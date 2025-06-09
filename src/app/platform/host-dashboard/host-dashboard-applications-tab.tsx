@@ -9,6 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { RequestWithUser } from '@/types';
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
+import TabLayout from "./components/tab-layout";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Filter options
 const filterOptions = [
@@ -283,7 +285,7 @@ const sampleHousingRequests: RequestWithUser[] = [
 ];
 
 // Helper function to format housing request data for display
-const formatHousingRequestForDisplay = (request: RequestWithUser) => {
+const formatHousingRequestForDisplay = (request: RequestWithUser, isMobile: boolean) => {
   const user = request.user;
   const trip = request.trip;
   
@@ -304,6 +306,12 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
     ? `$${trip.minPrice.toLocaleString()} - $${trip.maxPrice.toLocaleString()} / Month`
     : "$2,800 / Month"; // Default fallback
   
+  // Create full address for desktop, street address only for mobile
+  const fullAddress = request.listing ? 
+    `${request.listing.streetAddress1 || ''} ${request.listing.city || ''}, ${request.listing.state || ''} ${request.listing.postalCode || ''}` : 
+    'Address not available';
+  const displayAddress = isMobile ? (request.listing?.streetAddress1 || 'Address not available') : fullAddress;
+  
   return {
     id: request.id,
     userId: request.userId,
@@ -313,9 +321,7 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
     price,
     status: request.status || 'pending',
     listingTitle: request.listing?.title || 'Unknown Property',
-    listingAddress: request.listing ? 
-      `${request.listing.streetAddress1 || ''} ${request.listing.city || ''}, ${request.listing.state || ''} ${request.listing.postalCode || ''}` : 
-      'Address not available',
+    listingAddress: displayAddress,
     listingId: request.listingId
   };
 };
@@ -329,6 +335,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const isMobile = useIsMobile();
 
   // Debug logging
   console.log('HostDashboardApplicationsTab received propHousingRequests:', propHousingRequests);
@@ -353,7 +360,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
   // Filter and search applications
   const filteredApplications = useMemo(() => {
     // Convert housing requests to display format
-    const applications = housingRequestsToUse.map(formatHousingRequestForDisplay);
+    const applications = housingRequestsToUse.map(request => formatHousingRequestForDisplay(request, isMobile));
     let filtered = applications;
     
     // Apply status filters
@@ -381,7 +388,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     }
     
     return filtered;
-  }, [housingRequestsToUse, selectedFilters, searchTerm]);
+  }, [housingRequestsToUse, selectedFilters, searchTerm, isMobile]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
@@ -394,169 +401,151 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     setCurrentPage(1);
   }, [selectedFilters, searchTerm]);
 
-  return (
-    <div className="flex mt-0">
-      {/* Left sidebar */}
-      <div className="w-[201px] mr-8">
-        <h1 className="font-medium text-[#3f3f3f] text-[32px] [font-family:'Poppins',Helvetica]">
-          Review your Applications
-        </h1>
-
-        {/* Filter section */}
-        <div className="mt-2">
-          <div className="py-6">
-            <div className="flex flex-col items-start gap-4">
-              <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
-                Filter by Status
-              </div>
-
-              <div className="flex flex-col w-60 items-start gap-2">
-                {filterOptions.map((option) => (
-                  <div key={option.id} className="flex items-center gap-2 w-full">
-                    <Checkbox
-                      id={option.id}
-                      className="w-6 h-6 rounded-sm"
-                      checked={selectedFilters.includes(option.id)}
-                      onCheckedChange={() => toggleFilter(option.id)}
-                    />
-                    <label
-                      htmlFor={option.id}
-                      className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleFilter(option.id);
-                      }}
-                    >
-                      {option.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
+  // Sidebar content
+  const sidebarContent = (
+    <>
+      <div className="py-6">
+        <div className="flex flex-col items-start gap-4">
+          <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
+            Filter by Status
           </div>
-          
-          {/* Search bar */}
-          <div className="mt-6 px-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                type="text"
-                placeholder="Search by name or property..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px]"
-              />
-            </div>
+
+          <div className="flex flex-col w-60 items-start gap-2">
+            {filterOptions.map((option) => (
+              <div key={option.id} className="flex items-center gap-2 w-full">
+                <Checkbox
+                  id={option.id}
+                  className="w-6 h-6 rounded-sm"
+                  checked={selectedFilters.includes(option.id)}
+                  onCheckedChange={() => toggleFilter(option.id)}
+                />
+                <label
+                  htmlFor={option.id}
+                  className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFilter(option.id);
+                  }}
+                >
+                  {option.label}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+      
+      {/* Search bar */}
+      <div className="mt-6 px-1">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Search by name or property..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px]"
+          />
+        </div>
+      </div>
+    </>
+  );
 
-      {/* Application cards */}
-      <div className="flex flex-col gap-5 flex-1">
-        {filteredApplications.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            {housingRequestsToUse.length === 0 ? "No applications yet." : "No applications match your filters."}
-          </div>
-        ) : (
-          paginatedApplications.map((app) => (
-            <Card
-              key={app.id}
-              className="rounded-[5px] border border-solid border-[#6e504933]"
-            >
-              <CardContent className="p-4">
-                <div className="flex justify-between mb-1">
-                  <div>
-                    <h3 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                      {app.name}
-                    </h3>
-                    <p className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[14px] leading-5 mt-1">
-                      for {app.listingTitle}
-                    </p>
-                  </div>
-                  <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl leading-4">
-                    {app.price}
-                  </div>
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  return (
+    <TabLayout
+      title="Review your Applications"
+      sidebarContent={sidebarContent}
+      pagination={{
+        currentPage,
+        totalPages,
+        totalItems: filteredApplications.length,
+        itemsPerPage,
+        startIndex,
+        endIndex,
+        onPageChange: handlePageChange,
+        itemLabel: "applications"
+      }}
+      emptyStateMessage={housingRequestsToUse.length === 0 ? "No applications yet." : "No applications match your filters."}
+    >
+      <div className="flex flex-col gap-5">
+        {paginatedApplications.map((app) => (
+          <Card
+            key={app.id}
+            className="rounded-[5px] border border-solid border-[#6e504933]"
+          >
+            <CardContent className="p-4">
+              <div className="flex justify-between mb-1">
+                <div>
+                  <h3 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
+                    {app.name}
+                  </h3>
+                  <p className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[14px] leading-5 mt-1">
+                    for {app.listingTitle}
+                  </p>
                 </div>
-
-                <div className="flex justify-between mb-2">
-                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
-                    {app.period}
-                  </div>
-                  <div
-                    className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${getStatusColor(app.status)}`}
-                  >
-                    {app.status}
-                  </div>
+                <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl leading-4">
+                  {app.price}
                 </div>
+              </div>
 
-                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 mb-1">
-                  {app.occupants}
+              <div className="flex justify-between mb-2">
+                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
+                  {app.period}
                 </div>
-
-                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[14px] leading-5 mb-8">
-                  {app.listingAddress}
+                <div
+                  className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${getStatusColor(app.status)}`}
+                >
+                  {app.status}
                 </div>
+              </div>
 
-                <div className="flex gap-4">
-                  <Link href={`/platform/host-dashboard/${app.listingId}/${app.id}?from=dashboard`}>
-                    <Button
-                      variant="outline"
-                      className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                    >
-                      Application Details
-                    </Button>
-                  </Link>
-                  <MessageGuestDialog
-                    listingId={app.listingId}
-                    guestName={app.name}
-                    guestUserId={app.userId}
-                    className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                  >
-                    <Button
-                      variant="outline"
-                      className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                    >
-                      Message Applicant
-                    </Button>
-                  </MessageGuestDialog>
+              <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 mb-1">
+                {app.occupants}
+              </div>
+
+              <div className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[14px] leading-5 mb-8">
+                {app.listingAddress}
+              </div>
+
+              <div className="flex gap-4">
+                <Link href={`/platform/host-dashboard/${app.listingId}/${app.id}?from=dashboard`}>
                   <Button
                     variant="outline"
-                    size="icon"
-                    className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] p-2 h-auto w-auto"
+                    className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
                   >
-                    <MoreHorizontalIcon className="h-5 w-5" />
+                    Application Details
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
-
-        {/* Pagination */}
-        {filteredApplications.length > itemsPerPage && (
-          <div className="mt-8 flex justify-center">
-            <Button
-              variant="outline"
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-              disabled={currentPage === 1}
-              className="mr-2"
-            >
-              Previous
-            </Button>
-            <span className="mx-4 flex items-center">
-              Page {currentPage} of {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-              disabled={currentPage === totalPages}
-              className="ml-2"
-            >
-              Next
-            </Button>
-          </div>
-        )}
+                </Link>
+                <MessageGuestDialog
+                  listingId={app.listingId}
+                  guestName={app.name}
+                  guestUserId={app.userId}
+                  className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
+                >
+                  <Button
+                    variant="outline"
+                    className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
+                  >
+                    Message Applicant
+                  </Button>
+                </MessageGuestDialog>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] p-2 h-auto w-auto"
+                >
+                  <MoreHorizontalIcon className="h-5 w-5" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-    </div>
+    </TabLayout>
   );
 }

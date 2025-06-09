@@ -8,6 +8,8 @@ import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search } from 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
+import TabLayout from "./components/tab-layout";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Extended booking type with included relations
 type BookingWithRelations = {
@@ -174,6 +176,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const isMobile = useIsMobile();
 
   // Filter options
   const filterOptions = ["Active", "Upcoming", "Past", "Cancelled"];
@@ -307,77 +310,86 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
     setCurrentPage(1);
   }, [selectedFilters, searchTerm]);
 
-  return (
-    <div className="flex">
-      {/* Filter sidebar */}
-      <div className="w-[201px] mr-8">
-        <h1 className="font-medium text-[#3f3f3f] text-[32px] [font-family:'Poppins',Helvetica]">
-          Your Bookings
-        </h1>
-
-        <div className="mt-2">
-          <div className="py-6">
-            <div className="flex flex-col items-start gap-4">
-              <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
-                Filter by Status
-              </div>
-
-              <div className="flex flex-col w-60 items-start gap-2">
-                {filterOptions.map((option, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 w-full"
-                  >
-                    <Checkbox
-                      id={`filter-${index}`}
-                      className="w-6 h-6 rounded-sm"
-                      checked={selectedFilters.includes(option)}
-                      onCheckedChange={() => toggleFilter(option)}
-                    />
-                    <label
-                      htmlFor={`filter-${index}`}
-                      className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleFilter(option);
-                      }}
-                    >
-                      {option}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
+  // Sidebar content
+  const sidebarContent = (
+    <>
+      <div className="py-6">
+        <div className="flex flex-col items-start gap-4">
+          <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
+            Filter by Status
           </div>
-          
-          {/* Search bar */}
-          <div className="mt-6 px-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                type="text"
-                placeholder="Search by property, address, or guest..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px]"
-              />
-            </div>
+
+          <div className="flex flex-col w-60 items-start gap-2">
+            {filterOptions.map((option, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 w-full"
+              >
+                <Checkbox
+                  id={`filter-${index}`}
+                  className="w-6 h-6 rounded-sm"
+                  checked={selectedFilters.includes(option)}
+                  onCheckedChange={() => toggleFilter(option)}
+                />
+                <label
+                  htmlFor={`filter-${index}`}
+                  className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFilter(option);
+                  }}
+                >
+                  {option}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+      
+      {/* Search bar */}
+      <div className="mt-6 px-1">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Search by property, address, or guest..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px]"
+          />
+        </div>
+      </div>
+    </>
+  );
 
-      {/* Bookings list */}
-      <div className="flex-1">
-        {filteredBookings.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            {bookingsToUse.length === 0 ? "No bookings yet. Your confirmed bookings will appear here." : "No bookings match the selected filters."}
-          </div>
-        ) : (
-          paginatedBookings.map((booking) => {
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  return (
+    <TabLayout
+      title="Your Bookings"
+      sidebarContent={sidebarContent}
+      pagination={{
+        currentPage,
+        totalPages,
+        totalItems: filteredBookings.length,
+        itemsPerPage,
+        startIndex,
+        endIndex,
+        onPageChange: handlePageChange,
+        itemLabel: "bookings"
+      }}
+      emptyStateMessage={bookingsToUse.length === 0 ? "No bookings yet. Your confirmed bookings will appear here." : "No bookings match the selected filters."}
+    >
+      {paginatedBookings.map((booking) => {
             const statusInfo = getStatusInfo(booking.status);
-            const address = booking.listing ? 
+            const fullAddress = booking.listing ? 
               `${booking.listing.streetAddress1 || ""} ${booking.listing.city || ""}, ${booking.listing.state || ""} ${booking.listing.postalCode || ""}` : 
               "Address not available";
+            const displayAddress = isMobile ? (booking.listing?.streetAddress1 || "Address not available") : fullAddress;
             
             return (
               <Card
@@ -388,7 +400,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
                   <div className="mb-2">
                     <div className="flex justify-between">
                       <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                        {address}
+                        {displayAddress}
                       </h2>
                       <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl text-right leading-4">
                         ${booking.monthlyRent?.toLocaleString() || "0"} / Month
@@ -442,34 +454,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
                 </CardContent>
               </Card>
             );
-          })
-        )}
-
-        {/* Pagination */}
-        {filteredBookings.length > itemsPerPage && (
-          <div className="mt-8 flex justify-center">
-            <Button
-              variant="outline"
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-              disabled={currentPage === 1}
-              className="mr-2"
-            >
-              Previous
-            </Button>
-            <span className="mx-4 flex items-center">
-              Page {currentPage} of {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-              disabled={currentPage === totalPages}
-              className="ml-2"
-            >
-              Next
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
+          })}
+    </TabLayout>
   );
 }

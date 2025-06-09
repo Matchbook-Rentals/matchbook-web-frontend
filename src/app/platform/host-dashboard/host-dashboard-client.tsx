@@ -3,11 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import TabSelector from "@/components/ui/tab-selector";
+import MobileTabSelector from "@/components/ui/mobile-tab-selector";
 import HostDashboardListingsTab from "./host-dashboard-listings-tab";
 import HostDashboardBookingsTab from "./host-dashboard-bookings-tab";
 import HostDashboardApplicationsTab from "./host-dashboard-applications-tab";
 import { PAGE_MARGIN } from "@/constants/styles";
 import { ListingAndImages, RequestWithUser } from "@/types";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { Home, FileText, Calendar } from "lucide-react";
 
 interface PaginationInfo {
   totalCount: number;
@@ -31,6 +34,7 @@ export default function HostDashboardClient({
 }: HostDashboardClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const isMobile = useIsMobile();
   
   // Initialize active tab from URL params or default to 'listings'
   const getInitialTab = () => {
@@ -76,24 +80,39 @@ export default function HostDashboardClient({
     setActiveTab(value);
   };
 
-  // Define tabs
+  // Define tabs with mobile icons
   const tabs = [
     {
       value: 'listings',
-      label: 'Your Listings',
+      label: isMobile ? 'Listings' : 'Your Listings',
+      Icon: isMobile ? <Home className="h-5 w-5" /> : undefined,
       content: <HostDashboardListingsTab listings={listings} paginationInfo={listingsPagination} />
     },
     {
       value: 'bookings',
-      label: 'Your Bookings',
+      label: isMobile ? 'Bookings' : 'Your Bookings',
+      Icon: isMobile ? <Calendar className="h-5 w-5" /> : undefined,
       content: <HostDashboardBookingsTab bookings={bookings} />
     },
     {
       value: 'applications',
-      label: 'Your Applications',
+      label: isMobile ? 'Applications' : 'Your Applications',
+      Icon: isMobile ? <FileText className="h-5 w-5" /> : undefined,
       content: <HostDashboardApplicationsTab housingRequests={housingRequests} />
     }
   ];
+
+  if (isMobile) {
+    return (
+      <MobileTabSelector
+        tabs={tabs}
+        useUrlParams={false}
+        activeTabValue={activeTab}
+        onTabChange={handleTabChange}
+        className="bg-background"
+      />
+    );
+  }
 
   return (
     <div className={`bg-background ${PAGE_MARGIN} flex flex-row justify-center w-full`}>
