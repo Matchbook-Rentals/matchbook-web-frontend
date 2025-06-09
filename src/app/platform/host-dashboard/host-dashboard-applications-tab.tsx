@@ -1,12 +1,18 @@
 "use client";
 
-import { MoreHorizontalIcon, Search } from "lucide-react";
+import { MoreHorizontalIcon, Search, Home } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { RequestWithUser } from '@/types';
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "./components/tab-layout";
@@ -534,13 +540,25 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
                     Message Applicant
                   </Button>
                 </MessageGuestDialog>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] p-2 h-auto w-auto"
-                >
-                  <MoreHorizontalIcon className="h-5 w-5" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] p-2 h-auto w-auto"
+                    >
+                      <MoreHorizontalIcon className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/platform/host-dashboard/${app.listingId}`} className="cursor-pointer flex items-center gap-2">
+                        <Home className="h-4 w-4" />
+                        Manage Listing
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </CardContent>
           </Card>
