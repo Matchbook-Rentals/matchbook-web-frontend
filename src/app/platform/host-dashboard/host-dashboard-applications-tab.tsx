@@ -533,12 +533,6 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
                   guestUserId={app.userId}
                   className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
                 >
-                  <Button
-                    variant="outline"
-                    className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                  >
-                    Message Applicant
-                  </Button>
                 </MessageGuestDialog>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

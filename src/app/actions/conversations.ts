@@ -475,3 +475,65 @@ export async function findConversationBetweenUsers(listingId: string, otherUserI
     return { conversationId: null };
   }
 }
+
+export async function createListingConversation(
+  listingId: string,
+  otherUserId: string
+): Promise<{ success: boolean; conversationId?: string; error?: string }> {
+  try {
+    const userId = await checkAuth();
+    
+    // Prevent creating conversation with oneself
+    if (userId === otherUserId) {
+      return { success: false, error: 'Cannot create conversation with yourself' };
+    }
+
+    // Check if conversation already exists
+    const existing = await findConversationBetweenUsers(listingId, otherUserId);
+    if (existing.conversationId) {
+      return { success: true, conversationId: existing.conversationId };
+    }
+
+    // Determine roles based on who is creating the conversation
+    // Get the listing to check who is the host
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      return { success: false, error: 'Listing not found' };
+    }
+
+    const isCurrentUserHost = userId === listing.userId;
+    const creatorRole = isCurrentUserHost ? 'Host' : 'Guest';
+    const recipientRole = isCurrentUserHost ? 'Guest' : 'Host';
+
+    // Create new conversation
+    const conversation = await prisma.conversation.create({
+      data: {
+        listingId: listingId,
+        isGroup: false,
+        participants: {
+          create: [
+            {
+              userId: userId,
+              role: creatorRole
+            },
+            {
+              userId: otherUserId,
+              role: recipientRole
+            }
+          ]
+        }
+      }
+    });
+
+    revalidatePath('/conversations');
+    return { success: true, conversationId: conversation.id };
+
+  } catch (error) {
+    console.error('Error creating listing conversation:', error);
+    return { success: false, error: 'Failed to create conversation' };
+  }
+}
