@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ListingAndImages, RequestWithUser } from '@/types';
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
-import TabLayout from "../../components/tab-layout";
+import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Filter options

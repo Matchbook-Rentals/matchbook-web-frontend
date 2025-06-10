@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ListingAndImages } from "@/types";
 import CalendarDialog from "@/components/ui/calendar-dialog";
-import TabLayout from "./components/tab-layout";
+import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface PaginationInfo {
@@ -164,63 +164,111 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
     );
   };
 
-  // Sidebar content
+  // Search bar component
+  const searchBarComponent = (
+    <div className="relative w-full md:w-80">
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+      <Input
+        type="text"
+        placeholder="Search by title or address..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[14px]"
+      />
+    </div>
+  );
+
+  // Sidebar content - filters only
   const sidebarContent = (
     <>
-      <div className="py-6">
-        <div className="flex flex-col items-start gap-4">
-          <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
-            Filter by Status
-          </div>
+      {/* Mobile vertical layout - shown on small screens only */}
+      <div className="block md:hidden">
+        <div className="py-6">
+          <div className="flex flex-col items-start gap-4">
+            <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
+              Filter by Status
+            </div>
 
-          <div className="flex flex-col w-60 items-start gap-2">
-            {filterOptions.map((option, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 w-full"
-              >
-                <Checkbox
-                  id={`filter-${index}`}
-                  className="w-6 h-6 rounded-sm"
-                  checked={selectedFilters.includes(option)}
-                  onCheckedChange={() => toggleFilter(option)}
-                />
-                <label
-                  htmlFor={`filter-${index}`}
-                  className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleFilter(option);
-                  }}
+            <div className="flex flex-col w-60 items-start gap-2">
+              {filterOptions.map((option, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 w-full"
                 >
-                  {option}
-                </label>
-              </div>
-            ))}
+                  <Checkbox
+                    id={`filter-mobile-${index}`}
+                    className="w-6 h-6 rounded-sm"
+                    checked={selectedFilters.includes(option)}
+                    onCheckedChange={() => toggleFilter(option)}
+                  />
+                  <label
+                    htmlFor={`filter-mobile-${index}`}
+                    className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleFilter(option);
+                    }}
+                  >
+                    {option}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      
-      {/* Search bar */}
-      <div className="mt-6 px-1">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            type="text"
-            placeholder="Search by title or address..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px]"
-          />
+
+      {/* Desktop/tablet horizontal layout - shown on medium screens and up */}
+      <div className="hidden md:flex items-center flex-wrap gap-4">
+        <span className="[font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5 whitespace-nowrap">
+          Filter by Status:
+        </span>
+        <div className="flex items-center flex-wrap gap-3">
+          {filterOptions.map((option, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Checkbox
+                id={`filter-desktop-${index}`}
+                className="w-4 h-4 rounded-sm"
+                checked={selectedFilters.includes(option)}
+                onCheckedChange={() => toggleFilter(option)}
+              />
+              <label
+                htmlFor={`filter-desktop-${index}`}
+                className="[font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[14px] leading-5 cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleFilter(option);
+                }}
+              >
+                {option}
+              </label>
+            </div>
+          ))}
         </div>
       </div>
     </>
+  );
+
+  // Add Property button component
+  const addPropertyButton = (
+    <Link href="/platform/host-dashboard/add-property">
+      <Button
+        className="bg-black text-white hover:bg-gray-800 rounded-lg px-6 py-2 [font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5"
+      >
+        Add Property
+      </Button>
+    </Link>
   );
 
   return (
     <TabLayout
       title="Your Listings"
       sidebarContent={sidebarContent}
+      searchBar={searchBarComponent}
+      actionButton={addPropertyButton}
       pagination={{
         currentPage: clientPage,
         totalPages: totalClientPages,
