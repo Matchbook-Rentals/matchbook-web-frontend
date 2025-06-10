@@ -172,141 +172,126 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
     <div className="relative w-full max-w-[886px]">
       <div className="w-full">
         {/* Header Section */}
-        <div className="flex items-center mb-8">
-          <div>
-            <h2 className="font-medium text-2xl text-black [font-family:'Poppins',Helvetica]">
-              Term Tailored Pricing
-            </h2>
-            <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
-              Recommended
-            </p>
-          </div>
-          <div className="ml-auto flex items-center">
-            <Switch 
-              id="term-pricing" 
-              checked={tailoredPricing}
-              onCheckedChange={onTailoredPricingChange}
-            />
-            <span className="ml-2 font-medium text-[15px] text-[#2d2f2e99] [font-family:'Poppins',Helvetica]">
-              {tailoredPricing ? "On" : "Off"}
+        <div className="space-y-6 mb-8">
+          <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
+            What's the shortest stay you will accommodate?
+          </h2>
+          <div className="flex items-center justify-between">
+            <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+              {shortestStay} month{shortestStay !== 1 && "s"}
             </span>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full h-9 w-9"
+                onClick={decreaseShortestStay}
+                disabled={shortestStay <= 1}
+              >
+                <MinusIcon className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full h-9 w-9"
+                onClick={increaseShortestStay}
+                disabled={shortestStay >= longestStay}
+              >
+                <PlusIcon className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica] mt-8">
+            What's the longest stay you will accommodate?
+          </h2>
+          <div className="flex items-center justify-between">
+            <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+              {longestStay} month{longestStay !== 1 && "s"}
+            </span>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full h-9 w-9"
+                onClick={decreaseLongestStay}
+                disabled={longestStay <= shortestStay}
+              >
+                <MinusIcon className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full h-9 w-9"
+                onClick={increaseLongestStay}
+                disabled={longestStay >= 12}
+              >
+                <PlusIcon className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="mt-8">
+            <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica] mb-4">
+              Do you want to automatically adjust rents based on length of stay?
+            </h2>
+            <div className="flex items-center gap-4">
+              <Switch 
+                id="term-pricing" 
+                checked={tailoredPricing}
+                onCheckedChange={onTailoredPricingChange}
+              />
+              <span className="font-medium text-lg text-[#222222] [font-family:'Poppins',Helvetica]">
+                {tailoredPricing ? "Yes" : "No"}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Instructions and Stay Length Settings - only shown when tailored pricing is enabled */}
-        {tailoredPricing && (
-          <>
-            <p className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-8">
-              Choose your shortest and longest allowable stay lengths.
-            </p>
-
-            {/* Stay Length Settings */}
-            <div className="space-y-6 mb-8">
-              <div className="flex items-center justify-between">
-                <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                  Shortest stay length
-                </h3>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-9 w-9"
-                    onClick={decreaseShortestStay}
-                    disabled={shortestStay <= 1}
-                  >
-                    <MinusIcon className="h-4 w-4" />
-                  </Button>
-                  <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica] whitespace-nowrap">
-                    {shortestStay} month{shortestStay !== 1 && "s"}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-9 w-9"
-                    onClick={increaseShortestStay}
-                    disabled={shortestStay >= longestStay}
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                  Longest stay length
-                </h3>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-9 w-9"
-                    onClick={decreaseLongestStay}
-                    disabled={longestStay <= shortestStay}
-                  >
-                    <MinusIcon className="h-4 w-4" />
-                  </Button>
-                  <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica] whitespace-nowrap">
-                    {longestStay} month{longestStay !== 1 && "s"}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-9 w-9"
-                    onClick={increaseLongestStay}
-                    disabled={longestStay >= 12}
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        
-        {/* Alternative instruction for non-tailored pricing */}
-        {!tailoredPricing && (
-          <p className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-8">
-            Enter your standard monthly rent amount.
-          </p>
-        )}
 
         {/* Pricing Inputs */}
         <div className="space-y-6 mb-12">
           {tailoredPricing ? (
             <>
-              <div className="flex items-center justify-between">
-                <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                  Rent price for stay of {shortestStay} month{shortestStay !== 1 && "s"}
+              <div className="space-y-4">
+                <h3 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
+                  How much is rent per month for a {shortestStay} month{shortestStay !== 1 && "s"} stay?
                 </h3>
-                <div className="relative w-[234px]">
-                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                  <Input 
-                    className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
-                    value={shortTermRent}
-                    onChange={(e) => {
-                      // Only allow numbers and decimal points
-                      const value = e.target.value.replace(/[^0-9.]/g, '');
-                      onShortTermRentChange(value);
-                    }}
-                    placeholder="0.00"
-                    type="text"
-                    inputMode="decimal"
-                  />
+                <div className="flex items-center justify-between">
+                  <span className="font-normal text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                    Monthly rent amount
+                  </span>
+                  <div className="relative w-[234px]">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
+                    <Input 
+                      className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
+                      value={shortTermRent}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9.]/g, '');
+                        onShortTermRentChange(value);
+                      }}
+                      placeholder="0.00"
+                      type="text"
+                      inputMode="decimal"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-4">
+                <h3 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
+                  How much is rent per month for a {longestStay} month{longestStay !== 1 && "s"} stay?
+                </h3>
                 <div className="flex items-center justify-between">
-                  <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                    Rent price for stay of {longestStay} month{longestStay !== 1 && "s"}
-                  </h3>
+                  <span className="font-normal text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                    Monthly rent amount
+                  </span>
                   <div className="relative w-[234px]">
                     <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                     <Input 
                       className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
                       value={longTermRent}
                       onChange={(e) => {
-                        // Only allow numbers and decimal points
                         const value = e.target.value.replace(/[^0-9.]/g, '');
                         onLongTermRentChange(value);
                       }}
@@ -316,149 +301,77 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                     />
                   </div>
                 </div>
-                <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                <p className="font-light text-lg text-[#666666] [font-family:'Poppins',Helvetica]">
                   Hosts often discount rates for extended stays
                 </p>
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-between">
-              <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                Monthly Rent
+            <div className="space-y-4">
+              <h3 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
+                How much is rent per month?
               </h3>
-              <div className="relative w-[234px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                <Input 
-                  className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
-                  value={shortTermRent}
-                  onChange={(e) => {
-                    // Only allow numbers and decimal points
-                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                    // Update both short term and long term rent with the same value
-                    onShortTermRentChange(value);
-                    onLongTermRentChange(value);
-                  }}
-                  placeholder="0.00"
-                  type="text"
-                  inputMode="decimal"
-                />
+              <div className="flex items-center justify-between">
+                <span className="font-normal text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                  Monthly rent amount
+                </span>
+                <div className="relative w-[234px]">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
+                  <Input 
+                    className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
+                    value={shortTermRent}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9.]/g, '');
+                      onShortTermRentChange(value);
+                      onLongTermRentChange(value);
+                    }}
+                    placeholder="0.00"
+                    type="text"
+                    inputMode="decimal"
+                  />
+                </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Chart Section */}
-        <div className="mb-12">
-          <h3 className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-2">
-            {tailoredPricing 
-              ? "Monthly rent price by total lease length" 
-              : "Monthly rent price"
-            }
-          </h3>
-          <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica] mb-6">
-            {tailoredPricing
-              ? "This chart displays what guests pay per month, depending on the length of their stay"
-              : "This chart displays the fixed monthly rent for all stay durations"
-            }
-          </p>
+        {/* Chart Section - only show if tailored pricing is enabled and both prices are set */}
+        {tailoredPricing && shortTermRent && longTermRent && (
+          <div className="mb-12">
+            <h3 className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-2">
+              Monthly rent price by total lease length
+            </h3>
+            <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica] mb-6">
+              This chart displays what guests pay per month, depending on the length of their stay
+            </p>
 
-          <div className="w-full h-96">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis 
-                  domain={[0, maxChartValue]} 
-                  ticks={yAxisTicks}
-                  tickFormatter={(value) => `$${value}`} 
-                />
-                <Tooltip 
-                  formatter={(value) => [`$${value}`, 'Monthly Rent']}
-                  labelFormatter={(label) => `Stay Length: ${label}`}
-                />
-                <Bar 
-                  dataKey="price" 
-                  name="Monthly Rent" 
-                  fill="#a3b899"
-                  radius={[4, 4, 0, 0]}
-                  isAnimationActive={true}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Deposit Section */}
-        <div>
-          <h3 className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-6">
-            Deposit &amp; Miscellaneous Costs
-          </h3>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="font-normal text-2xl text-black [font-family:'Poppins',Helvetica]">
-                Deposit
-              </label>
-              <div className="relative w-[173px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
-                  value={deposit}
-                  onChange={(e) => {
-                    // Only allow numbers and decimal points
-                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                    onDepositChange(value);
-                  }}
-                  placeholder="0.00"
-                  type="text"
-                  inputMode="decimal"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="font-normal text-2xl text-black [font-family:'Poppins',Helvetica]">
-                Pet Deposit
-              </label>
-              <div className="relative w-[173px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
-                  value={petDeposit}
-                  onChange={(e) => {
-                    // Only allow numbers and decimal points
-                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                    onPetDepositChange(value);
-                  }}
-                  placeholder="0.00"
-                  type="text"
-                  inputMode="decimal"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="font-normal text-2xl text-black [font-family:'Poppins',Helvetica]">
-                Pet Rent
-              </label>
-              <div className="relative w-[173px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
-                  value={petRent}
-                  onChange={(e) => {
-                    // Only allow numbers and decimal points
-                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                    onPetRentChange(value);
-                  }}
-                  placeholder="0.00"
-                  type="text"
-                  inputMode="decimal"
-                />
-              </div>
+            <div className="w-full h-96">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis 
+                    domain={[0, maxChartValue]} 
+                    ticks={yAxisTicks}
+                    tickFormatter={(value) => `$${value}`} 
+                  />
+                  <Tooltip 
+                    formatter={(value) => [`$${value}`, 'Monthly Rent']}
+                    labelFormatter={(label) => `Stay Length: ${label}`}
+                  />
+                  <Bar 
+                    dataKey="price" 
+                    name="Monthly Rent" 
+                    fill="#a3b899"
+                    radius={[4, 4, 0, 0]}
+                    isAnimationActive={true}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
-        </div>
+        )}
+
 
       </div>
     </div>
