@@ -39,6 +39,7 @@ interface TabLayoutProps {
   };
   emptyStateMessage?: string;
   totalCount?: number; // For showing filtered vs total count
+  noMargin?: boolean; // Option to disable APP_PAGE_MARGIN for nested layouts
 }
 
 export default function TabLayout({
@@ -50,6 +51,7 @@ export default function TabLayout({
   pagination,
   emptyStateMessage = "No items found.",
   totalCount,
+  noMargin = false,
 }: TabLayoutProps) {
   const isMobile = useIsMobile();
   const [scrollAreaHeight, setScrollAreaHeight] = useState<string>('calc(100vh - 300px)');
@@ -131,7 +133,7 @@ export default function TabLayout({
 
   // Unified layout for both mobile and desktop
   return (
-    <div className={`${isMobile ? '' : APP_PAGE_MARGIN} flex flex-col `}>
+    <div className={`${isMobile ? '' : noMargin ? '' : APP_PAGE_MARGIN} flex flex-col `}>
       {/* Header with title, search, and filters */}
       <div ref={headerRef} className={`bg-background ${isMobile ? 'sticky top-0 z-40 border-b border-gray-200 px-4 py-4' : ''}`}>
         <h1 className={`font-medium text-[#3f3f3f] [font-family:'Poppins',Helvetica] mt-2 mb-4 ${isMobile ? 'text-[24px]' : 'text-[32px]'}`}>

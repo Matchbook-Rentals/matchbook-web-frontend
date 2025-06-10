@@ -30,7 +30,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
   return (
     <ListingDashboardProvider data={dashboardData}>
       <div className={`${APP_PAGE_MARGIN} min-h-screen pt-6`}>
-        <div className="flex gap-8">
+        <div className="flex gap-6">
           {/* Sidebar Navigation */}
           <ListingSidebar listingId={listingId} />
 
@@ -50,8 +50,8 @@ export default async function ListingLayout({ children, params }: ListingLayoutP
   return (
     <Suspense fallback={
       <div className={`${APP_PAGE_MARGIN} min-h-screen pt-6`}>
-        <div className="flex gap-8">
-          <div className="w-64 flex-shrink-0">
+        <div className="flex gap-6">
+          <div className="w-56 flex-shrink-0">
             <div className="animate-pulse space-y-2">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="h-12 bg-gray-200 rounded-lg"></div>

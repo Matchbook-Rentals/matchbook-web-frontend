@@ -72,7 +72,7 @@ export default function ListingSidebar({ listingId }: ListingSidebarProps) {
   const defaultValue = isOnListingPage ? "listing-specific" : "host-dashboard";
 
   return (
-    <div className="w-64 flex-shrink-0">
+    <div className="w-56 flex-shrink-0">
       <Accordion type="single" collapsible defaultValue={defaultValue} className="w-full">
         {/* Host Dashboard Section */}
         <AccordionItem value="host-dashboard" className="border-b">
@@ -109,7 +109,7 @@ export default function ListingSidebar({ listingId }: ListingSidebarProps) {
         <AccordionItem value="listing-specific" className="border-b">
           <AccordionTrigger className="hover:no-underline">
             <span className="text-sm font-medium text-gray-900 truncate">
-              {data.listing.title || 'Current Listing'}
+              {data.listing.streetAddress1 || data.listing.title || 'Current Listing'}
             </span>
           </AccordionTrigger>
           <AccordionContent>
