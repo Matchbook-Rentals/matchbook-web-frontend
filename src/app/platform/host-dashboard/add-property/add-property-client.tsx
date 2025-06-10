@@ -1157,19 +1157,18 @@ const [listingBasics, setListingBasics] = useState({
   }
 
   return (
-    <main className="bg-background flex flex-row justify-center w-full min-h-screen">
-      <div className="bg-background overflow-hidden w-full max-w-[1920px] relative py-12 pb-32">
+    <main className="bg-background flex flex-row justify-center w-full ">
+      <div className="bg-background overflow-hidden w-full max-w-[1920px] relative pb-32">
         {/* Progress bar component - hidden on success page */}
         {currentStep !== 9 && (
           <ProgressBar 
             currentStep={currentStep} 
             steps={steps}
-            onSaveExit={handleSaveExit}
           />
         )}
 
         {/* Main content with slide animation */}
-        <div className="mx-auto w-full max-w-[891px] mb-24">
+        <div className="mx-auto w-full max-w-[891px] mb-24 ">
           <div 
             key={animationKey} // Adding key to force re-render on each step change
             className="transition-transform duration-500 ease-in-out"
@@ -1199,13 +1198,19 @@ const [listingBasics, setListingBasics] = useState({
         {currentStep !== 9 && (
           <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 z-10">
             <Separator className="w-full" />
-            <div className="flex justify-between mx-auto w-full max-w-[891px] py-4">
+            <div className="flex justify-between items-center mx-auto w-full max-w-[891px] py-4">
               <Button 
                 className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
                 onClick={handleBack}
                 disabled={currentStep === 0}
               >
                 Back
+              </Button>
+              <Button 
+                className="w-[106px] h-[42px] bg-background rounded-[5px] border border-solid border-[#0000004c] font-['Montserrat',Helvetica] font-medium text-[#3f3f3f] text-sm"
+                onClick={handleSaveExit}
+              >
+                Save & Exit
               </Button>
               <Button 
                 className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
@@ -1219,7 +1224,6 @@ const [listingBasics, setListingBasics] = useState({
           </div>
         )}
         
-{/* Removed redundant padding div as we've added padding elsewhere */}
       </div>
     </main>
   );
