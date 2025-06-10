@@ -53,7 +53,6 @@ interface NullableListing {
   shortestLeasePrice: number | null;
   longestLeasePrice: number | null;
   furnished: boolean | null;
-  utilitiesIncluded: boolean | null;
   petsAllowed: boolean | null;
   airConditioner: boolean | null;
   laundryFacilities: boolean | null;
@@ -139,7 +138,6 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
     shortestLeasePrice: null,
     longestLeasePrice: null,
     furnished: null,
-    utilitiesIncluded: null,
     petsAllowed: null,
     airConditioner: null,
     laundryFacilities: null,
@@ -173,7 +171,6 @@ interface ListingHighlights {
   category: string | null;
   petsAllowed: boolean | null;
   furnished: boolean | null;
-  utilitiesIncluded: boolean | null;
 }
 
 // Listing location type - subset of NullableListing
@@ -195,8 +192,7 @@ interface ListingLocation {
 const [listingHighlights, setListingHighlights] = useState<ListingHighlights>({
   category: "Single Family",
   petsAllowed: true,
-  furnished: true,
-  utilitiesIncluded: true
+  furnished: true
 });
 
 // Step 1: Details (Location)
@@ -243,7 +239,7 @@ const [listingBasics, setListingBasics] = useState({
 // Define steps
   const steps: StepInfo[] = [
     { name: "Highlights", position: 0 },
-    { name: "Details", position: 1 },
+    { name: "Location", position: 1 },
     { name: "Rooms", position: 2 },
     { name: "Basics", position: 3 },
     { name: "Photos", position: 4 },
@@ -307,7 +303,6 @@ const [listingBasics, setListingBasics] = useState({
         category: listingHighlights.category || "Single Family",
         petsAllowed: listingHighlights.petsAllowed || false,
         furnished: listingHighlights.furnished || false,
-        utilitiesIncluded: listingHighlights.utilitiesIncluded || false,
       };
       
       // Process amenities from the array to set the proper boolean values
@@ -361,10 +356,6 @@ const [listingBasics, setListingBasics] = useState({
     
     if (listingHighlights.furnished === null) {
       errors.push("You must select a furnishing option");
-    }
-    
-    if (listingHighlights.utilitiesIncluded === null) {
-      errors.push("You must specify if utilities are included");
     }
     
     if (listingHighlights.petsAllowed === null) {
@@ -793,8 +784,7 @@ const [listingBasics, setListingBasics] = useState({
               setListingHighlights({
                 category: draftListing.category,
                 petsAllowed: draftListing.petsAllowed || false,
-                furnished: draftListing.furnished || false,
-                utilitiesIncluded: draftListing.utilitiesIncluded || false
+                furnished: draftListing.furnished || false
               });
             }
             
@@ -848,7 +838,6 @@ const [listingBasics, setListingBasics] = useState({
             Object.entries(draftListing).forEach(([key, value]) => {
               if (value === true && 
                   key !== 'furnished' && 
-                  key !== 'utilitiesIncluded' && 
                   key !== 'petsAllowed' && 
                   key !== 'isApproved') {
                 amenities.push(key);
@@ -892,7 +881,6 @@ const [listingBasics, setListingBasics] = useState({
       category: listingHighlights.category,
       petsAllowed: listingHighlights.petsAllowed,
       furnished: listingHighlights.furnished,
-      utilitiesIncluded: listingHighlights.utilitiesIncluded,
       // Sync location
       locationString: listingLocation.locationString,
       latitude: listingLocation.latitude,
