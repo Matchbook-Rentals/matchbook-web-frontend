@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { PAGE_MARGIN } from "@/constants/styles";
+import { APP_PAGE_MARGIN } from "@/constants/styles";
 import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
 import Link from "next/link";
 import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
@@ -213,7 +213,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
 
   return (
     <main className="bg-white flex flex-row justify-center w-full">
-      <div className={`bg-white w-full max-w-[1920px] relative ${PAGE_MARGIN} py-4`}>
+      <div className={`bg-white w-full max-w-[1920px] relative ${APP_PAGE_MARGIN} py-4`}>
         {/* Back Navigation */}
         <Link 
           href={

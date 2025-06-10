@@ -1,3 +1,5 @@
+"use client";
+
 import { MoreHorizontalIcon, Search, Home } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import Link from "next/link";

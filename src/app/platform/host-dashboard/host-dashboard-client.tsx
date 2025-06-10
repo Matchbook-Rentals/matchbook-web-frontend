@@ -7,7 +7,7 @@ import MobileTabSelector from "@/components/ui/mobile-tab-selector";
 import HostDashboardListingsTab from "./host-dashboard-listings-tab";
 import HostDashboardBookingsTab from "./host-dashboard-bookings-tab";
 import HostDashboardApplicationsTab from "./host-dashboard-applications-tab";
-import { PAGE_MARGIN } from "@/constants/styles";
+import { APP_PAGE_MARGIN } from "@/constants/styles";
 import { ListingAndImages, RequestWithUser } from "@/types";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Home, FileText, Calendar } from "lucide-react";
@@ -115,7 +115,7 @@ export default function HostDashboardClient({
   }
 
   return (
-    <div className={`bg-background ${PAGE_MARGIN} flex flex-row justify-center w-full`}>
+    <div className={`bg-background ${APP_PAGE_MARGIN} flex flex-row justify-center w-full`}>
       <div className="bg-background  overflow-hidden w-full max-w-[1920px] relative">
         <div className="max-w-[1373px] mx-auto">
           <TabSelector
