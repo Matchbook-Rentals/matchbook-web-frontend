@@ -45,12 +45,12 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "townhouse",
       name: "Townhouse",
-      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-[44px] h-[44px]" />
+      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-[48px] h-[48px]" />
     },
     {
       id: "private-room",
       name: "Private Room",
-      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-[44px] h-[44px]" />
+      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-[48px] h-[48px]" />
     },
   ];
 
@@ -101,8 +101,8 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     <>
       {/* Property Type Section */}
       <section className="mb-6">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4">
-          Type
+        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+          What kind of property is it?
         </h3>
         <div className="flex flex-wrap gap-4">
           {propertyTypes.map((type) => {
@@ -133,8 +133,8 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
 
       {/* Furnishings Section */}
       <section className="mb-6">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4">
-          Furnishings
+        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+          Is it furnished or unfurnished?
         </h3>
         <div className="flex gap-4">
           {furnishingOptions.map((option) => {
@@ -166,8 +166,8 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
 
       {/* Pets Section */}
       <section className="mb-6">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4">
-          Pets
+        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+          Do you allow pets?
         </h3>
         <div className="flex gap-4">
           {petsOptions.map((option) => {

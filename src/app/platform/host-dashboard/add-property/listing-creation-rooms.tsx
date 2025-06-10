@@ -31,14 +31,11 @@ export const Rooms: React.FC<RoomsProps> = ({
     <Card className="w-full max-w-[891px] border-none">
       <CardContent className="p-0">
         <div className="space-y-6">
-          <h2 className="font-medium text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-            Select beds and baths
-          </h2>
 
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <div className="font-normal text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-                Bedrooms
+                How many bedrooms are there?
               </div>
               <div className="flex items-center gap-4">
                 <Button
@@ -71,7 +68,7 @@ export const Rooms: React.FC<RoomsProps> = ({
 
             <div className="flex items-center justify-between">
               <div className="font-normal text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-                Bathrooms
+                How many bathrooms are there?
               </div>
               <div className="flex items-center gap-4">
                 <Button
@@ -102,12 +99,9 @@ export const Rooms: React.FC<RoomsProps> = ({
           </div>
 
           <div className="space-y-4">
-            <h2 className="font-medium text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-              How big is the living space?
-            </h2>
             <div className="flex items-center justify-between">
               <div className="font-normal text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-                Square Feet
+                How big is the living space (in square feet)?
               </div>
               <Input
                 className="w-[167px] h-12 rounded-[10px] border-2 border-[#0000004c]"

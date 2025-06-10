@@ -79,6 +79,9 @@ interface ListingAmenitiesProps {
 
 const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, onContinue, isLoading }) => {
   const [selected, setSelected] = useState<string[]>(value || []);
+  
+  // Reusable section styles
+  const sectionStyles = "space-y-4 border-b-2 py-6 mb-0";
 
   const toggleAmenity = (val: string) => {
     let updated: string[];
@@ -140,11 +143,11 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
 
 
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-2xl font-semibold mb-2">What amenities does your property offer?</h2>
+    <div className="flex flex-col gap-0">
+      <h2 className="text-2xl font-semibold mb-0 test">What amenities does your property offer?</h2>
 
       {/* Laundry Section */}
-      <div className="space-y-4 border-b-2 py-6">
+      <div className={sectionStyles}>
         <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
         <div className="flex items-center gap-4">
           <div className="flex-col border-black space-y-[3px]">
@@ -172,10 +175,10 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
       </div>
 
       <ScrollArea className="min-h-[400px]">
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-0">
           {AMENITY_GROUPS.map((group) => (
-            <div key={group.group}>
-              <h3 className="text-xl font-semibold mb-2">{group.group}</h3>
+            <div key={group.group} className={sectionStyles}>
+              <h3 className="text-[18px] font-medium text-[#404040]">{group.group}</h3>
               <div className="flex flex-wrap gap-4">
                 {group.items.map((amenity) => (
                   <Tile
