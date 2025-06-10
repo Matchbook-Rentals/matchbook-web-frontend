@@ -131,10 +131,10 @@ export default function TabLayout({
 
   // Unified layout for both mobile and desktop
   return (
-    <div className={`${isMobile ? '' : PAGE_MARGIN} flex flex-col h-screen`}>
+    <div className={`${isMobile ? '' : PAGE_MARGIN} flex flex-col `}>
       {/* Header with title, search, and filters */}
       <div ref={headerRef} className={`bg-background ${isMobile ? 'sticky top-0 z-40 border-b border-gray-200 px-4 py-4' : ''}`}>
-        <h1 className={`font-medium text-[#3f3f3f] [font-family:'Poppins',Helvetica] mb-4 ${isMobile ? 'text-[24px]' : 'text-[32px]'}`}>
+        <h1 className={`font-medium text-[#3f3f3f] [font-family:'Poppins',Helvetica] mt-2 mb-4 ${isMobile ? 'text-[24px]' : 'text-[32px]'}`}>
           {title}
         </h1>
         
@@ -170,7 +170,7 @@ export default function TabLayout({
           ) : (
             /* Desktop layout with search and filters in wrapping row */
             <div className="hidden md:block relative">
-              <div className="flex flex-wrap items-center gap-4 mb-4">
+              <div className="flex flex-wrap items-center gap-4 mb-1">
                 {/* Search bar */}
                 <div className="flex-shrink-0">
                   {searchBar}
@@ -194,7 +194,7 @@ export default function TabLayout({
       </div>
 
       {/* Content Area with Scroll */}
-      <div className={`flex-1 min-h-0 ${isMobile ? 'px-4 py-4' : 'mt-4'}`}>
+      <div className={`flex-1 min-h-0 ${isMobile ? 'px-4 py-4' : 'mt-1'}`}>
         {!hasContent ? (
           <div className="text-center py-12 text-gray-500">
             {emptyStateMessage}
