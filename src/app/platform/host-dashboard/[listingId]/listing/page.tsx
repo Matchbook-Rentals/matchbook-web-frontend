@@ -5,9 +5,9 @@ import SummaryTab from '../(tabs)/summary-tab';
 import { useListingDashboard } from '../listing-dashboard-context';
 
 export default function ListingPage() {
-  const { data } = useListingDashboard();
+  const { data, updateListing } = useListingDashboard();
   
   return (
-    <SummaryTab listing={data.listing} />
+    <SummaryTab listing={data.listing} onListingUpdate={updateListing} />
   );
 }

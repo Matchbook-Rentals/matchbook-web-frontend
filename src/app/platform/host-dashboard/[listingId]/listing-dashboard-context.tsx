@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { ListingAndImages, RequestWithUser } from '@/types';
 
 interface ListingDashboardData {
@@ -11,6 +11,7 @@ interface ListingDashboardData {
 
 interface ListingDashboardContextValue {
   data: ListingDashboardData;
+  updateListing: (updatedListing: ListingAndImages) => void;
 }
 
 const ListingDashboardContext = createContext<ListingDashboardContextValue | null>(null);
@@ -20,9 +21,18 @@ interface ListingDashboardProviderProps {
   data: ListingDashboardData;
 }
 
-export function ListingDashboardProvider({ children, data }: ListingDashboardProviderProps) {
+export function ListingDashboardProvider({ children, data: initialData }: ListingDashboardProviderProps) {
+  const [data, setData] = useState<ListingDashboardData>(initialData);
+
+  const updateListing = (updatedListing: ListingAndImages) => {
+    setData(prev => ({
+      ...prev,
+      listing: updatedListing
+    }));
+  };
+
   return (
-    <ListingDashboardContext.Provider value={{ data }}>
+    <ListingDashboardContext.Provider value={{ data, updateListing }}>
       {children}
     </ListingDashboardContext.Provider>
   );
