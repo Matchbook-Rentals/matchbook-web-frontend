@@ -79,13 +79,25 @@ interface ListingAmenitiesProps {
 
 const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, onContinue, isLoading }) => {
   const [selected, setSelected] = useState<string[]>(value || []);
+  
+  // Reusable section styles
+  const sectionStyles = "space-y-4 border-b-2 py-6 mb-0";
 
   const toggleAmenity = (val: string) => {
+    // Check if this is a laundry option
+    const laundryValues = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'];
+    
     let updated: string[];
     if (selected.includes(val)) {
       updated = selected.filter((v) => v !== val);
     } else {
-      updated = [...selected, val];
+      if (laundryValues.includes(val)) {
+        // If toggling a laundry option, remove other laundry options first
+        updated = selected.filter(item => !laundryValues.includes(item));
+        updated.push(val);
+      } else {
+        updated = [...selected, val];
+      }
     }
     setSelected(updated);
     onChange(updated);
@@ -112,39 +124,32 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
 
   // Helper for laundry radio selection
   const handleLaundryChange = (value: string) => {
-    let updated: string[] = [];
-    switch (value) {
-      case 'washerInUnit':
-        updated = ['washerInUnit'];
-        break;
-      case 'washerInComplex':
-        updated = ['washerInComplex'];
-        break;
-      case 'washerNotAvailable':
-        updated = ['washerNotAvailable'];
-        break;
-      default:
-        updated = [];
-    }
+    // Remove all existing laundry options first
+    const laundryValues = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'];
+    let updated = selected.filter(item => !laundryValues.includes(item));
+    
+    // Add the new laundry option
+    updated.push(value);
+    
     setSelected(updated);
     onChange(updated);
   };
 
   // Helper to check which radio is selected
   const getLaundrySelection = () => {
-    if (selected.length === 1 && selected[0] === 'washerInUnit') return 'washerInUnit';
-    if (selected.length === 1 && selected[0] === 'washerInComplex') return 'washerInComplex';
-    if (selected.length === 1 && selected[0] === 'washerNotAvailable') return 'washerNotAvailable';
+    if (selected.includes('washerInUnit')) return 'washerInUnit';
+    if (selected.includes('washerInComplex')) return 'washerInComplex';
+    if (selected.includes('washerNotAvailable')) return 'washerNotAvailable';
     return '';
   };
 
 
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-2xl font-semibold mb-2">What amenities does your property offer?</h2>
+    <div className="flex flex-col gap-0">
+      <h2 className="text-2xl font-semibold mb-0">What amenities does your property offer?</h2>
 
       {/* Laundry Section */}
-      <div className="space-y-4 border-b-2 py-6">
+      <div className={sectionStyles}>
         <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
         <div className="flex items-center gap-4">
           <div className="flex-col border-black space-y-[3px]">
@@ -172,10 +177,10 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
       </div>
 
       <ScrollArea className="min-h-[400px]">
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-0">
           {AMENITY_GROUPS.map((group) => (
-            <div key={group.group}>
-              <h3 className="text-xl font-semibold mb-2">{group.group}</h3>
+            <div key={group.group} className={sectionStyles}>
+              <h3 className="text-[18px] font-medium text-[#404040]">{group.group}</h3>
               <div className="flex flex-wrap gap-4">
                 {group.items.map((amenity) => (
                   <Tile

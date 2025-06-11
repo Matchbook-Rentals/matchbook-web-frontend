@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import { getDaysInMonth, startOfMonth, format, isWithinInterval, isSameDay, parseISO, isAfter, isBefore } from 'date-fns';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { getDaysInMonth, startOfMonth, format, isWithinInterval, isSameDay, parseISO } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Calendar as CalendarIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface Booking {
@@ -23,12 +21,11 @@ interface Unavailability {
   reason?: string;
 }
 
-interface CalendarDialogProps {
+interface StandaloneCalendarProps {
   bookings?: Booking[];
   unavailabilities?: Unavailability[];
-  triggerText?: string;
-  triggerClassName?: string;
-  listingId?: string;
+  className?: string;
+  onUnavailabilityClick?: (unavailability: Unavailability) => void;
 }
 
 const CalendarHeader = ({ currentDate, setCurrentDate }: { currentDate: Date; setCurrentDate: (date: Date) => void }) => {
@@ -72,14 +69,12 @@ const CalendarHeader = ({ currentDate, setCurrentDate }: { currentDate: Date; se
 
 const ColumnHeaders = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const shortDaysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
   return (
     <div className="grid grid-cols-7 py-2">
-      {daysOfWeek.map((day, index) => (
+      {daysOfWeek.map(day => (
         <div key={day} className="text-center font-semibold text-sm">
-          <span className="hidden md:inline">{day}</span>
-          <span className="md:hidden">{shortDaysOfWeek[index]}</span>
+          {day}
         </div>
       ))}
     </div>
@@ -89,12 +84,15 @@ const ColumnHeaders = () => {
 const CalendarDays = ({ 
   currentDate, 
   bookings = [], 
-  unavailabilities = [] 
+  unavailabilities = [],
+  onUnavailabilityClick
 }: { 
   currentDate: Date; 
   bookings: Booking[]; 
   unavailabilities: Unavailability[];
+  onUnavailabilityClick?: (unavailability: Unavailability) => void;
 }) => {
+  const router = useRouter();
   const daysInMonth = getDaysInMonth(currentDate);
   const startDate = startOfMonth(currentDate);
   const startDayOfWeek = startDate.getDay();
@@ -102,6 +100,16 @@ const CalendarDays = ({
   // Helper function to convert string dates to Date objects
   const parseDate = (date: Date | string): Date => {
     return typeof date === 'string' ? parseISO(date) : date;
+  };
+
+  const handleBookingClick = (bookingId: string) => {
+    router.push(`/platform/bookings/${bookingId}`);
+  };
+
+  const handleUnavailabilityClick = (unavailability: Unavailability) => {
+    if (onUnavailabilityClick) {
+      onUnavailabilityClick(unavailability);
+    }
   };
 
   const days = Array.from({ length: daysInMonth }, (_, i) => {
@@ -126,15 +134,15 @@ const CalendarDays = ({
     });
 
     // Base styling
-    let className = "p-2 text-center text-sm min-h-8 md:min-h-12 flex items-center justify-center";
+    let className = "p-2 text-center text-sm min-h-[32px] flex items-center justify-center";
     
     // Apply styling based on status
     if (currentBooking) {
-      className += " bg-blueBrand text-white font-medium opacity-60 hover:opacity-100 transition-opacity";
+      className += " bg-blueBrand text-white font-medium cursor-pointer hover:opacity-80 transition-opacity";
     } else if (currentUnavailability) {
-      className += " bg-gray-300 text-gray-600 opacity-60 hover:opacity-100 transition-opacity";
+      className += " bg-gray-300 text-gray-600 cursor-pointer hover:opacity-80 transition-opacity";
     } else {
-      className += " hover:bg-gray-100";
+      className += "";
     }
 
     const dayContent = (
@@ -150,17 +158,28 @@ const CalendarDays = ({
       if (currentBooking) {
         const startDate = format(parseDate(currentBooking.startDate), 'MMM d');
         const endDate = format(parseDate(currentBooking.endDate), 'MMM d, yyyy');
-        tooltipContent = `Guest: ${currentBooking.guestName || 'Unknown Guest'}\n${startDate} - ${endDate}`;
+        tooltipContent = `Guest: ${currentBooking.guestName || 'Unknown Guest'}\n${startDate} - ${endDate}\nClick to view booking`;
       } else if (currentUnavailability) {
         const startDate = format(parseDate(currentUnavailability.startDate), 'MMM d');
         const endDate = format(parseDate(currentUnavailability.endDate), 'MMM d, yyyy');
-        tooltipContent = `Unavailable: ${currentUnavailability.reason || 'No reason provided'}\n${startDate} - ${endDate}`;
+        tooltipContent = `Unavailable: ${currentUnavailability.reason || 'No reason provided'}\n${startDate} - ${endDate}\nClick to edit`;
       }
 
       return (
         <Tooltip key={i}>
           <TooltipTrigger asChild>
-            {dayContent}
+            <div 
+              className="cursor-pointer"
+              onClick={() => {
+                if (currentBooking) {
+                  handleBookingClick(currentBooking.id);
+                } else if (currentUnavailability) {
+                  handleUnavailabilityClick(currentUnavailability);
+                }
+              }}
+            >
+              {dayContent}
+            </div>
           </TooltipTrigger>
           <TooltipContent>
             <div className="whitespace-pre-line">
@@ -176,7 +195,7 @@ const CalendarDays = ({
 
   // Add blank cells for days before the start of the month
   const blanks = Array(startDayOfWeek).fill(null).map((_, i) => (
-    <div key={`blank-${i}`} className="p-2 min-h-8 md:min-h-12"></div>
+    <div key={`blank-${i}`} className="p-2 min-h-[32px]"></div>
   ));
 
   return (
@@ -208,73 +227,29 @@ const CalendarLegend = () => {
   );
 };
 
-const CalendarDialog: React.FC<CalendarDialogProps> = ({ 
+const StandaloneCalendar: React.FC<StandaloneCalendarProps> = ({ 
   bookings = [], 
   unavailabilities = [], 
-  triggerText = "Manage Calendar",
-  triggerClassName = "",
-  listingId
+  className = "",
+  onUnavailabilityClick
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
-
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleManageCalendar = () => {
-    setOpen(false);
-    if (listingId) {
-      router.push(`/platform/host-dashboard/${listingId}`);
-    }
-  };
 
   return (
     <TooltipProvider>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button 
-            variant="outline" 
-            className={`rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] ${triggerClassName}`}
-          >
-            <CalendarIcon className="h-4 w-4 mr-2" />
-            {triggerText}
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-2xl p-0" hideCloseButton>
-          <div className="w-full bg-white rounded-lg">
-            <CalendarHeader currentDate={currentDate} setCurrentDate={setCurrentDate} />
-            <ColumnHeaders />
-            <CalendarDays 
-              currentDate={currentDate} 
-              bookings={bookings}
-              unavailabilities={unavailabilities}
-            />
-            <CalendarLegend />
-            
-            {/* Footer with action buttons */}
-            <div className="p-4 border-t bg-white flex flex-col sm:flex-row justify-between gap-3">
-              <Button 
-                variant="outline" 
-                onClick={handleClose}
-                className="flex-1"
-              >
-                Close
-              </Button>
-              <Button 
-                onClick={handleManageCalendar}
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white"
-              >
-                Manage Calendar
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <div className={`w-full bg-background rounded-lg border ${className}`}>
+        <CalendarHeader currentDate={currentDate} setCurrentDate={setCurrentDate} />
+        <ColumnHeaders />
+        <CalendarDays 
+          currentDate={currentDate} 
+          bookings={bookings}
+          unavailabilities={unavailabilities}
+          onUnavailabilityClick={onUnavailabilityClick}
+        />
+        <CalendarLegend />
+      </div>
     </TooltipProvider>
   );
 };
 
-export default CalendarDialog;
+export default StandaloneCalendar;

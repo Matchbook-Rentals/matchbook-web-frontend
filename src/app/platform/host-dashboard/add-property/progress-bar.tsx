@@ -8,13 +8,11 @@ export interface StepInfo {
 interface ProgressBarProps {
   currentStep: number;
   steps: StepInfo[];
-  onSaveExit?: () => void;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ 
   currentStep,
-  steps,
-  onSaveExit 
+  steps
 }) => {
   // Calculate progress bar width based on current step (adding 1 to currentStep to start with progress)
   const progressWidth = `${((currentStep + 1) / steps.length) * 100}%`;
@@ -23,7 +21,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   const currentStepInfo = steps.find(step => step.position === currentStep) || steps[0];
 
   return (
-    <div className="mx-auto w-full max-w-[885px] mb-12">
+    <div className="mx-auto w-full max-w-[885px] mb-8">
       <div className="relative w-full h-[95px]">
         {/* Progress bar track */}
         <div className="absolute w-[883px] h-5 top-[46px] left-0">
@@ -46,25 +44,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
         {/* Step name label with transition */}
         <div 
-          className="w-[102px] h-[18px] top-[77px] font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-sm text-center absolute tracking-[0] leading-[normal] transition-all duration-500 ease-in-out"
-          style={{ left: `${((currentStep + 1) / steps.length) * 883 - 45}px` }}
+          className="w-[140px] h-[36px] top-[77px] font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl text-center absolute tracking-[0] leading-[normal] transition-all duration-500 ease-in-out"
+          style={{ left: `${((currentStep + 1) / steps.length) * 883 - 70}px` }}
         >
           {currentStepInfo.name}
         </div>
 
-        {/* Save & Exit button */}
-        <div className="absolute w-[106px] h-[29px] top-0 left-[777px]">
-          <div 
-            className="h-[29px] bg-background rounded-[15px] border-[0.5px] border-solid border-[#0000004c] cursor-pointer"
-            onClick={onSaveExit}
-          >
-            <div className="relative w-[89px] h-5 top-1 left-2">
-              <div className="w-[89px] h-5 top-0 left-0 font-['Montserrat',Helvetica] font-medium text-[#3f3f3f] text-xs text-center absolute tracking-[0] leading-[normal]">
-                Save &amp; Exit
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

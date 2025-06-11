@@ -312,12 +312,29 @@ export const getUserDraftListings = async (): Promise<ListingAndImages[]> => {
   }
 }
 
-// Get all listings for the current host user
-export const getHostListings = async (): Promise<ListingAndImages[]> => {
+// Get paginated listings for the current host user
+export const getHostListings = async (page: number = 1, itemsPerPage: number = 10): Promise<{
+  listings: ListingAndImages[];
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+}> => {
   try {
     const userId = await checkAuth();
-    console.log('Fetching listings for userId:', userId);
+    console.log('Fetching listings for userId:', userId, 'page:', page);
     
+    // Calculate pagination
+    const skip = (page - 1) * itemsPerPage;
+    
+    // Get total count
+    const totalCount = await prisma.listing.count({
+      where: { 
+        userId: userId,
+        status: { not: "draft" } // Exclude draft listings
+      }
+    });
+    
+    // Get paginated listings
     const hostListings = await prisma.listing.findMany({
       where: { 
         userId: userId,
@@ -331,22 +348,36 @@ export const getHostListings = async (): Promise<ListingAndImages[]> => {
       },
       orderBy: {
         createdAt: 'desc'
-      }
+      },
+      skip,
+      take: itemsPerPage
     });
     
-    console.log('Found listings:', hostListings.length);
+    console.log('Found listings:', hostListings.length, 'of total:', totalCount);
     
-    return hostListings.map(listing => ({
+    const listings = hostListings.map(listing => ({
       ...listing,
       distance: undefined,
       listingImages: listing.listingImages,
       bedrooms: listing.bedrooms,
       unavailablePeriods: listing.unavailablePeriods,
     }));
+    
+    return {
+      listings,
+      totalCount,
+      totalPages: Math.ceil(totalCount / itemsPerPage),
+      currentPage: page
+    };
   } catch (error) {
     console.error('Error in getHostListings:', error);
-    // Return empty array instead of throwing error to prevent page crash
-    return [];
+    // Return empty results instead of throwing error to prevent page crash
+    return {
+      listings: [],
+      totalCount: 0,
+      totalPages: 0,
+      currentPage: 1
+    };
   }
 }
 

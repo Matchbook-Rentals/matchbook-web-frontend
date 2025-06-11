@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Paddle from "@/components/ui/paddle";
+import Tile from "@/components/ui/tile";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 
 // Using the same interface as in add-property-client.tsx
@@ -7,7 +7,6 @@ interface ListingHighlights {
   category: string | null;
   petsAllowed: boolean | null;
   furnished: boolean | null;
-  utilitiesIncluded: boolean | null;
 }
 
 interface ListingUploadHighlightsProps {
@@ -22,14 +21,12 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
   // Local state for tracking selections
   const [selectedType, setSelectedType] = useState<string>(listingHighlights.category || "Single Family");
   const [selectedFurnishing, setSelectedFurnishing] = useState<string>(listingHighlights.furnished ? "Furnished" : "Unfurnished");
-  const [selectedUtilities, setSelectedUtilities] = useState<string>(listingHighlights.utilitiesIncluded ? "Included in rent" : "Paid separately");
   const [selectedPets, setSelectedPets] = useState<string>(listingHighlights.petsAllowed ? "Pets welcome" : "No pets");
 
   // Update local state when props change
   useEffect(() => {
     setSelectedType(listingHighlights.category || "Single Family");
     setSelectedFurnishing(listingHighlights.furnished ? "Furnished" : "Unfurnished");
-    setSelectedUtilities(listingHighlights.utilitiesIncluded ? "Included in rent" : "Paid separately");
     setSelectedPets(listingHighlights.petsAllowed ? "Pets welcome" : "No pets");
   }, [listingHighlights]);
 
@@ -38,22 +35,22 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "single-family",
       name: "Single Family",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" />
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-[44px] h-[44px]" />
     },
     {
       id: "apartment",
       name: "Apartment",
-      icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-full h-full" />
+      icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-[44px] h-[44px]" />
     },
     {
       id: "townhouse",
       name: "Townhouse",
-      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-full h-full" />
+      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-[48px] h-[48px]" />
     },
     {
       id: "private-room",
       name: "Private Room",
-      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-full h-full" />
+      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-[48px] h-[48px]" />
     },
   ];
 
@@ -62,40 +59,27 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "furnished",
       name: "Furnished",
-      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="w-full h-full" />
+      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="w-[44px] h-[44px]" />
     },
     {
       id: "unfurnished",
       name: "Unfurnished",
-      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="w-full h-full" />
+      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="w-[44px] h-[44px]" />
     },
   ];
 
-  // Utilities options data
-  const utilitiesOptions = [
-    {
-      id: "included",
-      name: "Included in rent",
-      icon: <AmenitiesIcons.UpdatedUtilitiesIncludedIcon className="w-full h-full" />
-    },
-    {
-      id: "separate",
-      name: "Paid separately",
-      icon: <AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon className="w-full h-full" />
-    },
-  ];
 
   // Pets options data
   const petsOptions = [
     {
       id: "pets-welcome",
       name: "Pets welcome",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" /> // Replace with actual pets icon when available
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-[44px] h-[44px]" /> // Replace with actual pets icon when available
     },
     {
       id: "no-pets",
       name: "No pets",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" /> // Replace with actual no pets icon when available
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-[44px] h-[44px]" /> // Replace with actual no pets icon when available
     },
   ];
 
@@ -106,8 +90,6 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         return selectedType === optionName;
       case "furnishing":
         return selectedFurnishing === optionName;
-      case "utilities":
-        return selectedUtilities === optionName;
       case "pets":
         return selectedPets === optionName;
       default:
@@ -117,30 +99,25 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
 
   return (
     <>
-      <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-2xl mb-6">
-        Listing Highlights
-      </h2>
-
       {/* Property Type Section */}
-      <section className="mb-12">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-          Type
+      <section className="mb-6">
+        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+          What kind of property is it?
         </h3>
-        <div className="flex flex-wrap gap-8">
+        <div className="flex flex-wrap gap-4">
           {propertyTypes.map((type) => {
             const isTypeSelected = isSelected("type", type.name);
             return (
-              <Paddle
+              <Tile
                 key={type.id}
                 icon={type.icon}
                 label={type.name}
-                className={`h-[295px] w-[196px] cursor-pointer box-border  ${
+                className={`cursor-pointer w-[116px] h-[131px] py-1.5 ${
                   isTypeSelected
                     ? "border-[3px] bg-background border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                    : "border border-solid border-[#0000004c]"
+                    : "border-[2px] border-[#E3E3E3] hover:border-gray-400"
                 }`}
-                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
-                iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#404040] text-[15px] text-center leading-tight`}
                 onClick={() => {
                   setSelectedType(type.name);
                   setListingHighlights({
@@ -155,25 +132,24 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
       </section>
 
       {/* Furnishings Section */}
-      <section className="mb-12">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-          Furnishings
+      <section className="mb-6">
+        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+          Is it furnished or unfurnished?
         </h3>
-        <div className="flex gap-8">
+        <div className="flex gap-4">
           {furnishingOptions.map((option) => {
             const isFurnishingSelected = isSelected("furnishing", option.name);
             return (
-              <Paddle
+              <Tile
                 key={option.id}
                 icon={option.icon}
                 label={option.name}
-                className={`h-[297px] w-[197px] cursor-pointer box-border  ${
+                className={`cursor-pointer w-[116px] h-[131px] py-1.5 ${
                   isFurnishingSelected
                     ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                    : "border border-solid border-[#0000004c]"
+                    : "border-[2px] border-[#E3E3E3] hover:border-gray-400"
                 }`}
-                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
-                iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#404040] text-[15px] text-center leading-tight`}
                 onClick={() => {
                   setSelectedFurnishing(option.name);
                   setListingHighlights({
@@ -187,59 +163,26 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         </div>
       </section>
 
-      {/* Utilities Section */}
-      <section className="mb-12">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-          Utilities
-        </h3>
-        <div className="flex gap-8">
-          {utilitiesOptions.map((option) => {
-            const isUtilitiesSelected = isSelected("utilities", option.name);
-            return (
-              <Paddle
-                key={option.id}
-                icon={option.icon}
-                label={option.name}
-                className={`h-[296px] w-[197px] cursor-pointer box-border  ${
-                  isUtilitiesSelected
-                    ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                    : "border border-solid border-[#0000004c]"
-                }`}
-                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
-                iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                onClick={() => {
-                  setSelectedUtilities(option.name);
-                  setListingHighlights({
-                    ...listingHighlights,
-                    utilitiesIncluded: option.name === "Included in rent"
-                  });
-                }}
-              />
-            );
-          })}
-        </div>
-      </section>
 
       {/* Pets Section */}
-      <section className="mb-12">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-          Pets
+      <section className="mb-6">
+        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+          Do you allow pets?
         </h3>
-        <div className="flex gap-8">
+        <div className="flex gap-4">
           {petsOptions.map((option) => {
             const isPetsSelected = isSelected("pets", option.name);
             return (
-              <Paddle
+              <Tile
                 key={option.id}
                 icon={option.icon}
                 label={option.name}
-                className={`h-[296px] w-[197px] cursor-pointer box-border  ${
+                className={`cursor-pointer w-[116px] h-[131px] py-1.5 ${
                   isPetsSelected
                     ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                    : "border border-solid border-[#0000004c]"
+                    : "border-[2px] border-[#E3E3E3] hover:border-gray-400"
                 }`}
-                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
-                iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#404040] text-[15px] text-center leading-tight px-1`}
                 onClick={() => {
                   setSelectedPets(option.name);
                   setListingHighlights({

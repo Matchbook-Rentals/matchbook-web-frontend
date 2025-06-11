@@ -126,7 +126,7 @@ export default function TabSelector({
           <TabsList
             ref={tabsListRef}
             className={cn(
-              "flex : justify-start pt-6 pb-8 space-x-2 overflow-x-auto overflow-y-hidden scrollbar-none",
+              "flex : justify-start pt-6 pb-8 px-2 space-x-2 overflow-x-auto overflow-y-hidden scrollbar-none",
               tabsListClassName
             )}>
             {tabs.map((tab) => (

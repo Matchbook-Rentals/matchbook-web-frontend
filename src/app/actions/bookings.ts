@@ -188,3 +188,67 @@ export async function getHostBookings() {
   }
 }
 
+// Get bookings for a specific listing (host must own the listing)
+export async function getBookingsByListingId(listingId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      console.log('No userId found in auth for listing bookings');
+      return []; // Return empty array instead of throwing error
+    }
+
+    console.log('Fetching bookings for listingId:', listingId, 'userId:', userId);
+
+    // First verify the listing belongs to the current user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing || listing.userId !== userId) {
+      console.log('Unauthorized to view bookings for this listing');
+      return []; // Return empty array instead of throwing error
+    }
+
+    const bookings = await prisma.booking.findMany({
+      where: { 
+        listingId: listingId
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        listing: {
+          select: {
+            title: true,
+            imageSrc: true,
+            streetAddress1: true,
+            city: true,
+            state: true,
+            postalCode: true
+          }
+        },
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        trip: {
+          select: {
+            numAdults: true,
+            numPets: true,
+            numChildren: true
+          }
+        }
+      }
+    });
+
+    console.log('Found bookings for listing:', bookings.length);
+    return bookings;
+  } catch (error) {
+    console.error('Error in getBookingsByListingId:', error);
+    // Return empty array instead of throwing error to prevent page crash
+    return [];
+  }
+}
+

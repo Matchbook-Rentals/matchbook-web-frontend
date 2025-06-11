@@ -4,3 +4,10 @@ export enum ListingStatus {
   Applied = 'applied',
   None = 'none'
 }
+
+export enum PropertyType {
+  SingleFamily = 'singleFamily',
+  Apartment = 'apartment',
+  Townhouse = 'townhouse',
+  PrivateRoom = 'privateRoom'
+}

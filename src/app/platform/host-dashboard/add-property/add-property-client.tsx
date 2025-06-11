@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import { revalidateHostDashboard } from "../_actions";
 import { getListingById } from "@/app/actions/listings";
@@ -16,6 +17,8 @@ import { ListingPhotos } from "./listing-creation-photos-upload";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
 import ListingAmenities from "./listing-creation-amenities";
 import ListingCreationPricing from "./listing-creation-pricing";
+import ListingCreationVerifyPricing from "./listing-creation-verify-pricing";
+import ListingCreationDeposit from "./listing-creation-deposit";
 import { Box as ListingCreationReview } from "./listing-creation-review";
 
 // Nullable Listing type for building a new listing
@@ -53,7 +56,6 @@ interface NullableListing {
   shortestLeasePrice: number | null;
   longestLeasePrice: number | null;
   furnished: boolean | null;
-  utilitiesIncluded: boolean | null;
   petsAllowed: boolean | null;
   airConditioner: boolean | null;
   laundryFacilities: boolean | null;
@@ -93,6 +95,11 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
   const router = useRouter();
   const searchParams = useSearchParams();
   const draftId = searchParams.get('draftId');
+  const { user } = useUser();
+  
+  // Check if user is admin
+  const userRole = user?.publicMetadata?.role as string | undefined;
+  const isAdmin = userRole === 'admin';
   
   // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -104,6 +111,9 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
   
   // State to track if we're loading a draft
   const [isLoadingDraft, setIsLoadingDraft] = useState<boolean>(!!draftId);
+  
+  // State to track if admin skip buttons are hidden
+  const [adminSkipButtonsHidden, setAdminSkipButtonsHidden] = useState<boolean>(false);
   
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
@@ -139,7 +149,6 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
     shortestLeasePrice: null,
     longestLeasePrice: null,
     furnished: null,
-    utilitiesIncluded: null,
     petsAllowed: null,
     airConditioner: null,
     laundryFacilities: null,
@@ -173,7 +182,6 @@ interface ListingHighlights {
   category: string | null;
   petsAllowed: boolean | null;
   furnished: boolean | null;
-  utilitiesIncluded: boolean | null;
 }
 
 // Listing location type - subset of NullableListing
@@ -195,8 +203,7 @@ interface ListingLocation {
 const [listingHighlights, setListingHighlights] = useState<ListingHighlights>({
   category: "Single Family",
   petsAllowed: true,
-  furnished: true,
-  utilitiesIncluded: true
+  furnished: true
 });
 
 // Step 1: Details (Location)
@@ -243,15 +250,17 @@ const [listingBasics, setListingBasics] = useState({
 // Define steps
   const steps: StepInfo[] = [
     { name: "Highlights", position: 0 },
-    { name: "Details", position: 1 },
+    { name: "Location", position: 1 },
     { name: "Rooms", position: 2 },
     { name: "Basics", position: 3 },
     { name: "Photos", position: 4 },
     { name: "Featured Photos", position: 5 },
     { name: "Amenities", position: 6 },
     { name: "Pricing", position: 7 },
-    { name: "Review", position: 8 },
-    { name: "Success", position: 9 },
+    { name: "Verify Pricing", position: 8 },
+    { name: "Deposits", position: 9 },
+    { name: "Review", position: 10 },
+    { name: "Success", position: 11 },
   ];
 
 
@@ -307,7 +316,6 @@ const [listingBasics, setListingBasics] = useState({
         category: listingHighlights.category || "Single Family",
         petsAllowed: listingHighlights.petsAllowed || false,
         furnished: listingHighlights.furnished || false,
-        utilitiesIncluded: listingHighlights.utilitiesIncluded || false,
       };
       
       // Process amenities from the array to set the proper boolean values
@@ -342,7 +350,7 @@ const [listingBasics, setListingBasics] = useState({
       await revalidateHostDashboard();
       
       // Show success state instead of immediate redirect, similar to submit flow
-      setCurrentStep(9); // Move to success step
+      setCurrentStep(11); // Move to success step
       setSlideDirection('right');
       setAnimationKey(prevKey => prevKey + 1);
     } catch (error) {
@@ -361,10 +369,6 @@ const [listingBasics, setListingBasics] = useState({
     
     if (listingHighlights.furnished === null) {
       errors.push("You must select a furnishing option");
-    }
-    
-    if (listingHighlights.utilitiesIncluded === null) {
-      errors.push("You must specify if utilities are included");
     }
     
     if (listingHighlights.petsAllowed === null) {
@@ -474,8 +478,19 @@ const [listingBasics, setListingBasics] = useState({
       errors.push("Long term rent price is required");
     }
     
+    return errors;
+  };
+  
+  const validateVerifyPricing = (): string[] => {
+    // No validation needed for verify pricing step - it's just for review
+    return [];
+  };
+  
+  const validateDeposits = (): string[] => {
+    const errors: string[] = [];
+    
     if (!listingPricing.deposit) {
-      errors.push("Deposit amount is required");
+      errors.push("Security deposit amount is required");
     }
     
     return errors;
@@ -500,6 +515,10 @@ const [listingBasics, setListingBasics] = useState({
         return validateAmenities();
       case 7:
         return validatePricing();
+      case 8:
+        return validateVerifyPricing();
+      case 9:
+        return validateDeposits();
       default:
         return [];
     }
@@ -550,13 +569,19 @@ const [listingBasics, setListingBasics] = useState({
         
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-        setCurrentStep(8); // Go to review step
+        setCurrentStep(10); // Go to review step
         setCameFromReview(false); // Reset the flag
       } else {
         // Normal flow
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-        setCurrentStep(currentStep + 1);
+        
+        // Special logic: Skip verify pricing step if tailored pricing is disabled
+        if (currentStep === 7 && !listingPricing.tailoredPricing) {
+          setCurrentStep(currentStep + 2); // Skip verify pricing step (8) and go to deposits (9)
+        } else {
+          setCurrentStep(currentStep + 1);
+        }
       }
       
       // Scroll the whole page to top
@@ -568,7 +593,14 @@ const [listingBasics, setListingBasics] = useState({
     if (currentStep > 0) {
       setSlideDirection('left'); // Slide from left to right (back)
       setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-      setCurrentStep(currentStep - 1);
+      
+      // Special logic: Skip verify pricing step if tailored pricing is disabled
+      if (currentStep === 9 && !listingPricing.tailoredPricing) {
+        setCurrentStep(currentStep - 2); // Skip verify pricing step (8) and go to pricing (7)
+      } else {
+        setCurrentStep(currentStep - 1);
+      }
+      
       setCameFromReview(false); // Reset the flag since we're going backward
       
       // Scroll the whole page to top
@@ -589,6 +621,26 @@ const [listingBasics, setListingBasics] = useState({
     
     // Scroll the whole page to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  // Admin skip handlers - navigate without validation
+  const handleAdminSkipNext = () => {
+    if (currentStep < steps.length - 1) {
+      setSlideDirection('right');
+      setAnimationKey(prevKey => prevKey + 1);
+      setCurrentStep(currentStep + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+  
+  const handleAdminSkipBack = () => {
+    if (currentStep > 0) {
+      setSlideDirection('left');
+      setAnimationKey(prevKey => prevKey + 1);
+      setCurrentStep(currentStep - 1);
+      setCameFromReview(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
   
   // Component to display validation errors
@@ -638,6 +690,12 @@ const [listingBasics, setListingBasics] = useState({
     
     const pricingErrors = validatePricing();
     if (pricingErrors.length > 0) allErrors[7] = pricingErrors;
+    
+    const verifyPricingErrors = validateVerifyPricing();
+    if (verifyPricingErrors.length > 0) allErrors[8] = verifyPricingErrors;
+    
+    const depositErrors = validateDeposits();
+    if (depositErrors.length > 0) allErrors[9] = depositErrors;
     
     setValidationErrors(allErrors);
     
@@ -750,7 +808,7 @@ const [listingBasics, setListingBasics] = useState({
         await revalidateHostDashboard();
         
         // Show success state instead of immediate redirect
-        setCurrentStep(9); // Move to a new success step
+        setCurrentStep(11); // Move to a new success step
         setSlideDirection('right');
         setAnimationKey(prevKey => prevKey + 1);
       } catch (error) {
@@ -759,7 +817,7 @@ const [listingBasics, setListingBasics] = useState({
         // Show error at the bottom of the review page
         setValidationErrors({
           ...validationErrors,
-          [8]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
+          [10]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
         });
       }
     } else {
@@ -793,8 +851,7 @@ const [listingBasics, setListingBasics] = useState({
               setListingHighlights({
                 category: draftListing.category,
                 petsAllowed: draftListing.petsAllowed || false,
-                furnished: draftListing.furnished || false,
-                utilitiesIncluded: draftListing.utilitiesIncluded || false
+                furnished: draftListing.furnished || false
               });
             }
             
@@ -848,7 +905,6 @@ const [listingBasics, setListingBasics] = useState({
             Object.entries(draftListing).forEach(([key, value]) => {
               if (value === true && 
                   key !== 'furnished' && 
-                  key !== 'utilitiesIncluded' && 
                   key !== 'petsAllowed' && 
                   key !== 'isApproved') {
                 amenities.push(key);
@@ -892,7 +948,6 @@ const [listingBasics, setListingBasics] = useState({
       category: listingHighlights.category,
       petsAllowed: listingHighlights.petsAllowed,
       furnished: listingHighlights.furnished,
-      utilitiesIncluded: listingHighlights.utilitiesIncluded,
       // Sync location
       locationString: listingLocation.locationString,
       latitude: listingLocation.latitude,
@@ -1072,6 +1127,37 @@ const [listingBasics, setListingBasics] = useState({
           </>
         );
       case 8:
+        return (
+          <>
+            <ListingCreationVerifyPricing
+              shortestStay={listingPricing.shortestStay}
+              longestStay={listingPricing.longestStay}
+              shortTermRent={listingPricing.shortTermRent}
+              longTermRent={listingPricing.longTermRent}
+              tailoredPricing={listingPricing.tailoredPricing}
+              onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
+              onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
+              onShortTermRentChange={(value) => setListingPricing(prev => ({ ...prev, shortTermRent: value }))}
+              onLongTermRentChange={(value) => setListingPricing(prev => ({ ...prev, longTermRent: value }))}
+            />
+          </>
+        );
+      case 9:
+        return (
+          <>
+            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mb-6" />}
+            <ListingCreationDeposit
+              deposit={listingPricing.deposit}
+              petDeposit={listingPricing.petDeposit}
+              petRent={listingPricing.petRent}
+              onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
+              onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
+              onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
+            />
+            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mt-6" />}
+          </>
+        );
+      case 10:
         // Combine all errors for the review page
         const allValidationErrors = Object.values(validationErrors).flat();
         
@@ -1111,9 +1197,9 @@ const [listingBasics, setListingBasics] = useState({
             )}
           </>
         );
-      case 9:
+      case 11:
         // Success page - determine if from Save & Exit or final submission
-        const isSaveAndExit = currentStep === 9 && listing.status === "draft";
+        const isSaveAndExit = currentStep === 11 && listing.status === "draft";
         
         return (
           <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -1133,7 +1219,7 @@ const [listingBasics, setListingBasics] = useState({
             </p>
             <Button 
               className="w-[200px] h-[48px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-              onClick={() => router.push('/platform/host-dashboard')}
+              onClick={() => router.push('/platform/host-dashboard/listings')}
             >
               Go to Host Dashboard
             </Button>
@@ -1157,19 +1243,18 @@ const [listingBasics, setListingBasics] = useState({
   }
 
   return (
-    <main className="bg-background flex flex-row justify-center w-full min-h-screen">
-      <div className="bg-background overflow-hidden w-full max-w-[1920px] relative py-12 pb-32">
+    <main className="bg-background flex flex-row justify-center w-full ">
+      <div className="bg-background overflow-hidden w-full max-w-[1920px] relative pb-32">
         {/* Progress bar component - hidden on success page */}
-        {currentStep !== 9 && (
+        {currentStep !== 11 && (
           <ProgressBar 
             currentStep={currentStep} 
             steps={steps}
-            onSaveExit={handleSaveExit}
           />
         )}
 
         {/* Main content with slide animation */}
-        <div className="mx-auto w-full max-w-[891px] mb-24">
+        <div className="mx-auto w-full max-w-[891px] mb-24 ">
           <div 
             key={animationKey} // Adding key to force re-render on each step change
             className="transition-transform duration-500 ease-in-out"
@@ -1196,30 +1281,103 @@ const [listingBasics, setListingBasics] = useState({
         `}</style>
 
         {/* Footer with navigation buttons - fixed to bottom */}
-        {currentStep !== 9 && (
+        {currentStep !== 11 && (
           <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 z-10">
             <Separator className="w-full" />
-            <div className="flex justify-between mx-auto w-full max-w-[891px] py-4">
-              <Button 
-                className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-                onClick={handleBack}
-                disabled={currentStep === 0}
-              >
-                Back
-              </Button>
-              <Button 
-                className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-                onClick={currentStep === 8 ? handleSubmitListing : handleNext}
-                disabled={currentStep === 8 && false} // Disabled set to false for review step to submit the listing
-              >
-                {currentStep === 8 ? 'Submit Listing' : 
-                 cameFromReview ? 'Review' : 'Next'}
-              </Button>
-            </div>
+            {isAdmin ? (
+              /* Admin footer with skip buttons */
+              <div className="mx-auto w-full max-w-[891px] py-4">
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex gap-2">
+                    <Button 
+                      className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+                      onClick={handleBack}
+                      disabled={currentStep === 0}
+                    >
+                      Back
+                    </Button>
+                    {!adminSkipButtonsHidden && (
+                      <Button 
+                        className="w-[80px] h-[42px] bg-orange-500 hover:bg-orange-600 rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-sm"
+                        onClick={handleAdminSkipBack}
+                        disabled={currentStep === 0}
+                      >
+                        Skip ←
+                      </Button>
+                    )}
+                  </div>
+                  <Button 
+                    className="w-[106px] h-[42px] bg-background rounded-[5px] border border-solid border-[#0000004c] font-['Montserrat',Helvetica] font-medium text-[#3f3f3f] text-sm"
+                    onClick={handleSaveExit}
+                  >
+                    Save & Exit
+                  </Button>
+                  <div className="flex gap-2">
+                    {!adminSkipButtonsHidden && (
+                      <Button 
+                        className="w-[80px] h-[42px] bg-orange-500 hover:bg-orange-600 rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-sm"
+                        onClick={handleAdminSkipNext}
+                        disabled={currentStep >= steps.length - 1}
+                      >
+                        Skip →
+                      </Button>
+                    )}
+                    <Button 
+                      className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
+                        currentStep === 10 && isAdmin 
+                          ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                          : 'bg-[#4f4f4f] text-white'
+                      }`}
+                      onClick={currentStep === 10 ? handleSubmitListing : handleNext}
+                      disabled={currentStep === 10 ? isAdmin : false}
+                    >
+                      {currentStep === 10 ? 'Submit Listing' : 
+                       cameFromReview ? 'Review' : 'Next'}
+                    </Button>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <span 
+                    className={`text-xs font-medium cursor-pointer ${adminSkipButtonsHidden ? 'text-gray-500' : 'text-orange-600'}`}
+                    onClick={() => setAdminSkipButtonsHidden(!adminSkipButtonsHidden)}
+                  >
+                    Admin Mode: Skip buttons bypass validation (click to {adminSkipButtonsHidden ? 'show' : 'hide'})
+                  </span>
+                </div>
+              </div>
+            ) : (
+              /* Regular user footer */
+              <div className="flex justify-between items-center mx-auto w-full max-w-[891px] py-4">
+                <Button 
+                  className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+                  onClick={handleBack}
+                  disabled={currentStep === 0}
+                >
+                  Back
+                </Button>
+                <Button 
+                  className="w-[106px] h-[42px] bg-background rounded-[5px] border border-solid border-[#0000004c] font-['Montserrat',Helvetica] font-medium text-[#3f3f3f] text-sm"
+                  onClick={handleSaveExit}
+                >
+                  Save & Exit
+                </Button>
+                <Button 
+                  className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
+                    currentStep === 10 && isAdmin 
+                      ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                      : 'bg-[#4f4f4f] text-white'
+                  }`}
+                  onClick={currentStep === 10 ? handleSubmitListing : handleNext}
+                  disabled={currentStep === 10 ? isAdmin : false}
+                >
+                  {currentStep === 10 ? 'Submit Listing' : 
+                   cameFromReview ? 'Review' : 'Next'}
+                </Button>
+              </div>
+            )}
           </div>
         )}
         
-{/* Removed redundant padding div as we've added padding elsewhere */}
       </div>
     </main>
   );
