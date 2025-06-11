@@ -241,7 +241,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
             {triggerText}
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-md p-0" hideCloseButton>
+        <DialogContent className="max-w-2xl p-0" hideCloseButton>
           <div className="w-full bg-white rounded-lg">
             <CalendarHeader currentDate={currentDate} setCurrentDate={setCurrentDate} />
             <ColumnHeaders />
