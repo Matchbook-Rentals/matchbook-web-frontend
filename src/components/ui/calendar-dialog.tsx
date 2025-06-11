@@ -72,12 +72,14 @@ const CalendarHeader = ({ currentDate, setCurrentDate }: { currentDate: Date; se
 
 const ColumnHeaders = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const shortDaysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
   return (
     <div className="grid grid-cols-7 py-2">
-      {daysOfWeek.map(day => (
+      {daysOfWeek.map((day, index) => (
         <div key={day} className="text-center font-semibold text-sm">
-          {day}
+          <span className="hidden md:inline">{day}</span>
+          <span className="md:hidden">{shortDaysOfWeek[index]}</span>
         </div>
       ))}
     </div>
@@ -124,7 +126,7 @@ const CalendarDays = ({
     });
 
     // Base styling
-    let className = "p-2 text-center text-sm min-h-[32px] flex items-center justify-center";
+    let className = "p-2 text-center text-sm min-h-8 md:min-h-12 flex items-center justify-center";
     
     // Apply styling based on status
     if (currentBooking) {
@@ -174,7 +176,7 @@ const CalendarDays = ({
 
   // Add blank cells for days before the start of the month
   const blanks = Array(startDayOfWeek).fill(null).map((_, i) => (
-    <div key={`blank-${i}`} className="p-2 min-h-[32px]"></div>
+    <div key={`blank-${i}`} className="p-2 min-h-8 md:min-h-12"></div>
   ));
 
   return (
@@ -253,7 +255,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
             <CalendarLegend />
             
             {/* Footer with action buttons */}
-            <div className="p-4 border-t bg-white flex justify-between gap-3">
+            <div className="p-4 border-t bg-white flex flex-col sm:flex-row justify-between gap-3">
               <Button 
                 variant="outline" 
                 onClick={handleClose}
