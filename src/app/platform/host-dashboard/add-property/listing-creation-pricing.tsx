@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface ListingCreationPricingProps {
   shortestStay: number;
@@ -48,100 +47,6 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
   isLoading
 }) => {
 
-  // Helper functions for chart data
-  const roundToNearestFive = (value: number) => {
-    return Math.round(value / 5) * 5;
-  };
-
-  const generateChartData = () => {
-    if (!shortTermRent || !longTermRent) {
-      // Return placeholder data if prices aren't set
-      return Array.from({ length: 12 }, (_, i) => {
-        const num = i + 1;
-        const monthLabel = num === 1 ? `${num} Month` : `${num} Months`;
-        return {
-          month: monthLabel,
-          price: 0,
-        };
-      });
-    }
-
-    const shortRent = parseFloat(shortTermRent);
-    const longRent = parseFloat(longTermRent);
-    
-    if (isNaN(shortRent) || isNaN(longRent)) {
-      return Array.from({ length: 12 }, (_, i) => {
-        const num = i + 1;
-        const monthLabel = num === 1 ? `${num} Month` : `${num} Months`;
-        return {
-          month: monthLabel,
-          price: 0,
-        };
-      });
-    }
-
-    const data = [];
-    
-    // If tailored pricing is off, use the same price for all months
-    if (!tailoredPricing) {
-      for (let i = 1; i <= 12; i++) {
-        // Consistent padding for single and double digit month labels
-        const monthLabel = i === 1 ? `${i} Month` : `${i} Months`;
-        
-        data.push({
-          month: monthLabel,
-          price: shortRent,
-          isHighlighted: i === 6, // Highlight 6-month stay
-        });
-      }
-      return data;
-    }
-    
-    // For tailored pricing, calculate the interpolated values
-    const stepValue = (longRent - shortRent) / (longestStay - shortestStay);
-    
-    // Only include months within the selected range
-    for (let i = shortestStay; i <= longestStay; i++) {
-      // Interpolate the price for stays between min and max length
-      const value = shortRent + stepValue * (i - shortestStay);
-      const roundedValue = roundToNearestFive(value);
-      
-      // Consistent padding for single and double digit month labels
-      const monthLabel = i === 1 ? `${i} Month` : `${i} Months`;
-      
-      data.push({
-        month: monthLabel,
-        price: parseFloat(roundedValue.toFixed(2)),
-        isHighlighted: i === 6, // Highlight 6-month stay
-      });
-    }
-    
-    return data;
-  };
-
-  const chartData = generateChartData();
-  
-  const roundUpToNearestHundred = (value: number) => {
-    return Math.ceil(value / 100) * 100;
-  };
-
-  const getMaxChartValue = () => {
-    const shortRent = parseFloat(shortTermRent);
-    if (!shortTermRent || isNaN(shortRent)) return 2000; // Default if no values set
-    return roundUpToNearestHundred(shortRent * 1.2); // 20% higher than the highest value
-  };
-
-  const generateYAxisTicks = (maxValue: number) => {
-    const ticks = [];
-    const step = maxValue <= 1000 ? 200 : 500;
-    for (let i = 0; i <= maxValue; i += step) {
-      ticks.push(i);
-    }
-    return ticks;
-  };
-
-  const maxChartValue = getMaxChartValue();
-  const yAxisTicks = generateYAxisTicks(maxChartValue);
 
   // Handlers for increasing/decreasing stay lengths
   const increaseShortestStay = () => {
@@ -173,61 +78,65 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
       <div className="w-full">
         {/* Header Section */}
         <div className="space-y-6 mb-8">
-          <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
-            What's the shortest stay you will accommodate?
-          </h2>
           <div className="flex items-center justify-between">
-            <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-              {shortestStay} month{shortestStay !== 1 && "s"}
-            </span>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={decreaseShortestStay}
-                disabled={shortestStay <= 1}
-              >
-                <MinusIcon className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={increaseShortestStay}
-                disabled={shortestStay >= longestStay}
-              >
-                <PlusIcon className="h-4 w-4" />
-              </Button>
+            <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
+              What's the shortest stay you will accommodate?
+            </h2>
+            <div className="flex items-center space-x-4">
+              <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                {shortestStay} month{shortestStay !== 1 && "s"}
+              </span>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full h-9 w-9 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                  onClick={decreaseShortestStay}
+                  disabled={shortestStay <= 1}
+                >
+                  <MinusIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full h-9 w-9 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                  onClick={increaseShortestStay}
+                  disabled={shortestStay >= longestStay}
+                >
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
           
-          <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica] mt-8">
-            What's the longest stay you will accommodate?
-          </h2>
-          <div className="flex items-center justify-between">
-            <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-              {longestStay} month{longestStay !== 1 && "s"}
-            </span>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={decreaseLongestStay}
-                disabled={longestStay <= shortestStay}
-              >
-                <MinusIcon className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={increaseLongestStay}
-                disabled={longestStay >= 12}
-              >
-                <PlusIcon className="h-4 w-4" />
-              </Button>
+          <div className="flex items-center justify-between mt-8">
+            <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
+              What's the longest stay you will accommodate?
+            </h2>
+            <div className="flex items-center space-x-4">
+              <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                {longestStay} month{longestStay !== 1 && "s"}
+              </span>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full h-9 w-9 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                  onClick={decreaseLongestStay}
+                  disabled={longestStay <= shortestStay}
+                >
+                  <MinusIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full h-9 w-9 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                  onClick={increaseLongestStay}
+                  disabled={longestStay >= 12}
+                >
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
           
@@ -254,12 +163,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
           {tailoredPricing ? (
             <>
               <div className="space-y-4">
-                <h3 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
-                  How much is rent per month for a {shortestStay} month{shortestStay !== 1 && "s"} stay?
-                </h3>
                 <div className="flex items-center justify-between">
-                  <span className="font-normal text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                    Monthly rent amount
+                  <span className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
+                    How much is rent per month for a {shortestStay} month{shortestStay !== 1 && "s"} stay?
                   </span>
                   <div className="relative w-[234px]">
                     <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
@@ -279,12 +185,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
-                  How much is rent per month for a {longestStay} month{longestStay !== 1 && "s"} stay?
-                </h3>
                 <div className="flex items-center justify-between">
-                  <span className="font-normal text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                    Monthly rent amount
+                  <span className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
+                    How much is rent per month for a {longestStay} month{longestStay !== 1 && "s"} stay?
                   </span>
                   <div className="relative w-[234px]">
                     <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
@@ -308,12 +211,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
             </>
           ) : (
             <div className="space-y-4">
-              <h3 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
-                How much is rent per month?
-              </h3>
               <div className="flex items-center justify-between">
-                <span className="font-normal text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                  Monthly rent amount
+                <span className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
+                  How much is rent per month?
                 </span>
                 <div className="relative w-[234px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
@@ -334,44 +234,6 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
             </div>
           )}
         </div>
-
-        {/* Chart Section - only show if tailored pricing is enabled and both prices are set */}
-        {tailoredPricing && shortTermRent && longTermRent && (
-          <div className="mb-12">
-            <h3 className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-2">
-              Monthly rent price by total lease length
-            </h3>
-            <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica] mb-6">
-              This chart displays what guests pay per month, depending on the length of their stay
-            </p>
-
-            <div className="w-full h-96">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis 
-                    domain={[0, maxChartValue]} 
-                    ticks={yAxisTicks}
-                    tickFormatter={(value) => `$${value}`} 
-                  />
-                  <Tooltip 
-                    formatter={(value) => [`$${value}`, 'Monthly Rent']}
-                    labelFormatter={(label) => `Stay Length: ${label}`}
-                  />
-                  <Bar 
-                    dataKey="price" 
-                    name="Monthly Rent" 
-                    fill="#a3b899"
-                    radius={[4, 4, 0, 0]}
-                    isAnimationActive={true}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        )}
-
 
       </div>
     </div>

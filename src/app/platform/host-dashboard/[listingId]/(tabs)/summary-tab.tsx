@@ -820,7 +820,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                             key={amenity.value}
                             label={amenity.label}
                             icon={amenity.icon}
-                            className={`cursor-pointer border-2 w-[77px] h-[87px] ${
+                            className={`cursor-pointer border-2 w-[85px] h-[96px] ${
                               (formData as any)[amenity.value] 
                                 ? 'border-primary shadow-lg' 
                                 : 'border-[#E3E3E3]'

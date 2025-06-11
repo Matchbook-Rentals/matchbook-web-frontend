@@ -280,7 +280,7 @@ export default function TabLayout({
                 
                 {/* Desktop Pagination - Fixed at bottom */}
                 {pagination && pagination.totalItems > pagination.itemsPerPage && (
-                  <div ref={paginationRef} className="mt-4 pt-4 border-t border-gray-200 bg-white">
+                  <div ref={paginationRef} className="mt-4 pt-4 border-t border-gray-200 bg-background">
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-gray-600">
                         Showing {pagination.startIndex + 1}-{Math.min(pagination.endIndex, pagination.totalItems)} of {pagination.totalItems} {pagination.itemLabel || 'items'}

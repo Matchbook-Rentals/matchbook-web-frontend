@@ -17,6 +17,7 @@ import { ListingPhotos } from "./listing-creation-photos-upload";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
 import ListingAmenities from "./listing-creation-amenities";
 import ListingCreationPricing from "./listing-creation-pricing";
+import ListingCreationVerifyPricing from "./listing-creation-verify-pricing";
 import ListingCreationDeposit from "./listing-creation-deposit";
 import { Box as ListingCreationReview } from "./listing-creation-review";
 
@@ -256,9 +257,10 @@ const [listingBasics, setListingBasics] = useState({
     { name: "Featured Photos", position: 5 },
     { name: "Amenities", position: 6 },
     { name: "Pricing", position: 7 },
-    { name: "Deposits", position: 8 },
-    { name: "Review", position: 9 },
-    { name: "Success", position: 10 },
+    { name: "Verify Pricing", position: 8 },
+    { name: "Deposits", position: 9 },
+    { name: "Review", position: 10 },
+    { name: "Success", position: 11 },
   ];
 
 
@@ -348,7 +350,7 @@ const [listingBasics, setListingBasics] = useState({
       await revalidateHostDashboard();
       
       // Show success state instead of immediate redirect, similar to submit flow
-      setCurrentStep(10); // Move to success step
+      setCurrentStep(11); // Move to success step
       setSlideDirection('right');
       setAnimationKey(prevKey => prevKey + 1);
     } catch (error) {
@@ -479,6 +481,11 @@ const [listingBasics, setListingBasics] = useState({
     return errors;
   };
   
+  const validateVerifyPricing = (): string[] => {
+    // No validation needed for verify pricing step - it's just for review
+    return [];
+  };
+  
   const validateDeposits = (): string[] => {
     const errors: string[] = [];
     
@@ -509,6 +516,8 @@ const [listingBasics, setListingBasics] = useState({
       case 7:
         return validatePricing();
       case 8:
+        return validateVerifyPricing();
+      case 9:
         return validateDeposits();
       default:
         return [];
@@ -560,13 +569,19 @@ const [listingBasics, setListingBasics] = useState({
         
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-        setCurrentStep(9); // Go to review step
+        setCurrentStep(10); // Go to review step
         setCameFromReview(false); // Reset the flag
       } else {
         // Normal flow
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-        setCurrentStep(currentStep + 1);
+        
+        // Special logic: Skip verify pricing step if tailored pricing is disabled
+        if (currentStep === 7 && !listingPricing.tailoredPricing) {
+          setCurrentStep(currentStep + 2); // Skip verify pricing step (8) and go to deposits (9)
+        } else {
+          setCurrentStep(currentStep + 1);
+        }
       }
       
       // Scroll the whole page to top
@@ -578,7 +593,14 @@ const [listingBasics, setListingBasics] = useState({
     if (currentStep > 0) {
       setSlideDirection('left'); // Slide from left to right (back)
       setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-      setCurrentStep(currentStep - 1);
+      
+      // Special logic: Skip verify pricing step if tailored pricing is disabled
+      if (currentStep === 9 && !listingPricing.tailoredPricing) {
+        setCurrentStep(currentStep - 2); // Skip verify pricing step (8) and go to pricing (7)
+      } else {
+        setCurrentStep(currentStep - 1);
+      }
+      
       setCameFromReview(false); // Reset the flag since we're going backward
       
       // Scroll the whole page to top
@@ -669,8 +691,11 @@ const [listingBasics, setListingBasics] = useState({
     const pricingErrors = validatePricing();
     if (pricingErrors.length > 0) allErrors[7] = pricingErrors;
     
+    const verifyPricingErrors = validateVerifyPricing();
+    if (verifyPricingErrors.length > 0) allErrors[8] = verifyPricingErrors;
+    
     const depositErrors = validateDeposits();
-    if (depositErrors.length > 0) allErrors[8] = depositErrors;
+    if (depositErrors.length > 0) allErrors[9] = depositErrors;
     
     setValidationErrors(allErrors);
     
@@ -783,7 +808,7 @@ const [listingBasics, setListingBasics] = useState({
         await revalidateHostDashboard();
         
         // Show success state instead of immediate redirect
-        setCurrentStep(10); // Move to a new success step
+        setCurrentStep(11); // Move to a new success step
         setSlideDirection('right');
         setAnimationKey(prevKey => prevKey + 1);
       } catch (error) {
@@ -792,7 +817,7 @@ const [listingBasics, setListingBasics] = useState({
         // Show error at the bottom of the review page
         setValidationErrors({
           ...validationErrors,
-          [9]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
+          [10]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
         });
       }
     } else {
@@ -1104,7 +1129,23 @@ const [listingBasics, setListingBasics] = useState({
       case 8:
         return (
           <>
-            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mb-6" />}
+            <ListingCreationVerifyPricing
+              shortestStay={listingPricing.shortestStay}
+              longestStay={listingPricing.longestStay}
+              shortTermRent={listingPricing.shortTermRent}
+              longTermRent={listingPricing.longTermRent}
+              tailoredPricing={listingPricing.tailoredPricing}
+              onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
+              onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
+              onShortTermRentChange={(value) => setListingPricing(prev => ({ ...prev, shortTermRent: value }))}
+              onLongTermRentChange={(value) => setListingPricing(prev => ({ ...prev, longTermRent: value }))}
+            />
+          </>
+        );
+      case 9:
+        return (
+          <>
+            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mb-6" />}
             <ListingCreationDeposit
               deposit={listingPricing.deposit}
               petDeposit={listingPricing.petDeposit}
@@ -1113,10 +1154,10 @@ const [listingBasics, setListingBasics] = useState({
               onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
               onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
             />
-            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mt-6" />}
+            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mt-6" />}
           </>
         );
-      case 9:
+      case 10:
         // Combine all errors for the review page
         const allValidationErrors = Object.values(validationErrors).flat();
         
@@ -1156,9 +1197,9 @@ const [listingBasics, setListingBasics] = useState({
             )}
           </>
         );
-      case 10:
+      case 11:
         // Success page - determine if from Save & Exit or final submission
-        const isSaveAndExit = currentStep === 10 && listing.status === "draft";
+        const isSaveAndExit = currentStep === 11 && listing.status === "draft";
         
         return (
           <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -1178,7 +1219,7 @@ const [listingBasics, setListingBasics] = useState({
             </p>
             <Button 
               className="w-[200px] h-[48px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-              onClick={() => router.push('/platform/host-dashboard')}
+              onClick={() => router.push('/platform/host-dashboard/listings')}
             >
               Go to Host Dashboard
             </Button>
@@ -1205,7 +1246,7 @@ const [listingBasics, setListingBasics] = useState({
     <main className="bg-background flex flex-row justify-center w-full ">
       <div className="bg-background overflow-hidden w-full max-w-[1920px] relative pb-32">
         {/* Progress bar component - hidden on success page */}
-        {currentStep !== 10 && (
+        {currentStep !== 11 && (
           <ProgressBar 
             currentStep={currentStep} 
             steps={steps}
@@ -1240,7 +1281,7 @@ const [listingBasics, setListingBasics] = useState({
         `}</style>
 
         {/* Footer with navigation buttons - fixed to bottom */}
-        {currentStep !== 10 && (
+        {currentStep !== 11 && (
           <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 z-10">
             <Separator className="w-full" />
             {isAdmin ? (
@@ -1282,11 +1323,15 @@ const [listingBasics, setListingBasics] = useState({
                       </Button>
                     )}
                     <Button 
-                      className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-                      onClick={currentStep === 9 ? handleSubmitListing : handleNext}
-                      disabled={currentStep === 9 && false}
+                      className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
+                        currentStep === 10 && isAdmin 
+                          ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                          : 'bg-[#4f4f4f] text-white'
+                      }`}
+                      onClick={currentStep === 10 ? handleSubmitListing : handleNext}
+                      disabled={currentStep === 10 ? isAdmin : false}
                     >
-                      {currentStep === 9 ? 'Submit Listing' : 
+                      {currentStep === 10 ? 'Submit Listing' : 
                        cameFromReview ? 'Review' : 'Next'}
                     </Button>
                   </div>
@@ -1317,11 +1362,15 @@ const [listingBasics, setListingBasics] = useState({
                   Save & Exit
                 </Button>
                 <Button 
-                  className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-                  onClick={currentStep === 9 ? handleSubmitListing : handleNext}
-                  disabled={currentStep === 9 && false} // Disabled set to false for review step to submit the listing
+                  className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
+                    currentStep === 10 && isAdmin 
+                      ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                      : 'bg-[#4f4f4f] text-white'
+                  }`}
+                  onClick={currentStep === 10 ? handleSubmitListing : handleNext}
+                  disabled={currentStep === 10 ? isAdmin : false}
                 >
-                  {currentStep === 9 ? 'Submit Listing' : 
+                  {currentStep === 10 ? 'Submit Listing' : 
                    cameFromReview ? 'Review' : 'Next'}
                 </Button>
               </div>

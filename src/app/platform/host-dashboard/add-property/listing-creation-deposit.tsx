@@ -34,12 +34,9 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
         {/* Deposit Section */}
         <div className="space-y-6">
           <div className="space-y-4">
-            <h3 className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
-              How much is the security deposit?
-            </h3>
             <div className="flex items-center justify-between">
-              <label className="font-normal text-lg text-[#222222] [font-family:'Poppins',Helvetica]">
-                Security deposit amount
+              <label className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
+                How much is the security deposit?
               </label>
               <div className="relative w-[173px]">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
@@ -60,13 +57,10 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
-              Do you charge additional fees for pets?
-            </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <label className="font-normal text-lg text-[#222222] [font-family:'Poppins',Helvetica]">
-                  Pet deposit (one-time)
+                <label className="font-medium text-lg text-[#404040] [font-family:'Poppins',Helvetica]">
+                  Is there an extra deposit for pets?
                 </label>
                 <div className="relative w-[173px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
@@ -86,8 +80,8 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
               </div>
 
               <div className="flex items-center justify-between">
-                <label className="font-normal text-lg text-[#222222] [font-family:'Poppins',Helvetica]">
-                  Monthly pet rent
+                <label className="font-medium text-lg text-[#404040] [font-family:'Poppins',Helvetica]">
+                  Is there a monthly fee for pets?
                 </label>
                 <div className="relative w-[173px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
