@@ -101,7 +101,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
               </div>
             </div>
             <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica]">
-              Leave blank if you don't charge pet fees
+              Leave blank if you don&apos;t charge pet fees
             </p>
           </div>
         </div>

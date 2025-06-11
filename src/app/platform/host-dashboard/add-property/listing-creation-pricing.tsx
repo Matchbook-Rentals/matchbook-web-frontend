@@ -80,7 +80,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
         <div className="space-y-6 mb-8">
           <div className="flex items-center justify-between">
             <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
-              What's the shortest stay you will accommodate?
+              What&apos;s the shortest stay you will accommodate?
             </h2>
             <div className="flex items-center space-x-4">
               <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
@@ -111,7 +111,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
           
           <div className="flex items-center justify-between mt-8">
             <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica]">
-              What's the longest stay you will accommodate?
+              What&apos;s the longest stay you will accommodate?
             </h2>
             <div className="flex items-center space-x-4">
               <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
