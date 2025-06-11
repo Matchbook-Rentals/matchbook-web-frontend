@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react';
 import { ListingAndImages, RequestWithUser } from '@/types';
+import { ListingUnavailability } from '@prisma/client';
 
 interface ListingDashboardData {
   listing: ListingAndImages;
@@ -12,6 +13,9 @@ interface ListingDashboardData {
 interface ListingDashboardContextValue {
   data: ListingDashboardData;
   updateListing: (updatedListing: ListingAndImages) => void;
+  addUnavailability: (unavailability: ListingUnavailability) => void;
+  updateUnavailability: (unavailability: ListingUnavailability) => void;
+  deleteUnavailability: (unavailabilityId: string) => void;
 }
 
 const ListingDashboardContext = createContext<ListingDashboardContextValue | null>(null);
@@ -31,8 +35,51 @@ export function ListingDashboardProvider({ children, data: initialData }: Listin
     }));
   };
 
+  const addUnavailability = (unavailability: ListingUnavailability) => {
+    setData(prev => ({
+      ...prev,
+      listing: {
+        ...prev.listing,
+        unavailablePeriods: [
+          ...(prev.listing.unavailablePeriods || []),
+          unavailability
+        ]
+      }
+    }));
+  };
+
+  const updateUnavailability = (updatedUnavailability: ListingUnavailability) => {
+    setData(prev => ({
+      ...prev,
+      listing: {
+        ...prev.listing,
+        unavailablePeriods: (prev.listing.unavailablePeriods || []).map(period =>
+          period.id === updatedUnavailability.id ? updatedUnavailability : period
+        )
+      }
+    }));
+  };
+
+  const deleteUnavailability = (unavailabilityId: string) => {
+    setData(prev => ({
+      ...prev,
+      listing: {
+        ...prev.listing,
+        unavailablePeriods: (prev.listing.unavailablePeriods || []).filter(
+          period => period.id !== unavailabilityId
+        )
+      }
+    }));
+  };
+
   return (
-    <ListingDashboardContext.Provider value={{ data, updateListing }}>
+    <ListingDashboardContext.Provider value={{ 
+      data, 
+      updateListing, 
+      addUnavailability, 
+      updateUnavailability, 
+      deleteUnavailability 
+    }}>
       {children}
     </ListingDashboardContext.Provider>
   );
