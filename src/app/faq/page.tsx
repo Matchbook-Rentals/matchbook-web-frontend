@@ -2,7 +2,7 @@
 import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header';
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { Montserrat } from 'next/font/google';
 import Footer from '@/components/marketing-landing-components/footer';
 

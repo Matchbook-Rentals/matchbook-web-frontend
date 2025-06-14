@@ -2,7 +2,7 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { ListingAndImages } from '@/types'
 import prisma from '@/lib/prismadb'
-import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header'
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { PAGE_MARGIN } from '@/constants/styles'
 import PlatformNavbar from '@/components/platform-components/platformNavbar'
 import { calculateRent, calculateLengthOfStay } from '@/lib/calculate-rent';

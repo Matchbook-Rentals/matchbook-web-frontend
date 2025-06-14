@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import PlatformNavbar from '@/components/platform-components/platformNavbar'
-import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header'
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 
 export default function NotFound() {
   const pathname = usePathname()

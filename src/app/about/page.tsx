@@ -1,6 +1,6 @@
 import { PAGE_MARGIN } from '@/constants/styles';
 import Image from 'next/image';
-import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header';
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Footer from '@/components/marketing-landing-components/footer';
 import SocialLinks from '@/components/SocialLinks';
 import { Montserrat } from 'next/font/google';
