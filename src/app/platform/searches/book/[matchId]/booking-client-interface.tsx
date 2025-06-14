@@ -15,7 +15,7 @@ import { useUser } from '@clerk/nextjs'
 import { checkSignature, updateBoldSignLease } from "@/app/actions/documents"
 import { toast } from "@/components/ui/use-toast"
 import { MatchWithRelations } from "@/types"
-import DocumentEmbed from "@/app/platform/host-dashboard/[listingId]/sign-lease/[housingRequestId]/lease-host-sign-embed"
+import DocumentEmbed from "@/app/platform/host/[listingId]/sign-lease/[housingRequestId]/lease-host-sign-embed"
 
 interface PropertyBookingPageProps {
   match: MatchWithRelations

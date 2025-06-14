@@ -21,7 +21,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
   return (
     <Link
-      href={`/platform/host-dashboard/${property.id}`}
+      href={`/platform/host/${property.id}`}
       className="w-[362px] rounded-2xl overflow-hidden bg-background transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-charcoalBrand group"
       style={{ textDecoration: 'none' }}
     >

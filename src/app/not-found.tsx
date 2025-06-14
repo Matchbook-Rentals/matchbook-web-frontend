@@ -73,7 +73,7 @@ export default function NotFound() {
                   <Link href="/platform/bookings" className="text-blue-600 hover:text-blue-800">
                     Bookings
                   </Link>
-                  <Link href="/platform/host-dashboard" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/platform/host/dashboard/listings" className="text-blue-600 hover:text-blue-800">
                     Host Dashboard
                   </Link>
                 </>

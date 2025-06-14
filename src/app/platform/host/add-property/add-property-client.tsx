@@ -1219,7 +1219,7 @@ const [listingBasics, setListingBasics] = useState({
             </p>
             <Button 
               className="w-[200px] h-[48px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-              onClick={() => router.push('/platform/host-dashboard/listings')}
+              onClick={() => router.push('/platform/host/dashboard/listings')}
             >
               Go to Host Dashboard
             </Button>

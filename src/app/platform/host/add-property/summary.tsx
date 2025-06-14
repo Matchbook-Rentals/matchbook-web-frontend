@@ -54,7 +54,7 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
         let isSuccessful = await handleListingCreation(propertyDetails);
         console.log('IS SUCCESSFUL', isSuccessful);
         if (isSuccessful === 'true') {
-            router.push('/platform/host-dashboard');
+            router.push('/platform/host/dashboard/listings');
         }
     }
 

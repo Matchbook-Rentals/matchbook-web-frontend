@@ -21,7 +21,7 @@ const MobileTabSelector = dynamic(() => import("@/components/ui/mobile-tab-selec
 });
 
 interface ResponsiveNavigationProps {
-  listingId: string;
+  listingId?: string;
 }
 
 export default function ResponsiveNavigation({ listingId }: ResponsiveNavigationProps) {
@@ -39,56 +39,56 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
 
   const hostDashboardItems = [
     {
-      href: "/platform/host-dashboard/listings",
+      href: "/platform/host/dashboard/listings",
       label: "All Listings",
       icon: Home,
     },
     {
-      href: "/platform/host-dashboard/applications",
+      href: "/platform/host/dashboard/applications",
       label: "All Applications",
       icon: FileText,
     },
     {
-      href: "/platform/host-dashboard/bookings",
+      href: "/platform/host/dashboard/bookings",
       label: "All Bookings",
       icon: Calendar,
     },
   ];
 
-  const listingSpecificItems = [
+  const listingSpecificItems = listingId ? [
     {
-      href: `/platform/host-dashboard/${listingId}/applications`,
+      href: `/platform/host/${listingId}/applications`,
       label: "Applications",
       icon: FileText,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/bookings`,
+      href: `/platform/host/${listingId}/bookings`,
       label: "Bookings", 
       icon: Calendar,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/reviews`,
+      href: `/platform/host/${listingId}/reviews`,
       label: "Reviews",
       icon: Star,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/listing`,
+      href: `/platform/host/${listingId}/listing`,
       label: "Listing Details",
       icon: Home,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/calendar`,
+      href: `/platform/host/${listingId}/calendar`,
       label: "Calendar",
       icon: CalendarDays,
     },
-  ];
+  ] : [];
 
   // Determine which accordion should be open by default
-  const isOnListingPage = pathname.includes(`/host-dashboard/${listingId}`);
+  const isOnListingPage = listingId && pathname.includes(`/host/${listingId}`);
   const defaultValue = isOnListingPage ? "listing-specific" : "host-dashboard";
 
-  // Create tabs for mobile view - only listing specific items
-  const mobileTabsData = listingSpecificItems.map(item => ({
+  // Create tabs for mobile view - use dashboard items if no listing, listing items if on listing page
+  const mobileTabsData = (listingId ? listingSpecificItems : hostDashboardItems).map(item => ({
     value: item.href,
     label: item.label,
     Icon: <item.icon className="h-5 w-5" />,
@@ -107,7 +107,7 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
   return (
     <>
       {/* Desktop Sidebar - hidden on mobile */}
-      <div className="hidden md:block w-56 flex-shrink-0">
+      <div className="hidden md:block w-56 flex-shrink-0 sticky top-0 self-start">
         <Accordion type="single" collapsible defaultValue={defaultValue} className="w-full">
           {/* Host Dashboard Section */}
           <AccordionItem value="host-dashboard" className="border-b">
@@ -140,38 +140,40 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
             </AccordionContent>
           </AccordionItem>
 
-          {/* Listing Specific Section */}
-          <AccordionItem value="listing-specific" className="border-b">
-            <AccordionTrigger className="hover:no-underline">
-              <span className="text-sm font-medium text-gray-900 truncate">
-                {listingData?.listing?.streetAddress1 || listingData?.listing?.title || 'Current Listing'}
-              </span>
-            </AccordionTrigger>
-            <AccordionContent>
-              <nav className="space-y-1 pl-2">
-                {listingSpecificItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href;
-                  
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                        isActive 
-                          ? "bg-blue-50 text-blue-700" 
-                          : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
-                      )}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </AccordionContent>
-          </AccordionItem>
+          {/* Listing Specific Section - only show when listingId is provided */}
+          {listingId && (
+            <AccordionItem value="listing-specific" className="border-b">
+              <AccordionTrigger className="hover:no-underline">
+                <span className="text-sm font-medium text-gray-900 truncate">
+                  {listingData?.listing?.streetAddress1 || listingData?.listing?.title || 'Current Listing'}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <nav className="space-y-1 pl-2">
+                  {listingSpecificItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = pathname === item.href;
+                    
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          isActive 
+                            ? "bg-blue-50 text-blue-700" 
+                            : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
+                        )}
+                      >
+                        <Icon className="h-4 w-4" />
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </AccordionContent>
+            </AccordionItem>
+          )}
         </Accordion>
       </div>
 

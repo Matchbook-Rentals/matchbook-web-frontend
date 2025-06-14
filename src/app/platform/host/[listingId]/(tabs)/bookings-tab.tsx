@@ -334,7 +334,7 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem asChild>
-                      <Link href={`/platform/host-dashboard/${listingId}`} className="cursor-pointer flex items-center gap-2">
+                      <Link href={`/platform/host/${listingId}`} className="cursor-pointer flex items-center gap-2">
                         <Home className="h-4 w-4" />
                         Manage Listing
                       </Link>

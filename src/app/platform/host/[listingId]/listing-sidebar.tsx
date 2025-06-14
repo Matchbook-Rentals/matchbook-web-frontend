@@ -23,17 +23,17 @@ export default function ListingSidebar({ listingId }: ListingSidebarProps) {
 
   const hostDashboardItems = [
     {
-      href: "/platform/host-dashboard/listings",
+      href: "/platform/host/dashboard/listings",
       label: "All Listings",
       icon: Home,
     },
     {
-      href: "/platform/host-dashboard/applications",
+      href: "/platform/host/dashboard/applications",
       label: "All Applications",
       icon: FileText,
     },
     {
-      href: "/platform/host-dashboard/bookings",
+      href: "/platform/host/dashboard/bookings",
       label: "All Bookings",
       icon: Calendar,
     },
@@ -41,34 +41,34 @@ export default function ListingSidebar({ listingId }: ListingSidebarProps) {
 
   const listingSpecificItems = [
     {
-      href: `/platform/host-dashboard/${listingId}/applications`,
+      href: `/platform/host/${listingId}/applications`,
       label: "Applications",
       icon: FileText,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/bookings`,
+      href: `/platform/host/${listingId}/bookings`,
       label: "Bookings", 
       icon: Calendar,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/reviews`,
+      href: `/platform/host/${listingId}/reviews`,
       label: "Reviews",
       icon: Star,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/listing`,
+      href: `/platform/host/${listingId}/listing`,
       label: "Listing Details",
       icon: Home,
     },
     {
-      href: `/platform/host-dashboard/${listingId}/calendar`,
+      href: `/platform/host/${listingId}/calendar`,
       label: "Calendar",
       icon: CalendarDays,
     },
   ];
 
   // Determine which accordion should be open by default
-  const isOnListingPage = pathname.includes(`/host-dashboard/${listingId}`);
+  const isOnListingPage = pathname.includes(`/host/${listingId}`);
   const defaultValue = isOnListingPage ? "listing-specific" : "host-dashboard";
 
   return (

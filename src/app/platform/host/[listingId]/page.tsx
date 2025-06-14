@@ -8,5 +8,5 @@ export default async function PropertyDashboardPage({ params }: PropertyDashboar
   const { listingId } = params;
   
   // Redirect to applications tab by default
-  redirect(`/platform/host-dashboard/${listingId}/applications`);
+  redirect(`/platform/host/${listingId}/applications`);
 }

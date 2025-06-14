@@ -88,7 +88,7 @@ export default async function AddPropertyPage() {
               </p>
             </div>
             <div className="flex flex-col space-y-2">
-              <Link href={`/platform/host-dashboard/add-property?draftId=${listing.id}`} className="w-full">
+              <Link href={`/platform/host/add-property?draftId=${listing.id}`} className="w-full">
                 <Button variant="default" className="w-full">
                   Continue Editing
                 </Button>
@@ -99,12 +99,12 @@ export default async function AddPropertyPage() {
       </div>
 
       <div className="flex justify-center">
-        <Link href="/platform/host-dashboard/add-property?new=true">
+        <Link href="/platform/host/add-property?new=true">
           <Button variant="outline" className="mr-4">
             Create New Listing
           </Button>
         </Link>
-        <Link href="/platform/host-dashboard">
+        <Link href="/platform/host/dashboard/listings">
           <Button variant="secondary">
             Back to Dashboard
           </Button>

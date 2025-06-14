@@ -57,17 +57,16 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   }, []);
 
   // Check if user is on host side - either by path or by view=host parameter
-  const isHostSide = pathname?.startsWith('/platform/host-dashboard') || 
-                     pathname?.startsWith('/platform/host/') ||
+  const isHostSide = pathname?.startsWith('/platform/host/') ||
                      searchParams.get('view') === 'host';
 
   // Define the menu structure with conditional items based on host/renter side
   const menuItems: MenuItem[] = isHostSide ? [
     // Host side menu items
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'properties', label: 'Your Properties', href: '/platform/host-dashboard/listings', requiresBeta: true, section: 1 },
-    { id: 'applications', label: 'Applications', href: '/platform/host-dashboard/applications', requiresBeta: true, section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/platform/host-dashboard/bookings', requiresBeta: true, section: 1 },
+    { id: 'properties', label: 'Your Properties', href: '/platform/host/dashboard/listings', requiresBeta: true, section: 1 },
+    { id: 'applications', label: 'Applications', href: '/platform/host/dashboard/applications', requiresBeta: true, section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/platform/host/dashboard/bookings', requiresBeta: true, section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/platform/messages?view=host', requiresBeta: true, section: 2 },
     {
       id: 'switch-mode',
@@ -89,7 +88,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     {
       id: 'switch-mode',
       label: 'Switch to Hosting',
-      href: '/platform/host-dashboard/listings',
+      href: '/platform/host/dashboard/listings',
       requiresHostAccess: true,
       section: 3
     },

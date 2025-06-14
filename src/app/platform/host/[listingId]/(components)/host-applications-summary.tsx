@@ -41,7 +41,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
   const handleApprove = async () => {
     setCurrApplication(application);
     setTrip(trip);
-    router.push(`/platform/host-dashboard/${currListing?.id}/sign-lease/${currHousingRequest.id}`);
+    router.push(`/platform/host/${currListing?.id}/sign-lease/${currHousingRequest.id}`);
     // try {
     //   const result = await createMatch(trip, currListing);
     //   console.log('Match creation result:', result);

@@ -13,7 +13,7 @@ export default function PlatformNavbar() {
 
   let marginClass;
 
-  const isWidePath = pathName === '/platform/messages' || pathName.includes('host-dashboard');
+  const isWidePath = pathName === '/platform/messages' || pathName.includes('/host/dashboard') || pathName.includes('/host/');
 
   isWidePath ? marginClass = APP_PAGE_MARGIN : marginClass = PAGE_MARGIN;
 

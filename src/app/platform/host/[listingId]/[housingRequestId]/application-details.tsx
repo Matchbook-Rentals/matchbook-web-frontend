@@ -218,8 +218,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
         <Link 
           href={
             from === 'dashboard' 
-              ? '/platform/host-dashboard?tab=applications'
-              : `/platform/host-dashboard/${listingId}?tab=applications`
+              ? '/platform/host/dashboard/applications'
+              : `/platform/host/${listingId}/applications`
           } 
           className="hover:underline flex items-center gap-2 mb-8"
         >

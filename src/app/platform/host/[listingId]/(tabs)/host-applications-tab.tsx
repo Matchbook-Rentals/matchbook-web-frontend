@@ -259,7 +259,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
               </div>
 
               <div className="flex items-center gap-4 mt-8">
-                <Link href={`/platform/host-dashboard/${listing.id}/${app.id}?from=listing`}>
+                <Link href={`/platform/host/${listing.id}/${app.id}?from=listing`}>
                   <Button
                     variant="outline"
                     className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
@@ -294,7 +294,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem asChild>
-                      <Link href={`/platform/host-dashboard/${listing.id}`} className="cursor-pointer flex items-center gap-2">
+                      <Link href={`/platform/host/${listing.id}`} className="cursor-pointer flex items-center gap-2">
                         <Home className="h-4 w-4" />
                         Manage Listing
                       </Link>

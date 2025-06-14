@@ -124,7 +124,7 @@ export default function PropertyCarousel({
   const handleFinish = (amenities) => {
     const tempPreferences = { ...propertyDetails, amenities };
     handleListingCreation();
-    router.push(`/platform/host-dashboard`);
+    router.push(`/platform/host/dashboard/listings`);
   };
 
   return (

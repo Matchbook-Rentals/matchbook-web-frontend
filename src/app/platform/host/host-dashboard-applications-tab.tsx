@@ -510,6 +510,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
         itemLabel: "applications"
       }}
       emptyStateMessage={housingRequestsToUse.length === 0 ? "No applications yet." : "No applications match your filters."}
+      noMargin={true}
     >
       <div className="flex flex-col gap-5">
         {paginatedApplications.map((app) => (
@@ -579,7 +580,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem asChild>
-                      <Link href={`/platform/host-dashboard/${app.listingId}`} className="cursor-pointer flex items-center gap-2">
+                      <Link href={`/platform/host/${app.listingId}`} className="cursor-pointer flex items-center gap-2">
                         <Home className="h-4 w-4" />
                         Manage Listing
                       </Link>

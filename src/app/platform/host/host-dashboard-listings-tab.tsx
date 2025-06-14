@@ -281,6 +281,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
       }}
       emptyStateMessage={listings?.length === 0 ? "No properties found. Add your first property to get started!" : "No properties match the selected filters."}
       totalCount={totalCount}
+      noMargin={true}
     >
       {paginatedListings.map((listing) => {
           const { status, statusColor } = getStatusInfo(listing);
@@ -326,7 +327,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
                 </div>
 
                 <div className="flex items-center gap-4 mt-8">
-                  <Link href={`/platform/host-dashboard/${listing.id}`}>
+                  <Link href={`/platform/host/${listing.id}`}>
                     <Button
                       variant="outline"
                       className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"

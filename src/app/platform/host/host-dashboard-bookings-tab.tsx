@@ -425,6 +425,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
         itemLabel: "bookings"
       }}
       emptyStateMessage={bookingsToUse.length === 0 ? "No bookings yet. Your confirmed bookings will appear here." : "No bookings match the selected filters."}
+      noMargin={true}
     >
       {paginatedBookings.map((booking) => {
             const statusInfo = getStatusInfo(booking.status);
@@ -505,7 +506,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem asChild>
-                          <Link href={`/platform/host-dashboard/${booking.listingId}`} className="cursor-pointer flex items-center gap-2">
+                          <Link href={`/platform/host/${booking.listingId}`} className="cursor-pointer flex items-center gap-2">
                             <Home className="h-4 w-4" />
                             Manage Listing
                           </Link>
