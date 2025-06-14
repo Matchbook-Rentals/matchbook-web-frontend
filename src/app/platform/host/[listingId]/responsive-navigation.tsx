@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { FileText, Calendar, Star, Home, CalendarDays } from "lucide-react";
+import { usePathname, useRouter } from 'next/navigation';
+import { FileText, Calendar, Star, Home, CalendarDays, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useListingDashboard } from './listing-dashboard-context';
 import {
@@ -26,6 +26,8 @@ interface ResponsiveNavigationProps {
 
 export default function ResponsiveNavigation({ listingId }: ResponsiveNavigationProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [loadingHref, setLoadingHref] = useState<string | null>(null);
   
   // Safely get listing data with fallback
   let listingData;
@@ -36,6 +38,24 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
     // Fallback if context is not available
     listingData = null;
   }
+
+  // Clear loading state when pathname changes
+  useEffect(() => {
+    setLoadingHref(null);
+  }, [pathname]);
+
+  const handleNavigation = (href: string) => {
+    // Only show loading for cross-section navigation (listing dashboard to host dashboard)
+    const isCurrentlyOnListingPage = listingId && pathname.includes(`/host/${listingId}`);
+    const isNavigatingToHostDashboard = href.includes('/host/dashboard');
+    
+    if (isCurrentlyOnListingPage && isNavigatingToHostDashboard) {
+      setLoadingHref(href);
+      router.push(href);
+    } else {
+      router.push(href);
+    }
+  };
 
   const hostDashboardItems = [
     {
@@ -98,10 +118,41 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
   const currentTab = mobileTabsData.find(tab => tab.value === pathname)?.value || mobileTabsData[0]?.value;
 
   const handleMobileTabChange = (value: string) => {
-    // Navigate to the selected route using Next.js router
-    if (typeof window !== 'undefined') {
-      window.location.href = value;
-    }
+    handleNavigation(value);
+  };
+
+  // Custom NavigationLink component
+  const NavigationLink = ({ 
+    href, 
+    icon: Icon, 
+    label, 
+    isActive 
+  }: { 
+    href: string; 
+    icon: any; 
+    label: string; 
+    isActive: boolean;
+  }) => {
+    const isLoading = loadingHref === href;
+    
+    return (
+      <button
+        onClick={() => handleNavigation(href)}
+        className={cn(
+          "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors w-full text-left",
+          isActive 
+            ? "bg-blue-50 text-blue-700" 
+            : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
+        )}
+        disabled={isLoading}
+      >
+        <Icon className="h-4 w-4" />
+        {label}
+        {isLoading && (
+          <Loader2 className="h-4 w-4 animate-spin ml-auto" />
+        )}
+      </button>
+    );
   };
 
   return (
@@ -117,23 +168,16 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
             <AccordionContent>
               <nav className="space-y-1 pl-2">
                 {hostDashboardItems.map((item) => {
-                  const Icon = item.icon;
                   const isActive = pathname === item.href;
                   
                   return (
-                    <Link
+                    <NavigationLink
                       key={item.href}
                       href={item.href}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                        isActive 
-                          ? "bg-blue-50 text-blue-700" 
-                          : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
-                      )}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {item.label}
-                    </Link>
+                      icon={item.icon}
+                      label={item.label}
+                      isActive={isActive}
+                    />
                   );
                 })}
               </nav>
@@ -151,23 +195,16 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
               <AccordionContent>
                 <nav className="space-y-1 pl-2">
                   {listingSpecificItems.map((item) => {
-                    const Icon = item.icon;
                     const isActive = pathname === item.href;
                     
                     return (
-                      <Link
+                      <NavigationLink
                         key={item.href}
                         href={item.href}
-                        className={cn(
-                          "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                          isActive 
-                            ? "bg-blue-50 text-blue-700" 
-                            : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
-                        )}
-                      >
-                        <Icon className="h-4 w-4" />
-                        {item.label}
-                      </Link>
+                        icon={item.icon}
+                        label={item.label}
+                        isActive={isActive}
+                      />
                     );
                   })}
                 </nav>
