@@ -507,6 +507,15 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
         data: { status: 'pending' }
       });
 
+      // Delete the original approval notification
+      await tx.notification.deleteMany({
+        where: {
+          userId: housingRequest.userId,
+          actionType: 'application_approved',
+          actionId: housingRequestId
+        }
+      });
+
       return { updatedRequest };
     });
 
@@ -562,10 +571,24 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
       throw new Error('Can only undo declined requests');
     }
 
-    // Update the housing request status back to pending
-    const updatedRequest = await prisma.housingRequest.update({
-      where: { id: housingRequestId },
-      data: { status: 'pending' }
+    // Start a transaction to ensure both operations succeed or fail together
+    const result = await prisma.$transaction(async (tx) => {
+      // Update the housing request status back to pending
+      const updatedRequest = await tx.housingRequest.update({
+        where: { id: housingRequestId },
+        data: { status: 'pending' }
+      });
+
+      // Delete the original decline notification
+      await tx.notification.deleteMany({
+        where: {
+          userId: housingRequest.userId,
+          actionType: 'application_declined',
+          actionId: housingRequestId
+        }
+      });
+
+      return { updatedRequest };
     });
 
     // Create a notification for the applicant
@@ -583,7 +606,7 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
     revalidatePath('/platform/host/dashboard/applications');
 
-    return { success: true, housingRequest: updatedRequest };
+    return { success: true, housingRequest: result.updatedRequest };
   } catch (error) {
     console.error('Error undoing decline:', error);
     throw error;

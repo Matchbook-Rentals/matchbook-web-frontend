@@ -58,11 +58,11 @@ const config = {
           foreground: 'hsl(var(--card-foreground))'
         },
         primaryBrand: {
-          DEFAULT: '#A3B899'
+          DEFAULT: '#095859'
         },
         secondaryBrand: {
-          '80': '#85997dcc',
-          DEFAULT: '#85997d'
+          '80': '##0B6E6E/80',
+          DEFAULT: '##0B6E6E'
         },
         blueBrand: {
           '80': '#5c9ac5cc',
