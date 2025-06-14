@@ -4,6 +4,7 @@ import { Trip } from '@prisma/client';
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import { Pencil } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -36,12 +37,13 @@ const EditTripDialog: React.FC<EditTripDialogProps> = ({ trip }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          className="bg-background border border-gray-200 hover:bg-gray-100 text-[#404040] rounded-md px-4 py-2 text-sm font-medium h-9"
-          variant="ghost"
+        <BrandButton
+          variant="outline"
+          className="h-9"
+          leftIcon={<Pencil className="h-4 w-4" />}
         >
-          <Pencil className="h-4 w-4 mr-1" /> Edit
-        </Button>
+          Edit
+        </BrandButton>
       </DialogTrigger>
 
       {isMobile ? (

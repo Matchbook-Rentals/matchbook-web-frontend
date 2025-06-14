@@ -61,8 +61,8 @@ const config = {
           DEFAULT: '#095859'
         },
         secondaryBrand: {
-          '80': '##0B6E6Ecc',
-          DEFAULT: '##0B6E6E'
+          '80': '#0B6E6Ecc',
+          DEFAULT: '#0B6E6E'
         },
         blueBrand: {
           '80': '#5c9ac5cc',

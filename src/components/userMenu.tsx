@@ -289,7 +289,7 @@ export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: User
       <div className="group">
         {isSignedIn ? (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className={mode === 'header' ? "flex items-center gap-2 rounded-md p-2 cursor-pointer" : "flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]"}>
+          <PopoverTrigger className={mode === 'header' ? "flex items-center gap-2 rounded-md pl-2 cursor-pointer" : "flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]"}>
             {mode === 'header' ? (
               <>
                 <div className="flex items-center gap-3">
@@ -299,7 +299,7 @@ export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: User
                   </Avatar>
 
                   <div className="flex flex-col">
-                    <span className="font-text-text-sm-semibold text-black text-[14px] leading-[22px]">
+                    <span className="font-text-text-sm-semibold text-black text-left text-[14px] leading-[22px]">
                       {fullName}
                     </span>
                     <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
