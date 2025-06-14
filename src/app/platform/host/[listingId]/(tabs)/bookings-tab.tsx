@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search, MoreHorizontalIcon } from "lucide-react";
+import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search, MoreHorizontalIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -55,9 +56,23 @@ interface ListingBookingsTabProps {
 }
 
 export default function ListingBookingsTab({ bookings, listingId }: ListingBookingsTabProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loadingBookingId, setLoadingBookingId] = useState<string | null>(null);
   const isMobile = useIsMobile();
+
+  // Clear loading state when pathname changes
+  useEffect(() => {
+    setLoadingBookingId(null);
+  }, [pathname]);
+
+  const handleViewBookingDetails = (bookingId: string) => {
+    setLoadingBookingId(bookingId);
+    // Navigate to booking details page (adjust route as needed)
+    router.push(`/platform/host/bookings/${bookingId}`);
+  };
 
   // Filter options for booking status
   const filterOptions = [
@@ -301,9 +316,14 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
               <div className="flex items-center gap-4 mt-8">
                 <Button
                   variant="outline"
-                  className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
+                  onClick={() => handleViewBookingDetails(booking.id)}
+                  disabled={loadingBookingId === booking.id}
+                  className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] flex items-center gap-2"
                 >
                   View Booking Details
+                  {loadingBookingId === booking.id && (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  )}
                 </Button>
 
                 <MessageGuestDialog

@@ -1,13 +1,18 @@
+"use client";
+
 import { ChevronDownIcon } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { APP_PAGE_MARGIN } from "@/constants/styles";
 import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
 import Link from "next/link";
 import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
+import { approveHousingRequest, declineHousingRequest, undoApprovalHousingRequest, undoDeclineHousingRequest } from "@/app/actions/housing-requests";
+import { toast } from "sonner";
 
 interface HousingRequestWithUser extends HousingRequest {
   user: User & {
@@ -21,6 +26,7 @@ interface HousingRequestWithUser extends HousingRequest {
   };
   listing: Listing;
   trip?: any;
+  hasBooking?: boolean;
 }
 
 interface ApplicationDetailsProps {
@@ -124,6 +130,11 @@ const questionnaire = {
 export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from }: ApplicationDetailsProps): JSX.Element => {
   const application = housingRequest.user.applications[0];
   const user = housingRequest.user;
+  const [isApproving, setIsApproving] = useState(false);
+  const [isDeclining, setIsDeclining] = useState(false);
+  const [isUndoing, setIsUndoing] = useState(false);
+  const [isUndoingDecline, setIsUndoingDecline] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState(housingRequest.status);
   
   // Get user name from actual data
   const getUserName = () => {
@@ -211,6 +222,78 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     return { percentage: `${percentage}%`, status };
   };
 
+  // Handler for approving housing request
+  const handleApprove = async () => {
+    setIsApproving(true);
+    try {
+      const result = await approveHousingRequest(housingRequestId);
+      if (result.success) {
+        setCurrentStatus('approved');
+        toast.success('Application approved successfully!');
+      }
+    } catch (error) {
+      console.error('Error approving application:', error);
+      toast.error('Failed to approve application. Please try again.');
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  // Handler for declining housing request
+  const handleDecline = async () => {
+    setIsDeclining(true);
+    try {
+      const result = await declineHousingRequest(housingRequestId);
+      if (result.success) {
+        setCurrentStatus('declined');
+        toast.success('Application declined successfully.');
+      }
+    } catch (error) {
+      console.error('Error declining application:', error);
+      toast.error('Failed to decline application. Please try again.');
+    } finally {
+      setIsDeclining(false);
+    }
+  };
+
+  // Handler for undoing approval
+  const handleUndoApproval = async () => {
+    setIsUndoing(true);
+    try {
+      const result = await undoApprovalHousingRequest(housingRequestId);
+      if (result.success) {
+        setCurrentStatus('pending');
+        toast.success('Approval has been undone.');
+      }
+    } catch (error) {
+      console.error('Error undoing approval:', error);
+      if (error instanceof Error && error.message.includes('booking already exists')) {
+        toast.error('Cannot undo approval: A booking has already been created.');
+      } else {
+        toast.error('Failed to undo approval. Please try again.');
+      }
+    } finally {
+      setIsUndoing(false);
+    }
+  };
+
+  // Handler for undoing decline
+  const handleUndoDecline = async () => {
+    setIsUndoingDecline(true);
+    try {
+      const result = await undoDeclineHousingRequest(housingRequestId);
+      if (result.success) {
+        setCurrentStatus('pending');
+        toast.success('Application is being reconsidered.');
+      }
+    } catch (error) {
+      console.error('Error undoing decline:', error);
+      toast.error('Failed to undo decline. Please try again.');
+    } finally {
+      setIsUndoingDecline(false);
+    }
+  };
+
   return (
     <main className="bg-white flex flex-row justify-center w-full">
       <div className={`bg-white w-full max-w-[1920px] relative ${APP_PAGE_MARGIN} py-4`}>
@@ -231,24 +314,75 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
 
         {/* Action Buttons */}
         <div className="flex gap-4 mb-12">
-          <Button
-            variant="outline"
-            className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#ff3b30] text-[#ff3b30] [font-family:'Poppins',Helvetica] font-medium"
-          >
-            Decline
-          </Button>
-          <Button
-            variant="outline"
-            className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium"
-          >
-            Message Guest
-          </Button>
-          <Button
-            variant="outline"
-            className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium"
-          >
-            Approve
-          </Button>
+          {currentStatus === 'approved' && (
+            <>
+              <div className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] bg-[#39b54a] text-white flex items-center justify-center [font-family:'Poppins',Helvetica] font-medium">
+                ✓ Approved
+              </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Button
+                        variant="outline"
+                        onClick={handleUndoApproval}
+                        disabled={isUndoing || housingRequest.hasBooking}
+                        className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#666666] text-[#666666] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-gray-50 disabled:cursor-not-allowed"
+                      >
+                        {isUndoing ? 'Undoing...' : 'Undo'}
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  {housingRequest.hasBooking && (
+                    <TooltipContent>
+                      <p>Cannot undo: A booking has been made</p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
+            </>
+          )}
+          {currentStatus === 'declined' && (
+            <>
+              <div className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#ff3b30] bg-[#ff3b30] text-white flex items-center justify-center [font-family:'Poppins',Helvetica] font-medium">
+                ✗ Declined
+              </div>
+              <Button
+                variant="outline"
+                onClick={handleUndoDecline}
+                disabled={isUndoingDecline}
+                className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#666666] text-[#666666] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-gray-50"
+              >
+                {isUndoingDecline ? 'Undoing...' : 'Undo'}
+              </Button>
+            </>
+          )}
+          {currentStatus === 'pending' && (
+            <>
+              <Button
+                variant="outline"
+                onClick={handleDecline}
+                disabled={isDeclining || isApproving}
+                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#ff3b30] text-[#ff3b30] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50"
+              >
+                {isDeclining ? 'Declining...' : 'Decline'}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium"
+              >
+                Message Guest
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleApprove}
+                disabled={isApproving || isDeclining}
+                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50"
+              >
+                {isApproving ? 'Approving...' : 'Approve'}
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Earnings Section */}

@@ -1,8 +1,9 @@
 "use client";
 
-import { MoreHorizontalIcon, Search, Home } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import { MoreHorizontalIcon, Search, Home, Loader2 } from "lucide-react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -337,11 +338,24 @@ interface HostDashboardApplicationsTabProps {
 }
 
 export default function HostDashboardApplicationsTab({ housingRequests: propHousingRequests }: HostDashboardApplicationsTabProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const itemsPerPage = 10;
   const isMobile = useIsMobile();
+
+  // Clear loading state when pathname changes
+  useEffect(() => {
+    setLoadingApplicationId(null);
+  }, [pathname]);
+
+  const handleViewApplicationDetails = (listingId: string, applicationId: string) => {
+    setLoadingApplicationId(applicationId);
+    router.push(`/platform/host/${listingId}/applications/${applicationId}?from=dashboard`);
+  };
 
   // Debug logging
   console.log('HostDashboardApplicationsTab received propHousingRequests:', propHousingRequests);
@@ -553,14 +567,17 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
               </div>
 
               <div className="flex gap-4">
-                <Link href={`/platform/host-dashboard/${app.listingId}/${app.id}?from=dashboard`}>
-                  <Button
-                    variant="outline"
-                    className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                  >
-                    Application Details
-                  </Button>
-                </Link>
+                <Button
+                  variant="outline"
+                  onClick={() => handleViewApplicationDetails(app.listingId, app.id)}
+                  disabled={loadingApplicationId === app.id}
+                  className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5 flex items-center gap-2"
+                >
+                  Application Details
+                  {loadingApplicationId === app.id && (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  )}
+                </Button>
                 <MessageGuestDialog
                   listingId={app.listingId}
                   guestName={app.name}

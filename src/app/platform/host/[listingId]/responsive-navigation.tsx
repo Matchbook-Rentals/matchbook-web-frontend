@@ -75,6 +75,28 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
     },
   ];
 
+  // Function to get current application guest name if on application page
+  const getCurrentApplicationGuestName = () => {
+    const pathParts = pathname.split('/');
+    const isOnApplicationPage = pathParts.includes('applications');
+    
+    if (isOnApplicationPage && listingData?.housingRequests) {
+      const housingRequestId = pathParts[pathParts.length - 1];
+      const currentRequest = listingData.housingRequests.find(request => request.id === housingRequestId);
+      
+      if (currentRequest?.user) {
+        const user = currentRequest.user;
+        if (user.firstName && user.lastName) {
+          return `${user.firstName} ${user.lastName}`;
+        }
+        return user.email || 'Guest';
+      }
+    }
+    return null;
+  };
+
+  const currentGuestName = getCurrentApplicationGuestName();
+
   const listingSpecificItems = listingId ? [
     {
       href: `/platform/host/${listingId}/applications`,
@@ -196,15 +218,27 @@ export default function ResponsiveNavigation({ listingId }: ResponsiveNavigation
                 <nav className="space-y-1 pl-2">
                   {listingSpecificItems.map((item) => {
                     const isActive = pathname === item.href;
+                    const isApplicationsItem = item.label === "Applications";
+                    const isOnApplicationDetailsPage = pathname.includes('/applications/');
                     
                     return (
-                      <NavigationLink
-                        key={item.href}
-                        href={item.href}
-                        icon={item.icon}
-                        label={item.label}
-                        isActive={isActive}
-                      />
+                      <div key={item.href}>
+                        <NavigationLink
+                          href={item.href}
+                          icon={item.icon}
+                          label={item.label}
+                          isActive={isActive && !isOnApplicationDetailsPage || (isApplicationsItem && isOnApplicationDetailsPage && !currentGuestName)}
+                        />
+                        {/* Show guest name as active item when on application details page */}
+                        {isApplicationsItem && currentGuestName && isOnApplicationDetailsPage && (
+                          <div className="pl-7 py-1">
+                            <div className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-blue-50 text-blue-700">
+                              <div className="h-4 w-4" /> {/* Spacer to align with icon */}
+                              {currentGuestName}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
                 </nav>

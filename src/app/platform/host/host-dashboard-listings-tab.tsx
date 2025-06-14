@@ -1,13 +1,13 @@
 "use client";
 
-import { MoreHorizontalIcon, Search } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import { MoreHorizontalIcon, Search, Loader2 } from "lucide-react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ListingAndImages } from "@/types";
 import CalendarDialog from "@/components/ui/calendar-dialog";
 import TabLayout from "./components/cards-with-filter-layout";
@@ -28,10 +28,22 @@ interface HostDashboardListingsTabProps {
 export default function HostDashboardListingsTab({ listings, paginationInfo }: HostDashboardListingsTabProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [clientPage, setClientPage] = useState(1);
+  const [loadingListingId, setLoadingListingId] = useState<string | null>(null);
   const isMobile = useIsMobile();
+
+  // Clear loading state when pathname changes
+  useEffect(() => {
+    setLoadingListingId(null);
+  }, [pathname]);
+
+  const handleViewListingDetails = (listingId: string) => {
+    setLoadingListingId(listingId);
+    router.push(`/platform/host/${listingId}`);
+  };
   
   // Client-side pagination settings
   const clientItemsPerPage = 10; // Always paginate by 10 on client side
@@ -254,7 +266,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
 
   // Add Property button component
   const addPropertyButton = (
-    <Link href="/platform/host-dashboard/add-property">
+    <Link href="/platform/host/add-property">
       <Button
         className="bg-black text-white hover:bg-gray-800 rounded-lg px-6 py-2 [font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5"
       >
@@ -327,14 +339,17 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
                 </div>
 
                 <div className="flex items-center gap-4 mt-8">
-                  <Link href={`/platform/host/${listing.id}`}>
-                    <Button
-                      variant="outline"
-                      className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                    >
-                      View Listing Details
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleViewListingDetails(listing.id)}
+                    disabled={loadingListingId === listing.id}
+                    className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] flex items-center gap-2"
+                  >
+                    View Listing Details
+                    {loadingListingId === listing.id && (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    )}
+                  </Button>
 
                   <CalendarDialog 
                     bookings={listing.bookings || []}
