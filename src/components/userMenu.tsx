@@ -1,5 +1,6 @@
 'use client'
-import { ChevronDownIcon, Bell } from "lucide-react";
+import { ChevronDownIcon, Bell, UserRound } from "lucide-react";
+import { FaUserLarge } from "react-icons/fa6";
 import React, { useEffect, useState, useCallback } from "react";
 import {
   Avatar,
@@ -53,10 +54,11 @@ export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: User
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   
-  // Get user's first and last name
+  // Get user's first name only, truncate after 10 characters
   const firstName = user?.firstName || '';
   const lastName = user?.lastName || '';
-  const fullName = `${firstName} ${lastName}`.trim() || 'User';
+  const displayText = firstName || user?.emailAddresses?.[0]?.emailAddress || 'User';
+  const fullName = displayText.length > 10 ? displayText.substring(0, 10) + '...' : displayText;
   
   // Get user role from metadata
   const userRole = user?.publicMetadata?.role as string | undefined;
@@ -250,7 +252,7 @@ export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: User
       {isSignedIn && hasBetaAccess && (
         <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
           <PopoverTrigger className="relative flex items-center justify-center">
-            <Bell className="h-5 w-5 text-charcoal transition-transform duration-300 ease-out hover:scale-110" />
+            <Bell className="h-5 w-5 text-charcoal transition-transform duration-300 ease-out " />
             {hasUnread && (
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
             )}
@@ -291,21 +293,21 @@ export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: User
             {mode === 'header' ? (
               <>
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-[38px] w-[38px] transition-transform duration-300 ease-out group-hover:scale-110">
+                  <Avatar className="h-[38px] w-[38px] transition-transform duration-300 ease-out group-hover:">
                     <AvatarImage src={user?.imageUrl} alt={fullName} />
                     <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
 
-                  <div className="flex flex-col transition-transform duration-300 ease-out group-hover:scale-[1.03]">
+                  <div className="flex flex-col">
                     <span className="font-text-text-sm-semibold text-black text-[14px] leading-[22px]">
                       {fullName}
                     </span>
                     <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
-                      {displayRole}
+                      {pathname?.includes('host') ? 'Hosting' : 'Renting'}
                     </span>
                   </div>
                 </div>
-                <ChevronDownIcon className="h-6 w-6 text-black/30" />
+                <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
               </>
             ) : (
               <>
@@ -409,13 +411,20 @@ export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: User
         </Popover>
       ) : (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className="flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]">
-            <div className="relative">
-              <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
+          <PopoverTrigger className="flex items-center gap-2 rounded-md p-2 cursor-pointer">
+            <div className="flex items-center gap-3">
+              <div className="relative min-w-[38px] min-h-[38px] rounded-full flex items-end justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110" style={{backgroundColor: '#0B6E6E'}}>
+                <FaUserLarge className="text-white h-[24px] w-[24px]" />
+              </div>
+
+              <div className="flex flex-col">
+                <span className="font-text-text-sm-semibold text-black text-[14px] leading-[22px]">
+                  Sign In                </span>
+                <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
+                </span>
+              </div>
             </div>
-            <div className="relative min-w-[32px] min-h-[32px]">
-              <UserIcon className="text-charcoal h-[32px] w-[32px]" />
-            </div>
+            <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
           </PopoverTrigger>
           <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-0">
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
