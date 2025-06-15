@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import FeatureCard from "./feature-card";
 
 // Feature card data for mapping
@@ -31,7 +31,7 @@ const featureCards = [
   {
     title: "Get MatchBook Verified and Stay in Control",
     description:
-      "Pay $25 once for your credit, criminal, and eviction check. Share it with any Matchbook listing",
+      "Pay $25 once for your credit, criminal, and eviction check. Share it with any Matchbook listing.",
     position: "col-span-2 row-span-1",
     speechBubble: {
       imageSrc: "/image-6.png",
@@ -69,29 +69,8 @@ const featureCards = [
 
 
 export default function RentEasyCopy(): JSX.Element {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [componentHeight, setComponentHeight] = useState<number>(0);
-
-  useEffect(() => {
-    const measureHeight = () => {
-      if (sectionRef.current) {
-        const height = sectionRef.current.offsetHeight;
-        // mb-40 = 160px (40 * 4), mt-8 = 32px (8 * 4) in Tailwind
-        const totalHeight = height + 160 + 32;
-        setComponentHeight(totalHeight);
-        console.log(`RentEasyCopy component height: ${height}px + margins: ${totalHeight}px`);
-      }
-    };
-
-    measureHeight();
-    window.addEventListener('resize', measureHeight);
-    
-    return () => window.removeEventListener('resize', measureHeight);
-  }, []);
-
   return (
     <section 
-      ref={sectionRef}
       className="flex flex-col  items-center gap-14 px-[150px] mt-8 mb-40 relative max-w-[1600px] mx-auto"
     >
       {/* Header */}
@@ -100,7 +79,7 @@ export default function RentEasyCopy(): JSX.Element {
           Renting shouldn&apos;t be so hard.
         </h1>
         <p className="relative self-stretch [font-family:'Poppins',Helvetica] font-medium text-[24px] leading-[100%] tracking-[0px] text-center text-[#6C737F]">
-          Now, it doesn&apos;t have to be. ({componentHeight}px)
+          Now, it doesn&apos;t have to be.
         </p>
       </header>
 

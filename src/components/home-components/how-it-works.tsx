@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "../../components/ui/card";
 
-export const HowItWorks = (): JSX.Element => {
+export const HowItWorksOld = (): JSX.Element => {
   // Data for the steps to make the code more maintainable
   const steps = [
     { 
@@ -44,6 +44,38 @@ export const HowItWorks = (): JSX.Element => {
             </CardContent>
           </Card>
         ))}
+      </div>
+    </section>
+  );
+};
+
+export const HowItWorks = (): JSX.Element => {
+  return (
+    <section className="w-full bg-[#FBFBFB] flex justify-center items-center py-2">
+      <div 
+        className="flex flex-col items-center relative"
+        style={{
+          width: '1441px',
+          paddingTop: '64px',
+          paddingRight: '150px',
+          paddingBottom: '64px',
+          paddingLeft: '150px',
+          gap: '56px'
+        }}
+      >
+        <header className="text-center">
+          <h1 className="font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] tracking-[-2.00px] leading-normal">
+            How MatchBook Works
+          </h1>
+        </header>
+        
+        <div className="w-full flex items-center justify-center">
+          <img
+            src="/marketing-images/Pasted image.png"
+            alt="How MatchBook Works"
+            className="max-w-full h-auto object-contain"
+          />
+        </div>
       </div>
     </section>
   );
