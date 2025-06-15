@@ -65,11 +65,8 @@ const WebHomePage = () => {
   return (
     <div className="overflow-x-hidden">
       <MatchbookHeader />
-      <div className="h-[82vh] flex flex-col justify-between">
       <Hero />
       <RentEasyCopy />
-      </div>
-      <div className={spacerDivClassNames} />
       <HowItWorks />
       <div className={spacerDivClassNames} />
       <RentersLoveMatchbook />
