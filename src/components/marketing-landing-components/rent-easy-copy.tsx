@@ -70,35 +70,30 @@ const featureCards = [
 
 export default function RentEasyCopy(): JSX.Element {
   return (
-    <section className="flex flex-col  items-center gap-14 px-[150px] mt-8 mb-40 relative">
+    <section className="flex flex-col  items-center gap-14 px-[150px] mt-8 mb-40 relative max-w-[1600px] mx-auto">
       {/* Header */}
       <header className="inline-flex flex-col items-center gap-1 relative">
         <h1 className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
           Renting shouldn&apos;t be so hard.
         </h1>
-        <p className="relative self-stretch font-text-heading-small-medium font-[number:var(--text-heading-small-medium-font-weight)] text-gray-neutral500 text-[length:var(--text-heading-small-medium-font-size)] text-center tracking-[var(--text-heading-small-medium-letter-spacing)] leading-[var(--text-heading-small-medium-line-height)] [font-style:var(--text-heading-small-medium-font-style)]">
+        <p className="relative self-stretch [font-family:'Poppins',Helvetica] font-medium text-[24px] leading-[100%] tracking-[0px] text-center text-[#6C737F]">
           Now, it doesn&apos;t have to be.
         </p>
       </header>
 
       {/* Feature Cards Grid */}
-      <div className="grid grid-cols-4 gap-6 w-full">
+      <div className="grid grid-cols-3 grid-rows-2 gap-6 w-full">
         {/* Left Column */}
-        <div className="col-span-1 flex flex-col gap-6">
+        <div className="col-span-1 row-span-1">
           <FeatureCard
             title={featureCards[0].title}
             description={featureCards[0].description}
             speechBubble={featureCards[0].speechBubble}
           />
-          <FeatureCard
-            title={featureCards[1].title}
-            description={featureCards[1].description}
-            speechBubble={featureCards[1].speechBubble}
-          />
         </div>
 
-        {/* Center Column */}
-        <div className="col-span-2 h-full">
+        {/* Center Column - spans 2 rows */}
+        <div className="col-span-1 row-span-2">
           <FeatureCard
             title={featureCards[2].title}
             description={featureCards[2].description}
@@ -107,13 +102,26 @@ export default function RentEasyCopy(): JSX.Element {
           />
         </div>
 
-        {/* Right Column */}
-        <div className="col-span-1 flex flex-col gap-6">
+        {/* Right Column Top */}
+        <div className="col-span-1 row-span-1">
           <FeatureCard
             title={featureCards[3].title}
             description={featureCards[3].description}
             speechBubble={featureCards[3].speechBubble}
           />
+        </div>
+
+        {/* Left Column Bottom */}
+        <div className="col-span-1 row-span-1">
+          <FeatureCard
+            title={featureCards[1].title}
+            description={featureCards[1].description}
+            speechBubble={featureCards[1].speechBubble}
+          />
+        </div>
+
+        {/* Right Column Bottom */}
+        <div className="col-span-1 row-span-1">
           <FeatureCard
             title={featureCards[4].title}
             description={featureCards[4].description}
