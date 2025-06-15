@@ -60,6 +60,25 @@ export async function getAllUserTrips(options?: { next?: { tags?: string[] } }):
   }
 }
 
+export async function getUserTripsCount(): Promise<number> {
+  const { userId } = auth();
+  if (!userId) {
+    return 0;
+  }
+
+  try {
+    const count = await prisma.trip.count({
+      where: {
+        userId: userId,
+      },
+    });
+    return count;
+  } catch (error) {
+    console.error('Error fetching user trips count:', error);
+    return 0;
+  }
+}
+
 export async function addParticipant(tripId: string, email: string): Promise<string[]> {
   const { userId } = auth();
   if (!userId) {

@@ -225,7 +225,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         className={cn('flex flex-row no-wrap px-3 py-2 items-center bg-background rounded-full shadow-md overflow-hidden', className)}
       >
         <div className="flex-1 flex flex-col sm:border-r border-gray-300">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Where</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'location', locationInputRef)}>Where</label>
           <input
             ref={locationInputRef}
             type="text"
@@ -238,7 +238,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
 
         <div className="flex-1 flex flex-col sm:border-r border-gray-300">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move In</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}>Move In</label>
           <input
             ref={moveInInputRef}
             type="text"
@@ -251,7 +251,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
 
         <div className="flex-1 flex flex-col sm:border-r border-gray-300">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move Out</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}>Move Out</label>
           <input
             ref={moveOutInputRef}
             type="text"
@@ -264,7 +264,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
 
         <div className="flex-1 flex flex-col">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Who</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => {
+              setHasBeenSelected(true);
+              handleInputClick(e, 'guests', guestsInputRef)
+            }}>Who</label>
           <input
             ref={guestsInputRef}
             type="text"
