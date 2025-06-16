@@ -8,7 +8,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useUser, useClerk, SignOutButton } from "@clerk/nextjs";
+import { useUser, useClerk, SignOutButton, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import NotificationItem from "./platform-components/notification-item";
@@ -35,12 +35,12 @@ interface MenuItem {
 }
 
 interface UserMenuProps {
-  isSignedIn: boolean;
   color: string;
   mode?: 'header' | 'menu-only';
 }
 
-export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: UserMenuProps): JSX.Element {
+export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): JSX.Element {
+  const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
   const { openUserProfile } = useClerk();
   const router = useRouter();
@@ -72,6 +72,17 @@ export default function UserMenu({ isSignedIn, color, mode = 'menu-only' }: User
   const initials = firstName && lastName 
     ? `${firstName[0]}${lastName[0]}`.toUpperCase()
     : fullName[0]?.toUpperCase() || 'U';
+
+  // Handle loading state
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center space-x-2 md:space-x-4">
+        <div className="animate-pulse">
+          <div className="h-10 w-10 bg-gray-200 rounded-full" />
+        </div>
+      </div>
+    );
+  }
 
   // Determine user roles and access levels
   const hasBetaAccess = checkClientBetaAccess(userRole);

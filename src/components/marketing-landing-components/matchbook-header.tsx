@@ -1,11 +1,9 @@
 'use client'
 import React from "react";
 import { Button } from "../../components/ui/button";
-import { useUser } from "@clerk/nextjs";
 import UserMenu from "../userMenu";
 
 export default function MatchbookHeader(): JSX.Element {
-  const { user } = useUser();
 
   return (
     <header className="flex w-full items-center justify-between px-6 py-1 bg-white">
@@ -21,7 +19,7 @@ export default function MatchbookHeader(): JSX.Element {
           Become a Host
         </Button>
 
-        <UserMenu isSignedIn={!!user} color="white" mode="header" />
+        <UserMenu color="white" mode="header" />
       </div>
     </header>
   );
