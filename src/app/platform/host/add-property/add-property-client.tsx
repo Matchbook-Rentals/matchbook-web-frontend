@@ -8,7 +8,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import { revalidateHostDashboard } from "../_actions";
-import { getListingById } from "@/app/actions/listings";
 import LocationForm from "./location-form";
 import ListingUploadHighlights from "./listing-creation-highlights";
 import { Rooms } from "./listing-creation-rooms";
@@ -314,67 +313,67 @@ const [listingBasics, setListingBasics] = useState({
         }
       }
 
-      // Prepare listing data with selected photos
-      const draftListing = {
-        title: listingBasics.title || "",
-        description: listingBasics.description || "",
-        status: "draft", // Mark as draft
+      // Prepare draft data
+      const draftData = {
+        id: draftId || undefined, // Include ID if updating existing draft
+        title: listingBasics.title || null,
+        description: listingBasics.description || null,
+        status: "draft",
+        // Listing location fields
+        locationString: listingLocation.locationString || null,
+        latitude: listingLocation.latitude || null,
+        longitude: listingLocation.longitude || null,
+        city: listingLocation.city || null,
+        state: listingLocation.state || null,
+        streetAddress1: listingLocation.streetAddress1 || null,
+        streetAddress2: listingLocation.streetAddress2 || null,
+        postalCode: listingLocation.postalCode || null,
+        // Room details
+        roomCount: listingRooms.bedrooms || null,
+        bathroomCount: listingRooms.bathrooms || null,
+        guestCount: listingRooms.bedrooms || null,
+        squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null,
+        // Pricing and deposits
+        depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
+        petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit) : null,
+        petRent: listingPricing.petRent ? Number(listingPricing.petRent) : null,
+        reservationDeposit: listingPricing.reservationDeposit ? Number(listingPricing.reservationDeposit) : null,
+        shortestLeaseLength: listingPricing.shortestStay || null,
+        longestLeaseLength: listingPricing.longestStay || null,
+        shortestLeasePrice: null, // Deprecated
+        longestLeasePrice: null, // Deprecated
+        requireBackgroundCheck: true,
+        // Highlights
+        category: listingHighlights.category || null,
+        petsAllowed: listingHighlights.petsAllowed || null,
+        furnished: listingHighlights.furnished || null,
+        // Store images and pricing separately for later
         listingImages: listingImagesFinal.map((photo, index) => ({
           url: photo.url,
           rank: photo.rank || index
         })),
-        // Listing location fields
-        locationString: listingLocation.locationString || "",
-        latitude: listingLocation.latitude || 0,
-        longitude: listingLocation.longitude || 0,
-        city: listingLocation.city || "",
-        state: listingLocation.state || "",
-        streetAddress1: listingLocation.streetAddress1 || "",
-        streetAddress2: listingLocation.streetAddress2 || "",
-        postalCode: listingLocation.postalCode || "",
-        // Required fields with defaults if needed
-        roomCount: listingRooms.bedrooms || 1,
-        bathroomCount: listingRooms.bathrooms || 1,
-        guestCount: listingRooms.bedrooms || 1,
-        squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : 0,
-        depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
-        reservationDeposit: listingPricing.reservationDeposit ? Number(listingPricing.reservationDeposit) : 0,
-        shortestLeaseLength: listingPricing.shortestStay || 1,
-        longestLeaseLength: listingPricing.longestStay || 12,
-        shortestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
-        longestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
         monthlyPricing: listingPricing.monthlyPricing.map(p => ({
           months: p.months,
           price: p.price ? Number(p.price) : 0,
           utilitiesIncluded: p.utilitiesIncluded
-        })),
-        requireBackgroundCheck: true,
-        category: listingHighlights.category || "Single Family",
-        petsAllowed: listingHighlights.petsAllowed || false,
-        furnished: listingHighlights.furnished || false,
+        }))
       };
       
       // Process amenities from the array to set the proper boolean values
       if (listingAmenities && listingAmenities.length > 0) {
         listingAmenities.forEach(amenity => {
           // @ts-ignore - Dynamic property assignment
-          draftListing[amenity] = true;
+          draftData[amenity] = true;
         });
       }
       
-      // Update the listing status in the local state
-      setListing(prev => ({
-        ...prev,
-        status: "draft"
-      }));
-      
-      // Send data to the server
-      const response = await fetch('/api/listings/create', {
+      // Send data to the draft API
+      const response = await fetch('/api/listings/draft', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(draftListing),
+        body: JSON.stringify(draftData),
       });
       
       if (!response.ok) {
@@ -382,8 +381,14 @@ const [listingBasics, setListingBasics] = useState({
         throw new Error(errorData.error || 'Failed to save listing draft');
       }
       
-      // Revalidate the host dashboard to refresh listing data
-      await revalidateHostDashboard();
+      const savedDraft = await response.json();
+      
+      // Update the URL with the draft ID if it's a new draft
+      if (!draftId && savedDraft.id) {
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set('draftId', savedDraft.id);
+        window.history.replaceState({}, '', newUrl.toString());
+      }
       
       // Show success state instead of immediate redirect, similar to submit flow
       setCurrentStep(11); // Move to success step
@@ -855,13 +860,28 @@ const [listingBasics, setListingBasics] = useState({
           });
         }
         
-        // Send data to the server
-        const response = await fetch('/api/listings/create', {
+        // If we have a draftId, submit the draft to create a listing
+        // Otherwise, create a new listing directly
+        const endpoint = draftId ? '/api/listings/draft/submit' : '/api/listings/create';
+        const payload = draftId ? {
+          draftId,
+          listingImages: listingImagesSorted.map((photo, index) => ({
+            url: photo.url,
+            rank: index
+          })),
+          monthlyPricing: listingPricing.monthlyPricing.map(p => ({
+            months: p.months,
+            price: p.price ? Number(p.price) : 0,
+            utilitiesIncluded: p.utilitiesIncluded
+          }))
+        } : finalListing;
+        
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(finalListing),
+          body: JSON.stringify(payload),
         });
         
         if (!response.ok) {
@@ -905,7 +925,14 @@ const [listingBasics, setListingBasics] = useState({
       if (draftId) {
         try {
           setIsLoadingDraft(true);
-          const draftListing = await getListingById(draftId);
+          
+          // Fetch draft from the draft API
+          const response = await fetch(`/api/listings/draft?id=${draftId}`);
+          if (!response.ok) {
+            throw new Error('Failed to load draft');
+          }
+          
+          const draftListing = await response.json();
           
           if (draftListing) {
             // Update the main listing state
@@ -943,27 +970,9 @@ const [listingBasics, setListingBasics] = useState({
               description: draftListing.description || ""
             });
             
-            // Set listing photos
-            if (draftListing.listingImages && draftListing.listingImages.length > 0) {
-              const photos = draftListing.listingImages.map(img => ({
-                id: img.id || null,
-                url: img.url || null,
-                listingId: img.listingId || null,
-                category: img.category || null,
-                rank: img.rank || null
-              }));
-              
-              setListingPhotos(photos);
-              
-              // Set featured photos (those with rank 1-4)
-              const featuredPhotos = photos
-                .filter(p => p.rank && p.rank >= 1 && p.rank <= 4)
-                .sort((a, b) => (a.rank || 0) - (b.rank || 0));
-                
-              if (featuredPhotos.length > 0) {
-                setSelectedPhotos(featuredPhotos);
-              }
-            }
+            // Note: ListingInCreation doesn't have images stored in the database
+            // If we need to persist images across draft saves, we'd need to add
+            // a separate table or store URLs in the draft
             
             // Set amenities (all properties that are true)
             const amenities: string[] = [];
@@ -1004,8 +1013,8 @@ const [listingBasics, setListingBasics] = useState({
               basePrice: "",
               deposit: draftListing.depositSize ? draftListing.depositSize.toString() : "",
               reservationDeposit: draftListing.reservationDeposit ? draftListing.reservationDeposit.toString() : "",
-              petDeposit: "",
-              petRent: ""
+              petDeposit: draftListing.petDeposit ? draftListing.petDeposit.toString() : "",
+              petRent: draftListing.petRent ? draftListing.petRent.toString() : ""
             });
           }
         } catch (error) {

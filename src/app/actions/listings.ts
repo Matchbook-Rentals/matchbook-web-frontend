@@ -279,33 +279,20 @@ export const getListingById = async (listingId: string): Promise<ListingAndImage
   }
 }
 
-// Get draft listings (listing creations) for the current user
-export const getUserDraftListings = async (): Promise<ListingAndImages[]> => {
+// Get draft listings from ListingInCreation for the current user
+export const getUserDraftListings = async () => {
   const userId = await checkAuth();
   try {
-    const draftListings = await prisma.listing.findMany({
+    const drafts = await prisma.listingInCreation.findMany({
       where: { 
-        userId: userId,
-        status: "draft"
-      },
-      include: {
-        listingImages: true,
-        bedrooms: true,
-        unavailablePeriods: true,
-        user: true,
+        userId: userId
       },
       orderBy: {
         lastModified: 'desc' // Get most recently modified first
       }
     });
     
-    return draftListings.map(listing => ({
-      ...listing,
-      distance: undefined,
-      listingImages: listing.listingImages,
-      bedrooms: listing.bedrooms,
-      unavailablePeriods: listing.unavailablePeriods,
-    }));
+    return drafts;
   } catch (error) {
     console.error('Error in getUserDraftListings:', error);
     throw error;

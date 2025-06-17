@@ -1064,6 +1064,9 @@ model ListingInCreation {
   userId                 String?
   squareFootage          Int?
   depositSize            Int?
+  petDeposit             Int?
+  petRent                Int?
+  reservationDeposit     Int?
   requireBackgroundCheck Boolean?
   shortestLeaseLength    Int?
   longestLeaseLength     Int?

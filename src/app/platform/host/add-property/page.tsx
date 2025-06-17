@@ -2,16 +2,15 @@ import React from "react";
 import prisma from "@/lib/prismadb";
 import ProgressBar from "./progress-bar";
 import AddPropertyClient from "./add-property-client";
-import { type Listing, type Bedroom, type ListingImage } from "@prisma/client";
+import { type Listing, type Bedroom, type ListingImage, type ListingInCreation } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 import { getUserDraftListings } from "@/app/actions/listings";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { ListingAndImages } from "@/types/";
 
 export type DraftListingProps = {
-  initialDraftListing?: ListingAndImages | null;
+  initialDraftListing?: ListingInCreation | null;
 };
 
 const handleListingCreation = async (propertyDetails: Listing & { bedrooms: Bedroom[], listingImages: { url: string }[] }) => {
@@ -44,9 +43,22 @@ const handleListingCreation = async (propertyDetails: Listing & { bedrooms: Bedr
   }
 };
 
-export default async function AddPropertyPage() {
+export default async function AddPropertyPage({
+  searchParams
+}: {
+  searchParams: { draftId?: string; new?: string }
+}) {
+  // If user explicitly wants to create new or continue editing, show the form
+  if (searchParams.draftId || searchParams.new) {
+    return (
+      <div>
+        <AddPropertyClient handleListingCreation={handleListingCreation} />
+      </div>
+    );
+  }
+
   // Get any draft listings for the current user
-  let draftListings: ListingAndImages[] = [];
+  let draftListings: ListingInCreation[] = [];
   try {
     draftListings = await getUserDraftListings();
   } catch (error) {
