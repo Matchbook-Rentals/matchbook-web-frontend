@@ -1268,6 +1268,7 @@ const [listingBasics, setListingBasics] = useState({
               onEditBasics={() => handleEditFromReview(3)}
               onEditAmenities={() => handleEditFromReview(6)}
               onEditPricing={() => handleEditFromReview(7)}
+              showPricingStructureTitle={false}
             />
             {allValidationErrors.length > 0 && (
               <ValidationErrors 
@@ -1364,7 +1365,7 @@ const [listingBasics, setListingBasics] = useState({
         `}</style>
 
         {/* Footer with navigation buttons - fixed to bottom */}
-        {currentStep !== 11 && (
+        {currentStep !== 12 && (
           <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 z-10">
             <Separator className="w-full" />
             {isAdmin ? (
@@ -1400,21 +1401,21 @@ const [listingBasics, setListingBasics] = useState({
                       <Button 
                         className="w-[80px] h-[42px] bg-orange-500 hover:bg-orange-600 rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-sm"
                         onClick={handleAdminSkipNext}
-                        disabled={currentStep >= steps.length - 1}
+                        disabled={currentStep >= steps.length - 1 || currentStep === 11}
                       >
                         Skip →
                       </Button>
                     )}
                     <Button 
                       className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
-                        currentStep === 10 && isAdmin 
+                        currentStep === 11 && isAdmin 
                           ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
                           : 'bg-[#4f4f4f] text-white'
                       }`}
-                      onClick={currentStep === 10 ? handleSubmitListing : handleNext}
-                      disabled={currentStep === 10 ? isAdmin : false}
+                      onClick={currentStep === 11 ? handleSubmitListing : handleNext}
+                      disabled={currentStep === 11 ? isAdmin : false}
                     >
-                      {currentStep === 10 ? 'Submit Listing' : 
+                      {currentStep === 11 ? 'Submit Listing' : 
                        cameFromReview ? 'Review' : 'Next'}
                     </Button>
                   </div>
@@ -1446,14 +1447,14 @@ const [listingBasics, setListingBasics] = useState({
                 </Button>
                 <Button 
                   className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
-                    currentStep === 10 && isAdmin 
+                    currentStep === 11 && isAdmin 
                       ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
                       : 'bg-[#4f4f4f] text-white'
                   }`}
-                  onClick={currentStep === 10 ? handleSubmitListing : handleNext}
-                  disabled={currentStep === 10 ? isAdmin : false}
+                  onClick={currentStep === 11 ? handleSubmitListing : handleNext}
+                  disabled={currentStep === 11 ? isAdmin : false}
                 >
-                  {currentStep === 10 ? 'Submit Listing' : 
+                  {currentStep === 11 ? 'Submit Listing' : 
                    cameFromReview ? 'Review' : 'Next'}
                 </Button>
               </div>

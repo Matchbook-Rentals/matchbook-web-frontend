@@ -141,6 +141,7 @@ interface ListingReviewProps {
   onEditBasics?: () => void;
   onEditAmenities?: () => void;
   onEditPricing?: () => void;
+  showPricingStructureTitle?: boolean;
 }
 
 // Property type options
@@ -221,7 +222,8 @@ export const Box = ({
   onEditRooms = () => {},
   onEditBasics = () => {},
   onEditAmenities = () => {},
-  onEditPricing = () => {}
+  onEditPricing = () => {},
+  showPricingStructureTitle = true
 }: ListingReviewProps): JSX.Element => {
   
   // Chart functions (copied from confirm pricing component)
@@ -497,10 +499,13 @@ export const Box = ({
           {/* Pricing Chart */}
           {chartData.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-lg font-medium text-[#222222] mb-4">
-                Pricing Structure
-              </h3>
-              <div className="w-full h-64">
+              {showPricingStructureTitle && (
+                <h3 className="text-lg font-medium text-[#222222] mb-4">
+                  Pricing Structure
+                </h3>
+              )}
+              {/* Desktop Chart */}
+              <div className="w-full h-64 hidden md:block">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -542,6 +547,62 @@ export const Box = ({
                       name="Monthly Rent" 
                       radius={[2, 2, 0, 0]}
                       isAnimationActive={true}
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Mobile Chart */}
+              <div className="w-full h-64 md:hidden">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart 
+                    data={chartData}
+                    margin={{ top: 20, right: 5, left: 5, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="month" 
+                      fontSize={10}
+                      tick={{ fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip 
+                      formatter={(value, name, props) => {
+                        const entry = props.payload;
+                        return [`$${value}${entry.utilitiesIncluded ? ' (utilities included)' : ''}`, 'Monthly Rent'];
+                      }}
+                      labelFormatter={(label) => `Stay Length: ${label}`}
+                    />
+                    <Legend 
+                      content={() => (
+                        <div className="flex justify-center gap-3 mt-2">
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 rounded" style={{ backgroundColor: '#0B6E6E' }}></div>
+                            <span className="text-xs font-medium text-[#222222]">Utils Inc.</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 rounded" style={{ backgroundColor: '#5DA5A5' }}></div>
+                            <span className="text-xs font-medium text-[#222222]">Not Inc.</span>
+                          </div>
+                        </div>
+                      )}
+                    />
+                    <Bar 
+                      dataKey="price" 
+                      name="Monthly Rent" 
+                      radius={[2, 2, 0, 0]}
+                      isAnimationActive={true}
+                      label={{
+                        position: 'top',
+                        fontSize: 10,
+                        fill: '#222222',
+                        formatter: (value: number) => `$${value}`
+                      }}
                     >
                       {chartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
