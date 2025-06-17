@@ -1,6 +1,11 @@
-import { Listing, Trip } from "@prisma/client";
+import { Listing, Trip, ListingMonthlyPricing } from "@prisma/client";
+
+interface ListingWithPricing extends Listing {
+  monthlyPricing: ListingMonthlyPricing[];
+}
+
 interface RentParams {
-  listing: Listing | null;
+  listing: ListingWithPricing | null;
   trip: Trip;
 }
 
@@ -10,35 +15,18 @@ export function calculateRent({ listing, trip, }: RentParams): number {
     return 0;
   }
   
-  const { shortestLeaseLength, longestLeaseLength, shortestLeasePrice, longestLeasePrice } = listing;
   const { startDate, endDate } = trip;
   const lengthOfStay = calculateLengthOfStay(startDate, endDate).months;
 
-  // Ensure lengthOfStay is within the allowed range
-  const clampedStayLength = Math.max(
-    shortestLeaseLength,
-    Math.min(longestLeaseLength, lengthOfStay)
-  );
+  // Find the monthly pricing for the exact number of months (using full months only)
+  const monthlyPricing = listing.monthlyPricing?.find(pricing => pricing.months === lengthOfStay);
+  
+  if (monthlyPricing) {
+    return monthlyPricing.price;
+  }
 
-  // If the stay length is exactly minimum or maximum, return the corresponding price
-  if (clampedStayLength === shortestLeaseLength) return shortestLeasePrice;
-  if (clampedStayLength === longestLeaseLength) return longestLeasePrice;
-
-  // Calculate the price difference and length difference
-  const priceDifference = longestLeasePrice - shortestLeasePrice;
-  const lengthDifference = longestLeaseLength - shortestLeaseLength;
-
-  // Calculate the price per month of additional stay
-  const pricePerMonth = priceDifference / lengthDifference;
-
-  // Calculate the additional months beyond the minimum stay
-  const additionalMonths = clampedStayLength - shortestLeaseLength;
-
-  // Calculate the final rent
-  const calculatedRent = shortestLeasePrice + (pricePerMonth * additionalMonths);
-  const roundedRent = Math.round(calculatedRent);
-
-  return roundedRent;
+  // If no price exists for this duration, return the error code
+  return 77777;
 }
 
 

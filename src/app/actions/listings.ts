@@ -122,7 +122,8 @@ export const pullListingsFromDb = async (
         listingImages: true,
         bedrooms: true,
         unavailablePeriods: true,
-        user: true
+        user: true,
+        monthlyPricing: true
       }
     });
     console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Fetched full listing details.`);
@@ -263,6 +264,7 @@ export const getListingById = async (listingId: string): Promise<ListingAndImage
         bedrooms: true,
         unavailablePeriods: true,
         user: true,
+        monthlyPricing: true,
       },
     });
     if (!listing) return null;
@@ -332,6 +334,7 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
         bedrooms: true,
         unavailablePeriods: true,
         user: true,
+        monthlyPricing: true,
       },
       orderBy: {
         createdAt: 'desc'

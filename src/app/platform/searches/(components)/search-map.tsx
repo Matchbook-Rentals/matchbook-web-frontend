@@ -495,7 +495,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         if (correspondingMarker?.listing.isLiked) {
           // Only add heart if it doesn't exist
           if (!el.querySelector('svg')) {
-            const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+            const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
             const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
 
             el.innerHTML = `
@@ -534,7 +534,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         if (correspondingMarker?.listing.isLiked) {
           // Only add heart if it doesn't exist
           if (!el.querySelector('svg')) {
-            const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+            const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
             const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
 
             // Create elements instead of using innerHTML to preserve state
@@ -590,7 +590,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
         // Update the heart icon if needed
         if (!el.querySelector('svg')) {
-          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+          const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
           const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
           el.innerHTML = `
             <span style="position: relative;">
@@ -619,7 +619,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         const heartIcon = el.querySelector('svg');
         if (heartIcon) {
           heartIcon.remove();
-          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+          const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
           const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
           // Just update the text content of the span
           const span = el.querySelector('span');
@@ -639,7 +639,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         const heartIcon = el.querySelector('svg');
         if (heartIcon) {
           heartIcon.remove();
-          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+          const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
           const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
           // Just update the text content of the span
           const span = el.querySelector('span');

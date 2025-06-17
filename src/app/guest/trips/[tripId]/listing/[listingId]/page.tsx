@@ -20,7 +20,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   const listing = await prisma.listing.findUnique({
     where: { id: params.listingId },
-    include: { listingImages: true, bedrooms: true, user: true },
+    include: { listingImages: true, bedrooms: true, user: true, monthlyPricing: true },
   }) as ListingAndImages | null
 
   const trip = await prisma.trip.findUnique({
