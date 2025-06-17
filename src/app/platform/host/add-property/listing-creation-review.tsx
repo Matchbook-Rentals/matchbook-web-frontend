@@ -2,7 +2,9 @@ import React from "react";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Separator } from "../../../../components/ui/separator";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
 import * as AmenitiesIcons from '@/components/icons/amenities';
+import { MonthlyPricing } from "./listing-creation-pricing";
 
 // Import the AMENITY_GROUPS constant from the amenities file
 const AMENITY_GROUPS = [
@@ -126,6 +128,7 @@ interface ListingReviewProps {
   listingPricing?: {
     shortestStay: number;
     longestStay: number;
+    monthlyPricing: MonthlyPricing[];
     shortTermRent: string;
     longTermRent: string;
     deposit: string;
@@ -220,6 +223,46 @@ export const Box = ({
   onEditAmenities = () => {},
   onEditPricing = () => {}
 }: ListingReviewProps): JSX.Element => {
+  
+  // Chart functions (copied from confirm pricing component)
+  const generateChartData = () => {
+    if (!listingPricing?.monthlyPricing) return [];
+    
+    return listingPricing.monthlyPricing.map(pricing => {
+      const price = pricing.price ? parseFloat(pricing.price) : 0;
+      const monthLabel = pricing.months === 1 ? `${pricing.months} Month` : `${pricing.months} Months`;
+      const isUtilitiesIncluded = pricing.utilitiesIncluded;
+      
+      return {
+        month: monthLabel,
+        price: price,
+        utilitiesIncluded: isUtilitiesIncluded,
+        color: isUtilitiesIncluded ? '#0B6E6E' : '#5DA5A5', // secondaryBrand for utilities, lighter for no utilities
+      };
+    });
+  };
+
+  const getMaxChartValue = () => {
+    if (!listingPricing?.monthlyPricing) return 2000;
+    
+    const prices = listingPricing.monthlyPricing.map(p => p.price ? parseFloat(p.price) : 0).filter(p => p > 0);
+    if (prices.length === 0) return 2000;
+    const maxPrice = Math.max(...prices);
+    return Math.ceil(maxPrice / 100) * 100 * 1.2; // 20% higher than the highest value, rounded up to nearest 100
+  };
+
+  const generateYAxisTicks = (maxValue: number) => {
+    const ticks = [];
+    const step = maxValue <= 1000 ? 200 : 500;
+    for (let i = 0; i <= maxValue; i += step) {
+      ticks.push(i);
+    }
+    return ticks;
+  };
+
+  const chartData = generateChartData();
+  const maxChartValue = getMaxChartValue();
+  const yAxisTicks = generateYAxisTicks(maxChartValue);
   
   // Use highlights directly from props
   return (
@@ -451,13 +494,72 @@ export const Box = ({
             </Button>
           </div>
 
+          {/* Pricing Chart */}
+          {chartData.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-lg font-medium text-[#222222] mb-4">
+                Pricing Structure
+              </h3>
+              <div className="w-full h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="month" 
+                      fontSize={12}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis 
+                      domain={[0, maxChartValue]} 
+                      ticks={yAxisTicks}
+                      tickFormatter={(value) => `$${value}`}
+                      fontSize={12}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <Tooltip 
+                      formatter={(value, name, props) => {
+                        const entry = props.payload;
+                        return [`$${value}${entry.utilitiesIncluded ? ' (utilities included)' : ''}`, 'Monthly Rent'];
+                      }}
+                      labelFormatter={(label) => `Stay Length: ${label}`}
+                    />
+                    <Legend 
+                      content={() => (
+                        <div className="flex justify-center gap-4 mt-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded" style={{ backgroundColor: '#0B6E6E' }}></div>
+                            <span className="text-xs font-medium text-[#222222]">Utilities Included</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded" style={{ backgroundColor: '#5DA5A5' }}></div>
+                            <span className="text-xs font-medium text-[#222222]">Not included</span>
+                          </div>
+                        </div>
+                      )}
+                    />
+                    <Bar 
+                      dataKey="price" 
+                      name="Monthly Rent" 
+                      radius={[2, 2, 0, 0]}
+                      isAnimationActive={true}
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
           <div className="space-y-2 mb-4">
             <div className="flex">
               <div className="w-[312px] text-xl font-light text-black">
                 Min Lease: {listingPricing.shortestStay || 1} Month{listingPricing.shortestStay > 1 ? 's' : ''}
               </div>
               <div className="text-xl font-light text-black">
-                Rent Price: ${listingPricing.shortTermRent || 0}
+                Price Range: ${Math.min(...chartData.map(d => d.price).filter(p => p > 0) || [0])} - ${Math.max(...chartData.map(d => d.price) || [0])}
               </div>
             </div>
             <div className="flex">
@@ -465,7 +567,7 @@ export const Box = ({
                 Max Lease: {listingPricing.longestStay || 0} Month{listingPricing.longestStay > 1 ? 's' : ''}
               </div>
               <div className="text-xl font-light text-black">
-                Rent Price: ${listingPricing.longTermRent || 0}
+                Utilities: {chartData.some(d => d.utilitiesIncluded) ? 'Included for some lengths' : 'Not included'}
               </div>
             </div>
           </div>
