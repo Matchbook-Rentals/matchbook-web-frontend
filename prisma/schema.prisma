@@ -296,6 +296,7 @@ model Listing {
   unavailablePeriods ListingUnavailability[]
   Maybe              Maybe[]
   conversations      Conversation[]          @relation("ConversationToListing")
+  monthlyPricing     ListingMonthlyPricing[]
   @@index([state])
 }
 
@@ -306,6 +307,21 @@ model ListingUnavailability {
   reason    String? // Optional: could track why it's blocked (repairs, personal reasons, etc.)
   listingId String
   listing   Listing  @relation(fields: [listingId], references: [id])
+  @@index([listingId])
+}
+
+model ListingMonthlyPricing {
+  id                String   @id @default(uuid())
+  listingId         String
+  months            Int      // Number of months (1-12)
+  price             Int      // Price for this month length
+  utilitiesIncluded Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  listing           Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  @@unique([listingId, months])
   @@index([listingId])
 }
 

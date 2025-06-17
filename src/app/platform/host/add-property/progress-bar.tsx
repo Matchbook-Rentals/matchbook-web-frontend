@@ -44,8 +44,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
         {/* Step name label with transition */}
         <div 
-          className="w-[140px] h-[36px] top-[77px] font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl text-center absolute tracking-[0] leading-[normal] transition-all duration-500 ease-in-out"
-          style={{ left: `${((currentStep + 1) / steps.length) * 883 - 70}px` }}
+          className="h-[36px] top-[77px] font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl text-center absolute tracking-[0] leading-[normal] transition-all duration-500 ease-in-out whitespace-nowrap"
+          style={{ 
+            left: `${((currentStep + 1) / steps.length) * 883}px`,
+            transform: 'translateX(-50%)'
+          }}
         >
           {currentStepInfo.name}
         </div>

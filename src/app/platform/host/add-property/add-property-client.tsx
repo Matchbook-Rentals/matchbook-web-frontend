@@ -16,8 +16,9 @@ import { ListingBasics } from "./listing-creation-basics";
 import { ListingPhotos } from "./listing-creation-photos-upload";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
 import ListingAmenities from "./listing-creation-amenities";
-import ListingCreationPricing from "./listing-creation-pricing";
+import ListingCreationPricing, { MonthlyPricing } from "./listing-creation-pricing";
 import ListingCreationVerifyPricing from "./listing-creation-verify-pricing";
+import ListingCreationConfirmPricing from "./listing-creation-confirm-pricing";
 import ListingCreationDeposit from "./listing-creation-deposit";
 import { Box as ListingCreationReview } from "./listing-creation-review";
 
@@ -226,13 +227,40 @@ const [listingAmenities, setListingAmenities] = useState<string[]>([]);
 const [listingPricing, setListingPricing] = useState({
   shortestStay: 1,
   longestStay: 12,
-  shortTermRent: "",
-  longTermRent: "",
+  monthlyPricing: [] as MonthlyPricing[],
+  includeUtilities: false,
+  utilitiesUpToMonths: 1,
+  varyPricingByLength: true,
+  basePrice: "",
   deposit: "",
   petDeposit: "",
-  petRent: "",
-  tailoredPricing: true
+  petRent: ""
 });
+
+// Initialize monthly pricing when component mounts or stay lengths change
+React.useEffect(() => {
+  const newPricing: MonthlyPricing[] = [];
+  for (let i = listingPricing.shortestStay; i <= listingPricing.longestStay; i++) {
+    // Try to find existing pricing for this month
+    const existing = listingPricing.monthlyPricing.find(p => p.months === i);
+    if (existing) {
+      // Update utilities based on current settings and price if not varying by length
+      newPricing.push({
+        ...existing,
+        price: !listingPricing.varyPricingByLength ? listingPricing.basePrice : existing.price,
+        utilitiesIncluded: listingPricing.includeUtilities && i <= listingPricing.utilitiesUpToMonths
+      });
+    } else {
+      // Create new entry with default values
+      newPricing.push({
+        months: i,
+        price: !listingPricing.varyPricingByLength ? listingPricing.basePrice : '',
+        utilitiesIncluded: listingPricing.includeUtilities && i <= listingPricing.utilitiesUpToMonths
+      });
+    }
+  }
+  setListingPricing(prev => ({ ...prev, monthlyPricing: newPricing }));
+}, [listingPricing.shortestStay, listingPricing.longestStay, listingPricing.includeUtilities, listingPricing.utilitiesUpToMonths, listingPricing.varyPricingByLength, listingPricing.basePrice]);
 
 // Step 2: Rooms
 const [listingRooms, setListingRooms] = useState({
@@ -258,9 +286,10 @@ const [listingBasics, setListingBasics] = useState({
     { name: "Amenities", position: 6 },
     { name: "Pricing", position: 7 },
     { name: "Verify Pricing", position: 8 },
-    { name: "Deposits", position: 9 },
-    { name: "Review", position: 10 },
-    { name: "Success", position: 11 },
+    { name: "Confirm Pricing", position: 9 },
+    { name: "Deposits", position: 10 },
+    { name: "Review", position: 11 },
+    { name: "Success", position: 12 },
   ];
 
 
@@ -310,8 +339,13 @@ const [listingBasics, setListingBasics] = useState({
         depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
         shortestLeaseLength: listingPricing.shortestStay || 1,
         longestLeaseLength: listingPricing.longestStay || 12,
-        shortestLeasePrice: listingPricing.shortTermRent ? Number(listingPricing.shortTermRent) : 0,
-        longestLeasePrice: listingPricing.longTermRent ? Number(listingPricing.longTermRent) : 0,
+        shortestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
+        longestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
+        monthlyPricing: listingPricing.monthlyPricing.map(p => ({
+          months: p.months,
+          price: p.price ? Number(p.price) : 0,
+          utilitiesIncluded: p.utilitiesIncluded
+        })),
         requireBackgroundCheck: true,
         category: listingHighlights.category || "Single Family",
         petsAllowed: listingHighlights.petsAllowed || false,
@@ -350,7 +384,7 @@ const [listingBasics, setListingBasics] = useState({
       await revalidateHostDashboard();
       
       // Show success state instead of immediate redirect, similar to submit flow
-      setCurrentStep(11); // Move to success step
+      setCurrentStep(12); // Move to success step
       setSlideDirection('right');
       setAnimationKey(prevKey => prevKey + 1);
     } catch (error) {
@@ -470,19 +504,61 @@ const [listingBasics, setListingBasics] = useState({
   const validatePricing = (): string[] => {
     const errors: string[] = [];
     
-    if (!listingPricing.shortTermRent) {
-      errors.push("Short term rent price is required");
+    // Step 7 validation - check basic settings and base price if not varying
+    if (listingPricing.shortestStay < 1 || listingPricing.shortestStay > 12) {
+      errors.push("Shortest stay must be between 1 and 12 months");
     }
     
-    if (!listingPricing.longTermRent) {
-      errors.push("Long term rent price is required");
+    if (listingPricing.longestStay < 1 || listingPricing.longestStay > 12) {
+      errors.push("Longest stay must be between 1 and 12 months");
+    }
+    
+    if (listingPricing.shortestStay >= listingPricing.longestStay) {
+      errors.push("Shortest stay must be less than longest stay");
+    }
+    
+    if (listingPricing.includeUtilities && listingPricing.utilitiesUpToMonths < listingPricing.shortestStay) {
+      errors.push("Utilities inclusion must be at least the shortest stay length");
+    }
+    
+    // If not varying pricing by length, validate base price
+    if (!listingPricing.varyPricingByLength) {
+      if (!listingPricing.basePrice || listingPricing.basePrice === '') {
+        errors.push("Please enter a monthly rent price");
+      } else {
+        const price = parseFloat(listingPricing.basePrice);
+        if (isNaN(price) || price <= 0) {
+          errors.push("Monthly rent price must be a valid positive number");
+        }
+      }
     }
     
     return errors;
   };
   
   const validateVerifyPricing = (): string[] => {
-    // No validation needed for verify pricing step - it's just for review
+    const errors: string[] = [];
+    
+    // Step 8 validation - validate that all prices are filled and valid
+    const missingPrices = listingPricing.monthlyPricing.filter(p => !p.price || p.price === '');
+    if (missingPrices.length > 0) {
+      errors.push(`Please set prices for all ${listingPricing.monthlyPricing.length} lease lengths`);
+    }
+    
+    // Check that prices are valid numbers
+    const invalidPrices = listingPricing.monthlyPricing.filter(p => {
+      const price = parseFloat(p.price);
+      return p.price && (isNaN(price) || price <= 0);
+    });
+    if (invalidPrices.length > 0) {
+      errors.push("All prices must be valid positive numbers");
+    }
+    
+    return errors;
+  };
+
+  const validateConfirmPricing = (): string[] => {
+    // Step 9 validation - no validation needed for confirm pricing step
     return [];
   };
   
@@ -518,6 +594,8 @@ const [listingBasics, setListingBasics] = useState({
       case 8:
         return validateVerifyPricing();
       case 9:
+        return validateConfirmPricing();
+      case 10:
         return validateDeposits();
       default:
         return [];
@@ -569,19 +647,13 @@ const [listingBasics, setListingBasics] = useState({
         
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-        setCurrentStep(10); // Go to review step
+        setCurrentStep(11); // Go to review step
         setCameFromReview(false); // Reset the flag
       } else {
         // Normal flow
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-        
-        // Special logic: Skip verify pricing step if tailored pricing is disabled
-        if (currentStep === 7 && !listingPricing.tailoredPricing) {
-          setCurrentStep(currentStep + 2); // Skip verify pricing step (8) and go to deposits (9)
-        } else {
-          setCurrentStep(currentStep + 1);
-        }
+        setCurrentStep(currentStep + 1);
       }
       
       // Scroll the whole page to top
@@ -593,13 +665,7 @@ const [listingBasics, setListingBasics] = useState({
     if (currentStep > 0) {
       setSlideDirection('left'); // Slide from left to right (back)
       setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-      
-      // Special logic: Skip verify pricing step if tailored pricing is disabled
-      if (currentStep === 9 && !listingPricing.tailoredPricing) {
-        setCurrentStep(currentStep - 2); // Skip verify pricing step (8) and go to pricing (7)
-      } else {
-        setCurrentStep(currentStep - 1);
-      }
+      setCurrentStep(currentStep - 1);
       
       setCameFromReview(false); // Reset the flag since we're going backward
       
@@ -694,8 +760,11 @@ const [listingBasics, setListingBasics] = useState({
     const verifyPricingErrors = validateVerifyPricing();
     if (verifyPricingErrors.length > 0) allErrors[8] = verifyPricingErrors;
     
+    const confirmPricingErrors = validateConfirmPricing();
+    if (confirmPricingErrors.length > 0) allErrors[9] = confirmPricingErrors;
+    
     const depositErrors = validateDeposits();
-    if (depositErrors.length > 0) allErrors[9] = depositErrors;
+    if (depositErrors.length > 0) allErrors[10] = depositErrors;
     
     setValidationErrors(allErrors);
     
@@ -776,8 +845,13 @@ const [listingBasics, setListingBasics] = useState({
           depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
           shortestLeaseLength: listingPricing.shortestStay || 1,
           longestLeaseLength: listingPricing.longestStay || 12,
-          shortestLeasePrice: listingPricing.shortTermRent ? Number(listingPricing.shortTermRent) : 0,
-          longestLeasePrice: listingPricing.longTermRent ? Number(listingPricing.longTermRent) : 0,
+          shortestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
+          longestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
+          monthlyPricing: listingPricing.monthlyPricing.map(p => ({
+            months: p.months,
+            price: p.price ? Number(p.price) : 0,
+            utilitiesIncluded: p.utilitiesIncluded
+          })),
           requireBackgroundCheck: true,
         };
 
@@ -808,7 +882,7 @@ const [listingBasics, setListingBasics] = useState({
         await revalidateHostDashboard();
         
         // Show success state instead of immediate redirect
-        setCurrentStep(11); // Move to a new success step
+        setCurrentStep(12); // Move to a new success step
         setSlideDirection('right');
         setAnimationKey(prevKey => prevKey + 1);
       } catch (error) {
@@ -817,7 +891,7 @@ const [listingBasics, setListingBasics] = useState({
         // Show error at the bottom of the review page
         setValidationErrors({
           ...validationErrors,
-          [10]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
+          [11]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
         });
       }
     } else {
@@ -916,15 +990,30 @@ const [listingBasics, setListingBasics] = useState({
             }
             
             // Set pricing
+            const shortestStay = draftListing.shortestLeaseLength || 1;
+            const longestStay = draftListing.longestLeaseLength || 12;
+            
+            // Initialize monthly pricing array
+            const monthlyPricing: MonthlyPricing[] = [];
+            for (let i = shortestStay; i <= longestStay; i++) {
+              monthlyPricing.push({
+                months: i,
+                price: '',
+                utilitiesIncluded: false
+              });
+            }
+            
             setListingPricing({
-              shortestStay: draftListing.shortestLeaseLength || 1,
-              longestStay: draftListing.longestLeaseLength || 12,
-              shortTermRent: draftListing.shortestLeasePrice ? draftListing.shortestLeasePrice.toString() : "",
-              longTermRent: draftListing.longestLeasePrice ? draftListing.longestLeasePrice.toString() : "",
+              shortestStay,
+              longestStay,
+              monthlyPricing,
+              includeUtilities: false,
+              utilitiesUpToMonths: shortestStay,
+              varyPricingByLength: true,
+              basePrice: "",
               deposit: draftListing.depositSize ? draftListing.depositSize.toString() : "",
               petDeposit: "",
-              petRent: "",
-              tailoredPricing: draftListing.shortestLeasePrice !== draftListing.longestLeasePrice
+              petRent: ""
             });
           }
         } catch (error) {
@@ -966,8 +1055,8 @@ const [listingBasics, setListingBasics] = useState({
       // Sync pricing
       shortestLeaseLength: listingPricing.shortestStay,
       longestLeaseLength: listingPricing.longestStay,
-      shortestLeasePrice: listingPricing.shortTermRent ? Number(listingPricing.shortTermRent) : null,
-      longestLeasePrice: listingPricing.longTermRent ? Number(listingPricing.longTermRent) : null,
+      shortestLeasePrice: 0, // Deprecated
+      longestLeasePrice: 0, // Deprecated
       depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
     }));
   }, [listingHighlights, listingLocation, listingRooms, listingAmenities, listingPricing]);
@@ -1092,35 +1181,16 @@ const [listingBasics, setListingBasics] = useState({
             <ListingCreationPricing
               shortestStay={listingPricing.shortestStay}
               longestStay={listingPricing.longestStay}
-              shortTermRent={listingPricing.shortTermRent}
-              longTermRent={listingPricing.longTermRent}
-              deposit={listingPricing.deposit}
-              petDeposit={listingPricing.petDeposit}
-              petRent={listingPricing.petRent}
-              tailoredPricing={listingPricing.tailoredPricing}
+              includeUtilities={listingPricing.includeUtilities}
+              utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
+              varyPricingByLength={listingPricing.varyPricingByLength}
+              basePrice={listingPricing.basePrice}
               onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
               onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-              onShortTermRentChange={(value) => setListingPricing(prev => ({ ...prev, shortTermRent: value }))}
-              onLongTermRentChange={(value) => setListingPricing(prev => ({ ...prev, longTermRent: value }))}
-              onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
-              onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
-              onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
-              onTailoredPricingChange={(value) => {
-  if (!value) {
-    // Going from ON to OFF: flatten both rents to the highest
-    const shortRent = parseFloat(listingPricing.shortTermRent) || 0;
-    const longRent = parseFloat(listingPricing.longTermRent) || 0;
-    const maxRent = Math.max(shortRent, longRent).toString();
-    setListingPricing(prev => ({
-      ...prev,
-      tailoredPricing: value,
-      shortTermRent: maxRent,
-      longTermRent: maxRent
-    }));
-  } else {
-    setListingPricing(prev => ({ ...prev, tailoredPricing: value }));
-  }
-}}
+              onIncludeUtilitiesChange={(value) => setListingPricing(prev => ({ ...prev, includeUtilities: value, utilitiesUpToMonths: value ? prev.shortestStay : prev.utilitiesUpToMonths }))}
+              onUtilitiesUpToMonthsChange={(value) => setListingPricing(prev => ({ ...prev, utilitiesUpToMonths: value }))}
+              onVaryPricingByLengthChange={(value) => setListingPricing(prev => ({ ...prev, varyPricingByLength: value }))}
+              onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
               onContinue={handleNext}
             />
             {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mt-6" />}
@@ -1129,23 +1199,36 @@ const [listingBasics, setListingBasics] = useState({
       case 8:
         return (
           <>
+            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mb-6" />}
             <ListingCreationVerifyPricing
               shortestStay={listingPricing.shortestStay}
               longestStay={listingPricing.longestStay}
-              shortTermRent={listingPricing.shortTermRent}
-              longTermRent={listingPricing.longTermRent}
-              tailoredPricing={listingPricing.tailoredPricing}
+              monthlyPricing={listingPricing.monthlyPricing}
+              includeUtilities={listingPricing.includeUtilities}
+              utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
               onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
               onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-              onShortTermRentChange={(value) => setListingPricing(prev => ({ ...prev, shortTermRent: value }))}
-              onLongTermRentChange={(value) => setListingPricing(prev => ({ ...prev, longTermRent: value }))}
+              onMonthlyPricingChange={(pricing) => setListingPricing(prev => ({ ...prev, monthlyPricing: pricing }))}
             />
+            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mt-6" />}
           </>
         );
       case 9:
         return (
           <>
-            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mb-6" />}
+            <ListingCreationConfirmPricing
+              shortestStay={listingPricing.shortestStay}
+              longestStay={listingPricing.longestStay}
+              monthlyPricing={listingPricing.monthlyPricing}
+              includeUtilities={listingPricing.includeUtilities}
+              utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
+            />
+          </>
+        );
+      case 10:
+        return (
+          <>
+            {validationErrors[10] && <ValidationErrors errors={validationErrors[10]} className="mb-6" />}
             <ListingCreationDeposit
               deposit={listingPricing.deposit}
               petDeposit={listingPricing.petDeposit}
@@ -1154,10 +1237,10 @@ const [listingBasics, setListingBasics] = useState({
               onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
               onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
             />
-            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mt-6" />}
+            {validationErrors[10] && <ValidationErrors errors={validationErrors[10]} className="mt-6" />}
           </>
         );
-      case 10:
+      case 11:
         // Combine all errors for the review page
         const allValidationErrors = Object.values(validationErrors).flat();
         
@@ -1197,9 +1280,9 @@ const [listingBasics, setListingBasics] = useState({
             )}
           </>
         );
-      case 11:
+      case 12:
         // Success page - determine if from Save & Exit or final submission
-        const isSaveAndExit = currentStep === 11 && listing.status === "draft";
+        const isSaveAndExit = currentStep === 12 && listing.status === "draft";
         
         return (
           <div className="flex flex-col items-center justify-center py-12 text-center">

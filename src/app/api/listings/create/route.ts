@@ -14,8 +14,8 @@ export async function POST(request: Request) {
     // Parse the request body
     const body = await request.json();
     
-    // Extract listing images from the body to handle them separately
-    const { listingImages, ...listingData } = body;
+    // Extract listing images and monthly pricing from the body to handle them separately
+    const { listingImages, monthlyPricing, ...listingData } = body;
     
     // Set the userId for the listing
     listingData.userId = userId;
@@ -47,6 +47,18 @@ export async function POST(request: Request) {
             listingId: listing.id,
             category: image.category || null,
             rank: image.rank || null,
+          })),
+        });
+      }
+      
+      // Create monthly pricing if provided
+      if (monthlyPricing && monthlyPricing.length > 0) {
+        await tx.listingMonthlyPricing.createMany({
+          data: monthlyPricing.map((pricing: any) => ({
+            listingId: listing.id,
+            months: pricing.months,
+            price: pricing.price || 0,
+            utilitiesIncluded: pricing.utilitiesIncluded || false,
           })),
         });
       }
