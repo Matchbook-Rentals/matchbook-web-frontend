@@ -132,6 +132,7 @@ interface ListingReviewProps {
     shortTermRent: string;
     longTermRent: string;
     deposit: string;
+    reservationDeposit: string;
     petDeposit: string;
     petRent: string;
   };
@@ -141,6 +142,7 @@ interface ListingReviewProps {
   onEditBasics?: () => void;
   onEditAmenities?: () => void;
   onEditPricing?: () => void;
+  onEditDeposits?: () => void;
   showPricingStructureTitle?: boolean;
 }
 
@@ -223,6 +225,7 @@ export const Box = ({
   onEditBasics = () => {},
   onEditAmenities = () => {},
   onEditPricing = () => {},
+  onEditDeposits = () => {},
   showPricingStructureTitle = true
 }: ListingReviewProps): JSX.Element => {
   
@@ -271,7 +274,7 @@ export const Box = ({
     <div className="relative max-w-[1188px] mx-auto">
       <div className="w-full">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <div className="text-xl font-normal text-[#3f3f3f]">
             Review Listing
           </div>
@@ -498,7 +501,7 @@ export const Box = ({
 
           {/* Pricing Chart */}
           {chartData.length > 0 && (
-            <div className="mb-6">
+            <div className="mb-4">
               {showPricingStructureTitle && (
                 <h3 className="text-lg font-medium text-[#222222] mb-4">
                   Pricing Structure
@@ -614,36 +617,142 @@ export const Box = ({
             </div>
           )}
 
-          <div className="space-y-2 mb-4">
-            <div className="flex">
-              <div className="w-[312px] text-xl font-light text-black">
-                Min Lease: {listingPricing.shortestStay || 1} Month{listingPricing.shortestStay > 1 ? 's' : ''}
-              </div>
-              <div className="text-xl font-light text-black">
-                Price Range: ${Math.min(...chartData.map(d => d.price).filter(p => p > 0) || [0])} - ${Math.max(...chartData.map(d => d.price) || [0])}
+          <div className="grid grid-cols-3 gap-6 mb-4">
+            <div>
+              <div className=" text-xl font-medium  mb-1">Lease length</div>
+              <div className="text-xl font-light ">
+                {listingPricing.shortestStay === listingPricing.longestStay 
+                  ? `${listingPricing.shortestStay} month${listingPricing.shortestStay !== 1 ? 's' : ''}`
+                  : `Between ${listingPricing.shortestStay} and ${listingPricing.longestStay} months`
+                }
               </div>
             </div>
-            <div className="flex">
-              <div className="w-[312px] text-xl font-light text-black">
-                Max Lease: {listingPricing.longestStay || 0} Month{listingPricing.longestStay > 1 ? 's' : ''}
-              </div>
+            
+            <div>
+              <div className=" text-xl font-medium  mb-1">Utilities</div>
               <div className="text-xl font-light text-black">
-                Utilities: {chartData.some(d => d.utilitiesIncluded) ? 'Included for some lengths' : 'Not included'}
+                {(() => {
+                  // Safety check for empty chart data
+                  if (!chartData || chartData.length === 0) {
+                    return 'Not included at any length';
+                  }
+                  
+                  const withUtilities = chartData.filter(d => d.utilitiesIncluded);
+                  const withoutUtilities = chartData.filter(d => !d.utilitiesIncluded);
+                  
+                  if (withUtilities.length === 0) {
+                    return 'Not included at any length';
+                  } else if (withoutUtilities.length === 0) {
+                    return 'Included at all lengths';
+                  } else {
+                    // Check if it's a simple pattern (consecutive months from start or end)
+                    const allMonths = chartData.map(d => d.months).sort((a, b) => a - b);
+                    const utilitiesMonths = withUtilities.map(d => d.months).sort((a, b) => a - b);
+                    
+                    // Safety check for empty arrays
+                    if (utilitiesMonths.length === 0 || allMonths.length === 0) {
+                      return 'Not included at any length';
+                    }
+                    
+                    // Check if utilities are included for consecutive months from the beginning
+                    const isConsecutiveFromStart = utilitiesMonths.every((month, index) => month === allMonths[index]);
+                    // Check if utilities are included for consecutive months from the end
+                    const isConsecutiveFromEnd = utilitiesMonths.every((month, index) => month === allMonths[allMonths.length - utilitiesMonths.length + index]);
+                    
+                    if (isConsecutiveFromStart && utilitiesMonths.length > 1) {
+                      const maxUtilitiesMonth = Math.max(...utilitiesMonths);
+                      return isNaN(maxUtilitiesMonth) ? 'Included for some lengths' : `Included for ${maxUtilitiesMonth} months and below`;
+                    } else if (isConsecutiveFromEnd && utilitiesMonths.length > 1) {
+                      const minUtilitiesMonth = Math.min(...utilitiesMonths);
+                      return isNaN(minUtilitiesMonth) ? 'Included for some lengths' : `Included for ${minUtilitiesMonth} months and above`;
+                    } else if (utilitiesMonths.length === 1) {
+                      const singleMonth = utilitiesMonths[0];
+                      return isNaN(singleMonth) ? 'Included for some lengths' : `Included for ${singleMonth} month${singleMonth !== 1 ? 's' : ''} only`;
+                    } else {
+                      return 'Included for some lengths';
+                    }
+                  }
+                })()}
+              </div>
+            </div>
+            
+            <div>
+              <div className=" text-xl font-medium  mb-1">Price range</div>
+              <div className="text-xl font-light text-black">
+                {(() => {
+                  if (!chartData || chartData.length === 0) {
+                    return 'No pricing data';
+                  }
+                  
+                  const validPrices = chartData.map(d => d.price).filter(p => p > 0 && !isNaN(p));
+                  
+                  if (validPrices.length === 0) {
+                    return 'No pricing data';
+                  }
+                  
+                  const minPrice = Math.min(...validPrices);
+                  const maxPrice = Math.max(...validPrices);
+                  
+                  if (minPrice === maxPrice) {
+                    return `$${minPrice} per month`;
+                  } else {
+                    return `$${minPrice} - $${maxPrice} per month`;
+                  }
+                })()}
               </div>
             </div>
           </div>
 
-          <div className="space-y-4 mt-6">
-            <div className="text-xl font-light text-black">
-              Deposit: ${listingPricing.deposit || 0}
+          <Separator className="my-4" />
+        </div>
+
+        {/* Deposits Section */}
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-medium text-[#3f3f3f]">
+              Deposits
+            </h2>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-[15px] text-[#3f3f3f] font-normal"
+              onClick={onEditDeposits}
+            >
+              Edit
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-4 gap-6 mb-4">
+            <div>
+              <div className="text-xl font-medium mb-1">Deposit</div>
+              <div className="text-xl font-light text-black">
+                ${listingPricing.deposit || 0}
+              </div>
             </div>
-            <div className="text-xl font-light text-black">
-              Pet Rent: ${listingPricing.petRent || 0} / month
+            
+            <div>
+              <div className="text-xl font-medium mb-1">Reservation Deposit</div>
+              <div className="text-xl font-light text-black">
+                ${listingPricing.reservationDeposit || 0}
+              </div>
             </div>
-            <div className="text-xl font-light text-black">
-              Pet Deposit: ${listingPricing.petDeposit || 0} / pet
+            
+            <div>
+              <div className="text-xl font-medium mb-1">Pet Rent</div>
+              <div className="text-xl font-light text-black">
+                ${listingPricing.petRent || 0} / month
+              </div>
+            </div>
+            
+            <div>
+              <div className="text-xl font-medium mb-1">Pet Deposit</div>
+              <div className="text-xl font-light text-black">
+                ${listingPricing.petDeposit || 0} / pet
+              </div>
             </div>
           </div>
+
+          <Separator className="my-4" />
         </div>
       </div>
     </div>

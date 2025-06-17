@@ -201,8 +201,8 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                 return (
                   <div 
                     key={rowIndex}
-                    className={`grid grid-cols-2 gap-6 py-4 px-4 border-b last:border-b-0 ${
-                      rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-25'
+                    className={`grid grid-cols-2 gap-6 py-3 px-4 border-b last:border-b-0 ${
+                      rowIndex % 2 === 0 ? 'bg-background' : 'bg-background'
                     }`}
                   >
                     {/* Left Column */}
