@@ -6,6 +6,8 @@ import { calculateRent } from '@/lib/calculate-rent'
 import { Trip, Listing, Notification } from '@prisma/client'
 import { createNotification } from './notifications'
 
+type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
+
 // Helper function to check authentication
 async function checkAuth() {
   const { userId } = auth()
@@ -42,12 +44,25 @@ export async function createMatch(trip: Trip, listing: Listing) {
   }
 }
 
-// Read a match by id
-export async function getMatch(id: string) {
+// Read a match by housing request id
+export async function getMatch(housingRequestId: string) {
   try {
     await checkAuth()
-    const match = await prisma.match.findUnique({
-      where: { id },
+    
+    // First get the housing request to find the match
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId }
+    })
+    
+    if (!housingRequest) {
+      return { success: false, error: 'Housing request not found' }
+    }
+    
+    const match = await prisma.match.findFirst({
+      where: {
+        tripId: housingRequest.tripId,
+        listingId: housingRequest.listingId
+      },
       include: {
         listing: {
           include: {
@@ -57,9 +72,13 @@ export async function getMatch(id: string) {
         trip: true,
         BoldSignLease: true,
         Lease: true,
-        // TODO: add housingRequest
       },
     })
+    
+    if (!match) {
+      return { success: false, error: 'Match not found' }
+    }
+    
     return { success: true, match }
   } catch (error) {
     console.error('Error fetching match:', error)
@@ -68,15 +87,12 @@ export async function getMatch(id: string) {
 }
 
 // Update a match
-export async function updateMatch(id: string, tripId?: string, matchId?: string) {
+export async function updateMatch(id: string, data: { tripId?: string; matchId?: string; leaseDocumentId?: string | null }) {
   try {
     await checkAuth()
     const match = await prisma.match.update({
       where: { id },
-      data: {
-        ...(tripId && { tripId }),
-        ...(matchId && { matchId }),
-      },
+      data: data,
     })
     return { success: true, match }
   } catch (error) {

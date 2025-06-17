@@ -350,15 +350,16 @@ model Bedroom {
 }
 
 model HousingRequest {
-  id        String   @id @default(uuid())
-  userId    String
-  listingId String
-  tripId    String
-  startDate DateTime
-  endDate   DateTime
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  userId          String
+  listingId       String
+  tripId          String
+  startDate       DateTime
+  endDate         DateTime
+  status          String   @default("pending")
+  leaseDocumentId String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id])
@@ -636,11 +637,12 @@ model MessageRead {
 }
 
 model Match {
-  id          String   @id @default(uuid())
-  tripId      String
-  listingId   String
-  booking     Booking?
-  monthlyRent Int?
+  id              String   @id @default(uuid())
+  tripId          String
+  listingId       String
+  booking         Booking?
+  monthlyRent     Int?
+  leaseDocumentId String?
 
   trip          Trip           @relation(fields: [tripId], references: [id])
   listing       Listing        @relation(fields: [listingId], references: [id])

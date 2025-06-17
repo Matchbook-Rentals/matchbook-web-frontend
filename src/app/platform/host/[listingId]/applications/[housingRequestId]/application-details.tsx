@@ -1,7 +1,7 @@
 "use client";
 
-import { ChevronDownIcon } from "lucide-react";
-import React, { useState } from "react";
+import { ChevronDownIcon, Upload, Trash2 } from "lucide-react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { APP_PAGE_MARGIN } from "@/constants/styles";
 import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
 import { approveHousingRequest, declineHousingRequest, undoApprovalHousingRequest, undoDeclineHousingRequest } from "@/app/actions/housing-requests";
 import { toast } from "sonner";
@@ -130,11 +131,16 @@ const questionnaire = {
 export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from }: ApplicationDetailsProps): JSX.Element => {
   const application = housingRequest.user.applications[0];
   const user = housingRequest.user;
+  const router = useRouter();
   const [isApproving, setIsApproving] = useState(false);
   const [isDeclining, setIsDeclining] = useState(false);
   const [isUndoing, setIsUndoing] = useState(false);
   const [isUndoingDecline, setIsUndoingDecline] = useState(false);
+  const [isUploadingLease, setIsUploadingLease] = useState(false);
+  const [isRemovingLease, setIsRemovingLease] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(housingRequest.status);
+  const [leaseDocumentId, setLeaseDocumentId] = useState(housingRequest.leaseDocumentId);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Get user name from actual data
   const getUserName = () => {
@@ -294,6 +300,137 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     }
   };
 
+  // Handler for uploading lease document
+  const handleUploadLease = async () => {
+    // Trigger file input click
+    fileInputRef.current?.click();
+  };
+
+  // Handler for file selection
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Please upload a PDF or Word document');
+      return;
+    }
+
+    // Validate file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File size must be less than 10MB');
+      return;
+    }
+
+    setIsUploadingLease(true);
+    try {
+      const formData = new FormData();
+      formData.append('housingRequestId', housingRequestId);
+      formData.append('listingId', listingId);
+      formData.append('leaseFile', file);
+
+      const response = await fetch('/api/signnow/create-document', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success('Lease document uploaded successfully!');
+        
+        // Update local state
+        if (result.documentId) {
+          setLeaseDocumentId(result.documentId);
+          router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-document/${result.documentId}`);
+        }
+      } else {
+        toast.error(result.error || 'Failed to upload lease document.');
+      }
+    } catch (error) {
+      console.error('Error uploading lease document:', error);
+      toast.error('Failed to upload lease document. Please try again.');
+    } finally {
+      setIsUploadingLease(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  // Handler for creating document without file
+  const handleCreateBlankLease = async () => {
+    setIsUploadingLease(true);
+    try {
+      const formData = new FormData();
+      formData.append('housingRequestId', housingRequestId);
+      formData.append('listingId', listingId);
+
+      const response = await fetch('/api/signnow/create-document', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success('Lease document created successfully!');
+        
+        // Update local state
+        if (result.documentId) {
+          setLeaseDocumentId(result.documentId);
+          router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-document/${result.documentId}`);
+        }
+      } else {
+        toast.error(result.error || 'Failed to create lease document.');
+      }
+    } catch (error) {
+      console.error('Error creating lease document:', error);
+      toast.error('Failed to create lease document. Please try again.');
+    } finally {
+      setIsUploadingLease(false);
+    }
+  };
+
+  // Handler for removing lease document
+  const handleRemoveLease = async () => {
+    if (!confirm('Are you sure you want to remove this lease document? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsRemovingLease(true);
+    try {
+      const response = await fetch('/api/signnow/delete-document', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          housingRequestId,
+          documentId: leaseDocumentId,
+        }),
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success('Lease document removed successfully');
+        // Update local state
+        setLeaseDocumentId(null);
+      } else {
+        toast.error(result.error || 'Failed to remove lease document');
+      }
+    } catch (error) {
+      console.error('Error removing lease document:', error);
+      toast.error('Failed to remove lease document. Please try again.');
+    } finally {
+      setIsRemovingLease(false);
+    }
+  };
+
   return (
     <main className="bg-white flex flex-row justify-center w-full">
       <div className={`bg-white w-full max-w-[1920px] relative ${APP_PAGE_MARGIN} py-4`}>
@@ -319,6 +456,45 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               <div className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] bg-[#39b54a] text-white flex items-center justify-center [font-family:'Poppins',Helvetica] font-medium">
                 ✓ Approved
               </div>
+              {leaseDocumentId ? (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-document/${leaseDocumentId}`)}
+                    className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium hover:bg-blue-50 flex items-center gap-2"
+                  >
+                    View Lease
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleRemoveLease}
+                    disabled={isRemovingLease}
+                    className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-red-200 text-red-600 [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-red-50 flex items-center gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    {isRemovingLease ? 'Removing...' : 'Remove Lease'}
+                  </Button>
+                </>
+              ) : (
+                <div className="relative">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={handleUploadLease}
+                    disabled={isUploadingLease}
+                    className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-blue-50 flex items-center gap-2"
+                  >
+                    <Upload className="w-4 h-4" />
+                    {isUploadingLease ? 'Uploading...' : 'Upload Lease'}
+                  </Button>
+                </div>
+              )}
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>

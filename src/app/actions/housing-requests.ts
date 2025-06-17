@@ -616,3 +616,44 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     throw error;
   }
 }
+
+// Update a housing request with new data
+export async function updateHousingRequest(housingRequestId: string, data: { leaseDocumentId?: string | null }) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // First verify that the housing request belongs to a listing owned by the current user
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        listing: true
+      }
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    if (housingRequest.listing.userId !== userId) {
+      throw new Error('Unauthorized: You can only update requests for your own listings');
+    }
+
+    // Update the housing request
+    const updatedRequest = await prisma.housingRequest.update({
+      where: { id: housingRequestId },
+      data: data
+    });
+
+    // Revalidate relevant paths
+    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/platform/host/dashboard/applications');
+
+    return { success: true, housingRequest: updatedRequest };
+  } catch (error) {
+    console.error('Error updating housing request:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
