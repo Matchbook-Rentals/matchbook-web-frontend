@@ -1,6 +1,7 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell, ReferenceDot } from 'recharts';
 import { MonthlyPricing } from "./listing-creation-pricing";
+import { Star } from "lucide-react";
 
 interface ListingCreationConfirmPricingProps {
   shortestStay: number;
@@ -33,7 +34,7 @@ const ListingCreationConfirmPricing: React.FC<ListingCreationConfirmPricingProps
         month: monthLabel,
         price: price,
         utilitiesIncluded: isUtilitiesIncluded,
-        isHighlighted: pricing.months === 6, // Highlight 6-month stay
+        color: isUtilitiesIncluded ? '#0B6E6E' : '#5DA5A5', // Full secondaryBrand for utilities, lighter for no utilities
       };
     });
   };
@@ -68,12 +69,9 @@ const ListingCreationConfirmPricing: React.FC<ListingCreationConfirmPricingProps
       <div className="w-full">
         {/* Chart Section */}
         <div className="mb-8">
-          <h3 className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-2">
+          <h3 className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-4">
             Your pricing structure
           </h3>
-          <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica] mb-6">
-            This chart displays what guests pay per month, depending on the length of their stay
-          </p>
 
           <div className="w-full h-96">
             <ResponsiveContainer width="100%" height="100%">
@@ -92,13 +90,30 @@ const ListingCreationConfirmPricing: React.FC<ListingCreationConfirmPricingProps
                   }}
                   labelFormatter={(label) => `Stay Length: ${label}`}
                 />
+                <Legend 
+                  content={() => (
+                    <div className="flex justify-center gap-6 mt-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: '#0B6E6E' }}></div>
+                        <span className="text-sm font-medium text-[#222222]">Utilities Included</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: '#5DA5A5' }}></div>
+                        <span className="text-sm font-medium text-[#222222]">Not included</span>
+                      </div>
+                    </div>
+                  )}
+                />
                 <Bar 
                   dataKey="price" 
                   name="Monthly Rent" 
-                  fill="#a3b899"
                   radius={[4, 4, 0, 0]}
                   isAnimationActive={true}
-                />
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>

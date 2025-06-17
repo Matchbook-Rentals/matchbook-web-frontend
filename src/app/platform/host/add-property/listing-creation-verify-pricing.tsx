@@ -4,6 +4,7 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MonthlyPricing } from "./listing-creation-pricing";
+import { styles } from "./styles";
 
 interface ListingCreationVerifyPricingProps {
   shortestStay: number;
@@ -113,17 +114,17 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
         <div className="flex items-center justify-center w-full gap-8 mb-6">
           {/* Shortest Stay Controls */}
           <div className="flex items-center gap-3">
-            <label className="font-medium text-base text-[#404040] [font-family:'Poppins',Helvetica] whitespace-nowrap">
+            <label className={`${styles.labelTextSmall} whitespace-nowrap`}>
               Shortest stay:
             </label>
-            <span className="font-normal text-base text-[#222222] [font-family:'Poppins',Helvetica] min-w-[20px]">
+            <span className={`${styles.counterTextSmall} min-w-[20px]`}>
               {shortestStay}
             </span>
             <div className="flex items-center space-x-1">
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full h-7 w-7 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                className={styles.counterButtonSmall}
                 onClick={decreaseShortestStay}
                 disabled={shortestStay <= 1}
               >
@@ -132,7 +133,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full h-7 w-7 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                className={styles.counterButtonSmall}
                 onClick={increaseShortestStay}
                 disabled={shortestStay >= longestStay}
               >
@@ -143,17 +144,17 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
 
           {/* Longest Stay Controls */}
           <div className="flex items-center gap-3">
-            <label className="font-medium text-base text-[#404040] [font-family:'Poppins',Helvetica] whitespace-nowrap">
+            <label className={`${styles.labelTextSmall} whitespace-nowrap`}>
               Longest stay:
             </label>
-            <span className="font-normal text-base text-[#222222] [font-family:'Poppins',Helvetica] min-w-[20px]">
+            <span className={`${styles.counterTextSmall} min-w-[20px]`}>
               {longestStay}
             </span>
             <div className="flex items-center space-x-1">
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full h-7 w-7 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                className={styles.counterButtonSmall}
                 onClick={decreaseLongestStay}
                 disabled={longestStay <= shortestStay}
               >
@@ -162,7 +163,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full h-7 w-7 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
+                className={styles.counterButtonSmall}
                 onClick={increaseLongestStay}
                 disabled={longestStay >= 12}
               >
