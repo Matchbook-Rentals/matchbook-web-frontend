@@ -184,6 +184,9 @@ model Listing {
   userId                 String
   squareFootage          Int       @default(0)
   depositSize            Int?
+  petDeposit             Int       @default(0)
+  petRent                Int       @default(0)
+  reservationDeposit     Int       @default(0)
   requireBackgroundCheck Boolean   @default(false)
   shortestLeaseLength    Int       @default(1)
   longestLeaseLength     Int       @default(12)
