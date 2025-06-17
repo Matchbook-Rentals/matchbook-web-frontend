@@ -43,7 +43,7 @@ export async function createLease(docId: string, housingRequestId: string) {
     // is this the correct way to grab the trip and listing?
     const housingRequest = await prisma.housingRequest.findUnique({
       where: { id: housingRequestId },
-      include: { trip: true, listing: true },
+      include: { trip: true, listing: { include: { monthlyPricing: true } } },
     });
     console.log('HOUSING REQUEST', housingRequest);
     console.log('LISTING', housingRequest?.listing);

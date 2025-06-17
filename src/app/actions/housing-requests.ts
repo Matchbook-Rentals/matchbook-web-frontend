@@ -34,7 +34,11 @@ export async function getHousingRequestById(housingRequestId: string) {
             }
           }
         },
-        listing: true,
+        listing: {
+          include: {
+            monthlyPricing: true
+          }
+        },
       },
     });
 

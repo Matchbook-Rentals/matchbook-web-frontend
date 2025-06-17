@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
         trip: true,
         listing: {
           include: {
-            user: true
+            user: true,
+            monthlyPricing: true
           }
         },
         user: true,

@@ -34,6 +34,7 @@ const fetchListingsFromDb = async (): Promise<ListingAndImages[]> => {
         housingRequests: true,
         unavailablePeriods: true,
         bookings: true,
+        monthlyPricing: true,
       },
       take: 100,
       orderBy: {

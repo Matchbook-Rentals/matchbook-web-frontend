@@ -49,7 +49,11 @@ export async function getMatch(id: string) {
     const match = await prisma.match.findUnique({
       where: { id },
       include: {
-        listing: true,
+        listing: {
+          include: {
+            monthlyPricing: true
+          }
+        },
         trip: true,
         BoldSignLease: true,
         Lease: true,

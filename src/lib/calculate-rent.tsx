@@ -18,14 +18,25 @@ export function calculateRent({ listing, trip, }: RentParams): number {
   const { startDate, endDate } = trip;
   const lengthOfStay = calculateLengthOfStay(startDate, endDate).months;
 
+  console.log('calculateRent debug:', {
+    listingId: listing.id,
+    lengthOfStay,
+    monthlyPricingCount: listing.monthlyPricing?.length || 0,
+    availableMonths: listing.monthlyPricing?.map(p => p.months) || [],
+    startDate,
+    endDate
+  });
+
   // Find the monthly pricing for the exact number of months (using full months only)
   const monthlyPricing = listing.monthlyPricing?.find(pricing => pricing.months === lengthOfStay);
   
   if (monthlyPricing) {
+    console.log('Found pricing:', monthlyPricing);
     return monthlyPricing.price;
   }
 
   // If no price exists for this duration, return the error code
+  console.warn(`No pricing found for ${lengthOfStay} months. Available: ${listing.monthlyPricing?.map(p => p.months).join(', ') || 'none'}`);
   return 77777;
 }
 
