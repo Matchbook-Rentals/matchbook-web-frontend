@@ -12,6 +12,7 @@ import { ListingAndImages } from "@/types";
 import CalendarDialog from "@/components/ui/calendar-dialog";
 import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useNavigationContent } from "./[listingId]/useNavigationContent";
 
 interface PaginationInfo {
   totalCount: number;
@@ -34,6 +35,15 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
   const [clientPage, setClientPage] = useState(1);
   const [loadingListingId, setLoadingListingId] = useState<string | null>(null);
   const isMobile = useIsMobile();
+  
+  // Create a wrapper component that passes the onNavigate callback
+  const MobileNavigationContent = ({ onNavigate }: { onNavigate?: () => void }) => {
+    const { NavigationContent } = useNavigationContent({ 
+      listingId: undefined, // No specific listing for the dashboard
+      onNavigate
+    });
+    return <NavigationContent />;
+  };
 
   // Clear loading state when pathname changes
   useEffect(() => {
@@ -281,6 +291,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
       sidebarContent={sidebarContent}
       searchBar={searchBarComponent}
       actionButton={addPropertyButton}
+      navigationContent={<MobileNavigationContent />}
       pagination={{
         currentPage: clientPage,
         totalPages: totalClientPages,
