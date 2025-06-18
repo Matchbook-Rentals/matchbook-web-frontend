@@ -179,8 +179,8 @@ export default function TabLayout({
             {title}
           </h1>
           
-          {/* Action button positioned on the right */}
-          {actionButton && (
+          {/* Action button positioned on the right - mobile only */}
+          {actionButton && isMobile && (
             <div>
               {actionButton}
             </div>
@@ -230,6 +230,13 @@ export default function TabLayout({
                   {sidebarContent}
                 </div>
               </div>
+              
+              {/* Action button positioned on far right - desktop only */}
+              {actionButton && (
+                <div className="absolute top-0 right-0">
+                  {actionButton}
+                </div>
+              )}
             </div>
           )}
         </div>
