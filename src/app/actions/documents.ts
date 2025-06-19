@@ -145,3 +145,332 @@ export async function checkSignature(id: string, role: 'Landlord' | 'Tenant'): P
   }
 }
 
+// Create BoldSign document embed link for lease upload
+export async function createBoldSignLeaseFromHousingRequest(housingRequestId: string, leaseFile: File) {
+  console.log('=== SERVER ACTION START ===');
+  console.log('Starting createBoldSignLeaseFromHousingRequest with:', { 
+    housingRequestId, 
+    fileName: leaseFile?.name,
+    fileSize: leaseFile?.size,
+    fileType: leaseFile?.type 
+  });
+  
+  try {
+    // STEP 1: Basic validation only
+    if (!housingRequestId) {
+      throw new Error('Housing request ID is required');
+    }
+
+    if (!leaseFile) {
+      throw new Error('Lease file is required');
+    }
+
+    console.log('Step 1 passed: Basic validation successful');
+    
+    // Return success for now to test if step 1 works
+    return { 
+      success: true, 
+      data: { 
+        embedUrl: 'test-url',
+        documentId: 'test-doc-id',
+        housingRequestId: housingRequestId
+      } 
+    };
+
+    // COMMENTED OUT - ALL OTHER STEPS
+    /*
+    const API_BASE_URL = 'https://api.boldsign.com';
+    const BOLDSIGN_API_KEY = process.env.BOLDSIGN_API_KEY;
+
+    if (!BOLDSIGN_API_KEY) {
+      throw new Error('BOLDSIGN_API_KEY is not configured');
+    }
+
+    console.log('Fetching housing request...');
+    // Get the housing request data
+    const housingRequest = await prisma?.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        trip: true,
+        listing: {
+          include: {
+            user: true,
+            monthlyPricing: true
+          }
+        },
+        user: true,
+      },
+    });
+
+    if (!housingRequest) {
+      throw new Error('No housingRequest found');
+    }
+
+    console.log('Housing request found:', {
+      id: housingRequest.id,
+      hasTrip: !!housingRequest.trip,
+      hasListing: !!housingRequest.listing,
+      hasUser: !!housingRequest.user,
+      hasListingUser: !!housingRequest.listing?.user
+    });
+
+    const tenant = housingRequest.user;
+    const landlord = housingRequest.listing.user;
+
+    if (!tenant) {
+      throw new Error('Tenant user not found');
+    }
+
+    if (!landlord) {
+      throw new Error('Landlord user not found');
+    }
+
+    console.log('Converting file to base64...');
+    // Convert file to base64 for the API
+    const fileBuffer = await leaseFile.arrayBuffer();
+    const base64File = Buffer.from(fileBuffer).toString('base64');
+    console.log('File converted, size:', base64File.length);
+
+    // Create BoldSign document embed URL from uploaded file
+    const documentRequestData = {
+      redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/platform/host/${housingRequest.listingId}/applications/${housingRequestId}`,
+      showToolbar: true,
+      sendViewOption: "PreparePage",
+      showSaveButton: true,
+      locale: "EN",
+      showSendButton: true,
+      showPreviewButton: true,
+      showNavigationButtons: true,
+      showTooltip: false,
+      embeddedSendLinkValidTill: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours from now
+      files: [base64File],
+      title: `Lease Agreement for ${housingRequest.listing.locationString}`,
+      message: "Please review and sign the lease agreement.",
+      signers: [
+        {
+          name: `${landlord?.firstName} ${landlord?.lastName}`.trim(),
+          emailAddress: landlord?.email || "",
+          signerOrder: 1,
+          signerType: "Signer",
+          authenticationType: "EmailOTP",
+          deliveryMode: "Email",
+          locale: "EN",
+          signerRole: "Host"
+        },
+        {
+          name: `${tenant?.firstName} ${tenant?.lastName}`.trim(),
+          emailAddress: tenant?.email || "",
+          signerOrder: 2,
+          signerType: "Signer",
+          authenticationType: "EmailOTP",
+          deliveryMode: "Email",
+          locale: "EN",
+          signerRole: "Tenant"
+        }
+      ],
+      enableSigningOrder: false,
+      expiryDateType: "Days",
+      expiryValue: 30,
+      reminderSettings: {
+        enableAutoReminder: true,
+        reminderDays: 3,
+        reminderCount: 5
+      },
+      disableEmails: false,
+      enablePrintAndSign: true,
+      enableReassign: true,
+      disableExpiryAlert: false,
+      documentInfo: [
+        {
+          locale: "EN",
+          title: `Lease Agreement - ${housingRequest.listing.locationString}`,
+          description: `Lease agreement for ${housingRequest.listing.locationString}`
+        }
+      ],
+      AutoDetectFields: true,
+      documentDownloadOption: "Combined"
+    };
+
+    console.log('Sending request to BoldSign API...');
+    console.log('Document request data:', JSON.stringify(documentRequestData, null, 2));
+
+    const response = await fetch(`${API_BASE_URL}/v1/document/createEmbeddedRequestUrl`, {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': BOLDSIGN_API_KEY!,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(documentRequestData),
+    });
+
+    console.log('BoldSign API response status:', response.status);
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('BoldSign document creation failed:', error);
+      throw new Error(`BoldSign API error (${response.status}): ${JSON.stringify(error)}`);
+    }
+
+    const result = await response.json();
+    console.log('Document embed URL created:', result);
+    
+    return { 
+      success: true, 
+      data: { 
+        embedUrl: result.sendUrl,
+        documentId: result.documentId,
+        housingRequestId: housingRequestId
+      } 
+    };
+    */
+  } catch (error) {
+    console.error('=== SERVER ACTION ERROR ===');
+    console.error('Error creating BoldSign document embed:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error('=== END SERVER ACTION ERROR ===');
+    
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    return { success: false, error: errorMessage };
+  }
+}
+
+// Update housing request when BoldSign document is sent
+export async function updateHousingRequestWithBoldSignLease(housingRequestId: string, documentId: string) {
+  try {
+    // Calculate rent and get users for match creation
+    const housingRequest = await prisma?.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        trip: true,
+        listing: {
+          include: {
+            user: true,
+            monthlyPricing: true
+          }
+        },
+        user: true,
+      },
+    });
+
+    if (!housingRequest) {
+      throw new Error('No housingRequest found');
+    }
+
+    const { calculateRent } = await import('@/lib/calculate-rent');
+    let monthlyRent = calculateRent({ listing: housingRequest.listing, trip: housingRequest.trip })
+    let tenant = housingRequest.user;
+    let landlord = housingRequest.listing.user;
+
+    // Create match
+    let match;
+    try {
+      match = await prisma.match.create({
+        data: {
+          tripId: housingRequest.trip.id,
+          listingId: housingRequest.listing.id,
+          monthlyRent,
+        }
+      })
+    } catch (error) {
+      console.log('Match Creation Failed - ', error);
+      throw new Error('Match creation failed');
+    }
+
+    // Create BoldSignLease record
+    const boldSignLease = await prisma?.boldSignLease.create({
+      data: {
+        id: documentId,
+        matchId: match.id,
+        landlordId: landlord.id,
+        primaryTenantId: tenant.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+    });
+
+    if (!boldSignLease) {
+      throw new Error('Failed to create BoldSignLease record');
+    }
+
+    // Update housing request with the boldSignLeaseId
+    await prisma.housingRequest.update({
+      where: { id: housingRequestId },
+      data: { boldSignLeaseId: boldSignLease.id }
+    });
+    
+    return { success: true, data: { boldSignLeaseId: boldSignLease.id } };
+  } catch (error) {
+    console.error('Error updating housing request with BoldSign lease:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
+
+// Remove BoldSign lease and clean up related records
+export async function removeBoldSignLease(housingRequestId: string) {
+  try {
+    // Get the housing request with related data
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        boldSignLease: {
+          include: {
+            match: true
+          }
+        }
+      }
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    if (!housingRequest.boldSignLease) {
+      throw new Error('No lease found to remove');
+    }
+
+    const leaseId = housingRequest.boldSignLease.id;
+    const matchId = housingRequest.boldSignLease.matchId;
+
+    // TODO: Optionally cancel the BoldSign document via API
+    // const API_BASE_URL = 'https://api.boldsign.com';
+    // const BOLDSIGN_API_KEY = process.env.BOLDSIGN_API_KEY;
+    // You might want to call BoldSign API to cancel/delete the document
+
+    // Delete the BoldSignLease record
+    await prisma.boldSignLease.delete({
+      where: { id: leaseId }
+    });
+
+    // Delete the associated Match record
+    if (matchId) {
+      try {
+        await prisma.match.delete({
+          where: { id: matchId }
+        });
+      } catch (error) {
+        console.warn('Failed to delete match:', error);
+        // Continue even if match deletion fails
+      }
+    }
+
+    // Update the housing request to remove the boldSignLeaseId
+    await prisma.housingRequest.update({
+      where: { id: housingRequestId },
+      data: { boldSignLeaseId: null }
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error removing BoldSign lease:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
+
+function formatDate(dateString: Date | string) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+}
+

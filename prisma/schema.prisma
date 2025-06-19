@@ -358,13 +358,15 @@ model HousingRequest {
   endDate         DateTime
   status          String   @default("pending")
   leaseDocumentId String?
+  boldSignLeaseId String?  @unique
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   // Relationships
-  user    User    @relation(fields: [userId], references: [id])
-  listing Listing @relation(fields: [listingId], references: [id])
-  trip    Trip    @relation(fields: [tripId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+  listing       Listing        @relation(fields: [listingId], references: [id])
+  trip          Trip           @relation(fields: [tripId], references: [id])
+  boldSignLease BoldSignLease? @relation(fields: [boldSignLeaseId], references: [id])
 
   // Constraints
   @@unique([listingId, tripId])
@@ -865,8 +867,9 @@ model BoldSignLease {
   landlordSigned    Boolean  @default(false)
   tenantSigned      Boolean  @default(false)
 
-  match    Match @relation(fields: [matchId], references: [id])
-  landlord User  @relation(fields: [landlordId], references: [id])
+  match          Match           @relation(fields: [matchId], references: [id])
+  landlord       User            @relation(fields: [landlordId], references: [id])
+  housingRequest HousingRequest?
 
   @@unique([matchId])
 }

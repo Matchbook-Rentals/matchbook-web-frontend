@@ -18,6 +18,7 @@ import { RequestWithUser } from '@/types';
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useNavigationContent } from "./[listingId]/useNavigationContent";
 
 // Filter options
 const filterOptions = [
@@ -346,6 +347,15 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const itemsPerPage = 10;
   const isMobile = useIsMobile();
+  
+  // Create a wrapper component that passes the onNavigate callback
+  const MobileNavigationContent = ({ onNavigate }: { onNavigate?: () => void }) => {
+    const { NavigationContent } = useNavigationContent({ 
+      listingId: undefined, // No specific listing for the dashboard
+      onNavigate
+    });
+    return <NavigationContent />;
+  };
 
   // Clear loading state when pathname changes
   useEffect(() => {
@@ -513,6 +523,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
       title="Your Applications"
       sidebarContent={sidebarContent}
       searchBar={searchBarComponent}
+      navigationContent={<MobileNavigationContent />}
       pagination={{
         currentPage,
         totalPages,

@@ -150,6 +150,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create lease record' }, { status: 500 });
     }
 
+    // Update housing request with the boldSignLeaseId
+    await prisma.housingRequest.update({
+      where: { id: body.housingRequestId },
+      data: { boldSignLeaseId: boldSignLease.id }
+    });
+
     if (!response.ok) {
       let message = await response.json();
       console.log("BoldSign API FAIL response:", message);

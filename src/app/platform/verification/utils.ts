@@ -52,7 +52,7 @@ export function generateVerificationXml(
       <phone>555-123-4567</phone>
     </subject>
     <subOrder type="National Criminal" />
-    <subOrder type="evictions_check" />
+    <subOrder type="County_criminal" />
     <package>A LA CARTE</package>
   </placeOrder>
 </New_Order>`;

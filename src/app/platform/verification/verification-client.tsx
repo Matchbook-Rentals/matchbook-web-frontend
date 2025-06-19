@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -35,6 +36,7 @@ export default function VerificationClient({
   const [formData, setFormData] = useState<VerificationFormValues | null>(null)
   const [paymentComplete, setPaymentComplete] = useState<boolean>(paymentStatus === 'success')
   const [hasPurchase, setHasPurchase] = useState<boolean>(serverHasPurchase || false)
+  const [approvalChecked, setApprovalChecked] = useState(false)
   const { user } = useUser()
 
   // Check URL params for payment success or review mode on component mount
@@ -702,12 +704,116 @@ export default function VerificationClient({
             </Card>
           ) : (
             <>
-              <div className="flex justify-center mt-8">
+              {/* Authorization Terms Section */}
+              <div className="mt-8 mb-6">
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Credit Report and Background Check Authorization</h3>
+                  
+                  <div className="p-4 bg-gray-50 rounded-md max-h-96 overflow-y-auto text-xs">
+                    <div className="space-y-3">
+                      <div className="text-center font-bold">
+                        CREDIT REPORT AND BACKGROUND CHECK AUTHORIZATION FORM
+                      </div>
+                      <div className="text-center text-gray-600">
+                        Last Updated: June 17, 2025
+                      </div>
+                      
+                      <p>By signing below, I voluntarily provide my informed consent to the following terms:</p>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-1">1. Authorization to Obtain Reports</h4>
+                        <p className="mb-1">
+                          I authorize MatchBook LLC and its designated agents and representatives, including third-party screening providers (such as Global Background Screening, iSoftpull), to obtain consumer reports about me, including a credit history and a background check (the "Reports"). I understand that my personal information, such as my date of birth and social security number, will be used for the purpose of obtaining these Reports. I understand that these Reports may include, but are not limited to, information related to the following from any governmental agency in any or all federal, state, or county jurisdiction:
+                        </p>
+                        <ul className="list-disc pl-4 space-y-0.5">
+                          <li>Credit history and credit score;</li>
+                          <li>Criminal history;</li>
+                          <li>Eviction records;</li>
+                          <li>Previous residences;</li>
+                          <li>Employment and education history; and</li>
+                          <li>Driving records and other public records.</li>
+                        </ul>
+                        <p className="mt-1">
+                          This Authorization is valid for purposes of verifying information pursuant to leasing and any other lawful purpose covered under the Fair Credit Reporting Act.
+                        </p>
+                        <p>This Authorization shall be valid in original or copy form.</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-1">2. Purpose of Screening</h4>
+                        <p>
+                          I understand that this information is collected for the sole purpose of evaluating my qualifications to rent a property listed on the Matchbook LLC platform. The results of this screening may impact whether I am matched with a host.
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-1">3. Limited Sharing of Results</h4>
+                        <p>
+                          Matchbook LLC may share a general summary of my credit standing (e.g., "Excellent," "Good," "Fair," "Poor") with hosts to help them evaluate my application. My full report will not be shared with property owners or managers.
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-1">4. Confidentiality</h4>
+                        <p>
+                          Matchbook LLC agrees to handle my information with care and in accordance with applicable privacy laws. My report will not be sold or disclosed to any third party except as explicitly stated in this consent or as required by law.
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-1">5. Your Rights Under the Fair Credit Reporting Act (FCRA)</h4>
+                        <p className="mb-1">I understand I have the right to:</p>
+                        <ul className="list-disc pl-4 space-y-0.5">
+                          <li>Obtain a free copy of my report from the screening agency used;</li>
+                          <li>Dispute inaccurate or incomplete information directly with the consumer reporting agency; and</li>
+                          <li>Request the name and contact information of the third-party agency used for screening.</li>
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-1">6. Release of Liability</h4>
+                        <p>
+                          I release Matchbook LLC, its agents, its affiliates, its representatives, and any third parties providing the reports from liability related to the lawful collection and use of this information, except in cases where such liability arises from Matchbook LLC, its agents, its affiliates, or any third parties' violation of the Fair Credit Reporting Act or other applicable law.
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-1">7. Consent Period</h4>
+                        <p>
+                          I understand that this report is valid for up to 90 days and may be reused for additional applications submitted to Matchbook LLC during that time.
+                        </p>
+                      </div>
+                      
+                      <div className="border-t pt-3 mt-3">
+                        <p className="font-medium">
+                          By signing this form, I confirm that I have read and understand the above terms. I consent to the screening and limited sharing of my information as described. I consent to the release of liability as described.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+              
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <Checkbox 
+                  id="approval-checkbox"
+                  checked={approvalChecked}
+                  onCheckedChange={(checked) => setApprovalChecked(checked === true)}
+                />
+                <label 
+                  htmlFor="approval-checkbox" 
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I authorize MatchBook LLC to obtain credit reports and background checks as described in the Credit Report and Background Check Authorization Form
+                </label>
+              </div>
+              
+              <div className="flex justify-center">
                 {hasPurchase ? (
                   <Button 
                     type="submit" 
                     className="px-8 py-6 text-lg bg-green-600 hover:bg-green-700 text-white"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !approvalChecked}
                   >
                     {isSubmitting ? "Submitting..." : "Submit Verification Request"}
                   </Button>
@@ -715,7 +821,7 @@ export default function VerificationClient({
                   <Button 
                     type="submit" 
                     className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !approvalChecked}
                   >
                     Continue to Payment - $25.00
                   </Button>

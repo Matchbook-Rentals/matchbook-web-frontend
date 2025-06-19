@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
 import { approveHousingRequest, declineHousingRequest, undoApprovalHousingRequest, undoDeclineHousingRequest } from "@/app/actions/housing-requests";
+import { createBoldSignLeaseFromHousingRequest, removeBoldSignLease } from "@/app/actions/documents";
 import { toast } from "sonner";
 
 interface HousingRequestWithUser extends HousingRequest {
@@ -28,6 +29,7 @@ interface HousingRequestWithUser extends HousingRequest {
   listing: Listing;
   trip?: any;
   hasBooking?: boolean;
+  boldSignLeaseId?: string | null;
 }
 
 interface ApplicationDetailsProps {
@@ -140,6 +142,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [isRemovingLease, setIsRemovingLease] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(housingRequest.status);
   const [leaseDocumentId, setLeaseDocumentId] = useState(housingRequest.leaseDocumentId);
+  const [boldSignLeaseId, setBoldSignLeaseId] = useState(housingRequest.boldSignLeaseId);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Get user name from actual data
@@ -300,21 +303,25 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     }
   };
 
-  // Handler for uploading lease document
+  // Handler for uploading lease file and creating template
   const handleUploadLease = async () => {
+    console.log('handleUploadLease called');
+    console.log('fileInputRef.current:', fileInputRef.current);
     // Trigger file input click
     fileInputRef.current?.click();
   };
 
-  // Handler for file selection
+  // Handler for file selection and template creation
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleFileSelect called');
     const file = event.target.files?.[0];
+    console.log('Selected file:', file);
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = ['application/pdf'];
     if (!allowedTypes.includes(file.type)) {
-      toast.error('Please upload a PDF or Word document');
+      toast.error('Please upload a PDF document');
       return;
     }
 
@@ -325,34 +332,53 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     }
 
     setIsUploadingLease(true);
+    
+    // Use fetch to call API route instead of server action to avoid React hydration issues
     try {
+      console.log('=== CLIENT ACTION START ===');
+      console.log('Uploading file via API route:', { 
+        housingRequestId, 
+        fileName: file.name, 
+        fileSize: file.size,
+        fileType: file.type 
+      });
+      
       const formData = new FormData();
       formData.append('housingRequestId', housingRequestId);
       formData.append('listingId', listingId);
       formData.append('leaseFile', file);
 
-      const response = await fetch('/api/signnow/create-document', {
+      const response = await fetch('/api/leases/create-from-upload', {
         method: 'POST',
         body: formData,
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create document');
+      }
+
       const result = await response.json();
+      console.log('Result from API:', result);
       
       if (result.success) {
-        toast.success('Lease document uploaded successfully!');
-        
-        // Update local state
-        if (result.documentId) {
-          setLeaseDocumentId(result.documentId);
-          router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-document/${result.documentId}`);
+        toast.success('Lease document created! Configure your fields.');
+        // Redirect to lease editing page with the embed URL
+        if (result.embedUrl && result.documentId) {
+          router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-editor?embedUrl=${encodeURIComponent(result.embedUrl)}&documentId=${result.documentId}`);
+        } else {
+          console.error('Missing embedUrl or documentId in success response:', result);
+          toast.error('Document created but missing redirect data');
         }
       } else {
-        toast.error(result.error || 'Failed to upload lease document.');
+        toast.error(result.error || 'Failed to create document');
       }
-    } catch (error) {
-      console.error('Error uploading lease document:', error);
-      toast.error('Failed to upload lease document. Please try again.');
+    } catch (clientError) {
+      console.error('=== CLIENT ERROR ===');
+      console.error('Client-side error creating BoldSign document:', clientError);
+      toast.error(`Failed to create document: ${clientError instanceof Error ? clientError.message : 'Unknown client error'}`);
     } finally {
+      console.log('=== CLIENT ACTION END ===');
       setIsUploadingLease(false);
       // Reset file input
       if (fileInputRef.current) {
@@ -361,71 +387,30 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     }
   };
 
-  // Handler for creating document without file
-  const handleCreateBlankLease = async () => {
-    setIsUploadingLease(true);
-    try {
-      const formData = new FormData();
-      formData.append('housingRequestId', housingRequestId);
-      formData.append('listingId', listingId);
 
-      const response = await fetch('/api/signnow/create-document', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const result = await response.json();
-      
-      if (result.success) {
-        toast.success('Lease document created successfully!');
-        
-        // Update local state
-        if (result.documentId) {
-          setLeaseDocumentId(result.documentId);
-          router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-document/${result.documentId}`);
-        }
-      } else {
-        toast.error(result.error || 'Failed to create lease document.');
-      }
-    } catch (error) {
-      console.error('Error creating lease document:', error);
-      toast.error('Failed to create lease document. Please try again.');
-    } finally {
-      setIsUploadingLease(false);
-    }
-  };
-
-  // Handler for removing lease document
+  // Handler for removing BoldSign lease
   const handleRemoveLease = async () => {
-    if (!confirm('Are you sure you want to remove this lease document? This action cannot be undone.')) {
+    if (!confirm('Are you sure you want to remove this lease? This will delete the lease document and cannot be undone.')) {
       return;
     }
 
     setIsRemovingLease(true);
     try {
-      const response = await fetch('/api/signnow/delete-document', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          housingRequestId,
-          documentId: leaseDocumentId,
-        }),
-      });
-
-      const result = await response.json();
+      // Use server action for lease removal
+      const result = await removeBoldSignLease(housingRequestId);
       
       if (result.success) {
-        toast.success('Lease document removed successfully');
+        toast.success('Lease removed successfully');
         // Update local state
-        setLeaseDocumentId(null);
+        setBoldSignLeaseId(null);
+        // Refresh the page to ensure UI is in sync
+        window.location.reload();
       } else {
-        toast.error(result.error || 'Failed to remove lease document');
+        toast.error(result.error || 'Failed to remove lease');
       }
     } catch (error) {
-      console.error('Error removing lease document:', error);
-      toast.error('Failed to remove lease document. Please try again.');
+      console.error('Error removing lease:', error);
+      toast.error('Failed to remove lease. Please try again.');
     } finally {
       setIsRemovingLease(false);
     }
@@ -456,11 +441,11 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               <div className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] bg-[#39b54a] text-white flex items-center justify-center [font-family:'Poppins',Helvetica] font-medium">
                 ✓ Approved
               </div>
-              {leaseDocumentId ? (
+              {boldSignLeaseId ? (
                 <>
                   <Button
                     variant="outline"
-                    onClick={() => router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-document/${leaseDocumentId}`)}
+                    onClick={() => toast.info('BoldSign lease viewing interface coming soon')}
                     className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium hover:bg-blue-50 flex items-center gap-2"
                   >
                     View Lease
@@ -480,7 +465,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".pdf,.doc,.docx"
+                    accept=".pdf"
                     onChange={handleFileSelect}
                     className="hidden"
                   />
@@ -491,7 +476,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-blue-50 flex items-center gap-2"
                   >
                     <Upload className="w-4 h-4" />
-                    {isUploadingLease ? 'Uploading...' : 'Upload Lease'}
+                    {isUploadingLease ? 'Creating...' : 'Upload Lease'}
                   </Button>
                 </div>
               )}
