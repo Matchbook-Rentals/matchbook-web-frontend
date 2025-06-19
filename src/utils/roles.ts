@@ -10,22 +10,22 @@ export const checkRole = async (role: Roles) => {
 export const checkHostAccess = async () => {
   const { sessionClaims } = auth()
   const userRole = sessionClaims?.metadata.role
-  return userRole === 'admin' || userRole === 'moderator' || userRole === 'host_beta'
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'host_beta' || userRole === 'preview'
 }
 
 export const checkBetaAccess = async () => {
   const { sessionClaims } = auth()
   const userRole = sessionClaims?.metadata.role
-  return userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta'
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta' || userRole === 'preview'
 }
 
 // Client-side role checking utilities for use with useUser() hook
 export const checkClientBetaAccess = (userRole?: string) => {
-  return userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta'
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta' || userRole === 'preview'
 }
 
 export const checkClientHostAccess = (userRole?: string) => {
-  return userRole === 'admin' || userRole === 'moderator' || userRole === 'host_beta'
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'host_beta' || userRole === 'preview'
 }
 
 export const checkClientRole = (userRole?: string, role: Roles) => {
