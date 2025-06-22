@@ -21,7 +21,7 @@ const brandButtonVariants = cva(
       },
       size: {
         default: "h-[40px] min-w-[160px] rounded-md px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm leading-5 tracking-normal",
-        sm: "h-[20px] min-w-[84px] rounded-md px-1 py-0 gap-1",
+        sm: "h-[36px] min-w-[156px] rounded-md px-4 py-3 gap-1 font-['Poppins'] font-semibold text-sm leading-5 tracking-normal",
         lg: "h-[44px] min-w-[179px] rounded-md px-5 py-[10px] gap-2 font-['Poppins'] font-semibold text-base leading-6 tracking-normal",
         xl: "h-[48px] min-w-[183px] rounded-md px-[18px] py-3 gap-2 font-['Poppins'] font-semibold text-base leading-6 tracking-normal",
         "2xl": "h-[60px] min-w-[219px] rounded-md px-[22px] py-5 gap-[10px] font-['Poppins'] font-semibold text-lg leading-7 tracking-normal",

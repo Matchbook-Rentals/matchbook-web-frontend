@@ -29,6 +29,7 @@ interface MenuItem {
   onClick?: () => void;
   requiresBeta?: boolean; // Requires beta_user, moderator, or admin
   requiresAdmin?: boolean; // Requires admin
+  requiresPreview?: boolean; // Requires preview
   requiresHostAccess?: boolean; // Requires host_beta, moderator, or admin
   adminOnlyVisible?: boolean; // Only visible to admin
   section: number; // For grouping and dividers
@@ -88,6 +89,7 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
   const hasBetaAccess = checkClientBetaAccess(userRole);
   const hasHostAccess = checkClientHostAccess(userRole);
   const isAdmin = userRole === 'admin';
+  const isPreview = userRole === 'preview'; // Preview role has access to everything except admin
 
   useEffect(() => {
     updateUserLogin(new Date());
@@ -119,7 +121,7 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
     // Renter side menu items
     { id: 'home', label: 'Home', href: '/', section: 1 },
     { id: 'searches', label: 'Searches', href: '/platform/trips', requiresBeta: true, section: 1 },
-    { id: 'application', label: 'Application', href: '/platform/application', requiresAdmin: true, section: 1 },
+    { id: 'application', label: 'Application', href: '/platform/application', requiresAdmin: true, requiresPreview: true, section: 1 },
     { id: 'bookings', label: 'Bookings', href: '/platform/bookings', requiresBeta: true, section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 },
     {
@@ -131,7 +133,7 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
-    { id: 'verification', label: 'Verification', href: '/platform/verification', requiresAdmin: true, section: 4 },
+    { id: 'verification', label: 'Verification', href: '/platform/verification', requiresAdmin: true, requiresPreview: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 
@@ -356,7 +358,12 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
                   if (item.requiresBeta && !hasBetaAccess) {
                     isItemEnabled = false;
                   }
-                  if (item.requiresAdmin && !isAdmin) {
+                  if (item.requiresAdmin && item.requiresPreview) {
+                    // If both requiresAdmin and requiresPreview are true, allow if user is either admin OR preview
+                    isItemEnabled = isAdmin || isPreview;
+                  } else if (item.requiresAdmin && !isAdmin) {
+                    isItemEnabled = false;
+                  } else if (item.requiresPreview && !isPreview) {
                     isItemEnabled = false;
                   }
                   if (item.requiresHostAccess && !hasHostAccess) {

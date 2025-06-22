@@ -13,6 +13,7 @@ export default async function AdminLayout({
   children: React.ReactNode
 }) {
   // Check for admin role at layout level for stronger protection
+  // Preview role should NOT have access to admin routes
   const isAdmin = await checkRole('admin')
   
   if (!isAdmin) {
