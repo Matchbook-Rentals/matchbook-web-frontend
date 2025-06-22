@@ -13,21 +13,21 @@ export const BecomeHostCopy = (): JSX.Element => {
       src: "/marketing-images/become-host/1.png",
       alt: "People viewing a property",
       className: "w-full h-full object-cover object-[50%_25%]",
-      containerClass: "relative w-full h-[160px] md:h-[200px] overflow-hidden rounded-2xl",
+      containerClass: "relative w-full h-[189px] overflow-hidden rounded-2xl",
     },
     {
       id: "left",
       src: "/marketing-images/become-host/3.png",
       alt: "House exterior",
       className: "w-full h-full object-cover object-center",
-      containerClass: "relative flex-1 h-[160px] overflow-hidden rounded-2xl",
+      containerClass: "relative md:flex-1 h-[189px] overflow-hidden rounded-2xl",
     },
     {
       id: "right",
       src: "/marketing-images/become-host/2.png",
       alt: "House exterior",
       className: "w-full h-full object-cover object-center",
-      containerClass: "relative flex-1 h-[160px] overflow-hidden rounded-2xl",
+      containerClass: "relative md:flex-1 h-[189px] overflow-hidden rounded-2xl",
     },
   ];
 
@@ -47,7 +47,7 @@ export const BecomeHostCopy = (): JSX.Element => {
             {images.slice(1).map((image) => (
               <div
                 key={image.id}
-                className={`${image.containerClass} w-full md:flex-1 max-h-[160px]`}
+                className={`${image.containerClass} w-full md:flex-1 max-h-[189px]`}
               >
                 <img
                   className={image.className}
