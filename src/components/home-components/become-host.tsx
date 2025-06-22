@@ -1,23 +1,10 @@
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrandButton } from "../../components/ui/brandButton";
 import { Card, CardContent } from "../../components/ui/card";
 import { useRouter } from "next/navigation";
 
 export const BecomeHostCopy = (): JSX.Element => {
   const router = useRouter();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
 
   // Image data for mapping
   const images = [
@@ -25,9 +12,8 @@ export const BecomeHostCopy = (): JSX.Element => {
       id: "main",
       src: "/marketing-images/become-host/1.png",
       alt: "People viewing a property",
-      className: "w-full h-full object-cover",
+      className: "w-full h-full object-cover object-[50%_25%]",
       containerClass: "relative w-full h-[160px] md:h-[200px] overflow-hidden rounded-2xl",
-      style: { objectPosition: '50% 25%' },
     },
     {
       id: "left",
@@ -40,10 +26,8 @@ export const BecomeHostCopy = (): JSX.Element => {
       id: "right",
       src: "/marketing-images/become-host/2.png",
       alt: "House exterior",
-      className: "w-full h-full object-cover",
+      className: "w-full h-full object-cover object-center",
       containerClass: "relative flex-1 h-[160px] overflow-hidden rounded-2xl",
-      mobileStyle: { objectPosition: '50% 50%' },
-      desktopStyle: { objectPosition: '50% 50%' },
     },
   ];
 
@@ -56,7 +40,6 @@ export const BecomeHostCopy = (): JSX.Element => {
               className={images[0].className}
               alt={images[0].alt}
               src={images[0].src}
-              style={images[0].style}
             />
           </div>
 
@@ -70,11 +53,6 @@ export const BecomeHostCopy = (): JSX.Element => {
                   className={image.className}
                   alt={image.alt}
                   src={image.src}
-                  style={{
-                    ...image.style,
-                    ...(image.mobileStyle && isMobile ? image.mobileStyle : {}),
-                    ...(image.desktopStyle && !isMobile ? image.desktopStyle : {}),
-                  }}
                 />
               </div>
             ))}
