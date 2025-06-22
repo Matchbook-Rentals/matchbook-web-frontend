@@ -42,7 +42,7 @@ export const BecomeHostCopy = (): JSX.Element => {
       alt: "House exterior",
       className: "w-full h-full object-cover",
       containerClass: "relative flex-1 h-[160px] overflow-hidden rounded-2xl",
-      mobileStyle: { objectPosition: '50% 80%' },
+      mobileStyle: { objectPosition: '50% 50%' },
       desktopStyle: { objectPosition: '50% 50%' },
     },
   ];
