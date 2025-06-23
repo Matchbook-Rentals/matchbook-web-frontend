@@ -66,7 +66,9 @@ const WebHomePage = () => {
     <div className="overflow-x-hidden">
       <MatchbookHeader />
       <Hero />
+      <div className={spacerDivClassNames} />
       <RentEasyCopy />
+      <div className={spacerDivClassNames} />
       <HowItWorks />
       <div className={spacerDivClassNames} />
       <RentersLoveMatchbook />

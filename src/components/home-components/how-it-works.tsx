@@ -51,15 +51,15 @@ export const HowItWorksOld = (): JSX.Element => {
 
 export const HowItWorks = (): JSX.Element => {
   return (
-    <section className="w-full bg-[#FBFBFB] flex justify-center items-center py-2">
+    <section className="w-full  flex justify-center items-center ">
       <div 
         className="flex flex-col items-center relative"
         style={{
           width: '1441px',
-          paddingTop: '64px',
-          paddingRight: '150px',
-          paddingBottom: '64px',
-          paddingLeft: '150px',
+          paddingTop: '0px',
+          paddingRight: '10%',
+          paddingBottom: '50px',
+          paddingLeft: '10%',
           gap: '56px'
         }}
       >
