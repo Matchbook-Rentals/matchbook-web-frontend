@@ -59,8 +59,8 @@ const WebHomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Define the spacer class name variable
-  const spacerDivClassNames = "h-72 lg:h-80 ";
-  const shortSpacerClassNames = "h-36  lg:h-40 ";
+  const spacerDivClassNames = "h-[56px]";
+  const shortSpacerClassNames = "";
 
   return (
     <div className="overflow-x-hidden">

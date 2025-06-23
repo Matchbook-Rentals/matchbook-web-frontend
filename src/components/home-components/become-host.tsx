@@ -43,19 +43,31 @@ export const BecomeHostCopy = (): JSX.Element => {
             />
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-6 w-full">
-            {images.slice(1).map((image) => (
-              <div
-                key={image.id}
-                className={`${image.containerClass} w-full md:flex-1 max-h-[189px]`}
-              >
-                <img
-                  className={image.className}
-                  alt={image.alt}
-                  src={image.src}
-                />
-              </div>
-            ))}
+          <div className="flex flex-col md:flex-row lg:flex-row items-center gap-6 w-full">
+            {/* Show only second image between md and lg */}
+            <div className="w-full md:w-full lg:flex-1 relative h-[189px] overflow-hidden rounded-2xl md:block lg:hidden">
+              <img
+                className="w-full h-full object-cover object-center"
+                alt={images[2].alt}
+                src={images[2].src}
+              />
+            </div>
+            
+            {/* Show both images at lg and above */}
+            <div className="hidden lg:flex lg:flex-row lg:gap-6 lg:w-full">
+              {images.slice(1).map((image) => (
+                <div
+                  key={image.id}
+                  className="flex-1 relative h-[189px] overflow-hidden rounded-2xl"
+                >
+                  <img
+                    className={image.className}
+                    alt={image.alt}
+                    src={image.src}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
