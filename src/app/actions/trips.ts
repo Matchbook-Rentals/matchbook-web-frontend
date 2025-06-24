@@ -230,8 +230,8 @@ export async function createTrip(tripData: {
   locationString: string;
   latitude: number;
   longitude: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | null;
+  endDate?: Date | null;
   numAdults?: number;
   numChildren?: number;
   numPets?: number;
@@ -242,10 +242,20 @@ export async function createTrip(tripData: {
   }
 
   try {
-    // Handle date logic
-    let { startDate, endDate } = tripData;
+    // Destructure all properties from tripData for clarity and safety
+    let {
+      startDate,
+      endDate,
+      locationString,
+      latitude,
+      longitude,
+      numAdults,
+      numChildren,
+      numPets
+    } = tripData;
     const today = new Date();
 
+    // Handle date logic
     if (!startDate && !endDate) {
       // If neither date is provided, start next month and end the month after
       startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
@@ -262,11 +272,16 @@ export async function createTrip(tripData: {
 
     const newTrip = await prisma.trip.create({
       data: {
-        ...tripData,
-        startDate,
-        endDate,
         userId,
         tripStatus: 'searching',
+        locationString,
+        lat: latitude,
+        lng: longitude,
+        startDate,
+        endDate,
+        numAdults,
+        numChildren,
+        numPets,
       },
     });
 
