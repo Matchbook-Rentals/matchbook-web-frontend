@@ -52,7 +52,6 @@ interface ApplicationDetailsProps {
   housingRequest: HousingRequestWithUser;
   listingId: string;
   from?: string;
-  currentUser?: User;
 }
 
 // Data for the application
@@ -146,7 +145,7 @@ const questionnaire = {
   },
 };
 
-export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from, currentUser }: ApplicationDetailsProps): JSX.Element => {
+export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from }: ApplicationDetailsProps): JSX.Element => {
   const application = housingRequest.user.applications[0];
   const user = housingRequest.user;
   const router = useRouter();
@@ -164,14 +163,22 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [pendingLeaseAction, setPendingLeaseAction] = useState<(() => void) | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  // Helper function to check if user has Stripe Connect setup
-  const hasStripeConnectSetup = () => {
-    return Boolean(currentUser?.stripeAccountId);
+  // Function to check Stripe Connect setup from database
+  const checkStripeConnectSetup = async () => {
+    try {
+      const response = await fetch('/api/user/stripe-account');
+      const data = await response.json();
+      return Boolean(data.stripeAccountId);
+    } catch (error) {
+      console.error('Error checking Stripe account:', error);
+      return false;
+    }
   };
 
   // Function to handle Stripe Connect verification before lease actions
-  const verifyStripeConnectAndProceed = (action: () => void) => {
-    if (!hasStripeConnectSetup()) {
+  const verifyStripeConnectAndProceed = async (action: () => void) => {
+    const hasStripeAccount = await checkStripeConnectSetup();
+    if (!hasStripeAccount) {
       setPendingLeaseAction(() => action);
       setIsStripeDialogOpen(true);
     } else {
@@ -356,7 +363,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     console.log('fileInputRef.current:', fileInputRef.current);
     
     // Check Stripe Connect setup before proceeding
-    verifyStripeConnectAndProceed(() => {
+    await verifyStripeConnectAndProceed(() => {
       // Trigger file input click
       fileInputRef.current?.click();
     });
@@ -418,8 +425,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
         // Notify tenant about the lease (if matchId is available)
         if (result.matchId) {
           console.log('Match created with ID:', result.matchId);
-          console.log('Tenant can sign lease at:', `/match/${result.matchId}`);
-          // TODO: Send notification to tenant with link to /match/${result.matchId}
+          console.log('Tenant can sign lease at:', `/platform/match/${result.matchId}`);
+          // TODO: Send notification to tenant with link to /platform/match/${result.matchId}
         }
         
         // Redirect to lease editing page with the embed URL
@@ -674,7 +681,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-blue-50 flex items-center gap-2"
                   >
                     <Upload className="w-4 h-4" />
-                    {isUploadingLease ? 'Creating...' : 'Upload Lease'}
+                    {isUploadingLease ? 'Creating Editable Document...' : 'Upload Lease'}
                   </Button>
                 </div>
               )}
@@ -739,7 +746,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 flex items-center justify-center gap-2"
               >
                 {isUploadingLease && <Loader2 className="w-4 h-4 animate-spin" />}
-                {isUploadingLease ? 'Creating Lease...' : 'Approve and Create Lease'}
+                {isUploadingLease ? 'Creating Editable Document...' : 'Approve and Create Lease'}
               </Button>
             </>
           )}
@@ -1207,7 +1214,6 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           isOpen={isStripeDialogOpen}
           onClose={handleStripeDialogClose}
           onContinue={handleStripeDialogContinue}
-          user={currentUser || {}}
         />
       </div>
     </main>

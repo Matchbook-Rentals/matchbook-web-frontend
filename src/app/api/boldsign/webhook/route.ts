@@ -111,7 +111,7 @@ export async function POST(req: Request) {
       const landlordNotification = await createNotification({
         userId: boldSignLease.landlordId,
         content: `Application approved! Your lease agreement for ${body.data.messageTitle} is ready for your signature.`,
-        url: `/platform/host/${boldSignLease.match.listingId}/applications`,
+        url: `/platform/host/match/${boldSignLease.matchId}`,
         actionType: 'application_approved_lease_ready',
         actionId: boldSignLease.id
       });
@@ -126,7 +126,7 @@ export async function POST(req: Request) {
         const tenantNotification = await createNotification({
           userId: boldSignLease.primaryTenantId,
           content: `Congratulations! Your application for ${body.data.messageTitle} has been approved and your lease is ready for signature.`,
-          url: `/match/${boldSignLease.matchId}`,
+          url: `/platform/match/${boldSignLease.matchId}`,
           actionType: 'application_approved_lease_ready',
           actionId: boldSignLease.id
         });

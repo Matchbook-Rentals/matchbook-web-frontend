@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {  CheckCircle, AlertCircle } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface OnboardingStep {
   id: string;
@@ -46,6 +46,7 @@ const onboardingSteps: OnboardingStep[] = [
 export default function StripeConnectOnboardingPage() {
   const { user } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [accountReady, setAccountReady] = React.useState(false);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isOnboardingComplete, setIsOnboardingComplete] = React.useState(false);
@@ -74,9 +75,14 @@ export default function StripeConnectOnboardingPage() {
 
   const handleOnboardingComplete = () => {
     setIsOnboardingComplete(true);
-    // Redirect to payments dashboard
+    // Redirect based on 'from' query param or default to host dashboard listings
     setTimeout(() => {
-      router.push('/platform/host/payments');
+      const from = searchParams.get('from');
+      if (from) {
+        router.push(decodeURIComponent(from));
+      } else {
+        router.push('/platform/host/dashboard/listings');
+      }
     }, 2000);
   };
 
@@ -91,8 +97,15 @@ export default function StripeConnectOnboardingPage() {
               <p className="text-muted-foreground mb-6">
                 Your payment account is now set up and ready to receive payments.
               </p>
-              <Button onClick={() => router.push('/platform/host/payments')}>
-                Go to Payments Dashboard
+              <Button onClick={() => {
+                const from = searchParams.get('from');
+                if (from) {
+                  router.push(decodeURIComponent(from));
+                } else {
+                  router.push('/platform/host/dashboard/listings');
+                }
+              }}>
+                Continue
               </Button>
             </div>
           </CardContent>

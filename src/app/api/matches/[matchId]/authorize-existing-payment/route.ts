@@ -66,7 +66,7 @@ export async function POST(
       payment_method: match.stripePaymentMethodId,
       capture_method: 'manual', // Don't capture the payment yet
       confirm: true,
-      return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/match/${params.matchId}/payment-success`,
+      return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/platform/match/${params.matchId}/payment-success`,
       transfer_data: {
         destination: match.listing.user.stripeAccountId,
       },

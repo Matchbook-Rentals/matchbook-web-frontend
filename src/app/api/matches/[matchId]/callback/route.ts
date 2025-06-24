@@ -55,7 +55,7 @@ export async function GET(
     // Both conditions must be met to proceed
     if (!isLeaseSigned || !isPaymentAuthorized) {
       console.log('⚠️ Conditions not met, redirecting back to lease signing');
-      return NextResponse.redirect(new URL(`/match/${params.matchId}`, request.url));
+      return NextResponse.redirect(new URL(`/platform/match/${params.matchId}`, request.url));
     }
 
     console.log('✅ All conditions met, creating host notification');
@@ -80,7 +80,7 @@ export async function GET(
     }
 
     // Redirect to pending host signature page
-    return NextResponse.redirect(new URL(`/match/${params.matchId}/pending-host-signature`, request.url));
+    return NextResponse.redirect(new URL(`/platform/match/${params.matchId}/pending-host-signature`, request.url));
 
   } catch (error) {
     console.error('❌ Error in callback verification:', error);

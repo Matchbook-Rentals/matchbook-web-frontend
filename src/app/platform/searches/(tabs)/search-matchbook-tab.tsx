@@ -50,7 +50,7 @@ export function SearchMatchbookTab() {
           label: 'Review',
           action: () => {
             if (matchId) {
-              router.push(`/match/${matchId}`);
+              router.push(`/platform/match/${matchId}`);
             } else {
               alert('Match not found');
             }
@@ -87,7 +87,7 @@ export function SearchMatchbookTab() {
           label: 'Review',
           action: () => {
             if (matchId) {
-              router.push(`/match/${matchId}`);
+              router.push(`/platform/match/${matchId}`);
             } else {
               alert('Match not found');
             }

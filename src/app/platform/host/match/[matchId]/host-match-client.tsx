@@ -101,7 +101,15 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
         return;
       }
 
-      switch (event.data) {
+      // Handle both direct string events and object-wrapped events
+      let eventType = event.data;
+      if (typeof event.data === 'object' && event.data !== null) {
+        // Check if event is wrapped in an object
+        eventType = event.data.type || event.data.eventType || event.data.action || event.data;
+        console.log('Extracted event type from object:', eventType);
+      }
+
+      switch (eventType) {
         case "onDocumentSigned":
           console.log("✅ Host document signed successfully");
           toast({

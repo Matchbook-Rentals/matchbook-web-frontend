@@ -182,16 +182,36 @@ interface StripeConnectVerificationDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onContinue: () => void;
-  user: { stripeAccountId?: string | null };
 }
 
 export const StripeConnectVerificationDialog: React.FC<StripeConnectVerificationDialogProps> = ({
   isOpen,
   onClose,
   onContinue,
-  user,
 }) => {
-  const hasStripeAccount = Boolean(user?.stripeAccountId);
+  const [hasStripeAccount, setHasStripeAccount] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // Check user's Stripe account status when dialog opens
+  React.useEffect(() => {
+    const checkStripeAccount = async () => {
+      if (isOpen) {
+        setIsLoading(true);
+        try {
+          const response = await fetch('/api/user/stripe-account');
+          const data = await response.json();
+          setHasStripeAccount(Boolean(data.stripeAccountId));
+        } catch (error) {
+          console.error('Error checking Stripe account:', error);
+          setHasStripeAccount(false);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    checkStripeAccount();
+  }, [isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -214,7 +234,21 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
         </div>
 
         <div className="flex flex-col gap-4 text-center">
-          {!hasStripeAccount ? (
+          {isLoading ? (
+            <>
+              <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Checking for Payment Information
+                </h3>
+                <p className="text-gray-600">
+                  Please wait while we verify your payment account setup...
+                </p>
+              </div>
+            </>
+          ) : !hasStripeAccount ? (
             <>
               <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
                 <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -248,10 +282,10 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Payment Setup Complete
+                  Payment Account Found
                 </h3>
                 <p className="text-gray-600">
-                  Your Stripe Connect account is set up and ready to receive payments. You can proceed with creating the lease.
+                  Your Stripe Connect account is set up and ready. You can now proceed with creating the lease.
                 </p>
               </div>
             </>
@@ -262,14 +296,25 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
           <Button
             variant="outline"
             onClick={onClose}
-            className="flex-1 h-12 rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50"
+            disabled={isLoading}
+            className="flex-1 h-12 rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
           >
             Cancel
           </Button>
-          {!hasStripeAccount ? (
+          {isLoading ? (
+            <Button
+              disabled
+              className="flex-1 h-12 rounded-lg bg-gray-400 text-white"
+            >
+              Checking...
+            </Button>
+          ) : !hasStripeAccount ? (
             <Button
               onClick={() => {
-                window.open('/platform/onboarding/embedded', '_blank');
+                // Get the current page URL to use as 'from' parameter
+                const currentUrl = window.location.href;
+                const onboardingUrl = `http://localhost:3000/platform/host/onboarding/stripe-connect?from=${encodeURIComponent(currentUrl)}`;
+                window.open(onboardingUrl, '_blank');
                 onClose();
               }}
               className="flex-1 h-12 rounded-lg bg-[#3c8787] hover:bg-[#2d6565] text-white"
@@ -282,9 +327,12 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
                 onContinue();
                 onClose();
               }}
-              className="flex-1 h-12 rounded-lg bg-[#39b54a] hover:bg-[#2d8a3a] text-white"
+              className="flex-1 h-12 rounded-lg bg-[#39b54a] hover:bg-[#2d8a3a] text-white flex items-center gap-2"
             >
-              Continue with Lease
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              Upload Lease
             </Button>
           )}
         </div>

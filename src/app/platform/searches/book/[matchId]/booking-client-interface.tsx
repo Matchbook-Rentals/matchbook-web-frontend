@@ -40,7 +40,7 @@ export default function PropertyBookingPage({ match, clientSecret }: PropertyBoo
 
   const handleSignLease = async () => {
     // Redirect to our new BoldSign lease signing page
-    window.location.href = `/match/${match.id}`;
+    window.location.href = `/platform/match/${match.id}`;
   };
 
   const handleUpdateLease = async () => {
@@ -70,7 +70,7 @@ export default function PropertyBookingPage({ match, clientSecret }: PropertyBoo
 
       </div>
 
-      {/* BoldSign lease signing is now handled through /match/[matchId] route */}
+      {/* BoldSign lease signing is now handled through /platform/match/[matchId] route */}
 
 
       {useStripeCheckout ? (
