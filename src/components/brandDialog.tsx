@@ -177,6 +177,122 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
   );
 };
 
+// Stripe Connect verification dialog component
+interface StripeConnectVerificationDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onContinue: () => void;
+  user: { stripeAccountId?: string | null };
+}
+
+export const StripeConnectVerificationDialog: React.FC<StripeConnectVerificationDialogProps> = ({
+  isOpen,
+  onClose,
+  onContinue,
+  user,
+}) => {
+  const hasStripeAccount = Boolean(user?.stripeAccountId);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent 
+        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] sm:max-w-md md:max-w-lg"
+        showCloseButton={false}
+      >
+        <div className="flex items-center justify-between relative self-stretch w-full">
+          <DialogClose asChild>
+            <button 
+              onClick={onClose}
+              className="p-1 hover:bg-gray-100 rounded-sm transition-colors"
+            >
+              <XIcon className="w-6 h-6 text-gray-500" />
+              <span className="sr-only">Close</span>
+            </button>
+          </DialogClose>
+          <h2 className="text-lg font-semibold text-gray-900">Payment Setup Required</h2>
+          <div className="w-6 h-6" />
+        </div>
+
+        <div className="flex flex-col gap-4 text-center">
+          {!hasStripeAccount ? (
+            <>
+              <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Stripe Connect Setup Required
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Before you can approve applications and create leases, you need to set up your payment account with Stripe Connect. 
+                  This allows you to securely receive rent payments and security deposits from tenants.
+                </p>
+              </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+                <h4 className="font-medium text-blue-900 mb-2">What you'll need:</h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Business or personal tax information</li>
+                  <li>• Bank account details for deposits</li>
+                  <li>• Government-issued ID</li>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Payment Setup Complete
+                </h3>
+                <p className="text-gray-600">
+                  Your Stripe Connect account is set up and ready to receive payments. You can proceed with creating the lease.
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="flex gap-3 w-full">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="flex-1 h-12 rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50"
+          >
+            Cancel
+          </Button>
+          {!hasStripeAccount ? (
+            <Button
+              onClick={() => {
+                window.open('/platform/onboarding/embedded', '_blank');
+                onClose();
+              }}
+              className="flex-1 h-12 rounded-lg bg-[#3c8787] hover:bg-[#2d6565] text-white"
+            >
+              Set Up Payments
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                onContinue();
+                onClose();
+              }}
+              className="flex-1 h-12 rounded-lg bg-[#39b54a] hover:bg-[#2d8a3a] text-white"
+            >
+              Continue with Lease
+            </Button>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 // Export the base components for reusability
 export {
   Dialog,

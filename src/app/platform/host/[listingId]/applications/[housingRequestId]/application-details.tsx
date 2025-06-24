@@ -15,6 +15,7 @@ import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/l
 import { approveHousingRequest, declineHousingRequest, undoApprovalHousingRequest, undoDeclineHousingRequest } from "@/app/actions/housing-requests";
 import { createBoldSignLeaseFromHousingRequest, removeBoldSignLease } from "@/app/actions/documents";
 import { toast } from "sonner";
+import { StripeConnectVerificationDialog } from "@/components/brandDialog";
 
 interface HousingRequestWithUser extends HousingRequest {
   user: User & {
@@ -51,6 +52,7 @@ interface ApplicationDetailsProps {
   housingRequest: HousingRequestWithUser;
   listingId: string;
   from?: string;
+  currentUser?: User;
 }
 
 // Data for the application
@@ -144,7 +146,7 @@ const questionnaire = {
   },
 };
 
-export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from }: ApplicationDetailsProps): JSX.Element => {
+export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from, currentUser }: ApplicationDetailsProps): JSX.Element => {
   const application = housingRequest.user.applications[0];
   const user = housingRequest.user;
   const router = useRouter();
@@ -158,8 +160,37 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [currentStatus, setCurrentStatus] = useState(housingRequest.status);
   const [leaseDocumentId, setLeaseDocumentId] = useState(housingRequest.leaseDocumentId);
   const [boldSignLeaseId, setBoldSignLeaseId] = useState(housingRequest.boldSignLeaseId);
+  const [isStripeDialogOpen, setIsStripeDialogOpen] = useState(false);
+  const [pendingLeaseAction, setPendingLeaseAction] = useState<(() => void) | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
+  // Helper function to check if user has Stripe Connect setup
+  const hasStripeConnectSetup = () => {
+    return Boolean(currentUser?.stripeAccountId);
+  };
+
+  // Function to handle Stripe Connect verification before lease actions
+  const verifyStripeConnectAndProceed = (action: () => void) => {
+    if (!hasStripeConnectSetup()) {
+      setPendingLeaseAction(() => action);
+      setIsStripeDialogOpen(true);
+    } else {
+      action();
+    }
+  };
+
+  // Handler for when user closes the Stripe dialog
+  const handleStripeDialogClose = () => {
+    setIsStripeDialogOpen(false);
+    setPendingLeaseAction(null);
+  };
+
+  // Handler for when user completes Stripe setup and wants to continue
+  const handleStripeDialogContinue = () => {
+    if (pendingLeaseAction) {
+      pendingLeaseAction();
+    }
+  };
   
   // Get user name from actual data
   const getUserName = () => {
@@ -323,8 +354,12 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const handleUploadLease = async () => {
     console.log('handleUploadLease called');
     console.log('fileInputRef.current:', fileInputRef.current);
-    // Trigger file input click
-    fileInputRef.current?.click();
+    
+    // Check Stripe Connect setup before proceeding
+    verifyStripeConnectAndProceed(() => {
+      // Trigger file input click
+      fileInputRef.current?.click();
+    });
   };
 
   // Handler for file selection and template creation
@@ -1166,6 +1201,14 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             </div>
           </CardContent>
         </Card>
+
+        {/* Stripe Connect Verification Dialog */}
+        <StripeConnectVerificationDialog
+          isOpen={isStripeDialogOpen}
+          onClose={handleStripeDialogClose}
+          onContinue={handleStripeDialogContinue}
+          user={currentUser || {}}
+        />
       </div>
     </main>
   );
