@@ -493,7 +493,7 @@ export function DesktopDateRange({
   };
 
   return (
-    <div className="bg-background rounded-xl p-6 shadow-lg">
+    <div className="bg-background rounded-xl p-6">
       <div className="flex gap-8">
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
