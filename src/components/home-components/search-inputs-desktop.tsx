@@ -138,18 +138,44 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     setActiveContent(null);
   };
 
+  const getTitle = () => {
+    switch (activeContent) {
+      case 'location':
+        return 'Select Location';
+      case 'date':
+        return 'Select Dates';
+      case 'guests':
+        return 'Add Guests';
+      default:
+        return 'Find your next home';
+    }
+  };
+
   const renderFooter = () => {
     const isFirstStep = activeContent === 'location';
     const isLastStep = activeContent === 'guests';
+    const isDateStep = activeContent === 'date';
 
     return (
-      <div className="flex justify-end items-center gap-4 w-full">
+      <div className="flex justify-between items-center w-full">
         <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
           {isFirstStep ? 'Close' : 'Back'}
         </BrandButton>
-        <BrandButton variant="default" onClick={handleNext} size="sm">
-          {isLastStep ? 'Start Search' : 'Next'}
-        </BrandButton>
+
+        <div className="flex items-center gap-3">
+          {isDateStep && (
+            <BrandButton
+              variant="outline"
+              onClick={() => setDateRange({ start: null, end: null })}
+              size="sm"
+            >
+              Clear
+            </BrandButton>
+          )}
+          <BrandButton variant="default" onClick={handleNext} size="sm">
+            {isLastStep ? 'Start Search' : 'Next'}
+          </BrandButton>
+        </div>
       </div>
     );
   };
@@ -184,7 +210,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             start={dateRange.start || null}
             end={dateRange.end || null}
             handleChange={(start, end) => setDateRange({ start, end })}
-            onClear={() => setDateRange({ start: null, end: null })}
             minimumDateRange={{ months: 1 }}
             maximumDateRange={{ months: 12 }} // Add maximum date range
           />
@@ -318,7 +343,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         }}
         titleComponent={
           <h2 className="text-lg font-semibold text-center flex-grow">
-            Find your next home
+            {getTitle()}
           </h2>
         }
         contentComponent={renderActiveContent()}
