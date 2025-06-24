@@ -331,4 +331,41 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
               } ${searchButtonClassNames || 'bg-primaryBrand'} rounded-full`}
           >
-            {locationDisplayV
+            {locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng) ? (
+              <ImSpinner8 className={`animate-spin ${searchIconColor}`} />
+            ) : (
+              <FaSearch className={searchIconColor} />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {isOpen && (
+        <div
+          ref={popoverRef}
+          className={cn(
+            "absolute z-10 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 p-6 w-full",
+            popoverMaxWidth ? popoverMaxWidth : "max-w-2xl"
+          )}
+          style={{
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <div
+            className="absolute -top-2 w-4 h-4 bg-white border-l border-t border-gray-200 transform rotate-45"
+            style={{ left: `calc(${arrowPosition}% - 8px)` }}
+          />
+          <div className="relative">
+            {renderActiveContent()}
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              {renderFooter()}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SearchInputsDesktop;
