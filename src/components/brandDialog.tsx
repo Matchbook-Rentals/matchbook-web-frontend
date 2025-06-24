@@ -164,9 +164,13 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-col items-end gap-6 relative self-stretch w-full">
+        <div className="flex flex-col gap-6 relative self-stretch w-full">
           {contentComponent}
-          {footerComponent}
+          {footerComponent && (
+            <div className="pt-6 border-t border-gray-200">
+              {footerComponent}
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

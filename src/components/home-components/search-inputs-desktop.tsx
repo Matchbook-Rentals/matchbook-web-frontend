@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { DisabledDesktopInputs } from "./disabled-inputs";
 import { cn } from "@/lib/utils";
 import { BrandDialog } from "@/components/brandDialog";
+import { BrandButton } from "@/components/ui/brandButton";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
@@ -99,18 +100,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
   const handleLocationSelect = (location: any) => {
     setSelectedLocation(location);
-    // Automatically switch to date selector after location is selected
-    setActiveContent('date');
-
-    // Update arrow position for the date input
-    if (containerRef.current && moveInInputRef.current) {
-      const containerLeft = containerRef.current.getBoundingClientRect().left;
-      const inputRect = moveInInputRef.current.getBoundingClientRect();
-      const inputLeft = inputRect.left;
-      const inputCenter = inputLeft + (inputRect.width / 2);
-      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-      setArrowPosition(position);
-    }
+    // We no longer automatically switch to date selector. User will click "Next".
   };
 
   // Add new state to track the arrow position
@@ -122,18 +112,70 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const moveOutInputRef = useRef<HTMLInputElement>(null);
   const guestsInputRef = useRef<HTMLInputElement>(null);
 
-  const handleProceed = () => {
-    setActiveContent('guests');
-
-    // Update arrow position for guests input
-    if (containerRef.current && guestsInputRef.current) {
-      const containerLeft = containerRef.current.getBoundingClientRect().left;
-      const inputRect = guestsInputRef.current.getBoundingClientRect();
-      const inputLeft = inputRect.left;
-      const inputCenter = inputLeft + (inputRect.width / 2);
-      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-      setArrowPosition(position);
+  const handleSubmit = async () => {
+    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
+      setIsOpen(true);
+      setActiveContent('location');
+      toast({
+        variant: "destructive",
+        description: `No lat/lng found for destination`,
+      });
+      return;
     }
+
+    const response = await createTrip({
+      locationString: selectedLocation.description,
+      latitude: selectedLocation.lat,
+      longitude: selectedLocation.lng,
+    });
+
+    if (response.success && response.trip) {
+      router.push(`/platform/searches/set-preferences/${response.trip.id}`);
+    } else {
+      toast({
+        variant: "destructive",
+        description: response.success === false ? response.error : "Failed to create trip",
+      });
+    }
+  };
+
+  const handleNext = () => {
+    if (activeContent === 'location') {
+      setActiveContent('date');
+    } else if (activeContent === 'date') {
+      setActiveContent('guests');
+    } else if (activeContent === 'guests') {
+      handleSubmit();
+    }
+  };
+
+  const handleBack = () => {
+    if (activeContent === 'date') {
+      setActiveContent('location');
+    } else if (activeContent === 'guests') {
+      setActiveContent('date');
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setActiveContent(null);
+  };
+
+  const renderFooter = () => {
+    const isFirstStep = activeContent === 'location';
+    const isLastStep = activeContent === 'guests';
+
+    return (
+      <div className="flex justify-end items-center gap-4 w-full">
+        <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack}>
+          {isFirstStep ? 'Close' : 'Back'}
+        </BrandButton>
+        <BrandButton variant="default" onClick={handleNext}>
+          {isLastStep ? 'Start Search' : 'Next'}
+        </BrandButton>
+      </div>
+    );
   };
 
   // Add this function to render content based on active type
@@ -147,7 +189,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             start={dateRange.start || null}
             end={dateRange.end || null}
             handleChange={(start, end) => setDateRange({ start, end })}
-            onProceed={handleProceed}
             onClear={() => setDateRange({ start: null, end: null })}
             minimumDateRange={{ months: 1 }}
             maximumDateRange={{ months: 12 }} // Add maximum date range
@@ -182,33 +223,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       const inputCenter = inputLeft + (inputRect.width / 2);
       const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
       setArrowPosition(position);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
-      setIsOpen(true);
-      setActiveContent('location');
-      toast({
-        variant: "destructive",
-        description: `No lat/lng found for destination`,
-      });
-      return;
-    }
-
-    const response = await createTrip({
-      locationString: selectedLocation.description,
-      latitude: selectedLocation.lat,
-      longitude: selectedLocation.lng,
-    });
-
-    if (response.success && response.trip) {
-      router.push(`/platform/searches/set-preferences/${response.trip.id}`);
-    } else {
-      toast({
-        variant: "destructive",
-        description: response.success === false ? response.error : "Failed to create trip",
-      });
     }
   };
 
@@ -322,6 +336,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           </h2>
         }
         contentComponent={renderActiveContent()}
+        footerComponent={renderFooter()}
         currentStep={activeContent === 'location' ? 1 : activeContent === 'date' ? 2 : 3}
         totalSteps={3}
       />
