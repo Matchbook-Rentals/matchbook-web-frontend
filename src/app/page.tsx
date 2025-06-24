@@ -59,7 +59,7 @@ const WebHomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Define the spacer class name variable
-  const spacerDivClassNames = "h-[56px]";
+  const spacerDivClassNames = "h-[90px]";
   const shortSpacerClassNames = "";
 
   return (
@@ -69,15 +69,12 @@ const WebHomePage = () => {
       <div className={spacerDivClassNames} />
       <RentEasyCopy />
       <div className={spacerDivClassNames} />
-      <HowItWorks />
       <div className={spacerDivClassNames} />
-      <RentersLoveMatchbook />
+      <HowItWorks />
       <div className={spacerDivClassNames} />
       <BecomeHostCopy />
       <div className={spacerDivClassNames} />
       <ProsConsGrid />
-      <div className={spacerDivClassNames} />
-      <PlaceYouLove />
       <div className={spacerDivClassNames} />
       <RecentArticle />
       <div className={spacerDivClassNames} />

@@ -73,10 +73,10 @@ export const BecomeHostCopy = (): JSX.Element => {
 
         <div className="flex flex-col w-full md:w-[460px] items-start gap-8">
           <div className="flex flex-col items-start gap-2 w-full">
-            <h2 className="w-full mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-2xl md:text-[40px] leading-normal text-center md:text-left">
+            <h2 className="w-full mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-900 text-2xl md:text-[40px] leading-normal text-center md:text-left">
               Interested in Becoming a Host?
             </h2>
-            <p className="w-full font-text-label-large-medium font-[500] text-gray-neutral600 text-base md:text-[18px] leading-normal text-center md:text-left">
+            <p className="w-full font-text-label-large-medium font-[500] text-gray-600 text-base md:text-[18px] leading-normal text-center md:text-left">
               Check out what we have to offer
             </p>
           </div>
