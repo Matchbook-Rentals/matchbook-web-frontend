@@ -161,6 +161,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     const isFirstStep = activeContent === 'location';
     const isLastStep = activeContent === 'guests';
     const isDateStep = activeContent === 'date';
+    const areDatesSelected = dateRange.start || dateRange.end;
 
     return (
       <div className="flex justify-between items-center w-full">
@@ -190,10 +191,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           {isDateStep && (
             <BrandButton
               variant="outline"
-              onClick={() => setDateRange({ start: null, end: null })}
+              onClick={areDatesSelected ? () => setDateRange({ start: null, end: null }) : handleBack}
               size="sm"
             >
-              Clear
+              {areDatesSelected ? 'Clear' : 'Back'}
             </BrandButton>
           )}
           <BrandButton variant="default" onClick={handleNext} size="sm">
