@@ -164,13 +164,20 @@ export async function POST(request: NextRequest) {
     console.log('Step 4 passed: Document embed URL created');
     console.log('BoldSign result keys:', Object.keys(result));
     
-    // STEP 5: Create Match and BoldSignLease records
-    console.log('Step 5: Creating Match and BoldSignLease records...');
-    const monthlyRent = calculateRent({ listing: housingRequest.listing, trip: housingRequest.trip });
+    // STEP 5: Find existing Match and update with leaseDocumentId, or create BoldSignLease
+    console.log('Step 5: Finding existing Match and updating with leaseDocumentId...');
+    
+    // Find existing match for this housing request
+    let match = await prisma.match.findFirst({
+      where: {
+        tripId: housingRequest.trip.id,
+        listingId: housingRequest.listing.id,
+      }
+    });
 
-    // Create match first with leaseDocumentId
-    let match;
-    try {
+    if (!match) {
+      // If no match exists, create one (fallback for edge cases)
+      const monthlyRent = calculateRent({ listing: housingRequest.listing, trip: housingRequest.trip });
       match = await prisma.match.create({
         data: {
           tripId: housingRequest.trip.id,
@@ -179,10 +186,14 @@ export async function POST(request: NextRequest) {
           leaseDocumentId: result.documentId
         }
       });
-      console.log('Step 5a passed: Match created', { matchId: match.id, leaseDocumentId: result.documentId });
-    } catch (error) {
-      console.log('Match Creation Failed - ', error);
-      return NextResponse.json({ error: 'Match failed' }, { status: 500 });
+      console.log('Step 5a: Created new match (no existing match found)', { matchId: match.id });
+    } else {
+      // Update existing match with leaseDocumentId
+      match = await prisma.match.update({
+        where: { id: match.id },
+        data: { leaseDocumentId: result.documentId }
+      });
+      console.log('Step 5a passed: Updated existing match with leaseDocumentId', { matchId: match.id, leaseDocumentId: result.documentId });
     }
 
     // Create BoldSignLease record

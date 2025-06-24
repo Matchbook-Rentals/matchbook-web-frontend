@@ -17,18 +17,36 @@ async function checkAuth() {
   return userId
 }
 
-// Create a new match
+// Find existing match or create a new one
 export async function createMatch(trip: Trip, listing: Listing) {
   try {
     await checkAuth()
+    
+    // First try to find existing match
+    let match = await prisma.match.findFirst({
+      where: {
+        tripId: trip.id,
+        listingId: listing.id,
+      }
+    });
+
+    if (match) {
+      console.log('Found existing match:', match.id);
+      return { success: true, match };
+    }
+
+    // Create new match if none exists
     const monthlyRent = calculateRent({ listing, trip })
-    const match = await prisma.match.create({
+    match = await prisma.match.create({
       data: {
         tripId: trip.id,
         listingId: listing.id,
         monthlyRent: monthlyRent,
       },
-    })
+    });
+    
+    console.log('Created new match:', match.id);
+
     const notificationData: CreateNotificationInput = {
       userId: trip.userId,
       content: 'New Match',

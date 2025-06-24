@@ -359,19 +359,31 @@ export async function updateHousingRequestWithBoldSignLease(housingRequestId: st
     let tenant = housingRequest.user;
     let landlord = housingRequest.listing.user;
 
-    // Create match
-    let match;
-    try {
-      match = await prisma.match.create({
-        data: {
-          tripId: housingRequest.trip.id,
-          listingId: housingRequest.listing.id,
-          monthlyRent,
-        }
-      })
-    } catch (error) {
-      console.log('Match Creation Failed - ', error);
-      throw new Error('Match creation failed');
+    // Find existing match or create if none exists
+    let match = await prisma.match.findFirst({
+      where: {
+        tripId: housingRequest.trip.id,
+        listingId: housingRequest.listing.id,
+      }
+    });
+
+    if (!match) {
+      // Create match only if it doesn't exist
+      try {
+        match = await prisma.match.create({
+          data: {
+            tripId: housingRequest.trip.id,
+            listingId: housingRequest.listing.id,
+            monthlyRent,
+          }
+        });
+        console.log('Created new match in updateHousingRequestWithBoldSignLease:', match.id);
+      } catch (error) {
+        console.log('Match Creation Failed - ', error);
+        throw new Error('Match creation failed');
+      }
+    } else {
+      console.log('Found existing match in updateHousingRequestWithBoldSignLease:', match.id);
     }
 
     // Create BoldSignLease record
