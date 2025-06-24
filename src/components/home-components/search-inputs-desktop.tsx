@@ -168,10 +168,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
     return (
       <div className="flex justify-end items-center gap-4 w-full">
-        <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack}>
+        <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
           {isFirstStep ? 'Close' : 'Back'}
         </BrandButton>
-        <BrandButton variant="default" onClick={handleNext}>
+        <BrandButton variant="default" onClick={handleNext} size="sm">
           {isLastStep ? 'Start Search' : 'Next'}
         </BrandButton>
       </div>
