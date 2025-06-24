@@ -36,6 +36,10 @@ function getNotificationPreferenceField(actionType: string): string | null {
     
     // External Communications
     'off_platform_host': 'emailOffPlatformHostNotifications',
+    
+    // Lease Signing
+    'lease_signature_required': 'emailApplicationApprovedNotifications', // Reuse existing preference
+    'lease_fully_executed': 'emailBookingCompletedNotifications', // Reuse existing preference
   };
   
   return mapping[actionType] || null;
