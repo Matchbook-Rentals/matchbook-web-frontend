@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     console.log('Step 4: Preparing BoldSign API request...');
     
     const documentRequestData = {
-      redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/platform/host/${housingRequest.listingId}/applications/${housingRequestId}/lease-sent`,
+      redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/lease-success?listingId=${housingRequest.listingId}&housingRequestId=${housingRequestId}&documentId={{DocumentId}}`,
       showToolbar: true,
       sendViewOption: "PreparePage",
       showSaveButton: true,
@@ -105,7 +105,6 @@ export async function POST(request: NextRequest) {
           emailAddress: landlord?.email || "",
           signerOrder: 1,
           signerType: "Signer",
-          authenticationType: "EmailOTP",
           deliveryMode: "Email",
           locale: "EN",
           signerRole: "Host"
@@ -115,7 +114,6 @@ export async function POST(request: NextRequest) {
           emailAddress: tenant?.email || "",
           signerOrder: 2,
           signerType: "Signer",
-          authenticationType: "EmailOTP",
           deliveryMode: "Email",
           locale: "EN",
           signerRole: "Tenant"
@@ -166,18 +164,11 @@ export async function POST(request: NextRequest) {
     console.log('Step 4 passed: Document embed URL created');
     console.log('BoldSign result keys:', Object.keys(result));
     
-    return NextResponse.json({ 
-      success: true, 
-      embedUrl: result.sendUrl,
-      documentId: result.documentId,
-      templateId: result.templateId
-    });
-
-    // COMMENTED OUT - REMAINING STEPS
-    /*
+    // STEP 5: Create Match and BoldSignLease records
+    console.log('Step 5: Creating Match and BoldSignLease records...');
     const monthlyRent = calculateRent({ listing: housingRequest.listing, trip: housingRequest.trip });
 
-    // Create match first
+    // Create match first with leaseDocumentId
     let match;
     try {
       match = await prisma.match.create({
@@ -185,96 +176,19 @@ export async function POST(request: NextRequest) {
           tripId: housingRequest.trip.id,
           listingId: housingRequest.listing.id,
           monthlyRent,
+          leaseDocumentId: result.documentId
         }
       });
+      console.log('Step 5a passed: Match created', { matchId: match.id, leaseDocumentId: result.documentId });
     } catch (error) {
       console.log('Match Creation Failed - ', error);
       return NextResponse.json({ error: 'Match failed' }, { status: 500 });
     }
 
-    // For now, use the existing default template workflow
-    // TODO: Implement proper template creation from uploaded file
-    const templateId = '1c447c5d-b082-4875-a6f3-4637db4205e9'; // Use default template
-
-    // Create document from template
-    const documentRequestData = {
-      title: "Lease Agreement for " + housingRequest?.listing?.locationString,
-      message: "Please review and sign the lease agreement.",
-      roles: [
-        {
-          roleIndex: 1,
-          signerName: `${landlord?.firstName} ${landlord?.lastName}`.trim(),
-          signerEmail: landlord?.email || "",
-          signerOrder: 1,
-          signerType: "signer",
-          existingFormFields: [
-            {
-              id: 'monthlyRent',
-              value: `$${monthlyRent.toFixed(2)}`
-            },
-            {
-              id: 'listingAddress',
-              value: housingRequest.listing.locationString,
-            },
-            {
-              id: 'startDate',
-              value: formatDate(housingRequest.trip.startDate!)
-            },
-            {
-              id: 'endDate',
-              value: formatDate(housingRequest.trip.endDate!)
-            },
-          ]
-        },
-        {
-          roleIndex: 2,
-          signerName: `${tenant?.firstName} ${tenant?.lastName}`.trim(),
-          signerEmail: tenant?.email,
-          signerOrder: 2,
-          signerType: "signer",
-        }
-      ],
-      reminderSettings: {
-        enableAutoReminder: true,
-        reminderDays: 3,
-        reminderCount: 5
-      },
-      expiryDays: 30,
-      expiryDateType: "Days",
-      expiryValue: 30,
-      disableExpiryAlert: false,
-      enablePrintAndSign: true,
-      enableReassign: false,
-      showToolbar: true,
-      sendViewOption: "PreparePage",
-      showSaveButton: true,
-      showSendButton: true,
-      showPreviewButton: true,
-      showNavigationButtons: true,
-      sendLinkValidTill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-    };
-
-    const documentResponse = await fetch(`${API_BASE_URL}/v1/template/send?templateId=${templateId}`, {
-      method: 'POST',
-      headers: {
-        'X-API-KEY': BOLDSIGN_API_KEY!,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(documentRequestData),
-    });
-
-    if (!documentResponse.ok) {
-      const documentError = await documentResponse.json();
-      console.error('BoldSign document creation failed:', documentError);
-      return NextResponse.json({ error: 'Failed to create document' }, { status: 500 });
-    }
-
-    const document = await documentResponse.json();
-
-    // Step 3: Create BoldSignLease record
+    // Create BoldSignLease record
     const boldSignLease = await prisma?.boldSignLease.create({
       data: {
-        id: document.documentId,
+        id: result.documentId,
         matchId: match.id,
         landlordId: landlord.id,
         primaryTenantId: tenant.id,
@@ -283,19 +197,29 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Step 4: Update housing request with the boldSignLeaseId
+    if (!boldSignLease) {
+      console.error('Failed to create BoldSignLease record');
+      return NextResponse.json({ error: 'Failed to create lease record' }, { status: 500 });
+    }
+
+    console.log('Step 5b passed: BoldSignLease created', { leaseId: boldSignLease.id });
+
+    // Update housing request with the boldSignLeaseId
     await prisma.housingRequest.update({
       where: { id: housingRequestId },
       data: { boldSignLeaseId: boldSignLease.id }
     });
 
+    console.log('Step 5c passed: Housing request updated');
+    
     return NextResponse.json({ 
       success: true, 
-      boldSignLeaseId: boldSignLease.id,
-      templateId: templateId,
-      documentId: document.documentId 
+      embedUrl: result.sendUrl,
+      documentId: result.documentId,
+      templateId: result.templateId,
+      matchId: match.id,
+      boldSignLeaseId: boldSignLease.id
     });
-    */
 
   } catch (error) {
     console.error('Error creating lease from upload:', error);

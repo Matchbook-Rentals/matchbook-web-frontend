@@ -1,45 +1,46 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { CheckCircle, MessageSquare, Clock, ArrowLeft } from 'lucide-react';
+import { CheckCircle, MessageSquare, Clock, Home } from 'lucide-react';
 import Link from 'next/link';
-import { updateHousingRequestWithBoldSignLease } from '@/app/actions/documents';
-import { toast } from 'sonner';
+import { getHousingRequestById } from '@/app/actions/housing-requests';
 
 interface LeaseSuccessPageProps {
   params: { listingId: string; housingRequestId: string };
 }
 
 export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const [tenantName, setTenantName] = useState<string>('');
   
-  const documentId = searchParams.get('documentId');
+  // Get tenant display name from URL params or fetch from housing request
+  const tenantDisplayName = searchParams.get('tenantName') || searchParams.get('tenant') || '';
 
   useEffect(() => {
-    // Update the housing request with the BoldSign lease document ID
-    if (documentId) {
-      console.log('Lease sent with document ID:', documentId);
-      
-      updateHousingRequestWithBoldSignLease(params.housingRequestId, documentId)
-        .then((result) => {
-          if (result.success) {
-            console.log('Housing request updated with BoldSign lease');
-            toast.success('Lease configuration completed successfully!');
-          } else {
-            console.error('Failed to update housing request:', result.error);
-            toast.error('Lease sent but failed to update records');
+    // If we don't have tenant name from URL params, fetch it from the housing request
+    if (!tenantDisplayName) {
+      getHousingRequestById(params.housingRequestId)
+        .then(housingRequest => {
+          if (housingRequest?.user) {
+            const displayName = housingRequest.user.displayName || 
+                               `${housingRequest.user.firstName} ${housingRequest.user.lastName}`.trim() ||
+                               housingRequest.user.email;
+            setTenantName(displayName);
           }
         })
-        .catch((error) => {
-          console.error('Error updating housing request:', error);
-          toast.error('Lease sent but failed to update records');
+        .catch(error => {
+          console.error('Error fetching tenant name:', error);
+          setTenantName('the tenant');
         });
+    } else {
+      setTenantName(tenantDisplayName);
     }
-  }, [documentId, params.housingRequestId]);
+  }, [tenantDisplayName, params.housingRequestId]);
+
+  const displayTenantName = tenantName || 'the tenant';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -54,11 +55,11 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
 
           {/* Main Message */}
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Lease Sent Successfully!
+            Success!
           </h1>
           
           <p className="text-lg text-gray-600 mb-8">
-            Your lease agreement has been sent to the renter for review and signature.
+            Your lease has been sent to {displayTenantName}. Please be ready to communicate with them over the next few days to facilitate lease signing and booking.
           </p>
 
           {/* Next Steps */}
@@ -74,7 +75,7 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
                   1
                 </div>
                 <p className="text-gray-700">
-                  The renter will receive an email notification to review and sign the lease
+                  {displayTenantName} will receive an email notification to review and sign the lease
                 </p>
               </div>
               
@@ -92,7 +93,7 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
                   3
                 </div>
                 <p className="text-gray-700">
-                  Once both parties sign, you'll receive the fully executed lease
+                  Once both parties sign, the booking will be confirmed
                 </p>
               </div>
             </div>
@@ -105,37 +106,22 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
               <h3 className="font-semibold text-yellow-800">Stay Responsive</h3>
             </div>
             <p className="text-yellow-700 text-sm">
-              Be ready to communicate with the renter in the coming days. They may have questions about the lease terms or move-in process.
+              Be ready to communicate with {displayTenantName} in the coming days. They may have questions about the lease terms or move-in process.
             </p>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Action Button */}
+          <div className="flex justify-center">
             <Button
-              onClick={() => router.push(`/platform/host/${params.listingId}/applications/${params.housingRequestId}`)}
+              asChild
               className="flex items-center gap-2"
             >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Application
-            </Button>
-            
-            <Button
-              variant="outline"
-              onClick={() => router.push('/platform/host/dashboard/applications')}
-              className="flex items-center gap-2"
-            >
-              View All Applications
+              <Link href="/platform/host/dashboard">
+                <Home className="w-4 h-4" />
+                Go to Dashboard
+              </Link>
             </Button>
           </div>
-
-          {/* Document Info */}
-          {documentId && (
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <p className="text-sm text-gray-500">
-                Document ID: <code className="bg-gray-100 px-2 py-1 rounded text-xs">{documentId}</code>
-              </p>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>

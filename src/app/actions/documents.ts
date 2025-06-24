@@ -252,7 +252,6 @@ export async function createBoldSignLeaseFromHousingRequest(housingRequestId: st
           emailAddress: landlord?.email || "",
           signerOrder: 1,
           signerType: "Signer",
-          authenticationType: "EmailOTP",
           deliveryMode: "Email",
           locale: "EN",
           signerRole: "Host"
@@ -262,7 +261,6 @@ export async function createBoldSignLeaseFromHousingRequest(housingRequestId: st
           emailAddress: tenant?.email || "",
           signerOrder: 2,
           signerType: "Signer",
-          authenticationType: "EmailOTP",
           deliveryMode: "Email",
           locale: "EN",
           signerRole: "Tenant"
@@ -453,10 +451,13 @@ export async function removeBoldSignLease(housingRequestId: string) {
       }
     }
 
-    // Update the housing request to remove the boldSignLeaseId
+    // Update the housing request to remove the boldSignLeaseId and set status back to pending
     await prisma.housingRequest.update({
       where: { id: housingRequestId },
-      data: { boldSignLeaseId: null }
+      data: { 
+        boldSignLeaseId: null,
+        status: 'pending'
+      }
     });
 
     return { success: true };

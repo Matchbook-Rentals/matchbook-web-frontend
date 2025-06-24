@@ -128,3 +128,38 @@ export async function getMatchesForTrip(tripId: string) {
     return { success: false, error: error instanceof Error ? error.message : 'Failed to fetch matches for trip' }
   }
 }
+
+// Get a match by matchId
+export async function getMatchById(matchId: string) {
+  try {
+    await checkAuth()
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        listing: {
+          include: {
+            listingImages: true,
+            user: true,
+            bedrooms: true,
+          }
+        },
+        trip: {
+          include: {
+            user: true,
+          }
+        },
+        BoldSignLease: true,
+        Lease: true,
+      },
+    })
+    
+    if (!match) {
+      return { success: false, error: 'Match not found' }
+    }
+    
+    return { success: true, match }
+  } catch (error) {
+    console.error('Error fetching match by ID:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to fetch match' }
+  }
+}

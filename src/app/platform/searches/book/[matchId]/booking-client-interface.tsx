@@ -10,26 +10,21 @@ import { QuestionMarkCircledIcon, CalendarIcon, PersonIcon } from "@radix-ui/rea
 import { Match, Trip, Listing } from "@prisma/client"
 import { useState } from "react"
 import StripeCheckoutEmbed from "./stripe-checkout-embed"
-import LeaseSignEmbed from "./(components)/lease-sign-embed"
 import { useUser } from '@clerk/nextjs'
-import { checkSignature, updateBoldSignLease } from "@/app/actions/documents"
+import { updateBoldSignLease } from "@/app/actions/documents"
 import { toast } from "@/components/ui/use-toast"
 import { MatchWithRelations } from "@/types"
-import DocumentEmbed from "@/app/platform/host/[listingId]/sign-lease/[housingRequestId]/lease-host-sign-embed"
 
 interface PropertyBookingPageProps {
   match: MatchWithRelations
   clientSecret: string;
 }
 
-const NUM_DB_CALLS = 10;
-const TIMEOUT_COUNT = 1000;
 
 
 
 export default function PropertyBookingPage({ match, clientSecret }: PropertyBookingPageProps) {
   const [useStripeCheckout, setUseStripeCheckout] = useState(false)
-  const [embedUrl, setEmbedUrl] = useState('')
   const { user } = useUser()
   const [isLeaseSigned, setIsLeaseSigned] = useState(false)
   // Calculate length of stay
@@ -44,20 +39,8 @@ export default function PropertyBookingPage({ match, clientSecret }: PropertyBoo
   };
 
   const handleSignLease = async () => {
-    const signerEmail = user?.emailAddresses[0].emailAddress
-    //const requestUrl = `/api/leases/document?documentId=${match.BoldSignLease.id}&signerEmail=${signerEmail}`
-    const requestUrl = `/api/pandadoc/templates/?docId=${match.Lease?.id}`
-    console.log('hitting', requestUrl)
-    const response = await fetch(requestUrl, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    const data = await response.json();
-    //setEmbedUrl(data.signLink)
-    setEmbedUrl(data.sessionId)
-    console.log(data);
+    // Redirect to our new BoldSign lease signing page
+    window.location.href = `/match/${match.id}`;
   };
 
   const handleUpdateLease = async () => {
@@ -69,30 +52,14 @@ export default function PropertyBookingPage({ match, clientSecret }: PropertyBoo
     console.log(response)
   }
 
-  const handleComplete = async () => {
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Wait for 1 second
-    for (let i = 0; i < NUM_DB_CALLS; i++) {
-      await new Promise(resolve => setTimeout(resolve, TIMEOUT_COUNT)); // Wait for 1 second
-      const isSigned = await checkSignature(match.Lease.id, 'Tenant');
-      if (isSigned) {
-        toast({
-          title: 'Lease Signed',
-          description: 'The lease has been successfully signed by the tenant.',
-        });
-        setIsLeaseSigned(true);
-        break;
-      }
-    }
-  };
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-end mb-4">
         <Button onClick={() => {
-          //console.log(match.BoldSignLease)
-          console.log(match.Lease)
+          console.log(match.BoldSignLease)
         }}>
-          Log Lease
+          Log BoldSign Lease
         </Button>
         <Label htmlFor="use-stripe" className="mr-2">Use Stripe Checkout</Label>
         <Switch
@@ -103,12 +70,7 @@ export default function PropertyBookingPage({ match, clientSecret }: PropertyBoo
 
       </div>
 
-      {/* Below line is boldsign stuff */}
-      {/* {embedUrl && <LeaseSignEmbed embeddedSigningLink={embedUrl} isLeaseSigned={isLeaseSigned} setIsLeaseSigned={setIsLeaseSigned} />}
-      <Button onClick={handleUpdateLease}>TEST UPDATE LEASE</Button> */}
-
-      {embedUrl || 'TEST'}
-      {embedUrl && <DocumentEmbed documentId={match.Lease.id} matchorHouseReqId={match.id} sessionId={embedUrl} handleComplete={handleComplete} />}
+      {/* BoldSign lease signing is now handled through /match/[matchId] route */}
 
 
       {useStripeCheckout ? (

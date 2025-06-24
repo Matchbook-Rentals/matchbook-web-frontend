@@ -160,6 +160,14 @@ const SendLeasePage: React.FC = () => {
               title: 'Match created',
               description: 'The match has been created',
             });
+            
+            // Redirect to success page with tenant name
+            const tenantName = currApplication?.firstName && currApplication?.lastName 
+              ? `${currApplication.firstName} ${currApplication.lastName}`
+              : currApplication?.email || '';
+            
+            const successUrl = `/platform/host/${currListing.id}/applications/${currHousingRequest?.id}/success?tenantName=${encodeURIComponent(tenantName)}`;
+            router.push(successUrl);
           } catch (error) {
             console.error('Error creating match:', error);
           }

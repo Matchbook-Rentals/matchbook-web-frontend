@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDownIcon, Upload, Trash2 } from "lucide-react";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { APP_PAGE_MARGIN } from "@/constants/styles";
 import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
 import { approveHousingRequest, declineHousingRequest, undoApprovalHousingRequest, undoDeclineHousingRequest } from "@/app/actions/housing-requests";
 import { createBoldSignLeaseFromHousingRequest, removeBoldSignLease } from "@/app/actions/documents";
@@ -134,6 +134,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const application = housingRequest.user.applications[0];
   const user = housingRequest.user;
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isApproving, setIsApproving] = useState(false);
   const [isDeclining, setIsDeclining] = useState(false);
   const [isUndoing, setIsUndoing] = useState(false);
@@ -144,6 +145,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [leaseDocumentId, setLeaseDocumentId] = useState(housingRequest.leaseDocumentId);
   const [boldSignLeaseId, setBoldSignLeaseId] = useState(housingRequest.boldSignLeaseId);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
   
   // Get user name from actual data
   const getUserName = () => {
@@ -363,6 +365,14 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
       
       if (result.success) {
         toast.success('Lease document created! Configure your fields.');
+        
+        // Notify tenant about the lease (if matchId is available)
+        if (result.matchId) {
+          console.log('Match created with ID:', result.matchId);
+          console.log('Tenant can sign lease at:', `/match/${result.matchId}`);
+          // TODO: Send notification to tenant with link to /match/${result.matchId}
+        }
+        
         // Redirect to lease editing page with the embed URL
         if (result.embedUrl && result.documentId) {
           router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-editor?embedUrl=${encodeURIComponent(result.embedUrl)}&documentId=${result.documentId}`);
@@ -400,9 +410,10 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
       const result = await removeBoldSignLease(housingRequestId);
       
       if (result.success) {
-        toast.success('Lease removed successfully');
+        toast.success('Lease removed successfully. Application status reset to pending.');
         // Update local state
         setBoldSignLeaseId(null);
+        setCurrentStatus('pending');
         // Refresh the page to ensure UI is in sync
         window.location.reload();
       } else {

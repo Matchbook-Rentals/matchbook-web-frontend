@@ -487,6 +487,9 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
         where: {
           tripId: housingRequest.tripId,
           listingId: housingRequest.listingId
+        },
+        include: {
+          BoldSignLease: true
         }
       });
 
@@ -500,16 +503,26 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
           throw new Error('Cannot undo approval: A booking already exists for this match');
         }
 
+        // Delete the BoldSignLease if it exists
+        if (match.BoldSignLease) {
+          await tx.boldSignLease.delete({
+            where: { id: match.BoldSignLease.id }
+          });
+        }
+
         // Delete the match
         await tx.match.delete({
           where: { id: match.id }
         });
       }
 
-      // Update the housing request status back to pending
+      // Update the housing request status back to pending and remove boldSignLeaseId
       const updatedRequest = await tx.housingRequest.update({
         where: { id: housingRequestId },
-        data: { status: 'pending' }
+        data: { 
+          status: 'pending',
+          boldSignLeaseId: null
+        }
       });
 
       // Delete the original approval notification

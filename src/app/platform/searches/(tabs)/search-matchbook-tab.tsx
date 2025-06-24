@@ -31,7 +31,12 @@ export function SearchMatchbookTab() {
     return status;
   };
 
-  const getCallToAction = (status: Status) => {
+  const getCallToAction = (status: Status, listingId: string) => {
+    const findMatchId = (listingId: string) => {
+      const match = trip?.matches.find(match => match.listingId === listingId);
+      return match?.id;
+    };
+
     switch (status) {
       case Status.Applied:
         return {
@@ -40,9 +45,16 @@ export function SearchMatchbookTab() {
           className: 'bg-blueBrand text-white hover:bg-blueBrand'
         };
       case Status.Favorite:
+        const matchId = findMatchId(listingId);
         return {
           label: 'Review',
-          action: () => alert('Review'),
+          action: () => {
+            if (matchId) {
+              router.push(`/match/${matchId}`);
+            } else {
+              alert('Match not found');
+            }
+          },
           className: 'bg-[#E3CE5B] text-gray-900 hover:bg-[#d4c154]'
         };
       case Status.Dislike:
@@ -56,7 +68,12 @@ export function SearchMatchbookTab() {
     }
   };
 
-  const getContextLabel = (status: Status) => {
+  const getContextLabel = (status: Status, listingId: string) => {
+    const findMatchId = (listingId: string) => {
+      const match = trip?.matches.find(match => match.listingId === listingId);
+      return match?.id;
+    };
+
     switch (status) {
       case Status.Applied:
         return {
@@ -65,9 +82,16 @@ export function SearchMatchbookTab() {
           className: 'bg-blueBrand/80 text-white hover:bg-blueBrand/80'
         };
       case Status.Favorite:
+        const matchId = findMatchId(listingId);
         return {
           label: 'Review',
-          action: () => alert('Review'),
+          action: () => {
+            if (matchId) {
+              router.push(`/match/${matchId}`);
+            } else {
+              alert('Match not found');
+            }
+          },
           className: 'bg-[#E3CE5B]/80 text-gray-900 hover:bg-[#d4c154]/80'
         };
       case Status.Dislike:
@@ -91,8 +115,8 @@ export function SearchMatchbookTab() {
               listing={listing}
               detailsClassName="min-h-[0px]"
               status={getListingStatus(listing.id)}
-              callToAction={getCallToAction(getListingStatus(listing.id))}
-              contextLabel={getContextLabel(getListingStatus(listing.id))}
+              callToAction={getCallToAction(getListingStatus(listing.id), listing.id)}
+              contextLabel={getContextLabel(getListingStatus(listing.id), listing.id)}
             />
           ))}
         </div>
