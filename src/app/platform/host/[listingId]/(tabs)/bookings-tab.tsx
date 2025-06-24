@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search, MoreHorizontalIcon, Loader2 } from "lucide-react";
+import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search, MoreHorizontalIcon, Loader2, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -421,6 +421,12 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
                       <Link href={`/platform/host/${listingId}`} className="cursor-pointer flex items-center gap-2">
                         <Home className="h-4 w-4" />
                         Manage Listing
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/platform/host/bookings/${booking.id}/payment-schedule`} className="cursor-pointer flex items-center gap-2">
+                        <CreditCard className="h-4 w-4" />
+                        View Payment Schedule
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>

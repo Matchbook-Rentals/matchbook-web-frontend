@@ -839,13 +839,19 @@ model CreditReport {
 }
 
 model RentPayment {
-  id        String   @id @default(cuid())
-  bookingId String
-  amount    Int
-  dueDate   DateTime
-  isPaid    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                    String    @id @default(cuid())
+  bookingId             String
+  amount                Int
+  dueDate               DateTime
+  isPaid                Boolean   @default(false)
+  stripePaymentMethodId String?
+  paymentAuthorizedAt   DateTime?
+  paymentCapturedAt     DateTime?
+  stripePaymentIntentId String?
+  failureReason         String?
+  retryCount           Int       @default(0)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   booking Booking @relation(fields: [bookingId], references: [id])
 }

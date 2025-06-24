@@ -6,6 +6,75 @@ import { auth } from '@clerk/nextjs/server'
 import { Booking, ListingUnavailability, Prisma, Notification  } from '@prisma/client'
 import { createNotification } from './notifications'
 
+// Utility function to generate scheduled rent payments with pro-rating
+function generateRentPayments(
+  bookingId: string,
+  monthlyRent: number,
+  startDate: Date,
+  endDate: Date,
+  stripePaymentMethodId: string
+): Prisma.RentPaymentCreateManyInput[] {
+  const payments: Prisma.RentPaymentCreateManyInput[] = [];
+  
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  // Start from the first of the month after start date (or same month if starts on 1st)
+  let currentDate = new Date(start.getFullYear(), start.getMonth(), 1);
+  
+  // If booking starts after the 1st, add a pro-rated payment for the partial month
+  if (start.getDate() > 1) {
+    const daysInMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+    const daysFromStart = daysInMonth - start.getDate() + 1;
+    const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
+    
+    payments.push({
+      bookingId,
+      amount: proRatedAmount,
+      dueDate: start,
+      stripePaymentMethodId,
+      paymentAuthorizedAt: new Date(),
+    });
+    
+    // Move to next month for regular payments
+    currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+  }
+  
+  // Generate monthly payments on the 1st of each month
+  while (currentDate <= end) {
+    const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    
+    // Check if this is the last month and we need pro-rating
+    if (monthEnd > end && end.getDate() < monthEnd.getDate()) {
+      const daysInMonth = monthEnd.getDate();
+      const daysToEnd = end.getDate();
+      const proRatedAmount = Math.round((monthlyRent * daysToEnd) / daysInMonth);
+      
+      payments.push({
+        bookingId,
+        amount: proRatedAmount,
+        dueDate: currentDate,
+        stripePaymentMethodId,
+        paymentAuthorizedAt: new Date(),
+      });
+    } else {
+      // Full month payment
+      payments.push({
+        bookingId,
+        amount: monthlyRent,
+        dueDate: currentDate,
+        stripePaymentMethodId,
+        paymentAuthorizedAt: new Date(),
+      });
+    }
+    
+    // Move to next month
+    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+  }
+  
+  return payments;
+}
+
 // Create a new booking
 // update the type to be a partial of booking
 export async function createBooking(data: Prisma.BookingCreateInput): Promise<Booking> {
@@ -14,7 +83,7 @@ export async function createBooking(data: Prisma.BookingCreateInput): Promise<Bo
     throw new Error('Unauthorized');
   }
 
-  // First get the match to get the tripId
+  // First get the match to get the tripId and payment method
   const match = await prisma.match.findUnique({
     where: {
       id: data.matchId as string
@@ -29,6 +98,14 @@ export async function createBooking(data: Prisma.BookingCreateInput): Promise<Bo
     throw new Error('Match not found');
   }
 
+  if (!match.stripePaymentMethodId) {
+    throw new Error('Payment method not found for this match');
+  }
+
+  if (!data.monthlyRent) {
+    throw new Error('Monthly rent is required to generate payment schedule');
+  }
+
   const booking = await prisma.booking.create({
     data: {
       ...data,
@@ -36,6 +113,22 @@ export async function createBooking(data: Prisma.BookingCreateInput): Promise<Bo
       tripId: match.tripId, // Add the tripId from the match
     },
   });
+
+  // Generate rent payments schedule
+  const rentPayments = generateRentPayments(
+    booking.id,
+    data.monthlyRent as number,
+    data.startDate as Date,
+    data.endDate as Date,
+    match.stripePaymentMethodId
+  );
+
+  // Create all rent payments
+  if (rentPayments.length > 0) {
+    await prisma.rentPayment.createMany({
+      data: rentPayments
+    });
+  }
 
   const notificationData: Notification = {
     actionType: 'booking',
