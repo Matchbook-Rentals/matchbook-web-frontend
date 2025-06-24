@@ -21,7 +21,6 @@ interface SearchInputsDesktopProps {
   inputClassName?: string;
   searchButtonClassNames?: string;
   searchIconColor?: string;
-  popoverMaxWidth?: string;
   headerText?: string;
   headerClassName?: string;
 }
@@ -35,7 +34,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   inputClassName,
   searchButtonClassNames,
   searchIconColor = 'text-white',
-  popoverMaxWidth,
   headerText,
   headerClassName
 }) => {
@@ -54,7 +52,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   });
   const [guests, setGuests] = React.useState({ pets: 0, children: 0, adults: 1 })
   const containerRef = useRef<HTMLDivElement>(null);
-  const popoverRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = React.useState({
     destination: '',
     description: '',
@@ -73,25 +70,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     setTotalGuests(total);
   }, [guests]);
 
-  // Add click outside handler
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isOpen &&
-        containerRef.current &&
-        popoverRef.current &&
-        !containerRef.current.contains(event.target as Node) &&
-        !popoverRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setActiveContent(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
   // Format the dates for display
   const formatDate = (date: Date | null) => {
     if (!date) return '';
@@ -103,9 +81,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     // Auto-advance to the next step upon selection
     setActiveContent('date');
   };
-
-  // Add new state to track the arrow position
-  const [arrowPosition, setArrowPosition] = React.useState(5); // Default left position in rem
 
   // Add refs for each input
   const locationInputRef = useRef<HTMLInputElement>(null);
@@ -235,15 +210,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     // Otherwise, open the popover with the new content
     setActiveContent(content);
     setIsOpen(true);
-
-    if (containerRef.current && inputRef.current) {
-      const containerLeft = containerRef.current.getBoundingClientRect().left;
-      const inputRect = inputRef.current.getBoundingClientRect();
-      const inputLeft = inputRect.left;
-      const inputCenter = inputLeft + (inputRect.width / 2);
-      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-      setArrowPosition(position);
-    }
   };
 
   // Render different versions based on hasAccess
@@ -252,6 +218,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       <DisabledDesktopInputs />
     );
   }
+
+  const currentStep = activeContent === 'location' ? 1 : activeContent === 'date' ? 2 : 3;
 
   return (
     <div ref={containerRef} className="relative">
@@ -340,30 +308,24 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
       </div>
 
-      {isOpen && (
-        <div
-          ref={popoverRef}
-          className={cn(
-            "absolute z-10 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 p-6 w-full",
-            popoverMaxWidth ? popoverMaxWidth : "max-w-2xl"
-          )}
-          style={{
-            left: '50%',
-            transform: 'translateX(-50%)',
-          }}
-        >
-          <div
-            className="absolute -top-2 w-4 h-4 bg-white border-l border-t border-gray-200 transform rotate-45"
-            style={{ left: `calc(${arrowPosition}% - 8px)` }}
-          />
-          <div className="relative">
-            {renderActiveContent()}
-            <div className="mt-6 pt-4 border-t border-gray-200">
-              {renderFooter()}
-            </div>
-          </div>
-        </div>
-      )}
+      <BrandDialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            setActiveContent(null);
+          }
+        }}
+        titleComponent={
+          <h2 className="text-lg font-semibold text-center flex-grow">
+            Find your next home
+          </h2>
+        }
+        contentComponent={renderActiveContent()}
+        footerComponent={renderFooter()}
+        currentStep={currentStep}
+        totalSteps={3}
+      />
     </div>
   );
 };
