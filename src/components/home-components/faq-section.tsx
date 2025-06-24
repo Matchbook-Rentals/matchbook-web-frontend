@@ -124,7 +124,19 @@ const FAQSection = () => {
   return (
     <MarketingContainer>
       <div className="w-full">
-        <h1 className={`text-lg font-medium leading-7 tracking-normal text-center mb-8 ${poppins.className}`}>Frequently Asked Questions</h1>
+        <h1 
+          className={`font-medium text-center mb-8 ${poppins.className}`}
+          style={{
+            fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+            lineHeight: '100%',
+            letterSpacing: 'clamp(-1px, -0.1vw, -2px)',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+        >
+          Frequently Asked Questions
+        </h1>
         <TabSelector
           tabs={tabs}
           tabsListClassName={`px-0 space-x-6  border-b-0 ${inter.className}`}
