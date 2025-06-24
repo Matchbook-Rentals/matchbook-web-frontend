@@ -73,6 +73,9 @@ interface FlexibleSelectorProps {
 }
 
 function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isDisabled, disabledReason }: CalendarDayProps) {
+  const selectedDayBgColor = 'bg-secondaryBrand';
+  const inRangeBgColor = 'bg-gray-200';
+
   const hasCompleteRange = isInRange || isEndDate;
   const showRangeBackground = hasCompleteRange && isInRange && !isSelected;
   const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
@@ -91,19 +94,19 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
     >
       <span className={`
         z-10
-        ${isSelected ? 'rounded-full bg-secondaryBrand text-white w-9 h-9 flex items-center justify-center text-base' : ''}
+        ${isSelected ? `rounded-full ${selectedDayBgColor} text-white w-9 h-9 flex items-center justify-center text-base` : ''}
         ${isDisabled && !isSelected ? 'text-gray-300' : ''}
       `}>
         {day}
       </span>
       {showRangeBackground && (
-        <div className="absolute inset-y-1/4 inset-x-0 bg-secondaryBrand/50" />
+        <div className={`absolute inset-y-1/4 inset-x-0 ${inRangeBgColor}`} />
       )}
       {showStartBackground && (
-        <div className="absolute right-0 left-1/2 inset-y-1/4 bg-secondaryBrand/50" />
+        <div className={`absolute right-0 left-1/2 inset-y-1/4 ${inRangeBgColor}`} />
       )}
       {showEndBackground && (
-        <div className="absolute left-0 right-1/2 inset-y-1/4 bg-secondaryBrand/50" />
+        <div className={`absolute left-0 right-1/2 inset-y-1/4 ${inRangeBgColor}`} />
       )}
     </button>
   );
