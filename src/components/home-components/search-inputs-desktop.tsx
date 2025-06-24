@@ -61,6 +61,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   });
   const [isOpen, setIsOpen] = React.useState(false);
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-background ${inputClassName || ''}`;
@@ -95,6 +96,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const guestsInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+
     if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
       setIsOpen(true);
       setActiveContent('location');
@@ -105,19 +108,29 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       return;
     }
 
-    const response = await createTrip({
-      locationString: selectedLocation.description,
-      latitude: selectedLocation.lat,
-      longitude: selectedLocation.lng,
-    });
+    setIsSubmitting(true);
+    try {
+      const response = await createTrip({
+        locationString: selectedLocation.description,
+        latitude: selectedLocation.lat,
+        longitude: selectedLocation.lng,
+      });
 
-    if (response.success && response.trip) {
-      router.push(`/platform/searches/set-preferences/${response.trip.id}`);
-    } else {
+      if (response.success && response.trip) {
+        router.push(`/platform/searches/set-preferences/${response.trip.id}`);
+      } else {
+        toast({
+          variant: "destructive",
+          description: response.success === false ? response.error : "Failed to create trip",
+        });
+      }
+    } catch (error) {
       toast({
         variant: "destructive",
-        description: response.success === false ? response.error : "Failed to create trip",
+        description: "An unexpected error occurred while creating the trip.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -197,7 +210,14 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
               {areDatesSelected ? 'Clear' : 'Back'}
             </BrandButton>
           )}
-          <BrandButton variant="default" onClick={handleNext} size="sm">
+          <BrandButton
+            variant="default"
+            onClick={handleNext}
+            size="sm"
+            disabled={isSubmitting && isLastStep}
+            className={cn({ 'opacity-75': isSubmitting && isLastStep })}
+          >
+            {isSubmitting && isLastStep && <ImSpinner8 className="animate-spin mr-2 h-4 w-4" />}
             {isLastStep ? 'Start Search' : 'Next'}
           </BrandButton>
         </div>
@@ -338,7 +358,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
         <div className="flex-shrink-0 self-end">
           <button
-            disabled={!hasAccess}
+            disabled={!hasAccess || isSubmitting}
             onClick={(e) => {
               e.stopPropagation();
               // Only run handleSubmit if we're not in a loading state
@@ -346,10 +366,15 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
                 handleSubmit();
               }
             }}
-            className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
-              } ${searchButtonClassNames || 'bg-primaryBrand'} rounded-full`}
+            className={cn(
+              'w-auto p-3 rounded-full',
+              searchButtonClassNames || 'bg-primaryBrand',
+              !hasAccess || isSubmitting
+                ? 'cursor-not-allowed opacity-50'
+                : 'cursor-pointer'
+            )}
           >
-            {locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng) ? (
+            {isSubmitting || (locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng)) ? (
               <ImSpinner8 className={`animate-spin ${searchIconColor}`} />
             ) : (
               <FaSearch className={searchIconColor} />
