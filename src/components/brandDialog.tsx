@@ -140,14 +140,14 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
                     }`}
                   >
                     <div
-                      className={`h-6 rounded-xl border-[1.5px] border-solid ${
+                      className={`h-6 rounded-xl border-[1.5px] border-solid flex items-center justify-center ${
                         step.status === "active"
                           ? "bg-[#3c8787]"
                           : "border-[#eaecf0]"
                       }`}
                     >
                       <div
-                        className={`relative w-2 h-2 top-2 left-2 rounded ${
+                        className={`w-2 h-2 rounded ${
                           step.status === "active" ? "bg-white" : "bg-[#d0d5dd]"
                         }`}
                       />
