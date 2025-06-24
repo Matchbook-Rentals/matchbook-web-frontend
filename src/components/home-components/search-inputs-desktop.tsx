@@ -12,6 +12,7 @@ import { DisabledDesktopInputs } from "./disabled-inputs";
 import { cn } from "@/lib/utils";
 import { BrandDialog } from "@/components/brandDialog";
 import { BrandButton } from "@/components/ui/brandButton";
+import { Input } from "@/components/ui/input";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
@@ -74,6 +75,11 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const formatDate = (date: Date | null) => {
     if (!date) return '';
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  const formatFooterDate = (date: Date | null) => {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
   const handleLocationSelect = (location: any) => {
@@ -158,9 +164,27 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
     return (
       <div className="flex justify-between items-center w-full">
-        <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
-          {isFirstStep ? 'Close' : 'Back'}
-        </BrandButton>
+        {isDateStep ? (
+          <div className="flex items-center gap-3">
+            <Input
+              className="w-[136px]"
+              value={formatFooterDate(dateRange.start)}
+              placeholder="Start Date"
+              readOnly
+            />
+            <span className="text-gray-600">–</span>
+            <Input
+              className="w-[136px]"
+              value={formatFooterDate(dateRange.end)}
+              placeholder="End Date"
+              readOnly
+            />
+          </div>
+        ) : (
+          <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
+            {isFirstStep ? 'Close' : 'Back'}
+          </BrandButton>
+        )}
 
         <div className="flex items-center gap-3">
           {isDateStep && (
