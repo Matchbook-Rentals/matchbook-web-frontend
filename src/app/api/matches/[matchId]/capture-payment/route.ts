@@ -19,7 +19,11 @@ export async function POST(
       include: {
         listing: {
           include: { user: true }
-        }
+        },
+        trip: {
+          include: { user: true }
+        },
+        BoldSignLease: true
       }
     });
 
@@ -28,8 +32,13 @@ export async function POST(
     }
 
     // Verify the user is the landlord (listing owner)
-    if (match.listing.user?.id !== userId) {
+    if (match.listing.userId !== userId) {
       return NextResponse.json({ error: 'Unauthorized - not landlord' }, { status: 403 });
+    }
+
+    // Verify the host has a Stripe Connect account
+    if (!match.listing.user?.stripeAccountId) {
+      return NextResponse.json({ error: 'Host must setup Stripe Connect account first' }, { status: 400 });
     }
 
     // Check if payment intent exists and is ready to capture
@@ -37,7 +46,21 @@ export async function POST(
       return NextResponse.json({ error: 'No payment method authorized' }, { status: 400 });
     }
 
-    // Capture the payment
+    // Verify payment is authorized but not captured yet
+    if (!match.paymentAuthorizedAt) {
+      return NextResponse.json({ error: 'Payment not authorized yet' }, { status: 400 });
+    }
+
+    if (match.paymentCapturedAt) {
+      return NextResponse.json({ error: 'Payment already captured' }, { status: 400 });
+    }
+
+    // Verify lease is fully signed before capturing payment
+    if (!match.BoldSignLease?.tenantSigned || !match.BoldSignLease?.landlordSigned) {
+      return NextResponse.json({ error: 'Lease must be fully signed before capturing payment' }, { status: 400 });
+    }
+
+    // Capture the payment (Connect transfer was set up during authorization)
     const paymentIntent = await stripe.paymentIntents.capture(match.stripePaymentIntentId);
 
     if (paymentIntent.status === 'succeeded') {
@@ -50,11 +73,48 @@ export async function POST(
         },
       });
 
+      // Create the booking record now that payment is captured
+      let booking = await prisma.booking.findFirst({
+        where: { matchId: params.matchId }
+      });
+
+      if (!booking) {
+        booking = await prisma.booking.create({
+          data: {
+            userId: match.trip.userId,
+            listingId: match.listingId,
+            tripId: match.tripId,
+            matchId: params.matchId,
+            startDate: match.trip.startDate,
+            endDate: match.trip.endDate,
+            totalPrice: paymentIntent.amount,
+            monthlyRent: match.monthlyRent,
+            status: 'confirmed'
+          }
+        });
+
+        // Create listing unavailability
+        await prisma.listingUnavailability.create({
+          data: {
+            startDate: booking.startDate,
+            endDate: booking.endDate,
+            reason: 'Booking',
+            listingId: booking.listingId
+          }
+        });
+
+        console.log('Created booking record:', booking.id);
+      }
+
       return NextResponse.json({
         success: true,
         paymentIntentId: paymentIntent.id,
         amount: paymentIntent.amount,
         status: paymentIntent.status,
+        booking: {
+          id: booking.id,
+          status: booking.status
+        }
       });
     } else {
       return NextResponse.json(

@@ -16,6 +16,33 @@ export async function POST(
     const { paymentMethodId, amount } = await request.json();
     console.log('📝 Request data:', { paymentMethodId, amount, userId });
 
+    // Get the match to find the host's Stripe Connect account
+    const match = await prisma.match.findUnique({
+      where: { id: params.matchId },
+      include: {
+        listing: {
+          include: { user: true }
+        },
+        trip: {
+          include: { user: true }
+        }
+      }
+    });
+
+    if (!match) {
+      return NextResponse.json({ error: 'Match not found' }, { status: 404 });
+    }
+
+    // Verify the user is the renter (trip owner)
+    if (match.trip.userId !== userId) {
+      return NextResponse.json({ error: 'Unauthorized - not renter' }, { status: 403 });
+    }
+
+    // Verify the host has a Stripe Connect account
+    if (!match.listing.user?.stripeAccountId) {
+      return NextResponse.json({ error: 'Host must setup Stripe Connect account first' }, { status: 400 });
+    }
+
     // Get user's Stripe customer ID or create one
     console.log('👤 Finding user:', userId);
     const user = await prisma.user.findUnique({
@@ -60,8 +87,13 @@ export async function POST(
       customer: customerId,
     });
 
-    // Create payment intent for authorization (but don't capture)
-    console.log('💰 Creating payment intent:', { amount: amount * 100, customerId, paymentMethodId });
+    // Create payment intent for authorization with Stripe Connect transfer
+    console.log('💰 Creating payment intent with Connect transfer:', { 
+      amount: amount * 100, 
+      customerId, 
+      paymentMethodId,
+      hostStripeAccountId: match.listing.user.stripeAccountId
+    });
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100, // Convert to cents
       currency: 'usd',
@@ -70,9 +102,13 @@ export async function POST(
       capture_method: 'manual', // Don't capture the payment yet
       confirm: true,
       return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/match/${params.matchId}/payment-success`,
+      transfer_data: {
+        destination: match.listing.user.stripeAccountId,
+      },
       metadata: {
         matchId: params.matchId,
         userId,
+        hostUserId: match.listing.userId,
         type: 'lease_deposit_and_rent',
       },
     });

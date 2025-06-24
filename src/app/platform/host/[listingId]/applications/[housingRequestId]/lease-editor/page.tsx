@@ -31,50 +31,46 @@ export default function LeaseEditorPage({ params }: LeaseEditorPageProps) {
 
     // Handle messages from BoldSign iframe
     const handleMessage = (event: MessageEvent) => {
+      console.log('=== BOLDSIGN EDITOR EVENT DEBUG ===');
+      console.log('Event origin:', event.origin);
+      console.log('Event data:', event.data);
+      console.log('Event type:', typeof event.data);
+      
       if (event.origin !== 'https://app.boldsign.com') {
+        console.log('Event ignored - wrong origin');
         return;
       }
 
-      const { action, data } = event.data;
-      console.log('BoldSign message:', action, data);
-
-      switch (action) {
+      switch (event.data) {
         case 'onDocumentSent':
+          console.log('✅ Document sent successfully');
           toast.success('Lease document sent successfully!');
-          // Update database with the sent document info
-          if (documentId) {
-            updateHousingRequestWithBoldSignLease(params.housingRequestId, documentId)
-              .then((result) => {
-                if (result.success) {
-                  console.log('Housing request updated with BoldSign lease');
-                } else {
-                  console.error('Failed to update housing request:', result.error);
-                }
-              });
-          }
+          // Note: Match and BoldSignLease are already created in the API route
+          // The webhook will handle notifications when BoldSign sends the "Sent" event
           // Hide iframe and show success state
           setShowIframe(false);
           setIsCompleted(true);
           break;
         case 'onDocumentSaved':
+          console.log('💾 Document saved');
           toast.success('Document saved');
           break;
         case 'onDocumentCancelled':
+          console.log('❌ Document creation cancelled');
           toast.info('Document creation cancelled');
           setShowIframe(false);
           setIsCompleted(true);
           break;
-        case 'onDocumentError':
-          toast.error('Error with document: ' + (data?.message || 'Unknown error'));
+        case 'onDocumentSendingFailed':
+          console.error('❌ Failed to send document');
+          toast.error('Failed to send lease document. Please try again.');
           break;
-        case 'redirectToListing':
-          // Redirect to the listing dashboard
-          if (data?.listingId) {
-            router.push(`/platform/host/${data.listingId}`);
-          }
+        case 'onDocumentSavingFailed':
+          console.error('❌ Failed to save document');
+          toast.error('Failed to save document. Please try again.');
           break;
         default:
-          console.log('Unhandled BoldSign action:', action);
+          console.log('🔍 Unknown BoldSign editor event:', event.data);
           break;
       }
     };

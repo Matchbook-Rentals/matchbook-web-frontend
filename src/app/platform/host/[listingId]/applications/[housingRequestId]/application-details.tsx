@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon, Upload, Trash2 } from "lucide-react";
+import { ChevronDownIcon, Upload, Trash2, Loader2 } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,6 +30,20 @@ interface HousingRequestWithUser extends HousingRequest {
   trip?: any;
   hasBooking?: boolean;
   boldSignLeaseId?: string | null;
+  match?: {
+    id: string;
+    stripePaymentMethodId?: string | null;
+    paymentAuthorizedAt?: Date | null;
+    paymentAmount?: number | null;
+    paymentCapturedAt?: Date | null;
+    paymentStatus?: string | null;
+    BoldSignLease?: {
+      id: string;
+      tenantSigned: boolean;
+      landlordSigned: boolean;
+      embedUrl?: string | null;
+    } | null;
+  } | null;
 }
 
 interface ApplicationDetailsProps {
@@ -445,6 +459,115 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           Back
         </Link>
 
+        {/* Lease Signing and Payment Status - for approved applications */}
+        {currentStatus === 'approved' && housingRequest.match && (
+          <section className="mb-8">
+            <h2 className="text-xl font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mb-4">
+              Lease & Payment Status
+            </h2>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Tenant Signature Status */}
+                <div className="flex items-center gap-3">
+                  {housingRequest.match.BoldSignLease?.tenantSigned ? (
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-medium text-gray-900">
+                      {housingRequest.match.BoldSignLease?.tenantSigned ? 'Tenant Signed' : 'Awaiting Tenant Signature'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {housingRequest.match.BoldSignLease?.tenantSigned 
+                        ? 'Lease has been signed by tenant' 
+                        : 'Tenant needs to sign the lease agreement'
+                      }
+                    </p>
+                  </div>
+                </div>
+
+                {/* Payment Authorization Status */}
+                <div className="flex items-center gap-3">
+                  {housingRequest.match.paymentAuthorizedAt ? (
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                        <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-medium text-gray-900">
+                      {housingRequest.match.paymentAuthorizedAt ? 'Payment Authorized' : 'Awaiting Payment Authorization'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {housingRequest.match.paymentAuthorizedAt 
+                        ? `$${housingRequest.match.paymentAmount?.toLocaleString()} pre-authorized` 
+                        : 'Tenant needs to authorize payment method'
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ready for Host Action */}
+              {housingRequest.match.BoldSignLease?.tenantSigned && housingRequest.match.paymentAuthorizedAt && !housingRequest.match.BoldSignLease?.landlordSigned && (
+                <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-green-900">Ready for Your Signature!</p>
+                      <p className="text-sm text-green-800">
+                        The tenant has signed the lease and authorized payment. Complete the process by signing the lease to collect the deposit.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Payment Captured Status */}
+              {housingRequest.match.paymentCapturedAt && (
+                <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-blue-900">Payment Collected!</p>
+                      <p className="text-sm text-blue-800">
+                        Deposit and rent have been successfully processed and transferred to your account.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Action Buttons */}
         <div className="flex gap-4 mb-12">
           {currentStatus === 'approved' && (
@@ -454,13 +577,42 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               </div>
               {boldSignLeaseId ? (
                 <>
-                  <Button
-                    variant="outline"
-                    onClick={() => toast.info('BoldSign lease viewing interface coming soon')}
-                    className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium hover:bg-blue-50 flex items-center gap-2"
-                  >
-                    View Lease
-                  </Button>
+                  {/* Show Sign Lease button if tenant has signed and payment is authorized but landlord hasn't signed */}
+                  {housingRequest.match?.BoldSignLease?.tenantSigned && 
+                   housingRequest.match?.paymentAuthorizedAt && 
+                   !housingRequest.match?.BoldSignLease?.landlordSigned ? (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (housingRequest.match?.BoldSignLease?.embedUrl) {
+                          window.open(housingRequest.match.BoldSignLease.embedUrl, '_blank', 'width=1200,height=800');
+                        } else {
+                          toast.error('Lease signing URL not available');
+                        }
+                      }}
+                      className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium hover:bg-green-50 flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Sign & Collect
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (boldSignLeaseId) {
+                          // Use the new view endpoint for signed documents
+                          window.open(`/api/leases/view?documentId=${boldSignLeaseId}`, '_blank');
+                        } else {
+                          toast.error('No lease document available');
+                        }
+                      }}
+                      className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium hover:bg-blue-50 flex items-center gap-2"
+                    >
+                      View Lease
+                    </Button>
+                  )}
                   <Button
                     variant="outline"
                     onClick={handleRemoveLease}
@@ -547,14 +699,24 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               </Button>
               <Button
                 variant="outline"
-                onClick={handleApprove}
-                disabled={isApproving || isDeclining}
-                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50"
+                onClick={handleUploadLease}
+                disabled={isUploadingLease || isDeclining}
+                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 flex items-center justify-center gap-2"
               >
-                {isApproving ? 'Approving...' : 'Approve'}
+                {isUploadingLease && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isUploadingLease ? 'Creating Lease...' : 'Approve and Create Lease'}
               </Button>
             </>
           )}
+          
+          {/* Hidden file input for lease upload - always available */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf"
+            onChange={handleFileSelect}
+            className="hidden"
+          />
         </div>
 
         {/* Earnings Section */}

@@ -33,6 +33,11 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized - not renter' }, { status: 403 });
     }
 
+    // Verify the host has a Stripe Connect account
+    if (!match.listing.user?.stripeAccountId) {
+      return NextResponse.json({ error: 'Host must setup Stripe Connect account first' }, { status: 400 });
+    }
+
     // Check if payment method exists
     if (!match.stripePaymentMethodId) {
       return NextResponse.json({ error: 'No payment method found' }, { status: 400 });
@@ -53,7 +58,7 @@ export async function POST(
       return NextResponse.json({ error: 'No Stripe customer found' }, { status: 400 });
     }
 
-    // Create payment intent for authorization (but don't capture)
+    // Create payment intent for authorization with Stripe Connect transfer
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100, // Convert to cents
       currency: 'usd',
@@ -62,9 +67,13 @@ export async function POST(
       capture_method: 'manual', // Don't capture the payment yet
       confirm: true,
       return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/match/${params.matchId}/payment-success`,
+      transfer_data: {
+        destination: match.listing.user.stripeAccountId,
+      },
       metadata: {
         matchId: params.matchId,
         userId,
+        hostUserId: match.listing.userId,
         type: 'lease_deposit_and_rent_existing',
       },
     });

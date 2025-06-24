@@ -652,6 +652,8 @@ model Match {
   paymentAmount         Int?
   paymentCapturedAt     DateTime?
   paymentStatus         String?
+  tenantSignedAt        DateTime?
+  landlordSignedAt      DateTime?
 
   trip          Trip           @relation(fields: [tripId], references: [id])
   listing       Listing        @relation(fields: [listingId], references: [id])

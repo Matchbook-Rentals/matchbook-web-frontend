@@ -161,7 +161,7 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
     const notificationData: CreateNotificationInput = {
       userId: listing.userId,
       content: 'New Housing Request',
-      url: `/platform/host-dashboard/${listing.id}?tab=applications`,
+      url: `/platform/host/${listing.id}/applications`,
       actionType: 'view',
       actionId: newHousingRequest.id,
     }

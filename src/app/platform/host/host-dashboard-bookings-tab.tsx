@@ -48,6 +48,18 @@ type BookingWithRelations = {
     numPets: number;
     numChildren: number;
   };
+  match?: {
+    id: string;
+    tenantSignedAt?: Date | null;
+    landlordSignedAt?: Date | null;
+    paymentAuthorizedAt?: Date | null;
+    BoldSignLease?: {
+      id: string;
+      landlordSigned: boolean;
+      tenantSigned: boolean;
+    } | null;
+    Lease?: any | null;
+  };
 };
 
 // Sample bookings data for hosts
@@ -193,14 +205,20 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
     setLoadingBookingId(null);
   }, [pathname]);
 
-  const handleViewBookingDetails = (bookingId: string) => {
-    setLoadingBookingId(bookingId);
-    // Navigate to booking details page (adjust route as needed)
-    router.push(`/platform/host/bookings/${bookingId}`);
+  const handleViewBookingDetails = (booking: BookingWithRelations) => {
+    setLoadingBookingId(booking.id);
+    
+    // If this is a match awaiting signature (not a real booking yet), go to host match page
+    if (booking.status === "awaiting_signature" || booking.id.startsWith("match-")) {
+      router.push(`/platform/host/match/${booking.matchId}`);
+    } else {
+      // Navigate to regular booking details page
+      router.push(`/platform/host/bookings/${booking.id}`);
+    }
   };
 
   // Filter options
-  const filterOptions = ["Active", "Upcoming", "Past", "Cancelled"];
+  const filterOptions = ["Active", "Upcoming", "Past", "Cancelled", "Awaiting Signature"];
 
   // Toggle filter selection
   const toggleFilter = (filter: string) => {
@@ -212,8 +230,28 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
   };
 
   // Get status info for display
-  const getStatusInfo = (status: string) => {
-    switch (status) {
+  const getStatusInfo = (booking: BookingWithRelations) => {
+    // Handle special awaiting_signature status (from matches without bookings)
+    if (booking.status === "awaiting_signature") {
+      return {
+        label: "Awaiting Signature",
+        icon: <Clock className="h-4 w-4" />,
+        className: "text-[#d97706]"
+      };
+    }
+
+    // Check if awaiting signature (match has BoldSignLease but not fully signed or no payment authorized)
+    if (booking.match?.BoldSignLease && 
+        ((!booking.match.BoldSignLease.tenantSigned || !booking.match.BoldSignLease.landlordSigned) || 
+         !booking.match.paymentAuthorizedAt)) {
+      return {
+        label: "Awaiting Signature",
+        icon: <Clock className="h-4 w-4" />,
+        className: "text-[#d97706]"
+      };
+    }
+
+    switch (booking.status) {
       case "active":
         return {
           label: "Active",
@@ -245,6 +283,30 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
           className: "text-yellow-600"
         };
     }
+  };
+
+  // Get signature status text for awaiting signature bookings
+  const getSignatureStatusText = (booking: BookingWithRelations) => {
+    if (!booking.match?.BoldSignLease) return booking.status;
+    
+    const { BoldSignLease } = booking.match;
+    
+    // If tenant hasn't signed yet
+    if (!BoldSignLease.tenantSigned) {
+      return "Awaiting Renter signature";
+    }
+    
+    // If tenant signed but landlord hasn't
+    if (BoldSignLease.tenantSigned && !BoldSignLease.landlordSigned) {
+      return "Awaiting your signature";
+    }
+    
+    // If both signed but no payment authorized
+    if (BoldSignLease.tenantSigned && BoldSignLease.landlordSigned && !booking.match.paymentAuthorizedAt) {
+      return "Awaiting payment authorization";
+    }
+    
+    return booking.status;
   };
 
   // Format date range
@@ -283,7 +345,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
     // Apply status filters
     if (selectedFilters.length > 0) {
       filtered = filtered.filter(booking => {
-        const statusInfo = getStatusInfo(booking.status);
+        const statusInfo = getStatusInfo(booking);
         return selectedFilters.includes(statusInfo.label);
       });
     }
@@ -443,7 +505,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
       noMargin={true}
     >
       {paginatedBookings.map((booking) => {
-            const statusInfo = getStatusInfo(booking.status);
+            const statusInfo = getStatusInfo(booking);
             const fullAddress = booking.listing ? 
               `${booking.listing.streetAddress1 || ""} ${booking.listing.city || ""}, ${booking.listing.state || ""} ${booking.listing.postalCode || ""}` : 
               "Address not available";
@@ -473,7 +535,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
                         <div
                           className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusInfo.className}`}
                         >
-                          {statusInfo.label}
+                          {statusInfo.label === "Awaiting Signature" ? getSignatureStatusText(booking) : statusInfo.label}
                         </div>
                       </div>
                     )}
@@ -488,11 +550,11 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
                   <div className="flex items-center gap-4 mt-8">
                     <Button
                       variant="outline"
-                      onClick={() => handleViewBookingDetails(booking.id)}
+                      onClick={() => handleViewBookingDetails(booking)}
                       disabled={loadingBookingId === booking.id}
                       className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] flex items-center gap-2"
                     >
-                      View Booking Details
+                      {booking.status === "awaiting_signature" || booking.id.startsWith("match-") ? "View Match Details" : "View Booking Details"}
                       {loadingBookingId === booking.id && (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       )}

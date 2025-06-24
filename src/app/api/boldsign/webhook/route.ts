@@ -68,14 +68,83 @@ export async function POST(req: Request) {
     const body: BoldSignWebhookEvent = await req.json();
     console.log('BoldSign webhook body:', JSON.stringify(body, null, 2));
 
-    // Only handle "Signed" events for now
-    if (body.event.eventType !== 'Signed') {
+    // Handle both "Signed" and "Sent" events
+    if (body.event.eventType !== 'Signed' && body.event.eventType !== 'Sent') {
       console.log(`Ignoring event type: ${body.event.eventType}`);
       return NextResponse.json({ message: 'Event type not handled' }, { status: 200 });
     }
 
     const { documentId, signerDetails } = body.data;
 
+    // Handle "Sent" event - document has been sent for signatures
+    if (body.event.eventType === 'Sent') {
+      console.log(`Processing "Sent" event for documentId: ${documentId}`);
+      
+      // Find the BoldSignLease by documentId
+      const boldSignLease = await prisma.boldSignLease.findFirst({
+        where: {
+          id: documentId,
+        },
+        include: {
+          match: {
+            include: {
+              trip: true,
+              listing: true
+            }
+          },
+          landlord: true,
+          primaryTenant: true
+        }
+      });
+
+      if (!boldSignLease) {
+        console.log(`No BoldSignLease found for documentId: ${documentId}`);
+        return NextResponse.json({ message: 'Lease not found' }, { status: 404 });
+      }
+
+      console.log(`Found BoldSignLease for "Sent" event: ${boldSignLease.id}`);
+
+      // Send combined approval and lease signing notifications
+      const notifications = [];
+
+      // Notify landlord
+      const landlordNotification = await createNotification({
+        userId: boldSignLease.landlordId,
+        content: `Application approved! Your lease agreement for ${body.data.messageTitle} is ready for your signature.`,
+        url: `/platform/host/${boldSignLease.match.listingId}/applications`,
+        actionType: 'application_approved_lease_ready',
+        actionId: boldSignLease.id
+      });
+      
+      if (landlordNotification.success) {
+        notifications.push('landlord');
+        console.log('Combined approval/lease notification sent to landlord');
+      }
+
+      // Notify primary tenant
+      if (boldSignLease.primaryTenantId) {
+        const tenantNotification = await createNotification({
+          userId: boldSignLease.primaryTenantId,
+          content: `Congratulations! Your application for ${body.data.messageTitle} has been approved and your lease is ready for signature.`,
+          url: `/match/${boldSignLease.matchId}`,
+          actionType: 'application_approved_lease_ready',
+          actionId: boldSignLease.id
+        });
+        
+        if (tenantNotification.success) {
+          notifications.push('primary_tenant');
+          console.log('Combined approval/lease notification sent to primary tenant');
+        }
+      }
+
+      return NextResponse.json({
+        message: 'Sent event processed successfully',
+        leaseId: boldSignLease.id,
+        notificationsSent: notifications
+      }, { status: 200 });
+    }
+
+    // Handle "Signed" event - continue with existing logic
     // Find the BoldSignLease by matching documentId stored in embedUrl or other field
     // Note: You may need to adjust this query based on how you store the documentId
     const boldSignLease = await prisma.boldSignLease.findFirst({
@@ -123,6 +192,23 @@ export async function POST(req: Request) {
         updatedAt: new Date()
       }
     });
+
+    // Update Match timestamps based on who signed
+    const matchUpdateData: any = {};
+    if (tenantSigned && !boldSignLease.tenantSigned) {
+      matchUpdateData.tenantSignedAt = new Date();
+    }
+    if (landlordSigned && !boldSignLease.landlordSigned) {
+      matchUpdateData.landlordSignedAt = new Date();
+    }
+    
+    if (Object.keys(matchUpdateData).length > 0) {
+      await prisma.match.update({
+        where: { id: boldSignLease.matchId },
+        data: matchUpdateData
+      });
+      console.log(`Updated Match timestamps:`, matchUpdateData);
+    }
 
     console.log(`Updated lease signing status - Landlord: ${landlordSigned}, Tenant: ${tenantSigned}`);
 

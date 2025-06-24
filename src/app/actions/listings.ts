@@ -265,6 +265,18 @@ export const getListingById = async (listingId: string): Promise<ListingAndImage
         unavailablePeriods: true,
         user: true,
         monthlyPricing: true,
+        matches: {
+          include: {
+            BoldSignLease: true,
+            Lease: true,
+            booking: true,
+            trip: {
+              include: {
+                user: true
+              }
+            }
+          }
+        },
       },
     });
     if (!listing) return null;
@@ -335,6 +347,18 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
         unavailablePeriods: true,
         user: true,
         monthlyPricing: true,
+        matches: {
+          include: {
+            BoldSignLease: true,
+            Lease: true,
+            booking: true,
+            trip: {
+              include: {
+                user: true
+              }
+            }
+          }
+        },
       },
       orderBy: {
         createdAt: 'desc'

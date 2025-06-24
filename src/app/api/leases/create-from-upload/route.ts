@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server'
 import { calculateRent } from '@/lib/calculate-rent';
+import { createNotification } from '@/app/actions/notifications';
 import prisma from '@/lib/prismadb'
 
 const API_BASE_URL = 'https://api.boldsign.com';
@@ -215,13 +216,17 @@ export async function POST(request: NextRequest) {
 
     console.log('Step 5b passed: BoldSignLease created', { leaseId: boldSignLease.id });
 
-    // Update housing request with the boldSignLeaseId
+    // Update housing request with the boldSignLeaseId and approve it
     await prisma.housingRequest.update({
       where: { id: housingRequestId },
-      data: { boldSignLeaseId: boldSignLease.id }
+      data: { 
+        boldSignLeaseId: boldSignLease.id,
+        status: 'approved'
+      }
     });
 
-    console.log('Step 5c passed: Housing request updated');
+    console.log('Step 5c passed: Housing request updated and approved');
+    // Note: Notifications will be sent by the webhook when the "Sent" event is received
     
     return NextResponse.json({ 
       success: true, 

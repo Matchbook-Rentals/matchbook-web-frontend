@@ -48,6 +48,18 @@ type BookingWithRelations = {
     numPets: number;
     numChildren: number;
   };
+  match?: {
+    id: string;
+    tenantSignedAt?: Date | null;
+    landlordSignedAt?: Date | null;
+    paymentAuthorizedAt?: Date | null;
+    BoldSignLease?: {
+      id: string;
+      landlordSigned: boolean;
+      tenantSigned: boolean;
+    } | null;
+    Lease?: any | null;
+  };
 };
 
 interface ListingBookingsTabProps {
@@ -68,10 +80,16 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     setLoadingBookingId(null);
   }, [pathname]);
 
-  const handleViewBookingDetails = (bookingId: string) => {
-    setLoadingBookingId(bookingId);
-    // Navigate to booking details page (adjust route as needed)
-    router.push(`/platform/host/bookings/${bookingId}`);
+  const handleViewBookingDetails = (booking: BookingWithRelations) => {
+    setLoadingBookingId(booking.id);
+    
+    // If this is a match awaiting signature (not a real booking yet), go to host match page
+    if (booking.status === "awaiting_signature" || booking.id.startsWith("match-")) {
+      router.push(`/platform/host/match/${booking.matchId}`);
+    } else {
+      // Navigate to regular booking details page
+      router.push(`/platform/host/bookings/${booking.id}`);
+    }
   };
 
   // Filter options for booking status
@@ -81,6 +99,7 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     { id: "ongoing", label: "Ongoing" },
     { id: "completed", label: "Completed" },
     { id: "cancelled", label: "Cancelled" },
+    { id: "awaiting_signature", label: "Awaiting Signature" },
   ];
 
   // Get booking status info
@@ -88,6 +107,26 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     const now = new Date();
     const startDate = new Date(booking.startDate);
     const endDate = new Date(booking.endDate);
+
+    // Handle special awaiting_signature status (from matches without bookings)
+    if (booking.status === "awaiting_signature") {
+      return { 
+        status: "Awaiting Signature", 
+        className: "text-[#d97706]",
+        icon: <Clock className="h-4 w-4" />
+      };
+    }
+
+    // Check if awaiting signature (match has BoldSignLease but not fully signed or no payment authorized)
+    if (booking.match?.BoldSignLease && 
+        ((!booking.match.BoldSignLease.tenantSigned || !booking.match.BoldSignLease.landlordSigned) || 
+         !booking.match.paymentAuthorizedAt)) {
+      return { 
+        status: "Awaiting Signature", 
+        className: "text-[#d97706]",
+        icon: <Clock className="h-4 w-4" />
+      };
+    }
 
     if (booking.status === "cancelled") {
       return { 
@@ -114,6 +153,30 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
         icon: <Check className="h-4 w-4" />
       };
     }
+  };
+
+  // Get signature status text for awaiting signature bookings
+  const getSignatureStatusText = (booking: BookingWithRelations) => {
+    if (!booking.match?.BoldSignLease) return booking.status;
+    
+    const { BoldSignLease } = booking.match;
+    
+    // If tenant hasn't signed yet
+    if (!BoldSignLease.tenantSigned) {
+      return "Awaiting Renter signature";
+    }
+    
+    // If tenant signed but landlord hasn't
+    if (BoldSignLease.tenantSigned && !BoldSignLease.landlordSigned) {
+      return "Awaiting your signature";
+    }
+    
+    // If both signed but no payment authorized
+    if (BoldSignLease.tenantSigned && BoldSignLease.landlordSigned && !booking.match.paymentAuthorizedAt) {
+      return "Awaiting payment authorization";
+    }
+    
+    return booking.status;
   };
 
   // Format guest information
@@ -143,7 +206,8 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     if (selectedFilters.length > 0) {
       filtered = filtered.filter(booking => {
         const statusInfo = getBookingStatusInfo(booking);
-        return selectedFilters.includes(statusInfo.status.toLowerCase());
+        const statusId = statusInfo.status.toLowerCase().replace(' ', '_');
+        return selectedFilters.includes(statusId);
       });
     }
     
@@ -301,7 +365,7 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
                     <div
                       className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusInfo.className}`}
                     >
-                      {statusInfo.status}
+                      {statusInfo.status === "Awaiting Signature" ? getSignatureStatusText(booking) : statusInfo.status}
                     </div>
                   </div>
                 )}
@@ -316,11 +380,11 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
               <div className="flex items-center gap-4 mt-8">
                 <Button
                   variant="outline"
-                  onClick={() => handleViewBookingDetails(booking.id)}
+                  onClick={() => handleViewBookingDetails(booking)}
                   disabled={loadingBookingId === booking.id}
                   className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] flex items-center gap-2"
                 >
-                  View Booking Details
+                  {booking.status === "awaiting_signature" || booking.id.startsWith("match-") ? "View Match Details" : "View Booking Details"}
                   {loadingBookingId === booking.id && (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   )}

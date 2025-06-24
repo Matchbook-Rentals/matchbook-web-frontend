@@ -175,6 +175,12 @@ export async function getHostBookings() {
             numPets: true,
             numChildren: true
           }
+        },
+        match: {
+          include: {
+            BoldSignLease: true,
+            Lease: true
+          }
         }
       }
     });
@@ -238,6 +244,12 @@ export async function getBookingsByListingId(listingId: string) {
             numAdults: true,
             numPets: true,
             numChildren: true
+          }
+        },
+        match: {
+          include: {
+            BoldSignLease: true,
+            Lease: true
           }
         }
       }

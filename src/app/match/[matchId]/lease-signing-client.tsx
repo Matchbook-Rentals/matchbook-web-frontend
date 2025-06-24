@@ -24,6 +24,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const [showPaymentSelector, setShowPaymentSelector] = useState(false);
   const [leaseCompleted, setLeaseCompleted] = useState(false);
   const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const startLeaseSigningFlow = async () => {
@@ -101,23 +102,47 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
       console.log('Event origin:', event.origin);
       console.log('Event data:', event.data);
       console.log('Event type:', typeof event.data);
+      console.log('Event data stringified:', JSON.stringify(event.data));
+      console.log('Event source:', event.source);
       
-      if (event.origin !== "https://app.boldsign.com") {
-        console.log('Event ignored - wrong origin');
+      // Check if this is a BoldSign event (ignore Stripe and other iframe events)
+      const isBoldSignEvent = event.origin.includes('boldsign.com');
+      const isStripeEvent = event.origin.includes('stripe.com') || event.origin.includes('js.stripe.com');
+      
+      if (isStripeEvent) {
+        console.log('Event ignored - Stripe event detected:', event.origin);
         return;
       }
+      
+      if (!isBoldSignEvent) {
+        console.log('Event ignored - not a BoldSign event:', event.origin);
+        return;
+      }
+      
+      console.log('✅ BoldSign event detected from origin:', event.origin);
 
-      switch (event.data) {
+      // Handle both direct string events and object-wrapped events
+      let eventType = event.data;
+      if (typeof event.data === 'object' && event.data !== null) {
+        // Check if event is wrapped in an object
+        eventType = event.data.type || event.data.eventType || event.data.action || event.data;
+        console.log('Extracted event type from object:', eventType);
+      }
+
+      switch (eventType) {
         case "onDocumentSigned":
           console.log("✅ Document signed successfully - transitioning to payment");
+          setIsTransitioning(true);
           toast({
             title: "Success",
             description: "Lease signed successfully! Now please set up your payment method.",
           });
-          // Close iframe by clearing the URL
+          // Clear iframe first to prevent dual rendering
           setEmbedUrl(null);
+          // Then set completion states
           setLeaseCompleted(true);
           setShowPaymentSelector(true);
+          setIsTransitioning(false);
           break;
         case "onDocumentSigningFailed":
           console.error("❌ Failed to sign document");
@@ -162,6 +187,8 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
           break;
         default:
           console.log('🔍 Unknown BoldSign event:', event.data);
+          console.log('🔍 Event type was:', eventType);
+          console.log('🔍 Original event.data:', JSON.stringify(event.data, null, 2));
       }
     };
 
@@ -174,7 +201,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
       title: "Success",
       description: "Payment method set up successfully!",
     });
-    router.push('/platform/dashboard');
+    router.push(`/api/matches/${matchId}/callback`);
   };
 
   const handlePaymentCancel = () => {
@@ -259,7 +286,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const currentStep = getCurrentStep();
 
   const handleViewLease = async () => {
-    if (!match.BoldSignLease?.embedUrl) {
+    if (!match.BoldSignLease?.id) {
       toast({
         title: "Error",
         description: "Lease document not available",
@@ -268,8 +295,8 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
       return;
     }
     
-    // Open the lease in a new tab for viewing
-    window.open(match.BoldSignLease.embedUrl, '_blank');
+    // Use the new view endpoint for signed documents
+    window.open(`/api/leases/view?documentId=${match.BoldSignLease.id}`, '_blank');
   };
 
   const handleViewPaymentInfo = () => {
@@ -319,6 +346,18 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
       setIsLoading(false);
     }
   };
+
+  // Show loading during transition
+  if (isTransitioning) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Processing lease signature...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Show payment selector if lease is completed or if forced by showPaymentSelector
   if (showPaymentSelector || currentStep === 'authorize-payment') {
@@ -544,7 +583,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                       {isLoading ? 'Loading...' : 'Open Lease Agreement'}
                     </Button>
                   </div>
-                ) : currentStep === 'sign-lease' && embedUrl ? (
+                ) : currentStep === 'sign-lease' && embedUrl && !isTransitioning ? (
                   <div className="space-y-4">
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <p className="text-blue-800 text-sm">
@@ -564,6 +603,17 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                             size="sm"
                           >
                             Test Payment Flow
+                          </Button>
+                          <Button 
+                            onClick={() => {
+                              console.log('🧪 Manually triggering onDocumentSigned event');
+                              // Simulate the BoldSign event
+                              window.postMessage('onDocumentSigned', window.location.origin);
+                            }}
+                            variant="outline"
+                            size="sm"
+                          >
+                            Test Signing Event
                           </Button>
                           <Button 
                             onClick={handleClearPaymentInfo}
