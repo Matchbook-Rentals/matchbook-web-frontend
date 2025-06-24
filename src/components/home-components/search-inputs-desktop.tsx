@@ -114,6 +114,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         locationString: selectedLocation.description,
         latitude: selectedLocation.lat,
         longitude: selectedLocation.lng,
+        startDate: dateRange.start,
+        endDate: dateRange.end,
       });
 
       if (response.success && response.trip) {
