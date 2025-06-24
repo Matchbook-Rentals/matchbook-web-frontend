@@ -53,6 +53,7 @@ import { BecomeHostCopy } from "@/components/home-components/become-host";
 import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import { PlaceYouLove } from "@/components/home-components/place-you-love";
 import RecentArticle from "@/components/home-components/recent-article";
+import FAQSection from "@/components/home-components/faq-section";
 
 
 const WebHomePage = () => {
@@ -77,6 +78,8 @@ const WebHomePage = () => {
       <ProsConsGrid />
       <div className={spacerDivClassNames} />
       <RecentArticle />
+      <div className={spacerDivClassNames} />
+      <FAQSection />
       <div className={spacerDivClassNames} />
       <Footer />
     </div>

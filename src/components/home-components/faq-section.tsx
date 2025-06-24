@@ -1,14 +1,12 @@
-
 import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
-import { Montserrat } from 'next/font/google';
-import Footer from '@/components/marketing-landing-components/footer';
+import { Montserrat, Inter, Poppins } from 'next/font/google';
+import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
-
-
+const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
+const poppins = Poppins({ subsets: ["latin"], weight: ["500"], variable: '--font-poppins' });
 
 interface Tab {
   value: string;
@@ -93,13 +91,14 @@ const tabs: Tab[] = [
   {
     value: 'guest',
     label: 'Guest',
-    textSize: 'text-xl',
+    className: 'px-0',
+    textSize: 'text-base font-semibold leading-6 tracking-normal',
     content:
       <Accordion type="multiple" className="space-y-4" >
         {guestFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger alternativeArrow chevronClassName='mt-2' className="text-xl text-left pt-0 font-semibold flex items-start">{faq.question}</AccordionTrigger>
-            <AccordionContent className=" text-[15px] pr-6">{faq.answer}</AccordionContent>
+            <AccordionTrigger alternativeArrow chevronClassName=' border-[1.5px] border-gray-400 text-gray-400 rounded-full group-hover:border-black group-hover:text-black transition-colors' className="group text-xl text-left pt-1 font-semibold flex items-start">{faq.question}</AccordionTrigger>
+            <AccordionContent className=" text-[15px] text-tertiary pr-6">{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
@@ -107,36 +106,35 @@ const tabs: Tab[] = [
   {
     value: 'host',
     label: 'Host',
-    textSize: 'text-xl ',
+    className: 'px-0',
+    textSize: 'text-base font-semibold leading-6 tracking-normal',
     content:
       <Accordion type="multiple" className="space-y-4" >
         {hostFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
             <AccordionTrigger alternativeArrow chevronClassName='mt-2' className="text-xl text-left pt-0 font-semibold flex items-start">{faq.question}</AccordionTrigger>
-            <AccordionContent className=" text-[15px] pr-6">{faq.answer}</AccordionContent>
+            <AccordionContent className=" text-[15px] text-[#475467] pr-6">{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
   },
 ]
 
-const FAQPage = () => {
+const FAQSection = () => {
   return (
-    <>
-      <MatchbookHeader />
-      <div className=" w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto mt-10 ">
-        <h1 className="text-3xl  mb-8">Frequently Asked Questions</h1>
+    <MarketingContainer>
+      <div className="w-full">
+        <h1 className={`text-lg font-medium leading-7 tracking-normal text-center mb-8 ${poppins.className}`}>Frequently Asked Questions</h1>
         <TabSelector
           tabs={tabs}
-          tabsListClassName={`p-0 test border-b-0 ${montserrat.className}`}
+          tabsListClassName={`px-0 space-x-6  border-b-0 ${inter.className}`}
           tabsClassName='border-0 [&[data-state=active]]:shadow-none'
-          className='border-0 mb-8'
-          //selectedTabColor='#0B6E6E'
+          className='border-0 mb-8 px-0 '
+          selectedTabColor='#0B6E6E'
         />
       </div>
-      <Footer />
-    </>
+    </MarketingContainer>
   );
 };
 
-export default FAQPage;
+export default FAQSection;

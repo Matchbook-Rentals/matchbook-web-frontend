@@ -26,6 +26,7 @@ interface TabSelectorProps {
   useIcons?: boolean;
   activeTabValue?: string; // New prop for controlled state
   onTabChange?: (value: string) => void; // Renamed from onTabClick
+  selectedTabColor?: string; // Color for selected tab
 }
 
 export default function TabSelector({
@@ -39,6 +40,7 @@ export default function TabSelector({
   useIcons = false,
   activeTabValue, // Destructure new prop
   onTabChange, // Destructure renamed prop
+  selectedTabColor = '#3396FF', // Default to current blue color
 }: TabSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -126,14 +128,28 @@ export default function TabSelector({
           <TabsList
             ref={tabsListRef}
             className={cn(
-              "flex : justify-start pt-6 pb-8 px-2 space-x-2 overflow-x-auto overflow-y-hidden scrollbar-none",
+              "flex justify-start pt-6 pb-8 px-2 space-x-2 overflow-x-auto overflow-y-hidden scrollbar-none",
               tabsListClassName
             )}>
             {tabs.map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className={cn("flex flex-col items-center hover:text-[#3396FF] transition-none", tab.className)}
+                className={cn("flex flex-col items-center transition-none", tab.className)}
+                style={{ 
+                  '--selected-color': selectedTabColor,
+                  color: currentActiveTab === tab.value ? selectedTabColor : undefined 
+                } as React.CSSProperties}
+                onMouseEnter={(e) => {
+                  if (currentActiveTab !== tab.value) {
+                    e.currentTarget.style.color = selectedTabColor;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (currentActiveTab !== tab.value) {
+                    e.currentTarget.style.color = '';
+                  }
+                }}
               >
                 {useIcons && tab.Icon && (
                   <div className={cn("flex items-center justify-center h-8 w-8")}>
@@ -142,9 +158,23 @@ export default function TabSelector({
                 )}
                 <div className="flex flex-col">
                   {/* Use currentActiveTab for styling */}
-                  <span className={cn("text-sm", tab.textSize, currentActiveTab === tab.value ? "text-[#3396FF]" : "")}>{tab.label}</span>
+                  <span 
+                    className={cn("text-sm mb-2", tab.textSize)}
+                    style={{
+                      color: currentActiveTab === tab.value ? selectedTabColor : undefined
+                    }}
+                  >
+                    {tab.label}
+                  </span>
                   {/* Use currentActiveTab for animation condition */}
-                  {currentActiveTab === tab.value && <motion.div className="h-[1px] w-full bg-[#3396FF] rounded-full" layout layoutId="underline"></motion.div>}
+                  {currentActiveTab === tab.value && (
+                    <motion.div 
+                      className="h-[1px] w-full rounded-full" 
+                      style={{ backgroundColor: selectedTabColor }}
+                      layout 
+                      layoutId="underline"
+                    />
+                  )}
                 </div>
               </TabsTrigger>
             ))}

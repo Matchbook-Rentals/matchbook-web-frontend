@@ -56,11 +56,28 @@ export default function RecentArticle() {
         <Card className="absolute bottom-0 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[10%] w-[90%] max-w-[439px] rounded-xl overflow-hidden bg-[linear-gradient(180deg,rgba(3,3,3,1)_0%,rgba(17,17,17,0.9)_94%)] border-none translate-y-1/2">
           <CardContent className="p-6 flex flex-col gap-6">
             <div className="flex flex-col gap-6">
-              <p className="font-['Poppins',Helvetica] font-medium text-white" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+              <p 
+                className="text-white" 
+                style={{ 
+                  fontFamily: 'Poppins',
+                  fontWeight: 500,
+                  fontSize: '16px',
+                  letterSpacing: '0px'
+                }}
+              >
                 Featured Article
               </p>
 
-              <h2 className="font-['Lora',Helvetica] font-medium text-white leading-normal" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.75rem)' }}>
+              <h2 
+                className="text-white" 
+                style={{ 
+                  fontFamily: 'Lora',
+                  fontWeight: 500,
+                  fontSize: 'clamp(1.25rem, 4vw, 28px)',
+                  lineHeight: 'normal',
+                  letterSpacing: '0px'
+                }}
+              >
                 {article.title}
               </h2>
             </div>
