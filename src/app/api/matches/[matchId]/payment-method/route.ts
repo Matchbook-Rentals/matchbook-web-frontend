@@ -1,0 +1,118 @@
+import { NextRequest, NextResponse } from 'next/server';
+import stripe from '@/lib/stripe';
+import { auth } from '@clerk/nextjs/server';
+import prisma from '@/lib/prismadb';
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { matchId: string } }
+) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { paymentMethodId, amount } = await request.json();
+    console.log('📝 Request data:', { paymentMethodId, amount, userId });
+
+    // Get user's Stripe customer ID or create one
+    console.log('👤 Finding user:', userId);
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { stripeCustomerId: true, email: true, firstName: true, lastName: true }
+    });
+
+    console.log('👤 User found:', { id: userId, hasCustomerId: !!user?.stripeCustomerId });
+
+    if (!user) {
+      console.error('👤 User not found:', userId);
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    let customerId = user.stripeCustomerId;
+
+    // Create Stripe customer if doesn't exist
+    if (!customerId) {
+      console.log('💳 Creating Stripe customer for user:', userId);
+      const customer = await stripe.customers.create({
+        email: user.email || undefined,
+        name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || undefined,
+        metadata: {
+          userId,
+        },
+      });
+      
+      customerId = customer.id;
+      console.log('💳 Created Stripe customer:', customerId);
+      
+      // Update user with Stripe customer ID
+      console.log('👤 Updating user with Stripe customer ID');
+      await prisma.user.update({
+        where: { id: userId },
+        data: { stripeCustomerId: customerId },
+      });
+    }
+
+    // Attach payment method to customer
+    console.log('🔗 Attaching payment method to customer:', { paymentMethodId, customerId });
+    await stripe.paymentMethods.attach(paymentMethodId, {
+      customer: customerId,
+    });
+
+    // Create payment intent for authorization (but don't capture)
+    console.log('💰 Creating payment intent:', { amount: amount * 100, customerId, paymentMethodId });
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount * 100, // Convert to cents
+      currency: 'usd',
+      customer: customerId,
+      payment_method: paymentMethodId,
+      capture_method: 'manual', // Don't capture the payment yet
+      confirm: true,
+      return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/match/${params.matchId}/payment-success`,
+      metadata: {
+        matchId: params.matchId,
+        userId,
+        type: 'lease_deposit_and_rent',
+      },
+    });
+
+    console.log('💰 Payment intent created:', { id: paymentIntent.id, status: paymentIntent.status });
+
+    // Save payment method info to the match
+    console.log('💾 Updating match with payment info:', params.matchId);
+    await prisma.match.update({
+      where: { id: params.matchId },
+      data: {
+        stripePaymentMethodId: paymentMethodId,
+        stripePaymentIntentId: paymentIntent.id,
+        paymentAuthorizedAt: new Date(),
+        paymentAmount: amount,
+      },
+    });
+
+    console.log('💾 Match updated successfully');
+
+    return NextResponse.json({
+      success: true,
+      paymentIntentId: paymentIntent.id,
+      status: paymentIntent.status,
+    });
+  } catch (error) {
+    console.error('Error saving payment method:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      type: typeof error,
+      error: error
+    });
+    
+    return NextResponse.json(
+      { 
+        error: 'Failed to save payment method',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}

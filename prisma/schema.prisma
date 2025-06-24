@@ -34,23 +34,24 @@ enum ApprovalStatus {
 }
 
 model User {
-  id              String    @id @default(uuid())
-  stripeAccountId String?
-  firstName       String?
-  lastName        String?
-  fullName        String?
-  email           String?   @unique
-  emailVerified   DateTime?
-  imageUrl        String?
-  hashedPassword  String?
-  role            String    @default("user") // User role (user, admin, etc.)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  lastLogin       DateTime?
-  verifiedAt      DateTime? // Timestamp of when user was verified
-  hallmarkHostAt  DateTime? // Timestamp of when user became hallmark host
-  trailblazerAt   DateTime? // Timestamp of when user became trailblazer
-  agreedToTerms   DateTime? // Timestamp of when user last agreed to terms
+  id               String    @id @default(uuid())
+  stripeAccountId  String?
+  stripeCustomerId String?
+  firstName        String?
+  lastName         String?
+  fullName         String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  imageUrl         String?
+  hashedPassword   String?
+  role             String    @default("user") // User role (user, admin, etc.)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  lastLogin        DateTime?
+  verifiedAt       DateTime? // Timestamp of when user was verified
+  hallmarkHostAt   DateTime? // Timestamp of when user became hallmark host
+  trailblazerAt    DateTime? // Timestamp of when user became trailblazer
+  agreedToTerms    DateTime? // Timestamp of when user last agreed to terms
 
   // Relationships trips          Trip[]
   accounts           Account[]
@@ -639,12 +640,18 @@ model MessageRead {
 }
 
 model Match {
-  id              String   @id @default(uuid())
-  tripId          String
-  listingId       String
-  booking         Booking?
-  monthlyRent     Int?
-  leaseDocumentId String?
+  id                    String    @id @default(uuid())
+  tripId                String
+  listingId             String
+  booking               Booking?
+  monthlyRent           Int?
+  leaseDocumentId       String?
+  stripePaymentMethodId String?
+  stripePaymentIntentId String?
+  paymentAuthorizedAt   DateTime?
+  paymentAmount         Int?
+  paymentCapturedAt     DateTime?
+  paymentStatus         String?
 
   trip          Trip           @relation(fields: [tripId], references: [id])
   listing       Listing        @relation(fields: [listingId], references: [id])
@@ -652,6 +659,7 @@ model Match {
   Lease         Lease?
 
   @@index([tripId])
+  @@index([stripePaymentIntentId])
 }
 
 model Favorite {
