@@ -110,7 +110,7 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[821px] mx-auto border-0 shadow-lg"
+        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-[1440px]:max-w-[700px] mx-auto border-0 shadow-lg"
         showCloseButton={false}
       >
         {titleComponent && (
