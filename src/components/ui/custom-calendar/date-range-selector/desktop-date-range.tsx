@@ -91,19 +91,19 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
     >
       <span className={`
         z-10
-        ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center text-base' : ''}
+        ${isSelected ? 'rounded-full bg-secondaryBrand text-white w-9 h-9 flex items-center justify-center text-base' : ''}
         ${isDisabled && !isSelected ? 'text-gray-300' : ''}
       `}>
         {day}
       </span>
       {showRangeBackground && (
-        <div className="absolute inset-y-1/4 inset-x-0 bg-[#5C9AC533]" />
+        <div className="absolute inset-y-1/4 inset-x-0 bg-secondaryBrand/50" />
       )}
       {showStartBackground && (
-        <div className="absolute right-0 left-1/2 inset-y-1/4 bg-[#5C9AC533]" />
+        <div className="absolute right-0 left-1/2 inset-y-1/4 bg-secondaryBrand/50" />
       )}
       {showEndBackground && (
-        <div className="absolute left-0 right-1/2 inset-y-1/4 bg-[#5C9AC533]" />
+        <div className="absolute left-0 right-1/2 inset-y-1/4 bg-secondaryBrand/50" />
       )}
     </button>
   );
