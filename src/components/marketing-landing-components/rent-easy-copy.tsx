@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import CowSpot from "./cow-spot";
+import MarketingContainer from "./marketing-container";
 
 export default function RentEasyCopy(): JSX.Element {
   // Feature card data for mapping
@@ -142,9 +143,10 @@ export default function RentEasyCopy(): JSX.Element {
   };
 
   return (
-    <section 
-      className="flex flex-col items-center gap-6 md:gap-8 lg:gap-10 xl:gap-14 px-0   relative max-w-[1600px] mx-auto"
-    >
+    <MarketingContainer>
+      <section 
+        className="flex flex-col items-center gap-6 md:gap-8 lg:gap-10 xl:gap-14 relative"
+      >
       {/* Header */}
       <header className="inline-flex flex-col items-center gap-1 relative">
         <h1 className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-neutral900 text-[32px] sm:text-[34px] md:text-[36px] lg:text-[38px] xl:text-[40px] text-center tracking-[-2.00px] leading-[normal] whitespace-nowrap">
@@ -194,5 +196,6 @@ export default function RentEasyCopy(): JSX.Element {
       </div>
 
     </section>
+    </MarketingContainer>
   );
 }
