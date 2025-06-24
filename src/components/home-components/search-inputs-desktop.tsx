@@ -100,7 +100,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
   const handleLocationSelect = (location: any) => {
     setSelectedLocation(location);
-    // We no longer automatically switch to date selector. User will click "Next".
+    // Auto-advance to the next step upon selection
+    setActiveContent('date');
   };
 
   // Add new state to track the arrow position
@@ -182,7 +183,26 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const renderActiveContent = () => {
     switch (activeContent) {
       case 'location':
-        return <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} setDisplayValue={setLocationDisplayValue} />;
+        return (
+          <>
+            {selectedLocation.description && (
+              <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <p className="font-semibold text-gray-800">Selected Location:</p>
+                <p className="text-gray-600">{selectedLocation.description}</p>
+              </div>
+            )}
+            <HeroLocationSuggest
+              hasAccess={hasAccess}
+              onLocationSelect={handleLocationSelect}
+              setDisplayValue={setLocationDisplayValue}
+              placeholder={
+                selectedLocation.description
+                  ? "Wrong place? Begin typing and select another"
+                  : "Enter an address or city"
+              }
+            />
+          </>
+        );
       case 'date':
         return (
           <DesktopDateRange
@@ -311,37 +331,4 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
               } ${searchButtonClassNames || 'bg-primaryBrand'} rounded-full`}
           >
-            {locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng) ? (
-              <ImSpinner8 className={`${searchIconColor} mx-auto animate-spin`} size={20} />
-            ) : (
-              <FaSearch className={`${searchIconColor} mx-auto`} size={20} />
-            )}
-          </button>
-        </div>
-      </div>
-
-      <BrandDialog
-        open={isOpen}
-        onOpenChange={(open) => {
-          setIsOpen(open);
-          if (!open) {
-            setActiveContent(null);
-          }
-        }}
-        titleComponent={
-          <h2 className="font-medium font-['Poppins',Helvetica] text-gray-neutral900 text-xl text-center">
-            {activeContent === 'location' && 'Select Location'}
-            {activeContent === 'date' && 'Select Dates'}
-            {activeContent === 'guests' && 'Select Guests'}
-          </h2>
-        }
-        contentComponent={renderActiveContent()}
-        footerComponent={renderFooter()}
-        currentStep={activeContent === 'location' ? 1 : activeContent === 'date' ? 2 : 3}
-        totalSteps={3}
-      />
-    </div>
-  );
-};
-
-export default SearchInputsDesktop;
+            {locationDisplayV

@@ -16,6 +16,7 @@ interface HeroLocationSuggestProps {
   triggerClassName?: string;
   contentClassName?: string;
   onLocationSelect?: (location: SuggestedLocation) => void;
+  placeholder?: string;
 }
 
 export default function HeroLocationSuggest({
@@ -23,7 +24,8 @@ export default function HeroLocationSuggest({
   triggerClassName = "",
   contentClassName = "",
   onLocationSelect,
-  setDisplayValue
+  setDisplayValue,
+  placeholder = "Enter an address or city",
 }: HeroLocationSuggestProps) {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -101,7 +103,7 @@ export default function HeroLocationSuggest({
       <input
         value={inputValue}
         onChange={handleInput}
-        placeholder="Enter an address or city"
+        placeholder={placeholder}
         type="text"
         className="w-full h-full text-2xl focus:outline-none"
         autoFocus={true}
