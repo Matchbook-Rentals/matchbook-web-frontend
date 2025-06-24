@@ -1,166 +1,54 @@
-
-
+import { HomeIcon } from "lucide-react";
 import React from "react";
-import { Button } from "../../components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "../../components/ui/breadcrumb";
 import { Card, CardContent } from "../../components/ui/card";
-import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
-import Footer from "@/components/marketing-landing-components/footer";
 
-export default function AboutHostingPage(): React.ReactNode {
-  // Feature data for mapping
-  const features = [
-    {
-      title: "Application Management, Simplified",
-      description:
-        "Receive, review, and approve applications effortlessly on our platform.",
-      image: "/marketing-images/App-management.png",
-      imageAlt: "Application management illustration",
-      align: "left",
-      verticalSpace: 12, // Added vertical space
-    },
-    {
-      title: "Collect Rent Automatically",
-      description:
-        "Rent is automatically collected and securely transferred to you every month.",
-      align: "right",
-      image: "/marketing-images/auto-collect.png",
-      imageAlt: "Application management illustration",
-      verticalSpace: 0, // Added vertical space
-    },
-    {
-      title: "Connect with Matchbook Verified Renters",
-      description:
-        "Pre-screened and ready to book. Renters pay upfront for their background, credit, and eviction check, giving you instant access to verified details. Choose to accept only MatchBook Verified Renters for a worry-free experience.",
-      image: "/marketing-images/verified-renters.png",
-      imageAlt: "Application management illustration",
-      align: "left",
-      verticalSpace: 0, // Added vertical space
-    },
-    {
-      title: "Real Reviews, Reliable Renters, Worry-Free Renting",
-      description:
-        "Choose renters you can trust. Our review system gives you insight into their past rentals, making worry-free renting a reality.",
-      image: "/marketing-images/worry-free.png",
-      imageAlt: "Application management illustration",
-      align: "right",
-      verticalSpace: 2, // Added vertical space
-    },
-    {
-      title: "Ditch the paperwork",
-      description:
-        "Bookings generate automatic rental agreements, streamlining the leasing process—no paperwork, no waiting. Your business, modernized.",
-      image: "/marketing-images/ditch-paperwork.png",
-      imageAlt: "Reviews illustration",
-      align: "left",
-      verticalSpace: 16, // Added vertical space
-    },
-  ];
-
+export const Frame = (): JSX.Element => {
   return (
-    <>
-    <MatchbookHeader />
-    <div className="flex flex-col items-center bg-background overflow-hidden">
-      {/* Hero Section */}
-      <section className="w-full max-w-[1344px] pt-8 lg:pt-16 pt-16 lg:pt-20 xl:pt-24 flex flex-col items-center">
-        <h1 className="font-['Cutive',Helvetica] text-[80px] text-[#1d221b] text-center tracking-[-2.40px] leading-[120px]">
-          Earn More, Keep More
-        </h1>
-
-        <h2 className="mt-16 mb-6 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
-          Why Hosts Love MatchBook
-        </h2>
-      </section>
-
-      {/* Features Section */}
-      <section className="relative w-full max-w-[990px] mx-auto px-4 md:px-0">
-        <div className="flex flex-col items-center gap-16"> {/* Removed py-12 from here */}
-          {features.map((feature, index) => (
-            <Card key={index} className={`w-full border-none bg-background shadow-none py-${feature.verticalSpace}`}> {/* Applied dynamic padding */}
-              <CardContent className="flex flex-col py-0">
-                <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0">
-                  {/* Mobile: always stack title, description, image. Desktop: alternate layout */}
-                  <div className="flex flex-col w-full md:hidden space-y-6">
-                    <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px] text-left">
-                      {feature.title}
-                    </h2>
-                    <p className="font-poppins font-normal text-[#1d221b] text-xl tracking-[0] leading-[30px] text-left">
-                      {feature.description}
-                    </p>
-                    {feature.image && (
-                      <div className="flex justify-center w-full">
-                        <img
-                          className="" // Removed size and object-fit classes
-                          alt={feature.imageAlt}
-                          src={feature.image}
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Desktop only: alternating layout */}
-                  {index % 2 === 0 ? ( // Changed condition to flip layout
-                    <>
-                      <div className="hidden md:flex flex-col items-start pr-2 w-full space-y-8"> {/* Adjusted spacing */}
-                        <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
-                          {feature.title}
-                        </h2>
-                        <p className="font-poppins font-normal text-[#1d221b] text-xl tracking-[0] leading-[30px]">
-                          {feature.description}
-                        </p>
-                      </div>
-                      {feature.image && (
-                        <div className="hidden md:flex w-1/2 justify-end items-center h-full">
-                          <img
-                            className="ml-auto" // Removed size and object-fit classes
-                            alt={feature.imageAlt}
-                            src={feature.image}
-                          />
-                        </div>
-                      )}
-                    </>
-                  ) : ( // Even index, image left, text right
-                    <>
-                      {feature.image && (
-                        <div className="hidden md:flex w-1/2 justify-start items-center h-full">
-                          <img
-                            className="" // Removed size and object-fit classes
-                            alt={feature.imageAlt}
-                            src={feature.image}
-                          />
-                        </div>
-                      )}
-                      <div className="hidden md:flex flex-col items-end pl-2 w-full space-y-8"> {/* Adjusted spacing */}
-                        <h2 className="font-normal text-right text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
-                          {feature.title}
-                        </h2>
-                        <p className="font-poppins font-normal text-right text-[#1d221b] text-xl tracking-[0] leading-[30px]">
-                          {feature.description}
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+    <Card className="w-[1143px] px-[100px] py-10 flex flex-col items-center justify-center gap-3 rounded-xl border border-[#d1d5da]">
+      <CardContent className="p-0 flex flex-col items-center w-full">
+        <div className="flex flex-col items-center">
+          <p className="w-fit [font-family:'Lora',Helvetica] font-semibold text-[#0b6969] text-base text-center">
+            Earn More, Keep More
+          </p>
+          <h1 className="w-fit [font-family:'Lora',Helvetica] font-medium text-gray-neutral900 text-[56px] text-center tracking-[-2.00px]">
+            Become a Host
+          </h1>
         </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="w-full max-w-[1344px] px-8 lg:px-16 py-16 lg:py-20 xl:py-28 flex flex-col items-center gap-8 lg:gap-12">
-        <h2 className="font-['Poppins',Helvetica] font-normal text-5xl md:text-6xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
-          Best part? It&apos;s completely free.
-        </h2>
-
-        <Button className="my-8 lg:my-16 px-8 py-3.5 bg-[#c68087ad] rounded-2xl hover:bg-[#c68087]">
-          <span className="font-['Public_Sans',Helvetica] font-medium text-white text-xl tracking-[0] leading-6 whitespace-nowrap">
-            List your Property
-          </span>
-        </Button>
-      </section>
-        <div className="mt-12" />
-        <Footer />
-    </div>
-    </>
+        <Breadcrumb className="mt-3">
+          <BreadcrumbList className="flex items-center gap-[15px]">
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">
+                <HomeIcon className="w-6 h-6" />
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="font-text-md-regular text-gray-3500">
+              /
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbLink className="[font-family:'Poppins',Helvetica] font-normal text-gray-3900 text-base leading-6">
+                Become a host
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </CardContent>
+    </Card>
   );
 };
+
+
+export default function HostsPage(): React.ReactNode {
+  return (
+    <div className="flex justify-center bg-background p-8">
+        <Frame />
+    </div>
+  );
+}
