@@ -18,8 +18,6 @@ interface DesktopDateRangeProps {
   end: Date | null;
   handleChange: (start: Date | null, end: Date | null) => void;
   onFlexibilityChange?: (flexibility: { start: 'exact' | number | null, end: 'exact' | number | null }) => void;
-  onProceed?: () => void;
-  onClear?: () => void;
   initialFlexibility?: { start: 'exact' | number | null, end: 'exact' | number | null };
   minimumDateRange?: Duration | null;
   maximumDateRange?: Duration | null; // Add maximumDateRange prop
@@ -335,8 +333,6 @@ export function DesktopDateRange({
   end,
   handleChange,
   onFlexibilityChange,
-  onProceed,
-  onClear,
   initialFlexibility,
   minimumDateRange,
   maximumDateRange // Destructure the new prop
@@ -553,32 +549,6 @@ export function DesktopDateRange({
             />
           </div>
         </div>
-      </div>
-
-      {/* Add buttons at the bottom */}
-      <div className="mt-6 flex flex-col items-center gap-3"> {/* Changed to flex-col and items-center */}
-        <button
-          onClick={onProceed}
-          disabled={!(start && end)}
-          className={`px-4 py-2 w-full rounded-lg ${start && end
-            ? 'bg-[#404040] opacity-90 hover:opacity-100'
-            : 'bg-gray-300 cursor-not-allowed'
-            } text-white`}
-        >
-          Proceed
-        </button>
-        {/* Add Clear button */}
-        <button
-          onClick={onClear}
-          disabled={!start && !end} // Disable if no dates are selected
-          className={`px-4 py-2 w-full rounded-lg bg-background border text-black ${
-            !start && !end
-              ? 'border-gray-300 text-gray-400 cursor-not-allowed' // Disabled styles
-              : 'border-black hover:bg-gray-100' // Enabled styles
-          }`}
-        >
-          Clear
-        </button>
       </div>
     </div>
   );
