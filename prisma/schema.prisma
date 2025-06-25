@@ -66,6 +66,7 @@ model User {
   purchases          Purchase[]
   personReports      PersonReport?
   creditReport       CreditReport?
+  bgsReports         BGSReport[]
   conversations      ConversationParticipant[]
   messageReads       MessageRead[]
   sentMessages       Message[]                 @relation("MessageSender")
@@ -387,6 +388,7 @@ model Booking {
 
   createdAt DateTime @default(now())
   status    String   @default("reserved")
+  moveInCompletedAt DateTime?
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -792,18 +794,39 @@ model VerificationImage {
 }
 
 model Purchase {
-  id         String   @id @default(cuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  status     String   @default("pending")
-  isRedeemed Boolean  @default(false)
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  status     String     @default("pending")
+  isRedeemed Boolean    @default(false)
   email      String?
   type       String
   amount     Int?
   userId     String?
+  orderId    String?
   metadata   Json?
-  user       User?    @relation(fields: [userId], references: [id])
+  user       User?      @relation(fields: [userId], references: [id])
+  bgsReport  BGSReport?
 
+  @@index([userId])
+}
+
+model BGSReport {
+  id              String    @id @default(cuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  purchaseId      String?   @unique
+  userId          String
+  orderId         String    @unique
+  status          String    @default("pending")
+  reportData      Json?
+  receivedAt      DateTime?
+  
+  // Relationships
+  purchase        Purchase? @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([orderId])
   @@index([userId])
 }
 

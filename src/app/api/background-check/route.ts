@@ -4,6 +4,8 @@ import {
   verificationSchema,
   generateVerificationXml
 } from "@/app/platform/verification/utils";
+import { auth } from '@clerk/nextjs/server';
+import prisma from '@/lib/prismadb';
 
 // Use the provided test credentials
 const ACCOUNT_DETAILS = {
@@ -18,6 +20,20 @@ const DEBUG = true; // Set to false in production
 // API endpoint to handle background check requests
 export async function POST(request: Request) {
   try {
+    // Get the authenticated user
+    const { userId } = auth();
+    
+    // Check for test mode header
+    const testUserId = request.headers.get('x-test-user-id');
+    const effectiveUserId = testUserId || userId;
+    
+    if (!effectiveUserId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+    
     // Parse request body
     const body = await request.json();
     
@@ -31,6 +47,22 @@ export async function POST(request: Request) {
     }
     
     const data = parseResult.data;
+    
+    // Check if user has an unredeemed background check purchase
+    const unredeemedPurchase = await prisma.purchase.findFirst({
+      where: {
+        userId: effectiveUserId,
+        type: 'backgroundCheck',
+        isRedeemed: false,
+      },
+    });
+    
+    if (!unredeemedPurchase) {
+      return NextResponse.json(
+        { error: "No unredeemed background check purchase found" },
+        { status: 403 }
+      );
+    }
     
     // Generate XML for the combined check
     const xmlPayload = generateVerificationXml(data, ACCOUNT_DETAILS);
@@ -95,6 +127,30 @@ export async function POST(request: Request) {
     } catch (err) {
       console.warn("Could not parse order number from response", err);
     }
+    
+    // Update the purchase with the orderId and mark as redeemed
+    await prisma.purchase.update({
+      where: {
+        id: unredeemedPurchase.id,
+      },
+      data: {
+        orderId: orderNumber,
+        isRedeemed: true,
+        status: "completed",
+      },
+    });
+    
+    // Create BGSReport entry for tracking
+    await prisma.bGSReport.create({
+      data: {
+        purchaseId: unredeemedPurchase?.id,
+        userId: effectiveUserId,
+        orderId: orderNumber,
+        status: 'pending'
+      }
+    });
+    
+    console.log(`Background check order ${orderNumber} saved for purchase ${unredeemedPurchase.id}`);
     
     return NextResponse.json({
       success: true,

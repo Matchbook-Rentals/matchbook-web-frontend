@@ -219,19 +219,14 @@ export const ReviewsSection = (): JSX.Element => {
 
   return (
     <section className="relative w-full max-w-[1440px] h-[853px] bg-[#0b6969] mx-auto">
-      <div className="relative w-[1114px] h-[679px] top-[87px] left-[226px] overflow-hidden">
+      <div className="relative w-[1114px] h-[679px] top-[87px] left-[226px] overflow-visible">
         <div className="relative h-[955px] top-[-104px]">
           <img
-            className="absolute w-[955px] h-[955px] top-0 left-[37px]"
+            className="absolute h-[80%] top-10 left-[37px] scale-[]"
             alt="Background shape"
-            src="/vector-4.svg"
+            src="/marketing-images/reviews-section/Vector.png"
           />
 
-          <img
-            className="absolute w-[951px] h-[679px] top-[104px] left-[38px]"
-            alt="Mask group"
-            src="/mask-group.png"
-          />
 
           {/* Main content */}
           <div className="flex flex-col w-[565px] items-center gap-4 absolute top-[370px] left-[189px]">

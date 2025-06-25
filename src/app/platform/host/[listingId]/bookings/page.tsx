@@ -13,12 +13,25 @@ export default function BookingsPage() {
     const existingBookingMatchIds = new Set(existingBookings.map(b => b.matchId));
     
     // Find matches that have BoldSignLease (lease documents) but no booking yet
+    // Only include matches that are NOT fully completed (still awaiting signature or payment)
     const matchesAwaitingSignature = (data.listing.matches || [])
-      .filter(match => 
-        match.BoldSignLease && // Has lease document
-        !existingBookingMatchIds.has(match.id) && // No booking yet
-        match.trip && match.trip.user // Has valid trip and user data
-      )
+      .filter(match => {
+        // Must have lease document
+        if (!match.BoldSignLease) return false;
+        
+        // Must not already have a booking
+        if (existingBookingMatchIds.has(match.id)) return false;
+        
+        // Must have valid trip and user data
+        if (!match.trip || !match.trip.user) return false;
+        
+        // Must be incomplete - either not fully signed OR payment not authorized
+        const isFullySigned = match.BoldSignLease.landlordSigned && match.BoldSignLease.tenantSigned;
+        const isPaymentAuthorized = !!match.paymentAuthorizedAt;
+        
+        // Only include if it's NOT fully completed
+        return !(isFullySigned && isPaymentAuthorized);
+      })
       .map(match => ({
         // Convert match to booking-like structure
         id: `match-${match.id}`, // Prefix to distinguish from real bookings

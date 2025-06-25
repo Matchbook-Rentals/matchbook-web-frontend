@@ -89,6 +89,44 @@ export async function POST(
       },
     });
 
+    // Check if lease is fully signed and create booking if so
+    const matchWithLease = await prisma.match.findUnique({
+      where: { id: params.matchId },
+      include: {
+        BoldSignLease: true,
+        booking: true,
+        trip: true
+      }
+    });
+
+    // If both parties have signed and no booking exists, create one
+    if (matchWithLease?.BoldSignLease?.landlordSigned && 
+        matchWithLease?.BoldSignLease?.tenantSigned && 
+        !matchWithLease.booking) {
+      
+      console.log('Payment authorized and lease fully signed - creating booking');
+      
+      try {
+        const booking = await prisma.booking.create({
+          data: {
+            userId,
+            listingId: match.listingId,
+            tripId: match.tripId,
+            matchId: params.matchId,
+            startDate: match.trip.startDate!,
+            endDate: match.trip.endDate!,
+            monthlyRent: match.monthlyRent,
+            status: 'confirmed'
+          }
+        });
+
+        console.log('✅ Booking created successfully:', booking.id);
+      } catch (bookingError) {
+        console.error('❌ Failed to create booking:', bookingError);
+        // Don't fail the payment authorization if booking creation fails
+      }
+    }
+
     return NextResponse.json({
       success: true,
       paymentIntentId: paymentIntent.id,

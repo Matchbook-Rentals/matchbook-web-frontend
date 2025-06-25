@@ -265,9 +265,46 @@ export async function POST(req: Request) {
       }
     }
 
-    // If both parties have signed, send completion notifications
+    // If both parties have signed, check if we should create a booking
     if (landlordSigned && tenantSigned) {
-      console.log('Lease fully executed - sending completion notifications');
+      console.log('Lease fully executed - checking for booking creation');
+      
+      // Get the match with payment authorization status
+      const matchWithPayment = await prisma.match.findUnique({
+        where: { id: boldSignLease.matchId },
+        include: {
+          booking: true,
+          trip: true,
+          listing: true
+        }
+      });
+
+      // If payment is authorized and no booking exists yet, create one
+      if (matchWithPayment?.paymentAuthorizedAt && !matchWithPayment.booking) {
+        console.log('Creating booking for fully completed match');
+        
+        try {
+          // Create booking directly with prisma since we don't have auth context
+          const booking = await prisma.booking.create({
+            data: {
+              userId: matchWithPayment.trip.userId,
+              listingId: matchWithPayment.listingId,
+              tripId: matchWithPayment.tripId,
+              matchId: matchWithPayment.id,
+              startDate: matchWithPayment.trip.startDate!,
+              endDate: matchWithPayment.trip.endDate!,
+              monthlyRent: matchWithPayment.monthlyRent,
+              status: 'confirmed'
+            }
+          });
+
+          console.log('✅ Booking created successfully for match:', matchWithPayment.id, 'bookingId:', booking.id);
+          
+        } catch (bookingError) {
+          console.error('❌ Failed to create booking:', bookingError);
+          // Continue with notifications even if booking creation fails
+        }
+      }
       
       // Notify all parties that lease is fully executed
       const completionNotifications = [

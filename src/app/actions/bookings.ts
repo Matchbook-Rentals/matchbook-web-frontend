@@ -298,6 +298,9 @@ export async function getBookingsByListingId(listingId: string) {
 
     console.log('Fetching bookings for listingId:', listingId, 'userId:', userId);
 
+    // First, ensure any completed matches have bookings created
+    await createBookingsForCompletedMatches();
+
     // First verify the listing belongs to the current user
     const listing = await prisma.listing.findUnique({
       where: { id: listingId },
@@ -354,6 +357,134 @@ export async function getBookingsByListingId(listingId: string) {
     console.error('Error in getBookingsByListingId:', error);
     // Return empty array instead of throwing error to prevent page crash
     return [];
+  }
+}
+
+// Mark move-in as complete and trigger first month rent pre-authorization
+export async function markMoveInComplete(bookingId: string) {
+  try {
+    const { userId, sessionClaims } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // Check if user is admin
+    const userRole = sessionClaims?.metadata.role;
+    if (userRole !== 'admin') {
+      throw new Error('Unauthorized - Admin access required');
+    }
+
+    // Get booking with all necessary relations
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        user: true,
+        listing: true,
+        match: {
+          include: {
+            trip: true
+          }
+        },
+        rentPayments: {
+          orderBy: { dueDate: 'asc' },
+          take: 1
+        }
+      }
+    });
+
+    if (!booking) {
+      throw new Error('Booking not found');
+    }
+
+    // Update booking status to mark move-in complete
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: {
+        moveInCompletedAt: new Date(),
+        status: 'active'
+      }
+    });
+
+    // Get the first rent payment
+    const firstRentPayment = booking.rentPayments[0];
+    if (!firstRentPayment) {
+      throw new Error('No rent payment found for this booking');
+    }
+
+    // Create notification for renter to authorize payment
+    await createNotification({
+      actionType: 'payment_authorization_required',
+      actionId: firstRentPayment.id,
+      content: `Your move-in has been confirmed! Please authorize your first month's rent payment of $${firstRentPayment.amount}.`,
+      url: `/platform/renter/bookings/${bookingId}/authorize-payment`,
+      unread: true,
+      userId: booking.userId,
+    });
+
+    // Send email notification to renter (you can implement this based on your email service)
+    // await sendPaymentAuthorizationEmail(booking.user.email, booking, firstRentPayment);
+
+    revalidatePath(`/platform/host/${booking.listingId}/bookings`);
+    revalidatePath('/platform/host/host-dashboard');
+
+    return { success: true, message: 'Move-in marked as complete and payment authorization request sent' };
+  } catch (error) {
+    console.error('Error marking move-in complete:', error);
+    throw error;
+  }
+}
+
+// Utility function to check for completed matches and create bookings
+export async function createBookingsForCompletedMatches() {
+  try {
+    // Find matches that are fully completed but don't have bookings yet
+    const completedMatches = await prisma.match.findMany({
+      where: {
+        AND: [
+          { paymentAuthorizedAt: { not: null } }, // Payment is authorized
+          { booking: null }, // No booking exists yet
+          {
+            BoldSignLease: {
+              landlordSigned: true,
+              tenantSigned: true
+            }
+          }
+        ]
+      },
+      include: {
+        trip: true,
+        listing: true,
+        BoldSignLease: true
+      }
+    });
+
+    console.log(`Found ${completedMatches.length} completed matches without bookings`);
+
+    for (const match of completedMatches) {
+      try {
+        const booking = await prisma.booking.create({
+          data: {
+            userId: match.trip.userId,
+            listingId: match.listingId,
+            tripId: match.tripId,
+            matchId: match.id,
+            startDate: match.trip.startDate!,
+            endDate: match.trip.endDate!,
+            monthlyRent: match.monthlyRent,
+            status: 'confirmed'
+          }
+        });
+
+        console.log(`✅ Created booking ${booking.id} for completed match ${match.id}`);
+      } catch (error) {
+        console.error(`❌ Failed to create booking for match ${match.id}:`, error);
+      }
+    }
+
+    return completedMatches.length;
+  } catch (error) {
+    console.error('Error creating bookings for completed matches:', error);
+    return 0;
   }
 }
 

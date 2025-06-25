@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search, MoreHorizontalIcon, Loader2, CreditCard } from "lucide-react";
+import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search, MoreHorizontalIcon, Loader2, CreditCard, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,6 +17,9 @@ import { useRouter, usePathname } from "next/navigation";
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { markMoveInComplete } from "@/app/actions/bookings";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 // Extended booking type with included relations
 type BookingWithRelations = {
@@ -60,6 +63,7 @@ type BookingWithRelations = {
     } | null;
     Lease?: any | null;
   };
+  moveInCompletedAt?: Date | null;
 };
 
 interface ListingBookingsTabProps {
@@ -73,7 +77,10 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingBookingId, setLoadingBookingId] = useState<string | null>(null);
+  const [markingMoveInBookingId, setMarkingMoveInBookingId] = useState<string | null>(null);
   const isMobile = useIsMobile();
+  const { user } = useUser();
+  const isAdmin = user?.publicMetadata?.role === 'admin';
 
   // Clear loading state when pathname changes
   useEffect(() => {
@@ -89,6 +96,23 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     } else {
       // Navigate to regular booking details page
       router.push(`/platform/host/bookings/${booking.id}`);
+    }
+  };
+
+  const handleMarkMoveInComplete = async (bookingId: string) => {
+    try {
+      setMarkingMoveInBookingId(bookingId);
+      const result = await markMoveInComplete(bookingId);
+      
+      if (result.success) {
+        toast.success(result.message);
+        router.refresh();
+      }
+    } catch (error) {
+      console.error('Error marking move-in complete:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to mark move-in complete');
+    } finally {
+      setMarkingMoveInBookingId(null);
     }
   };
 
@@ -362,10 +386,18 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
                     <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] pl-1 text-[16px] leading-5">
                       {booking.listing.title}
                     </div>
-                    <div
-                      className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusInfo.className}`}
-                    >
-                      {statusInfo.status === "Awaiting Signature" ? getSignatureStatusText(booking) : statusInfo.status}
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusInfo.className}`}
+                      >
+                        {statusInfo.status === "Awaiting Signature" ? getSignatureStatusText(booking) : statusInfo.status}
+                      </div>
+                      {booking.moveInCompletedAt && (
+                        <div className="flex items-center gap-1 text-[#24742f] text-sm">
+                          <CheckCircle className="h-3 w-3" />
+                          <span className="text-xs">Move-in Complete</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -429,6 +461,19 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
                         View Payment Schedule
                       </Link>
                     </DropdownMenuItem>
+                    {isAdmin && statusInfo.status === "Upcoming" && !booking.moveInCompletedAt && (
+                      <DropdownMenuItem 
+                        onClick={() => handleMarkMoveInComplete(booking.id)}
+                        disabled={markingMoveInBookingId === booking.id}
+                        className="cursor-pointer flex items-center gap-2"
+                      >
+                        <CheckCircle className="h-4 w-4" />
+                        Mark Move-in Complete
+                        {markingMoveInBookingId === booking.id && (
+                          <Loader2 className="h-4 w-4 animate-spin ml-auto" />
+                        )}
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
