@@ -18,8 +18,6 @@ interface DesktopDateRangeProps {
   end: Date | null;
   handleChange: (start: Date | null, end: Date | null) => void;
   onFlexibilityChange?: (flexibility: { start: 'exact' | number | null, end: 'exact' | number | null }) => void;
-  onProceed?: () => void;
-  onClear?: () => void;
   initialFlexibility?: { start: 'exact' | number | null, end: 'exact' | number | null };
   minimumDateRange?: Duration | null;
   maximumDateRange?: Duration | null; // Add maximumDateRange prop
@@ -75,6 +73,9 @@ interface FlexibleSelectorProps {
 }
 
 function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isDisabled, disabledReason }: CalendarDayProps) {
+  const selectedDayBgColor = 'bg-secondaryBrand';
+  const inRangeBgColor = 'bg-gray-200';
+
   const hasCompleteRange = isInRange || isEndDate;
   const showRangeBackground = hasCompleteRange && isInRange && !isSelected;
   const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
@@ -93,19 +94,19 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
     >
       <span className={`
         z-10
-        ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center text-base' : ''}
+        ${isSelected ? `rounded-full ${selectedDayBgColor} text-white w-9 h-9 flex items-center justify-center text-base` : ''}
         ${isDisabled && !isSelected ? 'text-gray-300' : ''}
       `}>
         {day}
       </span>
       {showRangeBackground && (
-        <div className="absolute inset-y-1/4 inset-x-0 bg-[#5C9AC533]" />
+        <div className={`absolute inset-y-1/4 inset-x-0 ${inRangeBgColor}`} />
       )}
       {showStartBackground && (
-        <div className="absolute right-0 left-1/2 inset-y-1/4 bg-[#5C9AC533]" />
+        <div className={`absolute right-0 left-1/2 inset-y-1/4 ${inRangeBgColor}`} />
       )}
       {showEndBackground && (
-        <div className="absolute left-0 right-1/2 inset-y-1/4 bg-[#5C9AC533]" />
+        <div className={`absolute left-0 right-1/2 inset-y-1/4 ${inRangeBgColor}`} />
       )}
     </button>
   );
@@ -335,8 +336,6 @@ export function DesktopDateRange({
   end,
   handleChange,
   onFlexibilityChange,
-  onProceed,
-  onClear,
   initialFlexibility,
   minimumDateRange,
   maximumDateRange // Destructure the new prop
@@ -494,7 +493,7 @@ export function DesktopDateRange({
   };
 
   return (
-    <div className="bg-background rounded-xl p-6 shadow-lg">
+    <div className="bg-background rounded-xl p-6">
       <div className="flex gap-8">
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
@@ -553,32 +552,6 @@ export function DesktopDateRange({
             />
           </div>
         </div>
-      </div>
-
-      {/* Add buttons at the bottom */}
-      <div className="mt-6 flex flex-col items-center gap-3"> {/* Changed to flex-col and items-center */}
-        <button
-          onClick={onProceed}
-          disabled={!(start && end)}
-          className={`px-4 py-2 w-full rounded-lg ${start && end
-            ? 'bg-[#404040] opacity-90 hover:opacity-100'
-            : 'bg-gray-300 cursor-not-allowed'
-            } text-white`}
-        >
-          Proceed
-        </button>
-        {/* Add Clear button */}
-        <button
-          onClick={onClear}
-          disabled={!start && !end} // Disable if no dates are selected
-          className={`px-4 py-2 w-full rounded-lg bg-background border text-black ${
-            !start && !end
-              ? 'border-gray-300 text-gray-400 cursor-not-allowed' // Disabled styles
-              : 'border-black hover:bg-gray-100' // Enabled styles
-          }`}
-        >
-          Clear
-        </button>
       </div>
     </div>
   );

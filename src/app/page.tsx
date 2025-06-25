@@ -53,34 +53,33 @@ import { BecomeHostCopy } from "@/components/home-components/become-host";
 import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import { PlaceYouLove } from "@/components/home-components/place-you-love";
 import RecentArticle from "@/components/home-components/recent-article";
+import FAQSection from "@/components/home-components/faq-section";
 
 
 const WebHomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Define the spacer class name variable
-  const spacerDivClassNames = "h-72 lg:h-80 ";
-  const shortSpacerClassNames = "h-36  lg:h-40 ";
+  const spacerDivClassNames = "h-[90px]";
+  const shortSpacerClassNames = "";
 
   return (
     <div className="overflow-x-hidden">
       <MatchbookHeader />
-      <div className="h-[82vh] flex flex-col justify-between">
       <Hero />
+      <div className={spacerDivClassNames} />
       <RentEasyCopy />
-      </div>
+      <div className={spacerDivClassNames} />
       <div className={spacerDivClassNames} />
       <HowItWorks />
-      <div className={spacerDivClassNames} />
-      <RentersLoveMatchbook />
       <div className={spacerDivClassNames} />
       <BecomeHostCopy />
       <div className={spacerDivClassNames} />
       <ProsConsGrid />
       <div className={spacerDivClassNames} />
-      <PlaceYouLove />
-      <div className={spacerDivClassNames} />
       <RecentArticle />
+      <div className={spacerDivClassNames} />
+      <FAQSection />
       <div className={spacerDivClassNames} />
       <Footer />
     </div>

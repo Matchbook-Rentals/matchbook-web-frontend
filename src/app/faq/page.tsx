@@ -2,7 +2,7 @@
 import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header';
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { Montserrat } from 'next/font/google';
 import Footer from '@/components/marketing-landing-components/footer';
 
@@ -107,7 +107,7 @@ const tabs: Tab[] = [
   {
     value: 'host',
     label: 'Host',
-    textSize: 'text-xl',
+    textSize: 'text-xl ',
     content:
       <Accordion type="multiple" className="space-y-4" >
         {hostFaqData.map((faq, index) => (
@@ -128,9 +128,10 @@ const FAQPage = () => {
         <h1 className="text-3xl  mb-8">Frequently Asked Questions</h1>
         <TabSelector
           tabs={tabs}
-          tabsListClassName={`p-0 border-b-0 ${montserrat.className}`}
+          tabsListClassName={`p-0 test border-b-0 ${montserrat.className}`}
           tabsClassName='border-0 [&[data-state=active]]:shadow-none'
           className='border-0 mb-8'
+          //selectedTabColor='#0B6E6E'
         />
       </div>
       <Footer />

@@ -30,8 +30,46 @@ const config = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))'
+          DEFAULT: '#101828',
+          foreground: 'hsl(var(--primary-foreground))',
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#101828',
+          950: '#0f172a'
+        },
+        tertiary: {
+          DEFAULT: '#475467',
+          50: '#f8f9fa',
+          100: '#f1f3f4',
+          200: '#e3e5e7',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#475467',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
+          950: '#030712'
+        },
+        quinary: {
+          50: '#fafafa',
+          100: '#f4f4f5',
+          200: '#e4e4e7',
+          300: '#d4d4d8',
+          400: '#475467',
+          500: '#71717a',
+          600: '#52525b',
+          700: '#3f3f46',
+          800: '#27272a',
+          900: '#18181b',
+          950: '#09090b'
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -58,11 +96,11 @@ const config = {
           foreground: 'hsl(var(--card-foreground))'
         },
         primaryBrand: {
-          DEFAULT: '#A3B899'
+          DEFAULT: '#095859'
         },
         secondaryBrand: {
-          '80': '#85997dcc',
-          DEFAULT: '#85997d'
+          '80': '#0B6E6Ecc',
+          DEFAULT: '#0B6E6E'
         },
         blueBrand: {
           '80': '#5c9ac5cc',

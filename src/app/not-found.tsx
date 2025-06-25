@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import PlatformNavbar from '@/components/platform-components/platformNavbar'
-import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header'
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 
 export default function NotFound() {
   const pathname = usePathname()
@@ -73,7 +73,7 @@ export default function NotFound() {
                   <Link href="/platform/bookings" className="text-blue-600 hover:text-blue-800">
                     Bookings
                   </Link>
-                  <Link href="/platform/host-dashboard" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/platform/host/dashboard/listings" className="text-blue-600 hover:text-blue-800">
                     Host Dashboard
                   </Link>
                 </>

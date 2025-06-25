@@ -1,28 +1,95 @@
-
 import React from "react";
-import { Button } from "../../components/ui/button";
+import { BrandButton } from "../../components/ui/brandButton";
+import { Card, CardContent } from "../../components/ui/card";
 import { useRouter } from "next/navigation";
 
 export const BecomeHostCopy = (): JSX.Element => {
   const router = useRouter();
 
+  // Image data for mapping
+  const images = [
+    {
+      id: "main",
+      src: "/marketing-images/become-host/1.png",
+      alt: "People viewing a property",
+      className: "w-full h-full object-cover object-[50%_25%]",
+      containerClass: "relative w-full h-[189px] overflow-hidden rounded-2xl",
+    },
+    {
+      id: "left",
+      src: "/marketing-images/become-host/3.png",
+      alt: "House exterior",
+      className: "w-full h-full object-cover object-center",
+      containerClass: "relative md:flex-1 h-[189px] overflow-hidden rounded-2xl",
+    },
+    {
+      id: "right",
+      src: "/marketing-images/become-host/2.png",
+      alt: "House exterior",
+      className: "w-full h-full object-cover object-center",
+      containerClass: "relative md:flex-1 h-[189px] overflow-hidden rounded-2xl",
+    },
+  ];
+
   return (
-    <section className="flex flex-col max-w-[1260px] w-full mx-auto items-center gap-9 py-0">
-      <h1 className="w-full font-['Poppins',Helvetica] font-medium text-[#271c1a] text-5xl text-center tracking-[-0.96px] leading-[68px]">
-        Interested in becoming a host?
-      </h1>
+    <Card className="flex items-center gap-8 px-6 md:px-[73px] py-6 bg-[#e7f0f0] rounded-none overflow-hidden border-none w-full">
+      <CardContent className="flex flex-col md:flex-row items-center gap-8 p-0 w-full">
+        <div className="flex flex-col items-start gap-6 flex-1 w-full">
+          <div className={images[0].containerClass}>
+            <img
+              className={images[0].className}
+              alt={images[0].alt}
+              src={images[0].src}
+            />
+          </div>
 
-      <p className="w-full font-['Poppins',Helvetica] font-normal text-[#271c1a] text-2xl text-center tracking-[-0.12px] leading-8">
-        Check out what we have to offer
-      </p>
+          <div className="flex flex-col md:flex-row lg:flex-row items-center gap-6 w-full">
+            {/* Show only second image between md and lg */}
+            <div className="w-full md:w-full lg:flex-1 relative h-[189px] overflow-hidden rounded-2xl md:block lg:hidden">
+              <img
+                className="w-full h-full object-cover object-center"
+                alt={images[2].alt}
+                src={images[2].src}
+              />
+            </div>
+            
+            {/* Show both images at lg and above */}
+            <div className="hidden lg:flex lg:flex-row lg:gap-6 lg:w-full">
+              {images.slice(1).map((image) => (
+                <div
+                  key={image.id}
+                  className="flex-1 relative h-[189px] overflow-hidden rounded-2xl"
+                >
+                  <img
+                    className={image.className}
+                    alt={image.alt}
+                    src={image.src}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-      <Button 
-        onClick={() => router.push('/hosts')}
-        className="px-8 py-3.5 bg-[#c68087ad] hover:bg-[#c68087] rounded-2xl font-['Public_Sans',Helvetica] font-medium text-[#050000] text-xl tracking-[0] leading-6"
-      >
-        Learn More
-      </Button>
-        
-    </section>
+        <div className="flex flex-col w-full md:w-[460px] items-start gap-8">
+          <div className="flex flex-col items-start gap-2 w-full">
+            <h2 className="w-full mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-900 text-2xl md:text-[40px] leading-normal text-center md:text-left">
+              Interested in Becoming a Host?
+            </h2>
+            <p className="w-full font-text-label-large-medium font-[500] text-gray-600 text-base md:text-[18px] leading-normal text-center md:text-left">
+              Check out what we have to offer
+            </p>
+          </div>
+
+          <BrandButton 
+            onClick={() => router.push('/hosts')}
+            size="xl"
+            className="w-1/2 md:w-auto mx-auto md:mx-0"
+          >
+            Learn More
+          </BrandButton>
+        </div>
+      </CardContent>
+    </Card>
   );
 };

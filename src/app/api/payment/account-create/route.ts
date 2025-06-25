@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
         requirement_collection: "application",
       },
       capabilities: {
+        card_payments: { requested: true },
         transfers: { requested: true }
       },
       country: "US",

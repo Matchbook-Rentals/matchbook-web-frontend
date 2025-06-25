@@ -10,6 +10,9 @@ import { createTrip } from "@/app/actions/trips";
 import { useRouter } from "next/navigation";
 import { DisabledDesktopInputs } from "./disabled-inputs";
 import { cn } from "@/lib/utils";
+import { BrandDialog } from "@/components/brandDialog";
+import { BrandButton } from "@/components/ui/brandButton";
+import { Input } from "@/components/ui/input";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
@@ -19,7 +22,6 @@ interface SearchInputsDesktopProps {
   inputClassName?: string;
   searchButtonClassNames?: string;
   searchIconColor?: string;
-  popoverMaxWidth?: string;
   headerText?: string;
   headerClassName?: string;
 }
@@ -33,7 +35,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   inputClassName,
   searchButtonClassNames,
   searchIconColor = 'text-white',
-  popoverMaxWidth,
   headerText,
   headerClassName
 }) => {
@@ -52,7 +53,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   });
   const [guests, setGuests] = React.useState({ pets: 0, children: 0, adults: 1 })
   const containerRef = useRef<HTMLDivElement>(null);
-  const popoverRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = React.useState({
     destination: '',
     description: '',
@@ -61,6 +61,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   });
   const [isOpen, setIsOpen] = React.useState(false);
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-background ${inputClassName || ''}`;
@@ -71,49 +72,22 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     setTotalGuests(total);
   }, [guests]);
 
-  // Add click outside handler
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isOpen &&
-        containerRef.current &&
-        popoverRef.current &&
-        !containerRef.current.contains(event.target as Node) &&
-        !popoverRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setActiveContent(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
   // Format the dates for display
   const formatDate = (date: Date | null) => {
     if (!date) return '';
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const handleLocationSelect = (location: any) => {
-    setSelectedLocation(location);
-    // Automatically switch to date selector after location is selected
-    setActiveContent('date');
-
-    // Update arrow position for the date input
-    if (containerRef.current && moveInInputRef.current) {
-      const containerLeft = containerRef.current.getBoundingClientRect().left;
-      const inputRect = moveInInputRef.current.getBoundingClientRect();
-      const inputLeft = inputRect.left;
-      const inputCenter = inputLeft + (inputRect.width / 2);
-      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-      setArrowPosition(position);
-    }
+  const formatFooterDate = (date: Date | null) => {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
-  // Add new state to track the arrow position
-  const [arrowPosition, setArrowPosition] = React.useState(5); // Default left position in rem
+  const handleLocationSelect = (location: any) => {
+    setSelectedLocation(location);
+    // Auto-advance to the next step upon selection
+    setActiveContent('date');
+  };
 
   // Add refs for each input
   const locationInputRef = useRef<HTMLInputElement>(null);
@@ -121,33 +95,168 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const moveOutInputRef = useRef<HTMLInputElement>(null);
   const guestsInputRef = useRef<HTMLInputElement>(null);
 
-  const handleProceed = () => {
-    setActiveContent('guests');
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
 
-    // Update arrow position for guests input
-    if (containerRef.current && guestsInputRef.current) {
-      const containerLeft = containerRef.current.getBoundingClientRect().left;
-      const inputRect = guestsInputRef.current.getBoundingClientRect();
-      const inputLeft = inputRect.left;
-      const inputCenter = inputLeft + (inputRect.width / 2);
-      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-      setArrowPosition(position);
+    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
+      setIsOpen(true);
+      setActiveContent('location');
+      toast({
+        variant: "destructive",
+        description: `No lat/lng found for destination`,
+      });
+      return;
     }
+
+    setIsSubmitting(true);
+    try {
+      const response = await createTrip({
+        locationString: selectedLocation.description,
+        latitude: selectedLocation.lat,
+        longitude: selectedLocation.lng,
+        startDate: dateRange.start,
+        endDate: dateRange.end,
+      });
+
+      if (response.success && response.trip) {
+        router.push(`/platform/searches/set-preferences/${response.trip.id}`);
+      } else {
+        toast({
+          variant: "destructive",
+          description: response.success === false ? response.error : "Failed to create trip",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "An unexpected error occurred while creating the trip.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleNext = () => {
+    if (activeContent === 'location') {
+      setActiveContent('date');
+    } else if (activeContent === 'date') {
+      setActiveContent('guests');
+    } else if (activeContent === 'guests') {
+      handleSubmit();
+    }
+  };
+
+  const handleBack = () => {
+    if (activeContent === 'date') {
+      setActiveContent('location');
+    } else if (activeContent === 'guests') {
+      setActiveContent('date');
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setActiveContent(null);
+  };
+
+  const getTitle = () => {
+    switch (activeContent) {
+      case 'location':
+        return 'Select Location';
+      case 'date':
+        return 'Select Dates';
+      case 'guests':
+        return 'Add Guests';
+      default:
+        return 'Find your next home';
+    }
+  };
+
+  const renderFooter = () => {
+    const isFirstStep = activeContent === 'location';
+    const isLastStep = activeContent === 'guests';
+    const isDateStep = activeContent === 'date';
+    const areDatesSelected = dateRange.start || dateRange.end;
+
+    return (
+      <div className="flex justify-between items-center w-full">
+        {isDateStep ? (
+          <div className="flex items-center gap-3">
+            <Input
+              className="w-[136px]"
+              value={formatFooterDate(dateRange.start)}
+              placeholder="Start Date"
+              readOnly
+            />
+            <span className="text-gray-600">–</span>
+            <Input
+              className="w-[136px]"
+              value={formatFooterDate(dateRange.end)}
+              placeholder="End Date"
+              readOnly
+            />
+          </div>
+        ) : (
+          <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
+            {isFirstStep ? 'Close' : 'Back'}
+          </BrandButton>
+        )}
+
+        <div className="flex items-center gap-3">
+          {isDateStep && (
+            <BrandButton
+              variant="outline"
+              onClick={areDatesSelected ? () => setDateRange({ start: null, end: null }) : handleBack}
+              size="sm"
+            >
+              {areDatesSelected ? 'Clear' : 'Back'}
+            </BrandButton>
+          )}
+          <BrandButton
+            variant="default"
+            onClick={handleNext}
+            size="sm"
+            disabled={isSubmitting && isLastStep}
+            className={cn({ 'opacity-75': isSubmitting && isLastStep })}
+          >
+            {isSubmitting && isLastStep && <ImSpinner8 className="animate-spin mr-2 h-4 w-4" />}
+            {isLastStep ? 'Start Search' : 'Next'}
+          </BrandButton>
+        </div>
+      </div>
+    );
   };
 
   // Add this function to render content based on active type
   const renderActiveContent = () => {
     switch (activeContent) {
       case 'location':
-        return <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} setDisplayValue={setLocationDisplayValue} />;
+        return (
+          <>
+            {selectedLocation.description && (
+              <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <p className="font-semibold text-gray-800">Selected Location:</p>
+                <p className="text-gray-600">{selectedLocation.description}</p>
+              </div>
+            )}
+            <HeroLocationSuggest
+              hasAccess={hasAccess}
+              onLocationSelect={handleLocationSelect}
+              setDisplayValue={setLocationDisplayValue}
+              placeholder={
+                selectedLocation.description
+                  ? "Wrong place? Begin typing and select another"
+                  : "Enter an address or city"
+              }
+            />
+          </>
+        );
       case 'date':
         return (
           <DesktopDateRange
             start={dateRange.start || null}
             end={dateRange.end || null}
             handleChange={(start, end) => setDateRange({ start, end })}
-            onProceed={handleProceed}
-            onClear={() => setDateRange({ start: null, end: null })}
             minimumDateRange={{ months: 1 }}
             maximumDateRange={{ months: 12 }} // Add maximum date range
           />
@@ -173,42 +282,6 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     // Otherwise, open the popover with the new content
     setActiveContent(content);
     setIsOpen(true);
-
-    if (containerRef.current && inputRef.current) {
-      const containerLeft = containerRef.current.getBoundingClientRect().left;
-      const inputRect = inputRef.current.getBoundingClientRect();
-      const inputLeft = inputRect.left;
-      const inputCenter = inputLeft + (inputRect.width / 2);
-      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-      setArrowPosition(position);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
-      setIsOpen(true);
-      setActiveContent('location');
-      toast({
-        variant: "destructive",
-        description: `No lat/lng found for destination`,
-      });
-      return;
-    }
-
-    const response = await createTrip({
-      locationString: selectedLocation.description,
-      latitude: selectedLocation.lat,
-      longitude: selectedLocation.lng,
-    });
-
-    if (response.success && response.trip) {
-      router.push(`/platform/searches/set-preferences/${response.trip.id}`);
-    } else {
-      toast({
-        variant: "destructive",
-        description: response.success === false ? response.error : "Failed to create trip",
-      });
-    }
   };
 
   // Render different versions based on hasAccess
@@ -218,6 +291,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     );
   }
 
+  const currentStep = activeContent === 'location' ? 1 : activeContent === 'date' ? 2 : 3;
+
   return (
     <div ref={containerRef} className="relative">
       {headerText && <h3 className={cn("hidden text-xl font-semibold mb-3 text-green-800 text-center", headerClassName)}>{headerText}</h3>}
@@ -225,7 +300,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         className={cn('flex flex-row no-wrap px-3 py-2 items-center bg-background rounded-full shadow-md overflow-hidden', className)}
       >
         <div className="flex-1 flex flex-col sm:border-r border-gray-300">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Where</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'location', locationInputRef)}>Where</label>
           <input
             ref={locationInputRef}
             type="text"
@@ -238,7 +313,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
 
         <div className="flex-1 flex flex-col sm:border-r border-gray-300">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move In</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}>Move In</label>
           <input
             ref={moveInInputRef}
             type="text"
@@ -251,7 +326,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
 
         <div className="flex-1 flex flex-col sm:border-r border-gray-300">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move Out</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}>Move Out</label>
           <input
             ref={moveOutInputRef}
             type="text"
@@ -264,7 +339,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
 
         <div className="flex-1 flex flex-col">
-          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Who</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => {
+              setHasBeenSelected(true);
+              handleInputClick(e, 'guests', guestsInputRef)
+            }}>Who</label>
           <input
             ref={guestsInputRef}
             type="text"
@@ -282,7 +360,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
         <div className="flex-shrink-0 self-end">
           <button
-            disabled={!hasAccess}
+            disabled={!hasAccess || isSubmitting}
             onClick={(e) => {
               e.stopPropagation();
               // Only run handleSubmit if we're not in a loading state
@@ -290,44 +368,41 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
                 handleSubmit();
               }
             }}
-            className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
-              } ${searchButtonClassNames || 'bg-primaryBrand'} rounded-full`}
+            className={cn(
+              'w-auto p-3 rounded-full',
+              searchButtonClassNames || 'bg-primaryBrand',
+              !hasAccess || isSubmitting
+                ? 'cursor-not-allowed opacity-50'
+                : 'cursor-pointer'
+            )}
           >
-            {locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng) ? (
-              <ImSpinner8 className={`${searchIconColor} mx-auto animate-spin`} size={20} />
+            {isSubmitting || (locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng)) ? (
+              <ImSpinner8 className={`animate-spin ${searchIconColor}`} />
             ) : (
-              <FaSearch className={`${searchIconColor} mx-auto`} size={20} />
+              <FaSearch className={searchIconColor} />
             )}
           </button>
         </div>
       </div>
 
-      {isOpen && (
-        <div ref={popoverRef}
-          className={`absolute top-[calc(100%+8px)] ${popoverMaxWidth ? 'left-1/2 transform -translate-x-1/2' : 'left-0'} w-full bg-background rounded-xl shadow-lg z-50
-          before:content-[''] before:absolute before:-top-2 ${popoverMaxWidth ? 'before:left-1/2 before:-translate-x-1/2' : 'before:left-[var(--arrow-position)]'} before:w-4 before:h-4
-          before:bg-background before:rotate-45 before:border-l before:border-t before:border-gray-200
-          origin-top`}
-          style={{
-            ...(!popoverMaxWidth ? { '--arrow-position': `${arrowPosition}%` } : {}),
-            ...(popoverMaxWidth ? { maxWidth: popoverMaxWidth } : {}),
-            animation: 'popoverFadeIn 0.2s ease-out'
-          } as React.CSSProperties}>
-          <style jsx>{`
-            @keyframes popoverFadeIn {
-              from {
-                opacity: 0;
-                transform: ${popoverMaxWidth ? 'translate(-50%, -8px)' : 'translateY(-8px)'};
-              }
-              to {
-                opacity: 1;
-                transform: ${popoverMaxWidth ? 'translate(-50%, 0)' : 'translateY(0)'};
-              }
-            }
-          `}</style>
-          {renderActiveContent()}
-        </div>
-      )}
+      <BrandDialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            setActiveContent(null);
+          }
+        }}
+        titleComponent={
+          <h2 className="text-lg font-semibold text-center flex-grow">
+            {getTitle()}
+          </h2>
+        }
+        contentComponent={renderActiveContent()}
+        footerComponent={renderFooter()}
+        currentStep={currentStep}
+        totalSteps={3}
+      />
     </div>
   );
 };

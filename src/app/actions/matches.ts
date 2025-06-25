@@ -6,6 +6,8 @@ import { calculateRent } from '@/lib/calculate-rent'
 import { Trip, Listing, Notification } from '@prisma/client'
 import { createNotification } from './notifications'
 
+type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
+
 // Helper function to check authentication
 async function checkAuth() {
   const { userId } = auth()
@@ -15,18 +17,36 @@ async function checkAuth() {
   return userId
 }
 
-// Create a new match
+// Find existing match or create a new one
 export async function createMatch(trip: Trip, listing: Listing) {
   try {
     await checkAuth()
+    
+    // First try to find existing match
+    let match = await prisma.match.findFirst({
+      where: {
+        tripId: trip.id,
+        listingId: listing.id,
+      }
+    });
+
+    if (match) {
+      console.log('Found existing match:', match.id);
+      return { success: true, match };
+    }
+
+    // Create new match if none exists
     const monthlyRent = calculateRent({ listing, trip })
-    const match = await prisma.match.create({
+    match = await prisma.match.create({
       data: {
         tripId: trip.id,
         listingId: listing.id,
         monthlyRent: monthlyRent,
       },
-    })
+    });
+    
+    console.log('Created new match:', match.id);
+
     const notificationData: CreateNotificationInput = {
       userId: trip.userId,
       content: 'New Match',
@@ -42,20 +62,41 @@ export async function createMatch(trip: Trip, listing: Listing) {
   }
 }
 
-// Read a match by id
-export async function getMatch(id: string) {
+// Read a match by housing request id
+export async function getMatch(housingRequestId: string) {
   try {
     await checkAuth()
-    const match = await prisma.match.findUnique({
-      where: { id },
+    
+    // First get the housing request to find the match
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId }
+    })
+    
+    if (!housingRequest) {
+      return { success: false, error: 'Housing request not found' }
+    }
+    
+    const match = await prisma.match.findFirst({
+      where: {
+        tripId: housingRequest.tripId,
+        listingId: housingRequest.listingId
+      },
       include: {
-        listing: true,
+        listing: {
+          include: {
+            monthlyPricing: true
+          }
+        },
         trip: true,
         BoldSignLease: true,
         Lease: true,
-        // TODO: add housingRequest
       },
     })
+    
+    if (!match) {
+      return { success: false, error: 'Match not found' }
+    }
+    
     return { success: true, match }
   } catch (error) {
     console.error('Error fetching match:', error)
@@ -64,15 +105,12 @@ export async function getMatch(id: string) {
 }
 
 // Update a match
-export async function updateMatch(id: string, tripId?: string, matchId?: string) {
+export async function updateMatch(id: string, data: { tripId?: string; matchId?: string; leaseDocumentId?: string | null }) {
   try {
     await checkAuth()
     const match = await prisma.match.update({
       where: { id },
-      data: {
-        ...(tripId && { tripId }),
-        ...(matchId && { matchId }),
-      },
+      data: data,
     })
     return { success: true, match }
   } catch (error) {
@@ -106,5 +144,40 @@ export async function getMatchesForTrip(tripId: string) {
   } catch (error) {
     console.error('Error fetching matches for trip:', error)
     return { success: false, error: error instanceof Error ? error.message : 'Failed to fetch matches for trip' }
+  }
+}
+
+// Get a match by matchId
+export async function getMatchById(matchId: string) {
+  try {
+    await checkAuth()
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        listing: {
+          include: {
+            listingImages: true,
+            user: true,
+            bedrooms: true,
+          }
+        },
+        trip: {
+          include: {
+            user: true,
+          }
+        },
+        BoldSignLease: true,
+        Lease: true,
+      },
+    })
+    
+    if (!match) {
+      return { success: false, error: 'Match not found' }
+    }
+    
+    return { success: true, match }
+  } catch (error) {
+    console.error('Error fetching match by ID:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to fetch match' }
   }
 }

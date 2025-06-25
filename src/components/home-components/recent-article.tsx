@@ -3,13 +3,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { ArrowRightIcon } from "lucide-react";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter } from "../../components/ui/card";
 import { BlogArticle } from "@prisma/client";
 import { getLatestBlogArticle } from "@/app/actions/blog-articles";
 import { PAGE_MARGIN } from "@/constants/styles";
@@ -46,46 +42,60 @@ export default function RecentArticle() {
   }
 
   return (
-    <section
-      className={`relative w-full ${PAGE_MARGIN} md:h-[50vh]`}
-    >
-      {/* Use flex-col by default, md:items-end for medium+ screens */}
-      <div className="relative w-full h-full flex flex-col md:flex-row md:items-end">
-        {/* Main background image from latest article */}
+    <section className="relative w-full max-w-[1440px] mx-auto pb-[220px]">
+      <div className="relative h-[496px]">
         {article.imageUrl && (
-          // Adjusted height for small screens, kept md styles
-          <div className="relative w-full h-[40vh] md:h-full aspect-video md:aspect-auto">
-            <Image
-              src={article.imageUrl}
-              alt={article.title || "Featured article image"}
-              fill
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <Image
+            src={article.imageUrl}
+            alt={article.title || "Featured article image"}
+            fill
+            className="object-cover"
+          />
         )}
 
-        {/* Featured article card */}
-        {/* Full width below image on small screens, absolute positioning restored on md+ */}
-        <Card
-          className="w-full mt-0 md:w-[403px] md:absolute md:bottom-[-40px] md:right-12 bg-[#1f1f1f] text-white rounded-none border-none"
-        >
-          <CardHeader className="pb-0">
-            <CardTitle className="font-['Poppins',Helvetica] font-semibold text-xl tracking-[-0.40px]">
-              Featured Article
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="py-4">
-            <h2 className="font-['Lora',Helvetica] font-bold text-[24px] md:text-[32px] tracking-[-0.64px] leading-8 md:leading-10">
-              {article.title}
-            </h2>
+        <Card className="absolute bottom-0 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[10%] w-[90%] max-w-[439px] rounded-xl overflow-hidden bg-[linear-gradient(180deg,rgba(3,3,3,1)_0%,rgba(17,17,17,0.9)_94%)] border-none translate-y-1/2">
+          <CardContent className="p-6 flex flex-col gap-6">
+            <div className="flex flex-col gap-6">
+              <p 
+                className="text-white" 
+                style={{ 
+                  fontFamily: 'Poppins',
+                  fontWeight: 500,
+                  fontSize: '16px',
+                  letterSpacing: '0px'
+                }}
+              >
+                Featured Article
+              </p>
+
+              <h2 
+                className="text-white" 
+                style={{ 
+                  fontFamily: 'Lora',
+                  fontWeight: 500,
+                  fontSize: 'clamp(1.25rem, 4vw, 28px)',
+                  lineHeight: 'normal',
+                  letterSpacing: '0px'
+                }}
+              >
+                {article.title}
+              </h2>
+            </div>
           </CardContent>
-          <CardFooter>
-            <Link
-              href={`/articles/${article.slug}`}
-              className="font-['Poppins',Helvetica] font-normal text-lg md:text-xl tracking-[-0.40px] hover:underline"
+
+          <CardFooter className="p-6 pt-0 flex justify-end">
+            <Button
+              variant="link"
+              className="p-0 h-auto flex items-center gap-2 text-[#e7f0f0] hover:text-white hover:no-underline"
+              asChild
             >
-              Read More
-            </Link>
+              <Link href={`/articles/${article.slug}`}>
+                <span className="font-['Poppins',Helvetica] font-semibold leading-6" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+                  Read Article
+                </span>
+                <ArrowRightIcon className="w-5 h-5" />
+              </Link>
+            </Button>
           </CardFooter>
         </Card>
       </div>

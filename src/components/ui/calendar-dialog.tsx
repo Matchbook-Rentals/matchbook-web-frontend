@@ -227,7 +227,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
   const handleManageCalendar = () => {
     setOpen(false);
     if (listingId) {
-      router.push(`/platform/host-dashboard/${listingId}`);
+      router.push(`/platform/host/${listingId}`);
     }
   };
 

@@ -1,0 +1,352 @@
+"use client"
+
+import * as React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { XIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
+
+// Base Radix Dialog components
+function Dialog({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+}
+
+function DialogTrigger({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+}
+
+function DialogPortal({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+}
+
+function DialogClose({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
+}
+
+function DialogOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+  return (
+    <DialogPrimitive.Overlay
+      data-slot="dialog-overlay"
+      className={cn(
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  showCloseButton?: boolean
+}) {
+  return (
+    <DialogPortal data-slot="dialog-portal">
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        data-slot="dialog-content"
+        className={cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
+          className
+        )}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close
+            data-slot="dialog-close"
+            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+          >
+            <XIcon />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  )
+}
+
+// Brand Dialog specific interface
+interface BrandDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  titleComponent?: React.ReactNode;
+  contentComponent: React.ReactNode;
+  footerComponent?: React.ReactNode;
+  currentStep?: number;
+  totalSteps?: number;
+}
+
+export const BrandDialog: React.FC<BrandDialogProps> = ({
+  open,
+  onOpenChange,
+  titleComponent,
+  contentComponent,
+  footerComponent,
+  currentStep = 1,
+  totalSteps = 3,
+}) => {
+  // Generate steps based on props
+  const steps = Array.from({ length: totalSteps }, (_, index) => ({
+    status: index < currentStep ? "active" : "inactive"
+  }));
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent 
+        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-[1440px]:max-w-[700px] mx-auto border-0 shadow-lg"
+        showCloseButton={false}
+      >
+        {titleComponent && (
+          <div className="flex items-center justify-between relative self-stretch w-full">
+            <DialogClose asChild>
+              <button className="p-1 hover:bg-gray-100 rounded-sm transition-colors">
+                <XIcon className="w-6 h-6 text-gray-500" />
+                <span className="sr-only">Close</span>
+              </button>
+            </DialogClose>
+            {titleComponent}
+            <div className="w-6 h-6" /> {/* Empty div for spacing */}
+          </div>
+        )}
+
+        <div className="flex w-full items-center justify-center">
+          <div className="flex w-[368px] items-center justify-center">
+            {steps.map((step, index) => (
+              <React.Fragment key={index}>
+                {/* Step circle */}
+                <div className="inline-flex items-start relative">
+                  <div
+                    className={`relative w-6 h-6 rounded-full overflow-hidden ${
+                      step.status === "active"
+                        ? "bg-[#f9f5ff] shadow-[0px_0px_0px_4px_#3c87873d]"
+                        : "bg-gray-50"
+                    }`}
+                  >
+                    <div
+                      className={`h-6 rounded-xl border-[1.5px] border-solid flex items-center justify-center ${
+                        step.status === "active"
+                          ? "bg-[#3c8787]"
+                          : "border-[#eaecf0]"
+                      }`}
+                    >
+                      <div
+                        className={`w-2 h-2 rounded ${
+                          step.status === "active" ? "bg-white" : "bg-[#d0d5dd]"
+                        }`}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Connector line (except after the last step) */}
+                {index < steps.length - 1 && (
+                  <div className="relative w-20 h-0.5 bg-[#0b6969]" />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 relative self-stretch w-full">
+          {contentComponent}
+          {footerComponent && (
+            <div className="pt-6 border-t border-gray-200">
+              {footerComponent}
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Stripe Connect verification dialog component
+interface StripeConnectVerificationDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onContinue: () => void;
+}
+
+export const StripeConnectVerificationDialog: React.FC<StripeConnectVerificationDialogProps> = ({
+  isOpen,
+  onClose,
+  onContinue,
+}) => {
+  const [hasStripeAccount, setHasStripeAccount] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // Check user's Stripe account status when dialog opens
+  React.useEffect(() => {
+    const checkStripeAccount = async () => {
+      if (isOpen) {
+        setIsLoading(true);
+        try {
+          const response = await fetch('/api/user/stripe-account');
+          const data = await response.json();
+          setHasStripeAccount(Boolean(data.stripeAccountId));
+        } catch (error) {
+          console.error('Error checking Stripe account:', error);
+          setHasStripeAccount(false);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    checkStripeAccount();
+  }, [isOpen]);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent 
+        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] sm:max-w-md md:max-w-lg"
+        showCloseButton={false}
+      >
+        <div className="flex items-center justify-between relative self-stretch w-full">
+          <DialogClose asChild>
+            <button 
+              onClick={onClose}
+              className="p-1 hover:bg-gray-100 rounded-sm transition-colors"
+            >
+              <XIcon className="w-6 h-6 text-gray-500" />
+              <span className="sr-only">Close</span>
+            </button>
+          </DialogClose>
+          <h2 className="text-lg font-semibold text-gray-900">Payment Setup Required</h2>
+          <div className="w-6 h-6" />
+        </div>
+
+        <div className="flex flex-col gap-4 text-center">
+          {isLoading ? (
+            <>
+              <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Checking for Payment Information
+                </h3>
+                <p className="text-gray-600">
+                  Please wait while we verify your payment account setup...
+                </p>
+              </div>
+            </>
+          ) : !hasStripeAccount ? (
+            <>
+              <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Stripe Connect Setup Required
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Before you can approve applications and create leases, you need to set up your payment account with Stripe Connect. 
+                  This allows you to securely receive rent payments and security deposits from tenants.
+                </p>
+              </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+                <h4 className="font-medium text-blue-900 mb-2">What you'll need:</h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Business or personal tax information</li>
+                  <li>• Bank account details for deposits</li>
+                  <li>• Government-issued ID</li>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Payment Account Found
+                </h3>
+                <p className="text-gray-600">
+                  Your Stripe Connect account is set up and ready. You can now proceed with creating the lease.
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="flex gap-3 w-full">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            disabled={isLoading}
+            className="flex-1 h-12 rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+          >
+            Cancel
+          </Button>
+          {isLoading ? (
+            <Button
+              disabled
+              className="flex-1 h-12 rounded-lg bg-gray-400 text-white"
+            >
+              Checking...
+            </Button>
+          ) : !hasStripeAccount ? (
+            <Button
+              onClick={() => {
+                // Get the current page URL to use as 'from' parameter
+                const currentUrl = window.location.href;
+                const onboardingUrl = `http://localhost:3000/platform/host/onboarding/stripe-connect?from=${encodeURIComponent(currentUrl)}`;
+                window.open(onboardingUrl, '_blank');
+                onClose();
+              }}
+              className="flex-1 h-12 rounded-lg bg-[#3c8787] hover:bg-[#2d6565] text-white"
+            >
+              Set Up Payments
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                onContinue();
+                onClose();
+              }}
+              className="flex-1 h-12 rounded-lg bg-[#39b54a] hover:bg-[#2d8a3a] text-white flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              Upload Lease
+            </Button>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Export the base components for reusability
+export {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogClose,
+  DialogOverlay,
+  DialogContent,
+};

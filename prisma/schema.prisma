@@ -34,23 +34,24 @@ enum ApprovalStatus {
 }
 
 model User {
-  id              String    @id @default(uuid())
-  stripeAccountId String?
-  firstName       String?
-  lastName        String?
-  fullName        String?
-  email           String?   @unique
-  emailVerified   DateTime?
-  imageUrl        String?
-  hashedPassword  String?
-  role            String    @default("user") // User role (user, admin, etc.)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  lastLogin       DateTime?
-  verifiedAt      DateTime? // Timestamp of when user was verified
-  hallmarkHostAt  DateTime? // Timestamp of when user became hallmark host
-  trailblazerAt   DateTime? // Timestamp of when user became trailblazer
-  agreedToTerms   DateTime? // Timestamp of when user last agreed to terms
+  id               String    @id @default(uuid())
+  stripeAccountId  String?
+  stripeCustomerId String?
+  firstName        String?
+  lastName         String?
+  fullName         String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  imageUrl         String?
+  hashedPassword   String?
+  role             String    @default("user") // User role (user, admin, etc.)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  lastLogin        DateTime?
+  verifiedAt       DateTime? // Timestamp of when user was verified
+  hallmarkHostAt   DateTime? // Timestamp of when user became hallmark host
+  trailblazerAt    DateTime? // Timestamp of when user became trailblazer
+  agreedToTerms    DateTime? // Timestamp of when user last agreed to terms
 
   // Relationships trips          Trip[]
   accounts           Account[]
@@ -65,6 +66,7 @@ model User {
   purchases          Purchase[]
   personReports      PersonReport?
   creditReport       CreditReport?
+  bgsReports         BGSReport[]
   conversations      ConversationParticipant[]
   messageReads       MessageRead[]
   sentMessages       Message[]                 @relation("MessageSender")
@@ -183,7 +185,10 @@ model Listing {
   postalCode             String?
   userId                 String
   squareFootage          Int       @default(0)
-  depositSize            Int?
+  depositSize            Int?      @default(0)
+  petDeposit             Int?      @default(0)
+  petRent                Int?      @default(0)
+  reservationDeposit     Int?      @default(0)
   requireBackgroundCheck Boolean   @default(false)
   shortestLeaseLength    Int       @default(1)
   longestLeaseLength     Int       @default(12)
@@ -296,6 +301,7 @@ model Listing {
   unavailablePeriods ListingUnavailability[]
   Maybe              Maybe[]
   conversations      Conversation[]          @relation("ConversationToListing")
+  monthlyPricing     ListingMonthlyPricing[]
   @@index([state])
 }
 
@@ -306,6 +312,21 @@ model ListingUnavailability {
   reason    String? // Optional: could track why it's blocked (repairs, personal reasons, etc.)
   listingId String
   listing   Listing  @relation(fields: [listingId], references: [id])
+  @@index([listingId])
+}
+
+model ListingMonthlyPricing {
+  id                String   @id @default(uuid())
+  listingId         String
+  months            Int      // Number of months (1-12)
+  price             Int      // Price for this month length
+  utilitiesIncluded Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  listing           Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  @@unique([listingId, months])
   @@index([listingId])
 }
 
@@ -331,20 +352,23 @@ model Bedroom {
 }
 
 model HousingRequest {
-  id        String   @id @default(uuid())
-  userId    String
-  listingId String
-  tripId    String
-  startDate DateTime
-  endDate   DateTime
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  userId          String
+  listingId       String
+  tripId          String
+  startDate       DateTime
+  endDate         DateTime
+  status          String   @default("pending")
+  leaseDocumentId String?
+  boldSignLeaseId String?  @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   // Relationships
-  user    User    @relation(fields: [userId], references: [id])
-  listing Listing @relation(fields: [listingId], references: [id])
-  trip    Trip    @relation(fields: [tripId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+  listing       Listing        @relation(fields: [listingId], references: [id])
+  trip          Trip           @relation(fields: [tripId], references: [id])
+  boldSignLease BoldSignLease? @relation(fields: [boldSignLeaseId], references: [id])
 
   // Constraints
   @@unique([listingId, tripId])
@@ -364,6 +388,7 @@ model Booking {
 
   createdAt DateTime @default(now())
   status    String   @default("reserved")
+  moveInCompletedAt DateTime?
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -617,11 +642,20 @@ model MessageRead {
 }
 
 model Match {
-  id          String   @id @default(uuid())
-  tripId      String
-  listingId   String
-  booking     Booking?
-  monthlyRent Int?
+  id                    String    @id @default(uuid())
+  tripId                String
+  listingId             String
+  booking               Booking?
+  monthlyRent           Int?
+  leaseDocumentId       String?
+  stripePaymentMethodId String?
+  stripePaymentIntentId String?
+  paymentAuthorizedAt   DateTime?
+  paymentAmount         Int?
+  paymentCapturedAt     DateTime?
+  paymentStatus         String?
+  tenantSignedAt        DateTime?
+  landlordSignedAt      DateTime?
 
   trip          Trip           @relation(fields: [tripId], references: [id])
   listing       Listing        @relation(fields: [listingId], references: [id])
@@ -629,6 +663,7 @@ model Match {
   Lease         Lease?
 
   @@index([tripId])
+  @@index([stripePaymentIntentId])
 }
 
 model Favorite {
@@ -759,18 +794,39 @@ model VerificationImage {
 }
 
 model Purchase {
-  id         String   @id @default(cuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  status     String   @default("pending")
-  isRedeemed Boolean  @default(false)
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  status     String     @default("pending")
+  isRedeemed Boolean    @default(false)
   email      String?
   type       String
   amount     Int?
   userId     String?
+  orderId    String?
   metadata   Json?
-  user       User?    @relation(fields: [userId], references: [id])
+  user       User?      @relation(fields: [userId], references: [id])
+  bgsReport  BGSReport?
 
+  @@index([userId])
+}
+
+model BGSReport {
+  id              String    @id @default(cuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  purchaseId      String?   @unique
+  userId          String
+  orderId         String    @unique
+  status          String    @default("pending")
+  reportData      Json?
+  receivedAt      DateTime?
+  
+  // Relationships
+  purchase        Purchase? @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([orderId])
   @@index([userId])
 }
 
@@ -806,13 +862,19 @@ model CreditReport {
 }
 
 model RentPayment {
-  id        String   @id @default(cuid())
-  bookingId String
-  amount    Int
-  dueDate   DateTime
-  isPaid    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                    String    @id @default(cuid())
+  bookingId             String
+  amount                Int
+  dueDate               DateTime
+  isPaid                Boolean   @default(false)
+  stripePaymentMethodId String?
+  paymentAuthorizedAt   DateTime?
+  paymentCapturedAt     DateTime?
+  stripePaymentIntentId String?
+  failureReason         String?
+  retryCount           Int       @default(0)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   booking Booking @relation(fields: [bookingId], references: [id])
 }
@@ -844,8 +906,9 @@ model BoldSignLease {
   landlordSigned    Boolean  @default(false)
   tenantSigned      Boolean  @default(false)
 
-  match    Match @relation(fields: [matchId], references: [id])
-  landlord User  @relation(fields: [landlordId], references: [id])
+  match          Match           @relation(fields: [matchId], references: [id])
+  landlord       User            @relation(fields: [landlordId], references: [id])
+  housingRequest HousingRequest?
 
   @@unique([matchId])
 }
@@ -1045,6 +1108,9 @@ model ListingInCreation {
   userId                 String?
   squareFootage          Int?
   depositSize            Int?
+  petDeposit             Int?
+  petRent                Int?
+  reservationDeposit     Int?
   requireBackgroundCheck Boolean?
   shortestLeaseLength    Int?
   longestLeaseLength     Int?

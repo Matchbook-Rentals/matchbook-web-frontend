@@ -3,9 +3,12 @@
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { createNotification } from './notifications'
-import { HousingRequest } from '@prisma/client'
+import { HousingRequest, Notification } from '@prisma/client'
 import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
+import { calculateRent } from '@/lib/calculate-rent'
+
+type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
 
 export async function getHousingRequestById(housingRequestId: string) {
@@ -31,7 +34,12 @@ export async function getHousingRequestById(housingRequestId: string) {
             }
           }
         },
-        listing: true,
+        listing: {
+          include: {
+            monthlyPricing: true
+          }
+        },
+        boldSignLease: true,
       },
     });
 
@@ -40,15 +48,31 @@ export async function getHousingRequestById(housingRequestId: string) {
     }
 
     // Manually fetch trip data to handle potential null cases
+    let trip = null;
     try {
-      const trip = await prisma.trip.findUnique({
+      trip = await prisma.trip.findUnique({
         where: { id: housingRequest.tripId }
       });
-      return { ...housingRequest, trip };
     } catch (error) {
       console.warn(`Failed to fetch trip ${housingRequest.tripId} for housing request ${housingRequest.id}:`, error);
-      return { ...housingRequest, trip: null };
     }
+
+    // Check if there's a booking for this housing request (via match)
+    let hasBooking = false;
+    if (housingRequest.status === 'approved') {
+      const match = await prisma.match.findFirst({
+        where: {
+          tripId: housingRequest.tripId,
+          listingId: housingRequest.listingId
+        },
+        include: {
+          booking: true
+        }
+      });
+      hasBooking = !!match?.booking;
+    }
+
+    return { ...housingRequest, trip, hasBooking };
   } catch (error) {
     console.error('Error fetching housing request:', error);
     throw new Error('Failed to fetch housing request');
@@ -137,7 +161,7 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
     const notificationData: CreateNotificationInput = {
       userId: listing.userId,
       content: 'New Housing Request',
-      url: `/platform/host-dashboard/${listing.id}?tab=applications`,
+      url: `/platform/host/${listing.id}/applications`,
       actionType: 'view',
       actionId: newHousingRequest.id,
     }
@@ -297,5 +321,353 @@ export async function getHostHousingRequests() {
     console.error('Error in getHostHousingRequests:', error);
     // Return empty array instead of throwing error to prevent page crash
     return [];
+  }
+}
+
+// Approve a housing request
+export async function approveHousingRequest(housingRequestId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // First verify that the housing request belongs to a listing owned by the current user
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        listing: true,
+        user: true,
+        trip: true
+      }
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    if (housingRequest.listing.userId !== userId) {
+      throw new Error('Unauthorized: You can only approve requests for your own listings');
+    }
+
+    // Start a transaction to ensure both operations succeed or fail together
+    const result = await prisma.$transaction(async (tx) => {
+      // Update the housing request status to approved
+      const updatedRequest = await tx.housingRequest.update({
+        where: { id: housingRequestId },
+        data: { status: 'approved' }
+      });
+
+      // Create a match for this approved housing request
+      const monthlyRent = calculateRent({ 
+        listing: housingRequest.listing, 
+        trip: housingRequest.trip 
+      });
+
+      const match = await tx.match.create({
+        data: {
+          tripId: housingRequest.tripId,
+          listingId: housingRequest.listingId,
+          monthlyRent: monthlyRent,
+        },
+      });
+
+      return { updatedRequest, match };
+    });
+
+    // Create a notification for the applicant
+    const notificationData = {
+      userId: housingRequest.userId,
+      content: `Your application for ${housingRequest.listing.title} has been approved!`,
+      url: `/platform/trips/${housingRequest.tripId}`,
+      actionType: 'application_approved',
+      actionId: housingRequestId,
+    };
+    
+    await createNotification(notificationData);
+
+    // Revalidate relevant paths
+    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/platform/host/dashboard/applications');
+    revalidatePath(`/platform/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
+
+    return { success: true, housingRequest: result.updatedRequest, match: result.match };
+  } catch (error) {
+    console.error('Error approving housing request:', error);
+    throw error;
+  }
+}
+
+// Decline a housing request
+export async function declineHousingRequest(housingRequestId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // First verify that the housing request belongs to a listing owned by the current user
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        listing: true,
+        user: true
+      }
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    if (housingRequest.listing.userId !== userId) {
+      throw new Error('Unauthorized: You can only decline requests for your own listings');
+    }
+
+    // Update the housing request status to declined
+    const updatedRequest = await prisma.housingRequest.update({
+      where: { id: housingRequestId },
+      data: { status: 'declined' }
+    });
+
+    // Create a notification for the applicant
+    const notificationData = {
+      userId: housingRequest.userId,
+      content: `Your application for ${housingRequest.listing.title} has been declined.`,
+      url: `/platform/trips/${housingRequest.tripId}`,
+      actionType: 'application_declined',
+      actionId: housingRequestId,
+    };
+    
+    await createNotification(notificationData);
+
+    // Revalidate relevant paths
+    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/platform/host/dashboard/applications');
+
+    return { success: true, housingRequest: updatedRequest };
+  } catch (error) {
+    console.error('Error declining housing request:', error);
+    throw error;
+  }
+}
+
+// Undo an approval (revert back to pending and delete the match)
+export async function undoApprovalHousingRequest(housingRequestId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // First verify that the housing request belongs to a listing owned by the current user
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        listing: true,
+        user: true
+      }
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    if (housingRequest.listing.userId !== userId) {
+      throw new Error('Unauthorized: You can only undo approvals for your own listings');
+    }
+
+    if (housingRequest.status !== 'approved') {
+      throw new Error('Can only undo approved requests');
+    }
+
+    // Start a transaction to ensure both operations succeed or fail together
+    const result = await prisma.$transaction(async (tx) => {
+      // Find and delete the match associated with this housing request
+      const match = await tx.match.findFirst({
+        where: {
+          tripId: housingRequest.tripId,
+          listingId: housingRequest.listingId
+        },
+        include: {
+          BoldSignLease: true
+        }
+      });
+
+      if (match) {
+        // Check if there's already a booking for this match
+        const booking = await tx.booking.findUnique({
+          where: { matchId: match.id }
+        });
+
+        if (booking) {
+          throw new Error('Cannot undo approval: A booking already exists for this match');
+        }
+
+        // Delete the BoldSignLease if it exists
+        if (match.BoldSignLease) {
+          await tx.boldSignLease.delete({
+            where: { id: match.BoldSignLease.id }
+          });
+        }
+
+        // Delete the match
+        await tx.match.delete({
+          where: { id: match.id }
+        });
+      }
+
+      // Update the housing request status back to pending and remove boldSignLeaseId
+      const updatedRequest = await tx.housingRequest.update({
+        where: { id: housingRequestId },
+        data: { 
+          status: 'pending',
+          boldSignLeaseId: null
+        }
+      });
+
+      // Delete the original approval notification
+      await tx.notification.deleteMany({
+        where: {
+          userId: housingRequest.userId,
+          actionType: 'application_approved',
+          actionId: housingRequestId
+        }
+      });
+
+      return { updatedRequest };
+    });
+
+    // Create a notification for the applicant
+    const notificationData = {
+      userId: housingRequest.userId,
+      content: `Your approval for ${housingRequest.listing.title} has been revoked.`,
+      url: `/platform/trips/${housingRequest.tripId}`,
+      actionType: 'application_revoked',
+      actionId: housingRequestId,
+    };
+    
+    await createNotification(notificationData);
+
+    // Revalidate relevant paths
+    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/platform/host/dashboard/applications');
+    revalidatePath(`/platform/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
+
+    return { success: true, housingRequest: result.updatedRequest };
+  } catch (error) {
+    console.error('Error undoing approval:', error);
+    throw error;
+  }
+}
+
+// Undo a decline (revert back to pending)
+export async function undoDeclineHousingRequest(housingRequestId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // First verify that the housing request belongs to a listing owned by the current user
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        listing: true,
+        user: true
+      }
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    if (housingRequest.listing.userId !== userId) {
+      throw new Error('Unauthorized: You can only undo declines for your own listings');
+    }
+
+    if (housingRequest.status !== 'declined') {
+      throw new Error('Can only undo declined requests');
+    }
+
+    // Start a transaction to ensure both operations succeed or fail together
+    const result = await prisma.$transaction(async (tx) => {
+      // Update the housing request status back to pending
+      const updatedRequest = await tx.housingRequest.update({
+        where: { id: housingRequestId },
+        data: { status: 'pending' }
+      });
+
+      // Delete the original decline notification
+      await tx.notification.deleteMany({
+        where: {
+          userId: housingRequest.userId,
+          actionType: 'application_declined',
+          actionId: housingRequestId
+        }
+      });
+
+      return { updatedRequest };
+    });
+
+    // Create a notification for the applicant
+    const notificationData = {
+      userId: housingRequest.userId,
+      content: `Your application for ${housingRequest.listing.title} is being reconsidered.`,
+      url: `/platform/trips/${housingRequest.tripId}`,
+      actionType: 'application_reconsidered',
+      actionId: housingRequestId,
+    };
+    
+    await createNotification(notificationData);
+
+    // Revalidate relevant paths
+    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/platform/host/dashboard/applications');
+
+    return { success: true, housingRequest: result.updatedRequest };
+  } catch (error) {
+    console.error('Error undoing decline:', error);
+    throw error;
+  }
+}
+
+// Update a housing request with new data
+export async function updateHousingRequest(housingRequestId: string, data: { leaseDocumentId?: string | null }) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // First verify that the housing request belongs to a listing owned by the current user
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: { id: housingRequestId },
+      include: {
+        listing: true
+      }
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    if (housingRequest.listing.userId !== userId) {
+      throw new Error('Unauthorized: You can only update requests for your own listings');
+    }
+
+    // Update the housing request
+    const updatedRequest = await prisma.housingRequest.update({
+      where: { id: housingRequestId },
+      data: data
+    });
+
+    // Revalidate relevant paths
+    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/platform/host/dashboard/applications');
+
+    return { success: true, housingRequest: updatedRequest };
+  } catch (error) {
+    console.error('Error updating housing request:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }

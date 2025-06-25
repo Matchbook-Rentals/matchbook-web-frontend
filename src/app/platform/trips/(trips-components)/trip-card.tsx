@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import { Trash, MoreHorizontal, Pencil, Settings } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -133,7 +134,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
         </AlertDialogContent>
       </AlertDialog>
       
-      <div className="border border-blueBrand rounded-md p-2 md:p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4">
+      <div className="border border-primaryBrand rounded-md p-2 md:p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4">
         <div className="flex justify-between items-start w-full md:w-auto">
           <div className="space-y-1">
             <h2 className="font-medium text-gray-900">{trip.locationString}</h2>
@@ -143,14 +144,14 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
           <div className="md:hidden">
             <Popover>
               <PopoverTrigger asChild>
-                <Button
-                  variant="ghost"
+                <BrandButton
+                  variant="outline"
                   size="icon"
-                  className="rounded-md h-9 w-9 border border-gray-200 bg-background"
+                  className="h-9 w-9"
                 >
-                  <MoreHorizontal className="h-5 w-5 text-gray-500" />
+                  <MoreHorizontal className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
-                </Button>
+                </BrandButton>
               </PopoverTrigger>
               <PopoverContent className="w-fit p-1">
                 <div className="flex flex-col w-full gap-1 text-left">
@@ -187,25 +188,25 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
         <div className="flex flex-col items-start md:items-center gap-3 w-full md:w-auto">
           <div className="text-right font-medium">{getPriceDisplay()}</div>
           <div className="flex justify-center gap-2 w-full md:w-auto">
-            <Button
-              className="bg-blueBrand/50 hover:bg-blueBrand/80 text-[#404040] rounded-md px-4 py-2 text-sm font-medium flex-1 md:w-auto h-9"
-              variant="ghost"
+            <BrandButton
+              variant="secondary"
+              className="flex-1 md:w-auto h-9"
               onClick={() => router.push(`trips/${trip.id}`)}
             >
               Continue Search
-            </Button>
+            </BrandButton>
             <EditTripDialog trip={trip} />
             <div className="hidden md:block">
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="ghost"
+                  <BrandButton
+                    variant="outline"
                     size="icon"
-                    className="rounded-md h-9 w-9 border border-gray-200 bg-background"
+                    className="h-9 w-9"
                   >
-                    <MoreHorizontal className="h-5 w-5 text-gray-500" />
+                    <MoreHorizontal className="h-5 w-5" />
                     <span className="sr-only">Open menu</span>
-                  </Button>
+                  </BrandButton>
                 </PopoverTrigger>
                 <PopoverContent className="w-fit p-1">
                   <div className="flex flex-col w-full gap-1 text-left">

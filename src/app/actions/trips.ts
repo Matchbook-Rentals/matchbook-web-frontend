@@ -60,6 +60,25 @@ export async function getAllUserTrips(options?: { next?: { tags?: string[] } }):
   }
 }
 
+export async function getUserTripsCount(): Promise<number> {
+  const { userId } = auth();
+  if (!userId) {
+    return 0;
+  }
+
+  try {
+    const count = await prisma.trip.count({
+      where: {
+        userId: userId,
+      },
+    });
+    return count;
+  } catch (error) {
+    console.error('Error fetching user trips count:', error);
+    return 0;
+  }
+}
+
 export async function addParticipant(tripId: string, email: string): Promise<string[]> {
   const { userId } = auth();
   if (!userId) {
@@ -211,8 +230,8 @@ export async function createTrip(tripData: {
   locationString: string;
   latitude: number;
   longitude: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | null;
+  endDate?: Date | null;
   numAdults?: number;
   numChildren?: number;
   numPets?: number;
@@ -223,10 +242,20 @@ export async function createTrip(tripData: {
   }
 
   try {
-    // Handle date logic
-    let { startDate, endDate } = tripData;
+    // Destructure all properties from tripData for clarity and safety
+    let {
+      startDate,
+      endDate,
+      locationString,
+      latitude,
+      longitude,
+      numAdults,
+      numChildren,
+      numPets
+    } = tripData;
     const today = new Date();
 
+    // Handle date logic
     if (!startDate && !endDate) {
       // If neither date is provided, start next month and end the month after
       startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
@@ -243,11 +272,16 @@ export async function createTrip(tripData: {
 
     const newTrip = await prisma.trip.create({
       data: {
-        ...tripData,
-        startDate,
-        endDate,
         userId,
         tripStatus: 'searching',
+        locationString,
+        latitude: latitude,
+        longitude: longitude,
+        startDate,
+        endDate,
+        numAdults,
+        numChildren,
+        numPets,
       },
     });
 

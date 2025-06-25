@@ -7,7 +7,7 @@ import { PAGE_MARGIN } from '@/constants/styles';
 import { Trip } from '@prisma/client';
 import SearchContainer from '@/components/home-components/searchContainer';
 import { LayoutGroup } from 'framer-motion'; // Keep LayoutGroup if needed elsewhere
-import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import { ChevronDown } from 'lucide-react';
 import {
   Dialog,
@@ -42,33 +42,35 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             <h1 className='text-[32px] font-medium mb-4'>Your Searches </h1>
             <div className="flex flex-wrap gap-2"> {/* Wrapper for buttons */}
               {/* Original Button - Hidden on mobile */}
-              <Button
+              <BrandButton
+                variant="outline"
                 onClick={() => setShowSearch(prev => !prev)}
-                className='hidden sm:flex w-fit rounded-full text-[16px]' // Use sm:flex to show on desktop
+                className='hidden sm:flex w-fit text-[16px]' // Use sm:flex to show on desktop
               >
                 New Search <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} />
-              </Button>
+              </BrandButton>
 
               {/* Mobile Search Button wrapped in DialogTrigger */}
               <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
                 <DialogTrigger asChild>
-                  <Button
+                  <BrandButton
+                    variant="outline"
                     className='block sm:hidden w-fit rounded-full text-[16px]' // block sm:hidden
                   >
                     New Search
-                  </Button>
+                  </BrandButton>
                 </DialogTrigger>
                 {/* Dialog Content will be rendered at the end of the component */}
               </Dialog>
             </div>
           </div>
-          <div className="hidden sm:block w-full md:w-1/2 mx-auto">
+          <div className="hidden sm:block w-full md:w-1/2 mx-auto mt-2">
             <Image
               src="/milwaukee-downtown.png"
               alt="Village footer"
               width={1200}
               height={516}
-              className="w-full max-w-[1000px] h-auto object-cover mx-auto p-0 my-0"
+              className="w-full max-w-[600px] h-auto object-cover mx-auto p-0 my-0"
             />
           </div>
         </div>

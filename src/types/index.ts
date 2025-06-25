@@ -38,6 +38,7 @@ export interface ListingAndImages extends Listing {
   uScore?: number;
   unavailablePeriods?: ListingUnavailability[];
   bookings?: Booking[];
+  matches?: MatchWithRelations[];
   availableStart?: Date;
   availableEnd?: Date;
   isActuallyAvailable?: boolean; // Helper flag from calculation

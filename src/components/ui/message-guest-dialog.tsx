@@ -47,8 +47,7 @@ const MessageGuestDialog: React.FC<MessageGuestDialogProps> = ({
       
       // Navigate to messages page with conversation ID
       const currentView = searchParams.get('view');
-      const isHostPath = window.location.pathname.startsWith('/platform/host-dashboard') || 
-                        window.location.pathname.startsWith('/platform/host/');
+      const isHostPath = window.location.pathname.startsWith('/platform/host/');
       
       if (currentView === 'host' || isHostPath) {
         router.push(`/platform/messages/?convo=${conversationId}&view=host`);

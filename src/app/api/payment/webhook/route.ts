@@ -27,6 +27,23 @@ const handleSuccessfulPurchase = async (session: any) => {
         },
       });
       break;
+    case 'backgroundCheck':
+      await prisma.purchase.create({
+        data: {
+          type: 'backgroundCheck',
+          amount: session.amount_total,
+          userId: session.metadata?.userId || null,
+          email: session.customer_details?.email || null,
+          status: 'completed',
+          isRedeemed: false,
+          metadata: {
+            sessionId: session.id || null,
+            paymentIntentId: session.payment_intent || null
+          },
+        },
+      });
+      console.log(`Background check purchase created for user ${session.metadata?.userId}`);
+      break;
     case 'booking':
       console.log('Booking session:', session);
       // TODO: Set Trip to 'booked'

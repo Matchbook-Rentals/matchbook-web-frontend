@@ -1,6 +1,17 @@
 # TO DOs
 
 
+
+update trip-context-proivder for new listing pricing strucutre and calculate rent helper fx
+
+Check that calc fx is applying correct price in filters/Preferences & match-tab/map-tab
+
+Upload Lease and direct user to sign
+
+Use lease to process payment
+
+
+
 rent easy copy auto text size
 
 Rewrite fxs and go server
