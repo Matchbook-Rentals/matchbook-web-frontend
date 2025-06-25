@@ -1,5 +1,6 @@
 import { HomeIcon, Star } from "lucide-react";
 import React from "react";
+import MatchbookHeader from "../../components/marketing-landing-components/matchbook-header";
 import {
   Avatar,
   AvatarFallback,
@@ -289,6 +290,7 @@ export const ReviewsSection = (): JSX.Element => {
 export default function HostsPage(): React.ReactNode {
   return (
     <div className="bg-background">
+      <MatchbookHeader />
       <div className="flex justify-center p-8">
         <HeroFrame />
       </div>
