@@ -52,21 +52,21 @@ export const HostsLoveMatchbook = (): JSX.Element => {
       id: 1,
       title: "We Don't Charge You a Dime",
       description: "MatchBook is completely free for Host.",
-      imageUrl: "/image.png",
+      imageUrl: "/marketing-images/hosts-love-us/1.png",
     },
     {
       id: 2,
       title: "Application Management Simplified",
       description:
         "Receive, review, and approve applications effortlessly on our platform.",
-      imageUrl: "/image-1.png",
+      imageUrl: "/marketing-images/hosts-love-us/2.png",
     },
     {
       id: 3,
       title: "Collect Rent Automatically",
       description:
         "Rent is automatically collected and securely transferred to you every month.",
-      imageUrl: "/image-2.png",
+      imageUrl: "/marketing-images/hosts-love-us/3.png",
       overlay: true,
     },
     {
@@ -74,7 +74,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
       title: "Connect with MatchBook Verified Renters",
       description:
         "Choose to accept only MatchBook Verified Renters for a worry-free experience.",
-      imageUrl: "/image-3.png",
+      imageUrl: "/marketing-images/hosts-love-us/4.png",
     },
   ];
 
