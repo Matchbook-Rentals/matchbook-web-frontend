@@ -45,7 +45,7 @@ export const HeroFrame = (): JSX.Element => {
   );
 };
 
-export const FeaturesSection = (): JSX.Element => {
+export const HostsLoveMatchbook = (): JSX.Element => {
   // Feature data for mapping
   const features = [
     {
@@ -166,7 +166,7 @@ export default function HostsPage(): React.ReactNode {
       <div className="flex justify-center p-8">
         <HeroFrame />
       </div>
-      <FeaturesSection />
+      <HostsLoveMatchbook />
     </div>
   );
 }
