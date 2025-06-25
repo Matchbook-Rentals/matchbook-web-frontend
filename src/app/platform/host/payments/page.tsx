@@ -4,7 +4,7 @@ import React from 'react';
 import { ConnectPayments } from '@stripe/react-connect-js';
 import EmbeddedComponentContainer from '@/app/components/EmbeddedComponentContainer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LoaderCircle, DollarSign, TrendingUp, Users } from 'lucide-react';
+import {  DollarSign, TrendingUp, Users } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
 // Mock data for dashboard widgets - replace with real data
@@ -78,7 +78,6 @@ export default function PaymentsPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Payments</CardTitle>
-            <LoaderCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockStats.pendingPayments}</div>
@@ -101,10 +100,6 @@ export default function PaymentsPage() {
           >
             {!accountReady ? (
               <div className="flex items-center justify-center gap-1 py-16 text-center">
-                <LoaderCircle
-                  className="mr-1 animate-spin items-center"
-                  size={20}
-                />
                 <span className="text-lg font-medium">Loading payment data...</span>
               </div>
             ) : (

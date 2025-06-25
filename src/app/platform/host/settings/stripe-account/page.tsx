@@ -8,7 +8,6 @@ import {
 import EmbeddedComponentContainer from '@/app/components/EmbeddedComponentContainer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LoaderCircle } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
 export default function StripeAccountSettingsPage() {
@@ -24,10 +23,6 @@ export default function StripeAccountSettingsPage() {
 
   const LoadingComponent = ({ message }: { message: string }) => (
     <div className="flex items-center justify-center gap-1 py-16 text-center">
-      <LoaderCircle
-        className="mr-1 animate-spin items-center"
-        size={20}
-      />
       <span className="text-lg font-medium">{message}</span>
     </div>
   );

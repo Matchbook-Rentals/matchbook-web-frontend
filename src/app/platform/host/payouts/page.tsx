@@ -4,7 +4,7 @@ import React from 'react';
 import { ConnectPayouts } from '@stripe/react-connect-js';
 import EmbeddedComponentContainer from '@/app/components/EmbeddedComponentContainer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LoaderCircle, Wallet, Clock, CheckCircle } from 'lucide-react';
+import {  Wallet, Clock, CheckCircle } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
 // Mock data for payout dashboard
@@ -107,10 +107,6 @@ export default function PayoutsPage() {
           >
             {!accountReady ? (
               <div className="flex items-center justify-center gap-1 py-16 text-center">
-                <LoaderCircle
-                  className="mr-1 animate-spin items-center"
-                  size={20}
-                />
                 <span className="text-lg font-medium">Loading payout data...</span>
               </div>
             ) : (

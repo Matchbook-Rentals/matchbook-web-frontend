@@ -332,7 +332,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
         {/* Fallback if PaymentElement doesn't render */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded text-xs">
-            <p className="text-red-700">If you don't see a payment form above, check:</p>
+            <p className="text-red-700">If you don&apos;t see a payment form above, check:</p>
             <ul className="text-red-600 mt-1 ml-4 list-disc">
               <li>Client secret is valid: {clientSecret ? '✅' : '❌'}</li>
               <li>Stripe keys match environment</li>

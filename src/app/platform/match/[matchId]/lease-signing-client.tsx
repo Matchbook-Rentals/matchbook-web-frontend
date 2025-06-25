@@ -717,13 +717,13 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                       Almost Complete!
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      🎉 Excellent work! You've successfully completed your part of the process.
+                      🎉 Excellent work! You&apos;ve successfully completed your part of the process.
                     </p>
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 mx-auto max-w-md">
-                      <h4 className="font-semibold text-blue-900 mb-2">What's Next?</h4>
+                      <h4 className="font-semibold text-blue-900 mb-2">What&apos;s Next?</h4>
                       <p className="text-blue-800 text-sm">
                         Your landlord has been notified and will sign the lease within 24-48 hours. 
-                        Once they sign, your payment will be processed and you'll receive confirmation.
+                        Once they sign, your payment will be processed and you&apos;ll receive confirmation.
                       </p>
                     </div>
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 mx-auto max-w-md">

@@ -74,6 +74,46 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
     ? `${firstName[0]}${lastName[0]}`.toUpperCase()
     : fullName[0]?.toUpperCase() || 'U';
 
+  // Determine user roles and access levels
+  const hasBetaAccess = checkClientBetaAccess(userRole);
+  const hasHostAccess = checkClientHostAccess(userRole);
+  const isAdmin = userRole === 'admin';
+  const isPreview = userRole === 'preview'; // Preview role has access to everything except admin
+
+  // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS
+  useEffect(() => {
+    updateUserLogin(new Date());
+  }, []);
+
+  const fetchNotifications = useCallback(async () => {
+    if (user && checkClientBetaAccess(userRole)) {
+      try {
+        const result = await getNotifications();
+        if (result.success && Array.isArray(result.notifications)) {
+          setNotifications(result.notifications);
+          setHasUnread(result.notifications.some(notification => notification.unread));
+        } else if (result.success && !Array.isArray(result.notifications)) {
+          console.error('Failed to fetch notifications: notifications data is not an array.', result);
+          setNotifications([]);
+          setHasUnread(false);
+        } else if (!result.success) {
+          console.error('Failed to fetch notifications:', result.error);
+        }
+      } catch (error) {
+        console.error('An error occurred while fetching notifications:', error);
+      }
+    }
+  }, [user, userRole]);
+
+  // Periodically update notifications
+  useEffect(() => {
+    fetchNotifications();
+    const notificationIntervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
+    return () => {
+      clearInterval(notificationIntervalId);
+    };
+  }, [fetchNotifications]);
+
   // Handle loading state
   if (!isLoaded) {
     return (
@@ -84,16 +124,6 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
       </div>
     );
   }
-
-  // Determine user roles and access levels
-  const hasBetaAccess = checkClientBetaAccess(userRole);
-  const hasHostAccess = checkClientHostAccess(userRole);
-  const isAdmin = userRole === 'admin';
-  const isPreview = userRole === 'preview'; // Preview role has access to everything except admin
-
-  useEffect(() => {
-    updateUserLogin(new Date());
-  }, []);
 
   // Check if user is on host side - either by path or by view=host parameter
   const isHostSide = pathname?.startsWith('/platform/host/') ||
@@ -136,35 +166,6 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
     { id: 'verification', label: 'Verification', href: '/platform/verification', requiresAdmin: true, requiresPreview: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
-
-  const fetchNotifications = useCallback(async () => {
-    if (user && checkClientBetaAccess(userRole)) {
-      try {
-        const result = await getNotifications();
-        if (result.success && Array.isArray(result.notifications)) {
-          setNotifications(result.notifications);
-          setHasUnread(result.notifications.some(notification => notification.unread));
-        } else if (result.success && !Array.isArray(result.notifications)) {
-          console.error('Failed to fetch notifications: notifications data is not an array.', result);
-          setNotifications([]);
-          setHasUnread(false);
-        } else if (!result.success) {
-          console.error('Failed to fetch notifications:', result.error);
-        }
-      } catch (error) {
-        console.error('An error occurred while fetching notifications:', error);
-      }
-    }
-  }, [user, userRole]);
-
-  // Periodically update notifications
-  useEffect(() => {
-    fetchNotifications();
-    const notificationIntervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
-    return () => {
-      clearInterval(notificationIntervalId);
-    };
-  }, [fetchNotifications]);
 
   const handleNotificationClick = async (notificationId: string) => {
     setNotifications(prevNotifications =>

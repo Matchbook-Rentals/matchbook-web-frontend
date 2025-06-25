@@ -84,7 +84,7 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
                   2
                 </div>
                 <p className="text-gray-700">
-                  You'll be notified when they complete their signature
+                  You&apos;ll be notified when they complete their signature
                 </p>
               </div>
               

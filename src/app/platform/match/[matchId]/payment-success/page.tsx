@@ -34,7 +34,7 @@ export default function PaymentSuccessPage({ params }: PaymentSuccessPageProps) 
                   <li>• Your payment method is securely stored with Stripe</li>
                   <li>• The landlord will sign the lease agreement</li>
                   <li>• Payment will be processed once both parties have signed</li>
-                  <li>• You'll receive confirmation when everything is complete</li>
+                  <li>• You&apos;ll receive confirmation when everything is complete</li>
                 </ul>
               </div>
 

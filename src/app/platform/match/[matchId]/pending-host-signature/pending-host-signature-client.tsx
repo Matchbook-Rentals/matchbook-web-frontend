@@ -54,7 +54,7 @@ export function PendingHostSignatureClient({ match, matchId }: PendingHostSignat
               <h1 className="text-3xl font-bold text-gray-900">Great Job!</h1>
             </div>
             <p className="text-lg text-gray-600 mb-2">
-              You've completed all required steps for your lease at
+              You&apos;ve completed all required steps for your lease at
             </p>
             <p className="text-xl font-semibold text-gray-900">
               {match.listing.locationString}
@@ -161,14 +161,14 @@ export function PendingHostSignatureClient({ match, matchId }: PendingHostSignat
                   
                   <div className="max-w-md mx-auto space-y-4 text-gray-600">
                     <p>
-                      You've successfully completed your part of the lease agreement! 
+                      You&apos;ve successfully completed your part of the lease agreement! 
                       Your payment method has been securely pre-authorized for <strong>${calculatePaymentAmount().toLocaleString()}</strong>.
                     </p>
                     
                     <p>
-                      We've notified <strong>{match.listing.user?.firstName} {match.listing.user?.lastName}</strong> 
+                      We&apos;ve notified <strong>{match.listing.user?.firstName} {match.listing.user?.lastName}</strong> 
                       that your lease is ready for their signature. Once they sign the lease, 
-                      your booking will be officially confirmed and you'll receive a notification.
+                      your booking will be officially confirmed and you&apos;ll receive a notification.
                     </p>
                     
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
@@ -177,8 +177,8 @@ export function PendingHostSignatureClient({ match, matchId }: PendingHostSignat
                         <div className="text-left">
                           <p className="font-medium text-blue-900 mb-1">Your Payment is Protected</p>
                           <p className="text-sm text-blue-800">
-                            Your payment is pre-authorized but won't be charged until the host signs. 
-                            If they don't sign within a reasonable time, the authorization will be canceled automatically.
+                            Your payment is pre-authorized but won&apos;t be charged until the host signs. 
+                            If they don&apos;t sign within a reasonable time, the authorization will be canceled automatically.
                           </p>
                         </div>
                       </div>
@@ -250,7 +250,7 @@ export function PendingHostSignatureClient({ match, matchId }: PendingHostSignat
                     <div>
                       <h4 className="font-semibold text-gray-900">Booking Confirmed</h4>
                       <p className="text-sm text-gray-600">
-                        You'll receive a confirmation notification and can start planning your move-in!
+                        You&apos;ll receive a confirmation notification and can start planning your move-in!
                       </p>
                     </div>
                   </div>

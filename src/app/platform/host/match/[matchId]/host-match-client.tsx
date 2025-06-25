@@ -532,7 +532,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                       Ready to Sign the Lease?
                     </h3>
                     <p className="text-gray-600 mb-6">
-                      The renter has signed the lease. Now it's your turn to review and sign the agreement.
+                      The renter has signed the lease. Now it&apos;s your turn to review and sign the agreement.
                     </p>
                     <Button 
                       onClick={startLeaseSigningFlow}

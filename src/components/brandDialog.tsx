@@ -265,7 +265,7 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
                 </p>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
-                <h4 className="font-medium text-blue-900 mb-2">What you'll need:</h4>
+                <h4 className="font-medium text-blue-900 mb-2">What you&apos;ll need:</h4>
                 <ul className="text-sm text-blue-800 space-y-1">
                   <li>• Business or personal tax information</li>
                   <li>• Bank account details for deposits</li>

@@ -83,7 +83,7 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
                   2
                 </div>
                 <p className="text-gray-700">
-                  You'll be notified when they complete their signature
+                  You&apos;ll be notified when they complete their signature
                 </p>
               </div>
               
@@ -92,7 +92,7 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
                   3
                 </div>
                 <p className="text-gray-700">
-                  Once both parties sign, you'll receive the fully executed lease
+                  Once both parties sign, you&apos;ll receive the fully executed lease
                 </p>
               </div>
             </div>

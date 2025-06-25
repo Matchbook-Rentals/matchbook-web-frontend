@@ -723,7 +723,7 @@ export default function VerificationClient({
                       <div>
                         <h4 className="font-semibold mb-1">1. Authorization to Obtain Reports</h4>
                         <p className="mb-1">
-                          I authorize MatchBook LLC and its designated agents and representatives, including third-party screening providers (such as Global Background Screening, iSoftpull), to obtain consumer reports about me, including a credit history and a background check (the "Reports"). I understand that my personal information, such as my date of birth and social security number, will be used for the purpose of obtaining these Reports. I understand that these Reports may include, but are not limited to, information related to the following from any governmental agency in any or all federal, state, or county jurisdiction:
+                          I authorize MatchBook LLC and its designated agents and representatives, including third-party screening providers (such as Global Background Screening, iSoftpull), to obtain consumer reports about me, including a credit history and a background check (the &quot;Reports&quot;). I understand that my personal information, such as my date of birth and social security number, will be used for the purpose of obtaining these Reports. I understand that these Reports may include, but are not limited to, information related to the following from any governmental agency in any or all federal, state, or county jurisdiction:
                         </p>
                         <ul className="list-disc pl-4 space-y-0.5">
                           <li>Credit history and credit score;</li>
@@ -749,7 +749,7 @@ export default function VerificationClient({
                       <div>
                         <h4 className="font-semibold mb-1">3. Limited Sharing of Results</h4>
                         <p>
-                          Matchbook LLC may share a general summary of my credit standing (e.g., "Excellent," "Good," "Fair," "Poor") with hosts to help them evaluate my application. My full report will not be shared with property owners or managers.
+                          Matchbook LLC may share a general summary of my credit standing (e.g., &quot;Excellent,&quot; &quot;Good,&quot; &quot;Fair,&quot; &quot;Poor&quot;) with hosts to help them evaluate my application. My full report will not be shared with property owners or managers.
                         </p>
                       </div>
                       
@@ -773,7 +773,7 @@ export default function VerificationClient({
                       <div>
                         <h4 className="font-semibold mb-1">6. Release of Liability</h4>
                         <p>
-                          I release Matchbook LLC, its agents, its affiliates, its representatives, and any third parties providing the reports from liability related to the lawful collection and use of this information, except in cases where such liability arises from Matchbook LLC, its agents, its affiliates, or any third parties' violation of the Fair Credit Reporting Act or other applicable law.
+                          I release Matchbook LLC, its agents, its affiliates, its representatives, and any third parties providing the reports from liability related to the lawful collection and use of this information, except in cases where such liability arises from Matchbook LLC, its agents, its affiliates, or any third parties&apos; violation of the Fair Credit Reporting Act or other applicable law.
                         </p>
                       </div>
                       
