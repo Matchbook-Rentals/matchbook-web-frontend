@@ -1,6 +1,7 @@
 import { HomeIcon, Star } from "lucide-react";
 import React from "react";
 import MatchbookHeader from "../../components/marketing-landing-components/matchbook-header";
+import { DitchPaperwork } from "../../components/marketing-landing-components/ditch-paperwork";
 import {
   Avatar,
   AvatarFallback,
@@ -291,6 +292,7 @@ export default function HostsPage(): React.ReactNode {
       </div>
       <HostsLoveMatchbook />
       <ReviewsSection />
+      <DitchPaperwork />
     </div>
   );
 }

@@ -1,6 +1,13 @@
 # TO DOs
 
 
+booking you pay reservatiohn deposit
+
+move in security deposit, first months (prorated to teh end of month)
+
+
+
+
 
 update trip-context-proivder for new listing pricing strucutre and calculate rent helper fx
 
