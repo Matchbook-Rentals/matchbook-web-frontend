@@ -9,7 +9,7 @@ export const DitchPaperwork = (): JSX.Element => {
           <img
             className="w-full h-full object-cover"
             alt="Man tearing paper representing paperless workflow"
-            src="/medium-shot-man-dealing-with-imposter-syndrome-1.png"
+            src="/marketing-images/ditch-paperwork/1.png"
           />
         </CardContent>
       </Card>
