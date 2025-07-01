@@ -29,7 +29,7 @@ export const MarketingPageHeader = ({
               {highlightedText}
             </p>
           )}
-          <h1 className="w-fit [font-family:'Lora',Helvetica] font-medium text-gray-neutral900 text-[56px] text-center tracking-[-2.00px]">
+          <h1 className="w-fit font-[Lora] font-medium text-gray-neutral900 text-[56px] text-center tracking-[-2px] leading-[100%]">
             {headerText}
           </h1>
         </div>

@@ -52,11 +52,13 @@
 
 .matchbook-header .match-book {
   color: #869a7d;
-  font-family: "Lora-Regular", Helvetica;
-  font-size: 52px;
-  font-weight: 400;
+  font-family: Lora;
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 100%;
+  letter-spacing: -2px;
+  text-align: center;
   left: 54px;
-  line-height: 52px;
   position: absolute;
   top: 0;
 }

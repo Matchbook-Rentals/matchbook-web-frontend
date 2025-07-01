@@ -3,7 +3,7 @@ import MatchbookHeader from "../../components/marketing-landing-components/match
 import { DitchPaperwork } from "../../components/marketing-landing-components/ditch-paperwork";
 import { ListYourProperty } from "../../components/marketing-landing-components/list-your-property";
 import { TermTailoredPricing } from "../../components/marketing-landing-components/term-tailored-pricing";
-import { MarketingPageHeader } from "../../components/marketing-landing-components/hero-frame";
+import { MarketingPageHeader } from "../../components/marketing-landing-components/marketing-page-header";
 import { HostsLoveMatchbook } from "../../components/marketing-landing-components/hosts-love-matchbook";
 import { ReviewsSection } from "../../components/marketing-landing-components/reviews-section";
 import Footer from "@/components/marketing-landing-components/footer";
