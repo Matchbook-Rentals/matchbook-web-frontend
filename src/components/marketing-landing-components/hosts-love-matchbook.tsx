@@ -1,5 +1,6 @@
 import React from "react";
-import { Button } from "../ui/button";
+import Link from "next/link";
+import { BrandButton } from "../ui/brandButton";
 import { Card, CardContent } from "../ui/card";
 
 export const HostsLoveMatchbook = (): JSX.Element => {
@@ -36,7 +37,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
   ];
 
   return (
-    <section className="flex flex-col items-center gap-14 px-[150px] py-16">
+    <section className="flex flex-col items-center gap-14 px-4 md:px-[100px] lg:px-[150px] py-16">
       <header className="inline-flex flex-col items-center gap-1">
         <h1 className="w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
           Why Hosts Love MatchBook
@@ -44,8 +45,8 @@ export const HostsLoveMatchbook = (): JSX.Element => {
       </header>
 
       <div className="flex flex-col items-start gap-6 w-full">
-        {/* First row of cards */}
-        <div className="flex items-center gap-6 w-full">
+        {/* Desktop view - First row of cards */}
+        <div className="hidden md:flex items-center gap-6 w-full">
           {features.slice(0, 2).map((feature) => (
             <Card
               key={feature.id}
@@ -76,8 +77,8 @@ export const HostsLoveMatchbook = (): JSX.Element => {
           ))}
         </div>
 
-        {/* Second row of cards */}
-        <div className="flex items-center gap-6 w-full">
+        {/* Desktop view - Second row of cards */}
+        <div className="hidden md:flex items-center gap-6 w-full">
           {features.slice(2, 4).map((feature) => (
             <Card
               key={feature.id}
@@ -105,14 +106,45 @@ export const HostsLoveMatchbook = (): JSX.Element => {
             </Card>
           ))}
         </div>
+
+        {/* Mobile view - Stacked cards */}
+        <div className="flex md:hidden flex-col gap-6 w-full">
+          {features.map((feature) => (
+            <Card
+              key={feature.id}
+              className="flex flex-col w-full items-start gap-5 border-none"
+            >
+              <div
+                className={`w-full h-60 rounded-xl bg-cover bg-center ${feature.overlay ? "bg-[linear-gradient(0deg,rgba(0,0,0,0.03)_0%,rgba(0,0,0,0.03)_100%)]" : ""}`}
+                style={{ backgroundImage: `url(${feature.imageUrl})` }}
+              />
+              <CardContent className="flex flex-col items-start gap-6 p-0 w-full">
+                <div className="flex-col gap-4 flex items-start w-full">
+                  <div className="flex-col gap-2 flex items-start w-full">
+                    <div className="gap-4 flex items-start w-full">
+                      <h2 className="flex-1 mt-[-1.00px] font-['Poppins',Helvetica] text-2xl tracking-[0] leading-8">
+                        <span className="font-semibold text-[#101828]">
+                          {feature.id}.{" "}
+                        </span>
+                        <span className="text-[#101828]">{feature.title}</span>
+                      </h2>
+                    </div>
+                    <p className="font-['Poppins',Helvetica] font-normal text-[#484a54] text-base tracking-[0] leading-6">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
 
-      <Button
-        className="w-[221px] bg-teal-600 hover:bg-teal-700 text-white"
-        asChild
-      >
-        <a href="#">List Your Property</a>
-      </Button>
+      <Link href="#">
+        <BrandButton size="lg">
+          List Your Property
+        </BrandButton>
+      </Link>
     </section>
   );
 };
