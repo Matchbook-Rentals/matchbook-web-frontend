@@ -4,6 +4,7 @@ import { MarketingPageHeader } from '@/components/marketing-landing-components/h
 import { AboutUsOurJourney } from '@/components/marketing-landing-components/about-us-our-journey';
 import { Frame as MissionStatement } from '@/components/marketing-landing-components/about-us-mission-statement';
 import { Frame as WhatMakesUsDifferent } from '@/components/marketing-landing-components/about-us-makes-us-different';
+import { AboutUsLookingAhead } from '@/components/marketing-landing-components/about-us-looking-ahead';
 
 export default function AboutPage() {
   return (
@@ -15,6 +16,7 @@ export default function AboutPage() {
       <AboutUsOurJourney />
       <MissionStatement />
       <WhatMakesUsDifferent />
+      <AboutUsLookingAhead />
       <Footer />
     </>
   );
