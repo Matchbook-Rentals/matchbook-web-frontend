@@ -313,7 +313,7 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
               onClick={() => {
                 // Get the current page URL to use as 'from' parameter
                 const currentUrl = window.location.href;
-                const onboardingUrl = `http://localhost:3000/platform/host/onboarding/stripe-connect?from=${encodeURIComponent(currentUrl)}`;
+                const onboardingUrl = `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/platform/host/onboarding/stripe-connect?from=${encodeURIComponent(currentUrl)}`;
                 window.open(onboardingUrl, '_blank');
                 onClose();
               }}

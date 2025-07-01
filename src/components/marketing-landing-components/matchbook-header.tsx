@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "../../components/ui/button";
 import UserMenu from "../userMenu";
+import Link from "next/link";
 
 export default function MatchbookHeader(): JSX.Element {
 
@@ -15,8 +16,11 @@ export default function MatchbookHeader(): JSX.Element {
         <Button
           variant="outline"
           className="text-[#3c8787] border-[#3c8787] hover:bg-primaryBrand hover:text-white font-medium transition-colors duration-300"
+
         >
+          <Link href={'/hosts'}>
           Become a Host
+          </Link>
         </Button>
 
         <UserMenu color="white" mode="header" />
