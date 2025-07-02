@@ -17,7 +17,7 @@ export async function POST(
     console.log('🔧 Creating setup intent with sandbox keys');
     const setupIntent = await stripe.setupIntents.create({
       customer: undefined, // Will be created when payment method is saved
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'us_bank_account'],
       usage: 'off_session',
       metadata: {
         matchId: params.matchId,

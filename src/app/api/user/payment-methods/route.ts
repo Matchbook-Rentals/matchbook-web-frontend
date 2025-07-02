@@ -25,25 +25,53 @@ export async function GET(request: NextRequest) {
 
     console.log('💳 Fetching payment methods for customer:', user.stripeCustomerId);
 
-    // Fetch payment methods from Stripe
-    const paymentMethods = await stripe.paymentMethods.list({
-      customer: user.stripeCustomerId,
-      type: 'card',
-    });
+    // Fetch both card and bank account payment methods from Stripe
+    const [cardMethods, bankMethods] = await Promise.all([
+      stripe.paymentMethods.list({
+        customer: user.stripeCustomerId,
+        type: 'card',
+      }),
+      stripe.paymentMethods.list({
+        customer: user.stripeCustomerId,
+        type: 'us_bank_account',
+      })
+    ]);
 
-    console.log('💳 Found payment methods:', paymentMethods.data.length);
+    const allPaymentMethods = [...cardMethods.data, ...bankMethods.data];
+    console.log('💳 Found payment methods:', allPaymentMethods.length, '(cards:', cardMethods.data.length, ', banks:', bankMethods.data.length, ')');
 
     // Format payment methods for frontend
-    const formattedPaymentMethods = paymentMethods.data.map(pm => ({
-      id: pm.id,
-      card: {
-        brand: pm.card?.brand || 'card',
-        last4: pm.card?.last4 || '****',
-        expMonth: pm.card?.exp_month || 1,
-        expYear: pm.card?.exp_year || 2025,
-      },
-      created: pm.created,
-    }));
+    const formattedPaymentMethods = allPaymentMethods.map(pm => {
+      if (pm.type === 'card') {
+        return {
+          id: pm.id,
+          type: 'card',
+          card: {
+            brand: pm.card?.brand || 'card',
+            last4: pm.card?.last4 || '****',
+            expMonth: pm.card?.exp_month || 1,
+            expYear: pm.card?.exp_year || 2025,
+          },
+          created: pm.created,
+        };
+      } else if (pm.type === 'us_bank_account') {
+        return {
+          id: pm.id,
+          type: 'us_bank_account',
+          us_bank_account: {
+            bank_name: pm.us_bank_account?.bank_name || 'Bank',
+            last4: pm.us_bank_account?.last4 || '****',
+            account_type: pm.us_bank_account?.account_type || 'checking',
+          },
+          created: pm.created,
+        };
+      }
+      return {
+        id: pm.id,
+        type: pm.type,
+        created: pm.created,
+      };
+    });
 
     return NextResponse.json({
       paymentMethods: formattedPaymentMethods,

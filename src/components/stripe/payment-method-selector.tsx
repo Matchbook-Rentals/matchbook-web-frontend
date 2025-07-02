@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CreditCard, Shield, CheckCircle, Plus } from 'lucide-react';
+import { CreditCard, Shield, CheckCircle, Plus, Trash2, Building2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -34,11 +34,17 @@ const stripePromise = stripePublishableKey
 
 interface SavedPaymentMethod {
   id: string;
-  card: {
+  type: 'card' | 'us_bank_account';
+  card?: {
     brand: string;
     last4: string;
     expMonth: number;
     expYear: number;
+  };
+  us_bank_account?: {
+    bank_name: string;
+    last4: string;
+    account_type: string;
   };
   created: number;
 }
@@ -136,8 +142,9 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
         // The actual details will be retrieved when needed for pre-authorization
         setPaymentMethod({
           id: setupIntent.payment_method,
-          card: { 
-            brand: 'card', 
+          type: 'unknown', // Will be determined server-side
+          display: { 
+            type: 'Payment Method', 
             last4: '****' // We'll get real details from server during pre-auth
           }
         });
@@ -225,9 +232,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
 
   // Show confirmation screen after payment method is added
   if (showConfirmation && paymentMethod) {
-    const card = paymentMethod.card;
-    const last4 = card?.last4 || '****';
-    const brand = card?.brand || 'card';
+    const display = paymentMethod.display || { type: 'Payment Method', last4: '****' };
     
     return (
       <div className="space-y-6">
@@ -242,9 +247,9 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
           <h3 className="font-semibold text-gray-900 mb-3">Payment Method Details</h3>
           <div className="flex items-center gap-3">
             <div className="w-10 h-6 bg-gray-200 rounded flex items-center justify-center text-xs font-medium">
-              {brand.toUpperCase()}
+              {display.type.substring(0, 4).toUpperCase()}
             </div>
-            <span className="text-gray-700">•••• •••• •••• {last4}</span>
+            <span className="text-gray-700">•••• •••• •••• {display.last4}</span>
           </div>
         </div>
 
@@ -252,7 +257,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
           <h3 className="font-semibold text-orange-900 mb-2">⚠️ Confirm Pre-Authorization</h3>
           <p className="text-orange-800 text-sm mb-3">
             Are you sure you want to pre-authorize charges of <strong>${amount.toLocaleString()}</strong> on 
-            your {brand} card ending in {last4}?
+            your {display.type} ending in {display.last4}?
           </p>
           <p className="text-orange-700 text-xs">
             This amount will be processed once the host signs the lease agreement. 
@@ -268,7 +273,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
             disabled={isProcessing}
             className="flex-1"
           >
-            Use Different Card
+            Use Different Method
           </Button>
           <Button
             type="button"
@@ -292,7 +297,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
           <span className="font-medium">Secure Payment Setup</span>
         </div>
         <p className="text-blue-700 text-sm mt-2">
-          Your payment method will be securely saved and pre-authorized for ${amount.toLocaleString()}.
+          Add a credit card or bank account that will be securely saved and pre-authorized for ${amount.toLocaleString()}.
           No charges will be made until the landlord signs the lease.
         </p>
       </div>
@@ -310,6 +315,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
         <PaymentElement 
           options={{ 
             layout: 'tabs',
+            paymentMethodOrder: ['card', 'us_bank_account'],
           }}
           onReady={() => {
             console.log('✅ PaymentElement ready');
@@ -371,6 +377,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
   const [showNewMethodForm, setShowNewMethodForm] = useState(false);
   const [isLoadingMethods, setIsLoadingMethods] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [deletingPaymentMethodId, setDeletingPaymentMethodId] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -493,6 +500,48 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
     return brand.charAt(0).toUpperCase() + brand.slice(1);
   };
 
+  const handleDeletePaymentMethod = async (paymentMethodId: string) => {
+    setDeletingPaymentMethodId(paymentMethodId);
+    
+    try {
+      console.log('🗑️ Deleting payment method:', paymentMethodId);
+      
+      const response = await fetch(`/api/user/payment-methods/${paymentMethodId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.details || errorData.error || 'Failed to delete payment method');
+      }
+
+      // Remove from local state
+      setSavedPaymentMethods(prev => prev.filter(method => method.id !== paymentMethodId));
+      
+      // Clear selection if the deleted method was selected
+      if (selectedPaymentMethod === paymentMethodId) {
+        setSelectedPaymentMethod('');
+      }
+
+      toast({
+        title: "Success",
+        description: "Payment method deleted successfully",
+      });
+    } catch (error) {
+      console.error('❌ Error deleting payment method:', error);
+      toast({
+        title: "Error",
+        description: `Failed to delete payment method: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingPaymentMethodId(null);
+    }
+  };
+
   if (isLoadingMethods) {
     return (
       <Card>
@@ -514,7 +563,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
           Payment Method Setup
         </CardTitle>
         <p className="text-sm text-gray-600">
-          To complete your lease, please select or add a payment method for security deposit and rent charges.
+          To complete your lease, please select or add a payment method (credit card or bank account) for security deposit and rent charges.
         </p>
       </CardHeader>
       <CardContent>
@@ -526,7 +575,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                 <span className="font-medium">Secure Payment Setup</span>
               </div>
               <p className="text-blue-700 text-sm mt-2">
-                Your payment method will be securely pre-authorized for ${amount.toLocaleString()}.
+                Select a saved payment method to pre-authorize for ${amount.toLocaleString()}.
                 No charges will be made until the landlord signs the lease.
               </p>
             </div>
@@ -535,32 +584,87 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900">Select a saved payment method:</h3>
                 
-                <Select value={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Choose a payment method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {savedPaymentMethods.map((method) => (
-                      <SelectItem key={method.id} value={method.id}>
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-6 bg-gray-200 rounded flex items-center justify-center text-xs font-medium">
-                            {formatCardBrand(method.card.brand)}
+                <div className="space-y-3">
+                  {savedPaymentMethods.map((method) => {
+                    const isCard = method.type === 'card';
+                    const isBankAccount = method.type === 'us_bank_account';
+                    
+                    return (
+                      <div 
+                        key={method.id} 
+                        className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                          selectedPaymentMethod === method.id 
+                            ? 'border-blue-500 bg-blue-50' 
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => setSelectedPaymentMethod(method.id)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            {isCard ? (
+                              <div className="w-8 h-6 bg-gray-200 rounded flex items-center justify-center text-xs font-medium">
+                                {formatCardBrand(method.card?.brand || 'card')}
+                              </div>
+                            ) : isBankAccount ? (
+                              <div className="w-8 h-6 bg-blue-100 rounded flex items-center justify-center">
+                                <Building2 className="w-4 h-4 text-blue-600" />
+                              </div>
+                            ) : (
+                              <div className="w-8 h-6 bg-gray-200 rounded flex items-center justify-center text-xs font-medium">
+                                PM
+                              </div>
+                            )}
+                            <div className="flex flex-col">
+                              {isCard && method.card ? (
+                                <>
+                                  <span className="font-medium">•••• •••• •••• {method.card.last4}</span>
+                                  <span className="text-gray-500 text-sm">
+                                    Expires {method.card.expMonth.toString().padStart(2, '0')}/{method.card.expYear.toString().slice(-2)}
+                                  </span>
+                                </>
+                              ) : isBankAccount && method.us_bank_account ? (
+                                <>
+                                  <span className="font-medium">{method.us_bank_account.bank_name} •••• {method.us_bank_account.last4}</span>
+                                  <span className="text-gray-500 text-sm capitalize">
+                                    {method.us_bank_account.account_type} account
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="font-medium">Payment Method</span>
+                              )}
+                            </div>
                           </div>
-                          <span>•••• •••• •••• {method.card.last4}</span>
-                          <span className="text-gray-500 text-sm">
-                            {method.card.expMonth.toString().padStart(2, '0')}/{method.card.expYear.toString().slice(-2)}
-                          </span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeletePaymentMethod(method.id);
+                            }}
+                            disabled={deletingPaymentMethodId === method.id}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            {deletingPaymentMethodId === method.id ? (
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                            ) : (
+                              <Trash2 className="w-4 h-4" />
+                            )}
+                          </Button>
                         </div>
-                      </SelectItem>
-                    ))}
-                    <SelectItem value="add-new">
-                      <div className="flex items-center gap-2">
-                        <Plus className="w-4 h-4" />
-                        <span>Add New Payment Method</span>
                       </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                    );
+                  })}
+                  
+                  <div 
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-gray-400 transition-colors"
+                    onClick={() => setSelectedPaymentMethod('add-new')}
+                  >
+                    <div className="flex items-center justify-center gap-2 text-gray-600">
+                      <Plus className="w-4 h-4" />
+                      <span>Add Credit Card or Bank Account</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -572,7 +676,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                   className="flex items-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
-                  Add New Payment Method
+                  Add Credit Card or Bank Account
                 </Button>
               </div>
             )}
@@ -596,7 +700,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                     className="flex-1"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Add New Method
+                    Add Payment Method
                   </Button>
                 ) : (
                   <Button
@@ -617,7 +721,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
           <div className="space-y-4">
             {savedPaymentMethods.length > 0 && (
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900">Add New Payment Method</h3>
+                <h3 className="font-semibold text-gray-900">Add Credit Card or Bank Account</h3>
                 <Button
                   variant="outline"
                   size="sm"
