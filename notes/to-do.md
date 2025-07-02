@@ -1,5 +1,6 @@
 # TO DOs
 
+don't do county criminal report, rather do crinial and evictions package tailored for us
 
 booking you pay reservatiohn deposit
 
@@ -33,7 +34,7 @@ Rewrite fxs and go server
 
 - [ ] APIS 
 ----- [ ] batching for geocodes and autocmplete after half of per second rate limits PositionStack
------ [ ] City use our own lookup 
+----- [ ] City use our own lookup  f
 ----- [ ] Move up higher by default so we don't cutoff the popover
 ----- [ ] Map Box Search box api for autocomplete
 ----- [ ] Credit check first, then background

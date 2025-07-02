@@ -7,6 +7,19 @@ import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 
+// Custom hook to get base URL safely
+const useBaseUrl = () => {
+  const [baseUrl, setBaseUrl] = React.useState('')
+  
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setBaseUrl(`${window.location.protocol}//${window.location.host}`)
+    }
+  }, [])
+  
+  return baseUrl
+}
+
 // Base Radix Dialog components
 function Dialog({
   ...props
@@ -191,6 +204,7 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
 }) => {
   const [hasStripeAccount, setHasStripeAccount] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
+  const baseUrl = useBaseUrl();
 
   // Check user's Stripe account status when dialog opens
   React.useEffect(() => {
@@ -312,8 +326,8 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
             <Button
               onClick={() => {
                 // Get the current page URL to use as 'from' parameter
-                const currentUrl = window.location.href;
-                const onboardingUrl = `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/platform/host/onboarding/stripe-connect?from=${encodeURIComponent(currentUrl)}`;
+                const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+                const onboardingUrl = `${baseUrl}/platform/host/onboarding/stripe-connect?from=${encodeURIComponent(currentUrl)}`;
                 window.open(onboardingUrl, '_blank');
                 onClose();
               }}
