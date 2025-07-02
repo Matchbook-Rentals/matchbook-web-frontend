@@ -315,7 +315,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
         <PaymentElement 
           options={{ 
             layout: 'tabs',
-            paymentMethodOrder: ['card', 'us_bank_account'],
+            paymentMethodOrder: ['us_bank_account', 'card'],
           }}
           onReady={() => {
             console.log('✅ PaymentElement ready');
@@ -479,10 +479,13 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
         throw new Error(errorData.details || errorData.error || 'Failed to authorize payment method');
       }
 
+      const result = await response.json();
+      
       toast({
-        title: "Success",
-        description: "Payment method authorized successfully!",
+        title: "Payment Authorized Successfully!",
+        description: "Your payment method has been pre-authorized. Check your email for a receipt from Stripe.",
       });
+      
       onSuccess();
     } catch (error) {
       console.error('❌ Error using existing payment method:', error);
@@ -496,8 +499,42 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
     }
   };
 
+
   const formatCardBrand = (brand: string) => {
     return brand.charAt(0).toUpperCase() + brand.slice(1);
+  };
+
+  const handleStripeCheckout = async (includeCardFee: boolean = true) => {
+    setIsProcessing(true);
+    try {
+      console.log('🔗 Creating Stripe Checkout session with card fee:', includeCardFee);
+      
+      const response = await fetch(`/api/matches/${matchId}/create-payment-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount, includeCardFee }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.details || errorData.error || 'Failed to create payment session');
+      }
+
+      const { url } = await response.json();
+      
+      // Redirect to Stripe Checkout
+      window.location.href = url;
+    } catch (error) {
+      console.error('❌ Error creating Stripe session:', error);
+      toast({
+        title: "Error",
+        description: `Failed to open Stripe checkout: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive",
+      });
+      setIsProcessing(false);
+    }
   };
 
   const handleDeletePaymentMethod = async (paymentMethodId: string) => {
@@ -575,14 +612,40 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                 <span className="font-medium">Secure Payment Setup</span>
               </div>
               <p className="text-blue-700 text-sm mt-2">
-                Select a saved payment method to pre-authorize for ${amount.toLocaleString()}.
-                No charges will be made until the landlord signs the lease.
+                Select a saved payment method to pre-authorize for ${amount.toLocaleString()}, or complete payment via Stripe Checkout.
+                Stripe will send you a receipt via email for any payment transaction.
               </p>
+            </div>
+
+            {/* Temporary Stripe Checkout Options */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <h3 className="font-semibold text-yellow-900 mb-2">🧪 Temporary: Complete Payment via Stripe Checkout</h3>
+              <p className="text-yellow-800 text-sm mb-4">
+                Complete full payment immediately with dynamic fee calculation based on payment method.
+              </p>
+              <div className="flex gap-3">
+                <Button 
+                  onClick={() => handleStripeCheckout(true)}
+                  disabled={isProcessing}
+                  variant="outline"
+                  className="flex-1 bg-yellow-100 border-yellow-300 hover:bg-yellow-200"
+                >
+                  {isProcessing ? 'Opening Stripe...' : '💳 Pay with Card (includes 2.9% + 30¢ fee)'}
+                </Button>
+                <Button 
+                  onClick={() => handleStripeCheckout(false)}
+                  disabled={isProcessing}
+                  variant="outline"
+                  className="flex-1 bg-blue-100 border-blue-300 hover:bg-blue-200"
+                >
+                  {isProcessing ? 'Opening Stripe...' : '🏦 Pay with Bank (no extra fees)'}
+                </Button>
+              </div>
             </div>
 
             {savedPaymentMethods.length > 0 && (
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900">Select a saved payment method:</h3>
+                <h3 className="font-semibold text-gray-900">Or select a saved payment method:</h3>
                 
                 <div className="space-y-3">
                   {savedPaymentMethods.map((method) => {
@@ -657,7 +720,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                   
                   <div 
                     className="border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-gray-400 transition-colors"
-                    onClick={() => setSelectedPaymentMethod('add-new')}
+                    onClick={() => setShowNewMethodForm(true)}
                   >
                     <div className="flex items-center justify-center gap-2 text-gray-600">
                       <Plus className="w-4 h-4" />
@@ -673,6 +736,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                 <p className="text-gray-600 mb-4">No saved payment methods found.</p>
                 <Button 
                   onClick={() => setShowNewMethodForm(true)}
+                  disabled={isProcessing}
                   className="flex items-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
@@ -682,36 +746,64 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
             )}
 
             {savedPaymentMethods.length > 0 && (
-              <div className="flex gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onCancel}
-                  disabled={isProcessing}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                
-                {selectedPaymentMethod === 'add-new' ? (
-                  <Button
-                    type="button"
-                    onClick={() => setShowNewMethodForm(true)}
-                    className="flex-1"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Payment Method
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    onClick={handleUseExistingMethod}
-                    disabled={!selectedPaymentMethod || selectedPaymentMethod === 'add-new' || isProcessing}
-                    className="flex-1"
-                  >
-                    <Shield className="w-4 h-4 mr-2" />
-                    {isProcessing ? 'Authorizing...' : 'Authorize Payment'}
-                  </Button>
+              <div className="space-y-3">
+                {/* Show action buttons based on selection */}
+                {selectedPaymentMethod && selectedPaymentMethod !== 'add-new' && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-blue-900 mb-2">Ready to Process Payment</h4>
+                    <p className="text-blue-800 text-sm mb-3">
+                      Click "Authorize Payment" to pre-authorize your selected payment method, or add a new payment method.
+                    </p>
+                    <div className="flex gap-3">
+                      <Button
+                        type="button"
+                        onClick={handleUseExistingMethod}
+                        disabled={isProcessing}
+                        className="flex-1"
+                      >
+                        <Shield className="w-4 h-4 mr-2" />
+                        {isProcessing ? 'Authorizing...' : 'Authorize Selected Payment'}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setShowNewMethodForm(true)}
+                        disabled={isProcessing}
+                        className="flex-1"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add New Payment Method
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {(!selectedPaymentMethod || selectedPaymentMethod === 'add-new') && (
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <p className="text-gray-700 text-sm mb-3">
+                      Select a saved payment method above, or add a new payment method.
+                    </p>
+                    <div className="flex gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={onCancel}
+                        disabled={isProcessing}
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => setShowNewMethodForm(true)}
+                        disabled={isProcessing}
+                        className="flex-1"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add New Payment Method
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </div>
             )}

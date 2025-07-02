@@ -58,13 +58,21 @@ export async function POST(
       return NextResponse.json({ error: 'No Stripe customer found' }, { status: 400 });
     }
 
+    // Get payment method details to determine capture method
+    const paymentMethod = await stripe.paymentMethods.retrieve(match.stripePaymentMethodId);
+    const isBankAccount = paymentMethod.type === 'us_bank_account';
+    const captureMethod = isBankAccount ? 'automatic' : 'manual';
+
+    console.log('💳 Existing payment method type:', paymentMethod.type, 'Capture method:', captureMethod);
+
     // Create payment intent for authorization with Stripe Connect transfer
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100, // Convert to cents
       currency: 'usd',
       customer: user.stripeCustomerId,
       payment_method: match.stripePaymentMethodId,
-      capture_method: 'manual', // Don't capture the payment yet
+      payment_method_types: ['card', 'us_bank_account'],
+      capture_method: captureMethod, // Automatic for bank accounts, manual for cards
       confirm: true,
       return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/platform/match/${params.matchId}/payment-success`,
       transfer_data: {
@@ -75,18 +83,29 @@ export async function POST(
         userId,
         hostUserId: match.listing.userId,
         type: 'lease_deposit_and_rent_existing',
+        paymentMethodType: paymentMethod.type,
       },
+      receipt_email: match.trip.user?.email || undefined, // Send receipt to user
     });
 
     // Update match with authorization info
+    const updateData: any = {
+      stripePaymentIntentId: paymentIntent.id,
+      paymentAuthorizedAt: new Date(),
+      paymentAmount: amount,
+    };
+
+    // If bank account (automatic capture), mark as captured immediately
+    if (isBankAccount && paymentIntent.status === 'succeeded') {
+      updateData.paymentCapturedAt = new Date();
+      updateData.paymentStatus = 'captured';
+    } else {
+      updateData.paymentStatus = 'authorized';
+    }
+
     await prisma.match.update({
       where: { id: params.matchId },
-      data: {
-        stripePaymentIntentId: paymentIntent.id,
-        paymentAuthorizedAt: new Date(),
-        paymentAmount: amount,
-        paymentStatus: 'authorized',
-      },
+      data: updateData,
     });
 
     // Check if lease is fully signed and create booking if so

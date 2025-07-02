@@ -305,6 +305,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
     setShowPaymentInfoModal(true);
   };
 
+
   const handleAuthorizeExistingPayment = async () => {
     if (!hasPaymentMethod) {
       toast({

@@ -87,19 +87,28 @@ export async function POST(
       customer: customerId,
     });
 
+    // Get payment method details to determine capture method
+    const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+    const isBankAccount = paymentMethod.type === 'us_bank_account';
+    const captureMethod = isBankAccount ? 'automatic' : 'manual';
+
+    console.log('💳 Payment method type:', paymentMethod.type, 'Capture method:', captureMethod);
+
     // Create payment intent for authorization with Stripe Connect transfer
     console.log('💰 Creating payment intent with Connect transfer:', { 
       amount: amount * 100, 
       customerId, 
       paymentMethodId,
-      hostStripeAccountId: match.listing.user.stripeAccountId
+      hostStripeAccountId: match.listing.user.stripeAccountId,
+      captureMethod
     });
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100, // Convert to cents
       currency: 'usd',
       customer: customerId,
       payment_method: paymentMethodId,
-      capture_method: 'manual', // Don't capture the payment yet
+      payment_method_types: ['card', 'us_bank_account'],
+      capture_method: captureMethod, // Automatic for bank accounts, manual for cards
       confirm: true,
       return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/platform/match/${params.matchId}/payment-success`,
       transfer_data: {
@@ -110,21 +119,33 @@ export async function POST(
         userId,
         hostUserId: match.listing.userId,
         type: 'lease_deposit_and_rent',
+        paymentMethodType: paymentMethod.type,
       },
+      receipt_email: match.trip.user?.email || undefined, // Send receipt to user
     });
 
     console.log('💰 Payment intent created:', { id: paymentIntent.id, status: paymentIntent.status });
 
     // Save payment method info to the match
     console.log('💾 Updating match with payment info:', params.matchId);
+    const updateData: any = {
+      stripePaymentMethodId: paymentMethodId,
+      stripePaymentIntentId: paymentIntent.id,
+      paymentAuthorizedAt: new Date(),
+      paymentAmount: amount,
+    };
+
+    // If bank account (automatic capture), mark as captured immediately
+    if (isBankAccount && paymentIntent.status === 'succeeded') {
+      updateData.paymentCapturedAt = new Date();
+      updateData.paymentStatus = 'captured';
+    } else {
+      updateData.paymentStatus = 'authorized';
+    }
+
     await prisma.match.update({
       where: { id: params.matchId },
-      data: {
-        stripePaymentMethodId: paymentMethodId,
-        stripePaymentIntentId: paymentIntent.id,
-        paymentAuthorizedAt: new Date(),
-        paymentAmount: amount,
-      },
+      data: updateData,
     });
 
     console.log('💾 Match updated successfully');

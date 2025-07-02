@@ -55,7 +55,7 @@ function generateRentPayments(
         amount: proRatedAmount,
         dueDate: currentDate,
         stripePaymentMethodId,
-        paymentAuthorizedAt: new Date(),
+        paymentAuthorizedAt: null,
       });
     } else {
       // Full month payment
@@ -64,7 +64,7 @@ function generateRentPayments(
         amount: monthlyRent,
         dueDate: currentDate,
         stripePaymentMethodId,
-        paymentAuthorizedAt: new Date(),
+        paymentAuthorizedAt: null,
       });
     }
     
