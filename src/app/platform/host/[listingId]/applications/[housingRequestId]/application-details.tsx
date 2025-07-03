@@ -939,7 +939,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 File Picker Alternative
               </h3>
               <p className="text-sm text-yellow-700 mb-3">
-                The automatic file picker didn't open. Please select your PDF lease document below:
+                The automatic file picker didn&apos;t open. Please select your PDF lease document below:
               </p>
               <input
                 type="file"
