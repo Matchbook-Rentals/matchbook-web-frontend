@@ -6,7 +6,11 @@ import { Button } from '@/components/ui/button'
 import { BrandButton } from '@/components/ui/brandButton'
 import { Badge } from '@/components/ui/badge'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Calendar, DollarSign, TestTube } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Calendar, DollarSign, TestTube, Plus, Loader2, Edit, Save, FileUp } from 'lucide-react'
 
 // Import the function we want to test
 // Note: We'll need to create a client-side version since generateRentPayments is server-side
@@ -105,14 +109,39 @@ interface TestCase {
   expectedPayments: number
   expectedAmounts: number[]
   description: string
+  isUnsaved?: boolean
+  testCaseId?: string
 }
 
 export default function TestPaymentCreation() {
   const [testResults, setTestResults] = useState<TestResult[]>([])
   const [isRunning, setIsRunning] = useState(false)
   const [runningTestCase, setRunningTestCase] = useState<string | null>(null)
+  const [isAddTestDialogOpen, setIsAddTestDialogOpen] = useState(false)
+  const [isEditTestDialogOpen, setIsEditTestDialogOpen] = useState(false)
+  const [isCsvImportDialogOpen, setIsCsvImportDialogOpen] = useState(false)
+  const [isGeneratingTest, setIsGeneratingTest] = useState(false)
+  const [editingTestIndex, setEditingTestIndex] = useState<number | null>(null)
+  const [savingTestIndex, setSavingTestIndex] = useState<number | null>(null)
+  const [csvFile, setCsvFile] = useState<File | null>(null)
+  const [isProcessingCsv, setIsProcessingCsv] = useState(false)
+  const [newTestForm, setNewTestForm] = useState({
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    monthlyRent: ''
+  })
+  const [editTestForm, setEditTestForm] = useState({
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    monthlyRent: '',
+    explanation: ''
+  })
 
-  const testCases: TestCase[] = [
+  const [testCases, setTestCases] = useState<TestCase[]>([
     {
       name: "Simple Year Lease (Jan 1 to Jan 1)",
       bookingId: "test-booking-1",
@@ -122,9 +151,313 @@ export default function TestPaymentCreation() {
       stripePaymentMethodId: "pm_test_123",
       expectedPayments: 12,
       expectedAmounts: [2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000], // 12 full payments, move-out date doesn't count
-      description: "1-year lease starting and ending on the 1st should have exactly 12 full payments, move-out date should not incur additional rent"
+      description: "1-year lease starting and ending on the 1st should have exactly 12 full payments, move-out date should not incur additional rent",
+      isUnsaved: false // This is the original example test case
     }
-  ]
+  ])
+
+  const handleAddTestCase = async () => {
+    if (!newTestForm.title || !newTestForm.startDate || !newTestForm.endDate || !newTestForm.monthlyRent) {
+      alert('Please fill in all required fields')
+      return
+    }
+
+    setIsGeneratingTest(true)
+    
+    try {
+      const response = await fetch('/api/test-cases/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: newTestForm.title,
+          description: newTestForm.description,
+          startDate: newTestForm.startDate,
+          endDate: newTestForm.endDate,
+          monthlyRent: parseInt(newTestForm.monthlyRent)
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        throw new Error(errorData.error || 'Failed to generate test case')
+      }
+
+      const generatedTest = await response.json()
+      
+      // Validate the response structure
+      if (!generatedTest.inputData || !generatedTest.expectedData || !generatedTest.testName) {
+        throw new Error('Invalid test case structure received from AI')
+      }
+      
+      // Convert generated test to TestCase format
+      const newTestCase: TestCase = {
+        name: generatedTest.testName,
+        bookingId: generatedTest.inputData.bookingId,
+        monthlyRent: generatedTest.inputData.monthlyRent,
+        startDate: new Date(generatedTest.inputData.startDate),
+        endDate: new Date(generatedTest.inputData.endDate),
+        stripePaymentMethodId: generatedTest.inputData.stripePaymentMethodId,
+        expectedPayments: generatedTest.expectedData.expectedPayments,
+        expectedAmounts: generatedTest.expectedData.expectedAmounts,
+        description: generatedTest.testDescription,
+        isUnsaved: true // Mark as unsaved since it's newly generated
+      }
+
+      setTestCases(prev => [...prev, newTestCase])
+      setIsAddTestDialogOpen(false)
+      setNewTestForm({
+        title: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        monthlyRent: ''
+      })
+      
+    } catch (error) {
+      console.error('Error generating test case:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      alert(`Failed to generate test case: ${errorMessage}\n\nPlease try again with different parameters.`)
+    } finally {
+      setIsGeneratingTest(false)
+    }
+  }
+
+  const handleEditTestCase = (index: number) => {
+    const testCase = testCases[index]
+    setEditingTestIndex(index)
+    setEditTestForm({
+      title: testCase.name,
+      description: testCase.description,
+      startDate: testCase.startDate.toISOString().split('T')[0],
+      endDate: testCase.endDate.toISOString().split('T')[0],
+      monthlyRent: testCase.monthlyRent.toString(),
+      explanation: ''
+    })
+    setIsEditTestDialogOpen(true)
+  }
+
+  const handleSaveEditedTestCase = async () => {
+    if (!editTestForm.title || !editTestForm.startDate || !editTestForm.endDate || !editTestForm.monthlyRent || !editTestForm.explanation) {
+      alert('Please fill in all required fields including the explanation')
+      return
+    }
+
+    if (editingTestIndex === null) return
+
+    setIsGeneratingTest(true)
+    
+    try {
+      const originalTestCase = testCases[editingTestIndex]
+      
+      const response = await fetch('/api/test-cases/edit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: editTestForm.title,
+          description: editTestForm.description,
+          startDate: editTestForm.startDate,
+          endDate: editTestForm.endDate,
+          monthlyRent: parseInt(editTestForm.monthlyRent),
+          explanation: editTestForm.explanation,
+          originalTestCase: {
+            name: originalTestCase.name,
+            bookingId: originalTestCase.bookingId,
+            monthlyRent: originalTestCase.monthlyRent,
+            startDate: originalTestCase.startDate.toISOString().split('T')[0],
+            endDate: originalTestCase.endDate.toISOString().split('T')[0],
+            stripePaymentMethodId: originalTestCase.stripePaymentMethodId,
+            expectedPayments: originalTestCase.expectedPayments,
+            expectedAmounts: originalTestCase.expectedAmounts,
+            description: originalTestCase.description
+          }
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        throw new Error(errorData.error || 'Failed to update test case')
+      }
+
+      const updatedTest = await response.json()
+      
+      // Validate the response structure
+      if (!updatedTest.inputData || !updatedTest.expectedData || !updatedTest.testName) {
+        throw new Error('Invalid test case structure received from AI')
+      }
+      
+      // Convert updated test to TestCase format
+      const updatedTestCase: TestCase = {
+        name: updatedTest.testName,
+        bookingId: updatedTest.inputData.bookingId,
+        monthlyRent: updatedTest.inputData.monthlyRent,
+        startDate: new Date(updatedTest.inputData.startDate),
+        endDate: new Date(updatedTest.inputData.endDate),
+        stripePaymentMethodId: updatedTest.inputData.stripePaymentMethodId,
+        expectedPayments: updatedTest.expectedData.expectedPayments,
+        expectedAmounts: updatedTest.expectedData.expectedAmounts,
+        description: updatedTest.testDescription,
+        isUnsaved: true // Mark as unsaved since it's been modified
+      }
+
+      // Update the test case in the array
+      setTestCases(prev => {
+        const newTestCases = [...prev]
+        newTestCases[editingTestIndex] = updatedTestCase
+        return newTestCases
+      })
+
+      // Clear test results for the updated test case
+      setTestResults(prev => prev.filter(r => r.testCaseName !== originalTestCase.name))
+      
+      setIsEditTestDialogOpen(false)
+      setEditingTestIndex(null)
+      setEditTestForm({
+        title: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        monthlyRent: '',
+        explanation: ''
+      })
+      
+    } catch (error) {
+      console.error('Error updating test case:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      alert(`Failed to update test case: ${errorMessage}\n\nPlease check your explanation and try again.`)
+    } finally {
+      setIsGeneratingTest(false)
+    }
+  }
+
+  const handleSaveTestCase = async (index: number) => {
+    const testCase = testCases[index]
+    
+    if (!testCase.isUnsaved) return // Already saved
+    
+    setSavingTestIndex(index)
+    
+    try {
+      const response = await fetch('/api/test-cases/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          testCase: {
+            name: testCase.name,
+            description: testCase.description,
+            inputData: {
+              bookingId: testCase.bookingId,
+              monthlyRent: testCase.monthlyRent,
+              startDate: testCase.startDate.toISOString().split('T')[0],
+              endDate: testCase.endDate.toISOString().split('T')[0],
+              stripePaymentMethodId: testCase.stripePaymentMethodId
+            },
+            expectedData: {
+              expectedPayments: testCase.expectedPayments,
+              expectedAmounts: testCase.expectedAmounts
+            }
+          }
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to save test case')
+      }
+
+      const saveResult = await response.json()
+      
+      // Update the test case to mark it as saved
+      setTestCases(prev => {
+        const newTestCases = [...prev]
+        newTestCases[index] = {
+          ...newTestCases[index],
+          isUnsaved: false,
+          testCaseId: saveResult.testCaseId
+        }
+        return newTestCases
+      })
+      
+    } catch (error) {
+      console.error('Error saving test case:', error)
+      alert(`Failed to save test case: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setSavingTestIndex(null)
+    }
+  }
+
+  const handleCsvImport = async () => {
+    if (!csvFile) {
+      alert('Please select a CSV file')
+      return
+    }
+
+    setIsProcessingCsv(true)
+    
+    try {
+      const formData = new FormData()
+      formData.append('file', csvFile)
+      
+      const response = await fetch('/api/test-cases/import-csv', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        throw new Error(errorData.error || 'Failed to process CSV file')
+      }
+
+      const result = await response.json()
+      
+      if (result.testCases && result.testCases.length > 0) {
+        // Convert generated test cases to TestCase format
+        const newTestCases: TestCase[] = result.testCases.map((tc: any) => ({
+          name: tc.testName,
+          bookingId: tc.inputData.bookingId,
+          monthlyRent: tc.inputData.monthlyRent,
+          startDate: new Date(tc.inputData.startDate),
+          endDate: new Date(tc.inputData.endDate),
+          stripePaymentMethodId: tc.inputData.stripePaymentMethodId,
+          expectedPayments: tc.expectedData.expectedPayments,
+          expectedAmounts: tc.expectedData.expectedAmounts,
+          description: tc.testDescription,
+          isUnsaved: true // Mark as unsaved since they're newly generated
+        }))
+        
+        setTestCases(prev => [...prev, ...newTestCases])
+        
+        // Show summary
+        let message = `Successfully imported ${result.successfulCount} test case(s)`
+        if (result.failedCount > 0) {
+          message += `\n\nFailed to process ${result.failedCount} test case(s):`
+          if (result.errors) {
+            result.errors.forEach((err: any) => {
+              message += `\n- ${err.title}: ${err.error}`
+            })
+          }
+        }
+        alert(message)
+        
+        setIsCsvImportDialogOpen(false)
+        setCsvFile(null)
+      } else {
+        throw new Error('No test cases were successfully generated')
+      }
+      
+    } catch (error) {
+      console.error('Error importing CSV:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      alert(`Failed to import CSV: ${errorMessage}`)
+    } finally {
+      setIsProcessingCsv(false)
+    }
+  }
 
   const runSingleTestCase = (testCase: TestCase) => {
     setRunningTestCase(testCase.name)
@@ -331,7 +664,175 @@ export default function TestPaymentCreation() {
           
           {/* Test Cases Overview with Individual Run Buttons */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Test Suites</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Test Suites</h3>
+              <div className="flex gap-2">
+                <Dialog open={isCsvImportDialogOpen} onOpenChange={setIsCsvImportDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="sm" variant="outline" className="flex items-center gap-2">
+                      <FileUp className="h-4 w-4" />
+                      Import CSV
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Import Test Cases from CSV</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid gap-2">
+                        <Label htmlFor="csv-file">CSV File</Label>
+                        <Input
+                          id="csv-file"
+                          type="file"
+                          accept=".csv"
+                          onChange={(e) => setCsvFile(e.target.files?.[0] || null)}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          CSV must have columns: title, startDate, endDate, monthlyRent (optional: description)
+                        </p>
+                      </div>
+                      {csvFile && (
+                        <div className="text-sm text-muted-foreground">
+                          Selected: {csvFile.name}
+                        </div>
+                      )}
+                      <div className="rounded-lg bg-muted p-3">
+                        <p className="text-sm font-medium mb-2">Example CSV format:</p>
+                        <pre className="text-xs overflow-x-auto">
+{`title,startDate,endDate,monthlyRent,description
+"6 Month Lease",2024-01-01,2024-07-01,2000,"Standard 6 month lease"
+"Mid-month start",2024-03-15,2024-09-15,1500,"Starts mid-month"
+"Year lease",2024-01-01,2025-01-01,2500,"Full year lease"`}
+                        </pre>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="mt-2 text-xs"
+                          onClick={() => {
+                            const csvContent = `title,startDate,endDate,monthlyRent,description
+"6 Month Lease",2024-01-01,2024-07-01,2000,"Standard 6 month lease"
+"Mid-month start",2024-03-15,2024-09-15,1500,"Starts mid-month"
+"Year lease",2024-01-01,2025-01-01,2500,"Full year lease"
+"Short term",2024-06-01,2024-09-01,1800,"3 month summer rental"
+"Academic year",2024-08-15,2025-05-15,2200,"9 month academic lease"`
+                            const blob = new Blob([csvContent], { type: 'text/csv' })
+                            const url = URL.createObjectURL(blob)
+                            const a = document.createElement('a')
+                            a.href = url
+                            a.download = 'test-cases-template.csv'
+                            a.click()
+                            URL.revokeObjectURL(url)
+                          }}
+                        >
+                          Download Template CSV
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setIsCsvImportDialogOpen(false)
+                          setCsvFile(null)
+                        }}
+                        disabled={isProcessingCsv}
+                      >
+                        Cancel
+                      </Button>
+                      <BrandButton
+                        onClick={handleCsvImport}
+                        disabled={!csvFile || isProcessingCsv}
+                        className="flex items-center gap-2"
+                      >
+                        {isProcessingCsv && <Loader2 className="h-4 w-4 animate-spin" />}
+                        {isProcessingCsv ? 'Processing...' : 'Import'}
+                      </BrandButton>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <Dialog open={isAddTestDialogOpen} onOpenChange={setIsAddTestDialogOpen}>
+                  <DialogTrigger asChild>
+                    <BrandButton size="sm" className="flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Add Test Case
+                    </BrandButton>
+                  </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Add New Test Case</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="title">Title *</Label>
+                      <Input
+                        id="title"
+                        value={newTestForm.title}
+                        onChange={(e) => setNewTestForm(prev => ({ ...prev, title: e.target.value }))}
+                        placeholder="e.g., Mid-month lease with pro-rating"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="description">Description</Label>
+                      <Textarea
+                        id="description"
+                        value={newTestForm.description}
+                        onChange={(e) => setNewTestForm(prev => ({ ...prev, description: e.target.value }))}
+                        placeholder="Optional description of the test scenario"
+                        rows={3}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="grid gap-2">
+                        <Label htmlFor="startDate">Start Date *</Label>
+                        <Input
+                          id="startDate"
+                          type="date"
+                          value={newTestForm.startDate}
+                          onChange={(e) => setNewTestForm(prev => ({ ...prev, startDate: e.target.value }))}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor="endDate">End Date *</Label>
+                        <Input
+                          id="endDate"
+                          type="date"
+                          value={newTestForm.endDate}
+                          onChange={(e) => setNewTestForm(prev => ({ ...prev, endDate: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="monthlyRent">Monthly Rent *</Label>
+                      <Input
+                        id="monthlyRent"
+                        type="number"
+                        value={newTestForm.monthlyRent}
+                        onChange={(e) => setNewTestForm(prev => ({ ...prev, monthlyRent: e.target.value }))}
+                        placeholder="e.g., 2000"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddTestDialogOpen(false)}
+                      disabled={isGeneratingTest}
+                    >
+                      Cancel
+                    </Button>
+                    <BrandButton
+                      onClick={handleAddTestCase}
+                      disabled={isGeneratingTest}
+                      className="flex items-center gap-2"
+                    >
+                      {isGeneratingTest && <Loader2 className="h-4 w-4 animate-spin" />}
+                      {isGeneratingTest ? 'Generating...' : 'Generate Test Case'}
+                    </BrandButton>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              </div>
+            </div>
             <Accordion type="single" collapsible className="w-full">
               {testCases.map((testCase, index) => {
                 const testCaseResults = testResults.filter(r => r.testCaseName === testCase.name)
@@ -353,24 +854,61 @@ export default function TestPaymentCreation() {
                             </Badge>
                           )}
                           <span className="font-medium">{testCase.name}</span>
+                          {testCase.isUnsaved && (
+                            <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
+                              Unsaved
+                            </Badge>
+                          )}
                           {hasResults && (
                             <Badge variant="outline">
                               {testCasePassedCount}/{testCaseResults.length}
                             </Badge>
                           )}
                         </div>
-                        <BrandButton 
-                          size="sm"
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation() // Prevent accordion toggle
-                            runSingleTestCase(testCase)
-                          }}
-                          disabled={runningTestCase === testCase.name}
-                          className="shrink-0"
-                        >
-                          {runningTestCase === testCase.name ? 'Running...' : hasResults ? 'Re-run' : 'Run Test'}
-                        </BrandButton>
+                        <div className="flex gap-2 shrink-0">
+                          {testCase.isUnsaved && (
+                            <Button
+                              size="sm"
+                              variant="default"
+                              onClick={(e) => {
+                                e.stopPropagation() // Prevent accordion toggle
+                                handleSaveTestCase(index)
+                              }}
+                              disabled={savingTestIndex === index}
+                              className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
+                            >
+                              {savingTestIndex === index ? (
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <Save className="h-3 w-3" />
+                              )}
+                              {savingTestIndex === index ? 'Saving...' : 'Save'}
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={(e) => {
+                              e.stopPropagation() // Prevent accordion toggle
+                              handleEditTestCase(index)
+                            }}
+                            className="flex items-center gap-1"
+                          >
+                            <Edit className="h-3 w-3" />
+                            Edit
+                          </Button>
+                          <BrandButton 
+                            size="sm"
+                            variant="outline"
+                            onClick={(e) => {
+                              e.stopPropagation() // Prevent accordion toggle
+                              runSingleTestCase(testCase)
+                            }}
+                            disabled={runningTestCase === testCase.name}
+                          >
+                            {runningTestCase === testCase.name ? 'Running...' : hasResults ? 'Re-run' : 'Run Test'}
+                          </BrandButton>
+                        </div>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="pt-4">
@@ -462,6 +1000,107 @@ export default function TestPaymentCreation() {
           )}
         </CardContent>
       </Card>
+
+      {/* Edit Test Case Dialog */}
+      <Dialog open={isEditTestDialogOpen} onOpenChange={setIsEditTestDialogOpen}>
+        <DialogContent className="sm:max-w-[525px]">
+          <DialogHeader>
+            <DialogTitle>Edit Test Case</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="edit-title">Title *</Label>
+              <Input
+                id="edit-title"
+                value={editTestForm.title}
+                onChange={(e) => setEditTestForm(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="e.g., Mid-month lease with pro-rating"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-description">Description</Label>
+              <Textarea
+                id="edit-description"
+                value={editTestForm.description}
+                onChange={(e) => setEditTestForm(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Optional description of the test scenario"
+                rows={2}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-startDate">Start Date *</Label>
+                <Input
+                  id="edit-startDate"
+                  type="date"
+                  value={editTestForm.startDate}
+                  onChange={(e) => setEditTestForm(prev => ({ ...prev, startDate: e.target.value }))}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-endDate">End Date *</Label>
+                <Input
+                  id="edit-endDate"
+                  type="date"
+                  value={editTestForm.endDate}
+                  onChange={(e) => setEditTestForm(prev => ({ ...prev, endDate: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-monthlyRent">Monthly Rent *</Label>
+              <Input
+                id="edit-monthlyRent"
+                type="number"
+                value={editTestForm.monthlyRent}
+                onChange={(e) => setEditTestForm(prev => ({ ...prev, monthlyRent: e.target.value }))}
+                placeholder="e.g., 2000"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-explanation">Explanation of Changes/Issues *</Label>
+              <Textarea
+                id="edit-explanation"
+                value={editTestForm.explanation}
+                onChange={(e) => setEditTestForm(prev => ({ ...prev, explanation: e.target.value }))}
+                placeholder="Describe what you want to change or any error you encountered with this test case..."
+                rows={3}
+              />
+              <p className="text-xs text-muted-foreground">
+                Explain what changes you want to make or describe any issues you found with the current test case. This helps the AI generate more accurate expectations.
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsEditTestDialogOpen(false)
+                setEditingTestIndex(null)
+                setEditTestForm({
+                  title: '',
+                  description: '',
+                  startDate: '',
+                  endDate: '',
+                  monthlyRent: '',
+                  explanation: ''
+                })
+              }}
+              disabled={isGeneratingTest}
+            >
+              Cancel
+            </Button>
+            <BrandButton
+              onClick={handleSaveEditedTestCase}
+              disabled={isGeneratingTest}
+              className="flex items-center gap-2"
+            >
+              {isGeneratingTest && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isGeneratingTest ? 'Updating...' : 'Update Test Case'}
+            </BrandButton>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

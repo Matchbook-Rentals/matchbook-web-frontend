@@ -1,5 +1,8 @@
 # TO DOs
 
+
+application history, when changign send notifcaiton to landlrod saying such and such person updated these fields
+
 don't do county criminal report, rather do crinial and evictions package tailored for us
 
 booking you pay reservatiohn deposit

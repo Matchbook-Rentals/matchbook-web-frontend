@@ -1207,3 +1207,71 @@ model ListingInCreation {
   linens            Boolean?
   privateBathroom   Boolean?
 }
+
+model TestSuite {
+  id          String   @id @default(uuid())
+  name        String
+  description String?  @db.Text
+  category    String   // e.g., "payment-generation", "booking-logic", etc.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String   // User ID of creator
+  
+  testCases TestCase[]
+  
+  @@index([category])
+  @@index([createdBy])
+}
+
+model TestCase {
+  id          String   @id @default(uuid())
+  testSuiteId String
+  name        String
+  description String?  @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Test input parameters (stored as JSON)
+  inputData   Json     // e.g., { bookingId, monthlyRent, startDate, endDate, stripePaymentMethodId }
+  
+  // Expected results
+  expectedData Json    // e.g., { expectedPayments: 12, expectedAmounts: [2000, 2000, ...] }
+  
+  // Test suite relationship
+  testSuite   TestSuite @relation(fields: [testSuiteId], references: [id], onDelete: Cascade)
+  
+  // Test execution results
+  testResults TestResult[]
+  
+  @@index([testSuiteId])
+}
+
+model TestResult {
+  id         String   @id @default(uuid())
+  testCaseId String
+  runId      String   // Unique identifier for a test run session
+  
+  // Test execution details
+  testName   String   // e.g., "Payment Count", "Payment Amounts"
+  passed     Boolean
+  expected   Json     // Expected value for this specific test
+  actual     Json     // Actual value received
+  message    String?  @db.Text // Additional test message/description
+  
+  // Execution metadata
+  executedAt DateTime @default(now())
+  executionTime Int?  // Execution time in milliseconds
+  
+  // Error details if test failed
+  errorMessage String? @db.Text
+  errorStack   String? @db.Text
+  
+  // Relationship
+  testCase TestCase @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
+  
+  @@index([testCaseId])
+  @@index([runId])
+  @@index([executedAt])
+}

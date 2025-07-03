@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     console.log(`Test purchase created: ${testPurchase.id} for user ${userId}`);
 
     // Call the background check API
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/background-check`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/background-check`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
