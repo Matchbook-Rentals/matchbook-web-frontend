@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -1322,16 +1323,25 @@ const [listingBasics, setListingBasics] = useState({
   return (
     <main className="bg-background flex flex-row justify-center w-full ">
       <div className="bg-background overflow-hidden w-full max-w-[1920px] relative pb-32">
-        {/* Progress bar component - hidden on success page */}
+
+        {/* Title and Save & Exit button at top */}
         {currentStep !== 11 && (
-          <ProgressBar 
-            currentStep={currentStep} 
-            steps={steps}
-          />
+          <div className="flex justify-between items-center w-full px-[247px] py-10">
+            <h1 className="font-['Poppins'] text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
+              {currentStep === 0 ? 'Which of these describes your place?' : 'Create Listing'}
+            </h1>
+            <BrandButton 
+              variant="outline"
+              size="xl"
+              onClick={handleSaveExit}
+            >
+              Save & Exit
+            </BrandButton>
+          </div>
         )}
 
         {/* Main content with slide animation */}
-        <div className="mx-auto w-full max-w-[891px] mb-24 ">
+        <div className="w-full px-[247px] mb-24">
           <div 
             key={animationKey} // Adding key to force re-render on each step change
             className="transition-transform duration-500 ease-in-out"
@@ -1359,58 +1369,60 @@ const [listingBasics, setListingBasics] = useState({
 
         {/* Footer with navigation buttons - fixed to bottom */}
         {currentStep !== 11 && (
-          <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 z-10">
+          <div className="fixed bottom-0 left-0 right-0 bg-background z-10">
+            {/* Progress bar above footer */}
+            <ProgressBar 
+              currentStep={currentStep} 
+              steps={steps}
+            />
+            <div className="border-t border-gray-200">
             <Separator className="w-full" />
             {isAdmin ? (
               /* Admin footer with skip buttons */
-              <div className="mx-auto w-full max-w-[891px] py-4">
+              <div className="w-full px-[50px] py-10">
                 <div className="flex justify-between items-center mb-2">
-                  <div className="flex gap-2">
-                    <Button 
-                      className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+                  <div className="flex gap-2 items-center">
+                    <BrandButton 
+                      variant="link"
+                      size="xl"
                       onClick={handleBack}
                       disabled={currentStep === 0}
                     >
                       Back
-                    </Button>
+                    </BrandButton>
                     {!adminSkipButtonsHidden && (
-                      <Button 
-                        className="w-[80px] h-[42px] bg-orange-500 hover:bg-orange-600 rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-sm"
+                      <BrandButton 
+                        variant="outline"
+                        size="sm"
+                        className="border-orange-500 text-orange-500 hover:bg-orange-500"
                         onClick={handleAdminSkipBack}
                         disabled={currentStep === 0}
                       >
                         Skip ←
-                      </Button>
+                      </BrandButton>
                     )}
                   </div>
-                  <Button 
-                    className="w-[106px] h-[42px] bg-background rounded-[5px] border border-solid border-[#0000004c] font-['Montserrat',Helvetica] font-medium text-[#3f3f3f] text-sm"
-                    onClick={handleSaveExit}
-                  >
-                    Save & Exit
-                  </Button>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 items-center">
                     {!adminSkipButtonsHidden && (
-                      <Button 
-                        className="w-[80px] h-[42px] bg-orange-500 hover:bg-orange-600 rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-sm"
+                      <BrandButton 
+                        variant="outline"
+                        size="sm"
+                        className="border-orange-500 text-orange-500 hover:bg-orange-500"
                         onClick={handleAdminSkipNext}
                         disabled={currentStep >= steps.length - 1 || currentStep === 10}
                       >
                         Skip →
-                      </Button>
+                      </BrandButton>
                     )}
-                    <Button 
-                      className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
-                        currentStep === 10 && isAdmin 
-                          ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
-                          : 'bg-[#4f4f4f] text-white'
-                      }`}
+                    <BrandButton 
+                      variant="default"
+                      size="2xl"
                       onClick={currentStep === 10 ? handleSubmitListing : handleNext}
                       disabled={currentStep === 10 ? isAdmin : false}
                     >
                       {currentStep === 10 ? 'Submit Listing' : 
                        (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
-                    </Button>
+                    </BrandButton>
                   </div>
                 </div>
                 <div className="text-center">
@@ -1424,34 +1436,27 @@ const [listingBasics, setListingBasics] = useState({
               </div>
             ) : (
               /* Regular user footer */
-              <div className="flex justify-between items-center mx-auto w-full max-w-[891px] py-4">
-                <Button 
-                  className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+              <div className="flex justify-between items-center w-full px-[50px] py-10">
+                <BrandButton 
+                  variant="link"
+                  size="xl"
                   onClick={handleBack}
                   disabled={currentStep === 0}
                 >
                   Back
-                </Button>
-                <Button 
-                  className="w-[106px] h-[42px] bg-background rounded-[5px] border border-solid border-[#0000004c] font-['Montserrat',Helvetica] font-medium text-[#3f3f3f] text-sm"
-                  onClick={handleSaveExit}
-                >
-                  Save & Exit
-                </Button>
-                <Button 
-                  className={`w-[119px] h-[42px] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-base ${
-                    currentStep === 10 && isAdmin 
-                      ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
-                      : 'bg-[#4f4f4f] text-white'
-                  }`}
+                </BrandButton>
+                <BrandButton 
+                  variant="default"
+                  size="2xl"
                   onClick={currentStep === 10 ? handleSubmitListing : handleNext}
                   disabled={currentStep === 10 ? isAdmin : false}
                 >
                   {currentStep === 10 ? 'Submit Listing' : 
                    (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
-                </Button>
+                </BrandButton>
               </div>
             )}
+            </div>
           </div>
         )}
         

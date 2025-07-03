@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Tile from "@/components/ui/tile";
+import { ListingCreationCard } from './listing-creation-card';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 
 // Using the same interface as in add-property-client.tsx
@@ -35,22 +35,22 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "single-family",
       name: "Single Family",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-[44px] h-[44px]" />
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-6 h-6" />
     },
     {
       id: "apartment",
       name: "Apartment",
-      icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-[44px] h-[44px]" />
+      icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-6 h-6" />
     },
     {
       id: "townhouse",
-      name: "Townhouse",
-      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-[48px] h-[48px]" />
+      name: "Town House",
+      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-6 h-6" />
     },
     {
       id: "private-room",
       name: "Private Room",
-      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-[48px] h-[48px]" />
+      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-6 h-6" />
     },
   ];
 
@@ -59,12 +59,12 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "furnished",
       name: "Furnished",
-      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="w-[44px] h-[44px]" />
+      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="w-6 h-6" />
     },
     {
       id: "unfurnished",
       name: "Unfurnished",
-      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="w-[44px] h-[44px]" />
+      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="w-6 h-6" />
     },
   ];
 
@@ -73,13 +73,13 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
   const petsOptions = [
     {
       id: "pets-welcome",
-      name: "Pets welcome",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-[44px] h-[44px]" /> // Replace with actual pets icon when available
+      name: "Pets Welcome",
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-6 h-6" /> // Replace with actual pets icon when available
     },
     {
       id: "no-pets",
-      name: "No pets",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-[44px] h-[44px]" /> // Replace with actual no pets icon when available
+      name: "No Pets",
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-6 h-6" /> // Replace with actual no pets icon when available
     },
   ];
 
@@ -104,20 +104,15 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
           What kind of property is it?
         </h3>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex items-center gap-6 w-full">
           {propertyTypes.map((type) => {
             const isTypeSelected = isSelected("type", type.name);
             return (
-              <Tile
+              <ListingCreationCard
                 key={type.id}
+                name={type.name}
                 icon={type.icon}
-                label={type.name}
-                className={`cursor-pointer w-[116px] h-[131px] py-1.5 ${
-                  isTypeSelected
-                    ? "border-[3px] bg-background border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                    : "border-[2px] border-[#E3E3E3] hover:border-gray-400"
-                }`}
-                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#404040] text-[15px] text-center leading-tight`}
+                isSelected={isTypeSelected}
                 onClick={() => {
                   setSelectedType(type.name);
                   setListingHighlights({
@@ -136,20 +131,15 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
           Is it furnished or unfurnished?
         </h3>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-6">
           {furnishingOptions.map((option) => {
             const isFurnishingSelected = isSelected("furnishing", option.name);
             return (
-              <Tile
+              <ListingCreationCard
                 key={option.id}
+                name={option.name}
                 icon={option.icon}
-                label={option.name}
-                className={`cursor-pointer w-[116px] h-[131px] py-1.5 ${
-                  isFurnishingSelected
-                    ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                    : "border-[2px] border-[#E3E3E3] hover:border-gray-400"
-                }`}
-                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#404040] text-[15px] text-center leading-tight`}
+                isSelected={isFurnishingSelected}
                 onClick={() => {
                   setSelectedFurnishing(option.name);
                   setListingHighlights({
@@ -169,25 +159,20 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
           Do you allow pets?
         </h3>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-6">
           {petsOptions.map((option) => {
             const isPetsSelected = isSelected("pets", option.name);
             return (
-              <Tile
+              <ListingCreationCard
                 key={option.id}
+                name={option.name}
                 icon={option.icon}
-                label={option.name}
-                className={`cursor-pointer w-[116px] h-[131px] py-1.5 ${
-                  isPetsSelected
-                    ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                    : "border-[2px] border-[#E3E3E3] hover:border-gray-400"
-                }`}
-                labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#404040] text-[15px] text-center leading-tight px-1`}
+                isSelected={isPetsSelected}
                 onClick={() => {
                   setSelectedPets(option.name);
                   setListingHighlights({
                     ...listingHighlights,
-                    petsAllowed: option.name === "Pets welcome"
+                    petsAllowed: option.name === "Pets Welcome"
                   });
                 }}
               />

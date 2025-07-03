@@ -17,7 +17,7 @@ const brandButtonVariants = cva(
         secondary:
           "bg-secondaryBrand text-white hover:bg-secondaryBrand/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "bg-transparent text-gray-600 hover:text-gray-900 transition-none rounded-none px-0 py-0 min-w-0",
+        link: "bg-transparent text-secondaryBrand hover:text-primaryBrand transition-none  rounded-none px-0 py-0 min-w-0",
       },
       size: {
         default: "h-[40px] min-w-[160px] rounded-lg px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm leading-5 tracking-normal",
