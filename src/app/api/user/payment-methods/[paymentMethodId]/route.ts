@@ -37,7 +37,7 @@ export async function DELETE(
       
       if (paymentMethod.customer !== user.stripeCustomerId) {
         console.log('⚠️ Payment method does not belong to user');
-        return NextResponse.json({ error: 'Payment method not found or unauthorized' }, { status: 404 });
+        return NextResponse.json({ error: 'Payment method not found or unauthorized' }, { status: 403 });
       }
     } catch (error) {
       console.log('⚠️ Payment method not found:', error);

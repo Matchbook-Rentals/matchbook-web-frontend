@@ -17,8 +17,12 @@ export async function POST(request: NextRequest) {
       select: { stripeAccountId: true },
     });
 
-    if (!user || !user.stripeAccountId) {
-      return NextResponse.json({ error: 'No Stripe account found' }, { status: 404 });
+    if (!user) {
+      return NextResponse.json({ error: 'User not found in database' }, { status: 500 });
+    }
+    
+    if (!user.stripeAccountId) {
+      return NextResponse.json({ error: 'No Stripe account found for user' }, { status: 400 });
     }
 
     // Fetch latest account status from Stripe

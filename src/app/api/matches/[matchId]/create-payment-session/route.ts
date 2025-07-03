@@ -54,7 +54,7 @@ export async function POST(
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'User not found in database' }, { status: 500 });
     }
 
     let customerId = user.stripeCustomerId;

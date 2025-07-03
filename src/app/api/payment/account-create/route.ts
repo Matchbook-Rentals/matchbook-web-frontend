@@ -26,10 +26,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'User not found in database' }, { status: 500 });
     }
     if (!user.email) {
-      return NextResponse.json({ error: 'User email not found' }, { status: 404 });
+      return NextResponse.json({ error: 'User email is required for account creation' }, { status: 422 });
     }
 
     const accountCreationDetails: Stripe.AccountCreateParams = {
