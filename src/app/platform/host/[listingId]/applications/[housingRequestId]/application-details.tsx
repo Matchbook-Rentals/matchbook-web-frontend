@@ -158,6 +158,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [isUndoingDecline, setIsUndoingDecline] = useState(false);
   const [isUploadingLease, setIsUploadingLease] = useState(false);
   const [uploadPhase, setUploadPhase] = useState<'idle' | 'checking' | 'selecting' | 'uploading' | 'creating'>('idle');
+  const selectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [showFallbackPicker, setShowFallbackPicker] = useState(false);
   const [isRemovingLease, setIsRemovingLease] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(housingRequest.status);
   const [leaseDocumentId, setLeaseDocumentId] = useState(housingRequest.leaseDocumentId);
@@ -178,6 +180,13 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
       platform: navigator.platform,
       housingRequestId
     });
+    
+    // Cleanup timeout on unmount
+    return () => {
+      if (selectTimeoutRef.current) {
+        clearTimeout(selectTimeoutRef.current);
+      }
+    };
   }, [housingRequestId, logger]);
   
   // Function to check Stripe Connect setup from database
@@ -307,6 +316,14 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     return baseText;
   };
 
+  // Manual trigger for fallback picker
+  const showFallbackManually = () => {
+    logger.info('User manually triggered fallback picker');
+    setUploadPhase('idle');
+    setIsUploadingLease(false);
+    setShowFallbackPicker(true);
+  };
+
   // Handler for approving housing request
   const handleApprove = async () => {
     setIsApproving(true);
@@ -401,7 +418,48 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
       logger.debug('Stripe account verified, opening file picker');
       setUploadPhase('selecting');
       // Keep isUploadingLease true to show the selecting state
-      fileInputRef.current?.click();
+      
+      // Add debugging for Mac file picker issues
+      logger.info('Attempting to open file picker', {
+        fileInputExists: !!fileInputRef.current,
+        fileInputType: fileInputRef.current?.type,
+        fileInputAccept: fileInputRef.current?.accept,
+        userAgent: navigator.userAgent
+      });
+      
+      // Try multiple approaches for Mac compatibility
+      if (fileInputRef.current) {
+        try {
+          // Set a timeout to detect if file picker doesn't open
+          logger.debug('Setting file picker timeout');
+          selectTimeoutRef.current = setTimeout(() => {
+            logger.warn('File picker timeout - no interaction detected, showing fallback');
+            setUploadPhase('idle');
+            setIsUploadingLease(false);
+            setShowFallbackPicker(true);
+            toast.error('File picker did not open automatically. Please use the file selector below.');
+          }, 3000); // 3 second timeout
+          
+          // Approach 1: Direct click
+          fileInputRef.current.click();
+          logger.debug('File input click executed', { timeoutSet: !!selectTimeoutRef.current });
+        } catch (error) {
+          logger.error('File input click failed', { error: error instanceof Error ? error.message : 'Unknown error' });
+          // Clear timeout and reset state if click fails
+          if (selectTimeoutRef.current) {
+            clearTimeout(selectTimeoutRef.current);
+            selectTimeoutRef.current = null;
+          }
+          setUploadPhase('idle');
+          setIsUploadingLease(false);
+          toast.error('Unable to open file picker. Please try again.');
+        }
+      } else {
+        logger.error('File input ref is null');
+        setUploadPhase('idle');
+        setIsUploadingLease(false);
+        toast.error('File picker not available. Please refresh the page.');
+      }
     } catch (error) {
       logger.error('Error checking Stripe setup', { error: error instanceof Error ? error.message : 'Unknown error' });
       setUploadPhase('idle');
@@ -412,6 +470,22 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
 
   // Handler for file selection and template creation
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    logger.debug('File input change event fired', { 
+      hasFiles: !!event.target.files?.length,
+      filesLength: event.target.files?.length,
+      timeoutExists: !!selectTimeoutRef.current
+    });
+    
+    // Clear the timeout since user interacted with file picker
+    if (selectTimeoutRef.current) {
+      logger.debug('Clearing file picker timeout');
+      clearTimeout(selectTimeoutRef.current);
+      selectTimeoutRef.current = null;
+    }
+    
+    // Hide fallback picker since file selection worked
+    setShowFallbackPicker(false);
+    
     const file = event.target.files?.[0];
     logger.info('File selected for upload', { 
       fileName: file?.name, 
@@ -750,15 +824,26 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     onChange={handleFileSelect}
                     className="hidden"
                   />
-                  <Button
-                    variant="outline"
-                    onClick={handleUploadLease}
-                    disabled={isUploadingLease}
-                    className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-blue-50 flex items-center gap-2"
-                  >
-                    <Upload className="w-4 h-4" />
-                    {getUploadButtonText('Upload Lease')}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={handleUploadLease}
+                      disabled={isUploadingLease}
+                      className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-blue-50 flex items-center gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {getUploadButtonText('Upload Lease')}
+                    </Button>
+                    {uploadPhase === 'selecting' && (
+                      <Button
+                        variant="outline"
+                        onClick={showFallbackManually}
+                        className="h-[63px] px-4 rounded-[5px] border-[1.5px] border-[#f39c12] text-[#f39c12] [font-family:'Poppins',Helvetica] font-medium hover:bg-orange-50 text-sm"
+                      >
+                        Try Alternative
+                      </Button>
+                    )}
+                  </div>
                 </div>
               )}
               <TooltipProvider>
@@ -815,15 +900,26 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               >
                 Message Guest
               </Button>
-              <Button
-                variant="outline"
-                onClick={handleUploadLease}
-                disabled={isUploadingLease || isDeclining}
-                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 flex items-center justify-center gap-2"
-              >
-                {isUploadingLease && <Loader2 className="w-4 h-4 animate-spin" />}
-                {getUploadButtonText('Approve and Create Lease')}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleUploadLease}
+                  disabled={isUploadingLease || isDeclining}
+                  className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 flex items-center justify-center gap-2"
+                >
+                  {isUploadingLease && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {getUploadButtonText('Approve and Create Lease')}
+                </Button>
+                {uploadPhase === 'selecting' && (
+                  <Button
+                    variant="outline"
+                    onClick={showFallbackManually}
+                    className="h-[63px] px-4 rounded-[5px] border-[1.5px] border-[#f39c12] text-[#f39c12] [font-family:'Poppins',Helvetica] font-medium hover:bg-orange-50 text-sm"
+                  >
+                    Try Alternative
+                  </Button>
+                )}
+              </div>
             </>
           )}
           
@@ -835,6 +931,25 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             onChange={handleFileSelect}
             className="hidden"
           />
+          
+          {/* Fallback file picker for Mac compatibility */}
+          {showFallbackPicker && (
+            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <h3 className="text-sm font-medium text-yellow-800 mb-2">
+                File Picker Alternative
+              </h3>
+              <p className="text-sm text-yellow-700 mb-3">
+                The automatic file picker didn't open. Please select your PDF lease document below:
+              </p>
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={handleFileSelect}
+                disabled={isUploadingLease}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
+              />
+            </div>
+          )}
         </div>
 
         {/* Earnings Section */}
