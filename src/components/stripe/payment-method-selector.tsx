@@ -752,7 +752,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <h4 className="font-semibold text-blue-900 mb-2">Ready to Process Payment</h4>
                     <p className="text-blue-800 text-sm mb-3">
-                      Click "Authorize Payment" to pre-authorize your selected payment method, or add a new payment method.
+                      Click &quot;Authorize Payment&quot; to pre-authorize your selected payment method, or add a new payment method.
                     </p>
                     <div className="flex gap-3">
                       <Button
