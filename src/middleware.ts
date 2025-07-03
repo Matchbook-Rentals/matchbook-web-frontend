@@ -7,7 +7,14 @@ const isProtectedRoute = createRouteMatcher([
   "/test(.*)" // Added protection for all test routes
 ]);
 
+const isPublicRoute = createRouteMatcher([
+  "/api/cron/check-unread-messages"
+]);
+
 export default clerkMiddleware((auth, request) => {
+  // Skip Clerk auth for public routes (like cron endpoints)
+  if (isPublicRoute(request)) return;
+  
   if (isProtectedRoute(request)) auth().protect();
 });
 
