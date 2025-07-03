@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, User } from 'lucide-react';
+import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, User, RefreshCw } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
 
@@ -18,7 +18,68 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
   const { toast } = useToast();
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingPayment, setIsCheckingPayment] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<{
+    localStatus: string | null;
+    stripeStatus: string | null;
+    isCompleted: boolean;
+  }>({
+    localStatus: match.paymentStatus || null,
+    stripeStatus: null,
+    isCompleted: !!match.paymentCapturedAt,
+  });
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const checkPaymentStatus = async () => {
+    if (!match.stripePaymentIntentId) {
+      return;
+    }
+
+    setIsCheckingPayment(true);
+    try {
+      const response = await fetch(`/api/matches/${matchId}/payment-status`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPaymentStatus({
+          localStatus: data.localStatus,
+          stripeStatus: data.stripeStatus,
+          isCompleted: data.stripeStatus === 'succeeded' || !!data.capturedAt,
+        });
+
+        // If payment is completed but our local state doesn't reflect it, refresh the page
+        if (data.stripeStatus === 'succeeded' && !match.paymentCapturedAt) {
+          toast({
+            title: "Payment Completed",
+            description: "Payment has been successfully processed! Refreshing page...",
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+    } finally {
+      setIsCheckingPayment(false);
+    }
+  };
+
+  // Check payment status on component mount and periodically if payment is pending
+  useEffect(() => {
+    if (match.stripePaymentIntentId && !match.paymentCapturedAt) {
+      checkPaymentStatus();
+      
+      // Poll every 30 seconds if payment is authorized but not captured
+      const interval = setInterval(checkPaymentStatus, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [match.stripePaymentIntentId, match.paymentCapturedAt]);
 
   const startLeaseSigningFlow = async () => {
     console.log('=== HOST LEASE SIGNING DEBUG ===');
@@ -274,9 +335,9 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
   const isHostSigned = match.BoldSignLease?.landlordSigned || false;
   const isLeaseFullyExecuted = isTenantSigned && isHostSigned;
 
-  // Check payment status
+  // Check payment status - use enhanced state that includes Stripe status
   const isPaymentAuthorized = !!match.paymentAuthorizedAt;
-  const isPaymentCaptured = !!match.paymentCapturedAt;
+  const isPaymentCaptured = paymentStatus.isCompleted || !!match.paymentCapturedAt;
   const hasPaymentMethod = !!match.stripePaymentMethodId;
 
   // Check Stripe Connect setup
@@ -413,7 +474,21 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
 
                 {/* Progress Status */}
                 <div className="pt-4 border-t">
-                  <h4 className="font-semibold mb-3">Progress Status</h4>
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold">Progress Status</h4>
+                    {match.stripePaymentIntentId && !isPaymentCaptured && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={checkPaymentStatus}
+                        disabled={isCheckingPayment}
+                        className="h-6 px-2 text-xs"
+                      >
+                        <RefreshCw className={`w-3 h-3 mr-1 ${isCheckingPayment ? 'animate-spin' : ''}`} />
+                        {isCheckingPayment ? 'Checking...' : 'Refresh'}
+                      </Button>
+                    )}
+                  </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       {isTenantSigned ? 
@@ -450,6 +525,11 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                       <span className={`text-sm ${isPaymentCaptured ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
                         Payment Collected
                       </span>
+                      {paymentStatus.stripeStatus && paymentStatus.stripeStatus !== paymentStatus.localStatus && (
+                        <span className="text-xs text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">
+                          Stripe: {paymentStatus.stripeStatus}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -570,9 +650,25 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       Waiting for Payment Authorization
                     </h3>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-600 mb-4">
                       The lease is fully signed! The renter now needs to authorize payment before you can collect the deposits.
                     </p>
+                    
+                    {/* Real-time payment checking notice */}
+                    {match.stripePaymentIntentId && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 mx-auto max-w-md">
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          <RefreshCw className={`w-4 h-4 text-blue-600 ${isCheckingPayment ? 'animate-spin' : ''}`} />
+                          <span className="text-sm font-medium text-blue-800">
+                            Monitoring Payment Status
+                          </span>
+                        </div>
+                        <p className="text-blue-700 text-sm">
+                          This page will automatically update when payment is authorized
+                        </p>
+                      </div>
+                    )}
+
                     <Button 
                       onClick={handleViewLease}
                       variant="outline"
@@ -590,10 +686,29 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       Ready to Collect Payment!
                     </h3>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-600 mb-4">
                       The renter has authorized payment of ${calculatePaymentAmount().toLocaleString()}. 
                       Click below to collect the deposits and confirm the booking.
                     </p>
+                    
+                    {/* Payment Status Details */}
+                    {paymentStatus.stripeStatus && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 mx-auto max-w-md">
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm font-medium text-green-800">
+                            Payment Status: {paymentStatus.stripeStatus}
+                          </span>
+                          {isCheckingPayment && (
+                            <RefreshCw className="w-4 h-4 text-green-600 animate-spin" />
+                          )}
+                        </div>
+                        <p className="text-green-700 text-sm">
+                          Payment is secured and ready to be captured
+                        </p>
+                      </div>
+                    )}
+
                     <div className="flex gap-3 justify-center">
                       <Button 
                         onClick={handleViewLease}

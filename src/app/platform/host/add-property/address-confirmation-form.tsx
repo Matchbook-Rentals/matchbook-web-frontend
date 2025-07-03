@@ -66,9 +66,6 @@ export const AddressConfirmationForm = ({
   return (
     <div className="w-full max-w-[880px]">
       <div className="w-full">
-        <h2 className="font-medium text-2xl text-[#3f3f3f] mb-6 font-['Poppins',Helvetica]">
-          Confirm the property address
-        </h2>
         <Card className="w-full border-2 border-solid border-[#0000004c] rounded-[10px]">
           <CardContent className="p-5">
             {/* Street Address */}

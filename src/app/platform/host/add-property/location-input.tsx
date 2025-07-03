@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { AddressConfirmationForm } from "./address-confirmation-form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import maplibregl from 'maplibre-gl';
@@ -27,15 +25,13 @@ interface Suggestion {
   description: string;
 }
 
-interface LocationFormProps {
+interface LocationInputProps {
   listingLocation: ListingLocation;
   setListingLocation: (location: ListingLocation) => void;
   validationErrors?: string[];
 }
 
-export default function LocationForm({ listingLocation, setListingLocation, validationErrors }: LocationFormProps) {
-  const observerRef = useRef<HTMLDivElement>(null);
-  const {toast} = useToast();
+export default function LocationInput({ listingLocation, setListingLocation, validationErrors }: LocationInputProps) {
   
   // Salt Lake City, Utah
   const INITIAL_COORDINATES = { lat: 40.7608, lng: -111.8910 };
@@ -49,34 +45,8 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
   const [open, setOpen] = useState(false);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [marker, setMarker] = useState<maplibregl.Marker | null>(null);
-  const [addressSelected, setAddressSelected] = useState(Boolean(listingLocation.streetAddress1));
-  
-  const [address, setAddress] = useState({
-    street: listingLocation.streetAddress1 || "",
-    street2: listingLocation.streetAddress2 || "",
-    city: listingLocation.city || "",
-    state: listingLocation.state || "",
-    zip: listingLocation.postalCode || "",
-  });
   
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Update listing location when address changes
-  useEffect(() => {
-    if (addressSelected) {
-      setListingLocation({
-        ...listingLocation,
-        streetAddress1: address.street,
-        streetAddress2: address.street2,
-        city: address.city,
-        state: address.state,
-        postalCode: address.zip,
-        latitude: coordinates.lat,
-        longitude: coordinates.lng,
-        locationString: inputValue
-      });
-    }
-  }, [address, coordinates, inputValue, addressSelected]);
 
   // Initialize map only on first render
   useEffect(() => {
@@ -200,109 +170,83 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
         setSuggestions([]);
       }
     } else {
-      setSuggestions([]);
       setOpen(false);
+      setSuggestions([]);
     }
   };
 
-  // Custom smooth scroll function
-  function smoothScrollToElement(element: HTMLElement, duration: number) {
-    const rect = element.getBoundingClientRect();
-    const targetY = rect.top + window.pageYOffset - window.innerHeight / 2 + rect.height / 2;
-    const startY = window.pageYOffset;
-    const diff = targetY - startY;
-    let start: number | null = null;
-    function step(timestamp: number) {
-      if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      window.scrollTo(0, startY + diff * progress);
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
-    }
-    window.requestAnimationFrame(step);
-  }
-
-  const handleSelect = async (description: string, place_id: string) => {
-    // After all other logic, scroll observer into view
-    setTimeout(() => {
-      if (observerRef.current) {
-        smoothScrollToElement(observerRef.current, 1000);
-      }
-    }, 1000);
-
-    const trimmedDescription = description.slice(0, -5); // Remove country code
-    setInputValue(trimmedDescription);
-    setAddressSelected(true);
-
-    // Start timing
-    const startTime = performance.now();
-
-    setSuggestions([]);
-    setOpen(false);
-
+  const handleSelect = async (description: string, placeId: string) => {
     try {
+      const trimmedDescription = description.slice(0, -5);
+      setInputValue(trimmedDescription);
+      setOpen(false);
+      setSuggestions([]);
+
+      // Geocode the selected address
       const response = await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
       const data = await response.json() as GeocodeResponse;
       
       let lat = 0, lng = 0;
+      let street = "", city = "", state = "", zip = "", country = "";
       
       // Check for different possible formats of the geocode response
       if (data.results && data.results.length > 0) {
-        if (data.results[0].geometry && data.results[0].geometry.location) {
+        const result = data.results[0];
+        
+        if (result.geometry && result.geometry.location) {
           // Google Maps API format
-          lat = data.results[0].geometry.location.lat;
-          lng = data.results[0].geometry.location.lng;
+          lat = result.geometry.location.lat;
+          lng = result.geometry.location.lng;
+        }
+        
+        // Parse address components
+        if (result.address_components) {
+          for (const component of result.address_components) {
+            const types = component.types;
+            
+            if (types.includes('street_number')) {
+              street = component.long_name + ' ';
+            } else if (types.includes('route')) {
+              street += component.long_name;
+            } else if (types.includes('locality')) {
+              city = component.long_name;
+            } else if (types.includes('administrative_area_level_1')) {
+              state = component.short_name;
+            } else if (types.includes('postal_code')) {
+              zip = component.long_name;
+            } else if (types.includes('country')) {
+              country = component.long_name;
+            }
+          }
         }
       }
-
-      const components = data.results[0].address_components;
-
-      let streetNumber = components.find((component) => component.types.includes('street_number'))?.short_name || '';
-      let streetName = components.find((component) => component.types.includes('route'))?.short_name || '';
-      let street2 = components.find((component) => component.types.includes('subpremise'))?.short_name || '';
-      let city = components.find((component) => component.types.includes('locality'))?.short_name || '';
-      let state = components.find((component) => component.types.includes('administrative_area_level_1'))?.long_name || '';
-      let zip = components.find((component) => component.types.includes('postal_code'))?.short_name || '';
-
-      let newAddress = {
-        street: `${streetNumber} ${streetName}`,
-        street2: street2,
-        city: city,
-        state: state,
-        zip: zip,
-      }
-      
-      setAddress(newAddress);
       
       // Only continue if we have valid coordinates
       if (lat && lng && lat !== 0 && lng !== 0) {
         // Update coordinates for the map
         setCoordinates({ lat: Number(lat), lng: Number(lng) });
-
-        // Maintain focus after selection
-        setTimeout(() => {
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
-        }, 0);
-      } else {
-        toast({
-          title: "Warning",
-          description: "No valid location found for this address.",
-          variant: "destructive"
+        
+        // Update listing location with complete address details
+        setListingLocation({
+          ...listingLocation,
+          locationString: trimmedDescription,
+          latitude: Number(lat),
+          longitude: Number(lng),
+          streetAddress1: street.trim(),
+          city: city,
+          state: state,
+          postalCode: zip,
+          country: country,
         });
       }
+      
     } catch (error) {
-      console.error("Error fetching geocode:", error);
+      console.error("Error geocoding selected address:", error);
     }
   };
 
   const handleAddressChange = (field: string, value: string) => {
-    setAddress((prev: typeof address) => ({
-      ...prev,
-      [field]: value
-    }));
+    // This method is not needed for this component since we're only doing address input
   };
   
   return (
@@ -342,9 +286,13 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
                     value={inputValue}
                     onChange={handleInput}
                     onFocus={() => {
-                      if (inputValue.length > 0 && suggestions.length > 0) {
+                      if (inputValue.length > 0) {
                         setOpen(true);
                       }
+                    }}
+                    onBlur={() => {
+                      // Delay closing to allow for click events
+                      setTimeout(() => setOpen(false), 200);
                     }}
                   />
                 </CardContent>
@@ -372,109 +320,6 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
             </div>
           </div>
         </div>
-
-        {/* Validation Errors below the map */}
-        {validationErrors && validationErrors.length > 0 && (
-          <div className="w-full flex justify-center mt-6">
-            <div className="w-full max-w-[670px] mx-auto">
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>
-                  <ul className="list-disc pl-5 mt-2">
-                    {validationErrors.map((error, index) => (
-                      <li key={index}>{error}</li>
-                    ))}
-                  </ul>
-                </AlertDescription>
-              </Alert>
-            </div>
-          </div>
-        )}
-
-        {/* Address form appears below the map if an address is selected */}
-        {addressSelected && (
-          <div className="w-full flex justify-center mt-12 relative z-70 pointer-events-auto">
-            <div className="w-full max-w-[670px] mx-auto bg-background">
-              <AddressConfirmationForm 
-                initialAddress={address} 
-                onAddressChange={(updatedAddress) => {
-                  // Map between the two address format structures
-                  setAddress({
-                    street: updatedAddress.street,
-                    street2: updatedAddress.apt,
-                    city: updatedAddress.city,
-                    state: updatedAddress.state,
-                    zip: updatedAddress.zip
-                  });
-                }}
-                onUpdatePin={() => {
-                  // Create a full address string for geocoding
-                  const addressString = `${address.street}, ${address.city}, ${address.state} ${address.zip}`;
-                  
-                  // Clear the input value
-                  setInputValue("");
-                  
-                  // Use our existing geocode logic to update the coordinates
-                  (async () => {
-                    try {
-                      const response = await fetch(`/api/geocode?address=${encodeURIComponent(addressString)}`);
-                      const data = await response.json() as GeocodeResponse;
-                      
-                      let lat = 0, lng = 0;
-                      
-                      // Check for different possible formats of the geocode response
-                      if (data.results && data.results.length > 0) {
-                        if (data.results[0].geometry && data.results[0].geometry.location) {
-                          // Google Maps API format
-                          lat = data.results[0].geometry.location.lat;
-                          lng = data.results[0].geometry.location.lng;
-                        }
-                        
-                        // Format the address from the geocode results
-                        const formattedAddress = data.results[0].formatted_address.split(',')[0];
-                        // Update the input value with the new formatted address
-                        setInputValue(formattedAddress);
-                      }
-                      
-                      // Only continue if we have valid coordinates
-                      if (lat && lng && lat !== 0 && lng !== 0) {
-                        // Update coordinates for the map
-                        setCoordinates({ lat: Number(lat), lng: Number(lng) });
-                        
-                        // Scroll to map to show the new pin location
-                        const mapElement = document.getElementById('property-location-map');
-                        if (mapElement) {
-                          mapElement.scrollIntoView({ behavior: 'smooth' });
-                        }
-                        
-                        toast({
-                          title: "Pin Updated",
-                          description: "Map location has been updated based on your address.",
-                        });
-                      } else {
-                        toast({
-                          title: "Warning",
-                          description: "Could not find a valid location for this address.",
-                          variant: "destructive"
-                        });
-                      }
-                    } catch (error) {
-                      console.error("Error updating pin:", error);
-                      toast({
-                        title: "Error",
-                        description: "There was a problem updating the map location.",
-                        variant: "destructive"
-                      });
-                    }
-                  })();
-                }}
-              />
-              {/* Observer div for scroll target */}
-              <div ref={observerRef} style={{height: 1}} tabIndex={-1} aria-hidden="true" />
-            </div>
-          </div>
-        )}
 
       </section>
     </main>

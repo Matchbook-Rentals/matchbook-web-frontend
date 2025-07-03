@@ -139,13 +139,9 @@ export async function POST(
       paymentAmount: amount,
     };
 
-    // If bank account (automatic capture), mark as captured immediately
-    if (isBankAccount && paymentIntent.status === 'succeeded') {
-      updateData.paymentCapturedAt = new Date();
-      updateData.paymentStatus = 'captured';
-    } else {
-      updateData.paymentStatus = 'authorized';
-    }
+    // All payment methods start as authorized, capture happens later when payment settles
+    // ACH payments can take 3+ days to settle and can fail during that time
+    updateData.paymentStatus = 'authorized';
 
     await prisma.match.update({
       where: { id: params.matchId },

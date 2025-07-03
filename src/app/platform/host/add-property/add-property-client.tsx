@@ -10,6 +10,8 @@ import { useUser } from "@clerk/nextjs";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import { revalidateHostDashboard } from "../_actions";
 import LocationForm from "./location-form";
+import LocationInput from "./location-input";
+import AddressConfirmation from "./address-confirmation";
 import ListingUploadHighlights from "./listing-creation-highlights";
 import { Rooms } from "./listing-creation-rooms";
 import { ListingBasics } from "./listing-creation-basics";
@@ -280,17 +282,18 @@ const [listingBasics, setListingBasics] = useState({
 // Define steps
   const steps: StepInfo[] = [
     { name: "Highlights", position: 0 },
-    { name: "Location", position: 1 },
-    { name: "Rooms", position: 2 },
-    { name: "Basics", position: 3 },
-    { name: "Photos", position: 4 },
-    { name: "Featured Photos", position: 5 },
-    { name: "Amenities", position: 6 },
-    { name: "Pricing", position: 7 },
-    { name: "Verify Pricing", position: 8 },
-    { name: "Deposits", position: 9 },
-    { name: "Review", position: 10 },
-    { name: "Success", position: 11 },
+    { name: "Location Input", position: 1 },
+    { name: "Address Confirmation", position: 2 },
+    { name: "Rooms", position: 3 },
+    { name: "Basics", position: 4 },
+    { name: "Photos", position: 5 },
+    { name: "Featured Photos", position: 6 },
+    { name: "Amenities", position: 7 },
+    { name: "Pricing", position: 8 },
+    { name: "Verify Pricing", position: 9 },
+    { name: "Deposits", position: 10 },
+    { name: "Review", position: 11 },
+    { name: "Success", position: 12 },
   ];
 
 
@@ -581,20 +584,22 @@ const [listingBasics, setListingBasics] = useState({
       case 1:
         return validateLocation();
       case 2:
-        return validateRooms();
+        return validateLocation(); // Address confirmation uses same validation as location input
       case 3:
-        return validateBasics();
+        return validateRooms();
       case 4:
-        return validatePhotos();
+        return validateBasics();
       case 5:
-        return validateFeaturedPhotos();
+        return validatePhotos();
       case 6:
-        return validateAmenities();
+        return validateFeaturedPhotos();
       case 7:
-        return validatePricing();
+        return validateAmenities();
       case 8:
-        return validateVerifyPricing();
+        return validatePricing();
       case 9:
+        return validateVerifyPricing();
+      case 10:
         return validateDeposits();
       default:
         return [];
@@ -736,31 +741,35 @@ const [listingBasics, setListingBasics] = useState({
     if (highlightErrors.length > 0) allErrors[0] = highlightErrors;
     
     const locationErrors = validateLocation();
-    if (locationErrors.length > 0) allErrors[1] = locationErrors;
+    // Location validation applies to both steps 1 and 2 (input and confirmation)
+    if (locationErrors.length > 0) {
+      allErrors[1] = locationErrors;
+      allErrors[2] = locationErrors;
+    }
     
     const roomsErrors = validateRooms();
-    if (roomsErrors.length > 0) allErrors[2] = roomsErrors;
+    if (roomsErrors.length > 0) allErrors[3] = roomsErrors;
     
     const basicsErrors = validateBasics();
-    if (basicsErrors.length > 0) allErrors[3] = basicsErrors;
+    if (basicsErrors.length > 0) allErrors[4] = basicsErrors;
     
     const photosErrors = validatePhotos();
-    if (photosErrors.length > 0) allErrors[4] = photosErrors;
+    if (photosErrors.length > 0) allErrors[5] = photosErrors;
     
     const featuredPhotosErrors = validateFeaturedPhotos();
-    if (featuredPhotosErrors.length > 0) allErrors[5] = featuredPhotosErrors;
+    if (featuredPhotosErrors.length > 0) allErrors[6] = featuredPhotosErrors;
     
     const amenitiesErrors = validateAmenities();
-    if (amenitiesErrors.length > 0) allErrors[6] = amenitiesErrors;
+    if (amenitiesErrors.length > 0) allErrors[7] = amenitiesErrors;
     
     const pricingErrors = validatePricing();
-    if (pricingErrors.length > 0) allErrors[7] = pricingErrors;
+    if (pricingErrors.length > 0) allErrors[8] = pricingErrors;
     
     const verifyPricingErrors = validateVerifyPricing();
-    if (verifyPricingErrors.length > 0) allErrors[8] = verifyPricingErrors;
+    if (verifyPricingErrors.length > 0) allErrors[9] = verifyPricingErrors;
     
     const depositErrors = validateDeposits();
-    if (depositErrors.length > 0) allErrors[9] = depositErrors;
+    if (depositErrors.length > 0) allErrors[10] = depositErrors;
     
     setValidationErrors(allErrors);
     
@@ -1081,7 +1090,7 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 1:
         return (
-          <LocationForm
+          <LocationInput
             listingLocation={listingLocation}
             setListingLocation={setListingLocation}
             validationErrors={validationErrors[1]}
@@ -1089,33 +1098,43 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 2:
         return (
-          <>
-            {validationErrors[2] && <ValidationErrors errors={validationErrors[2]} className="mb-6" />}
-            <Rooms
-              bedrooms={listingRooms.bedrooms}
-              bathrooms={listingRooms.bathrooms}
-              squareFeet={listingRooms.squareFeet}
-              onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
-              onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
-              onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
-            />
-            {validationErrors[2] && <ValidationErrors errors={validationErrors[2]} className="mt-6" />}
-          </>
+          <AddressConfirmation
+            listingLocation={listingLocation}
+            setListingLocation={setListingLocation}
+            validationErrors={validationErrors[2]}
+          />
         );
       case 3:
         return (
           <>
             {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} className="mb-6" />}
+            <div className="mt-8">
+              <Rooms
+                bedrooms={listingRooms.bedrooms}
+                bathrooms={listingRooms.bathrooms}
+                squareFeet={listingRooms.squareFeet}
+                onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
+                onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
+                onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
+              />
+            </div>
+            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} className="mt-6" />}
+          </>
+        );
+      case 4:
+        return (
+          <>
+            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mb-6" />}
             <ListingBasics
               title={listingBasics.title}
               setTitle={value => setListingBasics(prev => ({ ...prev, title: value }))}
               description={listingBasics.description}
               setDescription={value => setListingBasics(prev => ({ ...prev, description: value }))}
             />
-            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} className="mt-6" />}
+            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mt-6" />}
           </>
         );
-      case 4:
+      case 5:
         // Custom photo handler to update validation in real-time
         const handlePhotosUpdate = (newPhotos: NullableListingImage[]) => {
           // Update photos state first
@@ -1134,34 +1153,22 @@ const [listingBasics, setListingBasics] = useState({
           if (photoErrors.length > 0) {
             setValidationErrors({
               ...validationErrors,
-              [4]: photoErrors
+              [5]: photoErrors
             });
-          } else if (validationErrors[4]) {
+          } else if (validationErrors[5]) {
             // Clear errors if validation passes
             const newValidationErrors = { ...validationErrors };
-            delete newValidationErrors[4];
+            delete newValidationErrors[5];
             setValidationErrors(newValidationErrors);
           }
         };
         
         return (
           <>
-            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mb-6" />}
+            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mb-6" />}
             <ListingPhotos 
               listingPhotos={listingPhotos} 
               setListingPhotos={handlePhotosUpdate} 
-            />
-            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mt-6" />}
-          </>
-        );
-      case 5:
-        return (
-          <>
-            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mb-6" />}
-            <ListingPhotoSelection
-              listingPhotos={listingPhotos}
-              selectedPhotos={selectedPhotos}
-              setSelectedPhotos={setSelectedPhotos}
             />
             {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mt-6" />}
           </>
@@ -1170,9 +1177,10 @@ const [listingBasics, setListingBasics] = useState({
         return (
           <>
             {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} className="mb-6" />}
-            <ListingAmenities
-              value={listingAmenities}
-              onChange={setListingAmenities}
+            <ListingPhotoSelection
+              listingPhotos={listingPhotos}
+              selectedPhotos={selectedPhotos}
+              setSelectedPhotos={setSelectedPhotos}
             />
             {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} className="mt-6" />}
           </>
@@ -1181,6 +1189,17 @@ const [listingBasics, setListingBasics] = useState({
         return (
           <>
             {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mb-6" />}
+            <ListingAmenities
+              value={listingAmenities}
+              onChange={setListingAmenities}
+            />
+            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mt-6" />}
+          </>
+        );
+      case 8:
+        return (
+          <>
+            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mb-6" />}
             <ListingCreationPricing
               shortestStay={listingPricing.shortestStay}
               longestStay={listingPricing.longestStay}
@@ -1196,13 +1215,13 @@ const [listingBasics, setListingBasics] = useState({
               onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
               onContinue={handleNext}
             />
-            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mt-6" />}
+            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mt-6" />}
           </>
         );
-      case 8:
+      case 9:
         return (
           <>
-            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mb-6" />}
+            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mb-6" />}
             <ListingCreationVerifyPricing
               shortestStay={listingPricing.shortestStay}
               longestStay={listingPricing.longestStay}
@@ -1213,13 +1232,13 @@ const [listingBasics, setListingBasics] = useState({
               onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
               onMonthlyPricingChange={(pricing) => setListingPricing(prev => ({ ...prev, monthlyPricing: pricing }))}
             />
-            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mt-6" />}
+            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mt-6" />}
           </>
         );
-      case 9:
+      case 10:
         return (
           <>
-            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mb-6" />}
+            {validationErrors[10] && <ValidationErrors errors={validationErrors[10]} className="mb-6" />}
             <ListingCreationDeposit
               deposit={listingPricing.deposit}
               reservationDeposit={listingPricing.reservationDeposit}
@@ -1230,10 +1249,10 @@ const [listingBasics, setListingBasics] = useState({
               onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
               onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
             />
-            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mt-6" />}
+            {validationErrors[10] && <ValidationErrors errors={validationErrors[10]} className="mt-6" />}
           </>
         );
-      case 10:
+      case 11:
         // Combine all errors for the review page
         const allValidationErrors = Object.values(validationErrors).flat();
         
@@ -1257,11 +1276,11 @@ const [listingBasics, setListingBasics] = useState({
               listingPricing={listingPricing}
               onEditHighlights={() => handleEditFromReview(0)}
               onEditLocation={() => handleEditFromReview(1)}
-              onEditRooms={() => handleEditFromReview(2)}
-              onEditBasics={() => handleEditFromReview(3)}
-              onEditAmenities={() => handleEditFromReview(6)}
-              onEditPricing={() => handleEditFromReview(8)}
-              onEditDeposits={() => handleEditFromReview(9)}
+              onEditRooms={() => handleEditFromReview(3)}
+              onEditBasics={() => handleEditFromReview(4)}
+              onEditAmenities={() => handleEditFromReview(7)}
+              onEditPricing={() => handleEditFromReview(9)}
+              onEditDeposits={() => handleEditFromReview(10)}
               showPricingStructureTitle={false}
             />
             {allValidationErrors.length > 0 && (
@@ -1275,9 +1294,9 @@ const [listingBasics, setListingBasics] = useState({
             )}
           </>
         );
-      case 11:
+      case 12:
         // Success page - determine if from Save & Exit or final submission
-        const isSaveAndExit = currentStep === 11 && listing.status === "draft";
+        const isSaveAndExit = currentStep === 12 && listing.status === "draft";
         
         return (
           <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -1308,6 +1327,25 @@ const [listingBasics, setListingBasics] = useState({
     }
   };
 
+  // Get step title based on current step
+  const getStepTitle = (step: number): string => {
+    switch (step) {
+      case 0: return 'Which of these describes your place?';
+      case 1: return 'Where is your place located?';
+      case 2: return 'Confirm your property\'s address';
+      case 3: return 'Share some basics about your place';
+      case 4: return 'Tell us about your place';
+      case 5: return 'Add photos of your place';
+      case 6: return 'Choose your featured photos';
+      case 7: return 'What amenities do you offer?';
+      case 8: return 'Set your pricing';
+      case 9: return 'Verify your pricing';
+      case 10: return 'Set your deposit requirements';
+      case 11: return 'Review your listing';
+      default: return 'Create Listing';
+    }
+  };
+
   // Loading state for draft
   if (isLoadingDraft) {
     return (
@@ -1325,10 +1363,10 @@ const [listingBasics, setListingBasics] = useState({
       <div className="bg-background overflow-hidden w-full max-w-[1920px] relative pb-32">
 
         {/* Title and Save & Exit button at top */}
-        {currentStep !== 11 && (
-          <div className="flex justify-between items-center w-full px-[247px] py-10">
+        {currentStep !== 12 && (
+          <div className="flex justify-between items-center w-full max-w-[883px] mx-auto py-10">
             <h1 className="font-['Poppins'] text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
-              {currentStep === 0 ? 'Which of these describes your place?' : 'Create Listing'}
+              {getStepTitle(currentStep)}
             </h1>
             <BrandButton 
               variant="outline"
@@ -1341,7 +1379,7 @@ const [listingBasics, setListingBasics] = useState({
         )}
 
         {/* Main content with slide animation */}
-        <div className="w-full px-[247px] mb-24">
+        <div className="w-full max-w-[883px] mx-auto mb-24">
           <div 
             key={animationKey} // Adding key to force re-render on each step change
             className="transition-transform duration-500 ease-in-out"
@@ -1368,19 +1406,19 @@ const [listingBasics, setListingBasics] = useState({
         `}</style>
 
         {/* Footer with navigation buttons - fixed to bottom */}
-        {currentStep !== 11 && (
+        {currentStep !== 12 && (
           <div className="fixed bottom-0 left-0 right-0 bg-background z-10">
             {/* Progress bar above footer */}
             <ProgressBar 
               currentStep={currentStep} 
               steps={steps}
             />
-            <div className="border-t border-gray-200">
+            <div className="">
             <Separator className="w-full" />
             {isAdmin ? (
               /* Admin footer with skip buttons */
-              <div className="w-full px-[50px] py-10">
-                <div className="flex justify-between items-center mb-2">
+              <div className="w-full px-[50px] py-8">
+                <div className="flex justify-between items-center ">
                   <div className="flex gap-2 items-center">
                     <BrandButton 
                       variant="link"
@@ -1409,7 +1447,7 @@ const [listingBasics, setListingBasics] = useState({
                         size="sm"
                         className="border-orange-500 text-orange-500 hover:bg-orange-500"
                         onClick={handleAdminSkipNext}
-                        disabled={currentStep >= steps.length - 1 || currentStep === 10}
+                        disabled={currentStep >= steps.length - 1 || currentStep === 11}
                       >
                         Skip →
                       </BrandButton>
@@ -1417,10 +1455,10 @@ const [listingBasics, setListingBasics] = useState({
                     <BrandButton 
                       variant="default"
                       size="2xl"
-                      onClick={currentStep === 10 ? handleSubmitListing : handleNext}
-                      disabled={currentStep === 10 ? isAdmin : false}
+                      onClick={currentStep === 11 ? handleSubmitListing : handleNext}
+                      disabled={currentStep === 11 ? isAdmin : false}
                     >
-                      {currentStep === 10 ? 'Submit Listing' : 
+                      {currentStep === 11 ? 'Submit Listing' : 
                        (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
                     </BrandButton>
                   </div>
@@ -1448,10 +1486,10 @@ const [listingBasics, setListingBasics] = useState({
                 <BrandButton 
                   variant="default"
                   size="2xl"
-                  onClick={currentStep === 10 ? handleSubmitListing : handleNext}
-                  disabled={currentStep === 10 ? isAdmin : false}
+                  onClick={currentStep === 11 ? handleSubmitListing : handleNext}
+                  disabled={currentStep === 11 ? isAdmin : false}
                 >
-                  {currentStep === 10 ? 'Submit Listing' : 
+                  {currentStep === 11 ? 'Submit Listing' : 
                    (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
                 </BrandButton>
               </div>
