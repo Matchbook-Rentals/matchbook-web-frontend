@@ -181,7 +181,7 @@ export default function PaymentSuccessPage({ params }: PaymentSuccessPageProps) 
               <li>• ✅ Lease agreement signed</li>
               <li>• ✅ Payment processed successfully</li>
               <li>• ✅ Move-in ready!</li>
-              <li>• 📧 You'll receive move-in instructions via email</li>
+              <li>• 📧 You&apos;ll receive move-in instructions via email</li>
               <li>• 🏠 Contact your landlord for any questions</li>
             </ul>
           </div>
@@ -190,7 +190,7 @@ export default function PaymentSuccessPage({ params }: PaymentSuccessPageProps) 
             <h4 className="font-semibold text-yellow-900 mb-2">Important Notes</h4>
             <ul className="text-yellow-800 text-sm space-y-1">
               <li>• Keep your receipt for tax and rental records</li>
-              <li>• Save your landlord's contact information</li>
+              <li>• Save your landlord&apos;s contact information</li>
               <li>• Review your lease agreement for move-in details</li>
               <li>• Set up any required utilities before move-in</li>
             </ul>

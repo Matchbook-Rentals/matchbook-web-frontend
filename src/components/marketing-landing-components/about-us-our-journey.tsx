@@ -19,7 +19,7 @@ export const AboutUsOurJourney = (): JSX.Element => {
             We did, and it was a bad time. When Isabelle and I left Active Duty
             Air force to attend school, we discovered that trying to find a
             flexible rental property was like finding a missing sock in a pile
-            of laundry. We thought, "There has to be a better way!" And just
+            of laundry. We thought, &quot;There has to be a better way!&quot; And just
             like that, the idea for MatchBook was born. 3 years later and with
             the help of an amazing team, we have created a platform that makes
             connecting housing providers with guests a breeze for all types and

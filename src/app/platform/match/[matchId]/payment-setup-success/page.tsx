@@ -179,11 +179,11 @@ export default function PaymentSetupSuccessPage({ params }: PaymentSetupSuccessP
             <h4 className="font-semibold text-gray-900 mb-2">What happens next?</h4>
             <ul className="text-gray-700 text-sm space-y-1">
               <li>• Your landlord will be notified to sign the lease</li>
-              <li>• You'll receive confirmation once they sign</li>
+              <li>• You&apos;ll receive confirmation once they sign</li>
               {paymentResult?.paymentMethodType === 'card' && (
                 <li>• Payment will be processed automatically after landlord signs</li>
               )}
-              <li>• You'll receive move-in instructions via email</li>
+              <li>• You&apos;ll receive move-in instructions via email</li>
             </ul>
           </div>
 
