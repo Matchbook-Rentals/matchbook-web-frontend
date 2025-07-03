@@ -87,10 +87,13 @@ export async function POST(
       customer: customerId,
     });
 
-    // Get payment method details to determine capture method
+    // Get payment method details
     const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
-    const isBankAccount = paymentMethod.type === 'us_bank_account';
-    const captureMethod = isBankAccount ? 'automatic' : 'manual';
+    const captureMethod = 'automatic'; // Process payments immediately
+    
+    // Calculate application fee (3% of base amount)
+    const baseAmount = amount;
+    const applicationFeeAmount = Math.round(baseAmount * 0.03 * 100); // Convert to cents
 
     console.log('💳 Payment method type:', paymentMethod.type, 'Capture method:', captureMethod);
 
@@ -108,12 +111,13 @@ export async function POST(
       customer: customerId,
       payment_method: paymentMethodId,
       payment_method_types: ['card', 'us_bank_account'],
-      capture_method: captureMethod, // Automatic for bank accounts, manual for cards
+      capture_method: captureMethod, // Automatic for immediate processing
       confirm: true,
       return_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/platform/match/${params.matchId}/payment-success`,
       transfer_data: {
         destination: match.listing.user.stripeAccountId,
       },
+      application_fee_amount: applicationFeeAmount,
       metadata: {
         matchId: params.matchId,
         userId,

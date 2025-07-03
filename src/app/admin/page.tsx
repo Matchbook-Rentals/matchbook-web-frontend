@@ -3,7 +3,7 @@ import { checkRole } from '@/utils/roles'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { UsersIcon, BookText, Database, TicketIcon, AlertTriangle, CreditCard } from 'lucide-react' // Added AlertTriangle and CreditCard
+import { UsersIcon, BookText, Database, TicketIcon, AlertTriangle, CreditCard, FileText } from 'lucide-react' // Added AlertTriangle, CreditCard, and FileText
 
 export default async function AdminDashboard() {
   if (!checkRole('admin')) {
@@ -111,24 +111,22 @@ export default async function AdminDashboard() {
                 </Link>
               </CardContent>
             </Card>
-            
-          {/*
+
             <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-2">
-                  <Database className="h-5 w-5 text-primary" />
-                  <h2 className="text-xl font-semibold">Database Explorer</h2>
+                  <FileText className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-semibold">BoldSign Integration</h2>
                 </div>
-                  
                 <p className="text-muted-foreground mb-4">
-                  View data and run SQL queries
+                  Manage e-signature documents and templates
                 </p>
-                <Link href="/admin/sql-editor">
-                  <Button>Open Explorer</Button>
+                <Link href="/admin/boldsign">
+                  <Button>Manage Documents</Button>
                 </Link>
               </CardContent>
             </Card>
-        */}
+            
           </div>
         </CardContent>
       </Card>

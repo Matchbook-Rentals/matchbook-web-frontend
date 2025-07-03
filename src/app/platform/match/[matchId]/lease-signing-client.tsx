@@ -22,6 +22,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPaymentSelector, setShowPaymentSelector] = useState(false);
+  const [selectedPaymentMethodType, setSelectedPaymentMethodType] = useState<string>();
   const [leaseCompleted, setLeaseCompleted] = useState(false);
   const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -200,9 +201,9 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const handlePaymentSuccess = () => {
     toast({
       title: "Success",
-      description: "Payment authorized successfully! Waiting for landlord to sign the lease.",
+      description: "Payment completed successfully! Your booking is confirmed.",
     });
-    // Refresh to update state and move to waiting step
+    // Refresh to update state and move to next step
     window.location.reload();
   };
 
@@ -257,12 +258,54 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
     }
   };
 
-  // Calculate payment amount (deposit + first month rent)
-  const calculatePaymentAmount = () => {
-    const monthlyRent = match.monthlyRent || 0;
-    const deposit = match.listing.depositSize || 0;
-    const petDeposit = match.listing.petDeposit || 0;
-    return monthlyRent + deposit + petDeposit;
+  // Helper function to add credit card processing fee
+  const addCreditCardFee = (originalAmount: number) => {
+    return (originalAmount + 0.30) / (1 - 0.029);
+  };
+
+  // Calculate payment amount (reservation deposit only + fees)
+  const calculatePaymentAmount = (paymentMethodType?: string) => {
+    // Use reservation deposit, fallback to $77 if null
+    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have reservation deposits
+    const reservationDeposit = match.listing.reservationDeposit || 77;
+    
+    let subtotal = reservationDeposit;
+    
+    // Add 3% application fee
+    const applicationFee = Math.round(subtotal * 0.03 * 100) / 100;
+    subtotal += applicationFee;
+    
+    // Add credit card processing fees if payment method is card
+    if (paymentMethodType === 'card') {
+      const totalWithCardFee = addCreditCardFee(subtotal);
+      return Math.round(totalWithCardFee * 100) / 100;
+    }
+    
+    return Math.round(subtotal * 100) / 100;
+  };
+  
+  // Calculate breakdown for display
+  const getPaymentBreakdown = (paymentMethodType?: string) => {
+    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have reservation deposits
+    const reservationDeposit = match.listing.reservationDeposit || 77;
+    const applicationFee = Math.round(reservationDeposit * 0.03 * 100) / 100;
+    
+    let processingFee = 0;
+    let total = reservationDeposit + applicationFee;
+    
+    if (paymentMethodType === 'card') {
+      const subtotalWithAppFee = reservationDeposit + applicationFee;
+      const totalWithCardFee = addCreditCardFee(subtotalWithAppFee);
+      processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
+      total = Math.round(totalWithCardFee * 100) / 100;
+    }
+    
+    return {
+      reservationDeposit,
+      applicationFee,
+      processingFee,
+      total
+    };
   };
 
   // Check lease signing status
@@ -270,18 +313,16 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const isLandlordSigned = match.BoldSignLease?.landlordSigned || false;
   const isLeaseFullyExecuted = isLeaseSigned && isLandlordSigned;
 
-  // Check payment authorization status
-  const isPaymentAuthorized = !!match.paymentAuthorizedAt;
+  // Check payment completion status
+  const isPaymentCompleted = !!match.paymentAuthorizedAt;
   const isPaymentCaptured = !!match.paymentCapturedAt;
   const hasPaymentMethod = !!match.stripePaymentMethodId;
 
   // Determine current step
   const getCurrentStep = () => {
     if (!isLeaseSigned) return 'sign-lease';
-    if (isLeaseSigned && hasPaymentMethod && !isPaymentAuthorized) return 'payment-method-exists';
-    if (!isPaymentAuthorized) return 'authorize-payment';
-    if (!isLandlordSigned) return 'waiting-landlord';
-    if (!isPaymentCaptured) return 'payment-pending';
+    if (isLeaseSigned && hasPaymentMethod && !isPaymentCompleted) return 'payment-method-exists';
+    if (!isPaymentCompleted) return 'complete-payment';
     return 'completed';
   };
 
@@ -305,7 +346,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
     setShowPaymentInfoModal(true);
   };
 
-  const handleAuthorizeExistingPayment = async () => {
+  const handleCompleteExistingPayment = async () => {
     if (!hasPaymentMethod) {
       toast({
         title: "Error",
@@ -328,20 +369,20 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
       });
 
       if (!response.ok) {
-        throw new Error('Failed to authorize payment');
+        throw new Error('Failed to complete payment');
       }
 
       toast({
         title: "Success",
-        description: "Payment authorized successfully! Waiting for landlord to sign the lease.",
+        description: "Payment completed successfully! Your booking is confirmed.",
       });
       // Refresh the page to update the state and move to next step
       window.location.reload();
     } catch (error) {
-      console.error('Authorization error:', error);
+      console.error('Payment error:', error);
       toast({
         title: "Error",
-        description: "Failed to authorize payment method",
+        description: "Failed to complete payment",
         variant: "destructive",
       });
     } finally {
@@ -362,7 +403,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   }
 
   // Show payment selector if lease is completed or if forced by showPaymentSelector
-  if (showPaymentSelector || currentStep === 'authorize-payment') {
+  if (showPaymentSelector || currentStep === 'complete-payment') {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto p-4 max-w-4xl">
@@ -395,24 +436,22 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                   
                   <div className="space-y-2 border-t pt-4">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Monthly Rent</span>
-                      <span className="font-medium">${match.monthlyRent?.toLocaleString() || 0}</span>
+                      <span className="text-sm text-gray-600">Reservation Deposit</span>
+                      <span className="font-medium">${(match.listing.reservationDeposit || 77).toFixed(2)}</span>
                     </div>
-                    {match.listing.depositSize > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">Application Fee (3%)</span>
+                      <span className="font-medium">${getPaymentBreakdown(selectedPaymentMethodType).applicationFee.toFixed(2)}</span>
+                    </div>
+                    {selectedPaymentMethodType === 'card' && (
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Security Deposit</span>
-                        <span className="font-medium">${match.listing.depositSize.toLocaleString()}</span>
-                      </div>
-                    )}
-                    {match.listing.petDeposit > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Pet Deposit</span>
-                        <span className="font-medium">${match.listing.petDeposit.toLocaleString()}</span>
+                        <span className="text-sm text-gray-600">Processing Fee (2.9% + $0.30)</span>
+                        <span className="font-medium">${getPaymentBreakdown(selectedPaymentMethodType).processingFee.toFixed(2)}</span>
                       </div>
                     )}
                     <div className="flex justify-between border-t pt-2 font-semibold">
-                      <span>Pre-authorized Amount</span>
-                      <span className="text-green-600">${calculatePaymentAmount().toLocaleString()}</span>
+                      <span>Total Due Today</span>
+                      <span className="text-green-600">${calculatePaymentAmount(selectedPaymentMethodType).toFixed(2)}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -423,9 +462,10 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
             <div className="lg:col-span-2">
               <PaymentMethodSelector
                 matchId={matchId}
-                amount={calculatePaymentAmount()}
+                amount={calculatePaymentAmount(selectedPaymentMethodType)}
                 onSuccess={handlePaymentSuccess}
                 onCancel={handlePaymentCancel}
+                onPaymentMethodTypeChange={setSelectedPaymentMethodType}
               />
             </div>
           </div>
@@ -450,18 +490,14 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
           
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             {currentStep === 'sign-lease' ? 'Review and Sign Lease' :
-             currentStep === 'authorize-payment' ? 'Set Up Payment Method' :
-             currentStep === 'payment-method-exists' ? 'Authorize Payment Method' :
-             currentStep === 'waiting-landlord' ? 'Review & Wait for Landlord' :
-             currentStep === 'payment-pending' ? 'Processing Payment' :
+             currentStep === 'complete-payment' ? 'Complete Payment' :
+             currentStep === 'payment-method-exists' ? 'Complete Payment' :
              currentStep === 'completed' ? 'Booking Complete' : 'Lease Management'}
           </h1>
           <p className="text-gray-600">
             {currentStep === 'sign-lease' ? `Please review your lease agreement for ${match.listing.locationString}` :
-             currentStep === 'authorize-payment' ? `Complete your booking by setting up payment for ${match.listing.locationString}` :
-             currentStep === 'payment-method-exists' ? `Authorize your existing payment method for ${match.listing.locationString}` :
-             currentStep === 'waiting-landlord' ? `You've completed all steps! Review your information while waiting for the landlord to finalize the lease` :
-             currentStep === 'payment-pending' ? `Processing payment for your booking at ${match.listing.locationString}` :
+             currentStep === 'complete-payment' ? `Complete your booking by paying for ${match.listing.locationString}` :
+             currentStep === 'payment-method-exists' ? `Complete your payment for ${match.listing.locationString}` :
              currentStep === 'completed' ? `Congratulations! Your booking at ${match.listing.locationString} is complete` :
              `Manage your lease for ${match.listing.locationString}`}
           </p>
@@ -518,12 +554,12 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      {isPaymentAuthorized ? 
+                      {isPaymentCompleted ? 
                         <CheckCircle className="w-4 h-4 text-green-600" /> : 
                         <div className="w-4 h-4 border-2 border-gray-300 rounded-full"></div>
                       }
-                      <span className={`text-sm ${isPaymentAuthorized ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
-                        Payment Authorized
+                      <span className={`text-sm ${isPaymentCompleted ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
+                        Payment Completed
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -640,7 +676,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                       />
                     </div>
                   </div>
-                ) : currentStep === 'authorize-payment' ? (
+                ) : currentStep === 'complete-payment' ? (
                   <div className="text-center py-12">
                     <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -662,7 +698,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                         onClick={() => setShowPaymentSelector(true)}
                         size="lg"
                       >
-                        Set Up Payment
+                        Complete Payment
                       </Button>
                     </div>
                   </div>
@@ -675,11 +711,11 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                       Payment Method Found
                     </h3>
                     <p className="text-gray-600 mb-6">
-                      We found an existing payment method on your account. Please authorize the pre-authorization for ${calculatePaymentAmount().toLocaleString()}.
+                      We found an existing payment method on your account. Please complete your payment of ${calculatePaymentAmount().toFixed(2)}.
                     </p>
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 mx-auto max-w-md">
                       <p className="text-blue-800 text-sm">
-                        💳 Your saved payment method will be pre-authorized but not charged until the landlord signs the lease.
+                        💳 Your payment will be processed immediately to secure your lease.
                       </p>
                     </div>
                     <div className="flex gap-3 justify-center">
@@ -699,98 +735,23 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                         Use Different Card
                       </Button>
                       <Button 
-                        onClick={handleAuthorizeExistingPayment}
+                        onClick={handleCompleteExistingPayment}
                         disabled={isLoading}
                         size="lg"
                       >
                         <Shield className="w-4 h-4 mr-2" />
-                        {isLoading ? 'Authorizing...' : 'Authorize Payment'}
+                        {isLoading ? 'Processing...' : 'Complete Payment'}
                       </Button>
                     </div>
                   </div>
-                ) : currentStep === 'waiting-landlord' ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Calendar className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Almost Complete!
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      🎉 Excellent work! You&apos;ve successfully completed your part of the process.
-                    </p>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 mx-auto max-w-md">
-                      <h4 className="font-semibold text-blue-900 mb-2">What&apos;s Next?</h4>
-                      <p className="text-blue-800 text-sm">
-                        Your landlord has been notified and will sign the lease within 24-48 hours. 
-                        Once they sign, your payment will be processed and you&apos;ll receive confirmation.
-                      </p>
-                    </div>
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 mx-auto max-w-md">
-                      <h4 className="font-semibold text-green-900 mb-2">✅ Your Completed Steps:</h4>
-                      <ul className="text-green-800 text-sm space-y-1">
-                        <li>• Lease agreement signed</li>
-                        <li>• Payment method authorized (${calculatePaymentAmount().toLocaleString()})</li>
-                        <li>• All documentation complete</li>
-                      </ul>
-                    </div>
-                    <div className="flex gap-3 justify-center">
-                      <Button 
-                        onClick={handleViewLease}
-                        variant="outline"
-                        size="lg"
-                      >
-                        <FileText className="w-4 h-4 mr-2" />
-                        Review Signed Lease
-                      </Button>
-                      <Button 
-                        onClick={handleViewPaymentInfo}
-                        variant="outline"
-                        size="lg"
-                      >
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        Payment Details
-                      </Button>
-                    </div>
-                  </div>
-                ) : currentStep === 'payment-pending' ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <DollarSign className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Processing Payment
-                    </h3>
-                    <p className="text-gray-600 mb-6">
-                      Both parties have signed the lease. Payment is being processed.
-                    </p>
-                    <div className="flex gap-3 justify-center">
-                      <Button 
-                        onClick={handleViewLease}
-                        variant="outline"
-                        size="lg"
-                      >
-                        <FileText className="w-4 h-4 mr-2" />
-                        View Lease
-                      </Button>
-                      <Button 
-                        onClick={handleViewPaymentInfo}
-                        variant="outline"
-                        size="lg"
-                      >
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        View Payment Info
-                      </Button>
-                    </div>
-                  </div>
-                ) : currentStep === 'completed' ? (
+                ) : (
                   <div className="text-center py-12">
                     <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       Booking Complete!
                     </h3>
                     <p className="text-gray-600 mb-6">
-                      Your lease has been fully executed and payment has been processed. Welcome to your new home!
+                      Your lease has been signed and payment has been completed. Welcome to your new home!
                     </p>
                     <div className="flex gap-3 justify-center">
                       <Button 
@@ -809,11 +770,6 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                         Go to Dashboard
                       </Button>
                     </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-4">Loading...</p>
                   </div>
                 )}
               </CardContent>

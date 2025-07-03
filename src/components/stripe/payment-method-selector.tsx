@@ -54,6 +54,7 @@ interface PaymentMethodSelectorProps {
   amount: number;
   onSuccess: () => void;
   onCancel: () => void;
+  onPaymentMethodTypeChange?: (type: string) => void;
 }
 
 interface PaymentMethodFormProps extends PaymentMethodSelectorProps {
@@ -184,14 +185,14 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
       await savePaymentMethodToMatch(paymentMethod.id, matchId, amount);
       toast({
         title: "Success",
-        description: "Payment method pre-authorized successfully!",
+        description: "Payment completed successfully!",
       });
       onSuccess();
     } catch (err) {
       console.error('Pre-authorization error:', err);
       toast({
         title: "Error",
-        description: "Failed to pre-authorize payment method",
+        description: "Failed to complete payment",
         variant: "destructive",
       });
       setIsProcessing(false);
@@ -254,14 +255,13 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
         </div>
 
         <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-          <h3 className="font-semibold text-orange-900 mb-2">⚠️ Confirm Pre-Authorization</h3>
+          <h3 className="font-semibold text-orange-900 mb-2">⚠️ Confirm Payment</h3>
           <p className="text-orange-800 text-sm mb-3">
-            Are you sure you want to pre-authorize charges of <strong>${amount.toLocaleString()}</strong> on 
-            your {display.type} ending in {display.last4}?
+            Confirm payment of <strong>${amount.toFixed(2)}</strong> to 
+            your {display.type} ending in {display.last4}.
           </p>
           <p className="text-orange-700 text-xs">
-            This amount will be processed once the host signs the lease agreement. 
-            No charges will be made until then.
+            This payment will be processed immediately to secure your booking.
           </p>
         </div>
 
@@ -282,7 +282,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
             className="flex-1"
           >
             <Shield className="w-4 h-4 mr-2" />
-            {isProcessing ? 'Authorizing...' : 'Confirm Pre-Authorization'}
+            {isProcessing ? 'Processing...' : 'Book Now'}
           </Button>
         </div>
       </div>
@@ -297,8 +297,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
           <span className="font-medium">Secure Payment Setup</span>
         </div>
         <p className="text-blue-700 text-sm mt-2">
-          Add a credit card or bank account that will be securely saved and pre-authorized for ${amount.toLocaleString()}.
-          No charges will be made until the landlord signs the lease.
+          Add a credit card or bank account to complete your payment of ${amount.toFixed(2)}.
         </p>
       </div>
 
@@ -371,9 +370,19 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
   );
 }
 
-export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: PaymentMethodSelectorProps) {
+export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, onPaymentMethodTypeChange }: PaymentMethodSelectorProps) {
   const [savedPaymentMethods, setSavedPaymentMethods] = useState<SavedPaymentMethod[]>([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
+  
+  // Notify parent of payment method type changes
+  useEffect(() => {
+    if (selectedPaymentMethod && onPaymentMethodTypeChange) {
+      const method = savedPaymentMethods.find(pm => pm.id === selectedPaymentMethod);
+      if (method) {
+        onPaymentMethodTypeChange(method.type);
+      }
+    }
+  }, [selectedPaymentMethod, savedPaymentMethods, onPaymentMethodTypeChange]);
   const [showNewMethodForm, setShowNewMethodForm] = useState(false);
   const [isLoadingMethods, setIsLoadingMethods] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -476,14 +485,14 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-        throw new Error(errorData.details || errorData.error || 'Failed to authorize payment method');
+        throw new Error(errorData.details || errorData.error || 'Failed to complete payment');
       }
 
       const result = await response.json();
       
       toast({
-        title: "Payment Authorized Successfully!",
-        description: "Your payment method has been pre-authorized. Check your email for a receipt from Stripe.",
+        title: "Payment Completed Successfully!",
+        description: "Your payment has been processed. Check your email for a receipt from Stripe.",
       });
       
       onSuccess();
@@ -491,7 +500,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
       console.error('❌ Error using existing payment method:', error);
       toast({
         title: "Error",
-        description: `Failed to authorize payment method: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        description: `Failed to complete payment: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
     } finally {
@@ -612,7 +621,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                 <span className="font-medium">Secure Payment Setup</span>
               </div>
               <p className="text-blue-700 text-sm mt-2">
-                Select a saved payment method to pre-authorize for ${amount.toLocaleString()}, or complete payment via Stripe Checkout.
+                Select a saved payment method to pay ${amount.toFixed(2)}, or complete payment via Stripe Checkout.
                 Stripe will send you a receipt via email for any payment transaction.
               </p>
             </div>
@@ -752,7 +761,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <h4 className="font-semibold text-blue-900 mb-2">Ready to Process Payment</h4>
                     <p className="text-blue-800 text-sm mb-3">
-                      Click &quot;Authorize Payment&quot; to pre-authorize your selected payment method, or add a new payment method.
+                      Pay ${amount.toFixed(2)} with your selected payment method, or add a new payment method.
                     </p>
                     <div className="flex gap-3">
                       <Button
@@ -762,7 +771,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel }: 
                         className="flex-1"
                       >
                         <Shield className="w-4 h-4 mr-2" />
-                        {isProcessing ? 'Authorizing...' : 'Authorize Selected Payment'}
+                        {isProcessing ? 'Processing...' : 'Book Now'}
                       </Button>
                       <Button
                         type="button"

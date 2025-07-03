@@ -43,11 +43,13 @@ export async function POST(req: Request) {
     const event = JSON.parse(body);
 
     // Handle the webhook event
+    console.log(`Webhook event received: ${event.type}`);
+    
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object;
       
       // Extract metadata
-      const { userId, type } = paymentIntent.metadata;
+      const { userId, type, matchId, hostUserId } = paymentIntent.metadata;
       
       if (type === 'matchbookVerification') {
         // Extract the session ID
@@ -70,11 +72,44 @@ export async function POST(req: Request) {
         });
         
         console.log(`User ${userId} verification payment succeeded - purchase created with session ID: ${sessionId}`);
+      } else if (type === 'lease_deposit_and_rent' && matchId) {
+        // Handle lease deposit and rent payment
+        console.log(`Processing lease payment for match ${matchId}`);
+        
+        // Update match with payment success
+        await prismadb.match.update({
+          where: { id: matchId },
+          data: {
+            paymentStatus: 'completed',
+            paymentIntentId: paymentIntent.id,
+            paymentCompletedAt: new Date(),
+          },
+        });
+        
+        console.log(`Match ${matchId} payment completed successfully`);
+      }
+    } else if (event.type === 'payment_intent.payment_failed') {
+      const paymentIntent = event.data.object;
+      const { type, matchId } = paymentIntent.metadata;
+      
+      if (type === 'lease_deposit_and_rent' && matchId) {
+        // Handle payment failure
+        console.log(`Payment failed for match ${matchId}`);
+        
+        await prismadb.match.update({
+          where: { id: matchId },
+          data: {
+            paymentStatus: 'failed',
+            paymentIntentId: paymentIntent.id,
+          },
+        });
+        
+        console.log(`Match ${matchId} payment marked as failed`);
       }
     }
 
     // Return a success response
-    return NextResponse.json({ received: true });
+    return NextResponse.json({ received: true, type: event.type });
   } catch (error: any) {
     console.error('Error processing webhook:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
