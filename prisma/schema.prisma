@@ -80,6 +80,8 @@ model User {
   tickets            Ticket[]
   applicationErrors  ApplicationError[] // Relation to application errors logged for this user
   clientLogs         ClientLog[] // Relation to client logs submitted by this user
+  paymentReceipts    PaymentReceipt[]
+  paymentTransactions PaymentTransaction[]
 }
 
 model UserPreferences {
@@ -399,6 +401,7 @@ model Booking {
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   match   Match   @relation(fields: [matchId], references: [id])
   trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  paymentTransactions PaymentTransaction[]
 
   @@index([tripId])
 }
@@ -665,6 +668,7 @@ model Match {
   listing       Listing        @relation(fields: [listingId], references: [id])
   BoldSignLease BoldSignLease?
   Lease         Lease?
+  paymentTransactions PaymentTransaction[]
 
   @@index([tripId])
   @@index([stripePaymentIntentId])
@@ -866,21 +870,133 @@ model CreditReport {
 }
 
 model RentPayment {
-  id                    String    @id @default(cuid())
+  id                    String              @id @default(cuid())
   bookingId             String
   amount                Int
   dueDate               DateTime
-  isPaid                Boolean   @default(false)
+  isPaid                Boolean             @default(false)
   stripePaymentMethodId String?
   paymentAuthorizedAt   DateTime?
   paymentCapturedAt     DateTime?
   stripePaymentIntentId String?
   failureReason         String?
-  retryCount           Int       @default(0)
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  retryCount           Int                 @default(0)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  
+  // Receipt support
+  transactionId         String?             @unique
+  transaction           PaymentTransaction? @relation(fields: [transactionId], references: [id])
 
   booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model PaymentReceipt {
+  id                String        @id @default(uuid())
+  receiptNumber     String        @unique
+  paymentType       String        // "reservation", "rent", "deposit", "fees"
+  
+  // Receipt totals
+  totalAmount       Int
+  subtotalAmount    Int
+  taxAmount         Int           @default(0)
+  serviceFeeAmount  Int           @default(0)
+  currency          String        @default("usd")
+  
+  // Timestamps
+  issuedAt          DateTime      @default(now())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Document storage
+  receiptPdfUrl     String?
+  receiptHtmlUrl    String?
+  
+  // Relationships
+  userId            String
+  user              User          @relation(fields: [userId], references: [id])
+  receiptItems      ReceiptItem[]
+  transactions      PaymentTransaction[]
+  
+  @@index([userId])
+  @@index([receiptNumber])
+  @@index([paymentType])
+}
+
+model ReceiptItem {
+  id          String  @id @default(uuid())
+  receiptId   String
+  
+  // Item details
+  description String
+  quantity    Int     @default(1)
+  unitPrice   Int
+  totalPrice  Int
+  category    String? // "reservation_deposit", "application_fee", "processing_fee", "rent", "security_deposit"
+  
+  // Tax information
+  taxable     Boolean @default(false)
+  taxAmount   Int     @default(0)
+  taxRate     Float?  // Store as decimal (e.g., 0.08 for 8%)
+  
+  // Relationship
+  receipt     PaymentReceipt @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+  
+  @@index([receiptId])
+  @@index([category])
+}
+
+model PaymentTransaction {
+  id                    String   @id @default(uuid())
+  transactionNumber     String   @unique
+  
+  // Stripe integration
+  stripePaymentIntentId String?  @unique
+  stripeChargeId        String?
+  
+  // Transaction details
+  amount                Int
+  currency              String   @default("usd")
+  status                String   // "pending", "succeeded", "failed", "refunded"
+  paymentMethod         String   // "card", "ach", "bank_transfer"
+  
+  // Fee breakdown (in cents)
+  platformFeeAmount     Int      @default(0)
+  stripeFeeAmount       Int      @default(0)
+  netAmount             Int      // Amount after fees
+  
+  // Timestamps
+  processedAt           DateTime?
+  failedAt              DateTime?
+  refundedAt            DateTime?
+  
+  // Error handling
+  failureReason         String?
+  failureCode           String?
+  
+  // Relationships
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id])
+  
+  // Link to various payment sources
+  matchId               String?
+  match                 Match?   @relation(fields: [matchId], references: [id])
+  bookingId             String?
+  booking               Booking? @relation(fields: [bookingId], references: [id])
+  rentPayment           RentPayment?
+  
+  // Receipt generation
+  receiptId             String?
+  receipt               PaymentReceipt? @relation(fields: [receiptId], references: [id])
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+  @@index([processedAt])
+  @@index([matchId])
+  @@index([bookingId])
 }
 
 model BoldSignTemplate {

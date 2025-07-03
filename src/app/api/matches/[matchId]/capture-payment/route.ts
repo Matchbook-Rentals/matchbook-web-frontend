@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+import { createPaymentReceipt } from '@/lib/receipt-utils';
 
 export async function POST(
   request: NextRequest,
@@ -104,6 +105,29 @@ export async function POST(
         });
 
         console.log('Created booking record:', booking.id);
+      }
+
+      // Generate receipt for the tenant
+      try {
+        const reservationDeposit = match.listing.reservationDeposit || 77;
+        const paymentMethodType = 'card'; // Assuming card payment for now
+        
+        await createPaymentReceipt({
+          userId: match.trip.userId, // Receipt for the tenant
+          matchId: params.matchId,
+          bookingId: booking.id,
+          paymentType: 'reservation',
+          reservationDeposit,
+          paymentMethodType,
+          stripePaymentIntentId: paymentIntent.id,
+          stripeChargeId: paymentIntent.latest_charge as string,
+          transactionStatus: 'succeeded'
+        });
+        
+        console.log('Generated payment receipt for match:', params.matchId);
+      } catch (receiptError) {
+        console.error('Error generating receipt:', receiptError);
+        // Don't fail the payment capture if receipt generation fails
       }
 
       return NextResponse.json({

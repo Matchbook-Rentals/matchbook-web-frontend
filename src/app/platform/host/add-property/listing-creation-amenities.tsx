@@ -146,7 +146,6 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
 
   return (
     <div className="flex flex-col gap-0">
-      <h2 className="text-2xl font-semibold mb-0">What amenities does your property offer?</h2>
 
       {/* Laundry Section */}
       <div className={sectionStyles}>

@@ -74,3 +74,67 @@ export async function GET(
     );
   }
 }
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { matchId: string } }
+) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { status, capturedAt } = body;
+
+    const match = await prisma.match.findUnique({
+      where: { id: params.matchId },
+      select: {
+        listing: {
+          select: {
+            userId: true,
+          }
+        },
+        trip: {
+          select: {
+            userId: true,
+          }
+        }
+      }
+    });
+
+    if (!match) {
+      return NextResponse.json({ error: 'Match not found' }, { status: 404 });
+    }
+
+    // Check if user is authorized to update this match (host or tenant)
+    if (match.listing.userId !== userId && match.trip.userId !== userId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Update payment status in database
+    const updatedMatch = await prisma.match.update({
+      where: { id: params.matchId },
+      data: {
+        paymentStatus: status,
+        ...(status === 'succeeded' && capturedAt && {
+          paymentCapturedAt: new Date(capturedAt),
+        }),
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      paymentStatus: updatedMatch.paymentStatus,
+      paymentCapturedAt: updatedMatch.paymentCapturedAt,
+    });
+
+  } catch (error) {
+    console.error('Error updating payment status:', error);
+    return NextResponse.json(
+      { error: 'Failed to update payment status' }, 
+      { status: 500 }
+    );
+  }
+}

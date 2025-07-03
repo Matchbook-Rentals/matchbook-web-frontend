@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, User, RefreshCw } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, User, RefreshCw, ChevronDown } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
 
@@ -19,6 +20,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingPayment, setIsCheckingPayment] = useState(false);
+  const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<{
     localStatus: string | null;
     stripeStatus: string | null;
@@ -29,6 +31,67 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
     isCompleted: !!match.paymentCapturedAt,
   });
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Generate rent payments for the lease duration (matches lease signing client logic)
+  const generateRentPayments = (
+    monthlyRent: number,
+    startDate: Date,
+    endDate: Date
+  ) => {
+    const payments: { amount: number; dueDate: Date; description: string }[] = [];
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    // Start from the first of the month after start date (or same month if starts on 1st)
+    let currentDate = new Date(start.getFullYear(), start.getMonth(), 1);
+    
+    // If booking starts after the 1st, add a pro-rated payment for the partial month
+    if (start.getDate() > 1) {
+      const daysInMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+      const daysFromStart = daysInMonth - start.getDate() + 1;
+      const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
+      
+      payments.push({
+        amount: proRatedAmount,
+        dueDate: start,
+        description: `Pro-rated rent (${daysFromStart} days)`
+      });
+      
+      // Move to next month for regular payments
+      currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+    }
+    
+    // Generate monthly payments on the 1st of each month
+    while (currentDate <= end) {
+      const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      
+      // Check if this is the last month and we need pro-rating
+      if (monthEnd > end && end.getDate() < monthEnd.getDate()) {
+        const daysInMonth = monthEnd.getDate();
+        const daysToEnd = end.getDate();
+        const proRatedAmount = Math.round((monthlyRent * daysToEnd) / daysInMonth);
+        
+        payments.push({
+          amount: proRatedAmount,
+          dueDate: currentDate,
+          description: `Pro-rated rent (${daysToEnd} days)`
+        });
+      } else {
+        // Full month payment
+        payments.push({
+          amount: monthlyRent,
+          dueDate: currentDate,
+          description: 'Monthly rent'
+        });
+      }
+      
+      // Move to next month
+      currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    }
+    
+    return payments;
+  };
 
   const checkPaymentStatus = async () => {
     if (!match.stripePaymentIntentId) {
@@ -52,15 +115,28 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
           isCompleted: data.stripeStatus === 'succeeded' || !!data.capturedAt,
         });
 
-        // If payment is completed but our local state doesn't reflect it, refresh the page
+        // If payment is completed but our local state doesn't reflect it, update the database
         if (data.stripeStatus === 'succeeded' && !match.paymentCapturedAt) {
           toast({
             title: "Payment Completed",
-            description: "Payment has been successfully processed! Refreshing page...",
+            description: "Payment has been successfully processed!",
           });
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          
+          // Update the database to mark payment as captured
+          try {
+            await fetch(`/api/matches/${matchId}/payment-status`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                status: 'succeeded',
+                capturedAt: new Date().toISOString()
+              }),
+            });
+          } catch (error) {
+            console.error('Error updating payment status in database:', error);
+          }
         }
       }
     } catch (error) {
@@ -177,9 +253,8 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
             title: "Success",
             description: "Lease signed successfully! The renter can now proceed with payment.",
           });
-          // Close iframe by clearing the URL and refresh the page to update status
+          // Close iframe by clearing the URL - no need to refresh, state will update automatically
           setEmbedUrl(null);
-          window.location.reload();
           break;
         case "onDocumentSigningFailed":
           console.error("❌ Failed to sign document");
@@ -308,8 +383,12 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
         description: "Payment captured successfully! Booking is now confirmed.",
       });
       
-      // Refresh to update the status
-      window.location.reload();
+      // Update local state instead of refreshing
+      setPaymentStatus(prev => ({
+        ...prev,
+        isCompleted: true,
+        localStatus: 'succeeded'
+      }));
     } catch (error) {
       console.error('Error capturing payment:', error);
       toast({
@@ -322,12 +401,52 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
     }
   };
 
-  // Calculate payment amount (deposit + first month rent)
-  const calculatePaymentAmount = () => {
-    const monthlyRent = match.monthlyRent || 0;
-    const deposit = match.listing.depositSize || 0;
-    const petDeposit = match.listing.petDeposit || 0;
-    return monthlyRent + deposit + petDeposit;
+  // Helper function to add credit card processing fee
+  const addCreditCardFee = (originalAmount: number) => {
+    return (originalAmount + 0.30) / (1 - 0.029);
+  };
+
+  // Calculate payment amount (reservation deposit + fees only - matches lease signing client)
+  const calculatePaymentAmount = (paymentMethodType?: string) => {
+    // Use reservation deposit, fallback to $77 if null (matches lease signing client)
+    const reservationDeposit = match.listing.reservationDeposit || 77;
+    
+    let subtotal = reservationDeposit;
+    
+    // Add 3% application fee
+    const applicationFee = Math.round(subtotal * 0.03 * 100) / 100;
+    subtotal += applicationFee;
+    
+    // Add credit card processing fees if payment method is card
+    if (paymentMethodType === 'card') {
+      const totalWithCardFee = addCreditCardFee(subtotal);
+      return Math.round(totalWithCardFee * 100) / 100;
+    }
+    
+    return Math.round(subtotal * 100) / 100;
+  };
+  
+  // Calculate breakdown for display
+  const getPaymentBreakdown = (paymentMethodType?: string) => {
+    const reservationDeposit = match.listing.reservationDeposit || 77;
+    const applicationFee = Math.round(reservationDeposit * 0.03 * 100) / 100;
+    
+    let processingFee = 0;
+    let total = reservationDeposit + applicationFee;
+    
+    if (paymentMethodType === 'card') {
+      const subtotalWithAppFee = reservationDeposit + applicationFee;
+      const totalWithCardFee = addCreditCardFee(subtotalWithAppFee);
+      processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
+      total = Math.round(totalWithCardFee * 100) / 100;
+    }
+    
+    return {
+      reservationDeposit,
+      applicationFee,
+      processingFee,
+      total
+    };
   };
 
   // Check lease signing status
@@ -378,9 +497,9 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
       case 'waiting-payment-auth': 
         return `The renter needs to authorize payment for ${match.listing.locationString}`;
       case 'ready-to-collect': 
-        return `Payment is authorized! You can now collect the deposits and confirm the booking for ${match.listing.locationString}`;
+        return `Payment is authorized! You can now collect $${calculatePaymentAmount().toFixed(2)} (reservation deposit + fees) for ${match.listing.locationString}`;
       case 'completed': 
-        return `Booking confirmed! The renter's payment has been processed for ${match.listing.locationString}`;
+        return `Booking confirmed! The renter's payment of $${calculatePaymentAmount().toFixed(2)} has been processed for ${match.listing.locationString}`;
       default: 
         return `Manage the lease agreement for ${match.listing.locationString}`;
     }
@@ -449,25 +568,44 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                 <div className="pt-4 border-t">
                   <h4 className="font-semibold mb-3">Payment Details</h4>
                   <div className="space-y-2">
+                    <p className="text-xs text-gray-500 mb-3">Amount collected at lease signing:</p>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Monthly Rent</span>
-                      <span className="font-medium">${match.monthlyRent?.toLocaleString() || 0}</span>
+                      <span className="text-sm text-gray-600">Reservation Deposit</span>
+                      <span className="font-medium">${getPaymentBreakdown().reservationDeposit.toFixed(2)}</span>
                     </div>
-                    {match.listing.depositSize > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">Application Fee (3%)</span>
+                      <span className="font-medium">${getPaymentBreakdown().applicationFee.toFixed(2)}</span>
+                    </div>
+                    {getPaymentBreakdown('card').processingFee > 0 && (
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Security Deposit</span>
-                        <span className="font-medium">${match.listing.depositSize.toLocaleString()}</span>
-                      </div>
-                    )}
-                    {match.listing.petDeposit > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Pet Deposit</span>
-                        <span className="font-medium">${match.listing.petDeposit.toLocaleString()}</span>
+                        <span className="text-sm text-gray-600">Processing Fee (if card)</span>
+                        <span className="font-medium">${getPaymentBreakdown('card').processingFee.toFixed(2)}</span>
                       </div>
                     )}
                     <div className="flex justify-between border-t pt-2 font-semibold">
-                      <span>Total Amount</span>
-                      <span className="text-green-600">${calculatePaymentAmount().toLocaleString()}</span>
+                      <span>Amount Collected</span>
+                      <span className="text-green-600">${calculatePaymentAmount().toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="pt-3 border-t mt-4">
+                      <p className="text-xs text-gray-500 mb-2">Future charges (collected separately):</p>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Monthly Rent</span>
+                        <span className="font-medium">${match.monthlyRent?.toLocaleString() || 0}/month</span>
+                      </div>
+                      {match.listing.depositSize > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Security Deposit</span>
+                          <span className="font-medium">${match.listing.depositSize.toLocaleString()}</span>
+                        </div>
+                      )}
+                      {match.listing.petDeposit > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Pet Deposit</span>
+                          <span className="font-medium">${match.listing.petDeposit.toLocaleString()}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -532,6 +670,80 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                       )}
                     </div>
                   </div>
+                </div>
+
+                {/* Rent Payment Schedule */}
+                <div className="pt-4 border-t">
+                  <Collapsible open={isRentScheduleOpen} onOpenChange={setIsRentScheduleOpen}>
+                    <CollapsibleTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-between p-0 font-semibold text-gray-900 hover:text-gray-700"
+                      >
+                        <span>Rent Payment Schedule</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform ${isRentScheduleOpen ? 'rotate-180' : ''}`} />
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="mt-3 space-y-2">
+                      {(() => {
+                        const startDate = new Date(match.trip.startDate);
+                        const endDate = new Date(match.trip.endDate);
+                        const monthlyRent = match.monthlyRent;
+                        
+                        if (!monthlyRent || !startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                          return (
+                            <div className="text-sm text-gray-500 py-2">
+                              Payment schedule will be available after lease details are finalized.
+                            </div>
+                          );
+                        }
+                        
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                        
+                        if (payments.length === 0) {
+                          return (
+                            <div className="text-sm text-gray-500 py-2">
+                              No rent payments scheduled.
+                            </div>
+                          );
+                        }
+                        
+                        const totalRent = payments.reduce((sum, payment) => sum + payment.amount, 0);
+                        
+                        return (
+                          <>
+                            {payments.map((payment, index) => (
+                              <div key={index} className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
+                                <div>
+                                  <p className="text-sm font-medium">{payment.description}</p>
+                                  <p className="text-xs text-gray-500">
+                                    Due: {payment.dueDate.toLocaleDateString()}
+                                  </p>
+                                </div>
+                                <span className="font-medium text-gray-900">
+                                  ${payment.amount.toLocaleString()}
+                                </span>
+                              </div>
+                            ))}
+                            <div className="mt-3 pt-3 border-t border-gray-200 bg-blue-50 rounded px-3 py-2">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-semibold text-blue-900">Total Rent Income</span>
+                                <span className="font-bold text-blue-900">${totalRent.toLocaleString()}</span>
+                              </div>
+                              <p className="text-xs text-blue-700 mt-1">
+                                {payments.length} payment{payments.length !== 1 ? 's' : ''} over {Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30.44))} months
+                              </p>
+                            </div>
+                            <div className="mt-2 pt-2 border-t border-gray-200">
+                              <p className="text-xs text-gray-500">
+                                * Rent payments will be automatically charged monthly to the renter's payment method
+                              </p>
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </CollapsibleContent>
+                  </Collapsible>
                 </div>
 
                 {/* Renter Contact */}
@@ -687,8 +899,8 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                       Ready to Collect Payment!
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      The renter has authorized payment of ${calculatePaymentAmount().toLocaleString()}. 
-                      Click below to collect the deposits and confirm the booking.
+                      The renter has authorized payment of ${calculatePaymentAmount().toFixed(2)} (reservation deposit + fees). 
+                      Click below to collect the payment and confirm the booking.
                     </p>
                     
                     {/* Payment Status Details */}
@@ -725,7 +937,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                         className="bg-green-600 hover:bg-green-700"
                       >
                         <DollarSign className="w-4 h-4 mr-2" />
-                        {isLoading ? 'Processing...' : 'Collect Deposits and Confirm Booking'}
+                        {isLoading ? 'Processing...' : 'Collect Payment and Confirm Booking'}
                       </Button>
                     </div>
                   </div>

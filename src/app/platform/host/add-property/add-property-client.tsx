@@ -1335,12 +1335,12 @@ const [listingBasics, setListingBasics] = useState({
       case 2: return 'Confirm your property\'s address';
       case 3: return 'Share some basics about your place';
       case 4: return 'Tell us about your place';
-      case 5: return 'Add photos of your place';
-      case 6: return 'Choose your featured photos';
-      case 7: return 'What amenities do you offer?';
-      case 8: return 'Set your pricing';
-      case 9: return 'Verify your pricing';
-      case 10: return 'Set your deposit requirements';
+      case 5: return 'Add soome photos';
+      case 6: return 'Choose the photos renters see first';
+      case 7: return 'What amenities does your property offer?';
+      case 8: return 'Set the pricing';
+      case 9: return 'Adjust prices and utilities inclusion for each lease length';
+      case 10: return 'What deposits and additional costs do you require';
       case 11: return 'Review your listing';
       default: return 'Create Listing';
     }
