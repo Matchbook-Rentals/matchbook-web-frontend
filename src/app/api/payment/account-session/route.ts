@@ -83,6 +83,9 @@ export async function POST(request: Request) {
         },
         account_onboarding: {
           enabled: true,
+          features: {
+            external_account_collection: true,
+          },
         },
         notification_banner: {
           enabled: true,

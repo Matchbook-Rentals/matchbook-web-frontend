@@ -13,27 +13,50 @@ export async function GET() {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { stripeAccountId: true },
+      select: { 
+        stripeAccountId: true,
+        stripeChargesEnabled: true,
+        stripePayoutsEnabled: true,
+        stripeDetailsSubmitted: true,
+      },
     });
 
     let onboardingComplete = false;
+    let chargesEnabled = user?.stripeChargesEnabled || false;
+    let payoutsEnabled = user?.stripePayoutsEnabled || false;
+    let detailsSubmitted = user?.stripeDetailsSubmitted || false;
     
-    // If user has a Stripe account, check its status
+    // If user has a Stripe account, check its latest status
     if (user?.stripeAccountId) {
       try {
         const account = await stripe.accounts.retrieve(user.stripeAccountId);
-        onboardingComplete = account.details_submitted && 
-                           account.charges_enabled && 
-                           account.payouts_enabled;
+        chargesEnabled = account.charges_enabled || false;
+        payoutsEnabled = account.payouts_enabled || false;
+        detailsSubmitted = account.details_submitted || false;
+        onboardingComplete = detailsSubmitted && chargesEnabled && payoutsEnabled;
+        
+        // Update database with latest status
+        await prisma.user.update({
+          where: { id: userId },
+          data: {
+            stripeChargesEnabled: chargesEnabled,
+            stripePayoutsEnabled: payoutsEnabled,
+            stripeDetailsSubmitted: detailsSubmitted,
+          },
+        });
       } catch (stripeError) {
         console.error('Error fetching Stripe account:', stripeError);
-        // If there's an error fetching from Stripe, just return what we have
+        // If there's an error fetching from Stripe, use database values
+        onboardingComplete = detailsSubmitted && chargesEnabled && payoutsEnabled;
       }
     }
 
     return NextResponse.json({
       stripeAccountId: user?.stripeAccountId || null,
       onboardingComplete,
+      chargesEnabled,
+      payoutsEnabled,
+      detailsSubmitted,
     });
   } catch (error) {
     console.error('Error fetching user Stripe account:', error);

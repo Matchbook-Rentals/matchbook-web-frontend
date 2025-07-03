@@ -37,6 +37,10 @@ model User {
   id               String    @id @default(uuid())
   stripeAccountId  String?
   stripeCustomerId String?
+  // Stripe Connect onboarding status fields
+  stripeChargesEnabled    Boolean?  @default(false)  // Can accept payments
+  stripePayoutsEnabled    Boolean?  @default(false)  // Can receive payouts
+  stripeDetailsSubmitted  Boolean?  @default(false)  // Completed onboarding form
   firstName        String?
   lastName         String?
   fullName         String?

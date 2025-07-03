@@ -324,14 +324,66 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
             </Button>
           ) : !hasStripeAccount ? (
             <Button
-              onClick={() => {
-                // Get the current page URL to use as 'from' parameter
-                const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-                const onboardingUrl = `${baseUrl}/platform/host/onboarding/stripe-connect?from=${encodeURIComponent(currentUrl)}`;
-                window.open(onboardingUrl, '_blank');
-                onClose();
+              onClick={async () => {
+                setIsLoading(true);
+                try {
+                  // First, create a Standard Stripe account with prefilled data
+                  const createResponse = await fetch('/api/payment/account-create', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ accountType: 'individual' }),
+                  });
+                  
+                  const createData = await createResponse.json();
+                  if (createData.error) {
+                    console.error('Error creating Stripe account:', createData.error);
+                    setIsLoading(false);
+                    return;
+                  }
+                  
+                  // Get current URL to return to after onboarding
+                  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+                  
+                  // Create callback URLs with the current page as redirect destination
+                  const callbackUrl = new URL('/stripe-callback', window.location.origin);
+                  callbackUrl.searchParams.set('redirect_to', currentUrl);
+                  callbackUrl.searchParams.set('account_id', createData.account);
+                  
+                  // Create refresh URL for expired/visited links
+                  const refreshUrl = new URL('/stripe-callback', window.location.origin);
+                  refreshUrl.searchParams.set('redirect_to', currentUrl);
+                  refreshUrl.searchParams.set('account_id', createData.account);
+                  
+                  // Then create an account link for hosted onboarding
+                  const linkResponse = await fetch('/api/payment/account-link', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                      account: createData.account,
+                      returnUrl: callbackUrl.toString(),
+                      refreshUrl: refreshUrl.toString()
+                    }),
+                  });
+                  
+                  const linkData = await linkResponse.json();
+                  if (linkData.url) {
+                    // Redirect to Stripe's hosted onboarding
+                    window.location.href = linkData.url;
+                  } else {
+                    console.error('Error creating account link:', linkData.error);
+                    setIsLoading(false);
+                  }
+                } catch (error) {
+                  console.error('Error setting up Stripe payments:', error);
+                  setIsLoading(false);
+                }
               }}
-              className="flex-1 h-12 rounded-lg bg-[#3c8787] hover:bg-[#2d6565] text-white"
+              disabled={isLoading}
+              className="flex-1 h-12 rounded-lg bg-[#3c8787] hover:bg-[#2d6565] text-white disabled:opacity-50"
             >
               Set Up Payments
             </Button>

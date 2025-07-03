@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import stripe from '@/lib/stripe';
+import Stripe from 'stripe';
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server';
 
@@ -31,37 +32,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'User email not found' }, { status: 404 });
     }
 
-    const accountCreationDetails: any = {
+    const accountCreationDetails: Stripe.AccountCreateParams = {
+      type: 'express',
       email: user.email,
       business_profile: {
         url: 'matchbookrentals.com',
-      },
-      controller: {
-        stripe_dashboard: {
-          type: "none",
-        },
-        fees: {
-          payer: "application"
-        },
-        losses: {
-          payments: "application"
-        },
-        requirement_collection: "application",
-      },
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true }
+        mcc: '6513', // Real Estate Agents and Managers - Rentals
+        product_description: 'Property rental services - We facilitate rental agreements between property owners and tenants, including payment processing for rent and security deposits.',
+        name: 'Matchbook Rentals',
       },
       country: "US",
     };
 
     if (accountType) {
-      accountCreationDetails.business_type = accountType;
+      accountCreationDetails.business_type = accountType as Stripe.AccountCreateParams.BusinessType;
     }
     if (accountType === 'individual') {
       accountCreationDetails.individual = {
         first_name: user.firstName,
         last_name: user.lastName,
+      };
+    } else if (accountType === 'company') {
+      accountCreationDetails.company = {
+        name: user.organizationName || 'Property Management Company',
       };
     }
 
@@ -72,13 +65,17 @@ export async function POST(req: NextRequest) {
       },
       data: {
         stripeAccountId: account.id,
+        stripeChargesEnabled: account.charges_enabled || false,
+        stripePayoutsEnabled: account.payouts_enabled || false,
+        stripeDetailsSubmitted: account.details_submitted || false,
       },
     });
 
     console.log('updatedUser', updatedUser);
     return NextResponse.json({ account: account.id });
-  } catch (error: any) {
+  } catch (error) {
     console.error('An error occurred when calling the Stripe API to create an account:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

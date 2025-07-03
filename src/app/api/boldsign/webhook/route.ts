@@ -92,8 +92,7 @@ export async function POST(req: Request) {
               listing: true
             }
           },
-          landlord: true,
-          primaryTenant: true
+          landlord: true
         }
       });
 
