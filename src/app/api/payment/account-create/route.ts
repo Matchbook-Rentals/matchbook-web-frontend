@@ -38,24 +38,34 @@ export async function POST(req: NextRequest) {
       business_profile: {
         url: 'matchbookrentals.com',
         mcc: '6513', // Real Estate Agents and Managers - Rentals
-        product_description: 'Property rental services - We facilitate rental agreements between property owners and tenants, including payment processing for rent and security deposits.',
-        name: 'Matchbook Rentals',
       },
       country: "US",
     };
 
+    // Only set business_type and related fields if accountType is explicitly provided
     if (accountType) {
       accountCreationDetails.business_type = accountType as Stripe.AccountCreateParams.BusinessType;
-    }
-    if (accountType === 'individual') {
-      accountCreationDetails.individual = {
-        first_name: user.firstName,
-        last_name: user.lastName,
-      };
-    } else if (accountType === 'company') {
-      accountCreationDetails.company = {
-        name: user.organizationName || 'Property Management Company',
-      };
+      
+      if (accountType === 'individual') {
+        accountCreationDetails.individual = {
+          first_name: user.firstName,
+          last_name: user.lastName,
+        };
+      } else if (accountType === 'company') {
+        accountCreationDetails.company = {
+          name: user.organizationName || 'Property Management Company',
+        };
+      }
+    } else {
+      // When no accountType is provided, default to individual but only prefill name
+      // Users can still change to company/LLC during Stripe's onboarding flow
+      if (user.firstName && user.lastName) {
+        accountCreationDetails.business_type = 'individual';
+        accountCreationDetails.individual = {
+          first_name: user.firstName,
+          last_name: user.lastName,
+        };
+      }
     }
 
     const account = await stripe.accounts.create(accountCreationDetails);

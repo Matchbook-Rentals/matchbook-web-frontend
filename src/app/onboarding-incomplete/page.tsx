@@ -4,16 +4,44 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { RefreshCw } from 'lucide-react'
 
 export default function OnboardingIncompletePage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [isCreatingLink, setIsCreatingLink] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const redirectTo = searchParams.get('redirect_to')
   const accountId = searchParams.get('account_id')
-  const chargesEnabled = searchParams.get('charges_enabled') === 'true'
-  const detailsSubmitted = searchParams.get('details_submitted') === 'true'
+  const [chargesEnabled, setChargesEnabled] = useState(searchParams.get('charges_enabled') === 'true')
+  const [detailsSubmitted, setDetailsSubmitted] = useState(searchParams.get('details_submitted') === 'true')
+
+  const handleRefreshStatus = async () => {
+    if (!accountId) return
+
+    setIsRefreshing(true)
+    try {
+      // Check the current status from Stripe
+      const statusResponse = await fetch(`/api/stripe/account-status?account_id=${accountId}`)
+      const statusData = await statusResponse.json()
+      
+      // Update the local state with the new status
+      setChargesEnabled(statusData.chargesEnabled || false)
+      setDetailsSubmitted(statusData.detailsSubmitted || false)
+      
+      // If onboarding is now complete, redirect to the original destination
+      if (statusData.onboardingComplete) {
+        const finalUrl = new URL(redirectTo || '/dashboard', window.location.origin)
+        finalUrl.searchParams.set('onboarding_complete', 'true')
+        router.replace(finalUrl.toString())
+      }
+    } catch (error) {
+      console.error('Error refreshing status:', error)
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
 
   const handleContinueOnboarding = async () => {
     if (!accountId) return
@@ -123,10 +151,19 @@ export default function OnboardingIncompletePage() {
               </ul>
             </div>
 
+            {!chargesEnabled && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <p className="text-sm text-amber-800">
+                  <strong>Important:</strong> If you haven't added your ID, please click "Continue Setup" below and upload your ID. 
+                  If you have already uploaded your ID, please allow 1 minute for Stripe to process the ID, then click "Refresh Status".
+                </p>
+              </div>
+            )}
+
             <div className="space-y-3">
               <Button
                 onClick={handleContinueOnboarding}
-                disabled={isCreatingLink}
+                disabled={isCreatingLink || isRefreshing}
                 className="w-full h-12 bg-[#3c8787] hover:bg-[#2d6565] text-white"
               >
                 {isCreatingLink ? 'Creating Link...' : 'Continue Setup'}
@@ -134,8 +171,18 @@ export default function OnboardingIncompletePage() {
               
               <Button
                 variant="outline"
+                onClick={handleRefreshStatus}
+                disabled={isCreatingLink || isRefreshing}
+                className="w-full h-12 border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                {isRefreshing ? 'Checking Status...' : 'Refresh Status'}
+              </Button>
+              
+              <Button
+                variant="outline"
                 onClick={handleSkipForNow}
-                disabled={isCreatingLink}
+                disabled={isCreatingLink || isRefreshing}
                 className="w-full h-12 border-gray-300 text-gray-700 hover:bg-gray-50"
               >
                 Skip for Now

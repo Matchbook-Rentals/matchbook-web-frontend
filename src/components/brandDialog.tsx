@@ -327,13 +327,13 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
               onClick={async () => {
                 setIsLoading(true);
                 try {
-                  // First, create a Standard Stripe account with prefilled data
+                  // First, create a Standard Stripe account without preloading business type
                   const createResponse = await fetch('/api/payment/account-create', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ accountType: 'individual' }),
+                    body: JSON.stringify({}),
                   });
                   
                   const createData = await createResponse.json();
