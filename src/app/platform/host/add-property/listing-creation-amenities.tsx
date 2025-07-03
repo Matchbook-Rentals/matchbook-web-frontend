@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Tile from "@/components/ui/tile";
+import { ListingCreationCard } from './listing-creation-card';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,7 +9,7 @@ const AMENITY_GROUPS = [
   {
     group: 'Accessibility & Safety',
     items: [
-      { value: 'wheelchairAccess', label: 'Wheelchair Accessible', icon: <AmenitiesIcons.UpdatedWheelchairAccessibleIcon className="p-1 mt-0" /> },
+      { value: 'wheelchairAccess', label: 'Accessible', icon: <AmenitiesIcons.UpdatedWheelchairAccessibleIcon className="p-1 mt-0" /> },
       { value: 'fencedInYard', label: 'Fenced Yard', icon: <AmenitiesIcons.UpdatedFencedYardIcon className="p-1 mt-0" /> },
       { value: 'keylessEntry', label: 'Keyless Entry', icon: <AmenitiesIcons.UpdatedKeylessEntryIcon className="p-1 mt-0" /> },
       { value: 'alarmSystem', label: 'Alarm System', icon: <AmenitiesIcons.UpdatedAlarmSystemIcon className="p-1 mt-0" /> },
@@ -52,7 +52,7 @@ const AMENITY_GROUPS = [
     items: [
       { value: 'fireplace', label: 'Fireplace', icon: <AmenitiesIcons.UpdatedFireplaceIcon className="p-1 mt-0" /> },
       { value: 'heater', label: 'Heater', icon: <AmenitiesIcons.UpdatedHeaterIcon className="p-1 mt-0" /> },
-      { value: 'dedicatedWorkspace', label: 'Dedicated Workspace', icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" /> },
+      { value: 'dedicatedWorkspace', label: 'Workspace', icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" /> },
       { value: 'airConditioner', label: 'Air Conditioning', icon: <AmenitiesIcons.UpdatedAirConditioningIcon className="p-1 mt-0" /> },
     ]
   },
@@ -150,28 +150,16 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
       {/* Laundry Section */}
       <div className={sectionStyles}>
         <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
-        <div className="flex items-center gap-4">
-          <div className="flex-col border-black space-y-[3px]">
-            <AmenitiesIcons.DryerIcon className="w-[70px] h-[70px]" />
-            <AmenitiesIcons.WasherIcon className="w-[70px] h-[70px]" />
-          </div>
-          <div className="flex flex-col justify-between space-y-3">
-            {laundryOptions.map((option) => (
-              <div key={option.id} className='flex items-center gap-x-2'>
-                <input
-                  type="radio"
-                  id={option.id}
-                  name="laundry"
-                  checked={getLaundrySelection() === option.value}
-                  className='appearance-none w-[35px] h-[35px] border-[#70707045] border rounded-full cursor-pointer
-                    relative flex items-center justify-center before:content-[""] before:w-[15px] before:h-[15px] before:rounded-full
-                    checked:before:bg-[#4F4F4F] checked:border-[#4F4F4F] hover:border-[#4F4F4F] transition-colors'
-                  onChange={() => handleLaundryChange(option.value)}
-                />
-                <label htmlFor={option.id} className="text-base cursor-pointer select-none">{option.label}</label>
-              </div>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-4">
+          {laundryOptions.map((option) => (
+            <ListingCreationCard
+              key={option.id}
+              name={option.label}
+              icon={<AmenitiesIcons.WasherIcon className="w-8 h-8" />}
+              isSelected={getLaundrySelection() === option.value}
+              onClick={() => handleLaundryChange(option.value)}
+            />
+          ))}
         </div>
       </div>
 
@@ -182,11 +170,11 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
               <h3 className="text-[18px] font-medium text-[#404040]">{group.group}</h3>
               <div className="flex flex-wrap gap-4">
                 {group.items.map((amenity) => (
-                  <Tile
+                  <ListingCreationCard
                     key={amenity.value}
-                    label={amenity.label}
+                    name={amenity.label}
                     icon={amenity.icon}
-                    className={`cursor-pointer border-2 ${selected.includes(amenity.value) ? 'border-primary shadow-lg' : 'border-[#E3E3E3]'}`}
+                    isSelected={selected.includes(amenity.value)}
                     onClick={() => toggleAmenity(amenity.value)}
                   />
                 ))}
