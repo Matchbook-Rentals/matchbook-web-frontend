@@ -16,11 +16,47 @@ export default function LeaseEditorPage({ params }: LeaseEditorPageProps) {
   const searchParams = useSearchParams();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showIframe, setShowIframe] = useState(true);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [showRetryOption, setShowRetryOption] = useState(false);
   
   const embedUrl = searchParams.get('embedUrl');
   const documentId = searchParams.get('documentId');
+
+  const handleRetryEdit = async () => {
+    if (!documentId) {
+      toast.error('No document ID available for retry');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      // Call API to get a new edit URL for the existing document
+      const response = await fetch(`/api/leases/edit?documentId=${documentId}`);
+      const data = await response.json();
+      
+      if (data.success && data.embedUrl) {
+        // Update the URL to use the new embed URL
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set('embedUrl', data.embedUrl);
+        window.history.replaceState({}, '', newUrl.toString());
+        
+        // Reset states and reload iframe
+        setShowRetryOption(false);
+        setIsLoading(false);
+        
+        // Reload the iframe with the new URL
+        if (iframeRef.current) {
+          iframeRef.current.src = data.embedUrl;
+        }
+      } else {
+        toast.error(data.error || 'Failed to get edit URL');
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error retrying edit:', error);
+      toast.error('Failed to retry editing. Please try again.');
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!embedUrl) {
@@ -47,9 +83,8 @@ export default function LeaseEditorPage({ params }: LeaseEditorPageProps) {
           toast.success('Lease document sent successfully!');
           // Note: Match and BoldSignLease are already created in the API route
           // The webhook will handle notifications when BoldSign sends the "Sent" event
-          // Hide iframe and show success state
-          setShowIframe(false);
-          setIsCompleted(true);
+          // Just close the window/iframe
+          window.close();
           break;
         case 'onDocumentSaved':
           console.log('💾 Document saved');
@@ -58,8 +93,7 @@ export default function LeaseEditorPage({ params }: LeaseEditorPageProps) {
         case 'onDocumentCancelled':
           console.log('❌ Document creation cancelled');
           toast.info('Document creation cancelled');
-          setShowIframe(false);
-          setIsCompleted(true);
+          setShowRetryOption(true);
           break;
         case 'onDocumentSendingFailed':
           console.error('❌ Failed to send document');
@@ -116,8 +150,55 @@ export default function LeaseEditorPage({ params }: LeaseEditorPageProps) {
         </div>
       </div>
 
-      {/* Show iframe or success state */}
-      {showIframe ? (
+      {/* Show retry option if cancelled */}
+      {showRetryOption ? (
+        <div className="flex items-center justify-center py-16">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full text-center">
+            {/* Warning Icon */}
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+              </div>
+            </div>
+
+            {/* Main Message */}
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              Document Configuration Cancelled
+            </h1>
+            
+            <p className="text-lg text-gray-600 mb-8">
+              The lease document configuration was cancelled. You can try again to continue editing the same document.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={handleRetryEdit}
+                disabled={isLoading}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
+              >
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  </svg>
+                )}
+                {isLoading ? 'Getting edit link...' : 'Try Again'}
+              </button>
+              
+              <button
+                onClick={() => router.push(`/platform/host/${params.listingId}/applications/${params.housingRequestId}`)}
+                className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+              >
+                Back to Application
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
         <>
           {/* Loading indicator */}
           {isLoading && (
@@ -143,53 +224,6 @@ export default function LeaseEditorPage({ params }: LeaseEditorPageProps) {
             />
           </div>
         </>
-      ) : (
-        /* Success State */
-        <div className="flex items-center justify-center py-16">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full text-center">
-            {/* Success Icon */}
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-              </div>
-            </div>
-
-            {/* Main Message */}
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Lease Configured Successfully!
-            </h1>
-            
-            <p className="text-lg text-gray-600 mb-8">
-              Your lease agreement has been configured and sent for signatures.
-            </p>
-
-            <p className="text-gray-700 mb-8 text-sm bg-blue-50 border border-blue-200 rounded-lg p-4">
-              Please be ready to communicate with the renters to facilitate lease signing and booking in the coming days.
-            </p>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => router.push(`/platform/host/${params.listingId}/applications/${params.housingRequestId}`)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 12H5M12 19l-7-7 7-7"></path>
-                </svg>
-                Back to Application
-              </button>
-              
-              <button
-                onClick={() => router.push(`/platform/host/${params.listingId}`)}
-                className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors"
-              >
-                Back to Listing Dashboard
-              </button>
-            </div>
-          </div>
-        </div>
       )}
 
       {/* Footer */}
