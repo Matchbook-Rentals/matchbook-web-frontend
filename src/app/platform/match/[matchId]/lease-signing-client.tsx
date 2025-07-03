@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
@@ -26,7 +27,80 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const [leaseCompleted, setLeaseCompleted] = useState(false);
   const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Generate sample rent payments for display
+  const generateRentPayments = (
+    monthlyRent: number,
+    startDate: Date,
+    endDate: Date
+  ) => {
+    console.log('generateRentPayments called with:', { monthlyRent, startDate, endDate });
+    const payments: { amount: number; dueDate: Date; description: string }[] = [];
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    console.log('Date processing:', {
+      originalStart: startDate,
+      originalEnd: endDate,
+      processedStart: start,
+      processedEnd: end,
+      startValid: !isNaN(start.getTime()),
+      endValid: !isNaN(end.getTime())
+    });
+    
+    // Start from the first of the month after start date (or same month if starts on 1st)
+    let currentDate = new Date(start.getFullYear(), start.getMonth(), 1);
+    
+    // If booking starts after the 1st, add a pro-rated payment for the partial month
+    if (start.getDate() > 1) {
+      const daysInMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+      const daysFromStart = daysInMonth - start.getDate() + 1;
+      const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
+      
+      payments.push({
+        amount: proRatedAmount,
+        dueDate: start,
+        description: `Pro-rated rent (${daysFromStart} days)`
+      });
+      
+      // Move to next month for regular payments
+      currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+    }
+    
+    // Generate monthly payments on the 1st of each month
+    while (currentDate <= end) {
+      const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      
+      // Check if this is the last month and we need pro-rating
+      if (monthEnd > end && end.getDate() < monthEnd.getDate()) {
+        const daysInMonth = monthEnd.getDate();
+        const daysToEnd = end.getDate();
+        const proRatedAmount = Math.round((monthlyRent * daysToEnd) / daysInMonth);
+        
+        payments.push({
+          amount: proRatedAmount,
+          dueDate: currentDate,
+          description: `Pro-rated rent (${daysToEnd} days)`
+        });
+      } else {
+        // Full month payment
+        payments.push({
+          amount: monthlyRent,
+          dueDate: currentDate,
+          description: 'Monthly rent'
+        });
+      }
+      
+      // Move to next month
+      currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    }
+    
+    console.log('Generated payments:', payments);
+    return payments;
+  };
 
   const startLeaseSigningFlow = async () => {
     console.log('=== LEASE SIGNING DEBUG ===');
@@ -454,6 +528,82 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                       <span className="text-green-600">${calculatePaymentAmount(selectedPaymentMethodType).toFixed(2)}</span>
                     </div>
                   </div>
+
+                  {/* Rent Payment Schedule */}
+                  <div className="border-t pt-4">
+                    <Collapsible open={isRentScheduleOpen} onOpenChange={setIsRentScheduleOpen}>
+                      <CollapsibleTrigger asChild>
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-between p-0 font-medium text-gray-900 hover:text-gray-700"
+                        >
+                          <span>Rent Payment Schedule</span>
+                          <ChevronDown className={`h-4 w-4 transition-transform ${isRentScheduleOpen ? 'rotate-180' : ''}`} />
+                        </Button>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="mt-3 space-y-2">
+                        {(() => {
+                          console.log('Debug rent payments data:', {
+                            tripStartDate: match.trip.startDate,
+                            tripEndDate: match.trip.endDate,
+                            monthlyRent: match.monthlyRent,
+                            tripData: match.trip
+                          });
+                          
+                          const startDate = new Date(match.trip.startDate);
+                          const endDate = new Date(match.trip.endDate);
+                          const monthlyRent = match.monthlyRent;
+                          
+                          console.log('Parsed dates:', {
+                            startDate: !isNaN(startDate.getTime()) ? startDate.toISOString() : 'Invalid Date',
+                            endDate: !isNaN(endDate.getTime()) ? endDate.toISOString() : 'Invalid Date',
+                            monthlyRent,
+                            isValidStart: !isNaN(startDate.getTime()),
+                            isValidEnd: !isNaN(endDate.getTime())
+                          });
+                          
+                          if (!monthlyRent || !startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                            return (
+                              <div className="text-sm text-gray-500 py-2">
+                                Payment schedule will be available after lease details are finalized.
+                                <br />
+                                <small>Debug: monthlyRent={monthlyRent}, startDate={startDate?.toString()}, endDate={endDate?.toString()}</small>
+                              </div>
+                            );
+                          }
+                          
+                          const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                          
+                          if (payments.length === 0) {
+                            return (
+                              <div className="text-sm text-gray-500 py-2">
+                                No rent payments scheduled.
+                              </div>
+                            );
+                          }
+                          
+                          return payments.map((payment, index) => (
+                            <div key={index} className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
+                              <div>
+                                <p className="text-sm font-medium">{payment.description}</p>
+                                <p className="text-xs text-gray-500">
+                                  Due: {payment.dueDate.toLocaleDateString()}
+                                </p>
+                              </div>
+                              <span className="font-medium text-gray-900">
+                                ${payment.amount.toFixed(2)}
+                              </span>
+                            </div>
+                          ));
+                        })()}
+                        <div className="mt-2 pt-2 border-t border-gray-200">
+                          <p className="text-xs text-gray-500">
+                            * These payments will be automatically charged to your payment method monthly
+                          </p>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -528,7 +678,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                   <Calendar className="w-4 h-4 text-blue-600" />
                   <div>
                     <p className="text-sm text-gray-600">Check-in</p>
-                    <p className="font-medium">{new Date(match.trip.checkIn).toLocaleDateString()}</p>
+                    <p className="font-medium">{new Date(match.trip.startDate).toLocaleDateString()}</p>
                   </div>
                 </div>
 
@@ -536,7 +686,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                   <Calendar className="w-4 h-4 text-red-600" />
                   <div>
                     <p className="text-sm text-gray-600">Check-out</p>
-                    <p className="font-medium">{new Date(match.trip.checkOut).toLocaleDateString()}</p>
+                    <p className="font-medium">{new Date(match.trip.endDate).toLocaleDateString()}</p>
                   </div>
                 </div>
 
