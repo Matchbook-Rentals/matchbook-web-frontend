@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     console.log('Step 4: Preparing BoldSign API request...');
     
     const documentRequestData = {
-      redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/lease-success?listingId=${housingRequest.listingId}&housingRequestId=${housingRequestId}&documentId={{DocumentId}}`,
+      redirectUrl: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/lease-success?listingId=${housingRequest.listingId}&housingRequestId=${housingRequestId}&documentId={{DocumentId}}`,
       showToolbar: true,
       sendViewOption: "PreparePage",
       showSaveButton: true,
