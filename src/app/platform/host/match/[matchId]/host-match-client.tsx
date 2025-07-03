@@ -155,7 +155,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
       const interval = setInterval(checkPaymentStatus, 30000);
       return () => clearInterval(interval);
     }
-  }, [match.stripePaymentIntentId, match.paymentCapturedAt]);
+  }, [match.stripePaymentIntentId, match.paymentCapturedAt, checkPaymentStatus]);
 
   const startLeaseSigningFlow = async () => {
     console.log('=== HOST LEASE SIGNING DEBUG ===');
@@ -736,7 +736,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                             </div>
                             <div className="mt-2 pt-2 border-t border-gray-200">
                               <p className="text-xs text-gray-500">
-                                * Rent payments will be automatically charged monthly to the renter's payment method
+                                * Rent payments will be automatically charged monthly to the renter&apos;s payment method
                               </p>
                             </div>
                           </>

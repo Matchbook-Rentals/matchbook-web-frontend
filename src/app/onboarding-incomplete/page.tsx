@@ -154,8 +154,8 @@ export default function OnboardingIncompletePage() {
             {!chargesEnabled && (
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                 <p className="text-sm text-amber-800">
-                  <strong>Important:</strong> If you haven't added your ID, please click "Continue Setup" below and upload your ID. 
-                  If you have already uploaded your ID, please allow 1 minute for Stripe to process the ID, then click "Refresh Status".
+                  <strong>Important:</strong> If you haven&apos;t added your ID, please click &ldquo;Continue Setup&rdquo; below and upload your ID. 
+                  If you have already uploaded your ID, please allow 1 minute for Stripe to process the ID, then click &ldquo;Refresh Status&rdquo;.
                 </p>
               </div>
             )}
