@@ -16,6 +16,7 @@ import { approveHousingRequest, declineHousingRequest, undoApprovalHousingReques
 import { createBoldSignLeaseFromHousingRequest, removeBoldSignLease } from "@/app/actions/documents";
 import { toast } from "sonner";
 import { StripeConnectVerificationDialog } from "@/components/brandDialog";
+import { useClientLogger } from "@/hooks/useClientLogger";
 
 interface HousingRequestWithUser extends HousingRequest {
   user: User & {
@@ -150,53 +151,65 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const user = housingRequest.user;
   const router = useRouter();
   const searchParams = useSearchParams();
+  const logger = useClientLogger();
   const [isApproving, setIsApproving] = useState(false);
   const [isDeclining, setIsDeclining] = useState(false);
   const [isUndoing, setIsUndoing] = useState(false);
   const [isUndoingDecline, setIsUndoingDecline] = useState(false);
   const [isUploadingLease, setIsUploadingLease] = useState(false);
+  const [uploadPhase, setUploadPhase] = useState<'idle' | 'checking' | 'selecting' | 'uploading' | 'creating'>('idle');
   const [isRemovingLease, setIsRemovingLease] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(housingRequest.status);
   const [leaseDocumentId, setLeaseDocumentId] = useState(housingRequest.leaseDocumentId);
   const [boldSignLeaseId, setBoldSignLeaseId] = useState(housingRequest.boldSignLeaseId);
   const [isStripeDialogOpen, setIsStripeDialogOpen] = useState(false);
-  const [pendingLeaseAction, setPendingLeaseAction] = useState<(() => void) | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Log browser/OS info for debugging Mac-specific issues
+  useEffect(() => {
+    const userAgent = navigator.userAgent;
+    const isMac = /Mac|macOS/.test(userAgent);
+    const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
+    
+    logger.info('Browser environment detected', {
+      userAgent,
+      isMac,
+      isSafari,
+      platform: navigator.platform,
+      housingRequestId
+    });
+  }, [housingRequestId, logger]);
   
   // Function to check Stripe Connect setup from database
   const checkStripeConnectSetup = async () => {
     try {
+      logger.debug('Checking Stripe Connect setup');
       const response = await fetch('/api/user/stripe-account');
       const data = await response.json();
-      return Boolean(data.stripeAccountId);
+      const hasStripeAccount = Boolean(data.stripeAccountId);
+      logger.info('Stripe Connect setup check completed', { hasStripeAccount, stripeAccountId: data.stripeAccountId });
+      return hasStripeAccount;
     } catch (error) {
-      console.error('Error checking Stripe account:', error);
+      logger.error('Error checking Stripe account', { error: error instanceof Error ? error.message : 'Unknown error' });
       return false;
-    }
-  };
-
-  // Function to handle Stripe Connect verification before lease actions
-  const verifyStripeConnectAndProceed = async (action: () => void) => {
-    const hasStripeAccount = await checkStripeConnectSetup();
-    if (!hasStripeAccount) {
-      setPendingLeaseAction(() => action);
-      setIsStripeDialogOpen(true);
-    } else {
-      action();
     }
   };
 
   // Handler for when user closes the Stripe dialog
   const handleStripeDialogClose = () => {
     setIsStripeDialogOpen(false);
-    setPendingLeaseAction(null);
   };
 
   // Handler for when user completes Stripe setup and wants to continue
   const handleStripeDialogContinue = () => {
-    if (pendingLeaseAction) {
-      pendingLeaseAction();
-    }
+    logger.info('Stripe setup completed, continuing with file picker');
+    setIsStripeDialogOpen(false);
+    // Now that Stripe is set up, open the file picker
+    setTimeout(() => {
+      setUploadPhase('selecting');
+      setIsUploadingLease(true);
+      fileInputRef.current?.click();
+    }, 100); // Small delay to ensure dialog is closed
   };
   
   // Get user name from actual data
@@ -285,6 +298,15 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     return { percentage: `${percentage}%`, status };
   };
 
+  // Helper function to get upload button text based on phase
+  const getUploadButtonText = (baseText: string) => {
+    if (uploadPhase === 'checking') return 'Checking onboard status...';
+    if (uploadPhase === 'selecting') return 'Selecting file...';
+    if (uploadPhase === 'uploading') return 'Uploading file...';
+    if (uploadPhase === 'creating') return 'Creating editable document...';
+    return baseText;
+  };
+
   // Handler for approving housing request
   const handleApprove = async () => {
     setIsApproving(true);
@@ -359,53 +381,90 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
 
   // Handler for uploading lease file and creating template
   const handleUploadLease = async () => {
-    console.log('handleUploadLease called');
-    console.log('fileInputRef.current:', fileInputRef.current);
+    logger.info('Upload lease button clicked', { housingRequestId, listingId });
     
-    // Check Stripe Connect setup before proceeding
-    await verifyStripeConnectAndProceed(() => {
-      // Trigger file input click
+    // Check Stripe Connect setup BEFORE opening file picker to avoid dialog interference
+    try {
+      setUploadPhase('checking');
+      setIsUploadingLease(true);
+      
+      const hasStripeAccount = await checkStripeConnectSetup();
+      if (!hasStripeAccount) {
+        logger.warn('Stripe account not set up, showing dialog', { housingRequestId });
+        setUploadPhase('idle');
+        setIsUploadingLease(false);
+        setIsStripeDialogOpen(true);
+        return;
+      }
+
+      // Only open file picker if Stripe is set up
+      logger.debug('Stripe account verified, opening file picker');
+      setUploadPhase('selecting');
+      // Keep isUploadingLease true to show the selecting state
       fileInputRef.current?.click();
-    });
+    } catch (error) {
+      logger.error('Error checking Stripe setup', { error: error instanceof Error ? error.message : 'Unknown error' });
+      setUploadPhase('idle');
+      setIsUploadingLease(false);
+      toast.error('Failed to verify payment setup. Please try again.');
+    }
   };
 
   // Handler for file selection and template creation
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleFileSelect called');
     const file = event.target.files?.[0];
-    console.log('Selected file:', file);
-    if (!file) return;
+    logger.info('File selected for upload', { 
+      fileName: file?.name, 
+      fileSize: file?.size, 
+      fileType: file?.type,
+      housingRequestId 
+    });
+
+    if (!file) {
+      logger.debug('No file selected, user cancelled');
+      setUploadPhase('idle');
+      setIsUploadingLease(false);
+      return;
+    }
 
     // Validate file type
     const allowedTypes = ['application/pdf'];
     if (!allowedTypes.includes(file.type)) {
+      logger.warn('Invalid file type selected', { fileType: file.type, allowedTypes });
+      setUploadPhase('idle');
+      setIsUploadingLease(false);
       toast.error('Please upload a PDF document');
       return;
     }
 
     // Validate file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
+      logger.warn('File size too large', { fileSize: file.size, maxSize: 10 * 1024 * 1024 });
+      setUploadPhase('idle');
+      setIsUploadingLease(false);
       toast.error('File size must be less than 10MB');
       return;
     }
 
+    // Proceed with file upload (Stripe already verified)
+    await processFileUpload(file);
+  };
+
+  // Extracted file upload logic
+  const processFileUpload = async (file: File) => {
+    setUploadPhase('uploading');
     setIsUploadingLease(true);
+    logger.info('Starting file upload process', { fileName: file.name, fileSize: file.size, housingRequestId });
     
     // Use fetch to call API route instead of server action to avoid React hydration issues
     try {
-      console.log('=== CLIENT ACTION START ===');
-      console.log('Uploading file via API route:', { 
-        housingRequestId, 
-        fileName: file.name, 
-        fileSize: file.size,
-        fileType: file.type 
-      });
-      
+      logger.debug('Creating FormData for upload');
       const formData = new FormData();
       formData.append('housingRequestId', housingRequestId);
       formData.append('listingId', listingId);
       formData.append('leaseFile', file);
 
+      logger.info('Sending file upload request to API', { endpoint: '/api/leases/create-from-upload' });
       const response = await fetch('/api/leases/create-from-upload', {
         method: 'POST',
         body: formData,
@@ -413,38 +472,55 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
 
       if (!response.ok) {
         const errorData = await response.json();
+        logger.error('Upload API returned error', { status: response.status, error: errorData });
         throw new Error(errorData.error || 'Failed to create document');
       }
 
+      // File upload complete, now creating editable document
+      setUploadPhase('creating');
+      logger.debug('File uploaded successfully, creating editable document');
+
       const result = await response.json();
-      console.log('Result from API:', result);
+      logger.info('Upload API success response', { 
+        success: result.success, 
+        documentId: result.documentId,
+        matchId: result.matchId,
+        hasEmbedUrl: !!result.embedUrl 
+      });
       
       if (result.success) {
         toast.success('Lease document created! Configure your fields.');
         
         // Notify tenant about the lease (if matchId is available)
         if (result.matchId) {
-          console.log('Match created with ID:', result.matchId);
-          console.log('Tenant can sign lease at:', `/platform/match/${result.matchId}`);
-          // TODO: Send notification to tenant with link to /platform/match/${result.matchId}
+          logger.info('Match created for tenant lease signing', { 
+            matchId: result.matchId, 
+            tenantUrl: `/platform/match/${result.matchId}` 
+          });
         }
         
         // Redirect to lease editing page with the embed URL
         if (result.embedUrl && result.documentId) {
-          router.push(`/platform/host/${listingId}/applications/${housingRequestId}/lease-editor?embedUrl=${encodeURIComponent(result.embedUrl)}&documentId=${result.documentId}`);
+          const redirectUrl = `/platform/host/${listingId}/applications/${housingRequestId}/lease-editor?embedUrl=${encodeURIComponent(result.embedUrl)}&documentId=${result.documentId}`;
+          logger.info('Redirecting to lease editor', { redirectUrl });
+          router.push(redirectUrl);
         } else {
-          console.error('Missing embedUrl or documentId in success response:', result);
+          logger.error('Missing embedUrl or documentId in success response', result);
           toast.error('Document created but missing redirect data');
         }
       } else {
+        logger.error('Upload API returned success=false', { error: result.error });
         toast.error(result.error || 'Failed to create document');
       }
     } catch (clientError) {
-      console.error('=== CLIENT ERROR ===');
-      console.error('Client-side error creating BoldSign document:', clientError);
+      logger.error('Client-side error during file upload', { 
+        error: clientError instanceof Error ? clientError.message : 'Unknown client error',
+        stack: clientError instanceof Error ? clientError.stack : undefined
+      });
       toast.error(`Failed to create document: ${clientError instanceof Error ? clientError.message : 'Unknown client error'}`);
     } finally {
-      console.log('=== CLIENT ACTION END ===');
+      logger.debug('File upload process completed');
+      setUploadPhase('idle');
       setIsUploadingLease(false);
       // Reset file input
       if (fileInputRef.current) {
@@ -681,7 +757,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-blue-50 flex items-center gap-2"
                   >
                     <Upload className="w-4 h-4" />
-                    {isUploadingLease ? 'Creating Editable Document...' : 'Upload Lease'}
+                    {getUploadButtonText('Upload Lease')}
                   </Button>
                 </div>
               )}
@@ -746,7 +822,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 flex items-center justify-center gap-2"
               >
                 {isUploadingLease && <Loader2 className="w-4 h-4 animate-spin" />}
-                {isUploadingLease ? 'Creating Editable Document...' : 'Approve and Create Lease'}
+                {getUploadButtonText('Approve and Create Lease')}
               </Button>
             </>
           )}
