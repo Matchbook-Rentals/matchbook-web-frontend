@@ -287,6 +287,71 @@ export async function getHostBookings() {
   }
 }
 
+// Get all host listings with their matches (similar to how listing dashboard context works)
+export async function getHostListingsWithMatches() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      console.log('No userId found in auth for host listings');
+      return [];
+    }
+
+    console.log('Fetching all host listings with matches for userId:', userId);
+
+    const listings = await prisma.listing.findMany({
+      where: { 
+        userId: userId // Get listings owned by the current user
+      },
+      include: {
+        matches: {
+          include: {
+            BoldSignLease: true,
+            Lease: true,
+            booking: true,
+            trip: {
+              include: {
+                user: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    console.log('Found host listings:', listings.length);
+    return listings;
+  } catch (error) {
+    console.error('Error in getHostListingsWithMatches:', error);
+    return [];
+  }
+}
+
+// Get host bookings and listings data for dashboard processing (mirrors listing page approach)
+export async function getHostDashboardData() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      console.log('No userId found in auth for dashboard data');
+      return { bookings: [], listings: [] };
+    }
+
+    console.log('Fetching dashboard data for userId:', userId);
+
+    // Fetch both bookings and listings with matches in parallel
+    const [bookings, listings] = await Promise.all([
+      getHostBookings(),
+      getHostListingsWithMatches()
+    ]);
+
+    console.log('Dashboard data fetched - bookings:', bookings.length, 'listings:', listings.length);
+    
+    return { bookings, listings };
+  } catch (error) {
+    console.error('Error in getHostDashboardData:', error);
+    return { bookings: [], listings: [] };
+  }
+}
+
 // Get bookings for a specific listing (host must own the listing)
 export async function getBookingsByListingId(listingId: string) {
   try {
