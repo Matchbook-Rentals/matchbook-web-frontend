@@ -222,7 +222,7 @@ export const AddressConfirmationForm = ({
                     <SelectTrigger className={cn(
                       "h-12 w-full", 
                       inputStyles,
-                      isStateAutofilled && "bg-blue-50 border-blue-300", // Autofill styling
+                      isStateAutofilled && "bg-[#E8F0FE]", // Chrome's exact autofill background color
                       "data-[placeholder]:text-[#667085]" // Placeholder text color
                     )}>
                       <SelectValue placeholder="Select a state" className="text-[#667085]" />
