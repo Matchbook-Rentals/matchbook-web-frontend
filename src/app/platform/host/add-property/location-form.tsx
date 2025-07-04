@@ -333,7 +333,7 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
           {/* Address input overlay positioned at top */}
           <div className="absolute top-[34px] left-0 right-0 px-[107px]">
             <div className="w-full max-w-[670px] mx-auto relative">
-              <Card className="w-full rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-white cursor-text">
+              <Card className="w-full rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-background cursor-text">
                 <CardContent className="p-0">
                   <Input
                     ref={inputRef}
@@ -352,7 +352,7 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
 
               {/* Suggestions dropdown */}
               {open && suggestions.length > 0 && (
-                <div className="absolute z-50 w-full mt-2 bg-white rounded-[15px] shadow-lg">
+                <div className="absolute z-50 w-full mt-2 bg-background rounded-[15px] shadow-lg">
                   <div className="p-4 rounded-2xl">
                     <ul className="max-h-[300px] overflow-y-auto">
                       {suggestions.map((suggestion) => (

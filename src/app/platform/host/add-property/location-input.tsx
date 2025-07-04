@@ -277,7 +277,7 @@ export default function LocationInput({ listingLocation, setListingLocation, val
           {/* Address input overlay positioned at top */}
           <div className="absolute top-[34px] left-0 right-0 px-[107px]">
             <div className="w-full max-w-[670px] mx-auto relative">
-              <Card className="w-full rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-white cursor-text">
+              <Card className="w-full rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-background cursor-text">
                 <CardContent className="p-0">
                   <Input
                     ref={inputRef}
