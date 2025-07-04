@@ -140,6 +140,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               containerClassName="flex items-center space-x-1"
               buttonClassName={styles.counterButtonSmall}
               textClassName={`${styles.counterTextSmall} min-w-[20px]`}
+              showMonthSuffix={true}
             />
           </div>
 
@@ -160,6 +161,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               containerClassName="flex items-center space-x-1"
               buttonClassName={styles.counterButtonSmall}
               textClassName={`${styles.counterTextSmall} min-w-[20px]`}
+              showMonthSuffix={true}
             />
           </div>
         </div>
