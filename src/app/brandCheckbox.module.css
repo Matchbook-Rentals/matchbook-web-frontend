@@ -33,7 +33,7 @@
   transform: translate(-50%, -70%) scale(0);
   height: 50%;
   aspect-ratio: 1.5;
-  border: 2.5px solid white;
+  border: 2px solid white;
   border-top: none;
   border-right: none;
   transform-origin: center;
