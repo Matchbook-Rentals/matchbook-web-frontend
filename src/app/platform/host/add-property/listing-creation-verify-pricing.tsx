@@ -2,7 +2,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { BrandCheckbox } from "@/app/brandCheckbox";
 import { MonthlyPricing } from "./listing-creation-pricing";
 import { styles } from "./styles";
 
@@ -193,10 +193,11 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                 </div>
               </div>
               
-              {/* Table Rows - Two columns */}
+              {/* Table Rows - Two columns - Column first ordering */}
               {Array.from({ length: Math.ceil(monthlyPricing.length / 2) }, (_, rowIndex) => {
-                const leftPricing = monthlyPricing[rowIndex * 2];
-                const rightPricing = monthlyPricing[rowIndex * 2 + 1];
+                const halfLength = Math.ceil(monthlyPricing.length / 2);
+                const leftPricing = monthlyPricing[rowIndex];
+                const rightPricing = monthlyPricing[rowIndex + halfLength];
                 
                 return (
                   <div 
@@ -230,11 +231,11 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                       </div>
                       <div className="col-span-3">
                         <div className="flex items-center justify-center">
-                          <Checkbox
-                            id={`utilities-${leftPricing.months}`}
+                          <BrandCheckbox
+                            name={`utilities-${leftPricing.months}`}
                             checked={leftPricing.utilitiesIncluded}
-                            onCheckedChange={(checked) => {
-                              updateMonthUtilities(leftPricing.months, checked as boolean);
+                            onChange={(e) => {
+                              updateMonthUtilities(leftPricing.months, e.target.checked);
                             }}
                           />
                         </div>
@@ -267,11 +268,11 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                         </div>
                         <div className="col-span-3">
                           <div className="flex items-center justify-center">
-                            <Checkbox
-                              id={`utilities-${rightPricing.months}`}
+                            <BrandCheckbox
+                              name={`utilities-${rightPricing.months}`}
                               checked={rightPricing.utilitiesIncluded}
-                              onCheckedChange={(checked) => {
-                                updateMonthUtilities(rightPricing.months, checked as boolean);
+                              onChange={(e) => {
+                                updateMonthUtilities(rightPricing.months, e.target.checked);
                               }}
                             />
                           </div>
@@ -329,19 +330,14 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                   </div>
                   <div className="w-1/3">
                     <div className="flex items-center gap-2">
-                      <Checkbox
-                        id={`utilities-${pricing.months}-mobile`}
+                      <BrandCheckbox
+                        name={`utilities-${pricing.months}-mobile`}
                         checked={pricing.utilitiesIncluded}
-                        onCheckedChange={(checked) => {
-                          updateMonthUtilities(pricing.months, checked as boolean);
+                        onChange={(e) => {
+                          updateMonthUtilities(pricing.months, e.target.checked);
                         }}
+                        label="Utilities included"
                       />
-                      <label 
-                        htmlFor={`utilities-${pricing.months}-mobile`}
-                        className="font-normal text-base text-[#222222] cursor-pointer"
-                      >
-                        Utilities included
-                      </label>
                     </div>
                   </div>
                 </div>

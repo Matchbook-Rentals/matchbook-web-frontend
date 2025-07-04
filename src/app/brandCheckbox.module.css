@@ -1,0 +1,114 @@
+.brand-checkbox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.brand-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.brand-checkbox-input {
+  width: 1rem;
+  height: 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0.1875rem; /* 3px - subtle rounding like Stripe */
+  cursor: pointer;
+  background-color: white;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.brand-checkbox-input:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -70%) scale(0);
+  height: 50%;
+  aspect-ratio: 1.5;
+  border: 2.5px solid white;
+  border-top: none;
+  border-right: none;
+  transform-origin: center;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-checkbox-input:hover:not(:disabled) {
+  border-color: #9ca3af;
+  transform: scale(1.05);
+}
+
+.brand-checkbox-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(11, 110, 110, 0.1); /* secondaryBrand with low opacity */
+  border-color: #0B6E6E; /* secondaryBrand */
+}
+
+.brand-checkbox-input:checked {
+  background-color: #0B6E6E; /* secondaryBrand */
+  border-color: #0B6E6E; /* secondaryBrand */
+  transform: scale(1);
+}
+
+.brand-checkbox-input:checked:before {
+  transform: translate(-50%, -70%) scale(1) rotate(-45deg);
+}
+
+.brand-checkbox-input:checked:hover {
+  background-color: #095859; /* primaryBrand for hover state */
+  border-color: #095859;
+}
+
+.brand-checkbox-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+.brand-checkbox-input:disabled:hover {
+  transform: none;
+}
+
+.brand-checkbox-input.invalid {
+  border-color: #ef4444;
+}
+
+.brand-checkbox-input.invalid:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.brand-checkbox-label {
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #1f2937;
+  transition: color 0.2s ease-in-out;
+}
+
+.brand-checkbox-label:hover {
+  color: #0B6E6E; /* secondaryBrand */
+}
+
+.brand-checkbox-description {
+  margin: 0;
+  padding-left: 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #6b7280;
+}
+
+.brand-checkbox-error {
+  margin: 0;
+  padding-left: 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #ef4444;
+}
