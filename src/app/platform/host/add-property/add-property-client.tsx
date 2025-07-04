@@ -1349,7 +1349,7 @@ const [listingBasics, setListingBasics] = useState({
       case 6: return { title: 'Choose the photos renters see first' };
       case 7: return { title: 'What amenities does your property offer?' };
       case 8: return { title: 'Set the pricing' };
-      case 9: return { title: 'Adjust prices and utilities inclusion for each lease length', subtitle: 'Hosts often discount rates for extended stays. You can adjust pricing and utilities inclusion for each lease length.' };
+      case 9: return { title: 'Select Monthly Rent And Utilities Included', subtitle: 'Hosts often discount rates for extended stays. You can adjust pricing and utilities for each lease length.' };
       case 10: return { title: 'What deposits and additional costs do you require', subtitle: 'Set your security deposit and any pet-related fees' };
       case 11: return { title: 'Review your listing' };
       default: return { title: 'Create Listing' };
