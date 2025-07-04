@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useClientLogger } from "@/hooks/useClientLogger";
 
 const US_STATES = [
   { name: "Alabama", code: "AL" },
@@ -97,6 +98,9 @@ export const AddressConfirmationForm = ({
   
   const [edited, setEdited] = useState(addressEdited);
   const [isStateAutofilled, setIsStateAutofilled] = useState(false);
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const [foundValues, setFoundValues] = useState<string[]>([]);
+  const { debug } = useClientLogger();
 
   // Form field data for mapping
   const formFields = [
@@ -161,6 +165,95 @@ export const AddressConfirmationForm = ({
     }
   }, [initialAddress]);
 
+  // Check for autofill pseudo-class on hidden input
+  useEffect(() => {
+    const checkAutofillStatus = () => {
+      if (hiddenInputRef.current) {
+        const hasAutofill = hiddenInputRef.current.matches(':autofill');
+        setIsStateAutofilled(hasAutofill);
+        
+        if (hasAutofill) {
+          const input = hiddenInputRef.current;
+          const iowaVariations = ['iowa', 'IOWA', 'Iowa', 'IA', 'ia', 'Ia', 'iA'];
+          
+          // Check all possible value sources
+          const valuesToCheck = [
+            { name: 'value', value: input.value },
+            { name: 'defaultValue', value: input.defaultValue },
+            { name: 'textContent', value: input.textContent },
+            { name: 'innerText', value: input.innerText },
+            { name: 'innerHTML', value: input.innerHTML },
+            { name: 'outerHTML', value: input.outerHTML },
+            { name: 'nodeValue', value: input.nodeValue },
+            { name: 'data', value: (input as any).data },
+            { name: 'validationMessage', value: input.validationMessage },
+            { name: '_autofillValue', value: (input as any)._autofillValue },
+            { name: '__autofill__', value: (input as any).__autofill__ },
+            { name: 'webkitAutofillValue', value: (input as any).webkitAutofillValue },
+            { name: 'placeholder', value: input.placeholder },
+            { name: 'title', value: input.title },
+            { name: 'alt', value: input.alt },
+          ];
+          
+          // Add all attributes
+          for (let i = 0; i < input.attributes.length; i++) {
+            const attr = input.attributes[i];
+            valuesToCheck.push({ name: `attr-${attr.name}`, value: attr.value });
+          }
+          
+          // Try pseudo-elements
+          try {
+            const beforeStyle = window.getComputedStyle(input, '::before');
+            const afterStyle = window.getComputedStyle(input, '::after');
+            const mainStyle = window.getComputedStyle(input);
+            valuesToCheck.push(
+              { name: 'beforeContent', value: beforeStyle.content },
+              { name: 'afterContent', value: afterStyle.content },
+              { name: 'computedContent', value: mainStyle.content }
+            );
+          } catch (e) {
+            // Ignore pseudo-element errors
+          }
+          
+          // Check for Iowa variations in any value (with word boundaries)
+          const iowaFinds: string[] = [];
+          valuesToCheck.forEach(({ name, value }) => {
+            if (value && typeof value === 'string') {
+              iowaVariations.forEach(variation => {
+                // Use word boundaries or exact match for short codes like "IA"
+                const regex = variation.length === 2 
+                  ? new RegExp(`\\b${variation}\\b`, 'i') // Word boundary for 2-letter codes
+                  : new RegExp(`\\b${variation}\\b`, 'i'); // Word boundary for full names
+                
+                if (regex.test(value)) {
+                  const foundValue = `${name}: "${value}" (contains ${variation})`;
+                  if (!foundValues.includes(foundValue)) {
+                    iowaFinds.push(foundValue);
+                  }
+                }
+              });
+            }
+          });
+          
+          // If we found Iowa variations, add them and log
+          if (iowaFinds.length > 0) {
+            setFoundValues(prev => [...prev, ...iowaFinds]);
+            debug('🎯 IOWA FOUND IN AUTOFILL!', { 
+              iowaFinds, 
+              allFoundValues: [...foundValues, ...iowaFinds] 
+            });
+          }
+        }
+      }
+    };
+
+    // Check immediately and set up polling
+    checkAutofillStatus();
+    const interval = setInterval(checkAutofillStatus, 100);
+
+    return () => clearInterval(interval);
+  }, [foundValues, debug]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -214,7 +307,7 @@ export const AddressConfirmationForm = ({
                     const updatedForm = { ...form, state: value };
                     setForm(updatedForm);
                     setEdited(true);
-                    setIsStateAutofilled(false); // Manual selection, not autofill
+                    setIsStateAutofilled(false); // Manual selection, clear autofill state
                     if (onAddressChange) {
                       onAddressChange(updatedForm);
                     }
@@ -235,6 +328,7 @@ export const AddressConfirmationForm = ({
                   </Select>
                   {/* Hidden input to capture autofill */}
                   <input
+                    ref={hiddenInputRef}
                     type="text"
                     name="state"
                     autoComplete="address-level1"
@@ -245,7 +339,6 @@ export const AddressConfirmationForm = ({
                         const updatedForm = { ...form, state: value };
                         setForm(updatedForm);
                         setEdited(true);
-                        setIsStateAutofilled(true); // Mark as autofilled
                         if (onAddressChange) {
                           onAddressChange(updatedForm);
                         }
