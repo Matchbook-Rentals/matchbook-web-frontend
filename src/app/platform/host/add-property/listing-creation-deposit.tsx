@@ -10,6 +10,8 @@ interface ListingCreationDepositProps {
   onReservationDepositChange: (value: string) => void;
   onPetDepositChange: (value: string) => void;
   onPetRentChange: (value: string) => void;
+  questionTextStyles?: string;
+  questionSubTextStyles?: string;
 }
 
 const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
@@ -21,20 +23,12 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
   onReservationDepositChange,
   onPetDepositChange,
   onPetRentChange,
+  questionTextStyles,
+  questionSubTextStyles,
 }) => {
   return (
     <div className="relative w-full max-w-[886px]">
       <div className="w-full">
-        {/* Header Section */}
-        <div className="mb-8">
-          <h2 className="font-medium text-2xl text-[#404040] [font-family:'Poppins',Helvetica] mb-2">
-            What deposits and additional costs do you require?
-          </h2>
-          <p className="font-light text-lg text-[#666666] [font-family:'Poppins',Helvetica]">
-            Set your security deposit and any pet-related fees
-          </p>
-        </div>
-
         {/* Deposit Section */}
         <div className="space-y-6">
           <div className="space-y-4">

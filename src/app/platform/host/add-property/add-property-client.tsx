@@ -275,6 +275,7 @@ const [listingRooms, setListingRooms] = useState({
 
 // Reusable text styles
 const questionTextStyles = "font-text-label-small-medium text-[#484a54] text-[14px]";
+const questionSubTextStyles = "font-['Poppins'] text-xs font-normal text-[#838799]";
 
 // Step 3: Basics
 const [listingBasics, setListingBasics] = useState({
@@ -1219,6 +1220,8 @@ const [listingBasics, setListingBasics] = useState({
               onVaryPricingByLengthChange={(value) => setListingPricing(prev => ({ ...prev, varyPricingByLength: value }))}
               onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
               onContinue={handleNext}
+              questionTextStyles={questionTextStyles}
+              questionSubTextStyles={questionSubTextStyles}
             />
             {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mt-6" />}
           </>
@@ -1253,6 +1256,8 @@ const [listingBasics, setListingBasics] = useState({
               onReservationDepositChange={(value) => setListingPricing(prev => ({ ...prev, reservationDeposit: value }))}
               onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
               onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
+              questionTextStyles={questionTextStyles}
+              questionSubTextStyles={questionSubTextStyles}
             />
             {validationErrors[10] && <ValidationErrors errors={validationErrors[10]} className="mt-6" />}
           </>

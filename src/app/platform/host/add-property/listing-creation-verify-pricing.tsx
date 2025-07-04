@@ -100,15 +100,6 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
   return (
     <div className="relative w-full max-w-[886px]">
       <div className="w-full">
-        {/* Header Section */}
-        <div className="mb-4 pt-2">
-          <p className="font-light  text-[#222222] [font-family:'Poppins',Helvetica]">
-            Adjust prices and utilities inclusion for each lease length. You can also modify your stay length range below.
-          </p>
-          <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1 mb-2">
-            Hosts often discount rates for extended stays. You can adjust pricing and utilities inclusion for each lease length.
-          </p>
-        </div>
 
         {/* Interactive Controls - Allow editing stay lengths */}
         <div className="flex items-center justify-center w-full gap-8 mb-6">

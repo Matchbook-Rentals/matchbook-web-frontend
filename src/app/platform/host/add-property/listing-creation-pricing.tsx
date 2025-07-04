@@ -28,6 +28,8 @@ interface ListingCreationPricingProps {
   onBasePriceChange: (value: string) => void;
   onContinue?: () => void;
   isLoading?: boolean;
+  questionTextStyles?: string;
+  questionSubTextStyles?: string;
 }
 
 const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({ 
@@ -44,7 +46,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
   onVaryPricingByLengthChange,
   onBasePriceChange,
   onContinue,
-  isLoading
+  isLoading,
+  questionTextStyles,
+  questionSubTextStyles
 }) => {
 
 
