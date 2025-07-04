@@ -1,10 +1,61 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 const US_STATES = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+  { name: "Alabama", code: "AL" },
+  { name: "Alaska", code: "AK" },
+  { name: "Arizona", code: "AZ" },
+  { name: "Arkansas", code: "AR" },
+  { name: "California", code: "CA" },
+  { name: "Colorado", code: "CO" },
+  { name: "Connecticut", code: "CT" },
+  { name: "Delaware", code: "DE" },
+  { name: "Florida", code: "FL" },
+  { name: "Georgia", code: "GA" },
+  { name: "Hawaii", code: "HI" },
+  { name: "Idaho", code: "ID" },
+  { name: "Illinois", code: "IL" },
+  { name: "Indiana", code: "IN" },
+  { name: "Iowa", code: "IA" },
+  { name: "Kansas", code: "KS" },
+  { name: "Kentucky", code: "KY" },
+  { name: "Louisiana", code: "LA" },
+  { name: "Maine", code: "ME" },
+  { name: "Maryland", code: "MD" },
+  { name: "Massachusetts", code: "MA" },
+  { name: "Michigan", code: "MI" },
+  { name: "Minnesota", code: "MN" },
+  { name: "Mississippi", code: "MS" },
+  { name: "Missouri", code: "MO" },
+  { name: "Montana", code: "MT" },
+  { name: "Nebraska", code: "NE" },
+  { name: "Nevada", code: "NV" },
+  { name: "New Hampshire", code: "NH" },
+  { name: "New Jersey", code: "NJ" },
+  { name: "New Mexico", code: "NM" },
+  { name: "New York", code: "NY" },
+  { name: "North Carolina", code: "NC" },
+  { name: "North Dakota", code: "ND" },
+  { name: "Ohio", code: "OH" },
+  { name: "Oklahoma", code: "OK" },
+  { name: "Oregon", code: "OR" },
+  { name: "Pennsylvania", code: "PA" },
+  { name: "Rhode Island", code: "RI" },
+  { name: "South Carolina", code: "SC" },
+  { name: "South Dakota", code: "SD" },
+  { name: "Tennessee", code: "TN" },
+  { name: "Texas", code: "TX" },
+  { name: "Utah", code: "UT" },
+  { name: "Vermont", code: "VT" },
+  { name: "Virginia", code: "VA" },
+  { name: "Washington", code: "WA" },
+  { name: "West Virginia", code: "WV" },
+  { name: "Wisconsin", code: "WI" },
+  { name: "Wyoming", code: "WY" }
 ];
 
 interface AddressConfirmationFormProps {
@@ -24,13 +75,17 @@ interface AddressConfirmationFormProps {
   }) => void;
   onUpdatePin?: () => void;
   addressEdited?: boolean;
+  inputStyles?: string;
+  labelStyles?: string;
 }
 
 export const AddressConfirmationForm = ({ 
   initialAddress, 
   onAddressChange, 
   onUpdatePin,
-  addressEdited = false 
+  addressEdited = false,
+  inputStyles,
+  labelStyles
 }: AddressConfirmationFormProps) => {
   const [form, setForm] = useState({
     street: "",
@@ -41,6 +96,58 @@ export const AddressConfirmationForm = ({
   });
   
   const [edited, setEdited] = useState(addressEdited);
+  const [isStateAutofilled, setIsStateAutofilled] = useState(false);
+
+  // Form field data for mapping
+  const formFields = [
+    {
+      id: "street",
+      name: "street",
+      label: "Street Address",
+      value: form.street,
+      placeholder: "123 S Temple St",
+      required: true,
+      type: "text"
+    },
+    {
+      id: "apt",
+      name: "apt", 
+      label: "Apt, Suite, Unit (optional)",
+      value: form.apt,
+      placeholder: "Apt 4B",
+      required: false,
+      type: "text"
+    },
+    {
+      id: "city",
+      name: "city",
+      label: "City",
+      value: form.city,
+      placeholder: "Salt Lake City",
+      required: true,
+      type: "text"
+    },
+    {
+      id: "state",
+      name: "state",
+      label: "State",
+      value: form.state,
+      placeholder: "Utah",
+      required: true,
+      type: "select"
+    },
+    {
+      id: "zip",
+      name: "zip",
+      label: "Zip",
+      value: form.zip,
+      placeholder: "84101",
+      required: true,
+      type: "text",
+      pattern: "[0-9]{5}(-[0-9]{4})?",
+      maxLength: 10
+    },
+  ];
 
   useEffect(() => {
     if (initialAddress) {
@@ -54,9 +161,17 @@ export const AddressConfirmationForm = ({
     }
   }, [initialAddress]);
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const updatedForm = { ...form, [name]: value };
+    let processedValue = value;
+    
+    // If it's the state field, normalize the input
+    if (name === 'state') {
+      processedValue = normalizeState(value);
+    }
+    
+    const updatedForm = { ...form, [name]: processedValue };
     setForm(updatedForm);
     setEdited(true);
     if (onAddressChange) {
@@ -64,134 +179,106 @@ export const AddressConfirmationForm = ({
     }
   };
 
-  const handleSelectChange = (value: string) => {
-    const updatedForm = { ...form, state: value };
-    setForm(updatedForm);
-    setEdited(true);
-    if (onAddressChange) {
-      onAddressChange(updatedForm);
-    }
+  // Helper function to normalize state input to full name
+  const normalizeState = (input: string): string => {
+    // Check if it's a state code
+    const stateByCode = US_STATES.find(s => s.code.toUpperCase() === input.toUpperCase());
+    if (stateByCode) return stateByCode.name;
+    
+    // Check if it's already a full state name
+    const stateByName = US_STATES.find(s => s.name.toLowerCase() === input.toLowerCase());
+    if (stateByName) return stateByName.name;
+    
+    // Return as is if no match
+    return input;
   };
 
   return (
-    <div className="w-full max-w-[880px]">
-      <div className="w-full">
-        <Card className="w-full border-2 border-solid border-[#0000004c] rounded-[10px]">
-          <CardContent className="p-5">
-            {/* Street Address */}
-            <div>
-              <div className="py-2">
-                <label className="font-light text-[15px] text-[#3f3f3f] font-['Poppins',Helvetica]" htmlFor="street">
-                  Street Address
-                </label>
-                <input
-                  id="street"
-                  name="street"
-                  type="text"
-                  required
-                  value={form.street}
-                  onChange={handleChange}
-                  className="font-medium text-lg text-[#3f3f3f] mt-1 font-['Poppins',Helvetica] w-full border-b border-[#00000033] focus:outline-none bg-transparent"
-                  autoComplete="street-address"
-                />
-              </div>
-              <Separator className="my-2" />
-            </div>
-
-            {/* Apt, Suite, Unit (optional) */}
-            <div>
-              <div className="py-2">
-                <label className="font-light text-[15px] text-[#3f3f3f] font-['Poppins',Helvetica]" htmlFor="apt">
-                  Apt, Suite, Unit (optional)
-                </label>
-                <input
-                  id="apt"
-                  name="apt"
-                  type="text"
-                  value={form.apt}
-                  onChange={handleChange}
-                  className="font-medium text-lg text-[#3f3f3f] mt-1 font-['Poppins',Helvetica] w-full border-b border-[#00000033] focus:outline-none bg-transparent"
-                  autoComplete="address-line2"
-                />
-              </div>
-              <Separator className="my-2" />
-            </div>
-
-            {/* City */}
-            <div>
-              <div className="py-2">
-                <label className="font-light text-[15px] text-[#3f3f3f] font-['Poppins',Helvetica]" htmlFor="city">
-                  City
-                </label>
-                <input
-                  id="city"
-                  name="city"
-                  type="text"
-                  required
-                  value={form.city}
-                  onChange={handleChange}
-                  className="font-medium text-lg text-[#3f3f3f] mt-1 font-['Poppins',Helvetica] w-full border-b border-[#00000033] focus:outline-none bg-transparent"
-                  autoComplete="address-level2"
-                />
-              </div>
-              <Separator className="my-2" />
-            </div>
-
-            {/* State */}
-            <div>
-              <div className="py-2">
-                <label className="font-light text-[15px] text-[#3f3f3f] font-['Poppins',Helvetica]" htmlFor="state">
-                  State
-                </label>
-                <Select value={form.state} onValueChange={handleSelectChange}>
-                  <SelectTrigger className="font-medium text-lg text-[#3f3f3f] mt-1 font-['Poppins',Helvetica] w-full border-b border-[#00000033] focus:outline-none bg-transparent border-0 p-0 h-auto">
-                    <SelectValue placeholder="Select a state" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {US_STATES.map((state) => (
-                      <SelectItem key={state} value={state}>{state}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Separator className="my-2" />
-            </div>
-
-            {/* Zip */}
-            <div>
-              <div className="py-2">
-                <label className="font-light text-[15px] text-[#3f3f3f] font-['Poppins',Helvetica]" htmlFor="zip">
-                  Zip
-                </label>
-                <input
-                  id="zip"
-                  name="zip"
-                  type="text"
-                  required
-                  value={form.zip}
-                  onChange={handleChange}
-                  className="font-medium text-lg text-[#3f3f3f] mt-1 font-['Poppins',Helvetica] w-full border-b border-[#00000033] focus:outline-none bg-transparent"
-                  autoComplete="postal-code"
-                  pattern="[0-9]{5}(-[0-9]{4})?"
-                  maxLength={10}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {edited && onUpdatePin && (
-          <div className="mt-6 flex justify-center">
-            <button
-              type="button"
-              onClick={onUpdatePin}
-              className="px-6 py-3 bg-black text-white rounded-lg hover:bg-primary/90 transition-colors shadow-md font-medium"
+    <div className="w-full">
+      <Card className="border border-solid border-[#e6e6e6] p-6">
+        <CardContent className="flex flex-col items-start gap-4 p-0">
+          {formFields.map((field) => (
+            <div
+              key={field.id}
+              className="flex flex-col items-start gap-1.5 w-full"
             >
-              Update Map Marker 
-            </button>
-          </div>
-        )}
-      </div>
+              <Label
+                htmlFor={field.id}
+                className={labelStyles || "font-['Poppins'] font-medium text-sm text-[#344054]"}
+              >
+                {field.label}
+              </Label>
+              {field.type === "select" ? (
+                <div className="relative w-full">
+                  <Select value={field.value} onValueChange={(value) => {
+                    const updatedForm = { ...form, state: value };
+                    setForm(updatedForm);
+                    setEdited(true);
+                    setIsStateAutofilled(false); // Manual selection, not autofill
+                    if (onAddressChange) {
+                      onAddressChange(updatedForm);
+                    }
+                  }}>
+                    <SelectTrigger className={cn(
+                      "h-12 w-full", 
+                      inputStyles,
+                      isStateAutofilled && "bg-blue-50 border-blue-300", // Autofill styling
+                      "data-[placeholder]:text-[#667085]" // Placeholder text color
+                    )}>
+                      <SelectValue placeholder="Select a state" className="text-[#667085]" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {US_STATES.map((state) => (
+                        <SelectItem key={state.code} value={state.name}>{state.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {/* Hidden input to capture autofill */}
+                  <input
+                    type="text"
+                    name="state"
+                    autoComplete="address-level1"
+                    value=""
+                    onChange={(e) => {
+                      const value = normalizeState(e.target.value);
+                      if (value && value !== form.state) {
+                        const updatedForm = { ...form, state: value };
+                        setForm(updatedForm);
+                        setEdited(true);
+                        setIsStateAutofilled(true); // Mark as autofilled
+                        if (onAddressChange) {
+                          onAddressChange(updatedForm);
+                        }
+                      }
+                    }}
+                    className="absolute inset-0 opacity-0 pointer-events-none -z-10"
+                    tabIndex={-1}
+                    aria-hidden="true"
+                  />
+                </div>
+              ) : (
+                <Input
+                  id={field.id}
+                  name={field.name}
+                  type={field.type}
+                  value={field.value}
+                  onChange={handleChange}
+                  required={field.required}
+                  pattern={field.pattern}
+                  maxLength={field.maxLength}
+                  placeholder={field.placeholder}
+                  autoComplete={field.id === "street" ? "street-address" : 
+                              field.id === "apt" ? "address-line2" :
+                              field.id === "city" ? "address-level2" :
+                              field.id === "zip" ? "postal-code" : undefined}
+                  className={cn("h-12 w-full", inputStyles)}
+                />
+              )}
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
     </div>
   );
 };
