@@ -1,10 +1,9 @@
-import { MinusIcon, PlusIcon } from "lucide-react";
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ListingCreationCounter } from "./listing-creation-counter";
 import { styles } from "./styles";
 
 export interface MonthlyPricing {
@@ -107,62 +106,40 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
             <h2 className={styles.questionText}>
               What&apos;s the shortest stay you will accommodate?
             </h2>
-            <div className="flex items-center space-x-4">
-              <span className={styles.counterText}>
-                {shortestStay} month{shortestStay !== 1 && "s"}
-              </span>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={styles.counterButton}
-                  onClick={decreaseShortestStay}
-                  disabled={shortestStay <= 1}
-                >
-                  <MinusIcon className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={styles.counterButton}
-                  onClick={increaseShortestStay}
-                  disabled={shortestStay >= longestStay}
-                >
-                  <PlusIcon className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+            <ListingCreationCounter
+              value={shortestStay}
+              onChange={onShortestStayChange}
+              onIncrement={increaseShortestStay}
+              onDecrement={decreaseShortestStay}
+              incrementDisabled={shortestStay >= longestStay}
+              decrementDisabled={shortestStay <= 1}
+              variant="outline"
+              iconSize="md"
+              containerClassName="flex items-center space-x-4"
+              buttonClassName={styles.counterButton}
+              textClassName={styles.counterText}
+              showMonthSuffix={true}
+            />
           </div>
           
           <div className="flex items-center justify-between mt-8">
             <h2 className={styles.questionText}>
               What&apos;s the longest stay you will accommodate?
             </h2>
-            <div className="flex items-center space-x-4">
-              <span className={styles.counterText}>
-                {longestStay} month{longestStay !== 1 && "s"}
-              </span>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={styles.counterButton}
-                  onClick={decreaseLongestStay}
-                  disabled={longestStay <= shortestStay}
-                >
-                  <MinusIcon className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={styles.counterButton}
-                  onClick={increaseLongestStay}
-                  disabled={longestStay >= 12}
-                >
-                  <PlusIcon className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+            <ListingCreationCounter
+              value={longestStay}
+              onChange={onLongestStayChange}
+              onIncrement={increaseLongestStay}
+              onDecrement={decreaseLongestStay}
+              incrementDisabled={longestStay >= 12}
+              decrementDisabled={longestStay <= shortestStay}
+              variant="outline"
+              iconSize="md"
+              containerClassName="flex items-center space-x-4"
+              buttonClassName={styles.counterButton}
+              textClassName={styles.counterText}
+              showMonthSuffix={true}
+            />
           </div>
         </div>
 
@@ -237,31 +214,20 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                 <span className={styles.labelText}>
                   Include utilities for leases up to:
                 </span>
-                <div className="flex items-center space-x-4">
-                  <span className={styles.counterText}>
-                    {utilitiesUpToMonths} month{utilitiesUpToMonths !== 1 && "s"}
-                  </span>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={styles.counterButton}
-                      onClick={decreaseUtilitiesMonths}
-                      disabled={utilitiesUpToMonths <= shortestStay}
-                    >
-                      <MinusIcon className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={styles.counterButton}
-                      onClick={increaseUtilitiesMonths}
-                      disabled={utilitiesUpToMonths >= longestStay}
-                    >
-                      <PlusIcon className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+                <ListingCreationCounter
+                  value={utilitiesUpToMonths}
+                  onChange={onUtilitiesUpToMonthsChange}
+                  onIncrement={increaseUtilitiesMonths}
+                  onDecrement={decreaseUtilitiesMonths}
+                  incrementDisabled={utilitiesUpToMonths >= longestStay}
+                  decrementDisabled={utilitiesUpToMonths <= shortestStay}
+                  variant="outline"
+                  iconSize="md"
+                  containerClassName="flex items-center space-x-4"
+                  buttonClassName={styles.counterButton}
+                  textClassName={styles.counterText}
+                  showMonthSuffix={true}
+                />
               </div>
               <p className={`${styles.mutedText} mt-2`}>
                 Utilities will be included for leases from {shortestStay} to {utilitiesUpToMonths} months

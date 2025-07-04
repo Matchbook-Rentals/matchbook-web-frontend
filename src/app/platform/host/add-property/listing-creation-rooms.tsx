@@ -1,8 +1,7 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { BiPlus, BiMinus } from "react-icons/bi";
+import { ListingCreationCounter } from "./listing-creation-counter";
 
 interface RoomsProps {
   bedrooms: number;
@@ -23,12 +22,6 @@ export const Rooms: React.FC<RoomsProps> = ({
   onBathroomsChange,
   onSquareFeetChange,
 }) => {
-  const incrementBedrooms = () => onBedroomsChange(bedrooms + 1);
-  const decrementBedrooms = () => onBedroomsChange(bedrooms > 0 ? bedrooms - 1 : 0);
-
-  const incrementBathrooms = () => onBathroomsChange(bathrooms + 1);
-  const decrementBathrooms = () => onBathroomsChange(bathrooms > 0 ? bathrooms - 1 : 0);
-
   return (
     <Card className="w-full border-none shadow-none">
       <CardContent className="p-0">
@@ -38,29 +31,10 @@ export const Rooms: React.FC<RoomsProps> = ({
             How many bedrooms are there?
           </div>
 
-          <div className="flex items-center gap-8">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={decrementBedrooms}
-              className="p-1 h-8 w-8 rounded-full border border-black"
-            >
-              <BiMinus className="h-6 w-6 text-black" />
-            </Button>
-
-            <span className="font-text-label-large-medium text-[#5d606d] text-[18px]">
-              {bedrooms}
-            </span>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={incrementBedrooms}
-              className="p-1 h-8 w-8 rounded-full border border-black"
-            >
-              <BiPlus className="h-6 w-6 text-black" />
-            </Button>
-          </div>
+          <ListingCreationCounter
+            value={bedrooms}
+            onChange={onBedroomsChange}
+          />
         </div>
 
         {/* Bathrooms */}
@@ -69,29 +43,10 @@ export const Rooms: React.FC<RoomsProps> = ({
             How many bathrooms are there?
           </div>
 
-          <div className="flex items-center gap-8">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={decrementBathrooms}
-              className="p-1 h-8 w-8 rounded-full border border-black"
-            >
-              <BiMinus className="h-6 w-6 text-black" />
-            </Button>
-
-            <span className="font-text-label-large-medium text-[#5d606d] text-[18px]">
-              {bathrooms}
-            </span>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={incrementBathrooms}
-              className="p-1 h-8 w-8 rounded-full border border-black"
-            >
-              <BiPlus className="h-6 w-6 text-black" />
-            </Button>
-          </div>
+          <ListingCreationCounter
+            value={bathrooms}
+            onChange={onBathroomsChange}
+          />
         </div>
 
         {/* Square Feet */}

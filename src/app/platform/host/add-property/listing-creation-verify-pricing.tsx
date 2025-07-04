@@ -1,7 +1,5 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { MinusIcon, PlusIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { BrandCheckbox } from "@/app/brandCheckbox";
 import {
   Table,
@@ -11,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ListingCreationCounter } from "./listing-creation-counter";
 import { MonthlyPricing } from "./listing-creation-pricing";
 import { styles } from "./styles";
 
@@ -129,29 +128,19 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
             <label className={`${styles.labelTextSmall} whitespace-nowrap`}>
               Shortest stay:
             </label>
-            <span className={`${styles.counterTextSmall} min-w-[20px]`}>
-              {shortestStay}
-            </span>
-            <div className="flex items-center space-x-1">
-              <Button
-                variant="outline"
-                size="icon"
-                className={styles.counterButtonSmall}
-                onClick={decreaseShortestStay}
-                disabled={shortestStay <= 1}
-              >
-                <MinusIcon className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className={styles.counterButtonSmall}
-                onClick={increaseShortestStay}
-                disabled={shortestStay >= longestStay}
-              >
-                <PlusIcon className="h-3 w-3" />
-              </Button>
-            </div>
+            <ListingCreationCounter
+              value={shortestStay}
+              onChange={onShortestStayChange}
+              onIncrement={increaseShortestStay}
+              onDecrement={decreaseShortestStay}
+              incrementDisabled={shortestStay >= longestStay}
+              decrementDisabled={shortestStay <= 1}
+              variant="outline"
+              iconSize="sm"
+              containerClassName="flex items-center space-x-1"
+              buttonClassName={styles.counterButtonSmall}
+              textClassName={`${styles.counterTextSmall} min-w-[20px]`}
+            />
           </div>
 
           {/* Longest Stay Controls */}
@@ -159,29 +148,19 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
             <label className={`${styles.labelTextSmall} whitespace-nowrap`}>
               Longest stay:
             </label>
-            <span className={`${styles.counterTextSmall} min-w-[20px]`}>
-              {longestStay}
-            </span>
-            <div className="flex items-center space-x-1">
-              <Button
-                variant="outline"
-                size="icon"
-                className={styles.counterButtonSmall}
-                onClick={decreaseLongestStay}
-                disabled={longestStay <= shortestStay}
-              >
-                <MinusIcon className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className={styles.counterButtonSmall}
-                onClick={increaseLongestStay}
-                disabled={longestStay >= 12}
-              >
-                <PlusIcon className="h-3 w-3" />
-              </Button>
-            </div>
+            <ListingCreationCounter
+              value={longestStay}
+              onChange={onLongestStayChange}
+              onIncrement={increaseLongestStay}
+              onDecrement={decreaseLongestStay}
+              incrementDisabled={longestStay >= 12}
+              decrementDisabled={longestStay <= shortestStay}
+              variant="outline"
+              iconSize="sm"
+              containerClassName="flex items-center space-x-1"
+              buttonClassName={styles.counterButtonSmall}
+              textClassName={`${styles.counterTextSmall} min-w-[20px]`}
+            />
           </div>
         </div>
 
