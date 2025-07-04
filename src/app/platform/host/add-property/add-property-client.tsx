@@ -273,6 +273,9 @@ const [listingRooms, setListingRooms] = useState({
   squareFeet: ""
 });
 
+// Reusable text styles
+const questionTextStyles = "font-text-label-small-medium text-[#484a54] text-[14px]";
+
 // Step 3: Basics
 const [listingBasics, setListingBasics] = useState({
   title: "",
@@ -1084,6 +1087,7 @@ const [listingBasics, setListingBasics] = useState({
             <ListingUploadHighlights
               listingHighlights={listingHighlights}
               setListingHighlights={setListingHighlights}
+              questionTextStyles={questionTextStyles}
             />
             {validationErrors[0] && <ValidationErrors errors={validationErrors[0]} className="mt-6" />}
           </>
@@ -1113,6 +1117,7 @@ const [listingBasics, setListingBasics] = useState({
                 bedrooms={listingRooms.bedrooms}
                 bathrooms={listingRooms.bathrooms}
                 squareFeet={listingRooms.squareFeet}
+                questionTextStyles={questionTextStyles}
                 onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
                 onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
                 onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}

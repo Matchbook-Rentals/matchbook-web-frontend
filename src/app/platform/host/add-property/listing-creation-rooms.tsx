@@ -8,6 +8,7 @@ interface RoomsProps {
   bedrooms: number;
   bathrooms: number;
   squareFeet: string;
+  questionTextStyles: string;
   onBedroomsChange: (value: number) => void;
   onBathroomsChange: (value: number) => void;
   onSquareFeetChange: (value: string) => void;
@@ -17,6 +18,7 @@ export const Rooms: React.FC<RoomsProps> = ({
   bedrooms,
   bathrooms,
   squareFeet,
+  questionTextStyles,
   onBedroomsChange,
   onBathroomsChange,
   onSquareFeetChange,
@@ -32,7 +34,7 @@ export const Rooms: React.FC<RoomsProps> = ({
       <CardContent className="p-0">
         {/* Bedrooms */}
         <div className="flex items-center justify-between p-4 border-b border-[#e6e6e6]">
-          <div className="font-text-label-small-medium text-[#484a54] text-[14px]">
+          <div className={questionTextStyles}>
             How many bedrooms are there?
           </div>
 
@@ -63,7 +65,7 @@ export const Rooms: React.FC<RoomsProps> = ({
 
         {/* Bathrooms */}
         <div className="flex items-center justify-between p-4 border-b border-[#e6e6e6]">
-          <div className="font-text-label-small-medium text-[#484a54] text-[14px]">
+          <div className={questionTextStyles}>
             How many bathrooms are there?
           </div>
 
@@ -94,7 +96,7 @@ export const Rooms: React.FC<RoomsProps> = ({
 
         {/* Square Feet */}
         <div className="flex items-center justify-between p-4">
-          <div className="font-text-label-small-medium text-[#484a54] text-[14px]">
+          <div className={questionTextStyles}>
             How big is the living space (in square feet)?
           </div>
 

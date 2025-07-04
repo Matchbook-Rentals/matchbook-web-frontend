@@ -12,22 +12,24 @@ interface ListingHighlights {
 interface ListingUploadHighlightsProps {
   listingHighlights: ListingHighlights;
   setListingHighlights: (highlights: ListingHighlights) => void;
+  questionTextStyles?: string;
 }
 
 const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
   listingHighlights,
   setListingHighlights,
+  questionTextStyles,
 }) => {
   // Local state for tracking selections
   const [selectedType, setSelectedType] = useState<string>(listingHighlights.category || "Single Family");
   const [selectedFurnishing, setSelectedFurnishing] = useState<string>(listingHighlights.furnished ? "Furnished" : "Unfurnished");
-  const [selectedPets, setSelectedPets] = useState<string>(listingHighlights.petsAllowed ? "Pets welcome" : "No pets");
+  const [selectedPets, setSelectedPets] = useState<string>(listingHighlights.petsAllowed ? "Pets Welcome" : "No Pets");
 
   // Update local state when props change
   useEffect(() => {
     setSelectedType(listingHighlights.category || "Single Family");
     setSelectedFurnishing(listingHighlights.furnished ? "Furnished" : "Unfurnished");
-    setSelectedPets(listingHighlights.petsAllowed ? "Pets welcome" : "No pets");
+    setSelectedPets(listingHighlights.petsAllowed ? "Pets Welcome" : "No Pets");
   }, [listingHighlights]);
 
   // Property type options data
@@ -101,7 +103,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     <>
       {/* Property Type Section */}
       <section className="mb-6">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+        <h3 className={questionTextStyles || "font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2"}>
           What kind of property is it?
         </h3>
         <div className="flex items-center gap-6 w-full">
@@ -128,7 +130,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
 
       {/* Furnishings Section */}
       <section className="mb-6">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+        <h3 className={questionTextStyles || "font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2"}>
           Is it furnished or unfurnished?
         </h3>
         <div className="flex items-center gap-6">
@@ -156,7 +158,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
 
       {/* Pets Section */}
       <section className="mb-6">
-        <h3 className="font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2">
+        <h3 className={questionTextStyles || "font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2"}>
           Do you allow pets?
         </h3>
         <div className="flex items-center gap-6">
