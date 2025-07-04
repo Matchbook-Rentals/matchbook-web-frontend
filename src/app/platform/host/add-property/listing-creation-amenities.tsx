@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { ListingCreationCard } from './listing-creation-card';
 import * as AmenitiesIcons from '@/components/icons/amenities';
+import InComplexIcon from '@/lib/icons/in-complex';
+import NotAvailableIcon from '@/lib/icons/not-available';
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -32,7 +34,7 @@ const AMENITY_GROUPS = [
     group: 'Parking',
     items: [
       { value: 'offStreetParking', label: 'Off Street Parking', icon: <AmenitiesIcons.UpdatedParkingIcon className="p-1 mt-0" /> },
-      { value: 'evCharging', label: 'EV Charging', icon: <AmenitiesIcons.UpdatedEvChargingIcon className="p-1 mt-0 ml-3" /> },
+      { value: 'evCharging', label: 'EV Charging', icon: <AmenitiesIcons.UpdatedEvChargingIcon className="p-1 mt-0 ml-0" /> },
       { value: 'garageParking', label: 'Garage Parking', icon: <AmenitiesIcons.UpdatedGarageIcon className="p-1 mt-0" /> },
     ]
   },
@@ -81,7 +83,7 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
   const [selected, setSelected] = useState<string[]>(value || []);
   
   // Reusable section styles
-  const sectionStyles = "space-y-4 border-b-2 py-6 mb-0";
+  const sectionStyles = "space-y-4 pt-4 pb-6 mb-0";
 
   const toggleAmenity = (val: string) => {
     // Check if this is a laundry option
@@ -155,7 +157,11 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
             <ListingCreationCard
               key={option.id}
               name={option.label}
-              icon={<AmenitiesIcons.WasherIcon className="w-8 h-8" />}
+              icon={
+                option.value === 'washerInComplex' ? <InComplexIcon className="w-8 h-8" /> : 
+                option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-8 h-8" /> :
+                <AmenitiesIcons.WasherIcon className="w-8 h-8" />
+              }
               isSelected={getLaundrySelection() === option.value}
               onClick={() => handleLaundryChange(option.value)}
             />
