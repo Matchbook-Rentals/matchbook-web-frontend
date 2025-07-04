@@ -83,7 +83,7 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
   const [selected, setSelected] = useState<string[]>(value || []);
   
   // Reusable section styles
-  const sectionStyles = "space-y-4 pt-4 pb-6 mb-0";
+  const sectionStyles = "space-y-4 pt-0 pb-10 mb-0";
 
   const toggleAmenity = (val: string) => {
     // Check if this is a laundry option

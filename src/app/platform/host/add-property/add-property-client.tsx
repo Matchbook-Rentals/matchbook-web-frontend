@@ -1334,8 +1334,8 @@ const [listingBasics, setListingBasics] = useState({
       case 1: return 'Where is your place located?';
       case 2: return 'Confirm your property\'s address';
       case 3: return 'Share some basics about your place';
-      case 4: return 'Tell us about your place';
-      case 5: return 'Add soome photos';
+      case 4: return 'How would you describe your place?';
+      case 5: return 'Add some photos';
       case 6: return 'Choose the photos renters see first';
       case 7: return 'What amenities does your property offer?';
       case 8: return 'Set the pricing';

@@ -25,22 +25,22 @@ export const ListingBasics = ({ title, setTitle, description, setDescription }: 
 
   return (
     <section className="w-full max-w-[884px] space-y-8">
-      <div className="w-full space-y-3">
-        <h2 className="font-medium text-2xl text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
+      <div className="w-full space-y-1.5">
+        <h2 className="text-[#484A54] [font-family:'Poppins',Helvetica] text-sm font-medium">
           Give your place a title
         </h2>
 
         <div className="space-y-3">
-          <p className="text-xl text-[#3f3f3f] [font-family:'Poppins',Helvetica] font-normal">
+          <p className="text-[#838799] [font-family:'Poppins',Helvetica] text-xs font-normal">
             The best titles are short and descriptive; don&apos;t be afraid to
             have some fun.
           </p>
 
-          <Card className="border-2 border-[#0000004c] rounded-[10px]">
+          <Card className="border-2 border-[#D0D5DD] rounded-[10px]">
             <CardContent className="p-0">
               <Textarea
-                className="border-none min-h-[133px] focus-visible:ring-0 [font-family:'Poppins',Helvetica]"
-                placeholder=""
+                className="border-none min-h-[133px] focus-visible:ring-2 focus-visible:ring-gray-800 [font-family:'Poppins',Helvetica] text-base font-normal text-black placeholder:text-[#667085] placeholder:[font-family:'Poppins',Helvetica] bg-[#D0D5DD]/10"
+                placeholder="Enter a title..."
                 value={title}
                 onChange={handleTitleChange}
                 maxLength={35}
@@ -49,27 +49,27 @@ export const ListingBasics = ({ title, setTitle, description, setDescription }: 
             </CardContent>
           </Card>
 
-          <p className="text-xl text-[#3f3f3f] [font-family:'Poppins',Helvetica] font-normal">
+          <p className="text-[#838799] [font-family:'Poppins',Helvetica] text-xs font-normal">
             {titleCount}/35 characters
           </p>
         </div>
       </div>
 
-      <div className="w-full space-y-3">
-        <h2 className="font-medium text-2xl text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
+      <div className="w-full space-y-1.5">
+        <h2 className="text-[#484A54] [font-family:'Poppins',Helvetica] text-sm font-medium">
           Add a description
         </h2>
 
         <div className="space-y-3">
-          <p className="text-xl text-[#3f3f3f] [font-family:'Poppins',Helvetica] font-normal">
+          <p className="text-[#838799] [font-family:'Poppins',Helvetica] text-xs font-normal">
           Share what makes your place stand out.
           </p>
 
-          <Card className="border-2 border-[#0000004c] rounded-[10px]">
+          <Card className="border-2 border-[#D0D5DD] rounded-[10px]">
             <CardContent className="p-0">
               <Textarea
-                className="border-none min-h-[200px] focus-visible:ring-0 [font-family:'Poppins',Helvetica]"
-                placeholder=""
+                className="border-none min-h-[200px] focus-visible:ring-2 focus-visible:ring-gray-800 [font-family:'Poppins',Helvetica] text-base font-normal text-black placeholder:text-[#667085] placeholder:[font-family:'Poppins',Helvetica] bg-[#D0D5DD]/10"
+                placeholder="Enter a description..."
                 value={description}
                 onChange={handleDescriptionChange}
                 maxLength={1000}
@@ -78,7 +78,7 @@ export const ListingBasics = ({ title, setTitle, description, setDescription }: 
             </CardContent>
           </Card>
 
-          <p className="text-xl text-[#3f3f3f] [font-family:'Poppins',Helvetica] font-normal">
+          <p className="text-[#838799] [font-family:'Poppins',Helvetica] text-xs font-normal">
             {descriptionCount}/1,000 characters
           </p>
         </div>
