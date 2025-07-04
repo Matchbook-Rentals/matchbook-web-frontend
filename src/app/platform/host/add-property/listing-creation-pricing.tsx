@@ -29,6 +29,7 @@ interface ListingCreationPricingProps {
   isLoading?: boolean;
   questionTextStyles?: string;
   questionSubTextStyles?: string;
+  counterTextStyles?: string;
 }
 
 const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({ 
@@ -47,7 +48,8 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
   onContinue,
   isLoading,
   questionTextStyles,
-  questionSubTextStyles
+  questionSubTextStyles,
+  counterTextStyles
 }) => {
 
 
@@ -103,7 +105,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
         {/* Header Section */}
         <div className="space-y-6 mb-8">
           <div className="flex items-center justify-between">
-            <h2 className={styles.questionText}>
+            <h2 className={questionTextStyles || styles.questionText}>
               What&apos;s the shortest stay you will accommodate?
             </h2>
             <ListingCreationCounter
@@ -117,13 +119,13 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               iconSize="md"
               containerClassName="flex items-center space-x-4"
               buttonClassName={styles.counterButton}
-              textClassName={styles.counterText}
+              textClassName={counterTextStyles || styles.counterText}
               showMonthSuffix={true}
             />
           </div>
           
           <div className="flex items-center justify-between mt-8">
-            <h2 className={styles.questionText}>
+            <h2 className={questionTextStyles || styles.questionText}>
               What&apos;s the longest stay you will accommodate?
             </h2>
             <ListingCreationCounter
@@ -137,7 +139,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               iconSize="md"
               containerClassName="flex items-center space-x-4"
               buttonClassName={styles.counterButton}
-              textClassName={styles.counterText}
+              textClassName={counterTextStyles || styles.counterText}
               showMonthSuffix={true}
             />
           </div>
@@ -145,24 +147,22 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
 
         {/* Pricing Variation Question */}
         <div className="mt-8 mb-8">
-          <h2 className={`${styles.questionText} mb-4`}>
-            Do you want to change pricing based on lease length?
-          </h2>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between">
+            <h2 className={questionTextStyles || styles.questionText}>
+              Do you want to change pricing based on lease length?
+            </h2>
             <Switch 
               id="vary-pricing" 
               checked={varyPricingByLength}
               onCheckedChange={onVaryPricingByLengthChange}
+              className="data-[state=checked]:bg-secondaryBrand"
             />
-            <span className={styles.switchText}>
-              {varyPricingByLength ? "Yes" : "No"}
-            </span>
           </div>
           
           {!varyPricingByLength && (
             <div className="mt-6">
               <div className="flex items-center justify-between">
-                <span className={styles.labelText}>
+                <span className={questionSubTextStyles || styles.labelText}>
                   Monthly rent price for all lease lengths:
                 </span>
                 <div className="relative w-[234px]">
@@ -185,7 +185,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
           
           {varyPricingByLength && (
             <div className="mt-6">
-              <p className={styles.mutedText}>
+              <p className={questionSubTextStyles || styles.mutedText}>
                 Per length pricing will be set in the next step
               </p>
             </div>
@@ -194,24 +194,22 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
 
         {/* Utilities Question */}
         <div className="mt-8 mb-8">
-          <h2 className={`${styles.questionText} mb-4`}>
-            Would you like to include utilities on some lease durations?
-          </h2>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between">
+            <h2 className={questionTextStyles || styles.questionText}>
+              Would you like to include utilities on some lease durations?
+            </h2>
             <Switch 
               id="include-utilities" 
               checked={includeUtilities}
               onCheckedChange={onIncludeUtilitiesChange}
+              className="data-[state=checked]:bg-secondaryBrand"
             />
-            <span className={styles.switchText}>
-              {includeUtilities ? "Yes" : "No"}
-            </span>
           </div>
           
           {includeUtilities && (
             <div className="mt-6">
               <div className="flex items-center justify-between">
-                <span className={styles.labelText}>
+                <span className={questionTextStyles || styles.labelText}>
                   Include utilities for leases up to:
                 </span>
                 <ListingCreationCounter
@@ -225,11 +223,11 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                   iconSize="md"
                   containerClassName="flex items-center space-x-4"
                   buttonClassName={styles.counterButton}
-                  textClassName={styles.counterText}
+                  textClassName={counterTextStyles || styles.counterText}
                   showMonthSuffix={true}
                 />
               </div>
-              <p className={`${styles.mutedText} mt-2`}>
+              <p className={`${questionSubTextStyles || styles.mutedText} mt-2`}>
                 Utilities will be included for leases from {shortestStay} to {utilitiesUpToMonths} months
               </p>
             </div>

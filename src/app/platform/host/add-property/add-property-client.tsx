@@ -274,7 +274,7 @@ const [listingRooms, setListingRooms] = useState({
 });
 
 // Reusable text styles
-const questionTextStyles = "font-text-label-small-medium text-[#484a54] text-[14px]";
+const questionTextStyles = "font-['Poppins'] font-medium text-[#484a54] text-[14px]";
 const questionSubTextStyles = "font-['Poppins'] text-xs font-normal text-[#838799]";
 
 // Step 3: Basics
