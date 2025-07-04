@@ -1332,22 +1332,22 @@ const [listingBasics, setListingBasics] = useState({
     }
   };
 
-  // Get step title based on current step
-  const getStepTitle = (step: number): string => {
+  // Get step title and subtitle based on current step
+  const getStepInfo = (step: number): { title: string; subtitle?: string } => {
     switch (step) {
-      case 0: return 'Which of these describes your place?';
-      case 1: return 'Where is your place located?';
-      case 2: return 'Confirm your property\'s address';
-      case 3: return 'Share some basics about your place';
-      case 4: return 'How would you describe your place?';
-      case 5: return 'Add some photos';
-      case 6: return 'Choose the photos renters see first';
-      case 7: return 'What amenities does your property offer?';
-      case 8: return 'Set the pricing';
-      case 9: return 'Adjust prices and utilities inclusion for each lease length';
-      case 10: return 'What deposits and additional costs do you require';
-      case 11: return 'Review your listing';
-      default: return 'Create Listing';
+      case 0: return { title: 'Which of these describes your place?' };
+      case 1: return { title: 'Where is your place located?' };
+      case 2: return { title: 'Confirm your property\'s address' };
+      case 3: return { title: 'Share some basics about your place' };
+      case 4: return { title: 'How would you describe your place?' };
+      case 5: return { title: 'Add some photos' };
+      case 6: return { title: 'Choose the photos renters see first' };
+      case 7: return { title: 'What amenities does your property offer?' };
+      case 8: return { title: 'Set the pricing' };
+      case 9: return { title: 'Adjust prices and utilities inclusion for each lease length', subtitle: 'Hosts often discount rates for extended stays. You can adjust pricing and utilities inclusion for each lease length.' };
+      case 10: return { title: 'What deposits and additional costs do you require', subtitle: 'Set your security deposit and any pet-related fees' };
+      case 11: return { title: 'Review your listing' };
+      default: return { title: 'Create Listing' };
     }
   };
 
@@ -1370,9 +1370,19 @@ const [listingBasics, setListingBasics] = useState({
         {/* Title and Save & Exit button at top */}
         {currentStep !== 12 && (
           <div className="flex justify-between items-center w-full max-w-[883px] mx-auto py-10">
-            <h1 className="font-['Poppins'] text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
-              {getStepTitle(currentStep)}
-            </h1>
+            <div className="flex flex-col">
+              <h1 className="font-['Poppins'] text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
+                {getStepInfo(currentStep).title}
+              </h1>
+              {getStepInfo(currentStep).subtitle && (
+                <p 
+                  className="font-['Poppins'] text-sm font-normal leading-normal mt-1"
+                  style={{ color: 'var(--Nuetral-nuetral-700, #5D606D)' }}
+                >
+                  {getStepInfo(currentStep).subtitle}
+                </p>
+              )}
+            </div>
             <BrandButton 
               variant="outline"
               size="xl"

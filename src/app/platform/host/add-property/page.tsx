@@ -52,7 +52,9 @@ export default async function AddPropertyPage({
   if (searchParams.draftId || searchParams.new) {
     return (
       <div>
-        <AddPropertyClient handleListingCreation={handleListingCreation} />
+        <AddPropertyClient 
+          handleListingCreation={handleListingCreation} 
+        />
       </div>
     );
   }
@@ -69,7 +71,9 @@ export default async function AddPropertyPage({
   if (!draftListings || draftListings.length === 0) {
     return (
       <div>
-        <AddPropertyClient handleListingCreation={handleListingCreation} />
+        <AddPropertyClient 
+          handleListingCreation={handleListingCreation}
+        />
       </div>
     );
   }
