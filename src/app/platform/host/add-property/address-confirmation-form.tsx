@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const US_STATES = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
@@ -53,9 +54,18 @@ export const AddressConfirmationForm = ({
     }
   }, [initialAddress]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const updatedForm = { ...form, [name]: value };
+    setForm(updatedForm);
+    setEdited(true);
+    if (onAddressChange) {
+      onAddressChange(updatedForm);
+    }
+  };
+
+  const handleSelectChange = (value: string) => {
+    const updatedForm = { ...form, state: value };
     setForm(updatedForm);
     setEdited(true);
     if (onAddressChange) {
@@ -133,20 +143,16 @@ export const AddressConfirmationForm = ({
                 <label className="font-light text-[15px] text-[#3f3f3f] font-['Poppins',Helvetica]" htmlFor="state">
                   State
                 </label>
-                <select
-                  id="state"
-                  name="state"
-                  required
-                  value={form.state}
-                  onChange={handleChange}
-                  className="font-medium text-lg text-[#3f3f3f] mt-1 font-['Poppins',Helvetica] w-full border-b border-[#00000033] focus:outline-none bg-transparent"
-                  autoComplete="address-level1"
-                >
-                  <option value="" disabled>Select a state</option>
-                  {US_STATES.map((state) => (
-                    <option key={state} value={state}>{state}</option>
-                  ))}
-                </select>
+                <Select value={form.state} onValueChange={handleSelectChange}>
+                  <SelectTrigger className="font-medium text-lg text-[#3f3f3f] mt-1 font-['Poppins',Helvetica] w-full border-b border-[#00000033] focus:outline-none bg-transparent border-0 p-0 h-auto">
+                    <SelectValue placeholder="Select a state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {US_STATES.map((state) => (
+                      <SelectItem key={state} value={state}>{state}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <Separator className="my-2" />
             </div>

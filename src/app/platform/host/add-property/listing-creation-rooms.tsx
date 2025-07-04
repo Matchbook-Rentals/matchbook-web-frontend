@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { BiPlus, BiMinus } from "react-icons/bi";
 
 interface RoomsProps {
   bedrooms: number;
@@ -28,89 +28,82 @@ export const Rooms: React.FC<RoomsProps> = ({
   const decrementBathrooms = () => onBathroomsChange(bathrooms > 0 ? bathrooms - 1 : 0);
 
   return (
-    <Card className="w-full max-w-[891px] border-none">
+    <Card className="w-full border-none shadow-none">
       <CardContent className="p-0">
-        <div className="space-y-6">
-
-          <div className="space-y-8">
-            <div className="flex items-center justify-between">
-              <div className="font-normal text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-                How many bedrooms are there?
-              </div>
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="w-11 h-11 rounded-full bbg-background border border-black text-black flex items-center justify-center"
-                  onClick={decrementBedrooms}
-                >
-                  <span className="font-medium text-2xl text-black">
-                    -
-                  </span>
-                </Button>
-                <span className="w-9 font-medium text-2xl text-[#3f3f3f] text-center font-['Poppins',Helvetica]">
-                  {bedrooms}
-                </span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="w-11 h-11 rounded-full bbg-background border border-black text-black flex items-center justify-center"
-                  onClick={incrementBedrooms}
-                >
-                  <span className="font-medium text-2xl text-black">
-                    +
-                  </span>
-                </Button>
-              </div>
-            </div>
-
-            <Separator className="h-[3px] bg-[url(/line-68.svg)]" />
-
-            <div className="flex items-center justify-between">
-              <div className="font-normal text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-                How many bathrooms are there?
-              </div>
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="w-11 h-11 rounded-full bbg-background border border-black text-black flex items-center justify-center"
-                  onClick={decrementBathrooms}
-                >
-                  <span className="font-medium text-2xl text-black">
-                    -
-                  </span>
-                </Button>
-                <span className="w-9 font-medium text-2xl text-[#3f3f3f] text-center font-['Poppins',Helvetica]">
-                  {bathrooms}
-                </span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="w-11 h-11 rounded-full bbg-background border border-black text-black flex items-center justify-center"
-                  onClick={incrementBathrooms}
-                >
-                  <span className="font-medium text-2xl text-black">
-                    +
-                  </span>
-                </Button>
-              </div>
-            </div>
+        {/* Bedrooms */}
+        <div className="flex items-center justify-between p-4 border-b border-[#e6e6e6]">
+          <div className="font-text-label-small-medium text-[#484a54] text-[14px]">
+            How many bedrooms are there?
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="font-normal text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-                How big is the living space (in square feet)?
-              </div>
-              <Input
-                className="w-[167px] h-12 rounded-[10px] border-2 border-[#0000004c]"
-                type="text"
-                value={squareFeet}
-                onChange={e => onSquareFeetChange(e.target.value)}
-              />
-            </div>
+          <div className="flex items-center gap-8">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={decrementBedrooms}
+              className="p-1 h-8 w-8 rounded-full border border-black"
+            >
+              <BiMinus className="h-6 w-6 text-black" />
+            </Button>
+
+            <span className="font-text-label-large-medium text-[#5d606d] text-[18px]">
+              {bedrooms}
+            </span>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={incrementBedrooms}
+              className="p-1 h-8 w-8 rounded-full border border-black"
+            >
+              <BiPlus className="h-6 w-6 text-black" />
+            </Button>
           </div>
+        </div>
+
+        {/* Bathrooms */}
+        <div className="flex items-center justify-between p-4 border-b border-[#e6e6e6]">
+          <div className="font-text-label-small-medium text-[#484a54] text-[14px]">
+            How many bathrooms are there?
+          </div>
+
+          <div className="flex items-center gap-8">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={decrementBathrooms}
+              className="p-1 h-8 w-8 rounded-full border border-black"
+            >
+              <BiMinus className="h-6 w-6 text-black" />
+            </Button>
+
+            <span className="font-text-label-large-medium text-[#5d606d] text-[18px]">
+              {bathrooms}
+            </span>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={incrementBathrooms}
+              className="p-1 h-8 w-8 rounded-full border border-black"
+            >
+              <BiPlus className="h-6 w-6 text-black" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Square Feet */}
+        <div className="flex items-center justify-between p-4">
+          <div className="font-text-label-small-medium text-[#484a54] text-[14px]">
+            How big is the living space (in square feet)?
+          </div>
+
+          <Input
+            className="w-[135px] h-8 rounded-lg border border-[#8a8a8a]"
+            placeholder="123 sq feet"
+            value={squareFeet}
+            onChange={e => onSquareFeetChange(e.target.value)}
+          />
         </div>
       </CardContent>
     </Card>
