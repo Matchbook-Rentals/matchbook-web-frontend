@@ -14,7 +14,7 @@ export default function HostsPage(): React.ReactNode {
     <div className="bg-background">
       <MatchbookHeader />
       <div className="flex justify-center p-8">
-        <MarketingPageHeader 
+        <MarketingPageHeader
           headerText="Become a Host"
           highlightedText="Earn More, Keep More"
         />
@@ -22,10 +22,8 @@ export default function HostsPage(): React.ReactNode {
       <HostsLoveMatchbook />
       <ReviewsSection />
       <DitchPaperwork />
-      <div className="flex justify-center px-8 py-16">
-        <ListYourProperty />
-      </div>
       <TermTailoredPricing />
+      <ListYourProperty />
       <Footer />
     </div>
   );
