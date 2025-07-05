@@ -351,7 +351,14 @@ export const Box = ({
                 <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
                   Basics
                 </h2>
-                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditRooms} />
+                <button 
+                  onClick={onEditRooms}
+                  className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  aria-label="Edit basics section"
+                  type="button"
+                >
+                  <PencilIcon className="w-5 h-5" />
+                </button>
               </div>
 
               <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
@@ -381,7 +388,14 @@ export const Box = ({
                 <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
                   Highlights
                 </h2>
-                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditHighlights} />
+                <button 
+                  onClick={onEditHighlights}
+                  className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  aria-label="Edit highlights section"
+                  type="button"
+                >
+                  <PencilIcon className="w-5 h-5" />
+                </button>
               </div>
 
               <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
@@ -412,7 +426,14 @@ export const Box = ({
                 <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
                   Title
                 </h2>
-                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditBasics} />
+                <button 
+                  onClick={onEditBasics}
+                  className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  aria-label="Edit title section"
+                  type="button"
+                >
+                  <PencilIcon className="w-5 h-5" />
+                </button>
               </div>
 
               <div className={`${questionTextStyles} self-stretch w-full`}>
@@ -430,7 +451,14 @@ export const Box = ({
                 <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
                   Description
                 </h2>
-                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditBasics} />
+                <button 
+                  onClick={onEditBasics}
+                  className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  aria-label="Edit description section"
+                  type="button"
+                >
+                  <PencilIcon className="w-5 h-5" />
+                </button>
               </div>
 
               <div className={`${questionTextStyles} self-stretch w-full`}>
@@ -448,7 +476,14 @@ export const Box = ({
                 <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
                   Amenities
                 </h2>
-                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditAmenities} />
+                <button 
+                  onClick={onEditAmenities}
+                  className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  aria-label="Edit amenities section"
+                  type="button"
+                >
+                  <PencilIcon className="w-5 h-5" />
+                </button>
               </div>
 
               <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
@@ -479,7 +514,14 @@ export const Box = ({
                 <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
                   Location
                 </h2>
-                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditLocation} />
+                <button 
+                  onClick={onEditLocation}
+                  className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  aria-label="Edit location section"
+                  type="button"
+                >
+                  <PencilIcon className="w-5 h-5" />
+                </button>
               </div>
 
               <div className={`${questionTextStyles} self-stretch w-full`}>
@@ -497,7 +539,14 @@ export const Box = ({
                 <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
                   Pricing and Lease Terms
                 </h2>
-                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditPricing} />
+                <button 
+                  onClick={onEditPricing}
+                  className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  aria-label="Edit pricing and lease terms section"
+                  type="button"
+                >
+                  <PencilIcon className="w-5 h-5" />
+                </button>
               </div>
 
               {/* Pricing Chart */}
