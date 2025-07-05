@@ -472,297 +472,228 @@ export const Box = ({
         </Card>
 
         {/* Location Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-[#3f3f3f]">Location</h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[15px] text-[#3f3f3f] font-normal"
-              onClick={onEditLocation}
-            >
-              Edit
-            </Button>
-          </div>
+        <Card className="bg-neutral-50 rounded-xl mb-6">
+          <CardContent className="flex flex-col items-start gap-8 p-6">
+            <div className="flex flex-col items-start gap-4 self-stretch w-full">
+              <div className="flex items-center justify-between self-stretch w-full">
+                <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
+                  Location
+                </h2>
+                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditLocation} />
+              </div>
 
-          <div className="text-2xl font-normal text-[#3f3f3f] mb-4">
-            {listingLocation.streetAddress1} {listingLocation.city} {listingLocation.state} {listingLocation.postalCode}
-          </div>
-
-          <Separator className="my-4" />
-        </div>
+              <div className={`${questionTextStyles} self-stretch w-full`}>
+                {listingLocation?.streetAddress1} {listingLocation?.city} {listingLocation?.state} {listingLocation?.postalCode}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Pricing and Lease Terms Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-medium text-[#3f3f3f]">
-              Pricing and Lease Terms
-            </h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[15px] text-[#3f3f3f] font-normal"
-              onClick={onEditPricing}
-            >
-              Edit
-            </Button>
-          </div>
+        <Card className="bg-neutral-50 rounded-xl mb-6">
+          <CardContent className="flex flex-col items-start gap-8 p-6">
+            <div className="flex flex-col items-start gap-4 self-stretch w-full">
+              <div className="flex items-center justify-between self-stretch w-full">
+                <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
+                  Pricing and Lease Terms
+                </h2>
+                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditPricing} />
+              </div>
 
-          {/* Pricing Chart */}
-          {chartData.length > 0 && (
-            <div className="mb-4">
-              {showPricingStructureTitle && (
-                <h3 className="text-lg font-medium text-[#222222] mb-4">
-                  Pricing Structure
-                </h3>
+              {/* Pricing Chart */}
+              {chartData.length > 0 && (
+                <div className="self-stretch w-full">
+                  {showPricingStructureTitle && (
+                    <h3 className="text-lg font-medium text-[#222222] mb-4">
+                      Pricing Structure
+                    </h3>
+                  )}
+                  {/* Desktop Chart */}
+                  <div className="w-full h-64 hidden md:block">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="month" 
+                          fontSize={12}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <YAxis 
+                          domain={[0, maxChartValue]} 
+                          ticks={yAxisTicks}
+                          tickFormatter={(value) => `$${value}`}
+                          fontSize={12}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip 
+                          formatter={(value, name, props) => {
+                            const entry = props.payload;
+                            return [`$${value}${entry.utilitiesIncluded ? ' (utilities included)' : ''}`, 'Monthly Rent'];
+                          }}
+                          labelFormatter={(label) => `Stay Length: ${label}`}
+                        />
+                        <Legend 
+                          content={() => (
+                            <div className="flex justify-center gap-4 mt-2">
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded" style={{ backgroundColor: '#0B6E6E' }}></div>
+                                <span className="text-xs font-medium text-[#222222]">Utilities Included</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded" style={{ backgroundColor: '#5DA5A5' }}></div>
+                                <span className="text-xs font-medium text-[#222222]">Not included</span>
+                              </div>
+                            </div>
+                          )}
+                        />
+                        <Bar 
+                          dataKey="price" 
+                          name="Monthly Rent" 
+                          radius={[2, 2, 0, 0]}
+                          isAnimationActive={true}
+                        >
+                          {chartData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Mobile Chart */}
+                  <div className="w-full h-64 md:hidden">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart 
+                        data={chartData}
+                        margin={{ top: 20, right: 5, left: 5, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="month" 
+                          fontSize={10}
+                          tick={{ fontSize: 10 }}
+                          axisLine={false}
+                          tickLine={false}
+                        />
+                        <Tooltip 
+                          formatter={(value, name, props) => {
+                            const entry = props.payload;
+                            return [`$${value}${entry.utilitiesIncluded ? ' (utilities included)' : ''}`, 'Monthly Rent'];
+                          }}
+                          labelFormatter={(label) => `Stay Length: ${label}`}
+                        />
+                        <Legend 
+                          content={() => (
+                            <div className="flex justify-center gap-3 mt-2">
+                              <div className="flex items-center gap-1">
+                                <div className="w-2 h-2 rounded" style={{ backgroundColor: '#0B6E6E' }}></div>
+                                <span className="text-xs font-medium text-[#222222]">Utils Inc.</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-2 h-2 rounded" style={{ backgroundColor: '#5DA5A5' }}></div>
+                                <span className="text-xs font-medium text-[#222222]">Not Inc.</span>
+                              </div>
+                            </div>
+                          )}
+                        />
+                        <Bar 
+                          dataKey="price" 
+                          name="Monthly Rent" 
+                          radius={[2, 2, 0, 0]}
+                          isAnimationActive={true}
+                          label={{
+                            position: 'top',
+                            fontSize: 10,
+                            fill: '#222222',
+                            formatter: (value: number) => `$${value}`
+                          }}
+                        >
+                          {chartData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               )}
-              {/* Desktop Chart */}
-              <div className="w-full h-64 hidden md:block">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      fontSize={12}
-                      tick={{ fontSize: 12 }}
-                    />
-                    <YAxis 
-                      domain={[0, maxChartValue]} 
-                      ticks={yAxisTicks}
-                      tickFormatter={(value) => `$${value}`}
-                      fontSize={12}
-                      tick={{ fontSize: 12 }}
-                    />
-                    <Tooltip 
-                      formatter={(value, name, props) => {
-                        const entry = props.payload;
-                        return [`$${value}${entry.utilitiesIncluded ? ' (utilities included)' : ''}`, 'Monthly Rent'];
-                      }}
-                      labelFormatter={(label) => `Stay Length: ${label}`}
-                    />
-                    <Legend 
-                      content={() => (
-                        <div className="flex justify-center gap-4 mt-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded" style={{ backgroundColor: '#0B6E6E' }}></div>
-                            <span className="text-xs font-medium text-[#222222]">Utilities Included</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded" style={{ backgroundColor: '#5DA5A5' }}></div>
-                            <span className="text-xs font-medium text-[#222222]">Not included</span>
-                          </div>
-                        </div>
-                      )}
-                    />
-                    <Bar 
-                      dataKey="price" 
-                      name="Monthly Rent" 
-                      radius={[2, 2, 0, 0]}
-                      isAnimationActive={true}
-                    >
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
 
-              {/* Mobile Chart */}
-              <div className="w-full h-64 md:hidden">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart 
-                    data={chartData}
-                    margin={{ top: 20, right: 5, left: 5, bottom: 5 }}
+              <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
+                <div className="inline-flex items-center gap-5 flex-wrap">
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
                   >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      fontSize={10}
-                      tick={{ fontSize: 10 }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <Tooltip 
-                      formatter={(value, name, props) => {
-                        const entry = props.payload;
-                        return [`$${value}${entry.utilitiesIncluded ? ' (utilities included)' : ''}`, 'Monthly Rent'];
-                      }}
-                      labelFormatter={(label) => `Stay Length: ${label}`}
-                    />
-                    <Legend 
-                      content={() => (
-                        <div className="flex justify-center gap-3 mt-2">
-                          <div className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded" style={{ backgroundColor: '#0B6E6E' }}></div>
-                            <span className="text-xs font-medium text-[#222222]">Utils Inc.</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded" style={{ backgroundColor: '#5DA5A5' }}></div>
-                            <span className="text-xs font-medium text-[#222222]">Not Inc.</span>
-                          </div>
-                        </div>
-                      )}
-                    />
-                    <Bar 
-                      dataKey="price" 
-                      name="Monthly Rent" 
-                      radius={[2, 2, 0, 0]}
-                      isAnimationActive={true}
-                      label={{
-                        position: 'top',
-                        fontSize: 10,
-                        fill: '#222222',
-                        formatter: (value: number) => `$${value}`
-                      }}
-                    >
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                    <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                      <strong>Min Lease:</strong> {listingPricing?.shortestStay || 0} months
+                    </span>
+                  </Badge>
+                  
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                  >
+                    <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                      <strong>Max Lease:</strong> {listingPricing?.longestStay || 0} months
+                    </span>
+                  </Badge>
+                  
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                  >
+                    <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                      <strong>Average Rent:</strong> ${(() => {
+                        if (!chartData || chartData.length === 0) return '0';
+                        const validPrices = chartData.map(d => d.price).filter(p => p > 0 && !isNaN(p));
+                        if (validPrices.length === 0) return '0';
+                        const avgPrice = validPrices.reduce((sum, price) => sum + price, 0) / validPrices.length;
+                        return Math.round(avgPrice);
+                      })()}
+                    </span>
+                  </Badge>
+                  
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                  >
+                    <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                      <strong>Deposit:</strong> ${listingPricing?.deposit || 0}
+                    </span>
+                  </Badge>
+                  
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                  >
+                    <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                      <strong>Reservation Deposit:</strong> ${listingPricing?.reservationDeposit || 0}
+                    </span>
+                  </Badge>
+                  
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                  >
+                    <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                      <strong>Pet Rent:</strong> ${listingPricing?.petRent || 0}/mo
+                    </span>
+                  </Badge>
+                  
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                  >
+                    <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                      <strong>Pet Deposit:</strong> ${listingPricing?.petDeposit || 0}
+                    </span>
+                  </Badge>
+                </div>
               </div>
             </div>
-          )}
+          </CardContent>
+        </Card>
 
-          <div className="grid grid-cols-3 gap-6 mb-4">
-            <div>
-              <div className=" text-xl font-medium  mb-1">Lease length</div>
-              <div className="text-xl font-light ">
-                {listingPricing.shortestStay === listingPricing.longestStay 
-                  ? `${listingPricing.shortestStay} month${listingPricing.shortestStay !== 1 ? 's' : ''}`
-                  : `Between ${listingPricing.shortestStay} and ${listingPricing.longestStay} months`
-                }
-              </div>
-            </div>
-            
-            <div>
-              <div className=" text-xl font-medium  mb-1">Utilities</div>
-              <div className="text-xl font-light text-black">
-                {(() => {
-                  // Safety check for empty chart data
-                  if (!chartData || chartData.length === 0) {
-                    return 'Not included at any length';
-                  }
-                  
-                  const withUtilities = chartData.filter(d => d.utilitiesIncluded);
-                  const withoutUtilities = chartData.filter(d => !d.utilitiesIncluded);
-                  
-                  if (withUtilities.length === 0) {
-                    return 'Not included at any length';
-                  } else if (withoutUtilities.length === 0) {
-                    return 'Included at all lengths';
-                  } else {
-                    // Check if it's a simple pattern (consecutive months from start or end)
-                    const allMonths = chartData.map(d => d.months).sort((a, b) => a - b);
-                    const utilitiesMonths = withUtilities.map(d => d.months).sort((a, b) => a - b);
-                    
-                    // Safety check for empty arrays
-                    if (utilitiesMonths.length === 0 || allMonths.length === 0) {
-                      return 'Not included at any length';
-                    }
-                    
-                    // Check if utilities are included for consecutive months from the beginning
-                    const isConsecutiveFromStart = utilitiesMonths.every((month, index) => month === allMonths[index]);
-                    // Check if utilities are included for consecutive months from the end
-                    const isConsecutiveFromEnd = utilitiesMonths.every((month, index) => month === allMonths[allMonths.length - utilitiesMonths.length + index]);
-                    
-                    if (isConsecutiveFromStart && utilitiesMonths.length > 1) {
-                      const maxUtilitiesMonth = Math.max(...utilitiesMonths);
-                      return isNaN(maxUtilitiesMonth) ? 'Included for some lengths' : `Included for ${maxUtilitiesMonth} months and below`;
-                    } else if (isConsecutiveFromEnd && utilitiesMonths.length > 1) {
-                      const minUtilitiesMonth = Math.min(...utilitiesMonths);
-                      return isNaN(minUtilitiesMonth) ? 'Included for some lengths' : `Included for ${minUtilitiesMonth} months and above`;
-                    } else if (utilitiesMonths.length === 1) {
-                      const singleMonth = utilitiesMonths[0];
-                      return isNaN(singleMonth) ? 'Included for some lengths' : `Included for ${singleMonth} month${singleMonth !== 1 ? 's' : ''} only`;
-                    } else {
-                      return 'Included for some lengths';
-                    }
-                  }
-                })()}
-              </div>
-            </div>
-            
-            <div>
-              <div className=" text-xl font-medium  mb-1">Price range</div>
-              <div className="text-xl font-light text-black">
-                {(() => {
-                  if (!chartData || chartData.length === 0) {
-                    return 'No pricing data';
-                  }
-                  
-                  const validPrices = chartData.map(d => d.price).filter(p => p > 0 && !isNaN(p));
-                  
-                  if (validPrices.length === 0) {
-                    return 'No pricing data';
-                  }
-                  
-                  const minPrice = Math.min(...validPrices);
-                  const maxPrice = Math.max(...validPrices);
-                  
-                  if (minPrice === maxPrice) {
-                    return `$${minPrice} per month`;
-                  } else {
-                    return `$${minPrice} - $${maxPrice} per month`;
-                  }
-                })()}
-              </div>
-            </div>
-          </div>
-
-          <Separator className="my-4" />
-        </div>
-
-        {/* Deposits Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-medium text-[#3f3f3f]">
-              Deposits
-            </h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[15px] text-[#3f3f3f] font-normal"
-              onClick={onEditDeposits}
-            >
-              Edit
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-4 gap-6 mb-4">
-            <div>
-              <div className="text-xl font-medium mb-1">Deposit</div>
-              <div className="text-xl font-light text-black">
-                ${listingPricing.deposit || 0}
-              </div>
-            </div>
-            
-            <div>
-              <div className="text-xl font-medium mb-1">Reservation Deposit</div>
-              <div className="text-xl font-light text-black">
-                ${listingPricing.reservationDeposit || 0}
-              </div>
-            </div>
-            
-            <div>
-              <div className="text-xl font-medium mb-1">Pet Rent</div>
-              <div className="text-xl font-light text-black">
-                ${listingPricing.petRent || 0} / month
-              </div>
-            </div>
-            
-            <div>
-              <div className="text-xl font-medium mb-1">Pet Deposit</div>
-              <div className="text-xl font-light text-black">
-                ${listingPricing.petDeposit || 0} / pet
-              </div>
-            </div>
-          </div>
-
-          <Separator className="my-4" />
-        </div>
       </div>
     </div>
   );
