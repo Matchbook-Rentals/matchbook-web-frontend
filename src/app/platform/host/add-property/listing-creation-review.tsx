@@ -280,6 +280,17 @@ export const Box = ({
       label: `${listingRooms.squareFeet} Sqft`,
     }] : []),
   ];
+
+  // Amenity features data for mapping
+  const amenityFeatures = listingAmenities?.map(amenityValue => {
+    const amenity = getAmenityByValue(amenityValue);
+    return {
+      icon: React.cloneElement(amenity.icon as React.ReactElement, { 
+        className: "w-4 h-4" 
+      }),
+      label: amenity.label,
+    };
+  }) || [];
   
   // Chart functions (copied from confirm pricing component)
   const generateChartData = () => {
@@ -430,39 +441,35 @@ export const Box = ({
         </Card>
 
         {/* Amenities Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-medium text-black">Amenities</h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[15px] text-[#3f3f3f] font-normal"
-              onClick={onEditAmenities}
-            >
-              Edit
-            </Button>
-          </div>
+        <Card className="bg-neutral-50 rounded-xl mb-6">
+          <CardContent className="flex flex-col items-start gap-8 p-6">
+            <div className="flex flex-col items-start gap-4 self-stretch w-full">
+              <div className="flex items-center justify-between self-stretch w-full">
+                <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
+                  Amenities
+                </h2>
+                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditAmenities} />
+              </div>
 
-          <div className="grid grid-cols-2 gap-y-6 mb-4">
-            {listingAmenities.map((amenityValue, index) => {
-              const amenity = getAmenityByValue(amenityValue);
-              return (
-                <div key={index} className="flex items-center gap-4">
-                  <div className="w-[30px] h-[30px] flex items-center justify-center">
-                    {React.cloneElement(amenity.icon as React.ReactElement, { 
-                      className: "w-6 h-6" 
-                    })}
-                  </div>
-                  <span className="text-xl font-normal text-black">
-                    {amenity.label}
-                  </span>
+              <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
+                <div className="inline-flex items-center gap-5 flex-wrap">
+                  {amenityFeatures.map((feature, index) => (
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      className="inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                    >
+                      {feature.icon}
+                      <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                        {feature.label}
+                      </span>
+                    </Badge>
+                  ))}
                 </div>
-              );
-            })}
-          </div>
-
-          <Separator className="my-4" />
-        </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Location Section */}
         <div className="mb-6">

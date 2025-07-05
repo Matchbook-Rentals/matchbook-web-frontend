@@ -399,10 +399,8 @@ const [listingBasics, setListingBasics] = useState({
         window.history.replaceState({}, '', newUrl.toString());
       }
       
-      // Show success state instead of immediate redirect, similar to submit flow
-      setCurrentStep(11); // Move to success step
-      setSlideDirection('right');
-      setAnimationKey(prevKey => prevKey + 1);
+      // Exit to host dashboard after saving
+      router.push('/platform/host/dashboard');
     } catch (error) {
       console.error('Error saving listing draft:', error);
       alert(`Error saving your listing: ${(error as Error).message}`);
