@@ -59,8 +59,18 @@ export const ReviewsSection = (): JSX.Element => {
   };
 
   return (
-    <section className="relative w-full max-w-[1440px] h-[853px] bg-[#0b6969] mx-auto">
-      <div className="relative w-[1114px] h-[679px] top-[87px] left-[226px] overflow-visible">
+    <section className="relative w-full xl:h-[853px] bg-[#0B6969]">
+      {/* Mobile/Tablet view - just the image */}
+      <div className="block xl:hidden w-full">
+        <img
+          className="w-full max-w-[1000px] h-auto object-contain mx-auto"
+          alt="Reviews section mobile"
+          src="/marketing-images/reviews-section/2.png"
+        />
+      </div>
+
+      {/* Desktop view - original complex layout */}
+      <div className="hidden xl:block relative w-[1114px] h-[679px] top-[87px] left-[226px] overflow-visible">
         <div className="relative h-[955px] top-[-104px]">
           <img
             className="absolute h-[80%] top-10 left-[37px] scale-[]"

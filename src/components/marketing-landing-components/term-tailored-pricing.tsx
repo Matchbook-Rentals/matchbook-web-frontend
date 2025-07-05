@@ -21,7 +21,7 @@ export const TermTailoredPricing = (): JSX.Element => {
         <Card className="flex h-[338px] w-full border-0">
           <CardContent className="flex w-full h-full items-center justify-center p-0 bg-[linear-gradient(0deg,rgba(60,135,135,0)_0%,rgba(83,184,184,0)_94%)]">
             <div
-              className="w-full h-full bg-contain bg-center bg-no-repeat md:bg-[url(/marketing-images/term-tailored-pricing/1.png)] bg-[url(/marketing-images/term-tailored-pricing/2.png)]"
+              className="w-full h-full bg-contain bg-center bg-no-repeat sm:bg-[url(/marketing-images/term-tailored-pricing/1.png)] bg-[url(/marketing-images/term-tailored-pricing/2.png)]"
             />
           </CardContent>
         </Card>
