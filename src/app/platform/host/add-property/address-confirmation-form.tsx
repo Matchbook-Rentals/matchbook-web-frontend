@@ -15,6 +15,7 @@ const US_STATES = [
   { name: "Colorado", code: "CO" },
   { name: "Connecticut", code: "CT" },
   { name: "Delaware", code: "DE" },
+  { name: "District of Columbia", code: "DC" },
   { name: "Florida", code: "FL" },
   { name: "Georgia", code: "GA" },
   { name: "Hawaii", code: "HI" },
@@ -159,7 +160,7 @@ export const AddressConfirmationForm = ({
         street: initialAddress.street || "",
         apt: initialAddress.street2 || "",
         city: initialAddress.city || "",
-        state: initialAddress.state || "",
+        state: initialAddress.state ? normalizeState(initialAddress.state) : "",
         zip: initialAddress.zip || "",
       });
     }
