@@ -2,6 +2,8 @@ import React from "react";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Separator } from "../../../../components/ui/separator";
+import { Badge } from "../../../../components/ui/badge";
+import { PencilIcon } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { MonthlyPricing } from "./listing-creation-pricing";
@@ -229,6 +231,53 @@ export const Box = ({
   showPricingStructureTitle = true
 }: ListingReviewProps): JSX.Element => {
   
+  // Property feature data for mapping
+  const propertyFeatures = [
+    {
+      icon: propertyTypes.find(type => type.name === listingHighlights?.category)?.icon 
+        ? React.cloneElement(
+            propertyTypes.find(type => type.name === listingHighlights?.category)?.icon as React.ReactElement,
+            { className: "w-4 h-4" }
+          )
+        : React.cloneElement(propertyTypes[0].icon as React.ReactElement, { className: "w-4 h-4" }),
+      label: listingHighlights?.category || "Single Family",
+    },
+    {
+      icon: React.cloneElement(
+        (listingHighlights?.furnished 
+          ? furnishingOptions[0].icon 
+          : furnishingOptions[1].icon) as React.ReactElement,
+        { className: "w-4 h-4" }
+      ),
+      label: listingHighlights?.furnished ? "Furnished" : "Unfurnished",
+    },
+    {
+      icon: React.cloneElement(
+        (listingHighlights?.petsAllowed 
+          ? petsOptions[0].icon 
+          : petsOptions[1].icon) as React.ReactElement,
+        { className: "w-4 h-4" }
+      ),
+      label: listingHighlights?.petsAllowed ? "Pets allowed" : "No pets",
+    },
+  ];
+
+  // Basic features data for mapping
+  const basicFeatures = [
+    {
+      icon: null,
+      label: `${listingRooms?.bedrooms || 0} Bed${(listingRooms?.bedrooms || 0) !== 1 ? 's' : ''}`,
+    },
+    {
+      icon: null,
+      label: `${listingRooms?.bathrooms || 0} Bath${(listingRooms?.bathrooms || 0) !== 1 ? 's' : ''}`,
+    },
+    ...(listingRooms?.squareFeet ? [{
+      icon: null,
+      label: `${listingRooms.squareFeet} Sqft`,
+    }] : []),
+  ];
+  
   // Chart functions (copied from confirm pricing component)
   const generateChartData = () => {
     if (!listingPricing?.monthlyPricing) return [];
@@ -281,107 +330,65 @@ export const Box = ({
         </div>
 
         {/* Basics Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-medium text-black">Basics</h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[15px] text-[#3f3f3f] font-normal"
-              onClick={onEditRooms}
-            >
-              Edit
-            </Button>
-          </div>
+        <Card className="bg-neutral-50 rounded-xl mb-6">
+          <CardContent className="flex flex-col items-start gap-8 p-6">
+            <div className="flex flex-col items-start gap-4 self-stretch w-full">
+              <div className="flex items-center justify-between self-stretch w-full">
+                <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
+                  Basics
+                </h2>
+                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditRooms} />
+              </div>
 
-          <div className="text-2xl font-normal text-[#3f3f3f] mb-4">
-            {listingBasics?.title || "Untitled Property"}
-          </div>
-
-          <div className="flex justify-between mb-4">
-            <div className="text-2xl font-normal text-[#3f3f3f]">
-              {listingRooms.bedrooms} Bed{listingRooms.bedrooms !== 1 ? 's' : ''} | {listingRooms.bathrooms} Bath{listingRooms.bathrooms !== 1 ? 's' : ''}
+              <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
+                <div className="inline-flex items-center gap-5">
+                  {basicFeatures.map((feature, index) => (
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                    >
+                      <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                        {feature.label}
+                      </span>
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="text-2xl font-normal text-[#3f3f3f]">
-              {listingRooms.squareFeet ? `${listingRooms.squareFeet} Sqft` : ""}
-            </div>
-          </div>
-
-          <Separator className="my-4" />
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Highlights Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-medium text-[#3f3f3f]">Highlights</h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[15px] text-[#3f3f3f] font-normal"
-              onClick={onEditHighlights}
-            >
-              Edit
-            </Button>
-          </div>
+        <Card className="bg-neutral-50 rounded-xl mb-6">
+          <CardContent className="flex flex-col items-start gap-8 p-6">
+            <div className="flex flex-col items-start gap-4 self-stretch w-full">
+              <div className="flex items-center justify-between self-stretch w-full">
+                <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
+                  Highlights
+                </h2>
+                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditHighlights} />
+              </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-[30px] h-[30px] flex items-center justify-center">
-                {propertyTypes.find(type => type.name === listingHighlights.category)?.icon 
-                  ? React.cloneElement(
-                      propertyTypes.find(type => type.name === listingHighlights.category)?.icon as React.ReactElement,
-                      { className: "w-6 h-6" }
-                    )
-                  : React.cloneElement(propertyTypes[0].icon as React.ReactElement, { className: "w-6 h-6" })
-                }
+              <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
+                <div className="inline-flex items-center gap-5">
+                  {propertyFeatures.map((feature, index) => (
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      className="inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                    >
+                      {feature.icon}
+                      <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                        {feature.label}
+                      </span>
+                    </Badge>
+                  ))}
+                </div>
               </div>
-              <span className="text-xl font-normal text-black">
-                {listingHighlights.category || "Single Family"}
-              </span>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="w-[30px] h-[30px] flex items-center justify-center">
-                {React.cloneElement(
-                  (listingHighlights.furnished 
-                    ? furnishingOptions[0].icon 
-                    : furnishingOptions[1].icon) as React.ReactElement,
-                  { className: "w-6 h-6" }
-                )}
-              </div>
-              <span className="text-xl font-normal text-black">
-                {listingHighlights.furnished ? "Furnished" : "Unfurnished"}
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-[30px] h-[30px] flex items-center justify-center">
-                {React.cloneElement(
-                  (listingHighlights.utilitiesIncluded 
-                    ? utilitiesOptions[0].icon 
-                    : utilitiesOptions[1].icon) as React.ReactElement,
-                  { className: "w-6 h-6" }
-                )}
-              </div>
-              <span className="text-xl font-normal text-black">
-                {listingHighlights.utilitiesIncluded ? "Utilities included" : "Utilities not included"}
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-[30px] h-[30px] flex items-center justify-center">
-                {React.cloneElement(
-                  (listingHighlights.petsAllowed 
-                    ? petsOptions[0].icon 
-                    : petsOptions[1].icon) as React.ReactElement,
-                  { className: "w-6 h-6" }
-                )}
-              </div>
-              <span className="text-xl font-normal text-black">
-                {listingHighlights.petsAllowed ? "Pets welcome" : "No pets"}
-              </span>
-            </div>
-          </div>
-
-          <Separator className="my-4" />
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Title Section */}
         <div className="mb-6">
