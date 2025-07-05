@@ -137,19 +137,19 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   };
 
   const handleNext = () => {
-    if (activeContent === 'location') {
+    if (currentStep === 1) {
       setActiveContent('date');
-    } else if (activeContent === 'date') {
+    } else if (currentStep === 2) {
       setActiveContent('guests');
-    } else if (activeContent === 'guests') {
+    } else if (currentStep === 3) {
       handleSubmit();
     }
   };
 
   const handleBack = () => {
-    if (activeContent === 'date') {
+    if (currentStep === 2) {
       setActiveContent('location');
-    } else if (activeContent === 'guests') {
+    } else if (currentStep === 3) {
       setActiveContent('date');
     }
   };
@@ -227,46 +227,41 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     );
   };
 
-  // Add this function to render content based on active type
-  const renderActiveContent = () => {
-    switch (activeContent) {
-      case 'location':
-        return (
-          <>
-            {selectedLocation.description && (
-              <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="font-semibold text-gray-800">Selected Location:</p>
-                <p className="text-gray-600">{selectedLocation.description}</p>
-              </div>
-            )}
-            <HeroLocationSuggest
-              hasAccess={hasAccess}
-              onLocationSelect={handleLocationSelect}
-              setDisplayValue={setLocationDisplayValue}
-              placeholder={
-                selectedLocation.description
-                  ? "Wrong place? Begin typing and select another"
-                  : "Enter an address or city"
-              }
-            />
-          </>
-        );
-      case 'date':
-        return (
-          <DesktopDateRange
-            start={dateRange.start || null}
-            end={dateRange.end || null}
-            handleChange={(start, end) => setDateRange({ start, end })}
-            minimumDateRange={{ months: 1 }}
-            maximumDateRange={{ months: 12 }} // Add maximum date range
-          />
-        );
-      case 'guests':
-        return <GuestTypeCounter guests={guests} setGuests={setGuests} />;
-      default:
-        return null;
-    }
-  };
+  // Create all content components for the carousel
+  const locationContent = (
+    <>
+      {selectedLocation.description && (
+        <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
+          <p className="font-semibold text-gray-800">Selected Location:</p>
+          <p className="text-gray-600">{selectedLocation.description}</p>
+        </div>
+      )}
+      <HeroLocationSuggest
+        hasAccess={hasAccess}
+        onLocationSelect={handleLocationSelect}
+        setDisplayValue={setLocationDisplayValue}
+        placeholder={
+          selectedLocation.description
+            ? "Wrong place? Begin typing and select another"
+            : "Enter an address or city"
+        }
+      />
+    </>
+  );
+
+  const dateContent = (
+    <DesktopDateRange
+      start={dateRange.start || null}
+      end={dateRange.end || null}
+      handleChange={(start, end) => setDateRange({ start, end })}
+      minimumDateRange={{ months: 1 }}
+      maximumDateRange={{ months: 12 }}
+    />
+  );
+
+  const guestsContent = <GuestTypeCounter guests={guests} setGuests={setGuests} />;
+
+  const carouselContent = [locationContent, dateContent, guestsContent];
 
   // Update handleInputClick to use string types
   const handleInputClick = (e: React.MouseEvent, content: ActiveContentType, inputRef: React.RefObject<HTMLInputElement>) => {
@@ -398,7 +393,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             {getTitle()}
           </h2>
         }
-        contentComponent={renderActiveContent()}
+        carouselContent={carouselContent}
         footerComponent={renderFooter()}
         currentStep={currentStep}
         totalSteps={3}

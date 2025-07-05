@@ -139,19 +139,19 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   };
 
   const handleNext = () => {
-    if (activeContent === 'location') {
+    if (currentStep === 1) {
       setActiveContent('date');
-    } else if (activeContent === 'date') {
+    } else if (currentStep === 2) {
       setActiveContent('guests');
-    } else if (activeContent === 'guests') {
+    } else if (currentStep === 3) {
       handleSubmit();
     }
   };
 
   const handleBack = () => {
-    if (activeContent === 'date') {
+    if (currentStep === 2) {
       setActiveContent('location');
-    } else if (activeContent === 'guests') {
+    } else if (currentStep === 3) {
       setActiveContent('date');
     }
   };
@@ -180,51 +180,68 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
     const isDateStep = activeContent === 'date';
     const areDatesSelected = dateRange.start || dateRange.end;
 
-    return (
-      <div className="flex justify-between items-center w-full">
-        {isDateStep ? (
-          <div className="flex items-center gap-3">
-            <Input
-              className="w-[136px]"
-              value={formatFooterDate(dateRange.start)}
-              placeholder="Start Date"
-              readOnly
-            />
-            <span className="text-gray-600">–</span>
-            <Input
-              className="w-[136px]"
-              value={formatFooterDate(dateRange.end)}
-              placeholder="End Date"
-              readOnly
-            />
+    if (isDateStep) {
+      return (
+        <div className="flex flex-col items-start gap-3 p-4 relative w-full border-t border-[#eaecf0]">
+          <div className="inline-flex items-center gap-3 relative">
+            <div className="flex flex-col w-[136px] items-start gap-1.5 relative">
+              <Input
+                className="h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5"
+                value={formatFooterDate(dateRange.start)}
+                placeholder="Start Date"
+                readOnly
+              />
+            </div>
+            <div className="font-text-md-regular text-[#667085] w-fit whitespace-nowrap">
+              –
+            </div>
+            <div className="flex flex-col w-[136px] items-start gap-1.5 relative">
+              <Input
+                className="h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5"
+                value={formatFooterDate(dateRange.end)}
+                placeholder="End Date"
+                readOnly
+              />
+            </div>
           </div>
-        ) : (
-          <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
-            {isFirstStep ? 'Close' : 'Back'}
-          </BrandButton>
-        )}
 
-        <div className="flex items-center gap-3">
-          {isDateStep && (
+          <div className="inline-flex items-start gap-3 relative">
             <BrandButton
               variant="outline"
+              className="px-4 py-2.5 h-10 rounded-md border border-solid border-[#d0d5dd] text-[#384250]"
               onClick={areDatesSelected ? () => setDateRange({ start: null, end: null }) : handleBack}
               size="sm"
             >
               {areDatesSelected ? 'Clear' : 'Back'}
             </BrandButton>
-          )}
-          <BrandButton
-            variant="default"
-            onClick={handleNext}
-            size="sm"
-            disabled={isSubmitting && isLastStep}
-            className={cn({ 'opacity-75': isSubmitting && isLastStep })}
-          >
-            {isSubmitting && isLastStep && <ImSpinner8 className="animate-spin mr-2 h-4 w-4" />}
-            {isLastStep ? 'Start Search' : 'Next'}
-          </BrandButton>
+            <BrandButton
+              className="px-4 py-2.5 h-10 rounded-md bg-[#0b6969] text-white"
+              onClick={handleNext}
+              size="sm"
+            >
+              Next
+            </BrandButton>
+          </div>
         </div>
+      );
+    }
+
+    return (
+      <div className="flex justify-between items-center w-full">
+        <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
+          {isFirstStep ? 'Close' : 'Back'}
+        </BrandButton>
+
+        <BrandButton
+          variant="default"
+          onClick={handleNext}
+          size="sm"
+          disabled={isSubmitting && isLastStep}
+          className={cn({ 'opacity-75': isSubmitting && isLastStep })}
+        >
+          {isSubmitting && isLastStep && <ImSpinner8 className="animate-spin mr-2 h-4 w-4" />}
+          {isLastStep ? 'Start Search' : 'Next'}
+        </BrandButton>
       </div>
     );
   };
@@ -336,38 +353,33 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
     );
   };
 
-  // Add this function to render content based on active type
-  const renderActiveContent = () => {
-    switch (activeContent) {
-      case 'location':
-        return (
-          <>
-            {selectedLocation.description && (
-              <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="font-semibold text-gray-800">Selected Location:</p>
-                <p className="text-gray-600">{selectedLocation.description}</p>
-              </div>
-            )}
-            <MobileLocationSuggest />
-          </>
-        );
-      case 'date':
-        return (
-          <MobileDateRange
-            dateRange={dateRange}
-            onDateRangeChange={setDateRange}
-            onClose={() => setActiveContent(null)}
-            onProceed={() => setActiveContent('guests')}
-            minimumDateRange={{ months: 1 }}
-            maximumDateRange={{ months: 12 }}
-          />
-        );
-      case 'guests':
-        return <GuestTypeCounter guests={guests} setGuests={setGuests} />;
-      default:
-        return null;
-    }
-  };
+  // Create all content components for the carousel
+  const locationContent = (
+    <>
+      {selectedLocation.description && (
+        <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
+          <p className="font-semibold text-gray-800">Selected Location:</p>
+          <p className="text-gray-600">{selectedLocation.description}</p>
+        </div>
+      )}
+      <MobileLocationSuggest />
+    </>
+  );
+
+  const dateContent = (
+    <MobileDateRange
+      dateRange={dateRange}
+      onDateRangeChange={setDateRange}
+      onClose={() => setActiveContent(null)}
+      onProceed={() => setActiveContent('guests')}
+      minimumDateRange={{ months: 1 }}
+      maximumDateRange={{ months: 12 }}
+    />
+  );
+
+  const guestsContent = <GuestTypeCounter guests={guests} setGuests={setGuests} />;
+
+  const carouselContent = [locationContent, dateContent, guestsContent];
 
   // Update handleInputClick to use string types
   const handleInputClick = (e: React.MouseEvent, content: ActiveContentType, inputRef: React.RefObject<HTMLInputElement>) => {
@@ -417,7 +429,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
             {getTitle()}
           </h2>
         }
-        contentComponent={renderActiveContent()}
+        carouselContent={carouselContent}
         footerComponent={renderFooter()}
         currentStep={currentStep}
         totalSteps={3}
@@ -529,7 +541,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
             {getTitle()}
           </h2>
         }
-        contentComponent={renderActiveContent()}
+        carouselContent={carouselContent}
         footerComponent={renderFooter()}
         currentStep={currentStep}
         totalSteps={3}

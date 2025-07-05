@@ -100,7 +100,8 @@ interface BrandDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   titleComponent?: React.ReactNode;
-  contentComponent: React.ReactNode;
+  contentComponent?: React.ReactNode;
+  carouselContent?: React.ReactNode[];
   footerComponent?: React.ReactNode;
   currentStep?: number;
   totalSteps?: number;
@@ -111,10 +112,13 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
   onOpenChange,
   titleComponent,
   contentComponent,
+  carouselContent,
   footerComponent,
   currentStep = 1,
   totalSteps = 3,
 }) => {
+  const contentRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+
   // Generate steps based on props
   const steps = Array.from({ length: totalSteps }, (_, index) => ({
     status: index < currentStep ? "active" : "inactive"
@@ -179,7 +183,29 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
 
         <div className="flex flex-col gap-6 relative self-stretch w-full min-w-0">
           <div className="min-w-0 overflow-hidden">
-            {contentComponent}
+            {carouselContent ? (
+              <div className="relative">
+                <div 
+                  className="flex transition-transform duration-300 ease-in-out"
+                  style={{ transform: `translateX(-${(currentStep - 1) * 100}%)` }}
+                >
+                  {carouselContent.map((content, index) => (
+                    <div 
+                      key={index} 
+                      ref={(el) => (contentRefs.current[index] = el)}
+                      className="w-full flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden"
+                      style={{ 
+                        height: index === currentStep - 1 ? 'auto' : '100px'
+                      }}
+                    >
+                      {content}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              contentComponent
+            )}
           </div>
           {footerComponent && (
             <div className="pt-6 border-t border-gray-200">

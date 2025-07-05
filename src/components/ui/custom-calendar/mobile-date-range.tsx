@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { format, add, Duration } from "date-fns"; // Import add and Duration
+import { format, add, Duration } from "date-fns";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ChevronLeftIcon, ChevronRightIcon, XIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 interface DateRange {
   start: Date | null;
@@ -48,13 +50,14 @@ interface FlexibleSelectorProps {
   onSelect: (type: 'start' | 'end', option: 'exact' | number | null) => void;
 }
 
-function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDateSelect, isMobile, minimumDateRange, maximumDateRange }: CalendarMonthProps) { // Add maximumDateRange prop
+function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDateSelect, isMobile, minimumDateRange, maximumDateRange }: CalendarMonthProps) {
   const [currentMonth, setCurrentMonth] = useState(initialMonth);
   const [currentYear, setCurrentYear] = useState(initialYear);
   const [direction, setDirection] = useState(0);
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
+  const weekDays = ["Mo", "Tu", "We", "Th", "Fr", "Sat", "Su"];
 
   const handlePreviousMonth = () => {
     setDirection(-1);
@@ -161,21 +164,27 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
   };
 
   return (
-    <div className="w-full px-2 ">
-      <div className="flex justify-between items-center mt-1 mb-2 h-12">
-        <button
+    <div className="w-full px-6 py-5">
+      <div className="flex w-full items-center justify-between mb-3">
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={handlePreviousMonth}
-          className="h-full px-4 text-gray-600 hover:text-gray-800"
+          className="p-2 rounded-lg"
         >
-          Prev
-        </button>
-        <h2 className="text-base font-medium">{getMonthName(currentMonth)} {currentYear}</h2>
-        <button
+          <ChevronLeftIcon className="w-5 h-5" />
+        </Button>
+        <div className="font-semibold text-[#3c8787] text-center text-base font-['Poppins',Helvetica]">
+          {getMonthName(currentMonth)} {currentYear}
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={handleNextMonth}
-          className="h-full px-4 text-gray-600 hover:text-gray-800"
+          className="p-2 rounded-lg"
         >
-          Next
-        </button>
+          <ChevronRightIcon className="w-5 h-5" />
+        </Button>
       </div>
 
       <div className="overflow-hidden relative" >
@@ -210,16 +219,18 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <div className="grid grid-cols-7 gap-1 mb-1">
-              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-                <div key={day} className="text-center text-xs text-gray-600">
-                  {day}
+              {weekDays.map(day => (
+                <div key={day} className="relative w-10 h-10 rounded-full">
+                  <div className="absolute w-6 top-[9px] left-2 font-text-sm-medium text-[#344054] text-center">
+                    {day}
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="grid grid-cols-7  gap-0">
+            <div className="grid grid-cols-7 gap-1">
               {Array.from({ length: firstDayOfWeek }).map((_, index) => (
-                <div key={`empty-${index}`} className="aspect-square text-xs text-gray-400" />
+                <div key={`empty-${index}`} className="relative w-10 h-10 rounded-full" />
               ))}
 
               {Array.from({ length: daysInMonth }).map((_, index) => {
@@ -247,66 +258,43 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
 }
 
 function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isMobile, isDisabled }: CalendarDayProps) {
-  const hasCompleteRange = isInRange || isEndDate;
-  const showRangeBackground = hasCompleteRange && isInRange && !isSelected;
-  const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
-  const showEndBackground = hasCompleteRange && isEndDate && !isStartDate;
-
   return (
-    <button
-      className={`
-        aspect-square w-full flex items-center justify-center
-        ${isMobile ? 'text-sm py-1' : 'text-xs hover:bg-gray-100'}
-        relative
-        touch-manipulation
-        ${isDisabled ? 'cursor-not-allowed' : ''}
-      `}
-      onClick={onClick}
-      disabled={isDisabled}
-    >
-      <span className={`
-        z-10
-        ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center' : ''}
-        ${isDisabled && !isSelected ? 'text-gray-300' : ''}
-      `}>
-        {day}
-      </span>
-      {showRangeBackground && (
-        <div className="absolute" style={{
-          left: 0,
-          right: 0,
-          height: '25px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          backgroundColor: '#5C9AC533'
-        }} />
-      )}
-      {showStartBackground && (
-        <div className="absolute" style={{
-          left: '50%',
-          right: 0,
-          height: '25px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          backgroundColor: '#5C9AC533'
-        }} />
-      )}
-      {showEndBackground && (
-        <div className="absolute" style={{
-          left: 0,
-          right: '50%',
-          height: '25px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          backgroundColor: '#5C9AC533'
-        }} />
-      )}
-    </button>
+    <div className="relative w-10 h-10 rounded-full">
+      <button
+        className={`
+          relative w-10 h-10 rounded-full
+          ${isSelected ? 'bg-[#3c8787]' : ''}
+          ${isDisabled ? 'cursor-not-allowed' : ''}
+        `}
+        onClick={onClick}
+        disabled={isDisabled}
+      >
+        <div
+          className={`
+            absolute w-6 top-[9px] left-2 text-center
+            ${isSelected
+              ? 'font-text-sm-medium text-white'
+              : `font-text-sm-regular ${
+                  isDisabled ? 'text-[#667085]' : 'text-[#344054]'
+                }`
+            }
+          `}
+        >
+          {day}
+        </div>
+      </button>
+    </div>
   );
 }
 
 function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelectorProps) {
-  const flexibleDays = [1, 3, 5, 7, 14];
+  const flexibleDateOptions = [
+    { label: "Exact Date", value: "exact" },
+    { label: "3", value: 3 },
+    { label: "5", value: 5 },
+    { label: "7", value: 7 },
+    { label: "14", value: 14 },
+  ];
   const currentValue = type === 'start' ? selectedOption.start : selectedOption.end;
 
   const handleOptionSelect = (option: 'exact' | number) => {
@@ -314,34 +302,34 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
   };
 
   return (
-    <div className="flex gap-1 font-montserrat-light flex-wrap ">
-      <button
-        className={`
-                    px-3 py-1 text-sm rounded-full border-2
-                    ${currentValue === 'exact'
-            ? 'border-[#404040]'
-            : 'border-gray-200'}
-                `}
-        onClick={() => handleOptionSelect('exact')}
-      >
-        Exact dates
-      </button>
-      {flexibleDays.map(days => (
-        <button
-          key={days}
-          className={` px-4 py-1 text-sm flex items-center gap-1 rounded-full
-            border-2 ${currentValue === days ? 'border-[#404040]' : 'border-gray-200'} `}
-          onClick={() => handleOptionSelect(days)}
+    <div className="inline-flex items-start gap-3">
+      {flexibleDateOptions.map((option, index) => (
+        <Button
+          key={`${type}-option-${index}`}
+          variant="outline"
+          size="sm"
+          className={`
+            p-2 h-auto rounded border border-solid border-[#6c727e] 
+            font-text-paragraph-xsmall-paragraph text-gray-neutral500
+            ${currentValue === option.value ? 'bg-[#3c8787] text-white' : ''}
+          `}
+          onClick={() => handleOptionSelect(option.value as 'exact' | number)}
         >
-          &#177;{days}
-        </button>
+          {option.value !== "exact" && (
+            <svg className="w-4 h-4 mr-1" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 2V11.3333" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.33398 6.66663H12.6673" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.33398 14H12.6673" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
+          {option.label}
+        </Button>
       ))}
     </div>
   );
 }
 
-export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed, flexibleStart = null, flexibleEnd = null, onFlexibilityChange, minimumDateRange, maximumDateRange }: MobileDateRangeProps) { // Destructure maximumDateRange
-  // If a start date is provided, open the calendar at that month/year, otherwise use today's date.
+export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed, flexibleStart = null, flexibleEnd = null, onFlexibilityChange, minimumDateRange, maximumDateRange }: MobileDateRangeProps) {
   const initialDate = dateRange.start ? new Date(dateRange.start) : new Date();
   const [currentMonth, setCurrentMonth] = useState(initialDate.getMonth());
   const [currentYear, setCurrentYear] = useState(initialDate.getFullYear());
@@ -352,6 +340,8 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
     start: flexibleStart === 0 ? 'exact' : flexibleStart,
     end: flexibleEnd === 0 ? 'exact' : flexibleEnd,
   });
+
+  const weekDays = ["Mo", "Tu", "We", "Th", "Fr", "Sat", "Su"];
 
   const handleDateSelect = (date: number, month: number, year: number) => {
     const selectedDate = new Date(year, month, date);
@@ -438,64 +428,56 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
 
   return (
     <div className="flex flex-col w-full">
-      <div className="mb-6">
-        <div className="px-0">
-          <CalendarMonth
-            year={currentYear}
-            month={currentMonth}
-            dateRange={dateRange}
-            onDateSelect={handleDateSelect}
-            isMobile={true}
-            minimumDateRange={minimumDateRange}
-            maximumDateRange={maximumDateRange} // Pass prop down
-          />
-        </div>
+      <div className="flex items-end justify-end relative self-stretch w-full bg-white rounded-xl overflow-hidden border border-solid border-[#eaecf0]">
+        <div className="flex flex-col items-end justify-end relative flex-1 grow">
+          <div className="flex flex-col items-start relative self-stretch w-full">
+            <div className="flex flex-col items-center relative self-stretch w-full">
+              <CalendarMonth
+                year={currentYear}
+                month={currentMonth}
+                dateRange={dateRange}
+                onDateSelect={handleDateSelect}
+                isMobile={true}
+                minimumDateRange={minimumDateRange}
+                maximumDateRange={maximumDateRange}
+              />
+            </div>
+          </div>
 
-        <div className="px-3 space-y-4">
-          <div>
-            <h3 className="text-xs mb-1">Flexible Start Date</h3>
-            <FlexibleDateSelector
-              type="start"
-              selectedOption={flexibility}
-              onSelect={(type, option) => {
-                const updated = { ...flexibility, [type]: option };
-                setFlexibility(updated);
-                onFlexibilityChange?.(updated);
-              }}
-            />
-          </div>
-          <div>
-            <h3 className="text-xs mb-1">Flexible End Date</h3>
-            <FlexibleDateSelector
-              type="end"
-              selectedOption={flexibility}
-              onSelect={(type, option) => {
-                const updated = { ...flexibility, [type]: option };
-                setFlexibility(updated);
-                onFlexibilityChange?.(updated);
-              }}
-            />
-          </div>
-        </div>
+          <div className="flex flex-col items-start gap-3 p-4 relative self-stretch w-full border-t border-[#eaecf0]">
+            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full">
+              <div className="relative self-stretch mt-[-1.00px] font-text-paragraph-xsmall-paragraph text-gray-neutral700">
+                Flexible Start Date
+              </div>
+              <FlexibleDateSelector
+                type="start"
+                selectedOption={flexibility}
+                onSelect={(type, option) => {
+                  const updated = { ...flexibility, [type]: option };
+                  setFlexibility(updated);
+                  onFlexibilityChange?.(updated);
+                }}
+              />
+            </div>
 
-        <div className="px-3 mt-4">
-          <div className="flex gap-x-4">
-            <button
-              onClick={handleClear}
-              className="flex-1 px-2 py-2 text-sm rounded-full border-2 border-gray-200 hover:bg-gray-100"
-            >
-              Clear
-            </button>
-            <button
-              onClick={onProceed}
-              className="flex-1 bg-[#404040]/90 hover:bg-[#404040] text-white rounded-full py-2 text-sm"
-            >
-              Proceed
-            </button>
+            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full">
+              <div className="relative self-stretch mt-[-1.00px] font-text-paragraph-xsmall-paragraph text-gray-neutral700">
+                Flexible End Date
+              </div>
+              <FlexibleDateSelector
+                type="end"
+                selectedOption={flexibility}
+                onSelect={(type, option) => {
+                  const updated = { ...flexibility, [type]: option };
+                  setFlexibility(updated);
+                  onFlexibilityChange?.(updated);
+                }}
+              />
+            </div>
           </div>
+
         </div>
       </div>
-
     </div>
   );
 }
