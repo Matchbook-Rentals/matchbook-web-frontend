@@ -105,14 +105,14 @@ export default function HeroLocationSuggest({
         onChange={handleInput}
         placeholder={placeholder}
         type="text"
-        className="w-full h-full text-2xl focus:outline-none"
+        className="w-full h-full text-sm sm:text-xl md:text-2xl focus:outline-none min-w-0"
         autoFocus={true}
       />
       {suggestions.length > 0 && (
-        <ul className="mt-5">
+        <ul className="mt-3 sm:mt-5 max-h-64 overflow-y-auto">
           {suggestions.map((suggestion) => (
             <li
-              className="hover:bg-gray-100 p-2 cursor-pointer"
+              className="hover:bg-gray-100 p-2 sm:p-3 cursor-pointer text-sm sm:text-base rounded-md"
               key={suggestion.place_id}
               onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
               onMouseEnter={() => prefetchGeocode(suggestion.description)}

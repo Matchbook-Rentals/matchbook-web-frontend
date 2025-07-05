@@ -1,22 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { MapPin, Calendar, Users } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { DisabledMobileInputs } from "./disabled-inputs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { SuggestedLocation } from "@/types";
-import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { createTrip } from "@/app/actions/trips";
-import { format } from "date-fns";
 import { MobileDateRange } from "@/components/ui/custom-calendar/mobile-date-range";
 import GuestTypeCounter from "./GuestTypeCounter";
 import { cn } from "@/lib/utils";
-
-interface Suggestion {
-  place_id: string;
-  description: string;
-}
+import { BrandDialog } from "@/components/brandDialog";
+import { BrandButton } from "@/components/ui/brandButton";
+import { Input } from "@/components/ui/input";
+import { ImSpinner8 } from "react-icons/im";
+import HeroLocationSuggest from "./HeroLocationSuggest";
 
 interface SearchInputsMobileProps {
   hasAccess: boolean;
@@ -26,15 +20,12 @@ interface SearchInputsMobileProps {
   searchIconColor?: string;
   headerText?: string;
   headerClassName?: string;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-const PRESET_CITIES = [
-  { description: "New York City, NY", lat: 40.7128, lng: -74.0060 },
-  { description: "Los Angeles, CA", lat: 34.0522, lng: -118.2437 },
-  { description: "Chicago, IL", lat: 41.8781, lng: -87.6298 },
-  { description: "Houston, TX", lat: 29.7604, lng: -95.3698 },
-  { description: "Miami, FL", lat: 25.7617, lng: -80.1918 },
-];
+// Add this type definition
+type ActiveContentType = 'location' | 'date' | 'guests' | null;
 
 const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   hasAccess,
@@ -43,331 +34,507 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   searchButtonClassNames,
   searchIconColor = 'text-white',
   headerText,
-  headerClassName
+  headerClassName,
+  isOpen: externalIsOpen,
+  onOpenChange: externalOnOpenChange
 }) => {
-  const [activeInput, setActiveInput] = useState<number | null>(null);
-  const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<{
-    description: string;
-    lat: number | null;
-    lng: number | null;
-  }>({
+  const [hasBeenSelected, setHasBeenSelected] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  
+  // Replace activeInput state with new type
+  const [activeContent, setActiveContent] = useState<ActiveContentType>(null);
+  const [totalGuests, setTotalGuests] = useState<number>(0);
+  const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({
+    start: null,
+    end: null,
+  });
+  const [guests, setGuests] = useState({ pets: 0, children: 0, adults: 1 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [selectedLocation, setSelectedLocation] = useState({
+    destination: '',
     description: '',
     lat: null,
     lng: null
   });
-  const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({
-    start: null,
-    end: null
-  });
-  const router = useRouter();
-  const { toast } = useToast();
-  const componentRef = useRef<HTMLDivElement>(null);
-  const [hasBeenSelected, setHasBeenSelected] = useState(false);
-  const [guests, setGuests] = useState({ pets: 0, children: 0, adults: 1 });
-  const [totalGuests, setTotalGuests] = useState(1);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [locationDisplayValue, setLocationDisplayValue] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
-        setActiveInput(null);
-      }
-    };
+  // Use external dialog control if provided, otherwise use internal
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = externalOnOpenChange || setInternalIsOpen;
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+    } bg-background ${inputClassName || ''}`;
 
+  // Add this effect to update totalGuests whenever guests state changes
   useEffect(() => {
     const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
     setTotalGuests(total);
   }, [guests]);
 
-  const inputClasses = `w-full px-4 py-3 font-normal text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none border border-gray-200 rounded-full bg-white mb-3 transition-all duration-300 hover:shadow-sm ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
-    } ${inputClassName || ''}`;
-
-  const prefetchGeocode = async (description: string) => {
-    try {
-      const trimmedDescription = description.slice(0, -5);
-      await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
-    } catch (error) {
-      console.error("Error prefetching geocode:", error);
-    }
+  // Format the dates for display
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const handleLocationInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
-    if (newValue.length > 0) {
-      try {
-        const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}`);
-        const data = await response.json();
-        setSuggestions(data.predictions || []);
-      } catch (error) {
-        console.error("Error fetching suggestions:", error);
-        setSuggestions([]);
-      }
-    } else {
-      setSuggestions([]);
-    }
+  const formatFooterDate = (date: Date | null) => {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
-  const handleLocationSelect = async (description: string, place_id: string) => {
-    const trimmedDescription = description.slice(0, -5);
-    const startTime = performance.now();
-
-    setSelectedLocation({
-      description: trimmedDescription,
-      lat: null,
-      lng: null
-    });
-    setInputValue("");
-    setSuggestions([]);
-    setActiveInput(3);
-
-    try {
-      const response = await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
-      const data = await response.json();
-      if (data.results && data.results.length > 0) {
-        const { lat, lng } = data.results[0].geometry.location;
-        const endTime = performance.now();
-        const elapsedMs = Math.round(endTime - startTime);
-
-        //toast({
-        //  title: "Location selected",
-        //  description: `${trimmedDescription} (processed in ${elapsedMs}ms)`,
-        //  style: { backgroundColor: '#f5f5f5', border: 'black solid 1px' }
-        //});
-
-        setSelectedLocation((prev) => ({
-          ...prev,
-          lat: lat,
-          lng: lng
-        }));
-      }
-    } catch (error) {
-      console.error("Error fetching geocode:", error);
-    }
+  const handleLocationSelect = (location: any) => {
+    setSelectedLocation(location);
+    // Auto-advance to the next step upon selection
+    setActiveContent('date');
   };
 
-  const handleInputClick = (index: number) => {
-    setActiveInput(activeInput === index ? null : index);
-  };
-
-  const renderSlidingComponent = (index: number) => {
-    if (index === 0) return null;
-
-    return (
-      <AnimatePresence>
-        {activeInput === index && (
-          <motion.div
-            initial={{ maxHeight: 0, opacity: 0 }}
-            animate={{ maxHeight: "1500px", opacity: 1 }}
-            exit={{ maxHeight: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="w-full bg-background border-t border-b border-gray-200 overflow-hidden"
-          >
-            <div className="p-0">
-              {index === 3 && (
-                <MobileDateRange
-                  dateRange={dateRange}
-                  onDateRangeChange={setDateRange}
-                  onClose={() => setActiveInput(null)}
-                  onProceed={() => setActiveInput(4)}
-                  minimumDateRange={{ months: 1 }}
-                  maximumDateRange={{ months: 12 }} // Add maximum date range
-                />
-              )}
-              {index === 4 && (
-                <div className="p-4">
-                  <GuestTypeCounter
-                    guests={guests}
-                    setGuests={setGuests}
-                  />
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    );
-  };
-
-  const renderLocationSuggestions = () => {
-    return (
-      <AnimatePresence>
-        {activeInput === 0 && (
-          <motion.div
-            initial={{ maxHeight: 0, opacity: 0 }}
-            animate={{ maxHeight: "1500px", opacity: 1 }}
-            exit={{ maxHeight: 0, opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="bg-background border-t border-b border-gray-200 overflow-hidden w-full"
-          >
-            <div className="px-4 py-2 w-full">
-              <input
-                value={inputValue}
-                onChange={handleLocationInput}
-                placeholder="Enter an address or city"
-                type="text"
-                className="w-full text-lg focus:outline-none mb-3"
-                autoFocus
-              />
-              <ScrollArea className="h-[200px]">
-                {inputValue.length === 0 ? (
-                  // Show preset cities when input is empty
-                  PRESET_CITIES.map((city) => (
-                    <div
-                      key={city.description}
-                      className="py-2  font-light text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => {
-                        setSelectedLocation({
-                          description: city.description,
-                          lat: city.lat,
-                          lng: city.lng
-                        });
-                        setInputValue("");
-                        setSuggestions([]);
-                        setActiveInput(3);
-                      }}
-                    >
-                      {city.description}
-                    </div>
-                  ))
-                ) : (
-                  // Show API suggestions when input has value
-                  suggestions.map((suggestion) => (
-                    <div
-                      key={suggestion.place_id}
-                      className="py-2  text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleLocationSelect(suggestion.description, suggestion.place_id)}
-                      onMouseEnter={() => prefetchGeocode(suggestion.description)}
-                    >
-                      {suggestion.description.slice(0, -5)}
-                    </div>
-                  ))
-                )}
-              </ScrollArea>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    );
-  };
+  // Add refs for each input
+  const locationInputRef = useRef<HTMLInputElement>(null);
+  const moveInInputRef = useRef<HTMLInputElement>(null);
+  const moveOutInputRef = useRef<HTMLInputElement>(null);
+  const guestsInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+
     if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
-      setActiveInput(0);
+      setIsOpen(true);
+      setActiveContent('location');
       toast({
         variant: "destructive",
-        description: `Please select a location`,
+        description: `No lat/lng found for destination`,
       });
       return;
     }
 
-    if (!dateRange.start || !dateRange.end) {
-      setActiveInput(3);
+    setIsSubmitting(true);
+    try {
+      const response = await createTrip({
+        locationString: selectedLocation.description,
+        latitude: selectedLocation.lat,
+        longitude: selectedLocation.lng,
+        startDate: dateRange.start,
+        endDate: dateRange.end,
+      });
+
+      if (response.success && response.trip) {
+        router.push(`/platform/searches/set-preferences/${response.trip.id}`);
+      } else {
+        toast({
+          variant: "destructive",
+          description: response.success === false ? response.error : "Failed to create trip",
+        });
+      }
+    } catch (error) {
       toast({
         variant: "destructive",
-        description: `Please select both move-in and move-out dates`,
+        description: "An unexpected error occurred while creating the trip.",
       });
-      return;
-    }
-
-    if (guests.adults < 1) {
-      setActiveInput(4);
-      toast({
-        variant: "destructive",
-        description: `Please select at least one adult guest`,
-      });
-      return;
-    }
-
-    const response = await createTrip({
-      locationString: selectedLocation.description,
-      latitude: selectedLocation.lat,
-      longitude: selectedLocation.lng,
-      startDate: dateRange.start,
-      endDate: dateRange.end,
-      numAdults: guests.adults,
-      numChildren: guests.children,
-      numPets: guests.pets,
-    });
-
-    if (response.success && response.trip) {
-      router.push(`/platform/searches/set-preferences/${response.trip.id}`);
-    } else {
-      toast({
-        variant: "destructive",
-        description: "Failed to create trip",
-      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  if (!hasAccess) return <DisabledMobileInputs headerText={headerText} />;
+  const handleNext = () => {
+    if (activeContent === 'location') {
+      setActiveContent('date');
+    } else if (activeContent === 'date') {
+      setActiveContent('guests');
+    } else if (activeContent === 'guests') {
+      handleSubmit();
+    }
+  };
 
-  return (
-    <motion.div
-      ref={componentRef}
-      className={`flex flex-col p-4 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw] ${className || ''}`}
-      animate={{
-        width: activeInput !== null ? '85vw' : '60vw',
-        height: activeInput !== null ? 'auto' : 'auto'
-      }}
-      transition={{
-        duration: 0.3,
-        ease: "easeInOut"
-      }}
-    >
-      {headerText && <h3 className={cn("text-xl font-semibold mb-3 text-green-800 block sm:hidden", headerClassName)}>{headerText}</h3>}
-      <div
-        className={`${inputClasses} flex items-center`}
-        onClick={() => handleInputClick(0)}
-      >
-        <MapPin size={24} className="text-gray-500 mr-3" />
-        {selectedLocation.description || "Where to"}
+  const handleBack = () => {
+    if (activeContent === 'date') {
+      setActiveContent('location');
+    } else if (activeContent === 'guests') {
+      setActiveContent('date');
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setActiveContent(null);
+  };
+
+  const getTitle = () => {
+    switch (activeContent) {
+      case 'location':
+        return 'Select Location';
+      case 'date':
+        return 'Select Dates';
+      case 'guests':
+        return 'Add Guests';
+      default:
+        return 'Find your next home';
+    }
+  };
+
+  const renderFooter = () => {
+    const isFirstStep = activeContent === 'location';
+    const isLastStep = activeContent === 'guests';
+    const isDateStep = activeContent === 'date';
+    const areDatesSelected = dateRange.start || dateRange.end;
+
+    return (
+      <div className="flex justify-between items-center w-full">
+        {isDateStep ? (
+          <div className="flex items-center gap-3">
+            <Input
+              className="w-[136px]"
+              value={formatFooterDate(dateRange.start)}
+              placeholder="Start Date"
+              readOnly
+            />
+            <span className="text-gray-600">–</span>
+            <Input
+              className="w-[136px]"
+              value={formatFooterDate(dateRange.end)}
+              placeholder="End Date"
+              readOnly
+            />
+          </div>
+        ) : (
+          <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
+            {isFirstStep ? 'Close' : 'Back'}
+          </BrandButton>
+        )}
+
+        <div className="flex items-center gap-3">
+          {isDateStep && (
+            <BrandButton
+              variant="outline"
+              onClick={areDatesSelected ? () => setDateRange({ start: null, end: null }) : handleBack}
+              size="sm"
+            >
+              {areDatesSelected ? 'Clear' : 'Back'}
+            </BrandButton>
+          )}
+          <BrandButton
+            variant="default"
+            onClick={handleNext}
+            size="sm"
+            disabled={isSubmitting && isLastStep}
+            className={cn({ 'opacity-75': isSubmitting && isLastStep })}
+          >
+            {isSubmitting && isLastStep && <ImSpinner8 className="animate-spin mr-2 h-4 w-4" />}
+            {isLastStep ? 'Start Search' : 'Next'}
+          </BrandButton>
+        </div>
       </div>
-      {renderLocationSuggestions()}
+    );
+  };
 
-      <div
-        className={`${inputClasses} flex items-center`}
-        onClick={() => handleInputClick(3)}
-      >
-        <Calendar size={24} className="text-gray-500 mr-3" />
-        {dateRange.start && dateRange.end 
-          ? `${format(dateRange.start, 'MMM d')} - ${format(dateRange.end, 'MMM d')}`
-          : dateRange.start
-          ? `${format(dateRange.start, 'MMM d')} - Select`
-          : 'Dates'}
+  // Mobile-specific location component with preset cities
+  const MobileLocationSuggest = () => {
+    const [inputValue, setInputValue] = useState("");
+    const [apiSuggestions, setApiSuggestions] = useState<any[]>([]);
+    const [showingPresets, setShowingPresets] = useState(true);
+
+    const PRESET_CITIES = [
+      { place_id: "preset_nyc", description: "New York City, NY", lat: 40.7128, lng: -74.0060 },
+      { place_id: "preset_la", description: "Los Angeles, CA", lat: 34.0522, lng: -118.2437 },
+      { place_id: "preset_chicago", description: "Chicago, IL", lat: 41.8781, lng: -87.6298 },
+      { place_id: "preset_houston", description: "Houston, TX", lat: 29.7604, lng: -95.3698 },
+      { place_id: "preset_miami", description: "Miami, FL", lat: 25.7617, lng: -80.1918 },
+    ];
+
+    const suggestions = showingPresets ? PRESET_CITIES : apiSuggestions;
+
+    const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setInputValue(newValue);
+      
+      if (newValue.length > 0) {
+        setShowingPresets(false);
+        try {
+          const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}`);
+          const data = await response.json();
+          setApiSuggestions(data.predictions || []);
+        } catch (error) {
+          console.error("Error fetching suggestions:", error);
+          setApiSuggestions([]);
+        }
+      } else {
+        setShowingPresets(true);
+        setApiSuggestions([]);
+      }
+    };
+
+    const handleSelect = async (description: string, place_id: string) => {
+      const isPreset = place_id.startsWith('preset_');
+      const trimmedDescription = isPreset ? description : description.slice(0, -5);
+      
+      setLocationDisplayValue(trimmedDescription);
+      setInputValue("");
+      setApiSuggestions([]);
+      setShowingPresets(true);
+
+      if (isPreset) {
+        const presetCity = PRESET_CITIES.find(city => city.place_id === place_id);
+        if (presetCity) {
+          handleLocationSelect({ 
+            description: presetCity.description, 
+            lat: presetCity.lat, 
+            lng: presetCity.lng 
+          });
+        }
+      } else {
+        try {
+          const response = await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
+          const data = await response.json();
+          if (data.results && data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry.location;
+            handleLocationSelect({ description: trimmedDescription, lat, lng });
+          }
+        } catch (error) {
+          console.error("Error fetching geocode:", error);
+        }
+      }
+    };
+
+    return (
+      <div className="p-4">
+        <input
+          value={inputValue}
+          onChange={handleInput}
+          placeholder={
+            selectedLocation.description
+              ? "Wrong place? Begin typing and select another"
+              : "Enter an address or city"
+          }
+          type="text"
+          className="w-full h-full text-sm focus:outline-none min-w-0 mb-4"
+          autoFocus={true}
+        />
+        <div 
+          className="transition-all duration-300 ease-in-out overflow-hidden"
+          style={{
+            maxHeight: suggestions.length >= 5 ? '320px' : `${suggestions.length * 64}px`,
+            opacity: suggestions.length > 0 ? 1 : 0
+          }}
+        >
+          <ul>
+            {suggestions.map((suggestion) => (
+              <li
+                className={`hover:bg-gray-100 p-3 cursor-pointer text-sm rounded-md transition-colors duration-150 ${
+                  showingPresets ? 'text-gray-500' : 'text-gray-900'
+                }`}
+                key={suggestion.place_id}
+                onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
+              >
+                {showingPresets ? suggestion.description : suggestion.description.slice(0, -5)}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-      {renderSlidingComponent(3)}
+    );
+  };
 
-      <div
-        className={`${inputClasses} sm:border-r-0 flex items-center`}
-        onClick={() => {
-          setHasBeenSelected(true);
-          handleInputClick(4);
+  // Add this function to render content based on active type
+  const renderActiveContent = () => {
+    switch (activeContent) {
+      case 'location':
+        return (
+          <>
+            {selectedLocation.description && (
+              <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <p className="font-semibold text-gray-800">Selected Location:</p>
+                <p className="text-gray-600">{selectedLocation.description}</p>
+              </div>
+            )}
+            <MobileLocationSuggest />
+          </>
+        );
+      case 'date':
+        return (
+          <MobileDateRange
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
+            onClose={() => setActiveContent(null)}
+            onProceed={() => setActiveContent('guests')}
+            minimumDateRange={{ months: 1 }}
+            maximumDateRange={{ months: 12 }}
+          />
+        );
+      case 'guests':
+        return <GuestTypeCounter guests={guests} setGuests={setGuests} />;
+      default:
+        return null;
+    }
+  };
+
+  // Update handleInputClick to use string types
+  const handleInputClick = (e: React.MouseEvent, content: ActiveContentType, inputRef: React.RefObject<HTMLInputElement>) => {
+    e.stopPropagation();
+
+    // If clicking the same input that's already active, close the popover
+    if (activeContent === content && isOpen) {
+      setIsOpen(false);
+      setActiveContent(null);
+      return;
+    }
+
+    // Otherwise, open the popover with the new content
+    setActiveContent(content);
+    setIsOpen(true);
+  };
+
+  const currentStep = activeContent === 'location' ? 1 : activeContent === 'date' ? 2 : 3;
+
+  // When used externally (from hero), start with location step
+  useEffect(() => {
+    if (externalIsOpen && !activeContent) {
+      setActiveContent('location');
+    }
+  }, [externalIsOpen, activeContent]);
+
+  // Render different versions based on hasAccess
+  if (!hasAccess) {
+    return (
+      <DisabledMobileInputs headerText={headerText} />
+    );
+  }
+
+  // If external dialog control is provided, only render the BrandDialog
+  if (externalIsOpen !== undefined) {
+    return (
+      <BrandDialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            setActiveContent(null);
+          }
         }}
-      >
-        <Users size={24} className="text-gray-500 mr-3" />
-        {hasBeenSelected ? `${totalGuests} Renter${totalGuests !== 1 ? 's' : ''}` : 'Renters'}
-      </div>
-      {renderSlidingComponent(4)}
+        titleComponent={
+          <h2 className="text-lg font-semibold text-center flex-grow">
+            {getTitle()}
+          </h2>
+        }
+        contentComponent={renderActiveContent()}
+        footerComponent={renderFooter()}
+        currentStep={currentStep}
+        totalSteps={3}
+      />
+    );
+  }
 
-      <button
-        disabled={!hasAccess || !selectedLocation.lat || !selectedLocation.lng}
-        onClick={handleSubmit}
-        className={`w-full py-2 px-6 ${hasAccess && selectedLocation.lat && selectedLocation.lng
-          ? 'cursor-pointer'
-          : 'cursor-not-allowed opacity-30'
-          } ${searchButtonClassNames || 'bg-green-800'} text-white rounded-2xl text-lg font-medium transition-all duration-300 shadow-sm`}
+  // Original component rendering for standalone usage
+  return (
+    <div ref={containerRef} className="relative">
+      {headerText && <h3 className={cn("text-xl font-semibold mb-3 text-green-800 text-center", headerClassName)}>{headerText}</h3>}
+      <div
+        className={cn('flex flex-col gap-3 px-3 py-2 items-center bg-background rounded-3xl shadow-md overflow-hidden', className)}
       >
-        Search
-      </button>
-    </motion.div>
+        <div className="w-full flex flex-col border-b border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'location', locationInputRef)}>Where</label>
+          <input
+            ref={locationInputRef}
+            type="text"
+            placeholder="Choose Location"
+            value={locationDisplayValue}
+            className={inputClasses}
+            readOnly
+            onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
+          />
+        </div>
+
+        <div className="w-full flex flex-col border-b border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}>Move In</label>
+          <input
+            ref={moveInInputRef}
+            type="text"
+            placeholder="Select dates"
+            value={formatDate(dateRange.start)}
+            className={inputClasses}
+            readOnly
+            onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
+          />
+        </div>
+
+        <div className="w-full flex flex-col border-b border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}>Move Out</label>
+          <input
+            ref={moveOutInputRef}
+            type="text"
+            placeholder="Select dates"
+            value={formatDate(dateRange.end)}
+            className={inputClasses}
+            readOnly
+            onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
+          />
+        </div>
+
+        <div className="w-full flex flex-col">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600 cursor-pointer" onClick={(e) => {
+              setHasBeenSelected(true);
+              handleInputClick(e, 'guests', guestsInputRef)
+            }}>Who</label>
+          <input
+            ref={guestsInputRef}
+            type="text"
+            placeholder="Add renters"
+            value={hasBeenSelected ? `${totalGuests} Renter${totalGuests !== 1 ? 's' : ''}` : ''}
+            className={`${inputClasses}`}
+            readOnly
+            onClick={(e) => {
+              setHasBeenSelected(true);
+              handleInputClick(e, 'guests', guestsInputRef)
+            }}
+          />
+        </div>
+
+        <div className="w-full">
+          <button
+            disabled={!hasAccess || isSubmitting}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!(locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng))) {
+                handleSubmit();
+              }
+            }}
+            className={cn(
+              'w-full p-3 rounded-full',
+              searchButtonClassNames || 'bg-primaryBrand',
+              !hasAccess || isSubmitting
+                ? 'cursor-not-allowed opacity-50'
+                : 'cursor-pointer'
+            )}
+          >
+            {isSubmitting || (locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng)) ? (
+              <ImSpinner8 className={`animate-spin ${searchIconColor}`} />
+            ) : (
+              <span className={searchIconColor}>Search</span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      <BrandDialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            setActiveContent(null);
+          }
+        }}
+        titleComponent={
+          <h2 className="text-lg font-semibold text-center flex-grow">
+            {getTitle()}
+          </h2>
+        }
+        contentComponent={renderActiveContent()}
+        footerComponent={renderFooter()}
+        currentStep={currentStep}
+        totalSteps={3}
+      />
+    </div>
   );
 };
 

@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import SearchContainer from "./searchContainer";
+import SearchInputsMobile from "./search-inputs-mobile";
 import Countdown from "../marketing-landing-components/countdown";
 import { Button } from "@/components/ui/button"; // Import Button
 import { BrandButton } from "@/components/ui/brandButton"; // Import BrandButton
+import { Card, CardContent } from "@/components/ui/card"; // Import Card components
 import { useAuth, useUser } from "@clerk/nextjs"; // Import Clerk hooks
 import { checkClientBetaAccess } from '@/utils/roles';
 import {
@@ -111,53 +113,85 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      {/* Mobile Button wrapped in DialogTrigger */}
-      <div className="block sm:hidden my-auto pt-10 w-full z-10 text-center"> {/* Position button lower and center text */}
+      {/* Mobile Card Form wrapped in DialogTrigger */}
+      <div className="block sm:hidden my-auto pt-10 w-full z-10 flex justify-center"> {/* Position card lower and center it */}
         {/* Header Text for Mobile with Background */}
         <div className="inline-block bg-black/30 p-4 w-full rounded-none mb-4"> {/* Added background div */}
-          <h1 className="text-4xl font-medium text-white mb-8 "> {/* Removed text shadow and margin-bottom */}
+          <h1 className="text-4xl font-medium text-white mb-8 text-center"> {/* Removed text shadow and margin-bottom */}
             Find your next home
           </h1>
-          <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
-            <DialogTrigger asChild disabled={!hasAccess}>
-              <Button
-                className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md disabled:opacity-80 disabled:cursor-not-allowed"
-                disabled={!hasAccess} // Disable button if no access
-              >
-                {hasAccess ? 'Start Search' : 'Start Search'} {/* Change text based on access */}
-              </Button>
-            </DialogTrigger>
-            {/* Dialog Content will be rendered below */}
-          </Dialog>
+          <div className="flex justify-center">
+            <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
+              <DialogTrigger asChild disabled={!hasAccess}>
+                <Card className="w-[397px] rounded-xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
+                  <CardContent className="p-3 flex flex-col gap-2">
+                    <div className="flex flex-col gap-5 w-full">
+                      <div className="flex flex-col gap-4 w-full">
+                        {/* Where field */}
+                        <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
+                          <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal">
+                            Where
+                          </label>
+                          <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                            Choose Location
+                          </span>
+                        </div>
+
+                        {/* Move in/out date fields */}
+                        <div className="flex items-center gap-5 w-full">
+                          {/* Move in field */}
+                          <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
+                            <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
+                              Move in
+                            </label>
+                            <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                              Select Dates
+                            </span>
+                          </div>
+
+                          {/* Move out field */}
+                          <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
+                            <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
+                              Move out
+                            </label>
+                            <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                              Select Dates
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Who field */}
+                        <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
+                          <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
+                            Who
+                          </label>
+                          <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                            Add Renters
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* CTA Button */}
+                      <Button className="w-full bg-teal-700 hover:bg-teal-800 text-white" disabled={!hasAccess}>
+                        {hasAccess ? 'Button CTA' : 'Button CTA'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </DialogTrigger>
+              {/* Dialog Content will be rendered below */}
+            </Dialog>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Search Dialog Content */}
-      <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
-        {/* Content container with custom styling */}
-        <DialogContent
-          hideCloseButton
-          className="sm:hidden h-fit max-h-[90vh] bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
-        >
-          <div className="flex justify-center w-full">
-            <ScrollArea className="h-full max-h-[90vh] w-auto">
-              <div className="px-1">
-                {/* Use SearchContainer within the popup */}
-                <SearchContainer
-                  hasAccess={hasAccess} // Pass hasAccess state
-                  className="z-100" // Removed width constraint as it's now centered by parent
-                  containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]' // Removed padding
-                  inputStyles='bg-background'
-                  searchButtonClassNames='bg-primaryBrand hover:bg-primaryBrand/90 transition-none' // Mobile specific styles
-                  searchIconColor='text-white' // Mobile specific icon color
-                  popoverMaxWidth='90vw' // Adjust popover width for mobile
-                  headerText='Find your next home'
-                />
-              </div>
-            </ScrollArea>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Mobile Search Dialog Content - Direct BrandDialog */}
+      <SearchInputsMobile
+        hasAccess={hasAccess}
+        isOpen={showSearchPopup}
+        onOpenChange={setShowSearchPopup}
+        headerText='Find your next home'
+      />
     </div>
   );
 };
