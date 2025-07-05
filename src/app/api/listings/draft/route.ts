@@ -16,29 +16,69 @@ export async function POST(request: Request) {
     
     // If id is provided, update existing draft, otherwise create new
     if (id) {
-      // Update existing draft
-      const updatedDraft = await prisma.listingInCreation.update({
-        where: { id },
-        data: {
-          ...listingData,
-          userId,
-          lastModified: new Date(),
+      // Update existing draft in a transaction
+      const result = await prisma.$transaction(async (tx) => {
+        const updatedDraft = await tx.listingInCreation.update({
+          where: { id },
+          data: {
+            ...listingData,
+            userId,
+            lastModified: new Date(),
+          }
+        });
+
+        // Handle photo updates if provided
+        if (listingImages && Array.isArray(listingImages)) {
+          // Delete existing images for this draft
+          await tx.listingImage.deleteMany({
+            where: { listingId: id }
+          });
+
+          // Create new images if any provided
+          if (listingImages.length > 0) {
+            await tx.listingImage.createMany({
+              data: listingImages.map((image: any) => ({
+                url: image.url,
+                listingId: id,
+                category: image.category || null,
+                rank: image.rank || null,
+              })),
+            });
+          }
         }
+
+        return updatedDraft;
       });
       
-      return NextResponse.json(updatedDraft);
+      return NextResponse.json(result);
     } else {
-      // Create new draft
-      const newDraft = await prisma.listingInCreation.create({
-        data: {
-          ...listingData,
-          userId,
-          status: 'draft',
-          approvalStatus: 'pendingReview',
+      // Create new draft in a transaction
+      const result = await prisma.$transaction(async (tx) => {
+        const newDraft = await tx.listingInCreation.create({
+          data: {
+            ...listingData,
+            userId,
+            status: 'draft',
+            approvalStatus: 'pendingReview',
+          }
+        });
+
+        // Create images if provided
+        if (listingImages && Array.isArray(listingImages) && listingImages.length > 0) {
+          await tx.listingImage.createMany({
+            data: listingImages.map((image: any) => ({
+              url: image.url,
+              listingId: newDraft.id,
+              category: image.category || null,
+              rank: image.rank || null,
+            })),
+          });
         }
+
+        return newDraft;
       });
       
-      return NextResponse.json(newDraft);
+      return NextResponse.json(result);
     }
   } catch (error) {
     console.error('[API] Error saving draft:', error);
@@ -62,11 +102,16 @@ export async function GET(request: Request) {
     const draftId = searchParams.get('id');
     
     if (draftId) {
-      // Get specific draft
+      // Get specific draft with images
       const draft = await prisma.listingInCreation.findFirst({
         where: {
           id: draftId,
           userId
+        },
+        include: {
+          listingImages: {
+            orderBy: { rank: 'asc' }
+          }
         }
       });
       
@@ -76,10 +121,15 @@ export async function GET(request: Request) {
       
       return NextResponse.json(draft);
     } else {
-      // Get all drafts for user
+      // Get all drafts for user with image counts
       const drafts = await prisma.listingInCreation.findMany({
         where: { userId },
-        orderBy: { lastModified: 'desc' }
+        orderBy: { lastModified: 'desc' },
+        include: {
+          listingImages: {
+            orderBy: { rank: 'asc' }
+          }
+        }
       });
       
       return NextResponse.json(drafts);

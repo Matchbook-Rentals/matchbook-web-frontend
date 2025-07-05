@@ -18,11 +18,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Draft ID required' }, { status: 400 });
     }
     
-    // Fetch the draft
+    // Fetch the draft with images
     const draft = await prisma.listingInCreation.findFirst({
       where: {
         id: draftId,
         userId
+      },
+      include: {
+        listingImages: {
+          orderBy: { rank: 'asc' }
+        }
       }
     });
     
@@ -145,10 +150,14 @@ export async function POST(request: Request) {
         },
       });
       
-      // Create listing images if provided
-      if (listingImages && listingImages.length > 0) {
+      // Handle listing images - use provided ones or existing ones from draft
+      const imagesToCreate = listingImages && listingImages.length > 0 
+        ? listingImages 
+        : draft.listingImages || [];
+      
+      if (imagesToCreate.length > 0) {
         await tx.listingImage.createMany({
-          data: listingImages.map((image: any) => ({
+          data: imagesToCreate.map((image: any) => ({
             url: image.url,
             listingId: listing.id,
             category: image.category || null,

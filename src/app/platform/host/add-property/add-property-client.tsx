@@ -486,11 +486,13 @@ const [listingBasics, setListingBasics] = useState({
   
   const validatePhotos = (): string[] => {
     const errors: string[] = [];
+    const validPhotos = listingPhotos?.filter(photo => photo.url) || [];
+    const validPhotoCount = validPhotos.length;
     
-    if (!listingPhotos || listingPhotos.length === 0) {
+    if (validPhotoCount === 0) {
       errors.push("You must upload at least 4 photos");
-    } else if (listingPhotos.length < 4) {
-      errors.push(`You need to upload ${4 - listingPhotos.length} more photo${listingPhotos.length === 3 ? '' : 's'} (minimum 4 required)`);
+    } else if (validPhotoCount < 4) {
+      errors.push(`You need to upload ${4 - validPhotoCount} more photo${validPhotoCount === 3 ? '' : 's'} (minimum 4 required)`);
     }
     
     return errors;
@@ -983,9 +985,17 @@ const [listingBasics, setListingBasics] = useState({
               description: draftListing.description || ""
             });
             
-            // Note: ListingInCreation doesn't have images stored in the database
-            // If we need to persist images across draft saves, we'd need to add
-            // a separate table or store URLs in the draft
+            // Load photos from draft if they exist
+            if (draftListing.listingImages && Array.isArray(draftListing.listingImages)) {
+              const loadedPhotos = draftListing.listingImages.map((image: any) => ({
+                id: image.id,
+                url: image.url,
+                listingId: image.listingId,
+                category: image.category,
+                rank: image.rank,
+              }));
+              setListingPhotos(loadedPhotos);
+            }
             
             // Set amenities (all properties that are true)
             const amenities: string[] = [];
@@ -1150,11 +1160,13 @@ const [listingBasics, setListingBasics] = useState({
           // Use the new photos array directly for validation instead of calling validatePhotos()
           // which would use the not-yet-updated state value
           let photoErrors: string[] = [];
+          const validPhotos = newPhotos?.filter(photo => photo.url) || [];
+          const validPhotoCount = validPhotos.length;
           
-          if (!newPhotos || newPhotos.length === 0) {
+          if (validPhotoCount === 0) {
             photoErrors.push("You must upload at least 4 photos");
-          } else if (newPhotos.length < 4) {
-            photoErrors.push(`You need to upload ${4 - newPhotos.length} more photo${newPhotos.length === 3 ? '' : 's'} (minimum 4 required)`);
+          } else if (validPhotoCount < 4) {
+            photoErrors.push(`You need to upload ${4 - validPhotoCount} more photo${validPhotoCount === 3 ? '' : 's'} (minimum 4 required)`);
           }
           
           if (photoErrors.length > 0) {
@@ -1175,7 +1187,7 @@ const [listingBasics, setListingBasics] = useState({
             {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mb-6" />}
             <ListingPhotos 
               listingPhotos={listingPhotos} 
-              setListingPhotos={handlePhotosUpdate} 
+              setListingPhotos={handlePhotosUpdate}
             />
             {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mt-6" />}
           </>

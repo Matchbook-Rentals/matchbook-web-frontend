@@ -340,7 +340,8 @@ model ListingImage {
   id        String  @id @default(uuid())
   url       String
   listingId String
-  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade, map: "ListingImage_listing_fkey")
+  listingInCreation   ListingInCreation? @relation(fields: [listingId], references: [id], onDelete: Cascade, map: "ListingImage_listingInCreation_fkey")
   category  String?
   rank      Int?
   @@index([listingId])
@@ -1326,6 +1327,9 @@ model ListingInCreation {
   kitchenEssentials Boolean?
   linens            Boolean?
   privateBathroom   Boolean?
+
+  // Relationships
+  listingImages     ListingImage[] // Relation to images for drafts
 }
 
 model TestSuite {
