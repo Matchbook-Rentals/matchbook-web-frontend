@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { UploadDropzone } from "@/app/utils/uploadthing";
+import { UploadButton } from "@/app/utils/uploadthing";
+import { BrandButton } from "@/components/ui/brandButton";
 
 import type { NullableListingImage } from "./add-property-client";
 
@@ -21,41 +22,58 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
   return (
     <div className="w-full max-w-[884px]">
       <div className="flex flex-col gap-2">
-        <h2 className="font-medium text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-          {uploadData.title}
-        </h2>
-        <p className="font-normal text-2xl text-[#3f3f3f] font-['Poppins',Helvetica]">
-          {uploadData.subtitle}
-        </p>
-        <Card className="mt-4 border-none">
+        <Card className="mt-0 border-none">
           <CardContent className="p-0">
-            <UploadDropzone
-              endpoint="listingUploadPhotos"
-              className="w-full"
-              config={{
-                mode: "auto"
-              }}
-              appearance={{
-                uploadIcon: "hidden", // Hide default upload icon
-                button: "bg-charcoalBrand data-[state='uploading']:after:hidden", // Hide default button, use our own styling
-                label: "text-2xl font-medium text-black underline font-['Poppins',Helvetica] cursor-pointer",
-                container: "w-full flex flex-col items-center justify-center h-[232px] border border-dashed border-black rounded-none",
-              }}
-              onClientUploadComplete={(res) => {
-                // Each item in res is a file upload result
-                // Adapt this if your response shape is different
-                if (Array.isArray(res)) {
-                  const newPhotos: NullableListingImage[] = res.map((file, idx) => ({
-                    id: file.key || null,
-                    url: file.url || null,
-                    listingId: null, // can be set later
-                    category: null,
-                    rank: null, // append to end
-                  }));
-                  setListingPhotos(prev => [...prev, ...newPhotos]);
-                }
-              }}
-            />
+            <div className="inline-flex h-[534px] items-center gap-2 px-[286px] py-[34px] bg-[#f4f4f4] rounded-xl border-2 border-solid border-[#d9dadf] flex-col justify-center">
+              <div className="inline-flex gap-[100px] flex-col items-center relative flex-[0_0_auto]">
+                <div className="flex gap-4 self-stretch w-full flex-col items-center relative flex-[0_0_auto]">
+                  <div className="relative w-[260.19px] h-[142px]">
+                    <img
+                      src="/listing-upload/upload-photo.png"
+                      alt="Upload photos"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <p className="relative self-stretch font-text-xs-regular text-[#475467] text-center">
+                    SVG, PNG, JPG or GIF (max. 800x400px)
+                  </p>
+                </div>
+                <UploadButton
+                  endpoint="listingUploadPhotos"
+                  config={{
+                    mode: "auto"
+                  }}
+                  appearance={{
+                    button: "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300 h-[40px] min-w-[160px] rounded-lg px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm leading-5 tracking-normal w-full disabled:opacity-50 disabled:cursor-not-allowed",
+                    allowedContent: "hidden",
+                  }}
+                  content={{
+                    button: ({ ready, isUploading }) => (
+                      <div className="flex items-center justify-center gap-2">
+                        {isUploading && (
+                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        )}
+                        <span>{isUploading ? "Uploading..." : "Click to upload"}</span>
+                      </div>
+                    ),
+                  }}
+                  onClientUploadComplete={(res) => {
+                    // Each item in res is a file upload result
+                    // Adapt this if your response shape is different
+                    if (Array.isArray(res)) {
+                      const newPhotos: NullableListingImage[] = res.map((file, idx) => ({
+                        id: file.key || null,
+                        url: file.url || null,
+                        listingId: null, // can be set later
+                        category: null,
+                        rank: null, // append to end
+                      }));
+                      setListingPhotos(prev => [...prev, ...newPhotos]);
+                    }
+                  }}
+                />
+              </div>
+            </div>
           </CardContent>
         </Card>
         {/* Thumbnails of uploaded photos */}
