@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { XIcon } from "lucide-react"
+import { XIcon, CheckIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
@@ -120,9 +120,11 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
   const contentRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
   // Generate steps based on props
-  const steps = Array.from({ length: totalSteps }, (_, index) => ({
-    status: index < currentStep ? "active" : "inactive"
-  }));
+  const steps = Array.from({ length: totalSteps }, (_, index) => {
+    if (index < currentStep - 1) return { status: "completed" };
+    if (index === currentStep - 1) return { status: "active" };
+    return { status: "inactive" };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -153,6 +155,8 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
                     className={`relative w-6 h-6 rounded-full overflow-hidden ${
                       step.status === "active"
                         ? "bg-[#f9f5ff] shadow-[0px_0px_0px_4px_#3c87873d]"
+                        : step.status === "completed"
+                        ? "bg-[#0b6969]"
                         : "bg-gray-50"
                     }`}
                   >
@@ -160,14 +164,20 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
                       className={`h-6 rounded-xl border-[1.5px] border-solid flex items-center justify-center ${
                         step.status === "active"
                           ? "bg-[#3c8787]"
+                          : step.status === "completed"
+                          ? "bg-[#0b6969] border-[#0b6969]"
                           : "border-[#eaecf0]"
                       }`}
                     >
-                      <div
-                        className={`w-2 h-2 rounded ${
-                          step.status === "active" ? "bg-white" : "bg-[#d0d5dd]"
-                        }`}
-                      />
+                      {step.status === "completed" ? (
+                        <CheckIcon className="w-5 h-5 text-white stroke-[3]" />
+                      ) : (
+                        <div
+                          className={`w-2 h-2 rounded ${
+                            step.status === "active" ? "bg-white" : "bg-[#d0d5dd]"
+                          }`}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
