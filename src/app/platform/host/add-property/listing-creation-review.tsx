@@ -8,6 +8,9 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { MonthlyPricing } from "./listing-creation-pricing";
 
+// Reusable text styles
+const questionTextStyles = "font-['Poppins'] font-medium text-[#484a54] text-[16px]";
+
 // Import the AMENITY_GROUPS constant from the amenities file
 const AMENITY_GROUPS = [
   {
@@ -391,46 +394,38 @@ export const Box = ({
         </Card>
 
         {/* Title Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-medium text-black">Title</h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[15px] text-[#3f3f3f] font-normal"
-              onClick={onEditBasics}
-            >
-              Edit
-            </Button>
-          </div>
+        <Card className="bg-neutral-50 rounded-xl mb-6">
+          <CardContent className="flex flex-col items-start gap-8 p-6">
+            <div className="flex flex-col items-start gap-4 self-stretch w-full">
+              <div className="flex items-center justify-between self-stretch w-full">
+                <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
+                  Title
+                </h2>
+                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditBasics} />
+              </div>
 
-          <div className="text-xl font-normal text-black mb-4">
-            {listingBasics.title}
-          </div>
-
-          <Separator className="my-4" />
-        </div>
+              <div className={`${questionTextStyles} self-stretch w-full`}>
+                {listingBasics?.title || "Untitled Property"}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Description Section */}
-        <Card className="border-none shadow-none mb-6">
-          <CardContent className="p-0">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-medium text-black">Description</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-[15px] text-[#3f3f3f] font-normal"
-                onClick={onEditBasics}
-              >
-                Edit
-              </Button>
+        <Card className="bg-neutral-50 rounded-xl mb-6">
+          <CardContent className="flex flex-col items-start gap-8 p-6">
+            <div className="flex flex-col items-start gap-4 self-stretch w-full">
+              <div className="flex items-center justify-between self-stretch w-full">
+                <h2 className="font-medium text-xl tracking-[-0.40px] text-gray-800 font-['Poppins',Helvetica]">
+                  Description
+                </h2>
+                <PencilIcon className="w-5 h-5 cursor-pointer" onClick={onEditBasics} />
+              </div>
+
+              <div className={`${questionTextStyles} self-stretch w-full`}>
+                {listingBasics?.description || "No description provided"}
+              </div>
             </div>
-
-            <p className="text-xl font-normal text-black mb-4">
-              {listingBasics.description}
-            </p>
-
-            <Separator className="my-4" />
           </CardContent>
         </Card>
 

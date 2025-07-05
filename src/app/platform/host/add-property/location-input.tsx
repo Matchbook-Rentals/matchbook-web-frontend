@@ -60,7 +60,7 @@ export default function LocationInput({ listingLocation, setListingLocation, val
         container: mapContainer,
         style: 'https://tiles.openfreemap.org/styles/bright',
         center: [coordinates.lng, coordinates.lat],
-        zoom: (coordinates.lat === INITIAL_COORDINATES.lat && coordinates.lng === INITIAL_COORDINATES.lng) ? 4 : 13,
+        zoom: (coordinates.lat === INITIAL_COORDINATES.lat && coordinates.lng === INITIAL_COORDINATES.lng) ? 8 : 13,
       });
       
       // Add navigation controls

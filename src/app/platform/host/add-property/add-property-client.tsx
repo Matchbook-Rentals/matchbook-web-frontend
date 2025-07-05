@@ -274,7 +274,7 @@ const [listingRooms, setListingRooms] = useState({
 });
 
 // Reusable text styles
-const questionTextStyles = "font-['Poppins'] font-medium text-[#484a54] text-[14px]";
+const questionTextStyles = "font-['Poppins'] font-medium text-[#484a54] text-[16px]";
 const questionSubTextStyles = "font-['Poppins'] text-xs font-normal text-[#838799]";
 const inputStyles = "placeholder:text-[#667085] placeholder:font-['Poppins',Helvetica] bg-[#D0D5DD]/10";
 
