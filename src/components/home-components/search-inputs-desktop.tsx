@@ -108,7 +108,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
+    if (!selectedLocation?.lat || !selectedLocation?.lng || !selectedLocation?.description) {
       setIsOpen(true);
       setActiveContent('location');
       toast({
@@ -121,9 +121,9 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     setIsSubmitting(true);
     try {
       const response = await createTrip({
-        locationString: selectedLocation.description,
-        latitude: selectedLocation.lat,
-        longitude: selectedLocation.lng,
+        locationString: selectedLocation?.description || '',
+        latitude: selectedLocation?.lat || 0,
+        longitude: selectedLocation?.lng || 0,
         startDate: dateRange.start,
         endDate: dateRange.end,
       });
@@ -252,7 +252,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   // Create all content components for the carousel
   const locationContent = (
     <>
-      {selectedLocation.description && (
+      {selectedLocation?.description && (
         <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
           <p className="font-semibold text-gray-800">Selected Location:</p>
           <p className="text-gray-600">{selectedLocation.description}</p>
@@ -263,7 +263,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         onLocationSelect={handleLocationSelect}
         setDisplayValue={setLocationDisplayValue}
         placeholder={
-          selectedLocation.description
+          selectedLocation?.description
             ? "Wrong place? Begin typing and select another"
             : "Enter an address or city"
         }

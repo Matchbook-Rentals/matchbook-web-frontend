@@ -102,7 +102,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
+    if (!selectedLocation?.lat || !selectedLocation?.lng || !selectedLocation?.description) {
       setIsOpen(true);
       setActiveContent('location');
       toast({
@@ -115,9 +115,9 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
     setIsSubmitting(true);
     try {
       const response = await createTrip({
-        locationString: selectedLocation.description,
-        latitude: selectedLocation.lat,
-        longitude: selectedLocation.lng,
+        locationString: selectedLocation?.description || '',
+        latitude: selectedLocation?.lat || 0,
+        longitude: selectedLocation?.lng || 0,
         startDate: dateRange.start,
         endDate: dateRange.end,
       });
@@ -322,7 +322,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
           value={inputValue}
           onChange={handleInput}
           placeholder={
-            selectedLocation.description
+            selectedLocation?.description
               ? "Wrong place? Begin typing and select another"
               : "Enter an address or city"
           }
@@ -358,7 +358,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   // Create all content components for the carousel
   const locationContent = (
     <>
-      {selectedLocation.description && (
+      {selectedLocation?.description && (
         <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
           <p className="font-semibold text-gray-800">Selected Location:</p>
           <p className="text-gray-600">{selectedLocation.description}</p>
