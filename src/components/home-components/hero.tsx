@@ -89,7 +89,6 @@ const Hero: React.FC = () => {
           inputStyles='bg-background text-[12px]'
           searchButtonClassNames='border border-[#404040] sm:border-none bg-green-900 hover:bg-green-800 sm:bg-background sm:hover:bg-gray-200'
           searchIconColor='text-gray-400'
-          headerText='Find your next home'
           onOpenDialog={handleOpenSearchDialog}
         />
         
