@@ -205,7 +205,7 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
                       ref={(el) => (contentRefs.current[index] = el)}
                       className="w-full flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden"
                       style={{ 
-                        height: index === currentStep - 1 ? 'auto' : '100px'
+                        height: index === currentStep - 1 ? 'auto' : '50px'
                       }}
                     >
                       {content}

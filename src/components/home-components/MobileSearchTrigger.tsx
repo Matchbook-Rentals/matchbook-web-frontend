@@ -228,7 +228,7 @@ const MobileSearchTrigger: React.FC<MobileSearchTriggerProps> = ({
 
   // Create all content components for the carousel
   const locationContent = (
-    <div className="h-[400px] w-full overflow-y-auto">
+    <div className="h-auto w-full overflow-y-auto">
       {selectedLocation?.description && (
         <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg relative">
           <button
@@ -258,7 +258,7 @@ const MobileSearchTrigger: React.FC<MobileSearchTriggerProps> = ({
   );
 
   const dateContent = (
-    <div className="h-[400px] w-full overflow-y-auto">
+    <div className="h-auto max-h-[50vh] w-full overflow-y-auto">
       <MobileDateRange
         dateRange={dateRange}
         onDateRangeChange={setDateRange}
@@ -271,7 +271,7 @@ const MobileSearchTrigger: React.FC<MobileSearchTriggerProps> = ({
   );
 
   const guestsContent = (
-    <div className="h-[400px] w-full overflow-y-auto">
+    <div className="h-auto w-full overflow-y-auto">
       <GuestTypeCounter guests={guests} setGuests={setGuests} />
     </div>
   );
