@@ -188,9 +188,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     const isDateStep = activeContent === 'date';
     const areDatesSelected = dateRange.start || dateRange.end;
 
-    return (
-      <div className="flex justify-between items-center w-full">
-        {isDateStep ? (
+    if (isDateStep) {
+      return (
+        <div className="flex justify-between flex-wrap w-full gap-4">
+          {/* Date boxes on first line */}
           <div className="flex items-center gap-3">
             <Input
               className="w-[136px]"
@@ -206,14 +207,9 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
               readOnly
             />
           </div>
-        ) : (
-          <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
-            {isFirstStep ? 'Close' : 'Back'}
-          </BrandButton>
-        )}
-
-        <div className="flex items-center gap-3">
-          {isDateStep && (
+          
+          {/* Controls on second line */}
+          <div className="flex items-center gap-3">
             <BrandButton
               variant="outline"
               onClick={areDatesSelected ? () => setDateRange({ start: null, end: null }) : handleBack}
@@ -221,18 +217,34 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             >
               {areDatesSelected ? 'Clear' : 'Back'}
             </BrandButton>
-          )}
-          <BrandButton
-            variant="default"
-            onClick={handleNext}
-            size="sm"
-            disabled={isSubmitting && isLastStep}
-            className={cn({ 'opacity-75': isSubmitting && isLastStep })}
-          >
-            {isSubmitting && isLastStep && <ImSpinner8 className="animate-spin mr-2 h-4 w-4" />}
-            {isLastStep ? 'Start Search' : 'Next'}
-          </BrandButton>
+            <BrandButton
+              variant="default"
+              onClick={handleNext}
+              size="sm"
+            >
+              Next
+            </BrandButton>
+          </div>
         </div>
+      );
+    }
+
+    return (
+      <div className="flex justify-between items-center w-full">
+        <BrandButton variant="outline" onClick={isFirstStep ? handleClose : handleBack} size="sm">
+          {isFirstStep ? 'Close' : 'Back'}
+        </BrandButton>
+
+        <BrandButton
+          variant="default"
+          onClick={handleNext}
+          size="sm"
+          disabled={isSubmitting && isLastStep}
+          className={cn({ 'opacity-75': isSubmitting && isLastStep })}
+        >
+          {isSubmitting && isLastStep && <ImSpinner8 className="animate-spin mr-2 h-4 w-4" />}
+          {isLastStep ? 'Start Search' : 'Next'}
+        </BrandButton>
       </div>
     );
   };
