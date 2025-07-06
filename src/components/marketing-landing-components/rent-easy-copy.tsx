@@ -81,7 +81,7 @@ export default function RentEasyCopy(): JSX.Element {
                   src={card.icon}
                 />
               </div>
-              <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center w-full max-w-[289px] px-2">
+              <div className="relative w-fit [font-family:'Poppins',Helvetica] z-1  font-medium text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center w-full max-w-[289px] px-2">
                 {card.title}
               </div>
             </>
@@ -120,7 +120,7 @@ export default function RentEasyCopy(): JSX.Element {
 
           <div className="flex flex-col items-start gap-1 relative self-stretch w-full">
             <div
-              className={`relative self-stretch [font-family:'Poppins',Helvetica] font-normal text-[14px] leading-[140%] tracking-[0px] text-[#6C737F] ${card.isCentered ? "text-center" : "text-center md:text-left"}`}
+              className={`relative self-stretch [font-family:'Poppins',Helvetica] z-1 font-normal text-[14px] leading-[140%] tracking-[0px] text-[#6C737F] ${card.isCentered ? "text-center" : "text-center md:text-left"}`}
             >
               {card.description}
             </div>
@@ -128,14 +128,14 @@ export default function RentEasyCopy(): JSX.Element {
         </CardContent>
 
         {/* Cow spots container with overflow hidden */}
-        <div className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none">
+        <div className="absolute inset-0 z-0 overflow-hidden rounded-xl pointer-events-none">
           {isCenter ? (
             <>
               <CowSpot className="scale-[1.2]" direction="northeast" />
               <CowSpot className="md:scale-[3]" direction="southwest" />
             </>
           ) : (
-            <CowSpot className=" scale-[.5] md:scale-[1.1]" direction="southeast" />
+            <CowSpot className=" scale-[.5] md:scale-[0.7] z-0" direction="southeast" />
           )}
         </div>
       </Card>
