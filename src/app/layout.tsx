@@ -45,7 +45,7 @@ export default function RootLayout({
     <ClerkProvider 
       localization={localization}
       appearance={{
-        layout: {logoImageUrl: '/House_Logo.png', socialButtonsPlacement: 'bottom', socialButtonsVariant: 'blockButton'}}
+        layout: {logoImageUrl: '/new-green-logo.png', socialButtonsPlacement: 'bottom', socialButtonsVariant: 'blockButton'}}
     }>
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
         <head>
