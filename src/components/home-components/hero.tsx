@@ -17,6 +17,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"; // Import ScrollArea
 import { useWindowSize } from "@/hooks/useWindowSize"; // Import window size hook
 import { getUserTripsCount } from "@/app/actions/trips"; // Import trip count function
+import { Separator } from "@/components/ui/separator";
 
 const Hero: React.FC = () => {
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
@@ -70,7 +71,7 @@ const Hero: React.FC = () => {
 
   return (
     <div
-      className="relative h-[365px] max-h-[50vh] w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 bg-cover justify-start"
+      className="relative h-[365px] sm:h-[365px] h-[401px] max-h-[55vh] sm:max-h-[50vh] w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 bg-cover justify-start"
       style={{
         backgroundImage: "url('/marketing-images/banner-house.png')",
         backgroundSize: "cover", // Ensures the image covers the container
@@ -113,85 +114,92 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      {/* Mobile Card Form wrapped in DialogTrigger */}
-      <div className="block sm:hidden my-auto pt-10 w-full z-10 flex justify-center"> {/* Position card lower and center it */}
-        {/* Header Text for Mobile with Background */}
-        <div className="inline-block bg-black/30 p-4 w-full rounded-none mb-4"> {/* Added background div */}
-          <h1 className="text-4xl font-medium text-white mb-8 text-center"> {/* Removed text shadow and margin-bottom */}
-            Find your next home
-          </h1>
-          <div className="flex justify-center">
-            <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
-              <DialogTrigger asChild disabled={!hasAccess}>
-                <Card className="w-[397px] rounded-xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
-                  <CardContent className="p-3 flex flex-col gap-2">
-                    <div className="flex flex-col gap-5 w-full">
-                      <div className="flex flex-col gap-4 w-full">
-                        {/* Where field */}
-                        <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
-                          <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal">
-                            Where
-                          </label>
-                          <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                            Choose Location
-                          </span>
-                        </div>
+      {/* Mobile Disabled Inputs Preview */}
+      <div className="block sm:hidden pt-6 w-full z-10 flex justify-center">
+        <div className="relative">
+          <Card className="w-[397px] rounded-xl overflow-hidden">
+            <CardContent className="p-3 flex flex-col gap-2">
+              <div className="flex flex-col gap-5 w-full">
+                <div className="flex flex-col gap-4 w-full">
+                  {/* Where field */}
+                  <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
+                    <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal">
+                      Where
+                    </label>
+                    <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                      Choose Location
+                    </span>
+                  </div>
 
-                        {/* Move in/out date fields */}
-                        <div className="flex items-center gap-5 w-full">
-                          {/* Move in field */}
-                          <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
-                            <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
-                              Move in
-                            </label>
-                            <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                              Select Dates
-                            </span>
-                          </div>
-
-                          {/* Move out field */}
-                          <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
-                            <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
-                              Move out
-                            </label>
-                            <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                              Select Dates
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Who field */}
-                        <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
-                          <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
-                            Who
-                          </label>
-                          <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                            Add Renters
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* CTA Button */}
-                      <Button className="w-full bg-teal-700 hover:bg-teal-800 text-white" disabled={!hasAccess}>
-                        {hasAccess ? 'Button CTA' : 'Button CTA'}
-                      </Button>
+                  {/* Move in/out date fields */}
+                  <div className="flex items-center gap-5 w-full">
+                    {/* Move in field */}
+                    <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
+                      <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
+                        Move in
+                      </label>
+                      <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                        Select Dates
+                      </span>
                     </div>
-                  </CardContent>
-                </Card>
-              </DialogTrigger>
-              {/* Dialog Content will be rendered below */}
-            </Dialog>
-          </div>
+
+                    {/* Move out field */}
+                    <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
+                      <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
+                        Move out
+                      </label>
+                      <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                        Select Dates
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Who field */}
+                  <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
+                    <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
+                      Who
+                    </label>
+                    <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
+                      Add Renters
+                    </span>
+                  </div>
+                </div>
+
+                {/* Button */}
+                <Button className="w-full bg-teal-700 hover:bg-teal-800 text-white">
+                  Start Search
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Gray overlay when no access */}
+          {!hasAccess && (
+            <div className="absolute inset-0 bg-gray-200/80 rounded-xl cursor-not-allowed"></div>
+          )}
         </div>
       </div>
 
-      {/* Mobile Search Dialog Content - Direct BrandDialog */}
-      <SearchInputsMobile
-        hasAccess={hasAccess}
-        isOpen={showSearchPopup}
-        onOpenChange={setShowSearchPopup}
-        headerText='Find your next home'
-      />
+      {/* OR Separator */}
+      <div className="block sm:hidden w-full z-10 flex justify-center pt-4">
+        <div className="flex items-center gap-4">
+          <Separator className="w-[145px] bg-white" />
+          <span className="font-sans text-base text-white">OR</span>
+          <Separator className="w-[145px] bg-white" />
+        </div>
+      </div>
+
+      {/* Mobile Action Button */}
+      <div className="block sm:hidden pt-4 pb-5 w-full z-10 flex justify-center">
+        {hasAccess ? (
+          <BrandButton variant="outline">
+            View Past Searches
+          </BrandButton>
+        ) : (
+          <BrandButton variant={'outline'}> Log In </BrandButton>
+        )}
+      </div>
+
     </div>
   );
 };
