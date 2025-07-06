@@ -192,9 +192,9 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
         </div>
 
         <div className="flex flex-col gap-6 relative self-stretch w-full min-w-0 max-h-[70vh] lg:max-h-[85vh] overflow-hidden">
-          <div className="min-w-0 overflow-y-auto flex-1">
+          <div className="min-w-0 overflow-y-auto overflow-x-hidden flex-1">
             {carouselContent ? (
-              <div className="relative">
+              <div className="relative overflow-x-hidden">
                 <div 
                   className="flex transition-transform duration-300 ease-in-out"
                   style={{ transform: `translateX(-${(currentStep - 1) * 100}%)` }}

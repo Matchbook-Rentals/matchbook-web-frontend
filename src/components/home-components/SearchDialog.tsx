@@ -247,7 +247,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
 
   // Create content components for the carousel
   const locationContent = (
-    <div className={cn(isMobile ? "h-auto w-full overflow-y-auto" : "")}>
+    <div className={cn(isMobile ? "h-auto w-full overflow-x-hidden overflow-y-auto" : "")}>
       {selectedLocation?.description && (
         <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg relative">
           {isMobile && (
@@ -292,7 +292,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
   );
 
   const dateContent = (
-    <div className="h-auto w-full">
+    <div className="h-auto w-full overflow-x-hidden">
       {isMobile ? (
         <MobileDateRange
           dateRange={dateRange}
@@ -315,7 +315,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
   );
 
   const guestsContent = (
-    <div className={cn(isMobile ? "h-auto w-full overflow-y-auto" : "")}>
+    <div className={cn(isMobile ? "h-auto w-full overflow-x-hidden overflow-y-auto" : "")}>
       <GuestTypeCounter guests={guests} setGuests={setGuests} />
     </div>
   );
