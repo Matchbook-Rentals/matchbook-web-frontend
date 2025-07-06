@@ -317,10 +317,11 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
           key={`${type}-option-${index}`}
           className={`
             p-2 h-auto rounded border border-solid border-[#6c727e] 
-            font-text-paragraph-xsmall-paragraph text-gray-neutral500
+            text-gray-neutral500 whitespace-nowrap
             flex items-center hover:bg-gray-100
             ${currentValue === option.value ? 'bg-secondaryBrand text-white' : ''}
           `}
+          style={{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }}
           onClick={() => handleOptionSelect(option.value as 'exact' | number)}
         >
           {option.value !== "exact" && (
@@ -500,8 +501,8 @@ export function DesktopDateRange({
 
   return (
     <div className="bg-background rounded-xl p-6">
-      <div className="flex gap-8">
-        <div className="flex-1 flex flex-col">
+      <div className="flex flex-wrap gap-8 justify-center">
+        <div className="flex-1 flex flex-col max-w-[500px]">
           <div className="flex-1">
             <CalendarMonth
               year={leftYear}
@@ -515,7 +516,7 @@ export function DesktopDateRange({
               maximumDateRange={maximumDateRange} // Pass prop down
             />
           </div>
-          <div className="mt-4">
+          <div>
             <h3 className="text-xs mb-1">Flexible Start Date</h3>
             <FlexibleDateSelector
               type="start"
@@ -528,7 +529,7 @@ export function DesktopDateRange({
             />
           </div>
         </div>
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col max-w-[500px]">
           <div className="flex-1">
             <CalendarMonth
               year={rightYear}
@@ -545,7 +546,7 @@ export function DesktopDateRange({
               maximumDateRange={maximumDateRange} // Pass prop down
             />
           </div>
-          <div className="mt-4">
+          <div>
             <h3 className="text-xs mb-1">Flexible End Date</h3>
             <FlexibleDateSelector
               type="end"

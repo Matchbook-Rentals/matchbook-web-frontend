@@ -292,7 +292,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
   );
 
   const dateContent = (
-    <div className={cn(isMobile ? "h-auto max-h-[50vh] w-full overflow-y-auto" : "")}>
+    <div className="h-auto w-full">
       {isMobile ? (
         <MobileDateRange
           dateRange={dateRange}

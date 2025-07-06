@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { format, add, Duration } from "date-fns";
+import { format, add, Duration, endOfMonth } from "date-fns";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeftIcon, ChevronRightIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DateRange {
   start: Date | null;
@@ -33,6 +39,24 @@ interface CalendarMonthProps {
   maximumDateRange?: Duration | null; // Add maximumDateRange prop
 }
 
+// Helper function to format Duration object into a readable string
+function formatDuration(duration: Duration): string {
+  const parts: string[] = [];
+  if (duration.years && duration.years > 0) {
+    parts.push(`${duration.years} year${duration.years > 1 ? 's' : ''}`);
+  }
+  if (duration.months && duration.months > 0) {
+    parts.push(`${duration.months} month${duration.months > 1 ? 's' : ''}`);
+  }
+  if (duration.weeks && duration.weeks > 0) {
+    parts.push(`${duration.weeks} week${duration.weeks > 1 ? 's' : ''}`);
+  }
+  if (duration.days && duration.days > 0) {
+    parts.push(`${duration.days} day${duration.days > 1 ? 's' : ''}`);
+  }
+  return parts.join(', ');
+}
+
 interface CalendarDayProps {
   day: number;
   isSelected: boolean;
@@ -42,6 +66,7 @@ interface CalendarDayProps {
   onClick: () => void;
   isMobile?: boolean;
   isDisabled?: boolean;
+  disabledReason?: string | null;
 }
 
 interface FlexibleSelectorProps {
@@ -57,7 +82,6 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
-  const weekDays = ["Mo", "Tu", "We", "Th", "Fr", "Sat", "Su"];
 
   const handlePreviousMonth = () => {
     setDirection(-1);
@@ -77,6 +101,12 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
     } else {
       setCurrentMonth(prev => prev + 1);
     }
+  };
+
+  // Helper to check if it's the current month
+  const isCurrentMonth = (month: number, year: number) => {
+    const today = new Date();
+    return month === today.getMonth() && year === today.getFullYear();
   };
 
   const isDateInRange = (day: number) => {
@@ -106,159 +136,139 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
     return currentDate.getTime() === dateRange.end.getTime();
   };
 
-  const getMonthName = (monthIndex: number) => {
-    return new Date(2024, monthIndex).toLocaleString('default', { month: 'short' });
-  };
-
-  const isDateDisabled = (day: number) => {
+  // Returns a reason string if disabled, otherwise null
+  const getDisabledReason = (day: number): string | null => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize today's date to midnight
+    today.setHours(0, 0, 0, 0); // Normalize today's date
     const currentDate = new Date(currentYear, currentMonth, day);
     currentDate.setHours(0, 0, 0, 0); // Normalize the current calendar day
 
     // Disable past dates
     if (currentDate < today) {
-      return true;
+      return "Trips cannot begin in the past.";
     }
 
-    // Existing logic: Disable dates within 30 days *before* the start date if only start is selected
+    // Logic when only a start date is selected
     if (dateRange.start && !dateRange.end) {
       const startDate = new Date(dateRange.start);
       startDate.setHours(0, 0, 0, 0); // Normalize start date
 
       // Don't disable the start date itself
-      if (currentDate.getTime() === startDate.getTime()) return false;
+      if (currentDate.getTime() === startDate.getTime()) return null;
 
       // Disable dates strictly *before* the start date
       if (currentDate < startDate) {
-         return true;
+         return "End date cannot be before start date.";
       }
 
-      // NEW: Check minimum date range requirement
+      // Check minimum date range requirement
       if (minimumDateRange) {
-        // Calculate the minimum allowed end date
         const minEndDate = add(startDate, minimumDateRange);
         minEndDate.setHours(0, 0, 0, 0); // Normalize min end date
-
-        // Disable dates *before* the minimum required end date
         if (currentDate < minEndDate) {
-          return true;
+          return `Trips must be at least ${formatDuration(minimumDateRange)} long.`;
         }
       }
 
-      // NEW: Check maximum date range requirement
+      // Check maximum date range requirement
       if (maximumDateRange) {
-        // Calculate the maximum allowed end date
-        const maxEndDate = add(startDate, maximumDateRange);
+        let maxEndDate: Date;
+        // If days are null/undefined, calculate to the end of the month
+        if (maximumDateRange.days === null || maximumDateRange.days === undefined) {
+          // Add years, months, weeks first
+          const intermediateDate = add(startDate, {
+            years: maximumDateRange.years,
+            months: maximumDateRange.months,
+            weeks: maximumDateRange.weeks,
+          });
+          // Get the end of that month
+          maxEndDate = endOfMonth(intermediateDate);
+        } else {
+          // Otherwise, add the full duration including days (even if 0)
+          maxEndDate = add(startDate, maximumDateRange);
+        }
+
         maxEndDate.setHours(0, 0, 0, 0); // Normalize max end date
 
-        // Disable dates *after* the maximum allowed end date
         if (currentDate > maxEndDate) {
-          return true;
+          // Use the original maximumDateRange for the message for clarity
+          return `Trips cannot be longer than ${formatDuration(maximumDateRange)}.`;
         }
       }
     }
 
     // If no specific disabling condition met, the date is enabled
-    return false;
+    return null;
   };
 
   return (
-    <div className="w-full px-2 py-5">
-      <div className="flex w-full items-center justify-between mb-3 px-4">
-        <Button
-          variant="ghost"
-          size="icon"
+    <div className="w-full flex-1">
+      {/* Month and Year Display with Navigation */}
+      <div className="flex justify-between items-center mb-4">
+        <button
           onClick={handlePreviousMonth}
-          className="p-2 rounded-lg"
+          disabled={isCurrentMonth(currentMonth, currentYear)}
+          className={`text-sm px-2 py-1 hover:bg-gray-100 rounded-md ${isCurrentMonth(currentMonth, currentYear)
+            ? 'text-gray-300 cursor-not-allowed hover:bg-transparent'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
-          <ChevronLeftIcon className="w-5 h-5" />
-        </Button>
-        <div className="font-semibold text-[#3c8787] text-center text-base font-['Poppins',Helvetica]">
-          {getMonthName(currentMonth)} {currentYear}
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
+          Prev
+        </button>
+        <h2 className="text-base font-medium text-secondaryBrand">
+          {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}
+        </h2>
+        <button
           onClick={handleNextMonth}
-          className="p-2 rounded-lg"
+          className="text-sm text-gray-600 hover:text-gray-900 px-2 py-1 hover:bg-gray-100 rounded-md"
         >
-          <ChevronRightIcon className="w-5 h-5" />
-        </Button>
+          Next
+        </button>
       </div>
 
-      <div className="overflow-hidden relative" >
-        <AnimatePresence initial={false} custom={direction}>
-          <motion.div
-            key={currentMonth + '-' + currentYear}
-            custom={direction}
-            variants={{
-              enter: (direction: number) => ({
-                x: direction * 100 + '%',
-                position: 'absolute',
-                width: '100%',
-                top: 0,
-                left: 0
-              }),
-              center: {
-                x: 0,
-                position: 'relative',
-                width: '100%'
-              },
-              exit: (direction: number) => ({
-                x: direction * -100 + '%',
-                position: 'absolute',
-                width: '100%',
-                top: 0,
-                left: 0
-              })
-            }}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className="grid grid-cols-7 gap-0 mb-1">
-              {weekDays.map(day => (
-                <div key={day} className="relative flex-1 h-10 rounded-full flex items-center justify-center">
-                  <div className="font-text-sm-medium text-[#344054] text-center">
-                    {day}
-                  </div>
-                </div>
-              ))}
-            </div>
+      {/* Day of Week Headers */}
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+          <div key={day} className="text-center text-xs text-gray-600">
+            {day}
+          </div>
+        ))}
+      </div>
 
-            <div className="grid grid-cols-7 gap-0">
-              {Array.from({ length: firstDayOfWeek }).map((_, index) => (
-                <div key={`empty-${index}`} className="relative flex-1 h-10 rounded-full" />
-              ))}
+      {/* Calendar Grid */}
+      <div className="grid grid-cols-7 gap-0">
+        {/* Empty cells for days before the first of the month */}
+        {Array.from({ length: firstDayOfWeek }).map((_, index) => (
+          <div key={`empty-${index}`} className="aspect-square" />
+        ))}
 
-              {Array.from({ length: daysInMonth }).map((_, index) => {
-                const day = index + 1;
-                return (
-                  <CalendarDay
-                    key={day}
-                    day={day}
-                    isSelected={isDateSelected(day)}
-                    isInRange={isDateInRange(day)}
-                    isStartDate={isStartDate(day)}
-                    isEndDate={isEndDate(day)}
-                    onClick={() => onDateSelect(day, currentMonth, currentYear)}
-                    isMobile={isMobile}
-                    isDisabled={isDateDisabled(day)}
-                  />
-                );
-              })}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+        {/* Calendar days */}
+        {Array.from({ length: daysInMonth }).map((_, index) => {
+          const day = index + 1;
+          const disabledReason = getDisabledReason(day);
+          const isDisabled = !!disabledReason;
+          return (
+            <CalendarDay
+              key={day}
+              day={day}
+              isSelected={isDateSelected(day)}
+              isInRange={isDateInRange(day)}
+              isStartDate={isStartDate(day)}
+              isEndDate={isEndDate(day)}
+              onClick={() => !isDisabled && onDateSelect(day, currentMonth, currentYear)}
+              isMobile={isMobile}
+              isDisabled={isDisabled}
+              disabledReason={disabledReason}
+            />
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isMobile, isDisabled }: CalendarDayProps) {
-  const selectedDayBgColor = 'bg-[#3c8787]';
+function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isMobile, isDisabled, disabledReason }: CalendarDayProps) {
+  const selectedDayBgColor = 'bg-secondaryBrand';
   const inRangeBgColor = 'bg-gray-200';
 
   const hasCompleteRange = isInRange || isEndDate;
@@ -266,41 +276,52 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
   const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
   const showEndBackground = hasCompleteRange && isEndDate && !isStartDate;
 
-  return (
-    <div className="relative flex-1 h-10 rounded-full flex items-center justify-center">
-      <button
-        className={`
-          relative w-10 h-10 rounded-full flex items-center justify-center
-          ${isDisabled ? 'cursor-not-allowed' : ''}
-        `}
-        onClick={onClick}
-        disabled={isDisabled}
-      >
-        <div
-          className={`
-            text-center z-10
-            ${isSelected
-              ? `font-text-sm-medium text-white w-10 h-10 rounded-full ${selectedDayBgColor} flex items-center justify-center`
-              : `font-text-sm-regular ${
-                  isDisabled ? 'text-[#667085]' : 'text-[#344054]'
-                }`
-            }
-          `}
-        >
-          {day}
-        </div>
-        {showRangeBackground && (
-          <div className={`absolute inset-y-1/4 inset-x-0 ${inRangeBgColor}`} />
-        )}
-        {showStartBackground && (
-          <div className={`absolute right-0 left-1/2 inset-y-1/4 ${inRangeBgColor}`} />
-        )}
-        {showEndBackground && (
-          <div className={`absolute left-0 right-1/2 inset-y-1/4 ${inRangeBgColor}`} />
-        )}
-      </button>
-    </div>
+  const DayButton = (
+    <button
+      className={`
+        aspect-square w-full flex items-center justify-center text-base relative
+        ${!isDisabled ? 'hover:bg-gray-100' : 'cursor-not-allowed'}
+      `}
+      onClick={onClick}
+      disabled={isDisabled}
+      // Prevent focus ring when disabled and using tooltip
+      tabIndex={isDisabled ? -1 : undefined}
+    >
+      <span className={`
+        z-10
+        ${isSelected ? `rounded-full ${selectedDayBgColor} text-white w-9 h-9 flex items-center justify-center text-base` : ''}
+        ${isDisabled && !isSelected ? 'text-gray-300' : ''}
+      `}>
+        {day}
+      </span>
+      {showRangeBackground && (
+        <div className={`absolute inset-y-1/4 inset-x-0 ${inRangeBgColor}`} />
+      )}
+      {showStartBackground && (
+        <div className={`absolute right-0 left-1/2 inset-y-1/4 ${inRangeBgColor}`} />
+      )}
+      {showEndBackground && (
+        <div className={`absolute left-0 right-1/2 inset-y-1/4 ${inRangeBgColor}`} />
+      )}
+    </button>
   );
+
+  // Wrap with TooltipProvider and Tooltip only if disabled with a reason
+  if (isDisabled && disabledReason) {
+    return (
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger asChild>{DayButton}</TooltipTrigger>
+          <TooltipContent>
+            <p>{disabledReason}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  // Return the button directly if not disabled or no reason provided
+  return DayButton;
 }
 
 function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelectorProps) {
@@ -320,16 +341,15 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
   return (
     <div className="inline-flex items-start gap-3">
       {flexibleDateOptions.map((option, index) => (
-        <Button
+        <button
           key={`${type}-option-${index}`}
-          variant="outline"
-          size="sm"
           className={`
             p-2 h-auto rounded border border-solid border-[#6c727e] 
-            font-text-paragraph-xsmall-paragraph text-gray-neutral500
-            hover:bg-[#3c8787] hover:text-white
-            ${currentValue === option.value ? 'bg-[#3c8787] text-white' : ''}
+            text-gray-neutral500 whitespace-nowrap
+            flex items-center hover:bg-secondaryBrand hover:text-white
+            ${currentValue === option.value ? 'bg-secondaryBrand text-white' : ''}
           `}
+          style={{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }}
           onClick={() => handleOptionSelect(option.value as 'exact' | number)}
         >
           {option.value !== "exact" && (
@@ -340,7 +360,7 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
             </svg>
           )}
           {option.label}
-        </Button>
+        </button>
       ))}
     </div>
   );
@@ -444,55 +464,42 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
   };
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex items-end justify-end relative self-stretch w-full bg-white rounded-xl overflow-hidden border border-solid border-[#eaecf0]">
-        <div className="flex flex-col items-end justify-end relative flex-1 grow">
-          <div className="flex flex-col items-start relative self-stretch w-full">
-            <div className="flex flex-col items-center relative self-stretch w-full">
-              <CalendarMonth
-                year={currentYear}
-                month={currentMonth}
-                dateRange={dateRange}
-                onDateSelect={handleDateSelect}
-                isMobile={true}
-                minimumDateRange={minimumDateRange}
-                maximumDateRange={maximumDateRange}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col items-start gap-3 p-4 relative self-stretch w-full border-t border-[#eaecf0]">
-            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full">
-              <div className="relative self-stretch mt-[-1.00px] font-text-paragraph-xsmall-paragraph text-gray-neutral700">
-                Flexible Start Date
-              </div>
-              <FlexibleDateSelector
-                type="start"
-                selectedOption={flexibility}
-                onSelect={(type, option) => {
-                  const updated = { ...flexibility, [type]: option };
-                  setFlexibility(updated);
-                  onFlexibilityChange?.(updated);
-                }}
-              />
-            </div>
-
-            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full">
-              <div className="relative self-stretch mt-[-1.00px] font-text-paragraph-xsmall-paragraph text-gray-neutral700">
-                Flexible End Date
-              </div>
-              <FlexibleDateSelector
-                type="end"
-                selectedOption={flexibility}
-                onSelect={(type, option) => {
-                  const updated = { ...flexibility, [type]: option };
-                  setFlexibility(updated);
-                  onFlexibilityChange?.(updated);
-                }}
-              />
-            </div>
-          </div>
-
+    <div className="bg-background rounded-xl p-6">
+      <div className="flex flex-col">
+        <div className="flex-1">
+          <CalendarMonth
+            year={currentYear}
+            month={currentMonth}
+            dateRange={dateRange}
+            onDateSelect={handleDateSelect}
+            isMobile={true}
+            minimumDateRange={minimumDateRange}
+            maximumDateRange={maximumDateRange}
+          />
+        </div>
+        <div>
+          <h3 className="text-xs mb-1">Flexible Start Date</h3>
+          <FlexibleDateSelector
+            type="start"
+            selectedOption={flexibility}
+            onSelect={(type, option) => {
+              const newFlexibility = { ...flexibility, [type]: option };
+              setFlexibility(newFlexibility);
+              onFlexibilityChange?.(newFlexibility);
+            }}
+          />
+        </div>
+        <div>
+          <h3 className="text-xs mb-1">Flexible End Date</h3>
+          <FlexibleDateSelector
+            type="end"
+            selectedOption={flexibility}
+            onSelect={(type, option) => {
+              const newFlexibility = { ...flexibility, [type]: option };
+              setFlexibility(newFlexibility);
+              onFlexibilityChange?.(newFlexibility);
+            }}
+          />
         </div>
       </div>
     </div>
