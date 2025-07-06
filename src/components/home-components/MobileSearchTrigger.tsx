@@ -299,7 +299,7 @@ const MobileSearchTrigger: React.FC<MobileSearchTriggerProps> = ({
                 {/* Move in/out date fields */}
                 <div className="flex items-center gap-5 w-full">
                   {/* Move in field */}
-                  <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da] cursor-pointer" onClick={handleClick}>
+                  <div className="flex flex-col flex-1 pb-1.5 border-b border-[#d1d5da] cursor-pointer" onClick={handleClick}>
                     <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px] cursor-pointer">
                       Move in
                     </label>
@@ -309,7 +309,7 @@ const MobileSearchTrigger: React.FC<MobileSearchTriggerProps> = ({
                   </div>
 
                   {/* Move out field */}
-                  <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da] cursor-pointer" onClick={handleClick}>
+                  <div className="flex flex-col flex-1 pb-1.5 border-b border-[#d1d5da] cursor-pointer" onClick={handleClick}>
                     <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px] cursor-pointer">
                       Move out
                     </label>

@@ -164,8 +164,8 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
   };
 
   return (
-    <div className="w-full px-6 py-5">
-      <div className="flex w-full items-center justify-between mb-3">
+    <div className="w-full px-2 py-5">
+      <div className="flex w-full items-center justify-between mb-3 px-4">
         <Button
           variant="ghost"
           size="icon"
@@ -218,19 +218,19 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
             exit="exit"
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            <div className="grid grid-cols-7 gap-1 mb-1">
+            <div className="grid grid-cols-7 gap-0 mb-1">
               {weekDays.map(day => (
-                <div key={day} className="relative w-10 h-10 rounded-full">
-                  <div className="absolute w-6 top-[9px] left-2 font-text-sm-medium text-[#344054] text-center">
+                <div key={day} className="relative flex-1 h-10 rounded-full flex items-center justify-center">
+                  <div className="font-text-sm-medium text-[#344054] text-center">
                     {day}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-0">
               {Array.from({ length: firstDayOfWeek }).map((_, index) => (
-                <div key={`empty-${index}`} className="relative w-10 h-10 rounded-full" />
+                <div key={`empty-${index}`} className="relative flex-1 h-10 rounded-full" />
               ))}
 
               {Array.from({ length: daysInMonth }).map((_, index) => {
@@ -259,10 +259,10 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
 
 function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isMobile, isDisabled }: CalendarDayProps) {
   return (
-    <div className="relative w-10 h-10 rounded-full">
+    <div className="relative flex-1 h-10 rounded-full flex items-center justify-center">
       <button
         className={`
-          relative w-10 h-10 rounded-full
+          relative w-10 h-10 rounded-full flex items-center justify-center
           ${isSelected ? 'bg-[#3c8787]' : ''}
           ${isDisabled ? 'cursor-not-allowed' : ''}
         `}
@@ -271,7 +271,7 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
       >
         <div
           className={`
-            absolute w-6 top-[9px] left-2 text-center
+            text-center
             ${isSelected
               ? 'font-text-sm-medium text-white'
               : `font-text-sm-regular ${
