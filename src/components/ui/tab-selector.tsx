@@ -118,13 +118,13 @@ export default function TabSelector({
   };
 
   return (
-    <div className={cn("flex justify-start space-x-2 py-4 border-b", className)}>
+    <div className={cn("flex justify-start space-x-2 py-4", className)}>
       <Tabs
         className="w-full"
         value={currentActiveTab} // Use the determined active tab
         onValueChange={handleTabChange} // This triggers our handler
       >
-        <div className="flex items-start p-0 justify-between space-x-4 border-gray-300">
+        <div className="flex items-start p-0 justify-between space-x-4">
           <TabsList
             ref={tabsListRef}
             className={cn(
