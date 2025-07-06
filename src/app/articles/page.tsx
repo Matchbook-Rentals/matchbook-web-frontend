@@ -7,6 +7,7 @@ import { BlogArticle } from '@prisma/client';
 import SocialLinks from '@/components/SocialLinks';
 import Image from 'next/image';
 import Link from 'next/link';
+import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
 
 const poppins = Poppins({ 
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -27,7 +28,12 @@ export default async function Home() {
 
   return (
     <main className={`${PAGE_MARGIN} ${poppins.className} mx-auto px-4 py-8`}>
-      <h1 className="text-[32px] font-medium text-left mb-4 md:mb-8 ">Articles</h1>
+      <div className="flex justify-center mb-8">
+        <MarketingPageHeader 
+          headerText="Articles" 
+          breadcrumbText="Articles"
+        />
+      </div>
       {articles.map((article) => (
         <React.Fragment key={article.id}>
           <div className='flex justify-between px-0 mt-8'>
