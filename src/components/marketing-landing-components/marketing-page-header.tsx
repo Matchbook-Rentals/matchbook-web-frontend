@@ -38,10 +38,10 @@ export const MarketingPageHeader = ({
           <BreadcrumbList className="flex items-center gap-[15px]">
             <BreadcrumbItem>
               <BreadcrumbLink href="/">
-                <HomeIcon className="w-6 h-6" />
+                <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator className="font-text-md-regular text-gray-3500">
+            <BreadcrumbSeparator className="text-small text-gray-3500">
               /
             </BreadcrumbSeparator>
             <BreadcrumbItem>
