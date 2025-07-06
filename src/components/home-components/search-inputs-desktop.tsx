@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { BrandDialog } from "@/components/brandDialog";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Input } from "@/components/ui/input";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
@@ -43,6 +44,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const { user } = useUser();
   const { toast } = useToast();
   const router = useRouter();
+  const { width } = useWindowSize();
 
   // Replace activeContent state with new type
   const [activeContent, setActiveContent] = React.useState<ActiveContentType>(null);
@@ -71,6 +73,14 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
     setTotalGuests(total);
   }, [guests]);
+
+  // Close dialog when screen becomes mobile size (below 640px for sm breakpoint)
+  React.useEffect(() => {
+    if (width && width < 640 && isOpen) {
+      setIsOpen(false);
+      setActiveContent(null);
+    }
+  }, [width, isOpen]);
 
   // Format the dates for display
   const formatDate = (date: Date | null) => {

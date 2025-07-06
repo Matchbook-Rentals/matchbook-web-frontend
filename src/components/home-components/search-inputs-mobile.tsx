@@ -11,6 +11,7 @@ import { BrandButton } from "@/components/ui/brandButton";
 import { Input } from "@/components/ui/input";
 import { ImSpinner8 } from "react-icons/im";
 import HeroLocationSuggest from "./HeroLocationSuggest";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 interface SearchInputsMobileProps {
   hasAccess: boolean;
@@ -41,6 +42,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   const [hasBeenSelected, setHasBeenSelected] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { width } = useWindowSize();
   
   // Replace activeInput state with new type
   const [activeContent, setActiveContent] = useState<ActiveContentType>(null);
@@ -405,6 +407,14 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
       setActiveContent('location');
     }
   }, [externalIsOpen, activeContent]);
+
+  // Close dialog when screen becomes desktop size (640px+ for sm breakpoint)
+  useEffect(() => {
+    if (width && width >= 640 && isOpen) {
+      setIsOpen(false);
+      setActiveContent(null);
+    }
+  }, [width, isOpen, setIsOpen]);
 
   // Render different versions based on hasAccess
   if (!hasAccess) {
