@@ -57,7 +57,7 @@ export const Frame = (): JSX.Element => {
         </div>
       </header>
 
-      <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-6 relative self-stretch w-full">
+      <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-6 relative self-stretch w-full max-w-[1200px] mx-auto">
         {[...missionValues, ...additionalValues].map((value, index) => (
           <Card
             key={index}
