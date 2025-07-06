@@ -111,12 +111,12 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
         {/* Comparison Grid - Bottom on mobile, Right on desktop */}
         <div className="w-full lg:w-[655px] grid grid-cols-3 gap-0">
           {/* Header Row */}
-          <div className="w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
+          <div className="w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
           </div>
-          <div className="w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
+          <div className="w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
             <img src="/new-green-logo.png" alt="MatchBook Logo" className="object-contain max-h-full max-w-full" />
           </div>
-          <div className="w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-b-2 border-r-2 border-gray-200">
+          <div className="w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-b-2 border-r-2 border-gray-200">
             <span className={textStyles.competitorText}>{competitorName}</span>
           </div>
 
@@ -126,18 +126,18 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
             return (
               <React.Fragment key={index}>
                 {/* Feature Title */}
-                <div className={`w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200 overflow-hidden`}>
+                <div className={`w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200 overflow-hidden`}>
                   <span className={`${textStyles.normalText} break-words text-[10px] md:text-[12px]`}>{item.title}</span>
                 </div>
                 
                 {/* Matchbook Column */}
-                <div className={`w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200 gap-1 overflow-hidden`}>
+                <div className={`w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200 gap-1 overflow-hidden`}>
                   <CheckmarkSvg />
                   <span className={`${textStyles.normalText} break-words text-[10px] md:text-[12px]`}>{item.matchbookCopy}</span>
                 </div>
                 
                 {/* Competitor Column */}
-                <div className={`w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-b-2 border-r-2 border-gray-200`}>
+                <div className={`w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-b-2 border-r-2 border-gray-200`}>
                   {item.competitorSupports ? <CheckmarkSvg /> : <CrossSvg />}
                 </div>
               </React.Fragment>
