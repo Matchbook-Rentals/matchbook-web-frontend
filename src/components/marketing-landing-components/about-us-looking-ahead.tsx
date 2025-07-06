@@ -1,29 +1,31 @@
 import React from "react";
-import { Card, CardContent } from "../../components/ui/card";
-import { AboutUsLookingAheadTextBubble } from "./about-us-looking-ahead-text-bubble";
 
 export const AboutUsLookingAhead = (): JSX.Element => {
   return (
     <>
       {/* Desktop Layout */}
-      <section className="hidden xl:block relative w-full h-[488px] bg-background overflow-hidden">
-        <div className="relative w-full max-w-[1440px] mx-auto h-full flex items-center">
+      <section className="hidden xl:block relative w-full h-[488px] overflow-hidden" style={{ backgroundColor: '#FBFBFB' }}>
+        <div className="relative w-full max-w-[1440px] mx-auto h-full flex items-end">
           {/* Professional photo */}
           <img
-            className="absolute left-8 bottom-0 z-10 w-[303px] h-[466px] object-cover"
+            className="relative left-[15%]  z-10 w-[325px] object-cover"
             alt="Professional in suit"
             src="/about-us/looking-ahead/1.png"
           />
 
-          {/* Text and bubble component */}
-          <div className="absolute right-[5%] w-[70%] h-full min-w-[1000px]">
-            <AboutUsLookingAheadTextBubble />
+          {/* Text blob image */}
+          <div className="absolute right-[5%] w-[70%] h-full min-w-[1000px] flex items-center justify-center">
+            <img
+              className="w-auto h-auto max-w-full max-h-full object-contain"
+              alt="Looking Ahead text"
+              src="/about-us/looking-ahead/Text blob.png"
+            />
           </div>
         </div>
       </section>
 
       {/* Mobile Layout */}
-      <div className="xl:hidden w-full overflow-hidden">
+      <div className="xl:hidden w-full overflow-hidden" style={{ backgroundColor: '#FBFBFB' }}>
         <div className="relative w-full max-h-[80vh] flex flex-col">
           {/* Background with constrained height */}
           <div className="relative w-full h-full max-h-[60vh]">
