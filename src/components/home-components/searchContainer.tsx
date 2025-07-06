@@ -2,6 +2,7 @@ import React from "react";
 import SearchInputsDesktop from "./search-inputs-desktop";
 import SearchInputsMobile from "./search-inputs-mobile";
 import { cn } from "@/lib/utils";
+import MobileSearchTrigger from "./MobileSearchTrigger";
 
 interface SearchContainerProps {
   hasAccess: boolean; // Add hasAccess prop
@@ -42,17 +43,9 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
           />
         </div>
       </div>
-      <div className={cn("mx-auto block sm:hidden", className)}>
+      <div className={cn("mx-auto block test sm:hidden", className)}>
         <div className={cn("relative", containerStyles)}>
-          <SearchInputsMobile 
-            hasAccess={hasAccess} 
-            inputClassName={inputStyles} 
-            className={containerStyles} 
-            searchButtonClassNames={searchButtonClassNames}
-            searchIconColor={searchIconColor}
-            headerText={headerText}
-            headerClassName={headerClassName}
-          />
+          <MobileSearchTrigger hasAccess />
         </div>
       </div>
     </>

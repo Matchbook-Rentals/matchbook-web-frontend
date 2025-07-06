@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { ImSpinner8 } from "react-icons/im";
 import HeroLocationSuggest from "./HeroLocationSuggest";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SearchInputsMobileProps {
   hasAccess: boolean;
@@ -357,7 +358,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
 
   // Create all content components for the carousel
   const locationContent = (
-    <>
+    <ScrollArea className="h-[400px] w-full">
       {selectedLocation?.description && (
         <div className="mb-4 text-sm p-3 bg-gray-50 border border-gray-200 rounded-lg">
           <p className="font-semibold text-gray-800">Selected Location:</p>
@@ -365,21 +366,27 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         </div>
       )}
       <MobileLocationSuggest />
-    </>
+    </ScrollArea>
   );
 
   const dateContent = (
-    <MobileDateRange
-      dateRange={dateRange}
-      onDateRangeChange={setDateRange}
-      onClose={() => setActiveContent(null)}
-      onProceed={() => setActiveContent('guests')}
-      minimumDateRange={{ months: 1 }}
-      maximumDateRange={{ months: 12 }}
-    />
+    <ScrollArea className="h-[400px] w-full">
+      <MobileDateRange
+        dateRange={dateRange}
+        onDateRangeChange={setDateRange}
+        onClose={() => setActiveContent(null)}
+        onProceed={() => setActiveContent('guests')}
+        minimumDateRange={{ months: 1 }}
+        maximumDateRange={{ months: 12 }}
+      />
+    </ScrollArea>
   );
 
-  const guestsContent = <GuestTypeCounter guests={guests} setGuests={setGuests} />;
+  const guestsContent = (
+    <ScrollArea className="h-[400px] w-full">
+      <GuestTypeCounter guests={guests} setGuests={setGuests} />
+    </ScrollArea>
+  );
 
   const carouselContent = [locationContent, dateContent, guestsContent];
 

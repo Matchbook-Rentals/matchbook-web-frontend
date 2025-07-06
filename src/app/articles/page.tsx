@@ -67,7 +67,7 @@ export default async function Home() {
               href={`/articles/${article.slug}`}
               className="inline-block text-blue-500 hover:text-blue-700 mt-4"
             >
-              <p className="flex items-center text-[#0170D7] hover:opacity-80 transition-opacity">
+              <p className="flex items-center text-secondaryBrand hover:opacity-80 transition-opacity">
                 Read More
               </p>
             </Link>

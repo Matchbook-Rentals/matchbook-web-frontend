@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 // Move PRESET_CITIES outside component to prevent re-creation
 const PRESET_CITIES = [
@@ -82,7 +83,7 @@ const MobileLocationSuggest: React.FC<MobileLocationSuggestProps> = ({
 
   return (
     <div className="p-4">
-      <input
+      <Input
         value={inputValue}
         onChange={handleInput}
         placeholder={
@@ -90,8 +91,7 @@ const MobileLocationSuggest: React.FC<MobileLocationSuggestProps> = ({
             ? "Wrong place? Begin typing and select another"
             : "Enter an address or city"
         }
-        type="text"
-        className="w-full h-full text-base min-w-0 mb-4"
+        className="h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5 mb-4"
         inputMode="text"
         autoComplete="off"
         autoCorrect="off"

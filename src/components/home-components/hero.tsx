@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import SearchContainer from "./searchContainer";
 import SearchInputsMobile from "./search-inputs-mobile";
+import MobileSearchTrigger from "./MobileSearchTrigger";
 import Countdown from "../marketing-landing-components/countdown";
 import { Button } from "@/components/ui/button"; // Import Button
 import { BrandButton } from "@/components/ui/brandButton"; // Import BrandButton
@@ -115,76 +116,9 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Mobile Search Trigger */}
-      <div className="block sm:hidden pt-6 w-full z-10 flex justify-center">
-        <div className="relative">
-          <Card className="w-[397px] rounded-xl overflow-hidden cursor-pointer" onClick={() => hasAccess && setShowSearchPopup(true)}>
-            <CardContent className="p-3 flex flex-col gap-2">
-              <div className="flex flex-col gap-5 w-full">
-                <div className="flex flex-col gap-4 w-full">
-                  {/* Where field */}
-                  <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
-                    <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal">
-                      Where
-                    </label>
-                    <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                      Choose Location
-                    </span>
-                  </div>
-
-                  {/* Move in/out date fields */}
-                  <div className="flex items-center gap-5 w-full">
-                    {/* Move in field */}
-                    <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
-                      <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
-                        Move in
-                      </label>
-                      <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                        Select Dates
-                      </span>
-                    </div>
-
-                    {/* Move out field */}
-                    <div className="flex flex-col w-[170px] pb-1.5 border-b border-[#d1d5da]">
-                      <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
-                        Move out
-                      </label>
-                      <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                        Select Dates
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Who field */}
-                  <div className="flex flex-col h-[42px] pb-1.5 border-b border-[#d1d5da]">
-                    <label className="font-text-label-xsmall-medium font-[500] text-gray-neutral700 text-[12px] leading-normal mt-[-1.00px]">
-                      Who
-                    </label>
-                    <span className="font-['Poppins',Helvetica] font-normal text-gray-neutral400 text-[10px] leading-normal">
-                      Add Renters
-                    </span>
-                  </div>
-                </div>
-
-                {/* Button */}
-                <Button className="w-full bg-teal-700 hover:bg-teal-800 text-white">
-                  Start Search
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Gray overlay when no access */}
-          {!hasAccess && (
-            <div className="absolute inset-0 bg-gray-200/80 rounded-xl cursor-not-allowed"></div>
-          )}
-        </div>
-      </div>
-
-      {/* Mobile Search Dialog */}
-      <SearchInputsMobile
-        hasAccess={hasAccess}
-        isOpen={showSearchPopup}
-        onOpenChange={setShowSearchPopup}
+      <MobileSearchTrigger 
+        hasAccess={hasAccess} 
+        onTrigger={() => setShowSearchPopup(true)}
       />
 
       {/* OR Separator */}
