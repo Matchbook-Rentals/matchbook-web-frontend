@@ -297,7 +297,13 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
 }
 
 function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelectorProps) {
-  const flexibleDays = [1, 3, 5, 7, 14];
+  const flexibleDateOptions = [
+    { label: "Exact Date", value: "exact" },
+    { label: "3", value: 3 },
+    { label: "5", value: 5 },
+    { label: "7", value: 7 },
+    { label: "14", value: 14 },
+  ];
   const currentValue = type === 'start' ? selectedOption.start : selectedOption.end;
 
   const handleOptionSelect = (option: 'exact' | number) => {
@@ -305,26 +311,26 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
   };
 
   return (
-    <div className="flex gap-1 font-montserrat-light flex-wrap">
-      <button
-        className={`
-          px-3 py-1 text-sm rounded-full border-2 hover:bg-gray-100
-          ${currentValue === 'exact' ? 'border-[#404040]' : 'border-gray-200'}
-        `}
-        onClick={() => handleOptionSelect('exact')}
-      >
-        Exact dates
-      </button>
-      {flexibleDays.map(days => (
+    <div className="inline-flex items-start gap-3">
+      {flexibleDateOptions.map((option, index) => (
         <button
-          key={days}
+          key={`${type}-option-${index}`}
           className={`
-            px-3 py-1 text-sm flex items-center hover:bg-gray-100 gap-1 rounded-full border-2
-            ${currentValue === days ? 'border-[#404040]' : 'border-gray-200'}
+            p-2 h-auto rounded border border-solid border-[#6c727e] 
+            font-text-paragraph-xsmall-paragraph text-gray-neutral500
+            flex items-center hover:bg-gray-100
+            ${currentValue === option.value ? 'bg-[#3c8787] text-white' : ''}
           `}
-          onClick={() => handleOptionSelect(days)}
+          onClick={() => handleOptionSelect(option.value as 'exact' | number)}
         >
-          &#177; {days}
+          {option.value !== "exact" && (
+            <svg className="w-4 h-4 mr-1" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 2V11.3333" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.33398 6.66663H12.6673" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.33398 14H12.6673" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
+          {option.label}
         </button>
       ))}
     </div>

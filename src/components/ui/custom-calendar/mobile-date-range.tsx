@@ -311,6 +311,7 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
           className={`
             p-2 h-auto rounded border border-solid border-[#6c727e] 
             font-text-paragraph-xsmall-paragraph text-gray-neutral500
+            hover:bg-[#3c8787] hover:text-white
             ${currentValue === option.value ? 'bg-[#3c8787] text-white' : ''}
           `}
           onClick={() => handleOptionSelect(option.value as 'exact' | number)}
