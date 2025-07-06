@@ -1,3 +1,7 @@
+/**
+ * @deprecated This component was deprecated on July 6, 2025.
+ * Use DesktopSearchTrigger and MobileSearchTrigger components directly instead.
+ */
 import React from "react";
 import SearchInputsDesktop from "./search-inputs-desktop";
 import SearchInputsMobile from "./search-inputs-mobile";

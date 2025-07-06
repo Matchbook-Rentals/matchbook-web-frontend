@@ -1,27 +1,20 @@
 'use client'; // Required for useState and event handlers
 
 import React, { useState, useEffect } from "react";
-import SearchContainer from "./searchContainer";
-import SearchInputsMobile from "./search-inputs-mobile";
 import MobileSearchTrigger from "./MobileSearchTrigger";
-import Countdown from "../marketing-landing-components/countdown";
-import { Button } from "@/components/ui/button"; // Import Button
+import DesktopSearchTrigger from "./DesktopSearchTrigger";
+import SearchDialog from "./SearchDialog";
 import { BrandButton } from "@/components/ui/brandButton"; // Import BrandButton
 import { Card, CardContent } from "@/components/ui/card"; // Import Card components
 import { useAuth, useUser } from "@clerk/nextjs"; // Import Clerk hooks
 import { checkClientBetaAccess } from '@/utils/roles';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog"; // Import Dialog components
-import { ScrollArea } from "@/components/ui/scroll-area"; // Import ScrollArea
 import { useWindowSize } from "@/hooks/useWindowSize"; // Import window size hook
 import { getUserTripsCount } from "@/app/actions/trips"; // Import trip count function
 import { Separator } from "@/components/ui/separator";
 
 const Hero: React.FC = () => {
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
+  const [showSearchDialog, setShowSearchDialog] = useState(false); // State for shared search dialog
   const [hasAccess, setHasAccess] = useState(false); // State for access check
   const [tripCount, setTripCount] = useState<number>(0); // State for trip count
   const { isSignedIn } = useAuth();
@@ -70,6 +63,11 @@ const Hero: React.FC = () => {
     }
   }, [width, showSearchPopup]); // Run effect when width or showSearchPopup changes
 
+  // Handler for opening the search dialog
+  const handleOpenSearchDialog = () => {
+    setShowSearchDialog(true);
+  };
+
   return (
     <div
       className="relative h-[365px] sm:h-[365px] h-[401px] max-h-[55vh] sm:max-h-[50vh] w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 bg-cover justify-start"
@@ -84,15 +82,15 @@ const Hero: React.FC = () => {
 
       {/* Desktop Search Content */}
       <div className="hidden sm:block w-full z-10">
-        <SearchContainer
+        <DesktopSearchTrigger
           hasAccess={hasAccess} // Pass hasAccess state
-          className="sm:w-[90%] lg:w-[65%] pt-[2%]"
+          className="sm:w-[90%] lg:w-[65%] pt-[2%] mx-auto"
           containerStyles='bg-background rounded-full drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)] py-1'
           inputStyles='bg-background text-[12px]'
           searchButtonClassNames='border border-[#404040] sm:border-none bg-green-900 hover:bg-green-800 sm:bg-background sm:hover:bg-gray-200'
           searchIconColor='text-gray-400'
-          popoverMaxWidth='900px'
           headerText='Find your next home'
+          onOpenDialog={handleOpenSearchDialog}
         />
         
         {/* Conditionally render OR separator and button only if user has trips */}
@@ -119,6 +117,7 @@ const Hero: React.FC = () => {
       <MobileSearchTrigger 
         hasAccess={hasAccess} 
         onTrigger={() => setShowSearchPopup(true)}
+        onOpenDialog={handleOpenSearchDialog}
       />
 
       {/* OR Separator */}
@@ -140,6 +139,14 @@ const Hero: React.FC = () => {
           <BrandButton variant={'outline'}> Log In </BrandButton>
         )}
       </div>
+
+      {/* Shared Search Dialog */}
+      <SearchDialog
+        isOpen={showSearchDialog}
+        onOpenChange={setShowSearchDialog}
+        hasAccess={hasAccess}
+        headerText="Find your next home"
+      />
 
     </div>
   );
