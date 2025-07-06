@@ -9,13 +9,16 @@ export default function MatchbookHeader(): JSX.Element {
   return (
     <header className="flex w-full items-center justify-between px-6 py-1 bg-white">
       <div className="relative h-[72px] flex items-center">
-        <img className=" w-[200px]" alt="MatchBook Logo" src="/new-green-logo.png" />
+        <Link href="/">
+          <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
+          <img className="w-[40px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
+        </Link>
       </div>
 
       <div className="flex items-center gap-6">
         <Button
           variant="outline"
-          className="text-[#3c8787] border-[#3c8787] hover:bg-primaryBrand hover:text-white font-medium transition-colors duration-300"
+          className="text-[#3c8787] border-[#3c8787] hover:bg-primaryBrand hover:text-white font-medium transition-colors duration-300 hidden md:block"
 
         >
           <Link href={'/hosts'}>

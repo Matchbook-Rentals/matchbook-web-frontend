@@ -31,7 +31,12 @@ export default function PlatformNavbar() {
             <img
               src="/new-green-logo.png"
               alt="MatchBook Logo"
-              className="w-[200px]"
+              className="w-[200px] hidden md:block"
+            />
+            <img
+              src="/logo-small.svg"
+              alt="MatchBook Logo"
+              className="w-[40px] block md:hidden"
             />
           </Link>
         </motion.div>
