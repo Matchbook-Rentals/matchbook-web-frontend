@@ -245,7 +245,7 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
         >
           Prev
         </button>
-        <h2 className="text-base font-medium">
+        <h2 className="text-base font-medium text-secondaryBrand">
           {new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' })}
         </h2>
         <button
@@ -319,7 +319,7 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
             p-2 h-auto rounded border border-solid border-[#6c727e] 
             font-text-paragraph-xsmall-paragraph text-gray-neutral500
             flex items-center hover:bg-gray-100
-            ${currentValue === option.value ? 'bg-[#3c8787] text-white' : ''}
+            ${currentValue === option.value ? 'bg-secondaryBrand text-white' : ''}
           `}
           onClick={() => handleOptionSelect(option.value as 'exact' | number)}
         >

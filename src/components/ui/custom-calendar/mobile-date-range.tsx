@@ -258,12 +258,19 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
 }
 
 function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isMobile, isDisabled }: CalendarDayProps) {
+  const selectedDayBgColor = 'bg-[#3c8787]';
+  const inRangeBgColor = 'bg-gray-200';
+
+  const hasCompleteRange = isInRange || isEndDate;
+  const showRangeBackground = hasCompleteRange && isInRange && !isSelected;
+  const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
+  const showEndBackground = hasCompleteRange && isEndDate && !isStartDate;
+
   return (
     <div className="relative flex-1 h-10 rounded-full flex items-center justify-center">
       <button
         className={`
           relative w-10 h-10 rounded-full flex items-center justify-center
-          ${isSelected ? 'bg-[#3c8787]' : ''}
           ${isDisabled ? 'cursor-not-allowed' : ''}
         `}
         onClick={onClick}
@@ -271,9 +278,9 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
       >
         <div
           className={`
-            text-center
+            text-center z-10
             ${isSelected
-              ? 'font-text-sm-medium text-white'
+              ? `font-text-sm-medium text-white w-10 h-10 rounded-full ${selectedDayBgColor} flex items-center justify-center`
               : `font-text-sm-regular ${
                   isDisabled ? 'text-[#667085]' : 'text-[#344054]'
                 }`
@@ -282,6 +289,15 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
         >
           {day}
         </div>
+        {showRangeBackground && (
+          <div className={`absolute inset-y-1/4 inset-x-0 ${inRangeBgColor}`} />
+        )}
+        {showStartBackground && (
+          <div className={`absolute right-0 left-1/2 inset-y-1/4 ${inRangeBgColor}`} />
+        )}
+        {showEndBackground && (
+          <div className={`absolute left-0 right-1/2 inset-y-1/4 ${inRangeBgColor}`} />
+        )}
       </button>
     </div>
   );
