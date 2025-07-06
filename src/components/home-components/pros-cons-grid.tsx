@@ -104,7 +104,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
           <img
             src={imageUrl}
             alt="MatchBook Marketing"
-            className="w-full h-[450px] lg:h-full object-cover lg:object-cover rounded-lg shadow-md object-[45%_20%]"
+            className="w-full h-[450px] lg:h-full object-cover lg:object-cover rounded-lg shadow-md object-[45%_35%]"
           />
         </div>
 
@@ -114,7 +114,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
           <div className="w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
           </div>
           <div className="w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
-            <img src="/navbar-logo-full.png" alt="MatchBook Logo" className="object-contain max-h-full max-w-full" />
+            <img src="/new-green-logo.png" alt="MatchBook Logo" className="object-contain max-h-full max-w-full" />
           </div>
           <div className="w-full lg:w-[218.33px] h-[118px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-b-2 border-r-2 border-gray-200">
             <span className={textStyles.competitorText}>{competitorName}</span>

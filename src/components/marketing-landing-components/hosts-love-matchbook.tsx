@@ -37,7 +37,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
   ];
 
   return (
-    <section className="flex flex-col items-center gap-14 px-4 md:px-[100px] lg:px-[150px] py-16">
+    <section className="flex flex-col items-center gap-14 px-4 md:px-[100px] lg:px-[150px] py-16 max-w-[1600px] mx-auto">
       <header className="inline-flex flex-col items-center gap-1">
         <h1 className="w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
           Why Hosts Love MatchBook
@@ -53,7 +53,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
               className="flex flex-col min-w-80 items-start gap-5 flex-1 self-stretch border-none"
             >
               <div
-                className={`w-full h-60 rounded-xl bg-cover bg-center`}
+                className={`w-full h-60 rounded-xl bg-cover bg-top`}
                 style={{ backgroundImage: `url(${feature.imageUrl})` }}
               />
               <CardContent className="flex flex-col items-start gap-6 p-0 w-full">
@@ -85,7 +85,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
               className="flex flex-col min-w-80 items-start gap-5 flex-1 self-stretch border-none"
             >
               <div
-                className={`w-full h-60 rounded-xl bg-cover bg-center ${feature.overlay ? "bg-[linear-gradient(0deg,rgba(0,0,0,0.03)_0%,rgba(0,0,0,0.03)_100%)]" : ""}`}
+                className={`w-full h-60 rounded-xl bg-cover ${feature.id === 4 ? 'bg-center' : 'bg-top'} ${feature.overlay ? "bg-[linear-gradient(0deg,rgba(0,0,0,0.03)_0%,rgba(0,0,0,0.03)_100%)]" : ""}`}
                 style={{ backgroundImage: `url(${feature.imageUrl})` }}
               />
               <CardContent className="flex flex-col items-start gap-6 p-0 w-full">
@@ -115,7 +115,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
               className="flex flex-col w-full items-start gap-5 border-none"
             >
               <div
-                className={`w-full h-60 rounded-xl bg-cover bg-center ${feature.overlay ? "bg-[linear-gradient(0deg,rgba(0,0,0,0.03)_0%,rgba(0,0,0,0.03)_100%)]" : ""}`}
+                className={`w-full h-60 rounded-xl bg-cover ${feature.id === 4 ? 'bg-center' : 'bg-top'} ${feature.overlay ? "bg-[linear-gradient(0deg,rgba(0,0,0,0.03)_0%,rgba(0,0,0,0.03)_100%)]" : ""}`}
                 style={{ backgroundImage: `url(${feature.imageUrl})` }}
               />
               <CardContent className="flex flex-col items-start gap-6 p-0 w-full">
