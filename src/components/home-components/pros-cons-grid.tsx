@@ -55,7 +55,7 @@ const textStyles = {
 // Default comparison data
 const defaultComparisons: ComparisonItem[] = [
   {
-    title: "Free and Easy to Apply on our Site",
+    title: "Free and easy to apply to properties",
     matchbookCopy: "Fill out one application, and you'll be able to apply for any listing available on our platform.",
     competitorSupports: false
   },
@@ -71,7 +71,7 @@ const defaultComparisons: ComparisonItem[] = [
   },
   {
     title: "Easy to pay rent",
-    matchbookCopy: "Automatically pay rent directly from your account for free",
+    matchbookCopy: "Automatically pay rent directly from your bank account for free or with a credit card for a fee",
     competitorSupports: false
   }
 ];

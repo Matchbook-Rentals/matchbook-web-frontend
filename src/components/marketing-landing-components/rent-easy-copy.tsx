@@ -28,7 +28,7 @@ export default function RentEasyCopy(): JSX.Element {
       icon: "/marketing-images/rent-made-easy/checkmark.svg",
       title: "Get MatchBook Verified and Stay in Control",
       description:
-        "Found the right fit? Sign your rental agreement and pay directly through MatchBook. No emails, no PDFs, no back-and-forth.",
+        "Pay $25 once for your credit, criminal, and eviction check. Share your verification unlimited times for up to 3 months.",
       isCentered: true,
     },
     {
@@ -45,7 +45,7 @@ export default function RentEasyCopy(): JSX.Element {
       icon: "/marketing-images/rent-made-easy/paper.svg",
       title: "Sign, Book, and Pay in One Place",
       description:
-        "Found the right fit? Sign your rental agreement and pay directly through MatchBook. No emails, no PDFs, no back-and-forth.",
+        "Found the right fit? Sign your rental agreement and pay directly through MatchBook. ",
     },
   ];
 

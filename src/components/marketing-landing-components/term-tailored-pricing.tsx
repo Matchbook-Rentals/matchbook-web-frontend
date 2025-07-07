@@ -11,7 +11,7 @@ export const TermTailoredPricing = (): JSX.Element => {
           </h1>
 
           <p className="relative flex-1 font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-neutral500 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] text-center md:text-left">
-With MatchBook, you can adjust your monthly rent based on how long a renter stays. Offer better rates for longer terms and price shorter stays accordingly, all while staying competitive and increasing your earnings.
+            With MatchBook, you can adjust your monthly rent based on how long a renter stays. Offer better rates for longer terms and price shorter stays accordingly, all while staying competitive and increasing your earnings.
           </p>
         </div>
 
