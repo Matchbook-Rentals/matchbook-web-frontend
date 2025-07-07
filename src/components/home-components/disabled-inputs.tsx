@@ -23,7 +23,7 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
 }) => {
   // Base input classes matching SearchInputsDesktop, adding disabled styles
   const inputClasses = cn(
-    'w-full px-4 py-0 text-gray-700 placeholder-gray-400 focus:outline-none cursor-not-allowed bg-background',
+    'w-full px-4 py-0 text-gray-700 placeholder-gray-400 focus:outline-none cursor-not-allowed bg-background text-[12px]',
     inputClassName
   );
 
@@ -33,7 +33,7 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
       {headerText && <h3 className="hidden text-xl font-semibold mb-3 text-green-800 text-center sm:block">{headerText}</h3>}
       {/* Container matching SearchInputsDesktop, adding disabled styles */}
       <div
-        className={cn('flex flex-row no-wrap px-3 py-2 items-center bg-background rounded-[15px] shadow-md overflow-hidden cursor-not-allowed ', className)}
+        className={cn('flex flex-row no-wrap px-3 py-1 items-center bg-background rounded-full shadow-md overflow-hidden cursor-not-allowed ', className)}
       >
         {/* Location Input */}
         <div className="flex-1 flex flex-col sm:border-r border-gray-300">
@@ -92,11 +92,11 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
           <button
             disabled
             className={cn(
-              'w-auto p-3 cursor-not-allowed  rounded-full',
+              'w-auto p-3 cursor-not-allowed rounded-full',
               searchButtonClassNames || 'bg-background' // Match default background
             )}
           >
-            <FaSearch className={cn(searchIconColor, "mx-auto")} size={20} />
+            <FaSearch className={cn(searchIconColor, "mx-auto")} />
           </button>
         </div>
       </div>
