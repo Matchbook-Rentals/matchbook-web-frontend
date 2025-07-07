@@ -9,7 +9,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
     {
       id: 1,
       title: "We Don't Charge You a Dime",
-      description: "MatchBook is completely free for Host.",
+      description: "MatchBook is completely free for hosts. From listing your property to managing your bookings, using our platform is completely free.",
       imageUrl: "/marketing-images/hosts-love-us/1.png",
     },
     {
@@ -31,7 +31,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
       id: 4,
       title: "Connect with MatchBook Verified Renters",
       description:
-        "Choose to accept only MatchBook Verified Renters for a worry-free experience.",
+        "Matchbook Verified  Renters come pre screened. View their credit range, criminal background and eviction check. Get qualified renters without the awkward conversations.",
       imageUrl: "/marketing-images/hosts-love-us/4.png",
     },
   ];

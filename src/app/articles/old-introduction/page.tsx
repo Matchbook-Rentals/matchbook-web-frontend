@@ -5,6 +5,7 @@ import { PAGE_MARGIN } from '@/constants/styles';
 import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
 import SocialLinks from '@/components/SocialLinks';
 import { Montserrat, Poppins } from 'next/font/google';
+import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 const poppins = Poppins({ 
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -14,10 +15,12 @@ const poppins = Poppins({
 const BlogArticle = () => {
   return (
     <div className={`${PAGE_MARGIN} ${poppins.className} mx-auto py-8`}>
-      <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">
-
-        <Link href="/articles" className="hover:underline">Articles</Link> &gt; Introduction
-      </h1>
+      <div className="flex justify-center mb-8">
+        <MarketingPageHeader 
+          headerText="Introduction" 
+          breadcrumbText="Articles"
+        />
+      </div>
       <div className='flex justify-between px-1'>
         <h3 className={`${montserrat.className}`}>October 28, 2024</h3>
 

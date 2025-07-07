@@ -19,9 +19,8 @@ export const DitchPaperwork = (): JSX.Element => {
           Ditch the paperwork
         </h2>
 
-        <p className="relative self-stretch text-center md:text-left font-text-heading-small-medium font-[number:var(--text-heading-small-medium-font-weight)] text-gray-neutral500 text-[length:var(--text-heading-small-medium-font-size)] tracking-[var(--text-heading-small-medium-letter-spacing)] leading-[var(--text-heading-small-medium-line-height)] [font-style:var(--text-heading-small-medium-font-style)]">
-          Bookings generate automatic rental agreements, streamlining the
-          leasing process—no paperwork, no waiting. Your business, modernized.
+        <p className="relative self-stretch text-gray-600 text-medium text-center md:text-left font-text-heading-small-medium font-[number:var(--text-heading-small-medium-font-weight)] text-gray-neutral500 text-[length:var(--text-heading-small-medium-font-size)] tracking-[var(--text-heading-small-medium-letter-spacing)] leading-[var(--text-heading-small-medium-line-height)] [font-style:var(--text-heading-small-medium-font-style)]">
+Streamline your leasing process, upload your lease and get it signed on platform. No paperwork, no waiting. 
         </p>
       </div>
     </section>
