@@ -56,6 +56,13 @@
   height: 31px;
 }
 
+@media (max-width: 767px) {
+  .cl-logoImage,
+  .cl-logoBox {
+    display: none;
+  }
+}
+
 .cl-headerTitle {
   color: #281d1b;
   text-align: center;
@@ -82,15 +89,15 @@
   border: none !important;
   border-radius: 8px;
   outline: none ;
-  background: rgba(92, 154, 197, 0.49);
+  background: #0B6E6E;
   margin: 0 auto;
   padding: 8px 16px;
-  color:#050100;
+  color:#ffffff;
   box-shadow: none !important;
 }
 
 .cl-formButtonPrimary:hover {
-  background: rgba(92, 154, 197, 0.69);
+  background: #0B6E6Ecc;
 }
 
 .cl-formFieldInput {
