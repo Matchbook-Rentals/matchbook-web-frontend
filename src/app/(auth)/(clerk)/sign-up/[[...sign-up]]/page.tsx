@@ -9,6 +9,10 @@ const styles = {
 };
 
 const clerkStyles = `
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
   .cl-socialButtonsBlockButton {
     width: 95%;
     display: grid;
@@ -48,9 +52,13 @@ const clerkStyles = `
     opacity: 1 !important;
     backdrop-filter: none !important;
     background-color: white !important;
-    padding: 24px !important;
     box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15) !important;
     border: none;
+  }
+  @media (min-width: 768px) {
+    .cl-cardBox {
+      padding: 24px !important;
+    }
   }
   .cl-header {
     padding: 0 0px;
@@ -138,10 +146,10 @@ export default function Page() {
       <style dangerouslySetInnerHTML={{ __html: clerkStyles }} />
       <div className="relative w-full mx-auto overflow-y-auto" style={styles.container}>
       {/* Mobile image at very top */}
-      <img className=" object-contain w-full h-[280px] object-bottom block md:hidden z-0" src="/auth/4.png" alt="Matchbook sign up" />
+      <img className=" object-cover w-full h-[200px] object-bottom block md:hidden z-0" src="/auth/4.png" alt="Matchbook sign up" />
       
       {/* Form container */}
-      <div className="flex justify-center items-center w-full relative z-10  md:pt-8">
+      <div className="flex justify-center items-center w-full relative z-10  pt-8">
         <SignUp />
       </div>
       

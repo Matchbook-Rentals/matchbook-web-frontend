@@ -48,6 +48,11 @@ const clerkStyles = `
     border: none;
     box-shadow: none;
   }
+  @media (min-width: 768px) {
+    .cl-cardBox {
+      padding: 24px !important;
+    }
+  }
   .cl-header {
     padding: 0 0px;
     width: fit-content;
