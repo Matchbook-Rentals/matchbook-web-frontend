@@ -6,7 +6,22 @@ import { APP_PAGE_MARGIN, PAGE_MARGIN } from "@/constants/styles";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
-export default function PlatformNavbar() {
+interface UserObject {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  imageUrl: string;
+  emailAddresses?: { emailAddress: string }[];
+  publicMetadata?: Record<string, any>;
+}
+
+interface PlatformNavbarProps {
+  userId?: string | null;
+  user?: UserObject | null;
+  isSignedIn?: boolean;
+}
+
+export default function PlatformNavbar({ userId, user, isSignedIn }: PlatformNavbarProps) {
   const pathName = usePathname();
 
   let marginClass;
@@ -45,7 +60,7 @@ export default function PlatformNavbar() {
         </motion.div>
 
         <motion.div className="w-1/3 flex py-1 justify-end" layout="position" transition={{ duration: 0.3 }}>
-          <UserMenu color="black" mode="header" />
+          <UserMenu color="black" mode="header" userId={userId} user={user} isSignedIn={isSignedIn} />
         </motion.div>
       </motion.div>
     </motion.nav >

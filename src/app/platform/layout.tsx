@@ -1,21 +1,27 @@
 
-"use client";
-
-import PlatformNavbar from '@/components/platform-components/platformNavbar'
+import PlatformLayoutClient from '@/components/platform-components/platformLayoutClient'
 import React from 'react'
-import { usePathname } from 'next/navigation'
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 // Note: Terms agreement check moved to sign-in/sign-up flow
 
-export default function PlatformLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
+export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
+  const { userId } = await auth();
+  const user = await currentUser();
   
-  const shouldHideNavbar = pathname === '/platform/host/add-property'
+  // Serialize user data to plain object
+  const userObject = user ? {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    imageUrl: user.imageUrl,
+    emailAddresses: user.emailAddresses?.map(email => ({ emailAddress: email.emailAddress })),
+    publicMetadata: user.publicMetadata
+  } : null;
   
   return (
-    <>
-      {!shouldHideNavbar && <PlatformNavbar />}
-      <div style={{ fontFamily: 'Poppins' }}>{children}</div>
-    </>
+    <PlatformLayoutClient userId={userId} user={userObject} isSignedIn={!!userId}>
+      {children}
+    </PlatformLayoutClient>
   )
 }
