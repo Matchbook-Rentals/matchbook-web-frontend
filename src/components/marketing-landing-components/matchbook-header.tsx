@@ -35,7 +35,7 @@ export default function MatchbookHeader({ userId, user, isSignedIn }: MatchbookH
           variant="outline"
           className="text-[#3c8787] border-[#3c8787] hover:bg-primaryBrand hover:text-white font-medium transition-colors duration-300 hidden md:block"
         >
-          <Link href={'/platform/host/add-property'}>
+          <Link href={'/hosts'}>
             Become a Host
           </Link>
         </Button>
