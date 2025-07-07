@@ -59,7 +59,7 @@
 @media (max-width: 767px) {
   .cl-logoImage,
   .cl-logoBox {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -129,14 +129,28 @@
   background: var(--background);
 }
 
-html, body {
-  overflow: hidden;
-}
-
-.auth-container {
-  height: 100vh;
+.authContainer {
+  min-height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+}
+
+.cl-cardBox {
+  background: white !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  background-color: white !important;
+  padding: 24px !important;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15) !important;
+}
+
+@media (max-width: 767px) {
+  .auth-container {
+    background: white !important;
+  }
+  
+  .cl-cardBox {
+    box-shadow: none !important;
+  }
 }
 

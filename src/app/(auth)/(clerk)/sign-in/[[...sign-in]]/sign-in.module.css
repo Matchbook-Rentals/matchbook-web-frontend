@@ -129,18 +129,10 @@
   background: var(--background);
 }
 
-html, body {
+.authContainer {
+  height: 100vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
-}
-
-.cl-cardBox {
-  background: white !important;
-  opacity: 1 !important;
-  backdrop-filter: none !important;
-  background-color: white !important;
-  padding: 24px !important;
-  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15) !important;
 }
 
