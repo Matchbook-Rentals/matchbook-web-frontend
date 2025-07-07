@@ -3,7 +3,7 @@ import { Card, CardContent } from "../ui/card";
 
 export const AboutUsOurJourney = (): JSX.Element => {
   return (
-    <section className="flex flex-col items-center gap-14 py-16">
+    <section className="flex flex-col items-center gap-14  pt-8 pb-16">
       <header className="flex flex-col items-center gap-6 w-full">
         <h1 className="w-full font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] font-['Poppins',Helvetica]">
           Our Journey
@@ -47,7 +47,7 @@ export const AboutUsOurJourney = (): JSX.Element => {
           </Card>
         </div>
 
-        <Card className="w-full lg:w-[465px] h-[343px] rounded-xl overflow-hidden order-3 lg:order-2">
+        <Card className="w-full lg:w-[465px] h-[343px] rounded-xl border-none  shadow-none overflow-hidden order-3 lg:order-2">
           <CardContent className="p-0">
             <img
               className="w-full h-full object-cover"
