@@ -1,23 +1,19 @@
-import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
-import { getAgreedToTerms, agreeToTerms } from "../actions/user";
 import { auth } from "@clerk/nextjs/server";
+import { TermsAgreementForm } from "./terms-agreement-form";
 
 export default async function TermsPage({ searchParams }: { searchParams: { redirect_url?: string } }) {
+  console.log(`[TERMS PAGE] Rendering with searchParams:`, searchParams);
+  
   const { userId } = auth();
+  console.log(`[TERMS PAGE] User ID: ${userId}`);
   
   if (!userId) {
+    console.log(`[TERMS PAGE] No user ID, redirecting to sign-in`);
     return redirect("/sign-in");
   }
   
-  // Check if user has already agreed to terms
-  const agreedToTerms = await getAgreedToTerms();
-  
-  if (agreedToTerms) {
-    // User already agreed to terms, redirect to specified URL or home
-    const redirectUrl = searchParams.redirect_url || "/";
-    return redirect(redirectUrl);
-  }
+  console.log(`[TERMS PAGE] Showing terms page to user`);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -486,19 +482,7 @@ export default async function TermsPage({ searchParams }: { searchParams: { redi
         </p>
       </div>
       
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <form action={agreeToTerms}>
-          {searchParams.redirect_url && (
-            <input type="hidden" name="redirect_url" value={searchParams.redirect_url} />
-          )}
-          <Button 
-            type="submit"
-            className="w-full sm:w-auto"
-          >
-            I Agree to the Terms and Conditions
-          </Button>
-        </form>
-      </div>
+      <TermsAgreementForm redirectUrl={searchParams.redirect_url} />
     </div>
   );
 }

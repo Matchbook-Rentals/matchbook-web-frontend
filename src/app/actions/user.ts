@@ -1,5 +1,5 @@
 'use server'
-import prisma from '@/lib/prismadb'
+import prismadb from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { currentUser, auth } from '@clerk/nextjs/server'
@@ -14,7 +14,7 @@ export async function createUser() {
     throw new Error("Unauthorized");
   }
 
-  const user = await prisma.user.create({
+  const user = await prismadb.user.create({
     data: {
       id: clerkUser.id,
       firstName: clerkUser?.firstName,
@@ -39,7 +39,7 @@ export async function updateUserImage() {
       throw new Error('User ID is missing' + clerkUser)
     }
 
-    const dbUser = await prisma?.user.findUnique({
+    const dbUser = await prismadb?.user.findUnique({
       where: { id: clerkUser.id }
     })
 
@@ -49,7 +49,7 @@ export async function updateUserImage() {
     }
 
     if (clerkUser.imageUrl !== dbUser.imageUrl) {
-      await prisma?.user.update({
+      await prismadb?.user.update({
         where: { id: dbUser.id },
         data: { imageUrl: clerkUser.imageUrl }
       });
@@ -75,7 +75,7 @@ export async function updateUserLogin(timestamp: Date) {
       throw new Error('User ID is missing')
     }
 
-    const dbUser = await prisma.user.findUnique({
+    const dbUser = await prismadb.user.findUnique({
       where: { id: clerkUser.id }
     })
 
@@ -83,7 +83,7 @@ export async function updateUserLogin(timestamp: Date) {
       await createUser();
     }
 
-    await prisma.user.update({
+    await prismadb.user.update({
       where: { id: clerkUser.id },
       data: { lastLogin: timestamp }
     });
@@ -97,42 +97,82 @@ export async function updateUserLogin(timestamp: Date) {
 }
 
 export async function agreeToTerms(formData: FormData) {
-  const { userId } = auth();
-  const clerkUser = await currentUser();
+  try {
+    console.log(`[AGREE TO TERMS] ========== STARTING AGREEMENT PROCESS ==========`);
+    console.log(`[AGREE TO TERMS] FormData contents:`, Object.fromEntries(formData.entries()));
+    
+    const { userId } = auth();
+    const clerkUser = await currentUser();
+    
+    console.log(`[AGREE TO TERMS] User ID: ${userId}`);
+    console.log(`[AGREE TO TERMS] Clerk User exists: ${!!clerkUser}`);
 
-  if (!userId || !clerkUser) {
-    throw new Error("Not authenticated");
+    if (!userId || !clerkUser) {
+      console.error(`[AGREE TO TERMS] Authentication failed - userId: ${userId}, clerkUser: ${!!clerkUser}`);
+      throw new Error("Not authenticated");
+    }
+
+    console.log(`[AGREE TO TERMS] Step 1: Checking if user exists in database...`);
+    // Check if user exists in our database
+    const dbUser = await prismadb.user.findUnique({
+      where: { id: userId }
+    });
+    
+    console.log(`[AGREE TO TERMS] DB user exists: ${!!dbUser}`);
+
+    // If user doesn't exist, create them first
+    if (!dbUser) {
+      console.log(`[AGREE TO TERMS] Step 2: Creating new user in database...`);
+      await createUser();
+      console.log(`[AGREE TO TERMS] New user created successfully`);
+    }
+
+    console.log(`[AGREE TO TERMS] Step 3: Updating database with terms agreement...`);
+    // Update the user's agreedToTerms field with the current timestamp
+    const updateResult = await prismadb.user.update({
+      where: { id: userId },
+      data: { agreedToTerms: new Date() }
+    });
+    
+    console.log(`[AGREE TO TERMS] Database updated successfully:`, updateResult.agreedToTerms);
+
+    console.log(`[AGREE TO TERMS] Step 4: Updating Clerk metadata...`);
+    // Update user metadata to reflect terms agreement in session
+    const metadataUpdate = await clerkClient.users.updateUserMetadata(userId, {
+      privateMetadata: {
+        ...clerkUser.privateMetadata,
+        agreedToTerms: true,
+      },
+      publicMetadata: {
+        ...clerkUser.publicMetadata,
+        agreedToTerms: true,
+      },
+    });
+    
+    console.log(`[AGREE TO TERMS] Clerk metadata updated successfully`);
+
+    console.log(`[AGREE TO TERMS] Step 5: Preparing redirect...`);
+    // Get redirect URL from form data, default to home page
+    const redirectUrl = formData.get("redirect_url") as string || "/";
+    console.log(`[AGREE TO TERMS] Redirect URL from form: ${redirectUrl}`);
+    
+    // Decode the URL in case it was URL encoded
+    const decodedRedirectUrl = decodeURIComponent(redirectUrl);
+    console.log(`[AGREE TO TERMS] Decoded redirect URL: ${decodedRedirectUrl}`);
+    
+    console.log(`[AGREE TO TERMS] Step 6: Returning redirect URL for client...`);
+    // Return the redirect URL - middleware will check database directly
+    console.log(`[AGREE TO TERMS] ========== AGREEMENT PROCESS COMPLETE ==========`);
+    return { success: true, redirectUrl: decodedRedirectUrl };
+    
+  } catch (error) {
+    console.error(`[AGREE TO TERMS] ========== ERROR IN AGREEMENT PROCESS ==========`);
+    console.error(`[AGREE TO TERMS] Error type:`, error?.constructor?.name);
+    console.error(`[AGREE TO TERMS] Error message:`, error?.message);
+    console.error(`[AGREE TO TERMS] Full error:`, error);
+    console.error(`[AGREE TO TERMS] Stack trace:`, error?.stack);
+    throw error; // Re-throw so the client can handle it
   }
-
-  // Check if user exists in our database
-  const dbUser = await prisma.user.findUnique({
-    where: { id: userId }
-  });
-
-  // If user doesn't exist, create them first
-  if (!dbUser) {
-    await createUser();
-  }
-
-  // Update the user's agreedToTerms field with the current timestamp
-  await prisma.user.update({
-    where: { id: userId },
-    data: { agreedToTerms: new Date() }
-  });
-
-  // Update user metadata to reflect terms agreement in session
-  await clerkClient.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      ...clerkUser.publicMetadata,
-      agreedToTerms: true,
-    },
-  });
-
-  // Get redirect URL from form data, default to home page
-  const redirectUrl = formData.get("redirect_url") as string || "/";
-  
-  // Redirect to specified URL or home page after agreement
-  return redirect(redirectUrl);
 }
 
 export async function getAgreedToTerms() {
@@ -143,7 +183,7 @@ export async function getAgreedToTerms() {
   }
 
   // First check if user exists
-  const user = await prisma.user.findUnique({
+  const user = await prismadb.user.findUnique({
     where: { id: userId }
   });
 
@@ -195,7 +235,7 @@ export async function updateNotificationPreferences(preferences: {
     }
 
     // Ensure user exists
-    const dbUser = await prisma.user.findUnique({
+    const dbUser = await prismadb.user.findUnique({
       where: { id: clerkUser.id },
       include: { preferences: true }
     });
@@ -206,7 +246,7 @@ export async function updateNotificationPreferences(preferences: {
 
     // Check if user preferences exist, create if not
     if (!dbUser?.preferences) {
-      await prisma.userPreferences.create({
+      await prismadb.userPreferences.create({
         data: {
           userId: clerkUser.id,
           listingType: 'apartment',
@@ -217,7 +257,7 @@ export async function updateNotificationPreferences(preferences: {
       });
     } else {
       // Update existing preferences
-      await prisma.userPreferences.update({
+      await prismadb.userPreferences.update({
         where: { userId: clerkUser.id },
         data: preferences
       });
@@ -241,7 +281,7 @@ export async function getNotificationPreferences() {
       return { success: false, error: 'User not authenticated' };
     }
 
-    const userPreferences = await prisma.userPreferences.findUnique({
+    const userPreferences = await prismadb.userPreferences.findUnique({
       where: { userId: clerkUser.id },
       select: {
         // Messages & Communication
