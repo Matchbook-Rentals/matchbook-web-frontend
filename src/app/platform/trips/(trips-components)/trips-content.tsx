@@ -55,7 +55,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 <DialogTrigger asChild>
                   <BrandButton
                     variant="outline"
-                    className='block sm:hidden w-fit rounded-full text-[16px]' // block sm:hidden
+                    className='block sm:hidden w-fit rounded-lg py-0 text-[16px]' // block sm:hidden
                   >
                     New Search
                   </BrandButton>
