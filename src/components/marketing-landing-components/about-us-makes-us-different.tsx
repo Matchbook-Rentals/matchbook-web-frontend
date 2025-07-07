@@ -55,11 +55,11 @@ export const Frame = (): JSX.Element => {
             accessible for all budgets.
           </p>
 
-          <div className="flex items-start gap-6 relative self-stretch w-full">
+          <div className="flex items-start gap-6 relative justify-between max-w-[600px] lg:max-w-[1000px] mx-auto self-stretch w-full">
             {featureCards.map((feature, index) => (
               <Card
                 key={`feature-${index}`}
-                className={`flex flex-col items-center ${index === 2 ? "w-[170px]" : "flex-1 self-stretch grow"} bg-[#f8fbfb] rounded-lg overflow-hidden border border-solid border-[#e5e7ea]`}
+                className={`flex flex-col items-center max-w-[150px] ${"flex-1 self-stretch grow"} bg-[#f8fbfb] rounded-lg overflow-hidden border border-solid border-[#e5e7ea]`}
               >
                 <CardContent className="flex flex-col items-center gap-4 p-3 w-full">
                   <div className="flex flex-col items-center gap-3 relative self-stretch w-full">
