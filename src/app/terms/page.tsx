@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getAgreedToTerms, agreeToTerms } from "../actions/user";
 import { auth } from "@clerk/nextjs/server";
 
-export default async function TermsPage() {
+export default async function TermsPage({ searchParams }: { searchParams: { redirect_url?: string } }) {
   const { userId } = auth();
   
   if (!userId) {
@@ -14,8 +14,9 @@ export default async function TermsPage() {
   const agreedToTerms = await getAgreedToTerms();
   
   if (agreedToTerms) {
-    // User already agreed to terms, redirect to home
-    return redirect("/");
+    // User already agreed to terms, redirect to specified URL or home
+    const redirectUrl = searchParams.redirect_url || "/";
+    return redirect(redirectUrl);
   }
 
   return (
@@ -487,6 +488,9 @@ export default async function TermsPage() {
       
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
         <form action={agreeToTerms}>
+          {searchParams.redirect_url && (
+            <input type="hidden" name="redirect_url" value={searchParams.redirect_url} />
+          )}
           <Button 
             type="submit"
             className="w-full sm:w-auto"

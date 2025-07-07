@@ -63,7 +63,7 @@ export default function NotFound() {
             )}
             
             {!isPlatformPage && (
-              <Link href="/hosts">
+              <Link href="/platform/host/add-property">
                 <Button variant="outline" className="w-full sm:w-auto">
                   Become a Host
                 </Button>

@@ -95,7 +95,7 @@ export async function updateUserLogin(timestamp: Date) {
   }
 }
 
-export async function agreeToTerms() {
+export async function agreeToTerms(formData: FormData) {
   const { userId } = auth();
   const clerkUser = await currentUser();
 
@@ -119,8 +119,11 @@ export async function agreeToTerms() {
     data: { agreedToTerms: new Date() }
   });
 
-  // Redirect to home page after agreement
-  return redirect("/");
+  // Get redirect URL from form data, default to home page
+  const redirectUrl = formData.get("redirect_url") as string || "/";
+  
+  // Redirect to specified URL or home page after agreement
+  return redirect(redirectUrl);
 }
 
 export async function getAgreedToTerms() {

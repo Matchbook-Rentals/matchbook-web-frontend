@@ -140,7 +140,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
         </div>
       </div>
 
-      <Link href="#">
+      <Link href="/platform/host/add-property">
         <BrandButton size="lg">
           List Your Property
         </BrandButton>
