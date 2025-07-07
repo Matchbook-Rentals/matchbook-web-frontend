@@ -70,7 +70,7 @@ export default function RentEasyCopy(): JSX.Element {
         key={card.id}
         className="flex flex-col items-start gap-2 p-3 relative w-full h-full rounded-xl overflow-hidden border border-solid border-[#c1c1c1]"
       >
-        <CardContent className={`flex flex-col items-start gap-2 p-0 w-full ${isCenter ? "h-full justify-center items-center" : "md:items-start items-center"}`}>
+        <CardContent className={`flex flex-col items-start gap-2 p-0 w-full relative z-10 ${isCenter ? "h-full justify-center items-center" : "md:items-start items-center"}`}>
           {isCenter ? (
             // Center card layout: icon on top of title
             <>
@@ -81,7 +81,7 @@ export default function RentEasyCopy(): JSX.Element {
                   src={card.icon}
                 />
               </div>
-              <div className="relative w-fit [font-family:'Poppins',Helvetica] z-1  font-medium text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center w-full max-w-[289px] px-2">
+              <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center w-full max-w-[289px] px-2">
                 {card.title}
               </div>
             </>
@@ -120,7 +120,7 @@ export default function RentEasyCopy(): JSX.Element {
 
           <div className="flex flex-col items-start gap-1 relative self-stretch w-full">
             <div
-              className={`relative self-stretch [font-family:'Poppins',Helvetica] z-1 font-normal text-[14px] leading-[140%] tracking-[0px] text-[#6C737F] ${card.isCentered ? "text-center" : "text-center md:text-left"}`}
+              className={`relative self-stretch [font-family:'Poppins',Helvetica] font-normal text-[14px] leading-[140%] tracking-[0px] text-[#6C737F] ${card.isCentered ? "text-center" : "text-center md:text-left"}`}
             >
               {card.description}
             </div>
@@ -135,7 +135,7 @@ export default function RentEasyCopy(): JSX.Element {
               <CowSpot className="md:scale-[3]" direction="southwest" />
             </>
           ) : (
-            <CowSpot className=" scale-[.5] md:scale-[0.7] z-0" direction="southeast" />
+            <CowSpot className=" scale-[.5] md:scale-[1.0] z-0" direction="southeast" />
           )}
         </div>
       </Card>
