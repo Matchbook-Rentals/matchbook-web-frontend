@@ -31,12 +31,12 @@ export default function MatchbookHeader({ userId, user, isSignedIn }: MatchbookH
 
       <div className="flex items-center gap-6">
         <Button
+          asChild
           variant="outline"
           className="text-[#3c8787] border-[#3c8787] hover:bg-primaryBrand hover:text-white font-medium transition-colors duration-300 hidden md:block"
-
         >
           <Link href={'/platform/host/add-property'}>
-          Become a Host
+            Become a Host
           </Link>
         </Button>
 
