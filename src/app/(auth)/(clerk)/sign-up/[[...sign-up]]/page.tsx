@@ -7,7 +7,7 @@ export default function Page() {
   // and then redirecting to the final destination (e.g., /platform/trips).
 
   return (
-    <div className="flex flex-col md:flex-row w-full mx-auto max-h-[100vh]">
+    <div className="auth-container flex flex-col md:flex-row w-full mx-auto">
       <div className="w-full md:w-0 lg:w-1/2 relative z-0">
         <img className="object-cover w-full flex-1 md:h-screen object-bottom block md:hidden" src="/auth/2.png" alt="Matchbook sign up" />
         <img className="object-cover w-full h-56 md:h-screen object-[80%] hidden md:block" src="/vertical-shot-golden-gate-bridge-against-misty-blue-sky-san-francisco-california-usa.jpg" alt="Matchbook sign up" />

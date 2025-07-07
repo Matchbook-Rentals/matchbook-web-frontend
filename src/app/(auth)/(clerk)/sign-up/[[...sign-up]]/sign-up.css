@@ -92,12 +92,12 @@
   background: #0B6E6E;
   margin: 0 auto;
   padding: 8px 16px;
-  color:#050100;
+  color: #ffffff !important;
   box-shadow: none !important;
 }
 
 .cl-formButtonPrimary:hover {
-  background: rgba(92, 154, 197, 0.69);
+  background: #0B6E6Ecc;
 }
 
 .cl-formFieldInput {
@@ -127,5 +127,16 @@
 
 .cl-footerActionLink {
   background: var(--background);
+}
+
+html, body {
+  overflow: hidden;
+}
+
+.auth-container {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
