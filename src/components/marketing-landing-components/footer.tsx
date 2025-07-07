@@ -33,7 +33,7 @@ export default function Footer() {
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
-                About
+                About Us
               </Link>
               <Link
                 href="/contact/#"
