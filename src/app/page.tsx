@@ -8,6 +8,8 @@ import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import RecentArticle from "@/components/home-components/recent-article";
 import FAQSection from "@/components/home-components/faq-section";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { checkClientBetaAccess } from "@/utils/roles";
+import { getUserTripsCount } from "@/app/actions/trips";
 
 const WebHomePage = async () => {
   const { userId } = await auth();
@@ -23,11 +25,17 @@ const WebHomePage = async () => {
     publicMetadata: user.publicMetadata
   } : null;
 
+  // Derive hasAccess from server-side user data
+  const hasAccess = user ? checkClientBetaAccess(user.publicMetadata.role as string) : false;
+  
+  // Get trip count if user has access
+  const tripCount = hasAccess && userId ? await getUserTripsCount() : 0;
+
   return (
     <div className="overflow-x-hidden bg-red-500">
       <MatchbookHeader userId={userId} user={userObject} isSignedIn={!!userId} />
+      <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!userId} />
       {/* 
-      <Hero />
       <div className={spacerDivClassNames} />
       <RentEasyCopy />
       <div className={spacerDivClassNames} />

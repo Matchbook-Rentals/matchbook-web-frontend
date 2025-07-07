@@ -6,55 +6,21 @@ import DesktopSearchTrigger from "./DesktopSearchTrigger";
 import SearchDialog from "./SearchDialog";
 import { BrandButton } from "@/components/ui/brandButton"; // Import BrandButton
 import { Card, CardContent } from "@/components/ui/card"; // Import Card components
-import { useAuth, useUser } from "@clerk/nextjs"; // Import Clerk hooks
-import { checkClientBetaAccess } from '@/utils/roles';
 import { useWindowSize } from "@/hooks/useWindowSize"; // Import window size hook
-import { getUserTripsCount } from "@/app/actions/trips"; // Import trip count function
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  hasAccess: boolean;
+  tripCount: number;
+  isSignedIn: boolean;
+}
+
+const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
   const [showSearchDialog, setShowSearchDialog] = useState(false); // State for shared search dialog
-  const [hasAccess, setHasAccess] = useState(false); // State for access check
-  const [tripCount, setTripCount] = useState<number>(0); // State for trip count
-  const { isSignedIn } = useAuth();
-  const { user } = useUser();
   const { width } = useWindowSize(); // Get current window width
 
-  // Effect to check user access based on role
-  useEffect(() => {
-    const checkAccess = async () => {
-      if (isSignedIn && user) {
-        const userRole = user.publicMetadata.role as string;
-        // Allow access for specific roles
-        setHasAccess(checkClientBetaAccess(userRole));
-      } else {
-        // No access if not signed in or user data is unavailable
-        setHasAccess(false);
-      }
-    };
-
-    checkAccess();
-  }, [isSignedIn, user]); // Rerun check when auth state or user data changes
-
-  // Effect to fetch trip count when user is signed in
-  useEffect(() => {
-    const fetchTripCount = async () => {
-      if (isSignedIn && user) {
-        try {
-          const count = await getUserTripsCount();
-          setTripCount(count);
-        } catch (error) {
-          console.error('Error fetching trip count:', error);
-          setTripCount(0);
-        }
-      } else {
-        setTripCount(0);
-      }
-    };
-
-    fetchTripCount();
-  }, [isSignedIn, user]); // Rerun when auth state changes
 
   // Close mobile dialog when screen width exceeds 640px (sm breakpoint in Tailwind)
   useEffect(() => {
@@ -92,8 +58,8 @@ const Hero: React.FC = () => {
           onOpenDialog={handleOpenSearchDialog}
         />
         
-        {/* Conditionally render OR separator and button only if user has trips */}
-        {tripCount > 0 && (
+        {/* Conditionally render OR separator and button */}
+        {(tripCount > 0 || !isSignedIn) && (
           <>
             {/* OR separator with white lines */}
             <div className="flex items-center justify-center w-[65%] mx-auto mt-6">
@@ -102,11 +68,19 @@ const Hero: React.FC = () => {
               <div className="flex-1 h-0.5 bg-white"></div>
             </div>
             
-            {/* VIEW PAST SEARCHES button */}
+            {/* Button - either View Past Searches or Sign In */}
             <div className="flex justify-center mt-4">
-              <BrandButton variant="outline">
-                View Past Searches
-              </BrandButton>
+              {isSignedIn ? (
+                <BrandButton variant="outline">
+                  View Past Searches
+                </BrandButton>
+              ) : (
+                <Link href="/sign-in">
+                  <BrandButton variant="outline">
+                    Sign In
+                  </BrandButton>
+                </Link>
+              )}
             </div>
           </>
         )}
@@ -130,12 +104,16 @@ const Hero: React.FC = () => {
 
       {/* Mobile Action Button */}
       <div className="block sm:hidden pt-4 pb-5 w-full z-10 flex justify-center">
-        {hasAccess ? (
+        {isSignedIn ? (
           <BrandButton variant="outline">
             View Past Searches
           </BrandButton>
         ) : (
-          <BrandButton variant={'outline'}> Log In </BrandButton>
+          <Link href="/sign-in">
+            <BrandButton variant={'outline'}>
+              Sign In
+            </BrandButton>
+          </Link>
         )}
       </div>
 
