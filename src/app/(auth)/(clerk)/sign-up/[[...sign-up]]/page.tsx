@@ -7,13 +7,18 @@ export default function Page() {
   // and then redirecting to the final destination (e.g., /platform/trips).
 
   return (
-    <div className="auth-container flex flex-col md:flex-row w-full mx-auto">
-      <div className="w-full md:w-0 lg:w-1/2 relative z-0">
-        <img className="object-cover w-full flex-1 md:h-screen object-bottom block md:hidden" src="/auth/2.png" alt="Matchbook sign up" />
-        <img className="object-cover w-full h-56 md:h-screen object-[80%] hidden md:block" src="/vertical-shot-golden-gate-bridge-against-misty-blue-sky-san-francisco-california-usa.jpg" alt="Matchbook sign up" />
-      </div>
-      <div className="flex justify-center items-center w-full lg:w-1/2 py-8 relative z-10 -mt-6 md:mt-0">
+    <div className="w-full h-screen bg-white overflow-hidden relative">
+      <div className="flex justify-center items-center w-full h-full py-8 relative z-10">
         <SignUp />
+      </div>
+      
+      {/* Background image positioned at bottom */}
+      <div className="absolute w-[100vw] h-[65vh] bottom-0 left-0 pointer-events-none">
+        <img 
+          src="/auth/3.png" 
+          alt="Background gradient" 
+          className="w-full h-full object-cover object-top"
+        />
       </div>
     </div>
   )
