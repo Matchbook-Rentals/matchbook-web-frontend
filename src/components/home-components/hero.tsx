@@ -36,7 +36,7 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
 
   return (
     <div
-      className="relative h-[365px] sm:h-[365px] h-[401px] max-h-[55vh] sm:max-h-[50vh] w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 bg-cover justify-start"
+      className="relative h-[365px] sm:h-[365px] h-[401px]  sm:max-h-[50vh] w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 bg-cover justify-start"
       style={{
         backgroundImage: "url('/marketing-images/banner-house.png')",
         backgroundSize: "cover", // Ensures the image covers the container

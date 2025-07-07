@@ -42,7 +42,6 @@ const WebHomePage = async () => {
       <HowItWorks />
       <div className={spacerDivClassNames} />
       <BecomeHostCopy />
-      {/* 
       <div className={spacerDivClassNames} />
       <ProsConsGrid />
       <div className={spacerDivClassNames} />
@@ -51,7 +50,6 @@ const WebHomePage = async () => {
       <FAQSection />
       <div className={spacerDivClassNames} />
       <Footer />
-       */}
     </div>
   );
 };
