@@ -8,7 +8,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useUser, useClerk, SignOutButton, useAuth } from "@clerk/nextjs";
+import { useClerk, SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import NotificationItem from "./platform-components/notification-item";
@@ -20,6 +20,15 @@ import { checkClientBetaAccess, checkClientHostAccess } from "@/utils/roles";
 import { MenuIcon, UserIcon } from "@/components/svgs/svg-components";
 
 const NOTIFICATION_REFRESH_INTERVAL = 60000; // one minute
+
+interface UserObject {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  imageUrl: string;
+  emailAddresses?: { emailAddress: string }[];
+  publicMetadata?: Record<string, any>;
+}
 
 // Define the structure for menu items
 interface MenuItem {
@@ -38,11 +47,12 @@ interface MenuItem {
 interface UserMenuProps {
   color: string;
   mode?: 'header' | 'menu-only';
+  userId?: string | null;
+  user?: UserObject | null;
+  isSignedIn?: boolean;
 }
 
-export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): JSX.Element {
-  const { isSignedIn, isLoaded } = useAuth();
-  const { user } = useUser();
+export default function UserMenu({ color, mode = 'menu-only', userId, user, isSignedIn }: UserMenuProps): JSX.Element {
   const { openUserProfile } = useClerk();
   const router = useRouter();
   const pathname = usePathname();
@@ -136,16 +146,9 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
     checkStripeAccount();
   }, [isMenuOpen, user]);
 
-  // Handle loading state
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center space-x-2 md:space-x-4">
-        <div className="animate-pulse">
-          <div className="h-10 w-10 bg-gray-200 rounded-full" />
-        </div>
-      </div>
-    );
-  }
+  // Use passed props or default values
+  const currentIsSignedIn = isSignedIn !== undefined ? isSignedIn : false;
+  const isLoaded = true;
 
   // Check if user is on host side - either by path or by view=host parameter
   const isHostSide = pathname?.startsWith('/platform/host/') ||
@@ -345,7 +348,7 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
   return (
     <div className="flex items-center space-x-2 md:space-x-4">
       {/* Notifications Icon - Requires beta access */}
-      {isSignedIn && hasBetaAccess && (
+      {currentIsSignedIn && hasBetaAccess && (
         <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
           <PopoverTrigger className="relative flex items-center justify-center">
             <Bell className="h-5 w-5 text-charcoal transition-transform duration-300 ease-out " />
@@ -383,7 +386,7 @@ export default function UserMenu({ color, mode = 'menu-only' }: UserMenuProps): 
       )}
 
       <div className="group">
-        {isSignedIn ? (
+        {currentIsSignedIn ? (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <PopoverTrigger className={mode === 'header' ? "flex items-center gap-2 rounded-md pl-2 cursor-pointer" : "flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]"}>
             {mode === 'header' ? (

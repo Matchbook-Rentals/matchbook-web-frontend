@@ -3,8 +3,22 @@ import React from "react";
 import { Button } from "../../components/ui/button";
 import UserMenu from "../userMenu";
 import Link from "next/link";
+interface UserObject {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  imageUrl: string;
+  emailAddresses?: { emailAddress: string }[];
+  publicMetadata?: Record<string, any>;
+}
 
-export default function MatchbookHeader(): JSX.Element {
+interface MatchbookHeaderProps {
+  userId: string | null;
+  user: UserObject | null;
+  isSignedIn: boolean;
+}
+
+export default function MatchbookHeader({ userId, user, isSignedIn }: MatchbookHeaderProps): JSX.Element {
 
   return (
     <header className="flex w-full items-center justify-between px-6 py-1 bg-white">
@@ -26,7 +40,7 @@ export default function MatchbookHeader(): JSX.Element {
           </Link>
         </Button>
 
-        <UserMenu color="white" mode="header" />
+        <UserMenu color="white" mode="header" userId={userId} user={user} isSignedIn={isSignedIn} />
       </div>
     </header>
   );
