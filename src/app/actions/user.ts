@@ -3,6 +3,7 @@ import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { currentUser, auth } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/nextjs/server'
 import { logger } from '@/lib/logger';
 
 export async function createUser() {
@@ -117,6 +118,14 @@ export async function agreeToTerms(formData: FormData) {
   await prisma.user.update({
     where: { id: userId },
     data: { agreedToTerms: new Date() }
+  });
+
+  // Update user metadata to reflect terms agreement in session
+  await clerkClient.users.updateUserMetadata(userId, {
+    publicMetadata: {
+      ...clerkUser.publicMetadata,
+      agreedToTerms: true,
+    },
   });
 
   // Get redirect URL from form data, default to home page
