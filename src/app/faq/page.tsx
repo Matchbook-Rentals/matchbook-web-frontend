@@ -5,6 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { Montserrat } from 'next/font/google';
 import Footer from '@/components/marketing-landing-components/footer';
+import { currentUser } from "@clerk/nextjs/server";
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
@@ -120,10 +121,22 @@ const tabs: Tab[] = [
   },
 ]
 
-const FAQPage = () => {
+const FAQPage = async () => {
+  const user = await currentUser();
+
+  // Serialize user data to plain object
+  const userObject = user ? {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    imageUrl: user.imageUrl,
+    emailAddresses: user.emailAddresses?.map(email => ({ emailAddress: email.emailAddress })),
+    publicMetadata: user.publicMetadata
+  } : null;
+
   return (
     <>
-      <MatchbookHeader />
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
       <div className=" w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto mt-10 ">
         <h1 className="text-3xl  mb-8">Frequently Asked Questions</h1>
         <TabSelector

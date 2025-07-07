@@ -4,15 +4,27 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import PlatformNavbar from '@/components/platform-components/platformNavbar'
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
+import { useUser } from '@clerk/nextjs';
 
 export default function NotFound() {
   const pathname = usePathname()
   const isPlatformPage = pathname?.includes('platform')
+  const { user, isSignedIn } = useUser();
+
+  // Serialize user data to plain object
+  const userObject = user ? {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    imageUrl: user.imageUrl,
+    emailAddresses: user.emailAddresses?.map(email => ({ emailAddress: email.emailAddress })),
+    publicMetadata: user.publicMetadata
+  } : null;
 
   return (
     <div className="min-h-screen bg-background">
       {/* Conditional Navigation */}
-      {isPlatformPage ? <PlatformNavbar /> : <MatchbookHeader />}
+      {isPlatformPage ? <PlatformNavbar /> : <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={isSignedIn} />}
       
       {/* 404 Content */}
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">

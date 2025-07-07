@@ -1,16 +1,29 @@
 
 import Footer from "@/components/marketing-landing-components/footer";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
+import { currentUser } from "@clerk/nextjs/server";
 
 
-export default function BlogLayout({
+export default async function BlogLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await currentUser();
+
+  // Serialize user data to plain object
+  const userObject = user ? {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    imageUrl: user.imageUrl,
+    emailAddresses: user.emailAddresses?.map(email => ({ emailAddress: email.emailAddress })),
+    publicMetadata: user.publicMetadata
+  } : null;
+
   return (
     <>
-      <MatchbookHeader />
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
       {children}
       <Footer />
     </>
