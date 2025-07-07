@@ -177,30 +177,28 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
             "flex items-center gap-3",
             isMobile ? "justify-between w-full max-w-80" : ""
           )}>
-            <Input
+            <div
               className={cn(
-                "w-[136px]",
-                isMobile ? "h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5" : ""
+                "w-[136px] bg-background border border-input rounded-md px-3 py-2 text-sm",
+                isMobile ? "h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5" : "h-10"
               )}
-              value={formatFooterDate(dateRange.start)}
-              placeholder="Start Date"
-              readOnly
-            />
+            >
+              {formatFooterDate(dateRange.start) || "Start Date"}
+            </div>
             <span className={cn(
               "text-gray-600",
               isMobile ? "font-text-md-regular text-[#667085] whitespace-nowrap" : ""
             )}>
               –
             </span>
-            <Input
+            <div
               className={cn(
-                "w-[136px]",
-                isMobile ? "h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5" : ""
+                "w-[136px] bg-background border border-input rounded-md px-3 py-2 text-sm",
+                isMobile ? "h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5" : "h-10"
               )}
-              value={formatFooterDate(dateRange.end)}
-              placeholder="End Date"
-              readOnly
-            />
+            >
+              {formatFooterDate(dateRange.end) || "End Date"}
+            </div>
           </div>
           
           {/* Controls */}
