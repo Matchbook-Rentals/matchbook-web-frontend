@@ -1,10 +1,9 @@
 import React from "react";
 import { BrandButton } from "../../components/ui/brandButton";
 import { Card, CardContent } from "../../components/ui/card";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export const BecomeHostCopy = (): JSX.Element => {
-  const router = useRouter();
 
   // Image data for mapping
   const images = [
@@ -81,13 +80,14 @@ export const BecomeHostCopy = (): JSX.Element => {
             </p>
           </div>
 
-          <BrandButton 
-            onClick={() => router.push('/hosts')}
-            size="xl"
-            className="w-1/2 md:w-auto mx-auto md:mx-0"
-          >
-            Learn More
-          </BrandButton>
+          <Link href="/hosts">
+            <BrandButton 
+              size="xl"
+              className="w-1/2 md:w-auto mx-auto md:mx-0"
+            >
+              Learn More
+            </BrandButton>
+          </Link>
         </div>
       </CardContent>
     </Card>

@@ -12,8 +12,8 @@ import { checkClientBetaAccess } from "@/utils/roles";
 import { getUserTripsCount } from "@/app/actions/trips";
 
 const WebHomePage = async () => {
-  const { userId } = await auth();
   const user = await currentUser();
+  const spacerDivClassNames = "h-[90px]";
 
   // Serialize user data to plain object
   const userObject = user ? {
@@ -29,13 +29,12 @@ const WebHomePage = async () => {
   const hasAccess = user ? checkClientBetaAccess(user.publicMetadata.role as string) : false;
   
   // Get trip count if user has access
-  const tripCount = hasAccess && userId ? await getUserTripsCount() : 0;
+  const tripCount = hasAccess && user?.id ? await getUserTripsCount() : 0;
 
   return (
-    <div className="overflow-x-hidden bg-red-500">
-      <MatchbookHeader userId={userId} user={userObject} isSignedIn={!!userId} />
-      <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!userId} />
-      {/* 
+    <div className="overflow-x-hidden bg-background">
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+      <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!user?.id} />
       <div className={spacerDivClassNames} />
       <RentEasyCopy />
       <div className={spacerDivClassNames} />
@@ -43,6 +42,7 @@ const WebHomePage = async () => {
       <HowItWorks />
       <div className={spacerDivClassNames} />
       <BecomeHostCopy />
+      {/* 
       <div className={spacerDivClassNames} />
       <ProsConsGrid />
       <div className={spacerDivClassNames} />
