@@ -490,7 +490,7 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
           />
         </div>
         <div>
-          <h3 className="text-xs mb-1">Flexible End Date</h3>
+          <h3 className="text-xs mt-3 mb-1">Flexible End Date</h3>
           <FlexibleDateSelector
             type="end"
             selectedOption={flexibility}
