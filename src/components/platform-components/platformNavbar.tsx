@@ -51,7 +51,7 @@ export default function PlatformNavbar({ userId, user, isSignedIn }: PlatformNav
             <img
               src="/logo-small.svg"
               alt="MatchBook Logo"
-              className="w-[40px] block md:hidden"
+              className="w-[35px] block md:hidden"
             />
           </Link>
         </motion.div>

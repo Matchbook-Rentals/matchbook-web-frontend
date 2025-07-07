@@ -6,6 +6,7 @@ import MatchbookHeader from "@/components/marketing-landing-components/matchbook
 import { Montserrat } from 'next/font/google';
 import Footer from '@/components/marketing-landing-components/footer';
 import { currentUser } from "@clerk/nextjs/server";
+import FAQSection from '@/components/home-components/faq-section';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
@@ -137,16 +138,7 @@ const FAQPage = async () => {
   return (
     <>
       <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
-      <div className=" w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto mt-10 ">
-        <h1 className="text-3xl  mb-8">Frequently Asked Questions</h1>
-        <TabSelector
-          tabs={tabs}
-          tabsListClassName={`p-0 test border-b-0 ${montserrat.className}`}
-          tabsClassName='border-0 [&[data-state=active]]:shadow-none'
-          className='border-0 mb-8'
-          //selectedTabColor='#0B6E6E'
-        />
-      </div>
+      <FAQSection />
       <Footer />
     </>
   );

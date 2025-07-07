@@ -25,7 +25,7 @@ export default function MatchbookHeader({ userId, user, isSignedIn }: MatchbookH
       <div className="relative h-[72px] flex items-center">
         <Link href="/">
           <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
-          <img className="w-[40px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
+          <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
         </Link>
       </div>
 
