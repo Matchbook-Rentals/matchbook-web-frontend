@@ -50,7 +50,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
           {features.slice(0, 2).map((feature) => (
             <Card
               key={feature.id}
-              className="flex flex-col min-w-80 items-start gap-5 flex-1 self-stretch border-none"
+              className="flex flex-col min-w-80 items-start gap-5 flex-1 self-stretch border-none shadow-none"
             >
               <div
                 className={`w-full h-60 rounded-xl bg-cover bg-top`}
