@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
+import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 
@@ -41,17 +42,63 @@ export interface BrandButtonProps
   asChild?: boolean
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
+  href?: string
 }
 
 const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
-  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, href, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     
     // Special handling for link variant with 2xl size
     const isLink2xl = variant === "link" && size === "2xl"
     const link2xlClasses = isLink2xl ? "h-[28px] gap-4" : ""
     
-    return (
+    // If href is provided, render as non-interactive div with Link overlay
+    if (href) {
+      // Create group-hover versions of the hover styles
+      const getGroupHoverClasses = (variant: string) => {
+        switch (variant) {
+          case "default":
+            return "group-hover:bg-primaryBrand"
+          case "destructive":
+            return "group-hover:bg-destructive/90"
+          case "outline":
+            return "group-hover:bg-primaryBrand group-hover:text-white"
+          case "secondary":
+            return "group-hover:bg-secondaryBrand/80"
+          case "ghost":
+            return "group-hover:bg-accent group-hover:text-accent-foreground"
+          case "link":
+            return "group-hover:text-primaryBrand"
+          default:
+            return "group-hover:bg-primaryBrand"
+        }
+      }
+
+      return (
+        <div className="relative inline-block group">
+          <div
+            className={cn(
+              brandButtonVariants({ variant, size, className }),
+              link2xlClasses,
+              "pointer-events-none select-none transition-all duration-300",
+              getGroupHoverClasses(variant || "default")
+            )}
+          >
+            {leftIcon && <span className="mr-2">{leftIcon}</span>}
+            {children}
+            {rightIcon && <span className="ml-2">{rightIcon}</span>}
+          </div>
+          <Link 
+            href={href} 
+            className="absolute inset-0 w-full h-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg"
+            tabIndex={0}
+          />
+        </div>
+      )
+    }
+    
+    const buttonContent = (
       <Comp
         className={cn(
           brandButtonVariants({ variant, size, className }),
@@ -65,6 +112,8 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
         {rightIcon && <span className="ml-2">{rightIcon}</span>}
       </Comp>
     )
+    
+    return buttonContent
   }
 )
 BrandButton.displayName = "BrandButton"

@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import { BrandButton } from "../../components/ui/brandButton";
 import { Card, CardContent } from "../../components/ui/card";
-import Link from "next/link";
 
 export const BecomeHostCopy = (): JSX.Element => {
 
@@ -110,14 +109,13 @@ export const BecomeHostCopy = (): JSX.Element => {
           </div>
 
           <div className="w-full flex justify-center md:justify-start">
-            <Link href="/hosts">
-              <BrandButton 
-                size="xl"
-                className="w-auto"
-              >
-                Learn More
-              </BrandButton>
-            </Link>
+            <BrandButton 
+              size="xl"
+              className="w-auto"
+              href="/hosts"
+            >
+              Learn More
+            </BrandButton>
           </div>
         </div>
       </CardContent>

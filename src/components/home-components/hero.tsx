@@ -75,19 +75,13 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
             {/* Button - either View Past Searches or Sign In */}
             <div className="flex justify-center mt-4">
               {isSignedIn ? (
-                <div className="relative group">
-                  <BrandButton variant="outline" className="pointer-events-none group-hover:bg-primaryBrand group-hover:text-white transition-all duration-300">
-                    View Past Searches
-                  </BrandButton>
-                  <Link href="/platform/trips" className="absolute inset-0 w-full h-full" />
-                </div>
+                <BrandButton variant="outline" href="/platform/trips">
+                  View Past Searches
+                </BrandButton>
               ) : (
-                <div className="relative group">
-                  <BrandButton variant="outline" className="pointer-events-none group-hover:bg-primaryBrand group-hover:text-white transition-all duration-300">
-                    Sign In
-                  </BrandButton>
-                  <Link href="/sign-in" className="absolute inset-0 w-full h-full" />
-                </div>
+                <BrandButton variant="outline" href="/sign-in">
+                  Sign In
+                </BrandButton>
               )}
             </div>
           </>
@@ -113,19 +107,13 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
       {/* Mobile Action Button */}
       <div className="block sm:hidden pt-4 pb-5 w-full z-10 flex justify-center">
         {isSignedIn ? (
-          <div className="relative group">
-            <BrandButton variant="outline" className="pointer-events-none group-hover:bg-primaryBrand group-hover:text-white transition-all duration-300">
-              View Past Searches
-            </BrandButton>
-            <Link href="/platform/trips" className="absolute inset-0 w-full h-full" />
-          </div>
+          <BrandButton variant="outline" href="/platform/trips">
+            View Past Searches
+          </BrandButton>
         ) : (
-          <div className="relative group">
-            <BrandButton variant="outline" className="pointer-events-none group-hover:bg-primaryBrand group-hover:text-white transition-all duration-300">
-              Sign In
-            </BrandButton>
-            <Link href="/sign-in" className="absolute inset-0 w-full h-full" />
-          </div>
+          <BrandButton variant="outline" href="/sign-in">
+            Sign In
+          </BrandButton>
         )}
       </div>
 
