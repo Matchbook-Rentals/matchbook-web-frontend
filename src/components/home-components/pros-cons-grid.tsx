@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface ComparisonItem {
   title: string;
@@ -84,7 +85,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
 }) => {
   // SVG components for reuse
   const CheckmarkSvg = () => (
-    <img src="/marketing-images/pros-cons/tick.svg" alt="Check" className="h-[15px] w-[15px] md:h-[27.4px] md:w-[27.4px] mb-1" />
+    <Image src="/marketing-images/pros-cons/tick.svg" alt="Check" width={27} height={27} className="h-[15px] w-[15px] md:h-[27.4px] md:w-[27.4px] mb-1" />
   );
 
   const CrossSvg = () => (
@@ -100,11 +101,14 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
       </h2>
       <div className="flex flex-col lg:flex-row gap-2 mt-16">
         {/* Image - Top on mobile, Left on desktop */}
-        <div className="w-full lg:flex-1">
-          <img
+        <div className="w-full lg:flex-1 relative h-[450px] lg:h-auto lg:min-h-[600px]">
+          <Image
             src={imageUrl}
             alt="MatchBook Marketing"
-            className="w-full h-[450px] lg:h-full object-cover lg:object-cover rounded-lg shadow-md object-[45%_35%]"
+            fill
+            className="object-cover rounded-lg shadow-md object-[45%_35%]"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            quality={85}
           />
         </div>
 
@@ -114,7 +118,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
           <div className="w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
           </div>
           <div className="w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-r-2 border-b-2 border-gray-200">
-            <img src="/new-green-logo.png" alt="MatchBook Logo" className="object-contain max-h-full max-w-full" />
+            <Image src="/new-green-logo.png" alt="MatchBook Logo" width={150} height={50} className="object-contain max-h-full max-w-full" />
           </div>
           <div className="w-full lg:w-[218.33px] h-[130px] lg:h-[153.8px] p-1 lg:p-4 flex flex-col items-center justify-center border-b-2 border-r-2 border-gray-200">
             <span className={textStyles.competitorText}>{competitorName}</span>

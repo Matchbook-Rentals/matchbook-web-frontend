@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { BrandButton } from "../../components/ui/brandButton";
 import { Card, CardContent } from "../../components/ui/card";
 import Link from "next/link";
@@ -35,10 +36,13 @@ export const BecomeHostCopy = (): JSX.Element => {
       <CardContent className="flex flex-col md:flex-row items-center gap-8 p-0 w-full">
         <div className="flex flex-col items-start gap-6 flex-1 w-full">
           <div className={images[0].containerClass}>
-            <img
-              className={images[0].className}
-              alt={images[0].alt}
+            <Image
               src={images[0].src}
+              alt={images[0].alt}
+              fill
+              className="object-cover object-[50%_25%]"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              quality={85}
             />
           </div>
 
@@ -50,10 +54,13 @@ export const BecomeHostCopy = (): JSX.Element => {
                   key={image.id}
                   className="flex-1 relative h-[189px] overflow-hidden rounded-2xl"
                 >
-                  <img
-                    className={image.className}
-                    alt={image.alt}
+                  <Image
                     src={image.src}
+                    alt={image.alt}
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    quality={85}
                   />
                 </div>
               ))}
@@ -61,10 +68,13 @@ export const BecomeHostCopy = (): JSX.Element => {
             
             {/* Show only second image between md and lg */}
             <div className="w-full md:w-full lg:flex-1 relative h-[189px] overflow-hidden rounded-2xl hidden md:block lg:hidden">
-              <img
-                className="w-full h-full object-cover object-center"
-                alt={images[2].alt}
+              <Image
                 src={images[2].src}
+                alt={images[2].alt}
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                quality={85}
               />
             </div>
             
@@ -75,10 +85,13 @@ export const BecomeHostCopy = (): JSX.Element => {
                   key={image.id}
                   className="flex-1 relative h-[189px] overflow-hidden rounded-2xl"
                 >
-                  <img
-                    className={image.className}
-                    alt={image.alt}
+                  <Image
                     src={image.src}
+                    alt={image.alt}
+                    fill
+                    className="object-cover object-center"
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    quality={85}
                   />
                 </div>
               ))}

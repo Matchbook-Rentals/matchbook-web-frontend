@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 
 export const AboutUsOurJourney = (): JSX.Element => {
@@ -24,28 +25,41 @@ When my wife and I left the Air Force to go back to school, we discovered that f
       <div className="flex flex-col lg:flex-row items-start gap-5 justify-center w-full px-4">
         <div className="flex flex-col w-full lg:w-[655px] items-start gap-5 order-1 lg:order-1">
           <Card className="w-full h-[163px] rounded-xl overflow-hidden">
-            <CardContent className="p-0">
-              <img
-                className="w-full h-[163px] object-cover"
-                alt="People in uniform"
+            <CardContent className="p-0 relative h-full">
+              <Image
                 src="/about-us/our-journey/1.png"
+                alt="People in uniform"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 655px"
+                quality={85}
               />
             </CardContent>
           </Card>
 
           <Card className="w-full h-[159px] rounded-xl overflow-hidden order-2 lg:order-2">
-            <CardContent className="p-0">
-              <div className="w-full h-[159px] bg-[url(/about-us/our-journey/2.png)] bg-cover bg-center" />
+            <CardContent className="p-0 relative h-full">
+              <Image
+                src="/about-us/our-journey/2.png"
+                alt="Our journey"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 655px"
+                quality={85}
+              />
             </CardContent>
           </Card>
         </div>
 
         <Card className="w-full lg:w-[465px] h-[343px] rounded-xl border-none  shadow-none overflow-hidden order-3 lg:order-2">
-          <CardContent className="p-0">
-            <img
-              className="w-full h-full object-cover"
-              alt="Our journey"
+          <CardContent className="p-0 relative h-full">
+            <Image
               src="/about-us/our-journey/3.png"
+              alt="Our journey"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 465px"
+              quality={85}
             />
           </CardContent>
         </Card>

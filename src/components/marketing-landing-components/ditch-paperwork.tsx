@@ -1,15 +1,19 @@
 import React from "react";
+import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 
 export const DitchPaperwork = (): JSX.Element => {
   return (
     <section className="flex flex-col md:flex-row items-center gap-8 px-6 md:px-[150px] py-14 relative bg-[#3c87870d]">
       <Card className="relative w-full md:w-[558px] h-[428px] rounded-xl overflow-hidden border-0">
-        <CardContent className="p-0 h-full">
-          <img
-            className="w-full h-full object-cover"
-            alt="Man tearing paper representing paperless workflow"
+        <CardContent className="p-0 h-full relative">
+          <Image
             src="/marketing-images/ditch-paperwork/1.png"
+            alt="Man tearing paper representing paperless workflow"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 558px"
+            quality={85}
           />
         </CardContent>
       </Card>
