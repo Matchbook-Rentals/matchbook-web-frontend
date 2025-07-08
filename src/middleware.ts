@@ -1,6 +1,7 @@
 // middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { Roles } from "@/types/globals";
 
 const isProtectedRoute = createRouteMatcher([
   "/platform(.*)",
@@ -17,6 +18,77 @@ const isAuthRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)"
 ]);
+
+// Role-based access control functions
+const checkBetaAccess = (userRole?: string) => {
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta' || userRole === 'preview';
+};
+
+const checkHostAccess = (userRole?: string) => {
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'host_beta' || userRole === 'preview';
+};
+
+const checkAdminAccess = (userRole?: string) => {
+  return userRole === 'admin';
+};
+
+const checkPreviewAccess = (userRole?: string) => {
+  return userRole === 'preview';
+};
+
+// Route-specific access control
+const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
+  // Admin-only routes
+  if (pathname.startsWith('/admin')) {
+    return checkAdminAccess(userRole);
+  }
+
+  // Beta access required routes
+  const betaRoutes = [
+    '/platform/host/dashboard/listings',
+    '/platform/host/dashboard/applications', 
+    '/platform/host/dashboard/bookings',
+    '/platform/trips',
+    '/platform/bookings'
+  ];
+  
+  for (const route of betaRoutes) {
+    if (pathname.startsWith(route)) {
+      return checkBetaAccess(userRole);
+    }
+  }
+
+  // Messages routes with beta access
+  if (pathname.startsWith('/platform/messages')) {
+    return checkBetaAccess(userRole);
+  }
+
+  // Host access required routes
+  const hostRoutes = [
+    '/platform/host/dashboard/listings'
+  ];
+  
+  for (const route of hostRoutes) {
+    if (pathname.startsWith(route)) {
+      return checkHostAccess(userRole);
+    }
+  }
+
+  // Routes requiring admin OR preview access
+  const adminOrPreviewRoutes = [
+    '/platform/application',
+    '/platform/verification'
+  ];
+  
+  for (const route of adminOrPreviewRoutes) {
+    if (pathname.startsWith(route)) {
+      return checkAdminAccess(userRole) || checkPreviewAccess(userRole);
+    }
+  }
+
+  // Default: allow access to other routes
+  return true;
+};
 
 export default clerkMiddleware(async (auth, request) => {
   console.log(`[MIDDLEWARE] ========== PROCESSING REQUEST ==========`);
@@ -105,7 +177,23 @@ export default clerkMiddleware(async (auth, request) => {
           return NextResponse.redirect(termsUrl);
         }
         
-        console.log(`[MIDDLEWARE] USER HAS AGREED TO TERMS - ALLOWING ACCESS`);
+        console.log(`[MIDDLEWARE] USER HAS AGREED TO TERMS - PROCEEDING TO RBAC CHECK`);
+        
+        // Role-based access control check
+        const userRole = sessionClaims?.metadata?.role as Roles | undefined;
+        console.log(`[MIDDLEWARE] User role: ${userRole}`);
+        
+        const hasRouteAccess = checkRouteAccess(request.nextUrl.pathname, userRole);
+        console.log(`[MIDDLEWARE] Route access check for ${request.nextUrl.pathname}: ${hasRouteAccess}`);
+        
+        if (!hasRouteAccess) {
+          console.log(`[MIDDLEWARE] ACCESS DENIED - User lacks required role for this route`);
+          // Redirect to unauthorized page or home page
+          const unauthorizedUrl = new URL("/", request.url);
+          return NextResponse.redirect(unauthorizedUrl);
+        }
+        
+        console.log(`[MIDDLEWARE] RBAC CHECK PASSED - ALLOWING ACCESS`);
       } catch (error) {
         console.error("[MIDDLEWARE] Error checking terms agreement:", error);
       }
