@@ -1,4 +1,5 @@
 // pages/unauthorized.tsx
+import { BrandButton } from "@/components/ui/brandButton";
 import Link from "next/link";
 
 export default function Unauthorized() {
@@ -14,16 +15,20 @@ export default function Unauthorized() {
           To request access or learn more about our platform, please visit our contact page.
         </p>
         <div className="space-y-4">
+          <BrandButton
+            variant={'outline'}
+            >
           <Link 
             href="/contact"
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
+            className=""
           >
             Contact Us
           </Link>
+          </BrandButton>
           <div>
             <Link 
               href="/"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
+              className="text-secondaryBrand hover:text-secondaryBrand/60 transition-colors"
             >
               Return to Home
             </Link>
