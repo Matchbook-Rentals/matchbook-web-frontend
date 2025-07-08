@@ -17,8 +17,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Matchbook Rentals | Coming Soon",
-  description: "Your place, all in one place",
+  title: "Matchbook Rentals",
+  description: "Flexible Rentals",
+  icons: {
+    icon: "/logo-small.svg",
+  },
 };
 
 const localization={
