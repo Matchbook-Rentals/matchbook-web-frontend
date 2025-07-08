@@ -70,6 +70,11 @@ export const pullListingsFromDb = async (
     console.log(`Filtering listings for states: ${statesToSearch.join(', ')}`);
     console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Input validation and state lookup completed.`);
 
+    // Calculate trip length in days and months
+    const tripLengthDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    const tripLengthMonths = Math.ceil(tripLengthDays / 30.44); // Average days per month
+    console.log(`Trip length: ${tripLengthDays} days (${tripLengthMonths} months)`);
+
     // First, filter by states (indexed) and then get listing IDs and distances within the radius
     // Use the raw query for combined state, distance filtering.
     const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
@@ -96,7 +101,7 @@ export const pullListingsFromDb = async (
     const listingIds = listingsWithDistance.map(l => l.id);
     const listings = await prisma.listing.findMany({
       where: {
-        AND: [ // Combine ID filter and unavailability filter
+        AND: [ // Combine ID filter, unavailability filter, and monthly pricing filter
           {
             id: {
               in: listingIds
@@ -112,6 +117,15 @@ export const pullListingsFromDb = async (
                     { startDate: { lt: endDate } },
                     { endDate: { gt: startDate } }
                   ]
+                }
+              }
+            }
+          },
+          { // Add condition to include only listings with compatible monthly pricing
+            monthlyPricing: {
+              some: {
+                months: {
+                  gte: tripLengthMonths // Must have pricing for at least the trip length
                 }
               }
             }
