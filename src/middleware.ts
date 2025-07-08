@@ -188,8 +188,8 @@ export default clerkMiddleware(async (auth, request) => {
         
         if (!hasRouteAccess) {
           console.log(`[MIDDLEWARE] ACCESS DENIED - User lacks required role for this route`);
-          // Redirect to unauthorized page or home page
-          const unauthorizedUrl = new URL("/", request.url);
+          // Redirect to unauthorized page
+          const unauthorizedUrl = new URL("/unauthorized", request.url);
           return NextResponse.redirect(unauthorizedUrl);
         }
         
