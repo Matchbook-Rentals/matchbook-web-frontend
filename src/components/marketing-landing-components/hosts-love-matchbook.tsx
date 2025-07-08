@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import { BrandButton } from "../ui/brandButton";
 import { Card, CardContent } from "../ui/card";
 
@@ -140,11 +139,9 @@ export const HostsLoveMatchbook = (): JSX.Element => {
         </div>
       </div>
 
-      <Link href="/platform/host/add-property">
-        <BrandButton size="lg">
-          List Your Property
-        </BrandButton>
-      </Link>
+      <BrandButton size="lg" href="/platform/host/add-property">
+        List Your Property
+      </BrandButton>
     </section>
   );
 };

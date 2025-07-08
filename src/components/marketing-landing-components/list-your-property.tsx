@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import { BrandButton } from "../ui/brandButton";
 import { Card, CardContent } from "../ui/card";
 
@@ -18,9 +17,9 @@ export const ListYourProperty = (): JSX.Element => {
           </h2>
         </div>
 
-        <Link href="/platform/host/add-property" className="w-40 lg:w-auto">
-          <BrandButton size="lg" className="w-full lg:w-auto">List Your Property</BrandButton>
-        </Link>
+        <BrandButton size="lg" className="w-40 lg:w-auto" href="/platform/host/add-property">
+          List Your Property
+        </BrandButton>
       </CardContent>
     </Card>
   );
