@@ -9,7 +9,7 @@ export const Frame = (): JSX.Element => {
       Icon: Shield,
       title: "Honesty & Integrity",
       description:
-        "We value transparent communication and ethical practices—no hidden fees or misleading listings.",
+        "We value transparent communication and ethical practices. No hidden fees or misleading listings.",
     },
     {
       Icon: Home,
@@ -21,7 +21,7 @@ export const Frame = (): JSX.Element => {
       Icon: HandshakeIcon,
       title: "Relationships Over Transactions",
       description:
-        "We prioritize long-term partnerships over quick gains—for both customers and team members.",
+        "We prioritize long-term partnerships over quick gains for both customers and team members.",
     },
   ];
 
@@ -36,7 +36,7 @@ export const Frame = (): JSX.Element => {
       Icon: CheckCircle,
       title: "A Better Experience for All",
       description:
-        "We aim to make renting not just fair, but genuinely enjoyable—for landlords and renters alike.",
+        "We aim to make renting not just fair, but genuinely enjoyable for hosts and renters alike.",
     },
   ];
 
@@ -49,10 +49,7 @@ export const Frame = (): JSX.Element => {
 
         <div className="flex flex-col items-center gap-4 relative self-stretch w-full">
           <p className="relative w-full max-w-[720px] mt-[-1.00px] font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-neutral900 text-[length:var(--text-label-medium-regular-font-size)] text-center tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
-            At MatchBook, we&apos;re reshaping the rental experience by putting
-            people first. Whether you&apos;re offering or seeking flexible
-            housing, our mission is to make the process transparent,
-            stress-free, and fair for everyone involved.
+At MatchBook, we’re reshaping the rental experience by putting people first. Whether you’re offering or seeking flexible housing, our mission is to make the process transparent, stress-free, and fair for everyone involved.
           </p>
         </div>
       </header>

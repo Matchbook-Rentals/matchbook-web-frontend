@@ -16,14 +16,7 @@ export const AboutUsOurJourney = (): JSX.Element => {
           </p>
 
           <p className="w-full max-w-[720px] px-4 font-text-label-medium-regular text-gray-neutral500 text-[16px] text-center">
-            We did, and it was a bad time. When Isabelle and I left Active Duty
-            Air force to attend school, we discovered that trying to find a
-            flexible rental property was like finding a missing sock in a pile
-            of laundry. We thought, &quot;There has to be a better way!&quot; And just
-            like that, the idea for MatchBook was born. 3 years later and with
-            the help of an amazing team, we have created a platform that makes
-            connecting housing providers with guests a breeze for all types and
-            schedules.
+When my wife and I left the Air Force to go back to school, we discovered that finding a mid-term rental was the wild west of the rental market. We could choose between properties that were either prohibitively expensive with massive fees tacked on or completely unverified with very little guarantee of quality or legitimacy. Although we eventually found a place we could afford, it was not without significant difficulty and a bit of blind trust that could have gone very wrong. This was a problem that needed to be fixed, and we started MatchBook to do just that. Three years later, with the help of an amazing team, we have created a platform that makes connecting hosts with renters safer, simpler, and more affordable.
           </p>
         </div>
       </header>

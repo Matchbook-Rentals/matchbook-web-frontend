@@ -42,17 +42,13 @@ export const Frame = (): JSX.Element => {
           </h2>
 
           <p className="relative w-full font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-neutral900 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] text-center lg:text-left">
-            We stand out by offering a complete solution to common rental
-            challenges. Unlike others who leave you to figure out the
-            complexities on your own &amp; charge you an arm and a leg for their
-            help.
+We stand out by offering a complete solution to common rental challenges, unlike others who leave you to figure out the complexities on your own & charge you an arm and a leg for their help. 
           </p>
         </div>
 
         <div className="flex flex-col items-center lg:items-end gap-4 relative self-stretch w-full">
           <p className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-gray-neutral800 text-base tracking-[0] leading-[normal] text-center lg:text-left">
-            MatchBook integrates essential features&nbsp;&nbsp;into one platform
-            accessible for all budgets.
+MatchBook integrates essential features into one platform accessible for all budgets.
           </p>
 
           <div className="flex items-start gap-6 relative justify-between max-w-[600px] lg:max-w-[1000px] mx-auto self-stretch w-full">

@@ -9,9 +9,9 @@ export const AboutUsLookingAhead = (): JSX.Element => {
           {/* Text blob image */}
           <div className="h-full max-w-[1000px] flex items-center justify-center">
             <img
-              className="w-auto h-auto max-w-full max-h-full object-cover"
+              className="w-auto h-auto max-w-full lg:pl-[25px] max-h-full object-cover"
               alt="Looking Ahead text"
-              src="/about-us/looking-ahead/Text blob.png"
+              src="/about-us/looking-ahead/Text-blob-new.png"
             />
           </div>
 
@@ -29,7 +29,7 @@ export const AboutUsLookingAhead = (): JSX.Element => {
         <img
           className="w-full h-auto object-cover"
           alt="Looking Ahead"
-          src="/about-us/looking-ahead/3.png"
+          src="/about-us/looking-ahead/3-new.png"
         />
       </div>
     </>
