@@ -1,6 +1,7 @@
 'use client'; // Required for useState and event handlers
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import MobileSearchTrigger from "./MobileSearchTrigger";
 import DesktopSearchTrigger from "./DesktopSearchTrigger";
 import SearchDialog from "./SearchDialog";
@@ -35,14 +36,17 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
   };
 
   return (
-    <div
-      className="relative h-[365px] sm:h-[365px] h-[401px]  sm:max-h-[50vh] w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 bg-cover justify-start"
-      style={{
-        backgroundImage: "url('/marketing-images/banner-house.png')",
-        backgroundSize: "cover", // Ensures the image covers the container
-        backgroundPosition: "center", // Centers the image so it crops equally from all sides
-      }}
-    >
+    <div className="relative h-[365px] sm:h-[365px] h-[401px] sm:max-h-[50vh] w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 justify-start overflow-hidden">
+      {/* Optimized background image using Next.js Image */}
+      <Image
+        src="/marketing-images/banner-house.png"
+        alt="Beautiful house exterior"
+        fill
+        className="object-cover"
+        priority
+        sizes="100vw"
+        quality={85}
+      />
       {/* Overlay - Kept commented out as per original */}
       {/* <div className="absolute inset-0 bg-gray-400 opacity-50"></div> */}
 
