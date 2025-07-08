@@ -35,6 +35,7 @@ export default async function ArticlePage({ params }: Params) {
         <MarketingPageHeader 
           headerText={article.title} 
           breadcrumbText="Articles"
+          articleSlug={article.slug}
         />
       </div>
       <div className="flex justify-between items-center px-1 mb-1 text-foreground">
