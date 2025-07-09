@@ -110,7 +110,14 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
       </Button>
 
       <span className={cn(getDefaultTextStyle(), "text-center", showMonthSuffix ? "min-w-[120px]" : "min-w-[40px]", textClassName)}>
-        {showMonthSuffix ? `${value} month${value !== 1 ? "s" : ""}` : value}
+        {showMonthSuffix ? (
+          <>
+            <span className="sm:hidden">{value}</span>
+            <span className="hidden sm:inline">{value} month{value !== 1 ? "s" : ""}</span>
+          </>
+        ) : (
+          value
+        )}
       </span>
 
       <Button

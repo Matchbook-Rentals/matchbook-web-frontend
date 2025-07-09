@@ -122,7 +122,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
       <div className="w-full">
 
         {/* Interactive Controls - Allow editing stay lengths */}
-        <div className="flex items-center justify-center w-full gap-8 mb-6">
+        <div className="flex items-center justify-center w-full gap-2 md:gap-8 mb-6 flex-wrap">
           {/* Shortest Stay Controls */}
           <div className="flex items-center gap-3">
             <label className={`${styles.labelTextSmall} whitespace-nowrap`}>
@@ -171,34 +171,67 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[120px] min-w-[80px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
                   Lease Length
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[140px] min-w-[100px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
                   Monthly Rent
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[80px] min-w-[60px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
                   Utilities Included
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[120px] min-w-[80px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
                   Lease Length
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[140px] min-w-[100px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
                   Monthly Rent
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[80px] min-w-[60px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
                   Utilities Included
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
+{/* Mobile: Single column layout */}
+              {monthlyPricing.map((pricing) => (
+                <TableRow key={`pricing-mobile-${pricing.months}`} className="md:hidden">
+                  <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
+                    {pricing.months} month{pricing.months !== 1 && 's'}
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                      <Input
+                        className="pl-7 text-xs"
+                        placeholder="0.00"
+                        value={pricing.price}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9.]/g, '');
+                          updateMonthPricing(pricing.months, value);
+                        }}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <BrandCheckbox
+                      name={`utilities-${pricing.months}`}
+                      checked={pricing.utilitiesIncluded}
+                      onChange={(e) => 
+                        updateMonthUtilities(pricing.months, e.target.checked)
+                      }
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+              
+              {/* Desktop: Two column layout */}
               {Array.from({ length: Math.ceil(monthlyPricing.length / 2) }, (_, rowIndex) => {
                 const halfLength = Math.ceil(monthlyPricing.length / 2);
                 const leftPricing = monthlyPricing[rowIndex];
                 const rightPricing = monthlyPricing[rowIndex + halfLength];
                 
                 return (
-                  <TableRow key={`pricing-row-${rowIndex}`}>
+                  <TableRow key={`pricing-row-${rowIndex}`} className="hidden md:table-row">
                     <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
                       {leftPricing.months} month{leftPricing.months !== 1 && 's'}
                     </TableCell>
