@@ -63,8 +63,20 @@ export default function LocationInput({ listingLocation, setListingLocation, val
         zoom: (coordinates.lat === INITIAL_COORDINATES.lat && coordinates.lng === INITIAL_COORDINATES.lng) ? 8 : 13,
       });
       
-      // Add navigation controls
-      newMap.addControl(new maplibregl.NavigationControl(), 'top-right');
+      // Configure map controls
+      const isMobile = window.innerWidth < 768; // sub-medium breakpoint
+      
+      // Always enable drag, disable scroll zoom
+      newMap.dragPan.enable();
+      newMap.scrollZoom.disable();
+      
+      if (!isMobile) {
+        // Add zoom controls for desktop
+        newMap.addControl(new maplibregl.NavigationControl(), 'top-right');
+      } else {
+        // Enable pinch zoom for mobile (no zoom controls)
+        newMap.touchZoomRotate.enable();
+      }
       
       // Only add a marker if not at the initial coordinates
       let newMarker: maplibregl.Marker | null = null;
@@ -275,8 +287,8 @@ export default function LocationInput({ listingLocation, setListingLocation, val
           <div id="property-location-map" className="w-full h-full absolute inset-0"></div>
 
           {/* Address input overlay positioned at top */}
-          <div className="absolute top-[34px] left-0 right-0 px-[107px]">
-            <div className="w-full max-w-[670px] mx-auto relative">
+          <div className="absolute top-[34px] left-0 right-0 px-[5%] md:px-[107px]">
+            <div className="w-[90%] md:w-full md:max-w-[670px] mx-auto relative">
               <Card className="w-full rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-background cursor-text">
                 <CardContent className="p-0">
                   <Input
