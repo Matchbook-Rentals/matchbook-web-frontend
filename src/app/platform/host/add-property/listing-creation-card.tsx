@@ -15,7 +15,7 @@ export const ListingCreationCard: React.FC<ListingCreationCardProps> = ({
 }) => {
   return (
     <div
-      className={`w-[194px] h-[103px] p-0 rounded-lg cursor-pointer ${
+      className={` w-[165px] md:w-[194px] h-[103px] p-0 rounded-lg cursor-pointer ${
         isSelected
           ? "border-2 border-solid border-[#333333]"
           : "border border-solid border-[#e6e6e6]"

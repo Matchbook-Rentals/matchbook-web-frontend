@@ -3,7 +3,7 @@ import { checkRole } from '@/utils/roles'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { UsersIcon, BookText, Database, TicketIcon, AlertTriangle, CreditCard, FileText } from 'lucide-react' // Added AlertTriangle, CreditCard, and FileText
+import { UsersIcon, BookText, Database, TicketIcon, AlertTriangle, CreditCard, FileText, FlaskConical } from 'lucide-react'
 
 export default async function AdminDashboard() {
   if (!checkRole('admin')) {
@@ -123,6 +123,21 @@ export default async function AdminDashboard() {
                 </p>
                 <Link href="/admin/boldsign">
                   <Button>Manage Documents</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <FlaskConical className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-semibold">Test Suites</h2>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  View and manage all test suites
+                </p>
+                <Link href="/admin/test">
+                  <Button>View Tests</Button>
                 </Link>
               </CardContent>
             </Card>
