@@ -121,6 +121,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               buttonClassName={styles.counterButton}
               textClassName={counterTextStyles || styles.counterText}
               showMonthSuffix={true}
+              alwaysShowMonthSuffix={true}
             />
           </div>
           
@@ -141,6 +142,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               buttonClassName={styles.counterButton}
               textClassName={counterTextStyles || styles.counterText}
               showMonthSuffix={true}
+              alwaysShowMonthSuffix={true}
             />
           </div>
         </div>
@@ -225,6 +227,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                   buttonClassName={styles.counterButton}
                   textClassName={counterTextStyles || styles.counterText}
                   showMonthSuffix={true}
+                  alwaysShowMonthSuffix={true}
                 />
               </div>
               <p className={`${questionSubTextStyles || styles.mutedText} mt-2`}>

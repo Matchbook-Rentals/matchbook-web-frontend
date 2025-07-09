@@ -19,6 +19,7 @@ interface ListingCreationCounterProps {
   variant?: "default" | "outline";
   iconSize?: "sm" | "md" | "lg";
   showMonthSuffix?: boolean;
+  alwaysShowMonthSuffix?: boolean;
 }
 
 export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
@@ -36,6 +37,7 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
   variant = "default",
   iconSize = "lg",
   showMonthSuffix = false,
+  alwaysShowMonthSuffix = false,
 }) => {
   const handleIncrement = () => {
     if (onIncrement) {
@@ -112,8 +114,14 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
       <span className={cn(getDefaultTextStyle(), "text-center", showMonthSuffix ? "min-w-[120px]" : "min-w-[40px]", textClassName)}>
         {showMonthSuffix ? (
           <>
-            <span className="sm:hidden">{value}</span>
-            <span className="hidden sm:inline">{value} month{value !== 1 ? "s" : ""}</span>
+            {alwaysShowMonthSuffix ? (
+              <span>{value} month{value !== 1 ? "s" : ""}</span>
+            ) : (
+              <>
+                <span className="sm:hidden">{value}</span>
+                <span className="hidden sm:inline">{value} month{value !== 1 ? "s" : ""}</span>
+              </>
+            )}
           </>
         ) : (
           value
