@@ -72,14 +72,23 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
               <div className="flex-1 h-0.5 bg-white"></div>
             </div>
             
-            {/* Button - either View Past Searches or Sign In */}
+            {/* CTA Button - either View Past Searches or Sign In */}
             <div className="flex justify-center mt-4">
               {isSignedIn ? (
-                <BrandButton variant="outline" href="/platform/trips">
+                <BrandButton 
+                  variant="outline" 
+                  href="/platform/trips" 
+                  className="focus-visible:outline-yellow-200 focus-visible:outline-4 focus-visible:outline-offset-4"
+                >
                   View Past Searches
                 </BrandButton>
               ) : (
-                <BrandButton variant="outline" href="/sign-in">
+                <BrandButton 
+                  variant="outline" 
+                  href="/sign-in" 
+                  className="focus-visible:outline-1 focus-visible:outline-white focus-visible:outline-offset-4"
+                  ringOffsetColor="transparent"
+                >
                   Sign In
                 </BrandButton>
               )}

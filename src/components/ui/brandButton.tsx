@@ -6,7 +6,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 const brandButtonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -43,10 +43,12 @@ export interface BrandButtonProps
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
   href?: string
+  ringOffsetColor?: string
+  ringInset?: boolean
 }
 
 const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
-  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, href, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, href, ringOffsetColor, ringInset, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     
     // Special handling for link variant with 2xl size
@@ -75,14 +77,24 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
         }
       }
 
+      // Extract all focus-visible classes from className (including opacity syntax)
+      const focusClasses = className?.match(/focus-visible:[\w-\/]+/g) || [];
+      
+      // Separate different types of focus classes
+      const customFocusOutlineWidth = focusClasses.find(cls => cls.match(/focus-visible:outline-\d+/)) || "";
+      const customFocusOutlineColor = focusClasses.find(cls => cls.match(/focus-visible:outline-\w+/) && !cls.match(/focus-visible:outline-\d+/) && !cls.match(/focus-visible:outline-offset/)) || "";
+      const customOutlineOffset = focusClasses.find(cls => cls.match(/focus-visible:outline-offset-/)) || "";
+
       return (
         <div className="relative inline-block group">
           <div
             className={cn(
-              brandButtonVariants({ variant, size, className }),
+              brandButtonVariants({ variant, size }),
               link2xlClasses,
               "pointer-events-none select-none transition-all duration-300",
-              getGroupHoverClasses(variant || "default")
+              getGroupHoverClasses(variant || "default"),
+              // Remove focus styles from the visual div, keeping only other classes
+              className?.replace(/focus-visible:[\w-]+/g, '').trim()
             )}
           >
             {leftIcon && <span className="mr-2">{leftIcon}</span>}
@@ -91,7 +103,22 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
           </div>
           <Link 
             href={href} 
-            className="absolute inset-0 w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
+            className={cn(
+              "absolute inset-0 w-full h-full focus:outline-none rounded-lg",
+              // Only add default outline width if no custom one is provided
+              !customFocusOutlineWidth && "focus-visible:outline-2",
+              // Only add default outline color if no custom one is provided
+              !customFocusOutlineColor && "focus-visible:outline-ring",
+              // Only add default outline-offset if no custom one is provided and no prop provided and not inset
+              !customOutlineOffset && !ringOffsetColor && !ringInset && "focus-visible:outline-offset-2",
+              customFocusOutlineWidth,
+              customFocusOutlineColor,
+              customOutlineOffset,
+              // Apply outline offset color from prop if provided
+              ringOffsetColor && `focus-visible:outline-offset-${ringOffsetColor}`,
+              // Apply outline inset if prop is true (though outline doesn't support inset, we'll keep the prop)
+              ringInset && "focus-visible:outline-inset"
+            )}
             tabIndex={0}
           />
         </div>
@@ -103,7 +130,7 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
         className={cn(
           brandButtonVariants({ variant, size, className }),
           link2xlClasses,
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          "focus:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
         )}
         ref={ref}
         {...props}

@@ -1,0 +1,1 @@
+ npx ccusage@latest
