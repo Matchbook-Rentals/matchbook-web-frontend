@@ -3,8 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Separator } from "@/components/ui/separator";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import ProgressBar, { StepInfo } from "./progress-bar";
@@ -99,6 +98,7 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
   const searchParams = useSearchParams();
   const draftId = searchParams.get('draftId');
   const { user } = useUser();
+  const { toast } = useToast();
   
   // Check if user is admin
   const userRole = user?.publicMetadata?.role as string | undefined;
@@ -627,16 +627,18 @@ const [listingBasics, setListingBasics] = useState({
           [currentStep]: errors
         });
         
-        // Show top errors for all devices
-        setTopErrorsContent(errors);
-        setShowTopErrors(true);
-        // Scroll to top to show the error message
-        setTimeout(() => {
-          window.scrollTo({ 
-            top: 0, 
-            behavior: 'smooth' 
-          });
-        }, 100);
+        // Show validation errors as toast
+        toast({
+          variant: "destructive",
+          title: "Please complete the following:",
+          description: (
+            <ul className="mt-2 space-y-1">
+              {errors.map((error, index) => (
+                <li key={index}>• {error}</li>
+              ))}
+            </ul>
+          ),
+        });
         
         // We'll display the errors in the UI, so just return here
         return; // Don't proceed if there are errors
@@ -649,8 +651,6 @@ const [listingBasics, setListingBasics] = useState({
         setValidationErrors(newValidationErrors);
       }
       
-      // Hide top errors when proceeding
-      setShowTopErrors(false);
       
       // If coming from review, validate all steps again before returning to review
       if (cameFromReview) {
@@ -735,47 +735,6 @@ const [listingBasics, setListingBasics] = useState({
     }
   };
   
-  // State for top validation errors
-  const [showTopErrors, setShowTopErrors] = useState<boolean>(false);
-  const [topErrorsContent, setTopErrorsContent] = useState<string[]>([]);
-  
-  // Top validation error component
-  const TopValidationErrors = () => {
-    if (!showTopErrors || topErrorsContent.length === 0) return null;
-    
-    return (
-      <div 
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{
-          animation: showTopErrors ? 'slideDownFromTop 0.4s ease-out forwards' : 'slideUpToTop 0.3s ease-in forwards'
-        }}
-      >
-        <div className="bg-orange-50 border-b-2 border-orange-400 p-4 shadow-lg">
-          <div className="max-w-[883px] mx-auto flex items-start justify-between">
-            <div className="flex items-start space-x-3">
-              <AlertCircle className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
-              <div>
-                <h3 className="font-medium text-orange-800 text-sm mb-1">Please complete the following:</h3>
-                <ul className="text-sm text-orange-700 space-y-1">
-                  {topErrorsContent.map((error, index) => (
-                    <li key={index}>• {error}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowTopErrors(false)}
-              className="text-orange-500 hover:text-orange-700 p-1 ml-4"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
   
   // Validate all steps before submission
   const validateAllSteps = () => {
@@ -954,14 +913,29 @@ const [listingBasics, setListingBasics] = useState({
       } catch (error) {
         console.error('Error creating listing:', error);
         
-        // Show error at the bottom of the review page
-        setValidationErrors({
-          ...validationErrors,
-          [11]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
+        // Show error with toast
+        toast({
+          variant: "destructive",
+          title: "Error creating listing",
+          description: (error as Error).message || 'An error occurred while creating the listing. Please try again.',
         });
       }
     } else {
       // There are validation errors
+      const allErrors = Object.values(validationErrors).flat();
+      
+      // Show validation errors as toast
+      toast({
+        variant: "destructive",
+        title: "Please fix the following errors:",
+        description: (
+          <ul className="mt-2 space-y-1">
+            {allErrors.map((error, index) => (
+              <li key={index}>• {error}</li>
+            ))}
+          </ul>
+        ),
+      });
       
       // Find the first step with errors and navigate to it
       const firstErrorStep = Object.keys(validationErrors)
@@ -1423,20 +1397,7 @@ const [listingBasics, setListingBasics] = useState({
             from { transform: translateX(-100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
           }
-          
-          @keyframes slideDownFromTop {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-          }
-          
-          @keyframes slideUpToTop {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-100%); opacity: 0; }
-          }
         `}</style>
-        
-        {/* Top validation errors */}
-        <TopValidationErrors />
 
         {/* Footer with navigation buttons - fixed to bottom */}
         {currentStep !== 12 && (
