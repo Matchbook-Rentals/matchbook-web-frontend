@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ListingCreationCard } from './listing-creation-card';
+import { Badge } from "@/components/ui/badge";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import InComplexIcon from '@/lib/icons/in-complex';
 import NotAvailableIcon from '@/lib/icons/not-available';
@@ -84,6 +84,10 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
   
   // Reusable section styles
   const sectionStyles = "space-y-4 pt-0 pb-10 mb-0";
+  
+  // Selected badge styling
+  const selectedBadgeStyles = "bg-gray-100 border-[#4f4f4f] border-2";
+  const unselectedBadgeStyles = "bg-gray-50 border-[#d9dadf]";
 
   const toggleAmenity = (val: string) => {
     // Check if this is a laundry option
@@ -154,17 +158,28 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
         <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
         <div className="flex flex-wrap gap-4">
           {laundryOptions.map((option) => (
-            <ListingCreationCard
+            <Badge
               key={option.id}
-              name={option.label}
-              icon={
-                option.value === 'washerInComplex' ? <InComplexIcon className="w-8 h-8" /> : 
-                option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-8 h-8" /> :
-                <AmenitiesIcons.WasherIcon className="w-8 h-8" />
-              }
-              isSelected={getLaundrySelection() === option.value}
+              variant="outline"
+              className={`inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 rounded-full border-solid cursor-pointer ${
+                getLaundrySelection() === option.value
+                  ? selectedBadgeStyles
+                  : unselectedBadgeStyles
+              }`}
               onClick={() => handleLaundryChange(option.value)}
-            />
+            >
+              {React.cloneElement(
+                option.value === 'washerInComplex' ? <InComplexIcon className="w-4 h-4" /> : 
+                option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-4 h-4" /> :
+                <AmenitiesIcons.WasherIcon className="w-4 h-4" />,
+                { className: "w-4 h-4" }
+              )}
+              <span className={`font-['Poppins',Helvetica] font-medium text-sm text-center leading-5 ${
+                getLaundrySelection() === option.value ? "text-[#344054]" : "text-[#344054]"
+              }`}>
+                {option.label}
+              </span>
+            </Badge>
           ))}
         </div>
       </div>
@@ -176,13 +191,23 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
               <h3 className="text-[18px] font-medium text-[#404040]">{group.group}</h3>
               <div className="flex flex-wrap gap-4">
                 {group.items.map((amenity) => (
-                  <ListingCreationCard
+                  <Badge
                     key={amenity.value}
-                    name={amenity.label}
-                    icon={amenity.icon}
-                    isSelected={selected.includes(amenity.value)}
+                    variant="outline"
+                    className={`inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 rounded-full border-solid cursor-pointer ${
+                      selected.includes(amenity.value)
+                        ? selectedBadgeStyles
+                        : unselectedBadgeStyles
+                    }`}
                     onClick={() => toggleAmenity(amenity.value)}
-                  />
+                  >
+                    {React.cloneElement(amenity.icon as React.ReactElement, { 
+                      className: "w-4 h-4" 
+                    })}
+                    <span className="font-['Poppins',Helvetica] font-medium text-sm text-center leading-5 text-[#344054]">
+                      {amenity.label}
+                    </span>
+                  </Badge>
                 ))}
               </div>
             </div>
