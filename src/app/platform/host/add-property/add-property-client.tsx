@@ -627,6 +627,17 @@ const [listingBasics, setListingBasics] = useState({
           [currentStep]: errors
         });
         
+        // Show top errors for all devices
+        setTopErrorsContent(errors);
+        setShowTopErrors(true);
+        // Scroll to top to show the error message
+        setTimeout(() => {
+          window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+          });
+        }, 100);
+        
         // We'll display the errors in the UI, so just return here
         return; // Don't proceed if there are errors
       }
@@ -637,6 +648,9 @@ const [listingBasics, setListingBasics] = useState({
         delete newValidationErrors[currentStep];
         setValidationErrors(newValidationErrors);
       }
+      
+      // Hide top errors when proceeding
+      setShowTopErrors(false);
       
       // If coming from review, validate all steps again before returning to review
       if (cameFromReview) {
@@ -721,22 +735,45 @@ const [listingBasics, setListingBasics] = useState({
     }
   };
   
-  // Component to display validation errors
-  const ValidationErrors = ({ errors, className }: { errors: string[], className?: string }) => {
-    if (!errors || errors.length === 0) return null;
+  // State for top validation errors
+  const [showTopErrors, setShowTopErrors] = useState<boolean>(false);
+  const [topErrorsContent, setTopErrorsContent] = useState<string[]>([]);
+  
+  // Top validation error component
+  const TopValidationErrors = () => {
+    if (!showTopErrors || topErrorsContent.length === 0) return null;
     
     return (
-      <Alert variant="destructive" className={className || "mb-6"}>
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          <ul className="list-disc pl-5 mt-2">
-            {errors.map((error, index) => (
-              <li key={index}>{error}</li>
-            ))}
-          </ul>
-        </AlertDescription>
-      </Alert>
+      <div 
+        className="fixed top-0 left-0 right-0 z-50"
+        style={{
+          animation: showTopErrors ? 'slideDownFromTop 0.4s ease-out forwards' : 'slideUpToTop 0.3s ease-in forwards'
+        }}
+      >
+        <div className="bg-orange-50 border-b-2 border-orange-400 p-4 shadow-lg">
+          <div className="max-w-[883px] mx-auto flex items-start justify-between">
+            <div className="flex items-start space-x-3">
+              <AlertCircle className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-medium text-orange-800 text-sm mb-1">Please complete the following:</h3>
+                <ul className="text-sm text-orange-700 space-y-1">
+                  {topErrorsContent.map((error, index) => (
+                    <li key={index}>• {error}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowTopErrors(false)}
+              className="text-orange-500 hover:text-orange-700 p-1 ml-4"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     );
   };
   
@@ -1095,15 +1132,11 @@ const [listingBasics, setListingBasics] = useState({
     switch (currentStep) {
       case 0:
         return (
-          <>
-            {validationErrors[0] && <ValidationErrors errors={validationErrors[0]} className="mb-6" />}
-            <ListingUploadHighlights
-              listingHighlights={listingHighlights}
-              setListingHighlights={setListingHighlights}
-              questionTextStyles={questionTextStyles}
-            />
-            {validationErrors[0] && <ValidationErrors errors={validationErrors[0]} className="mt-6" />}
-          </>
+          <ListingUploadHighlights
+            listingHighlights={listingHighlights}
+            setListingHighlights={setListingHighlights}
+            questionTextStyles={questionTextStyles}
+          />
         );
       case 1:
         return (
@@ -1125,34 +1158,26 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 3:
         return (
-          <>
-            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} className="mb-6" />}
-            <div className="mt-8">
-              <Rooms
-                bedrooms={listingRooms.bedrooms}
-                bathrooms={listingRooms.bathrooms}
-                squareFeet={listingRooms.squareFeet}
-                questionTextStyles={questionTextStyles}
-                onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
-                onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
-                onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
-              />
-            </div>
-            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} className="mt-6" />}
-          </>
+          <div className="mt-8">
+            <Rooms
+              bedrooms={listingRooms.bedrooms}
+              bathrooms={listingRooms.bathrooms}
+              squareFeet={listingRooms.squareFeet}
+              questionTextStyles={questionTextStyles}
+              onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
+              onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
+              onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
+            />
+          </div>
         );
       case 4:
         return (
-          <>
-            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mb-6" />}
-            <ListingBasics
-              title={listingBasics.title}
-              setTitle={value => setListingBasics(prev => ({ ...prev, title: value }))}
-              description={listingBasics.description}
-              setDescription={value => setListingBasics(prev => ({ ...prev, description: value }))}
-            />
-            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mt-6" />}
-          </>
+          <ListingBasics
+            title={listingBasics.title}
+            setTitle={value => setListingBasics(prev => ({ ...prev, title: value }))}
+            description={listingBasics.description}
+            setDescription={value => setListingBasics(prev => ({ ...prev, description: value }))}
+          />
         );
       case 5:
         // Custom photo handler to update validation in real-time
@@ -1186,139 +1211,92 @@ const [listingBasics, setListingBasics] = useState({
         };
         
         return (
-          <>
-            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mb-6" />}
-            <ListingPhotos 
-              listingPhotos={listingPhotos} 
-              setListingPhotos={handlePhotosUpdate}
-            />
-            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mt-6" />}
-          </>
+          <ListingPhotos 
+            listingPhotos={listingPhotos} 
+            setListingPhotos={handlePhotosUpdate}
+          />
         );
       case 6:
         return (
-          <>
-            {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} className="mb-6" />}
-            <ListingPhotoSelection
-              listingPhotos={listingPhotos}
-              selectedPhotos={selectedPhotos}
-              setSelectedPhotos={setSelectedPhotos}
-            />
-            {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} className="mt-6" />}
-          </>
+          <ListingPhotoSelection
+            listingPhotos={listingPhotos}
+            selectedPhotos={selectedPhotos}
+            setSelectedPhotos={setSelectedPhotos}
+          />
         );
       case 7:
         return (
-          <>
-            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mb-6" />}
-            <ListingAmenities
-              value={listingAmenities}
-              onChange={setListingAmenities}
-            />
-            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mt-6" />}
-          </>
+          <ListingAmenities
+            value={listingAmenities}
+            onChange={setListingAmenities}
+          />
         );
       case 8:
         return (
-          <>
-            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mb-6" />}
-            <ListingCreationPricing
-              shortestStay={listingPricing.shortestStay}
-              longestStay={listingPricing.longestStay}
-              includeUtilities={listingPricing.includeUtilities}
-              utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
-              varyPricingByLength={listingPricing.varyPricingByLength}
-              basePrice={listingPricing.basePrice}
-              onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
-              onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-              onIncludeUtilitiesChange={(value) => setListingPricing(prev => ({ ...prev, includeUtilities: value, utilitiesUpToMonths: value ? prev.shortestStay : prev.utilitiesUpToMonths }))}
-              onUtilitiesUpToMonthsChange={(value) => setListingPricing(prev => ({ ...prev, utilitiesUpToMonths: value }))}
-              onVaryPricingByLengthChange={(value) => setListingPricing(prev => ({ ...prev, varyPricingByLength: value }))}
-              onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
-              onContinue={handleNext}
-              questionTextStyles={questionTextStyles}
-              questionSubTextStyles={questionSubTextStyles}
-            />
-            {validationErrors[8] && <ValidationErrors errors={validationErrors[8]} className="mt-6" />}
-          </>
+          <ListingCreationPricing
+            shortestStay={listingPricing.shortestStay}
+            longestStay={listingPricing.longestStay}
+            includeUtilities={listingPricing.includeUtilities}
+            utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
+            varyPricingByLength={listingPricing.varyPricingByLength}
+            basePrice={listingPricing.basePrice}
+            onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
+            onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
+            onIncludeUtilitiesChange={(value) => setListingPricing(prev => ({ ...prev, includeUtilities: value, utilitiesUpToMonths: value ? prev.shortestStay : prev.utilitiesUpToMonths }))}
+            onUtilitiesUpToMonthsChange={(value) => setListingPricing(prev => ({ ...prev, utilitiesUpToMonths: value }))}
+            onVaryPricingByLengthChange={(value) => setListingPricing(prev => ({ ...prev, varyPricingByLength: value }))}
+            onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
+            onContinue={handleNext}
+            questionTextStyles={questionTextStyles}
+            questionSubTextStyles={questionSubTextStyles}
+          />
         );
       case 9:
         return (
-          <>
-            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mb-6" />}
-            <ListingCreationVerifyPricing
-              shortestStay={listingPricing.shortestStay}
-              longestStay={listingPricing.longestStay}
-              monthlyPricing={listingPricing.monthlyPricing}
-              includeUtilities={listingPricing.includeUtilities}
-              utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
-              onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
-              onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-              onMonthlyPricingChange={(pricing) => setListingPricing(prev => ({ ...prev, monthlyPricing: pricing }))}
-            />
-            {validationErrors[9] && <ValidationErrors errors={validationErrors[9]} className="mt-6" />}
-          </>
+          <ListingCreationVerifyPricing
+            shortestStay={listingPricing.shortestStay}
+            longestStay={listingPricing.longestStay}
+            monthlyPricing={listingPricing.monthlyPricing}
+            includeUtilities={listingPricing.includeUtilities}
+            utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
+            onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
+            onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
+            onMonthlyPricingChange={(pricing) => setListingPricing(prev => ({ ...prev, monthlyPricing: pricing }))}
+          />
         );
       case 10:
         return (
-          <>
-            {validationErrors[10] && <ValidationErrors errors={validationErrors[10]} className="mb-6" />}
-            <ListingCreationDeposit
-              deposit={listingPricing.deposit}
-              reservationDeposit={listingPricing.reservationDeposit}
-              petDeposit={listingPricing.petDeposit}
-              petRent={listingPricing.petRent}
-              onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
-              onReservationDepositChange={(value) => setListingPricing(prev => ({ ...prev, reservationDeposit: value }))}
-              onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
-              onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
-              questionTextStyles={questionTextStyles}
-              questionSubTextStyles={questionSubTextStyles}
-            />
-            {validationErrors[10] && <ValidationErrors errors={validationErrors[10]} className="mt-6" />}
-          </>
+          <ListingCreationDeposit
+            deposit={listingPricing.deposit}
+            reservationDeposit={listingPricing.reservationDeposit}
+            petDeposit={listingPricing.petDeposit}
+            petRent={listingPricing.petRent}
+            onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
+            onReservationDepositChange={(value) => setListingPricing(prev => ({ ...prev, reservationDeposit: value }))}
+            onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
+            onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
+            questionTextStyles={questionTextStyles}
+            questionSubTextStyles={questionSubTextStyles}
+          />
         );
       case 11:
-        // Combine all errors for the review page
-        const allValidationErrors = Object.values(validationErrors).flat();
-        
         return (
-          <>
-            {allValidationErrors.length > 0 && (
-              <ValidationErrors 
-                errors={[
-                  "Please fix the following errors before submitting your listing:",
-                  ...allValidationErrors
-                ]} 
-                className="mb-6" 
-              />
-            )}
-            <ListingCreationReview 
-              listingHighlights={listingHighlights}
-              listingLocation={listingLocation}
-              listingRooms={listingRooms}
-              listingBasics={listingBasics}
-              listingAmenities={listingAmenities}
-              listingPricing={listingPricing}
-              onEditHighlights={() => handleEditFromReview(0)}
-              onEditLocation={() => handleEditFromReview(1)}
-              onEditRooms={() => handleEditFromReview(3)}
-              onEditBasics={() => handleEditFromReview(4)}
-              onEditAmenities={() => handleEditFromReview(7)}
-              onEditPricing={() => handleEditFromReview(9)}
-              onEditDeposits={() => handleEditFromReview(10)}
-              showPricingStructureTitle={false}
-            />
-            {allValidationErrors.length > 0 && (
-              <ValidationErrors 
-                errors={[
-                  "Please fix the following errors before submitting your listing:",
-                  ...allValidationErrors
-                ]} 
-                className="mt-6" 
-              />
-            )}
-          </>
+          <ListingCreationReview 
+            listingHighlights={listingHighlights}
+            listingLocation={listingLocation}
+            listingRooms={listingRooms}
+            listingBasics={listingBasics}
+            listingAmenities={listingAmenities}
+            listingPricing={listingPricing}
+            onEditHighlights={() => handleEditFromReview(0)}
+            onEditLocation={() => handleEditFromReview(1)}
+            onEditRooms={() => handleEditFromReview(3)}
+            onEditBasics={() => handleEditFromReview(4)}
+            onEditAmenities={() => handleEditFromReview(7)}
+            onEditPricing={() => handleEditFromReview(9)}
+            onEditDeposits={() => handleEditFromReview(10)}
+            showPricingStructureTitle={false}
+          />
         );
       case 12:
         // Success page - determine if from Save & Exit or final submission
@@ -1445,7 +1423,20 @@ const [listingBasics, setListingBasics] = useState({
             from { transform: translateX(-100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
           }
+          
+          @keyframes slideDownFromTop {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+          
+          @keyframes slideUpToTop {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100%); opacity: 0; }
+          }
         `}</style>
+        
+        {/* Top validation errors */}
+        <TopValidationErrors />
 
         {/* Footer with navigation buttons - fixed to bottom */}
         {currentStep !== 12 && (

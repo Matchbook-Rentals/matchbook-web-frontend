@@ -48,24 +48,6 @@ export default function AddressConfirmation({ listingLocation, setListingLocatio
   return (
     <main className="relative w-full">
       <section className="w-full h-full">
-
-        {/* Validation Errors at the top */}
-        {validationErrors && validationErrors.length > 0 && (
-          <div className="w-full mb-4">
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>
-                <ul className="list-disc pl-5 mt-2">
-                  {validationErrors.map((error, index) => (
-                    <li key={index}>{error}</li>
-                  ))}
-                </ul>
-              </AlertDescription>
-            </Alert>
-          </div>
-        )}
-
         {/* Address form */}
         <div className="w-full flex justify-center">
           <div className="w-full mx-auto bg-background">

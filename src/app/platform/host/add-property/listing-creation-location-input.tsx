@@ -264,24 +264,6 @@ export default function LocationInput({ listingLocation, setListingLocation, val
   return (
     <main className="relative w-full md:max-w-[883px] min-h-[601px]">
       <section className="w-full h-full">
-
-        {/* Validation Errors at the top */}
-        {validationErrors && validationErrors.length > 0 && (
-          <div className="w-full mb-4">
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>
-                <ul className="list-disc pl-5 mt-2">
-                  {validationErrors.map((error, index) => (
-                    <li key={index}>{error}</li>
-                  ))}
-                </ul>
-              </AlertDescription>
-            </Alert>
-          </div>
-        )}
-
         <div className="w-full h-[547px] relative bg-gray-100">
           {/* Map container replaces the background image */}
           <div id="property-location-map" className="w-full h-full absolute inset-0"></div>
