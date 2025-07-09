@@ -195,6 +195,7 @@ model Listing {
   petDeposit             Int?      @default(0)
   petRent                Int?      @default(0)
   reservationDeposit     Int?      @default(0)
+  rentDueAtBooking       Int?      @default(0)
   requireBackgroundCheck Boolean   @default(false)
   shortestLeaseLength    Int       @default(1)
   longestLeaseLength     Int       @default(12)
@@ -1232,6 +1233,7 @@ model ListingInCreation {
   petDeposit             Int?
   petRent                Int?
   reservationDeposit     Int?
+  rentDueAtBooking       Int?
   requireBackgroundCheck Boolean?
   shortestLeaseLength    Int?
   longestLeaseLength     Int?

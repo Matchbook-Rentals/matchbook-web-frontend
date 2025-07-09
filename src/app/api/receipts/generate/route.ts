@@ -43,17 +43,17 @@ export async function POST(request: NextRequest) {
       // Get reservation deposit from listing
       const listing = await prisma.listing.findUnique({
         where: { id: match.listingId },
-        select: { reservationDeposit: true }
+        select: { rentDueAtBooking: true }
       });
 
-      const reservationDeposit = listing?.reservationDeposit || 77;
+      const rentDueAtBooking = listing?.rentDueAtBooking || 77;
 
       // Create receipt
       const result = await createPaymentReceipt({
         userId,
         matchId,
         paymentType,
-        reservationDeposit,
+        rentDueAtBooking,
         paymentMethodType,
         stripePaymentIntentId,
         stripeChargeId,
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     if (bookingId) {
       const booking = await prisma.booking.findUnique({
         where: { id: bookingId },
-        select: { userId: true, listing: { select: { userId: true, reservationDeposit: true } } }
+        select: { userId: true, listing: { select: { userId: true, rentDueAtBooking: true } } }
       });
 
       if (!booking) {
@@ -84,14 +84,14 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
 
-      const reservationDeposit = booking.listing.reservationDeposit || 77;
+      const rentDueAtBooking = booking.listing.rentDueAtBooking || 77;
 
       // Create receipt
       const result = await createPaymentReceipt({
         userId,
         bookingId,
         paymentType,
-        reservationDeposit,
+        rentDueAtBooking,
         paymentMethodType,
         stripePaymentIntentId,
         stripeChargeId,

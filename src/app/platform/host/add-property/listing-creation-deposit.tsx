@@ -3,11 +3,11 @@ import { Input } from "@/components/ui/input";
 
 interface ListingCreationDepositProps {
   deposit: string;
-  reservationDeposit: string;
+  rentDueAtBooking: string;
   petDeposit: string;
   petRent: string;
   onDepositChange: (value: string) => void;
-  onReservationDepositChange: (value: string) => void;
+  onRentDueAtBookingChange: (value: string) => void;
   onPetDepositChange: (value: string) => void;
   onPetRentChange: (value: string) => void;
   questionTextStyles?: string;
@@ -16,11 +16,11 @@ interface ListingCreationDepositProps {
 
 const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
   deposit,
-  reservationDeposit,
+  rentDueAtBooking,
   petDeposit,
   petRent,
   onDepositChange,
-  onReservationDepositChange,
+  onRentDueAtBookingChange,
   onPetDepositChange,
   onPetRentChange,
   questionTextStyles,
@@ -63,7 +63,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <label className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
-                  Reservation deposit
+                  Rent Due At Booking
                 </label>
                 <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1">
                   This portion of the deposit is not refunded in the case of a cancellation
@@ -73,11 +73,11 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input 
                   className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
-                  value={reservationDeposit}
+                  value={rentDueAtBooking}
                   onChange={(e) => {
                     // Only allow numbers and decimal points
                     const value = e.target.value.replace(/[^0-9.]/g, '');
-                    onReservationDepositChange(value);
+                    onRentDueAtBookingChange(value);
                   }}
                   placeholder="0.00"
                   type="text"

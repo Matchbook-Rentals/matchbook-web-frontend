@@ -137,7 +137,7 @@ interface ListingReviewProps {
     shortTermRent: string;
     longTermRent: string;
     deposit: string;
-    reservationDeposit: string;
+    rentDueAtBooking: string;
     petDeposit: string;
     petRent: string;
   };
@@ -716,7 +716,7 @@ export const Box = ({
                     className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
                   >
                     <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
-                      <strong>Reservation Deposit:</strong> ${listingPricing?.reservationDeposit || 0}
+                      <strong>Rent Due At Booking:</strong> ${listingPricing?.rentDueAtBooking || 0}
                     </span>
                   </Badge>
                   

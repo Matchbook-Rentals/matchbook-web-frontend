@@ -9,24 +9,24 @@ export function generateReceiptNumber(): string {
 
 // Calculate payment breakdown (matches the frontend logic)
 export function calculatePaymentBreakdown(
-  reservationDeposit: number,
+  rentDueAtBooking: number,
   paymentMethodType?: string
 ) {
-  const applicationFee = Math.round(reservationDeposit * 0.03 * 100) / 100;
+  const applicationFee = Math.round(rentDueAtBooking * 0.03 * 100) / 100;
   
   let processingFee = 0;
-  let total = reservationDeposit + applicationFee;
+  let total = rentDueAtBooking + applicationFee;
   
   if (paymentMethodType === 'card') {
     // Stripe processing fee: 2.9% + $0.30
-    const subtotalWithAppFee = reservationDeposit + applicationFee;
+    const subtotalWithAppFee = rentDueAtBooking + applicationFee;
     const totalWithCardFee = (subtotalWithAppFee + 0.30) / (1 - 0.029);
     processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
     total = Math.round(totalWithCardFee * 100) / 100;
   }
   
   return {
-    reservationDeposit,
+    rentDueAtBooking,
     applicationFee,
     processingFee,
     total
@@ -49,7 +49,7 @@ export async function createPaymentReceipt(params: {
   matchId?: string;
   bookingId?: string;
   paymentType: string;
-  reservationDeposit: number;
+  rentDueAtBooking: number;
   paymentMethodType?: string;
   stripePaymentIntentId?: string;
   stripeChargeId?: string;
@@ -60,14 +60,14 @@ export async function createPaymentReceipt(params: {
     matchId,
     bookingId,
     paymentType,
-    reservationDeposit,
+    rentDueAtBooking,
     paymentMethodType,
     stripePaymentIntentId,
     stripeChargeId,
     transactionStatus
   } = params;
 
-  const breakdown = calculatePaymentBreakdown(reservationDeposit, paymentMethodType);
+  const breakdown = calculatePaymentBreakdown(rentDueAtBooking, paymentMethodType);
   const receiptNumber = generateReceiptNumber();
   
   // Generate unique transaction number
@@ -82,7 +82,7 @@ export async function createPaymentReceipt(params: {
           receiptNumber,
           paymentType,
           totalAmount: toCents(breakdown.total),
-          subtotalAmount: toCents(breakdown.reservationDeposit + breakdown.applicationFee),
+          subtotalAmount: toCents(breakdown.rentDueAtBooking + breakdown.applicationFee),
           serviceFeeAmount: toCents(breakdown.processingFee),
           userId,
         }
@@ -91,14 +91,14 @@ export async function createPaymentReceipt(params: {
       // Create receipt items
       const receiptItems = [];
       
-      // Reservation deposit
+      // Rent due at booking
       receiptItems.push({
         receiptId: receipt.id,
-        description: 'Reservation Deposit',
-        category: 'reservation_deposit',
+        description: 'Rent Due At Booking',
+        category: 'rent_due_at_booking',
         quantity: 1,
-        unitPrice: toCents(breakdown.reservationDeposit),
-        totalPrice: toCents(breakdown.reservationDeposit),
+        unitPrice: toCents(breakdown.rentDueAtBooking),
+        totalPrice: toCents(breakdown.rentDueAtBooking),
         taxable: false,
       });
 
@@ -142,7 +142,7 @@ export async function createPaymentReceipt(params: {
           paymentMethod: paymentMethodType || 'unknown',
           platformFeeAmount: toCents(breakdown.applicationFee),
           stripeFeeAmount: toCents(breakdown.processingFee),
-          netAmount: toCents(breakdown.reservationDeposit),
+          netAmount: toCents(breakdown.rentDueAtBooking),
           userId,
           matchId,
           bookingId,

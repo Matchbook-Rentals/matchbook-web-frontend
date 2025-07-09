@@ -337,13 +337,13 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
     return (originalAmount + 0.30) / (1 - 0.029);
   };
 
-  // Calculate payment amount (reservation deposit only + fees)
+  // Calculate payment amount (rent due at booking only + fees)
   const calculatePaymentAmount = (paymentMethodType?: string) => {
-    // Use reservation deposit, fallback to $77 if null
-    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have reservation deposits
-    const reservationDeposit = match.listing.reservationDeposit || 77;
+    // Use rent due at booking, fallback to $77 if null
+    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have rent due at booking set
+    const rentDueAtBooking = match.listing.rentDueAtBooking || 77;
     
-    let subtotal = reservationDeposit;
+    let subtotal = rentDueAtBooking;
     
     // Add 3% application fee
     const applicationFee = Math.round(subtotal * 0.03 * 100) / 100;
@@ -360,22 +360,22 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   
   // Calculate breakdown for display
   const getPaymentBreakdown = (paymentMethodType?: string) => {
-    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have reservation deposits
-    const reservationDeposit = match.listing.reservationDeposit || 77;
-    const applicationFee = Math.round(reservationDeposit * 0.03 * 100) / 100;
+    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have rent due at booking set
+    const rentDueAtBooking = match.listing.rentDueAtBooking || 77;
+    const applicationFee = Math.round(rentDueAtBooking * 0.03 * 100) / 100;
     
     let processingFee = 0;
-    let total = reservationDeposit + applicationFee;
+    let total = rentDueAtBooking + applicationFee;
     
     if (paymentMethodType === 'card') {
-      const subtotalWithAppFee = reservationDeposit + applicationFee;
+      const subtotalWithAppFee = rentDueAtBooking + applicationFee;
       const totalWithCardFee = addCreditCardFee(subtotalWithAppFee);
       processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
       total = Math.round(totalWithCardFee * 100) / 100;
     }
     
     return {
-      reservationDeposit,
+      rentDueAtBooking,
       applicationFee,
       processingFee,
       total
@@ -510,8 +510,8 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                   
                   <div className="space-y-2 border-t pt-4">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Reservation Deposit</span>
-                      <span className="font-medium">${(match.listing.reservationDeposit || 77).toFixed(2)}</span>
+                      <span className="text-sm text-gray-600">Rent Due At Booking</span>
+                      <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Application Fee (3%)</span>

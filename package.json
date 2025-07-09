@@ -26,7 +26,10 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:video": "RECORD_VIDEO=always playwright test",
     "test:e2e:video:headed": "RECORD_VIDEO=always playwright test --headed",
-    "test:e2e:codegen": "playwright codegen localhost:3000"
+    "test:e2e:codegen": "playwright codegen localhost:3000",
+    "migrate:reservation-deposit": "node scripts/migrate-reservation-deposit.js",
+    "verify:reservation-deposit": "node scripts/verify-reservation-deposit-migration.js",
+    "cleanup:reservation-deposit": "node scripts/cleanup-reservation-deposit.js"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.3",

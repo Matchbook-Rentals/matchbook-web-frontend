@@ -51,7 +51,7 @@ interface NullableListing {
   userId: string | null;
   squareFootage: number | null;
   depositSize: number | null;
-  reservationDeposit: number | null;
+  rentDueAtBooking: number | null;
   requireBackgroundCheck: boolean | null;
   shortestLeaseLength: number | null;
   longestLeaseLength: number | null;
@@ -149,7 +149,7 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
     userId: null,
     squareFootage: null,
     depositSize: null,
-    reservationDeposit: null,
+    rentDueAtBooking: null,
     requireBackgroundCheck: null,
     shortestLeaseLength: null,
     longestLeaseLength: null,
@@ -239,7 +239,7 @@ const [listingPricing, setListingPricing] = useState({
   varyPricingByLength: true,
   basePrice: "",
   deposit: "",
-  reservationDeposit: "",
+  rentDueAtBooking: "",
   petDeposit: "",
   petRent: ""
 });
@@ -349,7 +349,7 @@ const [listingBasics, setListingBasics] = useState({
         depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
         petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit) : null,
         petRent: listingPricing.petRent ? Number(listingPricing.petRent) : null,
-        reservationDeposit: listingPricing.reservationDeposit ? Number(listingPricing.reservationDeposit) : null,
+        rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : null,
         shortestLeaseLength: listingPricing.shortestStay || null,
         longestLeaseLength: listingPricing.longestStay || null,
         shortestLeasePrice: null, // Deprecated
@@ -852,7 +852,7 @@ const [listingBasics, setListingBasics] = useState({
           guestCount: listingRooms.bedrooms || 1,
           squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : 0,
           depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
-          reservationDeposit: listingPricing.reservationDeposit ? Number(listingPricing.reservationDeposit) : 0,
+          rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : 0,
           shortestLeaseLength: listingPricing.shortestStay || 1,
           longestLeaseLength: listingPricing.longestStay || 12,
           shortestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
@@ -1049,7 +1049,7 @@ const [listingBasics, setListingBasics] = useState({
               varyPricingByLength: true,
               basePrice: "",
               deposit: draftListing.depositSize ? draftListing.depositSize.toString() : "",
-              reservationDeposit: draftListing.reservationDeposit ? draftListing.reservationDeposit.toString() : "",
+              rentDueAtBooking: draftListing.rentDueAtBooking ? draftListing.rentDueAtBooking.toString() : "",
               petDeposit: draftListing.petDeposit ? draftListing.petDeposit.toString() : "",
               petRent: draftListing.petRent ? draftListing.petRent.toString() : ""
             });
@@ -1096,7 +1096,7 @@ const [listingBasics, setListingBasics] = useState({
       shortestLeasePrice: 0, // Deprecated
       longestLeasePrice: 0, // Deprecated
       depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
-      reservationDeposit: listingPricing.reservationDeposit ? Number(listingPricing.reservationDeposit) : null,
+      rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : null,
     }));
   }, [listingHighlights, listingLocation, listingRooms, listingAmenities, listingPricing]);
 
@@ -1242,11 +1242,11 @@ const [listingBasics, setListingBasics] = useState({
         return (
           <ListingCreationDeposit
             deposit={listingPricing.deposit}
-            reservationDeposit={listingPricing.reservationDeposit}
+            rentDueAtBooking={listingPricing.rentDueAtBooking}
             petDeposit={listingPricing.petDeposit}
             petRent={listingPricing.petRent}
             onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
-            onReservationDepositChange={(value) => setListingPricing(prev => ({ ...prev, reservationDeposit: value }))}
+            onRentDueAtBookingChange={(value) => setListingPricing(prev => ({ ...prev, rentDueAtBooking: value }))}
             onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
             onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
             questionTextStyles={questionTextStyles}

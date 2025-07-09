@@ -109,7 +109,7 @@ export async function POST(
 
       // Generate receipt for the tenant
       try {
-        const reservationDeposit = match.listing.reservationDeposit || 77;
+        const rentDueAtBooking = match.listing.rentDueAtBooking || 77;
         const paymentMethodType = 'card'; // Assuming card payment for now
         
         await createPaymentReceipt({
@@ -117,7 +117,7 @@ export async function POST(
           matchId: params.matchId,
           bookingId: booking.id,
           paymentType: 'reservation',
-          reservationDeposit,
+          rentDueAtBooking,
           paymentMethodType,
           stripePaymentIntentId: paymentIntent.id,
           stripeChargeId: paymentIntent.latest_charge as string,
