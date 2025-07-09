@@ -356,7 +356,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
             )}
           </PopoverTrigger>
-          <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-0">
+          <PopoverContent className="p-0">
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="border-b border-gray-200">
                 <div className="px-4 py-3">
@@ -428,8 +428,26 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
               </>
             )}
           </PopoverTrigger>
-          <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-0">
-            <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+          <PopoverContent className="p-0">
+            <div 
+              className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden"
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                  e.preventDefault();
+                  const focusableElements = e.currentTarget.querySelectorAll('a, button:not(:disabled)');
+                  const currentIndex = Array.from(focusableElements).findIndex(el => el === document.activeElement);
+                  
+                  let nextIndex;
+                  if (e.key === 'ArrowDown') {
+                    nextIndex = currentIndex + 1 >= focusableElements.length ? 0 : currentIndex + 1;
+                  } else {
+                    nextIndex = currentIndex <= 0 ? focusableElements.length - 1 : currentIndex - 1;
+                  }
+                  
+                  (focusableElements[nextIndex] as HTMLElement)?.focus();
+                }
+              }}
+            >
               {/* Render menu items from the structure */}
               {(() => {
                 let lastSection = 0;
@@ -469,7 +487,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                       {href && isItemEnabled ? (
                         <Link 
                           href={href} 
-                          className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset"
+                          className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {label}
@@ -477,7 +495,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                       ) : (
                         <button
                           onClick={item.onClick ? item.onClick : () => setIsMenuOpen(false)}
-                          className={`w-full px-4 py-3 text-left text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset ${
+                          className={`w-full px-4 py-3 text-left text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset ${
                             isItemEnabled
                               ? 'text-gray-800 hover:bg-gray-50'
                               : 'text-gray-400 cursor-not-allowed'
@@ -504,7 +522,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                 <SignOutButton>
                   <button
                     onClick={() => {}}
-                    className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset"
+                    className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset"
                   >
                     Sign Out
                   </button>
@@ -530,13 +548,13 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
             </div>
             <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
           </PopoverTrigger>
-          <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-0">
+          <PopoverContent className="p-0">
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
-                <Link href="/sign-in" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset">
+                <Link href="/sign-in" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
                   Sign In
                 </Link>
-                <button onClick={() => setIsSupportOpen(true)} className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset">
+                <button onClick={() => setIsSupportOpen(true)} className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
                   Get help
                 </button>
               </div>

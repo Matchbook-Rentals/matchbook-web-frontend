@@ -6,7 +6,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 const brandButtonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -91,7 +91,7 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
           </div>
           <Link 
             href={href} 
-            className="absolute inset-0 w-full h-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg"
+            className="absolute inset-0 w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
             tabIndex={0}
           />
         </div>
@@ -102,7 +102,8 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
       <Comp
         className={cn(
           brandButtonVariants({ variant, size, className }),
-          link2xlClasses
+          link2xlClasses,
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         )}
         ref={ref}
         {...props}
