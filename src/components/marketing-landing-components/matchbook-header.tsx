@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "../../components/ui/button";
 import UserMenu from "../userMenu";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 interface UserObject {
   id: string;
   firstName: string | null;
@@ -16,12 +17,13 @@ interface MatchbookHeaderProps {
   userId: string | null;
   user: UserObject | null;
   isSignedIn: boolean;
+  className?: string;
 }
 
-export default function MatchbookHeader({ userId, user, isSignedIn }: MatchbookHeaderProps): JSX.Element {
+export default function MatchbookHeader({ userId, user, isSignedIn, className }: MatchbookHeaderProps): JSX.Element {
 
   return (
-    <header className="flex w-full items-center justify-between px-6 py-1 bg-white">
+    <header className={cn("flex w-full items-center justify-between px-6 py-1 bg-white", className)}>
       <div className="relative h-[72px] flex items-center">
         <Link href="/">
           <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
