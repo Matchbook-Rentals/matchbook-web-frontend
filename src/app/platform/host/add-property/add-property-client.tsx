@@ -1385,11 +1385,12 @@ const [listingBasics, setListingBasics] = useState({
     <main className="bg-background flex flex-row justify-center w-full ">
       <div className="bg-background overflow-hidden w-full max-w-[1920px] relative pb-32">
 
-        {/* Title and Save & Exit button at top */}
+        {/* Mobile restructured header */}
         {currentStep !== 12 && (
-          <div className="flex justify-between items-center w-full max-w-[883px] mx-auto py-10">
-            <div className="flex flex-col">
-              <h1 className="font-['Poppins'] text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
+          <div className="w-full max-w-[883px] mx-auto">
+            {/* Title row - top left */}
+            <div className="px-4 pt-6">
+              <h1 className="font-['Poppins'] text-xl md:text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
                 {getStepInfo(currentStep).title}
               </h1>
               {getStepInfo(currentStep).subtitle && (
@@ -1401,18 +1402,23 @@ const [listingBasics, setListingBasics] = useState({
                 </p>
               )}
             </div>
-            <BrandButton 
-              variant="outline"
-              size="xl"
-              onClick={handleSaveExit}
-            >
-              Save & Exit
-            </BrandButton>
+            
+            {/* Save & Exit button row - top left */}
+            <div className="px-4 pt-4 pb-6">
+              <BrandButton 
+                variant="outline"
+                size="lg"
+                onClick={handleSaveExit}
+                className="text-sm"
+              >
+                Save & Exit
+              </BrandButton>
+            </div>
           </div>
         )}
 
         {/* Main content with slide animation */}
-        <div className="w-full max-w-[883px] mx-auto mb-24">
+        <div className="w-full max-w-[883px] mx-auto mb-24 px-4">
           <div 
             key={animationKey} // Adding key to force re-render on each step change
             className="transition-transform duration-500 ease-in-out"
@@ -1450,77 +1456,82 @@ const [listingBasics, setListingBasics] = useState({
             <Separator className="w-full" />
             {isAdmin ? (
               /* Admin footer with skip buttons */
-              <div className="w-full px-[50px] py-8">
-                <div className="flex justify-between items-center ">
-                  <div className="flex gap-2 items-center">
+              <div className="w-full px-4 md:px-[50px] py-6 md:py-8">
+                {/* Admin controls row - skip, skip */}
+                {!adminSkipButtonsHidden && (
+                  <div className="flex justify-between items-center mb-4">
                     <BrandButton 
-                      variant="link"
-                      size="xl"
-                      onClick={handleBack}
+                      variant="outline"
+                      size="sm"
+                      className="border-orange-500 text-orange-500 hover:bg-orange-500 text-xs px-3 py-1"
+                      onClick={handleAdminSkipBack}
                       disabled={currentStep === 0}
                     >
-                      Back
+                      Skip
                     </BrandButton>
-                    {!adminSkipButtonsHidden && (
-                      <BrandButton 
-                        variant="outline"
-                        size="sm"
-                        className="border-orange-500 text-orange-500 hover:bg-orange-500"
-                        onClick={handleAdminSkipBack}
-                        disabled={currentStep === 0}
-                      >
-                        Skip ←
-                      </BrandButton>
-                    )}
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    {!adminSkipButtonsHidden && (
-                      <BrandButton 
-                        variant="outline"
-                        size="sm"
-                        className="border-orange-500 text-orange-500 hover:bg-orange-500"
-                        onClick={handleAdminSkipNext}
-                        disabled={currentStep >= steps.length - 1 || currentStep === 11}
-                      >
-                        Skip →
-                      </BrandButton>
-                    )}
                     <BrandButton 
-                      variant="default"
-                      size="2xl"
-                      onClick={currentStep === 11 ? handleSubmitListing : handleNext}
-                      disabled={currentStep === 11 ? isAdmin : false}
+                      variant="outline"
+                      size="sm"
+                      className="border-orange-500 text-orange-500 hover:bg-orange-500 text-xs px-3 py-1"
+                      onClick={handleAdminSkipNext}
+                      disabled={currentStep >= steps.length - 1 || currentStep === 11}
                     >
-                      {currentStep === 11 ? 'Submit Listing' : 
-                       (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
+                      Skip
                     </BrandButton>
                   </div>
+                )}
+                
+                {/* Back and Next buttons row - mobile sizes, justify-between */}
+                <div className="flex justify-between items-center">
+                  <BrandButton 
+                    variant="link"
+                    size="lg"
+                    onClick={handleBack}
+                    disabled={currentStep === 0}
+                    className="text-sm"
+                  >
+                    Back
+                  </BrandButton>
+                  <BrandButton 
+                    variant="default"
+                    size="lg"
+                    onClick={currentStep === 11 ? handleSubmitListing : handleNext}
+                    disabled={currentStep === 11 ? isAdmin : false}
+                    className="text-sm px-6"
+                  >
+                    {currentStep === 11 ? 'Submit Listing' : 
+                     (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
+                  </BrandButton>
                 </div>
-                <div className="text-center">
+                
+                {/* Admin mode indicator */}
+                <div className="text-center mt-3">
                   <span 
                     className={`text-xs font-medium cursor-pointer ${adminSkipButtonsHidden ? 'text-gray-500' : 'text-orange-600'}`}
                     onClick={() => setAdminSkipButtonsHidden(!adminSkipButtonsHidden)}
                   >
-                    Admin Mode: Skip buttons bypass validation (click to {adminSkipButtonsHidden ? 'show' : 'hide'})
+                    Admin Mode (click to {adminSkipButtonsHidden ? 'show' : 'hide'} controls)
                   </span>
                 </div>
               </div>
             ) : (
-              /* Regular user footer */
-              <div className="flex justify-between items-center w-full px-[50px] py-10">
+              /* Regular user footer - Back and Next buttons mobile sizes, justify-between */
+              <div className="flex justify-between items-center w-full px-4 md:px-[50px] py-8 md:py-10">
                 <BrandButton 
                   variant="link"
-                  size="xl"
+                  size="lg"
                   onClick={handleBack}
                   disabled={currentStep === 0}
+                  className="text-sm"
                 >
                   Back
                 </BrandButton>
                 <BrandButton 
                   variant="default"
-                  size="2xl"
+                  size="lg"
                   onClick={currentStep === 11 ? handleSubmitListing : handleNext}
                   disabled={currentStep === 11 ? isAdmin : false}
+                  className="text-sm px-6"
                 >
                   {currentStep === 11 ? 'Submit Listing' : 
                    (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
