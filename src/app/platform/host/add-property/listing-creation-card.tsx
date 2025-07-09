@@ -15,14 +15,14 @@ export const ListingCreationCard: React.FC<ListingCreationCardProps> = ({
 }) => {
   return (
     <div
-      className={` w-[165px] md:w-[194px] h-[103px] p-0 rounded-lg cursor-pointer ${
+      className={` w-[145px] xs:w-[155px] sm:w-[165px] md:w-[194px] h-[103px] p-0 rounded-lg cursor-pointer ${
         isSelected
           ? "border-2 border-solid border-[#333333]"
           : "border border-solid border-[#e6e6e6]"
       }`}
       onClick={onClick}
     >
-      <div className="flex flex-col items-start gap-1.5 p-6 md:p-6 md:pl-6 pr-0 pl-4 pr-1 h-full">
+      <div className="flex flex-col border-2 items-start gap-1.5 py-6 md:py-6 md:pl-6 pr-0 pl-4 pr-1 h-full">
         <div className="relative w-[30px] h-[30px] flex items-center justify-center">
           {icon}
         </div>

@@ -217,6 +217,27 @@ const config = {
         },
         '.ios-safe-bottom': {
           bottom: 'env(safe-area-inset-bottom, 0px)',
+        },
+        '.test-size': {
+          border: '2px solid red', // default
+          '@screen xs': {
+            borderColor: 'orange',
+          },
+          '@screen sm': {
+            borderColor: 'yellow',
+          },
+          '@screen md': {
+            borderColor: 'green',
+          },
+          '@screen lg': {
+            borderColor: 'blue',
+          },
+          '@screen xl': {
+            borderColor: 'purple',
+          },
+          '@screen 2xl': {
+            borderColor: 'pink',
+          },
         }
       }
       addUtilities(newUtilities)

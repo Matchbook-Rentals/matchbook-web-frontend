@@ -120,8 +120,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               containerClassName="flex items-center space-x-4"
               buttonClassName={styles.counterButton}
               textClassName={counterTextStyles || styles.counterText}
-              showMonthSuffix={true}
-              alwaysShowMonthSuffix={true}
+              monthSuffixClassName="hidden sm:inline"
             />
           </div>
           
@@ -141,8 +140,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               containerClassName="flex items-center space-x-4"
               buttonClassName={styles.counterButton}
               textClassName={counterTextStyles || styles.counterText}
-              showMonthSuffix={true}
-              alwaysShowMonthSuffix={true}
+              monthSuffixClassName="hidden sm:inline"
             />
           </div>
         </div>
@@ -158,6 +156,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               checked={varyPricingByLength}
               onCheckedChange={onVaryPricingByLengthChange}
               className="data-[state=checked]:bg-secondaryBrand"
+              monthSuffixClassName="hidden sm:inline"
             />
           </div>
           

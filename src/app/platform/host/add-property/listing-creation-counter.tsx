@@ -18,8 +18,9 @@ interface ListingCreationCounterProps {
   decrementDisabled?: boolean;
   variant?: "default" | "outline";
   iconSize?: "sm" | "md" | "lg";
-  showMonthSuffix?: boolean;
-  alwaysShowMonthSuffix?: boolean;
+  monthSuffixClassName?: string;
+  textSize?: "sm" | "base" | "lg" | "xl";
+  buttonSize?: "sm" | "md" | "lg";
 }
 
 export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
@@ -36,8 +37,9 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
   decrementDisabled,
   variant = "default",
   iconSize = "lg",
-  showMonthSuffix = false,
-  alwaysShowMonthSuffix = false,
+  monthSuffixClassName = "inline",
+  textSize = "base",
+  buttonSize = "md",
 }) => {
   const handleIncrement = () => {
     if (onIncrement) {
@@ -71,27 +73,44 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
     }
   };
 
-  const getDefaultButtonStyle = () => {
-    if (variant === "outline") {
-      return iconSize === "sm" 
-        ? "rounded-full h-7 w-7 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900"
-        : "rounded-full h-9 w-9 border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900";
+  const getButtonSize = () => {
+    switch (buttonSize) {
+      case "sm": return "h-6 w-6";
+      case "md": return "h-8 w-8";
+      case "lg": return "h-10 w-10";
+      default: return "h-8 w-8";
     }
-    return "p-1 h-8 w-8 rounded-full border border-black";
+  };
+
+  const getTextSize = () => {
+    switch (textSize) {
+      case "sm": return "text-sm";
+      case "base": return "text-base";
+      case "lg": return "text-lg";
+      case "xl": return "text-xl";
+      default: return "text-base";
+    }
+  };
+
+  const getDefaultButtonStyle = () => {
+    const sizeClass = getButtonSize();
+    if (variant === "outline") {
+      return `rounded-full ${sizeClass} border-2 border-gray-600 text-gray-800 hover:border-gray-800 hover:text-gray-900`;
+    }
+    return `p-1 ${sizeClass} rounded-full border border-black`;
   };
 
   const getDefaultTextStyle = () => {
+    const sizeClass = getTextSize();
     if (variant === "outline") {
-      return iconSize === "sm" 
-        ? "font-normal text-base text-[#222222] [font-family:'Poppins',Helvetica]"
-        : "font-normal text-xl text-[#222222] [font-family:'Poppins',Helvetica]";
+      return `font-normal ${sizeClass} text-[#222222] [font-family:'Poppins',Helvetica]`;
     }
-    return "font-text-label-large-medium text-[#5d606d] text-[18px]";
+    return `font-text-label-large-medium text-[#5d606d] ${sizeClass}`;
   };
 
   const getDefaultContainerStyle = () => {
     if (variant === "outline") {
-      return iconSize === "sm" ? "flex items-center space-x-1" : "flex items-center space-x-2";
+      return buttonSize === "sm" ? "flex items-center space-x-1" : "flex items-center space-x-2";
     }
     return "flex items-center gap-8";
   };
@@ -111,21 +130,10 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
         <IconComponent className={cn(getIconSize(), variant === "default" ? "text-black" : "")} />
       </Button>
 
-      <span className={cn(getDefaultTextStyle(), "text-center", showMonthSuffix ? "min-w-[120px]" : "min-w-[40px]", textClassName)}>
-        {showMonthSuffix ? (
-          <>
-            {alwaysShowMonthSuffix ? (
-              <span>{value} month{value !== 1 ? "s" : ""}</span>
-            ) : (
-              <>
-                <span className="sm:hidden">{value}</span>
-                <span className="hidden sm:inline">{value} month{value !== 1 ? "s" : ""}</span>
-              </>
-            )}
-          </>
-        ) : (
-          value
-        )}
+      <span className={cn(getDefaultTextStyle(), "text-center min-w-[40px]", textClassName)}>
+        <span className="">
+          {value}<span className={cn("", monthSuffixClassName)}> month{value !== 1 ? "s" : ""}</span>
+        </span>
       </span>
 
       <Button

@@ -122,9 +122,9 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
       <div className="w-full">
 
         {/* Interactive Controls - Allow editing stay lengths */}
-        <div className="flex items-center justify-center w-full gap-2 md:gap-8 mb-6 flex-wrap">
+        <div className="flex items-center justify-between w-full gap-2 xs:justify-center xs:gap-6 sm:gap-8 mb-6 flex-wrap">
           {/* Shortest Stay Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <label className={`${styles.labelTextSmall} whitespace-nowrap`}>
               Shortest stay:
             </label>
@@ -137,10 +137,12 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               decrementDisabled={shortestStay <= 1}
               variant="outline"
               iconSize="sm"
+              buttonSize="sm"
+              textSize="base"
               containerClassName="flex items-center space-x-1"
               buttonClassName={styles.counterButtonSmall}
               textClassName={`${styles.counterTextSmall} min-w-[20px]`}
-              showMonthSuffix={true}
+              monthSuffixClassName="inline xs:hidden sm:inline"
             />
           </div>
 
@@ -158,10 +160,12 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               decrementDisabled={longestStay <= shortestStay}
               variant="outline"
               iconSize="sm"
+              buttonSize="sm"
+              textSize="base"
               containerClassName="flex items-center space-x-1"
               buttonClassName={styles.counterButtonSmall}
               textClassName={`${styles.counterTextSmall} min-w-[20px]`}
-              showMonthSuffix={true}
+              monthSuffixClassName="inline xs:hidden sm:inline"
             />
           </div>
         </div>
