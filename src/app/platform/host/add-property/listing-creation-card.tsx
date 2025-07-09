@@ -22,7 +22,7 @@ export const ListingCreationCard: React.FC<ListingCreationCardProps> = ({
       }`}
       onClick={onClick}
     >
-      <div className="flex flex-col items-start gap-1.5 p-6 md:p-6 md:pl-6 md:pr-6 pl-4 pr-1 h-full">
+      <div className="flex flex-col items-start gap-1.5 p-6 md:p-6 md:pl-6 pr-0 pl-4 pr-1 h-full">
         <div className="relative w-[30px] h-[30px] flex items-center justify-center">
           {icon}
         </div>
