@@ -356,7 +356,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
             )}
           </PopoverTrigger>
-          <PopoverContent className="p-0">
+          <PopoverContent className="p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="border-b border-gray-200">
                 <div className="px-4 py-3">
@@ -428,7 +428,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
               </>
             )}
           </PopoverTrigger>
-          <PopoverContent className="p-0">
+          <PopoverContent className="p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
             <div 
               className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden"
               onKeyDown={(e) => {
@@ -548,7 +548,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
             </div>
             <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
           </PopoverTrigger>
-          <PopoverContent className="p-0">
+          <PopoverContent className="p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
                 <Link href="/sign-in" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
