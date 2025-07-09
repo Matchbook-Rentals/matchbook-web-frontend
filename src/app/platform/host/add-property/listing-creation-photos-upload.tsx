@@ -89,7 +89,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                   config={{
                     mode: "auto"
                   }}
-                  className="uploadthing-focus"
+                  className="uploadthing-focus uploadthing-custom"
                   appearance={{
                     button: "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300 h-[40px] md:h-[44px] min-w-[160px] max-w-[280px] rounded-lg px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm md:text-base leading-5 tracking-normal w-full disabled:opacity-50 disabled:cursor-not-allowed",
                     allowedContent: "hidden",
@@ -115,7 +115,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                         category: null,
                         rank: null, // append to end
                       }));
-                      setListingPhotos(prev => [...prev, ...newPhotos]);
+                      setListingPhotos(prev => Array.isArray(prev) ? [...prev, ...newPhotos] : newPhotos);
                       toast({
                         title: "Success",
                         description: `${res.length} photo${res.length === 1 ? '' : 's'} uploaded successfully`,

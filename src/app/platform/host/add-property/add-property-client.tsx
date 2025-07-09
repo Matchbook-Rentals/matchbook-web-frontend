@@ -1162,7 +1162,7 @@ const [listingBasics, setListingBasics] = useState({
           // Use the new photos array directly for validation instead of calling validatePhotos()
           // which would use the not-yet-updated state value
           let photoErrors: string[] = [];
-          const validPhotos = newPhotos?.filter(photo => photo.url) || [];
+          const validPhotos = Array.isArray(newPhotos) ? newPhotos.filter(photo => photo.url) : [];
           const validPhotoCount = validPhotos.length;
           
           if (validPhotoCount === 0) {
