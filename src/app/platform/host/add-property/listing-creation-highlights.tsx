@@ -106,7 +106,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         <h3 className={questionTextStyles || "font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2"}>
           What kind of property is it?
         </h3>
-        <div className="flex items-center gap-6 w-full">
+        <div className="flex flex-wrap items-center gap-6 w-full">
           {propertyTypes.map((type) => {
             const isTypeSelected = isSelected("type", type.name);
             return (
@@ -133,7 +133,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         <h3 className={questionTextStyles || "font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2"}>
           Is it furnished or unfurnished?
         </h3>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-6">
           {furnishingOptions.map((option) => {
             const isFurnishingSelected = isSelected("furnishing", option.name);
             return (
@@ -161,7 +161,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
         <h3 className={questionTextStyles || "font-['Poppins',Helvetica] font-normal text-[#404040] text-2xl mb-4 mt-2"}>
           Do you allow pets?
         </h3>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-6">
           {petsOptions.map((option) => {
             const isPetsSelected = isSelected("pets", option.name);
             return (
