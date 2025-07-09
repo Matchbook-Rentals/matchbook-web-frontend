@@ -34,9 +34,10 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const generateRentPayments = (
     monthlyRent: number,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    rentDueAtBooking: number
   ) => {
-    console.log('generateRentPayments called with:', { monthlyRent, startDate, endDate });
+    console.log('generateRentPayments called with:', { monthlyRent, startDate, endDate, rentDueAtBooking });
     const payments: { amount: number; dueDate: Date; description: string }[] = [];
     
     const start = new Date(startDate);
@@ -53,6 +54,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
     
     // Start from the first of the month after start date (or same month if starts on 1st)
     let currentDate = new Date(start.getFullYear(), start.getMonth(), 1);
+    let isFirstPayment = true;
     
     // If booking starts after the 1st, add a pro-rated payment for the partial month
     if (start.getDate() > 1) {
@@ -60,12 +62,18 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
       const daysFromStart = daysInMonth - start.getDate() + 1;
       const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
       
-      payments.push({
-        amount: proRatedAmount,
-        dueDate: start,
-        description: `Pro-rated rent (${daysFromStart} days)`
-      });
+      // For first partial month, subtract the rent already paid at booking
+      const finalAmount = Math.max(0, proRatedAmount - rentDueAtBooking);
       
+      if (finalAmount > 0) {
+        payments.push({
+          amount: finalAmount,
+          dueDate: start,
+          description: `Pro-rated rent (${daysFromStart} days) - $${rentDueAtBooking.toFixed(2)} paid at booking`
+        });
+      }
+      
+      isFirstPayment = false;
       // Move to next month for regular payments
       currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
     }
@@ -86,12 +94,23 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
           description: `Pro-rated rent (${daysToEnd} days)`
         });
       } else {
-        // Full month payment
-        payments.push({
-          amount: monthlyRent,
-          dueDate: currentDate,
-          description: 'Monthly rent'
-        });
+        // Full month payment - subtract rent due at booking from first payment only
+        let paymentAmount = monthlyRent;
+        let description = 'Monthly rent';
+        
+        if (isFirstPayment) {
+          paymentAmount = Math.max(0, monthlyRent - rentDueAtBooking);
+          description = `Monthly rent - $${rentDueAtBooking.toFixed(2)} paid at booking`;
+          isFirstPayment = false;
+        }
+        
+        if (paymentAmount > 0) {
+          payments.push({
+            amount: paymentAmount,
+            dueDate: currentDate,
+            description: description
+          });
+        }
       }
       
       // Move to next month
@@ -572,7 +591,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                             );
                           }
                           
-                          const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                          const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
                           
                           if (payments.length === 0) {
                             return (
@@ -760,7 +779,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                           );
                         }
                         
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
                         
                         if (payments.length === 0) {
                           return (
@@ -1053,6 +1072,9 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                           <span className="text-sm text-green-700">Rent Due at Booking</span>
                           <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).rentDueAtBooking.toFixed(2)}</span>
                         </div>
+                        <div className="text-xs text-green-600 mt-1 ml-4">
+                          * Partial payment toward first month's rent
+                        </div>
                         <div className="flex justify-between">
                           <span className="text-sm text-green-700">Application Fee (3%)</span>
                           <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).applicationFee.toFixed(2)}</span>
@@ -1094,7 +1116,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                           );
                         }
                         
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
                         
                         if (payments.length === 0) {
                           return (

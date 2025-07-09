@@ -36,7 +36,8 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
   const generateRentPayments = (
     monthlyRent: number,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    rentDueAtBooking: number
   ) => {
     const payments: { amount: number; dueDate: Date; description: string }[] = [];
     
@@ -45,6 +46,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
     
     // Start from the first of the month after start date (or same month if starts on 1st)
     let currentDate = new Date(start.getFullYear(), start.getMonth(), 1);
+    let isFirstPayment = true;
     
     // If booking starts after the 1st, add a pro-rated payment for the partial month
     if (start.getDate() > 1) {
@@ -52,12 +54,18 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
       const daysFromStart = daysInMonth - start.getDate() + 1;
       const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
       
-      payments.push({
-        amount: proRatedAmount,
-        dueDate: start,
-        description: `Pro-rated rent (${daysFromStart} days)`
-      });
+      // For first partial month, subtract the rent already paid at booking
+      const finalAmount = Math.max(0, proRatedAmount - rentDueAtBooking);
       
+      if (finalAmount > 0) {
+        payments.push({
+          amount: finalAmount,
+          dueDate: start,
+          description: `Pro-rated rent (${daysFromStart} days) - $${rentDueAtBooking.toFixed(2)} paid at booking`
+        });
+      }
+      
+      isFirstPayment = false;
       // Move to next month for regular payments
       currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
     }
@@ -78,12 +86,23 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
           description: `Pro-rated rent (${daysToEnd} days)`
         });
       } else {
-        // Full month payment
-        payments.push({
-          amount: monthlyRent,
-          dueDate: currentDate,
-          description: 'Monthly rent'
-        });
+        // Full month payment - subtract rent due at booking from first payment only
+        let paymentAmount = monthlyRent;
+        let description = 'Monthly rent';
+        
+        if (isFirstPayment) {
+          paymentAmount = Math.max(0, monthlyRent - rentDueAtBooking);
+          description = `Monthly rent - $${rentDueAtBooking.toFixed(2)} paid at booking`;
+          isFirstPayment = false;
+        }
+        
+        if (paymentAmount > 0) {
+          payments.push({
+            amount: paymentAmount,
+            dueDate: currentDate,
+            description: description
+          });
+        }
       }
       
       // Move to next month
@@ -698,7 +717,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                           );
                         }
                         
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
                         
                         if (payments.length === 0) {
                           return (
