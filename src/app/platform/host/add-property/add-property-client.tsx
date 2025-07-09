@@ -118,6 +118,9 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
   // State to track if admin skip buttons are hidden
   const [adminSkipButtonsHidden, setAdminSkipButtonsHidden] = useState<boolean>(false);
   
+  // State to track if admin mode is temporarily disabled (requires refresh to get back)
+  const [adminModeDisabled, setAdminModeDisabled] = useState<boolean>(false);
+  
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
     listingPhotos: [],
@@ -1382,8 +1385,8 @@ const [listingBasics, setListingBasics] = useState({
   }
 
   return (
-    <main className="bg-background flex flex-row justify-center w-full ">
-      <div className="bg-background overflow-hidden w-full max-w-[1920px] relative pb-32">
+    <main className="bg-background flex flex-row justify-center w-full">
+      <div className="bg-background overflow-auto w-full max-w-[1920px] relative" style={{ paddingBottom: currentStep !== 12 ? '160px' : '0' }}>
 
         {/* Mobile restructured header */}
         {currentStep !== 12 && (
@@ -1418,7 +1421,7 @@ const [listingBasics, setListingBasics] = useState({
         )}
 
         {/* Main content with slide animation */}
-        <div className="w-full max-w-[883px] mx-auto mb-24 px-4">
+        <div className="w-full max-w-[883px] mx-auto px-4">
           <div 
             key={animationKey} // Adding key to force re-render on each step change
             className="transition-transform duration-500 ease-in-out"
@@ -1454,7 +1457,7 @@ const [listingBasics, setListingBasics] = useState({
             />
             <div className="">
             <Separator className="w-full" />
-            {isAdmin ? (
+            {isAdmin && !adminModeDisabled ? (
               /* Admin footer with skip buttons */
               <div className="w-full px-4 md:px-[50px] py-6 md:py-8">
                 {/* Admin controls row - skip, skip */}
@@ -1509,8 +1512,28 @@ const [listingBasics, setListingBasics] = useState({
                   <span 
                     className={`text-xs font-medium cursor-pointer ${adminSkipButtonsHidden ? 'text-gray-500' : 'text-orange-600'}`}
                     onClick={() => setAdminSkipButtonsHidden(!adminSkipButtonsHidden)}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setAdminModeDisabled(true);
+                    }}
+                    onTouchStart={(e) => {
+                      const timeoutId = setTimeout(() => {
+                        setAdminModeDisabled(true);
+                      }, 2000); // 2 second long press
+                      
+                      const handleTouchEnd = () => {
+                        clearTimeout(timeoutId);
+                        document.removeEventListener('touchend', handleTouchEnd);
+                        document.removeEventListener('touchcancel', handleTouchEnd);
+                        document.removeEventListener('touchmove', handleTouchEnd);
+                      };
+                      
+                      document.addEventListener('touchend', handleTouchEnd);
+                      document.addEventListener('touchcancel', handleTouchEnd);
+                      document.addEventListener('touchmove', handleTouchEnd);
+                    }}
                   >
-                    Admin Mode (click to {adminSkipButtonsHidden ? 'show' : 'hide'} controls)
+                    Admin Mode (click to {adminSkipButtonsHidden ? 'show' : 'hide'} controls, right-click/long press to disable)
                   </span>
                 </div>
               </div>
