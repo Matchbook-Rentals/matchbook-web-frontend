@@ -50,10 +50,10 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
       <div className="flex flex-col gap-2">
         <Card className="mt-0 border-none">
           <CardContent className="p-0">
-            <div className="inline-flex h-[534px] items-center gap-2 px-[286px] py-[34px] bg-[#f4f4f4] rounded-xl border-2 border-solid border-[#d9dadf] flex-col justify-center">
-              <div className="inline-flex gap-[100px] flex-col items-center relative flex-[0_0_auto]">
+            <div className="flex min-h-[300px] md:min-h-[400px] lg:min-h-[534px] items-center gap-2 px-4 md:px-8 lg:px-[286px] py-6 md:py-8 lg:py-[34px] bg-[#f4f4f4] rounded-xl border-2 border-solid border-[#d9dadf] flex-col justify-center w-full">
+              <div className="flex gap-8 md:gap-16 lg:gap-[100px] flex-col items-center relative flex-[0_0_auto] max-w-full">
                 <div className="flex gap-4 self-stretch w-full flex-col items-center relative flex-[0_0_auto]">
-                  <div className="relative w-[260.19px] h-[142px]">
+                  <div className="relative w-full max-w-[260px] h-[100px] md:h-[120px] lg:h-[142px]">
                     <img
                       src="/listing-upload/upload-photo.png"
                       alt="Upload photos"
@@ -71,7 +71,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                   }}
                   className="uploadthing-focus"
                   appearance={{
-                    button: "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300 h-[40px] min-w-[160px] rounded-lg px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm leading-5 tracking-normal w-full disabled:opacity-50 disabled:cursor-not-allowed",
+                    button: "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300 h-[40px] md:h-[44px] min-w-[160px] max-w-[280px] rounded-lg px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm md:text-base leading-5 tracking-normal w-full disabled:opacity-50 disabled:cursor-not-allowed",
                     allowedContent: "hidden",
                   }}
                   content={{
