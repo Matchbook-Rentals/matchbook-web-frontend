@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { UploadButton } from "@/app/utils/uploadthing";
 import { BrandButton } from "@/components/ui/brandButton";
+import { useToast } from "@/components/ui/use-toast";
 
 import type { NullableListingImage } from "./add-property-client";
 
@@ -11,6 +12,8 @@ interface ListingPhotosProps {
 }
 
 export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotosProps): JSX.Element => {
+  const { toast } = useToast();
+  
   // Data for the upload component
   const uploadData = {
     title: "Show us what your place looks like",
@@ -19,8 +22,31 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
     actionText: "Upload from your device",
   };
 
+  // Focus styles for keyboard navigation only
+  const focusStyles = `
+    .uploadthing-focus {
+      /* Target the specific label with data-ut-element="button" */
+      & label[data-ut-element="button"] {
+        /* Disable the default focus-within ring */
+        &:focus-within {
+          --tw-ring-color: transparent !important;
+          --tw-ring-offset-width: 0px !important;
+          --tw-ring-width: 0px !important;
+        }
+        
+        /* Only show focus ring when child has focus-visible (keyboard nav) */
+        &:has(input:focus-visible) {
+          outline: 2px solid black !important;
+          outline-offset: 4px !important;
+          transition: none !important;
+        }
+      }
+    }
+  `;
+
   return (
     <div className="w-full max-w-[884px]">
+      <style dangerouslySetInnerHTML={{ __html: focusStyles }} />
       <div className="flex flex-col gap-2">
         <Card className="mt-0 border-none">
           <CardContent className="p-0">
@@ -43,13 +69,14 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                   config={{
                     mode: "auto"
                   }}
+                  className="uploadthing-focus"
                   appearance={{
                     button: "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300 h-[40px] min-w-[160px] rounded-lg px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm leading-5 tracking-normal w-full disabled:opacity-50 disabled:cursor-not-allowed",
                     allowedContent: "hidden",
                   }}
                   content={{
                     button: ({ ready, isUploading }) => (
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-gray-500 focus-visible:outline-offset-2">
                         {isUploading && (
                           <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                         )}
@@ -69,7 +96,20 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                         rank: null, // append to end
                       }));
                       setListingPhotos(prev => [...prev, ...newPhotos]);
+                      toast({
+                        title: "Success",
+                        description: `${res.length} photo${res.length === 1 ? '' : 's'} uploaded successfully`,
+                        variant: "success"
+                      });
                     }
+                  }}
+                  onUploadError={(error) => {
+                    console.error("Upload error:", error);
+                    toast({
+                      title: "Upload Error",
+                      description: error.message || "Failed to upload photos. Please try again.",
+                      variant: "destructive"
+                    });
                   }}
                 />
               </div>

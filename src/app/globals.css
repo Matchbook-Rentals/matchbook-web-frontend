@@ -218,3 +218,9 @@
   word-wrap: break-word;
   hyphens: auto;
 }
+
+/* Custom UploadThing styles to hide progress bar only */
+.uploadthing-custom > *[data-ut-element="button"][data-state="uploading"]::after {
+  display: none !important;
+}
+
