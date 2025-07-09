@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, ChevronDown, User } from 'lucide-react';
+import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, ChevronDown, User, Banknote } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
@@ -15,9 +15,10 @@ import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
 interface LeaseSigningClientProps {
   match: MatchWithRelations;
   matchId: string;
+  testPaymentMethodPreview?: 'card' | 'ach';
 }
 
-export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) {
+export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }: LeaseSigningClientProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
@@ -28,16 +29,24 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
   const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(true);
+  const [previewPaymentMethod, setPreviewPaymentMethod] = useState<'card' | 'ach'>(testPaymentMethodPreview || 'card');
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Update preview payment method when test prop changes
+  useEffect(() => {
+    if (testPaymentMethodPreview) {
+      setPreviewPaymentMethod(testPaymentMethodPreview);
+    }
+  }, [testPaymentMethodPreview]);
 
   // Generate sample rent payments for display
   const generateRentPayments = (
     monthlyRent: number,
     startDate: Date,
     endDate: Date,
-    rentDueAtBooking: number
+    actualPaymentAmount: number
   ) => {
-    console.log('generateRentPayments called with:', { monthlyRent, startDate, endDate, rentDueAtBooking });
+    console.log('generateRentPayments called with:', { monthlyRent, startDate, endDate, actualPaymentAmount });
     const payments: { amount: number; dueDate: Date; description: string }[] = [];
     
     const start = new Date(startDate);
@@ -62,14 +71,14 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
       const daysFromStart = daysInMonth - start.getDate() + 1;
       const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
       
-      // For first partial month, subtract the rent already paid at booking
-      const finalAmount = Math.max(0, proRatedAmount - rentDueAtBooking);
+      // For first partial month, subtract the actual payment amount already paid at booking
+      const finalAmount = Math.max(0, proRatedAmount - actualPaymentAmount);
       
       if (finalAmount > 0) {
         payments.push({
           amount: finalAmount,
           dueDate: start,
-          description: `Pro-rated rent (${daysFromStart} days) - $${rentDueAtBooking.toFixed(2)} paid at booking`
+          description: `Pro-rated rent (${daysFromStart} days) - $${actualPaymentAmount.toFixed(2)} paid at booking`
         });
       }
       
@@ -99,8 +108,8 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
         let description = 'Monthly rent';
         
         if (isFirstPayment) {
-          paymentAmount = Math.max(0, monthlyRent - rentDueAtBooking);
-          description = `Monthly rent - $${rentDueAtBooking.toFixed(2)} paid at booking`;
+          paymentAmount = Math.max(0, monthlyRent - actualPaymentAmount);
+          description = `Monthly rent - $${actualPaymentAmount.toFixed(2)} paid at booking`;
           isFirstPayment = false;
         }
         
@@ -591,7 +600,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                             );
                           }
                           
-                          const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
+                          const payments = generateRentPayments(monthlyRent, startDate, endDate, calculatePaymentAmount(selectedPaymentMethodType));
                           
                           if (payments.length === 0) {
                             return (
@@ -691,6 +700,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
              currentStep === 'completed' ? `Congratulations! Your booking at ${match.listing.locationString} is complete` :
              `Manage your lease for ${match.listing.locationString}`}
           </p>
+          
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -740,15 +750,17 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Application Fee (3%)</span>
-                      <span className="font-medium">${getPaymentBreakdown().applicationFee.toFixed(2)}</span>
+                      <span className="font-medium">${getPaymentBreakdown(hasPaymentMethod ? undefined : previewPaymentMethod).applicationFee.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Processing Fee (est.)</span>
-                      <span className="font-medium">${getPaymentBreakdown('card').processingFee.toFixed(2)}</span>
-                    </div>
+                    {!hasPaymentMethod && previewPaymentMethod === 'card' && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Processing Fee (2.9% + $0.30)</span>
+                        <span className="font-medium">${getPaymentBreakdown(previewPaymentMethod).processingFee.toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between border-t pt-2 font-semibold">
                       <span>Total Due Today</span>
-                      <span className="text-green-600">${calculatePaymentAmount('card').toFixed(2)}</span>
+                      <span className="text-green-600">${calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod).toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -779,7 +791,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                           );
                         }
                         
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate, calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod));
                         
                         if (payments.length === 0) {
                           return (
@@ -1116,7 +1128,7 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                           );
                         }
                         
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate, calculatePaymentAmount(selectedPaymentMethodType));
                         
                         if (payments.length === 0) {
                           return (

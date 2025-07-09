@@ -37,7 +37,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
     monthlyRent: number,
     startDate: Date,
     endDate: Date,
-    rentDueAtBooking: number
+    actualPaymentAmount: number
   ) => {
     const payments: { amount: number; dueDate: Date; description: string }[] = [];
     
@@ -54,14 +54,14 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
       const daysFromStart = daysInMonth - start.getDate() + 1;
       const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
       
-      // For first partial month, subtract the rent already paid at booking
-      const finalAmount = Math.max(0, proRatedAmount - rentDueAtBooking);
+      // For first partial month, subtract the actual payment amount already paid at booking
+      const finalAmount = Math.max(0, proRatedAmount - actualPaymentAmount);
       
       if (finalAmount > 0) {
         payments.push({
           amount: finalAmount,
           dueDate: start,
-          description: `Pro-rated rent (${daysFromStart} days) - $${rentDueAtBooking.toFixed(2)} paid at booking`
+          description: `Pro-rated rent (${daysFromStart} days) - $${actualPaymentAmount.toFixed(2)} paid at booking`
         });
       }
       
@@ -91,8 +91,8 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
         let description = 'Monthly rent';
         
         if (isFirstPayment) {
-          paymentAmount = Math.max(0, monthlyRent - rentDueAtBooking);
-          description = `Monthly rent - $${rentDueAtBooking.toFixed(2)} paid at booking`;
+          paymentAmount = Math.max(0, monthlyRent - actualPaymentAmount);
+          description = `Monthly rent - $${actualPaymentAmount.toFixed(2)} paid at booking`;
           isFirstPayment = false;
         }
         
@@ -717,7 +717,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
                           );
                         }
                         
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate, match.listing.rentDueAtBooking || 77);
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate, calculatePaymentAmount());
                         
                         if (payments.length === 0) {
                           return (

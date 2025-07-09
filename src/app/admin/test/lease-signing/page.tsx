@@ -17,7 +17,9 @@ import {
   Settings,
   Play,
   RotateCcw,
-  Users
+  Users,
+  CreditCard,
+  Banknote
 } from 'lucide-react'
 import { LeaseSigningClient } from '@/app/platform/match/[matchId]/lease-signing-client'
 import HostMatchClient from '@/app/platform/host/match/[matchId]/host-match-client'
@@ -27,6 +29,7 @@ export default function LeaseSigningTestPage() {
   const [userType, setUserType] = useState<'host' | 'renter'>('renter')
   const [simulationStep, setSimulationStep] = useState<'sign-lease' | 'complete-payment' | 'completed'>('sign-lease')
   const [hostSimulationStep, setHostSimulationStep] = useState<'setup-stripe-connect' | 'waiting-tenant-signature' | 'sign-lease' | 'waiting-payment-auth' | 'ready-to-collect' | 'completed'>('setup-stripe-connect')
+  const [paymentMethodPreview, setPaymentMethodPreview] = useState<'card' | 'ach'>('card')
   const [mockData, setMockData] = useState({
     matchId: 'test-match-123',
     listingLocation: 'Test Property, San Francisco, CA',
@@ -176,7 +179,7 @@ export default function LeaseSigningTestPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 {/* User Type Toggle */}
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">User Type</Label>
@@ -189,6 +192,31 @@ export default function LeaseSigningTestPage() {
                     <Badge variant={userType === 'host' ? 'default' : 'secondary'}>
                       {userType === 'host' ? 'Host' : 'Renter'}
                     </Badge>
+                  </div>
+                </div>
+
+                {/* Payment Method Toggle */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Payment Method</Label>
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      variant={paymentMethodPreview === 'ach' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setPaymentMethodPreview('ach')}
+                      className="flex items-center gap-1 justify-start"
+                    >
+                      <Banknote className="h-4 w-4" />
+                      ACH (No fees)
+                    </Button>
+                    <Button
+                      variant={paymentMethodPreview === 'card' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setPaymentMethodPreview('card')}
+                      className="flex items-center gap-1 justify-start"
+                    >
+                      <CreditCard className="h-4 w-4" />
+                      Card (+fees)
+                    </Button>
                   </div>
                 </div>
 
@@ -292,6 +320,9 @@ export default function LeaseSigningTestPage() {
                     <Badge variant="outline" className="text-xs">
                       Step: {userType === 'host' ? hostSimulationStep : simulationStep}
                     </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Payment: {paymentMethodPreview === 'card' ? 'Card (+fees)' : 'ACH (No fees)'}
+                    </Badge>
                   </div>
                 </div>
               </div>
@@ -324,6 +355,7 @@ export default function LeaseSigningTestPage() {
                     <LeaseSigningClient 
                       match={mockMatch} 
                       matchId={mockData.matchId}
+                      testPaymentMethodPreview={paymentMethodPreview}
                     />
                   )}
                 </div>
