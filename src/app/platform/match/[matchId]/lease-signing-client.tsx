@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, ChevronDown } from 'lucide-react';
+import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, ChevronDown, User } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
@@ -604,6 +604,27 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                       </CollapsibleContent>
                     </Collapsible>
                   </div>
+
+                  {/* Host Contact Information */}
+                  <div className="border-t pt-4">
+                    <h4 className="font-semibold mb-3">Host Contact</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-gray-500" />
+                        <span className="text-sm font-medium text-gray-900">
+                          {match.listing.user?.firstName} {match.listing.user?.lastName}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-600">{match.listing.user?.email}</span>
+                      </div>
+                      <div className="mt-3 pt-3 border-t border-gray-200">
+                        <p className="text-xs text-gray-500">
+                          📞 Contact for move-in instructions and property questions
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -688,6 +709,103 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                     <p className="text-sm text-gray-600">Check-out</p>
                     <p className="font-medium">{new Date(match.trip.endDate).toLocaleDateString()}</p>
                   </div>
+                </div>
+
+                {/* Payment Breakdown */}
+                <div className="pt-4 border-t">
+                  <h4 className="font-semibold mb-3">Payment Due at Booking</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">Rent Due at Booking</span>
+                      <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">Application Fee (3%)</span>
+                      <span className="font-medium">${getPaymentBreakdown().applicationFee.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">Processing Fee (est.)</span>
+                      <span className="font-medium">${getPaymentBreakdown('card').processingFee.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between border-t pt-2 font-semibold">
+                      <span>Total Due Today</span>
+                      <span className="text-green-600">${calculatePaymentAmount('card').toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Future Rent Payments */}
+                <div className="pt-4 border-t">
+                  <Collapsible>
+                    <CollapsibleTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-between p-0 font-semibold text-gray-900 hover:text-gray-700"
+                      >
+                        <span>Future Rent Payments</span>
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="mt-3 space-y-2">
+                      {(() => {
+                        const startDate = new Date(match.trip.startDate);
+                        const endDate = new Date(match.trip.endDate);
+                        const monthlyRent = match.monthlyRent;
+                        
+                        if (!monthlyRent || !startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                          return (
+                            <div className="text-sm text-gray-500 py-2">
+                              Future payments will be available after lease details are finalized.
+                            </div>
+                          );
+                        }
+                        
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                        
+                        if (payments.length === 0) {
+                          return (
+                            <div className="text-sm text-gray-500 py-2">
+                              No additional rent payments scheduled.
+                            </div>
+                          );
+                        }
+                        
+                        const totalRent = payments.reduce((sum, payment) => sum + payment.amount, 0);
+                        
+                        return (
+                          <div className="space-y-2">
+                            {payments.map((payment, index) => (
+                              <div key={index} className="flex justify-between items-center py-2 px-3 bg-blue-50 rounded">
+                                <div>
+                                  <p className="text-sm font-medium text-blue-900">{payment.description}</p>
+                                  <p className="text-xs text-blue-600">
+                                    Due: {payment.dueDate.toLocaleDateString()}
+                                  </p>
+                                </div>
+                                <span className="font-medium text-blue-900">
+                                  ${payment.amount.toLocaleString()}
+                                </span>
+                              </div>
+                            ))}
+                            <div className="mt-3 pt-3 border-t border-blue-300 bg-blue-100 rounded px-3 py-2">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-semibold text-blue-900">Total Future Rent</span>
+                                <span className="font-bold text-blue-900">${totalRent.toLocaleString()}</span>
+                              </div>
+                              <p className="text-xs text-blue-700 mt-1">
+                                {payments.length} payment{payments.length !== 1 ? 's' : ''} over {Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30.44))} months
+                              </p>
+                            </div>
+                            <div className="mt-2 pt-2 border-t border-blue-300">
+                              <p className="text-xs text-blue-700">
+                                💳 These will be automatically charged to your payment method monthly
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </CollapsibleContent>
+                  </Collapsible>
                 </div>
 
                 {/* Progress Status */}
@@ -895,30 +1013,154 @@ export function LeaseSigningClient({ match, matchId }: LeaseSigningClientProps) 
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Booking Complete!
-                    </h3>
-                    <p className="text-gray-600 mb-6">
-                      Your lease has been signed and payment has been completed. Welcome to your new home!
-                    </p>
-                    <div className="flex gap-3 justify-center">
-                      <Button 
-                        onClick={handleViewLease}
-                        variant="outline"
-                        size="lg"
-                      >
-                        <FileText className="w-4 h-4 mr-2" />
-                        View Lease
-                      </Button>
-                      <Button 
-                        onClick={() => router.push('/platform/dashboard')}
-                        size="lg"
-                      >
-                        <Home className="w-4 h-4 mr-2" />
-                        Go to Dashboard
-                      </Button>
+                  <div className="space-y-6">
+                    {/* Completion Header */}
+                    <div className="text-center py-8">
+                      <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        Booking Complete!
+                      </h3>
+                      <p className="text-gray-600 mb-6">
+                        Your lease has been signed and payment has been completed. Welcome to your new home!
+                      </p>
+                      <div className="flex gap-3 justify-center">
+                        <Button 
+                          onClick={handleViewLease}
+                          variant="outline"
+                          size="lg"
+                        >
+                          <FileText className="w-4 h-4 mr-2" />
+                          View Lease
+                        </Button>
+                        <Button 
+                          onClick={() => router.push('/platform/dashboard')}
+                          size="lg"
+                        >
+                          <Home className="w-4 h-4 mr-2" />
+                          Go to Dashboard
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Payment Receipt */}
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <h4 className="font-semibold text-green-900">Payment Receipt</h4>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-green-700">Rent Due at Booking</span>
+                          <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).rentDueAtBooking.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-green-700">Application Fee (3%)</span>
+                          <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).applicationFee.toFixed(2)}</span>
+                        </div>
+                        {selectedPaymentMethodType === 'card' && getPaymentBreakdown(selectedPaymentMethodType).processingFee > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-sm text-green-700">Processing Fee</span>
+                            <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).processingFee.toFixed(2)}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between border-t border-green-300 pt-2 font-semibold">
+                          <span className="text-green-900">Total Paid</span>
+                          <span className="text-green-900">${calculatePaymentAmount(selectedPaymentMethodType).toFixed(2)}</span>
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-green-300">
+                          <p className="text-xs text-green-700">
+                            Payment processed on {new Date().toLocaleDateString()} • Transaction ID: {match.stripePaymentMethodId || 'N/A'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Future Payments Schedule */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Calendar className="w-5 h-5 text-blue-600" />
+                        <h4 className="font-semibold text-blue-900">Your Rent Payment Schedule</h4>
+                      </div>
+                      {(() => {
+                        const startDate = new Date(match.trip.startDate);
+                        const endDate = new Date(match.trip.endDate);
+                        const monthlyRent = match.monthlyRent;
+                        
+                        if (!monthlyRent || !startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                          return (
+                            <div className="text-sm text-blue-700 py-2">
+                              Payment schedule will be available after lease details are finalized.
+                            </div>
+                          );
+                        }
+                        
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate);
+                        
+                        if (payments.length === 0) {
+                          return (
+                            <div className="text-sm text-blue-700 py-2">
+                              No additional rent payments scheduled.
+                            </div>
+                          );
+                        }
+                        
+                        const totalRent = payments.reduce((sum, payment) => sum + payment.amount, 0);
+                        
+                        return (
+                          <div className="space-y-3">
+                            {payments.map((payment, index) => (
+                              <div key={index} className="flex justify-between items-center py-3 px-4 bg-white rounded-lg border border-blue-200">
+                                <div>
+                                  <p className="text-sm font-medium text-blue-900">{payment.description}</p>
+                                  <p className="text-xs text-blue-600">
+                                    Due: {payment.dueDate.toLocaleDateString()}
+                                  </p>
+                                </div>
+                                <span className="font-medium text-blue-900">
+                                  ${payment.amount.toLocaleString()}
+                                </span>
+                              </div>
+                            ))}
+                            <div className="mt-4 pt-4 border-t border-blue-300 bg-blue-100 rounded-lg px-4 py-3">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-semibold text-blue-900">Total Rent Due</span>
+                                <span className="font-bold text-blue-900">${totalRent.toLocaleString()}</span>
+                              </div>
+                              <p className="text-xs text-blue-700 mt-1">
+                                {payments.length} payment{payments.length !== 1 ? 's' : ''} over {Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30.44))} months
+                              </p>
+                            </div>
+                            <div className="mt-3 pt-3 border-t border-blue-300">
+                              <p className="text-xs text-blue-700">
+                                💳 These payments will be automatically charged to your saved payment method on the due dates above.
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </div>
+
+                    {/* Host Contact Information */}
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <User className="w-5 h-5 text-gray-600" />
+                        <h4 className="font-semibold text-gray-900">Your Host Contact</h4>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-900">
+                            {match.listing.user?.firstName} {match.listing.user?.lastName}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-600">{match.listing.user?.email}</span>
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-gray-300">
+                          <p className="text-xs text-gray-500">
+                            📞 Contact your host for any questions about the property, move-in instructions, or lease terms.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}

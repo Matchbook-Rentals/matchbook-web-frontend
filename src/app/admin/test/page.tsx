@@ -71,6 +71,13 @@ export default function TestSuitesPage() {
       description: 'Test search preference UI components and functionality',
       icon: <PlayIcon className="h-5 w-5" />,
       path: '/admin/test/search-preference'
+    },
+    {
+      id: 'lease-signing',
+      name: 'Lease Signing Tests',
+      description: 'Test lease signing client component with different states and user types',
+      icon: <FileText className="h-5 w-5" />,
+      path: '/admin/test/lease-signing'
     }
   ]
 
