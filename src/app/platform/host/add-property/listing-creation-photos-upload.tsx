@@ -13,6 +13,26 @@ interface ListingPhotosProps {
 
 export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotosProps): JSX.Element => {
   const { toast } = useToast();
+
+  const deletePhoto = async (photoId: string | null, photoUrl: string) => {
+    if (!photoId) return;
+    
+    // Remove from local state immediately
+    setListingPhotos(prev => prev.filter(photo => photo.id !== photoId));
+    
+    // Send delete request to backend (fire and forget)
+    try {
+      await fetch('/api/delete-photo', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ photoId, photoUrl }),
+      });
+    } catch (error) {
+      console.error('Failed to delete photo from backend:', error);
+    }
+  };
   
   // Data for the upload component
   const uploadData = {
@@ -125,12 +145,32 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
             <>
               <div className="mt-4 flex flex-row gap-2 flex-wrap">
                 {validPhotos.map((photo, idx) => (
-                  <div key={photo.id || idx} className="w-20 h-20 rounded overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
+                  <div key={photo.id || idx} className="relative w-20 h-20 rounded overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center group">
                     <img
                       src={photo.url!}
                       alt={`Listing photo ${idx + 1}`}
                       className="object-cover w-full h-full"
                     />
+                    <button
+                      onClick={() => deletePhoto(photo.id, photo.url!)}
+                      className="absolute -top-1 -right-1 w-6 h-6 bg-black/30 hover:bg-black/80 text-white hover:text-red-500 rounded-full flex items-center justify-center z-10 shadow-md transition-colors duration-200"
+                      aria-label="Delete photo"
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-3 w-3" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+                        />
+                      </svg>
+                    </button>
                   </div>
                 ))}
               </div>
