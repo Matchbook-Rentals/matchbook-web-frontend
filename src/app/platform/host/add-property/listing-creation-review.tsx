@@ -399,7 +399,7 @@ export const Box = ({
               </div>
 
               <div className="flex items-center gap-5 self-stretch w-full overflow-x-auto">
-                <div className="inline-flex items-center gap-5">
+                <div className="inline-flex items-center gap-5 flex-wrap">
                   {propertyFeatures.map((feature, index) => (
                     <Badge
                       key={index}
