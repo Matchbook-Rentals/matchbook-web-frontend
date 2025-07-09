@@ -65,12 +65,12 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
   `;
 
   return (
-    <div className="w-full max-w-[884px]">
+    <div className="w-full">
       <style dangerouslySetInnerHTML={{ __html: focusStyles }} />
       <div className="flex flex-col gap-2">
         <Card className="mt-0 border-none">
           <CardContent className="p-0">
-            <div className="flex min-h-[300px] md:min-h-[400px] lg:min-h-[534px] items-center gap-2 px-4 md:px-8 lg:px-[286px] py-6 md:py-8 lg:py-[34px] bg-[#f4f4f4] rounded-xl border-2 border-solid border-[#d9dadf] flex-col justify-center w-full">
+            <div className="flex min-h-[300px] md:min-h-[400px] lg:min-h-[534px] items-center gap-2 px-4 md:px-8 py-6 md:py-8 lg:py-[34px] bg-[#f4f4f4] rounded-xl border-2 border-solid border-[#d9dadf] flex-col justify-center w-full">
               <div className="flex gap-8 md:gap-16 lg:gap-[100px] flex-col items-center relative flex-[0_0_auto] max-w-full">
                 <div className="flex gap-4 self-stretch w-full flex-col items-center relative flex-[0_0_auto]">
                   <div className="relative w-full max-w-[260px] h-[100px] md:h-[120px] lg:h-[142px]">

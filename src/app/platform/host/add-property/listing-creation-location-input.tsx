@@ -262,7 +262,7 @@ export default function LocationInput({ listingLocation, setListingLocation, val
   };
   
   return (
-    <main className="relative w-full max-w-[883px] min-h-[601px]">
+    <main className="relative w-full md:max-w-[883px] min-h-[601px]">
       <section className="w-full h-full">
 
         {/* Validation Errors at the top */}
@@ -288,7 +288,7 @@ export default function LocationInput({ listingLocation, setListingLocation, val
 
           {/* Address input overlay positioned at top */}
           <div className="absolute top-[34px] left-0 right-0 px-[5%] md:px-[107px]">
-            <div className="w-[90%] md:w-full md:max-w-[670px] mx-auto relative">
+            <div className="w-full md:max-w-[670px] mx-auto relative">
               <Card className="w-full rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-background cursor-text">
                 <CardContent className="p-0">
                   <Input

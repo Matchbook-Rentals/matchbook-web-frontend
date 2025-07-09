@@ -118,7 +118,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
   };
 
   return (
-    <div className="relative w-full max-w-[886px]">
+    <div className="relative w-full md:max-w-[886px]">
       <div className="w-full">
 
         {/* Interactive Controls - Allow editing stay lengths */}
@@ -171,22 +171,22 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-[120px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[120px] min-w-[80px]">
                   Lease Length
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-[140px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[140px] min-w-[100px]">
                   Monthly Rent
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-[80px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[80px] min-w-[60px]">
                   Utilities Included
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-[120px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[120px] min-w-[80px]">
                   Lease Length
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-[140px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[140px] min-w-[100px]">
                   Monthly Rent
                 </TableHead>
-                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-[80px]">
+                <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-full max-w-[80px] min-w-[60px]">
                   Utilities Included
                 </TableHead>
               </TableRow>

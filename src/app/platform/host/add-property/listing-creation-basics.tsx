@@ -24,7 +24,7 @@ export const ListingBasics = ({ title, setTitle, description, setDescription }: 
   };
 
   return (
-    <section className="w-full max-w-[884px] space-y-8">
+    <section className="w-full md:max-w-[884px] space-y-8">
       <div className="w-full space-y-1.5">
         <h2 className="text-[#484A54] [font-family:'Poppins',Helvetica] text-sm font-medium">
           Give your place a title

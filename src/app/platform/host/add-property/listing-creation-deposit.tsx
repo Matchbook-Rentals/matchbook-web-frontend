@@ -27,7 +27,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
   questionSubTextStyles,
 }) => {
   return (
-    <div className="relative w-full max-w-[886px]">
+    <div className="relative w-full md:max-w-[886px]">
       <div className="w-full">
         {/* Deposit Section */}
         <div className="space-y-6">
@@ -41,7 +41,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   Total security deposit amount required from tenants
                 </p>
               </div>
-              <div className="relative w-[173px]">
+              <div className="relative w-full max-w-[173px]">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input 
                   className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
@@ -69,7 +69,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   This portion of the deposit is not refunded in the case of a cancellation
                 </p>
               </div>
-              <div className="relative w-[173px]">
+              <div className="relative w-full max-w-[173px]">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input 
                   className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
@@ -98,7 +98,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                     Additional deposit amount per pet (refundable)
                   </p>
                 </div>
-                <div className="relative w-[173px]">
+                <div className="relative w-full max-w-[173px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                   <Input 
                     className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
@@ -124,7 +124,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                     Monthly rent addition per pet (non-refundable)
                   </p>
                 </div>
-                <div className="relative w-[173px]">
+                <div className="relative w-full max-w-[173px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                   <Input 
                     className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 

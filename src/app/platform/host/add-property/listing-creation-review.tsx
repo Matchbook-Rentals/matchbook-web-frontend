@@ -334,7 +334,7 @@ export const Box = ({
   
   // Use highlights directly from props
   return (
-    <div className="relative max-w-[1188px] mx-auto">
+    <div className="relative w-full md:max-w-[1188px] mx-auto">
       <div className="w-full">
         {/* Header */}
         <div className="mb-6">

@@ -100,7 +100,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-[886px]">
+    <div className="relative w-full md:max-w-[886px]">
       <div className="w-full">
         {/* Header Section */}
         <div className="space-y-6 mb-8">
@@ -165,7 +165,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                 <span className={questionSubTextStyles || styles.labelText}>
                   Monthly rent price for all lease lengths:
                 </span>
-                <div className="relative w-[234px]">
+                <div className="relative w-full max-w-[234px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                   <Input 
                     className="w-full h-10 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 

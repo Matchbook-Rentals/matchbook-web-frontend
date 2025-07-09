@@ -65,7 +65,7 @@ const ListingCreationConfirmPricing: React.FC<ListingCreationConfirmPricingProps
   const yAxisTicks = generateYAxisTicks(maxChartValue);
 
   return (
-    <div className="relative w-full max-w-[886px]">
+    <div className="relative w-full md:max-w-[886px]">
       <div className="w-full">
         {/* Chart Section */}
         <div className="mb-8">
