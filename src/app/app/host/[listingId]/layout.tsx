@@ -78,7 +78,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
 
   const hostDashboardItems = [
     {
-      title: "Overview",
+      title: "Host Dashboard",
       url: "/app/host/dashboard",
       icon: "BarChart3",
     },
@@ -94,7 +94,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
 
   const sidebarGroups = [
     { 
-      title: "Host Dashboard",
+      title: "",
       items: hostDashboardItems 
     },
     { 
