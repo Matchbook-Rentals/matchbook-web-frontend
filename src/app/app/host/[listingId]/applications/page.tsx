@@ -3,6 +3,8 @@ import { getListingById } from '@/app/actions/listings';
 import { getHousingRequestsByListingId } from '@/app/actions/housing-requests';
 import { notFound } from 'next/navigation';
 import ApplicationsTab from '../(tabs)/host-applications-tab';
+import { HostPageTitle } from '../(components)/host-page-title';
+import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 interface ApplicationsPageProps {
   params: { listingId: string };
@@ -26,6 +28,12 @@ export default async function ApplicationsPage({ params }: ApplicationsPageProps
   console.log('- housingRequests count:', housingRequests.length);
   
   return (
-    <ApplicationsTab listing={listing} housingRequests={housingRequests} />
+    <div className={HOST_PAGE_STYLE}>
+      <HostPageTitle 
+        title="Applications" 
+        subtitle={`Applications for ${listing.streetAddress1}`} 
+      />
+      <ApplicationsTab listing={listing} housingRequests={housingRequests} />
+    </div>
   );
 }

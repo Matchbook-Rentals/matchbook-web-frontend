@@ -3,6 +3,7 @@ export const PAGE_MARGIN = 'w-[90vw] mx-auto md:w-[90vw] lg:w-[90vw] xl:w-[80vw]
 //This approach needs to be tested, it allows for a better resizing feel
 //export const PAGE_MARGIN = 'w-full mx-auto md:max-w-[700px] lg:max-w-[1100px] xl:max-w-[1200px]  px-2 md:px-0';
 export const APP_PAGE_MARGIN = 'w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto';
+export const HOST_PAGE_STYLE = 'p-2 md:px-6 bg-sidebar h-full';
 
 
 export const TallDialogContent = 'sm:max-w-[536px] h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat';

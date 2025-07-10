@@ -3,6 +3,8 @@ import { getListingById } from '@/app/actions/listings';
 import { getBookingsByListingId } from '@/app/actions/bookings';
 import { notFound } from 'next/navigation';
 import BookingsTab from '../(tabs)/bookings-tab';
+import { HostPageTitle } from '../(components)/host-page-title';
+import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 interface BookingsPageProps {
   params: { listingId: string };
@@ -82,6 +84,12 @@ export default async function BookingsPage({ params }: BookingsPageProps) {
   const allBookingsData = [...existingBookings, ...matchesAwaitingSignature];
   
   return (
-    <BookingsTab bookings={allBookingsData} listingId={listing.id} />
+    <div className={HOST_PAGE_STYLE}>
+      <HostPageTitle 
+        title="Bookings" 
+        subtitle={`Bookings for ${listing.streetAddress1}`} 
+      />
+      <BookingsTab bookings={allBookingsData} listingId={listing.id} />
+    </div>
   );
 }

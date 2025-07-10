@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/components/ui/use-toast';
 import { createMatch } from '@/app/actions/matches';
 import { createInitialLease } from '@/app/actions/documents';
+import { HostPageTitle } from '../(components)/host-page-title';
+import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 const SendLeasePage: React.FC = () => {
   const router = useRouter();
@@ -187,9 +189,12 @@ const SendLeasePage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className={`${HOST_PAGE_STYLE} container mx-auto p-4`}>
+      <HostPageTitle 
+        title="Send Lease" 
+        subtitle={`Send lease for ${currListing?.streetAddress1 || currListing?.locationString}`} 
+      />
       {docId && <p>Doc ID: {docId}</p>}
-      <h1 className="text-2xl font-bold mb-4">Create Lease</h1>
       <Button onClick={() => console.log('currListing', currListing)}>Log Application</Button>
 
 

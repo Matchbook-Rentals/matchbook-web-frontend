@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useHostProperties } from '@/contexts/host-properties-provider';
+import { HostPageTitle } from '../(components)/host-page-title';
+import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 const SignLeasePage = ({ params }: { params: { listingId: string } }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +54,15 @@ const SignLeasePage = ({ params }: { params: { listingId: string } }) => {
     return <div>Error: {error}, currHousingRequest: {currHousingRequest.id || 'not found'}</div>;
   }
 
-  return <div>BoldSign Lease Signing</div>;
+  return (
+    <div className={HOST_PAGE_STYLE}>
+      <HostPageTitle 
+        title="Sign Lease" 
+        subtitle="Sign lease for property" 
+      />
+      <div>BoldSign Lease Signing</div>
+    </div>
+  );
 };
 
 export default SignLeasePage;

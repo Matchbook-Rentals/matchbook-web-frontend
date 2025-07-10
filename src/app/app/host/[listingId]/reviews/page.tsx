@@ -2,6 +2,8 @@ import React from "react";
 import { getListingById } from '@/app/actions/listings';
 import { notFound } from 'next/navigation';
 import { UserRating } from '../../../../../components/reviews/host-review';
+import { HostPageTitle } from '../(components)/host-page-title';
+import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 const sampleReviewData = {
   overallRating: 4.2,
@@ -71,9 +73,14 @@ export default async function ReviewsPage({ params }: ReviewsPageProps) {
   // const reviews = await getReviewsByListingId(listingId);
   
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-4">Reviews</h2>
-      <UserRating data={sampleReviewData} />
+    <div className={HOST_PAGE_STYLE}>
+      <HostPageTitle 
+        title="Reviews" 
+        subtitle={`Reviews for ${listing.streetAddress1}`} 
+      />
+      <div className="mt-8">
+        <UserRating data={sampleReviewData} />
+      </div>
     </div>
   );
 }

@@ -2,6 +2,8 @@ import React from "react";
 import { getListingById } from '@/app/actions/listings';
 import { getBookingsByListingId } from '@/app/actions/bookings';
 import { notFound } from 'next/navigation';
+import { HostPageTitle } from '../(components)/host-page-title';
+import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 interface PaymentsPageProps {
   params: { listingId: string };
@@ -27,11 +29,11 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
   // TODO: Implement actual payments component when ready
   // For now, show placeholder content
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Payments</h1>
-        <p className="text-gray-600 mt-1">Manage payments for {listing.streetAddress1}</p>
-      </div>
+    <div className={`${HOST_PAGE_STYLE} space-y-6`}>
+      <HostPageTitle 
+        title="Payments" 
+        subtitle={`Payments for ${listing.streetAddress1}`} 
+      />
       
       <div className="bg-white rounded-lg border p-6">
         <h2 className="text-lg font-semibold mb-4">Payment Overview</h2>

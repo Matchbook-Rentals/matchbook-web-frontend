@@ -385,7 +385,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     <TabLayout
       title="Applications"
       subtitle={`Applications for ${listing.title || listing.streetAddress1 || 'this listing'}`}
-      searchPlaceholder="Search by name or dates"
+      searchPlaceholder="Search by guest name"
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
       defaultFilter="pending"

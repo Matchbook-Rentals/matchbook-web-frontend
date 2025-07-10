@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useListingDashboard } from '../listing-dashboard-context';
 import StandaloneCalendar from '@/components/ui/standalone-calendar';
 import UnavailabilityForm from '@/components/ui/unavailability-form';
+import { HostPageTitle } from '../(components)/host-page-title';
+import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 export default function CalendarPage() {
   const { data, updateListing, addUnavailability, updateUnavailability, deleteUnavailability } = useListingDashboard();
@@ -51,9 +53,11 @@ export default function CalendarPage() {
   })) || [];
 
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-6">Calendar Management</h2>
-      <p className="text-gray-600 mb-8">Manage availability for {data.listing.title}</p>
+    <div className={`${HOST_PAGE_STYLE} mt-8`}>
+      <HostPageTitle 
+        title="Calendar" 
+        subtitle={`Calendar for ${data.listing.streetAddress1}`} 
+      />
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Form on the left */}
