@@ -326,7 +326,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
 
   // Format guest info
   const formatGuestInfo = (trip?: { numAdults: number; numPets: number; numChildren: number }) => {
-    if (!trip) return "No guest info";
+    if (!trip) return "1 Adult";
     
     const parts = [];
     if (trip.numAdults > 0) {
@@ -339,14 +339,32 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
       parts.push(`${trip.numPets} pet${trip.numPets !== 1 ? "s" : ""}`);
     }
     
-    return parts.join(", ");
+    return parts.length > 0 ? parts.join(", ") : "1 Adult";
+  };
+
+  // Format guest name with fallback
+  const formatGuestName = (user?: { firstName?: string; lastName?: string; email?: string }) => {
+    if (!user) return "Guest";
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    if (user.firstName) return user.firstName;
+    if (user.lastName) return user.lastName;
+    if (user.email) return user.email;
+    return "Guest";
+  };
+
+  // Format date range with fallback
+  const formatDateRangeWithFallback = (startDate?: Date, endDate?: Date) => {
+    if (!startDate || !endDate) return "Dates not available";
+    return formatDateRange(startDate, endDate);
   };
 
   // Combine actual bookings with matches that don't have bookings yet (awaiting signature)
   // This mirrors the exact logic from the listing bookings page
   const allBookingsData = useMemo(() => {
-    if (!propBookings || !propListings) {
-      console.log('HostDashboardBookingsTab: Missing data, using sample data');
+    if (!propBookings || !propListings || (propBookings.length === 0 && propListings.length === 0)) {
+      console.log('HostDashboardBookingsTab: Missing or empty data, using sample data');
       return sampleBookings;
     }
 
@@ -623,8 +641,8 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
                     )}
 
                     <div className="mt-1">
-                      <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
-                        Guest: {booking.user ? `${booking.user.firstName} ${booking.user.lastName}` : "Guest Name"} • {formatGuestInfo(booking.trip)} • {formatDateRange(booking.startDate, booking.endDate)}
+                      <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 break-words">
+                        Guest: {formatGuestName(booking.user)} • {formatGuestInfo(booking.trip)} • {formatDateRangeWithFallback(booking.startDate, booking.endDate)}
                       </div>
                     </div>
                   </div>

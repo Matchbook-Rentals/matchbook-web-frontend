@@ -20,6 +20,118 @@ import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from '../useNavigationContent';
 
+// Sample housing requests for when no real data exists
+const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => [
+  {
+    id: `sample-request-${listingId}-1`,
+    userId: "sample-user-1",
+    listingId: listingId,
+    tripId: "sample-trip-1",
+    startDate: new Date("2025-02-01"),
+    endDate: new Date("2025-05-01"),
+    status: "pending",
+    createdAt: new Date("2025-01-06"),
+    updatedAt: new Date("2025-01-06"),
+    user: {
+      id: "sample-user-1",
+      email: "alex.chen@example.com",
+      firstName: "Alex",
+      lastName: "Chen",
+      profileImageSrc: null,
+      emailVerified: null,
+      isAdmin: false,
+      isHost: false,
+      isBeta: false,
+      isSeeded: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      stripeAccountId: null,
+      stripeAccountStatus: null,
+      stripeCustomerId: null,
+      showRentEasyFlow: false,
+      notificationPreferences: null,
+      preferredPropertyTypes: [],
+      phoneNumber: null,
+      role: "renter"
+    },
+    trip: {
+      id: "sample-trip-1",
+      locationString: "San Francisco, CA",
+      latitude: 37.7749,
+      longitude: -122.4194,
+      city: "San Francisco",
+      state: "CA",
+      postalCode: "94102",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isSponsored: false,
+      sponsorID: null,
+      startDate: new Date("2025-02-01"),
+      endDate: new Date("2025-05-01"),
+      numAdults: 2,
+      numPets: 0,
+      numChildren: 0,
+      minPrice: 3000,
+      maxPrice: 4000,
+      userId: "sample-user-1"
+    }
+  },
+  {
+    id: `sample-request-${listingId}-2`,
+    userId: "sample-user-2",
+    listingId: listingId,
+    tripId: "sample-trip-2",
+    startDate: new Date("2025-03-15"),
+    endDate: new Date("2025-06-15"),
+    status: "approved",
+    createdAt: new Date("2025-01-05"),
+    updatedAt: new Date("2025-01-05"),
+    user: {
+      id: "sample-user-2",
+      email: "jordan.m@example.com",
+      firstName: "Jordan",
+      lastName: "Martinez",
+      profileImageSrc: null,
+      emailVerified: null,
+      isAdmin: false,
+      isHost: false,
+      isBeta: false,
+      isSeeded: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      stripeAccountId: null,
+      stripeAccountStatus: null,
+      stripeCustomerId: null,
+      showRentEasyFlow: false,
+      notificationPreferences: null,
+      preferredPropertyTypes: [],
+      phoneNumber: null,
+      role: "renter"
+    },
+    trip: {
+      id: "sample-trip-2",
+      locationString: "San Francisco, CA",
+      latitude: 37.7749,
+      longitude: -122.4194,
+      city: "San Francisco",
+      state: "CA",
+      postalCode: "94117",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isSponsored: false,
+      sponsorID: null,
+      startDate: new Date("2025-03-15"),
+      endDate: new Date("2025-06-15"),
+      numAdults: 1,
+      numPets: 1,
+      numChildren: 0,
+      minPrice: 2800,
+      maxPrice: 3500,
+      userId: "sample-user-2"
+    }
+  }
+];
+
 // Filter options
 const filterOptions = [
   { id: "pending", label: "Pending" },
@@ -107,8 +219,11 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     router.push(`/app/host/${listing.id}/applications/${applicationId}?from=listing`);
   };
 
+  // Use real data if available, otherwise generate sample data
+  const requestsToUse = housingRequests.length > 0 ? housingRequests : generateSampleHousingRequests(listing.id);
+  
   // Convert housing requests to the format the UI expects
-  const applications = housingRequests.map(formatHousingRequestForDisplay);
+  const applications = requestsToUse.map(formatHousingRequestForDisplay);
 
   // Filter applications based on selected filters and search term
   const filteredApplications = useMemo(() => {
@@ -242,7 +357,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
       searchBar={searchBarComponent}
       navigationContent={<MobileNavigationContent />}
       noMargin={true}
-      emptyStateMessage={applications.length === 0 ? "No applications yet for this listing." : "No applications match the selected filters."}
+      emptyStateMessage={housingRequests.length === 0 ? "No applications yet for this listing." : "No applications match the selected filters."}
     >
       {filteredApplications.map((app) => {
         const addressDisplay = isMobile 

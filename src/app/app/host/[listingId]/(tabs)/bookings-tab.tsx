@@ -21,6 +21,80 @@ import { markMoveInComplete } from "@/app/actions/bookings";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 
+// Sample bookings data for when no real data exists
+const generateSampleBookings = (listingId: string): BookingWithRelations[] => [
+  {
+    id: `sample-booking-${listingId}-1`,
+    userId: "sample-user-1",
+    listingId: listingId,
+    tripId: "sample-trip-1",
+    matchId: "sample-match-1",
+    startDate: new Date("2025-01-15"),
+    endDate: new Date("2025-04-15"),
+    totalPrice: 10800,
+    monthlyRent: 3600,
+    createdAt: new Date("2024-12-20"),
+    status: "ongoing",
+    user: {
+      firstName: "Taylor",
+      lastName: "Johnson",
+      email: "taylor.j@example.com"
+    },
+    trip: {
+      numAdults: 1,
+      numPets: 1,
+      numChildren: 0
+    },
+    match: {
+      id: "sample-match-1",
+      tenantSignedAt: new Date("2024-12-18"),
+      landlordSignedAt: new Date("2024-12-19"),
+      paymentAuthorizedAt: new Date("2024-12-20"),
+      BoldSignLease: {
+        id: "sample-lease-1",
+        landlordSigned: true,
+        tenantSigned: true
+      },
+      Lease: null
+    }
+  },
+  {
+    id: `sample-booking-${listingId}-2`,
+    userId: "sample-user-2",
+    listingId: listingId,
+    tripId: "sample-trip-2",
+    matchId: "sample-match-2",
+    startDate: new Date("2025-02-28"),
+    endDate: new Date("2025-08-31"),
+    totalPrice: 21600,
+    monthlyRent: 3600,
+    createdAt: new Date("2024-12-25"),
+    status: "upcoming",
+    user: {
+      firstName: "Morgan",
+      lastName: "Smith",
+      email: "morgan.s@example.com"
+    },
+    trip: {
+      numAdults: 2,
+      numPets: 0,
+      numChildren: 1
+    },
+    match: {
+      id: "sample-match-2",
+      tenantSignedAt: new Date("2024-12-23"),
+      landlordSignedAt: new Date("2024-12-24"),
+      paymentAuthorizedAt: new Date("2024-12-25"),
+      BoldSignLease: {
+        id: "sample-lease-2",
+        landlordSigned: true,
+        tenantSigned: true
+      },
+      Lease: null
+    }
+  }
+];
+
 // Extended booking type with included relations
 type BookingWithRelations = {
   id: string;
@@ -72,6 +146,9 @@ interface ListingBookingsTabProps {
 }
 
 export default function ListingBookingsTab({ bookings, listingId }: ListingBookingsTabProps) {
+  // Use real data if available, otherwise generate sample data
+  const bookingsToUse = bookings.length > 0 ? bookings : generateSampleBookings(listingId);
+  
   const router = useRouter();
   const pathname = usePathname();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -210,7 +287,25 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     if (trip.numAdults > 0) parts.push(`${trip.numAdults} Adult${trip.numAdults !== 1 ? 's' : ''}`);
     if (trip.numChildren > 0) parts.push(`${trip.numChildren} Child${trip.numChildren !== 1 ? 'ren' : ''}`);
     if (trip.numPets > 0) parts.push(`${trip.numPets} Pet${trip.numPets !== 1 ? 's' : ''}`);
-    return parts.join(', ') || "1 Adult";
+    return parts.length > 0 ? parts.join(', ') : "1 Adult";
+  };
+
+  // Format guest name with fallback
+  const formatGuestName = (user?: { firstName?: string; lastName?: string; email?: string }) => {
+    if (!user) return "Guest";
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    if (user.firstName) return user.firstName;
+    if (user.lastName) return user.lastName;
+    if (user.email) return user.email;
+    return "Guest";
+  };
+
+  // Format date range with fallback
+  const formatDateRangeWithFallback = (startDate?: Date, endDate?: Date) => {
+    if (!startDate || !endDate) return "Dates not available";
+    return formatDateRange(startDate, endDate);
   };
 
   // Format date range
@@ -224,7 +319,7 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
 
   // Filter bookings based on selected filters and search term
   const filteredBookings = useMemo(() => {
-    let filtered = bookings;
+    let filtered = bookingsToUse;
     
     // Apply status filters
     if (selectedFilters.length > 0) {
@@ -251,7 +346,7 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     }
     
     return filtered;
-  }, [bookings, selectedFilters, searchTerm]);
+  }, [bookingsToUse, selectedFilters, searchTerm]);
 
   // Toggle filter selection
   const toggleFilter = (filter: string) => {
@@ -360,7 +455,7 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     >
       {filteredBookings.map((booking) => {
         const statusInfo = getBookingStatusInfo(booking);
-        const fullAddress = `${booking.listing?.streetAddress1 || ''} ${booking.listing?.city || ''}, ${booking.listing?.state || ''} ${booking.listing?.postalCode || ''}`;
+        const fullAddress = `${booking.listing?.streetAddress1 || 'Street'} ${booking.listing?.city || ' City'}, ${booking.listing?.state || 'ST'} ${booking.listing?.postalCode || '91910'}`;
         const displayAddress = isMobile 
           ? (booking.listing?.streetAddress1 || `Property in ${booking.listing?.state || 'Unknown Location'}`)
           : fullAddress;
@@ -403,8 +498,8 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
                 )}
 
                 <div className="mt-1">
-                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
-                    Guest: {booking.user ? `${booking.user.firstName} ${booking.user.lastName}` : "Guest Name"} • {formatGuestInfo(booking.trip)} • {formatDateRange(booking.startDate, booking.endDate)}
+                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 break-words">
+                    Guest: {formatGuestName(booking.user)} • {formatGuestInfo(booking.trip)} • {formatDateRangeWithFallback(booking.startDate, booking.endDate)}
                   </div>
                 </div>
               </div>

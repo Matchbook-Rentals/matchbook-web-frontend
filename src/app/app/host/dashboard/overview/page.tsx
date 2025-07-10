@@ -3,11 +3,13 @@ import React from "react";
 async function fetchOverviewData() {
   // Simulate data fetching delay
   await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  // Return sample data to show non-empty dashboard state
   return {
-    totalListings: 0,
-    activeApplications: 0,
-    currentBookings: 0,
-    monthlyRevenue: 0
+    totalListings: 3,
+    activeApplications: 7,
+    currentBookings: 2,
+    monthlyRevenue: 8500
   };
 }
 
