@@ -60,8 +60,8 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center gap-6 justify-between">
+              <div className="max-w-[50%]">
                 <label className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
                   Rent Due At Booking
                 </label>
