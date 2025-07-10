@@ -54,11 +54,10 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
                 style={{ backgroundImage: `url(${profileImage})` }}
               />
             ) : (
-              <div className="w-[81px] h-[85px] rounded-xl bg-secondaryBrand flex items-center justify-center p-1">
-                <span className="text-white font-semibold text-center font-poppins w-full text-5xl tracking-wide">
-                  {name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')}
-                </span>
-              </div>
+              <div 
+                className="relative w-[81px] h-[85px] rounded-xl bg-cover bg-[50%_50%]" 
+                style={{ backgroundImage: `url(https://placehold.co/600x400/0B6E6E/FFF?text=${name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')})` }}
+              />
             )}
 
             {/* Applicant Details */}
