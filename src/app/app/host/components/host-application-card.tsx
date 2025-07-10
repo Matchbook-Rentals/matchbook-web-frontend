@@ -48,10 +48,18 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
         <div className="flex items-start gap-2 w-full">
           <div className="flex items-start gap-6 flex-1">
             {/* Profile Image */}
-            <div 
-              className="relative w-[81px] h-[85px] rounded-xl bg-cover bg-[50%_50%]" 
-              style={{ backgroundImage: `url(${profileImage})` }}
-            />
+            {status.toLowerCase() === 'approved' ? (
+              <div 
+                className="relative w-[81px] h-[85px] rounded-xl bg-cover bg-[50%_50%]" 
+                style={{ backgroundImage: `url(${profileImage})` }}
+              />
+            ) : (
+              <div className="w-[81px] h-[85px] rounded-xl bg-secondaryBrand flex items-center justify-center p-1">
+                <span className="text-white font-semibold text-center font-poppins w-full text-5xl tracking-wide">
+                  {name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')}
+                </span>
+              </div>
+            )}
 
             {/* Applicant Details */}
             <div className="flex flex-col items-start gap-2.5 flex-1">
