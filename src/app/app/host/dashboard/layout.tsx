@@ -1,6 +1,11 @@
 import React from "react";
-import ResponsiveNavigation from "../[listingId]/responsive-navigation";
-import { APP_PAGE_MARGIN } from "@/constants/styles";
+import { HostSidebar } from "../components/host-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -8,15 +13,19 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className={`${APP_PAGE_MARGIN} pt-6 pb-20 md:pb-6`}>
-      <div className="flex gap-6">
-        <ResponsiveNavigation />
-        
-        {/* Main Content Area */}
-        <div className="flex-1 min-w-0">
+    <SidebarProvider>
+      <HostSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b">
+          <div className="flex items-center gap-2 px-3">
+            <SidebarTrigger />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4">
           {children}
         </div>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
