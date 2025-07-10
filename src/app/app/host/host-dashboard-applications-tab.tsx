@@ -1,13 +1,11 @@
 "use client";
 
-import { MoreHorizontalIcon, Search, Home, Loader2 } from "lucide-react";
+import { MoreHorizontalIcon, Home, Loader2 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,16 +18,15 @@ import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from "./[listingId]/useNavigationContent";
 import { useUser } from "@clerk/nextjs";
+import { HostApplicationCard } from "./components/host-application-card";
 
 // Base filter options
 const baseFilterOptions = [
+  { id: "all", label: "All" },
   { id: "pending", label: "Pending" },
   { id: "declined", label: "Declined" },
   { id: "approved", label: "Approved" },
 ];
-
-// Admin-only filter option
-const adminFilterOption = { id: "mock_data", label: "Mock Data" };
 
 // Helper function to get status color
 const getStatusColor = (status: string) => {
@@ -65,7 +62,7 @@ const sampleHousingRequests: RequestWithUser[] = [
       email: "john.smith@example.com",
       firstName: "John",
       lastName: "Smith",
-      profileImageSrc: null,
+      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=JS",
       emailVerified: null,
       isAdmin: false,
       isHost: false,
@@ -126,7 +123,7 @@ const sampleHousingRequests: RequestWithUser[] = [
       email: "sarah.j@example.com",
       firstName: "Sarah",
       lastName: "Johnson",
-      profileImageSrc: null,
+      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=SJ",
       emailVerified: null,
       isAdmin: false,
       isHost: false,
@@ -187,7 +184,7 @@ const sampleHousingRequests: RequestWithUser[] = [
       email: "m.davis@example.com",
       firstName: "Michael",
       lastName: "Davis",
-      profileImageSrc: null,
+      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=MD",
       emailVerified: null,
       isAdmin: false,
       isHost: false,
@@ -248,7 +245,7 @@ const sampleHousingRequests: RequestWithUser[] = [
       email: "emily.w@example.com",
       firstName: "Emily",
       lastName: "Wilson",
-      profileImageSrc: null,
+      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=EW",
       emailVerified: null,
       isAdmin: false,
       isHost: false,
@@ -297,7 +294,7 @@ const sampleHousingRequests: RequestWithUser[] = [
 ];
 
 // Helper function to format housing request data for display
-const formatHousingRequestForDisplay = (request: RequestWithUser, isMobile: boolean) => {
+const formatHousingRequestForDisplay = (request: RequestWithUser) => {
   const user = request.user;
   const trip = request.trip;
   
@@ -318,12 +315,6 @@ const formatHousingRequestForDisplay = (request: RequestWithUser, isMobile: bool
     ? `$${trip.minPrice.toLocaleString()} - $${trip.maxPrice.toLocaleString()} / Month`
     : "$2,800 / Month"; // Default fallback
   
-  // Create full address for desktop, street address only for mobile
-  const fullAddress = request.listing ? 
-    `${request.listing.streetAddress1 || ''} ${request.listing.city || ''}, ${request.listing.state || ''} ${request.listing.postalCode || ''}` : 
-    'Address not available';
-  const displayAddress = isMobile ? (request.listing?.streetAddress1 || 'Address not available') : fullAddress;
-  
   return {
     id: request.id,
     userId: request.userId,
@@ -332,9 +323,36 @@ const formatHousingRequestForDisplay = (request: RequestWithUser, isMobile: bool
     occupants,
     price,
     status: request.status || 'pending',
-    listingTitle: request.listing?.title || 'Unknown Property',
-    listingAddress: displayAddress,
+    user, // Pass the user object directly
+    listing: request.listing,
     listingId: request.listingId
+  };
+};
+
+// Helper function to transform application data for the HostApplicationCard component
+const transformApplicationForCard = (app: any, isMobile: boolean) => {
+  const listing = app.listing;
+  const addressDisplay = isMobile 
+    ? (listing?.streetAddress1 || `Property in ${listing?.state || 'Unknown Location'}`)
+    : `${listing?.streetAddress1 || ''} ${listing?.city || ''}, ${listing?.state || ''} ${listing?.postalCode || ''}`;
+
+  // Parse occupants string to create occupant objects
+  const occupantsParts = app.occupants.split(', ');
+  const occupants = [
+    { type: "Adult", count: parseInt(occupantsParts[0]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/adult.svg" },
+    { type: "Kid", count: parseInt(occupantsParts[1]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/kid.svg" },
+    { type: "pet", count: parseInt(occupantsParts[2]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/pet.svg" },
+  ];
+
+  return {
+    name: app.name,
+    status: app.status.charAt(0).toUpperCase() + app.status.slice(1),
+    dates: app.period,
+    address: addressDisplay,
+    description: `for ${listing?.title || 'this property'}`,
+    price: app.price,
+    occupants,
+    profileImage: app.user?.imageUrl,
   };
 };
 
@@ -345,17 +363,16 @@ interface HostDashboardApplicationsTabProps {
 export default function HostDashboardApplicationsTab({ housingRequests: propHousingRequests }: HostDashboardApplicationsTabProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>('pending');
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
-  const itemsPerPage = 10;
+  const [useMockData, setUseMockData] = useState(false);
   const isMobile = useIsMobile();
   const { user } = useUser();
-  const isAdmin = user?.sessionClaims?.metadata?.role === 'admin';
+  const isAdmin = user?.publicMetadata?.role === 'admin';
   
-  // Get filter options based on user role
-  const filterOptions = isAdmin ? [...baseFilterOptions, adminFilterOption] : baseFilterOptions;
+  // Get filter options
+  const filterOptions = baseFilterOptions;
   
   // Create a wrapper component that passes the onNavigate callback
   const MobileNavigationContent = ({ onNavigate }: { onNavigate?: () => void }) => {
@@ -381,40 +398,54 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
   console.log('propHousingRequests length:', propHousingRequests?.length || 0);
 
 
-  // Toggle filter
-  const toggleFilter = (filterId: string) => {
-    setSelectedFilters(prev => 
-      prev.includes(filterId) 
-        ? prev.filter(f => f !== filterId)
-        : [...prev, filterId]
-    );
-  };
-
-  // Determine which data to use based on filters and user role
-  const housingRequestsToUse = useMemo(() => {
-    // If admin has selected "Mock Data" filter, always show sample data
-    if (isAdmin && selectedFilters.includes('mock_data')) {
-      return sampleHousingRequests;
+  // Determine which data to use based on mock data toggle
+  const requestsToUse = useMemo(() => {
+    console.log('Debug - isAdmin:', isAdmin, 'useMockData:', useMockData, 'propHousingRequests.length:', propHousingRequests?.length || 0);
+    
+    // If admin has enabled mock data toggle, always show sample data
+    if (isAdmin && useMockData) {
+      const sampleData = sampleHousingRequests;
+      console.log('Debug - returning sample data:', sampleData.length);
+      return sampleData;
     }
-    // Otherwise, use real data if available, otherwise fall back to sample data
-    return propHousingRequests && propHousingRequests.length > 0 ? propHousingRequests : sampleHousingRequests;
-  }, [propHousingRequests, selectedFilters, isAdmin]);
+    // Otherwise, use real data (even if empty)
+    console.log('Debug - returning real data:', propHousingRequests?.length || 0);
+    return propHousingRequests || [];
+  }, [propHousingRequests, useMockData, isAdmin]);
   
-  console.log('housingRequestsToUse:', housingRequestsToUse);
-  console.log('Using real data?', propHousingRequests && propHousingRequests.length > 0);
-  
-  // Filter and search applications
+  // Convert housing requests to the format the UI expects and sort them
+  const applications = useMemo(() => {
+    const formattedApplications = requestsToUse.map(formatHousingRequestForDisplay);
+    
+    // Sort by status priority (pending -> approved -> denied) and then by oldest createdAt
+    return formattedApplications.sort((a, b) => {
+      // Define status priority order
+      const statusPriority = { pending: 0, approved: 1, declined: 2 };
+      const aStatus = a.status.toLowerCase() as keyof typeof statusPriority;
+      const bStatus = b.status.toLowerCase() as keyof typeof statusPriority;
+      
+      // First sort by status priority
+      const statusDiff = (statusPriority[aStatus] ?? 999) - (statusPriority[bStatus] ?? 999);
+      if (statusDiff !== 0) return statusDiff;
+      
+      // Then sort by oldest createdAt (ascending)
+      const aRequest = requestsToUse.find(r => r.id === a.id);
+      const bRequest = requestsToUse.find(r => r.id === b.id);
+      const aDate = aRequest?.createdAt?.getTime() ?? 0;
+      const bDate = bRequest?.createdAt?.getTime() ?? 0;
+      return aDate - bDate;
+    });
+  }, [requestsToUse]);
+
+  // Filter applications based on selected filter and search term
   const filteredApplications = useMemo(() => {
-    // Convert housing requests to display format
-    const applications = housingRequestsToUse.map(request => formatHousingRequestForDisplay(request, isMobile));
     let filtered = applications;
     
-    // Apply status filters (exclude mock_data filter from status filtering)
-    const statusFilters = selectedFilters.filter(filter => filter !== 'mock_data');
-    if (statusFilters.length > 0) {
-      filtered = filtered.filter(app => 
-        statusFilters.includes(app.status.toLowerCase())
-      );
+    // Apply status filter (exclude "all" from filtering)
+    if (selectedFilter !== 'all') {
+      filtered = filtered.filter(app => {
+        return app.status.toLowerCase() === selectedFilter;
+      });
     }
     
     // Apply search filter
@@ -424,226 +455,58 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
         // Search in applicant name
         if (app.name.toLowerCase().includes(searchLower)) return true;
         
-        // Search in listing title
-        if (app.listingTitle.toLowerCase().includes(searchLower)) return true;
+        // Search in period/dates
+        if (app.period.toLowerCase().includes(searchLower)) return true;
         
-        // Search in listing address
-        if (app.listingAddress.toLowerCase().includes(searchLower)) return true;
+        // Search in listing title
+        if (app.listing?.title?.toLowerCase().includes(searchLower)) return true;
         
         return false;
       });
     }
     
     return filtered;
-  }, [housingRequestsToUse, selectedFilters, searchTerm, isMobile]);
+  }, [applications, selectedFilter, searchTerm]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedApplications = filteredApplications.slice(startIndex, endIndex);
-
-  // Reset to page 1 when filters or search term change
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedFilters, searchTerm]);
-
-  // Search bar component
-  const searchBarComponent = (
-    <div className="relative w-full md:w-80">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-      <Input
-        type="text"
-        placeholder="Search by title, address, or guest name"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[14px]"
-      />
-    </div>
-  );
-
-  // Sidebar content - filters only
-  const sidebarContent = (
-    <>
-      {/* Mobile vertical layout - shown on small screens only */}
-      <div className="block md:hidden">
-        <div className="py-6">
-          <div className="flex flex-col items-start gap-4">
-            <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
-              Filter by Status
-            </div>
-
-            <div className="flex flex-col w-60 items-start gap-2">
-              {filterOptions.map((option) => (
-                <div key={option.id} className="flex items-center gap-2 w-full">
-                  <Checkbox
-                    id={`filter-mobile-${option.id}`}
-                    className="w-6 h-6 rounded-sm"
-                    checked={selectedFilters.includes(option.id)}
-                    onCheckedChange={() => toggleFilter(option.id)}
-                  />
-                  <label
-                    htmlFor={`filter-mobile-${option.id}`}
-                    className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleFilter(option.id);
-                    }}
-                  >
-                    {option.label}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Desktop/tablet horizontal layout - shown on medium screens and up */}
-      <div className="hidden md:flex items-center flex-wrap gap-4">
-        <span className="[font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5 whitespace-nowrap">
-          Filter by Status:
-        </span>
-        <div className="flex items-center flex-wrap gap-3">
-          {filterOptions.map((option) => (
-            <div key={option.id} className="flex items-center gap-2 whitespace-nowrap">
-              <Checkbox
-                id={`filter-desktop-${option.id}`}
-                className="w-4 h-4 rounded-sm"
-                checked={selectedFilters.includes(option.id)}
-                onCheckedChange={() => toggleFilter(option.id)}
-              />
-              <label
-                htmlFor={`filter-desktop-${option.id}`}
-                className="[font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[14px] leading-5 cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleFilter(option.id);
-                }}
-              >
-                {option.label}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-
-  // Handle page change
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+  // Handle filter change
+  const handleFilterChange = (filter: string) => {
+    setSelectedFilter(filter);
   };
+
 
   return (
     <TabLayout
       title="Applications"
       subtitle="Applications for all your listings"
-      searchPlaceholder="Search by title, address, or guest name"
+      searchPlaceholder="Search by guest name"
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
+      defaultFilter="pending"
       onSearchChange={setSearchTerm}
-      onFilterChange={(value) => {
-        if (filterOptions.find(opt => opt.id === value)) {
-          toggleFilter(value);
-        }
-      }}
-      pagination={{
-        currentPage,
-        totalPages,
-        totalItems: filteredApplications.length,
-        itemsPerPage,
-        startIndex,
-        endIndex,
-        onPageChange: handlePageChange,
-        itemLabel: "applications"
-      }}
-      emptyStateMessage={housingRequestsToUse.length === 0 ? "No applications yet." : "No applications match your filters."}
+      onFilterChange={handleFilterChange}
       noMargin={true}
+      emptyStateMessage={requestsToUse.length === 0 ? "No applications yet for your listings." : "No applications match the selected filters."}
+      showMockDataToggle={true}
+      useMockData={useMockData}
+      onMockDataToggle={setUseMockData}
     >
-      <div className="flex flex-col gap-5">
-        {paginatedApplications.map((app) => (
-          <Card
-            key={app.id}
-            className="rounded-[5px] border border-solid border-[#6e504933]"
-          >
-            <CardContent className="p-4">
-              <div className="flex justify-between mb-1">
-                <div>
-                  <h3 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                    {app.name}
-                  </h3>
-                  <p className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[14px] leading-5 mt-1">
-                    for {app.listingTitle}
-                  </p>
-                </div>
-                <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl leading-4">
-                  {app.price}
-                </div>
-              </div>
-
-              <div className="flex justify-between mb-2">
-                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
-                  {app.period}
-                </div>
-                <div
-                  className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${getStatusColor(app.status)}`}
-                >
-                  {app.status}
-                </div>
-              </div>
-
-              <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 mb-1">
-                {app.occupants}
-              </div>
-
-              <div className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[14px] leading-5 mb-8">
-                {app.listingAddress}
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => handleViewApplicationDetails(app.listingId, app.id)}
-                  disabled={loadingApplicationId === app.id}
-                  className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5 flex items-center gap-2"
-                >
-                  Application Details
-                  {loadingApplicationId === app.id && (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  )}
-                </Button>
-                <MessageGuestDialog
-                  listingId={app.listingId}
-                  guestName={app.name}
-                  guestUserId={app.userId}
-                  className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                >
-                </MessageGuestDialog>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] p-2 h-auto w-auto"
-                    >
-                      <MoreHorizontalIcon className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/app/host/${app.listingId}`} className="cursor-pointer flex items-center gap-2">
-                        <Home className="h-4 w-4" />
-                        Manage Listing
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {filteredApplications.map((app) => {
+        const cardData = transformApplicationForCard(app, isMobile);
+        
+        return (
+          <div key={app.id} className="mb-8">
+            <HostApplicationCard
+              {...cardData}
+              onApplicationDetails={() => handleViewApplicationDetails(app.listingId, app.id)}
+              onMessageGuest={() => {
+                // Handle message guest action - you may need to implement this
+                console.log('Message guest:', app.name);
+              }}
+              className="border border-solid border-[#6e504933]"
+            />
+          </div>
+        );
+      })}
     </TabLayout>
   );
 }
