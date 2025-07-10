@@ -379,7 +379,7 @@ export async function approveHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} has been approved!`,
-      url: `/platform/trips/${housingRequest.tripId}`,
+      url: `/platform/searches/${housingRequest.tripId}`,
       actionType: 'application_approved',
       actionId: housingRequestId,
     };
@@ -433,7 +433,7 @@ export async function declineHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} has been declined.`,
-      url: `/platform/trips/${housingRequest.tripId}`,
+      url: `/platform/searches/${housingRequest.tripId}`,
       actionType: 'application_declined',
       actionId: housingRequestId,
     };
@@ -541,7 +541,7 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your approval for ${housingRequest.listing.title} has been revoked.`,
-      url: `/platform/trips/${housingRequest.tripId}`,
+      url: `/platform/searches/${housingRequest.tripId}`,
       actionType: 'application_revoked',
       actionId: housingRequestId,
     };
@@ -613,7 +613,7 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} is being reconsidered.`,
-      url: `/platform/trips/${housingRequest.tripId}`,
+      url: `/platform/searches/${housingRequest.tripId}`,
       actionType: 'application_reconsidered',
       actionId: housingRequestId,
     };

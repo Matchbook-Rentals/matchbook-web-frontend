@@ -1,5 +1,5 @@
-import ListingPhotos from "@/app/platform/trips/[tripId]/listingPhotos";
-import MatchBar from "@/app/platform/trips/[tripId]/matchBar";
+import ListingPhotos from "@/app/platform/searches/[tripId]/listingPhotos";
+import MatchBar from "@/app/platform/searches/[tripId]/matchBar";
 import PlatformNavbar from "@/components/platform-components/platformNavbar";
 import PrefereceDisplay from "./preference-display";
 

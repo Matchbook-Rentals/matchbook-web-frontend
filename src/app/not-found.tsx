@@ -48,7 +48,7 @@ export default function NotFound() {
           
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href={isPlatformPage ? "/platform/trips" : "/"}>
+            <Link href={isPlatformPage ? "/platform/searches" : "/"}>
               <Button className="w-full sm:w-auto">
                 {isPlatformPage ? "Go to Searches" : "Go Home"}
               </Button>

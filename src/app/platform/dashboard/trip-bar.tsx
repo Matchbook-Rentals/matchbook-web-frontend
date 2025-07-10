@@ -8,7 +8,7 @@ export default function TripBar({ trip }: { trip: Trip }) {
   console.log(trip.id);
 
   const handleClick = () => {
-    router.push(`/platform/trips/${trip.id}`)
+    router.push(`/platform/searches/${trip.id}`)
   }
   return (
     <div onClick={handleClick} className='flex justify-between border-2 border-slate-400 w-3/4 mx-auto my-3 p-2 rounded-lg shadow-lg text-2xl cursor-pointer'>

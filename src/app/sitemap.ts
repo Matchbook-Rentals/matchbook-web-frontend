@@ -25,7 +25,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Platform routes (require authentication, lower priority)
   const platformRoutes = [
     '/platform/dashboard',
-    '/platform/trips',
     '/platform/searches',
     '/platform/bookings',
     '/platform/messages',
@@ -58,7 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // TODO: Add dynamic routes for:
   // - Individual articles: /articles/[slug]
   // - Individual listings: /platform/host/[listingId]
-  // - Trip details: /platform/trips/[tripId]
+  // - Trip details: /platform/searches/[tripId]
   // These would typically be fetched from your database
 
   return [...staticPages, ...platformPages, ...guestPages]

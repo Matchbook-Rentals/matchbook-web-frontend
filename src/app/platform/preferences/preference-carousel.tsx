@@ -46,7 +46,7 @@ export default function PreferenceCarousel({ updateUserPreferences }) {
 
     let tripId = localStorage.getItem('matchbookTripId');
 
-    router.push(`/platform/trips/${tripId}`)
+    router.push(`/platform/searches/${tripId}`)
 
 
 

@@ -40,7 +40,7 @@ test.describe('Authentication Flow', () => {
     await signIn(page);
     
     // Navigate to different pages and verify session persists
-    await page.goto('/platform/trips');
+    await page.goto('/platform/searches');
     await expect(page.getByRole('button', { name: 'User Profile' })).toBeVisible();
     
     await page.goto('/platform/messages');

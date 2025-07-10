@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
 import { PAGE_MARGIN, ApplicationItemHeaderStyles } from '@/constants/styles';
-import { PersonalInfo } from '../trips/(trips-components)/application-personal-info';
+import { PersonalInfo } from '../searches/(trips-components)/application-personal-info';
 import { logger } from '@/lib/logger';
-import { Identification } from '../trips/(trips-components)/application-identity';
-import { Income } from '../trips/(trips-components)/application-income';
-import Questionnaire from '../trips/(trips-components)/application-questionnaire';
-import MobileApplicationEdit from '../trips/(trips-components)/mobile-application-edit';
+import { Identification } from '../searches/(trips-components)/application-identity';
+import { Income } from '../searches/(trips-components)/application-income';
+import Questionnaire from '../searches/(trips-components)/application-questionnaire';
+import MobileApplicationEdit from '../searches/(trips-components)/mobile-application-edit';
 import { upsertApplication, markComplete } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
@@ -28,7 +28,7 @@ import {
   validateQuestionnaire
 } from '@/utils/application-validation';
 import { useApplicationStore } from '@/stores/application-store';
-import { ResidentialLandlordInfo } from '../trips/(trips-components)/residential-landlord-info';
+import { ResidentialLandlordInfo } from '../searches/(trips-components)/residential-landlord-info';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 const navigationItems = [

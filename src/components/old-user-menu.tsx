@@ -71,7 +71,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     {
       id: 'switch-mode',
       label: 'Switch to Renting',
-      href: '/platform/trips',
+      href: '/platform/searches',
       requiresBeta: true,
       section: 3
     },
@@ -81,7 +81,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   ] : [
     // Renter side menu items
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'searches', label: 'Searches', href: '/platform/trips', requiresBeta: true, section: 1 },
+    { id: 'searches', label: 'Searches', href: '/platform/searches', requiresBeta: true, section: 1 },
     { id: 'application', label: 'Application', href: '/platform/application', requiresAdmin: true, section: 1 },
     { id: 'bookings', label: 'Bookings', href: '/platform/bookings', requiresBeta: true, section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 },
