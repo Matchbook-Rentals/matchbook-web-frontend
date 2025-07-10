@@ -298,7 +298,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, []);
+  }, [toast]);
 
   const handlePaymentSuccess = () => {
     toast({
@@ -1085,7 +1085,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                           <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).rentDueAtBooking.toFixed(2)}</span>
                         </div>
                         <div className="text-xs text-green-600 mt-1 ml-4">
-                          * Partial payment toward first month's rent
+                          * Partial payment toward first month&apos;s rent
                         </div>
                         <div className="flex justify-between">
                           <span className="text-sm text-green-700">Application Fee (3%)</span>

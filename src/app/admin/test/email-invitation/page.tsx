@@ -61,7 +61,7 @@ export default function EmailInvitationTest() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Recipient's Email</Label>
+            <Label htmlFor="email">Recipient&apos;s Email</Label>
             <Input
               id="email"
               type="email"
