@@ -11,20 +11,21 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface TabLayoutProps {
   title: string;
-  sidebarContent: React.ReactNode;
+  subtitle?: string;
   children: React.ReactNode;
-  searchBar: React.ReactNode; // New prop for search bar
+  searchPlaceholder?: string;
+  filterLabel?: string;
+  filterOptions?: Array<{ value: string; label: string }>;
+  onSearchChange?: (value: string) => void;
+  onFilterChange?: (value: string) => void;
   actionButton?: React.ReactNode; // Optional button component
   // Pagination props (optional)
   pagination?: {
@@ -44,9 +45,13 @@ interface TabLayoutProps {
 
 export default function TabLayout({
   title,
-  sidebarContent,
+  subtitle,
   children,
-  searchBar,
+  searchPlaceholder = "Search",
+  filterLabel = "Filter by status",
+  filterOptions = [{ value: "all", label: "All" }],
+  onSearchChange,
+  onFilterChange,
   actionButton,
   pagination,
   emptyStateMessage = "No items found.",
@@ -135,76 +140,58 @@ export default function TabLayout({
   return (
     <div className={`${isMobile ? '' : noMargin ? '' : APP_PAGE_MARGIN} flex flex-col `}>
       {/* Header with title, search, and filters */}
-      <div ref={headerRef} className={`bg-background ${isMobile ? 'sticky top-0 z-40 border-b border-gray-200 px-4 py-4' : ''}`}>
-        
-        {/* Title and Action Button Row */}
-        <div className="flex items-center justify-between mb-4">
-          <h1 className={`font-medium text-[#3f3f3f] [font-family:'Poppins',Helvetica] ${isMobile ? 'text-[24px]' : 'text-[32px]'}`}>
-            {title}
-          </h1>
-          
-          {/* Action button positioned on the right - mobile only */}
-          {actionButton && isMobile && (
-            <div>
-              {actionButton}
-            </div>
-          )}
-        </div>
-        
-        {/* Combined search and filters section */}
-        <div className={`${!isMobile ? 'pb-4 border-b border-gray-200' : ''}`}>
-          {/* Mobile layout with accordion */}
-          {isMobile ? (
-            <div className="block md:hidden">
-              {/* Search bar for mobile */}
-              <div className="mb-4">
-                {searchBar}
-              </div>
-              
-              {/* Filters accordion for mobile */}
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="filters" className="border-0">
-                  <AccordionTrigger className="py-2 hover:no-underline">
-                    <span className="text-sm font-medium">Filters</span>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4">
-                      {sidebarContent}
-                      {actionButton && (
-                        <div className="pt-4">
-                          {actionButton}
-                        </div>
-                      )}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          ) : (
-            /* Desktop layout with search and filters in wrapping row */
-            <div className="hidden md:block relative">
-              <div className="flex flex-wrap items-center gap-4 mb-1">
-                {/* Search bar */}
-                <div className="flex-shrink-0">
-                  {searchBar}
-                </div>
-                
-                {/* Filters - allow wrapping */}
-                <div className="flex-1 min-w-0">
-                  {sidebarContent}
-                </div>
-              </div>
-              
-              {/* Action button positioned on far right - desktop only */}
-              {actionButton && (
-                <div className="absolute top-0 right-0">
-                  {actionButton}
-                </div>
+      <header ref={headerRef} className={`w-full py-6 ${isMobile ? 'px-4' : ''}`}>
+        <div className="flex flex-col gap-6">
+          <div className="flex items-end gap-6">
+            <div className="flex flex-col items-start gap-2 flex-1">
+              <h1 className="font-medium text-[#3f3f3f] text-2xl leading-[28.8px] font-['Poppins',Helvetica]">
+                {title}
+              </h1>
+              {subtitle && (
+                <p className="text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
+                  {subtitle}
+                </p>
               )}
             </div>
-          )}
+            {actionButton && !isMobile && (
+              <div>
+                {actionButton}
+              </div>
+            )}
+          </div>
+
+          <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-start gap-3'}`}>
+            <div className={isMobile ? 'w-full' : 'w-[434px]'}>
+              <Card className="border-0 shadow-none">
+                <CardContent className="p-0">
+                  <Input 
+                    className="h-12" 
+                    placeholder={searchPlaceholder}
+                    onChange={(e) => onSearchChange?.(e.target.value)}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className={`flex items-center ${isMobile ? 'justify-start' : 'justify-end'} gap-3 flex-1`}>
+              <span className="whitespace-nowrap text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
+                {filterLabel}
+              </span>
+              <Select onValueChange={onFilterChange}>
+                <SelectTrigger className="w-[142px] h-12">
+                  <SelectValue placeholder={filterOptions[0]?.label || "All"} />
+                </SelectTrigger>
+              </Select>
+            </div>
+            
+            {actionButton && isMobile && (
+              <div>
+                {actionButton}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </header>
 
       {/* Content Area with Scroll */}
       <div className={`flex-1 min-h-0 ${isMobile ? 'px-4 py-4' : 'mt-1'}`}>
