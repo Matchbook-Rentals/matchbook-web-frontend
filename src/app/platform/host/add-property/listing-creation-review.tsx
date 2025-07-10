@@ -6,6 +6,8 @@ import { Badge } from "../../../../components/ui/badge";
 import { PencilIcon } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
 import * as AmenitiesIcons from '@/components/icons/amenities';
+import InComplexIcon from '@/lib/icons/in-complex';
+import NotAvailableIcon from '@/lib/icons/not-available';
 import { MonthlyPricing } from "./listing-creation-pricing";
 
 // Reusable text styles
@@ -80,8 +82,8 @@ const AMENITY_GROUPS = [
 // Laundry options
 const LAUNDRY_OPTIONS = [
   { value: 'washerInUnit', label: 'In Unit Laundry', icon: <AmenitiesIcons.WasherIcon className="w-6 h-6" /> },
-  { value: 'washerInComplex', label: 'Laundry In Complex', icon: <AmenitiesIcons.WasherIcon className="w-6 h-6" /> },
-  { value: 'washerUnavailable', label: 'No Laundry', icon: <AmenitiesIcons.WasherIcon className="w-6 h-6" /> },
+  { value: 'washerInComplex', label: 'Laundry In Complex', icon: <InComplexIcon className="w-6 h-6" /> },
+  { value: 'washerNotAvailable', label: 'No Laundry', icon: <NotAvailableIcon className="w-6 h-6" /> },
 ];
 
 // Helper function to get amenity info by value
