@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckboxDemo } from '@/app/app/preferences/custom-checkbox';
+import { CheckboxDemo } from '@/app/app/rent/preferences/custom-checkbox';
 
 interface FurnishedCheckboxesProps {
   propertyDetails: PropertyDetails;

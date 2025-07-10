@@ -10,7 +10,7 @@ import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housin
 import { updateTripFilters } from '@/app/actions/trips';
 import { CategoryType, getBooleanFilters, getFiltersByCategory } from '@/constants/filters';
 import { useActionPopup } from '@/hooks/use-action-popup'
-import ActionPopup from '@/app/app/old-search/(components)/action-popup'
+import ActionPopup from '@/app/app/rent/old-search/(components)/action-popup'
 import { logger } from '@/lib/logger';
 import TripStateContext, { TripState } from './trip-state-context';
 import TripActionsContext, { TripActions } from './trip-actions-context';

@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 //import { useSearchContext } from '@/contexts/search-context-provider';
 import { useTripContext } from '@/contexts/trip-context-provider';
-import { SearchScreenPrompt } from '@/app/app/old-search/(components)/search-screen-prompt';
+import { SearchScreenPrompt } from '@/app/app/rent/old-search/(components)/search-screen-prompt';
 
 //Interfaces
 interface ApplicationFormData {

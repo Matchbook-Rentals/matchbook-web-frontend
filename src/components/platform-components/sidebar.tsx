@@ -29,7 +29,7 @@ const Sidebar = ({ links }) => {
         ))}
       </div>
       <div className='mt-10'>
-        <Link href="/app/dashboard" passHref>
+        <Link href="/app/rent/dashboard" passHref>
           <p style={{ cursor: 'pointer' }}>Dashboard</p>
         </Link>
       </div>

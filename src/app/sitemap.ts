@@ -24,12 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // App routes (require authentication, lower priority)
   const appRoutes = [
-    '/app/dashboard',
-    '/app/searches',
-    '/app/bookings',
-    '/app/messages',
-    '/app/settings',
-    '/app/preferences',
+    '/app/rent/dashboard',
+    '/app/rent/searches',
+    '/app/rent/bookings',
+    '/app/rent/messages',
+    '/app/rent/settings',
+    '/app/rent/preferences',
     '/app/host/dashboard',
     '/app/host/listings',
     '/app/host/add-property',
@@ -57,7 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // TODO: Add dynamic routes for:
   // - Individual articles: /articles/[slug]
   // - Individual listings: /app/host/[listingId]
-  // - Trip details: /app/searches/[tripId]
+  // - Trip details: /app/rent/searches/[tripId]
   // These would typically be fetched from your database
 
   return [...staticPages, ...appPages, ...guestPages]

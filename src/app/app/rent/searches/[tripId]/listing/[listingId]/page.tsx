@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { getTripById } from '@/app/actions/trips'
 import prisma from '@/lib/prismadb'
-import SearchListingDetailsView from '@/app/app/searches/(trips-components)/search-listing-details-view'
+import SearchListingDetailsView from '@/app/app/rent/searches/(trips-components)/search-listing-details-view'
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { useUser } from '@clerk/nextjs'
 import { PAGE_MARGIN } from '@/constants/styles'

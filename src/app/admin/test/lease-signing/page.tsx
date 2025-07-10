@@ -21,7 +21,7 @@ import {
   CreditCard,
   Banknote
 } from 'lucide-react'
-import { LeaseSigningClient } from '@/app/app/match/[matchId]/lease-signing-client'
+import { LeaseSigningClient } from '@/app/app/rent/match/[matchId]/lease-signing-client'
 import HostMatchClient from '@/app/app/host/match/[matchId]/host-match-client'
 import { MatchWithRelations } from '@/types'
 

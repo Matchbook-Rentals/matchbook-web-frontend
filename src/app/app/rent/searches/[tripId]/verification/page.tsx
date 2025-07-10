@@ -9,7 +9,7 @@ export default function VerificationPage() {
     <div className={`min-h-screen bg-background ${PAGE_MARGIN} `}>
       {/* Breadcrumb */}
         <nav className="flex items-center text-sm ">
-          <Link href="/app/searches" className="hover:text-blue-400 transition-colors">
+          <Link href="/app/rent/searches" className="hover:text-blue-400 transition-colors">
             Trips
           </Link>
           <span className="mx-2">{">"}</span>

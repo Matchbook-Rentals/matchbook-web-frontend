@@ -55,8 +55,8 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
 
   // Routes requiring admin OR preview access
   const adminOrPreviewRoutes = [
-    '/app/application',
-    '/app/verification'
+    '/app/rent/application',
+    '/app/rent/verification'
   ];
   
   for (const route of adminOrPreviewRoutes) {

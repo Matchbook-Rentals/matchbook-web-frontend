@@ -77,7 +77,7 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
               {isSignedIn ? (
                 <BrandButton 
                   variant="outline" 
-                  href="/app/searches" 
+                  href="/app/rent/searches" 
                   className="focus-visible:outline-yellow-200 focus-visible:outline-4 focus-visible:outline-offset-4"
                 >
                   View Past Searches
@@ -116,7 +116,7 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
       {/* Mobile Action Button */}
       <div className="block sm:hidden pt-4 pb-5 w-full z-10 flex justify-center">
         {isSignedIn ? (
-          <BrandButton variant="outline" href="/app/searches">
+          <BrandButton variant="outline" href="/app/rent/searches">
             View Past Searches
           </BrandButton>
         ) : (

@@ -33,6 +33,6 @@ export const fetchListingsFromDb = async () => {
 };
 
 export const revalidateHostDashboard = async () => {
-  revalidatePath("/app/host-dashboard");
+  revalidatePath("/app/host/dashboard");
   return { revalidated: true };
 };

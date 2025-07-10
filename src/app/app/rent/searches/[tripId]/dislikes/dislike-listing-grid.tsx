@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ListingAndImages } from '@/types';
-import SearchListingCard from '@/app/app/old-search/(components)/search-listing-card';
+import SearchListingCard from '@/app/app/rent/old-search/(components)/search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { Button } from "@/components/ui/button";

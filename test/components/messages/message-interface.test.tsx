@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import MessageInterface from '@/app/app/messages/message-interface';
+import MessageInterface from '@/app/app/rent/messages/message-interface';
 import { io } from 'socket.io-client';
 import { WebSocketClient } from '../../../ts_server/client';
 

@@ -221,11 +221,11 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     ...(hasStripeAccount === false || (hasStripeAccount === true && stripeOnboardingComplete === false) ? [
       { id: 'stripe-onboard', label: 'Onboard Stripe', onClick: handleStripeOnboarding, requiresBeta: true, section: 1 },
     ] : []),
-    { id: 'inbox', label: 'Inbox', href: '/app/messages?view=host', requiresBeta: true, section: 2 },
+    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', requiresBeta: true, section: 2 },
     {
       id: 'switch-mode',
       label: 'Switch to Renting',
-      href: '/app/searches',
+      href: '/app/rent/searches',
       requiresBeta: true,
       section: 3
     },
@@ -235,10 +235,10 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   ] : [
     // Renter side menu items
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'searches', label: 'Searches', href: '/app/searches', requiresBeta: true, section: 1 },
-    { id: 'application', label: 'Application', href: '/app/application', requiresAdmin: true, requiresPreview: true, section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/app/bookings', requiresBeta: true, section: 1 },
-    { id: 'inbox', label: 'Inbox', href: '/app/messages', requiresBeta: true, section: 2 },
+    { id: 'searches', label: 'Searches', href: '/app/rent/searches', requiresBeta: true, section: 1 },
+    { id: 'application', label: 'Application', href: '/app/rent/application', requiresAdmin: true, requiresPreview: true, section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', requiresBeta: true, section: 1 },
+    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', requiresBeta: true, section: 2 },
     {
       id: 'switch-mode',
       label: 'Switch to Hosting',
@@ -248,7 +248,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
-    { id: 'verification', label: 'Verification', href: '/app/verification', requiresAdmin: true, requiresPreview: true, section: 4 },
+    { id: 'verification', label: 'Verification', href: '/app/rent/verification', requiresAdmin: true, requiresPreview: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 

@@ -325,7 +325,7 @@ export default function NotificationCreator() {
               id="action-url"
               value={actionUrl}
               onChange={(e) => setActionUrl(e.target.value)}
-              placeholder="/app/dashboard"
+              placeholder="/app/rent/dashboard"
             />
           </div>
 

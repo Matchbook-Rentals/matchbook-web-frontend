@@ -48,14 +48,14 @@ export default function NotFound() {
           
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href={isPlatformPage ? "/app/searches" : "/"}>
+            <Link href={isPlatformPage ? "/app/rent/searches" : "/"}>
               <Button className="w-full sm:w-auto">
                 {isPlatformPage ? "Go to Searches" : "Go Home"}
               </Button>
             </Link>
             
             {isPlatformPage && (
-              <Link href="/app/bookings">
+              <Link href="/app/rent/bookings">
                 <Button variant="outline" className="w-full sm:w-auto">
                   View Bookings
                 </Button>
@@ -79,10 +79,10 @@ export default function NotFound() {
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               {isPlatformPage ? (
                 <>
-                  <Link href="/app/messages" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/app/rent/messages" className="text-blue-600 hover:text-blue-800">
                     Messages
                   </Link>
-                  <Link href="/app/bookings" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/app/rent/bookings" className="text-blue-600 hover:text-blue-800">
                     Bookings
                   </Link>
                   <Link href="/app/host/dashboard/listings" className="text-blue-600 hover:text-blue-800">
