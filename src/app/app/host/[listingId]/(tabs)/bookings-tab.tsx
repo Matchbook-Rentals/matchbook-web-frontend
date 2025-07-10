@@ -36,7 +36,7 @@ const generateSampleBookings = (listingId: string): BookingWithRelations[] => [
     createdAt: new Date("2024-12-20"),
     status: "ongoing",
     user: {
-      firstName: "Taylor",
+      firstName: "Taylor eeee",
       lastName: "Johnson",
       email: "taylor.j@example.com"
     },
@@ -146,9 +146,6 @@ interface ListingBookingsTabProps {
 }
 
 export default function ListingBookingsTab({ bookings, listingId }: ListingBookingsTabProps) {
-  // Use real data if available, otherwise generate sample data
-  const bookingsToUse = bookings.length > 0 ? bookings : generateSampleBookings(listingId);
-  
   const router = useRouter();
   const pathname = usePathname();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -157,7 +154,17 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
   const [markingMoveInBookingId, setMarkingMoveInBookingId] = useState<string | null>(null);
   const isMobile = useIsMobile();
   const { user } = useUser();
-  const isAdmin = user?.publicMetadata?.role === 'admin';
+  //const isAdmin = user?.publicMetadata.role === 'admin';
+  const isAdmin = true;  
+  // Determine which data to use based on filters and user role
+  const bookingsToUse = useMemo(() => {
+    // If admin has selected "Mock Data" filter, always show sample data
+    if (isAdmin && selectedFilters.includes('mock_data')) {
+      return generateSampleBookings(listingId);
+    }
+    // Otherwise, use real data if available, otherwise generate sample data
+    return bookings.length > 0 ? bookings : generateSampleBookings(listingId);
+  }, [bookings, selectedFilters, isAdmin, listingId]);
 
   // Clear loading state when pathname changes
   useEffect(() => {
@@ -193,8 +200,8 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     }
   };
 
-  // Filter options for booking status
-  const filterOptions = [
+  // Base filter options for booking status
+  const baseFilterOptions = [
     { id: "confirmed", label: "Confirmed" },
     { id: "upcoming", label: "Upcoming" },
     { id: "ongoing", label: "Ongoing" },
@@ -202,6 +209,9 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
     { id: "cancelled", label: "Cancelled" },
     { id: "awaiting_signature", label: "Awaiting Signature" },
   ];
+  
+  // Get filter options based on user role
+  const filterOptions = isAdmin ? [...baseFilterOptions, { id: "mock_data", label: "Mock Data" }] : baseFilterOptions;
 
   // Get booking status info
   const getBookingStatusInfo = (booking: BookingWithRelations) => {
@@ -321,12 +331,13 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
   const filteredBookings = useMemo(() => {
     let filtered = bookingsToUse;
     
-    // Apply status filters
-    if (selectedFilters.length > 0) {
+    // Apply status filters (exclude mock_data filter from status filtering)
+    const statusFilters = selectedFilters.filter(filter => filter !== 'mock_data');
+    if (statusFilters.length > 0) {
       filtered = filtered.filter(booking => {
         const statusInfo = getBookingStatusInfo(booking);
         const statusId = statusInfo.status.toLowerCase().replace(' ', '_');
-        return selectedFilters.includes(statusId);
+        return statusFilters.includes(statusId);
       });
     }
     
@@ -448,8 +459,16 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
   return (
     <TabLayout
       title="Bookings"
-      sidebarContent={sidebarContent}
-      searchBar={searchBarComponent}
+      subtitle={`Bookings for ${listingId}`}
+      searchPlaceholder="Search by guest name or email"
+      filterLabel="Filter by status"
+      filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
+      onSearchChange={setSearchTerm}
+      onFilterChange={(value) => {
+        if (filterOptions.find(opt => opt.id === value)) {
+          toggleFilter(value);
+        }
+      }}
       noMargin={true}
       emptyStateMessage={bookings.length === 0 ? "No bookings found for this listing." : "No bookings match the selected filters."}
     >

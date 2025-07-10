@@ -17,6 +17,7 @@ import { useRouter, usePathname } from "next/navigation";
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useUser } from "@clerk/nextjs";
 
 // Extended booking type with included relations
 type BookingWithRelations = {
@@ -224,8 +225,13 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
     }
   };
 
-  // Filter options
-  const filterOptions = ["Active", "Upcoming", "Past", "Cancelled", "Awaiting Signature"];
+  // Base filter options
+  const baseFilterOptions = ["Active", "Upcoming", "Past", "Cancelled", "Awaiting Signature"];
+  
+  // Get filter options based on user role
+  const { user } = useUser();
+  const isAdmin = user?.sessionClaims?.metadata?.role === 'admin';
+  const filterOptions = isAdmin ? [...baseFilterOptions, "Mock Data"] : baseFilterOptions;
 
   // Toggle filter selection
   const toggleFilter = (filter: string) => {
@@ -363,6 +369,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
   // Combine actual bookings with matches that don't have bookings yet (awaiting signature)
   // This mirrors the exact logic from the listing bookings page
   const allBookingsData = useMemo(() => {
+    // If admin has selected "Mock Data" filter, always show sample data
+    if (isAdmin && selectedFilters.includes('Mock Data')) {
+      console.log('HostDashboardBookingsTab: Admin selected Mock Data, using sample data');
+      return sampleBookings;
+    }
+    
     if (!propBookings || !propListings || (propBookings.length === 0 && propListings.length === 0)) {
       console.log('HostDashboardBookingsTab: Missing or empty data, using sample data');
       return sampleBookings;
@@ -434,7 +446,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
     console.log('HostDashboardBookingsTab: Combined bookings:', existingBookings.length, 'matches:', matchesAwaitingSignature.length, 'total:', combined.length);
     
     return combined;
-  }, [propBookings, propListings]);
+  }, [propBookings, propListings, selectedFilters, isAdmin]);
 
   const bookingsToUse = allBookingsData;
 
@@ -442,11 +454,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
   const filteredBookings = useMemo(() => {
     let filtered = bookingsToUse;
     
-    // Apply status filters
-    if (selectedFilters.length > 0) {
+    // Apply status filters (exclude Mock Data filter from status filtering)
+    const statusFilters = selectedFilters.filter(filter => filter !== 'Mock Data');
+    if (statusFilters.length > 0) {
       filtered = filtered.filter(booking => {
         const statusInfo = getStatusInfo(booking);
-        return selectedFilters.includes(statusInfo.label);
+        return statusFilters.includes(statusInfo.label);
       });
     }
     
@@ -588,9 +601,18 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
 
   return (
     <TabLayout
-      title="Your Bookings"
-      sidebarContent={sidebarContent}
-      searchBar={searchBarComponent}
+      title="Bookings"
+      subtitle="Bookings for all your listings"
+      searchPlaceholder="Search by title, address, or guest name"
+      filterLabel="Filter by status"
+      filterOptions={filterOptions.map(label => ({ value: label.toLowerCase().replace(' ', '_'), label }))}
+      onSearchChange={setSearchTerm}
+      onFilterChange={(value) => {
+        const label = filterOptions.find(opt => opt.toLowerCase().replace(' ', '_') === value);
+        if (label) {
+          toggleFilter(label);
+        }
+      }}
       pagination={{
         currentPage,
         totalPages,

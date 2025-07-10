@@ -19,13 +19,17 @@ import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from "./[listingId]/useNavigationContent";
+import { useUser } from "@clerk/nextjs";
 
-// Filter options
-const filterOptions = [
+// Base filter options
+const baseFilterOptions = [
   { id: "pending", label: "Pending" },
   { id: "declined", label: "Declined" },
   { id: "approved", label: "Approved" },
 ];
+
+// Admin-only filter option
+const adminFilterOption = { id: "mock_data", label: "Mock Data" };
 
 // Helper function to get status color
 const getStatusColor = (status: string) => {
@@ -347,6 +351,11 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const itemsPerPage = 10;
   const isMobile = useIsMobile();
+  const { user } = useUser();
+  const isAdmin = user?.sessionClaims?.metadata?.role === 'admin';
+  
+  // Get filter options based on user role
+  const filterOptions = isAdmin ? [...baseFilterOptions, adminFilterOption] : baseFilterOptions;
   
   // Create a wrapper component that passes the onNavigate callback
   const MobileNavigationContent = ({ onNavigate }: { onNavigate?: () => void }) => {
@@ -381,8 +390,15 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     );
   };
 
-  // Use real data if available, otherwise fall back to sample data
-  const housingRequestsToUse = propHousingRequests && propHousingRequests.length > 0 ? propHousingRequests : sampleHousingRequests;
+  // Determine which data to use based on filters and user role
+  const housingRequestsToUse = useMemo(() => {
+    // If admin has selected "Mock Data" filter, always show sample data
+    if (isAdmin && selectedFilters.includes('mock_data')) {
+      return sampleHousingRequests;
+    }
+    // Otherwise, use real data if available, otherwise fall back to sample data
+    return propHousingRequests && propHousingRequests.length > 0 ? propHousingRequests : sampleHousingRequests;
+  }, [propHousingRequests, selectedFilters, isAdmin]);
   
   console.log('housingRequestsToUse:', housingRequestsToUse);
   console.log('Using real data?', propHousingRequests && propHousingRequests.length > 0);
@@ -393,10 +409,11 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     const applications = housingRequestsToUse.map(request => formatHousingRequestForDisplay(request, isMobile));
     let filtered = applications;
     
-    // Apply status filters
-    if (selectedFilters.length > 0) {
+    // Apply status filters (exclude mock_data filter from status filtering)
+    const statusFilters = selectedFilters.filter(filter => filter !== 'mock_data');
+    if (statusFilters.length > 0) {
       filtered = filtered.filter(app => 
-        selectedFilters.includes(app.status.toLowerCase())
+        statusFilters.includes(app.status.toLowerCase())
       );
     }
     
@@ -520,10 +537,17 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
 
   return (
     <TabLayout
-      title="Your Applications"
-      sidebarContent={sidebarContent}
-      searchBar={searchBarComponent}
-      navigationContent={<MobileNavigationContent />}
+      title="Applications"
+      subtitle="Applications for all your listings"
+      searchPlaceholder="Search by title, address, or guest name"
+      filterLabel="Filter by status"
+      filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
+      onSearchChange={setSearchTerm}
+      onFilterChange={(value) => {
+        if (filterOptions.find(opt => opt.id === value)) {
+          toggleFilter(value);
+        }
+      }}
       pagination={{
         currentPage,
         totalPages,

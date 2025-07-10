@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -179,8 +179,15 @@ export default function TabLayout({
               </span>
               <Select onValueChange={onFilterChange}>
                 <SelectTrigger className="w-[142px] h-12">
-                  <SelectValue placeholder={filterOptions[0]?.label || "All"} />
+                  <SelectValue placeholder={filterOptions?.[0]?.label || "All"} />
                 </SelectTrigger>
+                <SelectContent>
+                  {filterOptions?.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
             

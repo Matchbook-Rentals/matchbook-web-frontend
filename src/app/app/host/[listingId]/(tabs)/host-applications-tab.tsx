@@ -19,6 +19,7 @@ import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from '../useNavigationContent';
+import { useUser } from "@clerk/nextjs";
 
 // Sample housing requests for when no real data exists
 const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => [
@@ -132,12 +133,15 @@ const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => 
   }
 ];
 
-// Filter options
-const filterOptions = [
+// Base filter options
+const baseFilterOptions = [
   { id: "pending", label: "Pending" },
   { id: "declined", label: "Declined" },
   { id: "approved", label: "Approved" },
 ];
+
+// Admin-only filter option
+const adminFilterOption = { id: "mock_data", label: "Mock Data" };
 
 // Helper function to get status color
 const getStatusColor = (status: string) => {
@@ -199,6 +203,11 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const isMobile = useIsMobile();
+  const { user } = useUser();
+  const isAdmin = user?.sessionClaims?.metadata?.role === 'admin';
+  
+  // Get filter options based on user role
+  const filterOptions = isAdmin ? [...baseFilterOptions, adminFilterOption] : baseFilterOptions;
   
   // Create a wrapper component that passes the onNavigate callback
   const MobileNavigationContent = ({ onNavigate }: { onNavigate?: () => void }) => {
@@ -219,8 +228,15 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     router.push(`/app/host/${listing.id}/applications/${applicationId}?from=listing`);
   };
 
-  // Use real data if available, otherwise generate sample data
-  const requestsToUse = housingRequests.length > 0 ? housingRequests : generateSampleHousingRequests(listing.id);
+  // Determine which data to use based on filters and user role
+  const requestsToUse = useMemo(() => {
+    // If admin has selected "Mock Data" filter, always show sample data
+    if (isAdmin && selectedFilters.includes('mock_data')) {
+      return generateSampleHousingRequests(listing.id);
+    }
+    // Otherwise, use real data if available, otherwise generate sample data
+    return housingRequests.length > 0 ? housingRequests : generateSampleHousingRequests(listing.id);
+  }, [housingRequests, selectedFilters, isAdmin, listing.id]);
   
   // Convert housing requests to the format the UI expects
   const applications = requestsToUse.map(formatHousingRequestForDisplay);
@@ -229,10 +245,11 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   const filteredApplications = useMemo(() => {
     let filtered = applications;
     
-    // Apply status filters
-    if (selectedFilters.length > 0) {
+    // Apply status filters (exclude mock_data filter from status filtering)
+    const statusFilters = selectedFilters.filter(filter => filter !== 'mock_data');
+    if (statusFilters.length > 0) {
       filtered = filtered.filter(app => {
-        return selectedFilters.includes(app.status.toLowerCase());
+        return statusFilters.includes(app.status.toLowerCase());
       });
     }
     
@@ -353,9 +370,16 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   return (
     <TabLayout
       title="Applications"
-      sidebarContent={sidebarContent}
-      searchBar={searchBarComponent}
-      navigationContent={<MobileNavigationContent />}
+      subtitle={`Applications for ${listing.title || listing.streetAddress1 || 'this listing'}`}
+      searchPlaceholder="Search by name or dates"
+      filterLabel="Filter by status"
+      filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
+      onSearchChange={setSearchTerm}
+      onFilterChange={(value) => {
+        if (filterOptions.find(opt => opt.id === value)) {
+          toggleFilter(value);
+        }
+      }}
       noMargin={true}
       emptyStateMessage={housingRequests.length === 0 ? "No applications yet for this listing." : "No applications match the selected filters."}
     >
