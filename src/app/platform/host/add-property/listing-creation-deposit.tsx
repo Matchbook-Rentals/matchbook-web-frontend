@@ -43,8 +43,8 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
               </div>
               <div className="relative w-full max-w-[173px]">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
+                <Input
+                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                   value={deposit}
                   onChange={(e) => {
                     // Only allow numbers and decimal points
@@ -66,13 +66,13 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   Rent Due At Booking
                 </label>
                 <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1">
-                  This portion of the deposit is not refunded in the case of a cancellation
+                  How much of first months rent do you want due at booking? " This amount is collected from renters at booking and is nonrefundable if they cancel 24 hours or more after booking.
                 </p>
               </div>
               <div className="relative w-full max-w-[173px]">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
+                <Input
+                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                   value={rentDueAtBooking}
                   onChange={(e) => {
                     // Only allow numbers and decimal points
@@ -100,8 +100,8 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 </div>
                 <div className="relative w-full max-w-[173px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                  <Input 
-                    className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
+                  <Input
+                    className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                     value={petDeposit}
                     onChange={(e) => {
                       // Only allow numbers and decimal points
@@ -126,8 +126,8 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 </div>
                 <div className="relative w-full max-w-[173px]">
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                  <Input 
-                    className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
+                  <Input
+                    className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                     value={petRent}
                     onChange={(e) => {
                       // Only allow numbers and decimal points

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ListingCreationCard } from './listing-creation-card';
 import { Badge } from "@/components/ui/badge";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import InComplexIcon from '@/lib/icons/in-complex';
@@ -153,8 +154,8 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
   return (
     <div className="flex flex-col gap-0">
 
-      {/* Laundry Section */}
-      <div className={sectionStyles}>
+      {/* Laundry Section - Badges (mobile only) */}
+      <div className={`md:sr-only ${sectionStyles}`}>
         <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
         <div className="flex flex-wrap gap-4">
           {laundryOptions.map((option) => (
@@ -184,6 +185,26 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
         </div>
       </div>
 
+      {/* Laundry Section - Cards (medium and above) */}
+      <div className={` test-blue hidden sm:block ${sectionStyles}`}>
+        <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
+        <div className="flex flex-wrap gap-4">
+          {laundryOptions.map((option) => (
+            <ListingCreationCard
+              key={option.id}
+              name={option.label}
+              icon={
+                option.value === 'washerInComplex' ? <InComplexIcon className="w-8 h-8" /> : 
+                option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-8 h-8" /> :
+                <AmenitiesIcons.WasherIcon className="w-8 h-8" />
+              }
+              isSelected={getLaundrySelection() === option.value}
+              onClick={() => handleLaundryChange(option.value)}
+            />
+          ))}
+        </div>
+      </div>
+
       <ScrollArea className="min-h-[400px]">
         <div className="flex flex-col gap-0">
           {AMENITY_GROUPS.map((group) => (
@@ -191,23 +212,34 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
               <h3 className="text-[18px] font-medium text-[#404040]">{group.group}</h3>
               <div className="flex flex-wrap gap-4">
                 {group.items.map((amenity) => (
-                  <Badge
-                    key={amenity.value}
-                    variant="outline"
-                    className={`inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 rounded-full border-solid cursor-pointer ${
-                      selected.includes(amenity.value)
-                        ? selectedBadgeStyles
-                        : unselectedBadgeStyles
-                    }`}
-                    onClick={() => toggleAmenity(amenity.value)}
-                  >
-                    {React.cloneElement(amenity.icon as React.ReactElement, { 
-                      className: "w-4 h-4" 
-                    })}
-                    <span className="font-['Poppins',Helvetica] font-medium text-sm text-center leading-5 text-[#344054]">
-                      {amenity.label}
-                    </span>
-                  </Badge>
+                  <React.Fragment key={amenity.value}>
+                    {/* Badge for mobile (< md) */}
+                    <Badge
+                      variant="outline"
+                      className={`md:hidden inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 rounded-full border-solid cursor-pointer ${
+                        selected.includes(amenity.value)
+                          ? selectedBadgeStyles
+                          : unselectedBadgeStyles
+                      }`}
+                      onClick={() => toggleAmenity(amenity.value)}
+                    >
+                      {React.cloneElement(amenity.icon as React.ReactElement, { 
+                        className: "w-4 h-4" 
+                      })}
+                      <span className="font-['Poppins',Helvetica] font-medium text-sm text-center leading-5 text-[#344054]">
+                        {amenity.label}
+                      </span>
+                    </Badge>
+                    {/* Card for medium+ screens */}
+                    <div className="hidden md:block">
+                      <ListingCreationCard
+                        name={amenity.label}
+                        icon={amenity.icon}
+                        isSelected={selected.includes(amenity.value)}
+                        onClick={() => toggleAmenity(amenity.value)}
+                      />
+                    </div>
+                  </React.Fragment>
                 ))}
               </div>
             </div>
