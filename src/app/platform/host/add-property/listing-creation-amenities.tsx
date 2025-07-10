@@ -155,7 +155,7 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
     <div className="flex flex-col gap-0">
 
       {/* Laundry Section - Badges (mobile only) */}
-      <div className={`md:sr-only ${sectionStyles}`}>
+      <div className={`md:hidden ${sectionStyles}`}>
         <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
         <div className="flex flex-wrap gap-4">
           {laundryOptions.map((option) => (
@@ -186,7 +186,7 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
       </div>
 
       {/* Laundry Section - Cards (medium and above) */}
-      <div className={` test-blue hidden sm:block ${sectionStyles}`}>
+      <div className={` hidden sm:block ${sectionStyles}`}>
         <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
         <div className="flex flex-wrap gap-4">
           {laundryOptions.map((option) => (
