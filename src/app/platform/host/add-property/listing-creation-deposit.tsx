@@ -32,12 +32,12 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
         {/* Deposit Section */}
         <div className="space-y-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <label className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
+            <div className="flex items-center gap-4 justify-between">
+              <div className="flex-1 min-w-0">
+                <label className={questionTextStyles || "font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]"}>
                   How much is the security deposit?
                 </label>
-                <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1">
+                <p className={questionSubTextStyles || "font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1"}>
                   Total security deposit amount required from tenants
                 </p>
               </div>
@@ -60,13 +60,13 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center gap-6 justify-between">
-              <div className="max-w-[50%]">
-                <label className="font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]">
-                  Rent Due At Booking
+            <div className="flex items-center gap-4 justify-between">
+              <div className="flex-1 min-w-0">
+                <label className={questionTextStyles || "font-medium text-xl text-[#404040] [font-family:'Poppins',Helvetica]"}>
+                  How much of first months rent do you want due at booking?
                 </label>
-                <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1">
-                  How much of first months rent do you want due at booking? " This amount is collected from renters at booking and is nonrefundable if they cancel 24 hours or more after booking.
+                <p className={questionSubTextStyles || "font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1"}>
+                   This amount is collected from renters at booking and is nonrefundable if they cancel 24 hours or more after booking.
                 </p>
               </div>
               <div className="relative w-full max-w-[173px]">
@@ -89,12 +89,12 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
 
           <div className="space-y-4">
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <label className="font-medium text-lg text-[#404040] [font-family:'Poppins',Helvetica]">
+              <div className="flex items-center gap-4 justify-between">
+                <div className="flex-1 min-w-0">
+                  <label className={questionTextStyles || "font-medium text-lg text-[#404040] [font-family:'Poppins',Helvetica]"}>
                     Is there an extra deposit for pets?
                   </label>
-                  <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1">
+                  <p className={questionSubTextStyles || "font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1"}>
                     Additional deposit amount per pet (refundable)
                   </p>
                 </div>
@@ -115,12 +115,12 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <label className="font-medium text-lg text-[#404040] [font-family:'Poppins',Helvetica]">
+              <div className="flex items-center gap-4 justify-between">
+                <div className="flex-1 min-w-0">
+                  <label className={questionTextStyles || "font-medium text-lg text-[#404040] [font-family:'Poppins',Helvetica]"}>
                     Is there a monthly fee for pets?
                   </label>
-                  <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1">
+                  <p className={questionSubTextStyles || "font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1"}>
                     Monthly rent addition per pet (non-refundable)
                   </p>
                 </div>
@@ -141,7 +141,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 </div>
               </div>
             </div>
-            <p className="font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica]">
+            <p className={questionSubTextStyles || "font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica]"}>
               Leave blank if you don&apos;t charge pet fees
             </p>
           </div>
