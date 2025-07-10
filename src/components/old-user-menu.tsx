@@ -11,7 +11,7 @@ import { getNotifications, updateNotification, deleteNotification } from '@/app/
 import { updateUserImage, updateUserLogin } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
-import { Bell } from 'lucide-react';
+import { Bell, Loader2 } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
 import { checkClientBetaAccess, checkClientHostAccess } from '@/utils/roles';
 
@@ -185,7 +185,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             content.innerHTML = `
               <h2 class="text-xl font-bold mb-4">Email Notification Settings</h2>
               <div id="loading-state" class="text-center py-4">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto" />
                 <p class="text-sm text-gray-500 mt-2">Loading preferences...</p>
               </div>
               <div id="notification-settings" class="space-y-6 hidden">

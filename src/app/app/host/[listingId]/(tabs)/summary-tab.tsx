@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus } from 'lucide-react';
+import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2 } from 'lucide-react';
 import Tile from '@/components/ui/tile';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { updateListing } from '@/app/actions/listings';
@@ -239,7 +239,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           >
             {buttonState === 'saving' ? (
               <div className="flex items-center gap-2">
-                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Saving...</span>
               </div>
             ) : buttonState === 'success' ? (

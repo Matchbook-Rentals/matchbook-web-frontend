@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import ProgressBar, { StepInfo } from "./progress-bar";
@@ -1329,7 +1330,7 @@ const [listingBasics, setListingBasics] = useState({
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <Loader2 className="w-16 h-16 text-blue-500 animate-spin mx-auto mb-4" />
           <p className="text-xl">Loading your draft listing...</p>
         </div>
       </div>

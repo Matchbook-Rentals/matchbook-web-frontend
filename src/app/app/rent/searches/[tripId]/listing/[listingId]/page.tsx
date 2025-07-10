@@ -6,6 +6,7 @@ import SearchListingDetailsView from '@/app/app/rent/searches/(trips-components)
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { useUser } from '@clerk/nextjs'
 import { PAGE_MARGIN } from '@/constants/styles'
+import { Loader2 } from 'lucide-react'
 
 interface ListingPageProps {
   params: {
@@ -23,7 +24,7 @@ export default function SearchListingPage({ params }: ListingPageProps) {
   if (!state.trip || !user) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
       </div>
     )
   }
@@ -42,7 +43,7 @@ export default function SearchListingPage({ params }: ListingPageProps) {
         <p className="text-lg md:text-xl text-gray-600 mb-8 text-center">
           Redirecting to default listing view...
         </p>
-        <div className="w-12 h-12 border-4 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+        <Loader2 className="w-12 h-12 text-gray-500 animate-spin" />
       </div>
     )
   }

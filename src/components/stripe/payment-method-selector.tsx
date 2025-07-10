@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CreditCard, Shield, CheckCircle, Plus, Trash2, Building2 } from 'lucide-react';
+import { CreditCard, Shield, CheckCircle, Plus, Trash2, Building2, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -593,7 +593,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
       <Card>
         <CardContent className="pt-6">
           <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
             <span className="ml-2 text-gray-600">Loading payment methods...</span>
           </div>
         </CardContent>
@@ -717,7 +717,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
                             className="text-red-600 hover:text-red-700 hover:bg-red-50"
                           >
                             {deletingPaymentMethodId === method.id ? (
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                              <Loader2 className="h-4 w-4 animate-spin text-red-600" />
                             ) : (
                               <Trash2 className="w-4 h-4" />
                             )}
@@ -855,7 +855,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
               </Elements>
             ) : (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
                 <p className="text-gray-600">Initializing payment form...</p>
               </div>
             )}

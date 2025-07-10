@@ -104,7 +104,7 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
           <Link 
             href={href} 
             className={cn(
-              "absolute inset-0 w-full h-full focus:outline-none rounded-lg",
+              "absolute inset-0 w-full h-full focus:outline-none focus-within:outline-none rounded-lg",
               // Only add default outline width if no custom one is provided
               !customFocusOutlineWidth && "focus-visible:outline-2",
               // Only add default outline color if no custom one is provided

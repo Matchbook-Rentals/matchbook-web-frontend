@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
-import { PaperclipIcon, X } from 'lucide-react';
+import { PaperclipIcon, X, Loader2 } from 'lucide-react';
 import Image from "next/image";
 import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
@@ -340,7 +340,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
               disabled={!selectedConversation}
             >
               {isUploading ? (
-                <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                <Loader2 className="w-5 h-5 text-gray-600 animate-spin" />
               ) : (
                 <PaperclipIcon className="w-5 h-5" />
               )}

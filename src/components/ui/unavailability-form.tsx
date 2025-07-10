@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, X, CalendarIcon, Trash2 } from 'lucide-react';
+import { Calendar, X, CalendarIcon, Trash2, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
@@ -348,7 +348,7 @@ const UnavailabilityForm: React.FC<UnavailabilityFormProps> = ({
             >
               {isSubmitting ? (
                 <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   {editingUnavailability ? 'Saving...' : 'Adding...'}
                 </div>
               ) : (
@@ -367,7 +367,7 @@ const UnavailabilityForm: React.FC<UnavailabilityFormProps> = ({
                 disabled={isSubmitting || isDeleting}
               >
                 {isDeleting ? (
-                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <div className="flex items-center gap-2">
                     <Trash2 className="h-4 w-4" />

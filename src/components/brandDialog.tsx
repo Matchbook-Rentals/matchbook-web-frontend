@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { XIcon, CheckIcon } from "lucide-react"
+import { XIcon, CheckIcon, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
@@ -290,7 +290,7 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
           {isLoading ? (
             <>
               <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">

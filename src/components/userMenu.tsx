@@ -1,5 +1,5 @@
 'use client'
-import { ChevronDownIcon, Bell, UserRound } from "lucide-react";
+import { ChevronDownIcon, Bell, UserRound, Loader2 } from "lucide-react";
 import { FaUserLarge } from "react-icons/fa6";
 import React, { useEffect, useState, useCallback } from "react";
 import {
@@ -285,7 +285,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
             content.innerHTML = `
               <h2 class="text-xl font-bold mb-4">Email Notification Settings</h2>
               <div id="loading-state" class="text-center py-4">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto" />
                 <p class="text-sm text-gray-500 mt-2">Loading preferences...</p>
               </div>
               <div id="notification-settings" class="space-y-6 hidden">

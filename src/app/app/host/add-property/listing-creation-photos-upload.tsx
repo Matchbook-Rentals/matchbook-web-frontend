@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { UploadButton } from "@/app/utils/uploadthing";
 import { BrandButton } from "@/components/ui/brandButton";
 import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 import type { NullableListingImage } from "./add-property-client";
 
@@ -98,7 +99,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                     button: ({ ready, isUploading }) => (
                       <div className="flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-gray-500 focus-visible:outline-offset-2">
                         {isUploading && (
-                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                          <Loader2 className="w-4 h-4 animate-spin" />
                         )}
                         <span>{isUploading ? "Uploading..." : "Click to upload"}</span>
                       </div>
