@@ -20,6 +20,7 @@ import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from '../useNavigationContent';
 import { useUser } from "@clerk/nextjs";
+import { HostApplicationCard } from "../../components/host-application-card";
 
 // Sample housing requests for when no real data exists
 const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => [
@@ -188,6 +189,32 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
     occupants,
     price,
     status: request.status || 'pending',
+  };
+};
+
+// Helper function to transform application data for the new card component
+const transformApplicationForCard = (app: any, listing: ListingAndImages, isMobile: boolean) => {
+  const addressDisplay = isMobile 
+    ? (listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`)
+    : `${listing.streetAddress1 || ''} ${listing.city || ''}, ${listing.state || ''} ${listing.postalCode || ''}`;
+
+  // Parse occupants string to create occupant objects
+  const occupantsParts = app.occupants.split(', ');
+  const occupants = [
+    { type: "Adult", count: parseInt(occupantsParts[0]?.split(' ')[0] || '0'), icon: "/adultl.svg" },
+    { type: "Kid", count: parseInt(occupantsParts[1]?.split(' ')[0] || '0'), icon: "/kid.svg" },
+    { type: "pet", count: parseInt(occupantsParts[2]?.split(' ')[0] || '0'), icon: "/pet.svg" },
+  ];
+
+  return {
+    name: app.name,
+    status: app.status.charAt(0).toUpperCase() + app.status.slice(1),
+    dates: app.period,
+    address: addressDisplay,
+    description: `for ${listing.title || 'this property'} - ${listing.numBedrooms || 0} bed ${listing.numBathrooms || 0} bath ${listing.petsAllowed ? 'pet friendly' : ''}`,
+    price: app.price,
+    occupants,
+    profileImage: "/image-35.png", // TODO: Use actual user profile image
   };
 };
 
@@ -384,93 +411,20 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
       emptyStateMessage={housingRequests.length === 0 ? "No applications yet for this listing." : "No applications match the selected filters."}
     >
       {filteredApplications.map((app) => {
-        const addressDisplay = isMobile 
-          ? (listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`)
-          : `${listing.streetAddress1 || ''} ${listing.city || ''}, ${listing.state || ''} ${listing.postalCode || ''}`;
-
+        const cardData = transformApplicationForCard(app, listing, isMobile);
+        
         return (
-          <Card
-            key={app.id}
-            className="mb-8 rounded-[5px] border border-solid border-[#6e504933]"
-          >
-            <CardContent className="p-4">
-              <div className="mb-2">
-                <div className="flex justify-between">
-                  <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                    {addressDisplay}
-                  </h2>
-                  <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl text-right leading-4">
-                    {app.price}
-                  </div>
-                </div>
-
-                <div className="flex justify-between mt-1">
-                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[16px] leading-5">
-                    Applicant: {app.name}
-                  </div>
-                  <div
-                    className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${getStatusColor(app.status)}`}
-                  >
-                    {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
-                  </div>
-                </div>
-
-                <div className="mt-1">
-                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
-                    {app.occupants} • {app.period}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 mt-8">
-                <Button
-                  variant="outline"
-                  onClick={() => handleViewApplicationDetails(app.id)}
-                  disabled={loadingApplicationId === app.id}
-                  className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] flex items-center gap-2"
-                >
-                  Application Details
-                  {loadingApplicationId === app.id && (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  )}
-                </Button>
-
-                <MessageGuestDialog
-                  listingId={listing.id}
-                  guestName={app.name}
-                  guestUserId={app.userId}
-                  className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                >
-                  <Button
-                    variant="outline"
-                    className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                  >
-                    Message Applicant
-                  </Button>
-                </MessageGuestDialog>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] h-10 w-10 p-2"
-                    >
-                      <MoreHorizontalIcon className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/app/host/${listing.id}`} className="cursor-pointer flex items-center gap-2">
-                        <Home className="h-4 w-4" />
-                        Manage Listing
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </CardContent>
-          </Card>
+          <div key={app.id} className="mb-8">
+            <HostApplicationCard
+              {...cardData}
+              onApplicationDetails={() => handleViewApplicationDetails(app.id)}
+              onMessageGuest={() => {
+                // Handle message guest action - you may need to implement this
+                console.log('Message guest:', app.name);
+              }}
+              className="border border-solid border-[#6e504933]"
+            />
+          </div>
         );
       })}
     </TabLayout>

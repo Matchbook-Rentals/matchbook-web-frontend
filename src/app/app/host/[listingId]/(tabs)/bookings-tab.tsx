@@ -154,8 +154,8 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
   const [markingMoveInBookingId, setMarkingMoveInBookingId] = useState<string | null>(null);
   const isMobile = useIsMobile();
   const { user } = useUser();
-  //const isAdmin = user?.publicMetadata.role === 'admin';
-  const isAdmin = true;  
+  const isAdmin = user?.publicMetadata.role === 'admin';
+
   // Determine which data to use based on filters and user role
   const bookingsToUse = useMemo(() => {
     // If admin has selected "Mock Data" filter, always show sample data
