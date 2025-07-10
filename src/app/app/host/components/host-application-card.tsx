@@ -1,8 +1,10 @@
-import { MapPinIcon } from "lucide-react";
+import { MapPinIcon, MoreVertical, X } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface Occupant {
   type: string;
@@ -21,6 +23,7 @@ interface HostApplicationCardProps {
   profileImage?: string;
   onApplicationDetails?: () => void;
   onMessageGuest?: () => void;
+  onRejectApplication?: () => void;
   className?: string;
 }
 
@@ -35,6 +38,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
   profileImage = "/image-35.png",
   onApplicationDetails,
   onMessageGuest,
+  onRejectApplication,
   className = "",
 }) => {
 
@@ -101,13 +105,27 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
           {/* Right Side - Price and Actions */}
           <div className="flex flex-col items-end justify-center gap-2 self-stretch">
             <div className="flex flex-col items-start gap-2.5 flex-1">
-              <Button
-                variant="outline"
-                size="icon"
-                className="p-2.5 rounded-lg border-[#3c8787]"
-              >
-                <img className="w-5 h-5" alt="Frame" src="/frame.svg" />
-              </Button>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="p-2.5 rounded-lg border-[#3c8787] text-[#3c8787]"
+                  >
+                    <MoreVertical className="w-5 h-5" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-48 p-0 " align="end">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-2"
+                    onClick={onRejectApplication}
+                  >
+                    <X className="w-4 h-4" />
+                    Reject Application
+                  </Button>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="flex flex-col items-end justify-center gap-3 w-full">
@@ -116,20 +134,19 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
               </div>
 
               <div className="flex items-center gap-3">
-                <Button
+                <BrandButton
                   variant="outline"
-                  className="px-3.5 py-2.5 border-[#3c8787] text-[#3c8787] font-semibold text-sm"
                   onClick={onApplicationDetails}
                 >
                   Application Details
-                </Button>
+                </BrandButton>
 
-                <Button 
-                  className="bg-[#3c8787] text-white"
+                <BrandButton 
+                  variant="default"
                   onClick={onMessageGuest}
                 >
                   Message Guest
-                </Button>
+                </BrandButton>
               </div>
             </div>
           </div>
