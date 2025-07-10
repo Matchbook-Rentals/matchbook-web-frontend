@@ -26,6 +26,7 @@ interface TabLayoutProps {
   searchPlaceholder?: string;
   filterLabel?: string;
   filterOptions?: Array<{ value: string; label: string }>;
+  defaultFilter?: string;
   onSearchChange?: (value: string) => void;
   onFilterChange?: (value: string) => void;
   actionButton?: React.ReactNode; // Optional button component
@@ -56,6 +57,7 @@ export default function TabLayout({
   searchPlaceholder = "Search",
   filterLabel = "Filter by status",
   filterOptions = [{ value: "all", label: "All" }],
+  defaultFilter,
   onSearchChange,
   onFilterChange,
   actionButton,
@@ -201,7 +203,7 @@ export default function TabLayout({
                 <span className="whitespace-nowrap text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
                   {filterLabel}
                 </span>
-                <Select onValueChange={onFilterChange}>
+                <Select onValueChange={onFilterChange} defaultValue={defaultFilter || filterOptions?.[0]?.value}>
                   <SelectTrigger className="w-[142px] h-12">
                     <SelectValue placeholder={filterOptions?.[0]?.label || "All"} />
                   </SelectTrigger>

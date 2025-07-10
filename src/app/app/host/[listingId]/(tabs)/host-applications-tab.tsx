@@ -278,7 +278,7 @@ interface ApplicationsTabProps {
 const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingRequests }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [selectedFilter, setSelectedFilter] = useState<string>('all');
+  const [selectedFilter, setSelectedFilter] = useState<string>('pending');
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const [useMockData, setUseMockData] = useState(false);
@@ -323,8 +323,29 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     return housingRequests;
   }, [housingRequests, useMockData, isAdmin, listing.id]);
   
-  // Convert housing requests to the format the UI expects
-  const applications = requestsToUse.map(formatHousingRequestForDisplay);
+  // Convert housing requests to the format the UI expects and sort them
+  const applications = useMemo(() => {
+    const formattedApplications = requestsToUse.map(formatHousingRequestForDisplay);
+    
+    // Sort by status priority (pending -> approved -> denied) and then by oldest createdAt
+    return formattedApplications.sort((a, b) => {
+      // Define status priority order
+      const statusPriority = { pending: 0, approved: 1, declined: 2 };
+      const aStatus = a.status.toLowerCase() as keyof typeof statusPriority;
+      const bStatus = b.status.toLowerCase() as keyof typeof statusPriority;
+      
+      // First sort by status priority
+      const statusDiff = (statusPriority[aStatus] ?? 999) - (statusPriority[bStatus] ?? 999);
+      if (statusDiff !== 0) return statusDiff;
+      
+      // Then sort by oldest createdAt (ascending)
+      const aRequest = requestsToUse.find(r => r.id === a.id);
+      const bRequest = requestsToUse.find(r => r.id === b.id);
+      const aDate = aRequest?.createdAt?.getTime() ?? 0;
+      const bDate = bRequest?.createdAt?.getTime() ?? 0;
+      return aDate - bDate;
+    });
+  }, [requestsToUse]);
 
   // Filter applications based on selected filter and search term
   const filteredApplications = useMemo(() => {
@@ -367,6 +388,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
       searchPlaceholder="Search by name or dates"
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
+      defaultFilter="pending"
       onSearchChange={setSearchTerm}
       onFilterChange={handleFilterChange}
       noMargin={true}
