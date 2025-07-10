@@ -85,9 +85,9 @@ export const ListingPhotoSelection: React.FC<ListingPhotoSelectionProps> = ({
   return (
     <section className="w-full max-w-[889px] mx-auto">
 
-      <div className="flex flex-col gap-5 w-full mb-6">
-        {/* Cover Photo Card - on top */}
-        <Card className="w-full max-w-md mx-auto aspect-[4/3] bg-[#f7f7f7] rounded-xl overflow-hidden border-0 cursor-pointer transition-all relative">
+      <div className="flex flex-col md:flex-row items-start gap-5 w-full mb-6">
+        {/* Cover Photo Card - larger but same aspect ratio */}
+        <Card className="w-full md:w-auto md:flex-1 max-w-md mx-auto md:mx-0 aspect-[4/3] bg-[#f7f7f7] rounded-xl overflow-hidden border-0 cursor-pointer transition-all relative">
           <CardContent className="p-0 h-full relative">
             <div className="absolute top-2.5 left-2.5 z-10">
               <Badge className="bg-white text-[#373940] hover:bg-white rounded px-2 py-1">
@@ -115,58 +115,60 @@ export const ListingPhotoSelection: React.FC<ListingPhotoSelectionProps> = ({
           </CardContent>
         </Card>
 
-        {/* Additional Photos - 2x2 grid below */}
-        <div className="grid grid-cols-2 gap-5 w-full max-w-md mx-auto">
-          {[0, 1, 2, 3].map((idx) => (
-            <Card
-              key={idx}
-              className={`aspect-[4/3] bg-[#f7f7f7] rounded-xl overflow-hidden border-0 cursor-pointer transition-all relative group ${activeIdx === idx && selectedPhotos[idx] ? 'ring-2 ring-charcoalBrand' : ''}`}
-              onClick={() => handleSlotClick(idx)}
-              title={selectedPhotos[idx] ? (activeIdx === idx ? 'Click to remove' : 'Click to preview') : ''}
-            >
-              <CardContent className="p-0 h-full flex items-center justify-center">
-                {selectedPhotos[idx] ? (
-                  <img
-                    className="w-full h-full object-cover"
-                    alt={selectedPhotos[idx].id || "Featured photo"}
-                    src={selectedPhotos[idx].url || ""}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center gap-2">
-                    <PlusIcon className="w-6 h-6 text-[#5d606d]" />
-                    <span className="font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
-                      {idx === 3 ? 'Add More' : 'Add'}
-                    </span>
-                  </div>
-                )}
-                {/* Action buttons overlay - always visible on mobile, hover on desktop */}
-                {selectedPhotos[idx] && (
-                  <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                    {idx !== 0 && (
+        {/* Additional Photos - 2x2 grid */}
+        <div className="flex flex-col gap-5 w-full md:flex-1">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-5 w-full max-w-md mx-auto md:max-w-none md:mx-0">
+            {[0, 1, 2, 3].map((idx) => (
+              <Card
+                key={idx}
+                className={`aspect-[4/3] bg-[#f7f7f7] rounded-xl overflow-hidden border-0 cursor-pointer transition-all relative group ${activeIdx === idx && selectedPhotos[idx] ? 'ring-2 ring-charcoalBrand' : ''}`}
+                onClick={() => handleSlotClick(idx)}
+                title={selectedPhotos[idx] ? (activeIdx === idx ? 'Click to remove' : 'Click to preview') : ''}
+              >
+                <CardContent className="p-0 h-full flex items-center justify-center">
+                  {selectedPhotos[idx] ? (
+                    <img
+                      className="w-full h-full object-cover"
+                      alt={selectedPhotos[idx].id || "Featured photo"}
+                      src={selectedPhotos[idx].url || ""}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-2">
+                      <PlusIcon className="w-6 h-6 text-[#5d606d]" />
+                      <span className="font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                        {idx === 3 ? 'Add More' : 'Add'}
+                      </span>
+                    </div>
+                  )}
+                  {/* Action buttons overlay - always visible on mobile, hover on desktop */}
+                  {selectedPhotos[idx] && (
+                    <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                      {idx !== 0 && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMakeCover(idx);
+                          }}
+                          className="bg-white rounded px-2 py-1 shadow text-xs font-bold text-charcoalBrand hover:bg-gray-50 transition-colors"
+                        >
+                          Make Cover
+                        </button>
+                      )}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleMakeCover(idx);
+                          handleRemovePhoto(idx);
                         }}
-                        className="bg-white rounded px-2 py-1 shadow text-xs font-bold text-charcoalBrand hover:bg-gray-50 transition-colors"
+                        className="bg-white rounded px-2 py-1 shadow text-xs font-bold text-red-600 hover:bg-gray-50 transition-colors"
                       >
-                        Make Cover
+                        Remove
                       </button>
-                    )}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemovePhoto(idx);
-                      }}
-                      className="bg-white rounded px-2 py-1 shadow text-xs font-bold text-red-600 hover:bg-gray-50 transition-colors"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -193,16 +195,6 @@ export const ListingPhotoSelection: React.FC<ListingPhotoSelectionProps> = ({
           );
         })}
       </div>
-
-      {/* Validation message */}
-      {selectedPhotos.length < 4 && (
-        <div className="mt-4 text-red-600 font-semibold flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
-          </svg>
-          Please select 4 featured photos.
-        </div>
-      )}
     </section>
   );
 };
