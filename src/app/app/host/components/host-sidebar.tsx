@@ -1,11 +1,13 @@
 "use client"
 
 import * as React from "react"
+import { LucideIcon, BarChart3, Home, Users, Calendar, MessageSquare, CreditCard, Settings } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -36,6 +38,19 @@ interface HostSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) {
+  const getIconComponent = (iconName: string) => {
+    const icons = {
+      BarChart3,
+      Home,
+      Users,
+      Calendar,
+      MessageSquare,
+      CreditCard,
+      Settings
+    };
+    return icons[iconName as keyof typeof icons] || BarChart3;
+  };
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -44,7 +59,7 @@ export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) 
             <SidebarMenuButton size="lg" asChild>
               <a href="/app/host">
                   <img
-                    className=""
+                    className="p-2"
                     alt="Logo"
                     src="/new-green-logo.png"
                   />
@@ -56,22 +71,27 @@ export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) 
       <SidebarContent>
         {groups.map((group, groupIndex) => (
           <SidebarGroup key={groupIndex}>
+            {group.title && <SidebarGroupLabel>{group.title}</SidebarGroupLabel>}
             <SidebarMenu>
-              {group.items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={item.isActive}>
-                    <a href={item.url} className="font-medium">
-                      <span className="text-base">{item.icon}</span>
-                      {item.title}
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {group.items.map((item) => {
+                const IconComponent = getIconComponent(item.icon);
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={item.isActive}>
+                      <a href={item.url} className="font-medium">
+                        <IconComponent className="h-4 w-4" />
+                        {item.title}
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <SidebarRail />
+      <SidebarRail>
+      </SidebarRail>
     </Sidebar>
   )
 }
