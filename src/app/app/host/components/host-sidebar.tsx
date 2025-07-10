@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { LucideIcon, BarChart3, Home, Users, Calendar, MessageSquare, CreditCard, Settings } from "lucide-react"
+import { LucideIcon, BarChart3, Home, Users, Calendar, MessageSquare, CreditCard, Settings, Loader2 } from "lucide-react"
+import { useRouter, usePathname } from "next/navigation"
 
 import {
   Sidebar,
@@ -38,6 +39,10 @@ interface HostSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [navigatingTo, setNavigatingTo] = React.useState<string | null>(null)
+
   const getIconComponent = (iconName: string) => {
     const icons = {
       BarChart3,
@@ -50,6 +55,17 @@ export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) 
     };
     return icons[iconName as keyof typeof icons] || BarChart3;
   };
+
+  const handleNavigation = (url: string) => {
+    if (pathname === url) return; // Don't navigate if already on the page
+    setNavigatingTo(url)
+    router.push(url)
+  }
+
+  // Reset navigation state when pathname changes
+  React.useEffect(() => {
+    setNavigatingTo(null)
+  }, [pathname])
 
   return (
     <Sidebar {...props}>
@@ -75,13 +91,23 @@ export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) 
             <SidebarMenu>
               {group.items.map((item) => {
                 const IconComponent = getIconComponent(item.icon);
+                const isNavigating = navigatingTo === item.url;
+                const isDisabled = navigatingTo !== null && !isNavigating;
+                
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url} className="font-medium">
+                    <SidebarMenuButton 
+                      onClick={() => handleNavigation(item.url)}
+                      isActive={item.isActive}
+                      disabled={isDisabled}
+                      className={`font-medium ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {isNavigating ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
                         <IconComponent className="h-4 w-4" />
-                        {item.title}
-                      </a>
+                      )}
+                      {item.title}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
