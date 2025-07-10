@@ -1,0 +1,21 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Clipboard back -->
+  <path d="M120 50 L120 460 Q120 480 140 480 L380 480 Q400 480 400 460 L400 50 Q400 30 380 30 L140 30 Q120 30 120 50 Z" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+  
+  <!-- Clipboard front -->
+  <path d="M180 120 L180 480 Q180 490 190 490 L470 490 Q480 490 480 480 L480 130 Q480 120 470 120 L190 120 Q180 120 180 120 Z" fill="#e5e7eb" stroke="#6b7280" stroke-width="2"/>
+  
+  <!-- Clip back -->
+  <rect x="90" y="10" width="140" height="40" rx="8" fill="#0d9488"/>
+  <circle cx="155" cy="15" r="8" fill="none" stroke="#0d9488" stroke-width="4"/>
+  
+  <!-- Clip front -->
+  <rect x="270" y="80" width="140" height="40" rx="8" fill="#0d9488"/>
+  <circle cx="335" cy="85" r="8" fill="none" stroke="#0d9488" stroke-width="4"/>
+  
+  <!-- Paper lines on front clipboard -->
+  <rect x="210" y="160" width="220" height="8" rx="4" fill="#d1d5db"/>
+  <rect x="210" y="185" width="180" height="8" rx="4" fill="#d1d5db"/>
+  <rect x="210" y="210" width="200" height="8" rx="4" fill="#d1d5db"/>
+  <rect x="210" y="235" width="160" height="8" rx="4" fill="#d1d5db"/>
+</svg>

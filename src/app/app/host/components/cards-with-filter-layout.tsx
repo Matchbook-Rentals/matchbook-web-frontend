@@ -228,8 +228,15 @@ export default function TabLayout({
       {/* Content Area with Scroll */}
       <div className={`flex-1 min-h-0 ${isMobile ? 'px-4 py-4' : 'mt-1'}`}>
         {!hasContent ? (
-          <div className="text-center py-12 text-gray-500">
-            {emptyStateMessage}
+          <div className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500">
+            <img 
+              src="/host-dashboard/empty/applications.png" 
+              alt="No applications" 
+              className="w-full h-auto max-w-[260px] mb-0,"
+            />
+            <div className="text-lg font-medium">
+              {emptyStateMessage}
+            </div>
           </div>
         ) : (
           <div className="flex flex-col h-full">
