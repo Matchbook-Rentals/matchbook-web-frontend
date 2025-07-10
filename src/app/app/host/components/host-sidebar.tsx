@@ -13,49 +13,23 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-const hostDashboardItems = [
-  {
-    title: "Overview",
-    url: "/app/host/dashboard",
-    icon: "📊",
-  },
-  {
-    title: "Listings",
-    url: "/app/host/dashboard/listings",
-    icon: "🏠",
-  },
-  {
-    title: "All Applications",
-    url: "/app/host/dashboard/applications",
-    icon: "👥",
-    isActive: true,
-  },
-  {
-    title: "All Bookings",
-    url: "/app/host/dashboard/bookings",
-    icon: "📅",
-  },
-  {
-    title: "All Reviews",
-    url: "/app/host/reviews",
-    icon: "💬",
-  },
-  {
-    title: "Payments",
-    url: "/app/host/payments",
-    icon: "💳",
-  },
-]
+interface SidebarMenuItem {
+  title: string;
+  url: string;
+  icon: string;
+  isActive?: boolean;
+}
 
-const otherItems = [
-  {
-    title: "Settings",
-    url: "/app/host/settings",
-    icon: "⚙️",
-  },
-]
+interface SidebarGroup {
+  title?: string;
+  items: SidebarMenuItem[];
+}
 
-export function HostSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface HostSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  groups: SidebarGroup[];
+}
+
+export function HostSidebar({ groups, ...props }: HostSidebarProps) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -80,34 +54,22 @@ export function HostSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarMenu>
-            {hostDashboardItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={item.isActive}>
-                  <a href={item.url} className="font-medium">
-                    <span className="text-base">{item.icon}</span>
-                    {item.title}
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarMenu>
-            {otherItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
-                    <span className="text-base">{item.icon}</span>
-                    {item.title}
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+        {groups.map((group, groupIndex) => (
+          <SidebarGroup key={groupIndex}>
+            <SidebarMenu>
+              {group.items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild isActive={item.isActive}>
+                    <a href={item.url} className="font-medium">
+                      <span className="text-base">{item.icon}</span>
+                      {item.title}
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
