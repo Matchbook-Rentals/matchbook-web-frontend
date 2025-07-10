@@ -17,16 +17,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { MenuIcon } from "@/components/icons/navigation";
 
 interface TabLayoutProps {
   title: string;
@@ -34,7 +26,6 @@ interface TabLayoutProps {
   children: React.ReactNode;
   searchBar: React.ReactNode; // New prop for search bar
   actionButton?: React.ReactNode; // Optional button component
-  navigationContent?: React.ReactNode; // Navigation content for mobile sidebar
   // Pagination props (optional)
   pagination?: {
     currentPage: number;
@@ -57,7 +48,6 @@ export default function TabLayout({
   children,
   searchBar,
   actionButton,
-  navigationContent,
   pagination,
   emptyStateMessage = "No items found.",
   totalCount,
@@ -65,7 +55,6 @@ export default function TabLayout({
 }: TabLayoutProps) {
   const isMobile = useIsMobile();
   const [scrollAreaHeight, setScrollAreaHeight] = useState<string>('calc(100vh - 300px)');
-  const [isNavigationSheetOpen, setIsNavigationSheetOpen] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
 
@@ -147,31 +136,6 @@ export default function TabLayout({
     <div className={`${isMobile ? '' : noMargin ? '' : APP_PAGE_MARGIN} flex flex-col `}>
       {/* Header with title, search, and filters */}
       <div ref={headerRef} className={`bg-background ${isMobile ? 'sticky top-0 z-40 border-b border-gray-200 px-4 py-4' : ''}`}>
-        {/* Mobile Navigation Button - positioned above title row */}
-        {isMobile && navigationContent && (
-          <div className="mb-3">
-            <Sheet open={isNavigationSheetOpen} onOpenChange={setIsNavigationSheetOpen}>
-              <SheetTrigger asChild>
-                <button className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition-colors">
-                  <MenuIcon className="h-5 w-5 text-gray-700" />
-                </button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[280px] p-0">
-                <SheetHeader className="p-6 pb-4">
-                  <SheetTitle className="text-left">
-                    Host View
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="px-6">
-                  {React.isValidElement(navigationContent) 
-                    ? React.cloneElement(navigationContent, { onNavigate: () => setIsNavigationSheetOpen(false) })
-                    : navigationContent
-                  }
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        )}
         
         {/* Title and Action Button Row */}
         <div className="flex items-center justify-between mb-4">
