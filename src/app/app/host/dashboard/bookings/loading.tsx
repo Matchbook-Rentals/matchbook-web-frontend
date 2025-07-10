@@ -1,5 +1,5 @@
-import ContentLoading from "../../components/content-loading";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export default function Loading() {
-  return <ContentLoading message="Loading bookings..." />;
+  return <LoadingSpinner displayText="Loading bookings..." />;
 }

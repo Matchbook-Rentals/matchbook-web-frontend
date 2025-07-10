@@ -43,7 +43,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
       title: "Overview",
       url: "/app/host/dashboard",
       icon: "BarChart3",
-      isActive: pathname === "/app/host/dashboard",
+      isActive: pathname === "/app/host/dashboard/overview",
     },
     {
       title: "Listings",
@@ -65,24 +65,24 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
     },
     {
       title: "All Reviews",
-      url: "/app/host/reviews",
+      url: "/app/host/dashboard/reviews",
       icon: "MessageSquare",
-      isActive: pathname === "/app/host/reviews",
+      isActive: pathname === "/app/host/dashboard/reviews",
     },
     {
       title: "Payments",
-      url: "/app/host/payments",
+      url: "/app/host/dashboard/payments",
       icon: "CreditCard",
-      isActive: pathname === "/app/host/payments",
+      isActive: pathname === "/app/host/dashboard/payments",
     },
   ];
 
   const otherItems = [
     {
       title: "Settings",
-      url: "/app/host/settings",
+      url: "/app/host/dashboard/settings",
       icon: "Settings",
-      isActive: pathname === "/app/host/settings",
+      isActive: pathname === "/app/host/dashboard/settings",
     },
   ];
 

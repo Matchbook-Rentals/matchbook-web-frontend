@@ -1,5 +1,5 @@
 import LoadingSpinner from "@/components/loading-spinner";
 
 export default function Loading() {
-  return <LoadingSpinner displayText="Loading listings..." />;
+  return <LoadingSpinner displayText="Loading settings..." />;
 }
