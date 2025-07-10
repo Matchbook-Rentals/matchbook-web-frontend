@@ -25,11 +25,17 @@ interface SidebarGroup {
   items: SidebarMenuItem[];
 }
 
-interface HostSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  groups: SidebarGroup[];
+interface BreadcrumbItem {
+  title: string;
+  icon: string;
 }
 
-export function HostSidebar({ groups, ...props }: HostSidebarProps) {
+interface HostSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  groups: SidebarGroup[];
+  breadcrumb?: BreadcrumbItem;
+}
+
+export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -37,17 +43,11 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="/app/host">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                   <img
-                    className="size-6"
+                    className=""
                     alt="Logo"
-                    src="/logo.svg"
+                    src="/new-green-logo.png"
                   />
-                </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Matchbook</span>
-                  <span className="text-xs">Host Dashboard</span>
-                </div>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
