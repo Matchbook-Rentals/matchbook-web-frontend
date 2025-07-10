@@ -3,6 +3,7 @@
 import * as React from "react"
 import { LucideIcon, BarChart3, Home, Users, Calendar, MessageSquare, CreditCard, Settings, Loader2 } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
+import Link from "next/link"
 
 import {
   Sidebar,
@@ -81,13 +82,13 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/app/host">
+              <Link href="/app/host">
                   <img
                     className="p-2"
                     alt="Logo"
                     src="/new-green-logo.png"
                   />
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -105,17 +106,28 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton 
-                      onClick={() => handleNavigation(item.url)}
+                      asChild
                       isActive={item.isActive}
                       disabled={isDisabled}
                       className={`font-medium ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                      {isNavigating ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <IconComponent className="h-4 w-4" />
-                      )}
-                      {item.title}
+                      <Link 
+                        href={item.url}
+                        onClick={(e) => {
+                          if (isDisabled) {
+                            e.preventDefault();
+                            return;
+                          }
+                          handleNavigation(item.url);
+                        }}
+                      >
+                        {isNavigating ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <IconComponent className="h-4 w-4" />
+                        )}
+                        {item.title}
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
