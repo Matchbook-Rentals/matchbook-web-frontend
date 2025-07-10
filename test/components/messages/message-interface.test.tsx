@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import MessageInterface from '@/app/platform/messages/message-interface';
+import MessageInterface from '@/app/app/messages/message-interface';
 import { io } from 'socket.io-client';
 import { WebSocketClient } from '../../../ts_server/client';
 
@@ -16,7 +16,7 @@ vi.mock('socket.io-client', () => ({
 }));
 
 // Mock conversation components
-vi.mock('@/app/platform/messages/components/ConversationList', () => ({
+vi.mock('@/app/app/messages/components/ConversationList', () => ({
   default: vi.fn(({ onSelectConversation }) => (
     <div data-testid="conversation-list">
       <button data-testid="select-conv" onClick={() => onSelectConversation('mock-conv-1')}>
@@ -26,7 +26,7 @@ vi.mock('@/app/platform/messages/components/ConversationList', () => ({
   )),
 }));
 
-vi.mock('@/app/platform/messages/components/MessageArea', () => ({
+vi.mock('@/app/app/messages/components/MessageArea', () => ({
   default: vi.fn(({ onSendMessage }) => (
     <div data-testid="message-area">
       <button data-testid="send-message" onClick={() => onSendMessage('Hello test')}>

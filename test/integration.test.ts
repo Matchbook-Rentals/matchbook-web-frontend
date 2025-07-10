@@ -14,7 +14,7 @@ describe('Message System Integration', () => {
     // 2. The main files involved are:
     // - ts_server/server.js: The Socket.IO server implementation
     // - ts_server/client.ts: WebSocket client for connecting to server
-    // - src/app/platform/messages/message-interface.tsx: UI for messaging
+    // - src/app/app/messages/message-interface.tsx: UI for messaging
     
     // 3. Key functionality in these components:
     // - server.js has handleDirectMessage function for routing messages

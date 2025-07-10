@@ -64,7 +64,7 @@ if (!checkRole('admin')) {  // Missing await!
 **Fix:** Implement proper webhook signature verification
 
 ### 8. **Insecure Sensitive Data Storage** - CRITICAL
-**File:** `src/app/platform/verification/verification-client.tsx:49-100`  
+**File:** `src/app/app/verification/verification-client.tsx:49-100`  
 **Impact:** PII accessible to any script  
 **Issue:** Personal information stored unencrypted in localStorage  
 **Fix:** Use secure HTTP-only cookies or encrypt data

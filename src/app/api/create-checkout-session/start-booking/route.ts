@@ -106,7 +106,7 @@ export async function POST(req: CheckoutSessionRequest) {
       },
       mode: 'payment',
       ui_mode: 'embedded',
-      return_url: `${process.env.NEXT_PUBLIC_URL}/platform/dashboard`,
+      return_url: `${process.env.NEXT_PUBLIC_URL}/app/dashboard`,
       metadata: {
         userId: userId,
         type: 'booking',

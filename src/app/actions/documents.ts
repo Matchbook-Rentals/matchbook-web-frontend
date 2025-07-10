@@ -233,7 +233,7 @@ export async function createBoldSignLeaseFromHousingRequest(housingRequestId: st
 
     // Create BoldSign document embed URL from uploaded file
     const documentRequestData = {
-      redirectUrl: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/platform/host/${housingRequest.listingId}/applications/${housingRequestId}`,
+      redirectUrl: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/host/${housingRequest.listingId}/applications/${housingRequestId}`,
       showToolbar: true,
       sendViewOption: "PreparePage",
       showSaveButton: true,

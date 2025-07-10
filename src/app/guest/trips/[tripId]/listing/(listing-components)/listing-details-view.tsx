@@ -1,8 +1,8 @@
 'use client'
 import React, { useRef, useState } from 'react';
-import ListingImageCarousel from '@/app/platform/searches/(trips-components)/image-carousel';
+import ListingImageCarousel from '@/app/app/searches/(trips-components)/image-carousel';
 import { ListingAndImages } from '@/types';
-import ListingDescription from '@/app/platform/searches/(trips-components)/listing-info';
+import ListingDescription from '@/app/app/searches/(trips-components)/listing-info';
 import ListingDetailsBox from './listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';

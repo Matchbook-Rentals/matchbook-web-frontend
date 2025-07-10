@@ -91,7 +91,7 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
 
   const handleViewMessagesClick = () => {
     if (existingConversationId) {
-      router.push(`/platform/messages/?convo=${existingConversationId}`);
+      router.push(`/app/messages/?convo=${existingConversationId}`);
     }
   };
 

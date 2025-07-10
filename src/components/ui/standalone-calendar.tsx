@@ -103,7 +103,7 @@ const CalendarDays = ({
   };
 
   const handleBookingClick = (bookingId: string) => {
-    router.push(`/platform/bookings/${bookingId}`);
+    router.push(`/app/bookings/${bookingId}`);
   };
 
   const handleUnavailabilityClick = (unavailability: Unavailability) => {

@@ -22,20 +22,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1 : 0.8,
   }))
 
-  // Platform routes (require authentication, lower priority)
-  const platformRoutes = [
-    '/platform/dashboard',
-    '/platform/searches',
-    '/platform/bookings',
-    '/platform/messages',
-    '/platform/settings',
-    '/platform/preferences',
-    '/platform/host/dashboard',
-    '/platform/host/listings',
-    '/platform/host/add-property',
+  // App routes (require authentication, lower priority)
+  const appRoutes = [
+    '/app/dashboard',
+    '/app/searches',
+    '/app/bookings',
+    '/app/messages',
+    '/app/settings',
+    '/app/preferences',
+    '/app/host/dashboard',
+    '/app/host/listings',
+    '/app/host/add-property',
   ]
 
-  const platformPages = platformRoutes.map((route) => ({
+  const appPages = appRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
@@ -56,9 +56,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // TODO: Add dynamic routes for:
   // - Individual articles: /articles/[slug]
-  // - Individual listings: /platform/host/[listingId]
-  // - Trip details: /platform/searches/[tripId]
+  // - Individual listings: /app/host/[listingId]
+  // - Trip details: /app/searches/[tripId]
   // These would typically be fetched from your database
 
-  return [...staticPages, ...platformPages, ...guestPages]
+  return [...staticPages, ...appPages, ...guestPages]
 }

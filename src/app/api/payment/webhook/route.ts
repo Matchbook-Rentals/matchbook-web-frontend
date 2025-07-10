@@ -136,7 +136,7 @@ let listingUnavailability = await prisma.listingUnavailability.create({
     actionType: 'booking',
     actionId: booking.id,
     content: `You have a new booking for ${match?.listing.title} from ${match?.trip.startDate} to ${match?.trip.endDate}`,
-    url: `/platform/host-dashboard/${match?.listing.id}?tab=bookings`,
+    url: `/app/host-dashboard/${match?.listing.id}?tab=bookings`,
     unread: true,
     userId: match?.listing.userId || null,
   }

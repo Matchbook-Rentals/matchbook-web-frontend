@@ -27,7 +27,7 @@ export default async function Page({ params, searchParams }: { params: { tripID:
             Hello {searchParams.invited}! You&apos;ve been invited on a trip to {trip?.locationString} with {trip?.user.firstName}.
             This is an exciting opportunity to join them on their adventure!
           </p>
-          <Link href={`/platform/searches?currentTrip=${params.tripID}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Link href={`/app/searches?currentTrip=${params.tripID}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Continue to Trip
           </Link>
         </>
@@ -40,14 +40,14 @@ export default async function Page({ params, searchParams }: { params: { tripID:
           <div className="flex items-center space-x-4">
             <div className="w-5/12 flex items-center justify-center flex-col">
               <h3 className="text-xl text-center font-semibold mb-2">Sign In</h3>
-              <SignIn redirectUrl={`/platform/searches?currentTrip=${params.tripID}`} />
+              <SignIn redirectUrl={`/app/searches?currentTrip=${params.tripID}`} />
             </div>
             <div className="w-2/12 flex items-center justify-center">
               <span className="text-4xl font-bold text-gray-400">OR</span>
             </div>
             <div className="w-5/12 flex items-center justify-center flex-col">
               <h3 className="text-xl text-center font-semibold mb-2">Sign Up</h3>
-              <SignUp redirectUrl={`/platform/searches?currentTrip=${params.tripID}`} />
+              <SignUp redirectUrl={`/app/searches?currentTrip=${params.tripID}`} />
             </div>
           </div>
         </>

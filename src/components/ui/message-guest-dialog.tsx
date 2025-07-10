@@ -47,12 +47,12 @@ const MessageGuestDialog: React.FC<MessageGuestDialogProps> = ({
       
       // Navigate to messages page with conversation ID
       const currentView = searchParams.get('view');
-      const isHostPath = window.location.pathname.startsWith('/platform/host/');
+      const isHostPath = window.location.pathname.startsWith('/app/host/');
       
       if (currentView === 'host' || isHostPath) {
-        router.push(`/platform/messages/?convo=${conversationId}&view=host`);
+        router.push(`/app/messages/?convo=${conversationId}&view=host`);
       } else {
-        router.push(`/platform/messages/?convo=${conversationId}`);
+        router.push(`/app/messages/?convo=${conversationId}`);
       }
     } catch (error) {
       console.error('Error handling message navigation:', error);

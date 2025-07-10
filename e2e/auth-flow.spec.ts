@@ -40,19 +40,19 @@ test.describe('Authentication Flow', () => {
     await signIn(page);
     
     // Navigate to different pages and verify session persists
-    await page.goto('/platform/searches');
+    await page.goto('/app/searches');
     await expect(page.getByRole('button', { name: 'User Profile' })).toBeVisible();
     
-    await page.goto('/platform/messages');
+    await page.goto('/app/messages');
     await expect(page.getByRole('button', { name: 'User Profile' })).toBeVisible();
     
-    await page.goto('/platform/dashboard');
+    await page.goto('/app/dashboard');
     await expect(page.getByRole('button', { name: 'User Profile' })).toBeVisible();
   });
   
   test('should redirect to sign-in when accessing protected routes while logged out', async ({ page }) => {
     // Try to access a protected route without being logged in
-    await page.goto('/platform/dashboard');
+    await page.goto('/app/dashboard');
     
     // Should be redirected to sign-in page
     await expect(page).toHaveURL(/.*sign-in.*/);

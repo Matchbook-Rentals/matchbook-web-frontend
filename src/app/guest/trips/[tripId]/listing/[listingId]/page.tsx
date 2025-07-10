@@ -30,7 +30,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
   const calculatedPrice = calculateRent({ listing, trip })
 
   if (!listing) {
-    redirect('/platform/listings')
+    redirect('/app/listings')
   }
 
   return (

@@ -26,7 +26,7 @@ export default function PlatformNavbar({ userId, user, isSignedIn }: PlatformNav
 
   let marginClass;
 
-  const isWidePath = pathName === '/platform/messages' || pathName.includes('/host/dashboard') || pathName.includes('/host/');
+  const isWidePath = pathName === '/app/messages' || pathName.includes('/host/dashboard') || pathName.includes('/host/');
 
   isWidePath ? marginClass = APP_PAGE_MARGIN : marginClass = PAGE_MARGIN;
 

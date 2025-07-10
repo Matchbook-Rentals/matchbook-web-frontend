@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { Roles } from "@/types/globals";
 
 const isProtectedRoute = createRouteMatcher([
-  "/platform(.*)",
+  "/app(.*)",
   "/admin(.*)", // Added protection for all admin routes
   "/test(.*)", // Added protection for all test routes
 ]);
@@ -43,20 +43,20 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
     return checkAdminAccess(userRole);
   }
 
-  // Host access required routes (check before general platform beta check)
-  if (pathname.startsWith('/platform/host')) {
+  // Host access required routes (check before general app beta check)
+  if (pathname.startsWith('/app/host')) {
     return checkHostAccess(userRole);
   }
 
-  // Beta access required routes - all platform routes except host
-  if (pathname.startsWith('/platform')) {
+  // Beta access required routes - all app routes except host
+  if (pathname.startsWith('/app')) {
     return checkBetaAccess(userRole);
   }
 
   // Routes requiring admin OR preview access
   const adminOrPreviewRoutes = [
-    '/platform/application',
-    '/platform/verification'
+    '/app/application',
+    '/app/verification'
   ];
   
   for (const route of adminOrPreviewRoutes) {

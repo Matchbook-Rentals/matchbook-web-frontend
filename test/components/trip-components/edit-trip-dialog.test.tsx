@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import EditTripDialog from '@/app/platform/searches/(trips-components)/edit-trip-dialog';
+import EditTripDialog from '@/app/app/searches/(trips-components)/edit-trip-dialog';
 import { Trip } from '@prisma/client';
 
 // Mock the SearchEditBar component

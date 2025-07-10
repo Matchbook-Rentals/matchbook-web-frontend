@@ -157,8 +157,8 @@ export async function POST(
       payment_method_types: includeCardFee ? ['card', 'us_bank_account'] : ['us_bank_account', 'card'], // Cards first when including fee
       mode: 'payment', // Payment mode for immediate payment
       line_items: lineItems,
-      success_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/platform/match/${params.matchId}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/platform/match/${params.matchId}/lease-signing`,
+      success_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/match/${params.matchId}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/match/${params.matchId}/lease-signing`,
       metadata: {
         matchId: params.matchId,
         userId,

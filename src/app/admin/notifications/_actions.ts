@@ -85,7 +85,7 @@ export async function createUserNotification(data: {
     const result = await createNotification({
       userId: data.userId,
       content: content,
-      url: data.actionUrl || '/platform/dashboard',
+      url: data.actionUrl || '/app/dashboard',
       actionType: `ADMIN_${data.type}`,
       actionId: `admin-notification-${Date.now()}`
     })
@@ -95,7 +95,7 @@ export async function createUserNotification(data: {
     }
 
     revalidatePath('/admin/notifications')
-    revalidatePath('/platform/notifications')
+    revalidatePath('/app/notifications')
     return { success: true }
   } catch (error) {
     console.error('Error creating notification:', error)
@@ -139,7 +139,7 @@ export async function createBulkNotification(data: {
       const result = await createNotification({
         userId: userId,
         content: content,
-        url: data.actionUrl || '/platform/dashboard',
+        url: data.actionUrl || '/app/dashboard',
         actionType: `ADMIN_${data.type}`,
         actionId: `admin-notification-${Date.now()}-${userId}`
       })
@@ -153,7 +153,7 @@ export async function createBulkNotification(data: {
     }
 
     revalidatePath('/admin/notifications')
-    revalidatePath('/platform/notifications')
+    revalidatePath('/app/notifications')
     return { success: true, created, failed }
   } catch (error) {
     console.error('Error creating bulk notifications:', error)

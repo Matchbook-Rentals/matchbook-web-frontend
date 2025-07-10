@@ -9,7 +9,7 @@ test.describe('Map Stability Tests', () => {
 
   test('Map should maintain position and zoom when liking/disliking listings', async ({ page }) => {
     // Navigate to search page with map
-    await page.goto('/platform/searches');
+    await page.goto('/app/searches');
     
     // Switch to map tab
     await page.getByRole('tab', { name: /map/i }).click();
@@ -44,7 +44,7 @@ test.describe('Map Stability Tests', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     
     // Navigate to search page with map on mobile
-    await page.goto('/platform/searches');
+    await page.goto('/app/searches');
     
     // Switch to map tab
     await page.getByRole('tab', { name: /map/i }).click();
@@ -79,7 +79,7 @@ test.describe('Map Stability Tests', () => {
 
   test('Full map workflows should function correctly with new architecture', async ({ page }) => {
     // Navigate to search page
-    await page.goto('/platform/searches');
+    await page.goto('/app/searches');
     
     // Switch to map tab
     await page.getByRole('tab', { name: /map/i }).click();

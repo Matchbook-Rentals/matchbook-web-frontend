@@ -43,12 +43,12 @@
 
 ## Implementation Steps (based on TDD plan)
 
-### `src/app/platform/messages/message-interface.tsx`
+### `src/app/app/messages/message-interface.tsx`
 - [x] Update `MessageFile` (if necessary) and `MessageData` interface.
 - [x] Update `createOptimisticMessage` function.
 - [x] Update `handleSendMessage` function.
 
-### `src/app/platform/messages/MessageArea.tsx`
+### `src/app/app/messages/MessageArea.tsx`
 - [x] Update `MessageAreaProps` interface for `onSendMessage`.
 - [x] Update `handleSend` function for chunking and limits.
 - [x] Update rendering logic in `renderMessageContent` for multiple attachments.

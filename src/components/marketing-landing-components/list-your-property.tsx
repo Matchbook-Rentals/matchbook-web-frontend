@@ -17,7 +17,7 @@ export const ListYourProperty = (): JSX.Element => {
           </h2>
         </div>
 
-        <BrandButton size="lg" className="w-40 lg:w-auto" href="/platform/host/add-property">
+        <BrandButton size="lg" className="w-40 lg:w-auto" href="/app/host/add-property">
           List Your Property
         </BrandButton>
       </CardContent>

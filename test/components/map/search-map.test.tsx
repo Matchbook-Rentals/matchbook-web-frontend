@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import SearchMapRefactored from '@/app/platform/searches/(components)/search-map-refactored';
+import SearchMapRefactored from '@/app/app/searches/(components)/search-map-refactored';
 import { TripContextProviderNew } from '@/contexts/trip-context-provider-new';
 import { MapMarker } from '@/store/map-selection-store';
 

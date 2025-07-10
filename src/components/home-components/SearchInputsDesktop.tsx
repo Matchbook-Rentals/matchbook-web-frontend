@@ -149,7 +149,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     });
 
     if (response.success && response.trip) {
-      router.push(`/platform/searches/${response.trip.id}`);
+      router.push(`/app/searches/${response.trip.id}`);
     } else {
       toast({
         variant: "destructive",

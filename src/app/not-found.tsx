@@ -8,7 +8,7 @@ import { useUser } from '@clerk/nextjs';
 
 export default function NotFound() {
   const pathname = usePathname()
-  const isPlatformPage = pathname?.includes('platform')
+  const isPlatformPage = pathname?.includes('app') && !pathname?.includes('admin')
   const { user, isSignedIn } = useUser();
 
   // Serialize user data to plain object
@@ -48,14 +48,14 @@ export default function NotFound() {
           
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href={isPlatformPage ? "/platform/searches" : "/"}>
+            <Link href={isPlatformPage ? "/app/searches" : "/"}>
               <Button className="w-full sm:w-auto">
                 {isPlatformPage ? "Go to Searches" : "Go Home"}
               </Button>
             </Link>
             
             {isPlatformPage && (
-              <Link href="/platform/bookings">
+              <Link href="/app/bookings">
                 <Button variant="outline" className="w-full sm:w-auto">
                   View Bookings
                 </Button>
@@ -63,7 +63,7 @@ export default function NotFound() {
             )}
             
             {!isPlatformPage && (
-              <Link href="/platform/host/add-property">
+              <Link href="/app/host/add-property">
                 <Button variant="outline" className="w-full sm:w-auto">
                   Become a Host
                 </Button>
@@ -79,13 +79,13 @@ export default function NotFound() {
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               {isPlatformPage ? (
                 <>
-                  <Link href="/platform/messages" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/app/messages" className="text-blue-600 hover:text-blue-800">
                     Messages
                   </Link>
-                  <Link href="/platform/bookings" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/app/bookings" className="text-blue-600 hover:text-blue-800">
                     Bookings
                   </Link>
-                  <Link href="/platform/host/dashboard/listings" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/app/host/dashboard/listings" className="text-blue-600 hover:text-blue-800">
                     Host Dashboard
                   </Link>
                 </>

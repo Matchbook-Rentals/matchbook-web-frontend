@@ -139,7 +139,7 @@ const clerkStyles = `
 export default function Page() {
   // Redirect to /terms after sign-up.
   // The /terms page should handle the agreement process
-  // and then redirecting to the final destination (e.g., /platform/searches).
+  // and then redirecting to the final destination (e.g., /app/searches).
 
   return (
     <>

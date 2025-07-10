@@ -22,7 +22,7 @@ The tests are organized as follows:
    - Message sending and receiving
    - Connection lifecycle management
 
-3. **Message Interface (`src/app/platform/messages/message-interface.tsx`)**:
+3. **Message Interface (`src/app/app/messages/message-interface.tsx`)**:
    - React component that provides the UI for messaging
    - Uses the WebSocket client to connect to the server
    - Handles message display, sending, and notifications

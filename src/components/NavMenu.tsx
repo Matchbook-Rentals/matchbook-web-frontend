@@ -4,7 +4,7 @@ export default function NavMenu() {
   return (
     <div className="w-48 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
       <div className="flex flex-col">
-        <Link href="/platform/searches">
+        <Link href="/app/searches">
           <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Searches</button>
         </Link>
         <Link href="/">
@@ -16,7 +16,7 @@ export default function NavMenu() {
       </div>
 
       <div className="border-t border-gray-200">
-        <Link href="/platform/messages">
+        <Link href="/app/messages">
           <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Inbox</button>
         </Link>
       </div>

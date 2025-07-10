@@ -15,26 +15,26 @@ Decouple the map components from TripContext to prevent unnecessary re-renders, 
   - [x] Ensure original TripContext still functions without breaking changes in `/src/contexts/trip-context-provider.tsx`
 
 - [ ] **2. Map Component Local State Implementation**
-  - [ ] Implement local state management in `/src/app/platform/searches/(components)/search-map-refactored.tsx`
+  - [ ] Implement local state management in `/src/app/app/searches/(components)/search-map-refactored.tsx`
   - [ ] Add optimistic updates for like/dislike actions
   - [ ] Ensure local state syncs with global state when needed
   - [ ] Create map selection store in `/src/store/map-selection-store.ts`
 
 - [ ] **3. Search Map Component Refactoring**
-  - [ ] Refactor main search map in `/src/app/platform/searches/(components)/search-map-refactored.tsx`
+  - [ ] Refactor main search map in `/src/app/app/searches/(components)/search-map-refactored.tsx`
   - [ ] Update map to use snapshot + actions pattern
   - [ ] Ensure map doesn't reset position/zoom on state changes
   - [ ] Add performance metrics tracking
 
 - [ ] **4. Mobile Map Optimization**
-  - [ ] Refactor mobile map in `/src/app/platform/searches/(components)/search-map-mobile.tsx`
+  - [ ] Refactor mobile map in `/src/app/app/searches/(components)/search-map-mobile.tsx`
   - [ ] Optimize touch interactions
   - [ ] Ensure position stability during mobile interactions
   - [ ] Update mobile-specific UI components
 
 - [ ] **5. Map Click Card Refactoring**
-  - [ ] Refactor desktop map click card in `/src/app/platform/searches/(components)/desktop-map-click-card-refactored.tsx`
-  - [ ] Refactor mobile map click card in `/src/app/platform/searches/(components)/mobile-map-click-listing-card.tsx`
+  - [ ] Refactor desktop map click card in `/src/app/app/searches/(components)/desktop-map-click-card-refactored.tsx`
+  - [ ] Refactor mobile map click card in `/src/app/app/searches/(components)/mobile-map-click-listing-card.tsx`
   - [ ] Ensure visual consistency between desktop and mobile
   - [ ] Update hover store in `/src/store/listing-hover-store.ts`
 

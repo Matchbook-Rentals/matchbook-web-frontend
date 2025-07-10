@@ -124,7 +124,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
       });
 
       if (response.success && response.trip) {
-        router.push(`/platform/searches/set-preferences/${response.trip.id}`);
+        router.push(`/app/searches/set-preferences/${response.trip.id}`);
       } else {
         toast({
           variant: "destructive",

@@ -30,13 +30,13 @@ export async function GET(
 
     if (!match) {
       console.error('❌ Match not found:', params.matchId);
-      return NextResponse.redirect(new URL('/platform/dashboard', request.url));
+      return NextResponse.redirect(new URL('/app/dashboard', request.url));
     }
 
     // Verify the user is the renter
     if (match.trip.user?.id !== userId) {
       console.error('❌ Unauthorized - not renter');
-      return NextResponse.redirect(new URL('/platform/dashboard', request.url));
+      return NextResponse.redirect(new URL('/app/dashboard', request.url));
     }
 
     // Check if lease is signed by tenant
@@ -55,7 +55,7 @@ export async function GET(
     // Both conditions must be met to proceed
     if (!isLeaseSigned || !isPaymentAuthorized) {
       console.log('⚠️ Conditions not met, redirecting back to lease signing');
-      return NextResponse.redirect(new URL(`/platform/match/${params.matchId}`, request.url));
+      return NextResponse.redirect(new URL(`/app/match/${params.matchId}`, request.url));
     }
 
     console.log('✅ All conditions met, creating host notification');
@@ -66,7 +66,7 @@ export async function GET(
         data: {
           userId: match.listing.user?.id || '',
           content: `Tenant has signed the lease and authorized payment for ${match.listing.locationString}. Complete the process by signing the lease.`,
-          url: `/platform/host/${match.listingId}/applications/${match.trip.id}/application-details`,
+          url: `/app/host/${match.listingId}/applications/${match.trip.id}/application-details`,
           actionType: 'lease_signature_required',
           actionId: match.id,
           unread: true,
@@ -80,10 +80,10 @@ export async function GET(
     }
 
     // Redirect to pending host signature page
-    return NextResponse.redirect(new URL(`/platform/match/${params.matchId}/pending-host-signature`, request.url));
+    return NextResponse.redirect(new URL(`/app/match/${params.matchId}/pending-host-signature`, request.url));
 
   } catch (error) {
     console.error('❌ Error in callback verification:', error);
-    return NextResponse.redirect(new URL('/platform/dashboard', request.url));
+    return NextResponse.redirect(new URL('/app/dashboard', request.url));
   }
 }

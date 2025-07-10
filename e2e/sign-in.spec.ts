@@ -34,7 +34,7 @@ test.describe('Sign In Flow', () => {
     // Wait for navigation to dashboard or home page after successful login
     await page.waitForURL((url) => {
       const pathname = url.pathname;
-      return pathname.includes('/platform') || 
+      return pathname.includes('/app') || 
              pathname.includes('/dashboard') || 
              pathname === '/' ||
              pathname.includes('/home');

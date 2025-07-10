@@ -134,7 +134,7 @@ export async function createBooking(data: Prisma.BookingCreateInput): Promise<Bo
     actionType: 'booking',
     actionId: booking.id,
     content: `You have a new booking for ${match?.listing.title} from ${match?.trip.startDate} to ${match?.trip.endDate}`,
-    url: `/platform/host-dashboard/${match?.listing.id}?tab=bookings`,
+    url: `/app/host-dashboard/${match?.listing.id}?tab=bookings`,
     unread: true,
     userId: match?.listing.userId || null,
   }
@@ -481,7 +481,7 @@ export async function markMoveInComplete(bookingId: string) {
       actionType: 'payment_authorization_required',
       actionId: firstRentPayment.id,
       content: `Your move-in has been confirmed! Please authorize your first month's rent payment of $${firstRentPayment.amount}.`,
-      url: `/platform/renter/bookings/${bookingId}/authorize-payment`,
+      url: `/app/renter/bookings/${bookingId}/authorize-payment`,
       unread: true,
       userId: booking.userId,
     });
@@ -489,8 +489,8 @@ export async function markMoveInComplete(bookingId: string) {
     // Send email notification to renter (you can implement this based on your email service)
     // await sendPaymentAuthorizationEmail(booking.user.email, booking, firstRentPayment);
 
-    revalidatePath(`/platform/host/${booking.listingId}/bookings`);
-    revalidatePath('/platform/host/host-dashboard');
+    revalidatePath(`/app/host/${booking.listingId}/bookings`);
+    revalidatePath('/app/host/host-dashboard');
 
     return { success: true, message: 'Move-in marked as complete and payment authorization request sent' };
   } catch (error) {

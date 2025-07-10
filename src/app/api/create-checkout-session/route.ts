@@ -23,8 +23,8 @@ export async function POST() {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/failure`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/app/checkout/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/app/checkout/failure`,
     });
     console.log('session', session);
     if (!session.id) {

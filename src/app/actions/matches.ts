@@ -50,7 +50,7 @@ export async function createMatch(trip: Trip, listing: Listing) {
     const notificationData: CreateNotificationInput = {
       userId: trip.userId,
       content: 'New Match',
-      url: `/platform/searches/?tab=matchbook&searchId=${trip.id}`,
+      url: `/app/searches/?tab=matchbook&searchId=${trip.id}`,
       actionType: 'view',
       actionId: trip.id,
     }

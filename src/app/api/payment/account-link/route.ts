@@ -10,8 +10,8 @@ export async function POST(request: NextRequest) {
 
     const accountLink = await stripe.accountLinks.create({
       account: account,
-      refresh_url: refreshUrl || `${request.nextUrl.origin}/platform/onboarding/hosted`,
-      return_url: returnUrl || `${request.nextUrl.origin}/platform/onboarding/hosted/${account}`,
+      refresh_url: refreshUrl || `${request.nextUrl.origin}/app/onboarding/hosted`,
+      return_url: returnUrl || `${request.nextUrl.origin}/app/onboarding/hosted/${account}`,
       type: "account_onboarding",
       collection_options: {
         fields: 'eventually_due',

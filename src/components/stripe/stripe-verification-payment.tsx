@@ -72,7 +72,7 @@ const VerificationCheckoutForm = ({ onSuccess }: { onSuccess: () => void }) => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/platform/verification/success?session_id=${sessionId}`,
+        return_url: `${window.location.origin}/app/verification/success?session_id=${sessionId}`,
         receipt_email: email,
       },
     });
@@ -134,7 +134,7 @@ export default function StripeVerificationPayment({
         localStorage.setItem('verificationFormData', JSON.stringify(formData));
         console.log('Form data saved to localStorage:', formData);
         
-        const returnUrl = `${window.location.origin}/platform/verification/review`;
+        const returnUrl = `${window.location.origin}/app/verification/review`;
         
         const response = await fetch('/api/create-payment-intent/background-verification', {
           method: 'POST',

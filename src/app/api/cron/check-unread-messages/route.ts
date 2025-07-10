@@ -98,7 +98,7 @@ export async function GET(request: Request) {
           actionType: 'message', // Use the enum value
           actionId: message.id,
           content: `You have a new message from ${senderName}.`, // Keep informative content for in-app
-          url: `/platform/messages?convo=${message.conversation.id}`, // Link notification to the conversation
+          url: `/app/messages?convo=${message.conversation.id}`, // Link notification to the conversation
           senderName: senderName, // Add sender name for email customization
           conversationId: message.conversation.id, // Add conversation ID for email URL
           listingTitle: listingTitle, // Add listing title for email

@@ -22,7 +22,7 @@ interface PlatformLayoutClientProps {
 export default function PlatformLayoutClient({ children, userId, user, isSignedIn }: PlatformLayoutClientProps) {
   const pathname = usePathname()
   
-  const shouldHideNavbar = pathname === '/platform/host/add-property'
+  const shouldHideNavbar = pathname === '/app/host/add-property'
   
   return (
     <>

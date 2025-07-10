@@ -3,7 +3,7 @@ import { z } from "zod";
 import { 
   verificationSchema,
   generateVerificationXml
-} from "@/app/platform/verification/utils";
+} from "@/app/app/verification/utils";
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 

@@ -161,7 +161,7 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
     const notificationData: CreateNotificationInput = {
       userId: listing.userId,
       content: 'New Housing Request',
-      url: `/platform/host/${listing.id}/applications`,
+      url: `/app/host/${listing.id}/applications`,
       actionType: 'view',
       actionId: newHousingRequest.id,
     }
@@ -379,7 +379,7 @@ export async function approveHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} has been approved!`,
-      url: `/platform/searches/${housingRequest.tripId}`,
+      url: `/app/searches/${housingRequest.tripId}`,
       actionType: 'application_approved',
       actionId: housingRequestId,
     };
@@ -387,9 +387,9 @@ export async function approveHousingRequest(housingRequestId: string) {
     await createNotification(notificationData);
 
     // Revalidate relevant paths
-    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
-    revalidatePath('/platform/host/dashboard/applications');
-    revalidatePath(`/platform/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
+    revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/app/host/dashboard/applications');
+    revalidatePath(`/app/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
 
     return { success: true, housingRequest: result.updatedRequest, match: result.match };
   } catch (error) {
@@ -433,7 +433,7 @@ export async function declineHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} has been declined.`,
-      url: `/platform/searches/${housingRequest.tripId}`,
+      url: `/app/searches/${housingRequest.tripId}`,
       actionType: 'application_declined',
       actionId: housingRequestId,
     };
@@ -441,8 +441,8 @@ export async function declineHousingRequest(housingRequestId: string) {
     await createNotification(notificationData);
 
     // Revalidate relevant paths
-    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
-    revalidatePath('/platform/host/dashboard/applications');
+    revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/app/host/dashboard/applications');
 
     return { success: true, housingRequest: updatedRequest };
   } catch (error) {
@@ -541,7 +541,7 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your approval for ${housingRequest.listing.title} has been revoked.`,
-      url: `/platform/searches/${housingRequest.tripId}`,
+      url: `/app/searches/${housingRequest.tripId}`,
       actionType: 'application_revoked',
       actionId: housingRequestId,
     };
@@ -549,9 +549,9 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
     await createNotification(notificationData);
 
     // Revalidate relevant paths
-    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
-    revalidatePath('/platform/host/dashboard/applications');
-    revalidatePath(`/platform/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
+    revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/app/host/dashboard/applications');
+    revalidatePath(`/app/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
 
     return { success: true, housingRequest: result.updatedRequest };
   } catch (error) {
@@ -613,7 +613,7 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} is being reconsidered.`,
-      url: `/platform/searches/${housingRequest.tripId}`,
+      url: `/app/searches/${housingRequest.tripId}`,
       actionType: 'application_reconsidered',
       actionId: housingRequestId,
     };
@@ -621,8 +621,8 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     await createNotification(notificationData);
 
     // Revalidate relevant paths
-    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
-    revalidatePath('/platform/host/dashboard/applications');
+    revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/app/host/dashboard/applications');
 
     return { success: true, housingRequest: result.updatedRequest };
   } catch (error) {
@@ -662,8 +662,8 @@ export async function updateHousingRequest(housingRequestId: string, data: { lea
     });
 
     // Revalidate relevant paths
-    revalidatePath(`/platform/host/${housingRequest.listingId}/applications`);
-    revalidatePath('/platform/host/dashboard/applications');
+    revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
+    revalidatePath('/app/host/dashboard/applications');
 
     return { success: true, housingRequest: updatedRequest };
   } catch (error) {

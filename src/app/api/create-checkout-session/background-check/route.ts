@@ -30,8 +30,8 @@ export async function POST(request: Request) {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/failure`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/app/checkout/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/app/checkout/failure`,
       metadata: {
         userId: userId,
         type: 'backgroundCheck',

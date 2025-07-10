@@ -110,7 +110,7 @@ export async function POST(req: Request) {
       const landlordNotification = await createNotification({
         userId: boldSignLease.landlordId,
         content: `Application approved! Your lease agreement for ${body.data.messageTitle} is ready for your signature.`,
-        url: `/platform/host/match/${boldSignLease.matchId}`,
+        url: `/app/host/match/${boldSignLease.matchId}`,
         actionType: 'application_approved_lease_ready',
         actionId: boldSignLease.id
       });
@@ -125,7 +125,7 @@ export async function POST(req: Request) {
         const tenantNotification = await createNotification({
           userId: boldSignLease.primaryTenantId,
           content: `Congratulations! Your application for ${body.data.messageTitle} has been approved and your lease is ready for signature.`,
-          url: `/platform/match/${boldSignLease.matchId}`,
+          url: `/app/match/${boldSignLease.matchId}`,
           actionType: 'application_approved_lease_ready',
           actionId: boldSignLease.id
         });
@@ -217,7 +217,7 @@ export async function POST(req: Request) {
       const notificationResult = await createNotification({
         userId: boldSignLease.landlordId,
         content: `Your lease agreement for ${body.data.messageTitle} is ready for your signature.`,
-        url: `/platform/host/match/${boldSignLease.matchId}`,
+        url: `/app/host/match/${boldSignLease.matchId}`,
         actionType: 'lease_signature_required',
         actionId: boldSignLease.id
       });
@@ -236,7 +236,7 @@ export async function POST(req: Request) {
         const notificationResult = await createNotification({
           userId: primaryTenantId,
           content: `Your lease agreement for ${body.data.messageTitle} is ready for your signature.`,
-          url: `/platform/searches/book/${boldSignLease.matchId}`,
+          url: `/app/searches/book/${boldSignLease.matchId}`,
           actionType: 'lease_signature_required',
           actionId: boldSignLease.id
         });
@@ -252,7 +252,7 @@ export async function POST(req: Request) {
         const notificationResult = await createNotification({
           userId: boldSignLease.secondaryTenantId,
           content: `Your lease agreement for ${body.data.messageTitle} is ready for your signature.`,
-          url: `/platform/searches/book/${boldSignLease.matchId}`,
+          url: `/app/searches/book/${boldSignLease.matchId}`,
           actionType: 'lease_signature_required',
           actionId: boldSignLease.id
         });
@@ -310,14 +310,14 @@ export async function POST(req: Request) {
         {
           userId: boldSignLease.landlordId,
           content: `Congratulations! The lease agreement for ${body.data.messageTitle} has been fully executed by all parties.`,
-          url: `/platform/host/match/${boldSignLease.matchId}`,
+          url: `/app/host/match/${boldSignLease.matchId}`,
           actionType: 'lease_fully_executed',
           actionId: boldSignLease.id
         },
         {
           userId: boldSignLease.primaryTenantId,
           content: `Congratulations! The lease agreement for ${body.data.messageTitle} has been fully executed by all parties.`,
-          url: `/platform/searches/book/${boldSignLease.matchId}`,
+          url: `/app/searches/book/${boldSignLease.matchId}`,
           actionType: 'lease_fully_executed',
           actionId: boldSignLease.id
         }
@@ -327,7 +327,7 @@ export async function POST(req: Request) {
         completionNotifications.push({
           userId: boldSignLease.secondaryTenantId,
           content: `Congratulations! The lease agreement for ${body.data.messageTitle} has been fully executed by all parties.`,
-          url: `/platform/searches/book/${boldSignLease.matchId}`,
+          url: `/app/searches/book/${boldSignLease.matchId}`,
           actionType: 'lease_fully_executed',
           actionId: boldSignLease.id
         });
