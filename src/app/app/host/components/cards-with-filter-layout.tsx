@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { BrandCheckbox } from "@/app/brandCheckbox";
 import { useUser } from "@clerk/nextjs";
+import { Search } from "lucide-react";
 
 interface TabLayoutProps {
   title: string;
@@ -167,11 +168,14 @@ export default function TabLayout({
             <div className={isMobile ? 'w-full' : 'w-[434px]'}>
               <Card className="border-0 shadow-none">
                 <CardContent className="p-0">
-                  <Input 
-                    className="h-12" 
-                    placeholder={searchPlaceholder}
-                    onChange={(e) => onSearchChange?.(e.target.value)}
-                  />
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      className="h-12 pl-10" 
+                      placeholder={searchPlaceholder}
+                      onChange={(e) => onSearchChange?.(e.target.value)}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             </div>
