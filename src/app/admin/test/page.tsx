@@ -78,6 +78,13 @@ export default function TestSuitesPage() {
       description: 'Test lease signing client component with different states and user types',
       icon: <FileText className="h-5 w-5" />,
       path: '/admin/test/lease-signing'
+    },
+    {
+      id: 'host-payments',
+      name: 'Host Payment Display',
+      description: 'Display host payments for specific booking IDs to test payment schedules',
+      icon: <FlaskConical className="h-5 w-5" />,
+      path: '/admin/test/host-payments'
     }
   ]
 
