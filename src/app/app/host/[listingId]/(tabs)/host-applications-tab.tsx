@@ -1,13 +1,11 @@
 "use client";
 
-import { MoreHorizontalIcon, Search, Home, Loader2 } from "lucide-react";
+import { MoreHorizontalIcon, Home, Loader2 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -131,11 +129,66 @@ const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => 
       maxPrice: 3500,
       userId: "sample-user-2"
     }
+  },
+  {
+    id: `sample-request-${listingId}-3`,
+    userId: "sample-user-3",
+    listingId: listingId,
+    tripId: "sample-trip-3",
+    startDate: new Date("2025-01-15"),
+    endDate: new Date("2025-04-15"),
+    status: "declined",
+    createdAt: new Date("2025-01-04"),
+    updatedAt: new Date("2025-01-04"),
+    user: {
+      id: "sample-user-3",
+      email: "taylor.smith@example.com",
+      firstName: "Taylor",
+      lastName: "Smith",
+      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=TS",
+      emailVerified: null,
+      isAdmin: false,
+      isHost: false,
+      isBeta: false,
+      isSeeded: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      stripeAccountId: null,
+      stripeAccountStatus: null,
+      stripeCustomerId: null,
+      showRentEasyFlow: false,
+      notificationPreferences: null,
+      preferredPropertyTypes: [],
+      phoneNumber: null,
+      role: "renter"
+    },
+    trip: {
+      id: "sample-trip-3",
+      locationString: "San Francisco, CA",
+      latitude: 37.7749,
+      longitude: -122.4194,
+      city: "San Francisco",
+      state: "CA",
+      postalCode: "94118",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isSponsored: false,
+      sponsorID: null,
+      startDate: new Date("2025-01-15"),
+      endDate: new Date("2025-04-15"),
+      numAdults: 1,
+      numPets: 0,
+      numChildren: 1,
+      minPrice: 2500,
+      maxPrice: 3200,
+      userId: "sample-user-3"
+    }
   }
 ];
 
 // Base filter options
 const baseFilterOptions = [
+  { id: "all", label: "All" },
   { id: "pending", label: "Pending" },
   { id: "declined", label: "Declined" },
   { id: "approved", label: "Approved" },
@@ -225,7 +278,7 @@ interface ApplicationsTabProps {
 const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingRequests }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const [useMockData, setUseMockData] = useState(false);
@@ -273,14 +326,14 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   // Convert housing requests to the format the UI expects
   const applications = requestsToUse.map(formatHousingRequestForDisplay);
 
-  // Filter applications based on selected filters and search term
+  // Filter applications based on selected filter and search term
   const filteredApplications = useMemo(() => {
     let filtered = applications;
     
-    // Apply status filters
-    if (selectedFilters.length > 0) {
+    // Apply status filter (exclude "all" from filtering)
+    if (selectedFilter !== 'all') {
       filtered = filtered.filter(app => {
-        return selectedFilters.includes(app.status.toLowerCase());
+        return app.status.toLowerCase() === selectedFilter;
       });
     }
     
@@ -299,104 +352,13 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     }
     
     return filtered;
-  }, [applications, selectedFilters, searchTerm]);
+  }, [applications, selectedFilter, searchTerm]);
 
-  // Toggle filter selection
-  const toggleFilter = (filter: string) => {
-    setSelectedFilters(prev => 
-      prev.includes(filter) 
-        ? prev.filter(f => f !== filter)
-        : [...prev, filter]
-    );
+  // Handle filter change
+  const handleFilterChange = (filter: string) => {
+    setSelectedFilter(filter);
   };
 
-  // Search bar component
-  const searchBarComponent = (
-    <div className="relative w-full md:w-80">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-      <Input
-        type="text"
-        placeholder="Search by name or dates"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[14px]"
-      />
-    </div>
-  );
-
-  // Sidebar content - filters only
-  const sidebarContent = (
-    <>
-      {/* Mobile vertical layout - shown on small screens only */}
-      <div className="block md:hidden">
-        <div className="py-6">
-          <div className="flex flex-col items-start gap-4">
-            <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
-              Filter by Status
-            </div>
-
-            <div className="flex flex-col w-60 items-start gap-2">
-              {filterOptions.map((option, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 w-full"
-                >
-                  <Checkbox
-                    id={`filter-mobile-${index}`}
-                    className="w-6 h-6 rounded-sm"
-                    checked={selectedFilters.includes(option.id)}
-                    onCheckedChange={() => toggleFilter(option.id)}
-                  />
-                  <label
-                    htmlFor={`filter-mobile-${index}`}
-                    className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleFilter(option.id);
-                    }}
-                  >
-                    {option.label}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Desktop/tablet horizontal layout - shown on medium screens and up */}
-      <div className="hidden md:flex items-center flex-wrap gap-4">
-        <span className="[font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5 whitespace-nowrap">
-          Filter by Status:
-        </span>
-        <div className="flex items-center flex-wrap gap-3">
-          {filterOptions.map((option, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-2 whitespace-nowrap"
-            >
-              <Checkbox
-                id={`filter-desktop-${index}`}
-                className="w-4 h-4 rounded-sm"
-                checked={selectedFilters.includes(option.id)}
-                onCheckedChange={() => toggleFilter(option.id)}
-              />
-              <label
-                htmlFor={`filter-desktop-${index}`}
-                className="[font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[14px] leading-5 cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleFilter(option.id);
-                }}
-              >
-                {option.label}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
 
   return (
     <TabLayout
@@ -406,11 +368,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
       onSearchChange={setSearchTerm}
-      onFilterChange={(value) => {
-        if (filterOptions.find(opt => opt.id === value)) {
-          toggleFilter(value);
-        }
-      }}
+      onFilterChange={handleFilterChange}
       noMargin={true}
       emptyStateMessage={housingRequests.length === 0 ? "No applications yet for this listing." : "No applications match the selected filters."}
       showMockDataToggle={true}

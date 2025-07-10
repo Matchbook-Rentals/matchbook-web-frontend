@@ -68,7 +68,15 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
                     {name}
                   </div>
 
-                  <Badge className="px-2.5 py-1 bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e] font-medium rounded-full">
+                  <Badge className={`px-2.5 py-1 font-medium rounded-full ${
+                    status.toLowerCase() === 'approved' 
+                      ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]'
+                      : status.toLowerCase() === 'pending'
+                      ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'
+                      : status.toLowerCase() === 'declined'
+                      ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]'
+                      : 'bg-gray-100 text-gray-600 border-gray-400'
+                  }`}>
                     {status}
                   </Badge>
                 </div>
