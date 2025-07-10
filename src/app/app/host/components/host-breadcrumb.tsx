@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { usePathname } from "next/navigation"
-import { BarChart3, Home, Users, Calendar, MessageSquare, CreditCard, Settings } from "lucide-react"
+import { PieChart, Home, Users, Calendar, MessageSquare, CreditCard, Settings } from "lucide-react"
 
 interface BreadcrumbItem {
   title: string;
@@ -22,14 +22,15 @@ interface SidebarGroup {
 
 interface HostBreadcrumbProps {
   groups: SidebarGroup[];
+  breadcrumbTitle?: string;
 }
 
-export function HostBreadcrumb({ groups }: HostBreadcrumbProps) {
+export function HostBreadcrumb({ groups, breadcrumbTitle }: HostBreadcrumbProps) {
   const pathname = usePathname()
 
   const getIconComponent = (iconName: string) => {
     const icons = {
-      BarChart3,
+      PieChart,
       Home,
       Users,
       Calendar,
@@ -37,10 +38,18 @@ export function HostBreadcrumb({ groups }: HostBreadcrumbProps) {
       CreditCard,
       Settings
     };
-    return icons[iconName as keyof typeof icons] || BarChart3;
+    return icons[iconName as keyof typeof icons] || PieChart;
   };
 
   const getCurrentBreadcrumb = (): BreadcrumbItem => {
+    // If breadcrumbTitle is provided, use it with a default icon
+    if (breadcrumbTitle) {
+      return {
+        title: breadcrumbTitle,
+        icon: "PieChart"
+      };
+    }
+
     const allItems = groups.flatMap(group => group.items);
     
     // Find exact match first
@@ -67,7 +76,7 @@ export function HostBreadcrumb({ groups }: HostBreadcrumbProps) {
       icon: firstItem.icon
     } : {
       title: "Dashboard",
-      icon: "BarChart3"
+      icon: "PieChart"
     };
   };
 

@@ -31,7 +31,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
     {
       title: "Overview",
       url: "/app/host/dashboard",
-      icon: "BarChart3",
+      icon: "PieChart",
     },
     {
       title: "Listings",
@@ -89,7 +89,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
             <div className="flex items-center gap-2">
               <SidebarTrigger />
               <Separator orientation="vertical" className="mr-2 h-4" />
-              <HostBreadcrumb groups={sidebarGroups} />
+              <HostBreadcrumb groups={sidebarGroups} breadcrumbTitle="Host Dashboard" />
             </div>
             <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" />
           </div>

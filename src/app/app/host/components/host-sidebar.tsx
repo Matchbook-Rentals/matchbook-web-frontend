@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { LucideIcon, BarChart3, Home, Users, Calendar, MessageSquare, CreditCard, Settings, Loader2 } from "lucide-react"
+import { LucideIcon, PieChart, Home, Users, Calendar, MessageSquare, CreditCard, Settings, Loader2 } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 
@@ -41,7 +41,7 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
 
   const getIconComponent = (iconName: string) => {
     const icons = {
-      BarChart3,
+      PieChart,
       Home,
       Users,
       Calendar,
@@ -49,7 +49,7 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
       CreditCard,
       Settings
     };
-    return icons[iconName as keyof typeof icons] || BarChart3;
+    return icons[iconName as keyof typeof icons] || PieChart;
   };
 
   // Calculate active states dynamically based on current pathname
@@ -95,7 +95,7 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         {groupsWithActiveStates.map((group, groupIndex) => (
-          <SidebarGroup key={groupIndex}>
+          <SidebarGroup key={groupIndex} className="border-t pt-4">
             {group.title && <SidebarGroupLabel>{group.title}</SidebarGroupLabel>}
             <SidebarMenu>
               {group.items.map((item) => {

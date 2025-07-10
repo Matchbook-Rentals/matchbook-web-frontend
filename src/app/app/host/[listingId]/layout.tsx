@@ -80,7 +80,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
     {
       title: "Host Dashboard",
       url: "/app/host/dashboard",
-      icon: "BarChart3",
+      icon: "PieChart",
     },
   ];
 
@@ -118,12 +118,12 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
                 <Separator orientation="vertical" className="mr-2 h-4" />
-                <HostBreadcrumb groups={sidebarGroups} />
+                <HostBreadcrumb groups={sidebarGroups} breadcrumbTitle={listing.streetAddress1} />
               </div>
               <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" />
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4">
+          <div className="flex flex-1 flex-col gap-4">
             {children}
           </div>
         </SidebarInset>
