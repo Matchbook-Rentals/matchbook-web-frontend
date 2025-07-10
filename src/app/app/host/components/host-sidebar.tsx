@@ -28,17 +28,12 @@ interface SidebarGroup {
   items: SidebarMenuItem[];
 }
 
-interface BreadcrumbItem {
-  title: string;
-  icon: string;
-}
 
 interface HostSidebarProps extends React.ComponentProps<typeof Sidebar> {
   groups: SidebarGroup[];
-  breadcrumb?: BreadcrumbItem;
 }
 
-export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) {
+export function HostSidebar({ groups, ...props }: HostSidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [navigatingTo, setNavigatingTo] = React.useState<string | null>(null)
@@ -55,6 +50,19 @@ export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) 
     };
     return icons[iconName as keyof typeof icons] || BarChart3;
   };
+
+  // Calculate active states dynamically based on current pathname
+  const getGroupsWithActiveStates = () => {
+    return groups.map(group => ({
+      ...group,
+      items: group.items.map(item => ({
+        ...item,
+        isActive: pathname === item.url || pathname.startsWith(item.url + '/')
+      }))
+    }));
+  };
+
+  const groupsWithActiveStates = getGroupsWithActiveStates();
 
   const handleNavigation = (url: string) => {
     if (pathname === url) return; // Don't navigate if already on the page
@@ -85,7 +93,7 @@ export function HostSidebar({ groups, breadcrumb, ...props }: HostSidebarProps) 
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {groups.map((group, groupIndex) => (
+        {groupsWithActiveStates.map((group, groupIndex) => (
           <SidebarGroup key={groupIndex}>
             {group.title && <SidebarGroupLabel>{group.title}</SidebarGroupLabel>}
             <SidebarMenu>

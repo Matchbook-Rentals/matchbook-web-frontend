@@ -4,24 +4,15 @@ import { getHousingRequestsByListingId } from '@/app/actions/housing-requests';
 import { getBookingsByListingId } from '@/app/actions/bookings';
 import { notFound } from 'next/navigation';
 import { HostSidebar } from "../components/host-sidebar";
+import { HostBreadcrumb } from "../components/host-breadcrumb";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { headers } from "next/headers";
-import {
-  Users,
-  Calendar,
-  Star,
-  CreditCard,
-  MessageSquare,
-  BarChart3,
-  Settings
-} from "lucide-react";
 import UserMenu from "@/components/userMenu";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { ListingDashboardProvider } from './listing-dashboard-context';
 
 interface ListingLayoutProps {
@@ -40,8 +31,6 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
   if (!listing) return notFound();
 
   const user = await currentUser();
-  const headersList = headers();
-  const pathname = headersList.get('x-pathname') || new URL(headersList.get('referer') || '').pathname;
 
   // Create a serializable user object
   const serializableUser = user ? {
@@ -64,25 +53,21 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       title: "Applications",
       url: `/app/host/${listingId}/applications`,
       icon: "Users",
-      isActive: pathname.startsWith(`/app/host/${listingId}/applications`),
     },
     {
       title: "Bookings",
       url: `/app/host/${listingId}/bookings`,
       icon: "Calendar",
-      isActive: pathname.startsWith(`/app/host/${listingId}/bookings`),
     },
     {
       title: "Reviews",
       url: `/app/host/${listingId}/reviews`,
       icon: "MessageSquare",
-      isActive: pathname.startsWith(`/app/host/${listingId}/reviews`),
     },
     {
       title: "Payments",
       url: `/app/host/${listingId}/payments`,
       icon: "CreditCard",
-      isActive: pathname.startsWith(`/app/host/${listingId}/payments`),
     },
   ];
 
@@ -91,7 +76,6 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       title: "Overview",
       url: "/app/host/dashboard",
       icon: "BarChart3",
-      isActive: pathname === "/app/host/dashboard",
     },
   ];
 
@@ -100,7 +84,6 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       title: "Settings",
       url: "/app/host/settings",
       icon: "Settings",
-      isActive: pathname.startsWith("/app/host/settings"),
     },
   ];
 
@@ -119,55 +102,18 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
     }
   ];
 
-  // Find current breadcrumb based on pathname
-  const getCurrentBreadcrumb = () => {
-    const allItems = [...hostDashboardItems, ...listingItems, ...otherItems];
-    const currentItem = allItems.find(item => item.url === pathname || pathname.startsWith(item.url));
-
-    if (currentItem) {
-      return {
-        title: currentItem.title,
-        icon: currentItem.icon
-      };
-    }
-
-    // Default to Applications if no match
-    return {
-      title: "Applications",
-      icon: "Users"
-    };
-  };
-
-  const breadcrumb = getCurrentBreadcrumb();
-
-  const getIconComponent = (iconName: string) => {
-    const icons = {
-      Users,
-      Calendar,
-      MessageSquare,
-      CreditCard,
-      BarChart3,
-      Settings
-    };
-    return icons[iconName as keyof typeof icons] || Users;
-  };
-
-  const BreadcrumbIcon = getIconComponent(breadcrumb.icon);
 
   return (
     <ListingDashboardProvider data={dashboardData}>
       <SidebarProvider>
-        <HostSidebar groups={sidebarGroups} breadcrumb={breadcrumb} />
+        <HostSidebar groups={sidebarGroups} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b">
             <div className="flex items-center justify-between w-full px-3">
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
                 <Separator orientation="vertical" className="mr-2 h-4" />
-                <div className="flex items-center gap-2">
-                  <BreadcrumbIcon className="h-4 w-4" />
-                  <span className="font-medium">{breadcrumb.title}</span>
-                </div>
+                <HostBreadcrumb groups={sidebarGroups} />
               </div>
               <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" />
             </div>
