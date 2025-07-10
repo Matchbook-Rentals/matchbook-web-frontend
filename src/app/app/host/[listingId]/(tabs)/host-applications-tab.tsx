@@ -39,7 +39,7 @@ const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => 
       email: "alex.chen@example.com",
       firstName: "Alex",
       lastName: "Chen",
-      profileImageSrc: "https://placehold.co/600x400/0B6E6E/FFF?text=AC",
+      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=AC",
       emailVerified: null,
       isAdmin: false,
       isHost: false,
@@ -93,7 +93,7 @@ const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => 
       email: "jordan.m@example.com",
       firstName: "Jordan",
       lastName: "Martinez",
-      profileImageSrc: "https://placehold.co/600x400/0B6E6E/FFF?text=JM",
+      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=JM",
       emailVerified: null,
       isAdmin: false,
       isHost: false,
@@ -189,6 +189,7 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
     occupants,
     price,
     status: request.status || 'pending',
+    user, // Pass the user object directly
   };
 };
 
@@ -214,7 +215,7 @@ const transformApplicationForCard = (app: any, listing: ListingAndImages, isMobi
     description: `for ${listing.title || 'this property'} - ${listing.numBedrooms || 0} bed ${listing.numBathrooms || 0} bath ${listing.petsAllowed ? 'pet friendly' : ''}`,
     price: app.price,
     occupants,
-    profileImage: app.user?.profileImageSrc || `https://placehold.co/600x400/0B6E6E/FFF?text=${(app.user?.firstName?.charAt(0) || '').toUpperCase()}${(app.user?.lastName?.charAt(0) || '').toUpperCase()}`, // TODO: Use actual user profile image
+    profileImage: app.user?.imageUrl, // Use the actual user profile image field
   };
 };
 
