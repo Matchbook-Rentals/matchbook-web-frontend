@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { BrandCheckbox } from "@/app/brandCheckbox";
+import { useUser } from "@clerk/nextjs";
 
 interface TabLayoutProps {
   title: string;
@@ -41,6 +43,10 @@ interface TabLayoutProps {
   emptyStateMessage?: string;
   totalCount?: number; // For showing filtered vs total count
   noMargin?: boolean; // Option to disable APP_PAGE_MARGIN for nested layouts
+  // Mock data toggle (admin only)
+  showMockDataToggle?: boolean;
+  useMockData?: boolean;
+  onMockDataToggle?: (checked: boolean) => void;
 }
 
 export default function TabLayout({
@@ -57,8 +63,13 @@ export default function TabLayout({
   emptyStateMessage = "No items found.",
   totalCount,
   noMargin = false,
+  showMockDataToggle = false,
+  useMockData = false,
+  onMockDataToggle,
 }: TabLayoutProps) {
   const isMobile = useIsMobile();
+  const { user } = useUser();
+  const isAdmin = user?.publicMetadata?.role === 'admin';
   const [scrollAreaHeight, setScrollAreaHeight] = useState<string>('calc(100vh - 300px)');
   const headerRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
@@ -173,22 +184,36 @@ export default function TabLayout({
               </Card>
             </div>
 
-            <div className={`flex items-center ${isMobile ? 'justify-start' : 'justify-end'} gap-3 flex-1`}>
-              <span className="whitespace-nowrap text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
-                {filterLabel}
-              </span>
-              <Select onValueChange={onFilterChange}>
-                <SelectTrigger className="w-[142px] h-12">
-                  <SelectValue placeholder={filterOptions?.[0]?.label || "All"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {filterOptions?.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-end gap-6'} flex-1`}>
+              {/* Mock Data Toggle for Admins */}
+              {showMockDataToggle && isAdmin && (
+                <div className="flex items-center">
+                  <BrandCheckbox
+                    checked={useMockData}
+                    onChange={(e) => onMockDataToggle?.(e.target.checked)}
+                    label="Use mock data"
+                    name="mock-data-toggle"
+                  />
+                </div>
+              )}
+              
+              <div className="flex items-center gap-3">
+                <span className="whitespace-nowrap text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
+                  {filterLabel}
+                </span>
+                <Select onValueChange={onFilterChange}>
+                  <SelectTrigger className="w-[142px] h-12">
+                    <SelectValue placeholder={filterOptions?.[0]?.label || "All"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {filterOptions?.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             
             {actionButton && isMobile && (

@@ -141,8 +141,6 @@ const baseFilterOptions = [
   { id: "approved", label: "Approved" },
 ];
 
-// Admin-only filter option
-const adminFilterOption = { id: "mock_data", label: "Mock Data" };
 
 // Helper function to get status color
 const getStatusColor = (status: string) => {
@@ -230,12 +228,13 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
+  const [useMockData, setUseMockData] = useState(false);
   const isMobile = useIsMobile();
   const { user } = useUser();
-  const isAdmin = user?.sessionClaims?.metadata?.role === 'admin';
+  const isAdmin = user?.publicMetadata?.role === 'admin';
   
-  // Get filter options based on user role
-  const filterOptions = isAdmin ? [...baseFilterOptions, adminFilterOption] : baseFilterOptions;
+  // Get filter options (no longer need admin filter option)
+  const filterOptions = baseFilterOptions;
   
   // Create a wrapper component that passes the onNavigate callback
   const MobileNavigationContent = ({ onNavigate }: { onNavigate?: () => void }) => {
@@ -256,15 +255,20 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     router.push(`/app/host/${listing.id}/applications/${applicationId}?from=listing`);
   };
 
-  // Determine which data to use based on filters and user role
+  // Determine which data to use based on mock data toggle
   const requestsToUse = useMemo(() => {
-    // If admin has selected "Mock Data" filter, always show sample data
-    if (isAdmin && selectedFilters.includes('mock_data')) {
-      return generateSampleHousingRequests(listing.id);
+    console.log('Debug - isAdmin:', isAdmin, 'useMockData:', useMockData, 'housingRequests.length:', housingRequests.length);
+    
+    // If admin has enabled mock data toggle, always show sample data
+    if (isAdmin && useMockData) {
+      const sampleData = generateSampleHousingRequests(listing.id);
+      console.log('Debug - returning sample data:', sampleData.length);
+      return sampleData;
     }
-    // Otherwise, use real data if available, otherwise generate sample data
-    return housingRequests.length > 0 ? housingRequests : generateSampleHousingRequests(listing.id);
-  }, [housingRequests, selectedFilters, isAdmin, listing.id]);
+    // Otherwise, use real data (even if empty)
+    console.log('Debug - returning real data:', housingRequests.length);
+    return housingRequests;
+  }, [housingRequests, useMockData, isAdmin, listing.id]);
   
   // Convert housing requests to the format the UI expects
   const applications = requestsToUse.map(formatHousingRequestForDisplay);
@@ -273,11 +277,10 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   const filteredApplications = useMemo(() => {
     let filtered = applications;
     
-    // Apply status filters (exclude mock_data filter from status filtering)
-    const statusFilters = selectedFilters.filter(filter => filter !== 'mock_data');
-    if (statusFilters.length > 0) {
+    // Apply status filters
+    if (selectedFilters.length > 0) {
       filtered = filtered.filter(app => {
-        return statusFilters.includes(app.status.toLowerCase());
+        return selectedFilters.includes(app.status.toLowerCase());
       });
     }
     
@@ -410,6 +413,9 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
       }}
       noMargin={true}
       emptyStateMessage={housingRequests.length === 0 ? "No applications yet for this listing." : "No applications match the selected filters."}
+      showMockDataToggle={true}
+      useMockData={useMockData}
+      onMockDataToggle={setUseMockData}
     >
       {filteredApplications.map((app) => {
         const cardData = transformApplicationForCard(app, listing, isMobile);
