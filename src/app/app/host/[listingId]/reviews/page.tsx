@@ -1,7 +1,6 @@
-"use client";
-
 import React from "react";
-import { useListingDashboard } from '../listing-dashboard-context';
+import { getListingById } from '@/app/actions/listings';
+import { notFound } from 'next/navigation';
 import { UserRating } from '../../../../../components/reviews/host-review';
 
 const sampleReviewData = {
@@ -51,8 +50,25 @@ const sampleReviewData = {
   ]
 };
 
-export default function ReviewsPage() {
-  const { data } = useListingDashboard();
+interface ReviewsPageProps {
+  params: { listingId: string };
+}
+
+export default async function ReviewsPage({ params }: ReviewsPageProps) {
+  const { listingId } = params;
+  
+  console.log('ReviewsPage: Starting data fetch...');
+  
+  // Fetch listing data
+  const listing = await getListingById(listingId);
+
+  if (!listing) return notFound();
+
+  console.log('ReviewsPage: Data fetched successfully');
+  console.log('- listing:', listing.streetAddress1);
+  
+  // TODO: Replace sampleReviewData with actual reviews data when available
+  // const reviews = await getReviewsByListingId(listingId);
   
   return (
     <div className="mt-8">
