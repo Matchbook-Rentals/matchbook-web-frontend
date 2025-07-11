@@ -56,14 +56,14 @@ export const Body = (): JSX.Element => {
         title="Calendar Management" 
         subtitle={`Manage availability for ${data.listing.streetAddress1 || data.listing.title || 'your listing'}`} 
       />
-      <section className="flex flex-col items-start gap-6 px-6 py-8 self-stretch w-full bg-[#f9f9f9]">
+      <section className="flex flex-col items-start gap-6 px-0 py-0 self-stretch w-full bg-[#f9f9f9]">
 
         <div className="flex flex-col items-start gap-[18px] self-stretch w-full">
           <div className="flex flex-col items-start gap-6 self-stretch w-full">
-            <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl overflow-hidden">
+            <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl p-2  overflow-hidden">
               <CardContent className="p-6">
                 <div className="flex flex-col items-end justify-center gap-6 w-full">
-                  <div className="flex flex-col items-start gap-8 p-6 w-full rounded-xl">
+                  <div className="flex flex-col items-start gap-8 p-0 w-full rounded-xl">
                     <div className="flex flex-col items-start gap-5 w-full">
                       <h2 className="self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
                         Block Unavailable Dates
@@ -100,6 +100,9 @@ export const Body = (): JSX.Element => {
                                     selectedDate={startDate}
                                     onDateSelect={setStartDate}
                                     minDate={new Date()}
+                                    isRangeMode={true}
+                                    startDate={startDate}
+                                    endDate={endDate}
                                   />
                                 </PopoverContent>
                               </Popover>
@@ -137,6 +140,9 @@ export const Body = (): JSX.Element => {
                                     selectedDate={endDate}
                                     onDateSelect={setEndDate}
                                     minDate={startDate || new Date()}
+                                    isRangeMode={true}
+                                    startDate={startDate}
+                                    endDate={endDate}
                                   />
                                 </PopoverContent>
                               </Popover>

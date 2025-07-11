@@ -77,8 +77,8 @@ function CalendarDay({ day, isBooked, isUnavailable, bookingInfo, unavailableRea
     <div
       className={`
         aspect-square w-full flex items-center justify-center text-base relative
-        ${isBooked ? 'bg-blue-100' : ''}
-        ${isUnavailable ? 'bg-red-100' : ''}
+        ${isBooked ? '' : ''}
+        ${isUnavailable ? '' : ''}
       `}
     >
       <span className={`
