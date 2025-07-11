@@ -180,7 +180,7 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
         
         <div className="flex items-center gap-2">
           <Select value={month.toString()} onValueChange={(value) => onMonthChange?.(parseInt(value))}>
-            <SelectTrigger className="w-[120px] h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
+            <SelectTrigger className="w-fit h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -195,7 +195,7 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
           </Select>
           
           <Select value={year.toString()} onValueChange={(value) => onYearChange?.(parseInt(value))}>
-            <SelectTrigger className="w-[80px] h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
+            <SelectTrigger className="w-fit h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

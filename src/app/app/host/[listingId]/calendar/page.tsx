@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon, XCircleIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,9 +10,14 @@ import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { DesktopScheduleViewer } from "@/components/ui/custom-calendar/date-range-selector/desktop-schedule-viewer";
 import { HostPageTitle } from "../(components)/host-page-title";
 import { useListingDashboard } from "../listing-dashboard-context";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { InteractiveDatePicker } from "@/components/ui/custom-calendar/date-range-selector/interactive-date-picker";
+import { format } from "date-fns";
 
 export const Body = (): JSX.Element => {
   const { data } = useListingDashboard();
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
   
   return (
     <div className="flex flex-col w-full items-start">
@@ -49,9 +54,24 @@ export const Body = (): JSX.Element => {
                             <div className="relative w-full">
                               <Input
                                 className="h-12 w-full pr-10 bg-sidebar"
-                                placeholder="dd/mm/yyyy"
+                                placeholder="mm/dd/yyyy"
+                                value={startDate ? format(startDate, "MM/dd/yyyy") : ""}
+                                readOnly
                               />
-                              <CalendarIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
+                                    <CalendarIcon className="h-5 w-5" />
+                                  </button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="end">
+                                  <InteractiveDatePicker
+                                    selectedDate={startDate}
+                                    onDateSelect={setStartDate}
+                                    minDate={new Date()}
+                                  />
+                                </PopoverContent>
+                              </Popover>
                             </div>
                           </div>
                         </div>
@@ -71,9 +91,24 @@ export const Body = (): JSX.Element => {
                             <div className="relative w-full">
                               <Input
                                 className="h-12 w-full pr-10 bg-sidebar"
-                                placeholder="dd/mm/yyyy"
+                                placeholder="mm/dd/yyyy"
+                                value={endDate ? format(endDate, "MM/dd/yyyy") : ""}
+                                readOnly
                               />
-                              <CalendarIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
+                                    <CalendarIcon className="h-5 w-5" />
+                                  </button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="end">
+                                  <InteractiveDatePicker
+                                    selectedDate={endDate}
+                                    onDateSelect={setEndDate}
+                                    minDate={startDate || new Date()}
+                                  />
+                                </PopoverContent>
+                              </Popover>
                             </div>
                           </div>
                         </div>
