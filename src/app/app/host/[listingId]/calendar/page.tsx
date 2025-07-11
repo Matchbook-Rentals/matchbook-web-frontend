@@ -8,21 +8,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { DesktopScheduleViewer } from "@/components/ui/custom-calendar/date-range-selector/desktop-schedule-viewer";
+import { HostPageTitle } from "../(components)/host-page-title";
+import { useListingDashboard } from "../listing-dashboard-context";
 
 export const Body = (): JSX.Element => {
+  const { data } = useListingDashboard();
+  
   return (
     <div className="flex flex-col w-full items-start">
+      <HostPageTitle 
+        title="Calendar Management" 
+        subtitle={`Manage availability for ${data.listing.streetAddress1 || data.listing.title || 'your listing'}`} 
+      />
       <section className="flex flex-col items-start gap-6 px-6 py-8 self-stretch w-full bg-[#f9f9f9]">
-        <header className="flex items-end gap-6 self-stretch w-full">
-          <div className="flex flex-col items-start gap-2 flex-1">
-            <h1 className="self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
-              Calendar Management
-            </h1>
-            <p className="w-full font-['Poppins',Helvetica] font-normal text-greygrey-500 text-base tracking-[0] leading-6">
-              Manage availability for sparkling New KING I Close to Necessities
-            </p>
-          </div>
-        </header>
 
         <div className="flex flex-col items-start gap-[18px] self-stretch w-full">
           <div className="flex flex-col items-start gap-6 self-stretch w-full">

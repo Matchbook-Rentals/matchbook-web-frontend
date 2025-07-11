@@ -227,8 +227,8 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
         ))}
       </div>
 
-      {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-0">
+      {/* Calendar Grid - Fixed height for 6 rows */}
+      <div className="grid grid-cols-7 grid-rows-6 gap-0 h-[300px]">
         {/* Empty cells for days before the first of the month */}
         {Array.from({ length: firstDayOfWeek }).map((_, index) => (
           <div key={`empty-${index}`} className="aspect-square" />
@@ -253,6 +253,11 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
             />
           );
         })}
+
+        {/* Fill remaining cells to complete 6 rows (42 total cells) */}
+        {Array.from({ length: 42 - firstDayOfWeek - daysInMonth }).map((_, index) => (
+          <div key={`fill-${index}`} className="aspect-square" />
+        ))}
       </div>
 
       {/* Legend */}
