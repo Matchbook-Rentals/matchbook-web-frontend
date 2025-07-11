@@ -60,6 +60,11 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       icon: "Calendar",
     },
     {
+      title: "Calendar",
+      url: `/app/host/${listingId}/calendar`,
+      icon: "CalendarDays",
+    },
+    {
       title: "Reviews",
       url: `/app/host/${listingId}/reviews`,
       icon: "MessageSquare",

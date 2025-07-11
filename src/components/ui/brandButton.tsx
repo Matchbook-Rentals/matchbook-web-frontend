@@ -97,9 +97,9 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
               className?.replace(/focus-visible:[\w-]+/g, '').trim()
             )}
           >
-            {leftIcon && <span className="mr-2">{leftIcon}</span>}
+            {leftIcon && <span className="mr-0">{leftIcon}</span>}
             {children}
-            {rightIcon && <span className="ml-2">{rightIcon}</span>}
+            {rightIcon && <span className="ml-0">{rightIcon}</span>}
           </div>
           <Link 
             href={href} 
@@ -135,9 +135,9 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
         ref={ref}
         {...props}
       >
-        {leftIcon && <span className="mr-2">{leftIcon}</span>}
+        {leftIcon && <span className="mr-0">{leftIcon}</span>}
         {children}
-        {rightIcon && <span className="ml-2">{rightIcon}</span>}
+        {rightIcon && <span className="ml-0">{rightIcon}</span>}
       </Comp>
     )
     
