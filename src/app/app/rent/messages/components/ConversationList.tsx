@@ -345,7 +345,16 @@ const ConversationList: React.FC<ConversationListProps> = ({
                       )}
                     </span>
                     <span className="text-xs text-gray-600 truncate">
-                      {conv.listingId ? (`${conv.listing?.title || "Cozy Downtown Apartment"}`) : "Property Discussion"}
+                      {(() => {
+                        // Check if this is a support conversation
+                        if (conv.name && conv.name.startsWith('Ticket:')) {
+                          // Extract ticket title from conversation name format: "Ticket: ID - Title"
+                          const titleMatch = conv.name.match(/^Ticket: .+ - (.+)$/);
+                          return titleMatch ? titleMatch[1] : "Customer Support";
+                        }
+                        // Regular conversation
+                        return conv.listingId ? (`${conv.listing?.title || "Cozy Downtown Apartment"}`) : "Property Discussion";
+                      })()}
                     </span>
                   </div>
                 </div>

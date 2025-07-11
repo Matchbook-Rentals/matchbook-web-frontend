@@ -12,6 +12,7 @@ import {
 } from '@/app/actions/conversations';
 import { markMessagesAsReadByTimestamp } from '@/app/actions/messages';
 import { logger } from '@/lib/logger';
+import { serverLog } from '@/app/actions/client-logs';
 // Import the hook and its MessageData type
 import { useWebSocketManager, MessageData as HookMessageData } from '@/hooks/useWebSocketManager';
 
@@ -177,18 +178,149 @@ const updateMessagesReadTimestamp = (
 };
 
 /**
- * Utility function to filter conversations by role
+ * Utility function to filter conversations by tab selection
  */
 const filterConversationsByRole = (
   conversations: ExtendedConversation[],
   userId: string,
-  role: string
+  activeTab: string
 ) => {
-  return role === 'all'
-    ? conversations
-    : conversations.filter((conv) =>
-      conv.participants.find((p) => p.userId === userId)?.role === role
-    );
+  // Do filtering synchronously first
+  if (activeTab === 'all') {
+    // Log async without awaiting
+    serverLog('All tab selected - returning all conversations', {
+      count: conversations.length
+    });
+    return conversations;
+  }
+
+  const filteredConversations = [];
+  const debugInfo = {
+    totalConversations: conversations.length,
+    activeTab,
+    userId,
+    conversationDetails: [] as any[],
+    filterResults: [] as any[]
+  };
+  
+  for (const conv of conversations) {
+    const userParticipant = conv.participants.find((p) => p.userId === userId);
+    const isSupportConversation = conv.name && conv.name.startsWith('Ticket:');
+    
+    // Collect debug info
+    debugInfo.conversationDetails.push({
+      conversationId: conv.id,
+      conversationName: conv.name,
+      userRole: userParticipant?.role || 'NO_ROLE',
+      isSupportConversation,
+      listingId: (conv as any).listingId,
+      listingTitle: (conv as any).listing?.title,
+      listingState: (conv as any).listing?.state,
+      participants: conv.participants.map(p => ({
+        userId: p.userId,
+        role: p.role,
+        userName: p.User?.firstName || p.User?.email || 'Unknown'
+      }))
+    });
+    
+    if (!userParticipant) {
+      debugInfo.filterResults.push({
+        conversationId: conv.id,
+        action: 'filtered_out',
+        reason: 'user_not_found_in_participants'
+      });
+      continue;
+    }
+
+    // Support filter: show conversations where user has 'Support' role OR listing.state='Support'
+    if (activeTab === 'Support') {
+      const hasListingStateSupport = (conv as any).listing?.state === 'Support';
+      const includeInSupport = userParticipant.role === 'Support' || hasListingStateSupport;
+      debugInfo.filterResults.push({
+        conversationId: conv.id,
+        action: includeInSupport ? 'included' : 'filtered_out',
+        reason: 'support_filter',
+        userRole: userParticipant.role,
+        listingState: (conv as any).listing?.state,
+        hasListingStateSupport,
+        includeInSupport
+      });
+      if (includeInSupport) filteredConversations.push(conv);
+      continue;
+    }
+
+    // Check if this is a support conversation (ticket-based or listing state)
+    const hasListingStateSupport = (conv as any).listing?.state === 'Support';
+    if (isSupportConversation || hasListingStateSupport) {
+      debugInfo.filterResults.push({
+        conversationId: conv.id,
+        action: 'filtered_out',
+        reason: 'support_conversation_in_non_support_tab',
+        conversationName: conv.name,
+        isSupportConversation,
+        hasListingStateSupport
+      });
+      continue;
+    }
+
+    // For regular conversations (property-related)
+    if (activeTab === 'Hosting') {
+      // Host filter: show conversations where user is the listing owner (Host role)
+      const includeInHosting = userParticipant.role === 'Host';
+      debugInfo.filterResults.push({
+        conversationId: conv.id,
+        action: includeInHosting ? 'included' : 'filtered_out',
+        reason: 'hosting_filter',
+        userRole: userParticipant.role,
+        includeInHosting
+      });
+      if (includeInHosting) filteredConversations.push(conv);
+      continue;
+    }
+
+    if (activeTab === 'Renting') {
+      // Renter filter: show conversations where user is not the listing owner (Tenant/Guest role)
+      // For 'member' role, we need to check if user owns the listing to determine if they're hosting or renting
+      let includeInRenting = userParticipant.role === 'Tenant' || userParticipant.role === 'Guest';
+      
+      // If user has 'member' role, we need additional logic to determine hosting vs renting
+      if (userParticipant.role === 'member') {
+        // For now, include all 'member' conversations in Renting
+        // TODO: Check if user owns the listing to properly categorize
+        includeInRenting = true;
+      }
+      
+      debugInfo.filterResults.push({
+        conversationId: conv.id,
+        action: includeInRenting ? 'included' : 'filtered_out',
+        reason: 'renting_filter',
+        userRole: userParticipant.role,
+        includeInRenting,
+        listingId: (conv as any).listingId,
+        listingTitle: (conv as any).listing?.title
+      });
+      if (includeInRenting) filteredConversations.push(conv);
+      continue;
+    }
+
+    debugInfo.filterResults.push({
+      conversationId: conv.id,
+      action: 'filtered_out',
+      reason: 'no_matching_tab_logic',
+      userRole: userParticipant.role
+    });
+  }
+
+  // Log all debug info async without awaiting
+  serverLog('Conversation filtering debug info', debugInfo);
+  serverLog('Filtering complete', {
+    activeTab,
+    originalCount: conversations.length,
+    filteredCount: filteredConversations.length,
+    filteredConversationIds: filteredConversations.map(c => c.id)
+  });
+
+  return filteredConversations;
 };
 
 /**
@@ -270,9 +402,10 @@ const MessageInterface = ({
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   // Always show the conversation list first on mobile
   const [sidebarVisible, setSidebarVisible] = useState(true);
-  const [tabs, setTabs] = useState<'all' | 'Host' | 'Tenant'>('all');
+  const [tabs, setTabs] = useState<'all' | 'Hosting' | 'Renting' | 'Support'>('all');
   const [unreadHostMessages, setUnreadHostMessages] = useState(0);
   const [unreadTenantMessages, setUnreadTenantMessages] = useState(0);
+  const [filteredConversations, setFilteredConversations] = useState<ExtendedConversation[]>([]);
   const [typingUsers, setTypingUsers] = useState<
     Record<string, { isTyping: boolean; timestamp: string }>
   >({});
@@ -417,6 +550,16 @@ const MessageInterface = ({
     // The hook manages its own connection lifecycle and cleanup.
     // No need for socketRef.current.disconnect() or clearing timeouts here related to socket.
   }, [user, initialConversations, searchParams]); // handleSelectConversation is memoized or stable
+
+  // Handle conversation filtering with async logging
+  useEffect(() => {
+    if (user && allConversations.length > 0) {
+      const filtered = filterConversationsByRole(allConversations, user.id, tabs);
+      setFilteredConversations(filtered);
+    } else {
+      setFilteredConversations([]);
+    }
+  }, [allConversations, user, tabs]);
 
   // We'll keep this effect since it's for the sidebar visibility, not keyboard related
   useEffect(() => {
@@ -628,11 +771,8 @@ const MessageInterface = ({
   // Early return if user is not available
   if (!user) return null;
 
-  // Filter conversations first by role
-  const roleFilteredConversations = filterConversationsByRole(allConversations, user.id, tabs);
-
   // Augment conversations with isUnread status before passing down
-  const augmentedConversations = roleFilteredConversations.map(conv => ({
+  const augmentedConversations = filteredConversations.map(conv => ({
     ...conv,
     isUnread: conversationHasUnreadMessages(conv, user.id)
   }));

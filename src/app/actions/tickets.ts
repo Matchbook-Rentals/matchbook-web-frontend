@@ -304,7 +304,7 @@ export async function createOrGetTicketConversation(ticketId: string) {
         ],
         isGroup: false,
         // Use the ticket title in the conversation name to identify it
-        name: `Ticket: ${ticket.id}`
+        name: `Ticket: ${ticket.id} - ${ticket.title}`
       },
       include: {
         participants: {
@@ -327,7 +327,7 @@ export async function createOrGetTicketConversation(ticketId: string) {
     // Create a new conversation for this ticket
     const conversation = await prismadb.conversation.create({
       data: {
-        name: `Ticket: ${ticket.id}`,
+        name: `Ticket: ${ticket.id} - ${ticket.title}`,
         participants: {
           create: [
             {

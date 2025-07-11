@@ -120,3 +120,17 @@ export async function logClientError(message: string, data?: any, metadata?: any
   })
 }
 
+/**
+ * Simple server logging function that directly logs to server console
+ * Useful for debugging without storing in database
+ */
+export async function serverLog(message: string, data?: any) {
+  try {
+    console.log(`[SERVER LOG] ${message}`, data || '');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to log to server console:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
+

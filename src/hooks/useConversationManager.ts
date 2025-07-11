@@ -50,7 +50,7 @@ export interface TypingUserEntry { // Already present, ensure it's suitable
   timestamp: string;
 }
 
-export type TabKey = 'all' | 'Host' | 'Tenant';
+export type TabKey = 'all' | 'Hosting' | 'Renting' | 'Support';
 // --- End Copied & Adapted Types ---
 
 // --- Copied Utility Functions ---
