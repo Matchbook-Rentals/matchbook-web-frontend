@@ -307,6 +307,8 @@ export async function deleteMessage(id: string) {
 // New function to get all conversations for a user
 export async function getAllConversations() {
   const authUserId = await checkAuth();
+  
+  // First get conversations with basic participant info
   const conversations = await prisma.conversation.findMany({
     where: {
       participants: {
@@ -318,26 +320,14 @@ export async function getAllConversations() {
     include: {
       messages: {
         orderBy: {
-          createdAt: 'desc', // Get messages in reverse chronological order
+          createdAt: 'desc',
         },
-        take: 50, // Limit to most recent 50 messages per conversation
-        include: { // Include attachments for each message
+        take: 50,
+        include: {
           attachments: true,
         },
       },
-      participants: {
-        include: {
-          User: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              imageUrl: true,
-              email: true,
-            }
-          }
-        }
-      },
+      participants: true,
       listing: {
         select: {
           title: true
@@ -345,13 +335,53 @@ export async function getAllConversations() {
       },
     },
     orderBy: {
-      updatedAt: 'desc', // Most recent conversations first
+      updatedAt: 'desc',
     },
   });
-  for (let convo of conversations) {
-    convo.messages = convo.messages.reverse();
-  }
-  return conversations;
+
+  // Then manually fetch user data for each participant
+  const conversationsWithUsers = await Promise.all(
+    conversations.map(async (conversation) => {
+      const participantsWithUsers = await Promise.all(
+        conversation.participants.map(async (participant) => {
+          try {
+            const user = await prisma.user.findUnique({
+              where: { id: participant.userId },
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true,
+                email: true,
+              }
+            });
+            return {
+              ...participant,
+              User: user
+            };
+          } catch (error) {
+            // If user doesn't exist, return participant with null user
+            return {
+              ...participant,
+              User: null
+            };
+          }
+        })
+      );
+      
+      return {
+        ...conversation,
+        participants: participantsWithUsers.filter(p => p.User !== null)
+      };
+    })
+  );
+  // Reverse messages for each conversation
+  const finalConversations = conversationsWithUsers.map(conversation => ({
+    ...conversation,
+    messages: conversation.messages.reverse()
+  }));
+  
+  return finalConversations;
 }
 
 

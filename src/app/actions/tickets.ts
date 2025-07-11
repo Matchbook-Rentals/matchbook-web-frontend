@@ -259,3 +259,102 @@ export async function deleteTickets(ticketIds: string[]) {
     return { error: "Failed to delete tickets" };
   }
 }
+
+export async function createOrGetTicketConversation(ticketId: string) {
+  try {
+    const { userId: adminUserId } = auth();
+    if (!adminUserId) {
+      throw new Error("Unauthorized");
+    }
+
+    // Get the ticket with user info
+    const ticket = await prismadb.ticket.findUnique({
+      where: { id: ticketId },
+      include: {
+        user: true
+      }
+    });
+
+    if (!ticket) {
+      throw new Error("Ticket not found");
+    }
+
+    if (!ticket.userId) {
+      throw new Error("Ticket has no associated user");
+    }
+
+    // Check if a conversation already exists between admin and ticket user
+    const existingConversation = await prismadb.conversation.findFirst({
+      where: {
+        AND: [
+          {
+            participants: {
+              some: {
+                userId: adminUserId
+              }
+            }
+          },
+          {
+            participants: {
+              some: {
+                userId: ticket.userId
+              }
+            }
+          }
+        ],
+        isGroup: false,
+        // Use the ticket title in the conversation name to identify it
+        name: `Ticket: ${ticket.id}`
+      },
+      include: {
+        participants: {
+          include: {
+            User: true
+          }
+        },
+        messages: {
+          orderBy: {
+            createdAt: 'asc'
+          }
+        }
+      }
+    });
+
+    if (existingConversation) {
+      return existingConversation;
+    }
+
+    // Create a new conversation for this ticket
+    const conversation = await prismadb.conversation.create({
+      data: {
+        name: `Ticket: ${ticket.id}`,
+        participants: {
+          create: [
+            {
+              userId: adminUserId,
+              role: 'Support'
+            },
+            {
+              userId: ticket.userId,
+              role: 'User'
+            }
+          ]
+        }
+      },
+      include: {
+        participants: {
+          include: {
+            User: true
+          }
+        },
+        messages: true
+      }
+    });
+
+    console.log('Created conversation for ticket:', { ticketId, conversationId: conversation.id });
+    return conversation;
+  } catch (error) {
+    console.error("Error creating/getting ticket conversation:", error);
+    throw error;
+  }
+}
