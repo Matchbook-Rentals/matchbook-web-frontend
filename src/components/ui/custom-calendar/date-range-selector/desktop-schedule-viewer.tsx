@@ -9,6 +9,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface DateRange {
   start: Date | null;
@@ -43,6 +51,8 @@ interface CalendarMonthProps {
   isPrevDisabled?: boolean;
   bookings?: Booking[];
   unavailablePeriods?: UnavailablePeriod[];
+  onMonthChange?: (month: number) => void;
+  onYearChange?: (year: number) => void;
 }
 
 interface CalendarDayProps {
@@ -100,7 +110,7 @@ function CalendarDay({ day, isBooked, isUnavailable, bookingInfo, unavailableRea
   return DayButton;
 }
 
-function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [] }: CalendarMonthProps) {
+function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange }: CalendarMonthProps) {
   // Calculate calendar grid parameters
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay();
@@ -144,6 +154,15 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
     return period?.reason || 'Unavailable';
   };
 
+  const currentYear = new Date().getFullYear();
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  
+  // Generate years from current year - 1 to current year + 10
+  const years = Array.from({ length: 12 }, (_, i) => currentYear - 1 + i);
+
   return (
     <div className="w-full flex-1">
       {/* Month and Year Display with Navigation */}
@@ -158,9 +177,39 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
         >
           Prev
         </button>
-        <h2 className="text-base font-medium text-secondaryBrand">
-          {new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' })}
-        </h2>
+        
+        <div className="flex items-center gap-2">
+          <Select value={month.toString()} onValueChange={(value) => onMonthChange?.(parseInt(value))}>
+            <SelectTrigger className="w-[120px] h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <ScrollArea className="h-[200px]">
+                {months.map((monthName, index) => (
+                  <SelectItem key={index} value={index.toString()}>
+                    {monthName}
+                  </SelectItem>
+                ))}
+              </ScrollArea>
+            </SelectContent>
+          </Select>
+          
+          <Select value={year.toString()} onValueChange={(value) => onYearChange?.(parseInt(value))}>
+            <SelectTrigger className="w-[80px] h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <ScrollArea className="h-[200px]">
+                {years.map((yearOption) => (
+                  <SelectItem key={yearOption} value={yearOption.toString()}>
+                    {yearOption}
+                  </SelectItem>
+                ))}
+              </ScrollArea>
+            </SelectContent>
+          </Select>
+        </div>
+        
         <button
           onClick={onNextMonth}
           className="text-sm text-gray-600 hover:text-gray-900 px-2 py-1 hover:bg-gray-100 rounded-md"
@@ -307,10 +356,68 @@ export function DesktopScheduleViewer({
     }
   };
 
+  const handleLeftMonthChange = (newMonth: number) => {
+    setLeftMonth(newMonth);
+    // If left calendar would overlap with right, push right forward
+    if (newMonth === rightMonth && leftYear === rightYear) {
+      if (rightMonth === 11) {
+        setRightMonth(0);
+        setRightYear(prev => prev + 1);
+      } else {
+        setRightMonth(prev => prev + 1);
+      }
+    }
+  };
+
+  const handleLeftYearChange = (newYear: number) => {
+    setLeftYear(newYear);
+    // If left calendar would overlap with right, push right forward
+    if (leftMonth === rightMonth && newYear === rightYear) {
+      if (rightMonth === 11) {
+        setRightMonth(0);
+        setRightYear(prev => prev + 1);
+      } else {
+        setRightMonth(prev => prev + 1);
+      }
+    }
+  };
+
+  const handleRightMonthChange = (newMonth: number) => {
+    setRightMonth(newMonth);
+    // Ensure right calendar is after left calendar
+    const leftDate = new Date(leftYear, leftMonth);
+    const newRightDate = new Date(rightYear, newMonth);
+    if (newRightDate <= leftDate) {
+      // Move left calendar back
+      if (leftMonth === 0) {
+        setLeftMonth(11);
+        setLeftYear(prev => prev - 1);
+      } else {
+        setLeftMonth(prev => prev - 1);
+      }
+    }
+  };
+
+  const handleRightYearChange = (newYear: number) => {
+    setRightYear(newYear);
+    // Ensure right calendar is after left calendar
+    const leftDate = new Date(leftYear, leftMonth);
+    const newRightDate = new Date(newYear, rightMonth);
+    if (newRightDate <= leftDate) {
+      // Move left calendar back
+      if (leftMonth === 0) {
+        setLeftMonth(11);
+        setLeftYear(prev => prev - 1);
+      } else {
+        setLeftMonth(prev => prev - 1);
+      }
+    }
+  };
+
   return (
-    <div className=" rounded-xl p-6 w-full max-w-[1360px] mx-auto">
+    <div className=" rounded-xl p-6 w-full max-w-[1260px] mx-auto">
       {/* Desktop: Two calendars side by side */}
-      <div className="hidden md:flex justify-between w-full">
+      <div className="hidden md:flex justify-between w-full gap-4">
         <div className="flex-1 bg-background p-2 flex flex-col rounded-md max-w-[530px]">
           <CalendarMonth
             year={leftYear}
@@ -320,9 +427,11 @@ export function DesktopScheduleViewer({
             isPrevDisabled={isCurrentMonth(leftMonth, leftYear)}
             bookings={bookings}
             unavailablePeriods={unavailablePeriods}
+            onMonthChange={handleLeftMonthChange}
+            onYearChange={handleLeftYearChange}
           />
         </div>
-        <div className="flex-1 bg-background p-2 flex flex-col rounded-md max-w-[530px]">
+        <div className="flex-1 bg-background p-3 flex flex-col rounded-lg max-w-[530px]">
           <CalendarMonth
             year={rightYear}
             month={rightMonth}
@@ -333,6 +442,8 @@ export function DesktopScheduleViewer({
             }
             bookings={bookings}
             unavailablePeriods={unavailablePeriods}
+            onMonthChange={handleRightMonthChange}
+            onYearChange={handleRightYearChange}
           />
         </div>
       </div>
@@ -347,6 +458,8 @@ export function DesktopScheduleViewer({
           isPrevDisabled={isCurrentMonth(leftMonth, leftYear)}
           bookings={bookings}
           unavailablePeriods={unavailablePeriods}
+          onMonthChange={handleLeftMonthChange}
+          onYearChange={handleLeftYearChange}
         />
       </div>
     </div>
