@@ -418,7 +418,7 @@ export function DesktopScheduleViewer({
     <div className=" rounded-xl p-6 w-full max-w-[1260px] mx-auto">
       {/* Desktop: Two calendars side by side */}
       <div className="hidden md:flex justify-between w-full gap-4">
-        <div className="flex-1 bg-background p-2 flex flex-col rounded-md max-w-[530px]">
+        <div className="flex-1 bg-background p-4 flex flex-col rounded-xl max-w-[530px] shadow-[0px_0px_5px_#00000029]">
           <CalendarMonth
             year={leftYear}
             month={leftMonth}
@@ -431,7 +431,7 @@ export function DesktopScheduleViewer({
             onYearChange={handleLeftYearChange}
           />
         </div>
-        <div className="flex-1 bg-background p-3 flex flex-col rounded-lg max-w-[530px]">
+        <div className="flex-1 bg-background p-4 flex flex-col rounded-xl max-w-[530px] shadow-[0px_0px_5px_#00000029]">
           <CalendarMonth
             year={rightYear}
             month={rightMonth}

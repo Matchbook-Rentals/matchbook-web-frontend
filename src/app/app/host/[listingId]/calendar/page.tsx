@@ -29,7 +29,7 @@ export const Body = (): JSX.Element => {
             <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl overflow-hidden">
               <CardContent className="p-6">
                 <div className="flex flex-col items-end justify-center gap-6 w-full">
-                  <div className="flex flex-col items-start gap-8 p-6 w-full bg-neutral-50 rounded-xl">
+                  <div className="flex flex-col items-start gap-8 p-6 w-full rounded-xl">
                     <div className="flex flex-col items-start gap-5 w-full">
                       <h2 className="self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
                         Block Unavailable Dates
@@ -50,7 +50,7 @@ export const Body = (): JSX.Element => {
                             </div>
                             <div className="relative w-full">
                               <Input
-                                className="h-12 w-full pr-10"
+                                className="h-12 w-full pr-10 bg-sidebar"
                                 placeholder="dd/mm/yyyy"
                               />
                               <CalendarIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -72,7 +72,7 @@ export const Body = (): JSX.Element => {
                             </div>
                             <div className="relative w-full">
                               <Input
-                                className="h-12 w-full pr-10"
+                                className="h-12 w-full pr-10 bg-sidebar"
                                 placeholder="dd/mm/yyyy"
                               />
                               <CalendarIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -91,7 +91,7 @@ export const Body = (): JSX.Element => {
                             </label>
                           </div>
                           <Textarea
-                            className="flex-1 w-full resize-none"
+                            className="flex-1 w-full resize-none bg-sidebar"
                             placeholder="e.g Personal use, maintenance, already booked elsewhere..."
                           />
                         </div>
