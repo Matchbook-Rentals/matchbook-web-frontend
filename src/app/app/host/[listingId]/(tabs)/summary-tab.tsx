@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2 } from 'lucide-react';
+import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon } from 'lucide-react';
 import Tile from '@/components/ui/tile';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { updateListing } from '@/app/actions/listings';
@@ -386,95 +386,96 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     <div className="space-y-6 p-6">
 
       {/* Highlights */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Home className="h-5 w-5" />
-              Highlights
+      <Card className="p-6 flex flex-col gap-8 rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <div className="flex items-center justify-between w-full">
+          <h2 className="text-2xl font-semibold text-gray-900">
+            Highlights
+          </h2>
+          {editingSections['basic'] ? renderEditButtons('basic') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('basic')} />}
+        </div>
+
+        {editingSections['basic'] ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-gray-500">Property Title</label>
+              <Input
+                value={formData.title || ''}
+                onChange={(e) => updateFormData('title', e.target.value)}
+                className="mt-1"
+                placeholder="Enter property title"
+              />
             </div>
-            {renderEditButtons('basic')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {editingSections['basic'] ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Property Title</label>
-                <Input
-                  value={formData.title || ''}
-                  onChange={(e) => updateFormData('title', e.target.value)}
-                  className="mt-1"
-                  placeholder="Enter property title"
+            <div>
+              <label className="text-sm font-medium text-gray-700">Property Type</label>
+              <Select value={formData.category || ''} onValueChange={(value) => updateFormData('category', value)}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select property type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={PropertyType.SingleFamily}>Single Family</SelectItem>
+                  <SelectItem value={PropertyType.Apartment}>Apartment</SelectItem>
+                  <SelectItem value={PropertyType.Townhouse}>Townhouse</SelectItem>
+                  <SelectItem value={PropertyType.PrivateRoom}>Private Room</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Furnished Status</label>
+              <div className="flex items-center space-x-2 mt-2">
+                <Switch
+                  checked={formData.furnished || false}
+                  onCheckedChange={(checked) => updateFormData('furnished', checked)}
                 />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Property Type</label>
-                <Select value={formData.category || ''} onValueChange={(value) => updateFormData('category', value)}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select property type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={PropertyType.SingleFamily}>Single Family</SelectItem>
-                    <SelectItem value={PropertyType.Apartment}>Apartment</SelectItem>
-                    <SelectItem value={PropertyType.Townhouse}>Townhouse</SelectItem>
-                    <SelectItem value={PropertyType.PrivateRoom}>Private Room</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Furnished Status</label>
-                <div className="flex items-center space-x-2 mt-2">
-                  <Switch
-                    checked={formData.furnished || false}
-                    onCheckedChange={(checked) => updateFormData('furnished', checked)}
-                  />
-                  <span className="text-sm">{formData.furnished ? 'Furnished' : 'Unfurnished'}</span>
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Pets Allowed</label>
-                <div className="flex items-center space-x-2 mt-2">
-                  <Switch
-                    checked={formData.petsAllowed || false}
-                    onCheckedChange={(checked) => updateFormData('petsAllowed', checked)}
-                  />
-                  <span className="text-sm">{formData.petsAllowed ? 'Pets allowed' : 'No pets'}</span>
-                </div>
+                <span className="text-sm">{formData.furnished ? 'Furnished' : 'Unfurnished'}</span>
               </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {currentListing.title && (
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Property Title</label>
-                  <p className="mt-1 text-lg font-semibold">{currentListing.title}</p>
-                </div>
-              )}
-              <div>
-                <label className="text-sm font-medium text-gray-700">Property Type</label>
-                <div className="mt-1 flex items-center gap-2">
-                  <Building className="h-4 w-4 text-gray-500" />
-                  <span>{formatPropertyType(currentListing.category)}</span>
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Furnished Status</label>
-                <div className="mt-1 flex items-center gap-2">
-                  <Home className="h-4 w-4 text-gray-500" />
-                  <span>{formatFurnished(currentListing.furnished)}</span>
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Pets Allowed</label>
-                <div className="mt-1 flex items-center gap-2">
-                  <PawPrint className="h-4 w-4 text-gray-500" />
-                  <span>{currentListing.petsAllowed ? 'Pets allowed' : 'No pets'}</span>
-                </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Pets Allowed</label>
+              <div className="flex items-center space-x-2 mt-2">
+                <Switch
+                  checked={formData.petsAllowed || false}
+                  onCheckedChange={(checked) => updateFormData('petsAllowed', checked)}
+                />
+                <span className="text-sm">{formData.petsAllowed ? 'Pets allowed' : 'No pets'}</span>
               </div>
             </div>
-          )}
-        </CardContent>
+          </div>
+        ) : (
+          <CardContent className="flex items-start gap-6 p-0">
+            <div className="flex flex-col items-start gap-1.5 w-[374px]">
+              <div className="text-md font-normal text-gray-500">
+                Property Title
+              </div>
+              <div className="text-md font-medium text-gray-900">
+                {currentListing.title || 'No title'}
+              </div>
+            </div>
+            <div className="flex flex-col items-start gap-1.5 w-[212px]">
+              <div className="text-md font-normal text-gray-500">
+                Property Type
+              </div>
+              <div className="text-md font-medium text-gray-900">
+                {formatPropertyType(currentListing.category)}
+              </div>
+            </div>
+            <div className="flex flex-col items-start gap-1.5 w-[235px]">
+              <div className="text-md font-normal text-gray-500">
+                Furnished Status
+              </div>
+              <div className="text-md font-medium text-gray-900">
+                {formatFurnished(currentListing.furnished)}
+              </div>
+            </div>
+            <div className="flex flex-col items-start gap-1.5 flex-1">
+              <div className="text-md font-normal text-gray-500">
+                Pets Allowed
+              </div>
+              <div className="text-md font-medium text-gray-900">
+                {currentListing.petsAllowed ? 'Pets allowed' : 'No Pets'}
+              </div>
+            </div>
+          </CardContent>
+        )}
       </Card>
 
       {/* Description */}
