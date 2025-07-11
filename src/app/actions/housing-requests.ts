@@ -40,21 +40,12 @@ export async function getHousingRequestById(housingRequestId: string) {
           }
         },
         boldSignLease: true,
+        trip: true, // Include trip data directly in the join
       },
     });
 
     if (!housingRequest) {
       throw new Error('Housing request not found');
-    }
-
-    // Manually fetch trip data to handle potential null cases
-    let trip = null;
-    try {
-      trip = await prisma.trip.findUnique({
-        where: { id: housingRequest.tripId }
-      });
-    } catch (error) {
-      console.warn(`Failed to fetch trip ${housingRequest.tripId} for housing request ${housingRequest.id}:`, error);
     }
 
     // Check if there's a booking for this housing request (via match)
@@ -72,7 +63,7 @@ export async function getHousingRequestById(housingRequestId: string) {
       hasBooking = !!match?.booking;
     }
 
-    return { ...housingRequest, trip, hasBooking };
+    return { ...housingRequest, hasBooking };
   } catch (error) {
     console.error('Error fetching housing request:', error);
     throw new Error('Failed to fetch housing request');
@@ -81,6 +72,7 @@ export async function getHousingRequestById(housingRequestId: string) {
 
 export async function getHousingRequestsByListingId(listingId: string) {
   try {
+    // Use a single query with proper joins to avoid N+1 problem
     const housingRequests = await prisma.housingRequest.findMany({
       where: {
         listingId: listingId,
@@ -97,25 +89,11 @@ export async function getHousingRequestsByListingId(listingId: string) {
             }
           }
         },
+        trip: true // Include trip data directly in the join
       },
     });
 
-    // Manually fetch trip data for each housing request to handle potential null cases
-    const housingRequestsWithTrips = await Promise.all(
-      housingRequests.map(async (request) => {
-        try {
-          const trip = await prisma.trip.findUnique({
-            where: { id: request.tripId }
-          });
-          return { ...request, trip };
-        } catch (error) {
-          console.warn(`Failed to fetch trip ${request.tripId} for housing request ${request.id}:`, error);
-          return { ...request, trip: null };
-        }
-      })
-    );
-
-    return housingRequestsWithTrips;
+    return housingRequests;
   } catch (error) {
     console.error('Error fetching housing requests:', error);
     throw new Error('Failed to fetch housing requests');
@@ -266,6 +244,7 @@ export async function getHostHousingRequests() {
 
     console.log('Fetching housing requests for userId:', userId);
 
+    // Use a single query with proper joins to avoid N+1 problem
     const housingRequests = await prisma.housingRequest.findMany({
       where: {
         listing: {
@@ -289,34 +268,21 @@ export async function getHostHousingRequests() {
             state: true,
             postalCode: true
           }
+        },
+        trip: {
+          select: {
+            numAdults: true,
+            numPets: true,
+            numChildren: true,
+            minPrice: true,
+            maxPrice: true
+          }
         }
       }
     });
 
-    // Manually fetch trip data for each housing request to handle potential null cases
-    const housingRequestsWithTrips = await Promise.all(
-      housingRequests.map(async (request) => {
-        try {
-          const trip = await prisma.trip.findUnique({
-            where: { id: request.tripId },
-            select: {
-              numAdults: true,
-              numPets: true,
-              numChildren: true,
-              minPrice: true,
-              maxPrice: true
-            }
-          });
-          return { ...request, trip };
-        } catch (error) {
-          console.warn(`Failed to fetch trip ${request.tripId} for housing request ${request.id}:`, error);
-          return { ...request, trip: null };
-        }
-      })
-    );
-
-    console.log('Found housing requests:', housingRequestsWithTrips.length);
-    return housingRequestsWithTrips;
+    console.log('Found housing requests:', housingRequests.length);
+    return housingRequests;
   } catch (error) {
     console.error('Error in getHostHousingRequests:', error);
     // Return empty array instead of throwing error to prevent page crash

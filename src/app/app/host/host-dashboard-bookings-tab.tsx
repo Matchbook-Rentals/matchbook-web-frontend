@@ -18,6 +18,7 @@ import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useUser } from "@clerk/nextjs";
+import { HostBookingCard } from "./components/host-booking-card";
 
 // Extended booking type with included relations
 type BookingWithRelations = {
@@ -205,6 +206,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingBookingId, setLoadingBookingId] = useState<string | null>(null);
+  const [useMockData, setUseMockData] = useState(false);
   const itemsPerPage = 10;
   const isMobile = useIsMobile();
 
@@ -230,8 +232,8 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
   
   // Get filter options based on user role
   const { user } = useUser();
-  const isAdmin = user?.sessionClaims?.metadata?.role === 'admin';
-  const filterOptions = isAdmin ? [...baseFilterOptions, "Mock Data"] : baseFilterOptions;
+  const isAdmin = user?.publicMetadata?.role === 'admin';
+  const filterOptions = baseFilterOptions;
 
   // Toggle filter selection
   const toggleFilter = (filter: string) => {
@@ -360,6 +362,37 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
     return "Guest";
   };
 
+  // Helper function to transform booking data for the HostBookingCard component
+  const transformBookingForCard = (booking: BookingWithRelations, isMobile: boolean) => {
+    const listing = booking.listing;
+    const addressDisplay = isMobile 
+      ? (listing?.streetAddress1 || `Property in ${listing?.state || 'Unknown Location'}`)
+      : `${listing?.streetAddress1 || ''} ${listing?.city || ''}, ${listing?.state || ''} ${listing?.postalCode || ''}`;
+
+    // Create occupant objects from trip data
+    const occupants = [
+      { type: "Adult", count: booking.trip?.numAdults || 0, icon: "/host-dashboard/svg/adult.svg" },
+      { type: "Kid", count: booking.trip?.numChildren || 0, icon: "/host-dashboard/svg/kid.svg" },
+      { type: "pet", count: booking.trip?.numPets || 0, icon: "/host-dashboard/svg/pet.svg" },
+    ];
+
+    const statusInfo = getStatusInfo(booking);
+    const price = booking.monthlyRent 
+      ? `$${booking.monthlyRent.toLocaleString()} / Month`
+      : "$0 / Month";
+
+    return {
+      name: formatGuestName(booking.user),
+      status: statusInfo.label === "Awaiting Signature" ? getSignatureStatusText(booking) : statusInfo.label,
+      dates: formatDateRangeWithFallback(booking.startDate, booking.endDate),
+      address: addressDisplay,
+      description: `for ${listing?.title || 'this property'}`,
+      price,
+      occupants,
+      profileImage: booking.user?.imageUrl,
+    };
+  };
+
   // Format date range with fallback
   const formatDateRangeWithFallback = (startDate?: Date, endDate?: Date) => {
     if (!startDate || !endDate) return "Dates not available";
@@ -369,9 +402,9 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
   // Combine actual bookings with matches that don't have bookings yet (awaiting signature)
   // This mirrors the exact logic from the listing bookings page
   const allBookingsData = useMemo(() => {
-    // If admin has selected "Mock Data" filter, always show sample data
-    if (isAdmin && selectedFilters.includes('Mock Data')) {
-      console.log('HostDashboardBookingsTab: Admin selected Mock Data, using sample data');
+    // If admin has enabled mock data toggle, always show sample data
+    if (isAdmin && useMockData) {
+      console.log('HostDashboardBookingsTab: Admin enabled mock data, using sample data');
       return sampleBookings;
     }
     
@@ -446,7 +479,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
     console.log('HostDashboardBookingsTab: Combined bookings:', existingBookings.length, 'matches:', matchesAwaitingSignature.length, 'total:', combined.length);
     
     return combined;
-  }, [propBookings, propListings, selectedFilters, isAdmin]);
+  }, [propBookings, propListings, useMockData, isAdmin]);
 
   const bookingsToUse = allBookingsData;
 
@@ -454,8 +487,8 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
   const filteredBookings = useMemo(() => {
     let filtered = bookingsToUse;
     
-    // Apply status filters (exclude Mock Data filter from status filtering)
-    const statusFilters = selectedFilters.filter(filter => filter !== 'Mock Data');
+    // Apply status filters
+    const statusFilters = selectedFilters;
     if (statusFilters.length > 0) {
       filtered = filtered.filter(booking => {
         const statusInfo = getStatusInfo(booking);
@@ -624,104 +657,28 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
         itemLabel: "bookings"
       }}
       emptyStateMessage={bookingsToUse.length === 0 ? "No bookings yet. Your confirmed bookings will appear here." : "No bookings match the selected filters."}
+      showMockDataToggle={true}
+      useMockData={useMockData}
+      onMockDataToggle={setUseMockData}
       noMargin={true}
     >
       {paginatedBookings.map((booking) => {
-            const statusInfo = getStatusInfo(booking);
-            const fullAddress = booking.listing ? 
-              `${booking.listing.streetAddress1 || ""} ${booking.listing.city || ""}, ${booking.listing.state || ""} ${booking.listing.postalCode || ""}` : 
-              "Address not available";
-            const displayAddress = isMobile ? (booking.listing?.streetAddress1 || "Address not available") : fullAddress;
-            
-            return (
-              <Card
-                key={booking.id}
-                className="mb-8 rounded-[5px] border border-solid border-[#6e504933]"
-              >
-                <CardContent className="p-4">
-                  <div className="mb-2">
-                    <div className="flex justify-between">
-                      <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                        {displayAddress}
-                      </h2>
-                      <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl text-right leading-4">
-                        ${booking.monthlyRent?.toLocaleString() || "0"} / Month
-                      </div>
-                    </div>
-
-                    {booking.listing?.title && (
-                      <div className="flex justify-between mt-1">
-                        <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] pl-1 text-[16px] leading-5">
-                          {booking.listing.title}
-                        </div>
-                        <div
-                          className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusInfo.className}`}
-                        >
-                          {statusInfo.label === "Awaiting Signature" ? getSignatureStatusText(booking) : statusInfo.label}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="mt-1">
-                      <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 break-words">
-                        Guest: {formatGuestName(booking.user)} • {formatGuestInfo(booking.trip)} • {formatDateRangeWithFallback(booking.startDate, booking.endDate)}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 mt-8">
-                    <Button
-                      variant="outline"
-                      onClick={() => handleViewBookingDetails(booking)}
-                      disabled={loadingBookingId === booking.id}
-                      className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] flex items-center gap-2"
-                    >
-                      {booking.status === "awaiting_signature" || booking.id.startsWith("match-") ? "View Match Details" : "View Booking Details"}
-                      {loadingBookingId === booking.id && (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      )}
-                    </Button>
-
-                    <MessageGuestDialog
-                      listingId={booking.listingId}
-                      guestName={booking.user ? `${booking.user.firstName} ${booking.user.lastName}` : "Guest"}
-                      guestUserId={booking.userId}
-                      className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                    />
-
-                    {booking.status === "upcoming" && (
-                      <Button
-                        variant="outline"
-                        className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                      >
-                        Send Check-in Info
-                      </Button>
-                    )}
-
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] h-10 w-10 p-2"
-                        >
-                          <MoreHorizontalIcon className="h-5 w-5" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/app/host/${booking.listingId}`} className="cursor-pointer flex items-center gap-2">
-                            <Home className="h-4 w-4" />
-                            Manage Listing
-                          </Link>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+        const cardData = transformBookingForCard(booking, isMobile);
+        
+        return (
+          <div key={booking.id} className="mb-8">
+            <HostBookingCard
+              {...cardData}
+              onBookingDetails={() => handleViewBookingDetails(booking)}
+              onMessageGuest={() => {
+                // Handle message guest action - you may need to implement this
+                console.log('Message guest:', formatGuestName(booking.user));
+              }}
+              className="border border-solid border-[#6e504933]"
+            />
+          </div>
+        );
+      })}
     </TabLayout>
   );
 }

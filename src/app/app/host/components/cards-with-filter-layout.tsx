@@ -154,7 +154,7 @@ export default function TabLayout({
   return (
     <div className={`${isMobile ? '' : noMargin ? '' : APP_PAGE_MARGIN} flex flex-col `}>
       {/* Header with title, search, and filters */}
-      <header ref={headerRef} className={`w-full  ${isMobile ? 'px-4' : ''}`}>
+      <header ref={headerRef} className={`w-full pb-4  ${isMobile ? 'px-4' : ''}`}>
         <div className="flex flex-col gap-6">
           <div className="flex items-end gap-6">
             {actionButton && !isMobile && (
