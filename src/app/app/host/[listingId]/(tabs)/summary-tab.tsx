@@ -560,7 +560,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
   ];
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-0">
 
       {/* Highlights */}
       <Card className="p-6 flex flex-col gap-8 rounded-xl shadow-[0px_0px_5px_#00000029]">
@@ -776,7 +776,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
               <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
                 <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
                   <MapPin className="w-5 h-5 text-gray-500" />
-                  <div className="relative flex-1 mt-[-1.00px] text-md font-normal text-gray-800">
+                  <div className={noLabelStyles}>
                     {formatAddress()}
                   </div>
                 </div>
@@ -797,7 +797,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
             {editingSections['details'] ? (
               <div className="grid grid-cols-3 gap-4 w-full">
-                <div>
+                <div className="text-center">
                   <label className="text-sm font-medium text-gray-700">Bedrooms</label>
                   <div className="flex items-center gap-3 px-3 py-2 mt-1 w-fit mx-auto">
                     <Button
@@ -822,7 +822,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                     </Button>
                   </div>
                 </div>
-                <div>
+                <div className="text-center">
                   <label className="text-sm font-medium text-gray-700">Bathrooms</label>
                   <div className="flex items-center gap-3 px-3 py-2 mt-1 w-fit mx-auto">
                     <Button
@@ -847,7 +847,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                     </Button>
                   </div>
                 </div>
-                <div>
+                <div className="text-center">
                   <label className="text-sm font-medium text-gray-700">Square Feet</label>
                   <Input
                     type="number"
@@ -969,12 +969,10 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   key={item.id}
                   className={`flex flex-col gap-1.5 ${item.width}`}
                 >
-                  <div className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-neutralneutral-700 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
+                  <div className={labelStyles}>
                     {item.label}
                   </div>
-                  <div
-                    className={`${item.valueStyle} font-[number:var(--${item.valueStyle}-font-weight)] text-neutralneutral-900 text-[length:var(--${item.valueStyle}-font-size)] tracking-[var(--${item.valueStyle}-letter-spacing)] leading-[var(--${item.valueStyle}-line-height)] [font-style:var(--${item.valueStyle}-font-style)]`}
-                  >
+                  <div className={valueStyles}>
                     {item.value}
                   </div>
                 </div>
@@ -1028,9 +1026,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                     return (
                       <div key={index} className="flex items-center gap-3 py-1">
                         <div className="w-5 h-5 flex items-center justify-center">
-                          <IconComponent className="w-5 h-5 text-gray-500" />
+                          <IconComponent className={`w-5 h-5 ${labelStyles}`} />
                         </div>
-                        <span className="font-medium text-[#344054] text-base leading-5">
+                        <span className={valueStyles}>
                           {amenity.label}
                         </span>
                       </div>
@@ -1055,7 +1053,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             </div>
           </CardHeader>
 
-          <CardContent className="px-6 py-8 flex justify-center">
+          <CardContent className="px-6 py-8 flex justify-start">
             {editingSections['photos'] ? (
               <div className="w-full space-y-6">
                 {/* Upload Section */}
