@@ -38,7 +38,7 @@ export const Body = (): JSX.Element => {
                             <div className="inline-flex items-center gap-1.5">
                               <label className="inline-flex items-center gap-1.5">
                                 <span className="w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                                  Start Birth
+                                  Start Date
                                 </span>
                               </label>
                               <span className="text-red-500 w-[5.2px] h-1.5">
