@@ -34,6 +34,7 @@ export const Rooms: React.FC<RoomsProps> = ({
           <ListingCreationCounter
             value={bedrooms}
             onChange={onBedroomsChange}
+            monthSuffixClassName="hidden"
           />
         </div>
 
@@ -46,6 +47,7 @@ export const Rooms: React.FC<RoomsProps> = ({
           <ListingCreationCounter
             value={bathrooms}
             onChange={onBathroomsChange}
+            monthSuffixClassName="hidden"
           />
         </div>
 

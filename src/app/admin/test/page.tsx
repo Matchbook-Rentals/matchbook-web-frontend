@@ -6,7 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
-import { PlayIcon, FlaskConical, Globe, Component, Server, FileText } from 'lucide-react'
+import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home } from 'lucide-react'
 import Link from 'next/link'
 
 export default function TestSuitesPage() {
@@ -85,6 +85,13 @@ export default function TestSuitesPage() {
       description: 'Display host payments for specific booking IDs to test payment schedules',
       icon: <FlaskConical className="h-5 w-5" />,
       path: '/admin/test/host-payments'
+    },
+    {
+      id: 'add-property-modal',
+      name: 'Add Property Modal',
+      description: 'Test property creation modal with start options',
+      icon: <Home className="h-5 w-5" />,
+      path: '/admin/test/add-property-modal'
     }
   ]
 

@@ -57,7 +57,11 @@ export async function POST(
     }
 
     // Verify lease is fully signed before capturing payment
-    if (!match.BoldSignLease?.tenantSigned || !match.BoldSignLease?.landlordSigned) {
+    // Check both BoldSignLease completion AND regular lease signatures
+    const isBoldSignLeaseComplete = match.BoldSignLease?.tenantSigned && match.BoldSignLease?.landlordSigned;
+    const isRegularLeaseComplete = match.landlordSignedAt && match.tenantSignedAt;
+    
+    if (!isBoldSignLeaseComplete && !isRegularLeaseComplete) {
       return NextResponse.json({ error: 'Lease must be fully signed before capturing payment' }, { status: 400 });
     }
 

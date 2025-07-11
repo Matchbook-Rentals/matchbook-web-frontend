@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 import { createNotification } from '@/app/actions/notifications';
+import { createBookingFromCompletedMatch } from '@/app/actions/bookings';
 
 interface BoldSignWebhookEvent {
   event: {
@@ -280,27 +281,14 @@ export async function POST(req: Request) {
 
       // If payment is authorized and no booking exists yet, create one
       if (matchWithPayment?.paymentAuthorizedAt && !matchWithPayment.booking) {
-        console.log('Creating booking for fully completed match');
+        console.log('Creating booking for fully completed match using server action');
         
-        try {
-          // Create booking directly with prisma since we don't have auth context
-          const booking = await prisma.booking.create({
-            data: {
-              userId: matchWithPayment.trip.userId,
-              listingId: matchWithPayment.listingId,
-              tripId: matchWithPayment.tripId,
-              matchId: matchWithPayment.id,
-              startDate: matchWithPayment.trip.startDate!,
-              endDate: matchWithPayment.trip.endDate!,
-              monthlyRent: matchWithPayment.monthlyRent,
-              status: 'confirmed'
-            }
-          });
-
-          console.log('✅ Booking created successfully for match:', matchWithPayment.id, 'bookingId:', booking.id);
-          
-        } catch (bookingError) {
-          console.error('❌ Failed to create booking:', bookingError);
+        const result = await createBookingFromCompletedMatch(matchWithPayment.id);
+        
+        if (result.success) {
+          console.log('✅ Booking created successfully via server action:', result.booking?.id);
+        } else {
+          console.error('❌ Failed to create booking via server action:', result.error);
           // Continue with notifications even if booking creation fails
         }
       }

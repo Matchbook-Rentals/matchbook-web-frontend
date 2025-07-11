@@ -268,12 +268,6 @@ export async function getHostBookings() {
             numPets: true,
             numChildren: true
           }
-        },
-        match: {
-          include: {
-            BoldSignLease: true,
-            Lease: true
-          }
         }
       }
     });
@@ -352,6 +346,92 @@ export async function getHostDashboardData() {
   }
 }
 
+// Create booking from completed match (for webhooks - no auth required)
+export async function createBookingFromCompletedMatch(matchId: string) {
+  try {
+    console.log('Creating booking from completed match:', matchId);
+    
+    // Get the match with all required data
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        trip: true,
+        listing: true,
+        booking: true
+      }
+    });
+
+    if (!match) {
+      throw new Error(`Match ${matchId} not found`);
+    }
+
+    // Check if booking already exists
+    if (match.booking) {
+      console.log('Booking already exists for match:', matchId);
+      return { success: true, booking: match.booking };
+    }
+
+    // Verify payment is authorized
+    if (!match.paymentAuthorizedAt) {
+      throw new Error('Payment not authorized for this match');
+    }
+
+    // Create the booking
+    const booking = await prisma.booking.create({
+      data: {
+        userId: match.trip.userId,
+        listingId: match.listingId,
+        tripId: match.tripId,
+        matchId: match.id,
+        startDate: match.trip.startDate!,
+        endDate: match.trip.endDate!,
+        monthlyRent: match.monthlyRent,
+        status: 'confirmed'
+      }
+    });
+
+    console.log('✅ Booking created:', booking.id);
+
+    // Generate rent payments schedule if we have payment method
+    if (match.stripePaymentMethodId && match.monthlyRent) {
+      const rentPayments = generateRentPayments(
+        booking.id,
+        match.monthlyRent,
+        match.trip.startDate!,
+        match.trip.endDate!,
+        match.stripePaymentMethodId
+      );
+
+      if (rentPayments.length > 0) {
+        await prisma.rentPayment.createMany({
+          data: rentPayments
+        });
+        console.log(`✅ Created ${rentPayments.length} rent payments for booking:`, booking.id);
+      }
+    }
+
+    // Create notification for the host
+    await createNotification({
+      actionType: 'booking',
+      actionId: booking.id,
+      content: `You have a new booking for ${match.listing.title} from ${new Date(match.trip.startDate!).toLocaleDateString()} to ${new Date(match.trip.endDate!).toLocaleDateString()}`,
+      url: `/app/host-dashboard/${match.listing.id}?tab=bookings`,
+      unread: true,
+      userId: match.listing.userId,
+    });
+
+    console.log('✅ Host booking notification sent');
+
+    return { success: true, booking };
+  } catch (error) {
+    console.error('❌ Error creating booking from completed match:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
+}
+
 // Get bookings for a specific listing (host must own the listing)
 export async function getBookingsByListingId(listingId: string) {
   try {
@@ -405,12 +485,6 @@ export async function getBookingsByListingId(listingId: string) {
             numAdults: true,
             numPets: true,
             numChildren: true
-          }
-        },
-        match: {
-          include: {
-            BoldSignLease: true,
-            Lease: true
           }
         }
       }
@@ -503,12 +577,31 @@ export async function markMoveInComplete(bookingId: string) {
 export async function getAllHostBookings() {
   try {
     const { userId } = auth();
+    console.log('🔍 getAllHostBookings - Auth userId:', userId);
+    console.log('🔍 getAllHostBookings - Auth userId type:', typeof userId);
+    
     if (!userId) {
-      console.log('No userId found in auth for getAllHostBookings');
+      console.log('❌ No userId found in auth for getAllHostBookings');
       return { bookings: [], readyMatches: [] };
     }
 
-    console.log('Fetching all host bookings and ready matches for userId:', userId);
+    console.log('✅ Fetching all host bookings and ready matches for userId:', userId);
+    
+    // Debug: Check if this user actually has any listings
+    const userListingCount = await prisma.listing.count({
+      where: { userId: userId }
+    });
+    console.log('📊 User has', userListingCount, 'listings');
+    
+    // Debug: Check if there are any bookings for this user's listings
+    const userBookingCount = await prisma.booking.count({
+      where: { 
+        listing: {
+          userId: userId
+        }
+      }
+    });
+    console.log('📊 User has', userBookingCount, 'bookings for their listings');
 
     // Get existing bookings
     const bookings = await prisma.booking.findMany({
@@ -541,12 +634,6 @@ export async function getAllHostBookings() {
             numAdults: true,
             numPets: true,
             numChildren: true
-          }
-        },
-        match: {
-          include: {
-            BoldSignLease: true,
-            Lease: true
           }
         }
       }
@@ -598,7 +685,10 @@ export async function getAllHostBookings() {
       }
     });
 
-    console.log('Found bookings:', bookings.length, 'ready matches:', readyMatches.length);
+    console.log('📊 FINAL RESULTS - Found bookings:', bookings.length, 'ready matches:', readyMatches.length);
+    console.log('🔍 Booking IDs found:', bookings.map(b => b.id));
+    console.log('🔍 Ready match IDs found:', readyMatches.map(m => m.id));
+    
     return { bookings, readyMatches };
   } catch (error) {
     console.error('Error in getAllHostBookings:', error);
