@@ -447,6 +447,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
                 // Handle message guest action - you may need to implement this
                 console.log('Message guest:', app.name);
               }}
+              onManageListing={() => router.push(`/app/host/${app.listingId}/summary`)}
               className="border border-solid border-[#6e504933]"
             />
           </div>

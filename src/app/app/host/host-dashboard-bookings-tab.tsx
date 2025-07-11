@@ -649,6 +649,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
                 // Handle message guest action - you may need to implement this
                 console.log('Message guest:', formatGuestName(booking.user));
               }}
+              onManageListing={() => router.push(`/app/host/${booking.listingId}/summary`)}
               className="border border-solid border-[#6e504933]"
             />
           </div>

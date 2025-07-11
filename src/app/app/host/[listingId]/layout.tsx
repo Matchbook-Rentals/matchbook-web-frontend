@@ -65,12 +65,12 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       icon: "MessageSquare",
     },
     {
-      title: "Listing Details",
+      title: "Payments",
       url: `/app/host/${listingId}/payments`,
       icon: "CreditCard",
     },
     {
-      title: "Payments",
+      title: "Listing Details",
       url: `/app/host/${listingId}/summary`,
       icon: "Settings",
     },

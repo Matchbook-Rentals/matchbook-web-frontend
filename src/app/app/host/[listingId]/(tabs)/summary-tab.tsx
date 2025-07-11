@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ListingAndImages } from '@/types';
+import { useListingDashboard } from '../listing-dashboard-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -77,6 +78,7 @@ interface SummaryTabProps {
 }
 
 const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => {
+  const { updateListing: updateContextListing } = useListingDashboard();
   // Edit state management
   const [editingSections, setEditingSections] = useState<Record<string, boolean>>({});
   const [formData, setFormData] = useState(listing);
@@ -168,6 +170,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         // Update the current listing with the new data
         const updatedListing = { ...currentListing, ...updateData };
         setCurrentListing(updatedListing);
+        
+        // Update the context with the new listing data
+        updateContextListing(updatedListing);
         
         // Call the optional callback to update parent component
         if (onListingUpdate) {

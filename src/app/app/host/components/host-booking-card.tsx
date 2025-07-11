@@ -1,4 +1,4 @@
-import { MapPinIcon, MoreVertical, X } from "lucide-react";
+import { MapPinIcon, MoreVertical, Home } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ interface HostBookingCardProps {
   profileImage?: string;
   onBookingDetails?: () => void;
   onMessageGuest?: () => void;
-  onRejectApplication?: () => void;
+  onManageListing?: () => void;
   className?: string;
 }
 
@@ -38,7 +38,7 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
   profileImage = "/image-35.png",
   onBookingDetails,
   onMessageGuest,
-  onRejectApplication,
+  onManageListing,
   className = "",
 }) => {
 
@@ -134,10 +134,10 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
                   <Button
                     variant="ghost"
                     className="w-full justify-start gap-2"
-                    onClick={onRejectApplication}
+                    onClick={onManageListing}
                   >
-                    <X className="w-4 h-4" />
-                    Reject Application
+                    <Home className="w-4 h-4" />
+                    Manage Listing
                   </Button>
                 </PopoverContent>
               </Popover>
