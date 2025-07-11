@@ -186,3 +186,75 @@ export function getFileUrl(fileKey: string): string {
     ? `https://${appId}.ufs.sh/f/${fileKey}` 
     : `https://utfs.io/f/${fileKey}`;
 }
+
+/**
+ * Generates user initials from first and last name
+ * @param firstName - User's first name
+ * @param lastName - User's last name
+ * @param email - User's email (fallback if names not available)
+ * @returns User initials (up to 2 characters)
+ */
+export function getUserInitials(firstName?: string | null, lastName?: string | null, email?: string | null): string {
+  if (firstName && lastName) {
+    return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+  }
+  
+  if (firstName) {
+    return firstName.charAt(0).toUpperCase();
+  }
+  
+  if (lastName) {
+    return lastName.charAt(0).toUpperCase();
+  }
+  
+  if (email) {
+    return email.charAt(0).toUpperCase();
+  }
+  
+  return 'U'; // Default fallback
+}
+
+/**
+ * Generates a placeholder image URL with user initials
+ * @param firstName - User's first name
+ * @param lastName - User's last name  
+ * @param email - User's email (fallback if names not available)
+ * @param size - Image size (default: 400)
+ * @param bgColor - Background color hex without # (default: 0B6E6E)
+ * @param textColor - Text color hex without # (default: FFF)
+ * @returns Placeholder image URL
+ */
+export function getInitialsPlaceholder(
+  firstName?: string | null, 
+  lastName?: string | null, 
+  email?: string | null,
+  size: number = 400,
+  bgColor: string = '0B6E6E',
+  textColor: string = 'FFF'
+): string {
+  const initials = getUserInitials(firstName, lastName, email);
+  return `https://placehold.co/${size}x${size}/${bgColor}/${textColor}?text=${encodeURIComponent(initials)}`;
+}
+
+/**
+ * Gets the appropriate image URL with fallback to initials placeholder
+ * @param imageUrl - The user's profile image URL
+ * @param firstName - User's first name
+ * @param lastName - User's last name
+ * @param email - User's email (fallback if names not available)
+ * @param size - Placeholder image size (default: 400)
+ * @returns Image URL or placeholder with initials
+ */
+export function getImageWithFallback(
+  imageUrl?: string | null,
+  firstName?: string | null,
+  lastName?: string | null,
+  email?: string | null,
+  size: number = 400
+): string {
+  if (imageUrl) {
+    return imageUrl;
+  }
+  
+  return getInitialsPlaceholder(firstName, lastName, email, size);
+}

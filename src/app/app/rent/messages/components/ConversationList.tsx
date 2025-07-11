@@ -9,6 +9,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getImageWithFallback } from '@/lib/utils';
+import { AvatarWithFallback } from '@/components/ui/avatar-with-fallback';
 
 // Define the conversation participant structure
 interface ConversationParticipant {
@@ -68,6 +70,37 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
+    // Check if this is a support conversation (conversation name starts with "Ticket:")
+    if (conv.name && conv.name.startsWith('Ticket:')) {
+      // For support conversations, show "Customer Support" for users and user's first name for support staff
+      const otherParticipant = conv.participants.find(
+        p => p.User.id !== currentUser.id
+      );
+
+      if (!otherParticipant) {
+        return { displayName: "Customer Support", imageUrl: "" };
+      }
+
+      const { User } = otherParticipant;
+      
+      // If the other participant is support staff (role contains 'Support'), show "Customer Support"
+      if (otherParticipant.role === 'Support') {
+        return {
+          displayName: "Customer Support",
+          imageUrl: getImageWithFallback(User.imageUrl, User.firstName, User.lastName, User.email, 400)
+        };
+      }
+      
+      // If current user is support staff viewing user, show only first name
+      const currentUserParticipant = conv.participants.find(p => p.User.id === currentUser.id);
+      if (currentUserParticipant?.role === 'Support') {
+        return {
+          displayName: User.firstName || User.email || "User",
+          imageUrl: getImageWithFallback(User.imageUrl, User.firstName, User.lastName, User.email, 400)
+        };
+      }
+    }
+
     // Find the other participant in the conversation
     const otherParticipant = conv.participants.find(
       p => p.User.id !== currentUser.id
@@ -84,7 +117,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
     return {
       displayName,
-      imageUrl: User.imageUrl || ""
+      imageUrl: getImageWithFallback(User.imageUrl, User.firstName, User.lastName, User.email, 400)
     };
   };
 
@@ -257,6 +290,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
               ? conv.messages[conv.messages.length - 1]
               : null;
 
+            // Get user info for fallback
+            const otherParticipant = conv.participants.find(p => p.User.id !== user.id);
+            const participantUser = otherParticipant?.User;
+
             return (
               <div
                 key={conv.id}
@@ -265,10 +302,14 @@ const ConversationList: React.FC<ConversationListProps> = ({
               >
                 <div className="p-3 flex items-center h-full w-full">
                   <div className="relative flex-shrink-0">
-                    <img
-                      src={imageUrl || "/placeholder-avatar.png"}
-                      className="w-11 h-11 aspect-square object-cover rounded-full mr-3"
+                    <AvatarWithFallback
+                      src={participantUser?.imageUrl}
+                      firstName={participantUser?.firstName}
+                      lastName={participantUser?.lastName}
+                      email={participantUser?.email}
                       alt={displayName}
+                      className="w-11 h-11 aspect-square object-cover rounded-full mr-3"
+                      size={100}
                     />
                     {/* Use the isUnread prop for the indicator */}
                     {conv.isUnread && (

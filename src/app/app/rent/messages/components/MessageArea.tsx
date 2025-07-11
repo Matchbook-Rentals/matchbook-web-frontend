@@ -3,7 +3,7 @@ import { Download } from 'lucide-react';
 import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FilePreview } from '@/components/ui/file-preview';
-import { isImageFile } from '@/lib/utils';
+import { isImageFile, getImageWithFallback } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from '@/components/ui/button';
 import MessageList from './MessageList';
@@ -304,6 +304,36 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       return { displayName: "Unknown", imageUrl: "" };
     }
 
+    // Check if this is a support conversation (conversation name starts with "Ticket:")
+    if (selectedConversation.name && selectedConversation.name.startsWith('Ticket:')) {
+      const otherParticipant = selectedConversation.participants.find(
+        (p: any) => p.User.id !== currentUserId
+      );
+
+      if (!otherParticipant) {
+        return { displayName: "Customer Support", imageUrl: "" };
+      }
+
+      const { User } = otherParticipant;
+      
+      // If the other participant is support staff, show "Customer Support"
+      if (otherParticipant.role === 'Support') {
+        return {
+          displayName: "Customer Support",
+          imageUrl: getImageWithFallback(User.imageUrl, User.firstName, User.lastName, User.email, 400)
+        };
+      }
+      
+      // If current user is support staff viewing user, show only first name
+      const currentUserParticipant = selectedConversation.participants.find((p: any) => p.User.id === currentUserId);
+      if (currentUserParticipant?.role === 'Support') {
+        return {
+          displayName: User.firstName || User.email || "User",
+          imageUrl: getImageWithFallback(User.imageUrl, User.firstName, User.lastName, User.email, 400)
+        };
+      }
+    }
+
     const otherParticipant = selectedConversation.participants.find(
       (p: any) => p.User.id !== currentUserId
     );
@@ -327,11 +357,22 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     return {
       displayName,
-      imageUrl: User.imageUrl || "/placeholder-avatar.png"
+      imageUrl: getImageWithFallback(User.imageUrl, User.firstName, User.lastName, User.email, 400)
     };
   };
 
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
+  
+  // Get participant user info for avatar fallback
+  const getParticipantUser = () => {
+    if (!selectedConversation || !selectedConversation.participants) return null;
+    const otherParticipant = selectedConversation.participants.find(
+      (p: any) => p.User.id !== currentUserId
+    );
+    return otherParticipant?.User || null;
+  };
+  
+  const participantUser = selectedConversation ? getParticipantUser() : null;
 
   const downloadFile = (url: string, fileName: string) => {
     const link = document.createElement('a');
@@ -405,6 +446,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
+          participantUser={participantUser}
           onBack={onBack}
           isMobile={isMobile}
           handleBackClick={handleBackClick}
@@ -432,6 +474,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               currentUserId={currentUserId}
               selectedConversation={selectedConversation}
               participantInfo={participantInfo}
+              participantUser={participantUser}
               isOtherUserTyping={isOtherUserTyping}
               handleFileClick={handleFileClick}
             />

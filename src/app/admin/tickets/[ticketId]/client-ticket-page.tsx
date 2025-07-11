@@ -14,6 +14,8 @@ import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { getImageWithFallback } from '@/lib/utils';
+import { AvatarWithFallback } from '@/components/ui/avatar-with-fallback';
 
 interface ClientTicketPageProps {
   ticket: any;
@@ -392,13 +394,15 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
                   <div className="flex items-center gap-2 mt-1">
                     {ticket.user ? (
                       <>
-                        {ticket.user.imageUrl && (
-                          <img 
-                            src={ticket.user.imageUrl} 
-                            alt={`${ticket.user.firstName} ${ticket.user.lastName}`}
-                            className="w-6 h-6 rounded-full"
-                          />
-                        )}
+                        <AvatarWithFallback
+                          src={ticket.user.imageUrl}
+                          firstName={ticket.user.firstName}
+                          lastName={ticket.user.lastName}
+                          email={ticket.user.email}
+                          alt={`${ticket.user.firstName} ${ticket.user.lastName}`}
+                          className="w-6 h-6 rounded-full"
+                          size={100}
+                        />
                         <span>{ticket.user.firstName} {ticket.user.lastName}</span>
                       </>
                     ) : (

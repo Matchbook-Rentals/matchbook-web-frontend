@@ -4,6 +4,7 @@ import Image from "next/image";
 import { isImageFile } from '@/lib/utils';
 import { FilePreview } from '@/components/ui/file-preview';
 import { AttachmentCarouselDialog } from '@/components/ui/attachment-carousel-dialog';
+import { AvatarWithFallback } from '@/components/ui/avatar-with-fallback';
 
 interface MessageFile {
   url: string;
@@ -18,6 +19,11 @@ interface MessageListProps {
   currentUserId: string | undefined;
   selectedConversation: any;
   participantInfo: { displayName: string; imageUrl: string };
+  participantUser?: {
+    firstName?: string | null;
+    lastName?: string | null;
+    email?: string | null;
+  } | null;
   isOtherUserTyping?: boolean;
   handleFileClick: (file: MessageFile) => void;
 }
@@ -27,6 +33,7 @@ const MessageList: React.FC<MessageListProps> = ({
   currentUserId,
   selectedConversation,
   participantInfo,
+  participantUser,
   isOtherUserTyping = false,
   handleFileClick
 }) => {
@@ -276,10 +283,14 @@ const MessageList: React.FC<MessageListProps> = ({
             <div className={`flex ${justifyClass}`}>
               {showAvatar && (
                 <div className="relative self-end">
-                  <img
+                  <AvatarWithFallback
                     src={participantInfo.imageUrl}
+                    firstName={participantUser?.firstName}
+                    lastName={participantUser?.lastName}
+                    email={participantUser?.email}
                     alt="Profile"
                     className="w-9 h-9 rounded-full object-cover mr-2"
+                    size={100}
                   />
                 </div>
               )}
@@ -462,10 +473,14 @@ const MessageList: React.FC<MessageListProps> = ({
       {isOtherUserTyping && (
         <div className="flex justify-start mb-4 mt-4">
           <div className="relative">
-            <img
+            <AvatarWithFallback
               src={participantInfo.imageUrl}
+              firstName={participantUser?.firstName}
+              lastName={participantUser?.lastName}
+              email={participantUser?.email}
               alt="Profile"
               className="w-9 h-9 rounded-full mr-3 absolute bottom-[-12px]"
+              size={100}
             />
             <div className="w-8 mr-3" />
           </div>

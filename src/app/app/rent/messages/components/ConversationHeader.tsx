@@ -3,6 +3,7 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { UserRating } from '@/components/reviews/host-review';
+import { AvatarWithFallback } from '@/components/ui/avatar-with-fallback';
 
 interface ConversationHeaderProps {
   selectedConversation: any;
@@ -10,6 +11,11 @@ interface ConversationHeaderProps {
     displayName: string;
     imageUrl: string;
   };
+  participantUser?: {
+    firstName?: string | null;
+    lastName?: string | null;
+    email?: string | null;
+  } | null;
   onBack?: () => void;
   isMobile: boolean;
   handleBackClick: () => void;
@@ -18,6 +24,7 @@ interface ConversationHeaderProps {
 const ConversationHeader: React.FC<ConversationHeaderProps> = ({
   selectedConversation,
   participantInfo,
+  participantUser,
   onBack,
   isMobile,
   handleBackClick
@@ -36,10 +43,14 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
             </button>
           )}
           <div className="flex items-center justify-center w-fit md:justify-start md:pl-[calc(2.5vw+7px)]">
-            <img
+            <AvatarWithFallback
               src={participantInfo.imageUrl}
+              firstName={participantUser?.firstName}
+              lastName={participantUser?.lastName}
+              email={participantUser?.email}
               alt={participantInfo.displayName}
               className="w-12 h-12 aspect-square rounded-full object-cover mr-4"
+              size={100}
             />
             <div className="flex justify-between w-full gap-4">
               <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-tight">
