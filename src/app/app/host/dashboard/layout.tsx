@@ -94,7 +94,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
             <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-1 flex-col gap-4">
           {children}
         </div>
       </SidebarInset>

@@ -253,9 +253,9 @@ const transformApplicationForCard = (app: any, listing: ListingAndImages, isMobi
   // Parse occupants string to create occupant objects
   const occupantsParts = app.occupants.split(', ');
   const occupants = [
-    { type: "Adult", count: parseInt(occupantsParts[0]?.split(' ')[0] || '0'), icon: "/adultl.svg" },
-    { type: "Kid", count: parseInt(occupantsParts[1]?.split(' ')[0] || '0'), icon: "/kid.svg" },
-    { type: "pet", count: parseInt(occupantsParts[2]?.split(' ')[0] || '0'), icon: "/pet.svg" },
+    { type: "Adult", count: parseInt(occupantsParts[0]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/adult.svg" },
+    { type: "Kid", count: parseInt(occupantsParts[1]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/kid.svg" },
+    { type: "pet", count: parseInt(occupantsParts[2]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/pet.svg" },
   ];
 
   return {

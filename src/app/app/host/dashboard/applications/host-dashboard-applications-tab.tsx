@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RequestWithUser } from '@/types';
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
-import TabLayout from "./components/cards-with-filter-layout";
+import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useNavigationContent } from "./[listingId]/useNavigationContent";
+import { useNavigationContent } from "../../[listingId]/useNavigationContent";
 import { useUser } from "@clerk/nextjs";
-import { HostApplicationCard } from "./components/host-application-card";
+import { HostApplicationCard } from "../../components/host-application-card";
 
 // Base filter options
 const baseFilterOptions = [
@@ -81,12 +81,12 @@ const sampleHousingRequests: RequestWithUser[] = [
     },
     trip: {
       id: "trip-001",
-      locationString: "San Francisco, CA",
-      latitude: 37.7749,
-      longitude: -122.4194,
-      city: "San Francisco",
-      state: "CA",
-      postalCode: "94102",
+      locationString: "New York, NY",
+      latitude: 40.7128,
+      longitude: -74.0060,
+      city: "New York",
+      state: "NY",
+      postalCode: "10001",
       createdAt: new Date(),
       updatedAt: new Date(),
       isSponsored: false,
@@ -102,10 +102,10 @@ const sampleHousingRequests: RequestWithUser[] = [
     },
     listing: {
       title: "Modern Downtown Loft",
-      streetAddress1: "123 Main Street",
-      city: "San Francisco",
-      state: "CA",
-      postalCode: "94102"
+      streetAddress1: "123 Broadway",
+      city: "New York",
+      state: "NY",
+      postalCode: "10001"
     }
   },
   {
@@ -142,12 +142,12 @@ const sampleHousingRequests: RequestWithUser[] = [
     },
     trip: {
       id: "trip-002",
-      locationString: "San Francisco, CA",
-      latitude: 37.7749,
-      longitude: -122.4194,
-      city: "San Francisco",
+      locationString: "Los Angeles, CA",
+      latitude: 34.0522,
+      longitude: -118.2437,
+      city: "Los Angeles",
       state: "CA",
-      postalCode: "94117",
+      postalCode: "90210",
       createdAt: new Date(),
       updatedAt: new Date(),
       isSponsored: false,
@@ -162,11 +162,11 @@ const sampleHousingRequests: RequestWithUser[] = [
       userId: "user-002"
     },
     listing: {
-      title: "Cozy Studio Near Park",
-      streetAddress1: "456 Oak Avenue",
-      city: "San Francisco",
+      title: "Cozy Studio Near Beach",
+      streetAddress1: "456 Sunset Boulevard",
+      city: "Los Angeles",
       state: "CA",
-      postalCode: "94117"
+      postalCode: "90210"
     }
   },
   {
@@ -203,12 +203,12 @@ const sampleHousingRequests: RequestWithUser[] = [
     },
     trip: {
       id: "trip-003",
-      locationString: "San Francisco, CA",
-      latitude: 37.7749,
-      longitude: -122.4194,
-      city: "San Francisco",
-      state: "CA",
-      postalCode: "94103",
+      locationString: "Chicago, IL",
+      latitude: 41.8781,
+      longitude: -87.6298,
+      city: "Chicago",
+      state: "IL",
+      postalCode: "60601",
       createdAt: new Date(),
       updatedAt: new Date(),
       isSponsored: false,
@@ -224,71 +224,10 @@ const sampleHousingRequests: RequestWithUser[] = [
     },
     listing: {
       title: "Spacious 2BR Apartment",
-      streetAddress1: "789 Market Street",
-      city: "San Francisco",
-      state: "CA",
-      postalCode: "94103"
-    }
-  },
-  {
-    id: "request-004",
-    userId: "user-004",
-    listingId: "listing-001",
-    tripId: "trip-004",
-    startDate: new Date("2025-02-15"),
-    endDate: new Date("2025-08-15"),
-    status: "pending",
-    createdAt: new Date("2025-01-07"),
-    updatedAt: new Date("2025-01-07"),
-    user: {
-      id: "user-004",
-      email: "emily.w@example.com",
-      firstName: "Emily",
-      lastName: "Wilson",
-      imageUrl: "https://placehold.co/600x400/0B6E6E/FFF?text=EW",
-      emailVerified: null,
-      isAdmin: false,
-      isHost: false,
-      isBeta: false,
-      isSeeded: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      stripeAccountId: null,
-      stripeAccountStatus: null,
-      stripeCustomerId: null,
-      showRentEasyFlow: false,
-      notificationPreferences: null,
-      preferredPropertyTypes: [],
-      phoneNumber: null,
-      role: "renter"
-    },
-    trip: {
-      id: "trip-004",
-      locationString: "San Francisco, CA",
-      latitude: 37.7749,
-      longitude: -122.4194,
-      city: "San Francisco",
-      state: "CA",
-      postalCode: "94102",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      isSponsored: false,
-      sponsorID: null,
-      startDate: new Date("2025-02-15"),
-      endDate: new Date("2025-08-15"),
-      numAdults: 2,
-      numPets: 2,
-      numChildren: 0,
-      minPrice: 3500,
-      maxPrice: 4500,
-      userId: "user-004"
-    },
-    listing: {
-      title: "Modern Downtown Loft",
-      streetAddress1: "123 Main Street",
-      city: "San Francisco",
-      state: "CA",
-      postalCode: "94102"
+      streetAddress1: "789 Michigan Avenue",
+      city: "Chicago",
+      state: "IL",
+      postalCode: "60601"
     }
   }
 ];
@@ -461,6 +400,12 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
         // Search in listing title
         if (app.listing?.title?.toLowerCase().includes(searchLower)) return true;
         
+        // Search in listing address
+        if (app.listing?.streetAddress1?.toLowerCase().includes(searchLower)) return true;
+        if (app.listing?.city?.toLowerCase().includes(searchLower)) return true;
+        if (app.listing?.state?.toLowerCase().includes(searchLower)) return true;
+        if (app.listing?.postalCode?.toLowerCase().includes(searchLower)) return true;
+        
         return false;
       });
     }
@@ -478,7 +423,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     <TabLayout
       title="Applications"
       subtitle="Applications for all your listings"
-      searchPlaceholder="Search by guest name"
+      searchPlaceholder="Search by guest name or address"
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
       defaultFilter="pending"
