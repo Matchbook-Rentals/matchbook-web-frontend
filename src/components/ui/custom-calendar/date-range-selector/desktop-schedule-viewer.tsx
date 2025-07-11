@@ -170,7 +170,7 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
         <button
           onClick={onPrevMonth}
           disabled={isPrevDisabled}
-          className={`text-sm px-2 py-1 hover:bg-gray-100 rounded-md ${isPrevDisabled
+          className={`text-sm px-2 focus:outline-none focus-visible:outline-black py-1 hover:bg-gray-100 rounded-md ${isPrevDisabled
             ? 'text-gray-300 cursor-not-allowed hover:bg-transparent'
             : 'text-gray-600 hover:text-gray-900'
             }`}
@@ -212,7 +212,7 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
         
         <button
           onClick={onNextMonth}
-          className="text-sm text-gray-600 hover:text-gray-900 px-2 py-1 hover:bg-gray-100 rounded-md"
+          className="text-sm text-gray-600 focus:outline-none focus-visible:outline-black hover:text-gray-900 px-2 py-1 hover:bg-gray-100 rounded-md"
         >
           Next
         </button>
