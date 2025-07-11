@@ -17,7 +17,11 @@ export const fetchListingsFromDb = async () => {
       },
       include: {
         bedrooms: true,
-        listingImages: true,
+        listingImages: {
+          orderBy: {
+            rank: 'asc'
+          }
+        },
       },
       take: 100,
       orderBy: {

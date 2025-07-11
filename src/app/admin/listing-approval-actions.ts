@@ -75,7 +75,11 @@ export async function getListingDetails(listingId: string) {
           email: true
         }
       },
-      listingImages: true,
+      listingImages: {
+        orderBy: {
+          rank: 'asc'
+        }
+      },
       bedrooms: true
     }
   })

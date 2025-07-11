@@ -133,7 +133,11 @@ export const pullListingsFromDb = async (
         ]
       },
       include: {
-        listingImages: true,
+        listingImages: {
+          orderBy: {
+            rank: 'asc'
+          }
+        },
         bedrooms: true,
         unavailablePeriods: true,
         user: true,
@@ -259,7 +263,13 @@ export const updateListingPhotos = async (listingId: string, photos: Array<{id: 
     // Return updated listing with photos
     const updatedListing = await prisma.listing.findUnique({
       where: { id: listingId },
-      include: { listingImages: true }
+      include: { 
+        listingImages: {
+          orderBy: {
+            rank: 'asc'
+          }
+        }
+      }
     });
 
     return updatedListing;
@@ -336,7 +346,11 @@ export const getListingById = async (listingId: string): Promise<ListingAndImage
     const listing = await prisma.listing.findUnique({
       where: { id: listingId },
       include: {
-        listingImages: true,
+        listingImages: {
+          orderBy: {
+            rank: 'asc'
+          }
+        },
         bedrooms: true,
         unavailablePeriods: true,
         user: true,
@@ -418,7 +432,11 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
         status: { not: "draft" } // Exclude draft listings
       },
       include: {
-        listingImages: true,
+        listingImages: {
+          orderBy: {
+            rank: 'asc'
+          }
+        },
         bedrooms: true,
         unavailablePeriods: true,
         user: true,

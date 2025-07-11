@@ -156,7 +156,11 @@ export async function getMatchById(matchId: string) {
       include: {
         listing: {
           include: {
-            listingImages: true,
+            listingImages: {
+              orderBy: {
+                rank: 'asc'
+              }
+            },
             user: true,
             bedrooms: true,
           }

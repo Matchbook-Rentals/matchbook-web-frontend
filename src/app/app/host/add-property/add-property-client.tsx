@@ -326,6 +326,15 @@ const [listingBasics, setListingBasics] = useState({
         }
       }
 
+      // Assign ranks to any remaining photos with null ranks
+      const maxRank = Math.max(0, ...listingImagesFinal.filter(p => p.rank !== null).map(p => p.rank!));
+      let nextRank = maxRank + 1;
+      listingImagesFinal.forEach(photo => {
+        if (photo.rank === null) {
+          photo.rank = nextRank++;
+        }
+      });
+
       // Prepare draft data
       const draftData = {
         id: draftId || undefined, // Include ID if updating existing draft
@@ -817,6 +826,15 @@ const [listingBasics, setListingBasics] = useState({
         }
       }
 
+      // Assign ranks to any remaining photos with null ranks
+      const maxRank = Math.max(0, ...listingImagesFinal.filter(p => p.rank !== null).map(p => p.rank!));
+      let nextRank = maxRank + 1;
+      listingImagesFinal.forEach(photo => {
+        if (photo.rank === null) {
+          photo.rank = nextRank++;
+        }
+      });
+
       // Sort photos: ranked photos first (in ascending order), then unranked photos
       listingImagesFinal.sort((a, b) => {
         if (a.rank === null && b.rank === null) return 0;
@@ -825,7 +843,7 @@ const [listingBasics, setListingBasics] = useState({
         return a.rank - b.rank;
       });
 
-      let listingImagesSorted = listingImagesFinal.sort()
+      let listingImagesSorted = listingImagesFinal
 
       try {
         // Prepare listing data with selected photos
@@ -834,9 +852,9 @@ const [listingBasics, setListingBasics] = useState({
           description: listingBasics.description,
           status: "available", // Default status for new listings
           // Use the correct property name that matches the Prisma schema
-          listingImages: listingImagesSorted.map((photo, index) => ({
+          listingImages: listingImagesSorted.map((photo) => ({
             url: photo.url,
-            rank: index // Use the order of selectedPhotos for ranking
+            rank: photo.rank // Use the assigned rank
           })),
           // Listing location fields
           locationString: listingLocation.locationString,
@@ -880,9 +898,9 @@ const [listingBasics, setListingBasics] = useState({
         const endpoint = draftId ? '/api/listings/draft/submit' : '/api/listings/create';
         const payload = draftId ? {
           draftId,
-          listingImages: listingImagesSorted.map((photo, index) => ({
+          listingImages: listingImagesSorted.map((photo) => ({
             url: photo.url,
-            rank: index
+            rank: photo.rank
           })),
           monthlyPricing: listingPricing.monthlyPricing.map(p => ({
             months: p.months,
