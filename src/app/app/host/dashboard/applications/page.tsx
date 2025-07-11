@@ -1,6 +1,6 @@
 import React from "react";
 import { getHostHousingRequests } from "@/app/actions/housing-requests";
-import HostDashboardApplicationsTab from "./host-dashboard-applications-tab";
+import HostDashboardApplicationsTab from "../../host-dashboard-applications-tab";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
 

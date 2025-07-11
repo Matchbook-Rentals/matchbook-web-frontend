@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RequestWithUser } from '@/types';
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
-import TabLayout from "../../components/cards-with-filter-layout";
+import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useNavigationContent } from "../../[listingId]/useNavigationContent";
+import { useNavigationContent } from "./[listingId]/useNavigationContent";
 import { useUser } from "@clerk/nextjs";
-import { HostApplicationCard } from "../../components/host-application-card";
+import { HostApplicationCard } from "./components/host-application-card";
 
 // Base filter options
 const baseFilterOptions = [
