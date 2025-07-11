@@ -10,14 +10,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon } from 'lucide-react';
+import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2 } from 'lucide-react';
 import Tile from '@/components/ui/tile';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { updateListing } from '@/app/actions/listings';
+import { updateListing, updateListingPhotos } from '@/app/actions/listings';
 import { toast } from '@/components/ui/use-toast';
 import { PropertyType } from '@/constants/enums';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { iconAmenities } from '@/lib/amenities-list';
+import { UploadButton } from "@/app/utils/uploadthing";
 
 // Amenity options grouped by category (same as listing creation)
 const AMENITY_GROUPS = [
@@ -79,12 +80,21 @@ interface SummaryTabProps {
 
 const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => {
   const { updateListing: updateContextListing } = useListingDashboard();
+  
+  // Shared style constants
+  const sectionHeaderStyles = "text-2xl font-semibold text-gray-900";
+  const labelStyles = "text-md font-normal text-gray-500";
+  const valueStyles = "text-md font-medium text-gray-900";
+  const noLabelStyles = "text-md font-normal text-gray-500";
   // Edit state management
   const [editingSections, setEditingSections] = useState<Record<string, boolean>>({});
   const [formData, setFormData] = useState(listing);
   const [currentListing, setCurrentListing] = useState(listing);
   const [isSaving, setIsSaving] = useState(false);
   const [buttonStates, setButtonStates] = useState<Record<string, 'saving' | 'success' | 'failed' | null>>({});
+  const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
+  const [dragOverTrash, setDragOverTrash] = useState(false);
+  const [dropPreviewIndex, setDropPreviewIndex] = useState<number | null>(null);
 
   // Define which fields belong to each section
   const sectionFields: Record<string, string[]> = {
@@ -94,11 +104,25 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     pricing: ['shortestLeasePrice', 'longestLeasePrice', 'shortestLeaseLength', 'longestLeaseLength', 'depositSize'],
     amenities: ['wifi', 'parking', 'kitchen', 'laundryFacilities', 'airConditioner', 'heater', 'dedicatedWorkspace', 'wheelchairAccess', 'security', 'alarmSystem', 'gatedEntry', 'smokeDetector', 'carbonMonoxide', 'waterfront', 'beachfront', 'mountainView', 'cityView', 'waterView', 'dishwasher', 'fridge', 'oven', 'stove', 'grill', 'fireplace', 'pool', 'balcony', 'patio', 'hotTub', 'gym', 'sauna', 'tv', 'microwave', 'elevator'],
     // Note: petRent and petSecurityDeposit are not yet in the database schema and should not be sent to server
-    description: ['description']
+    description: ['description'],
+    photos: [] // Photos are handled separately since they're a relation
   };
 
   // Check if a section has changes
   const hasChanges = (section: string) => {
+    if (section === 'photos') {
+      // Special handling for photos - compare the arrays
+      const currentPhotos = formData.listingImages || [];
+      const originalPhotos = currentListing.listingImages || [];
+      
+      if (currentPhotos.length !== originalPhotos.length) return true;
+      
+      return currentPhotos.some((photo, index) => {
+        const originalPhoto = originalPhotos[index];
+        return photo.id !== originalPhoto?.id || photo.url !== originalPhoto?.url;
+      });
+    }
+    
     const fields = sectionFields[section] || [];
     return fields.some(field => {
       const currentValue = formData[field as keyof typeof formData];
@@ -149,37 +173,66 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     setButtonStates(prev => ({ ...prev, [section]: 'saving' }));
     
     try {
-      // Only save the fields that belong to this section
-      const fields = sectionFields[section] || [];
-      const updateData: any = {};
-      
-      fields.forEach(field => {
-        const currentValue = formData[field as keyof typeof formData];
-        const originalValue = currentListing[field as keyof typeof currentListing];
+      if (section === 'photos') {
+        // Handle photos - save to database
+        const photos = (formData.listingImages || []).map((photo, index) => ({
+          id: photo.id,
+          url: photo.url,
+          category: photo.category,
+          rank: index + 1
+        }));
         
-        // Only include fields that have changed
-        if (currentValue !== originalValue) {
-          updateData[field] = currentValue;
-        }
-      });
-      
-      if (Object.keys(updateData).length > 0) {
-        console.log(`Saving section '${section}' with data:`, updateData);
-        await updateListing(listing.id, updateData);
+        console.log('Saving photos to database:', photos);
+        const result = await updateListingPhotos(listing.id, photos);
         
-        // Update the current listing with the new data
-        const updatedListing = { ...currentListing, ...updateData };
-        setCurrentListing(updatedListing);
-        
-        // Update the context with the new listing data
-        updateContextListing(updatedListing);
-        
-        // Call the optional callback to update parent component
-        if (onListingUpdate) {
-          onListingUpdate(updatedListing);
+        if (result) {
+          // Update the current listing with the saved data
+          const updatedListing = { ...currentListing, listingImages: result.listingImages };
+          setCurrentListing(updatedListing);
+          
+          // Update the context with the new listing data
+          updateContextListing(updatedListing);
+          
+          // Call the optional callback to update parent component
+          if (onListingUpdate) {
+            onListingUpdate(updatedListing);
+          }
+          
+          console.log('Photos saved successfully to database');
         }
       } else {
-        console.log(`No changes detected for section '${section}'`);
+        // Handle regular fields
+        const fields = sectionFields[section] || [];
+        const updateData: any = {};
+        
+        fields.forEach(field => {
+          const currentValue = formData[field as keyof typeof formData];
+          const originalValue = currentListing[field as keyof typeof currentListing];
+          
+          // Only include fields that have changed
+          if (currentValue !== originalValue) {
+            updateData[field] = currentValue;
+          }
+        });
+        
+        if (Object.keys(updateData).length > 0) {
+          console.log(`Saving section '${section}' with data:`, updateData);
+          await updateListing(listing.id, updateData);
+          
+          // Update the current listing with the new data
+          const updatedListing = { ...currentListing, ...updateData };
+          setCurrentListing(updatedListing);
+          
+          // Update the context with the new listing data
+          updateContextListing(updatedListing);
+          
+          // Call the optional callback to update parent component
+          if (onListingUpdate) {
+            onListingUpdate(updatedListing);
+          }
+        } else {
+          console.log(`No changes detected for section '${section}'`);
+        }
       }
       
       // Show success state
@@ -379,8 +432,132 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     updateFormData(amenityValue, !currentValue);
   };
 
+  // Photo management functions
+  const handleDragStart = (e: React.DragEvent, imageId: string) => {
+    setDraggedImageId(imageId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, index?: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (typeof index === 'number' && index !== dropPreviewIndex) {
+      setDropPreviewIndex(index);
+    }
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    // Only clear preview if we're leaving the entire photo grid area
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      setDropPreviewIndex(null);
+    }
+  };
+
+  const handleDragEnterTrash = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOverTrash(true);
+  };
+
+  const handleDragLeaveTrash = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOverTrash(false);
+  };
+
+  const handleDropOnTrash = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOverTrash(false);
+    
+    if (draggedImageId) {
+      const updatedImages = formData.listingImages?.filter(img => img.id !== draggedImageId) || [];
+      updateFormData('listingImages', updatedImages);
+      setDraggedImageId(null);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    
+    if (!draggedImageId || !formData.listingImages) return;
+    
+    const draggedIndex = formData.listingImages.findIndex(img => img.id === draggedImageId);
+    if (draggedIndex === -1) return;
+    
+    const updatedImages = [...formData.listingImages];
+    const [draggedImage] = updatedImages.splice(draggedIndex, 1);
+    updatedImages.splice(targetIndex, 0, draggedImage);
+    
+    updateFormData('listingImages', updatedImages);
+    setDraggedImageId(null);
+    setDropPreviewIndex(null);
+  };
+
+  const handlePhotoUpload = (res: any[]) => {
+    if (Array.isArray(res)) {
+      const newPhotos = res.map((file) => ({
+        id: file.key || Date.now().toString(),
+        url: file.url,
+        listingId: listing.id,
+        category: null,
+        rank: null,
+      }));
+      
+      const currentImages = formData.listingImages || [];
+      updateFormData('listingImages', [...currentImages, ...newPhotos]);
+      
+      toast({
+        title: "Success",
+        description: `${res.length} photo${res.length === 1 ? '' : 's'} uploaded successfully`,
+        variant: "success"
+      });
+    }
+  };
+
   const roomDetails = formatRoomDetails();
   const displayAmenities = getDisplayAmenities();
+
+  // Pricing data for display
+  const pricingData = [
+    {
+      id: "monthly-rent",
+      label: "Monthly Rent",
+      value: formatPriceRange(),
+      width: "w-full sm:w-[374px]",
+      valueStyle: "font-text-label-medium-semi-bold",
+    },
+    {
+      id: "security-deposit",
+      label: "Security Deposit",
+      value: currentListing.depositSize ? `$${currentListing.depositSize.toLocaleString()}` : 'Not specified',
+      width: "w-full sm:w-[342px]",
+      valueStyle: "font-text-label-medium-semi-bold",
+    },
+    {
+      id: "pet-rent",
+      label: "Pet Rent",
+      value: "Not Specified",
+      width: "w-full sm:w-[235px]",
+      valueStyle: "font-text-label-medium-medium",
+    },
+    {
+      id: "pet-security-deposit",
+      label: "Pet Security Deposit",
+      value: currentListing.petsAllowed ? "Not Specified" : "No Pets",
+      width: "w-full sm:w-[374px]",
+      valueStyle: "font-text-label-medium-medium",
+    },
+    {
+      id: "lease-terms",
+      label: "Lease Terms",
+      value: formatLeaseTerms(),
+      width: "w-full sm:w-[370px]",
+      valueStyle: "font-text-label-medium-medium",
+    },
+  ];
 
   return (
     <div className="space-y-6 p-6">
@@ -388,7 +565,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       {/* Highlights */}
       <Card className="p-6 flex flex-col gap-8 rounded-xl shadow-[0px_0px_5px_#00000029]">
         <div className="flex items-center justify-between w-full">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className={sectionHeaderStyles}>
             Highlights
           </h2>
           {editingSections['basic'] ? renderEditButtons('basic') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('basic')} />}
@@ -443,34 +620,34 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         ) : (
           <CardContent className="flex items-start gap-6 p-0">
             <div className="flex flex-col items-start gap-1.5 w-[374px]">
-              <div className="text-md font-normal text-gray-500">
+              <div className={labelStyles}>
                 Property Title
               </div>
-              <div className="text-md font-medium text-gray-900">
+              <div className={valueStyles}>
                 {currentListing.title || 'No title'}
               </div>
             </div>
             <div className="flex flex-col items-start gap-1.5 w-[212px]">
-              <div className="text-md font-normal text-gray-500">
+              <div className={labelStyles}>
                 Property Type
               </div>
-              <div className="text-md font-medium text-gray-900">
+              <div className={valueStyles}>
                 {formatPropertyType(currentListing.category)}
               </div>
             </div>
             <div className="flex flex-col items-start gap-1.5 w-[235px]">
-              <div className="text-md font-normal text-gray-500">
+              <div className={labelStyles}>
                 Furnished Status
               </div>
-              <div className="text-md font-medium text-gray-900">
+              <div className={valueStyles}>
                 {formatFurnished(currentListing.furnished)}
               </div>
             </div>
             <div className="flex flex-col items-start gap-1.5 flex-1">
-              <div className="text-md font-normal text-gray-500">
+              <div className={labelStyles}>
                 Pets Allowed
               </div>
-              <div className="text-md font-medium text-gray-900">
+              <div className={valueStyles}>
                 {currentListing.petsAllowed ? 'Pets allowed' : 'No Pets'}
               </div>
             </div>
@@ -479,16 +656,17 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       </Card>
 
       {/* Description */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Description</span>
-            {renderEditButtons('description')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl">
+        <CardContent className="p-6 flex flex-col gap-[18px]">
+          <div className="flex items-center justify-between w-full">
+            <h2 className={sectionHeaderStyles}>
+              Description
+            </h2>
+            {editingSections['description'] ? renderEditButtons('description') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('description')} />}
+          </div>
+
           {editingSections['description'] ? (
-            <div>
+            <div className="flex flex-col gap-[18px] w-full">
               <label className="text-sm font-medium text-gray-700">Property Description</label>
               <Textarea
                 value={formData.description || ''}
@@ -523,188 +701,205 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
               </div>
             </div>
           ) : (
-            <p className="text-gray-700 whitespace-pre-wrap">
-              {currentListing.description || 'No description provided.'}
-            </p>
+            <div className="flex flex-col gap-[18px] w-full">
+              <p className={`${noLabelStyles} whitespace-pre-wrap`}>
+                {currentListing.description || 'No description provided.'}
+              </p>
+            </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Location */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
-              Location
+      {/* Location and Property Details Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Location */}
+        <Card className="flex-1 self-stretch shadow-[0px_0px_5px_#00000029] p-0">
+          <CardContent className="flex flex-col items-end gap-[18px] p-6">
+            <div className="flex items-center justify-end gap-8 relative flex-1 self-stretch w-full">
+              <div className="relative flex-1 opacity-90 text-2xl font-semibold text-gray-900">
+                Location
+              </div>
+              {editingSections['location'] ? renderEditButtons('location') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('location')} />}
             </div>
-            {renderEditButtons('location')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {editingSections['location'] ? (
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Street Address</label>
-                <Input
-                  value={formData.streetAddress1 || ''}
-                  onChange={(e) => updateFormData('streetAddress1', e.target.value)}
-                  className="mt-1"
-                  placeholder="Enter street address"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Apartment/Unit (Optional)</label>
-                <Input
-                  value={formData.streetAddress2 || ''}
-                  onChange={(e) => updateFormData('streetAddress2', e.target.value)}
-                  className="mt-1"
-                  placeholder="Apt, suite, etc."
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">City</label>
-                  <Input
-                    value={formData.city || ''}
-                    onChange={(e) => updateFormData('city', e.target.value)}
-                    className="mt-1"
-                    placeholder="City"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">State</label>
-                  <Input
-                    value={formData.state || ''}
-                    onChange={(e) => updateFormData('state', e.target.value)}
-                    className="mt-1"
-                    placeholder="State"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">ZIP Code</label>
-                  <Input
-                    value={formData.postalCode || ''}
-                    onChange={(e) => updateFormData('postalCode', e.target.value)}
-                    className="mt-1"
-                    placeholder="ZIP"
-                  />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <p className="text-gray-700">{formatAddress()}</p>
-          )}
-        </CardContent>
-      </Card>
 
-      {/* Property Details */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Building className="h-5 w-5" />
-              Property Details
-            </div>
-            {renderEditButtons('details')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {editingSections['details'] ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Bedrooms</label>
-                <div className="flex items-center gap-3 border rounded-md px-3 py-2 mt-1 w-fit mx-auto">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 rounded-full p-0"
-                    onClick={() => updateFormData('roomCount', Math.max(0, (formData.roomCount || 0) - 1))}
-                    disabled={(formData.roomCount || 0) <= 0}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="text-lg font-medium min-w-[2rem] text-center">{formData.roomCount || 0}</span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 rounded-full p-0"
-                    onClick={() => updateFormData('roomCount', (formData.roomCount || 0) + 1)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
+            {editingSections['location'] ? (
+              <div className="space-y-4 w-full">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Street Address</label>
+                  <Input
+                    value={formData.streetAddress1 || ''}
+                    onChange={(e) => updateFormData('streetAddress1', e.target.value)}
+                    className="mt-1"
+                    placeholder="Enter street address"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Apartment/Unit (Optional)</label>
+                  <Input
+                    value={formData.streetAddress2 || ''}
+                    onChange={(e) => updateFormData('streetAddress2', e.target.value)}
+                    className="mt-1"
+                    placeholder="Apt, suite, etc."
+                  />
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">City</label>
+                    <Input
+                      value={formData.city || ''}
+                      onChange={(e) => updateFormData('city', e.target.value)}
+                      className="mt-1"
+                      placeholder="City"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">State</label>
+                    <Input
+                      value={formData.state || ''}
+                      onChange={(e) => updateFormData('state', e.target.value)}
+                      className="mt-1"
+                      placeholder="State"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">ZIP Code</label>
+                    <Input
+                      value={formData.postalCode || ''}
+                      onChange={(e) => updateFormData('postalCode', e.target.value)}
+                      className="mt-1"
+                      placeholder="ZIP"
+                    />
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Bathrooms</label>
-                <div className="flex items-center gap-3 border rounded-md px-3 py-2 mt-1 w-fit mx-auto">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 rounded-full p-0"
-                    onClick={() => updateFormData('bathroomCount', Math.max(0, (formData.bathroomCount || 0) - 0.5))}
-                    disabled={(formData.bathroomCount || 0) <= 0}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="text-lg font-medium min-w-[2rem] text-center">{formData.bathroomCount || 0}</span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 rounded-full p-0"
-                    onClick={() => updateFormData('bathroomCount', (formData.bathroomCount || 0) + 0.5)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
+            ) : (
+              <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
+                <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
+                  <MapPin className="w-5 h-5 text-gray-500" />
+                  <div className="relative flex-1 mt-[-1.00px] text-md font-normal text-gray-800">
+                    {formatAddress()}
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Square Feet</label>
-                <Input
-                  type="number"
-                  min="0"
-                  value={formData.squareFootage || ''}
-                  onChange={(e) => updateFormData('squareFootage', parseInt(e.target.value) || null)}
-                  className="mt-1"
-                  placeholder="Square footage"
-                />
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Property Details */}
+        <Card className="flex-1 shadow-[0px_0px_5px_#00000029] p-0">
+          <CardContent className="flex flex-col items-end gap-[18px] p-6">
+            <div className="flex items-center justify-end gap-8 relative flex-1 self-stretch w-full">
+              <div className="flex-1 opacity-90 text-2xl font-semibold text-gray-900 relative mt-[-1.00px]">
+                Property Details
               </div>
+              {editingSections['details'] ? renderEditButtons('details') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('details')} />}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center gap-2">
-                <Bed className="h-4 w-4 text-gray-500" />
-                <span>{roomDetails.beds} Bedroom{roomDetails.beds !== 1 ? 's' : ''}</span>
+
+            {editingSections['details'] ? (
+              <div className="grid grid-cols-3 gap-4 w-full">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Bedrooms</label>
+                  <div className="flex items-center gap-3 px-3 py-2 mt-1 w-fit mx-auto">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 rounded-full p-0"
+                      onClick={() => updateFormData('roomCount', Math.max(0, (formData.roomCount || 0) - 1))}
+                      disabled={(formData.roomCount || 0) <= 0}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="text-lg font-medium min-w-[2rem] text-center">{formData.roomCount || 0}</span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 rounded-full p-0"
+                      onClick={() => updateFormData('roomCount', (formData.roomCount || 0) + 1)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Bathrooms</label>
+                  <div className="flex items-center gap-3 px-3 py-2 mt-1 w-fit mx-auto">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 rounded-full p-0"
+                      onClick={() => updateFormData('bathroomCount', Math.max(0, (formData.bathroomCount || 0) - 0.5))}
+                      disabled={(formData.bathroomCount || 0) <= 0}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="text-lg font-medium min-w-[2rem] text-center">{formData.bathroomCount || 0}</span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 rounded-full p-0"
+                      onClick={() => updateFormData('bathroomCount', (formData.bathroomCount || 0) + 0.5)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Square Feet</label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={formData.squareFootage || ''}
+                    onChange={(e) => updateFormData('squareFootage', parseInt(e.target.value) || null)}
+                    className="mt-1"
+                    placeholder="Square footage"
+                  />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Bath className="h-4 w-4 text-gray-500" />
-                <span>{roomDetails.baths} Bathroom{roomDetails.baths !== 1 ? 's' : ''}</span>
+            ) : (
+              <div className="flex items-center gap-[41px] relative self-stretch w-full flex-[0_0_auto]">
+                {/* Bedroom */}
+                <div className="inline-flex items-center justify-center gap-1.5 px-0 py-1.5 relative flex-[0_0_auto] rounded-full">
+                  <Bed className="w-5 h-5 text-gray-500" />
+                  <div className="relative w-fit mt-[-1.00px] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                    {roomDetails.beds} Bedroom{roomDetails.beds !== 1 ? 's' : ''}
+                  </div>
+                </div>
+
+                {/* Bathroom */}
+                <div className="inline-flex items-center justify-center gap-1.5 px-0 py-1.5 relative flex-[0_0_auto] rounded-full">
+                  <Bath className="w-5 h-5 text-gray-500" />
+                  <div className="relative w-fit mt-[-1.00px] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                    {roomDetails.baths} Bathroom{roomDetails.baths !== 1 ? 's' : ''}
+                  </div>
+                </div>
+
+                {/* Square Footage */}
+                <div className="inline-flex items-center justify-center gap-1.5 px-0 py-1.5 relative flex-[0_0_auto] rounded-full">
+                  <Square className="w-5 h-5 text-gray-500" />
+                  <div className="relative w-fit mt-[-1.00px] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                    {roomDetails.sqft} Sqft
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Square className="h-4 w-4 text-gray-500" />
-                <span>{roomDetails.sqft} Sqft</span>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Pricing & Lease Terms */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
+      <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl">
+        <CardContent className="flex flex-col gap-8 p-6">
+          <div className="flex items-center justify-between w-full">
+            <h2 className={sectionHeaderStyles}>
               Pricing & Lease Terms
-            </div>
-            {renderEditButtons('pricing')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+            </h2>
+            {editingSections['pricing'] ? renderEditButtons('pricing') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('pricing')} />}
+          </div>
+
           {editingSections['pricing'] ? (
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -768,34 +963,22 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
               </div>
             </div>
           ) : (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Monthly Rent</label>
-                  <p className="text-2xl font-bold text-gray-800">{formatPriceRange()}</p>
-                </div>
-                {currentListing.depositSize && (
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">Security Deposit</label>
-                    <p className="text-lg font-semibold text-gray-800">${currentListing.depositSize.toLocaleString()}</p>
+            <div className="flex flex-wrap gap-6">
+              {pricingData.map((item) => (
+                <div
+                  key={item.id}
+                  className={`flex flex-col gap-1.5 ${item.width}`}
+                >
+                  <div className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-neutralneutral-700 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
+                    {item.label}
                   </div>
-                )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Note: Pet rent and pet security deposit fields are not yet in database schema */}
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Pet Rent</label>
-                  <p className="text-gray-700">Not specified</p>
+                  <div
+                    className={`${item.valueStyle} font-[number:var(--${item.valueStyle}-font-weight)] text-neutralneutral-900 text-[length:var(--${item.valueStyle}-font-size)] tracking-[var(--${item.valueStyle}-letter-spacing)] leading-[var(--${item.valueStyle}-line-height)] [font-style:var(--${item.valueStyle}-font-style)]`}
+                  >
+                    {item.value}
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Pet Security Deposit</label>
-                  <p className="text-gray-700">Not specified</p>
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Lease Terms</label>
-                <p className="text-gray-700">{formatLeaseTerms()}</p>
-              </div>
+              ))}
             </div>
           )}
         </CardContent>
@@ -804,17 +987,15 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
       {/* Amenities */}
       {(displayAmenities.length > 0 || editingSections['amenities']) && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Heart className="h-5 w-5" />
+        <Card className="p-6 rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardContent className="flex flex-col gap-8 p-0">
+            <div className="flex items-center justify-between w-full">
+              <h2 className={sectionHeaderStyles}>
                 Amenities
-              </div>
-              {renderEditButtons('amenities')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+              </h2>
+              {editingSections['amenities'] ? renderEditButtons('amenities') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('amenities')} />}
+            </div>
+
             {editingSections['amenities'] ? (
               <div className="flex flex-col gap-4">
                   {AMENITY_GROUPS.map((group) => (
@@ -841,15 +1022,15 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                 </div>
             ) : (
               displayAmenities.length > 0 && (
-                <div className="grid grid-cols-2 gap-y-6 mb-4">
+                <div className="flex items-center gap-[60px] w-full flex-wrap gap-y-4">
                   {displayAmenities.map((amenity, index) => {
                     const IconComponent = amenity.icon;
                     return (
-                      <div key={index} className="flex items-center gap-4">
-                        <div className="w-[30px] h-[30px] flex items-center justify-center">
-                          <IconComponent className="w-6 h-6" />
+                      <div key={index} className="flex items-center gap-3 py-1">
+                        <div className="w-5 h-5 flex items-center justify-center">
+                          <IconComponent className="w-5 h-5 text-gray-500" />
                         </div>
-                        <span className="text-xl font-normal text-black">
+                        <span className="font-medium text-[#344054] text-base leading-5">
                           {amenity.label}
                         </span>
                       </div>
@@ -864,29 +1045,140 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
       {/* Photos */}
       {currentListing.listingImages && currentListing.listingImages.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Photos ({currentListing.listingImages.length})</CardTitle>
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardHeader className="p-6 pb-0">
+            <div className="flex items-center justify-between w-full">
+              <CardTitle className={sectionHeaderStyles}>
+                Photos ({currentListing.listingImages.length})
+              </CardTitle>
+              {editingSections['photos'] ? renderEditButtons('photos') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('photos')} />}
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {currentListing.listingImages.slice(0, 8).map((image, index) => (
-                <div key={index} className="aspect-square relative rounded-lg overflow-hidden">
-                  <img
-                    src={image.url}
-                    alt={`Property image ${index + 1}`}
-                    className="w-full h-full object-cover"
+
+          <CardContent className="px-6 py-8 flex justify-center">
+            {editingSections['photos'] ? (
+              <div className="w-full space-y-6">
+                {/* Upload Section */}
+                <div className="flex justify-center">
+                  <UploadButton
+                    endpoint="listingUploadPhotos"
+                    config={{
+                      mode: "auto"
+                    }}
+                    className="uploadthing-custom"
+                    appearance={{
+                      button: "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300 h-[44px] min-w-[160px] rounded-lg px-[14px] py-[10px] gap-1 font-semibold text-base",
+                      allowedContent: "hidden",
+                    }}
+                    content={{
+                      button: ({ ready, isUploading }) => (
+                        <div className="flex items-center justify-center gap-2">
+                          {isUploading && (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          )}
+                          <span>{isUploading ? "Uploading..." : "Upload Photos"}</span>
+                        </div>
+                      ),
+                    }}
+                    onClientUploadComplete={handlePhotoUpload}
+                    onUploadError={(error) => {
+                      console.error("Upload error:", error);
+                      toast({
+                        title: "Upload Error",
+                        description: error.message || "Failed to upload photos. Please try again.",
+                        variant: "destructive"
+                      });
+                    }}
                   />
                 </div>
-              ))}
-              {currentListing.listingImages.length > 8 && (
-                <div className="aspect-square relative rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                  <span className="text-gray-600 font-semibold">
-                    +{currentListing.listingImages.length - 8} more
-                  </span>
+
+                {/* Drag and Drop Photos */}
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600 text-center">Drag photos to reorder or drop on trash to delete</p>
+                  
+                  {/* Trash Zone */}
+                  <div
+                    className={`w-full h-16 border-2 border-dashed rounded-lg flex items-center justify-center transition-colors ${
+                      dragOverTrash ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-gray-50'
+                    }`}
+                    onDragOver={handleDragOver}
+                    onDragEnter={handleDragEnterTrash}
+                    onDragLeave={handleDragLeaveTrash}
+                    onDrop={handleDropOnTrash}
+                  >
+                    <div className="flex items-center gap-2 text-gray-500">
+                      <Trash2 className="w-5 h-5" />
+                      <span>Drop here to delete</span>
+                    </div>
+                  </div>
+
+                  {/* Photo Grid */}
+                  <div 
+                    className="flex flex-wrap gap-4 justify-start"
+                    onDragLeave={handleDragLeave}
+                  >
+                    {(formData.listingImages || []).map((image, index) => (
+                      <div key={image.id} className="relative">
+                        {/* Drop Preview Indicator */}
+                        {dropPreviewIndex === index && draggedImageId !== image.id && (
+                          <div className="absolute -left-2 top-0 w-1 h-full bg-blue-500 rounded-full z-10" />
+                        )}
+                        
+                        <div
+                          className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden cursor-grab border-2 transition-all ${
+                            draggedImageId === image.id 
+                              ? 'opacity-50 border-blue-400 scale-95' 
+                              : dropPreviewIndex === index && draggedImageId !== image.id
+                              ? 'border-blue-300 shadow-lg'
+                              : 'border-transparent hover:border-gray-300'
+                          }`}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, image.id)}
+                          onDragOver={(e) => handleDragOver(e, index)}
+                          onDrop={(e) => handleDrop(e, index)}
+                        >
+                          <img
+                            src={image.url}
+                            alt={`Property image ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                            {index + 1}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* End Drop Zone */}
+                    {draggedImageId && (
+                      <div
+                        className={`w-[175px] h-[108px] border-2 border-dashed rounded-lg flex items-center justify-center transition-colors ${
+                          dropPreviewIndex === (formData.listingImages?.length || 0) 
+                            ? 'border-blue-500 bg-blue-50' 
+                            : 'border-gray-300'
+                        }`}
+                        onDragOver={(e) => handleDragOver(e, formData.listingImages?.length || 0)}
+                        onDrop={(e) => handleDrop(e, formData.listingImages?.length || 0)}
+                      >
+                        <span className="text-gray-500 text-sm">Drop here</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-6 justify-start">
+                {currentListing.listingImages.map((image, index) => (
+                  <div key={index} className="w-[175px] h-[108px] relative rounded-lg overflow-hidden">
+                    <img
+                      src={image.url}
+                      alt={`Property image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       )}

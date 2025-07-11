@@ -207,6 +207,68 @@ export const updateListing = async (listingId: string, updateData: Partial<Listi
   }
 }
 
+export const updateListingPhotos = async (listingId: string, photos: Array<{id: string, url: string, category?: string | null, rank?: number | null}>) => {
+  const userId = await checkAuth();
+
+  try {
+    // Fetch the listing to ensure it belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized to update this listing');
+    }
+
+    // Delete existing photos that are not in the new list
+    const photoIds = photos.map(p => p.id);
+    await prisma.listingImage.deleteMany({
+      where: {
+        listingId: listingId,
+        id: {
+          notIn: photoIds
+        }
+      }
+    });
+
+    // Update or create photos with new order
+    const updatePromises = photos.map((photo, index) => {
+      return prisma.listingImage.upsert({
+        where: { id: photo.id },
+        update: {
+          rank: index + 1,
+          category: photo.category,
+        },
+        create: {
+          id: photo.id,
+          url: photo.url,
+          listingId: listingId,
+          category: photo.category,
+          rank: index + 1,
+        },
+      });
+    });
+
+    await Promise.all(updatePromises);
+
+    // Return updated listing with photos
+    const updatedListing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      include: { listingImages: true }
+    });
+
+    return updatedListing;
+  } catch (error) {
+    console.error('Error in updateListingPhotos:', error);
+    throw error;
+  }
+}
+
 export const deleteListing = async (listingId: string) => {
   const userId = await checkAuth();
 
