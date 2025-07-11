@@ -91,6 +91,7 @@ export const BrandCheckbox: React.FC<BrandCheckboxProps> = ({
         <input
           ref={checkboxRef}
           type="checkbox"
+          id={name}
           autoFocus={autoFocus}
           checked={checked}
           defaultChecked={defaultChecked}
