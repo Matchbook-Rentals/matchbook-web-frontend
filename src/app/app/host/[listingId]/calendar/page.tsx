@@ -1,3 +1,5 @@
+"use client";
+
 import { CalendarIcon, XCircleIcon } from "lucide-react";
 import React from "react";
 import { BrandButton } from "@/components/ui/brandButton";
@@ -5,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
+import { DesktopScheduleViewer } from "@/components/ui/custom-calendar/date-range-selector/desktop-schedule-viewer";
 
 export const Body = (): JSX.Element => {
   return (
@@ -113,6 +116,14 @@ export const Body = (): JSX.Element => {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Calendar Schedule Viewer */}
+        <div className=" pb-8 w-full">
+          <DesktopScheduleViewer
+            bookings={[]}
+            unavailablePeriods={[]}
+          />
         </div>
       </section>
     </div>
