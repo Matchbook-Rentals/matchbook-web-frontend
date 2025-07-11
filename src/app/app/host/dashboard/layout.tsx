@@ -34,7 +34,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
       icon: "PieChart",
     },
     {
-      title: "Listings",
+      title: "All Listings",
       url: "/app/host/dashboard/listings",
       icon: "Home",
     },
