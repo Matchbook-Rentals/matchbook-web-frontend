@@ -190,15 +190,10 @@ const sampleBookings: BookingWithRelations[] = [
 
 interface HostDashboardBookingsTabProps {
   bookings?: any[]; // Using any for now since we need to define the proper type
-  listings?: any[]; // Listings with matches data
+  matches?: any[];  // nearly complete matches from getAllHostBookings readyMatches
 }
 
-export default function HostDashboardBookingsTab({ bookings: propBookings, listings: propListings }: HostDashboardBookingsTabProps) {
-  // Debug logging
-  console.log('HostDashboardBookingsTab: Received propBookings:', propBookings);
-  console.log('HostDashboardBookingsTab: propBookings length:', propBookings?.length || 0);
-  console.log('HostDashboardBookingsTab: Received propListings:', propListings);
-  console.log('HostDashboardBookingsTab: propListings length:', propListings?.length || 0);
+export default function HostDashboardBookingsTab({ bookings: propBookings, matches }: HostDashboardBookingsTabProps) {
   
   const router = useRouter();
   const pathname = usePathname();
@@ -399,8 +394,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
     return formatDateRange(startDate, endDate);
   };
 
-  // Combine actual bookings with matches that don't have bookings yet (awaiting signature)
-  // This mirrors the exact logic from the listing bookings page
+  // Combine actual bookings with matches that are ready to be converted to bookings
   const allBookingsData = useMemo(() => {
     // If admin has enabled mock data toggle, always show sample data
     if (isAdmin && useMockData) {
@@ -408,78 +402,59 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, listi
       return sampleBookings;
     }
     
-    if (!propBookings || !propListings || (propBookings.length === 0 && propListings.length === 0)) {
-      console.log('HostDashboardBookingsTab: Missing or empty data, using sample data');
-      return sampleBookings;
+    // Otherwise, use real data (even if empty)
+    if (!propBookings) {
+      console.log('HostDashboardBookingsTab: Missing bookings data, returning empty array');
+      return [];
     }
 
     const existingBookings = propBookings || [];
-    const existingBookingMatchIds = new Set(existingBookings.map(b => b.matchId));
+    const readyMatches = matches || [];
     
-    console.log('HostDashboardBookingsTab: Processing', propListings.length, 'listings for matches');
+    console.log('HostDashboardBookingsTab: Processing', existingBookings.length, 'bookings and', readyMatches.length, 'ready matches');
     
-    // Find matches that have BoldSignLease (lease documents) but no booking yet
-    // Only include matches that are NOT fully completed (still awaiting signature or payment)
-    const matchesAwaitingSignature = propListings
-      .flatMap(listing => (listing.matches || []).map(match => ({ ...match, listing })))
-      .filter(match => {
-        // Must have lease document
-        if (!match.BoldSignLease) return false;
-        
-        // Must not already have a booking
-        if (existingBookingMatchIds.has(match.id)) return false;
-        
-        // Must have valid trip and user data
-        if (!match.trip || !match.trip.user) return false;
-        
-        // Must be incomplete - either not fully signed OR payment not authorized
-        const isFullySigned = match.BoldSignLease.landlordSigned && match.BoldSignLease.tenantSigned;
-        const isPaymentAuthorized = !!match.paymentAuthorizedAt;
-        
-        // Only include if it's NOT fully completed
-        return !(isFullySigned && isPaymentAuthorized);
-      })
-      .map(match => ({
-        // Convert match to booking-like structure
-        id: `match-${match.id}`, // Prefix to distinguish from real bookings
-        userId: match.trip.user.id,
-        listingId: match.listingId,
-        tripId: match.tripId,
-        matchId: match.id,
-        startDate: match.trip.startDate,
-        endDate: match.trip.endDate,
-        totalPrice: null,
-        monthlyRent: match.monthlyRent,
-        createdAt: new Date(match.trip.createdAt),
-        status: "awaiting_signature", // Special status
-        listing: {
-          title: match.listing.title,
-          streetAddress1: match.listing.streetAddress1,
-          city: match.listing.city,
-          state: match.listing.state,
-          postalCode: match.listing.postalCode,
-        },
-        user: match.trip.user,
-        trip: {
-          numAdults: match.trip.numAdults,
-          numPets: match.trip.numPets,
-          numChildren: match.trip.numChildren,
-        },
-        match: {
-          id: match.id,
-          tenantSignedAt: match.tenantSignedAt,
-          landlordSignedAt: match.landlordSignedAt,
-          paymentAuthorizedAt: match.paymentAuthorizedAt,
-          BoldSignLease: match.BoldSignLease,
-          Lease: match.Lease,
-        }
-      }));
+    // Convert ready matches to booking-like structures
+    const matchesAsBookings = readyMatches.map(match => ({
+      // Convert match to booking-like structure
+      id: `match-${match.id}`, // Prefix to distinguish from real bookings
+      userId: match.trip.user.id,
+      listingId: match.listingId,
+      tripId: match.tripId,
+      matchId: match.id,
+      startDate: match.trip.startDate,
+      endDate: match.trip.endDate,
+      totalPrice: null,
+      monthlyRent: match.monthlyRent,
+      createdAt: new Date(match.trip.createdAt),
+      status: "awaiting_signature", // Special status for ready matches
+      listing: {
+        title: match.listing.title,
+        streetAddress1: match.listing.streetAddress1,
+        city: match.listing.city,
+        state: match.listing.state,
+        postalCode: match.listing.postalCode,
+      },
+      user: match.trip.user,
+      trip: {
+        numAdults: match.trip.numAdults,
+        numPets: match.trip.numPets,
+        numChildren: match.trip.numChildren,
+      },
+      match: {
+        id: match.id,
+        tenantSignedAt: match.tenantSignedAt,
+        landlordSignedAt: match.landlordSignedAt,
+        paymentAuthorizedAt: match.paymentAuthorizedAt,
+        BoldSignLease: match.BoldSignLease,
+        Lease: match.Lease,
+      }
+    }));
     
-    const combined = [...existingBookings, ...matchesAwaitingSignature];
-    console.log('HostDashboardBookingsTab: Combined bookings:', existingBookings.length, 'matches:', matchesAwaitingSignature.length, 'total:', combined.length);
+    const combined = [...existingBookings, ...matchesAsBookings];
+    console.log('HostDashboardBookingsTab: Combined bookings:', existingBookings.length, 'ready matches:', matchesAsBookings.length, 'total:', combined.length);
     
     return combined;
-  }, [propBookings, propListings, useMockData, isAdmin]);
+  }, [propBookings, matches, useMockData, isAdmin]);
 
   const bookingsToUse = allBookingsData;
 

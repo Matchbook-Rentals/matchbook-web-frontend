@@ -118,7 +118,7 @@ function PaymentMethodForm({ matchId, amount, onSuccess, onCancel, clientSecret 
       const { error, setupIntent } = await stripe.confirmSetup({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/app/match/${matchId}/payment-success`,
+          return_url: `${window.location.origin}/app/rent/match/${matchId}/payment-success`,
         },
         redirect: 'if_required',
       });
