@@ -7,7 +7,7 @@ interface HostPageTitleProps {
 
 export const HostPageTitle = ({ title, subtitle }: HostPageTitleProps): JSX.Element => {
   return (
-    <header className="w-full max-w-[1144px] pt-6">
+    <header className="w-full  max-w-[1144px] py-6">
       <div className="flex flex-col gap-1">
         <h1 className="font-medium text-2xl text-black font-['Poppins',Helvetica] leading-[28.8px]">
           {title}

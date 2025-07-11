@@ -152,9 +152,9 @@ export default function TabLayout({
 
   // Unified layout for both mobile and desktop
   return (
-    <div className={`${isMobile ? '' : noMargin ? '' : APP_PAGE_MARGIN} flex flex-col  `}>
+    <div className={`${isMobile ? '' : noMargin ? '' : APP_PAGE_MARGIN} flex flex-col `}>
       {/* Header with title, search, and filters */}
-      <header ref={headerRef} className={`w-full py-6 ${isMobile ? 'px-4' : ''}`}>
+      <header ref={headerRef} className={`w-full  ${isMobile ? 'px-4' : ''}`}>
         <div className="flex flex-col gap-6">
           <div className="flex items-end gap-6">
             {actionButton && !isMobile && (

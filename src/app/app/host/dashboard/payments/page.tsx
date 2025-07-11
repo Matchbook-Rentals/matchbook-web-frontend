@@ -6,6 +6,8 @@ import EmbeddedComponentContainer from '@/app/components/EmbeddedComponentContai
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {  DollarSign, TrendingUp, Users } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
+import { HOST_PAGE_STYLE } from "@/constants/styles";
+import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
 
 // Mock data for dashboard widgets - replace with real data
 const mockStats = {
@@ -29,10 +31,8 @@ export default function PaymentsPage() {
   }, [user]);
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex flex-row items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Payments</h1>
-      </div>
+    <div className={`${HOST_PAGE_STYLE}`}>
+      <HostPageTitle title="All Payments" subtitle="Manage payments and financial data for your properties" />
 
       {/* Dashboard Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

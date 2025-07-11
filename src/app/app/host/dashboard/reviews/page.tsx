@@ -1,4 +1,6 @@
 import React from "react";
+import { HOST_PAGE_STYLE } from "@/constants/styles";
+import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
 
 async function fetchReviews() {
   // Simulate data fetching delay
@@ -10,10 +12,8 @@ export default async function ReviewsPage() {
   const reviews = await fetchReviews();
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Reviews</h1>
-      </div>
+    <div className={`${HOST_PAGE_STYLE}`}>
+      <HostPageTitle title="All Reviews" subtitle="View and manage reviews from your tenants" />
       <div className="flex-1 space-y-4">
         <p className="text-muted-foreground">
           {reviews.length === 0 ? "No reviews yet." : `${reviews.length} reviews found.`}
