@@ -309,7 +309,7 @@ export const deleteListing = async (listingId: string) => {
   }
 }
 
-export const addUnavailability = async (listingId: string, startDate: Date, endDate: Date): Promise<ListingUnavailability> => {
+export const addUnavailability = async (listingId: string, startDate: Date, endDate: Date, reason?: string): Promise<ListingUnavailability> => {
   const userId = await checkAuth();
 
   try {
@@ -328,7 +328,8 @@ export const addUnavailability = async (listingId: string, startDate: Date, endD
       data: {
         listingId,
         startDate,
-        endDate
+        endDate,
+        reason: reason || null
       }
     });
 

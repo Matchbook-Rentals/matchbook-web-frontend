@@ -2,6 +2,7 @@
 
 import { CalendarIcon, XCircleIcon } from "lucide-react";
 import React, { useState } from "react";
+import { addUnavailability } from "@/app/actions/listings";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,9 +16,39 @@ import { InteractiveDatePicker } from "@/components/ui/custom-calendar/date-rang
 import { format } from "date-fns";
 
 export const Body = (): JSX.Element => {
-  const { data } = useListingDashboard();
+  const { data, addUnavailability: addUnavailabilityToContext } = useListingDashboard();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const [reason, setReason] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleSubmit = async () => {
+    if (!startDate || !endDate) {
+      alert("Please select both start and end dates");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      const unavailability = await addUnavailability(data.listing.id, startDate, endDate, reason);
+      addUnavailabilityToContext(unavailability);
+      // Clear form
+      setStartDate(undefined);
+      setEndDate(undefined);
+      setReason("");
+    } catch (error) {
+      console.error("Error adding unavailability:", error);
+      alert("Failed to add unavailability period");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClear = () => {
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setReason("");
+  };
   
   return (
     <div className="flex flex-col w-full items-start">
@@ -126,6 +157,8 @@ export const Body = (): JSX.Element => {
                           <Textarea
                             className="flex-1 w-full resize-none bg-sidebar"
                             placeholder="e.g Personal use, maintenance, already booked elsewhere..."
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
                           />
                         </div>
                       </div>
@@ -137,12 +170,18 @@ export const Body = (): JSX.Element => {
                       variant="outline"
                       className="pl-3 pr-2 min-w-0"
                       rightIcon={<XCircleIcon className="w-5 h-5 ml-[2px] " />}
+                      onClick={handleClear}
+                      disabled={isSubmitting}
                     >
                       Clear
                     </BrandButton>
 
-                    <BrandButton variant="default">
-                      Add Unavailability
+                    <BrandButton 
+                      variant="default"
+                      onClick={handleSubmit}
+                      disabled={isSubmitting || !startDate || !endDate}
+                    >
+                      {isSubmitting ? "Adding..." : "Add Unavailability"}
                     </BrandButton>
                   </div>
                 </div>
@@ -154,8 +193,8 @@ export const Body = (): JSX.Element => {
         {/* Calendar Schedule Viewer */}
         <div className=" pb-8 w-full">
           <DesktopScheduleViewer
-            bookings={[]}
-            unavailablePeriods={[]}
+            bookings={data.bookings}
+            unavailablePeriods={data.listing.unavailablePeriods || []}
           />
         </div>
       </section>
