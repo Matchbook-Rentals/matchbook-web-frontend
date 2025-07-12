@@ -1,12 +1,20 @@
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface PropertyDashboardPageProps {
   params: { listingId: string }
 }
 
-export default async function PropertyDashboardPage({ params }: PropertyDashboardPageProps) {
+export default function PropertyDashboardPage({ params }: PropertyDashboardPageProps) {
   const { listingId } = params;
+  const router = useRouter();
   
-  // Redirect to applications tab by default
-  redirect(`/app/host/${listingId}/applications`);
+  useEffect(() => {
+    // Redirect to applications tab by default
+    router.push(`/app/host/${listingId}/summary`);
+  }, [listingId, router]);
+
+  return null;
 }

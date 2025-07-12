@@ -1,6 +1,15 @@
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function DashboardPage() {
-  // Redirect to listings as the default dashboard page
-  redirect('/app/host/dashboard/overview');
+  const router = useRouter();
+  
+  useEffect(() => {
+    // Redirect to applications as the default dashboard page
+    router.push('/app/host/dashboard/listings');
+  }, [router]);
+
+  return null;
 }
