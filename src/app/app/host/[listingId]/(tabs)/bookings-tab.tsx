@@ -202,12 +202,12 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
 
   // Base filter options for booking status
   const baseFilterOptions = [
-    { id: "confirmed", label: "Confirmed" },
+    { id: "all", label: "All" },
+    { id: "pending", label: "Pending" },
+    { id: "active", label: "Active" },
     { id: "upcoming", label: "Upcoming" },
-    { id: "ongoing", label: "Ongoing" },
-    { id: "completed", label: "Completed" },
+    { id: "past", label: "Past" },
     { id: "cancelled", label: "Cancelled" },
-    { id: "awaiting_signature", label: "Awaiting Signature" },
   ];
   
   // Get filter options based on user role
@@ -331,13 +331,26 @@ export default function ListingBookingsTab({ bookings, listingId }: ListingBooki
   const filteredBookings = useMemo(() => {
     let filtered = bookingsToUse;
     
-    // Apply status filters (exclude mock_data filter from status filtering)
-    const statusFilters = selectedFilters.filter(filter => filter !== 'mock_data');
+    // Apply status filters (exclude mock_data and all filters from status filtering)
+    const statusFilters = selectedFilters.filter(filter => filter !== 'mock_data' && filter !== 'all');
     if (statusFilters.length > 0) {
       filtered = filtered.filter(booking => {
         const statusInfo = getBookingStatusInfo(booking);
-        const statusId = statusInfo.status.toLowerCase().replace(' ', '_');
-        return statusFilters.includes(statusId);
+        
+        // Map filter values to status labels
+        return statusFilters.some(filter => {
+          if (filter === "pending") {
+            return statusInfo.status === "Awaiting Signature";
+          }
+          if (filter === "active") {
+            return statusInfo.status === "Ongoing";
+          }
+          if (filter === "past") {
+            return statusInfo.status === "Completed";
+          }
+          // Direct matches for upcoming and cancelled
+          return statusInfo.status.toLowerCase() === filter;
+        });
       });
     }
     

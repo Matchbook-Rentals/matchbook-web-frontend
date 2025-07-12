@@ -223,19 +223,19 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
   };
 
   // Base filter options
-  const baseFilterOptions = ["Active", "Upcoming", "Past", "Cancelled", "Awaiting Signature"];
+  const baseFilterOptions = ["All", "Pending", "Active", "Upcoming", "Past", "Cancelled"];
   
   // Get filter options based on user role
   const { user } = useUser();
   const isAdmin = user?.publicMetadata?.role === 'admin';
   const filterOptions = baseFilterOptions;
 
-  // Toggle filter selection
+  // Toggle filter selection - exclusive mode (only one filter at a time)
   const toggleFilter = (filter: string) => {
     setSelectedFilters(prev => 
       prev.includes(filter) 
-        ? prev.filter(f => f !== filter)
-        : [...prev, filter]
+        ? [] // If clicking the current filter, deselect all
+        : [filter] // Otherwise, select only this filter
     );
   };
 
@@ -462,14 +462,84 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
   const filteredBookings = useMemo(() => {
     let filtered = bookingsToUse;
     
-    // Apply status filters
+    // Debug: Count statuses before filtering
+    const statusCounts = {
+      "Pending": 0,
+      "Awaiting Signature": 0,
+      "Active": 0,
+      "Upcoming": 0,
+      "Past": 0,
+      "Cancelled": 0
+    };
+    
+    bookingsToUse.forEach(booking => {
+      const statusInfo = getStatusInfo(booking);
+      if (statusCounts.hasOwnProperty(statusInfo.label)) {
+        statusCounts[statusInfo.label]++;
+      } else {
+        statusCounts[statusInfo.label] = (statusCounts[statusInfo.label] || 0) + 1;
+      }
+    });
+    
+    console.log("🔍 FILTER DEBUG - Before filtering:");
+    console.log("- Total bookings:", bookingsToUse.length);
+    console.log("- Selected filters:", selectedFilters);
+    console.log("- Status counts:", statusCounts);
+    
+    // Apply status filters - EXCLUSIVE filtering (only one filter should survive)
     const statusFilters = selectedFilters;
-    if (statusFilters.length > 0) {
+    if (statusFilters.length === 1 && !statusFilters.includes("All")) {
+      const selectedFilter = statusFilters[0];
       filtered = filtered.filter(booking => {
         const statusInfo = getStatusInfo(booking);
-        return statusFilters.includes(statusInfo.label);
+        
+        if (selectedFilter === "Pending") {
+          // Pending should include both "Pending" status and "Awaiting Signature" status
+          return statusInfo.label === "Pending" || statusInfo.label === "Awaiting Signature";
+        }
+        if (selectedFilter === "Active") {
+          // Active should only show "Active" status
+          return statusInfo.label === "Active";
+        }
+        if (selectedFilter === "Upcoming") {
+          // Upcoming should only show "Upcoming" status
+          return statusInfo.label === "Upcoming";
+        }
+        if (selectedFilter === "Past") {
+          // Past should only show "Past" status
+          return statusInfo.label === "Past";
+        }
+        if (selectedFilter === "Cancelled") {
+          // Cancelled should only show "Cancelled" status
+          return statusInfo.label === "Cancelled";
+        }
+        // Fallback for exact match
+        return statusInfo.label === selectedFilter;
       });
     }
+    
+    // Debug: Count statuses after filtering
+    const filteredStatusCounts = {
+      "Pending": 0,
+      "Awaiting Signature": 0,
+      "Active": 0,
+      "Upcoming": 0,
+      "Past": 0,
+      "Cancelled": 0
+    };
+    
+    filtered.forEach(booking => {
+      const statusInfo = getStatusInfo(booking);
+      if (filteredStatusCounts.hasOwnProperty(statusInfo.label)) {
+        filteredStatusCounts[statusInfo.label]++;
+      } else {
+        filteredStatusCounts[statusInfo.label] = (filteredStatusCounts[statusInfo.label] || 0) + 1;
+      }
+    });
+    
+    console.log("🔍 FILTER DEBUG - After filtering:");
+    console.log("- Total bookings:", filtered.length);
+    console.log("- Status counts:", filteredStatusCounts);
     
     // Apply search filter
     if (searchTerm.trim()) {

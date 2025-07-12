@@ -696,6 +696,117 @@ export async function getAllHostBookings() {
   }
 }
 
+// Get all bookings for a specific listing including matches ready to be converted to bookings
+export async function getAllListingBookings(listingId: string) {
+  try {
+    const { userId } = auth();
+    console.log('🔍 getAllListingBookings - Auth userId:', userId, 'listingId:', listingId);
+    
+    if (!userId) {
+      console.log('❌ No userId found in auth for getAllListingBookings');
+      return { bookings: [], readyMatches: [] };
+    }
+
+    // First verify the listing belongs to the current user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing || listing.userId !== userId) {
+      console.log('❌ Unauthorized to view bookings for this listing');
+      return { bookings: [], readyMatches: [] };
+    }
+
+    console.log('✅ Fetching listing bookings and ready matches for listingId:', listingId);
+    
+    // Get existing bookings for this specific listing
+    const bookings = await prisma.booking.findMany({
+      where: { 
+        listingId: listingId
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        listing: {
+          select: {
+            title: true,
+            imageSrc: true,
+            streetAddress1: true,
+            city: true,
+            state: true,
+            postalCode: true
+          }
+        },
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        trip: {
+          select: {
+            numAdults: true,
+            numPets: true,
+            numChildren: true
+          }
+        }
+      }
+    });
+
+    // Get matches ready to be converted to bookings for this specific listing
+    const readyMatches = await prisma.match.findMany({
+      where: {
+        AND: [
+          { listingId: listingId }, // Only matches for this specific listing
+          { paymentAuthorizedAt: { not: null } }, // Payment is authorized
+          { booking: null }, // No booking exists yet
+          {
+            BoldSignLease: {
+              tenantSigned: true // Tenant has signed
+            }
+          }
+        ]
+      },
+      orderBy: { paymentAuthorizedAt: 'desc' },
+      include: {
+        trip: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                email: true
+              }
+            }
+          }
+        },
+        listing: {
+          select: {
+            title: true,
+            imageSrc: true,
+            streetAddress1: true,
+            city: true,
+            state: true,
+            postalCode: true
+          }
+        },
+        BoldSignLease: true,
+        Lease: true
+      }
+    });
+
+    console.log('📊 FINAL RESULTS - Found bookings:', bookings.length, 'ready matches:', readyMatches.length);
+    console.log('🔍 Booking IDs found:', bookings.map(b => b.id));
+    console.log('🔍 Ready match IDs found:', readyMatches.map(m => m.id));
+    
+    return { bookings, readyMatches };
+  } catch (error) {
+    console.error('Error in getAllListingBookings:', error);
+    return { bookings: [], readyMatches: [] };
+  }
+}
+
 // Utility function to check for completed matches and create bookings
 export async function createBookingsForCompletedMatches() {
   try {
