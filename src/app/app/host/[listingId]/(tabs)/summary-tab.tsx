@@ -1371,7 +1371,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                     {leaseTerms.map((term) => (
                     <div 
                       key={term.months}
-                      className="bg-white border border-[#e7f0f0] rounded-lg p-4"
+                      className="bg-white border border-[#e7f0f0] rounded-lg p-4 max-w-[310px] mx-auto"
                     >
                       <div className="space-y-3">
                         <div className="text-sm font-medium text-[#373940]">
