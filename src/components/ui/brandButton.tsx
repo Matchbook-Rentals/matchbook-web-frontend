@@ -2,6 +2,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import Link from "next/link"
+import { Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -45,11 +46,23 @@ export interface BrandButtonProps
   href?: string
   ringOffsetColor?: string
   ringInset?: boolean
+  spinOnClick?: boolean
 }
 
 const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
-  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, href, ringOffsetColor, ringInset, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, href, ringOffsetColor, ringInset, spinOnClick = false, onClick, ...props }, ref) => {
+    const [isLoading, setIsLoading] = React.useState(false)
     const Comp = asChild ? Slot : "button"
+    
+    // Handle click with optional spinner
+    const handleClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+      if (spinOnClick) {
+        setIsLoading(true)
+      }
+      if (onClick) {
+        onClick(e)
+      }
+    }, [spinOnClick, onClick])
     
     // Special handling for link variant with 2xl size
     const isLink2xl = variant === "link" && size === "2xl"
@@ -97,12 +110,17 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
               className?.replace(/focus-visible:[\w-]+/g, '').trim()
             )}
           >
-            {leftIcon && <span className="mr-0">{leftIcon}</span>}
+            {(isLoading && spinOnClick) ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              leftIcon && <span className="mr-0">{leftIcon}</span>
+            )}
             {children}
             {rightIcon && <span className="ml-0">{rightIcon}</span>}
           </div>
           <Link 
             href={href} 
+            onClick={handleClick}
             className={cn(
               "absolute inset-0 w-full h-full focus:outline-none focus-within:outline-none rounded-lg",
               // Only add default outline width if no custom one is provided
@@ -132,10 +150,16 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
           link2xlClasses,
           "focus:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
         )}
+        onClick={handleClick}
+        disabled={isLoading || props.disabled}
         ref={ref}
         {...props}
       >
-        {leftIcon && <span className="mr-0">{leftIcon}</span>}
+        {(isLoading && spinOnClick) ? (
+          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+        ) : (
+          leftIcon && <span className="mr-0">{leftIcon}</span>
+        )}
         {children}
         {rightIcon && <span className="ml-0">{rightIcon}</span>}
       </Comp>

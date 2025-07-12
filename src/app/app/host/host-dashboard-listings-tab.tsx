@@ -1,9 +1,11 @@
 "use client";
 
-import { MoreHorizontalIcon, Search, Loader2 } from "lucide-react";
+import { MoreHorizontalIcon, MoreVerticalIcon, Search, Loader2, MapPinIcon, Bed, Bath, Square } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -314,68 +316,108 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
             : fullAddress;
           
           return (
-            <Card
-              key={listing.id}
-              className="mb-8 rounded-[5px] border border-solid border-[#6e504933]"
-            >
-              <CardContent className="p-4">
-                <div className="mb-2">
-                  <div className="flex justify-between">
-                    <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                      {displayAddress}
-                    </h2>
-                    <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl text-right leading-4">
-                      {formatPrice(listing)}
+            <Card className="w-full p-6 rounded-xl mb-8">
+              <CardContent className="p-0">
+                <div className="flex gap-6">
+                  {/* Property Image */}
+                  <div className="w-[209px] h-[140px] rounded-xl overflow-hidden flex-shrink-0">
+                    <img
+                      className="w-full h-full object-cover"
+                      alt="Property image"
+                      src={listing.listingImages?.[0]?.url || "/image-35.png"}
+                    />
+                  </div>
+
+                  {/* Property Details */}
+                  <div className="flex flex-col gap-4 flex-grow">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-2">
+                        {/* Status Badge */}
+                        <Badge className={`w-fit ${status === 'Active' ? 'bg-[#e9f7ee] text-[#1ca34e] border border-[#1ca34e] hover:bg-[#e9f7ee] hover:text-[#1ca34e]' : status === 'Rented' ? 'bg-blue-50 text-blue-600 border border-blue-600 hover:bg-blue-50 hover:text-blue-600' : 'bg-red-50 text-red-600 border border-red-600 hover:bg-red-50 hover:text-red-600'}`}>
+                          {status}
+                        </Badge>
+
+                        {/* Property Name */}
+                        <h3 className="font-text-label-large-medium text-[#484a54] text-[18px]">
+                          {listing.title || displayAddress}
+                        </h3>
+                      </div>
+
+                      {/* Property Address */}
+                      <div className="flex items-center gap-2 w-full">
+                        <MapPinIcon className="w-5 h-5 text-[#777b8b]" />
+                        <span className="font-text-label-small-regular text-[#777b8b] text-[14px]">
+                          {displayAddress}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Property Features */}
+                    <div className="flex items-center gap-10">
+                      {/* Bedroom */}
+                      <div className="flex items-center gap-1.5 py-1.5">
+                        <Bed className="w-5 h-5 text-gray-500" />
+                        <span className="font-medium text-sm text-[#344054]">
+                          {listing.bedrooms?.length || listing.bedroomCount || 0} Bedroom{(listing.bedrooms?.length || listing.bedroomCount || 0) !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+
+                      {/* Bathroom */}
+                      <div className="flex items-center gap-1.5 py-1.5">
+                        <Bath className="w-5 h-5 text-gray-500" />
+                        <span className="font-medium text-sm text-[#344054]">
+                          {listing.bathroomCount || 0} Bathroom{(listing.bathroomCount || 0) !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+
+                      {/* Square Footage */}
+                      <div className="flex items-center gap-1.5 py-1.5">
+                        <Square className="w-5 h-5 text-gray-500" />
+                        <span className="font-medium text-sm text-[#344054]">
+                          {listing.squareFeet || 'N/A'} Sqft
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  {listing.title && (
-                    <div className="flex justify-between mt-1">
-                      <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[16px] leading-5">
-                        {listing.title}
-                      </div>
-                      <div
-                        className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusColor}`}
-                      >
-                        {status}
-                      </div>
-                    </div>
-                  )}
+                  {/* Right Side - Price and Actions */}
+                  <div className="flex flex-col justify-between items-end">
+                    {/* More Options Button */}
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-lg border-[#3c8787] h-10 w-10"
+                    >
+                      <MoreVerticalIcon className="h-5 w-5" />
+                    </Button>
 
-                  <div className="mt-1">
-                    <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
-                      {formatDetails(listing)}
+                    <div className="flex flex-col items-end gap-3">
+                      {/* Price */}
+                      <p className="font-semibold text-xl text-[#484a54]">
+                        {formatPrice(listing)}
+                      </p>
+
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-3">
+                        <CalendarDialog 
+                          bookings={listing.bookings || []}
+                          unavailabilities={listing.unavailablePeriods || []}
+                          triggerText="View Calendar"
+                          listingId={listing.id}
+                          showIcon={false}
+                          triggerClassName="!border-primaryBrand !text-primaryBrand hover:!bg-primaryBrand hover:!text-white !transition-all !duration-300 !h-[36px] !min-w-[156px] !rounded-lg !px-4 !py-3 !gap-1 !font-['Poppins'] !font-semibold !text-sm !leading-5 !tracking-normal"
+                        />
+                        <BrandButton 
+                          variant="default"
+                          size="sm"
+                          href={`/app/host/${listing.id}/summary`}
+                          spinOnClick={true}
+                        >
+                          Manage Listing
+                        </BrandButton>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-4 mt-8">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleViewListingDetails(listing.id)}
-                    disabled={loadingListingId === listing.id}
-                    className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] flex items-center gap-2"
-                  >
-                    View Listing Details
-                    {loadingListingId === listing.id && (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    )}
-                  </Button>
-
-                  <CalendarDialog 
-                    bookings={listing.bookings || []}
-                    unavailabilities={listing.unavailablePeriods || []}
-                    triggerText="View Calendar"
-                    listingId={listing.id}
-                  />
-
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] h-10 w-10 p-2"
-                  >
-                    <MoreHorizontalIcon className="h-5 w-5" />
-                  </Button>
                 </div>
               </CardContent>
             </Card>

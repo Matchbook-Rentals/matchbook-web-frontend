@@ -117,11 +117,6 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                         rank: null, // append to end
                       }));
                       setListingPhotos(prev => Array.isArray(prev) ? [...prev, ...newPhotos] : newPhotos);
-                      toast({
-                        title: "Success",
-                        description: `${res.length} photo${res.length === 1 ? '' : 's'} uploaded successfully`,
-                        variant: "success"
-                      });
                     }
                   }}
                   onUploadError={(error) => {

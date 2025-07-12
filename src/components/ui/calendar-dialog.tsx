@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { getDaysInMonth, startOfMonth, format, isWithinInterval, isSameDay, parseISO, isAfter, isBefore } from 'date-fns';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 
 interface Booking {
   id: string;
@@ -29,6 +29,7 @@ interface CalendarDialogProps {
   triggerText?: string;
   triggerClassName?: string;
   listingId?: string;
+  showIcon?: boolean;
 }
 
 const CalendarHeader = ({ currentDate, setCurrentDate }: { currentDate: Date; setCurrentDate: (date: Date) => void }) => {
@@ -213,22 +214,20 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
   unavailabilities = [], 
   triggerText = "Manage Calendar",
   triggerClassName = "",
-  listingId
+  listingId,
+  showIcon = true
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleManageCalendar = () => {
+    setIsLoading(true);
     setOpen(false);
-    if (listingId) {
-      router.push(`/app/host/${listingId}`);
-    }
   };
 
   return (
@@ -239,7 +238,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
             variant="outline" 
             className={`rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] ${triggerClassName}`}
           >
-            <CalendarIcon className="h-4 w-4 mr-2" />
+            {showIcon && <CalendarIcon className="h-4 w-4 mr-2" />}
             {triggerText}
           </Button>
         </DialogTrigger>
@@ -263,12 +262,22 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
               >
                 Close
               </Button>
-              <Button 
+              <BrandButton 
+                variant="default"
                 onClick={handleManageCalendar}
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white"
+                disabled={isLoading}
+                className="flex-1"
+                href={listingId ? `/app/host/${listingId}/calendar` : undefined}
               >
-                Manage Calendar
-              </Button>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  'Manage Calendar'
+                )}
+              </BrandButton>
             </div>
           </div>
         </DialogContent>
