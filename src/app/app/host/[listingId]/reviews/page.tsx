@@ -1,86 +1,227 @@
 import React from "react";
+import { HOST_PAGE_STYLE } from "@/constants/styles";
+import { HostPageTitle } from "../(components)/host-page-title";
+import { HostReviewClient } from "./host-review-client";
+import { auth } from "@clerk/nextjs/server";
 import { getListingById } from '@/app/actions/listings';
-import { notFound } from 'next/navigation';
-import { UserRating } from '../../../../../components/reviews/host-review';
-import { HostPageTitle } from '../(components)/host-page-title';
-import { HOST_PAGE_STYLE } from '@/constants/styles';
 
-const sampleReviewData = {
-  overallRating: 4.2,
-  totalReviews: 3,
-  ratingDistribution: [
-    { stars: 5, percentage: 33 },
-    { stars: 4, percentage: 33 },
-    { stars: 3, percentage: 33 },
-    { stars: 2, percentage: 0 },
-    { stars: 1, percentage: 0 },
+// Sample data
+const sampleReviewsData = {
+  overallRating: 4.5,
+  totalReviews: 2243,
+  averageRating: 4.5,
+  ratingBreakdown: [
+    { stars: 5, percentage: 40, count: 897 },
+    { stars: 4, percentage: 50, count: 1122 },
+    { stars: 3, percentage: 70, count: 157 },
+    { stars: 2, percentage: 30, count: 67 },
+    { stars: 1, percentage: 30, count: 0 },
   ],
   reviews: [
     {
-      name: "Sarah Johnson",
-      memberSince: "On Matchbook since 2023",
-      overallRating: 5,
-      categoryRatings: [
-        { category: "Listing Accuracy and Value", rating: 5.0 },
-        { category: "Responsiveness and Maintenance", rating: 5.0 },
-        { category: "Privacy and Safety", rating: 5.0 },
-      ],
-      avatarImgUrl: "/placeholderImages/image_2.jpg"
+      id: 1,
+      name: "Alex Johnson",
+      time: "2 days ago",
+      rating: 5.0,
+      location: "Downtown Austin, TX",
+      review: "Absolutely amazing stay! The property was spotless, perfectly located, and the host was incredibly responsive. Would definitely book again.",
+      avatar: "/avatar-1.png",
     },
     {
-      name: "Mike Chen",
-      memberSince: "On Matchbook since 2022",
-      overallRating: 4,
-      categoryRatings: [
-        { category: "Listing Accuracy and Value", rating: 4.0 },
-        { category: "Responsiveness and Maintenance", rating: 4.5 },
-        { category: "Privacy and Safety", rating: 3.5 },
-      ],
-      avatarImgUrl: "/placeholderImages/image_3.jpg"
+      id: 2,
+      name: "Sarah Williams",
+      time: "1 week ago",
+      rating: 4.0,
+      location: "South Beach, Miami, FL",
+      review: "Great location and beautiful apartment. The view was stunning and everything was as described. Minor issue with wifi but quickly resolved.",
+      avatar: "/avatar-2.png",
     },
     {
-      name: "Emma Rodriguez",
-      memberSince: "On Matchbook since 2024",
-      overallRating: 3,
-      categoryRatings: [
-        { category: "Listing Accuracy and Value", rating: 3.0 },
-        { category: "Responsiveness and Maintenance", rating: 2.5 },
-        { category: "Privacy and Safety", rating: 3.5 },
-      ],
-      avatarImgUrl: "/placeholderImages/image_4.jpg"
-    }
+      id: 3,
+      name: "Michael Chen",
+      time: "2 weeks ago",
+      rating: 5.0,
+      location: "Mission District, San Francisco, CA",
+      review: "Perfect for our business trip. Clean, modern, and well-equipped kitchen. Host provided excellent local recommendations.",
+      avatar: "/avatar-3.png",
+    },
+    {
+      id: 4,
+      name: "Emily Davis",
+      time: "3 weeks ago",
+      rating: 4.0,
+      location: "Capitol Hill, Seattle, WA",
+      review: "Loved the cozy atmosphere and the neighborhood was fantastic. Easy access to public transport and great restaurants nearby.",
+      avatar: "/avatar-4.png",
+    },
+    {
+      id: 5,
+      name: "David Rodriguez",
+      time: "1 month ago",
+      rating: 5.0,
+      location: "Brooklyn Heights, NY",
+      review: "Outstanding hospitality! The space was immaculate and the host went above and beyond to ensure our comfort. Highly recommended!",
+      avatar: "/avatar-5.png",
+    },
+    {
+      id: 6,
+      name: "Jessica Thompson",
+      time: "1 month ago",
+      rating: 4.0,
+      location: "River North, Chicago, IL",
+      review: "Stylish apartment with all the amenities we needed. The location was perfect for exploring the city. Would stay here again.",
+      avatar: "/avatar-6.png",
+    },
+    {
+      id: 7,
+      name: "Ryan Martinez",
+      time: "5 weeks ago",
+      rating: 3.0,
+      location: "Gaslamp Quarter, San Diego, CA",
+      review: "Good value for money. The space was adequate for our needs, though it could use some updates. Host was helpful with check-in.",
+      avatar: "/avatar-7.png",
+    },
+    {
+      id: 8,
+      name: "Amanda Wilson",
+      time: "6 weeks ago",
+      rating: 5.0,
+      location: "Pearl District, Portland, OR",
+      review: "Exceptional experience from start to finish. The property exceeded our expectations and the host was incredibly welcoming.",
+      avatar: "/avatar-8.png",
+    },
+    {
+      id: 9,
+      name: "James Brown",
+      time: "2 months ago",
+      rating: 4.0,
+      location: "French Quarter, New Orleans, LA",
+      review: "Great location in the heart of the action. The property was clean and comfortable. Parking was a bit challenging but manageable.",
+      avatar: "/avatar-9.png",
+    },
+    {
+      id: 10,
+      name: "Lisa Anderson",
+      time: "2 months ago",
+      rating: 5.0,
+      location: "Back Bay, Boston, MA",
+      review: "Perfect for our family vacation. Spacious, clean, and well-located. Kids loved the nearby park and we enjoyed the local cafes.",
+      avatar: "/avatar-10.png",
+    },
+    {
+      id: 11,
+      name: "Kevin Taylor",
+      time: "3 months ago",
+      rating: 4.0,
+      location: "Midtown, Atlanta, GA",
+      review: "Solid choice for business travelers. Good workspace setup and reliable internet. Host provided helpful local business recommendations.",
+      avatar: "/avatar-11.png",
+    },
+    {
+      id: 12,
+      name: "Nicole Garcia",
+      time: "3 months ago",
+      rating: 5.0,
+      location: "South End, Charlotte, NC",
+      review: "Absolutely loved our stay! The attention to detail was impressive and the host made us feel like VIPs. Will definitely return.",
+      avatar: "/avatar-12.png",
+    },
+    {
+      id: 13,
+      name: "Christopher Lee",
+      time: "4 months ago",
+      rating: 3.0,
+      location: "Capitol Peak, Denver, CO",
+      review: "Decent place with good mountain views. Some appliances were showing age but overall functional. Host was responsive to questions.",
+      avatar: "/avatar-13.png",
+    },
+    {
+      id: 14,
+      name: "Rachel White",
+      time: "4 months ago",
+      rating: 5.0,
+      location: "Old Town, Scottsdale, AZ",
+      review: "Incredible desert retreat! The property was beautifully designed and the outdoor space was perfect for relaxing after long days.",
+      avatar: "/avatar-14.png",
+    },
+    {
+      id: 15,
+      name: "Mark Harris",
+      time: "5 months ago",
+      rating: 4.0,
+      location: "Belltown, Seattle, WA",
+      review: "Great urban experience. Walking distance to everything we wanted to see. Property was modern and well-maintained.",
+      avatar: "/avatar-15.png",
+    },
+    {
+      id: 16,
+      name: "Stephanie Clark",
+      time: "5 months ago",
+      rating: 5.0,
+      location: "Arts District, Los Angeles, CA",
+      review: "Fantastic stay in a vibrant neighborhood. The loft was stylish and comfortable. Host provided great local art gallery recommendations.",
+      avatar: "/avatar-16.png",
+    },
+    {
+      id: 17,
+      name: "Thomas Lewis",
+      time: "6 months ago",
+      rating: 4.0,
+      location: "Medical District, Houston, TX",
+      review: "Convenient location for our medical appointments. Clean and comfortable with easy parking. Host was understanding of our needs.",
+      avatar: "/avatar-17.png",
+    },
+    {
+      id: 18,
+      name: "Jennifer Walker",
+      time: "6 months ago",
+      rating: 5.0,
+      location: "Wynwood, Miami, FL",
+      review: "Amazing artistic neighborhood and the property fit right in! Unique decor and perfect for Instagram photos. Loved every minute.",
+      avatar: "/avatar-18.png",
+    },
+    {
+      id: 19,
+      name: "Daniel Hall",
+      time: "7 months ago",
+      rating: 4.0,
+      location: "Inner Richmond, San Francisco, CA",
+      review: "Good value in an expensive city. Property was clean and functional. Host provided helpful transportation tips for getting around.",
+      avatar: "/avatar-19.png",
+    },
+    {
+      id: 20,
+      name: "Megan Young",
+      time: "7 months ago",
+      rating: 5.0,
+      location: "East Village, New York, NY",
+      review: "Perfect NYC experience! The apartment had character and charm while being modern and comfortable. Host was a true New Yorker with great tips.",
+      avatar: "/avatar-20.png",
+    },
   ]
 };
 
-interface ReviewsPageProps {
-  params: { listingId: string };
+async function fetchReviews() {
+  // Simulate data fetching delay
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  return sampleReviewsData;
 }
 
-export default async function ReviewsPage({ params }: ReviewsPageProps) {
-  const { listingId } = params;
+export default async function ReviewsPage({ params }: { params: { listingId: string } }) {
+  const reviewsData = await fetchReviews();
   
-  console.log('ReviewsPage: Starting data fetch...');
-  
+  // Check if user is admin
+  const { sessionClaims } = await auth();
+  const isAdmin = sessionClaims?.metadata?.role === 'admin';
+
   // Fetch listing data
-  const listing = await getListingById(listingId);
+  const listing = await getListingById(params.listingId);
+  const subtitle = `View and manage reviews for ${listing?.streetAddress1 || listing?.title || 'this listing'}`;
 
-  if (!listing) return notFound();
-
-  console.log('ReviewsPage: Data fetched successfully');
-  console.log('- listing:', listing.streetAddress1);
-  
-  // TODO: Replace sampleReviewData with actual reviews data when available
-  // const reviews = await getReviewsByListingId(listingId);
-  
   return (
-    <div className={HOST_PAGE_STYLE}>
-      <HostPageTitle 
-        title="Reviews" 
-        subtitle={`Reviews for ${listing.streetAddress1}`} 
-      />
-      <div className="mt-8">
-        <UserRating data={sampleReviewData} />
-      </div>
+    <div className={`${HOST_PAGE_STYLE} flex flex-col min-h-0 flex-1`}>
+      <HostPageTitle title="Reviews" subtitle={subtitle} />
+      <HostReviewClient mockData={reviewsData} isAdmin={isAdmin} />
     </div>
   );
 }
