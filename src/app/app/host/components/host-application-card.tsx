@@ -1,4 +1,4 @@
-import { MapPinIcon, MoreVertical, Home } from "lucide-react";
+import { MapPinIcon, MoreVertical, Home, Loader2 } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ interface HostApplicationCardProps {
   onMessageGuest?: () => void;
   onManageListing?: () => void;
   className?: string;
+  isLoading?: boolean;
 }
 
 export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
@@ -40,12 +41,19 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
   onMessageGuest,
   onManageListing,
   className = "",
+  isLoading = false,
 }) => {
 
   return (
-    <Card className={`w-full p-6 rounded-xl ${className}`}>
+    <Card className={`w-full p-6 rounded-xl ${className} ${isLoading ? 'opacity-75' : ''}`}>
       <CardContent className="p-0">
-        <div className="flex items-start gap-2 w-full">
+        <div className="flex items-start gap-2 w-full relative">
+          {/* Loading overlay */}
+          {isLoading && (
+            <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-xl">
+              <Loader2 className="w-8 h-8 animate-spin text-[#3c8787]" />
+            </div>
+          )}
           <div className="flex items-start gap-6 flex-1">
             {/* Profile Image */}
             {status.toLowerCase() === 'approved' ? (
@@ -126,6 +134,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
                     variant="outline"
                     size="icon"
                     className="p-2.5 rounded-lg border-[#3c8787] text-[#3c8787]"
+                    disabled={isLoading}
                   >
                     <MoreVertical className="w-5 h-5" />
                   </Button>
@@ -152,13 +161,22 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
                 <BrandButton
                   variant="outline"
                   onClick={onApplicationDetails}
+                  disabled={isLoading}
                 >
-                  Application Details
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Loading...
+                    </>
+                  ) : (
+                    'Application Details'
+                  )}
                 </BrandButton>
 
                 <BrandButton 
                   variant="default"
                   onClick={onMessageGuest}
+                  disabled={isLoading}
                 >
                   Message Guest
                 </BrandButton>

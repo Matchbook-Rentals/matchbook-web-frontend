@@ -303,9 +303,24 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     setLoadingApplicationId(null);
   }, [pathname]);
 
-  const handleViewApplicationDetails = (applicationId: string) => {
-    setLoadingApplicationId(applicationId);
-    router.push(`/app/host/${listing.id}/applications/${applicationId}?from=listing`);
+  const handleViewApplicationDetails = async (applicationId: string) => {
+    try {
+      setLoadingApplicationId(applicationId);
+      
+      // Set a timeout to clear loading state if navigation takes too long
+      const timeoutId = setTimeout(() => {
+        setLoadingApplicationId(null);
+      }, 10000); // 10 second timeout
+      
+      router.push(`/app/host/${listing.id}/applications/${applicationId}?from=listing`);
+      
+      // Clear timeout if navigation is successful
+      clearTimeout(timeoutId);
+    } catch (error) {
+      console.error('Error navigating to application details:', error);
+      setLoadingApplicationId(null);
+      // You could add a toast notification here for user feedback
+    }
   };
 
   // Determine which data to use based on mock data toggle
@@ -411,6 +426,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
               }}
               onManageListing={() => router.push(`/app/host/${listing.id}/summary`)}
               className="border border-solid border-[#6e504933]"
+              isLoading={loadingApplicationId === app.id}
             />
           </div>
         );

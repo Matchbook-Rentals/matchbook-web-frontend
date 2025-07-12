@@ -23,7 +23,7 @@ const ApplicationDetails = ({ selectedApplication }: { selectedApplication: Requ
   ];
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
+    <Card className="w-full test max-w-3xl mx-auto">
       <ApplicationSummary
         trip={selectedApplication?.trip}
         application={application}

@@ -327,9 +327,24 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     setLoadingApplicationId(null);
   }, [pathname]);
 
-  const handleViewApplicationDetails = (listingId: string, applicationId: string) => {
-    setLoadingApplicationId(applicationId);
-    router.push(`/app/host/${listingId}/applications/${applicationId}?from=dashboard`);
+  const handleViewApplicationDetails = async (listingId: string, applicationId: string) => {
+    try {
+      setLoadingApplicationId(applicationId);
+      
+      // Set a timeout to clear loading state if navigation takes too long
+      const timeoutId = setTimeout(() => {
+        setLoadingApplicationId(null);
+      }, 10000); // 10 second timeout
+      
+      router.push(`/app/host/${listingId}/applications/${applicationId}?from=dashboard`);
+      
+      // Clear timeout if navigation is successful
+      clearTimeout(timeoutId);
+    } catch (error) {
+      console.error('Error navigating to application details:', error);
+      setLoadingApplicationId(null);
+      // You could add a toast notification here for user feedback
+    }
   };
 
   // Debug logging
@@ -449,6 +464,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
               }}
               onManageListing={() => router.push(`/app/host/${app.listingId}/summary`)}
               className="border border-solid border-[#6e504933]"
+              isLoading={loadingApplicationId === app.id}
             />
           </div>
         );
