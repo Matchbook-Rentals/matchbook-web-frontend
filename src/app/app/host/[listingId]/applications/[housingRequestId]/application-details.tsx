@@ -17,6 +17,7 @@ import { createBoldSignLeaseFromHousingRequest, removeBoldSignLease } from "@/ap
 import { toast } from "sonner";
 import { StripeConnectVerificationDialog } from "@/components/brandDialog";
 import { useClientLogger } from "@/hooks/useClientLogger";
+import { useUser } from "@clerk/nextjs";
 
 interface HousingRequestWithUser extends HousingRequest {
   user: User & {
@@ -152,6 +153,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const router = useRouter();
   const searchParams = useSearchParams();
   const logger = useClientLogger();
+  const { user: clerkUser } = useUser();
   const [isApproving, setIsApproving] = useState(false);
   const [isDeclining, setIsDeclining] = useState(false);
   const [isUndoing, setIsUndoing] = useState(false);
@@ -166,6 +168,13 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [boldSignLeaseId, setBoldSignLeaseId] = useState(housingRequest.boldSignLeaseId);
   const [isStripeDialogOpen, setIsStripeDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Admin detection and editable income state
+  const [testIncome, setTestIncome] = useState<number | null>(null);
+  const [isEditingIncome, setIsEditingIncome] = useState(false);
+  
+  // Check if user is admin
+  const isAdmin = clerkUser?.publicMetadata?.role === 'admin';
   
   // Log browser/OS info for debugging Mac-specific issues
   useEffect(() => {
@@ -287,7 +296,56 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
 
   // Helper function to calculate total monthly income
   const getTotalMonthlyIncome = () => {
+    // For admins, use test income if set, otherwise use actual income
+    if (isAdmin && testIncome !== null) {
+      return testIncome;
+    }
     return application?.incomes?.reduce((acc, cur) => acc + Number(cur.monthlyAmount || 0), 0) || 0;
+  };
+
+  // Helper function to get rent-to-income ratio classification
+  const getRentToIncomeClassification = (ratio: number) => {
+    if (ratio <= 30) {
+      return {
+        status: 'Ideal',
+        description: 'Low risk. Strong ability to pay rent.',
+        recommendation: 'Approve without hesitation.',
+        color: '#39b54a', // Green
+        bgColor: '#f0f9f0'
+      };
+    } else if (ratio <= 35) {
+      return {
+        status: 'Acceptable',
+        description: 'Still reasonable if other factors (credit, savings) are good.',
+        recommendation: 'Approve with standard screening.',
+        color: '#5c9ac5', // Blue
+        bgColor: '#f0f8ff'
+      };
+    } else if (ratio <= 40) {
+      return {
+        status: 'Borderline',
+        description: 'Moderate risk. May struggle if unexpected expenses arise.',
+        recommendation: 'Consider with compensating factors (e.g. guarantor, high credit, longer history).',
+        color: '#f39c12', // Orange
+        bgColor: '#fffbf0'
+      };
+    } else if (ratio <= 50) {
+      return {
+        status: 'High Risk',
+        description: 'Rent-heavy budget; may lead to late or missed payments.',
+        recommendation: 'Likely decline unless exceptional compensating factors exist.',
+        color: '#e67e22', // Dark orange
+        bgColor: '#fff5f0'
+      };
+    } else {
+      return {
+        status: 'Very High Risk',
+        description: 'Unsustainable. Indicates high likelihood of payment issues.',
+        recommendation: 'Decline.',
+        color: '#e74c3c', // Red
+        bgColor: '#fff0f0'
+      };
+    }
   };
 
   // Helper function to calculate rent-to-income ratio
@@ -295,16 +353,13 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     const monthlyRent = getMonthlyRent();
     const monthlyIncome = getTotalMonthlyIncome();
     
-    if (monthlyIncome === 0) return { percentage: 'N/A', status: 'Unknown' };
+    if (monthlyIncome === 0) return { percentage: 'N/A', status: 'Unknown', classification: null };
     
     const ratio = (monthlyRent / monthlyIncome) * 100;
     const percentage = Math.round(ratio);
+    const classification = getRentToIncomeClassification(ratio);
     
-    let status = 'Poor';
-    if (ratio <= 30) status = 'Great';
-    else if (ratio <= 40) status = 'Good';
-    
-    return { percentage: `${percentage}%`, status };
+    return { percentage: `${percentage}%`, status: classification.status, classification, rawRatio: ratio };
   };
 
   // Helper function to get upload button text based on phase
@@ -1035,27 +1090,88 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               </p>
             </div>
             <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {formatCurrency(getTotalMonthlyIncome())}
-              </p>
+              {isAdmin ? (
+                <div className="flex items-center gap-2">
+                  {isEditingIncome ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={testIncome || getTotalMonthlyIncome()}
+                        onChange={(e) => setTestIncome(Number(e.target.value) || 0)}
+                        className="text-[20px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] border border-gray-300 rounded px-2 py-1 w-32"
+                        min="0"
+                        step="100"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsEditingIncome(false)}
+                        className="text-xs"
+                      >
+                        Done
+                      </Button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setIsEditingIncome(true)}
+                      className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] hover:text-blue-600 cursor-pointer border-b border-dashed border-gray-400 hover:border-blue-600"
+                    >
+                      {formatCurrency(getTotalMonthlyIncome())}
+                    </button>
+                  )}
+                  {testIncome !== null && (
+                    <span className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                      Test Mode
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
+                  {formatCurrency(getTotalMonthlyIncome())}
+                </p>
+              )}
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
                 Household income
               </p>
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Helvetica-Regular',Helvetica]">
                   {getRentToIncomeRatio().percentage}
                 </p>
-                <div className={`px-3 py-1 rounded border bg-background ${
-                  getRentToIncomeRatio().status === 'Great' ? 'border-[#39b54a] text-[#39b54a]' : 
-                  getRentToIncomeRatio().status === 'Good' ? 'border-[#f39c12] text-[#f39c12]' : 
-                  'border-[#e74c3c] text-[#e74c3c]'
-                }`}>
-                  <p className="text-sm font-normal [font-family:'Poppins',Helvetica]">
-                    {getRentToIncomeRatio().status}
-                  </p>
-                </div>
+                {getRentToIncomeRatio().classification && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div 
+                          className="px-3 py-1 rounded border bg-background cursor-help"
+                          style={{
+                            borderColor: getRentToIncomeRatio().classification?.color,
+                            color: getRentToIncomeRatio().classification?.color,
+                            backgroundColor: getRentToIncomeRatio().classification?.bgColor
+                          }}
+                        >
+                          <p className="text-sm font-medium [font-family:'Poppins',Helvetica]">
+                            {getRentToIncomeRatio().status}
+                          </p>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <div className="space-y-2">
+                          <p className="font-medium">
+                            {getRentToIncomeRatio().status} (≤{getRentToIncomeRatio().rawRatio <= 30 ? '30' : getRentToIncomeRatio().rawRatio <= 35 ? '35' : getRentToIncomeRatio().rawRatio <= 40 ? '40' : getRentToIncomeRatio().rawRatio <= 50 ? '50' : '>50'}%)
+                          </p>
+                          <p className="text-sm">
+                            {getRentToIncomeRatio().classification?.description}
+                          </p>
+                          <p className="text-sm font-medium">
+                            {getRentToIncomeRatio().classification?.recommendation}
+                          </p>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </div>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
                 Rent to income ratio
