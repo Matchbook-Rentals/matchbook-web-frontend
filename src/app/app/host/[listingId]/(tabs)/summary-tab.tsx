@@ -6,10 +6,12 @@ import { useListingDashboard } from '../listing-dashboard-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { BrandCheckbox } from '@/app/brandCheckbox';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2 } from 'lucide-react';
 import Tile from '@/components/ui/tile';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -73,6 +75,12 @@ const AMENITY_GROUPS = [
   },
 ];
 
+interface LeaseTermPricing {
+  months: number;
+  price: string;
+  utilitiesIncluded: boolean;
+}
+
 interface SummaryTabProps {
   listing: ListingAndImages;
   onListingUpdate?: (updatedListing: ListingAndImages) => void;
@@ -95,17 +103,97 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
   const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
   const [dragOverTrash, setDragOverTrash] = useState(false);
   const [dropPreviewIndex, setDropPreviewIndex] = useState<number | null>(null);
+  
+  // Lease terms state
+  const [leaseTerms, setLeaseTerms] = useState<LeaseTermPricing[]>(() => {
+    const terms: LeaseTermPricing[] = [];
+    const shortest = currentListing.shortestLeaseLength || 1;
+    const longest = currentListing.longestLeaseLength || 12;
+    
+    for (let i = shortest; i <= longest; i++) {
+      let price = '';
+      if (i === shortest && currentListing.shortestLeasePrice) {
+        price = currentListing.shortestLeasePrice.toString();
+      } else if (i === longest && currentListing.longestLeasePrice) {
+        price = currentListing.longestLeasePrice.toString();
+      }
+      terms.push({ months: i, price, utilitiesIncluded: false });
+    }
+    
+    return terms;
+  });
 
   // Define which fields belong to each section
   const sectionFields: Record<string, string[]> = {
     basic: ['category', 'furnished', 'title', 'petsAllowed'],
     location: ['streetAddress1', 'streetAddress2', 'city', 'state', 'postalCode'],
     details: ['roomCount', 'bathroomCount', 'squareFootage'],
-    pricing: ['shortestLeasePrice', 'longestLeasePrice', 'shortestLeaseLength', 'longestLeaseLength', 'depositSize'],
+    pricing: ['shortestLeasePrice', 'longestLeasePrice', 'shortestLeaseLength', 'longestLeaseLength', 'depositSize', 'rentDueAtBooking', 'petDeposit', 'petRent'],
     amenities: ['wifi', 'parking', 'kitchen', 'laundryFacilities', 'airConditioner', 'heater', 'dedicatedWorkspace', 'wheelchairAccess', 'security', 'alarmSystem', 'gatedEntry', 'smokeDetector', 'carbonMonoxide', 'waterfront', 'beachfront', 'mountainView', 'cityView', 'waterView', 'dishwasher', 'fridge', 'oven', 'stove', 'grill', 'fireplace', 'pool', 'balcony', 'patio', 'hotTub', 'gym', 'sauna', 'tv', 'microwave', 'elevator'],
     // Note: petRent and petSecurityDeposit are not yet in the database schema and should not be sent to server
     description: ['description'],
     photos: [] // Photos are handled separately since they're a relation
+  };
+
+  // Lease terms management functions
+  const updateLeaseTermRange = (newShortestStay: number, newLongestStay: number) => {
+    const newTerms: LeaseTermPricing[] = [];
+    for (let i = newShortestStay; i <= newLongestStay; i++) {
+      const existing = leaseTerms.find(t => t.months === i);
+      if (existing) {
+        newTerms.push(existing);
+      } else {
+        newTerms.push({ months: i, price: '', utilitiesIncluded: false });
+      }
+    }
+    setLeaseTerms(newTerms);
+  };
+
+  const updateLeaseTermPrice = (months: number, price: string) => {
+    const updated = leaseTerms.map(t => 
+      t.months === months ? { ...t, price } : t
+    );
+    setLeaseTerms(updated);
+  };
+
+  const updateLeaseTermUtilities = (months: number, utilitiesIncluded: boolean) => {
+    // Check if all checkboxes are currently unchecked (false)
+    const allUnchecked = leaseTerms.every(t => !t.utilitiesIncluded);
+    
+    if (allUnchecked && utilitiesIncluded) {
+      // First click when all are unchecked - check all months up to and including the clicked month
+      const updated = leaseTerms.map(t => ({
+        ...t,
+        utilitiesIncluded: t.months <= months
+      }));
+      setLeaseTerms(updated);
+    } else {
+      // Normal behavior - just toggle the clicked checkbox
+      const updated = leaseTerms.map(t => 
+        t.months === months ? { ...t, utilitiesIncluded } : t
+      );
+      setLeaseTerms(updated);
+    }
+  };
+
+  const handleLeaseTermsChange = () => {
+    const updatedFormData = { ...formData };
+    
+    // Find the shortest and longest terms with prices
+    const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
+    
+    if (termsWithPrices.length > 0) {
+      const sortedTerms = termsWithPrices.sort((a, b) => a.months - b.months);
+      const shortestTerm = sortedTerms[0];
+      const longestTerm = sortedTerms[sortedTerms.length - 1];
+      
+      updatedFormData.shortestLeaseLength = shortestTerm.months;
+      updatedFormData.shortestLeasePrice = parseFloat(shortestTerm.price);
+      updatedFormData.longestLeaseLength = longestTerm.months;
+      updatedFormData.longestLeasePrice = parseFloat(longestTerm.price);
+    }
+    
+    setFormData(updatedFormData);
   };
 
   // Check if a section has changes
@@ -121,6 +209,41 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         const originalPhoto = originalPhotos[index];
         return photo.id !== originalPhoto?.id || photo.url !== originalPhoto?.url;
       });
+    }
+    
+    if (section === 'pricing') {
+      // Check both regular pricing fields and lease terms
+      const fields = sectionFields[section] || [];
+      const regularChanges = fields.some(field => {
+        const currentValue = formData[field as keyof typeof formData];
+        const originalValue = currentListing[field as keyof typeof currentListing];
+        
+        // Handle different types of comparisons
+        if (currentValue === undefined && originalValue === undefined) return false;
+        if (currentValue === null && originalValue === null) return false;
+        if (currentValue === '' && (originalValue === null || originalValue === undefined)) return false;
+        
+        return currentValue !== originalValue;
+      });
+      
+      // Check if lease terms have changed from original
+      const originalShortestLength = currentListing.shortestLeaseLength || 1;
+      const originalLongestLength = currentListing.longestLeaseLength || 12;
+      const originalTerms: LeaseTermPricing[] = [];
+      
+      for (let i = originalShortestLength; i <= originalLongestLength; i++) {
+        let price = '';
+        if (i === originalShortestLength && currentListing.shortestLeasePrice) {
+          price = currentListing.shortestLeasePrice.toString();
+        } else if (i === originalLongestLength && currentListing.longestLeasePrice) {
+          price = currentListing.longestLeasePrice.toString();
+        }
+        originalTerms.push({ months: i, price, utilitiesIncluded: false });
+      }
+      
+      const leaseTermsChanged = JSON.stringify(leaseTerms) !== JSON.stringify(originalTerms);
+      
+      return regularChanges || leaseTermsChanged;
     }
     
     const fields = sectionFields[section] || [];
@@ -155,6 +278,24 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     // Reset form data when entering edit mode
     if (!editingSections[section]) {
       setFormData(currentListing);
+      
+      // Reset lease terms if editing pricing section
+      if (section === 'pricing') {
+        const terms: LeaseTermPricing[] = [];
+        const shortest = currentListing.shortestLeaseLength || 1;
+        const longest = currentListing.longestLeaseLength || 12;
+        
+        for (let i = shortest; i <= longest; i++) {
+          let price = '';
+          if (i === shortest && currentListing.shortestLeasePrice) {
+            price = currentListing.shortestLeasePrice.toString();
+          } else if (i === longest && currentListing.longestLeasePrice) {
+            price = currentListing.longestLeasePrice.toString();
+          }
+          terms.push({ months: i, price, utilitiesIncluded: false });
+        }
+        setLeaseTerms(terms);
+      }
     }
   };
 
@@ -165,6 +306,24 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       [section]: false
     }));
     setFormData(currentListing); // Reset to current saved data
+    
+    // Reset lease terms if cancelling pricing section
+    if (section === 'pricing') {
+      const terms: LeaseTermPricing[] = [];
+      const shortest = currentListing.shortestLeaseLength || 1;
+      const longest = currentListing.longestLeaseLength || 12;
+      
+      for (let i = shortest; i <= longest; i++) {
+        let price = '';
+        if (i === shortest && currentListing.shortestLeasePrice) {
+          price = currentListing.shortestLeasePrice.toString();
+        } else if (i === longest && currentListing.longestLeasePrice) {
+          price = currentListing.longestLeasePrice.toString();
+        }
+        terms.push({ months: i, price, utilitiesIncluded: false });
+      }
+      setLeaseTerms(terms);
+    }
   };
 
   // Save changes
@@ -173,7 +332,76 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     setButtonStates(prev => ({ ...prev, [section]: 'saving' }));
     
     try {
-      if (section === 'photos') {
+      if (section === 'pricing') {
+        // Update form data with lease terms before saving
+        handleLeaseTermsChange();
+        
+        // Get the updated form data after lease terms processing
+        const updatedFormData = { ...formData };
+        const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
+        
+        if (termsWithPrices.length > 0) {
+          const sortedTerms = termsWithPrices.sort((a, b) => a.months - b.months);
+          const shortestTerm = sortedTerms[0];
+          const longestTerm = sortedTerms[sortedTerms.length - 1];
+          
+          updatedFormData.shortestLeaseLength = shortestTerm.months;
+          updatedFormData.shortestLeasePrice = parseFloat(shortestTerm.price);
+          updatedFormData.longestLeaseLength = longestTerm.months;
+          updatedFormData.longestLeasePrice = parseFloat(longestTerm.price);
+        }
+        
+        // Handle regular pricing fields
+        const fields = sectionFields[section] || [];
+        const updateData: any = {};
+        
+        fields.forEach(field => {
+          const currentValue = updatedFormData[field as keyof typeof updatedFormData];
+          const originalValue = currentListing[field as keyof typeof currentListing];
+          
+          // Only include fields that have changed
+          if (currentValue !== originalValue) {
+            updateData[field] = currentValue;
+          }
+        });
+        
+        if (Object.keys(updateData).length > 0) {
+          console.log(`Saving section '${section}' with data:`, updateData);
+          await updateListing(listing.id, updateData);
+          
+          // Update the current listing with the new data
+          const updatedListing = { ...currentListing, ...updateData };
+          setCurrentListing(updatedListing);
+          setFormData(updatedListing);
+          
+          // Update lease terms to match saved data
+          const newTerms: LeaseTermPricing[] = [];
+          const shortest = updatedListing.shortestLeaseLength || 1;
+          const longest = updatedListing.longestLeaseLength || 12;
+          
+          for (let i = shortest; i <= longest; i++) {
+            let price = '';
+            if (i === shortest && updatedListing.shortestLeasePrice) {
+              price = updatedListing.shortestLeasePrice.toString();
+            } else if (i === longest && updatedListing.longestLeasePrice) {
+              price = updatedListing.longestLeasePrice.toString();
+            }
+            newTerms.push({ months: i, price, utilitiesIncluded: false });
+          }
+          setLeaseTerms(newTerms);
+          
+          // Update the context with the new listing data
+          updateContextListing(updatedListing);
+          
+          // Call the optional callback to update parent component
+          if (onListingUpdate) {
+            onListingUpdate(updatedListing);
+          }
+        } else {
+          console.log(`No changes detected for section '${section}'`);
+        }
+        
+      } else if (section === 'photos') {
         // Handle photos - save to database
         const photos = (formData.listingImages || []).map((photo, index) => ({
           id: photo.id,
@@ -537,16 +765,23 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       valueStyle: "font-text-label-medium-semi-bold",
     },
     {
-      id: "pet-rent",
-      label: "Pet Rent",
-      value: "Not Specified",
+      id: "rent-due-at-booking",
+      label: "Rent Due at Booking",
+      value: currentListing.rentDueAtBooking ? `$${currentListing.rentDueAtBooking.toLocaleString()}` : 'Not specified',
+      width: "w-full sm:w-[320px]",
+      valueStyle: "font-text-label-medium-medium",
+    },
+    {
+      id: "pet-deposit",
+      label: "Pet Deposit",
+      value: currentListing.petDeposit ? `$${currentListing.petDeposit.toLocaleString()}` : (currentListing.petsAllowed ? "Not Specified" : "No Pets"),
       width: "w-full sm:w-[235px]",
       valueStyle: "font-text-label-medium-medium",
     },
     {
-      id: "pet-security-deposit",
-      label: "Pet Security Deposit",
-      value: currentListing.petsAllowed ? "Not Specified" : "No Pets",
+      id: "pet-rent",
+      label: "Pet Rent (Per Pet)",
+      value: currentListing.petRent ? `$${currentListing.petRent.toLocaleString()}/month` : (currentListing.petsAllowed ? "Not Specified" : "No Pets"),
       width: "w-full sm:w-[374px]",
       valueStyle: "font-text-label-medium-medium",
     },
@@ -901,65 +1136,291 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           </div>
 
           {editingSections['pricing'] ? (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-6">
+              {/* Form Inputs on Top */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-sidebar rounded-lg p-4 shadow-lg">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Shortest Lease Price ($)</label>
+                  <label className="text-sm font-medium text-gray-700">Security Deposit</label>
                   <Input
                     type="number"
                     min="0"
-                    value={formData.shortestLeasePrice || ''}
-                    onChange={(e) => updateFormData('shortestLeasePrice', parseInt(e.target.value) || null)}
+                    value={formData.depositSize || ''}
+                    onChange={(e) => updateFormData('depositSize', parseInt(e.target.value) || null)}
                     className="mt-1"
-                    placeholder="Shortest lease monthly rent"
+                    placeholder="Security deposit amount"
                   />
                 </div>
+
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Longest Lease Price ($)</label>
+                  <label className="text-sm font-medium text-gray-700">Rent Due at Booking</label>
                   <Input
                     type="number"
                     min="0"
-                    value={formData.longestLeasePrice || ''}
-                    onChange={(e) => updateFormData('longestLeasePrice', parseInt(e.target.value) || null)}
+                    value={formData.rentDueAtBooking || ''}
+                    onChange={(e) => updateFormData('rentDueAtBooking', parseInt(e.target.value) || null)}
                     className="mt-1"
-                    placeholder="Longest lease monthly rent"
+                    placeholder="Amount due at booking"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Pet Deposit</label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={formData.petDeposit || ''}
+                    onChange={(e) => updateFormData('petDeposit', parseInt(e.target.value) || null)}
+                    className="mt-1"
+                    placeholder="Pet security deposit"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Pet Rent (Per Pet)</label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={formData.petRent || ''}
+                    onChange={(e) => updateFormData('petRent', parseInt(e.target.value) || null)}
+                    className="mt-1"
+                    placeholder="Monthly pet rent per pet"
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Shortest Lease Length (months)</label>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={formData.shortestLeaseLength || ''}
-                    onChange={(e) => updateFormData('shortestLeaseLength', parseInt(e.target.value) || null)}
-                    className="mt-1"
-                    placeholder="Min lease term"
-                  />
+
+              {/* Chart and Counters Container */}
+              <div className="w-fit bg-sidebar rounded-lg p-4 shadow-lg">
+                {/* Lease Terms Controls */}
+                <div className="flex items-center justify-center gap-6 mb-4 flex-wrap mx-auto">
+                  <div className="flex items-center gap-3">
+                    <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                      Shortest stay:
+                    </label>
+                    <div className="flex items-center space-x-1">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 rounded-full p-0"
+                        onClick={() => {
+                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                          if (currentShortest > 1) {
+                            updateLeaseTermRange(currentShortest - 1, currentLongest);
+                          }
+                        }}
+                        disabled={Math.min(...leaseTerms.map(t => t.months)) <= 1}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="text-lg font-medium min-w-[2rem] text-center">
+                        {Math.min(...leaseTerms.map(t => t.months))}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 rounded-full p-0"
+                        onClick={() => {
+                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                          if (currentShortest < currentLongest) {
+                            updateLeaseTermRange(currentShortest + 1, currentLongest);
+                          }
+                        }}
+                        disabled={Math.min(...leaseTerms.map(t => t.months)) >= Math.max(...leaseTerms.map(t => t.months))}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                      <span className="text-sm text-gray-500">months</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                      Longest stay:
+                    </label>
+                    <div className="flex items-center space-x-1">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 rounded-full p-0"
+                        onClick={() => {
+                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                          if (currentLongest > currentShortest) {
+                            updateLeaseTermRange(currentShortest, currentLongest - 1);
+                          }
+                        }}
+                        disabled={Math.max(...leaseTerms.map(t => t.months)) <= Math.min(...leaseTerms.map(t => t.months))}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="text-lg font-medium min-w-[2rem] text-center">
+                        {Math.max(...leaseTerms.map(t => t.months))}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 rounded-full p-0"
+                        onClick={() => {
+                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                          if (currentLongest < 12) {
+                            updateLeaseTermRange(currentShortest, currentLongest + 1);
+                          }
+                        }}
+                        disabled={Math.max(...leaseTerms.map(t => t.months)) >= 12}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                      <span className="text-sm text-gray-500">months</span>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Longest Lease Length (months)</label>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={formData.longestLeaseLength || ''}
-                    onChange={(e) => updateFormData('longestLeaseLength', parseInt(e.target.value) || null)}
-                    className="mt-1"
-                    placeholder="Max lease term"
-                  />
+
+                {/* Lease Terms Table */}
+                <div className="relative w-full md:max-w-[886px]">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
+                        Lease Length
+                      </TableHead>
+                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
+                        Monthly Rent
+                      </TableHead>
+                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
+                        Utilities Included
+                      </TableHead>
+                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
+                        Lease Length
+                      </TableHead>
+                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
+                        Monthly Rent
+                      </TableHead>
+                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
+                        Utilities Included
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {/* Mobile: Single column layout */}
+                    {leaseTerms.map((term) => (
+                      <TableRow key={`term-mobile-${term.months}`} className="md:hidden">
+                        <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
+                          {term.months} month{term.months !== 1 ? 's' : ''}
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <div className="relative">
+                            <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                            <Input
+                              className="pl-7 text-xs"
+                              placeholder="0.00"
+                              value={term.price}
+                              tabIndex={100 + (term.months * 2 - 1)}
+                              onChange={(e) => {
+                                const value = e.target.value.replace(/[^0-9.]/g, '');
+                                updateLeaseTermPrice(term.months, value);
+                              }}
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <BrandCheckbox
+                            name={`utilities-${term.months}`}
+                            checked={term.utilitiesIncluded}
+                            tabIndex={100 + (term.months * 2)}
+                            onChange={(e) => 
+                              updateLeaseTermUtilities(term.months, e.target.checked)
+                            }
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    
+                    {/* Desktop: Two column layout */}
+                    {Array.from({ length: Math.ceil(leaseTerms.length / 2) }, (_, rowIndex) => {
+                      const halfLength = Math.ceil(leaseTerms.length / 2);
+                      const leftTerm = leaseTerms[rowIndex];
+                      const rightTerm = leaseTerms[rowIndex + halfLength];
+                      
+                      return (
+                        <TableRow key={`term-row-${rowIndex}`} className="hidden md:table-row">
+                          <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
+                            {leftTerm.months} month{leftTerm.months !== 1 ? 's' : ''}
+                          </TableCell>
+                          <TableCell className="py-4">
+                            <div className="relative">
+                              <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                              <Input
+                                className="pl-7 text-xs"
+                                placeholder="0.00"
+                                value={leftTerm.price}
+                                tabIndex={100 + (leftTerm.months * 2 - 1)}
+                                onChange={(e) => {
+                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  updateLeaseTermPrice(leftTerm.months, value);
+                                }}
+                              />
+                            </div>
+                          </TableCell>
+                          <TableCell className="py-4">
+                            <BrandCheckbox
+                              name={`utilities-${leftTerm.months}`}
+                              checked={leftTerm.utilitiesIncluded}
+                              tabIndex={100 + (leftTerm.months * 2)}
+                              onChange={(e) => 
+                                updateLeaseTermUtilities(leftTerm.months, e.target.checked)
+                              }
+                            />
+                          </TableCell>
+                          {rightTerm ? (
+                            <>
+                              <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
+                                {rightTerm.months} month{rightTerm.months !== 1 ? 's' : ''}
+                              </TableCell>
+                              <TableCell className="py-4">
+                                <div className="relative">
+                                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                                  <Input
+                                    className="pl-7 text-xs"
+                                    placeholder="0.00"
+                                    value={rightTerm.price}
+                                    tabIndex={100 + (rightTerm.months * 2 - 1)}
+                                    onChange={(e) => {
+                                      const value = e.target.value.replace(/[^0-9.]/g, '');
+                                      updateLeaseTermPrice(rightTerm.months, value);
+                                    }}
+                                  />
+                                </div>
+                              </TableCell>
+                              <TableCell className="py-4">
+                                <BrandCheckbox
+                                  name={`utilities-${rightTerm.months}`}
+                                  checked={rightTerm.utilitiesIncluded}
+                                  tabIndex={100 + (rightTerm.months * 2)}
+                                  onChange={(e) => 
+                                    updateLeaseTermUtilities(rightTerm.months, e.target.checked)
+                                  }
+                                />
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell />
+                              <TableCell />
+                              <TableCell />
+                            </>
+                          )}
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
                 </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Security Deposit ($)</label>
-                <Input
-                  type="number"
-                  min="0"
-                  value={formData.depositSize || ''}
-                  onChange={(e) => updateFormData('depositSize', parseInt(e.target.value) || null)}
-                  className="mt-1"
-                  placeholder="Security deposit amount"
-                />
               </div>
             </div>
           ) : (
