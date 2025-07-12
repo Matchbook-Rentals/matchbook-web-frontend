@@ -711,9 +711,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       </Card>
 
       {/* Location and Property Details Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Location */}
-        <Card className="flex-1 self-stretch shadow-[0px_0px_5px_#00000029] p-0">
+        <Card className="shadow-[0px_0px_5px_#00000029] p-0 lg:min-h-[140px]">
           <CardContent className="flex flex-col items-end gap-[18px] p-6">
             <div className="flex items-center justify-end gap-8 relative flex-1 self-stretch w-full">
               <div className="relative flex-1 opacity-90 text-2xl font-semibold text-gray-900">
@@ -786,7 +786,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         </Card>
 
         {/* Property Details */}
-        <Card className="flex-1 shadow-[0px_0px_5px_#00000029] p-0">
+        <Card className="shadow-[0px_0px_5px_#00000029] p-0 lg:min-h-[140px]">
           <CardContent className="flex flex-col items-end gap-[18px] p-6">
             <div className="flex items-center justify-end gap-8 relative flex-1 self-stretch w-full">
               <div className="flex-1 opacity-90 text-2xl font-semibold text-gray-900 relative mt-[-1.00px]">
