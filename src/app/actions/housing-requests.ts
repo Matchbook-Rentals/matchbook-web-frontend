@@ -257,7 +257,8 @@ export async function getHostHousingRequests() {
           select: {
             firstName: true,
             lastName: true,
-            email: true
+            email: true,
+            imageUrl: true
           }
         },
         listing: {
