@@ -236,7 +236,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
             : fullAddress;
           
           return (
-            <Card className="w-full p-6 rounded-xl mb-8">
+            <Card key={listing.id} className="w-full p-6 rounded-xl mb-8">
               <CardContent className="p-0">
                 <div className="flex gap-6">
                   {/* Property Image */}
