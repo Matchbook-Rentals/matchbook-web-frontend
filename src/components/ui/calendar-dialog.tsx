@@ -227,7 +227,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
 
   const handleManageCalendar = () => {
     setIsLoading(true);
-    setOpen(false);
+    // Don't close dialog - let navigation happen directly
   };
 
   return (

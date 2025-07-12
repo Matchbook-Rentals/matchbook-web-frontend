@@ -156,14 +156,6 @@ export default function TabLayout({
       {/* Header with title, search, and filters */}
       <header ref={headerRef} className={`w-full pb-4  ${isMobile ? 'px-4' : ''}`}>
         <div className="flex flex-col gap-6">
-          <div className="flex items-end gap-6">
-            {actionButton && !isMobile && (
-              <div>
-                {actionButton}
-              </div>
-            )}
-          </div>
-
           <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-start gap-3'}`}>
             <div className={isMobile ? 'w-full' : 'w-[434px]'}>
               <Card className="border-0 shadow-none">
@@ -209,6 +201,13 @@ export default function TabLayout({
                     ))}
                   </SelectContent>
                 </Select>
+                
+                {/* Action Button right next to filter on desktop */}
+                {actionButton && !isMobile && (
+                  <div className="ml-3">
+                    {actionButton}
+                  </div>
+                )}
               </div>
             </div>
             
