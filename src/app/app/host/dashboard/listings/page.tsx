@@ -1,5 +1,6 @@
 import React from "react";
 import { getHostListings } from "@/app/actions/listings";
+import { getFirstListingInCreation } from "@/app/actions/listings-in-creation";
 import HostDashboardListingsTab from "../../host-dashboard-listings-tab";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
@@ -10,6 +11,7 @@ interface PageProps {
   };
 }
 
+
 export default async function HostDashboardListingsPage({ searchParams }: PageProps) {
   console.log('HostDashboardListingsPage: Starting data fetch...');
   
@@ -17,11 +19,15 @@ export default async function HostDashboardListingsPage({ searchParams }: PagePr
   const currentPage = parseInt(searchParams.page || '1', 10);
   const itemsPerPage = 100; // Fetch 100 at a time from server
   
-  // Fetch listings data server-side
-  const listingsData = await getHostListings(currentPage, itemsPerPage);
+  // Fetch both listings data and listing in creation data in parallel
+  const [listingsData, listingInCreation] = await Promise.all([
+    getHostListings(currentPage, itemsPerPage),
+    getFirstListingInCreation()
+  ]);
 
   console.log('HostDashboardListingsPage: Data fetched successfully');
   console.log('- listings count:', listingsData.listings.length, 'of total:', listingsData.totalCount);
+  console.log('- listing in creation:', listingInCreation?.id || 'none');
 
   return (
     <div className={`${HOST_PAGE_STYLE}`}>
@@ -34,6 +40,7 @@ export default async function HostDashboardListingsPage({ searchParams }: PagePr
           currentPage: listingsData.currentPage,
           itemsPerPage
         }}
+        listingInCreation={listingInCreation}
       />
     </div>
   );

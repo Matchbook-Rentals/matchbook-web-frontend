@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { BrandButton } from '@/components/ui/brandButton'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/brandDialog'
@@ -9,16 +9,17 @@ interface AddPropertyModalProps {
   triggerButton?: React.ReactNode
   onPickUpWhereLeftOff?: () => void
   onStartBlank?: () => void
+  listingInCreation?: { id: string } | null
 }
 
 export default function AddPropertyModal({ 
   triggerButton, 
   onPickUpWhereLeftOff,
-  onStartBlank 
+  onStartBlank,
+  listingInCreation 
 }: AddPropertyModalProps) {
   const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [listingInCreation, setListingInCreation] = useState<{ id: string } | null>(null)
 
   const handlePickUpWhereLeftOff = () => {
     if (onPickUpWhereLeftOff) {
@@ -42,26 +43,6 @@ export default function AddPropertyModal({
     }
   }
 
-  // Fetch the first listing in creation when modal opens
-  useEffect(() => {
-    const fetchListingInCreation = async () => {
-      if (isModalOpen) {
-        try {
-          // Replace with your actual API endpoint
-          const response = await fetch('/api/listings/in-creation')
-          if (response.ok) {
-            const data = await response.json()
-            setListingInCreation(data.length > 0 ? data[0] : null)
-          }
-        } catch (error) {
-          console.error('Error fetching listing in creation:', error)
-          setListingInCreation(null)
-        }
-      }
-    }
-
-    fetchListingInCreation()
-  }, [isModalOpen])
 
   const defaultTrigger = (
     <BrandButton variant="default">

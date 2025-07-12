@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ListingAndImages } from "@/types";
 import CalendarDialog from "@/components/ui/calendar-dialog";
@@ -24,9 +25,10 @@ interface PaginationInfo {
 interface HostDashboardListingsTabProps {
   listings: ListingAndImages[] | null;
   paginationInfo?: PaginationInfo;
+  listingInCreation?: { id: string } | null;
 }
 
-export default function HostDashboardListingsTab({ listings, paginationInfo }: HostDashboardListingsTabProps) {
+export default function HostDashboardListingsTab({ listings, paginationInfo, listingInCreation }: HostDashboardListingsTabProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -176,9 +178,15 @@ export default function HostDashboardListingsTab({ listings, paginationInfo }: H
 
 
 
-  // Add Property modal component
-  const addPropertyButton = (
-    <AddPropertyModal />
+  // Add Property modal component or direct link
+  const addPropertyButton = listingInCreation ? (
+    <AddPropertyModal listingInCreation={listingInCreation} />
+  ) : (
+    <Link href="/app/host/add-property?new=true">
+      <BrandButton variant="default">
+        Add Property
+      </BrandButton>
+    </Link>
   );
 
   return (
