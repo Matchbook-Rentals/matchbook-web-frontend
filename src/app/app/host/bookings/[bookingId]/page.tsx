@@ -1,6 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { getBooking } from "@/app/actions/bookings";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
