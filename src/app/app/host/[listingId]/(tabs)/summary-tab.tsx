@@ -15,11 +15,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2 } from 'lucide-react';
 import Tile from '@/components/ui/tile';
 import { ListingCreationCard } from '@/app/app/host/add-property/listing-creation-card';
+import { ListingCreationCounter } from '@/app/app/host/add-property/listing-creation-counter';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { updateListing, updateListingPhotos } from '@/app/actions/listings';
 import { toast } from '@/components/ui/use-toast';
 import { PropertyType } from '@/constants/enums';
 import * as AmenitiesIcons from '@/components/icons/amenities';
+import InComplexIcon from '@/lib/icons/in-complex';
+import NotAvailableIcon from '@/lib/icons/not-available';
 import { iconAmenities } from '@/lib/amenities-list';
 import { UploadButton } from "@/app/utils/uploadthing";
 
@@ -28,7 +31,9 @@ const AMENITY_GROUPS = [
   {
     group: 'Accessibility & Safety',
     items: [
-      { value: 'wheelchairAccess', label: 'Wheelchair Accessible', icon: <AmenitiesIcons.UpdatedWheelchairAccessibleIcon className="p-1 mt-0" /> },
+      { value: 'wheelchairAccess', label: 'Accessible', icon: <AmenitiesIcons.UpdatedWheelchairAccessibleIcon className="p-1 mt-0" /> },
+      { value: 'fencedInYard', label: 'Fenced Yard', icon: <AmenitiesIcons.UpdatedFencedYardIcon className="p-1 mt-0" /> },
+      { value: 'keylessEntry', label: 'Keyless Entry', icon: <AmenitiesIcons.UpdatedKeylessEntryIcon className="p-1 mt-0" /> },
       { value: 'alarmSystem', label: 'Alarm System', icon: <AmenitiesIcons.UpdatedAlarmSystemIcon className="p-1 mt-0" /> },
       { value: 'gatedEntry', label: 'Gated Entry', icon: <AmenitiesIcons.UpdatedGatedEntryIcon className="p-1 mt-0" /> },
       { value: 'smokeDetector', label: 'Smoke Detector', icon: <AmenitiesIcons.UpdatedSmokeDetectorIcon className="p-1 mt-0" /> },
@@ -46,12 +51,22 @@ const AMENITY_GROUPS = [
     ]
   },
   {
+    group: 'Parking',
+    items: [
+      { value: 'offStreetParking', label: 'Off Street Parking', icon: <AmenitiesIcons.UpdatedParkingIcon className="p-1 mt-0" /> },
+      { value: 'evCharging', label: 'EV Charging', icon: <AmenitiesIcons.UpdatedEvChargingIcon className="p-1 mt-0 ml-0" /> },
+      { value: 'garageParking', label: 'Garage Parking', icon: <AmenitiesIcons.UpdatedGarageIcon className="p-1 mt-0" /> },
+    ]
+  },
+  {
     group: 'Kitchen',
     items: [
+      { value: 'garbageDisposal', label: 'Garbage Disposal', icon: <AmenitiesIcons.UpdatedGarbageDisposalIcon className="p-1 my-0" /> },
       { value: 'dishwasher', label: 'Dishwasher', icon: <AmenitiesIcons.UpdatedDishwasherIcon className="p-1 mt-0" /> },
       { value: 'fridge', label: 'Refrigerator', icon: <AmenitiesIcons.UpdatedFridgeIcon className="p-1 mt-0 " /> },
       { value: 'oven', label: 'Oven/Stove', icon: <AmenitiesIcons.UpdatedOvenIcon className="p-1 mt-0" /> },
       { value: 'grill', label: 'Grill', icon: <AmenitiesIcons.UpdatedGrillIcon className="p-1" /> },
+      { value: 'kitchenEssentials', label: 'Kitchen Essentials', icon: <AmenitiesIcons.UpdatedKitchenEssentialsIcon className="p-1 mt-0" /> },
     ]
   },
   {
@@ -59,7 +74,7 @@ const AMENITY_GROUPS = [
     items: [
       { value: 'fireplace', label: 'Fireplace', icon: <AmenitiesIcons.UpdatedFireplaceIcon className="p-1 mt-0" /> },
       { value: 'heater', label: 'Heater', icon: <AmenitiesIcons.UpdatedHeaterIcon className="p-1 mt-0" /> },
-      { value: 'dedicatedWorkspace', label: 'Dedicated Workspace', icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" /> },
+      { value: 'dedicatedWorkspace', label: 'Workspace', icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" /> },
       { value: 'airConditioner', label: 'Air Conditioning', icon: <AmenitiesIcons.UpdatedAirConditioningIcon className="p-1 mt-0" /> },
     ]
   },
@@ -72,6 +87,7 @@ const AMENITY_GROUPS = [
       { value: 'pool', label: 'Pool', icon: <AmenitiesIcons.PoolIcon className="p-0 mt-2" /> },
       { value: 'hotTub', label: 'Hot Tub', icon: <AmenitiesIcons.UpdatedHotTubIcon className="p-1 mt-0" /> },
       { value: 'patio', label: 'Patio', icon: <AmenitiesIcons.UpdatedPatioIcon className="p-1 mt-0" /> },
+      { value: 'sunroom', label: 'Sunroom', icon: <AmenitiesIcons.UpdatedSunroomIcon className="p-1 mt-0" /> },
     ]
   },
 ];
@@ -89,6 +105,42 @@ interface SummaryTabProps {
 
 const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => {
   const { updateListing: updateContextListing } = useListingDashboard();
+  
+  // Generate unique class names for container queries
+  const containerId = `lease-terms-container-${listing.id}`;
+  const gridId = `lease-terms-grid-${listing.id}`;
+  
+  // Container query CSS
+  const containerQueryCSS = `
+    .${containerId} {
+      container-type: inline-size;
+      width: 100%;
+    }
+    
+    .${gridId} {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @container (min-width: 1024px) {
+      .${gridId} {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @container (min-width: 1280px) {
+      .${gridId} {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @container (min-width: 1536px) {
+      .${gridId} {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+  `;
   
   // Shared style constants
   const sectionHeaderStyles = "text-2xl font-semibold text-gray-900";
@@ -130,7 +182,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     location: ['streetAddress1', 'streetAddress2', 'city', 'state', 'postalCode'],
     details: ['roomCount', 'bathroomCount', 'squareFootage'],
     pricing: ['shortestLeasePrice', 'longestLeasePrice', 'shortestLeaseLength', 'longestLeaseLength', 'depositSize', 'rentDueAtBooking', 'petDeposit', 'petRent'],
-    amenities: ['wifi', 'parking', 'kitchen', 'laundryFacilities', 'airConditioner', 'heater', 'dedicatedWorkspace', 'wheelchairAccess', 'security', 'alarmSystem', 'gatedEntry', 'smokeDetector', 'carbonMonoxide', 'waterfront', 'beachfront', 'mountainView', 'cityView', 'waterView', 'dishwasher', 'fridge', 'oven', 'stove', 'grill', 'fireplace', 'pool', 'balcony', 'patio', 'hotTub', 'gym', 'sauna', 'tv', 'microwave', 'elevator'],
+    amenities: ['wheelchairAccess', 'fencedInYard', 'keylessEntry', 'alarmSystem', 'gatedEntry', 'smokeDetector', 'carbonMonoxide', 'security', 'mountainView', 'cityView', 'waterfront', 'waterView', 'offStreetParking', 'evCharging', 'garageParking', 'garbageDisposal', 'dishwasher', 'fridge', 'oven', 'grill', 'kitchenEssentials', 'fireplace', 'heater', 'dedicatedWorkspace', 'airConditioner', 'gym', 'sauna', 'balcony', 'pool', 'hotTub', 'patio', 'sunroom', 'washerInUnit', 'washerInComplex', 'washerNotAvailable'],
     // Note: petRent and petSecurityDeposit are not yet in the database schema and should not be sent to server
     description: ['description'],
     photos: [] // Photos are handled separately since they're a relation
@@ -655,10 +707,64 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     return selected;
   };
 
+  // Laundry options (aligned with Prisma schema)
+  const laundryOptions = [
+    {
+      value: 'washerInUnit',
+      label: 'In Unit',
+      id: 'inUnit',
+    },
+    {
+      value: 'washerInComplex',
+      label: 'In Complex',
+      id: 'inComplex',
+    },
+    {
+      value: 'washerNotAvailable',
+      label: 'Unavailable',
+      id: 'unavailable',
+    },
+  ];
+
+  // Helper to check which laundry option is selected
+  const getLaundrySelection = () => {
+    if ((formData as any).washerInUnit) return 'washerInUnit';
+    if ((formData as any).washerInComplex) return 'washerInComplex';
+    if ((formData as any).washerNotAvailable) return 'washerNotAvailable';
+    return '';
+  };
+
+  // Helper for laundry radio selection
+  const handleLaundryChange = (value: string) => {
+    // Remove all existing laundry options first
+    const laundryValues = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'];
+    laundryValues.forEach(laundryValue => {
+      updateFormData(laundryValue, false);
+    });
+    
+    // Add the new laundry option
+    updateFormData(value, true);
+  };
+
   // Toggle amenity selection
   const toggleAmenity = (amenityValue: string) => {
-    const currentValue = (formData as any)[amenityValue];
-    updateFormData(amenityValue, !currentValue);
+    // Check if this is a laundry option
+    const laundryValues = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'];
+    
+    if (laundryValues.includes(amenityValue)) {
+      // Handle laundry options with radio behavior
+      if ((formData as any)[amenityValue]) {
+        // If already selected, deselect it
+        updateFormData(amenityValue, false);
+      } else {
+        // If not selected, select it and deselect others
+        handleLaundryChange(amenityValue);
+      }
+    } else {
+      // Handle regular amenities with toggle behavior
+      const currentValue = (formData as any)[amenityValue];
+      updateFormData(amenityValue, !currentValue);
+    }
   };
 
   // Photo management functions
@@ -1190,131 +1296,91 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
               </div>
 
               {/* Chart and Counters Container */}
-              <div className="w-fit bg-sidebar rounded-lg p-4 shadow-lg">
+              <div className="w-full mx-auto bg-sidebar rounded-lg p-4 shadow-lg">
                 {/* Lease Terms Controls */}
                 <div className="flex items-center justify-center gap-6 mb-4 flex-wrap mx-auto">
                   <div className="flex items-center gap-3">
                     <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
                       Shortest stay:
                     </label>
-                    <div className="flex items-center space-x-1">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-8 w-8 rounded-full p-0"
-                        onClick={() => {
-                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
-                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
-                          if (currentShortest > 1) {
-                            updateLeaseTermRange(currentShortest - 1, currentLongest);
-                          }
-                        }}
-                        disabled={Math.min(...leaseTerms.map(t => t.months)) <= 1}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <span className="text-lg font-medium min-w-[2rem] text-center">
-                        {Math.min(...leaseTerms.map(t => t.months))}
-                      </span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-8 w-8 rounded-full p-0"
-                        onClick={() => {
-                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
-                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
-                          if (currentShortest < currentLongest) {
-                            updateLeaseTermRange(currentShortest + 1, currentLongest);
-                          }
-                        }}
-                        disabled={Math.min(...leaseTerms.map(t => t.months)) >= Math.max(...leaseTerms.map(t => t.months))}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                      <span className="text-sm text-gray-500">months</span>
-                    </div>
+                    <ListingCreationCounter
+                      value={Math.min(...leaseTerms.map(t => t.months))}
+                      onChange={() => {}} // Handled by custom logic
+                      min={1}
+                      max={Math.max(...leaseTerms.map(t => t.months))}
+                      variant="outline"
+                      buttonSize="sm"
+                      textSize="lg"
+                      monthSuffixClassName="hidden md:inline"
+                      onDecrement={() => {
+                        const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                        const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                        if (currentShortest > 1) {
+                          updateLeaseTermRange(currentShortest - 1, currentLongest);
+                        }
+                      }}
+                      onIncrement={() => {
+                        const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                        const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                        if (currentShortest < currentLongest) {
+                          updateLeaseTermRange(currentShortest + 1, currentLongest);
+                        }
+                      }}
+                      decrementDisabled={Math.min(...leaseTerms.map(t => t.months)) <= 1}
+                      incrementDisabled={Math.min(...leaseTerms.map(t => t.months)) >= Math.max(...leaseTerms.map(t => t.months))}
+                    />
                   </div>
 
                   <div className="flex items-center gap-3">
                     <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
                       Longest stay:
                     </label>
-                    <div className="flex items-center space-x-1">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-8 w-8 rounded-full p-0"
-                        onClick={() => {
-                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
-                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
-                          if (currentLongest > currentShortest) {
-                            updateLeaseTermRange(currentShortest, currentLongest - 1);
-                          }
-                        }}
-                        disabled={Math.max(...leaseTerms.map(t => t.months)) <= Math.min(...leaseTerms.map(t => t.months))}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <span className="text-lg font-medium min-w-[2rem] text-center">
-                        {Math.max(...leaseTerms.map(t => t.months))}
-                      </span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-8 w-8 rounded-full p-0"
-                        onClick={() => {
-                          const currentShortest = Math.min(...leaseTerms.map(t => t.months));
-                          const currentLongest = Math.max(...leaseTerms.map(t => t.months));
-                          if (currentLongest < 12) {
-                            updateLeaseTermRange(currentShortest, currentLongest + 1);
-                          }
-                        }}
-                        disabled={Math.max(...leaseTerms.map(t => t.months)) >= 12}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                      <span className="text-sm text-gray-500">months</span>
-                    </div>
+                    <ListingCreationCounter
+                      value={Math.max(...leaseTerms.map(t => t.months))}
+                      onChange={() => {}} // Handled by custom logic
+                      min={Math.min(...leaseTerms.map(t => t.months))}
+                      max={12}
+                      variant="outline"
+                      buttonSize="sm"
+                      textSize="lg"
+                      monthSuffixClassName="hidden md:inline"
+                      onDecrement={() => {
+                        const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                        const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                        if (currentLongest > currentShortest) {
+                          updateLeaseTermRange(currentShortest, currentLongest - 1);
+                        }
+                      }}
+                      onIncrement={() => {
+                        const currentShortest = Math.min(...leaseTerms.map(t => t.months));
+                        const currentLongest = Math.max(...leaseTerms.map(t => t.months));
+                        if (currentLongest < 12) {
+                          updateLeaseTermRange(currentShortest, currentLongest + 1);
+                        }
+                      }}
+                      decrementDisabled={Math.max(...leaseTerms.map(t => t.months)) <= Math.min(...leaseTerms.map(t => t.months))}
+                      incrementDisabled={Math.max(...leaseTerms.map(t => t.months)) >= 12}
+                    />
                   </div>
                 </div>
 
-                {/* Lease Terms Table */}
-                <div className="relative w-full md:max-w-[886px]">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
-                        Lease Length
-                      </TableHead>
-                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
-                        Monthly Rent
-                      </TableHead>
-                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6">
-                        Utilities Included
-                      </TableHead>
-                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
-                        Lease Length
-                      </TableHead>
-                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
-                        Monthly Rent
-                      </TableHead>
-                      <TableHead className="bg-[#e7f0f0] font-medium text-xs text-[#475467] w-1/3 md:w-1/6 hidden md:table-cell">
-                        Utilities Included
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {/* Mobile: Single column layout */}
+                {/* Lease Terms Grid - Optimized for ~290px card width */}
+                <div className={containerId}>
+                  <style dangerouslySetInnerHTML={{ __html: containerQueryCSS }} />
+                  <div className={gridId}>
                     {leaseTerms.map((term) => (
-                      <TableRow key={`term-mobile-${term.months}`} className="md:hidden">
-                        <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
+                    <div 
+                      key={term.months}
+                      className="bg-white border border-[#e7f0f0] rounded-lg p-4"
+                    >
+                      <div className="space-y-3">
+                        <div className="text-sm font-medium text-[#373940]">
                           {term.months} month{term.months !== 1 ? 's' : ''}
-                        </TableCell>
-                        <TableCell className="py-4">
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-[#475467] mb-1 block">
+                            Monthly Rent
+                          </label>
                           <div className="relative">
                             <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                             <Input
@@ -1328,8 +1394,8 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                               }}
                             />
                           </div>
-                        </TableCell>
-                        <TableCell className="py-4">
+                        </div>
+                        <div className="flex items-center space-x-2">
                           <BrandCheckbox
                             name={`utilities-${term.months}`}
                             checked={term.utilitiesIncluded}
@@ -1338,89 +1404,14 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                               updateLeaseTermUtilities(term.months, e.target.checked)
                             }
                           />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    
-                    {/* Desktop: Two column layout */}
-                    {Array.from({ length: Math.ceil(leaseTerms.length / 2) }, (_, rowIndex) => {
-                      const halfLength = Math.ceil(leaseTerms.length / 2);
-                      const leftTerm = leaseTerms[rowIndex];
-                      const rightTerm = leaseTerms[rowIndex + halfLength];
-                      
-                      return (
-                        <TableRow key={`term-row-${rowIndex}`} className="hidden md:table-row">
-                          <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
-                            {leftTerm.months} month{leftTerm.months !== 1 ? 's' : ''}
-                          </TableCell>
-                          <TableCell className="py-4">
-                            <div className="relative">
-                              <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
-                              <Input
-                                className="pl-7 text-xs"
-                                placeholder="0.00"
-                                value={leftTerm.price}
-                                tabIndex={100 + (leftTerm.months * 2 - 1)}
-                                onChange={(e) => {
-                                  const value = e.target.value.replace(/[^0-9.]/g, '');
-                                  updateLeaseTermPrice(leftTerm.months, value);
-                                }}
-                              />
-                            </div>
-                          </TableCell>
-                          <TableCell className="py-4">
-                            <BrandCheckbox
-                              name={`utilities-${leftTerm.months}`}
-                              checked={leftTerm.utilitiesIncluded}
-                              tabIndex={100 + (leftTerm.months * 2)}
-                              onChange={(e) => 
-                                updateLeaseTermUtilities(leftTerm.months, e.target.checked)
-                              }
-                            />
-                          </TableCell>
-                          {rightTerm ? (
-                            <>
-                              <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
-                                {rightTerm.months} month{rightTerm.months !== 1 ? 's' : ''}
-                              </TableCell>
-                              <TableCell className="py-4">
-                                <div className="relative">
-                                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
-                                  <Input
-                                    className="pl-7 text-xs"
-                                    placeholder="0.00"
-                                    value={rightTerm.price}
-                                    tabIndex={100 + (rightTerm.months * 2 - 1)}
-                                    onChange={(e) => {
-                                      const value = e.target.value.replace(/[^0-9.]/g, '');
-                                      updateLeaseTermPrice(rightTerm.months, value);
-                                    }}
-                                  />
-                                </div>
-                              </TableCell>
-                              <TableCell className="py-4">
-                                <BrandCheckbox
-                                  name={`utilities-${rightTerm.months}`}
-                                  checked={rightTerm.utilitiesIncluded}
-                                  tabIndex={100 + (rightTerm.months * 2)}
-                                  onChange={(e) => 
-                                    updateLeaseTermUtilities(rightTerm.months, e.target.checked)
-                                  }
-                                />
-                              </TableCell>
-                            </>
-                          ) : (
-                            <>
-                              <TableCell />
-                              <TableCell />
-                              <TableCell />
-                            </>
-                          )}
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                          <label className="text-xs font-medium text-[#475467]">
+                            Utilities Included
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1458,6 +1449,55 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
             {editingSections['amenities'] ? (
               <div className="flex flex-col gap-0">
+                  {/* Laundry Section - Badges (mobile only) */}
+                  <div className="md:hidden space-y-4 pt-0 pb-10 mb-0">
+                    <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
+                    <div className="flex flex-wrap gap-4">
+                      {laundryOptions.map((option) => (
+                        <Badge
+                          key={option.id}
+                          variant="outline"
+                          className={`inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 rounded-full border-solid cursor-pointer ${
+                            getLaundrySelection() === option.value
+                              ? 'bg-gray-100 border-[#4f4f4f] border-2'
+                              : 'bg-gray-50 border-[#d9dadf]'
+                          }`}
+                          onClick={() => handleLaundryChange(option.value)}
+                        >
+                          {React.cloneElement(
+                            option.value === 'washerInComplex' ? <InComplexIcon className="w-4 h-4" /> : 
+                            option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-4 h-4" /> :
+                            <AmenitiesIcons.WasherIcon className="w-4 h-4" />,
+                            { className: "w-4 h-4" }
+                          )}
+                          <span className="font-['Poppins',Helvetica] font-medium text-sm text-center leading-5 text-[#344054]">
+                            {option.label}
+                          </span>
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Laundry Section - Cards (medium and above) */}
+                  <div className="hidden sm:block space-y-4 pt-0 pb-10 mb-0">
+                    <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
+                    <div className="flex flex-wrap gap-4">
+                      {laundryOptions.map((option) => (
+                        <ListingCreationCard
+                          key={option.id}
+                          name={option.label}
+                          icon={
+                            option.value === 'washerInComplex' ? <InComplexIcon className="w-8 h-8" /> : 
+                            option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-8 h-8" /> :
+                            <AmenitiesIcons.WasherIcon className="w-8 h-8" />
+                          }
+                          isSelected={getLaundrySelection() === option.value}
+                          onClick={() => handleLaundryChange(option.value)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
                   {AMENITY_GROUPS.map((group) => (
                     <div key={group.group} className="space-y-4 pt-0 pb-10 mb-0">
                       <h3 className="text-[18px] font-medium text-[#404040]">{group.group}</h3>

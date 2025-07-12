@@ -131,8 +131,11 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
       </Button>
 
       <span className={cn(getDefaultTextStyle(), "text-center min-w-[40px]", textClassName)}>
-        <span className="">
-          {value}<span className={cn("", monthSuffixClassName)}> month{value !== 1 ? "s" : ""}</span>
+        <span className="relative inline-block">
+          <span className="invisible absolute">{max || 99}<span className={cn("", monthSuffixClassName)}> months</span></span>
+          <span className="relative">
+            {value}<span className={cn("", monthSuffixClassName)}> month<span className={value !== 1 ? "" : "opacity-0"}>s</span></span>
+          </span>
         </span>
       </span>
 
