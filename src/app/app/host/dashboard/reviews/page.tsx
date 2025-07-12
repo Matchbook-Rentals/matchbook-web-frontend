@@ -1,298 +1,222 @@
 import React from "react";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
-import TabLayout from "../../components/cards-with-filter-layout";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { LightbulbIcon, MapPinIcon } from "lucide-react";
+import { HostReviewClient } from "./host-review-client";
+import { auth } from "@clerk/nextjs/server";
+
+// Sample data
+const sampleReviewsData = {
+  overallRating: 4.5,
+  totalReviews: 2243,
+  averageRating: 4.5,
+  ratingBreakdown: [
+    { stars: 5, percentage: 40, count: 897 },
+    { stars: 4, percentage: 50, count: 1122 },
+    { stars: 3, percentage: 70, count: 157 },
+    { stars: 2, percentage: 30, count: 67 },
+    { stars: 1, percentage: 30, count: 0 },
+  ],
+  reviews: [
+    {
+      id: 1,
+      name: "Alex Johnson",
+      time: "2 days ago",
+      rating: 5.0,
+      location: "Downtown Austin, TX",
+      review: "Absolutely amazing stay! The property was spotless, perfectly located, and the host was incredibly responsive. Would definitely book again.",
+      avatar: "/avatar-1.png",
+    },
+    {
+      id: 2,
+      name: "Sarah Williams",
+      time: "1 week ago",
+      rating: 4.0,
+      location: "South Beach, Miami, FL",
+      review: "Great location and beautiful apartment. The view was stunning and everything was as described. Minor issue with wifi but quickly resolved.",
+      avatar: "/avatar-2.png",
+    },
+    {
+      id: 3,
+      name: "Michael Chen",
+      time: "2 weeks ago",
+      rating: 5.0,
+      location: "Mission District, San Francisco, CA",
+      review: "Perfect for our business trip. Clean, modern, and well-equipped kitchen. Host provided excellent local recommendations.",
+      avatar: "/avatar-3.png",
+    },
+    {
+      id: 4,
+      name: "Emily Davis",
+      time: "3 weeks ago",
+      rating: 4.0,
+      location: "Capitol Hill, Seattle, WA",
+      review: "Loved the cozy atmosphere and the neighborhood was fantastic. Easy access to public transport and great restaurants nearby.",
+      avatar: "/avatar-4.png",
+    },
+    {
+      id: 5,
+      name: "David Rodriguez",
+      time: "1 month ago",
+      rating: 5.0,
+      location: "Brooklyn Heights, NY",
+      review: "Outstanding hospitality! The space was immaculate and the host went above and beyond to ensure our comfort. Highly recommended!",
+      avatar: "/avatar-5.png",
+    },
+    {
+      id: 6,
+      name: "Jessica Thompson",
+      time: "1 month ago",
+      rating: 4.0,
+      location: "River North, Chicago, IL",
+      review: "Stylish apartment with all the amenities we needed. The location was perfect for exploring the city. Would stay here again.",
+      avatar: "/avatar-6.png",
+    },
+    {
+      id: 7,
+      name: "Ryan Martinez",
+      time: "5 weeks ago",
+      rating: 3.0,
+      location: "Gaslamp Quarter, San Diego, CA",
+      review: "Good value for money. The space was adequate for our needs, though it could use some updates. Host was helpful with check-in.",
+      avatar: "/avatar-7.png",
+    },
+    {
+      id: 8,
+      name: "Amanda Wilson",
+      time: "6 weeks ago",
+      rating: 5.0,
+      location: "Pearl District, Portland, OR",
+      review: "Exceptional experience from start to finish. The property exceeded our expectations and the host was incredibly welcoming.",
+      avatar: "/avatar-8.png",
+    },
+    {
+      id: 9,
+      name: "James Brown",
+      time: "2 months ago",
+      rating: 4.0,
+      location: "French Quarter, New Orleans, LA",
+      review: "Great location in the heart of the action. The property was clean and comfortable. Parking was a bit challenging but manageable.",
+      avatar: "/avatar-9.png",
+    },
+    {
+      id: 10,
+      name: "Lisa Anderson",
+      time: "2 months ago",
+      rating: 5.0,
+      location: "Back Bay, Boston, MA",
+      review: "Perfect for our family vacation. Spacious, clean, and well-located. Kids loved the nearby park and we enjoyed the local cafes.",
+      avatar: "/avatar-10.png",
+    },
+    {
+      id: 11,
+      name: "Kevin Taylor",
+      time: "3 months ago",
+      rating: 4.0,
+      location: "Midtown, Atlanta, GA",
+      review: "Solid choice for business travelers. Good workspace setup and reliable internet. Host provided helpful local business recommendations.",
+      avatar: "/avatar-11.png",
+    },
+    {
+      id: 12,
+      name: "Nicole Garcia",
+      time: "3 months ago",
+      rating: 5.0,
+      location: "South End, Charlotte, NC",
+      review: "Absolutely loved our stay! The attention to detail was impressive and the host made us feel like VIPs. Will definitely return.",
+      avatar: "/avatar-12.png",
+    },
+    {
+      id: 13,
+      name: "Christopher Lee",
+      time: "4 months ago",
+      rating: 3.0,
+      location: "Capitol Peak, Denver, CO",
+      review: "Decent place with good mountain views. Some appliances were showing age but overall functional. Host was responsive to questions.",
+      avatar: "/avatar-13.png",
+    },
+    {
+      id: 14,
+      name: "Rachel White",
+      time: "4 months ago",
+      rating: 5.0,
+      location: "Old Town, Scottsdale, AZ",
+      review: "Incredible desert retreat! The property was beautifully designed and the outdoor space was perfect for relaxing after long days.",
+      avatar: "/avatar-14.png",
+    },
+    {
+      id: 15,
+      name: "Mark Harris",
+      time: "5 months ago",
+      rating: 4.0,
+      location: "Belltown, Seattle, WA",
+      review: "Great urban experience. Walking distance to everything we wanted to see. Property was modern and well-maintained.",
+      avatar: "/avatar-15.png",
+    },
+    {
+      id: 16,
+      name: "Stephanie Clark",
+      time: "5 months ago",
+      rating: 5.0,
+      location: "Arts District, Los Angeles, CA",
+      review: "Fantastic stay in a vibrant neighborhood. The loft was stylish and comfortable. Host provided great local art gallery recommendations.",
+      avatar: "/avatar-16.png",
+    },
+    {
+      id: 17,
+      name: "Thomas Lewis",
+      time: "6 months ago",
+      rating: 4.0,
+      location: "Medical District, Houston, TX",
+      review: "Convenient location for our medical appointments. Clean and comfortable with easy parking. Host was understanding of our needs.",
+      avatar: "/avatar-17.png",
+    },
+    {
+      id: 18,
+      name: "Jennifer Walker",
+      time: "6 months ago",
+      rating: 5.0,
+      location: "Wynwood, Miami, FL",
+      review: "Amazing artistic neighborhood and the property fit right in! Unique decor and perfect for Instagram photos. Loved every minute.",
+      avatar: "/avatar-18.png",
+    },
+    {
+      id: 19,
+      name: "Daniel Hall",
+      time: "7 months ago",
+      rating: 4.0,
+      location: "Inner Richmond, San Francisco, CA",
+      review: "Good value in an expensive city. Property was clean and functional. Host provided helpful transportation tips for getting around.",
+      avatar: "/avatar-19.png",
+    },
+    {
+      id: 20,
+      name: "Megan Young",
+      time: "7 months ago",
+      rating: 5.0,
+      location: "East Village, New York, NY",
+      review: "Perfect NYC experience! The apartment had character and charm while being modern and comfortable. Host was a true New Yorker with great tips.",
+      avatar: "/avatar-20.png",
+    },
+  ]
+};
 
 async function fetchReviews() {
   // Simulate data fetching delay
   await new Promise(resolve => setTimeout(resolve, 2000));
-  return [];
+  return sampleReviewsData;
 }
 
-const UserReviewsSection = (): JSX.Element => {
-  const ratingData = [
-    { stars: 5, percentage: 40, filled: [true, true, true, true, true] },
-    { stars: 4, percentage: 50, filled: [true, true, true, true, false] },
-    { stars: 3, percentage: 70, filled: [true, true, true, false, false] },
-    { stars: 2, percentage: 30, filled: [true, true, false, false, false] },
-    { stars: 1, percentage: 30, filled: [true, false, false, false, false] },
-  ];
-
-  return (
-    <Card className="flex flex-col w-full items-end gap-8 p-6 relative bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-      <h2 className="relative self-stretch mt-[-1.00px] font-medium text-gray-900 text-xl tracking-[0] leading-[30px]">
-        Overall Reviews Breakdown
-      </h2>
-
-      <div className="flex items-start justify-end gap-8 relative self-stretch w-full">
-        <Card className="flex flex-col w-[223px] h-[161px] items-center justify-center gap-5 px-0 py-[31px] relative bg-[#faffff] rounded-xl border border-solid border-[#e8eaef]">
-          <CardContent className="p-0 flex flex-col items-center">
-            <span className="relative w-fit mt-[-12.50px] font-bold text-gray-900 text-5xl text-center whitespace-nowrap">
-              4.8
-            </span>
-
-            <div className="inline-flex flex-col items-center justify-center gap-2 relative flex-[0_0_auto] mb-[-11.50px]">
-              <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-                <span className="relative w-fit mt-[-1.00px] font-medium text-[#020202] text-sm">
-                  4.5
-                </span>
-
-                <div className="items-center justify-center gap-[3.52px] inline-flex relative flex-[0_0_auto]">
-                  {[1, 2, 3, 4, 5].map((_, index) => (
-                    <div
-                      key={`overall-star-${index}`}
-                      className="inline-flex items-center gap-[6.1px] relative flex-[0_0_auto]"
-                    >
-                      <span className="text-yellow-400 text-lg">★</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <span className="relative w-fit font-medium text-[#020202] text-sm">
-                (2,243 reviews)
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex flex-col items-end justify-center gap-2.5 relative flex-1 grow">
-          <div className="flex flex-col w-full items-start justify-center gap-2 relative">
-            {ratingData.map((rating, index) => (
-              <div
-                key={`rating-${rating.stars}`}
-                className="flex items-center gap-1 relative self-stretch w-full"
-              >
-                <div className="flex items-center gap-3 relative flex-1 grow">
-                  <div className="inline-flex items-center gap-3 relative flex-[0_0_auto]">
-                    <div className="inline-flex items-center justify-center gap-[3px] relative flex-[0_0_auto]">
-                      {rating.filled.map((isFilled, starIndex) => (
-                        <div
-                          key={`star-${rating.stars}-${starIndex}`}
-                          className="gap-[5.2px] inline-flex items-center relative flex-[0_0_auto]"
-                        >
-                          <span className={`text-lg ${isFilled ? 'text-yellow-400' : 'text-gray-300'}`}>
-                            ★
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="relative w-[122px] mt-[-1.00px] font-medium text-gray-600 text-sm">
-                      {rating.stars} Star Rating
-                    </div>
-                  </div>
-
-                  <div className="relative flex-1 self-stretch grow rounded-lg">
-                    <div className="relative w-full h-2.5 top-1.5 bg-[#e9e9eb] rounded-full">
-                      <Progress
-                        value={rating.percentage}
-                        className="h-2.5 bg-[#0b6969] rounded-full"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="relative w-fit mt-[-1.00px] font-medium text-gray-700 text-sm">
-                    {rating.percentage}%
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </Card>
-  );
-};
-
-const OverallReviewsSection = (): JSX.Element => {
-  const reviews = [
-    {
-      id: 1,
-      name: "Guy Hawkins",
-      time: "1 week ago",
-      rating: 4.0,
-      location: "2270 CheminBicolas-Austin Austin, TX",
-      review:
-        "I appreciate the precise short videos (10 mins or less each) because overly long videos tend to make me lose focus. The instructor is very knowledgeable in Web Design and it shows as he shares his knowledge. These were my best 6 months of training. Thanks, Vako.",
-      avatar: "/image-2.png",
-    },
-    {
-      id: 2,
-      name: "Arlene McCoy",
-      time: "1 week ago",
-      rating: 4.0,
-      location: "2270 CheminBicolas-Austin Austin, TX",
-      review:
-        "I appreciate the precise short videos (10 mins or less each) because overly long videos tend to make me lose focus. The instructor is very knowledgeable in Web Design and it shows as he shares his knowledge. These were my best 6 months of training. Thanks, Vako.",
-      avatar: "/image-1.png",
-    },
-    {
-      id: 3,
-      name: "Guy Hawkins",
-      time: "1 week ago",
-      rating: 4.0,
-      location: "2270 CheminBicolas-Austin Austin, TX",
-      review:
-        "I appreciate the precise short videos (10 mins or less each) because overly long videos tend to make me lose focus. The instructor is very knowledgeable in Web Design and it shows as he shares his knowledge. These were my best 6 months of training. Thanks, Vako.",
-      avatar: "/image-2.png",
-    },
-  ];
-
-  return (
-    <section className="flex flex-col items-start gap-[18px] w-full">
-      <div className="flex items-start gap-3 w-full">
-        <div className="flex flex-col w-full items-start gap-1.5 bg-white rounded-lg">
-          <Input
-            className="h-12"
-            placeholder="Search review by guest name"
-            type="search"
-          />
-        </div>
-      </div>
-
-      <Card className="w-full shadow-[0px_0px_5px_#00000029]">
-        <CardContent className="p-6 flex flex-col gap-8">
-          <div className="flex items-center justify-between w-full">
-            <h2 className="font-medium text-gray-900 text-xl leading-8">
-              Reviews
-            </h2>
-
-            <Select defaultValue="most-recent">
-              <SelectTrigger className="w-[157px] h-12 bg-white border-[#e8eaef] font-medium text-gray-700">
-                <SelectValue placeholder="Most Recent" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="most-recent">Most Recent</SelectItem>
-                <SelectItem value="highest-rated">Highest Rated</SelectItem>
-                <SelectItem value="lowest-rated">Lowest Rated</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex flex-col items-start w-full">
-            <div className="flex flex-col items-start gap-5 w-full">
-              {reviews.map((review, index) => (
-                <React.Fragment key={review.id}>
-                  <div className="flex flex-col items-end justify-center gap-[22px] w-full">
-                    <div className="flex items-start justify-center gap-4 w-full">
-                      <Avatar className="w-10 h-10">
-                        <AvatarImage
-                          src={review.avatar}
-                          alt={`${review.name}'s avatar`}
-                          className="w-full h-full object-cover"
-                        />
-                        <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-
-                      <div className="flex flex-col items-start gap-3 flex-1">
-                        <div className="flex-col items-start gap-2 inline-flex">
-                          <div className="inline-flex items-center gap-2">
-                            <div className="font-medium text-gray-900">
-                              {review.name}
-                            </div>
-                            <div className="font-medium text-gray-600">
-                              •
-                            </div>
-                            <div className="font-medium text-gray-600 whitespace-nowrap">
-                              {review.time}
-                            </div>
-                          </div>
-
-                          <div className="inline-flex items-start gap-2">
-                            <div className="inline-flex items-center gap-[2.68px]">
-                              {[1, 2, 3, 4, 5].map((star) => (
-                                <span
-                                  key={star}
-                                  className={`text-lg ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                                >
-                                  ★
-                                </span>
-                              ))}
-                            </div>
-                            <div className="font-medium text-[#696969] text-center whitespace-nowrap">
-                              ({review.rating})
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 w-full">
-                          <MapPinIcon className="w-5 h-5 text-[#777b8b]" />
-                          <div className="flex-1 font-medium text-[#777b8b]">
-                            {review.location}
-                          </div>
-                        </div>
-
-                        <p className="w-full font-medium text-gray-700">
-                          {review.review}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2 px-4 py-2.5 border-[#bae7cb] shadow-sm"
-                      >
-                        <LightbulbIcon className="w-6 h-6" />
-                        <span className="font-medium text-[#696969] whitespace-nowrap">
-                          Helpful
-                        </span>
-                      </Button>
-
-                      <div className="flex items-center gap-3">
-                        <Button
-                          variant="outline"
-                          className="p-2.5 border-[#daf6ff] shadow-sm"
-                        >
-                          <span className="text-blue-500">👍</span>
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          className="p-2.5 border-[#ffe4e4] shadow-sm"
-                        >
-                          <span className="text-red-500">👎</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {index < reviews.length - 1 && (
-                    <Separator className="w-full h-px" />
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-
-            <Button className="mt-5 bg-blue-100 text-blue-500 hover:bg-blue-100 hover:text-blue-500">
-              <span className="font-medium whitespace-nowrap">Load More</span>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
-  );
-};
-
 export default async function ReviewsPage() {
-  const reviews = await fetchReviews();
+  const reviewsData = await fetchReviews();
+  
+  // Check if user is admin
+  const { sessionClaims } = await auth();
+  const isAdmin = sessionClaims?.metadata?.role === 'admin';
 
   return (
-    <div className={`${HOST_PAGE_STYLE} w-[100%] overflow-hidden`}>
+    <div className={`${HOST_PAGE_STYLE}`}>
       <HostPageTitle title="All Reviews" subtitle="View and manage reviews from your tenants" />
-      <div className="flex flex-col w-full max-w-[1192px] mx-auto gap-6">
-        <UserReviewsSection />
-        <OverallReviewsSection />
-      </div>
+      <HostReviewClient mockData={reviewsData} isAdmin={isAdmin} />
     </div>
   );
 }
