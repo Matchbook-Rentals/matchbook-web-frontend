@@ -52,8 +52,13 @@ export async function POST(request: Request) {
       
       return NextResponse.json(result);
     } else {
-      // Create new draft in a transaction
+      // Create new draft in a transaction - but first delete any existing drafts for this user
       const result = await prisma.$transaction(async (tx) => {
+        // Delete all existing drafts for this user (there should only be one at a time)
+        await tx.listingInCreation.deleteMany({
+          where: { userId }
+        });
+
         const newDraft = await tx.listingInCreation.create({
           data: {
             ...listingData,
