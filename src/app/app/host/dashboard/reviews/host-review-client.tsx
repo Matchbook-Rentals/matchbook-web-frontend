@@ -228,6 +228,7 @@ const OverallReviewsSection: React.FC<{
   onMockDataToggle: (checked: boolean) => void;
 }> = ({ reviews, isAdmin, useMockData, onMockDataToggle }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [visibleCount, setVisibleCount] = useState(5);
 
   const filteredReviews = useMemo(() => {
     // If not using mock data, return empty array
@@ -240,8 +241,24 @@ const OverallReviewsSection: React.FC<{
     );
   }, [reviews, searchTerm, useMockData]);
 
+  const displayedReviews = useMemo(() => {
+    return filteredReviews.slice(0, visibleCount);
+  }, [filteredReviews, visibleCount]);
+
+  const hasMoreReviews = filteredReviews.length > visibleCount;
+
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 5);
+  };
+
+  // Reset visible count when search term changes
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setVisibleCount(5);
+  };
+
   return (
-    <section className="flex flex-col items-start gap-[18px] w-full">
+    <section className="flex flex-col pb-4 items-start flex-1 gap-[18px] w-full">
       <div className="flex items-center gap-6 w-full">
         <div className="w-[434px]">
           <Card className="border-0 shadow-none">
@@ -252,7 +269,7 @@ const OverallReviewsSection: React.FC<{
                   className="h-12 pl-10" 
                   placeholder="Search review by guest name"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                 />
               </div>
             </CardContent>
@@ -291,9 +308,9 @@ const OverallReviewsSection: React.FC<{
             </Select>
           </div>
 
-          <div className="flex flex-col items-start w-full flex-1">
+          <div className="flex flex-col items-start w-full flex-1 ">
             {filteredReviews.length === 0 ? (
-              <div className="flex flex-col items-center gap-8 justify-center text-gray-500 w-full flex-1 min-h-[400px]">
+              <div className="flex flex-col items-center gap-8 justify-center text-gray-500 w-full h-full">
                 <img 
                   src="/host-dashboard/empty/reviews.png" 
                   alt="No reviews" 
@@ -306,18 +323,23 @@ const OverallReviewsSection: React.FC<{
             ) : (
               <>
                 <div className="flex flex-col items-start gap-5 w-full">
-                  {filteredReviews.map((review, index) => (
+                  {displayedReviews.map((review, index) => (
                     <IndividualReview
                       key={review.id}
                       review={review}
-                      isLast={index === filteredReviews.length - 1}
+                      isLast={index === displayedReviews.length - 1}
                     />
                   ))}
                 </div>
 
-                <Button className="mt-5 bg-blue-100 text-blue-500 hover:bg-blue-100 hover:text-blue-500">
-                  <span className="font-medium whitespace-nowrap">Load More</span>
-                </Button>
+                {hasMoreReviews && (
+                  <Button 
+                    className="mt-5 bg-blue-100 text-blue-500 hover:bg-blue-100 hover:text-blue-500"
+                    onClick={handleLoadMore}
+                  >
+                    <span className="font-medium whitespace-nowrap">Load More</span>
+                  </Button>
+                )}
               </>
             )}
           </div>
@@ -331,7 +353,7 @@ export const HostReviewClient: React.FC<{ mockData: ReviewData; isAdmin: boolean
   const [useMockData, setUseMockData] = useState(false);
 
   return (
-    <div className="flex flex-col w-full items-start mx-auto gap-6">
+    <div className="flex flex-col w-full items-start mx-auto gap-6 min-h-0 flex-1">
       {useMockData && (
         <UserReviewsSection 
           overallRating={mockData.overallRating}

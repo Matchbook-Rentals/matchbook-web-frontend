@@ -214,7 +214,7 @@ export default async function ReviewsPage() {
   const isAdmin = sessionClaims?.metadata?.role === 'admin';
 
   return (
-    <div className={`${HOST_PAGE_STYLE}`}>
+    <div className={`${HOST_PAGE_STYLE} flex flex-col min-h-0 flex-1`}>
       <HostPageTitle title="All Reviews" subtitle="View and manage reviews from your tenants" />
       <HostReviewClient mockData={reviewsData} isAdmin={isAdmin} />
     </div>
