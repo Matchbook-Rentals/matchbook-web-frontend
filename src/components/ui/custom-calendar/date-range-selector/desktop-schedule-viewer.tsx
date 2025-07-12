@@ -420,7 +420,7 @@ export function DesktopScheduleViewer({
   };
 
   return (
-    <div className=" rounded-xl p-6 w-full mx-auto">
+    <div className=" rounded-xl py-6 w-full mx-auto">
       {/* Desktop: Two calendars side by side */}
       <div className="hidden md:flex justify-center w-full bg-background rounded-xl overflow-hidden shadow-[0px_0px_5px_#00000029]">
         <div className="flex-1 bg-background p-4 flex flex-col ">
