@@ -122,6 +122,9 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
   // State to track if admin mode is temporarily disabled (requires refresh to get back)
   const [adminModeDisabled, setAdminModeDisabled] = useState<boolean>(false);
   
+  // State to track if save & exit is loading
+  const [isSavingDraft, setIsSavingDraft] = useState<boolean>(false);
+  
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
     listingPhotos: [],
@@ -308,6 +311,7 @@ const [listingBasics, setListingBasics] = useState({
 
   // Handler for Save & Exit button
   const handleSaveExit = async () => {
+    setIsSavingDraft(true);
     try {
       // Create final array of photos
       let listingImagesFinal = [...listingPhotos].map(photo => ({
@@ -417,6 +421,8 @@ const [listingBasics, setListingBasics] = useState({
     } catch (error) {
       console.error('Error saving listing draft:', error);
       alert(`Error saving your listing: ${(error as Error).message}`);
+    } finally {
+      setIsSavingDraft(false);
     }
   };
 
@@ -1383,9 +1389,17 @@ const [listingBasics, setListingBasics] = useState({
                 variant="outline"
                 size="lg"
                 onClick={handleSaveExit}
+                disabled={isSavingDraft}
                 className="text-sm"
               >
-                Save & Exit
+                {isSavingDraft ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save & Exit'
+                )}
               </BrandButton>
             </div>
           </div>
