@@ -14,6 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2 } from 'lucide-react';
 import Tile from '@/components/ui/tile';
+import { ListingCreationCard } from '@/app/app/host/add-property/listing-creation-card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { updateListing, updateListingPhotos } from '@/app/actions/listings';
 import { toast } from '@/components/ui/use-toast';
@@ -1456,24 +1457,40 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             </div>
 
             {editingSections['amenities'] ? (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-0">
                   {AMENITY_GROUPS.map((group) => (
-                    <div key={group.group} className="space-y-4 border-b pb-4">
-                      <h3 className="text-[16px] font-medium text-[#404040]">{group.group}</h3>
-                      <div className="flex flex-wrap gap-3">
+                    <div key={group.group} className="space-y-4 pt-0 pb-10 mb-0">
+                      <h3 className="text-[18px] font-medium text-[#404040]">{group.group}</h3>
+                      <div className="flex flex-wrap gap-4">
                         {group.items.map((amenity) => (
-                          <Tile
-                            key={amenity.value}
-                            label={amenity.label}
-                            icon={amenity.icon}
-                            className={`cursor-pointer border-2 w-[85px] h-[96px] ${
-                              (formData as any)[amenity.value] 
-                                ? 'border-primary shadow-lg' 
-                                : 'border-[#E3E3E3]'
-                            }`}
-                            labelClassNames="text-xs"
-                            onClick={() => toggleAmenity(amenity.value)}
-                          />
+                          <React.Fragment key={amenity.value}>
+                            {/* Badge for mobile (< md) */}
+                            <Badge
+                              variant="outline"
+                              className={`md:hidden inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 rounded-full border-solid cursor-pointer ${
+                                (formData as any)[amenity.value]
+                                  ? 'bg-gray-100 border-[#4f4f4f] border-2'
+                                  : 'bg-gray-50 border-[#d9dadf]'
+                              }`}
+                              onClick={() => toggleAmenity(amenity.value)}
+                            >
+                              {React.cloneElement(amenity.icon as React.ReactElement, { 
+                                className: "w-4 h-4" 
+                              })}
+                              <span className="font-['Poppins',Helvetica] font-medium text-sm text-center leading-5 text-[#344054]">
+                                {amenity.label}
+                              </span>
+                            </Badge>
+                            {/* Card for medium+ screens */}
+                            <div className="hidden md:block">
+                              <ListingCreationCard
+                                name={amenity.label}
+                                icon={amenity.icon}
+                                isSelected={(formData as any)[amenity.value] || false}
+                                onClick={() => toggleAmenity(amenity.value)}
+                              />
+                            </div>
+                          </React.Fragment>
                         ))}
                       </div>
                     </div>
@@ -1481,18 +1498,22 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                 </div>
             ) : (
               displayAmenities.length > 0 && (
-                <div className="flex items-center gap-[60px] w-full flex-wrap gap-y-4">
+                <div className="flex items-center gap-5 w-full flex-wrap">
                   {displayAmenities.map((amenity, index) => {
                     const IconComponent = amenity.icon;
                     return (
-                      <div key={index} className="flex items-center gap-3 py-1">
-                        <div className="w-5 h-5 flex items-center justify-center">
-                          <IconComponent className={`w-5 h-5 ${labelStyles}`} />
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="inline-flex items-center justify-center gap-1.5 pl-1.5 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                      >
+                        <div className="w-4 h-4 flex items-center justify-center">
+                          <IconComponent className="w-4 h-4" />
                         </div>
-                        <span className={valueStyles}>
+                        <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
                           {amenity.label}
                         </span>
-                      </div>
+                      </Badge>
                     );
                   })}
                 </div>
