@@ -107,7 +107,7 @@ const sampleBookings: BookingWithRelations[] = [
     totalPrice: 10500,
     monthlyRent: 3500,
     createdAt: new Date("2024-12-15"),
-    status: "upcoming",
+    status: "pending",
     listing: {
       title: "Cozy Studio Near Park",
       streetAddress1: "456 Oak Avenue",
@@ -185,6 +185,48 @@ const sampleBookings: BookingWithRelations[] = [
       numPets: 2,
       numChildren: 0
     }
+  },
+  {
+    id: "match-005",
+    userId: "user-005",
+    listingId: "listing-004",
+    tripId: "trip-005",
+    matchId: "match-005",
+    startDate: new Date("2025-03-01"),
+    endDate: new Date("2025-06-01"),
+    totalPrice: null,
+    monthlyRent: 3800,
+    createdAt: new Date("2024-12-18"),
+    status: "awaiting_signature",
+    listing: {
+      title: "Garden View Apartment",
+      streetAddress1: "321 Pine Street",
+      city: "San Francisco",
+      state: "CA",
+      postalCode: "94108"
+    },
+    user: {
+      firstName: "Lisa",
+      lastName: "Chen",
+      email: "lisa.chen@example.com"
+    },
+    trip: {
+      numAdults: 1,
+      numPets: 1,
+      numChildren: 0
+    },
+    match: {
+      id: "match-005",
+      tenantSignedAt: null,
+      landlordSignedAt: null,
+      paymentAuthorizedAt: null,
+      BoldSignLease: {
+        id: "lease-005",
+        landlordSigned: false,
+        tenantSigned: false,
+      },
+      Lease: null,
+    }
   }
 ];
 
@@ -223,7 +265,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
   };
 
   // Base filter options
-  const baseFilterOptions = ["All", "Pending", "Active", "Upcoming", "Past", "Cancelled"];
+  const baseFilterOptions = ["All", "Upcoming", "Active", "Awaiting Signature", "Past", "Cancelled"];
   
   // Get filter options based on user role
   const { user } = useUser();
@@ -244,7 +286,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     // Handle special awaiting_signature status (from matches without bookings)
     if (booking.status === "awaiting_signature") {
       return {
-        label: "Awaiting Signature",
+        label: "Awaiting Your Signature",
         icon: <Clock className="h-4 w-4" />,
         className: "text-[#d97706]"
       };
@@ -255,7 +297,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
         ((!booking.match.BoldSignLease.tenantSigned || !booking.match.BoldSignLease.landlordSigned) || 
          !booking.match.paymentAuthorizedAt)) {
       return {
-        label: "Awaiting Signature",
+        label: "Awaiting Your Signature",
         icon: <Clock className="h-4 w-4" />,
         className: "text-[#d97706]"
       };
@@ -269,6 +311,13 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
           className: "text-green-600"
         };
       case "upcoming":
+        return {
+          label: "Upcoming",
+          icon: <Calendar className="h-4 w-4" />,
+          className: "text-blue-600"
+        };
+      case "pending":
+        // DB pending status should show as "Upcoming"
         return {
           label: "Upcoming",
           icon: <Calendar className="h-4 w-4" />,
@@ -288,9 +337,9 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
         };
       default:
         return {
-          label: "Pending",
-          icon: <Clock className="h-4 w-4" />,
-          className: "text-yellow-600"
+          label: "Upcoming",
+          icon: <Calendar className="h-4 w-4" />,
+          className: "text-blue-600"
         };
     }
   };
@@ -464,10 +513,9 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     
     // Debug: Count statuses before filtering
     const statusCounts = {
-      "Pending": 0,
-      "Awaiting Signature": 0,
-      "Active": 0,
       "Upcoming": 0,
+      "Awaiting Your Signature": 0,
+      "Active": 0,
       "Past": 0,
       "Cancelled": 0
     };
@@ -493,17 +541,17 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
       filtered = filtered.filter(booking => {
         const statusInfo = getStatusInfo(booking);
         
-        if (selectedFilter === "Pending") {
-          // Pending should include both "Pending" status and "Awaiting Signature" status
-          return statusInfo.label === "Pending" || statusInfo.label === "Awaiting Signature";
+        if (selectedFilter === "Upcoming") {
+          // Upcoming should only show "Upcoming" status
+          return statusInfo.label === "Upcoming";
         }
         if (selectedFilter === "Active") {
           // Active should only show "Active" status
           return statusInfo.label === "Active";
         }
-        if (selectedFilter === "Upcoming") {
-          // Upcoming should only show "Upcoming" status
-          return statusInfo.label === "Upcoming";
+        if (selectedFilter === "Awaiting Signature") {
+          // Awaiting Signature should only show readyMatches
+          return statusInfo.label === "Awaiting Your Signature";
         }
         if (selectedFilter === "Past") {
           // Past should only show "Past" status
@@ -520,10 +568,9 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     
     // Debug: Count statuses after filtering
     const filteredStatusCounts = {
-      "Pending": 0,
-      "Awaiting Signature": 0,
-      "Active": 0,
       "Upcoming": 0,
+      "Awaiting Your Signature": 0,
+      "Active": 0,
       "Past": 0,
       "Cancelled": 0
     };
