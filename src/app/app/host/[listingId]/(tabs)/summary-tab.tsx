@@ -287,13 +287,13 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             className={`
               h-8 px-3 transition-all duration-300 ease-out
               ${buttonState ? 'w-full z-10' : ''}
-              ${!canSave && !buttonState ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed opacity-50' : ''}
-              ${canSave && !buttonState ? 'bg-green-600 hover:bg-green-700 text-white' : ''}
-              ${buttonState === 'success' ? 'bg-green-600 hover:bg-green-600' : ''}
-              ${buttonState === 'failed' ? 'bg-red-600 hover:bg-red-600' : ''}
+              ${buttonState === 'success' ? 'bg-secondaryBrand hover:bg-secondaryBrand text-white' : 
+                buttonState === 'failed' ? 'bg-red-600 hover:bg-red-600' : 
+                !canSave && !buttonState ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed opacity-50' : 
+                canSave && !buttonState ? 'bg-secondaryBrand hover:bg-secondaryBrand/90 text-white' : ''}
             `}
             onClick={() => !buttonState && canSave && saveChanges(section)}
-            disabled={isSaving || !!buttonState || !canSave}
+            disabled={isSaving || (buttonState === 'saving' || buttonState === 'failed') || (!buttonState && !canSave)}
           >
             {buttonState === 'saving' ? (
               <div className="flex items-center gap-2">
