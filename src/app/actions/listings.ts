@@ -15,6 +15,15 @@ const checkAuth = async () => {
   return userId;
 }
 
+/**
+ * Core listing search engine that implements comprehensive filtering requirements.
+ * 
+ * This function applies multiple filter categories including geographic, authentication,
+ * approval status, availability, pricing compatibility, and user activity filtering.
+ * 
+ * For detailed filter requirements documentation, see:
+ * docs/pullListingsFromDb-filter-requirements.md
+ */
 export const pullListingsFromDb = async (
   lat: number,
   lng: number,
@@ -87,6 +96,7 @@ export const pullListingsFromDb = async (
       FROM Listing l
       WHERE l.state IN (${ Prisma.join(statesToSearch) }) -- Filter by states first
         AND l.approvalStatus = 'approved' -- Only include approved listings
+        AND l.markedActiveByUser = true -- Only include listings marked active by host
       HAVING distance <= ${radiusMiles} -- Then filter by distance
       ORDER BY distance
     `;
@@ -129,9 +139,6 @@ export const pullListingsFromDb = async (
                 }
               }
             }
-          },
-          { // Only include listings marked as active by the user
-            markedActiveByUser: true
           }
         ]
       },

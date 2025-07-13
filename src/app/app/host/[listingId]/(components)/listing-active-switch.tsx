@@ -50,16 +50,13 @@ export const ListingActiveSwitch: React.FC<ListingActiveSwitchProps> = ({
   return (
     <div className="flex items-center space-x-3">
       <label className="text-sm font-medium text-gray-700">
-        Active Status
+        Listing {isActive ? 'Active' : 'Inactive'}
       </label>
       <Switch
         checked={isActive}
         onCheckedChange={handleToggle}
         disabled={isUpdating}
       />
-      <span className="text-sm text-gray-600">
-        {isActive ? 'Active' : 'Inactive'}
-      </span>
     </div>
   );
 };

@@ -431,7 +431,76 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-[50vh]">
-                <p className="font-montserrat-regular text-2xl mb-5">No more listings to show!</p>
+                <p 
+                  className="font-montserrat-regular text-2xl mb-5 cursor-pointer hover:text-blue-600"
+                  onClick={() => {
+                    console.log('=== DEBUG: No more listings to show ===');
+                    console.log('Total listings from backend:', listings.length);
+                    console.log('Display listings (after filtering):', displayListings.length);
+                    console.log('Show listings (from context):', showListings.length);
+                    console.log('Liked listings:', likedListings.length);
+                    console.log('Filtered out count:', numFilteredOut);
+                    
+                    console.log('\n--- Trip Details ---');
+                    console.table({
+                      'Trip Start Date': trip?.startDate ? new Date(trip.startDate).toDateString() : 'Not set',
+                      'Trip End Date': trip?.endDate ? new Date(trip.endDate).toDateString() : 'Not set',
+                      'Flexible Start Days': trip?.flexibleStart || 0,
+                      'Flexible End Days': trip?.flexibleEnd || 0,
+                      'Stay Duration (days)': trip?.startDate && trip?.endDate ? 
+                        Math.ceil((new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1 : 'Unknown'
+                    });
+                    
+                    // Log individual listings and why they might be filtered
+                    console.log('\n--- All listings from backend ---');
+                    listings.forEach((listing, index) => {
+                      const isInShowListings = showListings.some(sl => sl.id === listing.id);
+                      const isLiked = lookup.favIds.has(listing.id);
+                      const isDisliked = lookup.dislikedIds.has(listing.id);
+                      const isRequested = lookup.requestedIds.has(listing.id);
+                      
+                      console.log(`${index + 1}. ${listing.title} (${listing.id})`);
+                      console.log(`   - In showListings: ${isInShowListings}`);
+                      console.log(`   - Liked: ${isLiked}`);
+                      console.log(`   - Disliked: ${isDisliked}`);
+                      console.log(`   - Requested: ${isRequested}`);
+                      console.log(`   - Available: ${listing.isActuallyAvailable !== false}`);
+                      console.log(`   - Approval Status: ${listing.approvalStatus}`);
+                      console.log(`   - Marked Active: ${listing.markedActiveByUser}`);
+                      console.log(`   - Latitude: ${listing.latitude}`);
+                      console.log(`   - Longitude: ${listing.longitude}`);
+                      console.log(`   - Category: ${listing.category}`);
+                      console.log(`   - Furnished: ${listing.furnished}`);
+                      console.log(`   - Bedrooms: ${listing.bedrooms?.length || 0}`);
+                      console.log(`   - Bathroom Count: ${listing.bathroomCount}`);
+                      console.log(`   - Distance: ${listing.distance}`);
+                      console.log(`   - Price: ${listing.price}`);
+                      console.log(`   - Calculated Price: ${listing.calculatedPrice}`);
+                      
+                      // Enhanced unavailable periods logging
+                      console.log(`\n   📅 Unavailable Periods for "${listing.title}":`);
+                      if (listing.unavailablePeriods && listing.unavailablePeriods.length > 0) {
+                        console.table(listing.unavailablePeriods.map((period, idx) => ({
+                          'Period #': idx + 1,
+                          'Start Date': new Date(period.startDate).toDateString(),
+                          'End Date': new Date(period.endDate).toDateString(),
+                          'Reason': period.reason || 'Not specified'
+                        })));
+                      } else {
+                        console.log('   ✅ No unavailable periods');
+                      }
+                      
+                      console.log('   - Full listing object:', listing);
+                      console.log('');
+                    });
+                    
+                    console.log('\n--- Current filters ---');
+                    console.log(filters);
+                    console.log('=== END DEBUG ===');
+                  }}
+                >
+                  No more listings to show!
+                </p>
                 <p>
                   {numFilteredOut > 0 ? 'Try adjusting your filters to see more listings.' : 'Check back later for new listings.'}
                 </p>
