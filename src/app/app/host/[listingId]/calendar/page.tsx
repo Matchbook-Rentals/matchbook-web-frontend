@@ -175,6 +175,14 @@ export const Body = (): JSX.Element => {
       />
       <section className="flex flex-col items-start gap-6 px-0 py-0 self-stretch w-full bg-[#f9f9f9]">
 
+        {/* Calendar Schedule Viewer */}
+        <div className=" pb-8 w-full">
+          <DesktopScheduleViewer
+            bookings={data.bookings}
+            unavailablePeriods={data.listing.unavailablePeriods || []}
+          />
+        </div>
+
         <div className="flex flex-col items-start gap-[18px] self-stretch w-full">
           <div className="flex flex-col items-start gap-6 self-stretch w-full">
             <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl p-2  overflow-hidden">
@@ -343,14 +351,6 @@ export const Body = (): JSX.Element => {
               </CardContent>
             </Card>
           </div>
-        </div>
-
-        {/* Calendar Schedule Viewer */}
-        <div className=" pb-8 w-full">
-          <DesktopScheduleViewer
-            bookings={data.bookings}
-            unavailablePeriods={data.listing.unavailablePeriods || []}
-          />
         </div>
       </section>
     </div>
