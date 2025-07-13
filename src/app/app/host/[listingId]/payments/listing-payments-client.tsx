@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { StatisticsCard } from "../overview/statistics-card";
+import { StatisticsCard } from "../../dashboard/overview/statistics-card";
 import { DollarSign, AlertTriangle, CreditCard, Shield, Eye } from "lucide-react";
-import { PaymentsTable } from "./payments-table";
+import { PaymentsTable } from "../../dashboard/payments/payments-table";
 
 const iconMap = {
   DollarSign,
@@ -40,15 +40,23 @@ interface PaymentsData {
   history: PaymentTableData[];
 }
 
-interface PaymentsClientProps {
+interface ListingPaymentsClientProps {
   mockCards: PaymentCardData[];
   emptyCards: PaymentCardData[];
   mockData: PaymentsData;
   emptyData: PaymentsData;
   isAdmin: boolean;
+  listingAddress: string;
 }
 
-export default function PaymentsClient({ mockCards, emptyCards, mockData, emptyData, isAdmin }: PaymentsClientProps) {
+export default function ListingPaymentsClient({ 
+  mockCards, 
+  emptyCards, 
+  mockData, 
+  emptyData, 
+  isAdmin,
+  listingAddress
+}: ListingPaymentsClientProps) {
   const [useMockData, setUseMockData] = useState(false);
   
   const cards = useMockData ? mockCards : emptyCards;

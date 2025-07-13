@@ -41,20 +41,20 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
 
   // Column headers
   const headers = [
-    { name: "Tenant", width: "w-[194px]" },
-    { name: "Amount", width: "flex-1" },
-    { name: "Type", width: "w-[151px]" },
-    { name: "Method", width: "w-[150px]" },
-    { name: "Bank", width: "flex-1" },
-    { name: "Due Date", width: "w-[135px]" },
-    { name: "Status", width: "flex-1" },
-    { name: "Actions", width: "flex-1" },
+    { name: "Tenant", width: "w-fit" },
+    { name: "Amount", width: "w-fit" },
+    { name: "Type", width: "w-fit" },
+    { name: "Method", width: "w-fit" },
+    { name: "Bank", width: "w-fit" },
+    { name: "Due Date", width: "w-fit" },
+    { name: "Status", width: "w-fit" },
+    { name: "Actions", width: "w-fit" },
   ];
 
   const renderTable = (data: PaymentTableData[]) => (
     <Table>
       <TableHeader>
-        <TableRow className="bg-[#e7f0f0]">
+        <TableRow className="bg-[#e7f0f0] justify-evenly">
           {headers.map((header, index) => (
             <TableHead
               key={`header-${index}`}
@@ -67,8 +67,8 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
       </TableHeader>
       <TableBody>
         {data.map((row, rowIndex) => (
-          <TableRow key={`row-${rowIndex}`}>
-            <TableCell className="w-[194px] h-[72px] px-6 py-4 border-b border-[#eaecf0] flex items-center gap-3">
+          <TableRow key={`row-${rowIndex}`} className="justify-evenly">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] flex items-center gap-3">
               <Avatar className="w-10 h-10 rounded-full border-[0.75px] border-[#00000014]">
                 <AvatarImage src="/avatar-5.png" alt={row.tenant} />
                 <AvatarFallback>{row.tenant.charAt(0)}</AvatarFallback>
@@ -77,22 +77,22 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
                 {row.tenant}
               </span>
             </TableCell>
-            <TableCell className="flex-1 h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               ${row.amount}
             </TableCell>
-            <TableCell className="w-[151px] h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.type}
             </TableCell>
-            <TableCell className="w-[150px] h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.method}
             </TableCell>
-            <TableCell className="flex-1 h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.bank}
             </TableCell>
-            <TableCell className="w-[135px] h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.dueDate}
             </TableCell>
-            <TableCell className="flex-1 h-[72px] px-6 py-4 border-b border-[#eaecf0]">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0]">
               <Badge 
                 className={`rounded-full px-2 py-0.5 font-medium text-xs ${
                   row.status === 'Completed' 
@@ -107,7 +107,7 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
                 {row.status}
               </Badge>
             </TableCell>
-            <TableCell className="flex-1 h-[72px] px-6 py-4 border-b border-[#eaecf0] flex justify-center items-center">
+            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] flex justify-center items-center">
               <div className="inline-flex flex-col items-start">
                 <MoreVerticalIcon className="w-5 h-5 cursor-pointer hover:text-gray-600" />
               </div>
