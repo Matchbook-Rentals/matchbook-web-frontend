@@ -1445,6 +1445,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                         </div>
                         <div className="flex items-center space-x-2">
                           <BrandCheckbox
+                            id={`utilities-${term.months}`}
                             name={`utilities-${term.months}`}
                             checked={term.utilitiesIncluded}
                             tabIndex={100 + (term.months * 2)}
@@ -1452,7 +1453,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                               updateLeaseTermUtilities(term.months, e.target.checked)
                             }
                           />
-                          <label className="text-xs font-medium text-[#475467]">
+                          <label htmlFor={`utilities-${term.months}`} className="text-xs font-medium text-[#475467] cursor-pointer">
                             Utilities Included
                           </label>
                         </div>
