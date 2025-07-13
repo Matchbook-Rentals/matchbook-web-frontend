@@ -1512,15 +1512,19 @@ const [listingBasics, setListingBasics] = useState({
                 
                 {/* Back and Next buttons row - mobile sizes, justify-between */}
                 <div className="flex justify-between items-center">
-                  <BrandButton 
-                    variant="link"
-                    size="lg"
-                    onClick={handleBack}
-                    disabled={currentStep === 0}
-                    className="text-sm"
-                  >
-                    Back
-                  </BrandButton>
+                  {!cameFromReview ? (
+                    <BrandButton 
+                      variant="link"
+                      size="lg"
+                      onClick={handleBack}
+                      disabled={currentStep === 0}
+                      className="text-sm"
+                    >
+                      Back
+                    </BrandButton>
+                  ) : (
+                    <div></div>
+                  )}
                   <BrandButton 
                     variant="default"
                     size="lg"
@@ -1566,15 +1570,19 @@ const [listingBasics, setListingBasics] = useState({
             ) : (
               /* Regular user footer - Back and Next buttons mobile sizes, justify-between */
               <div className="flex justify-between items-center w-full px-4 md:px-[50px] py-8 md:py-10">
-                <BrandButton 
-                  variant="link"
-                  size="lg"
-                  onClick={handleBack}
-                  disabled={currentStep === 0}
-                  className="text-sm"
-                >
-                  Back
-                </BrandButton>
+                {!cameFromReview ? (
+                  <BrandButton 
+                    variant="link"
+                    size="lg"
+                    onClick={handleBack}
+                    disabled={currentStep === 0}
+                    className="text-sm"
+                  >
+                    Back
+                  </BrandButton>
+                ) : (
+                  <div></div>
+                )}
                 <BrandButton 
                   variant="default"
                   size="lg"
