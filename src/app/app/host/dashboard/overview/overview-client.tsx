@@ -41,7 +41,9 @@ const iconMap = {
   Database,
 };
 
-const OverviewSection = (): JSX.Element => {
+const OverviewSection = ({ userFirstName }: { userFirstName: string | null }): JSX.Element => {
+  const displayName = userFirstName || 'host';
+  
   return (
     <section className="w-full">
       <div className="flex flex-col gap-2">
@@ -49,7 +51,7 @@ const OverviewSection = (): JSX.Element => {
           Overview
         </h2>
         <p className="text-lg text-gray-600 font-normal leading-[27px] font-['Poppins',Helvetica]">
-          Hello host, here&apos;s what&apos;s happening with your properties
+          Hello {displayName}, here&apos;s what&apos;s happening with your properties
         </p>
       </div>
     </section>
@@ -132,36 +134,15 @@ const StatisticsSection = ({
   );
 };
 
-const ApplicationsSection = (): JSX.Element => {
-  const applicationsData = [
-    { month: "Jan", approved: 25, spacer1: 1, pending: 10, spacer2: 1, declined: 15 },
-    { month: "Feb", approved: 43, spacer1: 1, pending: 21, spacer2: 1, declined: 31 },
-    { month: "Mar", approved: 25, spacer1: 1, pending: 20, spacer2: 1, declined: 29 },
-    { month: "Apr", approved: 11, spacer1: 1, pending: 77, spacer2: 1, declined: 15 },
-    { month: "May", approved: 50, spacer1: 1, pending: 16, spacer2: 1, declined: 55 },
-    { month: "Jun", approved: 25, spacer1: 1, pending: 46, spacer2: 1, declined: 15 },
-    { month: "Jul", approved: 38, spacer1: 1, pending: 8, spacer2: 1, declined: 22 },
-    { month: "Aug", approved: 71, spacer1: 1, pending: 27, spacer2: 1, declined: 15 },
-    { month: "Sep", approved: 14, spacer1: 1, pending: 40, spacer2: 1, declined: 15 },
-    { month: "Oct", approved: 63, spacer1: 1, pending: 37, spacer2: 1, declined: 16 },
-    { month: "Nov", approved: 24, spacer1: 1, pending: 23, spacer2: 1, declined: 16 },
-    { month: "Dec", approved: 47, spacer1: 1, pending: 32, spacer2: 1, declined: 32 },
-  ];
-
-  const revenueData = [
-    { month: "Jan", revenue: 45000 },
-    { month: "Feb", revenue: 52000 },
-    { month: "Mar", revenue: 48000 },
-    { month: "Apr", revenue: 61000 },
-    { month: "May", revenue: 55000 },
-    { month: "Jun", revenue: 67000 },
-    { month: "Jul", revenue: 72000 },
-    { month: "Aug", revenue: 68000 },
-    { month: "Sep", revenue: 59000 },
-    { month: "Oct", revenue: 63000 },
-    { month: "Nov", revenue: 58000 },
-    { month: "Dec", revenue: 71000 },
-  ];
+const ApplicationsSection = ({ 
+  showMockData, 
+  mockChartData 
+}: { 
+  showMockData: boolean; 
+  mockChartData: MockChartData; 
+}): JSX.Element => {
+  const applicationsData = showMockData ? mockChartData.applicationsData : null;
+  const revenueData = showMockData ? mockChartData.revenueData : null;
 
   return (
     <div className="flex items-stretch gap-6 w-full h-full">
@@ -194,74 +175,85 @@ const ApplicationsSection = (): JSX.Element => {
         </CardHeader>
 
         <CardContent className="p-6 flex flex-col gap-4 flex-1">
-          <div className="flex gap-8 items-center">
-            <div className="inline-flex gap-1.5 items-center">
-              <div className="w-3 h-3 rounded-md bg-[#1fb356]" />
-              <span className="font-normal text-sm text-gray-500 font-['Poppins',Helvetica] leading-[21px]">
-                Approved
-              </span>
-            </div>
-            <div className="inline-flex gap-1.5 items-center">
-              <div className="w-3 h-3 rounded-md bg-[#edbd33]" />
-              <span className="font-normal text-sm text-gray-500 font-['Poppins',Helvetica] leading-[21px]">
-                Pending
-              </span>
-            </div>
-            <div className="inline-flex gap-1.5 items-center">
-              <div className="w-3 h-3 rounded-md bg-[#e62e2e]" />
-              <span className="font-normal text-sm text-gray-500 font-['Poppins',Helvetica] leading-[21px]">
-                Declined
-              </span>
-            </div>
-          </div>
+          {applicationsData ? (
+            <>
+              <div className="flex gap-8 items-center">
+                <div className="inline-flex gap-1.5 items-center">
+                  <div className="w-3 h-3 rounded-md bg-[#1fb356]" />
+                  <span className="font-normal text-sm text-gray-500 font-['Poppins',Helvetica] leading-[21px]">
+                    Approved
+                  </span>
+                </div>
+                <div className="inline-flex gap-1.5 items-center">
+                  <div className="w-3 h-3 rounded-md bg-[#edbd33]" />
+                  <span className="font-normal text-sm text-gray-500 font-['Poppins',Helvetica] leading-[21px]">
+                    Pending
+                  </span>
+                </div>
+                <div className="inline-flex gap-1.5 items-center">
+                  <div className="w-3 h-3 rounded-md bg-[#e62e2e]" />
+                  <span className="font-normal text-sm text-gray-500 font-['Poppins',Helvetica] leading-[21px]">
+                    Declined
+                  </span>
+                </div>
+              </div>
 
-          <div className="flex-1 min-h-[240px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart 
-                data={applicationsData} 
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                maxBarSize={12}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis 
-                  dataKey="month" 
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
-                />
-                <YAxis 
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'white', 
-                    border: '1px solid #e2e8f0', 
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                  }}
-                  labelFormatter={(label) => {
-                    const monthMap: { [key: string]: string } = {
-                      'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April',
-                      'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August',
-                      'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December'
-                    };
-                    return monthMap[label] || label;
-                  }}
-                  formatter={(value, name) => {
-                    if (name === 'spacer1' || name === 'spacer2') return [null, null];
-                    return [value, name.charAt(0).toUpperCase() + name.slice(1)];
-                  }}
-                />
-                <Bar dataKey="approved" stackId="a" fill="#1fb356" radius={[6, 6, 6, 6]} />
-                <Bar dataKey="spacer1" stackId="a" fill="transparent" />
-                <Bar dataKey="pending" stackId="a" fill="#edbd33" radius={[6, 6, 6, 6]} />
-                <Bar dataKey="spacer2" stackId="a" fill="transparent" />
-                <Bar dataKey="declined" stackId="a" fill="#e62e2e" radius={[6, 6, 6, 6]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+              <div className="flex-1 min-h-[240px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart 
+                    data={applicationsData} 
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    maxBarSize={12}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis 
+                      dataKey="month" 
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 12, fill: '#6b7280' }}
+                    />
+                    <YAxis 
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 12, fill: '#6b7280' }}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'white', 
+                        border: '1px solid #e2e8f0', 
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }}
+                      labelFormatter={(label) => {
+                        const monthMap: { [key: string]: string } = {
+                          'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April',
+                          'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August',
+                          'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December'
+                        };
+                        return monthMap[label] || label;
+                      }}
+                      formatter={(value, name) => {
+                        if (name === 'spacer1' || name === 'spacer2') return [null, null];
+                        return [value, name.charAt(0).toUpperCase() + name.slice(1)];
+                      }}
+                    />
+                    <Bar dataKey="approved" stackId="a" fill="#1fb356" radius={[6, 6, 6, 6]} />
+                    <Bar dataKey="spacer1" stackId="a" fill="transparent" />
+                    <Bar dataKey="pending" stackId="a" fill="#edbd33" radius={[6, 6, 6, 6]} />
+                    <Bar dataKey="spacer2" stackId="a" fill="transparent" />
+                    <Bar dataKey="declined" stackId="a" fill="#e62e2e" radius={[6, 6, 6, 6]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 min-h-[240px] flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-gray-400 text-lg font-medium mb-2">No data available</div>
+                <div className="text-gray-500 text-sm">No data for applications visualization</div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -301,57 +293,66 @@ const ApplicationsSection = (): JSX.Element => {
         </CardHeader>
 
         <CardContent className="p-6 flex flex-col gap-4 flex-1">
-          <div className="flex-1 min-h-[240px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0B6E6E" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#0B6E6E" stopOpacity={0.1}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis 
-                  dataKey="month" 
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
-                />
-                <YAxis 
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'white', 
-                    border: '1px solid #e2e8f0', 
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                  }}
-                  labelFormatter={(label) => {
-                    const monthMap: { [key: string]: string } = {
-                      'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April',
-                      'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August',
-                      'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December'
-                    };
-                    return monthMap[label] || label;
-                  }}
-                  formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="revenue" 
-                  stroke="#0B6E6E" 
-                  strokeWidth={3}
-                  fill="url(#revenueGradient)"
-                  dot={false}
-                  activeDot={{ r: 6, fill: '#0B6E6E' }}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          {revenueData ? (
+            <div className="flex-1 min-h-[240px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={revenueData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <defs>
+                    <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0B6E6E" stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor="#0B6E6E" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis 
+                    dataKey="month" 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 12, fill: '#6b7280' }}
+                  />
+                  <YAxis 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 12, fill: '#6b7280' }}
+                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'white', 
+                      border: '1px solid #e2e8f0', 
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    }}
+                    labelFormatter={(label) => {
+                      const monthMap: { [key: string]: string } = {
+                        'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April',
+                        'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August',
+                        'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December'
+                      };
+                      return monthMap[label] || label;
+                    }}
+                    formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="revenue" 
+                    stroke="#0B6E6E" 
+                    strokeWidth={3}
+                    fill="url(#revenueGradient)"
+                    dot={false}
+                    activeDot={{ r: 6, fill: '#0B6E6E' }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="flex-1 min-h-[240px] flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-gray-400 text-lg font-medium mb-2">No data available</div>
+                <div className="text-gray-500 text-sm">No data for revenue visualization</div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -390,25 +391,42 @@ interface StatisticsCardData {
   };
 }
 
+interface MockChartData {
+  applicationsData: Array<{
+    month: string;
+    approved: number;
+    spacer1: number;
+    pending: number;
+    spacer2: number;
+    declined: number;
+  }>;
+  revenueData: Array<{
+    month: string;
+    revenue: number;
+  }>;
+}
+
 interface OverviewClientProps {
   cards: StatisticsCardData[];
   mockCards: StatisticsCardData[];
+  mockChartData: MockChartData;
+  userFirstName: string | null;
 }
 
-export default function OverviewClient({ cards, mockCards }: OverviewClientProps) {
+export default function OverviewClient({ cards, mockCards, mockChartData, userFirstName }: OverviewClientProps) {
   const [showMockData, setShowMockData] = useState(false);
   
   const displayCards = showMockData ? mockCards : cards;
   return (
     <div className="flex flex-col gap-6 p-6 bg-gray-50 h-full min-h-screen">
-      <OverviewSection />
+      <OverviewSection userFirstName={userFirstName} />
       <StatisticsSection 
         cards={displayCards} 
         showMockData={showMockData}
         onToggleMockData={() => setShowMockData(!showMockData)}
       />
       <div className="flex-1">
-        <ApplicationsSection />
+        <ApplicationsSection showMockData={showMockData} mockChartData={mockChartData} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import OverviewClient from "./overview-client";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 async function fetchOverviewData() {
   // Simulate data fetching delay
@@ -212,7 +212,8 @@ function buildZeroStatisticsCards() {
 export default async function OverviewPage() {
   const data = await fetchOverviewData();
   
-  // Check if user is admin
+  // Get user data and check admin role
+  const user = await currentUser();
   const { sessionClaims } = await auth();
   const isAdmin = sessionClaims?.metadata?.role === 'admin';
   
@@ -245,5 +246,37 @@ export default async function OverviewPage() {
     realCards = realCards.filter(card => card.id !== "mock-toggle");
   }
 
-  return <OverviewClient cards={realCards} mockCards={mockCards} />;
+  // Mock chart data
+  const mockChartData = {
+    applicationsData: [
+      { month: "Jan", approved: 25, spacer1: 1, pending: 10, spacer2: 1, declined: 15 },
+      { month: "Feb", approved: 43, spacer1: 1, pending: 21, spacer2: 1, declined: 31 },
+      { month: "Mar", approved: 25, spacer1: 1, pending: 20, spacer2: 1, declined: 29 },
+      { month: "Apr", approved: 11, spacer1: 1, pending: 77, spacer2: 1, declined: 15 },
+      { month: "May", approved: 50, spacer1: 1, pending: 16, spacer2: 1, declined: 55 },
+      { month: "Jun", approved: 25, spacer1: 1, pending: 46, spacer2: 1, declined: 15 },
+      { month: "Jul", approved: 38, spacer1: 1, pending: 8, spacer2: 1, declined: 22 },
+      { month: "Aug", approved: 71, spacer1: 1, pending: 27, spacer2: 1, declined: 15 },
+      { month: "Sep", approved: 14, spacer1: 1, pending: 40, spacer2: 1, declined: 15 },
+      { month: "Oct", approved: 63, spacer1: 1, pending: 37, spacer2: 1, declined: 16 },
+      { month: "Nov", approved: 24, spacer1: 1, pending: 23, spacer2: 1, declined: 16 },
+      { month: "Dec", approved: 47, spacer1: 1, pending: 32, spacer2: 1, declined: 32 },
+    ],
+    revenueData: [
+      { month: "Jan", revenue: 45000 },
+      { month: "Feb", revenue: 52000 },
+      { month: "Mar", revenue: 48000 },
+      { month: "Apr", revenue: 61000 },
+      { month: "May", revenue: 55000 },
+      { month: "Jun", revenue: 67000 },
+      { month: "Jul", revenue: 72000 },
+      { month: "Aug", revenue: 68000 },
+      { month: "Sep", revenue: 59000 },
+      { month: "Oct", revenue: 63000 },
+      { month: "Nov", revenue: 58000 },
+      { month: "Dec", revenue: 71000 },
+    ]
+  };
+
+  return <OverviewClient cards={realCards} mockCards={mockCards} mockChartData={mockChartData} userFirstName={user?.firstName || null} />;
 }
