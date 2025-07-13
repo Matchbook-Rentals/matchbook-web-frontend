@@ -44,7 +44,7 @@ interface DesktopScheduleViewerProps {
   unavailablePeriods?: UnavailablePeriod[];
 }
 
-interface CalendarMonthProps {
+export interface CalendarMonthProps {
   year: number;
   month: number;
   onPrevMonth?: () => void;
@@ -194,7 +194,7 @@ function CalendarDay({
   return DayButton;
 }
 
-function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange, className, headerClassName, gridClassName, legendClassName, dayClassName, dayContainerClassName, daySpanClassName }: CalendarMonthProps) {
+export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange, className, headerClassName, gridClassName, legendClassName, dayClassName, dayContainerClassName, daySpanClassName }: CalendarMonthProps) {
   // Calculate calendar grid parameters
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay();
@@ -225,7 +225,20 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
       const end = new Date(booking.endDate);
       return currentDate >= start && currentDate <= end;
     });
-    return booking ? `Booked by ${booking.guestName || 'Guest'}` : undefined;
+    
+    if (!booking) return undefined;
+    
+    const startDate = format(new Date(booking.startDate), 'MMM d, yyyy');
+    const endDate = format(new Date(booking.endDate), 'MMM d, yyyy');
+    const name = booking.guestName || 'Unknown Guest';
+    
+    return (
+      <div>
+        <div className="font-medium">Booking</div>
+        <div><span className="font-medium">Guest:</span> {name}</div>
+        <div><span className="font-medium">Dates:</span> {startDate} - {endDate}</div>
+      </div>
+    );
   };
 
   const getBookingPlatform = (day: number) => {
