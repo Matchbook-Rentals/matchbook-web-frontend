@@ -25,6 +25,7 @@ import InComplexIcon from '@/lib/icons/in-complex';
 import NotAvailableIcon from '@/lib/icons/not-available';
 import { iconAmenities } from '@/lib/amenities-list';
 import { UploadButton } from "@/app/utils/uploadthing";
+import { UploadError } from "@uploadthing/react";
 
 // Amenity options grouped by category (same as listing creation)
 const AMENITY_GROUPS = [
@@ -852,6 +853,53 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     }
   };
 
+  const handleUploadError = (error: UploadError) => {
+    let title = "Upload Error";
+    let description = "An error occurred during upload. Please try again.";
+
+    // Handle specific error codes from Uploadthing
+    switch (error.code) {
+      case "TOO_LARGE":
+        title = "File Too Large";
+        description = "One or more files exceed the maximum size limit. Please upload smaller images (max 4MB per file).";
+        break;
+      case "TOO_MANY_FILES":
+        title = "Too Many Files";
+        description = "You have exceeded the maximum number of files allowed in one upload. Please upload fewer files at a time (max 10).";
+        break;
+      case "INVALID_TYPE":
+        title = "Invalid File Type";
+        description = "One or more files are not supported image types. Please upload only JPG, PNG, or WEBP files.";
+        break;
+      case "UPLOAD_ABORTED":
+        title = "Upload Cancelled";
+        description = "The upload was cancelled. If this was unexpected, please try again.";
+        break;
+      case "NETWORK_ERROR":
+        title = "Network Error";
+        description = "There was a network issue during upload. Please check your internet connection and try again.";
+        break;
+      case "SERVER_ERROR":
+        title = "Server Error";
+        description = "An internal server error occurred. Please try again later or contact support if the issue persists.";
+        break;
+      case "AUTH_ERROR":
+        title = "Authentication Error";
+        description = "You are not authorized to upload files. Please log in again or contact support.";
+        break;
+      default:
+        // Fallback for unknown errors
+        description = error.message || "An unexpected error occurred. Please try again.";
+        break;
+    }
+
+    toast({
+      title,
+      description,
+      variant: "destructive"
+    });
+  };
+
   const roomDetails = formatRoomDetails();
   const displayAmenities = getDisplayAmenities();
 
@@ -1601,14 +1649,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       ),
                     }}
                     onClientUploadComplete={handlePhotoUpload}
-                    onUploadError={(error) => {
-                      console.error("Upload error:", error);
-                      toast({
-                        title: "Upload Error",
-                        description: error.message || "Failed to upload photos. Please try again.",
-                        variant: "destructive"
-                      });
-                    }}
+                    onUploadError={handleUploadError}
                   />
                 </div>
 
@@ -1646,11 +1687,13 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                         
                         <div
                           className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden cursor-grab border-2 transition-all ${
+                            index < 4 ? 'border-blue-500 shadow-md' : 'border-transparent'
+                          } ${
                             draggedImageId === image.id 
                               ? 'opacity-50 border-blue-400 scale-95' 
                               : dropPreviewIndex === index && draggedImageId !== image.id
                               ? 'border-blue-300 shadow-lg'
-                              : 'border-transparent hover:border-gray-300'
+                              : 'hover:border-gray-300'
                           }`}
                           draggable
                           onDragStart={(e) => handleDragStart(e, image.id)}
@@ -1689,7 +1732,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             ) : (
               <div className="flex flex-wrap gap-6 justify-start">
                 {currentListing.listingImages.map((image, index) => (
-                  <div key={index} className="w-[175px] h-[108px] relative rounded-lg overflow-hidden">
+                  <div key={index} className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden ${index < 4 ? 'border-2 border-blue-500 shadow-md' : ''}`}>
                     <img
                       src={image.url}
                       alt={`Property image ${index + 1}`}
