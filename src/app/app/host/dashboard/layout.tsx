@@ -30,7 +30,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   const hostDashboardItems = [
     {
       title: "Overview",
-      url: "/app/host/dashboard",
+      url: "/app/host/dashboard/overview",
       icon: "PieChart",
     },
     {
@@ -54,7 +54,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
       icon: "MessageSquare",
     },
     {
-      title: "Payments",
+      title: "All Payments",
       url: "/app/host/dashboard/payments",
       icon: "CreditCard",
     },

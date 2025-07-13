@@ -242,7 +242,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     {
       id: 'switch-mode',
       label: 'Switch to Hosting',
-      href: '/app/host/dashboard/listings',
+      href: '/app/host/dashboard/overview',
       requiresHostAccess: true,
       section: 3
     },

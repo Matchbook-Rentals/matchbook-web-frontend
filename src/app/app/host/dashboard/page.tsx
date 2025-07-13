@@ -8,7 +8,7 @@ export default function DashboardPage() {
   
   useEffect(() => {
     // Redirect to applications as the default dashboard page
-    router.push('/app/host/dashboard/listings');
+    router.push('/app/host/dashboard/overview');
   }, [router]);
 
   return null;
