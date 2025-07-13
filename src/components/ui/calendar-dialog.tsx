@@ -59,12 +59,15 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
     ...b,
     startDate: typeof b.startDate === 'string' ? parseISO(b.startDate) : b.startDate,
     endDate: typeof b.endDate === 'string' ? parseISO(b.endDate) : b.endDate,
+    platform: b.status === 'off-platform' ? 'other' as const : 'matchbook' as const,
+    guestName: b.guestName || 'Guest'
   }));
   
   const parsedUnavailablePeriods = unavailablePeriods.map(u => ({
     ...u,
     startDate: typeof u.startDate === 'string' ? parseISO(u.startDate) : u.startDate,
     endDate: typeof u.endDate === 'string' ? parseISO(u.endDate) : u.endDate,
+    reason: u.reason || 'Unavailable'
   }));
 
   return (
@@ -125,25 +128,25 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
                 newDate.setFullYear(newYear);
                 setCurrentDate(newDate);
               }}
-              className="p-4"
+              className="p-6"
               gridClassName="gap-y-2"
               daySpanClassName="text-sm"
             />
             
             {/* Footer with action buttons */}
-            <div className="p-4 border-t bg-white flex flex-col sm:flex-row justify-between gap-3">
-              <Button 
+            <div className="p-4 border-t bg-white flex justify-end gap-3">
+              <BrandButton 
                 variant="outline" 
                 onClick={handleClose}
-                className="flex-1"
+                className="w-auto px-2"
               >
                 Close
-              </Button>
+              </BrandButton>
               <BrandButton 
                 variant="default"
                 onClick={handleManageCalendar}
                 disabled={isLoading}
-                className="flex-1"
+                className="w-auto"
                 href={listingId ? `/app/host/${listingId}/calendar` : undefined}
               >
                 {isLoading ? (

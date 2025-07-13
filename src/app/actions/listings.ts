@@ -450,6 +450,7 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
         },
         bedrooms: true,
         unavailablePeriods: true,
+        bookings: true,
         user: true,
         monthlyPricing: true,
         matches: {
@@ -480,6 +481,7 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
       listingImages: listing.listingImages,
       bedrooms: listing.bedrooms,
       unavailablePeriods: listing.unavailablePeriods,
+      bookings: listing.bookings,
     }));
     
     return {

@@ -321,7 +321,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
                       <div className="flex items-center gap-3">
                         <CalendarDialog 
                           bookings={listing.bookings || []}
-                          unavailabilities={listing.unavailablePeriods || []}
+                          unavailablePeriods={listing.unavailablePeriods || []}
                           triggerText="View Calendar"
                           listingId={listing.id}
                           showIcon={false}
