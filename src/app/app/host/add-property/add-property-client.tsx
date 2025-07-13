@@ -369,10 +369,11 @@ const [listingBasics, setListingBasics] = useState({
         shortestLeasePrice: null, // Deprecated
         longestLeasePrice: null, // Deprecated
         requireBackgroundCheck: true,
-        // Save additional pricing fields
-        utilitiesIncluded: listingPricing.includeUtilities,
+        // Save additional pricing fields (includeUtilities mapped to utilitiesIncluded in API)
+        includeUtilities: listingPricing.includeUtilities,
         varyPricingByLength: listingPricing.varyPricingByLength,
         basePrice: listingPricing.basePrice || null,
+        utilitiesUpToMonths: listingPricing.utilitiesUpToMonths,
         // Highlights
         category: listingHighlights.category || null,
         petsAllowed: listingHighlights.petsAllowed || null,

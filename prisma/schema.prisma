@@ -1243,6 +1243,13 @@ model ListingInCreation {
   furnished              Boolean?
   utilitiesIncluded      Boolean?
   petsAllowed            Boolean?
+  markedActiveByUser     Boolean?
+  
+  // Pricing configuration fields
+  varyPricingByLength    Boolean?
+  basePrice              String?
+  utilitiesUpToMonths    Int?
+  monthlyPricingData     String? @db.Text
 
   // General Amenities
   airConditioner     Boolean?

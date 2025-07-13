@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     }
     
     const body = await request.json();
-    const { id, listingImages, monthlyPricing, ...listingData } = body;
+    const { id, listingImages, monthlyPricing, includeUtilities, ...listingData } = body;
     
     // If id is provided, update existing draft, otherwise create new
     if (id) {
@@ -24,6 +24,10 @@ export async function POST(request: Request) {
             ...listingData,
             userId,
             lastModified: new Date(),
+            // Map includeUtilities to utilitiesIncluded for database
+            utilitiesIncluded: includeUtilities,
+            // Save monthly pricing as JSON string
+            monthlyPricingData: monthlyPricing ? JSON.stringify(monthlyPricing) : null,
           }
         });
 
@@ -65,6 +69,10 @@ export async function POST(request: Request) {
             userId,
             status: 'draft',
             approvalStatus: 'pendingReview',
+            // Map includeUtilities to utilitiesIncluded for database
+            utilitiesIncluded: includeUtilities,
+            // Save monthly pricing as JSON string
+            monthlyPricingData: monthlyPricing ? JSON.stringify(monthlyPricing) : null,
           }
         });
 
@@ -124,16 +132,27 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Draft not found' }, { status: 404 });
       }
       
-      // Add derived fields that aren't stored in the draft table
+      // Parse monthly pricing data from JSON
+      let monthlyPricing = [];
+      if (draft.monthlyPricingData) {
+        try {
+          monthlyPricing = JSON.parse(draft.monthlyPricingData);
+        } catch (error) {
+          console.error('Error parsing monthly pricing data:', error);
+          monthlyPricing = [];
+        }
+      }
+
+      // Add derived fields for frontend compatibility
       const enrichedDraft = {
         ...draft,
-        // Derive utilitiesUpToMonths - if utilities are included, default to shortest lease length
-        utilitiesUpToMonths: draft.utilitiesIncluded ? (draft.shortestLeaseLength || 1) : 1,
-        // Add default values for fields that aren't stored in drafts
+        // Map utilitiesIncluded to includeUtilities for frontend
         includeUtilities: draft.utilitiesIncluded || false,
-        varyPricingByLength: true, // Default assumption
-        basePrice: null,
-        monthlyPricing: [] // Empty array since not stored in drafts
+        // Provide defaults for fields that might be null
+        varyPricingByLength: draft.varyPricingByLength ?? true,
+        basePrice: draft.basePrice || null,
+        utilitiesUpToMonths: draft.utilitiesUpToMonths || (draft.utilitiesIncluded ? (draft.shortestLeaseLength || 1) : 1),
+        monthlyPricing: monthlyPricing
       };
       
       return NextResponse.json(enrichedDraft);
