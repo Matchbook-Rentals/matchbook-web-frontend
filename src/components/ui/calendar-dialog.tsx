@@ -131,6 +131,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
               className="p-6"
               gridClassName="gap-y-2"
               daySpanClassName="text-sm"
+              useSelectPortal={false}
             />
             
             {/* Footer with action buttons */}

@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import * as SelectPrimitive from "@radix-ui/react-select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface DateRange {
@@ -61,6 +62,7 @@ export interface CalendarMonthProps {
   dayClassName?: string;
   dayContainerClassName?: string;
   daySpanClassName?: string;
+  useSelectPortal?: boolean;
 }
 
 interface CalendarDayProps {
@@ -194,7 +196,9 @@ function CalendarDay({
   return DayButton;
 }
 
-export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange, className, headerClassName, gridClassName, legendClassName, dayClassName, dayContainerClassName, daySpanClassName }: CalendarMonthProps) {
+export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange, className, headerClassName, gridClassName, legendClassName, dayClassName, dayContainerClassName, daySpanClassName, useSelectPortal }: CalendarMonthProps) {
+  const { useSelectPortal: useSelectPortalProp = true } = { useSelectPortal };  // Extract with default value
+
   // Calculate calendar grid parameters
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay();
@@ -360,30 +364,84 @@ export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDis
             <SelectTrigger className="w-fit h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <ScrollArea className="h-[200px]">
-                {months.map((monthName, index) => (
-                  <SelectItem key={index} value={index.toString()}>
-                    {monthName}
-                  </SelectItem>
-                ))}
-              </ScrollArea>
-            </SelectContent>
+            {useSelectPortalProp ? (
+              <SelectPrimitive.Portal>
+                <SelectPrimitive.Content
+                  position="popper"
+                  className={cn(
+                    "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
+                    "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+                    "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1"
+                  )}
+                >
+                  <ScrollArea className="h-[200px]">
+                    {months.map((monthName, index) => (
+                      <SelectItem key={index} value={index.toString()}>
+                        {monthName}
+                      </SelectItem>
+                    ))}
+                  </ScrollArea>
+                </SelectPrimitive.Content>
+              </SelectPrimitive.Portal>
+            ) : (
+              <SelectPrimitive.Content
+                position="item-aligned"
+                className={cn(
+                  "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
+                  "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                )}
+              >
+                <ScrollArea className="h-[200px]">
+                  {months.map((monthName, index) => (
+                    <SelectItem key={index} value={index.toString()}>
+                      {monthName}
+                    </SelectItem>
+                  ))}
+                </ScrollArea>
+              </SelectPrimitive.Content>
+            )}
           </Select>
           
           <Select value={year.toString()} onValueChange={(value) => onYearChange?.(parseInt(value))}>
             <SelectTrigger className="w-fit h-8 text-sm border-none shadow-none text-secondaryBrand font-medium">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
-              <ScrollArea className="h-[200px]">
-                {years.map((yearOption) => (
-                  <SelectItem key={yearOption} value={yearOption.toString()}>
-                    {yearOption}
-                  </SelectItem>
-                ))}
-              </ScrollArea>
-            </SelectContent>
+            {useSelectPortalProp ? (
+              <SelectPrimitive.Portal>
+                <SelectPrimitive.Content
+                  position="popper"
+                  className={cn(
+                    "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
+                    "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+                    "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1"
+                  )}
+                >
+                  <ScrollArea className="h-[200px]">
+                    {years.map((yearOption) => (
+                      <SelectItem key={yearOption} value={yearOption.toString()}>
+                        {yearOption}
+                      </SelectItem>
+                    ))}
+                  </ScrollArea>
+                </SelectPrimitive.Content>
+              </SelectPrimitive.Portal>
+            ) : (
+              <SelectPrimitive.Content
+                position="item-aligned"
+                className={cn(
+                  "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
+                  "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                )}
+              >
+                <ScrollArea className="h-[200px]">
+                  {years.map((yearOption) => (
+                    <SelectItem key={yearOption} value={yearOption.toString()}>
+                      {yearOption}
+                    </SelectItem>
+                  ))}
+                </ScrollArea>
+              </SelectPrimitive.Content>
+            )}
           </Select>
         </div>
         
