@@ -106,6 +106,11 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
     throw new Error(`Need start and end date (both)`);
   }
 
+  // Prevent users from applying to their own listings
+  if (trip.userId === listing.userId) {
+    throw new Error('You cannot apply to your own listing');
+  }
+
   try {
     const newHousingRequest = await prisma.housingRequest.create({
       data: {
@@ -209,6 +214,11 @@ export async function optimisticApplyDb(tripId: string, listing: ListingAndImage
     });
 
     if (!trip) throw new Error('Trip not found');
+
+    // Prevent users from applying to their own listings
+    if (trip.userId === listing.userId) {
+      throw new Error('You cannot apply to your own listing');
+    }
 
     const housingRequest = await createDbHousingRequest(trip, listing);
 

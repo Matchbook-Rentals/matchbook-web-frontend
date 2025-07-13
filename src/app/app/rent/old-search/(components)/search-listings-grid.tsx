@@ -34,6 +34,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   // const sentinelRef = useRef<HTMLDivElement>(null); // Removed sentinel ref
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
+  const { trip } = state;
   
   // Always call the hook unconditionally to comply with rules of hooks
   const snapshotFromHook = useListingsSnapshot();

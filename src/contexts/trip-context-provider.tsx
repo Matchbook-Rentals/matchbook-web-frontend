@@ -676,6 +676,12 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     try {
       if (lookup.requestedIds.has(listing.id)) return;
 
+      // Prevent users from applying to their own listings
+      if (trip?.userId && listing.userId === trip.userId) {
+        logger.error('Cannot apply to own listing');
+        return;
+      }
+
       // Optimistically update the UI
       setLookup(prev => ({
         ...prev,

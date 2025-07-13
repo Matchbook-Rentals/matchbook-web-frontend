@@ -16,6 +16,16 @@ export default function PropertiesYouLoveTab() {
   const pathname = usePathname();
 
   const handleApply = async (listing: ListingAndImages) => {
+    // Check if user is trying to apply to their own listing
+    if (trip?.userId && listing.userId === trip.userId) {
+      toast({
+        title: "Cannot Apply to Own Listing",
+        description: "You cannot apply to your own property listing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!hasApplication) {
       toast({
         title: "No Application Found",
@@ -61,7 +71,7 @@ export default function PropertiesYouLoveTab() {
   }
 
   const generateLikedCardActions = (listing: ListingAndImages) => {
-    return [{ label: 'Apply Now', action: () => handleApply(listing) }]
+    return [{ label: 'Apply Now', action: () => handleApply(listing) }];
   }
 
   const generateRequestedCardActions = (listing: ListingAndImages) => {

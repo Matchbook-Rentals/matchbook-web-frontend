@@ -54,6 +54,16 @@ export default function SearchFavoritesTab() {
   };
 
   const handleApply = async (listing: ListingAndImages) => {
+    // Check if user is trying to apply to their own listing
+    if (state.trip?.userId && listing.userId === state.trip.userId) {
+      toast({
+        title: "Cannot Apply to Own Listing",
+        description: "You cannot apply to your own property listing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!state.hasApplication) {
       toast({
         title: "No Application Found",
@@ -110,7 +120,7 @@ export default function SearchFavoritesTab() {
   }
 
   const generateLikedCardActions = (listing: ListingAndImages) => {
-    return [{ label: 'Apply Now', action: () => handleApply(listing) }]
+    return [{ label: 'Apply Now', action: () => handleApply(listing) }];
   }
 
   const generateRequestedCardActions = (listing: ListingAndImages) => {
