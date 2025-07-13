@@ -155,41 +155,41 @@ function CalendarDay({
   // Wrap with popover if there's info to display
   if (displayInfo) {
     return (
-      <div
-        className={cn(
-          "aspect-square w-full flex items-center justify-center relative text-sm md:text-base lg:text-lg",
-          containerClassName,
-          className
-        )}
-      >
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-          <PopoverTrigger asChild>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <button
+            className={cn(
+              "aspect-square w-full flex items-center justify-center relative text-sm md:text-base lg:text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group",
+              containerClassName,
+              className
+            )}
+          >
             <span className={cn(
-              "z-10 relative cursor-pointer",
+              "z-10 relative",
               (isStartOfRange || isEndOfRange) && isBooked && `rounded-full ${bookedBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
               (isStartOfRange || isEndOfRange) && isUnavailable && !isBooked && `rounded-full ${unavailableBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
-              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'other') && (isOpen ? 'rounded-full bg-[#00A6E8] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'hover:rounded-full hover:bg-[#00A6E8] hover:text-white hover:w-9 hover:h-9 md:hover:w-10 md:hover:h-10 lg:hover:w-11 lg:hover:h-11 hover:flex hover:items-center hover:justify-center'),
-              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'matchbook') && (isOpen ? 'rounded-full bg-secondaryBrand text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'hover:rounded-full hover:bg-secondaryBrand hover:text-white hover:w-9 hover:h-9 md:hover:w-10 md:hover:h-10 lg:hover:w-11 lg:hover:h-11 hover:flex hover:items-center hover:justify-center'),
-              (isInRange && !isStartOfRange && !isEndOfRange && isUnavailable && !isBooked) && (isOpen ? 'rounded-full bg-[#b2aaaa] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'hover:rounded-full hover:bg-[#b2aaaa] hover:text-white hover:w-9 hover:h-9 md:hover:w-10 md:hover:h-10 lg:hover:w-11 lg:hover:h-11 hover:flex hover:items-center hover:justify-center'),
+              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'other') && (isOpen ? 'rounded-full bg-[#00A6E8] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-[#00A6E8] group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
+              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'matchbook') && (isOpen ? 'rounded-full bg-secondaryBrand text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-secondaryBrand group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
+              (isInRange && !isStartOfRange && !isEndOfRange && isUnavailable && !isBooked) && (isOpen ? 'rounded-full bg-[#b2aaaa] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-[#b2aaaa] group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
               spanClassName
             )}>
               {day}
             </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto">
-            {displayInfo}
-          </PopoverContent>
-        </Popover>
-        {showRangeBackground && (
-          <div className={`absolute inset-y-[30%] inset-x-0 transition-colors duration-200 ${getRangeBgColor()}`} />
-        )}
-        {showStartBackground && (
-          <div className={`absolute right-0 left-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
-        )}
-        {showEndBackground && (
-          <div className={`absolute left-0 right-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
-        )}
-      </div>
+            {showRangeBackground && (
+              <div className={`absolute inset-y-[30%] inset-x-0 transition-colors duration-200 ${getRangeBgColor()}`} />
+            )}
+            {showStartBackground && (
+              <div className={`absolute right-0 left-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+            )}
+            {showEndBackground && (
+              <div className={`absolute left-0 right-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+            )}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto">
+          {displayInfo}
+        </PopoverContent>
+      </Popover>
     );
   }
 
