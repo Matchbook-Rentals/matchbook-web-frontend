@@ -370,8 +370,7 @@ const [listingBasics, setListingBasics] = useState({
         longestLeasePrice: null, // Deprecated
         requireBackgroundCheck: true,
         // Save additional pricing fields
-        includeUtilities: listingPricing.includeUtilities,
-        utilitiesUpToMonths: listingPricing.utilitiesUpToMonths,
+        utilitiesIncluded: listingPricing.includeUtilities,
         varyPricingByLength: listingPricing.varyPricingByLength,
         basePrice: listingPricing.basePrice || null,
         // Highlights
@@ -1070,7 +1069,7 @@ const [listingBasics, setListingBasics] = useState({
             let monthlyPricing: MonthlyPricing[] = [];
             
             // If draft has saved monthly pricing, use it, otherwise initialize empty
-            if (draftListing.monthlyPricing && Array.isArray(draftListing.monthlyPricing)) {
+            if (draftListing.monthlyPricing && Array.isArray(draftListing.monthlyPricing) && draftListing.monthlyPricing.length > 0) {
               monthlyPricing = draftListing.monthlyPricing.map((p: any) => ({
                 months: p.months,
                 price: p.price ? p.price.toString() : '',
@@ -1078,11 +1077,12 @@ const [listingBasics, setListingBasics] = useState({
               }));
             } else {
               // Initialize empty pricing for each month in range
+              // For drafts, derive utilities inclusion based on utilitiesUpToMonths
               for (let i = shortestStay; i <= longestStay; i++) {
                 monthlyPricing.push({
                   months: i,
                   price: '',
-                  utilitiesIncluded: false
+                  utilitiesIncluded: draftListing.includeUtilities && i <= (draftListing.utilitiesUpToMonths || shortestStay)
                 });
               }
             }

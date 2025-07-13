@@ -124,7 +124,19 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Draft not found' }, { status: 404 });
       }
       
-      return NextResponse.json(draft);
+      // Add derived fields that aren't stored in the draft table
+      const enrichedDraft = {
+        ...draft,
+        // Derive utilitiesUpToMonths - if utilities are included, default to shortest lease length
+        utilitiesUpToMonths: draft.utilitiesIncluded ? (draft.shortestLeaseLength || 1) : 1,
+        // Add default values for fields that aren't stored in drafts
+        includeUtilities: draft.utilitiesIncluded || false,
+        varyPricingByLength: true, // Default assumption
+        basePrice: null,
+        monthlyPricing: [] // Empty array since not stored in drafts
+      };
+      
+      return NextResponse.json(enrichedDraft);
     } else {
       // Get all drafts for user with image counts
       const drafts = await prisma.listingInCreation.findMany({
