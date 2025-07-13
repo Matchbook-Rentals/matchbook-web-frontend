@@ -24,11 +24,27 @@ interface PaymentCardData {
   };
 }
 
-interface PaymentsClientProps {
-  cards: PaymentCardData[];
+interface PaymentTableData {
+  tenant: string;
+  amount: string;
+  type: string;
+  method: string;
+  bank: string;
+  dueDate: string;
+  status: string;
 }
 
-export default function PaymentsClient({ cards }: PaymentsClientProps) {
+interface PaymentsData {
+  upcoming: PaymentTableData[];
+  history: PaymentTableData[];
+}
+
+interface PaymentsClientProps {
+  cards: PaymentCardData[];
+  paymentsData: PaymentsData;
+}
+
+export default function PaymentsClient({ cards, paymentsData }: PaymentsClientProps) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-between gap-6">
@@ -53,7 +69,7 @@ export default function PaymentsClient({ cards }: PaymentsClientProps) {
         })}
       </div>
       
-      <PaymentsTable />
+      <PaymentsTable paymentsData={paymentsData} />
     </div>
   );
 }

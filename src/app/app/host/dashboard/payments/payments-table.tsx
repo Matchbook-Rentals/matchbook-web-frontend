@@ -28,64 +28,16 @@ interface PaymentTableData {
   status: string;
 }
 
-export const PaymentsTable = (): JSX.Element => {
-  // Data for table rows
-  const tableData: PaymentTableData[] = [
-    {
-      tenant: "Daniel Resner",
-      amount: "2,350.30",
-      type: "Deposit Return",
-      method: "Bank Transfer",
-      bank: "Chase",
-      dueDate: "02/15/2025",
-      status: "Scheduled",
-    },
-    {
-      tenant: "Daniel Resner",
-      amount: "2,350.30",
-      type: "Rent",
-      method: "Bank Transfer",
-      bank: "Chase",
-      dueDate: "02/15/2025",
-      status: "Scheduled",
-    },
-    {
-      tenant: "Daniel Resner",
-      amount: "2,350.30",
-      type: "Deposit Return",
-      method: "Bank Transfer",
-      bank: "Chase",
-      dueDate: "02/15/2025",
-      status: "Scheduled",
-    },
-    {
-      tenant: "Daniel Resner",
-      amount: "2,350.30",
-      type: "Rent",
-      method: "Bank Transfer",
-      bank: "Chase",
-      dueDate: "02/15/2025",
-      status: "Scheduled",
-    },
-    {
-      tenant: "Daniel Resner",
-      amount: "2,350.30",
-      type: "Deposit Return",
-      method: "Bank Transfer",
-      bank: "Chase",
-      dueDate: "02/15/2025",
-      status: "Scheduled",
-    },
-    {
-      tenant: "Daniel Resner",
-      amount: "2,350.30",
-      type: "Rent",
-      method: "Bank Transfer",
-      bank: "Chase",
-      dueDate: "02/15/2025",
-      status: "Scheduled",
-    },
-  ];
+interface PaymentsData {
+  upcoming: PaymentTableData[];
+  history: PaymentTableData[];
+}
+
+interface PaymentsTableProps {
+  paymentsData: PaymentsData;
+}
+
+export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element => {
 
   // Column headers
   const headers = [
@@ -99,7 +51,7 @@ export const PaymentsTable = (): JSX.Element => {
     { name: "Actions", width: "flex-1" },
   ];
 
-  const renderTable = () => (
+  const renderTable = (data: PaymentTableData[]) => (
     <Table>
       <TableHeader>
         <TableRow className="bg-[#e7f0f0]">
@@ -114,7 +66,7 @@ export const PaymentsTable = (): JSX.Element => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tableData.map((row, rowIndex) => (
+        {data.map((row, rowIndex) => (
           <TableRow key={`row-${rowIndex}`}>
             <TableCell className="w-[194px] h-[72px] px-6 py-4 border-b border-[#eaecf0] flex items-center gap-3">
               <Avatar className="w-10 h-10 rounded-full border-[0.75px] border-[#00000014]">
@@ -141,7 +93,17 @@ export const PaymentsTable = (): JSX.Element => {
               {row.dueDate}
             </TableCell>
             <TableCell className="flex-1 h-[72px] px-6 py-4 border-b border-[#eaecf0]">
-              <Badge className="bg-[#e7f0f0] text-[#0b6969] border border-[#3c8787] rounded-full px-2 py-0.5 font-medium text-xs">
+              <Badge 
+                className={`rounded-full px-2 py-0.5 font-medium text-xs ${
+                  row.status === 'Completed' 
+                    ? 'bg-green-50 text-green-600 border border-green-200' 
+                    : row.status === 'Failed'
+                    ? 'bg-red-50 text-red-600 border border-red-200'
+                    : row.status === 'Pending'
+                    ? 'bg-yellow-50 text-yellow-600 border border-yellow-200'
+                    : 'bg-[#e7f0f0] text-[#0b6969] border border-[#3c8787]'
+                }`}
+              >
                 {row.status}
               </Badge>
             </TableCell>
@@ -156,19 +118,20 @@ export const PaymentsTable = (): JSX.Element => {
     </Table>
   );
 
-  // Define tabs for the TabSelector component
+  // Define tabs for the TabSelector component with different data for each tab
   const tabs = [
     {
       value: "upcoming",
       label: "Upcoming",
-      content: renderTable(),
-      textSize: "text-base",
+      content: renderTable(paymentsData.upcoming),
+      textSize: "text-base px-6",
+      className: ''
     },
     {
       value: "history", 
       label: "History",
-      content: renderTable(),
-      textSize: "text-base",
+      content: renderTable(paymentsData.history),
+      textSize: "text-base px-6",
     },
   ];
 
@@ -180,7 +143,7 @@ export const PaymentsTable = (): JSX.Element => {
           defaultTab="upcoming"
           selectedTabColor="#0b6969"
           className="justify-start py-0"
-          tabsListClassName="justify-start pt-4 pb-4 px-0 -mx-2"
+          tabsListClassName="justify-start  pt-4 pb-4 px-0 -mx-2"
           tabsClassName="pt-0 px-0"
         />
       </div>
