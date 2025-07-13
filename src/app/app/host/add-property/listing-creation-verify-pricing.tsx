@@ -143,6 +143,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               buttonClassName={styles.counterButtonSmall}
               textClassName={`${styles.counterTextSmall} min-w-[20px]`}
               monthSuffixClassName="inline xs:hidden sm:inline"
+              tabIndex={1}
             />
           </div>
 
@@ -166,6 +167,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               buttonClassName={styles.counterButtonSmall}
               textClassName={`${styles.counterTextSmall} min-w-[20px]`}
               monthSuffixClassName="inline xs:hidden sm:inline"
+              tabIndex={2}
             />
           </div>
         </div>
@@ -209,7 +211,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                         className="pl-7 text-xs"
                         placeholder="0.00"
                         value={pricing.price}
-                        tabIndex={100 + (pricing.months * 2 - 1)}
+                        tabIndex={2 + pricing.months}
                         onChange={(e) => {
                           const value = e.target.value.replace(/[^0-9.]/g, '');
                           updateMonthPricing(pricing.months, value);
@@ -221,7 +223,8 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                     <BrandCheckbox
                       name={`utilities-${pricing.months}`}
                       checked={pricing.utilitiesIncluded}
-                      tabIndex={100 + (pricing.months * 2)}
+                      tabIndex={14 + pricing.months}
+                      className="focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-yellow-200"
                       onChange={(e) => 
                         updateMonthUtilities(pricing.months, e.target.checked)
                       }
@@ -248,7 +251,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                           className="pl-7 text-xs"
                           placeholder="0.00"
                           value={leftPricing.price}
-                          tabIndex={100 + (leftPricing.months * 2 - 1)}
+                          tabIndex={2 + leftPricing.months}
                           onChange={(e) => {
                             const value = e.target.value.replace(/[^0-9.]/g, '');
                             updateMonthPricing(leftPricing.months, value);
@@ -260,7 +263,8 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                       <BrandCheckbox
                         name={`utilities-${leftPricing.months}`}
                         checked={leftPricing.utilitiesIncluded}
-                        tabIndex={100 + (leftPricing.months * 2)}
+                        tabIndex={14 + leftPricing.months}
+                        className="focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-yellow-200"
                         onChange={(e) => 
                           updateMonthUtilities(leftPricing.months, e.target.checked)
                         }
@@ -278,7 +282,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                               className="pl-7 text-xs"
                               placeholder="0.00"
                               value={rightPricing.price}
-                              tabIndex={100 + (rightPricing.months * 2 - 1)}
+                              tabIndex={2 + rightPricing.months}
                               onChange={(e) => {
                                 const value = e.target.value.replace(/[^0-9.]/g, '');
                                 updateMonthPricing(rightPricing.months, value);
@@ -290,7 +294,8 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                           <BrandCheckbox
                             name={`utilities-${rightPricing.months}`}
                             checked={rightPricing.utilitiesIncluded}
-                            tabIndex={100 + (rightPricing.months * 2)}
+                            tabIndex={14 + rightPricing.months}
+                            className="focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-yellow-200"
                             onChange={(e) => 
                               updateMonthUtilities(rightPricing.months, e.target.checked)
                             }

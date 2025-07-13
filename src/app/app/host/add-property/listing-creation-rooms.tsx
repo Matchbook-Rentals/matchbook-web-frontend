@@ -35,6 +35,7 @@ export const Rooms: React.FC<RoomsProps> = ({
             value={bedrooms}
             onChange={onBedroomsChange}
             monthSuffixClassName="hidden"
+            textClassName="text-black text-lg"
           />
         </div>
 
@@ -48,6 +49,7 @@ export const Rooms: React.FC<RoomsProps> = ({
             value={bathrooms}
             onChange={onBathroomsChange}
             monthSuffixClassName="hidden"
+            textClassName="text-black text-lg"
           />
         </div>
 

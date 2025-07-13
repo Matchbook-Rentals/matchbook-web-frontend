@@ -51,6 +51,13 @@
   border-color: #0B6E6E; /* secondaryBrand */
 }
 
+.brand-checkbox-input:focus-visible {
+  outline: 2px orange solid;
+  outline-offset: 10px;
+  box-shadow: 0 0 0 3px rgba(11, 110, 110, 0.1); /* secondaryBrand with low opacity */
+  border-color: #0B6E6E; /* secondaryBrand */
+}
+
 .brand-checkbox-input:checked {
   background-color: #0B6E6E; /* secondaryBrand */
   border-color: #0B6E6E; /* secondaryBrand */
