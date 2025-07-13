@@ -64,8 +64,6 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSupportOpen, setIsSupportOpen] = useState(false);
-  const [hasStripeAccount, setHasStripeAccount] = useState<boolean | null>(null);
-  const [stripeOnboardingComplete, setStripeOnboardingComplete] = useState<boolean | null>(null);
   
   // Get user's first name only, truncate after 10 characters
   const firstName = user?.firstName || '';
@@ -126,25 +124,6 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     };
   }, [fetchNotifications]);
 
-  // Check Stripe account status when menu opens
-  useEffect(() => {
-    const checkStripeAccount = async () => {
-      if (isMenuOpen && user) {
-        try {
-          const response = await fetch('/api/user/stripe-account');
-          const data = await response.json();
-          setHasStripeAccount(Boolean(data.stripeAccountId));
-          setStripeOnboardingComplete(Boolean(data.onboardingComplete));
-        } catch (error) {
-          console.error('Error checking Stripe account:', error);
-          setHasStripeAccount(false);
-          setStripeOnboardingComplete(false);
-        }
-      }
-    };
-
-    checkStripeAccount();
-  }, [isMenuOpen, user]);
 
   // Use passed props or default values
   const currentIsSignedIn = isSignedIn !== undefined ? isSignedIn : false;
@@ -154,62 +133,6 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   const isHostSide = pathname?.startsWith('/app/host/') ||
                      searchParams.get('view') === 'host';
 
-  // Define handleStripeOnboarding before menuItems
-  const handleStripeOnboarding = async () => {
-    setIsMenuOpen(false);
-    try {
-      // Create a Stripe account without preloading business type
-      const createResponse = await fetch('/api/payment/account-create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}),
-      });
-      
-      const createData = await createResponse.json();
-      if (createData.error) {
-        console.error('Error creating Stripe account:', createData.error);
-        return;
-      }
-      
-      // Get current URL to return to after onboarding
-      const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-      
-      // Create callback URLs with the current page as redirect destination
-      const callbackUrl = new URL('/stripe-callback', window.location.origin);
-      callbackUrl.searchParams.set('redirect_to', currentUrl);
-      callbackUrl.searchParams.set('account_id', createData.account);
-      
-      // Create refresh URL for expired/visited links
-      const refreshUrl = new URL('/stripe-callback', window.location.origin);
-      refreshUrl.searchParams.set('redirect_to', currentUrl);
-      refreshUrl.searchParams.set('account_id', createData.account);
-      
-      // Create an account link for hosted onboarding
-      const linkResponse = await fetch('/api/payment/account-link', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          account: createData.account,
-          returnUrl: callbackUrl.toString(),
-          refreshUrl: refreshUrl.toString()
-        }),
-      });
-      
-      const linkData = await linkResponse.json();
-      if (linkData.url) {
-        // Redirect to Stripe's hosted onboarding
-        window.location.href = linkData.url;
-      } else {
-        console.error('Error creating account link:', linkData.error);
-      }
-    } catch (error) {
-      console.error('Error setting up Stripe payments:', error);
-    }
-  };
 
   // Define the menu structure with conditional items based on host/renter side
   const menuItems: MenuItem[] = isHostSide ? [
@@ -218,9 +141,6 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'properties', label: 'Your Properties', href: '/app/host/dashboard/listings', requiresBeta: true, section: 1 },
     { id: 'applications', label: 'Applications', href: '/app/host/dashboard/applications', requiresBeta: true, section: 1 },
     { id: 'bookings', label: 'Bookings', href: '/app/host/dashboard/bookings', requiresBeta: true, section: 1 },
-    ...(hasStripeAccount === false || (hasStripeAccount === true && stripeOnboardingComplete === false) ? [
-      { id: 'stripe-onboard', label: 'Onboard Stripe', onClick: handleStripeOnboarding, requiresBeta: true, section: 1 },
-    ] : []),
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', requiresBeta: true, section: 2 },
     {
       id: 'switch-mode',
