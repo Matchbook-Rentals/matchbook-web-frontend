@@ -176,7 +176,7 @@ export const Body = (): JSX.Element => {
       <section className="flex flex-col items-start gap-6 px-0 py-0 self-stretch w-full bg-[#f9f9f9]">
 
         {/* Calendar Schedule Viewer */}
-        <div className=" pb-8 w-full">
+        <div className="pb-12 w-full">
           <DesktopScheduleViewer
             bookings={data.bookings}
             unavailablePeriods={data.listing.unavailablePeriods || []}

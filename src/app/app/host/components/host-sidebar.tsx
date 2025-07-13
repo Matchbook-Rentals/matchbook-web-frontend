@@ -82,7 +82,7 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/app/host">
+              <Link href="/">
                   <img
                     className="p-2"
                     alt="Logo"

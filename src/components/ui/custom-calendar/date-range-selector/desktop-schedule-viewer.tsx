@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { format, add, Duration, endOfMonth } from "date-fns";
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from "@/lib/utils";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -29,6 +29,7 @@ interface Booking {
   endDate: Date;
   guestName?: string;
   status?: string;
+  platform?: 'matchbook' | 'other';
 }
 
 interface UnavailablePeriod {
@@ -53,6 +54,13 @@ interface CalendarMonthProps {
   unavailablePeriods?: UnavailablePeriod[];
   onMonthChange?: (month: number) => void;
   onYearChange?: (year: number) => void;
+  className?: string;
+  headerClassName?: string;
+  gridClassName?: string;
+  legendClassName?: string;
+  dayClassName?: string;
+  dayContainerClassName?: string;
+  daySpanClassName?: string;
 }
 
 interface CalendarDayProps {
@@ -61,11 +69,46 @@ interface CalendarDayProps {
   isUnavailable: boolean;
   bookingInfo?: string;
   unavailableReason?: string;
+  bookingPlatform?: 'matchbook' | 'other';
+  className?: string;
+  containerClassName?: string;
+  spanClassName?: string;
 }
 
-function CalendarDay({ day, isBooked, isUnavailable, bookingInfo, unavailableReason }: CalendarDayProps) {
-  const bookedBgColor = 'bg-blue-500';
-  const unavailableBgColor = 'bg-red-500';
+function CalendarDay({ 
+  day, 
+  isBooked, 
+  isUnavailable, 
+  bookingInfo, 
+  unavailableReason, 
+  bookingPlatform = 'matchbook', 
+  className, 
+  containerClassName, 
+  spanClassName,
+  isStartOfRange,
+  isEndOfRange,
+  isInRange,
+  rangeType // 'booking' | 'unavailable' | null
+}: CalendarDayProps & {
+  isStartOfRange?: boolean;
+  isEndOfRange?: boolean;
+  isInRange?: boolean;
+  rangeType?: 'booking' | 'unavailable' | null;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const getBookedBgColor = () => {
+    if (bookingPlatform === 'other') return 'bg-[#00A6E8]';
+    return 'bg-secondaryBrand';
+  };
+  const bookedBgColor = getBookedBgColor();
+  const unavailableBgColor = 'bg-[#b2aaaa]';
+  
+  const getRangeBgColor = () => {
+    if (rangeType === 'booking') {
+      return bookingPlatform === 'other' ? 'bg-[#00A6E8]/20' : 'bg-secondaryBrand/20';
+    }
+    return 'bg-[#b2aaaa]/20';
+  };
   
   const getDisplayInfo = () => {
     if (isBooked && bookingInfo) return bookingInfo;
@@ -73,44 +116,85 @@ function CalendarDay({ day, isBooked, isUnavailable, bookingInfo, unavailableRea
     return null;
   };
 
+  const showRangeBackground = isInRange && !isStartOfRange && !isEndOfRange;
+  const showStartBackground = isStartOfRange && !isEndOfRange;
+  const showEndBackground = isEndOfRange && !isStartOfRange;
+
+  const displayInfo = getDisplayInfo();
+
   const DayButton = (
     <div
-      className={`
-        aspect-square w-full flex items-center justify-center text-base relative
-        ${isBooked ? '' : ''}
-        ${isUnavailable ? '' : ''}
-      `}
+      className={cn(
+        "aspect-square w-full flex items-center justify-center relative text-sm md:text-base lg:text-lg",
+        containerClassName,
+        className
+      )}
     >
-      <span className={`
-        z-10
-        ${isBooked ? `rounded-full ${bookedBgColor} text-white w-9 h-9 flex items-center justify-center text-base` : ''}
-        ${isUnavailable && !isBooked ? `rounded-full ${unavailableBgColor} text-white w-9 h-9 flex items-center justify-center text-base` : ''}
-      `}>
+      <span className={cn(
+        "z-10 relative",
+        (isStartOfRange || isEndOfRange) && isBooked && `rounded-full ${bookedBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+        (isStartOfRange || isEndOfRange) && isUnavailable && !isBooked && `rounded-full ${unavailableBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+        spanClassName
+      )}>
         {day}
       </span>
+      {showRangeBackground && (
+        <div className={`absolute inset-y-[30%] inset-x-0 transition-colors duration-200 ${getRangeBgColor()}`} />
+      )}
+      {showStartBackground && (
+        <div className={`absolute right-0 left-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+      )}
+      {showEndBackground && (
+        <div className={`absolute left-0 right-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+      )}
     </div>
   );
 
-  const displayInfo = getDisplayInfo();
-  
-  // Wrap with tooltip if there's info to display
+  // Wrap with popover if there's info to display
   if (displayInfo) {
     return (
-      <TooltipProvider delayDuration={100}>
-        <Tooltip>
-          <TooltipTrigger asChild>{DayButton}</TooltipTrigger>
-          <TooltipContent>
-            <p>{displayInfo}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <div
+        className={cn(
+          "aspect-square w-full flex items-center justify-center relative text-sm md:text-base lg:text-lg",
+          containerClassName,
+          className
+        )}
+      >
+        <Popover open={isOpen} onOpenChange={setIsOpen}>
+          <PopoverTrigger asChild>
+            <span className={cn(
+              "z-10 relative cursor-pointer",
+              (isStartOfRange || isEndOfRange) && isBooked && `rounded-full ${bookedBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+              (isStartOfRange || isEndOfRange) && isUnavailable && !isBooked && `rounded-full ${unavailableBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'other') && (isOpen ? 'rounded-full bg-[#00A6E8] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'hover:rounded-full hover:bg-[#00A6E8] hover:text-white hover:w-9 hover:h-9 md:hover:w-10 md:hover:h-10 lg:hover:w-11 lg:hover:h-11 hover:flex hover:items-center hover:justify-center'),
+              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'matchbook') && (isOpen ? 'rounded-full bg-secondaryBrand text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'hover:rounded-full hover:bg-secondaryBrand hover:text-white hover:w-9 hover:h-9 md:hover:w-10 md:hover:h-10 lg:hover:w-11 lg:hover:h-11 hover:flex hover:items-center hover:justify-center'),
+              (isInRange && !isStartOfRange && !isEndOfRange && isUnavailable && !isBooked) && (isOpen ? 'rounded-full bg-[#b2aaaa] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'hover:rounded-full hover:bg-[#b2aaaa] hover:text-white hover:w-9 hover:h-9 md:hover:w-10 md:hover:h-10 lg:hover:w-11 lg:hover:h-11 hover:flex hover:items-center hover:justify-center'),
+              spanClassName
+            )}>
+              {day}
+            </span>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto">
+            {displayInfo}
+          </PopoverContent>
+        </Popover>
+        {showRangeBackground && (
+          <div className={`absolute inset-y-[30%] inset-x-0 transition-colors duration-200 ${getRangeBgColor()}`} />
+        )}
+        {showStartBackground && (
+          <div className={`absolute right-0 left-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+        )}
+        {showEndBackground && (
+          <div className={`absolute left-0 right-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+        )}
+      </div>
     );
   }
 
   return DayButton;
 }
 
-function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange }: CalendarMonthProps) {
+function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange, className, headerClassName, gridClassName, legendClassName, dayClassName, dayContainerClassName, daySpanClassName }: CalendarMonthProps) {
   // Calculate calendar grid parameters
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay();
@@ -144,6 +228,16 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
     return booking ? `Booked by ${booking.guestName || 'Guest'}` : undefined;
   };
 
+  const getBookingPlatform = (day: number) => {
+    const currentDate = new Date(year, month, day);
+    const booking = bookings.find(booking => {
+      const start = new Date(booking.startDate);
+      const end = new Date(booking.endDate);
+      return currentDate >= start && currentDate <= end;
+    });
+    return booking?.platform || 'matchbook';
+  };
+
   const getUnavailableReason = (day: number) => {
     const currentDate = new Date(year, month, day);
     const period = unavailablePeriods.find(period => {
@@ -151,7 +245,77 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
       const end = new Date(period.endDate);
       return currentDate >= start && currentDate <= end;
     });
-    return period?.reason || 'Unavailable';
+    
+    if (!period) return 'Unavailable';
+    
+    const startDate = format(new Date(period.startDate), 'MMM d, yyyy');
+    const endDate = format(new Date(period.endDate), 'MMM d, yyyy');
+    const reason = period.reason || 'No reason provided';
+    
+    return (
+      <div>
+        <div className="font-medium">Unavailability</div>
+        <div><span className="font-medium">Dates:</span> {startDate} - {endDate}</div>
+        <div><span className="font-medium">Reason:</span> {reason}</div>
+      </div>
+    );
+  };
+
+  // Helper functions for range visualization
+  const isStartOfBookingRange = (day: number) => {
+    const currentDate = new Date(year, month, day);
+    return bookings.some(booking => {
+      const start = new Date(booking.startDate);
+      return currentDate.toDateString() === start.toDateString();
+    });
+  };
+
+  const isEndOfBookingRange = (day: number) => {
+    const currentDate = new Date(year, month, day);
+    return bookings.some(booking => {
+      const end = new Date(booking.endDate);
+      return currentDate.toDateString() === end.toDateString();
+    });
+  };
+
+  const isInBookingRange = (day: number) => {
+    const currentDate = new Date(year, month, day);
+    return bookings.some(booking => {
+      const start = new Date(booking.startDate);
+      const end = new Date(booking.endDate);
+      return currentDate >= start && currentDate <= end;
+    });
+  };
+
+  const isStartOfUnavailableRange = (day: number) => {
+    const currentDate = new Date(year, month, day);
+    return unavailablePeriods.some(period => {
+      const start = new Date(period.startDate);
+      return currentDate.toDateString() === start.toDateString();
+    });
+  };
+
+  const isEndOfUnavailableRange = (day: number) => {
+    const currentDate = new Date(year, month, day);
+    return unavailablePeriods.some(period => {
+      const end = new Date(period.endDate);
+      return currentDate.toDateString() === end.toDateString();
+    });
+  };
+
+  const isInUnavailableRange = (day: number) => {
+    const currentDate = new Date(year, month, day);
+    return unavailablePeriods.some(period => {
+      const start = new Date(period.startDate);
+      const end = new Date(period.endDate);
+      return currentDate >= start && currentDate <= end;
+    });
+  };
+
+  const getRangeType = (day: number): 'booking' | 'unavailable' | null => {
+    if (isInBookingRange(day)) return 'booking';
+    if (isInUnavailableRange(day)) return 'unavailable';
+    return null;
   };
 
   const currentYear = new Date().getFullYear();
@@ -164,9 +328,9 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
   const years = Array.from({ length: 12 }, (_, i) => currentYear - 1 + i);
 
   return (
-    <div className="w-full flex-1">
+    <div className={cn("w-full flex-1", className)}>
       {/* Month and Year Display with Navigation */}
-      <div className="flex justify-between items-center mb-4">
+      <div className={cn("flex justify-between items-center mb-4", headerClassName)}>
         <button
           onClick={onPrevMonth}
           disabled={isPrevDisabled}
@@ -228,7 +392,7 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
       </div>
 
       {/* Calendar Grid - Fixed height for 6 rows */}
-      <div className="grid grid-cols-7 grid-rows-6 gap-0 h-[300px]">
+      <div className={cn("grid grid-cols-7 grid-rows-6 gap-y-1 h-[320px]", gridClassName)}>
         {/* Empty cells for days before the first of the month */}
         {Array.from({ length: firstDayOfWeek }).map((_, index) => (
           <div key={`empty-${index}`} className="aspect-square" />
@@ -241,6 +405,26 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
           const isUnavailable = isDateUnavailable(day);
           const bookingInfo = getBookingInfo(day);
           const unavailableReason = getUnavailableReason(day);
+          const bookingPlatform = getBookingPlatform(day);
+          const rangeType = getRangeType(day);
+          
+          const isStartOfRange = rangeType === 'booking' 
+            ? isStartOfBookingRange(day) 
+            : rangeType === 'unavailable' 
+              ? isStartOfUnavailableRange(day) 
+              : false;
+              
+          const isEndOfRange = rangeType === 'booking'
+            ? isEndOfBookingRange(day)
+            : rangeType === 'unavailable'
+              ? isEndOfUnavailableRange(day)
+              : false;
+              
+          const isInRange = rangeType === 'booking'
+            ? isInBookingRange(day)
+            : rangeType === 'unavailable'
+              ? isInUnavailableRange(day)
+              : false;
           
           return (
             <CalendarDay
@@ -250,6 +434,14 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
               isUnavailable={isUnavailable}
               bookingInfo={bookingInfo}
               unavailableReason={unavailableReason}
+              bookingPlatform={bookingPlatform}
+              className={dayClassName}
+              containerClassName={dayContainerClassName}
+              spanClassName={daySpanClassName}
+              isStartOfRange={isStartOfRange}
+              isEndOfRange={isEndOfRange}
+              isInRange={isInRange}
+              rangeType={rangeType}
             />
           );
         })}
@@ -260,17 +452,6 @@ function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, 
         ))}
       </div>
 
-      {/* Legend */}
-      <div className="flex gap-4 mt-4 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-          <span>Booked</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-          <span>Unavailable</span>
-        </div>
-      </div>
     </div>
   );
 }
@@ -421,9 +602,27 @@ export function DesktopScheduleViewer({
 
   return (
     <div className=" rounded-xl py-6 w-full mx-auto">
+      {/* Legend */}
+      <div className="w-full  mx-auto mb-4">
+        <div className="flex flex-wrap gap-4 text-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-secondaryBrand rounded-full"></div>
+            <span>Matchbook Booking</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-[#00A6E8] rounded-full"></div>
+            <span>Other Platform Booking</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-[#b2aaaa] rounded-full"></div>
+            <span>Unavailable</span>
+          </div>
+        </div>
+      </div>
+
       {/* Desktop: Two calendars side by side */}
-      <div className="hidden md:flex justify-center w-full bg-background rounded-xl overflow-hidden shadow-[0px_0px_5px_#00000029]">
-        <div className="flex-1 bg-background p-4 flex flex-col ">
+      <div className="hidden md:flex justify-center pt-8 pb-8 gap-4  w-full mx-auto bg-background rounded-xl overflow-hidden shadow-[0px_0px_5px_#00000029]">
+        <div className="flex-1 bg-background px-8 flex flex-col max-w-[800px] ">
           <CalendarMonth
             year={leftYear}
             month={leftMonth}
@@ -434,9 +633,12 @@ export function DesktopScheduleViewer({
             unavailablePeriods={unavailablePeriods}
             onMonthChange={handleLeftMonthChange}
             onYearChange={handleLeftYearChange}
+            dayContainerClassName=""
+            daySpanClassName=""
           />
         </div>
-        <div className="flex-1 bg-background p-4 flex flex-col ">
+        <div className="w-px bg-gray-200"></div>
+        <div className="flex-1 bg-background px-8 flex flex-col max-w-[800px]">
           <CalendarMonth
             year={rightYear}
             month={rightMonth}
@@ -449,6 +651,8 @@ export function DesktopScheduleViewer({
             unavailablePeriods={unavailablePeriods}
             onMonthChange={handleRightMonthChange}
             onYearChange={handleRightYearChange}
+            dayContainerClassName=""
+            daySpanClassName=""
           />
         </div>
       </div>
@@ -465,6 +669,8 @@ export function DesktopScheduleViewer({
           unavailablePeriods={unavailablePeriods}
           onMonthChange={handleLeftMonthChange}
           onYearChange={handleLeftYearChange}
+          dayContainerClassName="p-0.5"
+          daySpanClassName="aspect-square w-11/12"
         />
       </div>
     </div>
