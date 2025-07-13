@@ -1682,17 +1682,17 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       <div key={image.id} className="relative">
                         {/* Drop Preview Indicator */}
                         {dropPreviewIndex === index && draggedImageId !== image.id && (
-                          <div className="absolute -left-2 top-0 w-1 h-full bg-blue-500 rounded-full z-10" />
+                          <div className="absolute -left-2 top-0 w-1 h-full bg-yellow-500 rounded-full z-10" />
                         )}
                         
                         <div
                           className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden cursor-grab border-2 transition-all ${
-                            index < 4 ? 'border-blue-500 shadow-md' : 'border-transparent'
+                            index < 4 ? 'border-yellow-500 shadow-md' : 'border-transparent'
                           } ${
                             draggedImageId === image.id 
-                              ? 'opacity-50 border-blue-400 scale-95' 
+                              ? 'opacity-50 border-yellow-400 scale-95' 
                               : dropPreviewIndex === index && draggedImageId !== image.id
-                              ? 'border-blue-300 shadow-lg'
+                              ? 'border-yellow-300 shadow-lg'
                               : 'hover:border-gray-300'
                           }`}
                           draggable
@@ -1717,7 +1717,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       <div
                         className={`w-[175px] h-[108px] border-2 border-dashed rounded-lg flex items-center justify-center transition-colors ${
                           dropPreviewIndex === (formData.listingImages?.length || 0) 
-                            ? 'border-blue-500 bg-blue-50' 
+                            ? 'border-yellow-500 bg-yellow-50' 
                             : 'border-gray-300'
                         }`}
                         onDragOver={(e) => handleDragOver(e, formData.listingImages?.length || 0)}
@@ -1732,7 +1732,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             ) : (
               <div className="flex flex-wrap gap-6 justify-start">
                 {currentListing.listingImages.map((image, index) => (
-                  <div key={index} className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden ${index < 4 ? 'border-2 border-blue-500 shadow-md' : ''}`}>
+                  <div key={index} className="w-[175px] h-[108px] relative rounded-lg overflow-hidden">
                     <img
                       src={image.url}
                       alt={`Property image ${index + 1}`}
