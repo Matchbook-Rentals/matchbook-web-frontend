@@ -601,7 +601,7 @@ export function DesktopScheduleViewer({
   };
 
   return (
-    <div className=" rounded-xl py-6 w-full mx-auto">
+    <div className=" rounded-xl pb-6 w-full mx-auto">
       {/* Legend */}
       <div className="w-full  mx-auto mb-4">
         <div className="flex flex-wrap gap-4 text-sm">
@@ -611,7 +611,7 @@ export function DesktopScheduleViewer({
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-[#00A6E8] rounded-full"></div>
-            <span>Other Platform Booking</span>
+            <span>Off Platform Booking</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-[#b2aaaa] rounded-full"></div>
@@ -621,7 +621,7 @@ export function DesktopScheduleViewer({
       </div>
 
       {/* Desktop: Two calendars side by side */}
-      <div className="hidden md:flex justify-center pt-8 pb-8 gap-4  w-full mx-auto bg-background rounded-xl overflow-hidden shadow-[0px_0px_5px_#00000029]">
+      <div className="hidden xl:flex justify-evenly pt-8 pb-8 lg:px-4 gap-4  w-full mx-auto bg-background rounded-xl overflow-hidden shadow-[0px_0px_5px_#00000029]">
         <div className="flex-1 bg-background px-8 flex flex-col max-w-[800px] ">
           <CalendarMonth
             year={leftYear}
@@ -652,13 +652,13 @@ export function DesktopScheduleViewer({
             onMonthChange={handleRightMonthChange}
             onYearChange={handleRightYearChange}
             dayContainerClassName=""
-            daySpanClassName=""
+            daySpanClassName="lg:p-2"
           />
         </div>
       </div>
 
       {/* Mobile/Tablet: Single calendar */}
-      <div className="md:hidden w-full">
+      <div className="xl:hidden w-full py-2 rounded-xl bg-background shadow-[0px_0px_5px_#00000029]">
         <CalendarMonth
           year={leftYear}
           month={leftMonth}
@@ -669,8 +669,8 @@ export function DesktopScheduleViewer({
           unavailablePeriods={unavailablePeriods}
           onMonthChange={handleLeftMonthChange}
           onYearChange={handleLeftYearChange}
-          dayContainerClassName="p-0.5"
-          daySpanClassName="aspect-square w-11/12"
+          dayContainerClassName=""
+          daySpanClassName="p-2"
         />
       </div>
     </div>

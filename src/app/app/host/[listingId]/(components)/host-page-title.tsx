@@ -8,7 +8,7 @@ interface HostPageTitleProps {
 
 export const HostPageTitle = ({ title, subtitle, rightContent }: HostPageTitleProps): JSX.Element => {
   return (
-    <header className="w-full  py-6">
+    <header className="w-full  py-6 ">
       <div className="flex items-end justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="font-medium text-2xl text-black font-['Poppins',Helvetica] leading-[28.8px]">
