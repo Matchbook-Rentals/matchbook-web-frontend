@@ -553,8 +553,8 @@ const [listingBasics, setListingBasics] = useState({
       errors.push("Longest stay must be between 1 and 12 months");
     }
     
-    if (listingPricing.shortestStay >= listingPricing.longestStay) {
-      errors.push("Shortest stay must be less than longest stay");
+    if (listingPricing.shortestStay > listingPricing.longestStay) {
+      errors.push("Shortest stay cannot be longer than longest stay");
     }
     
     if (listingPricing.includeUtilities && listingPricing.utilitiesUpToMonths < listingPricing.shortestStay) {
@@ -600,7 +600,25 @@ const [listingBasics, setListingBasics] = useState({
   const validateDeposits = (): string[] => {
     const errors: string[] = [];
     
-    // All deposit fields are optional, no validation required
+    // Validate rent due at booking doesn't exceed lowest monthly rent
+    if (listingPricing.rentDueAtBooking && listingPricing.rentDueAtBooking !== '') {
+      const rentDueAmount = parseFloat(listingPricing.rentDueAtBooking);
+      
+      if (!isNaN(rentDueAmount) && rentDueAmount > 0) {
+        // Find the lowest monthly rent price from the pricing array
+        const validPrices = listingPricing.monthlyPricing
+          .filter(p => p.price && p.price !== '')
+          .map(p => parseFloat(p.price))
+          .filter(price => !isNaN(price) && price > 0);
+        
+        if (validPrices.length > 0) {
+          const lowestPrice = Math.min(...validPrices);
+          if (rentDueAmount > lowestPrice) {
+            errors.push(`Rent due at booking ($${rentDueAmount}) cannot be higher than the lowest monthly rent ($${lowestPrice})`);
+          }
+        }
+      }
+    }
     
     return errors;
   };
