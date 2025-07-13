@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getListingById } from '@/app/actions/listings';
 import SummaryTab from '../(tabs)/summary-tab';
 import { HostPageTitle } from '../(components)/host-page-title';
+import { ListingActiveSwitch } from '../(components)/listing-active-switch';
 import { HOST_PAGE_STYLE } from '@/constants/styles';
 
 interface SummaryPageProps {
@@ -23,7 +24,8 @@ export default async function SummaryPage({ params }: SummaryPageProps) {
     <div className={HOST_PAGE_STYLE}>
       <HostPageTitle 
         title="Listing Summary" 
-        subtitle={`Summary for ${listing.streetAddress1 || listing.title || 'this listing'}`} 
+        subtitle={`Summary for ${listing.streetAddress1 || listing.title || 'this listing'}`}
+        rightContent={<ListingActiveSwitch listing={listing} />}
       />
       <SummaryTab listing={listing} />
     </div>

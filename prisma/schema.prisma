@@ -204,6 +204,7 @@ model Listing {
   furnished              Boolean   @default(false)
   utilitiesIncluded      Boolean   @default(false)
   petsAllowed            Boolean   @default(false)
+  markedActiveByUser     Boolean   @default(false)
 
   // General Amenities
   airConditioner     Boolean @default(false)

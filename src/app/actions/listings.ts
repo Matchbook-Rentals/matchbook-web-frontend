@@ -129,6 +129,9 @@ export const pullListingsFromDb = async (
                 }
               }
             }
+          },
+          { // Only include listings marked as active by the user
+            markedActiveByUser: true
           }
         ]
       },
