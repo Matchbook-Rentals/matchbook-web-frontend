@@ -38,55 +38,28 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
   // Handlers for increasing/decreasing stay lengths
   const increaseShortestStay = () => {
     if (shortestStay < longestStay) {
-      const newShortestStay = shortestStay + 1;
-      onShortestStayChange(newShortestStay);
-      updatePricingRange(newShortestStay, longestStay);
+      onShortestStayChange(shortestStay + 1);
     }
   };
 
   const decreaseShortestStay = () => {
     if (shortestStay > 1) {
-      const newShortestStay = shortestStay - 1;
-      onShortestStayChange(newShortestStay);
-      updatePricingRange(newShortestStay, longestStay);
+      onShortestStayChange(shortestStay - 1);
     }
   };
 
   const increaseLongestStay = () => {
     if (longestStay < 12) {
-      const newLongestStay = longestStay + 1;
-      onLongestStayChange(newLongestStay);
-      updatePricingRange(shortestStay, newLongestStay);
+      onLongestStayChange(longestStay + 1);
     }
   };
 
   const decreaseLongestStay = () => {
     if (longestStay > shortestStay) {
-      const newLongestStay = longestStay - 1;
-      onLongestStayChange(newLongestStay);
-      updatePricingRange(shortestStay, newLongestStay);
+      onLongestStayChange(longestStay - 1);
     }
   };
 
-  // Update pricing array when stay lengths change
-  const updatePricingRange = (newShortestStay: number, newLongestStay: number) => {
-    const newPricing: MonthlyPricing[] = [];
-    for (let i = newShortestStay; i <= newLongestStay; i++) {
-      // Try to find existing pricing for this month
-      const existing = monthlyPricing.find(p => p.months === i);
-      if (existing) {
-        newPricing.push(existing);
-      } else {
-        // Create new entry with default values
-        newPricing.push({
-          months: i,
-          price: '',
-          utilitiesIncluded: false
-        });
-      }
-    }
-    onMonthlyPricingChange(newPricing);
-  };
 
   // Update a specific month's pricing
   const updateMonthPricing = (months: number, price: string) => {

@@ -248,27 +248,49 @@ const [listingPricing, setListingPricing] = useState({
   petRent: ""
 });
 
+// Cache to preserve all pricing data, even for months outside current range
+const [pricingCache, setPricingCache] = useState<Map<number, MonthlyPricing>>(new Map());
+
 // Initialize monthly pricing when component mounts or stay lengths change
 React.useEffect(() => {
   const newPricing: MonthlyPricing[] = [];
+  const cacheUpdates: Array<{ months: number, pricing: MonthlyPricing }> = [];
+  
   for (let i = listingPricing.shortestStay; i <= listingPricing.longestStay; i++) {
-    // Try to find existing pricing for this month
+    // Try to find cached pricing for this month first, then existing pricing
+    const cached = pricingCache.get(i);
     const existing = listingPricing.monthlyPricing.find(p => p.months === i);
-    if (existing) {
-      // Keep existing pricing
-      newPricing.push({
-        ...existing
-      });
+    
+    if (cached) {
+      // Use cached pricing (preserves previously entered values)
+      newPricing.push({ ...cached });
+    } else if (existing) {
+      // Keep existing pricing and cache it
+      newPricing.push({ ...existing });
+      cacheUpdates.push({ months: i, pricing: { ...existing } });
     } else {
       // Create new entry with default values
-      newPricing.push({
+      const newEntry = {
         months: i,
         price: '',
         utilitiesIncluded: false
-      });
+      };
+      newPricing.push(newEntry);
+      cacheUpdates.push({ months: i, pricing: { ...newEntry } });
     }
   }
+  
+  // Update pricing state
   setListingPricing(prev => ({ ...prev, monthlyPricing: newPricing }));
+  
+  // Update cache if needed
+  if (cacheUpdates.length > 0) {
+    setPricingCache(prev => {
+      const newCache = new Map(prev);
+      cacheUpdates.forEach(({ months, pricing }) => newCache.set(months, pricing));
+      return newCache;
+    });
+  }
 }, [listingPricing.shortestStay, listingPricing.longestStay]);
 
 // Step 2: Rooms
@@ -1095,6 +1117,13 @@ const [listingBasics, setListingBasics] = useState({
               petDeposit: draftListing.petDeposit ? draftListing.petDeposit.toString() : "",
               petRent: draftListing.petRent ? draftListing.petRent.toString() : ""
             });
+
+            // Initialize pricing cache with all available pricing data
+            const initialCache = new Map<number, MonthlyPricing>();
+            monthlyPricing.forEach(p => {
+              initialCache.set(p.months, { ...p });
+            });
+            setPricingCache(initialCache);
           }
         } catch (error) {
           console.error("Error loading draft listing:", error);
@@ -1277,7 +1306,15 @@ const [listingBasics, setListingBasics] = useState({
             utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
             onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
             onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-            onMonthlyPricingChange={(pricing) => setListingPricing(prev => ({ ...prev, monthlyPricing: pricing }))}
+            onMonthlyPricingChange={(pricing) => {
+              setListingPricing(prev => ({ ...prev, monthlyPricing: pricing }));
+              // Update cache with new pricing values
+              setPricingCache(prev => {
+                const newCache = new Map(prev);
+                pricing.forEach(p => newCache.set(p.months, { ...p }));
+                return newCache;
+              });
+            }}
           />
         );
       case 10:
