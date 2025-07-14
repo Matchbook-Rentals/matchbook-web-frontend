@@ -1,5 +1,8 @@
 "use client";
 
+// Hospitable Integration Status: BLOCKED - Insufficient OAuth Scopes
+// See docs/hospitable-integration.md for detailed status and next steps
+
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";

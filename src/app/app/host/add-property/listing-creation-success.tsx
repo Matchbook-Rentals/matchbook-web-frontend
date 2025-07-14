@@ -1,4 +1,8 @@
 'use client';
+
+// Hospitable Integration Status: BLOCKED - Insufficient OAuth Scopes  
+// See docs/hospitable-integration.md for detailed status and next steps
+
 import React, { useState } from "react";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Button } from "@/components/ui/button";

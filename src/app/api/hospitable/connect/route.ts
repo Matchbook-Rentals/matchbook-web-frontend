@@ -39,7 +39,8 @@ export async function GET() {
     );
   }
 
-  const scopes = "properties:read bookings:read bookings:write"; // Adjust scopes as needed
+  // Request core scopes - focus on what we actually need and what might be available
+  const scopes = "property:read property:write listing:read listing:write reservation:read reservation:write calendar:read calendar:write"; // Core permissions
 
   const params = new URLSearchParams({
     client_id: clientId,

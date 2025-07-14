@@ -1,3 +1,6 @@
+// Hospitable Integration Status: BLOCKED - Insufficient OAuth Scopes
+// See docs/hospitable-integration.md for detailed status and next steps
+
 import { NextResponse, type NextRequest } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
@@ -87,15 +90,59 @@ export async function POST(request: NextRequest) {
       },
     };
 
-    // Send property to Hospitable API
-    const hospitableResponse = await fetch('https://public.api.hospitable.com/properties', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${user.hospitableAccessToken}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(hospitableProperty),
+    // Test multiple endpoints to find the correct one
+    const endpointsToTest = [
+      'https://public.api.hospitable.com/v2/properties',
+      'https://public.api.hospitable.com/v2/listings', 
+      'https://public.api.hospitable.com/properties',
+      'https://public.api.hospitable.com/listings',
+      'https://public.api.hospitable.com/v2/reservations'
+    ];
+
+    const testResults = [];
+
+    for (const testUrl of endpointsToTest) {
+      console.log('HOSPITABLE CHECK: Testing endpoint:', testUrl);
+      
+      try {
+        const response = await fetch(testUrl, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${user.hospitableAccessToken}`,
+            'Accept': 'application/json',
+          },
+        });
+
+        const responseText = await response.text();
+        
+        testResults.push({
+          url: testUrl,
+          status: response.status,
+          response: responseText.substring(0, 200) // Limit length
+        });
+
+        console.log(`HOSPITABLE CHECK: ${testUrl} -> ${response.status}:`, responseText.substring(0, 100));
+        
+        // If we get a 200, break here
+        if (response.ok) {
+          console.log('HOSPITABLE CHECK: Found working endpoint!');
+          break;
+        }
+      } catch (error) {
+        console.log(`HOSPITABLE CHECK: Error testing ${testUrl}:`, error);
+        testResults.push({
+          url: testUrl,
+          status: 'ERROR',
+          response: (error as Error).message
+        });
+      }
+    }
+
+    // Return all test results to understand which endpoints work
+    return NextResponse.json({
+      success: false,
+      message: "Testing multiple endpoints to find the correct API structure",
+      testResults: testResults,
     });
 
     if (!hospitableResponse.ok) {

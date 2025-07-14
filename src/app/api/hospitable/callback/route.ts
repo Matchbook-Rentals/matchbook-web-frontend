@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const error = searchParams.get("error");
 
-  console.log("Callback request received:", {
+  console.log("HOSPITABLE CHECK: Callback request received:", {
     userId,
     code: code ? `${code.substring(0, 10)}...` : 'null',
     error,
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       redirect_uri: process.env.NEXT_PUBLIC_HOSPITABLE_REDIRECT_URI,
     };
 
-    console.log("Token exchange request:", {
+    console.log("HOSPITABLE CHECK: Token exchange request:", {
       url: "https://auth.hospitable.com/oauth/token",
       body: {
         ...tokenRequestBody,
@@ -57,10 +57,10 @@ export async function GET(request: NextRequest) {
       body: JSON.stringify(tokenRequestBody),
     });
 
-    console.log("Token response status:", tokenResponse.status);
+    console.log("HOSPITABLE CHECK: Token response status:", tokenResponse.status);
     
     const responseText = await tokenResponse.text();
-    console.log("Token response body:", responseText);
+    console.log("HOSPITABLE CHECK: Token response body:", responseText);
 
     if (!tokenResponse.ok) {
       let errorBody;
