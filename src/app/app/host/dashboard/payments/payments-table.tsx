@@ -58,7 +58,7 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
           {headers.map((header, index) => (
             <TableHead
               key={`header-${index}`}
-              className={`${header.width} h-11 px-6 py-3 border-b border-[#eaecf0] font-medium text-xs text-[#475467] font-['Poppins',Helvetica]`}
+              className={`${header.width} h-11 px-6 py-3 font-medium text-xs text-[#475467] font-['Poppins',Helvetica]`}
             >
               {header.name}
             </TableHead>
@@ -67,8 +67,8 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
       </TableHeader>
       <TableBody>
         {data.map((row, rowIndex) => (
-          <TableRow key={`row-${rowIndex}`} className="justify-evenly">
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] flex items-center gap-3">
+          <TableRow key={`row-${rowIndex}`} className="justify-evenly border-b border-[#eaecf0]">
+            <TableCell className="w-fit h-[72px] px-6 py-4 flex items-center gap-3">
               <Avatar className="w-10 h-10 rounded-full border-[0.75px] border-[#00000014]">
                 <AvatarImage src="/avatar-5.png" alt={row.tenant} />
                 <AvatarFallback>{row.tenant.charAt(0)}</AvatarFallback>
@@ -77,22 +77,22 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
                 {row.tenant}
               </span>
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               ${row.amount}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.type}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.method}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.bank}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.dueDate}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0]">
+            <TableCell className="w-fit h-[72px] px-6 py-4">
               <Badge 
                 className={`rounded-full px-2 py-0.5 font-medium text-xs ${
                   row.status === 'Completed' 
@@ -107,7 +107,7 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
                 {row.status}
               </Badge>
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 border-b border-[#eaecf0] flex justify-center items-center">
+            <TableCell className="w-fit h-[72px] px-6 py-4 flex justify-center items-center">
               <div className="inline-flex flex-col items-start">
                 <MoreVerticalIcon className="w-5 h-5 cursor-pointer hover:text-gray-600" />
               </div>
