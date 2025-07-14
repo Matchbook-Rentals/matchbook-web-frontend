@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { HospitableConnect } from "./hospitable-connect";
-import prisma from "@/lib/prisma";
+import prisma from "@/lib/prismadb";
 
 export default async function SettingsPage() {
   const user = await currentUser();
