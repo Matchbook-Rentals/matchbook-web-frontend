@@ -2,7 +2,6 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { auth } from "@clerk/nextjs/server";
 import sharp from "sharp";
-import client from '@/lib/prismadb';
 
 const f = createUploadthing();
 
@@ -26,25 +25,6 @@ export const ourFileRouter = {
       console.log("Upload complete for userId:", metadata.userId);
 
       console.log("file url", file.url);
-
-      // Save file metadata to database
-      try {
-        await client.uploadedFile.create({
-          data: {
-            key: file.key,
-            url: file.url,
-            router: 'imageUploader',
-            userId: metadata.userId,
-            uploadedAt: new Date(),
-            size: file.size,
-            name: file.name,
-          }
-        });
-        console.log("Upload complete for userId:", metadata.userId, "- Saved file metadata to database");
-      } catch (dbError) {
-        console.error("Upload complete for userId:", metadata.userId, "- Failed to save to database:", dbError);
-        // Don't throw; let upload succeed but log error
-      }
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url };
@@ -231,25 +211,6 @@ export const ourFileRouter = {
           originalSizeMB: (file.size / (1024 * 1024)).toFixed(2)
         });
 
-        // Save file metadata to database
-        try {
-          await client.uploadedFile.create({
-            data: {
-              key: file.key,
-              url: file.url,
-              router: 'listingUploadPhotos',
-              userId: metadata.userId,
-              uploadedAt: new Date(),
-              size: file.size,
-              name: file.name,
-            }
-          });
-          console.log(`${logPrefix} - Saved file metadata to database`);
-        } catch (dbError) {
-          console.error(`${logPrefix} - Failed to save to database:`, dbError);
-          // Don't throw; let upload succeed but log error
-        }
-
         return returnData;
 
       } catch (unexpectedError) {
@@ -264,24 +225,6 @@ export const ourFileRouter = {
           url: file.url,
           key: file.key
         });
-
-        // Save file metadata to database even if processing failed
-        try {
-          await client.uploadedFile.create({
-            data: {
-              key: file.key,
-              url: file.url,
-              router: 'listingUploadPhotos',
-              userId: metadata.userId,
-              uploadedAt: new Date(),
-              size: file.size,
-              name: file.name,
-            }
-          });
-          console.log(`${logPrefix} - Saved file metadata to database despite processing error`);
-        } catch (dbError) {
-          console.error(`${logPrefix} - Failed to save to database:`, dbError);
-        }
 
         // Return basic success data even if processing failed
         // This prevents the upload from appearing as failed to the client
@@ -314,25 +257,6 @@ export const ourFileRouter = {
 
       console.log("file url", file.url);
 
-      // Save file metadata to database
-      try {
-        await client.uploadedFile.create({
-          data: {
-            key: file.key,
-            url: file.url,
-            router: 'incomeUploader',
-            userId: metadata.userId,
-            uploadedAt: new Date(),
-            size: file.size,
-            name: file.name,
-          }
-        });
-        console.log("Proof of income upload for userId:", metadata.userId, "- Saved file metadata to database");
-      } catch (dbError) {
-        console.error("Proof of income upload for userId:", metadata.userId, "- Failed to save to database:", dbError);
-        // Don't throw; let upload succeed but log error
-      }
-
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url };
     }),
@@ -354,25 +278,6 @@ export const ourFileRouter = {
 
       console.log("file url", file.url);
 
-      // Save file metadata to database
-      try {
-        await client.uploadedFile.create({
-          data: {
-            key: file.key,
-            url: file.url,
-            router: 'idUploader',
-            userId: metadata.userId,
-            uploadedAt: new Date(),
-            size: file.size,
-            name: file.name,
-          }
-        });
-        console.log("ID image upload for userId:", metadata.userId, "- Saved file metadata to database");
-      } catch (dbError) {
-        console.error("ID image upload for userId:", metadata.userId, "- Failed to save to database:", dbError);
-        // Don't throw; let upload succeed but log error
-      }
-
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url };
     }),
@@ -385,26 +290,6 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Message attachment upload for userId:", metadata.userId);
       console.log("file url", file.url);
-
-      // Save file metadata to database
-      try {
-        await client.uploadedFile.create({
-          data: {
-            key: file.key,
-            url: file.url,
-            router: 'messageUploader',
-            userId: metadata.userId,
-            uploadedAt: new Date(),
-            size: file.size,
-            name: file.name,
-          }
-        });
-        console.log("Message attachment upload for userId:", metadata.userId, "- Saved file metadata to database");
-      } catch (dbError) {
-        console.error("Message attachment upload for userId:", metadata.userId, "- Failed to save to database:", dbError);
-        // Don't throw; let upload succeed but log error
-      }
-
       return { uploadedBy: metadata.userId, fileUrl: file.url };
     }),
   documentUploader: f({
@@ -426,26 +311,6 @@ export const ourFileRouter = {
       console.log("Document file url:", file.url);
       console.log("Document file key:", file.key);
       console.log("Document file name:", file.name);
-
-      // Save file metadata to database
-      try {
-        await client.uploadedFile.create({
-          data: {
-            key: file.key,
-            url: file.url,
-            router: 'documentUploader',
-            userId: metadata.userId,
-            uploadedAt: new Date(),
-            size: file.size,
-            name: file.name,
-          }
-        });
-        console.log("Document upload complete for userId:", metadata.userId, "- Saved file metadata to database");
-      } catch (dbError) {
-        console.error("Document upload complete for userId:", metadata.userId, "- Failed to save to database:", dbError);
-        // Don't throw; let upload succeed but log error
-      }
-
       return { 
         uploadedBy: metadata.userId, 
         fileUrl: file.url,

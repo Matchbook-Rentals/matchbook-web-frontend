@@ -1,7 +1,6 @@
 // Server-side file upload handler using UploadThing
 import { NextRequest, NextResponse } from 'next/server';
 import { UTApi } from 'uploadthing/server';
-import client from '@/lib/prismadb';
 
 const utapi = new UTApi();
 
@@ -31,26 +30,6 @@ export async function POST(req: NextRequest) {
 
     const uploaded = responses.map(r => r.data!);
     console.log(`[uploadFiles API] Successfully uploaded ${uploaded.length} file(s)`);
-
-    // Save file metadata to database
-    for (const upload of uploaded) {
-      try {
-        await client.uploadedFile.create({
-          data: {
-            key: upload.key,
-            url: upload.url,
-            router: 'custom',
-            userId: null, // Custom route may not have userId; adjust as needed
-            uploadedAt: new Date(),
-            size: upload.size,
-            name: upload.name,
-          }
-        });
-      } catch (dbError) {
-        console.error(`[uploadFiles API] Failed to save ${upload.key} to database:`, dbError);
-      }
-    }
-
     return NextResponse.json(uploaded, { status: 200 });
   } catch (err: any) {
     console.error('[uploadFiles API] Exception:', err);

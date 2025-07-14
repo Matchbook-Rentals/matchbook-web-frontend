@@ -141,21 +141,6 @@ export default async function AdminDashboard() {
                 </Link>
               </CardContent>
             </Card>
-
-            <Card className="hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <Database className="h-5 w-5 text-primary" />
-                  <h2 className="text-xl font-semibold">UploadThing Management</h2>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  Manage and delete uploaded files
-                </p>
-                <Link href="/admin/uploadthing">
-                  <Button>Manage Uploads</Button>
-                </Link>
-              </CardContent>
-            </Card>
             
           </div>
         </CardContent>
