@@ -67,14 +67,34 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
 
   // Map listing status to display status and color
   const getStatusInfo = (listing: ListingAndImages) => {
-    if (listing.status === "rented") {
-      return { status: "Rented", statusColor: "text-[#24742f]" };
-    } else if (listing.status === "booked") {
-      return { status: "Active", statusColor: "text-[#5c9ac5]" };
-    } else if (listing.status === "available") {
-      return { status: "Active", statusColor: "text-[#5c9ac5]" };
+    // Check approval status first
+    if (listing.approvalStatus === 'pending' || listing.approvalStatus === 'pendingReview') {
+      return { status: "Pending Approval", statusColor: "text-[#c68087]" };
+    } else if (listing.approvalStatus === 'rejected') {
+      return { status: "Rejected", statusColor: "text-[#c68087]" };
+    } else if (listing.approvalStatus === 'approved') {
+      // For approved listings, check if marked active by user
+      if (listing.markedActiveByUser) {
+        // Check rental status for active listings
+        if (listing.status === "rented") {
+          return { status: "Rented", statusColor: "text-[#24742f]" };
+        } else {
+          return { status: "Active", statusColor: "text-[#5c9ac5]" };
+        }
+      } else {
+        return { status: "Inactive", statusColor: "text-[#c68087]" };
+      }
     } else {
-      return { status: "Inactive", statusColor: "text-[#c68087]" };
+      // Fallback to old logic if approval status is undefined
+      if (listing.status === "rented") {
+        return { status: "Rented", statusColor: "text-[#24742f]" };
+      } else if (listing.status === "booked") {
+        return { status: "Active", statusColor: "text-[#5c9ac5]" };
+      } else if (listing.status === "available") {
+        return { status: "Active", statusColor: "text-[#5c9ac5]" };
+      } else {
+        return { status: "Inactive", statusColor: "text-[#c68087]" };
+      }
     }
   };
 
@@ -198,7 +218,9 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
         { value: "all", label: "All" },
         { value: "rented", label: "Rented" },
         { value: "inactive", label: "Inactive" },
-        { value: "active", label: "Active" }
+        { value: "active", label: "Active" },
+        { value: "pending", label: "Pending Approval" },
+        { value: "rejected", label: "Rejected" }
       ]}
       onSearchChange={setSearchTerm}
       onFilterChange={(value) => {
@@ -208,7 +230,9 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
           const filterMap: { [key: string]: string } = {
             "rented": "Rented",
             "inactive": "Inactive", 
-            "active": "Active"
+            "active": "Active",
+            "pending": "Pending Approval",
+            "rejected": "Rejected"
           };
           setSelectedFilters([filterMap[value]]);
         }
@@ -253,7 +277,13 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
                     <div className="flex flex-col gap-2">
                       <div className="flex flex-col gap-2">
                         {/* Status Badge */}
-                        <Badge className={`w-fit ${status === 'Active' ? 'bg-[#e9f7ee] text-[#1ca34e] border border-[#1ca34e] hover:bg-[#e9f7ee] hover:text-[#1ca34e]' : status === 'Rented' ? 'bg-blue-50 text-blue-600 border border-blue-600 hover:bg-blue-50 hover:text-blue-600' : 'bg-red-50 text-red-600 border border-red-600 hover:bg-red-50 hover:text-red-600'}`}>
+                        <Badge className={`w-fit ${
+                          status === 'Active' ? 'bg-[#e9f7ee] text-[#1ca34e] border border-[#1ca34e] hover:bg-[#e9f7ee] hover:text-[#1ca34e]' : 
+                          status === 'Rented' ? 'bg-blue-50 text-blue-600 border border-blue-600 hover:bg-blue-50 hover:text-blue-600' : 
+                          status === 'Pending Approval' ? 'bg-yellow-50 text-yellow-700 border border-yellow-700 hover:bg-yellow-50 hover:text-yellow-700' :
+                          status === 'Rejected' ? 'bg-red-50 text-red-600 border border-red-600 hover:bg-red-50 hover:text-red-600' :
+                          'bg-gray-50 text-gray-600 border border-gray-600 hover:bg-gray-50 hover:text-gray-600'
+                        }`}>
                           {status}
                         </Badge>
 
