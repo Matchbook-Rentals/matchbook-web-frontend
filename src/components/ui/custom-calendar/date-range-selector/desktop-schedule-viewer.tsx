@@ -10,6 +10,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -43,6 +49,7 @@ interface UnavailablePeriod {
 interface DesktopScheduleViewerProps {
   bookings?: Booking[];
   unavailablePeriods?: UnavailablePeriod[];
+  asToolTips?: boolean;
 }
 
 export interface CalendarMonthProps {
@@ -63,6 +70,7 @@ export interface CalendarMonthProps {
   dayContainerClassName?: string;
   daySpanClassName?: string;
   useSelectPortal?: boolean;
+  asToolTips?: boolean;
 }
 
 interface CalendarDayProps {
@@ -75,6 +83,7 @@ interface CalendarDayProps {
   className?: string;
   containerClassName?: string;
   spanClassName?: string;
+  asToolTip?: boolean;
 }
 
 function CalendarDay({ 
@@ -87,6 +96,7 @@ function CalendarDay({
   className, 
   containerClassName, 
   spanClassName,
+  asToolTip = false,
   isStartOfRange,
   isEndOfRange,
   isInRange,
@@ -152,51 +162,88 @@ function CalendarDay({
     </div>
   );
 
-  // Wrap with popover if there's info to display
+  // Wrap with tooltip or popover if there's info to display
   if (displayInfo) {
-    return (
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <button
-            className={cn(
-              "aspect-square w-full flex items-center justify-center relative text-sm md:text-base lg:text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group",
-              containerClassName,
-              className
-            )}
-          >
-            <span className={cn(
-              "z-10 relative",
-              (isStartOfRange || isEndOfRange) && isBooked && `rounded-full ${bookedBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
-              (isStartOfRange || isEndOfRange) && isUnavailable && !isBooked && `rounded-full ${unavailableBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
-              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'other') && (isOpen ? 'rounded-full bg-[#00A6E8] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-[#00A6E8] group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
-              (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'matchbook') && (isOpen ? 'rounded-full bg-secondaryBrand text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-secondaryBrand group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
-              (isInRange && !isStartOfRange && !isEndOfRange && isUnavailable && !isBooked) && (isOpen ? 'rounded-full bg-[#b2aaaa] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-[#b2aaaa] group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
-              spanClassName
-            )}>
-              {day}
-            </span>
-            {showRangeBackground && (
-              <div className={`absolute inset-y-[30%] inset-x-0 transition-colors duration-200 ${getRangeBgColor()}`} />
-            )}
-            {showStartBackground && (
-              <div className={`absolute right-0 left-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
-            )}
-            {showEndBackground && (
-              <div className={`absolute left-0 right-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
-            )}
-          </button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto">
-          {displayInfo}
-        </PopoverContent>
-      </Popover>
-    );
+    if (asToolTip) {
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              className={cn(
+                "aspect-square w-full flex items-center justify-center relative text-sm md:text-base lg:text-lg",
+                containerClassName,
+                className
+              )}
+            >
+              <span className={cn(
+                "z-10 relative",
+                (isStartOfRange || isEndOfRange) && isBooked && `rounded-full ${bookedBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+                (isStartOfRange || isEndOfRange) && isUnavailable && !isBooked && `rounded-full ${unavailableBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+                spanClassName
+              )}>
+                {day}
+              </span>
+              {showRangeBackground && (
+                <div className={`absolute inset-y-[30%] inset-x-0 transition-colors duration-200 ${getRangeBgColor()}`} />
+              )}
+              {showStartBackground && (
+                <div className={`absolute right-0 left-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+              )}
+              {showEndBackground && (
+                <div className={`absolute left-0 right-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+              )}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            {displayInfo}
+          </TooltipContent>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Popover open={isOpen} onOpenChange={setIsOpen}>
+          <PopoverTrigger asChild>
+            <button
+              className={cn(
+                "aspect-square w-full flex items-center justify-center relative text-sm md:text-base lg:text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group",
+                containerClassName,
+                className
+              )}
+            >
+              <span className={cn(
+                "z-10 relative",
+                (isStartOfRange || isEndOfRange) && isBooked && `rounded-full ${bookedBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+                (isStartOfRange || isEndOfRange) && isUnavailable && !isBooked && `rounded-full ${unavailableBgColor} text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center`,
+                (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'other') && (isOpen ? 'rounded-full bg-[#00A6E8] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-[#00A6E8] group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
+                (isInRange && !isStartOfRange && !isEndOfRange && isBooked && bookingPlatform === 'matchbook') && (isOpen ? 'rounded-full bg-secondaryBrand text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-secondaryBrand group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
+                (isInRange && !isStartOfRange && !isEndOfRange && isUnavailable && !isBooked) && (isOpen ? 'rounded-full bg-[#b2aaaa] text-white w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 flex items-center justify-center' : 'group-hover:rounded-full group-hover:bg-[#b2aaaa] group-hover:text-white group-hover:w-9 group-hover:h-9 md:group-hover:w-10 md:group-hover:h-10 lg:group-hover:w-11 lg:group-hover:h-11 group-hover:flex group-hover:items-center group-hover:justify-center'),
+                spanClassName
+              )}>
+                {day}
+              </span>
+              {showRangeBackground && (
+                <div className={`absolute inset-y-[30%] inset-x-0 transition-colors duration-200 ${getRangeBgColor()}`} />
+              )}
+              {showStartBackground && (
+                <div className={`absolute right-0 left-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+              )}
+              {showEndBackground && (
+                <div className={`absolute left-0 right-1/2 inset-y-[30%] transition-colors duration-200 ${getRangeBgColor()}`} />
+              )}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto">
+            {displayInfo}
+          </PopoverContent>
+        </Popover>
+      );
+    }
   }
 
   return DayButton;
 }
 
-export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange, className, headerClassName, gridClassName, legendClassName, dayClassName, dayContainerClassName, daySpanClassName, useSelectPortal }: CalendarMonthProps) {
+export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDisabled, bookings = [], unavailablePeriods = [], onMonthChange, onYearChange, className, headerClassName, gridClassName, legendClassName, dayClassName, dayContainerClassName, daySpanClassName, useSelectPortal, asToolTips = false }: CalendarMonthProps) {
   const { useSelectPortal: useSelectPortalProp = true } = { useSelectPortal };  // Extract with default value
 
   // Calculate calendar grid parameters
@@ -344,7 +391,7 @@ export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDis
   // Generate years from current year - 1 to current year + 10
   const years = Array.from({ length: 12 }, (_, i) => currentYear - 1 + i);
 
-  return (
+  const calendarContent = (
     <div className={cn("w-full flex-1", className)}>
       {/* Month and Year Display with Navigation */}
       <div className={cn("flex justify-between items-center mb-4", headerClassName)}>
@@ -509,6 +556,7 @@ export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDis
               className={dayClassName}
               containerClassName={dayContainerClassName}
               spanClassName={daySpanClassName}
+              asToolTip={asToolTips}
               isStartOfRange={isStartOfRange}
               isEndOfRange={isEndOfRange}
               isInRange={isInRange}
@@ -525,11 +573,20 @@ export function CalendarMonth({ year, month, onPrevMonth, onNextMonth, isPrevDis
 
     </div>
   );
+
+  return asToolTips ? (
+    <TooltipProvider>
+      {calendarContent}
+    </TooltipProvider>
+  ) : (
+    calendarContent
+  );
 }
 
 export function DesktopScheduleViewer({
   bookings = [],
-  unavailablePeriods = []
+  unavailablePeriods = [],
+  asToolTips = false
 }: DesktopScheduleViewerProps) {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
@@ -706,6 +763,7 @@ export function DesktopScheduleViewer({
             onYearChange={handleLeftYearChange}
             dayContainerClassName=""
             daySpanClassName=""
+            asToolTips={asToolTips}
           />
         </div>
         <div className="w-px bg-gray-200"></div>
@@ -724,6 +782,7 @@ export function DesktopScheduleViewer({
             onYearChange={handleRightYearChange}
             dayContainerClassName=""
             daySpanClassName="lg:p-2"
+            asToolTips={asToolTips}
           />
         </div>
       </div>
@@ -742,6 +801,7 @@ export function DesktopScheduleViewer({
           onYearChange={handleLeftYearChange}
           dayContainerClassName=""
           daySpanClassName="p-2"
+          asToolTips={asToolTips}
         />
       </div>
     </div>
