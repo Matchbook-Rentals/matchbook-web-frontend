@@ -399,11 +399,16 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     }
     if (section === 'pricing') {
       // ALL monthly rent fields must be filled in with values > 0
-      return leaseTerms.every(t => {
+      const allFieldsValid = leaseTerms.every(t => {
         if (!t.price || t.price.trim() === '' || t.price.trim() === '0') return false;
         const price = parseFloat(t.price);
         return !isNaN(price) && price > 0;
       });
+      
+      // Rent due at booking validation
+      const rentDueAtBookingValid = isRentDueAtBookingValid();
+      
+      return allFieldsValid && rentDueAtBookingValid;
     }
     return true; // Other sections don't have validation currently
   };
@@ -561,6 +566,16 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         // Get the updated form data after lease terms processing
         const updatedFormData = { ...formData };
         const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
+        
+        // Validation: Check if rent due at booking exceeds smallest monthly rent
+        if (termsWithPrices.length > 0 && updatedFormData.rentDueAtBooking) {
+          const allPrices = termsWithPrices.map(t => parseFloat(t.price));
+          const smallestRent = Math.min(...allPrices);
+          
+          if (updatedFormData.rentDueAtBooking > smallestRent) {
+            throw new Error(`Rent due at booking ($${updatedFormData.rentDueAtBooking.toLocaleString()}) cannot exceed the smallest monthly rent ($${smallestRent.toLocaleString()})`);
+          }
+        }
         
         if (termsWithPrices.length > 0) {
           const sortedTerms = termsWithPrices.sort((a, b) => a.months - b.months);
@@ -886,6 +901,20 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     return furnished ? 'Furnished' : 'Unfurnished';
   };
 
+  // Helper function to check if rent due at booking exceeds smallest monthly rent
+  const isRentDueAtBookingValid = () => {
+    const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
+    
+    if (termsWithPrices.length === 0 || !formData.rentDueAtBooking) {
+      return true; // No validation needed if no prices or no rent due at booking
+    }
+    
+    const allPrices = termsWithPrices.map(t => parseFloat(t.price));
+    const smallestRent = Math.min(...allPrices);
+    
+    return formData.rentDueAtBooking <= smallestRent;
+  };
+
   // Format price range - now derived from monthlyPricing data for consistency
   const formatPriceRange = () => {
     // Get pricing data from monthlyPricing table instead of legacy shortestLeasePrice/longestLeasePrice
@@ -895,18 +924,16 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       return 'Price not set';
     }
     
-    // Find the prices for shortest and longest lease terms
-    const sortedPricing = monthlyPricing.sort((a, b) => a.months - b.months);
-    const shortestPrice = sortedPricing[0].price;
-    const longestPrice = sortedPricing[sortedPricing.length - 1].price;
+    // Find the actual minimum and maximum prices across all months
+    const allPrices = monthlyPricing.map(p => p.price);
+    const minPrice = Math.min(...allPrices);
+    const maxPrice = Math.max(...allPrices);
     
-    if (shortestPrice === longestPrice) {
-      return `$${shortestPrice.toLocaleString()}`;
+    if (minPrice === maxPrice) {
+      return `$${minPrice.toLocaleString()}`;
     }
     
-    const lowerPrice = Math.min(shortestPrice, longestPrice);
-    const higherPrice = Math.max(shortestPrice, longestPrice);
-    return `$${lowerPrice.toLocaleString()} - $${higherPrice.toLocaleString()}`;
+    return `$${minPrice.toLocaleString()} - $${maxPrice.toLocaleString()}`;
   };
 
   // Format lease terms
@@ -1642,9 +1669,22 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                     min="0"
                     value={formData.rentDueAtBooking || ''}
                     onChange={(e) => updateFormData('rentDueAtBooking', parseInt(e.target.value) || null)}
-                    className="mt-1"
+                    className={`mt-1 ${!isRentDueAtBookingValid() ? 'border-red-500 focus:border-red-500' : ''}`}
                     placeholder="Amount due at booking"
                   />
+                  {!isRentDueAtBookingValid() && (
+                    <div className="text-sm text-red-600 mt-1">
+                      Rent due at booking cannot exceed the smallest monthly rent (${(() => {
+                        const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
+                        if (termsWithPrices.length > 0) {
+                          const allPrices = termsWithPrices.map(t => parseFloat(t.price));
+                          const smallestRent = Math.min(...allPrices);
+                          return `$${smallestRent.toLocaleString()}`;
+                        }
+                        return 'N/A';
+                      })()})
+                    </div>
+                  )}
                 </div>
 
                 <div>
