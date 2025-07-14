@@ -15,7 +15,7 @@ import AddressConfirmation from "./listing-creation-address-confirmation";
 import ListingUploadHighlights from "./listing-creation-highlights";
 import { Rooms } from "./listing-creation-rooms";
 import { ListingBasics } from "./listing-creation-basics";
-import { ListingPhotos } from "./listing-creation-photos-upload";
+import { ListingPhotos } from "./listing-creation-photos-upload-batched";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
 import ListingAmenities from "./listing-creation-amenities";
 import ListingCreationPricing, { MonthlyPricing } from "./listing-creation-pricing";
