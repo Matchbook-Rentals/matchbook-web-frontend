@@ -4,6 +4,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '../popover';
 import { Booking, ListingUnavailability } from '@prisma/client';
 import { BrandButton } from '../brandButton';
 import { EditUnavailabilityDialog } from './edit-unavailability-dialog';
+import { Dialog, DialogContent } from '../../brandDialog';
 
 interface ScheduleViewerPopoverDayProps {
   day: number;
@@ -15,6 +16,7 @@ interface ScheduleViewerPopoverDayProps {
 
 const ScheduleViewerPopoverDay: React.FC<ScheduleViewerPopoverDayProps> = ({ day, booking, unavailability, onDeleteUnavailability, onEditUnavailability }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const getStatusClass = (booking: Booking | undefined, unavailability: ListingUnavailability | undefined) => {
     if (unavailability) {
       return 'bg-gray-300 hover:bg-gray-500';
@@ -53,7 +55,7 @@ const ScheduleViewerPopoverDay: React.FC<ScheduleViewerPopoverDayProps> = ({ day
               <p><strong>End Date:</strong> {booking.endDate.toLocaleDateString()}</p>
             </div>
             <div className="flex justify-end pt-2">
-              <BrandButton variant="outline" size="sm">
+              <BrandButton variant="default" size="sm">
                 View Booking
               </BrandButton>
             </div>
@@ -68,32 +70,68 @@ const ScheduleViewerPopoverDay: React.FC<ScheduleViewerPopoverDayProps> = ({ day
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <BrandButton 
-                variant="outline" 
+                variant="destructive-outline" 
+                size="sm" 
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                Delete
+              </BrandButton>
+              <BrandButton 
+                variant="default" 
                 size="sm" 
                 onClick={() => setIsEditDialogOpen(true)}
               >
                 Edit
               </BrandButton>
-              <BrandButton 
-                variant="outline" 
-                size="sm" 
-                onClick={() => onDeleteUnavailability?.(unavailability.id)}
-              >
-                Delete
-              </BrandButton>
             </div>
           </div>
         )}
         {unavailability && (
-          <EditUnavailabilityDialog
-            isOpen={isEditDialogOpen}
-            onClose={() => setIsEditDialogOpen(false)}
-            unavailability={unavailability}
-            onSave={(updatedUnavailability) => {
-              onEditUnavailability?.(updatedUnavailability);
-              setIsEditDialogOpen(false);
-            }}
-          />
+          <>
+            <EditUnavailabilityDialog
+              isOpen={isEditDialogOpen}
+              onClose={() => setIsEditDialogOpen(false)}
+              unavailability={unavailability}
+              onSave={(updatedUnavailability) => {
+                onEditUnavailability?.(updatedUnavailability);
+                setIsEditDialogOpen(false);
+              }}
+            />
+            
+            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+              <DialogContent className="sm:max-w-[400px] flex flex-col">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900">Delete this unavailable period?</h2>
+                </div>
+                
+                <div className="flex-1 py-4">
+                  <p className="text-gray-600">
+                    This will permanently remove the unavailable period from {unavailability.startDate.toLocaleDateString()} to {unavailability.endDate.toLocaleDateString()}. This action cannot be undone.
+                  </p>
+                </div>
+                
+                <div className="flex gap-2 pt-4 border-t border-gray-200">
+                  <BrandButton
+                    variant="outline"
+                    onClick={() => setIsDeleteDialogOpen(false)}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </BrandButton>
+                  <BrandButton
+                    variant="destructive"
+                    onClick={() => {
+                      onDeleteUnavailability?.(unavailability.id);
+                      setIsDeleteDialogOpen(false);
+                    }}
+                    className="flex-1"
+                  >
+                    Delete
+                  </BrandButton>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </>
         )}
       </PopoverContent>
     </Popover>

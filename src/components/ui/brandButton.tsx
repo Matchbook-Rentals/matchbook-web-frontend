@@ -16,6 +16,8 @@ const brandButtonVariants = cva(
         default: "bg-secondaryBrand text-white hover:bg-primaryBrand transition-colors",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        "destructive-outline":
+          "border border-destructive bg-background text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all duration-300",
         outline:
           "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300",
         secondary:
@@ -79,6 +81,8 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
             return "group-hover:bg-primaryBrand"
           case "destructive":
             return "group-hover:bg-destructive/90"
+          case "destructive-outline":
+            return "group-hover:bg-destructive group-hover:text-destructive-foreground"
           case "outline":
             return "group-hover:bg-primaryBrand group-hover:text-white"
           case "secondary":

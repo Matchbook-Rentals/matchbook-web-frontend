@@ -1,6 +1,6 @@
 'use client'
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../dialog';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Dialog, DialogContent } from '../../brandDialog';
 import { BrandButton } from '../brandButton';
 import { Input } from '../input';
 import { Textarea } from '../textarea';
@@ -30,6 +30,13 @@ export const EditUnavailabilityDialog: React.FC<EditUnavailabilityDialogProps> =
   unavailability,
   onSave
 }) => {
+  // Store original values to detect changes
+  const [originalValues] = useState({
+    startDate: unavailability.startDate,
+    endDate: unavailability.endDate,
+    reason: unavailability.reason || ""
+  });
+
   const [startDate, setStartDate] = useState<Date>(unavailability.startDate);
   const [endDate, setEndDate] = useState<Date>(unavailability.endDate);
   const [startDateInput, setStartDateInput] = useState("");
@@ -40,6 +47,15 @@ export const EditUnavailabilityDialog: React.FC<EditUnavailabilityDialogProps> =
   const [endDateTouched, setEndDateTouched] = useState(false);
   const [reason, setReason] = useState(unavailability.reason || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Check if there are any changes from original values
+  const hasChanges = useMemo(() => {
+    return (
+      startDate.getTime() !== originalValues.startDate.getTime() ||
+      endDate.getTime() !== originalValues.endDate.getTime() ||
+      reason !== originalValues.reason
+    );
+  }, [startDate, endDate, reason, originalValues]);
 
   // Initialize form with current unavailability data
   useEffect(() => {
@@ -176,25 +192,33 @@ export const EditUnavailabilityDialog: React.FC<EditUnavailabilityDialogProps> =
     }
   };
 
-  const handleClear = () => {
-    setStartDate(unavailability.startDate);
-    setEndDate(unavailability.endDate);
-    setStartDateInput(format(unavailability.startDate, "MM/dd/yyyy"));
-    setEndDateInput(format(unavailability.endDate, "MM/dd/yyyy"));
+  const handleReset = () => {
+    setStartDate(originalValues.startDate);
+    setEndDate(originalValues.endDate);
+    setStartDateInput(format(originalValues.startDate, "MM/dd/yyyy"));
+    setEndDateInput(format(originalValues.endDate, "MM/dd/yyyy"));
     setStartDateError("");
     setEndDateError("");
     setStartDateTouched(false);
     setEndDateTouched(false);
-    setReason(unavailability.reason || "");
+    setReason(originalValues.reason);
+  };
+
+  const handleClose = () => {
+    if (hasChanges) {
+      handleReset();
+    }
+    onClose();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit Unavailable Period</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-[467px] flex flex-col">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-900">Edit Unavailable Period</h2>
+        </div>
+        
+        <div className="flex-1 space-y-4 min-h-0">
           <div className="flex gap-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -303,31 +327,25 @@ export const EditUnavailabilityDialog: React.FC<EditUnavailabilityDialogProps> =
             />
           </div>
         </div>
-        <DialogFooter>
-          <div className="flex gap-2">
-            <BrandButton
-              variant="outline"
-              onClick={handleClear}
-              disabled={isSubmitting}
-            >
-              Reset
-            </BrandButton>
-            <BrandButton
-              variant="outline"
-              onClick={onClose}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </BrandButton>
-            <BrandButton
-              variant="default"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !startDate || !endDate}
-            >
-              {isSubmitting ? "Saving..." : "Save Changes"}
-            </BrandButton>
-          </div>
-        </DialogFooter>
+        
+        <div className="flex gap-2 pt-4 border-t border-gray-200">
+          <BrandButton
+            variant={hasChanges ? "outline" : "outline"}
+            onClick={hasChanges ? handleReset : handleClose}
+            disabled={isSubmitting}
+            className="flex-1"
+          >
+            {hasChanges ? "Reset" : "Close"}
+          </BrandButton>
+          <BrandButton
+            variant="default"
+            onClick={handleSubmit}
+            disabled={isSubmitting || !startDate || !endDate}
+            className="flex-1"
+          >
+            {isSubmitting ? "Saving..." : "Save Changes"}
+          </BrandButton>
+        </div>
       </DialogContent>
     </Dialog>
   );
