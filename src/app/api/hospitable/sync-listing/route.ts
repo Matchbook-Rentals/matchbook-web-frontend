@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Send property to Hospitable API
-    const hospitableResponse = await fetch('https://api.hospitable.com/v2/properties', {
+    const hospitableResponse = await fetch('https://public.api.hospitable.com/properties', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${user.hospitableAccessToken}`,
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
           });
 
           // Retry the request with new token
-          const retryResponse = await fetch('https://api.hospitable.com/v2/properties', {
+          const retryResponse = await fetch('https://public.api.hospitable.com/properties', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${refreshedTokens.access_token}`,
@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
 // Helper function to refresh Hospitable token
 async function refreshHospitableToken(refreshToken: string) {
   try {
-    const response = await fetch('https://app.hospitable.com/oauth/token', {
+    const response = await fetch('https://auth.hospitable.com/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

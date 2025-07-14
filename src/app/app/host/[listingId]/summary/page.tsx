@@ -21,11 +21,15 @@ export default async function SummaryPage({ params }: SummaryPageProps) {
     return notFound();
   }
 
+  let titleCasedBreadcrumbText = ((listing.streetAddress1 || listing.title || 'Listing') as string)
+        .toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase()) 
+
   return (
     <div className={HOST_PAGE_STYLE}>
       <HostPageTitle 
         title="Listing Summary" 
-        subtitle={`Summary for ${listing.streetAddress1 || listing.title || 'this listing'}`}
+        subtitle={`Summary for ${titleCasedBreadcrumbText}`}
         rightContent={
           <div className="flex items-center gap-4">
             <HospitableConnectButton listing={listing} />

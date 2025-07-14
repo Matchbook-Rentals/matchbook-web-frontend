@@ -11,6 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2 } from 'lucide-react';
 import Tile from '@/components/ui/tile';
@@ -157,6 +165,8 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
   const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
   const [dragOverTrash, setDragOverTrash] = useState(false);
   const [dropPreviewIndex, setDropPreviewIndex] = useState<number | null>(null);
+  const [showLocationConfirmDialog, setShowLocationConfirmDialog] = useState(false);
+  const [pendingLocationUpdate, setPendingLocationUpdate] = useState<any>(null);
   
   // Lease terms state
   const [leaseTerms, setLeaseTerms] = useState<LeaseTermPricing[]>(() => {

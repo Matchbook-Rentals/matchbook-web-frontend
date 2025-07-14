@@ -108,15 +108,18 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
     },
   ];
 
+
+  let titleCasedBreadcrumbText = ((listing.streetAddress1 || listing.title || 'Listing') as string)
+        .toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase()) 
+
   const sidebarGroups = [
     { 
       title: "",
       items: hostDashboardItems 
     },
     { 
-      title: ((listing.streetAddress1 || listing.title || 'Listing') as string)
-        .toLowerCase()
-        .replace(/\b\w/g, char => char.toUpperCase()),
+      title: titleCasedBreadcrumbText,
       items: listingItems 
     },
     { 
@@ -136,7 +139,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
                 <Separator orientation="vertical" className="mr-2 h-4" />
-                <HostBreadcrumb groups={sidebarGroups} breadcrumbTitle={(listing.streetAddress1 || listing.title || 'Listing')} />
+                <HostBreadcrumb groups={sidebarGroups} breadcrumbTitle={titleCasedBreadcrumbText} />
               </div>
               <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" />
             </div>

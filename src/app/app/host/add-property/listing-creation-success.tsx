@@ -4,6 +4,7 @@ import { BrandButton } from "@/components/ui/brandButton";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { HospitableConnectButton } from "../[listingId]/(components)/hospitable-connect-button";
 
 interface ListingCreationSuccessProps {
   isSaveAndExit?: boolean;
@@ -93,6 +94,8 @@ export default function ListingCreationSuccess({ isSaveAndExit = false, listingI
         >
           Go to Host Dashboard
         </BrandButton>
+
+        <HospitableConnectButton listing={null} />
         
         {!isSaveAndExit && listingId && (
           <Button

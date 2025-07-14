@@ -84,8 +84,8 @@ model User {
   paymentTransactions PaymentTransaction[]
 
   // Hospitable integration
-  hospitableAccessToken   String?
-  hospitableRefreshToken  String?
+  hospitableAccessToken   String?   @db.VarChar(1500)
+  hospitableRefreshToken  String?   @db.VarChar(1500)
   hospitableAccountId     String?   @unique
 }
 

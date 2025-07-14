@@ -69,11 +69,11 @@ export const HospitableConnectButton: React.FC<HospitableConnectButtonProps> = (
   return (
     <Button
       size="sm"
-      variant={isConnected ? "outline" : "default"}
+      variant={isConnected ? "outline" : "outline"}
       className={`
         ${isConnected 
-          ? "border-[#45BA8E] text-[#45BA8E] hover:bg-[#45BA8E]/10 bg-[#45BA8E]/5" 
-          : "bg-[#ed3c6a] hover:bg-[#d63459] text-white border-0"
+          ? "hidden" 
+          : "bg-white text-[#ed3c6a] hover:text-[#ed3c6a] border border-[#ed3c6a] hover:bg-[#ed3c6a]/5"
         } 
         font-medium shadow-sm transition-all duration-200 disabled:opacity-60
       `}
@@ -93,7 +93,14 @@ export const HospitableConnectButton: React.FC<HospitableConnectButtonProps> = (
           Connected to Hospitable
         </>
       ) : (
-        'Connect to Hospitable'
+        <>
+          <img 
+            src="https://partners.hospitable.com/images/logo.svg" 
+            alt="Hospitable" 
+            className="w-4 h-4 mr-2"
+          />
+          Connect to Hospitable
+        </>
       )}
     </Button>
   );
