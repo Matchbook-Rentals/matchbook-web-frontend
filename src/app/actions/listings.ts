@@ -486,6 +486,69 @@ export const addUnavailability = async (listingId: string, startDate: Date, endD
   }
 }
 
+export const updateUnavailability = async (unavailabilityId: string, startDate: Date, endDate: Date, reason?: string): Promise<ListingUnavailability> => {
+  const userId = await checkAuth();
+
+  try {
+    // Verify the unavailability period belongs to a listing owned by the authenticated user
+    const unavailability = await prisma.listingUnavailability.findUnique({
+      where: { id: unavailabilityId },
+      include: {
+        listing: {
+          select: { userId: true }
+        }
+      }
+    });
+
+    if (!unavailability || unavailability.listing.userId !== userId) {
+      throw new Error('Unauthorized to update this unavailability period');
+    }
+
+    // Update the unavailability period
+    const updatedUnavailability = await prisma.listingUnavailability.update({
+      where: { id: unavailabilityId },
+      data: {
+        startDate,
+        endDate,
+        reason: reason || null
+      }
+    });
+
+    return updatedUnavailability;
+  } catch (error) {
+    console.error('Error in updateUnavailability:', error);
+    throw error;
+  }
+}
+
+export const deleteUnavailability = async (unavailabilityId: string): Promise<void> => {
+  const userId = await checkAuth();
+
+  try {
+    // Verify the unavailability period belongs to a listing owned by the authenticated user
+    const unavailability = await prisma.listingUnavailability.findUnique({
+      where: { id: unavailabilityId },
+      include: {
+        listing: {
+          select: { userId: true }
+        }
+      }
+    });
+
+    if (!unavailability || unavailability.listing.userId !== userId) {
+      throw new Error('Unauthorized to delete this unavailability period');
+    }
+
+    // Delete the unavailability period
+    await prisma.listingUnavailability.delete({
+      where: { id: unavailabilityId }
+    });
+  } catch (error) {
+    console.error('Error in deleteUnavailability:', error);
+    throw error;
+  }
+}
+
 // Fetch a single listing by ID, including images, bedrooms, and unavailablePeriods
 export const getListingById = async (listingId: string): Promise<ListingAndImages | null> => {
   const userId = await checkAuth();

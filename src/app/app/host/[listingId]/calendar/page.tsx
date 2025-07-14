@@ -2,21 +2,22 @@
 
 import { CalendarIcon, XCircleIcon } from "lucide-react";
 import React, { useState } from "react";
-import { addUnavailability } from "@/app/actions/listings";
+import { addUnavailability, updateUnavailability, deleteUnavailability } from "@/app/actions/listings";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
-import { DesktopScheduleViewer } from "@/components/ui/custom-calendar/date-range-selector/desktop-schedule-viewer";
+import { ScheduleViewerDays } from "@/components/ui/custom-calendar/date-range-selector/schedule-viewer-days";
 import { HostPageTitle } from "../(components)/host-page-title";
 import { useListingDashboard } from "../listing-dashboard-context";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { InteractiveDatePicker } from "@/components/ui/custom-calendar/date-range-selector/interactive-date-picker";
 import { format } from "date-fns";
+import { getListingDisplayName } from "@/utils/listing-helpers";
 
 export const Body = (): JSX.Element => {
-  const { data, addUnavailability: addUnavailabilityToContext } = useListingDashboard();
+  const { data, addUnavailability: addUnavailabilityToContext, updateUnavailability: updateUnavailabilityInContext, deleteUnavailability: deleteUnavailabilityFromContext } = useListingDashboard();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [startDateInput, setStartDateInput] = useState("");
@@ -166,20 +167,51 @@ export const Body = (): JSX.Element => {
     setEndDateTouched(false);
     setReason("");
   };
+
+  const handleEditUnavailability = async (unavailability: any) => {
+    try {
+      const updatedUnavailability = await updateUnavailability(
+        unavailability.id,
+        unavailability.startDate,
+        unavailability.endDate,
+        unavailability.reason
+      );
+      updateUnavailabilityInContext(updatedUnavailability);
+    } catch (error) {
+      console.error("Error updating unavailability:", error);
+      alert("Failed to update unavailability period");
+    }
+  };
+
+  const handleDeleteUnavailability = async (unavailabilityId: string) => {
+    if (!confirm("Are you sure you want to delete this unavailability period?")) {
+      return;
+    }
+    
+    try {
+      await deleteUnavailability(unavailabilityId);
+      deleteUnavailabilityFromContext(unavailabilityId);
+    } catch (error) {
+      console.error("Error deleting unavailability:", error);
+      alert("Failed to delete unavailability period");
+    }
+  };
   
   return (
     <div className="flex flex-col w-full items-start">
       <HostPageTitle 
         title="Calendar Management" 
-        subtitle={`Manage availability for ${data.listing.streetAddress1 || data.listing.title || 'your listing'}`} 
+        subtitle={`Manage availability for ${getListingDisplayName(data.listing)}`} 
       />
       <section className="flex flex-col items-start px-0 py-0 self-stretch w-full bg-[#f9f9f9]">
 
         {/* Calendar Schedule Viewer */}
         <div className="md:pb-12 w-full">
-          <DesktopScheduleViewer
+          <ScheduleViewerDays
             bookings={data.bookings}
             unavailablePeriods={data.listing.unavailablePeriods || []}
+            onDeleteUnavailability={handleDeleteUnavailability}
+            onEditUnavailability={handleEditUnavailability}
           />
         </div>
 
