@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import HostDashboardBookingsTab from '../../host-dashboard-bookings-tab';
 import { HostPageTitle } from '../(components)/host-page-title';
 import { HOST_PAGE_STYLE } from '@/constants/styles';
+import { getListingDisplayName } from '@/utils/listing-helpers';
 
 interface BookingsPageProps {
   params: { listingId: string };
@@ -32,7 +33,7 @@ export default async function BookingsPage({ params }: BookingsPageProps) {
     <div className={HOST_PAGE_STYLE}>
       <HostPageTitle 
         title="Bookings" 
-        subtitle={`Bookings for ${listing.streetAddress1 || listing.title || 'this listing'}`} 
+        subtitle={`Bookings for ${getListingDisplayName(listing)}`} 
       />
       <HostDashboardBookingsTab bookings={bookings} matches={readyMatches} />
     </div>

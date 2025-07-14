@@ -12,6 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { getListingDisplayName } from "@/utils/listing-helpers";
 
 interface ListingSidebarProps {
   listingId: string;
@@ -109,7 +110,7 @@ export default function ListingSidebar({ listingId }: ListingSidebarProps) {
         <AccordionItem value="listing-specific" className="border-b">
           <AccordionTrigger className="hover:no-underline">
             <span className="text-sm font-medium text-gray-900 truncate">
-              {data.listing.streetAddress1 || data.listing.title || 'Current Listing'}
+              {getListingDisplayName(data.listing)}
             </span>
           </AccordionTrigger>
           <AccordionContent>

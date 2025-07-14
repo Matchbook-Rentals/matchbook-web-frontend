@@ -18,6 +18,7 @@ import TabLayout from "../../components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from '../useNavigationContent';
 import { useUser } from "@clerk/nextjs";
+import { getListingDisplayName } from "@/utils/listing-helpers";
 import { HostApplicationCard } from "../../components/host-application-card";
 
 // Sample housing requests for when no real data exists
@@ -399,7 +400,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   return (
     <TabLayout
       title="Applications"
-      subtitle={`Applications for ${listing.title || listing.streetAddress1 || 'this listing'}`}
+      subtitle={`Applications for ${getListingDisplayName(listing)}`}
       searchPlaceholder="Search by guest name"
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}

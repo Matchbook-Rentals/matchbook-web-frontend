@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import UserMenu from "@/components/userMenu";
 import { currentUser } from "@clerk/nextjs/server";
 import { ListingDashboardProvider } from './listing-dashboard-context';
+import { getListingDisplayName } from '@/utils/listing-helpers';
 
 interface ListingLayoutProps {
   children: React.ReactNode;
@@ -109,9 +110,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
   ];
 
 
-  let titleCasedBreadcrumbText = ((listing.streetAddress1 || listing.title || 'Listing') as string)
-        .toLowerCase()
-        .replace(/\b\w/g, char => char.toUpperCase()) 
+  let titleCasedBreadcrumbText = getListingDisplayName(listing); 
 
   const sidebarGroups = [
     { 

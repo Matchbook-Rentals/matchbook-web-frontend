@@ -6,6 +6,7 @@ import { HostPageTitle } from '../(components)/host-page-title';
 import { ListingActiveSwitch } from '../(components)/listing-active-switch';
 import { HospitableConnectButton } from '../(components)/hospitable-connect-button';
 import { HOST_PAGE_STYLE } from '@/constants/styles';
+import { getListingDisplayName } from '@/utils/listing-helpers';
 
 interface SummaryPageProps {
   params: { listingId: string };
@@ -21,9 +22,7 @@ export default async function SummaryPage({ params }: SummaryPageProps) {
     return notFound();
   }
 
-  let titleCasedBreadcrumbText = ((listing.streetAddress1 || listing.title || 'Listing') as string)
-        .toLowerCase()
-        .replace(/\b\w/g, char => char.toUpperCase()) 
+  let titleCasedBreadcrumbText = getListingDisplayName(listing); 
 
   return (
     <div className={HOST_PAGE_STYLE}>
