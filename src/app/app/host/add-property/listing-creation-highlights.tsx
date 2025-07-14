@@ -76,12 +76,12 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "pets-welcome",
       name: "Pets Welcome",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-6 h-6" /> // Replace with actual pets icon when available
+      icon: <AmenitiesIcons.UpdatedPetFriendlyIcon className="w-7 h-7" /> // Replace with actual pets icon when available
     },
     {
       id: "no-pets",
       name: "No Pets",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-6 h-6" /> // Replace with actual no pets icon when available
+      icon: <AmenitiesIcons.UpdatedPetUnfriendlyIcon className="w-7 h-7" /> // Replace with actual no pets icon when available
     },
   ];
 

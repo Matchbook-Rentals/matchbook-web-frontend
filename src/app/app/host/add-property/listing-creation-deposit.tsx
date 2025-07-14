@@ -38,7 +38,7 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   How much is the security deposit?
                 </label>
                 <p className={questionSubTextStyles || "font-light text-sm text-[#666666] [font-family:'Poppins',Helvetica] mt-1"}>
-                  Total security deposit amount required from tenants
+                  Total security deposit amount required from renters
                 </p>
               </div>
               <div className="relative w-full max-w-[173px]">
