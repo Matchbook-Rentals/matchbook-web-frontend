@@ -174,7 +174,7 @@ export default function LocationInput({ listingLocation, setListingLocation, val
     if (newValue.length > 0) {
       setOpen(true);
       try {
-        const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}`);
+        const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}&types=address`);
         const data = await response.json();
         setSuggestions(data.predictions || []);
       } catch (error) {
