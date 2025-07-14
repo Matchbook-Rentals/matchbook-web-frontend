@@ -82,7 +82,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                     />
                   </div>
                   <p className="relative self-stretch font-text-xs-regular text-[#475467] text-center">
-                    SVG, PNG, JPG or GIF (max. 800x400px)
+                    SVG, PNG, or JPG (max. 8MB)
                   </p>
                 </div>
                 <UploadButton
