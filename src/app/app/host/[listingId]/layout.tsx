@@ -83,7 +83,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
     },
     {
       title: "Move-in Setup",
-      url: `/app/host/${listingId}/check-in-setup`,
+      url: `/app/host/${listingId}/move-in`,
       icon: "Key",
     },
     {

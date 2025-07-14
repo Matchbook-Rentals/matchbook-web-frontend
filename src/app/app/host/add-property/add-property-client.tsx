@@ -92,10 +92,9 @@ export interface NullableListingImage {
   rank: number | null;
 }
 
-import { DraftListingProps } from './page';
 import ListingCreationSuccess from './listing-creation-success';
 
-export default function AddPropertyclient({ initialDraftListing }: DraftListingProps) {
+export default function AddPropertyclient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const draftId = searchParams.get('draftId');

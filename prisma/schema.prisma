@@ -302,6 +302,12 @@ model Listing {
   // Third-party integrations
   hospitablePropertyId String? @unique
 
+  // Move-in Instructions
+  moveInPropertyAccess String? @db.Text
+  moveInParkingInfo    String? @db.Text
+  moveInWifiInfo       String? @db.Text
+  moveInOtherNotes     String? @db.Text
+
   // Relationships
   user               User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookings           Booking[]

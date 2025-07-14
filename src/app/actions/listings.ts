@@ -701,3 +701,48 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
   }
 }
 
+export const updateListingMoveInData = async (
+  listingId: string,
+  moveInData: {
+    moveInPropertyAccess?: string;
+    moveInParkingInfo?: string;
+    moveInWifiInfo?: string;
+    moveInOtherNotes?: string;
+  }
+) => {
+  const userId = await checkAuth();
+  
+  try {
+    // Fetch the listing to ensure it belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized to update this listing');
+    }
+
+    // Update the move-in data
+    const updatedListing = await prisma.listing.update({
+      where: { id: listingId },
+      data: {
+        moveInPropertyAccess: moveInData.moveInPropertyAccess,
+        moveInParkingInfo: moveInData.moveInParkingInfo,
+        moveInWifiInfo: moveInData.moveInWifiInfo,
+        moveInOtherNotes: moveInData.moveInOtherNotes,
+        lastModified: new Date(),
+      },
+    });
+
+    return { success: true, listing: updatedListing };
+  } catch (error) {
+    console.error('Error updating move-in data:', error);
+    throw new Error(error instanceof Error ? error.message : 'Failed to update move-in data');
+  }
+}
+
