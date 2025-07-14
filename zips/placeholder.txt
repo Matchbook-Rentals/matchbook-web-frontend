@@ -1,0 +1,4 @@
+This is a placeholder file to keep the zips directory in git.
+
+This folder is used for Figma zip exports and other temporary zip files.
+Git doesn't track empty directories, so this file ensures the directory exists.

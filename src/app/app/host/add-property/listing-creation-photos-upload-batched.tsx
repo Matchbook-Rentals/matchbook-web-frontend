@@ -276,6 +276,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                     accept="image/jpeg,image/jpg,image/png,image/svg+xml,image/webp"
                     onChange={handleFileSelect}
                     disabled={uploadProgress.isUploading}
+                    tabIndex={0}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
                   />
                   <BrandButton
