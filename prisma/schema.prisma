@@ -82,6 +82,11 @@ model User {
   clientLogs         ClientLog[] // Relation to client logs submitted by this user
   paymentReceipts    PaymentReceipt[]
   paymentTransactions PaymentTransaction[]
+
+  // Hospitable integration
+  hospitableAccessToken   String?
+  hospitableRefreshToken  String?
+  hospitableAccountId     String?   @unique
 }
 
 model UserPreferences {

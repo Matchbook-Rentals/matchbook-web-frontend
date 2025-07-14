@@ -1,21 +1,31 @@
-import React from "react";
-
-async function fetchSettings() {
-  // Simulate data fetching delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return {};
-}
+import { currentUser } from "@clerk/nextjs/server";
+import { HospitableConnect } from "./hospitable-connect";
+import prisma from "@/lib/prisma";
 
 export default async function SettingsPage() {
-  const settings = await fetchSettings();
+  const user = await currentUser();
+  if (!user) {
+    return <div>Not authenticated</div>;
+  }
+
+  // Fetch user from your DB to check for tokens
+  const dbUser = await prisma.user.findUnique({
+    where: { email: user.emailAddresses[0].emailAddress }, // or by id if you sync it
+    select: { hospitableAccessToken: true },
+  });
+
+  const isConnected = !!dbUser?.hospitableAccessToken;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-      </div>
-      <div className="flex-1 space-y-4">
-        <p className="text-muted-foreground">Settings loaded successfully.</p>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Settings</h1>
+      <div className="p-6 border rounded-lg">
+        <h2 className="text-lg font-semibold">Integrations</h2>
+        <p className="text-sm text-gray-500 mb-4">
+          Connect your account to third-party services like Hospitable to sync
+          your bookings.
+        </p>
+        <HospitableConnect isConnected={isConnected} />
       </div>
     </div>
   );
