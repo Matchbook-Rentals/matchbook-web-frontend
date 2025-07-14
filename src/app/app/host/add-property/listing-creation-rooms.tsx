@@ -60,7 +60,7 @@ export const Rooms: React.FC<RoomsProps> = ({
           </div>
 
           <Input
-            className="w-full max-w-[135px] h-8 rounded-lg border border-[#8a8a8a]"
+            className="w-full max-w-[135px] h-8 rounded-lg border border-[#8a8a8a] text-base"
             placeholder="123 sq feet"
             value={squareFeet}
             onChange={e => onSquareFeetChange(e.target.value)}

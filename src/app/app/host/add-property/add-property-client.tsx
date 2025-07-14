@@ -124,6 +124,9 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
   
   // State to track if save & exit is loading
   const [isSavingDraft, setIsSavingDraft] = useState<boolean>(false);
+
+  // State to track if submit is loading
+  const [isSubmittingListing, setIsSubmittingListing] = useState<boolean>(false);
   
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
@@ -837,7 +840,17 @@ const [listingBasics, setListingBasics] = useState({
   
   // Handle form submission
   const handleSubmitListing = async () => {
+    // If admin mode and not disabled, skip validation and API call, show success preview
+    if (isAdmin && !adminModeDisabled && !adminSkipButtonsHidden) {
+      setCurrentStep(12); // Move to success step
+      setSlideDirection('right');
+      setAnimationKey(prevKey => prevKey + 1);
+      return;
+    }
+
     if (validateAllSteps()) {
+
+      setIsSubmittingListing(true);
 
       // Create final array of photos and sort them by rank
       let listingImagesFinal = [...listingPhotos].map(photo => ({
@@ -954,7 +967,7 @@ const [listingBasics, setListingBasics] = useState({
         await revalidateHostDashboard();
         
         // Show success state instead of immediate redirect
-        setCurrentStep(11); // Move to a new success step
+        setCurrentStep(12); // Move to success step
         setSlideDirection('right');
         setAnimationKey(prevKey => prevKey + 1);
       } catch (error) {
@@ -966,6 +979,8 @@ const [listingBasics, setListingBasics] = useState({
           title: "Error creating listing",
           description: (error as Error).message || 'An error occurred while creating the listing. Please try again.',
         });
+      } finally {
+        setIsSubmittingListing(false);
       }
     } else {
       // There are validation errors
@@ -985,12 +1000,22 @@ const [listingBasics, setListingBasics] = useState({
       });
       
       // Find the first step with errors and navigate to it
-      const firstErrorStep = Object.keys(validationErrors)
-        .map(Number)
-        .sort((a, b) => a - b)[0];
+      // Special case: if both step 5 (photo upload) and step 6 (photo selection) have errors,
+      // and we have enough photos uploaded, prioritize step 6 (selection)
+      const errorSteps = Object.keys(validationErrors).map(Number).sort((a, b) => a - b);
+      let targetStep = errorSteps[0];
       
-      if (firstErrorStep !== undefined) {
-        setCurrentStep(firstErrorStep);
+      if (errorSteps.includes(5) && errorSteps.includes(6)) {
+        // Check if we have enough photos uploaded (4+)
+        const validPhotos = listingPhotos?.filter(photo => photo.url) || [];
+        if (validPhotos.length >= 4) {
+          // We have enough photos, the issue is selection, so go to step 6
+          targetStep = 6;
+        }
+      }
+      
+      if (targetStep !== undefined) {
+        setCurrentStep(targetStep);
       }
     }
   };
@@ -1356,7 +1381,7 @@ const [listingBasics, setListingBasics] = useState({
         const isSaveAndExit = currentStep === 12 && listing.status === "draft";
         
         return (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="flex flex-col  items-center justify-center py-12 text-center">
             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -1371,12 +1396,13 @@ const [listingBasics, setListingBasics] = useState({
                 : "Our team will review your listing for approval in the next 24 hours. You'll receive a notification once your listing is approved."
               }
             </p>
-            <Button 
-              className="w-[200px] h-[48px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-              onClick={() => router.push('/app/host/dashboard/listings')}
+            <BrandButton 
+              href="/app/host/dashboard/listings"
+              size="xl"
+              className="w-[200px]"
             >
               Go to Host Dashboard
-            </Button>
+            </BrandButton>
           </div>
         );
       default:
@@ -1417,7 +1443,7 @@ const [listingBasics, setListingBasics] = useState({
 
   return (
     <main className="bg-background flex flex-row justify-center w-full">
-      <div className="bg-background overflow-auto w-full max-w-[1920px] relative" style={{ paddingBottom: currentStep !== 12 ? '160px' : '0' }}>
+      <div className="bg-background overflow-auto w-full max-w-[1920px] relative" style={{ paddingBottom: (currentStep !== 12 || (isAdmin && !adminModeDisabled)) ? '160px' : '0' }}>
 
         {/* Mobile restructured header */}
         {currentStep !== 12 && (
@@ -1487,7 +1513,7 @@ const [listingBasics, setListingBasics] = useState({
         `}</style>
 
         {/* Footer with navigation buttons - fixed to bottom */}
-        {currentStep !== 12 && (
+        {(currentStep !== 12 || (isAdmin && !adminModeDisabled)) && (
           <div className="fixed bottom-0 left-0 right-0 bg-background z-10">
             {/* Progress bar above footer */}
             <ProgressBar 
@@ -1541,12 +1567,24 @@ const [listingBasics, setListingBasics] = useState({
                   <BrandButton 
                     variant="default"
                     size="lg"
-                    onClick={currentStep === 11 ? handleSubmitListing : handleNext}
-                    disabled={currentStep === 11 ? (isAdmin && !adminModeDisabled && !adminSkipButtonsHidden) : false}
+                    onClick={currentStep === 11 ? handleSubmitListing : currentStep === 12 ? () => setCurrentStep(11) : handleNext}
+                    disabled={currentStep === 11 ? isSubmittingListing : false}
                     className="text-sm px-6"
                   >
-                    {currentStep === 11 ? 'Submit Listing' : 
-                     (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
+                    {currentStep === 11 ? (
+                      isSubmittingListing ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          {isAdmin && !adminModeDisabled && !adminSkipButtonsHidden ? 'Preview' : 'Submitting...'}
+                        </>
+                      ) : (
+                        isAdmin && !adminModeDisabled && !adminSkipButtonsHidden ? 'Preview Success' : 'Submit Listing'
+                      )
+                    ) : currentStep === 12 ? (
+                      'Back to Review'
+                    ) : (
+                      (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'
+                    )}
                   </BrandButton>
                 </div>
                 
@@ -1599,12 +1637,24 @@ const [listingBasics, setListingBasics] = useState({
                 <BrandButton 
                   variant="default"
                   size="lg"
-                  onClick={currentStep === 11 ? handleSubmitListing : handleNext}
-                  disabled={currentStep === 11 ? (isAdmin && !adminModeDisabled && !adminSkipButtonsHidden) : false}
+                  onClick={currentStep === 11 ? handleSubmitListing : currentStep === 12 ? () => setCurrentStep(11) : handleNext}
+                  disabled={currentStep === 11 ? isSubmittingListing : false}
                   className="text-sm px-6"
                 >
-                  {currentStep === 11 ? 'Submit Listing' : 
-                   (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'}
+                  {currentStep === 11 ? (
+                    isSubmittingListing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      'Submit Listing'
+                    )
+                  ) : currentStep === 12 ? (
+                    'Back to Review'
+                  ) : (
+                    (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'
+                  )}
                 </BrandButton>
               </div>
             )}

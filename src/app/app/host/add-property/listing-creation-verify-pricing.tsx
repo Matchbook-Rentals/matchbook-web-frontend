@@ -181,7 +181,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                     <div className="relative">
                       <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                       <Input
-                        className="pl-7 text-xs"
+                        className="pl-7 text-base"
                         placeholder="0.00"
                         value={pricing.price}
                         tabIndex={2 + pricing.months}
@@ -221,7 +221,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                       <div className="relative">
                         <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                         <Input
-                          className="pl-7 text-xs"
+                          className="pl-7 text-base"
                           placeholder="0.00"
                           value={leftPricing.price}
                           tabIndex={2 + leftPricing.months}
@@ -252,7 +252,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                           <div className="relative">
                             <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                             <Input
-                              className="pl-7 text-xs"
+                              className="pl-7 text-base"
                               placeholder="0.00"
                               value={rightPricing.price}
                               tabIndex={2 + rightPricing.months}
