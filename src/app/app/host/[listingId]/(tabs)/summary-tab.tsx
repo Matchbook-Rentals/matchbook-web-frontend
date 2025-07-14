@@ -188,17 +188,36 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
   // Lease terms state
   const [leaseTerms, setLeaseTerms] = useState<LeaseTermPricing[]>(() => {
     const terms: LeaseTermPricing[] = [];
-    const shortest = currentListing.shortestLeaseLength || 1;
-    const longest = currentListing.longestLeaseLength || 12;
     
-    for (let i = shortest; i <= longest; i++) {
-      let price = '';
-      if (i === shortest && currentListing.shortestLeasePrice) {
-        price = currentListing.shortestLeasePrice.toString();
-      } else if (i === longest && currentListing.longestLeasePrice) {
-        price = currentListing.longestLeasePrice.toString();
+    // If we have monthlyPricing data, use that for full pricing array
+    if (currentListing.monthlyPricing && currentListing.monthlyPricing.length > 0) {
+      const sortedPricing = [...currentListing.monthlyPricing].sort((a, b) => a.months - b.months);
+      const minMonths = sortedPricing[0].months;
+      const maxMonths = sortedPricing[sortedPricing.length - 1].months;
+      
+      // Create terms for the full range, filling in prices where available
+      for (let i = minMonths; i <= maxMonths; i++) {
+        const pricingData = sortedPricing.find(p => p.months === i);
+        terms.push({ 
+          months: i, 
+          price: pricingData ? pricingData.price.toString() : '', 
+          utilitiesIncluded: pricingData ? pricingData.utilitiesIncluded || false : false 
+        });
       }
-      terms.push({ months: i, price, utilitiesIncluded: false });
+    } else {
+      // Fallback to old method using shortest/longest values
+      const shortest = currentListing.shortestLeaseLength || 1;
+      const longest = currentListing.longestLeaseLength || 12;
+      
+      for (let i = shortest; i <= longest; i++) {
+        let price = '';
+        if (i === shortest && currentListing.shortestLeasePrice) {
+          price = currentListing.shortestLeasePrice.toString();
+        } else if (i === longest && currentListing.longestLeasePrice) {
+          price = currentListing.longestLeasePrice.toString();
+        }
+        terms.push({ months: i, price, utilitiesIncluded: false });
+      }
     }
     
     return terms;
@@ -378,6 +397,18 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       const charCount = (formData.description || '').length;
       return charCount >= 20 && charCount <= 1000;
     }
+    if (section === 'photos') {
+      const photoCount = (formData.listingImages || []).filter(photo => photo.url).length;
+      return photoCount >= 4;
+    }
+    if (section === 'pricing') {
+      // ALL monthly rent fields must be filled in with values > 0
+      return leaseTerms.every(t => {
+        if (!t.price || t.price.trim() === '' || t.price.trim() === '0') return false;
+        const price = parseFloat(t.price);
+        return !isNaN(price) && price > 0;
+      });
+    }
     return true; // Other sections don't have validation currently
   };
 
@@ -394,17 +425,34 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       // Reset lease terms if editing pricing section
       if (section === 'pricing') {
         const terms: LeaseTermPricing[] = [];
-        const shortest = currentListing.shortestLeaseLength || 1;
-        const longest = currentListing.longestLeaseLength || 12;
         
-        for (let i = shortest; i <= longest; i++) {
-          let price = '';
-          if (i === shortest && currentListing.shortestLeasePrice) {
-            price = currentListing.shortestLeasePrice.toString();
-          } else if (i === longest && currentListing.longestLeasePrice) {
-            price = currentListing.longestLeasePrice.toString();
+        // Use same logic as initialization
+        if (currentListing.monthlyPricing && currentListing.monthlyPricing.length > 0) {
+          const sortedPricing = [...currentListing.monthlyPricing].sort((a, b) => a.months - b.months);
+          const minMonths = sortedPricing[0].months;
+          const maxMonths = sortedPricing[sortedPricing.length - 1].months;
+          
+          for (let i = minMonths; i <= maxMonths; i++) {
+            const pricingData = sortedPricing.find(p => p.months === i);
+            terms.push({ 
+              months: i, 
+              price: pricingData ? pricingData.price.toString() : '', 
+              utilitiesIncluded: pricingData ? pricingData.utilitiesIncluded || false : false 
+            });
           }
-          terms.push({ months: i, price, utilitiesIncluded: false });
+        } else {
+          const shortest = currentListing.shortestLeaseLength || 1;
+          const longest = currentListing.longestLeaseLength || 12;
+          
+          for (let i = shortest; i <= longest; i++) {
+            let price = '';
+            if (i === shortest && currentListing.shortestLeasePrice) {
+              price = currentListing.shortestLeasePrice.toString();
+            } else if (i === longest && currentListing.longestLeasePrice) {
+              price = currentListing.longestLeasePrice.toString();
+            }
+            terms.push({ months: i, price, utilitiesIncluded: false });
+          }
         }
         setLeaseTerms(terms);
       }
@@ -422,17 +470,34 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     // Reset lease terms if cancelling pricing section
     if (section === 'pricing') {
       const terms: LeaseTermPricing[] = [];
-      const shortest = currentListing.shortestLeaseLength || 1;
-      const longest = currentListing.longestLeaseLength || 12;
       
-      for (let i = shortest; i <= longest; i++) {
-        let price = '';
-        if (i === shortest && currentListing.shortestLeasePrice) {
-          price = currentListing.shortestLeasePrice.toString();
-        } else if (i === longest && currentListing.longestLeasePrice) {
-          price = currentListing.longestLeasePrice.toString();
+      // Use same logic as initialization
+      if (currentListing.monthlyPricing && currentListing.monthlyPricing.length > 0) {
+        const sortedPricing = [...currentListing.monthlyPricing].sort((a, b) => a.months - b.months);
+        const minMonths = sortedPricing[0].months;
+        const maxMonths = sortedPricing[sortedPricing.length - 1].months;
+        
+        for (let i = minMonths; i <= maxMonths; i++) {
+          const pricingData = sortedPricing.find(p => p.months === i);
+          terms.push({ 
+            months: i, 
+            price: pricingData ? pricingData.price.toString() : '', 
+            utilitiesIncluded: pricingData ? pricingData.utilitiesIncluded || false : false 
+          });
         }
-        terms.push({ months: i, price, utilitiesIncluded: false });
+      } else {
+        const shortest = currentListing.shortestLeaseLength || 1;
+        const longest = currentListing.longestLeaseLength || 12;
+        
+        for (let i = shortest; i <= longest; i++) {
+          let price = '';
+          if (i === shortest && currentListing.shortestLeasePrice) {
+            price = currentListing.shortestLeasePrice.toString();
+          } else if (i === longest && currentListing.longestLeasePrice) {
+            price = currentListing.longestLeasePrice.toString();
+          }
+          terms.push({ months: i, price, utilitiesIncluded: false });
+        }
       }
       setLeaseTerms(terms);
     }
@@ -1587,6 +1652,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       max={Math.max(...leaseTerms.map(t => t.months))}
                       variant="outline"
                       buttonSize="sm"
+                      containerClassName='min-w-[200px]'
                       textSize="lg"
                       monthSuffixClassName="hidden md:inline"
                       onDecrement={() => {
@@ -1691,6 +1757,21 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   ))}
                   </div>
                 </div>
+                
+                {/* Pricing validation feedback */}
+                {(() => {
+                  const emptyFields = leaseTerms.filter(t => !t.price || t.price.trim() === '' || t.price.trim() === '0');
+                  
+                  if (emptyFields.length > 0) {
+                    return (
+                      <div className="text-sm text-center text-red-600 mt-4">
+                        All monthly rent fields must be filled in with values greater than $0
+                      </div>
+                    );
+                  }
+                  
+                  return null;
+                })()}
               </div>
             </div>
           ) : (
@@ -1910,6 +1991,21 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   <p className="text-sm text-gray-500 text-center max-w-md">
                     SVG, PNG, WEBP, or JPG (max of 30 images, large files will be automatically resized)
                   </p>
+                  
+                  {/* Photo count validation - only show if below 4 photos */}
+                  {(() => {
+                    const photoCount = (formData.listingImages || []).filter(photo => photo.url).length;
+                    if (photoCount < 4) {
+                      return (
+                        <div className="text-sm text-center">
+                          <span className="text-red-600">
+                            {4 - photoCount} more photo{4 - photoCount !== 1 ? 's' : ''} required (minimum 4)
+                          </span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
 
                 {/* Drag and Drop Photos */}
@@ -1945,11 +2041,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                         )}
                         
                         <div
-                          className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden cursor-grab border-2 transition-all ${
-                            index < 4 ? 'border-yellow-500 shadow-md' : 'border-transparent'
-                          } ${
+                          className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden cursor-grab border-2 transition-all border-transparent ${
                             draggedImageId === image.id 
-                              ? 'opacity-50 border-yellow-400 scale-95' 
+                              ? 'opacity-50 border-black scale-95' 
                               : dropPreviewIndex === index && draggedImageId !== image.id
                               ? 'border-blue-300 shadow-lg'
                               : 'hover:border-gray-300'
@@ -1964,27 +2058,29 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                             alt={`Property image ${index + 1}`}
                             className="w-full h-full object-cover"
                           />
-                          <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                            {index + 1}
+                          <div className="absolute top-2 left-2 bg-white text-black text-xs px-2 py-1 rounded font-medium border border-black">
+                            {index < 4 ? 'Cover Photo' : index + 1}
                           </div>
                         </div>
                       </div>
                     ))}
                     
-                    {/* End Drop Zone */}
-                    {draggedImageId && (
-                      <div
-                        className={`w-[175px] h-[108px] border-2 border-dashed rounded-lg flex items-center justify-center transition-colors ${
-                          dropPreviewIndex === (formData.listingImages?.length || 0) 
-                            ? 'border-blue-500 bg-blue-50' 
-                            : 'border-gray-300'
-                        }`}
-                        onDragOver={(e) => handleDragOver(e, formData.listingImages?.length || 0)}
-                        onDrop={(e) => handleDrop(e, formData.listingImages?.length || 0)}
-                      >
+                    {/* Invisible placeholder that becomes drop zone when dragging */}
+                    <div
+                      className={`w-[175px] h-[108px] border-2 rounded-lg flex items-center justify-center transition-colors ${
+                        draggedImageId
+                          ? dropPreviewIndex === (formData.listingImages?.length || 0)
+                            ? 'border-dashed border-blue-500 bg-blue-50'
+                            : 'border-dashed border-gray-300'
+                          : 'border-transparent'
+                      }`}
+                      onDragOver={(e) => handleDragOver(e, formData.listingImages?.length || 0)}
+                      onDrop={(e) => handleDrop(e, formData.listingImages?.length || 0)}
+                    >
+                      {draggedImageId && (
                         <span className="text-gray-500 text-sm">Drop here</span>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
