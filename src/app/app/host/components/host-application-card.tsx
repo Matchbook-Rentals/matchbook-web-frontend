@@ -47,23 +47,23 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
   return (
     <Card className={`w-full p-6 rounded-xl ${className} ${isLoading ? 'opacity-75' : ''}`}>
       <CardContent className="p-0">
-        <div className="flex items-start gap-2 w-full relative">
+        <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-2 w-full relative">
           {/* Loading overlay */}
           {isLoading && (
             <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-xl">
               <Loader2 className="w-8 h-8 animate-spin text-[#3c8787]" />
             </div>
           )}
-          <div className="flex items-start gap-6 flex-1">
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 flex-1 w-full">
             {/* Profile Image */}
             {status.toLowerCase() === 'approved' ? (
               <div 
-                className="relative w-[81px] h-[85px] rounded-xl bg-cover bg-[50%_50%]" 
+                className="relative w-16 h-16 sm:w-[81px] sm:h-[85px] lg:w-[81px] lg:h-[85px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
                 style={{ backgroundImage: `url(${profileImage})` }}
               />
             ) : (
               <div 
-                className="relative w-[81px] h-[85px] rounded-xl bg-cover bg-[50%_50%]" 
+                className="relative w-16 h-16 sm:w-[81px] sm:h-[85px] lg:w-[81px] lg:h-[85px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
                 style={{ backgroundImage: `url(https://placehold.co/600x400/0B6E6E/FFF?text=${name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')})` }}
               />
             )}
@@ -105,7 +105,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
                 {description}
               </div>
 
-              <div className="flex items-center gap-6 w-full">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-6 w-full">
                 {occupants.map((occupant, index) => (
                   <div
                     key={index}
@@ -126,7 +126,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
           </div>
 
           {/* Right Side - Price and Actions */}
-          <div className="flex flex-col items-end justify-center gap-2 self-stretch">
+          <div className="flex flex-col sm:items-end items-start justify-center gap-2 w-full sm:w-auto self-stretch">
             <div className="flex flex-col items-start gap-2.5 flex-1">
               <Popover>
                 <PopoverTrigger asChild>
@@ -152,16 +152,17 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
               </Popover>
             </div>
 
-            <div className="flex flex-col items-end justify-center gap-3 w-full">
-              <div className="w-full font-semibold text-[#484a54] text-xl text-right">
+            <div className="flex flex-col sm:items-end items-start justify-center gap-3 w-full">
+              <div className="w-full font-semibold text-[#484a54] text-xl sm:text-right text-left">
                 {price}
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <BrandButton
                   variant="outline"
                   onClick={onApplicationDetails}
                   disabled={isLoading}
+                  className="w-full sm:w-auto"
                 >
                   {isLoading ? (
                     <>
@@ -177,6 +178,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
                   variant="default"
                   onClick={onMessageGuest}
                   disabled={isLoading}
+                  className="w-full sm:w-auto"
                 >
                   Message Guest
                 </BrandButton>

@@ -8,7 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { LightbulbIcon, MapPinIcon, Search } from "lucide-react";
+import { MapPinIcon, Search } from "lucide-react";
 import { BrandCheckbox } from "@/app/brandCheckbox";
 
 interface Review {
@@ -19,6 +19,7 @@ interface Review {
   location: string;
   review: string;
   avatar: string;
+  createdAt: string;
 }
 
 interface RatingBreakdown {
@@ -93,33 +94,6 @@ const IndividualReview: React.FC<{ review: Review; isLast: boolean }> = ({ revie
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 px-4 py-2.5 border-[#bae7cb] shadow-sm"
-          >
-            <LightbulbIcon className="w-6 h-6" />
-            <span className="font-medium text-[#696969] whitespace-nowrap">
-              Helpful
-            </span>
-          </Button>
-
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              className="p-2.5 border-[#daf6ff] shadow-sm"
-            >
-              <span className="text-blue-500">👍</span>
-            </Button>
-
-            <Button
-              variant="outline"
-              className="p-2.5 border-[#ffe4e4] shadow-sm"
-            >
-              <span className="text-red-500">👎</span>
-            </Button>
-          </div>
-        </div>
       </div>
 
       {!isLast && <Separator className="w-full h-px" />}
@@ -229,23 +203,43 @@ const OverallReviewsSection: React.FC<{
 }> = ({ reviews, isAdmin, useMockData, onMockDataToggle }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleCount, setVisibleCount] = useState(5);
+  const [sortBy, setSortBy] = useState("most-recent");
 
-  const filteredReviews = useMemo(() => {
+  const filteredAndSortedReviews = useMemo(() => {
     // If not using mock data, return empty array
     if (!useMockData) return [];
     
-    if (!searchTerm.trim()) return reviews;
+    let filtered = reviews;
     
-    return reviews.filter(review => 
-      review.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [reviews, searchTerm, useMockData]);
+    // Apply search filter
+    if (searchTerm.trim()) {
+      filtered = reviews.filter(review => 
+        review.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    // Apply sorting
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "highest-rated":
+          return b.rating - a.rating;
+        case "lowest-rated":
+          return a.rating - b.rating;
+        case "most-recent":
+        default:
+          // Sort by createdAt date, newest first
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+    });
+    
+    return sorted;
+  }, [reviews, searchTerm, useMockData, sortBy]);
 
   const displayedReviews = useMemo(() => {
-    return filteredReviews.slice(0, visibleCount);
-  }, [filteredReviews, visibleCount]);
+    return filteredAndSortedReviews.slice(0, visibleCount);
+  }, [filteredAndSortedReviews, visibleCount]);
 
-  const hasMoreReviews = filteredReviews.length > visibleCount;
+  const hasMoreReviews = filteredAndSortedReviews.length > visibleCount;
 
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 5);
@@ -296,7 +290,7 @@ const OverallReviewsSection: React.FC<{
               Reviews
             </h2>
 
-            <Select defaultValue="most-recent">
+            <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-[157px] h-12 bg-white border-[#e8eaef] font-medium text-gray-700">
                 <SelectValue placeholder="Most Recent" />
               </SelectTrigger>
@@ -309,7 +303,7 @@ const OverallReviewsSection: React.FC<{
           </div>
 
           <div className="flex flex-col items-start w-full flex-1 ">
-            {filteredReviews.length === 0 ? (
+            {filteredAndSortedReviews.length === 0 ? (
               <div className="flex flex-col items-center gap-8 justify-center text-gray-500 w-full h-full">
                 <img 
                   src="/host-dashboard/empty/reviews.png" 
