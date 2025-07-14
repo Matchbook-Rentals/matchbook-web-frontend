@@ -47,6 +47,31 @@ export const ListingActiveSwitch: React.FC<ListingActiveSwitchProps> = ({
     }
   };
 
+  // Check if listing is approved
+  const isApproved = listing.approvalStatus === 'approved';
+  
+  // If not approved, show status text instead of switch
+  if (!isApproved) {
+    const statusText = listing.approvalStatus === 'pending' || listing.approvalStatus === 'pendingReview' 
+      ? 'Pending Approval' 
+      : listing.approvalStatus === 'rejected' 
+      ? 'Rejected' 
+      : 'Pending Approval';
+      
+    const statusColor = listing.approvalStatus === 'rejected' 
+      ? 'text-red-600' 
+      : 'text-black';
+      
+    return (
+      <div className="flex items-center space-x-3">
+        <span className={`text-sm font-medium ${statusColor}`}>
+          {statusText}
+        </span>
+      </div>
+    );
+  }
+
+  // For approved listings, show the switch
   return (
     <div className="flex items-center space-x-3">
       <label className="text-sm font-medium text-gray-700">
