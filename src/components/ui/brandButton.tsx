@@ -13,17 +13,17 @@ const brandButtonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-secondaryBrand text-white hover:bg-primaryBrand transition-colors",
+        default: "bg-secondaryBrand text-white hover:bg-primaryBrand disabled:hover:bg-secondaryBrand transition-colors",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:hover:bg-destructive",
         "destructive-outline":
-          "border border-destructive bg-background text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all duration-300",
+          "border border-destructive bg-background text-destructive hover:bg-destructive hover:text-destructive-foreground disabled:hover:bg-background disabled:hover:text-destructive transition-all duration-300",
         outline:
-          "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300",
+          "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white disabled:hover:bg-background disabled:hover:text-primaryBrand transition-all duration-300",
         secondary:
-          "bg-secondaryBrand text-white hover:bg-secondaryBrand/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "bg-transparent text-secondaryBrand hover:text-primaryBrand transition-none  rounded-none px-0 py-0 min-w-0",
+          "bg-secondaryBrand text-white hover:bg-secondaryBrand/80 disabled:hover:bg-secondaryBrand",
+        ghost: "hover:bg-accent hover:text-accent-foreground disabled:hover:bg-transparent disabled:hover:text-current",
+        link: "bg-transparent text-secondaryBrand hover:text-primaryBrand disabled:hover:text-secondaryBrand transition-none  rounded-none px-0 py-0 min-w-0",
       },
       size: {
         default: "h-[40px] min-w-[160px] rounded-lg px-[14px] py-[10px] gap-1 font-['Poppins'] font-semibold text-sm leading-5 tracking-normal",
