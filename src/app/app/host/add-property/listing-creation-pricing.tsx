@@ -1,8 +1,4 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ListingCreationCounter } from "./listing-creation-counter";
 import { styles } from "./styles";
 
@@ -57,10 +53,6 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
   const increaseShortestStay = () => {
     if (shortestStay < longestStay) {
       onShortestStayChange(shortestStay + 1);
-      // Adjust utilities counter if needed
-      if (utilitiesUpToMonths < shortestStay + 1) {
-        onUtilitiesUpToMonthsChange(shortestStay + 1);
-      }
     }
   };
 
@@ -79,25 +71,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
   const decreaseLongestStay = () => {
     if (longestStay > shortestStay) {
       onLongestStayChange(longestStay - 1);
-      // Adjust utilities counter if needed
-      if (utilitiesUpToMonths > longestStay - 1) {
-        onUtilitiesUpToMonthsChange(longestStay - 1);
-      }
     }
   };
 
-  // Handlers for utilities counter
-  const increaseUtilitiesMonths = () => {
-    if (utilitiesUpToMonths < longestStay) {
-      onUtilitiesUpToMonthsChange(utilitiesUpToMonths + 1);
-    }
-  };
-
-  const decreaseUtilitiesMonths = () => {
-    if (utilitiesUpToMonths > shortestStay) {
-      onUtilitiesUpToMonthsChange(utilitiesUpToMonths - 1);
-    }
-  };
 
   return (
     <div className="relative w-full md:max-w-[886px]">
@@ -145,96 +121,6 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
           </div>
         </div>
 
-        {/* Pricing Variation Question */}
-        <div className="mt-8 mb-8">
-          <div className="flex items-center justify-between">
-            <h2 className={questionTextStyles || styles.questionText}>
-              Do you want to change pricing based on lease length?
-            </h2>
-            <Switch 
-              id="vary-pricing" 
-              checked={varyPricingByLength}
-              onCheckedChange={onVaryPricingByLengthChange}
-              className="data-[state=checked]:bg-secondaryBrand"
-              monthSuffixClassName="hidden sm:inline"
-            />
-          </div>
-          
-          {!varyPricingByLength && (
-            <div className="mt-6">
-              <div className="flex items-center justify-between">
-                <span className={questionSubTextStyles || styles.labelText}>
-                  Monthly rent price for all lease lengths:
-                </span>
-                <div className="relative w-full max-w-[234px]">
-                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
-                  <Input 
-                    className="w-full h-10 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
-                    value={basePrice}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/[^0-9.]/g, '');
-                      onBasePriceChange(value);
-                    }}
-                    placeholder="0.00"
-                    type="text"
-                    inputMode="decimal"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {varyPricingByLength && (
-            <div className="mt-6">
-              <p className={questionSubTextStyles || styles.mutedText}>
-                Per length pricing will be set in the next step
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Utilities Question */}
-        <div className="mt-8 mb-8">
-          <div className="flex items-center justify-between">
-            <h2 className={questionTextStyles || styles.questionText}>
-              Would you like to include utilities on some lease durations?
-            </h2>
-            <Switch 
-              id="include-utilities" 
-              checked={includeUtilities}
-              onCheckedChange={onIncludeUtilitiesChange}
-              className="data-[state=checked]:bg-secondaryBrand"
-            />
-          </div>
-          
-          {includeUtilities && (
-            <div className="mt-6">
-              <div className="flex items-center justify-between">
-                <span className={questionTextStyles || styles.labelText}>
-                  Include utilities for leases up to:
-                </span>
-                <ListingCreationCounter
-                  value={utilitiesUpToMonths}
-                  onChange={onUtilitiesUpToMonthsChange}
-                  onIncrement={increaseUtilitiesMonths}
-                  onDecrement={decreaseUtilitiesMonths}
-                  incrementDisabled={utilitiesUpToMonths >= longestStay}
-                  decrementDisabled={utilitiesUpToMonths <= shortestStay}
-                  variant="outline"
-                  iconSize="md"
-                  containerClassName="flex items-center space-x-4"
-                  buttonClassName={styles.counterButton}
-                  textClassName={counterTextStyles || styles.counterText}
-                  showMonthSuffix={true}
-                  alwaysShowMonthSuffix={true}
-                />
-              </div>
-              <p className={`${questionSubTextStyles || styles.mutedText} mt-2`}>
-                Utilities will be included for leases from {shortestStay} to {utilitiesUpToMonths} months
-              </p>
-            </div>
-          )}
-        </div>
 
       </div>
     </div>

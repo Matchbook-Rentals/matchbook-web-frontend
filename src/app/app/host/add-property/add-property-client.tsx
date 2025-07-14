@@ -1529,7 +1529,7 @@ const [listingBasics, setListingBasics] = useState({
                     variant="default"
                     size="lg"
                     onClick={currentStep === 11 ? handleSubmitListing : handleNext}
-                    disabled={currentStep === 11 ? isAdmin : false}
+                    disabled={currentStep === 11 ? (isAdmin && !adminModeDisabled && !adminSkipButtonsHidden) : false}
                     className="text-sm px-6"
                   >
                     {currentStep === 11 ? 'Submit Listing' : 
@@ -1587,7 +1587,7 @@ const [listingBasics, setListingBasics] = useState({
                   variant="default"
                   size="lg"
                   onClick={currentStep === 11 ? handleSubmitListing : handleNext}
-                  disabled={currentStep === 11 ? isAdmin : false}
+                  disabled={currentStep === 11 ? (isAdmin && !adminModeDisabled && !adminSkipButtonsHidden) : false}
                   className="text-sm px-6"
                 >
                   {currentStep === 11 ? 'Submit Listing' : 
