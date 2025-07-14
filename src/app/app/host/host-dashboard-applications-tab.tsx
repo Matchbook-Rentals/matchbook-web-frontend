@@ -18,7 +18,7 @@ import TabLayout from "./components/cards-with-filter-layout";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from "./[listingId]/useNavigationContent";
 import { useUser } from "@clerk/nextjs";
-import { HostApplicationCard } from "./components/host-application-card";
+import HostApplicationCards from "./host-application-cards";
 
 // Base filter options
 const baseFilterOptions = [
@@ -268,32 +268,6 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
   };
 };
 
-// Helper function to transform application data for the HostApplicationCard component
-const transformApplicationForCard = (app: any, isMobile: boolean) => {
-  const listing = app.listing;
-  const addressDisplay = isMobile 
-    ? (listing?.streetAddress1 || `Property in ${listing?.state || 'Unknown Location'}`)
-    : `${listing?.streetAddress1 || ''} ${listing?.city || ''}, ${listing?.state || ''} ${listing?.postalCode || ''}`;
-
-  // Parse occupants string to create occupant objects
-  const occupantsParts = app.occupants.split(', ');
-  const occupants = [
-    { type: "Adult", count: parseInt(occupantsParts[0]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/adult.svg" },
-    { type: "Kid", count: parseInt(occupantsParts[1]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/kid.svg" },
-    { type: "pet", count: parseInt(occupantsParts[2]?.split(' ')[0] || '0'), icon: "/host-dashboard/svg/pet.svg" },
-  ];
-
-  return {
-    name: app.name,
-    status: app.status.charAt(0).toUpperCase() + app.status.slice(1),
-    dates: app.period,
-    address: addressDisplay,
-    description: `for ${listing?.title || 'this property'}`,
-    price: app.price,
-    occupants,
-    profileImage: app.user?.imageUrl,
-  };
-};
 
 interface HostDashboardApplicationsTabProps {
   housingRequests?: RequestWithUser[];
@@ -450,25 +424,15 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
       useMockData={useMockData}
       onMockDataToggle={setUseMockData}
     >
-      {filteredApplications.map((app) => {
-        const cardData = transformApplicationForCard(app, isMobile);
-        
-        return (
-          <div key={app.id} className="mb-8">
-            <HostApplicationCard
-              {...cardData}
-              onApplicationDetails={() => handleViewApplicationDetails(app.listingId, app.id)}
-              onMessageGuest={() => {
-                // Handle message guest action - you may need to implement this
-                console.log('Message guest:', app.name);
-              }}
-              onManageListing={() => router.push(`/app/host/${app.listingId}/summary`)}
-              className="border border-solid border-[#6e504933]"
-              isLoading={loadingApplicationId === app.id}
-            />
-          </div>
-        );
-      })}
+      <HostApplicationCards
+        applications={filteredApplications}
+        loadingApplicationId={loadingApplicationId}
+        onViewApplicationDetails={handleViewApplicationDetails}
+        onMessageGuest={(appName: string) => {
+          // Handle message guest action - you may need to implement this
+          console.log('Message guest:', appName);
+        }}
+      />
     </TabLayout>
   );
 }
