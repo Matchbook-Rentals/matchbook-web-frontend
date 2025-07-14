@@ -214,7 +214,7 @@ export const EditUnavailabilityDialog: React.FC<EditUnavailabilityDialogProps> =
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[467px] flex flex-col">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <h2 className="text-lg font-semibold text-gray-900">Edit Unavailable Period</h2>
         </div>
         

@@ -104,6 +104,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
             
             <CalendarMonth
               year={currentDate.getFullYear()}
+              asToolTips
               month={currentDate.getMonth()}
               onPrevMonth={() => {
                 const newDate = new Date(currentDate);

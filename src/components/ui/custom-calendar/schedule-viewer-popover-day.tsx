@@ -74,7 +74,7 @@ const ScheduleViewerPopoverDay: React.FC<ScheduleViewerPopoverDayProps> = ({ day
                 size="sm" 
                 onClick={() => setIsDeleteDialogOpen(true)}
               >
-                Delete
+                Deleter
               </BrandButton>
               <BrandButton 
                 variant="default" 
@@ -100,8 +100,8 @@ const ScheduleViewerPopoverDay: React.FC<ScheduleViewerPopoverDayProps> = ({ day
             
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
               <DialogContent className="sm:max-w-[400px] flex flex-col">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900">Delete this unavailable period?</h2>
+                <div className="flex items-center justify-center">
+                  <h2 className="text-lg font-semibold text-gray-900 text-center">Delete this unavailable period?</h2>
                 </div>
                 
                 <div className="flex-1 py-4">

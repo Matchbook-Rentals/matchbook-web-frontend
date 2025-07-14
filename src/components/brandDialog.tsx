@@ -84,9 +84,9 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-2 left-2 h-8 w-8 flex items-center justify-center rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none cursor-pointer"
           >
-            <XIcon />
+            <XIcon className="h-5 w-5 sm:h-6 sm:w-6 stroke-2 pointer-events-none" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}
@@ -447,11 +447,31 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
 };
 
 // Export the base components for reusability
+// Simple Close Button Component
+function DialogCloseButton({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+  return (
+    <DialogPrimitive.Close
+      className={cn(
+        "absolute left-2 top-2 h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center cursor-pointer rounded-sm opacity-70 hover:opacity-100 transition-opacity z-50",
+        className
+      )}
+      {...props}
+    >
+      <XIcon className="h-4 w-4 sm:h-5 sm:w-5 stroke-2" />
+      <span className="sr-only">Close</span>
+    </DialogPrimitive.Close>
+  );
+}
+
 export {
   Dialog,
   DialogTrigger,
   DialogPortal,
   DialogClose,
+  DialogCloseButton,
   DialogOverlay,
   DialogContent,
 };

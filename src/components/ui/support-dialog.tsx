@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
-} from "@/components/ui/dialog";
+} from "@/components/brandDialog";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Input } from "@/components/ui/input";
@@ -124,7 +124,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95%] sm:w-[90%] md:w-[85%] lg:w-[80%] max-w-[800px] max-h-[90vh] p-4 sm:p-6 rounded-xl top-[5vh] sm:top-[10vh] md:top-[15vh] lg:top-[25vh] translate-y-0">
+      <DialogContent className="w-[95%] sm:w-[90%] md:w-[85%] lg:w-[80%] max-w-[900px] max-h-[90vh] p-4 sm:p-6 rounded-xl top-[5vh] sm:top-[10vh] md:top-[15vh] lg:top-[25vh] translate-y-0">
         <div className="flex items-center justify-between px-0 pb-0">
           <div className="w-6 h-6 opacity-0"></div>
           <h2 className="font-medium text-xl text-gray-neutral900">
