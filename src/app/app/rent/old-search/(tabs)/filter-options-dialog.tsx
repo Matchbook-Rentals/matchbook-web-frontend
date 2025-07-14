@@ -287,7 +287,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     }
   ];
 
-  const MINIMUM_OPTIONS = [
+  const BEDROOM_OPTIONS = [
     { label: 'Any', value: 0 },
     { label: '1+', value: 1 },
     { label: '2+', value: 2 },
@@ -295,6 +295,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     { label: '4+', value: 4 },
     { label: '5+', value: 5 },
     { label: '6+', value: 6 },
+  ];
+
+  const BATHROOM_OPTIONS = [
+    { label: 'Any', value: 0 },
+    { label: '1+', value: 1 },
+    { label: '1.5+', value: 1.5 },
+    { label: '2+', value: 2 },
+    { label: '2.5+', value: 2.5 },
+    { label: '3+', value: 3 },
+    { label: '3.5+', value: 3.5 },
+    { label: '4+', value: 4 },
   ];
 
   // Calculate filtered listings count based on local filters
@@ -955,31 +966,34 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <div className='border-b-2 py-6'>
             <h3 className="text-[18px] font-medium text-[#404040] mb-6">Minimum Requirements</h3>
             <div className="space-y-4">
-              {minimumOptions.map(({ key, label }) => (
-                <div key={key} className="text-center">
-                  <h4 className="text-[16px] font-normal text-[#404040] text-left mb-2 font-200">{label}</h4>
-                  <div className="flex flex-wrap justify-start gap-2">
-                    {MINIMUM_OPTIONS.map(({ label: optionLabel, value }) => (
-                      <Button
-                        key={value}
-                        variant={localFilters[key] === value ? "default" : "outline"}
-                        className="rounded-full"
-                        onClick={() => {
-                          if (localFilters[key] === value) {
-                            if (value === 0) { return; }
-                            handleLocalFilterChange(key, 0);
-                          }
-                          else {
-                            handleLocalFilterChange(key, value)
-                          }
-                        }}
-                      >
-                        {optionLabel}
-                      </Button>
-                    ))}
+              {minimumOptions.map(({ key, label }) => {
+                const options = key === 'minBathrooms' ? BATHROOM_OPTIONS : BEDROOM_OPTIONS;
+                return (
+                  <div key={key} className="text-center">
+                    <h4 className="text-[16px] font-normal text-[#404040] text-left mb-2 font-200">{label}</h4>
+                    <div className="flex flex-wrap justify-start gap-2">
+                      {options.map(({ label: optionLabel, value }) => (
+                        <Button
+                          key={value}
+                          variant={localFilters[key] === value ? "default" : "outline"}
+                          className="rounded-full"
+                          onClick={() => {
+                            if (localFilters[key] === value) {
+                              if (value === 0) { return; }
+                              handleLocalFilterChange(key, 0);
+                            }
+                            else {
+                              handleLocalFilterChange(key, value)
+                            }
+                          }}
+                        >
+                          {optionLabel}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </ScrollArea>

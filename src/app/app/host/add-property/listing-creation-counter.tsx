@@ -9,6 +9,7 @@ interface ListingCreationCounterProps {
   onChange: (value: number) => void;
   min?: number;
   max?: number;
+  incrementSize?: number;
   containerClassName?: string;
   buttonClassName?: string;
   textClassName?: string;
@@ -28,6 +29,7 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
   onChange,
   min = 0,
   max,
+  incrementSize = 1,
   containerClassName,
   buttonClassName,
   textClassName,
@@ -46,7 +48,7 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
       onIncrement();
     } else {
       if (max === undefined || value < max) {
-        onChange(value + 1);
+        onChange(value + incrementSize);
       }
     }
   };
@@ -56,7 +58,7 @@ export const ListingCreationCounter: React.FC<ListingCreationCounterProps> = ({
       onDecrement();
     } else {
       if (value > min) {
-        onChange(value - 1);
+        onChange(Math.max(min, value - incrementSize));
       }
     }
   };

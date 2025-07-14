@@ -48,6 +48,7 @@ export const Rooms: React.FC<RoomsProps> = ({
           <ListingCreationCounter
             value={bathrooms}
             onChange={onBathroomsChange}
+            incrementSize={0.5}
             monthSuffixClassName="hidden"
             textClassName="text-black text-lg"
           />

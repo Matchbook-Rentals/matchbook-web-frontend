@@ -117,7 +117,7 @@ export default function DetailsForm({ goToNext, goToPrevious, setPropertyDetails
               <Button size="icon" variant="outline" onClick={() => setBathroomCount(prev => prev > 0 ? prev - 1 : 0)}>
                 <MinusIcon />
               </Button>
-              <Input id="bathroom-count" placeholder="Enter bathroom count" type="number" value={bathroomCount.toString()} onChange={e => setBathroomCount(parseInt(e.target.value) || 0)} className={invalidFields.bathroomCount ? 'border-2 border-red-500' : ''} />
+              <Input id="bathroom-count" placeholder="Enter bathroom count" type="number" step="0.5" value={bathroomCount.toString()} onChange={e => setBathroomCount(parseFloat(e.target.value) || 0)} className={invalidFields.bathroomCount ? 'border-2 border-red-500' : ''} />
               <Button size="icon" variant="outline" onClick={() => setBathroomCount(prev => prev + 1)}>
                 <PlusIcon />
               </Button>

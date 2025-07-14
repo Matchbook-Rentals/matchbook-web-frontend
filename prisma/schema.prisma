@@ -95,7 +95,7 @@ model UserPreferences {
   createdAt          DateTime @default(now())
   listingType        String
   bedroomCount       Int
-  bathroomCount      Int
+  bathroomCount      Float
   furnished          Boolean  @default(false)
   airConditioner     Boolean  @default(false)
   laundryFacilites   Boolean  @default(false)
@@ -184,7 +184,7 @@ model Listing {
   imageSrc               String?
   category               String?
   roomCount              Int
-  bathroomCount          Int
+  bathroomCount          Float
   guestCount             Int?
   latitude               Float     @default(0)
   longitude              Float     @default(0)
@@ -209,7 +209,7 @@ model Listing {
   furnished              Boolean   @default(false)
   utilitiesIncluded      Boolean   @default(false)
   petsAllowed            Boolean   @default(false)
-  markedActiveByUser     Boolean   @default(false)
+  markedActiveByUser     Boolean   @default(true)
 
   // General Amenities
   airConditioner     Boolean @default(false)
@@ -450,7 +450,7 @@ model Trip {
   maxPrice     Int?
   minBeds      Int?
   minBedrooms  Int?
-  minBathrooms Int?
+  minBathrooms Float?
   searchRadius Int? @default(50)
 
   // Highlight Filters
@@ -1232,7 +1232,7 @@ model ListingInCreation {
   imageSrc               String?
   category               String?
   roomCount              Int?
-  bathroomCount          Int?
+  bathroomCount          Float?
   guestCount             Int?
   latitude               Float?
   longitude              Float?
