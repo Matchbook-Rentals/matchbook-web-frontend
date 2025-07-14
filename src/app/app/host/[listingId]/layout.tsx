@@ -56,6 +56,11 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
 
   const listingItems = [
     {
+      title: "Listing Details",
+      url: `/app/host/${listingId}/summary`,
+      icon: "Settings",
+    },
+    {
       title: "Applications",
       url: `/app/host/${listingId}/applications`,
       icon: "Users",
@@ -76,7 +81,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       icon: "MessageSquare",
     },
     {
-      title: "Check-in Setup",
+      title: "Move-in Setup",
       url: `/app/host/${listingId}/check-in-setup`,
       icon: "Key",
     },
@@ -84,11 +89,6 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       title: "Payments",
       url: `/app/host/${listingId}/payments`,
       icon: "CreditCard",
-    },
-    {
-      title: "Listing Details",
-      url: `/app/host/${listingId}/summary`,
-      icon: "Settings",
     },
   ];
 
@@ -114,7 +114,9 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       items: hostDashboardItems 
     },
     { 
-      title: listing.streetAddress1 || listing.title || 'Listing',
+      title: ((listing.streetAddress1 || listing.title || 'Listing') as string)
+        .toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase()),
       items: listingItems 
     },
     { 
@@ -134,7 +136,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
                 <Separator orientation="vertical" className="mr-2 h-4" />
-                <HostBreadcrumb groups={sidebarGroups} breadcrumbTitle={listing.streetAddress1} />
+                <HostBreadcrumb groups={sidebarGroups} breadcrumbTitle={(listing.streetAddress1 || listing.title || 'Listing')} />
               </div>
               <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" />
             </div>

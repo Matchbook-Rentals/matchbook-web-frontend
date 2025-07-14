@@ -52,7 +52,7 @@
 }
 
 .brand-checkbox-input:focus-visible {
-  outline: 2px orange solid;
+  outline: 2px black solid;
   outline-offset: 10px;
   box-shadow: 0 0 0 3px rgba(11, 110, 110, 0.1); /* secondaryBrand with low opacity */
   border-color: #0B6E6E; /* secondaryBrand */

@@ -298,6 +298,9 @@ model Listing {
   kitchenEssentials Boolean @default(false)
   linens            Boolean @default(false)
   privateBathroom   Boolean @default(false)
+  
+  // Third-party integrations
+  hospitablePropertyId String? @unique
 
   // Relationships
   user               User                    @relation(fields: [userId], references: [id], onDelete: Cascade)

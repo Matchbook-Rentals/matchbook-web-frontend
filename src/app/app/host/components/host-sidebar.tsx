@@ -86,7 +86,7 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
                   <img
                     className="p-2"
                     alt="Logo"
-                    src="/new-green-logo.png"
+                    src="/logos/full-logo-transparent.png"
                   />
               </Link>
             </SidebarMenuButton>

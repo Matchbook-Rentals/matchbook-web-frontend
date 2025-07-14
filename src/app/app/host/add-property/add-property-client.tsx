@@ -129,6 +129,9 @@ export default function AddPropertyclient({ initialDraftListing }: DraftListingP
   // State to track if submit is loading
   const [isSubmittingListing, setIsSubmittingListing] = useState<boolean>(false);
   
+  // State to track created listing ID for Hospitable integration
+  const [createdListingId, setCreatedListingId] = useState<string | null>(null);
+  
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
     listingPhotos: [],
@@ -964,6 +967,9 @@ const [listingBasics, setListingBasics] = useState({
           throw new Error(errorData.error || 'Failed to create listing');
         }
         
+        const createdListing = await response.json();
+        setCreatedListingId(createdListing.id);
+        
         // Revalidate the host dashboard to refresh listing data
         await revalidateHostDashboard();
         
@@ -1382,7 +1388,10 @@ const [listingBasics, setListingBasics] = useState({
         const isSaveAndExit = currentStep === 12 && listing.status === "draft";
         
         return (
-          <ListingCreationSuccess isSaveAndExit={isSaveAndExit} />
+          <ListingCreationSuccess 
+            isSaveAndExit={isSaveAndExit} 
+            listingId={createdListingId} 
+          />
         );
       default:
         return null;
