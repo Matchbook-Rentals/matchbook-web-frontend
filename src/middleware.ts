@@ -43,26 +43,33 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
     return checkAdminAccess(userRole);
   }
 
-  // Host access required routes (check before general app beta check)
-  if (pathname.startsWith('/app/host')) {
-    return checkHostAccess(userRole);
+  // Host routes now open to public - no restrictions during launch
+  // TODO: May want to restore some restrictions later if needed
+  // if (pathname.startsWith('/app/host')) {
+  //   return checkHostAccess(userRole);
+  // }
+
+  // Admin-only routes during MX period - entire rent section temporarily restricted
+  if (pathname.startsWith('/app/rent')) {
+    return checkAdminAccess(userRole);
   }
+
+  // TODO: Restore these beta access routes after MX period
+  // Routes requiring admin OR preview access
+  // const adminOrPreviewRoutes = [
+  //   '/app/rent/application',
+  //   '/app/rent/verification'
+  // ];
+  // 
+  // for (const route of adminOrPreviewRoutes) {
+  //   if (pathname.startsWith(route)) {
+  //     return checkAdminAccess(userRole) || checkPreviewAccess(userRole);
+  //   }
+  // }
 
   // Beta access required routes - all app routes except host
   if (pathname.startsWith('/app')) {
     return checkBetaAccess(userRole);
-  }
-
-  // Routes requiring admin OR preview access
-  const adminOrPreviewRoutes = [
-    '/app/rent/application',
-    '/app/rent/verification'
-  ];
-  
-  for (const route of adminOrPreviewRoutes) {
-    if (pathname.startsWith(route)) {
-      return checkAdminAccess(userRole) || checkPreviewAccess(userRole);
-    }
   }
 
   // Default: allow access to other routes

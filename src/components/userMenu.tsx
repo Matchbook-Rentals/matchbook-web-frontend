@@ -136,39 +136,39 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
 
   // Define the menu structure with conditional items based on host/renter side
   const menuItems: MenuItem[] = isHostSide ? [
-    // Host side menu items
+    // Host side menu items - now open to public
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'properties', label: 'Your Properties', href: '/app/host/dashboard/listings', requiresBeta: true, section: 1 },
-    { id: 'applications', label: 'Applications', href: '/app/host/dashboard/applications', requiresBeta: true, section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/app/host/dashboard/bookings', requiresBeta: true, section: 1 },
-    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', requiresBeta: true, section: 2 },
+    { id: 'properties', label: 'Your Properties', href: '/app/host/dashboard/listings', section: 1 }, // TODO: Was requiresBeta
+    { id: 'applications', label: 'Applications', href: '/app/host/dashboard/applications', section: 1 }, // TODO: Was requiresBeta
+    { id: 'bookings', label: 'Bookings', href: '/app/host/dashboard/bookings', section: 1 }, // TODO: Was requiresBeta
+    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', requiresAdmin: true, section: 2 }, // TODO: Was requiresBeta, but messages are admin-only during MX
     {
       id: 'switch-mode',
       label: 'Switch to Renting',
       href: '/app/rent/searches',
-      requiresBeta: true,
+      requiresAdmin: true, // Still admin-only since it goes to rent section
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ] : [
-    // Renter side menu items
+    // Renter side menu items - temporarily admin-only during MX period
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'searches', label: 'Searches', href: '/app/rent/searches', requiresBeta: true, section: 1 },
-    { id: 'application', label: 'Application', href: '/app/rent/application', requiresAdmin: true, requiresPreview: true, section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', requiresBeta: true, section: 1 },
-    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', requiresBeta: true, section: 2 },
+    { id: 'searches', label: 'Searches', href: '/app/rent/searches', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
+    { id: 'application', label: 'Application', href: '/app/rent/application', requiresAdmin: true, section: 1 }, // TODO: Restore requiresAdmin + requiresPreview after MX
+    { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
+    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', requiresAdmin: true, section: 2 }, // TODO: Restore requiresBeta after MX
     {
       id: 'switch-mode',
       label: 'Switch to Hosting',
       href: '/app/host/dashboard/overview',
-      requiresHostAccess: true,
+      // TODO: Was requiresHostAccess but now open to public
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
-    { id: 'verification', label: 'Verification', href: '/app/rent/verification', requiresAdmin: true, requiresPreview: true, section: 4 },
+    { id: 'verification', label: 'Verification', href: '/app/rent/verification', requiresAdmin: true, section: 4 }, // TODO: Restore requiresAdmin + requiresPreview after MX
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 
@@ -430,12 +430,6 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                 }).filter(Boolean); // Filter out null values from skipped items
               })()}
 
-              {/* Beta access notice - Show only if user doesn't have beta access */}
-              {!hasBetaAccess && (
-                <div className="border-t border-gray-200">
-                  <div className="w-full px-4 py-3 text-left text-sm font-medium text-gray-500">Beta access coming soon!</div>
-                </div>
-              )}
 
               {/* Logout */}
               <div className="border-t border-gray-200">
