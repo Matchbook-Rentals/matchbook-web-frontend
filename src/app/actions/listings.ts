@@ -221,6 +221,99 @@ export const updateListing = async (listingId: string, updateData: Partial<Listi
   }
 }
 
+/**
+ * Update or create monthly pricing data for a listing
+ * Handles the ListingMonthlyPricing table as defined in the schema
+ */
+export const updateListingMonthlyPricing = async (
+  listingId: string, 
+  monthlyPricingData: Array<{
+    months: number;      // Schema: months (Int) - Number of months (1-12)
+    price: number;       // Schema: price (Int) - Price for this month length
+    utilitiesIncluded: boolean; // Schema: utilitiesIncluded (Boolean) - Whether utilities are included
+  }>
+) => {
+  const userId = await checkAuth();
+  try {
+    // Fetch the listing to ensure it belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized to update this listing');
+    }
+
+    // Delete existing monthly pricing data for this listing
+    await prisma.listingMonthlyPricing.deleteMany({
+      where: { listingId: listingId }
+    });
+
+    // Create new monthly pricing records
+    // Schema: ListingMonthlyPricing has @@unique([listingId, months]) constraint
+    const createPromises = monthlyPricingData.map((pricingData) => {
+      return prisma.listingMonthlyPricing.create({
+        data: {
+          listingId: listingId,              // Schema: listingId (String) - Foreign key to Listing
+          months: pricingData.months,        // Schema: months (Int) - Number of months (1-12)
+          price: pricingData.price,          // Schema: price (Int) - Price for this month length
+          utilitiesIncluded: pricingData.utilitiesIncluded, // Schema: utilitiesIncluded (Boolean) - Whether utilities are included
+          // Schema: id, createdAt, updatedAt are auto-generated
+        }
+      });
+    });
+
+    await Promise.all(createPromises);
+
+    // Return the updated listing with monthly pricing included
+    const updatedListing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      include: {
+        monthlyPricing: true // Include the monthly pricing data in the response
+      }
+    });
+
+    return updatedListing;
+  } catch (error) {
+    console.error('Error in updateListingMonthlyPricing:', error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch a complete listing with all pricing data
+ * Used to get the full listing state after pricing updates
+ */
+export const getListingWithPricing = async (listingId: string) => {
+  const userId = await checkAuth();
+  try {
+    // Fetch the listing to ensure it belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      include: {
+        monthlyPricing: true, // Include monthly pricing data
+        listingImages: true,  // Include listing images
+        // Add other includes as needed
+      }
+    });
+    
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized to access this listing');
+    }
+
+    return listing;
+  } catch (error) {
+    console.error('Error in getListingWithPricing:', error);
+    throw error;
+  }
+}
+
 export const updateListingLocation = async (
   listingId: string, 
   locationData: {

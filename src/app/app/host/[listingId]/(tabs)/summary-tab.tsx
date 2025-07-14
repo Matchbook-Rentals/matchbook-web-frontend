@@ -19,7 +19,7 @@ import Tile from '@/components/ui/tile';
 import { ListingCreationCard } from '@/app/app/host/add-property/listing-creation-card';
 import { ListingCreationCounter } from '@/app/app/host/add-property/listing-creation-counter';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { updateListing, updateListingPhotos, updateListingLocation } from '@/app/actions/listings';
+import { updateListing, updateListingPhotos, updateListingLocation, updateListingMonthlyPricing, getListingWithPricing } from '@/app/actions/listings';
 import { toast } from '@/components/ui/use-toast';
 import { PropertyType } from '@/constants/enums';
 import * as AmenitiesIcons from '@/components/icons/amenities';
@@ -185,11 +185,11 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     errors: []
   });
   
-  // Lease terms state
+  // Lease terms state - prioritizes monthlyPricing data over legacy price fields
   const [leaseTerms, setLeaseTerms] = useState<LeaseTermPricing[]>(() => {
     const terms: LeaseTermPricing[] = [];
     
-    // If we have monthlyPricing data, use that for full pricing array
+    // Priority 1: Use monthlyPricing data (the source of truth for pricing)
     if (currentListing.monthlyPricing && currentListing.monthlyPricing.length > 0) {
       const sortedPricing = [...currentListing.monthlyPricing].sort((a, b) => a.months - b.months);
       const minMonths = sortedPricing[0].months;
@@ -205,18 +205,14 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         });
       }
     } else {
-      // Fallback to old method using shortest/longest values
+      // Fallback when no monthlyPricing data exists - create empty terms for the lease range
+      // No longer using legacy shortestLeasePrice/longestLeasePrice to avoid data inconsistency
       const shortest = currentListing.shortestLeaseLength || 1;
       const longest = currentListing.longestLeaseLength || 12;
       
       for (let i = shortest; i <= longest; i++) {
-        let price = '';
-        if (i === shortest && currentListing.shortestLeasePrice) {
-          price = currentListing.shortestLeasePrice.toString();
-        } else if (i === longest && currentListing.longestLeasePrice) {
-          price = currentListing.longestLeasePrice.toString();
-        }
-        terms.push({ months: i, price, utilitiesIncluded: false });
+        // Create empty pricing terms - user will need to fill in prices
+        terms.push({ months: i, price: '', utilitiesIncluded: false });
       }
     }
     
@@ -571,13 +567,26 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           const shortestTerm = sortedTerms[0];
           const longestTerm = sortedTerms[sortedTerms.length - 1];
           
-          updatedFormData.shortestLeaseLength = shortestTerm.months;
-          updatedFormData.shortestLeasePrice = parseFloat(shortestTerm.price);
-          updatedFormData.longestLeaseLength = longestTerm.months;
-          updatedFormData.longestLeasePrice = parseFloat(longestTerm.price);
+          // Schema alignment: Listing table basic pricing fields
+          // Only save the lease length metadata - prices are now derived from monthlyPricing table
+          updatedFormData.shortestLeaseLength = shortestTerm.months;  // Schema: shortestLeaseLength (Int) - minimum lease length in months
+          updatedFormData.longestLeaseLength = longestTerm.months;   // Schema: longestLeaseLength (Int) - maximum lease length in months
+          
+          // NOTE: shortestLeasePrice and longestLeasePrice are no longer saved to main Listing table
+          // These values are now derived from the ListingMonthlyPricing table to maintain data consistency
         }
         
-        // Handle regular pricing fields
+        // Handle regular pricing fields for Listing table
+        // Schema alignment: All pricing fields from the Listing model
+        // - depositSize: Int? @default(0) - security deposit amount
+        // - petDeposit: Int? @default(0) - pet security deposit
+        // - petRent: Int? @default(0) - monthly pet rent per pet
+        // - reservationDeposit: Int? @default(0) - reservation deposit
+        // - rentDueAtBooking: Int? @default(0) - rent due at booking
+        // - shortestLeaseLength: Int @default(1) - minimum lease length in months
+        // - longestLeaseLength: Int @default(12) - maximum lease length in months
+        // - utilitiesIncluded: Boolean @default(false) - utilities included flag
+        // NOTE: shortestLeasePrice and longestLeasePrice are NO LONGER SAVED - derived from monthlyPricing table
         const fields = sectionFields[section] || [];
         const updateData: any = {};
         
@@ -591,28 +600,48 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           }
         });
         
+        // Save basic pricing fields to Listing table
         if (Object.keys(updateData).length > 0) {
           console.log(`Saving section '${section}' with data:`, updateData);
           await updateListing(listing.id, updateData);
+        }
+        
+        // Save detailed monthly pricing to ListingMonthlyPricing table
+        if (termsWithPrices.length > 0) {
+          const monthlyPricingData = termsWithPrices.map(term => ({
+            months: term.months,                    // Schema: months (Int) - Number of months (1-12)
+            price: Math.round(parseFloat(term.price)), // Schema: price (Int) - Price for this month length
+            utilitiesIncluded: term.utilitiesIncluded  // Schema: utilitiesIncluded (Boolean) - Whether utilities are included
+          }));
           
+          console.log('Saving monthly pricing data:', monthlyPricingData);
+          await updateListingMonthlyPricing(listing.id, monthlyPricingData);
+        }
+        
+        // Fetch the complete updated listing with monthly pricing
+        const updatedListingWithPricing = await getListingWithPricing(listing.id);
+        
+        if (updatedListingWithPricing) {
           // Update the current listing with the new data
-          const updatedListing = { ...currentListing, ...updateData };
+          const updatedListing = { ...currentListing, ...updateData, monthlyPricing: updatedListingWithPricing.monthlyPricing };
           setCurrentListing(updatedListing);
           setFormData(updatedListing);
           
-          // Update lease terms to match saved data
+          // Reset lease terms with the actual saved data instead of losing user input
+          // This preserves all monthly pricing data that was saved
           const newTerms: LeaseTermPricing[] = [];
           const shortest = updatedListing.shortestLeaseLength || 1;
           const longest = updatedListing.longestLeaseLength || 12;
           
           for (let i = shortest; i <= longest; i++) {
-            let price = '';
-            if (i === shortest && updatedListing.shortestLeasePrice) {
-              price = updatedListing.shortestLeasePrice.toString();
-            } else if (i === longest && updatedListing.longestLeasePrice) {
-              price = updatedListing.longestLeasePrice.toString();
-            }
-            newTerms.push({ months: i, price, utilitiesIncluded: false });
+            // Find the saved monthly pricing data for this month
+            const savedPricing = updatedListingWithPricing.monthlyPricing?.find(p => p.months === i);
+            
+            newTerms.push({ 
+              months: i, 
+              price: savedPricing ? savedPricing.price.toString() : '', // Use saved price or empty string
+              utilitiesIncluded: savedPricing ? savedPricing.utilitiesIncluded : false // Use saved utilities flag
+            });
           }
           setLeaseTerms(newTerms);
           
@@ -857,21 +886,27 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     return furnished ? 'Furnished' : 'Unfurnished';
   };
 
-  // Format price range
+  // Format price range - now derived from monthlyPricing data for consistency
   const formatPriceRange = () => {
-    if (currentListing.longestLeasePrice && currentListing.shortestLeasePrice) {
-      if (currentListing.longestLeasePrice === currentListing.shortestLeasePrice) {
-        return `$${currentListing.longestLeasePrice.toLocaleString()}`;
-      }
-      const lowerPrice = Math.min(currentListing.longestLeasePrice, currentListing.shortestLeasePrice);
-      const higherPrice = Math.max(currentListing.longestLeasePrice, currentListing.shortestLeasePrice);
-      return `$${lowerPrice.toLocaleString()} - $${higherPrice.toLocaleString()}`;
-    } else if (currentListing.shortestLeasePrice) {
-      return `$${currentListing.shortestLeasePrice.toLocaleString()}`;
-    } else if (currentListing.longestLeasePrice) {
-      return `$${currentListing.longestLeasePrice.toLocaleString()}`;
+    // Get pricing data from monthlyPricing table instead of legacy shortestLeasePrice/longestLeasePrice
+    const monthlyPricing = currentListing.monthlyPricing || [];
+    
+    if (monthlyPricing.length === 0) {
+      return 'Price not set';
     }
-    return 'Price not set';
+    
+    // Find the prices for shortest and longest lease terms
+    const sortedPricing = monthlyPricing.sort((a, b) => a.months - b.months);
+    const shortestPrice = sortedPricing[0].price;
+    const longestPrice = sortedPricing[sortedPricing.length - 1].price;
+    
+    if (shortestPrice === longestPrice) {
+      return `$${shortestPrice.toLocaleString()}`;
+    }
+    
+    const lowerPrice = Math.min(shortestPrice, longestPrice);
+    const higherPrice = Math.max(shortestPrice, longestPrice);
+    return `$${lowerPrice.toLocaleString()} - $${higherPrice.toLocaleString()}`;
   };
 
   // Format lease terms
