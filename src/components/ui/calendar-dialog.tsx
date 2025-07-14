@@ -89,7 +89,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
               <div className="flex flex-wrap gap-4 text-sm justify-center">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-secondaryBrand rounded-full"></div>
-                  <span>Matchbook Booking</span>
+                  <span>MatchBook Booking</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-[#00A6E8] rounded-full"></div>
