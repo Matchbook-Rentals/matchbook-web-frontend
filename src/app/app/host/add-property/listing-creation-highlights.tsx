@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ListingCreationCard } from './listing-creation-card';
 import * as AmenitiesIcons from '@/components/icons/amenities';
+import Image from 'next/image';
 
 // Using the same interface as in add-property-client.tsx
 interface ListingHighlights {
@@ -37,22 +38,22 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "single-family",
       name: "Single Family",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-6 h-6" />
+      icon: <Image src="/host-dashboard/svg/single-family.svg" alt="Single Family" width={24} height={24} />
     },
     {
       id: "apartment",
       name: "Apartment",
-      icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-6 h-6" />
+      icon: <Image src="/host-dashboard/svg/apartment.svg" alt="Apartment" width={24} height={24} />
     },
     {
       id: "townhouse",
       name: "Town House",
-      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-6 h-6" />
+      icon: <Image src="/host-dashboard/svg/townhouse-2.svg" alt="Town House" width={28} height={28} />
     },
     {
       id: "private-room",
       name: "Private Room",
-      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-6 h-6" />
+      icon: <Image src="/host-dashboard/svg/private-room.svg" alt="Private Room" width={28} height={28} />
     },
   ];
 
@@ -76,12 +77,12 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "pets-welcome",
       name: "Pets Welcome",
-      icon: <AmenitiesIcons.UpdatedPetFriendlyIcon className="w-7 h-7" /> // Replace with actual pets icon when available
+      icon: <Image src="/host-dashboard/svg/pets-welcome.svg" alt="Pets Welcome" width={24} height={24} />
     },
     {
       id: "no-pets",
       name: "No Pets",
-      icon: <AmenitiesIcons.UpdatedPetUnfriendlyIcon className="w-7 h-7" /> // Replace with actual no pets icon when available
+      icon: <Image src="/host-dashboard/svg/pets-not-welcome.svg" alt="No Pets" width={24} height={24} />
     },
   ];
 
