@@ -7,6 +7,7 @@ import { HOST_PAGE_STYLE } from '@/constants/styles';
 import { BrandButton } from "@/components/ui/brandButton";
 import { auth } from "@clerk/nextjs/server";
 import ListingPaymentsClient from "./listing-payments-client";
+import { getListingDisplayName } from '@/utils/listing-helpers';
 
 interface PaymentsPageProps {
   params: { listingId: string };
@@ -203,7 +204,7 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
     <div className={`${HOST_PAGE_STYLE}`}>
       <HostPageTitle 
         title="Payments" 
-        subtitle={`Manage payments for ${listing.streetAddress1}`}
+        subtitle={`Manage payments for ${getListingDisplayName(listing)}`}
         rightContent={
           <BrandButton
             //href="/app/stripe/onboarding"

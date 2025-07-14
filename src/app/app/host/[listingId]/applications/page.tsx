@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import ApplicationsTab from '../(tabs)/host-applications-tab';
 import { HostPageTitle } from '../(components)/host-page-title';
 import { HOST_PAGE_STYLE } from '@/constants/styles';
+import { getListingDisplayName } from '@/utils/listing-helpers';
 
 interface ApplicationsPageProps {
   params: { listingId: string };
@@ -31,7 +32,7 @@ export default async function ApplicationsPage({ params }: ApplicationsPageProps
     <div className={HOST_PAGE_STYLE}>
       <HostPageTitle 
         title="Applications" 
-        subtitle={`Applications for ${listing.streetAddress1}`} 
+        subtitle={`Applications for ${getListingDisplayName(listing)}`} 
       />
       <ApplicationsTab listing={listing} housingRequests={housingRequests} />
     </div>
