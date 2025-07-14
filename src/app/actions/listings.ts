@@ -221,6 +221,49 @@ export const updateListing = async (listingId: string, updateData: Partial<Listi
   }
 }
 
+export const updateListingLocation = async (
+  listingId: string, 
+  locationData: {
+    streetAddress1?: string;
+    streetAddress2?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+  }
+) => {
+  const userId = await checkAuth();
+
+  try {
+    // Fetch the listing to ensure it belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized to update this listing');
+    }
+
+    // Update the listing location and set approval status to pending review
+    const updatedListing = await prisma.listing.update({
+      where: { id: listingId },
+      data: {
+        ...locationData,
+        approvalStatus: 'pendingReview', // Set to pending review when location changes
+      },
+    });
+
+    return updatedListing;
+  } catch (error) {
+    console.error('Error in updateListingLocation:', error);
+    throw error;
+  }
+}
+
 export const updateListingPhotos = async (listingId: string, photos: Array<{id: string, url: string, category?: string | null, rank?: number | null}>) => {
   const userId = await checkAuth();
 

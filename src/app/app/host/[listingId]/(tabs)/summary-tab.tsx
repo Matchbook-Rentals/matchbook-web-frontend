@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
 import { useListingDashboard } from '../listing-dashboard-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,29 +12,23 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from '@/components/brandDialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2 } from 'lucide-react';
+import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2, Upload } from 'lucide-react';
 import Tile from '@/components/ui/tile';
 import { ListingCreationCard } from '@/app/app/host/add-property/listing-creation-card';
 import { ListingCreationCounter } from '@/app/app/host/add-property/listing-creation-counter';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { updateListing, updateListingPhotos } from '@/app/actions/listings';
+import { updateListing, updateListingPhotos, updateListingLocation } from '@/app/actions/listings';
 import { toast } from '@/components/ui/use-toast';
 import { PropertyType } from '@/constants/enums';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import InComplexIcon from '@/lib/icons/in-complex';
 import NotAvailableIcon from '@/lib/icons/not-available';
 import { iconAmenities } from '@/lib/amenities-list';
-import { UploadButton } from "@/app/utils/uploadthing";
-import { UploadError } from "@uploadthing/react";
+import { useUploadThing } from "@/app/utils/uploadthing";
+import { Progress } from "@/components/ui/progress";
+import { BrandButton } from "@/components/ui/brandButton";
 
 // Amenity options grouped by category (same as listing creation)
 const AMENITY_GROUPS = [
@@ -107,13 +102,26 @@ interface LeaseTermPricing {
   utilitiesIncluded: boolean;
 }
 
+interface UploadProgress {
+  totalFiles: number;
+  uploadedFiles: number;
+  currentBatch: number;
+  totalBatches: number;
+  isUploading: boolean;
+  errors: string[];
+}
+
 interface SummaryTabProps {
   listing: ListingAndImages;
   onListingUpdate?: (updatedListing: ListingAndImages) => void;
 }
 
+const BATCH_SIZE = 5; // Upload 5 files at a time
+const MAX_PHOTOS = 30;
+
 const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => {
   const { updateListing: updateContextListing } = useListingDashboard();
+  const router = useRouter();
   
   // Generate unique class names for container queries
   const containerId = `lease-terms-container-${listing.id}`;
@@ -167,6 +175,15 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
   const [dropPreviewIndex, setDropPreviewIndex] = useState<number | null>(null);
   const [showLocationConfirmDialog, setShowLocationConfirmDialog] = useState(false);
   const [pendingLocationUpdate, setPendingLocationUpdate] = useState<any>(null);
+  const [showLocationBrandDialog, setShowLocationBrandDialog] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<UploadProgress>({
+    totalFiles: 0,
+    uploadedFiles: 0,
+    currentBatch: 0,
+    totalBatches: 0,
+    isUploading: false,
+    errors: []
+  });
   
   // Lease terms state
   const [leaseTerms, setLeaseTerms] = useState<LeaseTermPricing[]>(() => {
@@ -185,6 +202,37 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     }
     
     return terms;
+  });
+
+  const { startUpload } = useUploadThing("listingUploadPhotos", {
+    onClientUploadComplete: (res) => {
+      // This is called after each batch completes
+      if (Array.isArray(res) && res.length > 0) {
+        const newPhotos = res.map((file) => ({
+          id: file.key || null,
+          url: file.url || null,
+          listingId: null,
+          category: null,
+          rank: null,
+        }));
+        
+        const currentImages = formData.listingImages || [];
+        updateFormData('listingImages', [...currentImages, ...newPhotos]);
+        
+        // Update progress
+        setUploadProgress(prev => ({
+          ...prev,
+          uploadedFiles: prev.uploadedFiles + res.length
+        }));
+      }
+    },
+    onUploadError: (error) => {
+      console.error("Upload error:", error);
+      setUploadProgress(prev => ({
+        ...prev,
+        errors: [...prev.errors, error.message || "Upload failed"]
+      }));
+    }
   });
 
   // Define which fields belong to each section
@@ -390,6 +438,55 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     }
   };
 
+  // Handle location update through brand dialog
+  const handleLocationUpdate = async () => {
+    try {
+      const locationFields = sectionFields['location'] || [];
+      const locationData: any = {};
+      
+      locationFields.forEach(field => {
+        const currentValue = formData[field as keyof typeof formData];
+        locationData[field] = currentValue;
+      });
+
+      console.log('Updating location with data:', locationData);
+      const updatedListing = await updateListingLocation(listing.id, locationData);
+      
+      // Update the current listing with the new data
+      setCurrentListing(updatedListing);
+      setFormData(updatedListing);
+      
+      // Update the context with the new listing data
+      updateContextListing(updatedListing);
+      
+      // Call the optional callback to update parent component
+      if (onListingUpdate) {
+        onListingUpdate(updatedListing);
+      }
+
+      // Exit edit mode
+      setEditingSections(prev => ({
+        ...prev,
+        location: false
+      }));
+
+      // Show success message
+      toast({
+        title: "Location Updated",
+        description: "Your listing location has been updated and is now pending review. During the review period, your listing will not be shown to renters.",
+        variant: "success"
+      });
+
+    } catch (error) {
+      console.error('Error updating location:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update location. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   // Save changes
   const saveChanges = async (section: string) => {
     setIsSaving(true);
@@ -491,6 +588,53 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           }
           
           console.log('Photos saved successfully to database');
+        }
+      } else if (section === 'location') {
+        // Handle location fields with special server action
+        const fields = sectionFields[section] || [];
+        const updateData: any = {};
+        
+        fields.forEach(field => {
+          const currentValue = formData[field as keyof typeof formData];
+          const originalValue = currentListing[field as keyof typeof currentListing];
+          
+          // Only include fields that have changed
+          if (currentValue !== originalValue) {
+            updateData[field] = currentValue;
+          }
+        });
+        
+        if (Object.keys(updateData).length > 0) {
+          console.log(`Saving location section with data:`, updateData);
+          const updatedListing = await updateListingLocation(listing.id, updateData);
+          
+          // Update the current listing with the new data
+          setCurrentListing(updatedListing);
+          
+          // Update the context with the new listing data
+          updateContextListing(updatedListing);
+          
+          // Call the optional callback to update parent component
+          if (onListingUpdate) {
+            onListingUpdate(updatedListing);
+          }
+
+          // Show success state briefly before refresh
+          setButtonStates(prev => ({ ...prev, [section]: 'success' }));
+          
+          // Wait a moment to show success, then soft refresh and reset edit mode
+          setTimeout(() => {
+            router.refresh();
+            setEditingSections(prev => ({
+              ...prev,
+              [section]: false
+            }));
+            setButtonStates(prev => ({ ...prev, [section]: null }));
+          }, 300);
+          
+          return; // Exit early to prevent normal success flow
+        } else {
+          console.log(`No changes detected for location section`);
         }
       } else {
         // Handle regular fields
@@ -842,72 +986,147 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     setDropPreviewIndex(null);
   };
 
-  const handlePhotoUpload = (res: any[]) => {
-    if (Array.isArray(res)) {
-      const newPhotos = res.map((file) => ({
-        id: file.key || Date.now().toString(),
-        url: file.url,
-        listingId: listing.id,
-        category: null,
-        rank: null,
-      }));
-      
-      const currentImages = formData.listingImages || [];
-      updateFormData('listingImages', [...currentImages, ...newPhotos]);
-      
-      toast({
-        title: "Success",
-        description: `${res.length} photo${res.length === 1 ? '' : 's'} uploaded successfully`,
-        variant: "success"
-      });
+  // Client-side file validation
+  const validateFiles = (files: File[]): { valid: boolean; errors: string[] } => {
+    const errors: string[] = [];
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml', 'image/webp'];
+    
+    // Check total file count including existing photos
+    const currentPhotoCount = (formData.listingImages || []).filter(photo => photo.url).length;
+    const totalCount = currentPhotoCount + files.length;
+    
+    if (totalCount > MAX_PHOTOS) {
+      errors.push(`You can only have up to ${MAX_PHOTOS} photos total. You currently have ${currentPhotoCount} photos and are trying to add ${files.length} more.`);
+      return { valid: false, errors };
     }
+    
+    // Check each file
+    files.forEach((file) => {
+      if (!allowedTypes.includes(file.type.toLowerCase())) {
+        const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
+        errors.push(`File "${file.name}" has unsupported type "${fileExtension}". Please use JPG, JPEG, PNG, SVG, or WEBP files only.`);
+      }
+      
+      if (file.name.length > 255) {
+        errors.push(`File "${file.name}" has a name that's too long. Please use a shorter filename.`);
+      }
+    });
+    
+    return { valid: errors.length === 0, errors };
   };
 
-  const handleUploadError = (error: UploadError) => {
-    let title = "Upload Error";
-    let description = "An error occurred during upload. Please try again.";
-
-    // Handle specific error codes from Uploadthing
-    switch (error.code) {
-      case "TOO_LARGE":
-        title = "File Too Large";
-        description = "One or more files exceed the maximum size limit. Please upload smaller images (max 4MB per file).";
-        break;
-      case "TOO_MANY_FILES":
-        title = "Too Many Files";
-        description = "You have exceeded the maximum number of files allowed in one upload. Please upload fewer files at a time (max 10).";
-        break;
-      case "INVALID_TYPE":
-        title = "Invalid File Type";
-        description = "One or more files are not supported image types. Please upload only JPG, PNG, or WEBP files.";
-        break;
-      case "UPLOAD_ABORTED":
-        title = "Upload Cancelled";
-        description = "The upload was cancelled. If this was unexpected, please try again.";
-        break;
-      case "NETWORK_ERROR":
-        title = "Network Error";
-        description = "There was a network issue during upload. Please check your internet connection and try again.";
-        break;
-      case "SERVER_ERROR":
-        title = "Server Error";
-        description = "An internal server error occurred. Please try again later or contact support if the issue persists.";
-        break;
-      case "AUTH_ERROR":
-        title = "Authentication Error";
-        description = "You are not authorized to upload files. Please log in again or contact support.";
-        break;
-      default:
-        // Fallback for unknown errors
-        description = error.message || "An unexpected error occurred. Please try again.";
-        break;
-    }
-
-    toast({
-      title,
-      description,
-      variant: "destructive"
+  // Smart distribution: larger files go to later batches for better UX
+  const createBatches = (files: File[], batchSize: number): File[][] => {
+    if (files.length === 0) return [];
+    
+    // Calculate number of batches needed
+    const numBatches = Math.ceil(files.length / batchSize);
+    const batches: File[][] = Array.from({ length: numBatches }, () => []);
+    
+    // Sort files by size (largest first) for smart distribution
+    const sortedFiles = [...files].sort((a, b) => b.size - a.size);
+    
+    // Distribute files round-robin starting from the last batch (back-loading)
+    // This puts largest files in later batches for better user psychology
+    sortedFiles.forEach((file, index) => {
+      const batchIndex = (numBatches - 1) - (index % numBatches);
+      batches[batchIndex].push(file);
     });
+    
+    return batches;
+  };
+
+  // Handle file selection and batch upload
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+    
+    // Validate files
+    const validation = validateFiles(files);
+    if (!validation.valid) {
+      validation.errors.forEach((error) => {
+        toast({
+          title: "Upload Error",
+          description: error,
+          variant: "destructive"
+        });
+      });
+      return;
+    }
+    
+    // Create batches
+    const batches = createBatches(files, BATCH_SIZE);
+    
+    // Initialize progress
+    setUploadProgress({
+      totalFiles: files.length,
+      uploadedFiles: 0,
+      currentBatch: 0,
+      totalBatches: batches.length,
+      isUploading: true,
+      errors: []
+    });
+    
+    // Upload batches sequentially
+    let successCount = 0;
+    let resizedCount = 0;
+    
+    for (let i = 0; i < batches.length; i++) {
+      setUploadProgress(prev => ({
+        ...prev,
+        currentBatch: i + 1
+      }));
+      
+      try {
+        const result = await startUpload(batches[i]);
+        if (result && result.length > 0) {
+          successCount += result.length;
+          resizedCount += result.filter(f => f.wasResized).length;
+        }
+      } catch (error) {
+        console.error(`Batch ${i + 1} failed:`, error);
+        setUploadProgress(prev => ({
+          ...prev,
+          errors: [...prev.errors, `Some photos failed to upload. Please try again.`]
+        }));
+      }
+    }
+    
+    // Upload complete
+    setUploadProgress(prev => ({
+      ...prev,
+      isUploading: false
+    }));
+    
+    // Show completion message
+    if (successCount > 0) {
+      let description = `Successfully uploaded ${successCount} photo${successCount !== 1 ? 's' : ''}.`;
+      if (resizedCount > 0) {
+        description += ` ${resizedCount} photo${resizedCount !== 1 ? 's were' : ' was'} automatically resized to optimize size.`;
+      }
+      toast({
+        title: "Photos Uploaded!",
+        description,
+        variant: "default"
+      });
+    }
+    
+    // Show any errors
+    if (uploadProgress.errors.length > 0) {
+      uploadProgress.errors.forEach((error) => {
+        toast({
+          title: "Upload Warning",
+          description: error,
+          variant: "destructive"
+        });
+      });
+    }
+    
+    // Reset file input
+    const fileInput = event.target;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   };
 
   const roomDetails = formatRoomDetails();
@@ -1119,7 +1338,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
               <div className="relative flex-1 opacity-90 text-2xl font-semibold text-gray-900">
                 Location
               </div>
-              {editingSections['location'] ? renderEditButtons('location') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => toggleEdit('location')} />}
+              {editingSections['location'] ? renderEditButtons('location') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => setShowLocationBrandDialog(true)} />}
             </div>
 
             {editingSections['location'] ? (
@@ -1638,30 +1857,59 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             {editingSections['photos'] ? (
               <div className="w-full space-y-6">
                 {/* Upload Section */}
-                <div className="flex justify-center">
-                  <UploadButton
-                    endpoint="listingUploadPhotos"
-                    config={{
-                      mode: "auto"
-                    }}
-                    className="uploadthing-custom"
-                    appearance={{
-                      button: "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white transition-all duration-300 h-[44px] min-w-[160px] rounded-lg px-[14px] py-[10px] gap-1 font-semibold text-base",
-                      allowedContent: "hidden",
-                    }}
-                    content={{
-                      button: ({ ready, isUploading }) => (
-                        <div className="flex items-center justify-center gap-2">
-                          {isUploading && (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          )}
-                          <span>{isUploading ? "Uploading..." : "Upload Photos"}</span>
-                        </div>
-                      ),
-                    }}
-                    onClientUploadComplete={handlePhotoUpload}
-                    onUploadError={handleUploadError}
-                  />
+                <div className="flex flex-col items-center gap-4">
+                  {/* Upload progress display */}
+                  {uploadProgress.isUploading && (
+                    <div className="w-full max-w-md space-y-3">
+                      <div className="flex justify-between text-sm text-gray-600">
+                        <span>Uploading photos...</span>
+                        <span>{uploadProgress.uploadedFiles} of {uploadProgress.totalFiles} photos</span>
+                      </div>
+                      <Progress 
+                        value={uploadProgress.totalFiles > 0 
+                          ? Math.round((uploadProgress.uploadedFiles / uploadProgress.totalFiles) * 100)
+                          : 0
+                        } 
+                        className="h-2" 
+                      />
+                      <p className="text-xs text-center text-gray-500">
+                        Please wait while your photos are being uploaded...
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Upload button */}
+                  <div className="relative">
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/jpeg,image/jpg,image/png,image/svg+xml,image/webp"
+                      onChange={handleFileSelect}
+                      disabled={uploadProgress.isUploading}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                    />
+                    <BrandButton
+                      variant="outline"
+                      disabled={uploadProgress.isUploading}
+                      className="min-w-[160px] max-w-[280px]"
+                    >
+                      {uploadProgress.isUploading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Click to upload
+                        </>
+                      )}
+                    </BrandButton>
+                  </div>
+                  
+                  <p className="text-sm text-gray-500 text-center max-w-md">
+                    SVG, PNG, WEBP, or JPG (max of 30 images, large files will be automatically resized)
+                  </p>
                 </div>
 
                 {/* Drag and Drop Photos */}
@@ -1693,7 +1941,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       <div key={image.id} className="relative">
                         {/* Drop Preview Indicator */}
                         {dropPreviewIndex === index && draggedImageId !== image.id && (
-                          <div className="absolute -left-2 top-0 w-1 h-full bg-yellow-500 rounded-full z-10" />
+                          <div className="absolute -left-2 top-0 w-1 h-full bg-blue-500 rounded-full z-10" />
                         )}
                         
                         <div
@@ -1703,7 +1951,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                             draggedImageId === image.id 
                               ? 'opacity-50 border-yellow-400 scale-95' 
                               : dropPreviewIndex === index && draggedImageId !== image.id
-                              ? 'border-yellow-300 shadow-lg'
+                              ? 'border-blue-300 shadow-lg'
                               : 'hover:border-gray-300'
                           }`}
                           draggable
@@ -1728,7 +1976,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       <div
                         className={`w-[175px] h-[108px] border-2 border-dashed rounded-lg flex items-center justify-center transition-colors ${
                           dropPreviewIndex === (formData.listingImages?.length || 0) 
-                            ? 'border-yellow-500 bg-yellow-50' 
+                            ? 'border-blue-500 bg-blue-50' 
                             : 'border-gray-300'
                         }`}
                         onDragOver={(e) => handleDragOver(e, formData.listingImages?.length || 0)}
@@ -1756,6 +2004,49 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           </CardContent>
         </Card>
       )}
+
+      {/* Location Update Brand Dialog */}
+      <Dialog open={showLocationBrandDialog} onOpenChange={setShowLocationBrandDialog}>
+        <DialogContent className="max-w-[500px]">
+          <div className="space-y-6 text-center">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Manual Review Required
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Any change to your listing's address will trigger a manual review process. During the 24-hour review period, your listing will not be shown to renters.
+              </p>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+              <h4 className="font-medium text-blue-900 mb-2">What happens next:</h4>
+              <ul className="text-sm text-blue-800 space-y-1">
+                <li>• Your listing will be hidden from search results</li>
+                <li>• Our team will review your location update within 24 hours</li>
+                <li>• You'll receive a notification once the review is complete</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="flex gap-3 w-full">
+            <Button
+              variant="outline"
+              onClick={() => setShowLocationBrandDialog(false)}
+              className="flex-1 h-12 rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setShowLocationBrandDialog(false);
+                toggleEdit('location');
+              }}
+              className="flex-1 h-12 rounded-lg bg-[#3c8787] hover:bg-[#2d6565] text-white"
+            >
+              Proceed to Edit
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
     </div>
   );
