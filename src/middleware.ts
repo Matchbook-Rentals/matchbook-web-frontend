@@ -43,11 +43,11 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
     return checkAdminAccess(userRole);
   }
 
-  // Host routes now open to public - no restrictions during launch
-  // TODO: May want to restore some restrictions later if needed
-  // if (pathname.startsWith('/app/host')) {
-  //   return checkHostAccess(userRole);
-  // }
+  // Host routes require host-beta access
+  // TODO: Consider disabling these protections before public launch
+  if (pathname.startsWith('/app/host')) {
+    return checkHostAccess(userRole);
+  }
 
   // Admin-only routes during MX period - entire rent section temporarily restricted
   if (pathname.startsWith('/app/rent')) {

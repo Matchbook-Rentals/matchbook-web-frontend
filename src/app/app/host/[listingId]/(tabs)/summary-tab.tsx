@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
 import { useListingDashboard } from '../listing-dashboard-context';
@@ -2128,10 +2129,12 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                           onDragOver={(e) => handleDragOver(e, index)}
                           onDrop={(e) => handleDrop(e, index)}
                         >
-                          <img
+                          <Image
                             src={image.url}
                             alt={`Property image ${index + 1}`}
                             className="w-full h-full object-cover"
+                            width={175}
+                            height={108}
                           />
                           <div className="absolute top-2 left-2 bg-white text-black text-xs px-2 py-1 rounded font-medium border border-black">
                             {index < 4 ? 'Cover Photo' : index + 1}
@@ -2163,10 +2166,12 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
               <div className="flex flex-wrap gap-6 justify-start">
                 {currentListing.listingImages.map((image, index) => (
                   <div key={index} className="w-[175px] h-[108px] relative rounded-lg overflow-hidden">
-                    <img
+                    <Image
                       src={image.url}
                       alt={`Property image ${index + 1}`}
                       className="w-full h-full object-cover"
+                      width={175}
+                      height={108}
                     />
                   </div>
                 ))}
@@ -2185,7 +2190,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                 Manual Review Required
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Any change to your listing's address will trigger a manual review process. During the 24-hour review period, your listing will not be shown to renters.
+                Any change to your listing&apos;s address will trigger a manual review process. During the 24-hour review period, your listing will not be shown to renters.
               </p>
             </div>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
@@ -2193,7 +2198,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
               <ul className="text-sm text-blue-800 space-y-1">
                 <li>• Your listing will be hidden from search results</li>
                 <li>• Our team will review your location update within 24 hours</li>
-                <li>• You'll receive a notification once the review is complete</li>
+                <li>• You&apos;ll receive a notification once the review is complete</li>
               </ul>
             </div>
           </div>

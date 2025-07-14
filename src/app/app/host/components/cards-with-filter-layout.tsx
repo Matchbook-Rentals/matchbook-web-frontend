@@ -157,7 +157,7 @@ export default function TabLayout({
       <header ref={headerRef} className={`w-full pb-4  ${isMobile ? 'px-4' : ''}`}>
         <div className="flex flex-col gap-6">
           <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-start gap-3'}`}>
-            <div className={isMobile ? 'w-full' : 'w-[434px]'}>
+            <div className={`${isMobile ? 'w-full' : 'w-[434px]'} ${!isMobile ? 'sm:w-full md:w-[434px]' : ''}`}>
               <Card className="border-0 shadow-none">
                 <CardContent className="p-0">
                   <div className="relative">
@@ -172,7 +172,7 @@ export default function TabLayout({
               </Card>
             </div>
 
-            <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-end gap-6'} flex-1`}>
+            <div className={`flex ${isMobile ? 'flex-col gap-4' : 'sm:flex-row sm:items-center sm:justify-end items-center justify-end gap-6'} flex-1`}>
               {/* Mock Data Toggle for Admins */}
               {showMockDataToggle && isAdmin && (
                 <div className="flex items-center">

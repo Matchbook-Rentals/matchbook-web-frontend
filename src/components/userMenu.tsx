@@ -136,11 +136,12 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
 
   // Define the menu structure with conditional items based on host/renter side
   const menuItems: MenuItem[] = isHostSide ? [
-    // Host side menu items - now open to public
+    // Host side menu items - require host-beta access
+    // TODO: Consider disabling these protections before public launch
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'properties', label: 'Your Properties', href: '/app/host/dashboard/listings', section: 1 }, // TODO: Was requiresBeta
-    { id: 'applications', label: 'Applications', href: '/app/host/dashboard/applications', section: 1 }, // TODO: Was requiresBeta
-    { id: 'bookings', label: 'Bookings', href: '/app/host/dashboard/bookings', section: 1 }, // TODO: Was requiresBeta
+    { id: 'properties', label: 'Your Properties', href: '/app/host/dashboard/listings', requiresHostAccess: true, section: 1 },
+    { id: 'applications', label: 'Applications', href: '/app/host/dashboard/applications', requiresHostAccess: true, section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/app/host/dashboard/bookings', requiresHostAccess: true, section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', requiresAdmin: true, section: 2 }, // TODO: Was requiresBeta, but messages are admin-only during MX
     {
       id: 'switch-mode',
@@ -163,7 +164,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       id: 'switch-mode',
       label: 'Switch to Hosting',
       href: '/app/host/dashboard/overview',
-      // TODO: Was requiresHostAccess but now open to public
+      requiresHostAccess: true, // TODO: Consider disabling before public launch
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
