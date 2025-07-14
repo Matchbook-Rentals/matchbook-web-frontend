@@ -93,7 +93,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               decrementDisabled={shortestStay <= 1}
               variant="outline"
               iconSize="md"
-              containerClassName="flex items-center space-x-4"
+              containerClassName="flex items-center justify-between sm:min-w-[220px] space-x-4"
               buttonClassName={styles.counterButton}
               textClassName={counterTextStyles || styles.counterText}
               monthSuffixClassName="hidden sm:inline"
@@ -113,7 +113,7 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
               decrementDisabled={longestStay <= shortestStay}
               variant="outline"
               iconSize="md"
-              containerClassName="flex items-center space-x-4"
+              containerClassName="flex items-center justify-between sm:min-w-[220px] space-x-4"
               buttonClassName={styles.counterButton}
               textClassName={counterTextStyles || styles.counterText}
               monthSuffixClassName="hidden sm:inline"

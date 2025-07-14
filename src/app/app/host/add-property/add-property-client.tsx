@@ -255,23 +255,21 @@ React.useEffect(() => {
     // Try to find existing pricing for this month
     const existing = listingPricing.monthlyPricing.find(p => p.months === i);
     if (existing) {
-      // Update utilities based on current settings and price if not varying by length
+      // Keep existing pricing
       newPricing.push({
-        ...existing,
-        price: !listingPricing.varyPricingByLength ? listingPricing.basePrice : existing.price,
-        utilitiesIncluded: listingPricing.includeUtilities && i <= listingPricing.utilitiesUpToMonths
+        ...existing
       });
     } else {
       // Create new entry with default values
       newPricing.push({
         months: i,
-        price: !listingPricing.varyPricingByLength ? listingPricing.basePrice : '',
-        utilitiesIncluded: listingPricing.includeUtilities && i <= listingPricing.utilitiesUpToMonths
+        price: '',
+        utilitiesIncluded: false
       });
     }
   }
   setListingPricing(prev => ({ ...prev, monthlyPricing: newPricing }));
-}, [listingPricing.shortestStay, listingPricing.longestStay, listingPricing.includeUtilities, listingPricing.utilitiesUpToMonths, listingPricing.varyPricingByLength, listingPricing.basePrice]);
+}, [listingPricing.shortestStay, listingPricing.longestStay]);
 
 // Step 2: Rooms
 const [listingRooms, setListingRooms] = useState({
@@ -369,11 +367,6 @@ const [listingBasics, setListingBasics] = useState({
         shortestLeasePrice: null, // Deprecated
         longestLeasePrice: null, // Deprecated
         requireBackgroundCheck: true,
-        // Save additional pricing fields (includeUtilities mapped to utilitiesIncluded in API)
-        includeUtilities: listingPricing.includeUtilities,
-        varyPricingByLength: listingPricing.varyPricingByLength,
-        basePrice: listingPricing.basePrice || null,
-        utilitiesUpToMonths: listingPricing.utilitiesUpToMonths,
         // Highlights
         category: listingHighlights.category || null,
         petsAllowed: listingHighlights.petsAllowed || null,
@@ -544,7 +537,7 @@ const [listingBasics, setListingBasics] = useState({
   const validatePricing = (): string[] => {
     const errors: string[] = [];
     
-    // Step 7 validation - check basic settings and base price if not varying
+    // Step 7 validation - check basic settings
     if (listingPricing.shortestStay < 1 || listingPricing.shortestStay > 12) {
       errors.push("Shortest stay must be between 1 and 12 months");
     }
@@ -555,22 +548,6 @@ const [listingBasics, setListingBasics] = useState({
     
     if (listingPricing.shortestStay > listingPricing.longestStay) {
       errors.push("Shortest stay cannot be longer than longest stay");
-    }
-    
-    if (listingPricing.includeUtilities && listingPricing.utilitiesUpToMonths < listingPricing.shortestStay) {
-      errors.push("Utilities inclusion must be at least the shortest stay length");
-    }
-    
-    // If not varying pricing by length, validate base price
-    if (!listingPricing.varyPricingByLength) {
-      if (!listingPricing.basePrice || listingPricing.basePrice === '') {
-        errors.push("Please enter a monthly rent price");
-      } else {
-        const price = parseFloat(listingPricing.basePrice);
-        if (isNaN(price) || price <= 0) {
-          errors.push("Monthly rent price must be a valid positive number");
-        }
-      }
     }
     
     return errors;
@@ -1096,12 +1073,11 @@ const [listingBasics, setListingBasics] = useState({
               }));
             } else {
               // Initialize empty pricing for each month in range
-              // For drafts, derive utilities inclusion based on utilitiesUpToMonths
               for (let i = shortestStay; i <= longestStay; i++) {
                 monthlyPricing.push({
                   months: i,
                   price: '',
-                  utilitiesIncluded: draftListing.includeUtilities && i <= (draftListing.utilitiesUpToMonths || shortestStay)
+                  utilitiesIncluded: false
                 });
               }
             }
@@ -1110,10 +1086,10 @@ const [listingBasics, setListingBasics] = useState({
               shortestStay,
               longestStay,
               monthlyPricing,
-              includeUtilities: draftListing.includeUtilities || false,
-              utilitiesUpToMonths: draftListing.utilitiesUpToMonths || shortestStay,
-              varyPricingByLength: draftListing.varyPricingByLength !== undefined ? draftListing.varyPricingByLength : true,
-              basePrice: draftListing.basePrice || "",
+              includeUtilities: false,
+              utilitiesUpToMonths: 1,
+              varyPricingByLength: true,
+              basePrice: "",
               deposit: draftListing.depositSize ? draftListing.depositSize.toString() : "",
               rentDueAtBooking: draftListing.rentDueAtBooking ? draftListing.rentDueAtBooking.toString() : "",
               petDeposit: draftListing.petDeposit ? draftListing.petDeposit.toString() : "",
@@ -1282,7 +1258,7 @@ const [listingBasics, setListingBasics] = useState({
             basePrice={listingPricing.basePrice}
             onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
             onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-            onIncludeUtilitiesChange={(value) => setListingPricing(prev => ({ ...prev, includeUtilities: value, utilitiesUpToMonths: value ? prev.shortestStay : prev.utilitiesUpToMonths }))}
+            onIncludeUtilitiesChange={(value) => setListingPricing(prev => ({ ...prev, includeUtilities: value }))}
             onUtilitiesUpToMonthsChange={(value) => setListingPricing(prev => ({ ...prev, utilitiesUpToMonths: value }))}
             onVaryPricingByLengthChange={(value) => setListingPricing(prev => ({ ...prev, varyPricingByLength: value }))}
             onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
