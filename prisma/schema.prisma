@@ -1414,3 +1414,18 @@ model TestResult {
   @@index([runId])
   @@index([executedAt])
 }
+
+model UploadedFile {
+  id         String   @id @default(uuid())
+  key        String   @unique
+  url        String
+  router     String   // Which uploadthing router was used
+  userId     String?  // User who uploaded the file
+  uploadedAt DateTime @default(now())
+  size       Int?     // File size in bytes
+  name       String?  // Original filename
+  
+  @@index([userId])
+  @@index([router])
+  @@index([uploadedAt])
+}
