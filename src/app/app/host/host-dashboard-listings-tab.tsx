@@ -324,7 +324,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
                       <div className="flex items-center gap-1.5 py-1.5">
                         <Square className="w-5 h-5 text-gray-500" />
                         <span className="font-medium text-sm text-[#344054]">
-                          {listing.squareFeet || 'N/A'} Sqft
+                          {listing.squareFootage || 'N/A'} Sqft
                         </span>
                       </div>
                     </div>
