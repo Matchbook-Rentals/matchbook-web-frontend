@@ -15,6 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar"
 
 interface SidebarMenuItem {
@@ -38,6 +39,7 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [navigatingTo, setNavigatingTo] = React.useState<string | null>(null)
+  const { isMobile, setOpenMobile } = useSidebar()
 
   const getIconComponent = (iconName: string) => {
     const icons = {
@@ -68,6 +70,12 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
   const handleNavigation = (url: string) => {
     if (pathname === url) return; // Don't navigate if already on the page
     setNavigatingTo(url)
+    
+    // Close mobile sidebar on navigation
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+    
     router.push(url)
   }
 
