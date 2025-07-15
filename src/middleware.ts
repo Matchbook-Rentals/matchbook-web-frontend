@@ -136,7 +136,6 @@ export default clerkMiddleware(async (auth, request) => {
               hasAgreedToTerms = true;
             }
           } catch (dbError) {
-            console.error(`[MIDDLEWARE] Error checking database:`, dbError);
             // Continue with session-only check if DB fails
           }
         }
@@ -160,7 +159,7 @@ export default clerkMiddleware(async (auth, request) => {
           return NextResponse.redirect(unauthorizedUrl);
         }
       } catch (error) {
-        console.error("[MIDDLEWARE] Error checking terms agreement:", error);
+        // Error checking terms agreement
       }
     }
   }
