@@ -30,7 +30,7 @@ export const HostsLoveMatchbook = (): JSX.Element => {
       id: 4,
       title: "Connect with MatchBook Verified Renters",
       description:
-        "Matchbook Verified  Renters come pre screened. View their credit range, criminal background and eviction check. Get qualified renters without the awkward conversations.",
+        "Matchbook Verified  Renters come pre-screened. View their credit range, criminal background, and eviction check. Get qualified renters without the awkward conversations.",
       imageUrl: "/marketing-images/hosts-love-us/4.png",
     },
   ];

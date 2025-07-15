@@ -78,7 +78,7 @@ const hostFaqData = [
   },
   {
     "question": "How does MatchBook help ensure a smooth move-in process?",
-    "answer": "On MatchBook hosts can clearly outline check-in procedures which are shared with renters on move-in day. We also offer a messaging platform to keep communication open, making it easy to coordinate every step of the rental process. Our platform ensures that hosts and renters can seamlessly manage check-ins and maintain effective communication."
+    "answer": "On MatchBook, hosts can clearly outline check-in procedures which are shared with renters on move-in day. We also offer a messaging platform to keep communication open, making it easy to coordinate every step of the rental process. Our platform ensures that hosts and renters can seamlessly manage check-ins and maintain effective communication."
   },
   {
     "question": "How do I update my listing or availability on MatchBook?",

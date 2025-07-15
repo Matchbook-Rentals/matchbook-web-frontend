@@ -72,7 +72,7 @@ const defaultComparisons: ComparisonItem[] = [
   },
   {
     title: "Easy to pay rent",
-    matchbookCopy: "Automatically pay rent directly from your bank account for free or with a credit card for a fee",
+    matchbookCopy: "Automatically pay rent directly from your bank account for free or with a credit card for a fee.",
     competitorSupports: false
   }
 ];
