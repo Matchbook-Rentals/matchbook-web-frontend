@@ -114,8 +114,8 @@ const UserReviewsSection: React.FC<{
         Overall Reviews Breakdown
       </h2>
 
-      <div className="flex items-start justify-end gap-8 relative self-stretch w-full">
-        <Card className="flex flex-col w-[223px] h-[161px] items-center justify-center gap-5 px-0 py-[31px] relative bg-[#faffff] rounded-xl border border-solid border-[#e8eaef]">
+      <div className="flex flex-col md:flex-row items-start justify-end gap-8 relative self-stretch w-full">
+        <Card className="flex flex-col w-full md:w-[223px] h-[161px] items-center justify-center gap-5 px-0 py-[31px] relative bg-[#faffff] rounded-xl border border-solid border-[#e8eaef]">
           <CardContent className="p-0 flex flex-col items-center">
             <span className="relative w-fit mt-[-12.50px] font-bold text-gray-900 text-5xl text-center whitespace-nowrap">
               {overallRating}
