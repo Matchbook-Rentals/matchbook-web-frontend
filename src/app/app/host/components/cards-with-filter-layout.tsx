@@ -203,7 +203,7 @@ export default function TabLayout({
                 </Select>
                 
                 {/* Action Button right next to filter on desktop */}
-                {actionButton && !isMobile && (
+                {actionButton && (
                   <div className="ml-3">
                     {actionButton}
                   </div>
@@ -211,11 +211,6 @@ export default function TabLayout({
               </div>
             </div>
             
-            {actionButton && isMobile && (
-              <div>
-                {actionButton}
-              </div>
-            )}
           </div>
         </div>
       </header>
@@ -238,7 +233,7 @@ export default function TabLayout({
             {/* Scrollable content area - only use ScrollArea on desktop */}
             {isMobile ? (
               <>
-                <div className="space-y-4">
+                <div className="space-y-4 w-full">
                   {children}
                 </div>
                 

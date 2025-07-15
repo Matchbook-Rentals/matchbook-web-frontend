@@ -354,7 +354,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
                       triggerText="View Calendar"
                       listingId={listing.id}
                       showIcon={false}
-                      triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-white hover:bg-gray-50"
+                      triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-white hover:bg-[#3c8787] hover:text-white transition-all duration-300"
                       variant="outline"
                     />
                     <BrandButton
