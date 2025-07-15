@@ -137,7 +137,7 @@ const FAQPage = async () => {
 
   return (
     <>
-      <MatchBookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
       <FAQSection />
       <Footer />
     </>
