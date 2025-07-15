@@ -1,10 +1,10 @@
 "use client";
 
-import { MoreVerticalIcon, MapPinIcon, Bed, Bath, Square } from "lucide-react";
+import { MoreVerticalIcon, MapPinIcon, BedSingleIcon, BathIcon, SquareIcon } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -259,6 +259,119 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
             ? (listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`)
             : fullAddress;
           
+          // Mobile Layout
+          if (isMobile) {
+            return (
+              <Card key={listing.id} className="flex flex-col w-full items-start gap-6 p-4 bg-white rounded-xl overflow-hidden mb-4">
+                <CardContent className="flex flex-col items-end justify-end gap-6 relative self-stretch w-full p-0">
+                  <div className="flex items-start gap-2 relative self-stretch w-full">
+                    <div className="flex flex-col items-start gap-6 relative flex-1 grow">
+                      {/* Property Image */}
+                      <div className="relative self-stretch w-full h-[162px] rounded-xl overflow-hidden bg-cover bg-center"
+                           style={{ backgroundImage: `url(${listing.listingImages?.[0]?.url || '/image-35.png'})` }}>
+                        <div className="absolute top-2.5 right-2.5">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="w-6 h-6 p-0 bg-white rounded overflow-hidden border border-solid border-[#d9dadf] shadow-[0px_0px_4px_#ffffff7d]"
+                          >
+                            <MoreVerticalIcon className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Property Details */}
+                      <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full">
+                        <div className="flex flex-col items-start gap-2 relative self-stretch w-full">
+                          {/* Property Name and Status */}
+                          <div className="flex items-start gap-2 relative self-stretch w-full">
+                            <div className="relative flex-1 mt-[-1.00px] font-text-label-large-medium font-[number:var(--text-label-large-medium-font-weight)] text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)] [font-style:var(--text-label-large-medium-font-style)]">
+                              {listing.title || displayAddress}
+                            </div>
+
+                            <Badge
+                              variant="outline"
+                              className={`items-center gap-1.5 px-2.5 py-1 rounded-full border border-solid font-medium ${
+                                status === 'Active' ? 'bg-[#e9f7ee] border-[#1ca34e] text-[#1ca34e]' :
+                                status === 'Rented' ? 'bg-blue-50 border-blue-600 text-blue-600' :
+                                status === 'Pending Approval' ? 'bg-yellow-50 border-yellow-700 text-yellow-700' :
+                                status === 'Rejected' ? 'bg-red-50 border-red-600 text-red-600' :
+                                'bg-gray-50 border-gray-600 text-gray-600'
+                              }`}
+                            >
+                              {status}
+                            </Badge>
+                          </div>
+
+                          {/* Property Address */}
+                          <div className="flex w-full items-start gap-2 relative">
+                            <MapPinIcon className="w-5 h-5 text-[#777b8b]" />
+                            <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                              {displayAddress}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Property Features */}
+                        <div className="flex items-center gap-[22px] relative self-stretch w-full">
+                          <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
+                            <BedSingleIcon className="w-5 h-5 text-[#344054]" />
+                            <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                              {listing.roomCount || 0} Bedroom{(listing.roomCount || 0) !== 1 ? 's' : ''}
+                            </div>
+                          </div>
+
+                          <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
+                            <BathIcon className="w-5 h-5 text-[#344054]" />
+                            <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                              {listing.bathroomCount || 0} Bathroom{(listing.bathroomCount || 0) !== 1 ? 's' : ''}
+                            </div>
+                          </div>
+
+                          <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
+                            <SquareIcon className="w-5 h-5 text-[#344054]" />
+                            <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                              {listing.squareFootage || 'N/A'} Sqft
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+
+                <CardFooter className="flex flex-col items-start justify-end gap-3 relative self-stretch w-full p-0">
+                  {/* Price */}
+                  <div className="relative self-stretch mt-[-1.00px] font-text-heading-small-semi-bold font-[number:var(--text-heading-small-semi-bold-font-weight)] text-[#484a54] text-[length:var(--text-heading-small-semi-bold-font-size)] tracking-[var(--text-heading-small-semi-bold-letter-spacing)] leading-[var(--text-heading-small-semi-bold-line-height)] [font-style:var(--text-heading-small-semi-bold-font-style)]">
+                    {formatPrice(listing)}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-3 relative self-stretch w-full">
+                    <CalendarDialog
+                      bookings={listing.bookings || []}
+                      unavailablePeriods={listing.unavailablePeriods || []}
+                      triggerText="View Calendar"
+                      listingId={listing.id}
+                      showIcon={false}
+                      triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-white hover:bg-gray-50"
+                      variant="outline"
+                    />
+                    <BrandButton
+                      variant="default"
+                      className="flex-1 bg-[#3c8787] text-white font-semibold"
+                      href={`/app/host/${listing.id}/summary`}
+                      spinOnClick={true}
+                    >
+                      Manage Listing
+                    </BrandButton>
+                  </div>
+                </CardFooter>
+              </Card>
+            );
+          }
+
+          // Desktop Layout
           return (
             <Card key={listing.id} className="w-full p-6 rounded-xl mb-8">
               <CardContent className="p-0">
@@ -306,7 +419,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
                     <div className="flex items-center gap-10">
                       {/* Bedroom */}
                       <div onClick={() => console.log('BED', listing)} className="flex items-center gap-1.5 py-1.5">
-                        <Bed className="w-5 h-5 text-gray-500" />
+                        <BedSingleIcon className="w-5 h-5 text-gray-500" />
                         <span className="font-medium text-sm text-[#344054]">
                           {listing.roomCount || 0} Bedroom{(listing.roomCount|| 0) !== 1 ? 's' : ''}
                         </span>
@@ -314,7 +427,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
 
                       {/* Bathroom */}
                       <div className="flex items-center gap-1.5 py-1.5">
-                        <Bath className="w-5 h-5 text-gray-500" />
+                        <BathIcon className="w-5 h-5 text-gray-500" />
                         <span className="font-medium text-sm text-[#344054]">
                           {listing.bathroomCount || 0} Bathroom{(listing.bathroomCount || 0) !== 1 ? 's' : ''}
                         </span>
@@ -322,7 +435,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
 
                       {/* Square Footage */}
                       <div className="flex items-center gap-1.5 py-1.5">
-                        <Square className="w-5 h-5 text-gray-500" />
+                        <SquareIcon className="w-5 h-5 text-gray-500" />
                         <span className="font-medium text-sm text-[#344054]">
                           {listing.squareFootage || 'N/A'} Sqft
                         </span>
