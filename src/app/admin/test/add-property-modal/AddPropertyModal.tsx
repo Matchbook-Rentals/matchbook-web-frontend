@@ -63,7 +63,7 @@ export default function AddPropertyModal({
           <h2 className="text-lg font-semibold text-gray-900">How would you like to start?</h2>
         </div>
 
-        <div className="flex gap-4 w-full">
+        <div className="flex flex-wrap gap-4 w-full">
           <BrandButton 
             variant="outline" 
             className="flex-1"

@@ -1,7 +1,7 @@
 import React from "react";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
-import { HostReviewClient } from "./host-review-client";
+import { HostReviewClient } from "@/app/app/host/components/host-review-client";
 import { auth } from "@clerk/nextjs/server";
 
 // Utility function to calculate relative time
