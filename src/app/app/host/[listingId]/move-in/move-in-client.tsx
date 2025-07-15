@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Listing } from "@prisma/client";
 import { updateListingMoveInData } from "@/app/actions/listings";
-import { toast } from "sonner";
+import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 interface MoveInProps {
   listing: Listing;
@@ -15,7 +16,9 @@ interface MoveInProps {
 
 export const MoveIn = ({ listing }: MoveInProps): JSX.Element => {
   const [isPending, startTransition] = useTransition();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
   
   // Store original data from DB for comparison
   const [originalData, setOriginalData] = useState({
@@ -44,20 +47,32 @@ export const MoveIn = ({ listing }: MoveInProps): JSX.Element => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    startTransition(async () => {
-      try {
-        const result = await updateListingMoveInData(listing.id, formData);
-        toast.success("Move-in instructions saved successfully!");
-        
-        // Update original data to match current form data
-        setOriginalData({ ...formData });
-        
-        // Refresh the router to ensure data consistency
-        router.refresh();
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Failed to save move-in instructions");
-      }
-    });
+    setIsSubmitting(true);
+    
+    try {
+      const result = await updateListingMoveInData(listing.id, formData);
+      
+      // Show success toast
+      toast({
+        title: "Success",
+        description: "Move-in instructions updated.",
+      });
+      
+      // Update original data to match current form data
+      setOriginalData({ ...formData });
+      
+      // Refresh the router to ensure data consistency
+      router.refresh();
+    } catch (error) {
+      console.error("Error updating move-in instructions:", error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to save move-in instructions",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   // Form fields data
   const formFields = [
@@ -116,7 +131,7 @@ export const MoveIn = ({ listing }: MoveInProps): JSX.Element => {
                   className="flex flex-col items-start gap-1.5 w-full"
                 >
                   <div className="inline-flex items-center gap-1.5">
-                    <label className="font-medium text-[#344054] text-sm [font-family:'Poppins',Helvetica]">
+                    <label className="font-medium text-[#344054] text-base [font-family:'Poppins',Helvetica]">
                       {field.label}
                     </label>
                   </div>
@@ -133,10 +148,11 @@ export const MoveIn = ({ listing }: MoveInProps): JSX.Element => {
           <div className="flex justify-center pb-6">
             <BrandButton 
               type="submit"
-              disabled={isPending || !hasChanges}
-              spinOnClick={true}
+              disabled={isSubmitting || !hasChanges}
+              spinOnClick={false}
+              leftIcon={isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : undefined}
             >
-              Save
+              {isSubmitting ? "Saving..." : "Save"}
             </BrandButton>
           </div>
         </Card>

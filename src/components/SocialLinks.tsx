@@ -11,7 +11,7 @@ export default function SocialLinks({ className = "" }: SocialLinksProps) {
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       <Link
-        href="https://x.com/matchbookrent"
+        href="https://x.com/matchbookrntls"
         className="bg-secondaryBrand hover:bg-secondaryBrand/80 text-white rounded-full p-1.5 md:p-2 transition-colors duration-200"
         prefetch={false}
       >
