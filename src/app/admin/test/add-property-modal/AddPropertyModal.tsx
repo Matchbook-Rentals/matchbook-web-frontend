@@ -57,7 +57,6 @@ export default function AddPropertyModal({
       </DialogTrigger>
       <DialogContent 
         className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] sm:max-w-md"
-        showCloseButton={false}
       >
         <div className="flex items-center justify-center relative self-stretch w-full">
           <h2 className="text-lg font-semibold text-gray-900">How would you like to start?</h2>
