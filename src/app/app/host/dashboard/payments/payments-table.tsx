@@ -39,16 +39,16 @@ interface PaymentsTableProps {
 
 export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element => {
 
-  // Column headers
+  // Column headers with responsive visibility classes
   const headers = [
-    { name: "Tenant", width: "w-fit" },
-    { name: "Amount", width: "w-fit" },
-    { name: "Type", width: "w-fit" },
-    { name: "Method", width: "w-fit" },
-    { name: "Bank", width: "w-fit" },
-    { name: "Due Date", width: "w-fit" },
-    { name: "Status", width: "w-fit" },
-    { name: "Actions", width: "w-fit" },
+    { name: "Tenant", width: "w-fit", className: "" }, // Always visible
+    { name: "Amount", width: "w-fit", className: "" }, // Always visible
+    { name: "Type", width: "w-fit", className: "hidden xl:table-cell" }, // Hidden below xl
+    { name: "Method", width: "w-fit", className: "hidden lg:table-cell" }, // Hidden below lg
+    { name: "Bank", width: "w-fit", className: "hidden md:table-cell" }, // Hidden below md
+    { name: "Due Date", width: "w-fit", className: "hidden 2xl:table-cell" }, // Hidden below 2xl
+    { name: "Status", width: "w-fit", className: "hidden xl:table-cell" }, // Hidden below xl
+    { name: "Actions", width: "w-fit", className: "" }, // Always visible
   ];
 
   const renderTable = (data: PaymentTableData[]) => (
@@ -58,7 +58,7 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
           {headers.map((header, index) => (
             <TableHead
               key={`header-${index}`}
-              className={`${header.width} h-11 px-6 py-3 font-medium text-xs text-[#475467] font-['Poppins',Helvetica]`}
+              className={`${header.width} ${header.className} h-11 px-2 sm:px-6 py-3 font-medium text-xs text-[#475467] font-['Poppins',Helvetica]`}
             >
               {header.name}
             </TableHead>
@@ -68,31 +68,38 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
       <TableBody>
         {data.map((row, rowIndex) => (
           <TableRow key={`row-${rowIndex}`} className="justify-evenly border-b border-[#eaecf0]">
-            <TableCell className="w-fit h-[72px] px-6 py-4 flex items-center gap-3">
-              <Avatar className="w-10 h-10 rounded-full border-[0.75px] border-[#00000014]">
+            {/* Tenant - Always visible */}
+            <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 flex items-center gap-2 sm:gap-3">
+              <Avatar className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-[0.75px] border-[#00000014]">
                 <AvatarImage src="/avatar-5.png" alt={row.tenant} />
                 <AvatarFallback>{row.tenant.charAt(0)}</AvatarFallback>
               </Avatar>
-              <span className="font-text-sm-medium text-[#101828] text-sm font-medium leading-5 whitespace-nowrap">
+              <span className="font-text-sm-medium text-[#101828] text-sm font-medium leading-5 max-w-[120px] sm:max-w-none truncate">
                 {row.tenant}
               </span>
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            {/* Amount - Always visible */}
+            <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               ${row.amount}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            {/* Type - Hidden below xl */}
+            <TableCell className="hidden xl:table-cell w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.type}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            {/* Method - Hidden below lg */}
+            <TableCell className="hidden lg:table-cell w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.method}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            {/* Bank - Hidden below md */}
+            <TableCell className="hidden md:table-cell w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.bank}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
+            {/* Due Date - Hidden below 2xl */}
+            <TableCell className="hidden 2xl:table-cell w-fit h-[72px] px-6 py-4 font-['Inter',Helvetica] font-normal text-[#373940] text-sm leading-5">
               {row.dueDate}
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4">
+            {/* Status - Hidden below xl */}
+            <TableCell className="hidden xl:table-cell w-fit h-[72px] px-6 py-4">
               <Badge 
                 className={`rounded-full px-2 py-0.5 font-medium text-xs ${
                   row.status === 'Completed' 
@@ -107,7 +114,8 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
                 {row.status}
               </Badge>
             </TableCell>
-            <TableCell className="w-fit h-[72px] px-6 py-4 flex justify-center items-center">
+            {/* Actions - Always visible */}
+            <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 flex justify-center items-center">
               <div className="inline-flex flex-col items-start">
                 <MoreVerticalIcon className="w-5 h-5 cursor-pointer hover:text-gray-600" />
               </div>
