@@ -568,6 +568,7 @@ export const Box = ({
                           dataKey="month" 
                           fontSize={12}
                           tick={{ fontSize: 12 }}
+                          interval={0}
                         />
                         <YAxis 
                           domain={[0, maxChartValue]} 
@@ -602,6 +603,12 @@ export const Box = ({
                           name="Monthly Rent" 
                           radius={[2, 2, 0, 0]}
                           isAnimationActive={true}
+                          label={{
+                            position: 'top',
+                            fontSize: 12,
+                            fill: '#222222',
+                            formatter: (value: number) => `$${value}`
+                          }}
                         >
                           {chartData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
@@ -652,11 +659,24 @@ export const Box = ({
                           name="Monthly Rent" 
                           radius={[2, 2, 0, 0]}
                           isAnimationActive={true}
-                          label={{
-                            position: 'top',
-                            fontSize: 10,
-                            fill: '#222222',
-                            formatter: (value: number) => `$${value}`
+                          label={(props: any) => {
+                            const { x, y, width, value, index } = props;
+                            // Show dollar amount on every other bar if more than 8 months
+                            if (chartData.length > 8 && index % 2 !== 0) {
+                              return null;
+                            }
+                            return (
+                              <text 
+                                x={x + width / 2} 
+                                y={y - 5} 
+                                fill="#222222" 
+                                textAnchor="middle" 
+                                dy={-6} 
+                                fontSize={10}
+                              >
+                                ${value}
+                              </text>
+                            );
                           }}
                         >
                           {chartData.map((entry, index) => (
