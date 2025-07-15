@@ -51,29 +51,7 @@ interface PaymentsClientProps {
 export default function PaymentsClient({ mockCards, emptyCards, mockData, emptyData, isAdmin }: PaymentsClientProps) {
   const [useMockData, setUseMockData] = useState(false);
   
-  // Replace the mock data card with a normal security deposits card for non-admins
-  const getCardsForUser = () => {
-    if (useMockData) return mockCards;
-    
-    if (isAdmin) return emptyCards;
-    
-    // For non-admins, replace the "view-mock-data" card with a security deposits card
-    return emptyCards.map(card => 
-      card.id === "view-mock-data" 
-        ? {
-            id: "security-deposits",
-            title: "Total Amount of Security Deposits",
-            value: "$0",
-            iconName: "Shield",
-            iconBg: "bg-purple-50",
-            iconColor: "text-gray-700",
-            subtitle: { text: "this month" },
-          }
-        : card
-    );
-  };
-  
-  const cards = getCardsForUser();
+  const cards = useMockData ? mockCards : emptyCards;
   const currentPaymentsData = useMockData ? mockData : emptyData;
   
   return (

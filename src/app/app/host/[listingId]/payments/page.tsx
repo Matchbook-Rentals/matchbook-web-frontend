@@ -93,7 +93,7 @@ function getEmptyListingPaymentsData(): PaymentsData {
   };
 }
 
-function buildListingPaymentCards(useMockData: boolean, listingAddress: string) {
+function buildListingPaymentCards(useMockData: boolean, listingAddress: string, isAdmin: boolean) {
   if (useMockData) {
     return [
       {
@@ -135,7 +135,7 @@ function buildListingPaymentCards(useMockData: boolean, listingAddress: string) 
     ];
   }
   
-  return [
+  const baseCards = [
     {
       id: "total-payments",
       title: "Total Payments",
@@ -163,7 +163,10 @@ function buildListingPaymentCards(useMockData: boolean, listingAddress: string) 
       iconColor: "text-gray-700",
       subtitle: { text: "this month" },
     },
-    {
+  ];
+
+  if (isAdmin) {
+    baseCards.push({
       id: "view-mock-data",
       title: "View Mock Data",
       value: "Click",
@@ -171,8 +174,20 @@ function buildListingPaymentCards(useMockData: boolean, listingAddress: string) 
       iconBg: "bg-indigo-50",
       iconColor: "text-indigo-600",
       subtitle: { text: "for demo purposes" },
-    },
-  ];
+    });
+  } else {
+    baseCards.push({
+      id: "security-deposits",
+      title: "Total Amount of Security Deposits",
+      value: "$0",
+      iconName: "Shield",
+      iconBg: "bg-purple-50",
+      iconColor: "text-gray-700",
+      subtitle: { text: "this month" },
+    });
+  }
+
+  return baseCards;
 }
 
 export default async function PaymentsPage({ params }: PaymentsPageProps) {
@@ -197,8 +212,8 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
   const listingAddress = listing.streetAddress1;
   const mockData = await fetchMockListingPaymentsData(listingAddress);
   const emptyData = getEmptyListingPaymentsData();
-  const mockCards = buildListingPaymentCards(true, listingAddress);
-  const emptyCards = buildListingPaymentCards(false, listingAddress);
+  const mockCards = buildListingPaymentCards(true, listingAddress, isAdmin);
+  const emptyCards = buildListingPaymentCards(false, listingAddress, isAdmin);
   
   return (
     <div className={`${HOST_PAGE_STYLE}`}>

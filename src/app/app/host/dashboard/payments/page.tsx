@@ -130,7 +130,7 @@ function getEmptyPaymentsData(): PaymentsData {
   };
 }
 
-function buildPaymentCards(useMockData: boolean) {
+function buildPaymentCards(useMockData: boolean, isAdmin: boolean) {
   if (useMockData) {
     return [
       {
@@ -172,7 +172,7 @@ function buildPaymentCards(useMockData: boolean) {
     ];
   }
   
-  return [
+  const baseCards = [
     {
       id: "total-payments",
       title: "Total Payments",
@@ -200,7 +200,10 @@ function buildPaymentCards(useMockData: boolean) {
       iconColor: "text-gray-700",
       subtitle: { text: "this month" },
     },
-    {
+  ];
+
+  if (isAdmin) {
+    baseCards.push({
       id: "view-mock-data",
       title: "View Mock Data",
       value: "Click",
@@ -208,8 +211,20 @@ function buildPaymentCards(useMockData: boolean) {
       iconBg: "bg-indigo-50",
       iconColor: "text-indigo-600",
       subtitle: { text: "for demo purposes" },
-    },
-  ];
+    });
+  } else {
+    baseCards.push({
+      id: "security-deposits",
+      title: "Total Amount of Security Deposits",
+      value: "$0",
+      iconName: "Shield",
+      iconBg: "bg-purple-50",
+      iconColor: "text-gray-700",
+      subtitle: { text: "this month" },
+    });
+  }
+
+  return baseCards;
 }
 
 export default async function PaymentsPage() {
@@ -218,8 +233,8 @@ export default async function PaymentsPage() {
   
   const mockData = await fetchMockPaymentsData();
   const emptyData = getEmptyPaymentsData();
-  const mockCards = buildPaymentCards(true);
-  const emptyCards = buildPaymentCards(false);
+  const mockCards = buildPaymentCards(true, isAdmin);
+  const emptyCards = buildPaymentCards(false, isAdmin);
 
   return (
     <div className={`${HOST_PAGE_STYLE}`}>
