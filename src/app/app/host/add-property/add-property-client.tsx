@@ -442,8 +442,8 @@ const [listingBasics, setListingBasics] = useState({
         window.history.replaceState({}, '', newUrl.toString());
       }
       
-      // Exit to host dashboard after saving
-      router.push('/app/host/dashboard');
+      // Exit to host overview after saving
+      router.push('/app/host/overview');
     } catch (error) {
       console.error('Error saving listing draft:', error);
       alert(`Error saving your listing: ${(error as Error).message}`);

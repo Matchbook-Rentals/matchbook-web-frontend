@@ -96,7 +96,7 @@ export default function ListingCreationSuccess({ isSaveAndExit = false, listingI
           size="xl"
           className="w-[200px]"
         >
-          Go to Host Dashboard
+          View My Listings
         </BrandButton>
 
         <HospitableConnectButton listing={null} />
