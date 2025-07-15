@@ -96,7 +96,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
 
   return (
     <div className="max-w-[1000px] mx-auto px-4">
-      <h2 className={`${textStyles.title} text-[clamp(24px,5vw,40px)] tracking-[clamp(0px,-0.05vw,-2px)] whitespace-nowrap overflow-hidden text-ellipsis pb-2`}>
+      <h2 className={`${textStyles.title} text-[clamp(20px,4.5vw,40px)] tracking-[clamp(-1px,-0.05vw,-2px)] pb-2`}>
         {title}
       </h2>
       <div className="flex flex-col lg:flex-row gap-2 mt-16">
