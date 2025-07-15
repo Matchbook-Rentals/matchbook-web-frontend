@@ -1,6 +1,7 @@
 import { Dumbbell } from 'lucide-react';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { Wifi as WifiIcon } from 'lucide-react';
+import NotAvailableIcon from '@/lib/icons/not-available';
 
 const amenities = [
   // Basics
@@ -111,6 +112,7 @@ export const iconAmenities = [
   // Laundry
   { code: 'washerInUnit', label: 'In Unit', icon: AmenitiesIcons.WasherIcon, category: 'laundry' },
   { code: 'washerInComplex', label: 'In Complex', icon: AmenitiesIcons.WasherIcon, category: 'laundry' },
+  { code: 'washerNotAvailable', label: 'No Laundry', icon: NotAvailableIcon, category: 'laundry' },
 
   // Location
   { code: 'waterfront', label: 'Waterfront', icon: AmenitiesIcons.UpdatedWaterfrontIcon, category: 'location' },
