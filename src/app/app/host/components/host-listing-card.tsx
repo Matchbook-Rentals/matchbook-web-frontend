@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVerticalIcon, MapPinIcon, BedSingleIcon, BathIcon, SquareIcon } from "lucide-react";
+import { MoreVerticalIcon, MapPinIcon, BedSingleIcon, BathIcon, SquareIcon, TrashIcon } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
@@ -9,6 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { ListingAndImages } from "@/types";
 import CalendarDialog from "@/components/ui/calendar-dialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { BrandDialog } from "@/components/brandDialog";
+import { Input } from "@/components/ui/input";
+import { deleteListing } from "@/app/actions/listings";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface HostListingCardProps {
   listing: ListingAndImages;
@@ -22,6 +28,11 @@ export default function HostListingCard({
   onViewDetails 
 }: HostListingCardProps) {
   const isMobile = useIsMobile();
+  const router = useRouter();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = React.useState("");
+  const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   // Map listing status to display status and color
   const getStatusInfo = (listing: ListingAndImages) => {
@@ -81,9 +92,36 @@ export default function HostListingCard({
     ? (listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`)
     : fullAddress;
 
-  // Mobile Layout
-  if (isMobile) {
-    return (
+  const handleDeleteListing = () => {
+    setIsPopoverOpen(false);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteListing(listing.id);
+      toast.success("Listing deleted successfully");
+      setIsDeleteDialogOpen(false);
+      setDeleteConfirmationText("");
+      router.refresh(); // Refresh the page to update the listing display
+    } catch (error) {
+      console.error("Error deleting listing:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to delete listing");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteDialogOpen(false);
+    setDeleteConfirmationText("");
+  };
+
+  const isDeleteButtonDisabled = deleteConfirmationText.toLowerCase() !== listing.streetAddress1?.toLowerCase();
+
+  // Mobile Layout Component
+  const MobileLayout = () => (
       <Card className="flex flex-col w-full items-start gap-6 p-3 bg-background rounded-xl overflow-hidden mb-4">
         <CardContent className="flex flex-col items-end justify-end gap-6 relative self-stretch w-full p-0">
           <div className="flex items-start gap-2 relative self-stretch w-full">
@@ -92,13 +130,30 @@ export default function HostListingCard({
               <div className="relative w-full rounded-xl overflow-hidden bg-cover bg-center"
                    style={{ backgroundImage: `url(${listing.listingImages?.[0]?.url || '/image-35.png'})`, aspectRatio: '366/162' }}>
                 <div className="absolute top-2.5 right-2.5">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="w-6 h-6 p-0 bg-background rounded overflow-hidden border border-solid border-[#d9dadf] shadow-[0px_0px_4px_#ffffff7d]"
-                  >
-                    <MoreVerticalIcon className="h-3 w-3" />
-                  </Button>
+                  <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="w-6 h-6 p-0 bg-background rounded overflow-hidden border border-solid border-[#d9dadf] shadow-[0px_0px_4px_#ffffff7d]"
+                      >
+                        <MoreVerticalIcon className="h-3 w-3" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-48 p-2" align="end">
+                      <div className="flex flex-col gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+                          onClick={handleDeleteListing}
+                        >
+                          <TrashIcon className="h-4 w-4 mr-2" />
+                          Delete Listing
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
 
@@ -190,11 +245,10 @@ export default function HostListingCard({
           </div>
         </CardFooter>
       </Card>
-    );
-  }
+  );
 
-  // Desktop Layout
-  return (
+  // Desktop Layout Component
+  const DesktopLayout = () => (
     <Card className="w-full p-6 rounded-xl mb-8">
       <CardContent className="p-0">
         <div className="flex gap-6">
@@ -268,13 +322,30 @@ export default function HostListingCard({
           {/* Right Side - Price and Actions */}
           <div className="flex flex-col justify-between items-end">
             {/* More Options Button */}
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-lg border-[#3c8787] h-10 w-10"
-            >
-              <MoreVerticalIcon className="h-5 w-5" />
-            </Button>
+            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-lg border-[#3c8787] h-10 w-10"
+                >
+                  <MoreVerticalIcon className="h-5 w-5" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-2" align="end">
+                <div className="flex flex-col gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+                    onClick={handleDeleteListing}
+                  >
+                    <TrashIcon className="h-4 w-4 mr-2" />
+                    Delete Listing
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
 
             <div className="flex flex-col items-end gap-3">
               {/* Price */}
@@ -306,5 +377,80 @@ export default function HostListingCard({
         </div>
       </CardContent>
     </Card>
+  );
+
+
+  return (
+    <>
+      {isMobile ? <MobileLayout /> : <DesktopLayout />}
+      
+      {/* Delete Confirmation Dialog */}
+      <BrandDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        titleComponent={
+          <h2 className="text-xl font-semibold text-gray-900">Delete Listing</h2>
+        }
+        contentComponent={
+          <div className="flex flex-col gap-4">
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+                <TrashIcon className="h-8 w-8 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Are you sure you want to delete this listing?
+              </h3>
+              <p className="text-gray-600 mb-4">
+                This action cannot be undone. This will permanently delete the listing and remove all associated data.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="confirmation-input" className="block text-sm font-medium text-gray-700">
+                To confirm, type <strong>{listing.streetAddress1}</strong> below:
+              </label>
+              <Input
+                id="confirmation-input"
+                type="text"
+                value={deleteConfirmationText}
+                onChange={(e) => setDeleteConfirmationText(e.target.value)}
+                placeholder={listing.streetAddress1}
+                className="w-full"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+        }
+        footerComponent={
+          <div className="flex gap-3 w-full">
+            <BrandButton
+              variant="outline"
+              onClick={handleCancelDelete}
+              className="flex-1"
+            >
+              Cancel
+            </BrandButton>
+            <BrandButton
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={isDeleteButtonDisabled || isDeleting}
+              className="flex-1"
+              spinOnClick={false}
+            >
+              {isDeleting ? (
+                <>
+                  <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <TrashIcon className="h-4 w-4 mr-2" />
+                  Delete Listing
+                </>
+              )}
+            </BrandButton>
+          </div>
+        }
+      />
+    </>
   );
 }

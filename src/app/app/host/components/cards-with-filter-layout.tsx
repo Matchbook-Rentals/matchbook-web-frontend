@@ -81,24 +81,24 @@ export default function TabLayout({
   useEffect(() => {
     const calculateHeight = () => {
       if (!headerRef.current) return;
-      
+
       const headerHeight = headerRef.current.offsetHeight;
       const paginationHeight = paginationRef.current ? paginationRef.current.offsetHeight : 80; // Default height for pagination
       const topOffset = headerRef.current.offsetTop;
       const bottomPadding = 32; // Some padding at the bottom
-      
+
       const availableHeight = window.innerHeight - topOffset - headerHeight - paginationHeight - bottomPadding;
       setScrollAreaHeight(`${availableHeight}px`);
     };
 
     calculateHeight();
     window.addEventListener('resize', calculateHeight);
-    
+
     // Recalculate when content changes
     const observer = new ResizeObserver(calculateHeight);
     if (headerRef.current) observer.observe(headerRef.current);
     if (paginationRef.current) observer.observe(paginationRef.current);
-    
+
     return () => {
       window.removeEventListener('resize', calculateHeight);
       observer.disconnect();
@@ -108,11 +108,11 @@ export default function TabLayout({
   // Generate page numbers for pagination
   const getPageNumbers = () => {
     if (!pagination) return [];
-    
+
     const pages = [];
     const maxPagesToShow = isMobile ? 3 : 5; // Fewer pages on mobile
     const { currentPage, totalPages } = pagination;
-    
+
     if (totalPages <= maxPagesToShow) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -144,7 +144,7 @@ export default function TabLayout({
         pages.push(totalPages);
       }
     }
-    
+
     return pages;
   };
 
@@ -162,8 +162,8 @@ export default function TabLayout({
                 <CardContent className="p-0">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input 
-                      className="h-12 pl-10" 
+                    <Input
+                      className="h-12 pl-10"
                       placeholder={searchPlaceholder}
                       onChange={(e) => onSearchChange?.(e.target.value)}
                     />
@@ -174,7 +174,7 @@ export default function TabLayout({
 
             <div className={`flex ${isMobile ? 'flex-col gap-4' : 'sm:flex-row sm:items-center sm:justify-end items-center justify-end gap-6'} flex-1`}>
               {/* Mock Data Toggle for Admins */}
-              {showMockDataToggle && isAdmin && !isMobile &&  (
+              {showMockDataToggle && isAdmin && !isMobile && (
                 <div className="flex items-center">
                   <BrandCheckbox
                     checked={useMockData}
@@ -184,33 +184,35 @@ export default function TabLayout({
                   />
                 </div>
               )}
-              
-              <div className="flex items-center self-end md:self-auto gap-3">
-                <span className="whitespace-nowrap text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
-                  {filterLabel}
-                </span>
-                <Select onValueChange={onFilterChange} defaultValue={defaultFilter || filterOptions?.[0]?.value}>
-                  <SelectTrigger className="w-[142px] h-12">
-                    <SelectValue placeholder={filterOptions?.[0]?.label || "All"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {filterOptions?.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                
+
+              <div className={`flex flex-wrap-reverse ${actionButton ? 'justify-between' : 'justify-end'} sm:justify-end w-full items-center self-start md:self-auto gap-3`}>
+                <div className="flex items-center gap-3">
+                  <span className="whitespace-nowrap hidden xs:inline text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
+                    {filterLabel}
+                  </span>
+                  <Select onValueChange={onFilterChange} defaultValue={defaultFilter || filterOptions?.[0]?.value}>
+                    <SelectTrigger className="w-[142px] h-12">
+                      <SelectValue placeholder={filterOptions?.[0]?.label || "All"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {filterOptions?.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 {/* Action Button right next to filter on desktop */}
                 {actionButton && (
-                  <div className="ml-3">
+                  <div className="md:ml-3">
                     {actionButton}
                   </div>
                 )}
               </div>
             </div>
-            
+
           </div>
         </div>
       </header>
@@ -219,9 +221,9 @@ export default function TabLayout({
       <div className={`flex-1 min-h-0 ${isMobile ? 'px-0 pb-4' : 'mt-1'}`}>
         {!hasContent ? (
           <div className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500">
-            <img 
-              src="/host-dashboard/empty/applications.png" 
-              alt="No applications" 
+            <img
+              src="/host-dashboard/empty/applications.png"
+              alt="No applications"
               className="w-full h-auto max-w-[260px] mb-0,"
             />
             <div className="text-lg font-medium">
@@ -236,7 +238,7 @@ export default function TabLayout({
                 <div className="space-y-4 w-full">
                   {children}
                 </div>
-                
+
                 {/* Mobile Pagination */}
                 {pagination && pagination.totalItems > pagination.itemsPerPage && (
                   <div className="mt-8 space-y-4">
@@ -244,11 +246,11 @@ export default function TabLayout({
                       Showing {pagination.startIndex + 1}-{Math.min(pagination.endIndex, pagination.totalItems)} of {pagination.totalItems} {pagination.itemLabel || 'items'}
                       {totalCount && totalCount > pagination.totalItems && ` (${totalCount} total)`}
                     </div>
-                    
+
                     <Pagination>
                       <PaginationContent className="flex-wrap justify-center gap-1">
                         <PaginationItem>
-                          <PaginationPrevious 
+                          <PaginationPrevious
                             href="#"
                             onClick={(e) => {
                               e.preventDefault();
@@ -259,7 +261,7 @@ export default function TabLayout({
                             className={`${pagination.currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} text-sm px-2 py-1`}
                           />
                         </PaginationItem>
-                        
+
                         {getPageNumbers().map((pageNum, index) => (
                           <PaginationItem key={index}>
                             {pageNum === 'ellipsis' ? (
@@ -279,7 +281,7 @@ export default function TabLayout({
                             )}
                           </PaginationItem>
                         ))}
-                        
+
                         <PaginationItem>
                           <PaginationNext
                             href="#"
@@ -304,7 +306,7 @@ export default function TabLayout({
                     {children}
                   </div>
                 </ScrollArea>
-                
+
                 {/* Desktop Pagination - Fixed at bottom */}
                 {pagination && pagination.totalItems > pagination.itemsPerPage && (
                   <div ref={paginationRef} className="mt-4 pt-4 border-t border-gray-200 bg-background">
@@ -313,11 +315,11 @@ export default function TabLayout({
                         Showing {pagination.startIndex + 1}-{Math.min(pagination.endIndex, pagination.totalItems)} of {pagination.totalItems} {pagination.itemLabel || 'items'}
                         {totalCount && totalCount > pagination.totalItems && ` (${totalCount} total)`}
                       </div>
-                      
+
                       <Pagination>
                         <PaginationContent>
                           <PaginationItem>
-                            <PaginationPrevious 
+                            <PaginationPrevious
                               href="#"
                               onClick={(e) => {
                                 e.preventDefault();
@@ -328,7 +330,7 @@ export default function TabLayout({
                               className={pagination.currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                             />
                           </PaginationItem>
-                          
+
                           {getPageNumbers().map((pageNum, index) => (
                             <PaginationItem key={index}>
                               {pageNum === 'ellipsis' ? (
@@ -348,7 +350,7 @@ export default function TabLayout({
                               )}
                             </PaginationItem>
                           ))}
-                          
+
                           <PaginationItem>
                             <PaginationNext
                               href="#"
