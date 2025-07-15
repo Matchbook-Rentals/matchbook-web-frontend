@@ -909,12 +909,18 @@ const [listingBasics, setListingBasics] = useState({
           streetAddress1: listingLocation.streetAddress1,
           streetAddress2: listingLocation.streetAddress2,
           postalCode: listingLocation.postalCode,
+          // Listing highlights fields
+          category: listingHighlights.category,
+          petsAllowed: listingHighlights.petsAllowed || false,
+          furnished: listingHighlights.furnished || false,
           // Required fields with defaults if needed
           roomCount: listingRooms.bedrooms || 1,
           bathroomCount: listingRooms.bathrooms || 1,
           guestCount: listingRooms.bedrooms || 1,
           squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : 0,
           depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
+          petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit) : 0,
+          petRent: listingPricing.petRent ? Number(listingPricing.petRent) : 0,
           rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : 0,
           shortestLeaseLength: listingPricing.shortestStay || 1,
           longestLeaseLength: listingPricing.longestStay || 12,
@@ -1606,7 +1612,7 @@ const [listingBasics, setListingBasics] = useState({
                 </div>
               </div>
             ) : (
-              /* Regular user footer - Back and Next buttons mobile sizes, justify-between */
+              /* Regular user footer - Back and Next buttons */
               <div className="flex justify-between items-center w-full px-4 md:px-[50px] py-8 md:py-10">
                 {!cameFromReview ? (
                   <BrandButton 

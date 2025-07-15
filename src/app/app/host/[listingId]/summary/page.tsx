@@ -29,7 +29,7 @@ export default async function SummaryPage({ params }: SummaryPageProps) {
   return (
     <div className={HOST_PAGE_STYLE}>
       <HostPageTitle
-        title="Listing Summary"
+        title="Listing Details"
         subtitle={`Summary for ${titleCasedBreadcrumbText}`}
         rightContent={
           <div className="flex items-center gap-4">
