@@ -84,18 +84,18 @@ export default function HostListingCard({
   // Mobile Layout
   if (isMobile) {
     return (
-      <Card className="flex flex-col w-full items-start gap-6 p-2 bg-white rounded-xl overflow-hidden mb-4">
+      <Card className="flex flex-col w-full items-start gap-6 p-3 bg-background rounded-xl overflow-hidden mb-4">
         <CardContent className="flex flex-col items-end justify-end gap-6 relative self-stretch w-full p-0">
           <div className="flex items-start gap-2 relative self-stretch w-full">
             <div className="flex flex-col items-start gap-6 relative flex-1 grow">
               {/* Property Image */}
-              <div className="relative self-stretch w-full h-[162px] rounded-xl overflow-hidden bg-cover bg-center"
-                   style={{ backgroundImage: `url(${listing.listingImages?.[0]?.url || '/image-35.png'})` }}>
+              <div className="relative w-full rounded-xl overflow-hidden bg-cover bg-center"
+                   style={{ backgroundImage: `url(${listing.listingImages?.[0]?.url || '/image-35.png'})`, aspectRatio: '366/162' }}>
                 <div className="absolute top-2.5 right-2.5">
                   <Button
                     variant="outline"
                     size="icon"
-                    className="w-6 h-6 p-0 bg-white rounded overflow-hidden border border-solid border-[#d9dadf] shadow-[0px_0px_4px_#ffffff7d]"
+                    className="w-6 h-6 p-0 bg-background rounded overflow-hidden border border-solid border-[#d9dadf] shadow-[0px_0px_4px_#ffffff7d]"
                   >
                     <MoreVerticalIcon className="h-3 w-3" />
                   </Button>
@@ -176,7 +176,7 @@ export default function HostListingCard({
               triggerText="View Calendar"
               listingId={listing.id}
               showIcon={false}
-              triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-white hover:bg-[#3c8787] hover:text-white transition-all duration-300"
+              triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-background hover:bg-[#3c8787] hover:text-white transition-all duration-300"
               variant="outline"
             />
             <BrandButton
