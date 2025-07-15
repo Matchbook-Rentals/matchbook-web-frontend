@@ -44,7 +44,7 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
   isLoading = false,
 }) => {
   return (
-    <Card className={`w-[398px] rounded-xl overflow-hidden p-4 ${className} ${isLoading ? 'opacity-75' : ''}`}>
+    <Card className={`w-full mx-auto rounded-xl overflow-hidden p-4 ${className} ${isLoading ? 'opacity-75' : ''}`}>
       <CardContent className="p-0 space-y-6 relative">
         {/* Loading overlay */}
         {isLoading && (

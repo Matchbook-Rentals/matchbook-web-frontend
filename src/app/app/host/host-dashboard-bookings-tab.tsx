@@ -758,7 +758,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
         const cardData = transformBookingForCard(booking, isMobile);
         
         return (
-          <div key={booking.id} className="mb-8">
+          <div key={booking.id} className="mb-8 w-full">
             <HostBookingCard
               {...cardData}
               onBookingDetails={() => handleViewBookingDetails(booking)}
