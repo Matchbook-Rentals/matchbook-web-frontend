@@ -85,7 +85,7 @@ export function HostBreadcrumb({ groups, breadcrumbTitle }: HostBreadcrumbProps)
 
   return (
     <div className="flex items-center gap-2">
-      <BreadcrumbIcon className="h-4 w-4" />
+      <BreadcrumbIcon className="hidden sm:block h-4 w-4" />
       <span className="font-medium">{breadcrumb.title}</span>
     </div>
   );
