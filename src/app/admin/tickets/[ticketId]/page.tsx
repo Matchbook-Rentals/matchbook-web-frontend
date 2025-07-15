@@ -3,7 +3,8 @@ import { checkRole } from '@/utils/roles'
 import prismadb from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
 import ClientTicketPage from './client-ticket-page'
-import { createOrGetTicketConversation } from '@/app/actions/tickets'
+// Removed createOrGetTicketConversation - now using Customer Support functions
+import { getTicketConversation } from '@/app/actions/customer-support'
 
 interface PageProps {
   params: { 
@@ -51,13 +52,23 @@ export default async function TicketDetailPage({ params }: PageProps) {
     }
   })
 
-  // Try to get existing conversation if the ticket has a user
+  // Try to get existing Customer Support conversation if the ticket has a user
   let conversation = null
   if (ticket.userId) {
     try {
-      conversation = await createOrGetTicketConversation(ticketId)
+      console.log('🎫 Server-side: Getting Customer Support conversation for ticket', { ticketId })
+      const result = await getTicketConversation(ticketId)
+      if (result.success) {
+        conversation = result.conversation
+        console.log('✅ Server-side: Customer Support conversation loaded', { 
+          found: !!conversation,
+          messageCount: conversation?.messages?.length 
+        })
+      } else {
+        console.log('❌ Server-side: Failed to get Customer Support conversation', result.error)
+      }
     } catch (error) {
-      console.error('Failed to get/create conversation:', error)
+      console.error('Failed to get Customer Support conversation:', error)
     }
   }
 

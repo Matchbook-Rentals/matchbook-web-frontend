@@ -6,16 +6,14 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowLeft, Clock, MessageSquare, Send } from 'lucide-react'
 import { SupportNotes } from './support-notes'
-import { updateTicketStatus, createOrGetTicketConversation } from '@/app/actions/tickets'
-import { createMessage } from '@/app/actions/conversations';
-import { markMessagesAsReadByTimestamp } from '@/app/actions/messages';
+import { updateTicketStatus } from '@/app/actions/tickets'
+import { sendCustomerSupportMessage, getTicketConversation } from '@/app/actions/customer-support'
 import { useWebSocketManager, MessageData as HookMessageData } from '@/hooks/useWebSocketManager';
 import { logger } from '@/lib/logger';
-import { v4 as uuidv4 } from 'uuid';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { getImageWithFallback } from '@/lib/utils';
 import { AvatarWithFallback } from '@/components/ui/avatar-with-fallback';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ClientTicketPageProps {
   ticket: any;
@@ -24,6 +22,7 @@ interface ClientTicketPageProps {
 }
 
 export default function ClientTicketPage({ ticket, user, conversation: initialConversation }: ClientTicketPageProps) {
+  const { toast } = useToast();
   const [activeConversation, setActiveConversation] = useState(initialConversation);
   const [messages, setMessages] = useState(initialConversation?.messages || []);
   const [messageInput, setMessageInput] = useState('');
@@ -45,6 +44,9 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Removed auto-creation to prevent infinite loops
+  // Users must manually click "Start Chat" to create Customer Support conversations
 
   const webSocketManagerRef = useRef<any>(null);
 
@@ -144,69 +146,119 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
   }, [user, activeConversation, webSocketManager]);
 
   const handleCreateConversation = async () => {
+    console.log('Creating Customer Support conversation for ticket:', ticket.id);
     setIsLoading(true);
     try {
-      const result = await createOrGetTicketConversation(ticket.id);
-      setActiveConversation(result);
-      setMessages(result.messages || []);
+      // First check if conversation exists
+      const result = await getTicketConversation(ticket.id);
+      console.log('Customer Support conversation result:', result);
+      
+      if (result.success && result.conversation) {
+        // Conversation exists, load it
+        setActiveConversation(result.conversation);
+        setMessages(result.conversation.messages || []);
+        toast({
+          title: "Success",
+          description: "Customer Support chat loaded successfully!",
+        });
+      } else {
+        // No conversation exists, create one by sending an initial message
+        console.log('No conversation exists, creating one with initial message');
+        const createResult = await sendCustomerSupportMessage(ticket.id, "Chat started by admin.");
+        
+        if (createResult.success && createResult.conversation) {
+          setActiveConversation(createResult.conversation);
+          setMessages(createResult.conversation.messages || []);
+          toast({
+            title: "Success",
+            description: "Customer Support chat created successfully!",
+          });
+        } else {
+          throw new Error(createResult.error || 'Failed to create conversation');
+        }
+      }
     } catch (error) {
-      console.error('Failed to create conversation:', error);
+      console.error('Failed to create Customer Support conversation:', error);
+      toast({
+        title: "Error",
+        description: `Failed to create conversation: ${error.message}`,
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleSendMessage = async () => {
-    if (!messageInput.trim() || !activeConversation || !user) return;
+    console.log('Customer Support message send called', { 
+      messageInput: messageInput.trim(), 
+      ticketId: ticket.id 
+    });
+    
+    if (!messageInput.trim() || !activeConversation) {
+      console.log('Early return due to empty message or no conversation');
+      return;
+    }
 
-    const receiver = activeConversation.participants.find((p: any) => p.userId !== user.id);
-    if (!receiver) return;
-
-    const messageId = `message_${uuidv4()}`;
-    const messageData: HookMessageData = {
-      id: messageId,
-      content: messageInput,
-      conversationId: activeConversation.id,
-      receiverId: receiver.userId,
-      senderId: user.id,
-      senderRole: activeConversation.participants.find((p: any) => p.userId === user.id)?.role as 'Host' | 'Tenant',
-      timestamp: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      type: 'message',
-      deliveryStatus: 'sending',
-      pending: true,
-    };
-
-    // Optimistic update
-    setMessages((prev) => [...prev, messageData]);
+    const messageContent = messageInput.trim();
     setMessageInput('');
-    sendTypingStatus(false);
-
+    
     try {
-      const ack = await webSocketManager.sendMessage(messageData);
-      setMessages((prev) => prev.map((msg) =>
-        msg.id === messageId
-          ? { ...msg, pending: false, deliveryStatus: 'delivered' }
-          : msg
-      ));
-    } catch (error) {
-      console.error('WebSocket message delivery failed:', error);
-      // Fall back to REST API
-      try {
-        const savedMessage = await createMessage(messageData as any);
-        setMessages((prev) => prev.map((msg) =>
-          msg.id === messageId
-            ? { ...savedMessage, pending: false, deliveryStatus: 'delivered' }
-            : msg
-        ));
-      } catch (restError) {
-        console.error('REST API message delivery also failed:', restError);
-        setMessages((prev) => prev.map((msg) =>
-          msg.id === messageId
-            ? { ...msg, failed: true, pending: false, deliveryStatus: 'failed' }
-            : msg
-        ));
+      // Send via WebSocket if connected (server will forward to REST API)
+      if (webSocketManager.isConnected) {
+        console.log('Sending Customer Support message via WebSocket');
+        const receiver = activeConversation.participants.find((p: any) => p.userId !== 'support-user-001');
+        if (receiver) {
+          // Generate a proper UUID v4 format for the message (server expects "message_" prefix)
+          const messageId = 'message_' + crypto.randomUUID();
+          
+          webSocketManager.sendMessage({
+            id: messageId,
+            content: messageContent,
+            conversationId: activeConversation.id,
+            senderId: 'support-user-001', // Customer Support user ID
+            receiverId: receiver.userId,
+            timestamp: new Date().toISOString(),
+            type: 'message'
+          });
+          
+          toast({
+            title: "Message Sent",
+            description: "Message sent as Customer Support via WebSocket",
+          });
+        } else {
+          throw new Error('No receiver found in conversation');
+        }
+      } else {
+        // Fallback to direct REST API call if WebSocket is disconnected
+        console.log('WebSocket disconnected, falling back to REST API');
+        const result = await sendCustomerSupportMessage(ticket.id, messageContent);
+        
+        if (result.success) {
+          console.log('Customer Support message sent via REST API fallback', result);
+          
+          if (result.message && result.conversation) {
+            setActiveConversation(result.conversation);
+            setMessages(result.conversation.messages || []);
+          }
+          
+          toast({
+            title: "Message Sent",
+            description: "Message sent as Customer Support via REST API",
+          });
+        } else {
+          throw new Error(result.error || 'Failed to send message');
+        }
       }
+    } catch (error) {
+      console.error('Customer Support message failed:', error);
+      toast({
+        title: "Message Failed",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+      // Restore the message input on failure
+      setMessageInput(messageContent);
     }
   };
 
@@ -230,6 +282,13 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
 
   function formatDate(dateString: string) {
     const date = new Date(dateString)
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date string:', dateString)
+      return 'Invalid date'
+    }
+    
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -242,10 +301,19 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
   const handleStatusChange = async (newStatus: string) => {
     try {
       await updateTicketStatus(ticket.id, newStatus);
+      toast({
+        title: "Success",
+        description: `Ticket status updated to ${newStatus}`,
+      });
       // Optionally refresh the page or update local state
       window.location.reload();
     } catch (error) {
       console.error('Failed to update ticket status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update ticket status. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -367,6 +435,15 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
                             <Send className="h-4 w-4" />
                           </Button>
                         </form>
+                        
+                        {/* WebSocket Connection Indicator */}
+                        <div className="flex items-center justify-between mt-2 px-2 py-1 text-xs text-gray-500">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-2 h-2 rounded-full ${webSocketManager.isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                            <span>WebSocket: {webSocketManager.isConnected ? 'Connected' : 'Disconnected'}</span>
+                          </div>
+                          <span>Messages via: {webSocketManager.isConnected ? 'WebSocket' : 'REST API'}</span>
+                        </div>
                       </div>
                     </div>
                   )}
