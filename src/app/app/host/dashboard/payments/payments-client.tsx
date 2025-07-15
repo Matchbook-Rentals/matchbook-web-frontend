@@ -56,14 +56,14 @@ export default function PaymentsClient({ mockCards, emptyCards, mockData, emptyD
   
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between gap-6">
+      <div className="grid grid-cols-1 grid-cols-2 gap-x-1 gap-y-4 sm:gap-6 lg:flex lg:justify-between">
         {cards.map((card, index) => {
           const IconComponent = iconMap[card.iconName as keyof typeof iconMap];
           const isViewMockDataCard = card.id === "view-mock-data";
           const isClickable = !useMockData && isAdmin && isViewMockDataCard;
           
           return (
-            <div key={index} className="flex-1 min-w-[300px]">
+            <div key={index} className="min-w-0 lg:flex-1">
               <StatisticsCard
                 id={card.id}
                 title={card.title}
