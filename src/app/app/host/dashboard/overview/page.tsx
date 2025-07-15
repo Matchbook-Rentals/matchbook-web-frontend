@@ -1,6 +1,7 @@
 import React from "react";
 import OverviewClient from "./overview-client";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import type { StatisticsCardData } from "./overview-client";
 
 async function fetchOverviewData() {
   // Simulate data fetching delay
@@ -28,26 +29,30 @@ function buildStatisticsCards(data: typeof sampleData) {
       iconBg: "bg-purple-50",
       iconColor: "text-gray-700",
       link: "/app/host/dashboard/applications",
-      badges: [
-        {
-          text: "4 Approved",
-          bg: "bg-green-50",
-          valueColor: "text-green-600",
-          labelColor: "text-gray-600",
-        },
-        {
-          text: "3 Pending",
-          bg: "bg-yellow-50",
-          valueColor: "text-yellow-600",
-          labelColor: "text-gray-600",
-        },
-        {
-          text: "1 Declined",
-          bg: "bg-red-50",
-          valueColor: "text-red-600",
-          labelColor: "text-gray-600",
-        },
-      ],
+      badges: [],
+      footer: {
+        type: "badges" as const,
+        badges: [
+          {
+            text: "4 Approved",
+            bg: "bg-green-50",
+            valueColor: "text-green-600",
+            labelColor: "text-gray-600",
+          },
+          {
+            text: "3 Pending",
+            bg: "bg-yellow-50",
+            valueColor: "text-yellow-600",
+            labelColor: "text-gray-600",
+          },
+          {
+            text: "1 Declined",
+            bg: "bg-red-50",
+            valueColor: "text-red-600",
+            labelColor: "text-gray-600",
+          },
+        ],
+      },
     },
     {
       id: "bookings",
@@ -59,7 +64,7 @@ function buildStatisticsCards(data: typeof sampleData) {
       link: "/app/host/dashboard/bookings",
       badges: [],
       footer: {
-        type: "badges",
+        type: "badges" as const,
         badges: [
           {
             text: "2 Upcoming",
@@ -122,26 +127,30 @@ function buildZeroStatisticsCards() {
       iconBg: "bg-purple-50",
       iconColor: "text-gray-700",
       link: "/app/host/dashboard/applications",
-      badges: [
-        {
-          text: "0 Approved",
-          bg: "bg-green-50",
-          valueColor: "text-green-600",
-          labelColor: "text-gray-600",
-        },
-        {
-          text: "0 Pending",
-          bg: "bg-yellow-50",
-          valueColor: "text-yellow-600",
-          labelColor: "text-gray-600",
-        },
-        {
-          text: "0 Declined",
-          bg: "bg-red-50",
-          valueColor: "text-red-600",
-          labelColor: "text-gray-600",
-        },
-      ],
+      badges: [],
+      footer: {
+        type: "badges" as const,
+        badges: [
+          {
+            text: "0 Approved",
+            bg: "bg-green-50",
+            valueColor: "text-green-600",
+            labelColor: "text-gray-600",
+          },
+          {
+            text: "0 Pending",
+            bg: "bg-yellow-50",
+            valueColor: "text-yellow-600",
+            labelColor: "text-gray-600",
+          },
+          {
+            text: "0 Declined",
+            bg: "bg-red-50",
+            valueColor: "text-red-600",
+            labelColor: "text-gray-600",
+          },
+        ],
+      },
     },
     {
       id: "bookings",
@@ -153,7 +162,7 @@ function buildZeroStatisticsCards() {
       link: "/app/host/dashboard/bookings",
       badges: [],
       footer: {
-        type: "badges",
+        type: "badges" as const,
         badges: [
           {
             text: "0 Upcoming",

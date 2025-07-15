@@ -75,12 +75,12 @@ const StatisticsSection = ({
     let footerElement = null;
     if (card.footer?.type === "badges") {
       footerElement = (
-        <div className="flex items-center justify-between w-full gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {card.footer.badges.map((badge, badgeIndex) => (
-            <div key={badgeIndex} className="flex-1 flex justify-center">
+            <div key={badgeIndex}>
               {badge ? (
                 <div
-                  className={`px-2 py-1 ${badge.bg} rounded-full font-normal text-xs`}
+                  className={`px-2 py-1 ${badge.bg} rounded-full font-normal text-xs whitespace-nowrap`}
                 >
                   <span className={`${badge.valueColor} leading-[0.1px]`}>
                     {badge.text.split(" ")[0]}{" "}
@@ -89,9 +89,7 @@ const StatisticsSection = ({
                     {badge.text.split(" ")[1]}
                   </span>
                 </div>
-              ) : (
-                <div></div> // Empty column for null badges
-              )}
+              ) : null}
             </div>
           ))}
         </div>
@@ -123,9 +121,9 @@ const StatisticsSection = ({
 
   return (
     <div className="w-full">
-      <div className="flex justify-between gap-6">
+      <div className="grid grid-cols-2 gap-6 lg:flex lg:justify-between">
         {cards.map((card, index) => (
-          <div key={index} className="flex-1 min-w-[300px]">
+          <div key={index} className="min-w-0 lg:flex-1">
             {renderCard(card, index)}
           </div>
         ))}
@@ -145,7 +143,7 @@ const ApplicationsSection = ({
   const revenueData = showMockData ? mockChartData.revenueData : null;
 
   return (
-    <div className="flex items-stretch gap-6 w-full h-full">
+    <div className="flex flex-col lg:flex-row items-stretch gap-6 w-full h-full">
       <Card className="flex-1 border border-gray-200 rounded-[20px] flex flex-col">
         <CardHeader className="flex flex-row items-center justify-between px-6 py-[18px] border-b border-gray-200 flex-shrink-0">
           <div className="flex flex-col gap-0.5">
