@@ -157,7 +157,7 @@ export default function TabLayout({
       <header ref={headerRef} className={`w-full pb-4 ${isMobile ? 'px-0' : ''}`}>
         <div className="flex flex-col gap-6">
           <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-start gap-3'}`}>
-            <div className={`${isMobile ? 'w-full' : 'w-[434px]'} ${!isMobile ? 'sm:w-full md:w-[434px]' : ''}`}>
+            <div className={`w-full md:w-[434px]`}>
               <Card className="border-0  shadow-none">
                 <CardContent className="p-0">
                   <div className="relative">
@@ -234,7 +234,7 @@ export default function TabLayout({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col items-center h-full">
             {/* Scrollable content area - only use ScrollArea on desktop */}
             {isMobile ? (
               <>

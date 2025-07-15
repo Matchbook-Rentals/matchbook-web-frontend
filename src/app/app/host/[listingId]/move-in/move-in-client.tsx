@@ -119,13 +119,6 @@ export const MoveIn = ({ listing }: MoveInProps): JSX.Element => {
                     <label className="font-medium text-[#344054] text-sm [font-family:'Poppins',Helvetica]">
                       {field.label}
                     </label>
-                    {field.required && (
-                      <img
-                        className="w-[5.2px] h-1.5"
-                        alt="Required"
-                        src="/star-6.svg"
-                      />
-                    )}
                   </div>
                   <Textarea
                     className="min-h-12 bg-sidebar"
