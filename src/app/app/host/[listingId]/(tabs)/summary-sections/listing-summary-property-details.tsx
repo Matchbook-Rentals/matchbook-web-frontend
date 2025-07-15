@@ -64,7 +64,7 @@ const ListingSummaryPropertyDetails: React.FC<ListingSummaryPropertyDetailsProps
 
   // Format room details
   const formatRoomDetails = () => {
-    const beds = listing.bedrooms?.length || listing.roomCount || 0;
+    const beds = listing.roomCount || 0;
     const baths = listing.bathroomCount || 0;
     const sqft = listing.squareFootage || 'N/A';
     return { beds, baths, sqft };

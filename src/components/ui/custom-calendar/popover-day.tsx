@@ -34,7 +34,7 @@ const PopoverDay: React.FC<PopoverDayProps> = ({ day, booking, unavailability })
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className={`h-12 flex items-center justify-center border transition ${bgColor} cursor-pointer`}>
+        <div className={`h-12 test flex items-center justify-center border transition ${bgColor} cursor-pointer`}>
           {day}
         </div>
       </PopoverTrigger>

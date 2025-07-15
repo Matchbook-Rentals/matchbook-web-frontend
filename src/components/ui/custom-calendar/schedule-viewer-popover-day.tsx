@@ -41,7 +41,7 @@ const ScheduleViewerPopoverDay: React.FC<ScheduleViewerPopoverDayProps> = ({ day
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className={`h-12 flex items-center justify-center border transition ${bgColor} cursor-pointer`}>
+        <div className={`h-12 flex test items-center justify-center border transition ${bgColor} cursor-pointer`}>
           {day}
         </div>
       </PopoverTrigger>
@@ -74,7 +74,7 @@ const ScheduleViewerPopoverDay: React.FC<ScheduleViewerPopoverDayProps> = ({ day
                 size="sm" 
                 onClick={() => setIsDeleteDialogOpen(true)}
               >
-                Deleter
+                Delete
               </BrandButton>
               <BrandButton 
                 variant="default" 

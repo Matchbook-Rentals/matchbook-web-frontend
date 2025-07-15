@@ -305,10 +305,10 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
                     {/* Property Features */}
                     <div className="flex items-center gap-10">
                       {/* Bedroom */}
-                      <div className="flex items-center gap-1.5 py-1.5">
+                      <div onClick={() => console.log('BED', listing)} className="flex items-center gap-1.5 py-1.5">
                         <Bed className="w-5 h-5 text-gray-500" />
                         <span className="font-medium text-sm text-[#344054]">
-                          {listing.bedrooms?.length || listing.bedroomCount || 0} Bedroom{(listing.bedrooms?.length || listing.bedroomCount || 0) !== 1 ? 's' : ''}
+                          {listing.roomCount || 0} Bedroom{(listing.roomCount|| 0) !== 1 ? 's' : ''}
                         </span>
                       </div>
 
