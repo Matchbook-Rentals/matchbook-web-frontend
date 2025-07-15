@@ -34,7 +34,7 @@ const DesktopSearchTrigger: React.FC<DesktopSearchTriggerProps> = ({
   const inputClasses = `w-full px-3 py-0 text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-background ${inputStyles || ''}`;
 
-  const sectionClasses = `flex-1 flex flex-col sm:border-r border-gray-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus-visible:ring-inset py-1 px-1 rounded-sm ${hasAccess ? '' : 'cursor-not-allowed opacity-50'}`;
+  const sectionClasses = `flex-1 flex flex-col sm:border-r rounded-none border-gray-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus-visible:ring-inset py-1 px-1  ${hasAccess ? '' : 'cursor-not-allowed opacity-50'}`;
 
   // Add refs for each section div
   const locationSectionRef = useRef<HTMLDivElement>(null);
