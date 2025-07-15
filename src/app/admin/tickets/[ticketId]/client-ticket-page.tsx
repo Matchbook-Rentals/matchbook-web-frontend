@@ -24,7 +24,16 @@ interface ClientTicketPageProps {
 export default function ClientTicketPage({ ticket, user, conversation: initialConversation }: ClientTicketPageProps) {
   const { toast } = useToast();
   const [activeConversation, setActiveConversation] = useState(initialConversation);
-  const [messages, setMessages] = useState(initialConversation?.messages || []);
+  const [messages, setMessages] = useState(() => {
+    const initialMessages = initialConversation?.messages || [];
+    console.log('Initial messages loaded:', initialMessages.map(m => ({
+      id: m.id,
+      senderId: m.senderId,
+      content: m.content?.substring(0, 50),
+      createdAt: m.createdAt
+    })));
+    return initialMessages;
+  });
   const [messageInput, setMessageInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [typingUsers, setTypingUsers] = useState<Record<string, { isTyping: boolean; timestamp: string }>>({});
@@ -51,14 +60,34 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
   const webSocketManagerRef = useRef<any>(null);
 
   const handleIncomingMessage = useCallback((message: HookMessageData) => {
-    if (!user || !activeConversation) return;
+    console.log('🔄 handleIncomingMessage called', { 
+      hasUser: !!user, 
+      hasActiveConversation: !!activeConversation,
+      messageType: message.type,
+      messageSender: message.senderId,
+      messageContent: message.content?.substring(0, 50),
+      userIdCheck: user?.id,
+      conversationIdMatch: message.conversationId === activeConversation?.id
+    });
+
+    if (!user || !activeConversation) {
+      console.log('❌ Early return: missing user or activeConversation');
+      return;
+    }
 
     if (message.type !== 'typing') {
       logger.debug('Ticket chat message received', { type: message.type, message });
     }
 
     // Handle message delivery confirmation
-    if (message.id && message.senderId === user?.id && message.confirmedDeliveryAt) {
+    // Check for delivery confirmation from Customer Support messages sent by this admin
+    if (message.id && (message.senderId === user?.id || message.senderId === 'support-user-001') && message.confirmedDeliveryAt) {
+      console.log('Message delivery confirmation:', { 
+        messageId: message.id, 
+        senderId: message.senderId, 
+        adminUserId: user?.id,
+        deliveryStatus: message.deliveryStatus 
+      });
       setMessages((prev) => prev.map((msg) =>
         msg.id === message.id
           ? { ...msg, pending: false, deliveryStatus: message.deliveryStatus || 'delivered' }
@@ -68,8 +97,23 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
     }
 
     // Handle new incoming messages
+    // Accept messages from anyone except the current admin user (includes ticket user and Customer Support)
+    console.log('🔍 Message filtering check:', {
+      senderNotAdmin: message.senderId !== user.id,
+      messageType: message.type,
+      isMessageOrFile: message.type === 'message' || message.type === 'file',
+      conversationMatch: message.conversationId === activeConversation.id,
+      willProcess: message.senderId !== user.id && (message.type === 'message' || message.type === 'file') && message.conversationId === activeConversation.id
+    });
+    
     if (message.senderId !== user.id && (message.type === 'message' || message.type === 'file')) {
       if (message.conversationId === activeConversation.id) {
+        console.log('✅ Admin receiving message:', { 
+          messageId: message.id, 
+          senderId: message.senderId, 
+          content: message.content?.substring(0, 50),
+          adminUserId: user.id 
+        });
         setMessages((prev) => [...prev, { ...message, isRead: true, deliveryStatus: 'read' }]);
         
         // Send read receipt
@@ -120,7 +164,8 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
 
   const webSocketManager = useWebSocketManager({
     socketUrl,
-    userId: user?.id || null,
+    // Connect as Customer Support user for ticket conversations
+    userId: 'support-user-001',
     onMessageReceived: handleIncomingMessage,
     onTypingReceived: handleTypingReceived,
     onReadReceiptReceived: handleReadReceiptReceived,
@@ -211,6 +256,19 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
         if (receiver) {
           // Generate a proper UUID v4 format for the message (server expects "message_" prefix)
           const messageId = 'message_' + crypto.randomUUID();
+          
+          // Optimistically add the message to the UI
+          const optimisticMessage = {
+            id: messageId,
+            content: messageContent,
+            senderId: 'support-user-001',
+            conversationId: activeConversation.id,
+            createdAt: new Date().toISOString(),
+            pending: true,
+            deliveryStatus: 'sending'
+          };
+          
+          setMessages((prev) => [...prev, optimisticMessage]);
           
           webSocketManager.sendMessage({
             id: messageId,
@@ -377,34 +435,41 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
                     <div className="border rounded-lg">
                       <ScrollArea className="h-[400px] p-4" ref={scrollAreaRef}>
                         <div className="space-y-4">
-                          {messages.map((message: any) => (
-                            <div
-                              key={message.id}
-                              className={`flex ${message.senderId === user?.id ? 'justify-end' : 'justify-start'}`}
-                            >
+                          {messages.map((message: any) => {
+                            // Messages from Customer Support should appear as "outgoing" from admin perspective
+                            const isFromSupport = message.senderId === 'support-user-001';
+                            const isOutgoing = message.senderId === user?.id || isFromSupport;
+                            
+                            return (
                               <div
-                                className={`max-w-[70%] rounded-lg px-4 py-2 ${
-                                  message.senderId === user?.id
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'bg-muted'
-                                }`}
+                                key={message.id}
+                                className={`flex ${isOutgoing ? 'justify-end' : 'justify-start'}`}
                               >
-                                <p className="text-sm">{message.content}</p>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-xs opacity-70">
-                                    {formatDate(message.createdAt)}
-                                  </span>
-                                  {message.senderId === user?.id && (
+                                <div
+                                  className={`max-w-[70%] rounded-lg px-4 py-2 ${
+                                    isOutgoing
+                                      ? 'bg-primary text-primary-foreground'
+                                      : 'bg-muted'
+                                  }`}
+                                >
+                                  <p className="text-sm">{message.content}</p>
+                                  <div className="flex items-center gap-2 mt-1">
                                     <span className="text-xs opacity-70">
-                                      {message.deliveryStatus === 'read' ? '✓✓' : 
-                                       message.deliveryStatus === 'delivered' ? '✓' : 
-                                       message.pending ? '...' : ''}
+                                      {formatDate(message.createdAt)}
                                     </span>
-                                  )}
+                                    {/* Show delivery status for Customer Support messages too */}
+                                    {(message.senderId === user?.id || isFromSupport) && (
+                                      <span className="text-xs opacity-70">
+                                        {message.deliveryStatus === 'read' ? '✓✓' : 
+                                         message.deliveryStatus === 'delivered' ? '✓' : 
+                                         message.pending ? '...' : ''}
+                                      </span>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                           {isOtherUserTyping && (
                             <div className="flex justify-start">
                               <div className="bg-muted rounded-lg px-4 py-2">
