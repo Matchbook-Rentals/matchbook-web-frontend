@@ -43,11 +43,11 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
     return checkAdminAccess(userRole);
   }
 
-  // Host routes require host-beta access
-  // TODO: Consider disabling these protections before public launch
-  if (pathname.startsWith('/app/host')) {
-    return checkHostAccess(userRole);
-  }
+  // Host routes are now open to all users
+  // No longer requiring host-beta access
+  // if (pathname.startsWith('/app/host')) {
+  //   return checkHostAccess(userRole);
+  // }
 
   // Admin-only routes during MX period - entire rent section temporarily restricted
   if (pathname.startsWith('/app/rent')) {
@@ -67,10 +67,6 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
   //   }
   // }
 
-  // Beta access required routes - all app routes except host
-  if (pathname.startsWith('/app')) {
-    return checkBetaAccess(userRole);
-  }
 
   // Default: allow access to other routes
   return true;

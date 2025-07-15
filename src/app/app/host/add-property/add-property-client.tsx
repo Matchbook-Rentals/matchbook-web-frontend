@@ -443,7 +443,7 @@ const [listingBasics, setListingBasics] = useState({
       }
       
       // Exit to host overview after saving
-      router.push('/app/host/overview');
+      router.push('/app/host/dashboard/overview');
     } catch (error) {
       console.error('Error saving listing draft:', error);
       alert(`Error saving your listing: ${(error as Error).message}`);
