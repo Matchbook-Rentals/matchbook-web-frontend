@@ -81,7 +81,7 @@ export default function RentEasyCopy(): JSX.Element {
                   src={card.icon}
                 />
               </div>
-              <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center w-full max-w-[289px] px-2">
+              <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[14px] sm:text-[15px] md:text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center w-full max-w-[289px] px-2">
                 {card.title}
               </div>
             </>
@@ -97,7 +97,7 @@ export default function RentEasyCopy(): JSX.Element {
                     src={card.icon}
                   />
                 </div>
-                <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center">
+                <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[14px] sm:text-[15px] md:text-[16px] leading-[140%] tracking-[0px] text-[#384250] text-center">
                   {card.title}
                 </div>
               </div>
@@ -111,7 +111,7 @@ export default function RentEasyCopy(): JSX.Element {
                     src={card.icon}
                   />
                 </div>
-                <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[16px] leading-[140%] tracking-[0px] text-[#384250]">
+                <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[14px] sm:text-[15px] md:text-[16px] leading-[140%] tracking-[0px] text-[#384250]">
                   {card.title}
                 </div>
               </div>
@@ -120,7 +120,7 @@ export default function RentEasyCopy(): JSX.Element {
 
           <div className="flex flex-col items-start gap-1 relative self-stretch w-full">
             <div
-              className={`relative self-stretch [font-family:'Poppins',Helvetica] font-normal text-[14px] leading-[140%] tracking-[0px] text-[#6C737F] ${card.isCentered ? "text-center" : "text-center md:text-left"}`}
+              className={`relative self-stretch [font-family:'Poppins',Helvetica] font-normal text-[12px] sm:text-[13px] md:text-[14px] leading-[140%] tracking-[0px] text-[#6C737F] ${card.isCentered ? "text-center" : "text-center md:text-left"}`}
             >
               {card.description}
             </div>
@@ -149,10 +149,10 @@ export default function RentEasyCopy(): JSX.Element {
       >
       {/* Header */}
       <header className="inline-flex flex-col items-center gap-1 relative">
-        <h1 className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-neutral900 text-[32px] sm:text-[34px] md:text-[36px] lg:text-[38px] xl:text-[40px] text-center tracking-[-2.00px] leading-[normal] whitespace-nowrap">
+        <h1 className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-neutral900 text-[24px] sm:text-[28px] md:text-[32px] lg:text-[36px] xl:text-[40px] text-center tracking-[-2.00px] leading-[normal] whitespace-nowrap">
           Renting shouldn&apos;t be so hard.
         </h1>
-        <p className="relative self-stretch [font-family:'Poppins',Helvetica] font-medium text-[20px] sm:text-[21px] md:text-[22px] lg:text-[23px] xl:text-[24px] leading-[100%] tracking-[0px] text-center text-[#6C737F] whitespace-nowrap">
+        <p className="relative self-stretch [font-family:'Poppins',Helvetica] font-medium text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] xl:text-[24px] leading-[100%] tracking-[0px] text-center text-[#6C737F] whitespace-nowrap">
           Now, it doesn&apos;t have to be.
         </p>
       </header>

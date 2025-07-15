@@ -92,6 +92,13 @@ export default function TestSuitesPage() {
       description: 'Test property creation modal with start options',
       icon: <Home className="h-5 w-5" />,
       path: '/admin/test/add-property-modal'
+    },
+    {
+      id: 'terms-agreement',
+      name: 'Terms Agreement Tests',
+      description: 'Test terms agreement logic, database updates, API endpoints, and middleware behavior',
+      icon: <FileText className="h-5 w-5" />,
+      path: '/admin/test/terms-agreement'
     }
   ]
 

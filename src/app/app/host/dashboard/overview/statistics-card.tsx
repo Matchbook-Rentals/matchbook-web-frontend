@@ -65,21 +65,21 @@ export function StatisticsCard({
     <div className="flex flex-col items-start gap-4 p-5 h-full">
       <div className="flex gap-4 self-stretch w-full items-start">
         <div className="flex flex-col gap-2 flex-1 items-start">
-          <div className="self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-900 text-base leading-6">
+          <div className="self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-900 text-sm sm:text-base leading-5 sm:leading-6">
             {title}
           </div>
         </div>
 
         <div
           className={cn(
-            "flex w-10 h-10 items-center justify-center gap-2 p-2 rounded-full overflow-hidden",
+            "flex w-10 h-10 items-center justify-center gap-2 p-2 rounded-full overflow-hidden flex-shrink-0",
             iconBg
           )}
         >
           {isLoading ? (
-            <Loader2 className="w-5 h-5 text-gray-700 animate-spin" />
+            <Loader2 className="w-5 h-5 text-gray-700 animate-spin flex-shrink-0" />
           ) : (
-            <Icon className={cn("w-5 h-5", iconColor)} />
+            <Icon className={cn("w-5 h-5 flex-shrink-0", iconColor)} />
           )}
         </div>
       </div>
@@ -97,20 +97,54 @@ export function StatisticsCard({
 
           <div className="flex flex-col gap-4 w-full">
             {badges && badges.length > 0 && (
-              <div className="flex items-center justify-between w-full gap-3">
-                {badges.map((badge, badgeIndex) => (
-                  <div
-                    key={badgeIndex}
-                    className={cn("px-2.5 py-1 rounded-full font-normal text-xs flex-1 text-center min-w-0", badge.bg)}
-                  >
-                    <span className={cn(badge.valueColor, "leading-[0.1px]")}>
-                      {badge.text.split(" ")[0]}{" "}
-                    </span>
-                    <span className={cn(badge.labelColor, "leading-[18px]")}>
-                      {badge.text.split(" ")[1]}
-                    </span>
-                  </div>
-                ))}
+              <div className="hidden sm:flex items-center justify-between w-full gap-3">
+                {badges.map((badge, badgeIndex) => {
+                  // Only show pending badges at small sizes, show all badges at larger sizes
+                  const isPending = badge.text.toLowerCase().includes('pending');
+                  
+                  return (
+                    <div
+                      key={badgeIndex}
+                      className={cn(
+                        "px-2.5 py-1 rounded-full font-normal text-xs flex-1 text-center min-w-0",
+                        badge.bg,
+                        !isPending && "hidden sm:block"
+                      )}
+                    >
+                      <span className={cn(badge.valueColor, "leading-[0.1px]")}>
+                        {badge.text.split(" ")[0]}{" "}
+                      </span>
+                      <span className={cn(badge.labelColor, "leading-[18px]")}>
+                        {badge.text.split(" ")[1]}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            
+            {/* Show only pending badges at small sizes */}
+            {badges && badges.length > 0 && (
+              <div className="flex sm:hidden items-center justify-start w-full gap-2">
+                {badges
+                  .filter(badge => badge.text.toLowerCase().includes('pending'))
+                  .map((badge, badgeIndex) => (
+                    <div
+                      key={badgeIndex}
+                      className={cn(
+                        "px-2 py-1 rounded-full font-normal text-xs text-center",
+                        badge.bg
+                      )}
+                    >
+                      <span className={cn(badge.valueColor, "leading-[0.1px]")}>
+                        {badge.text.split(" ")[0]}{" "}
+                      </span>
+                      <span className={cn(badge.labelColor, "leading-[18px]")}>
+                        {badge.text.split(" ")[1]}
+                      </span>
+                    </div>
+                  ))
+                }
               </div>
             )}
 

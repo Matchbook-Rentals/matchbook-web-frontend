@@ -76,11 +76,17 @@ const StatisticsSection = ({
     if (card.footer?.type === "badges") {
       footerElement = (
         <div className="flex flex-wrap items-center gap-2">
-          {card.footer.badges.map((badge, badgeIndex) => (
-            <div key={badgeIndex}>
-              {badge ? (
+          {card.footer.badges.map((badge, badgeIndex) => {
+            if (!badge) return null;
+            
+            const isPending = badge.text.toLowerCase().includes('pending');
+            
+            return (
+              <div key={badgeIndex}>
                 <div
-                  className={`px-2 py-1 ${badge.bg} rounded-full font-normal text-xs whitespace-nowrap`}
+                  className={`px-2 py-1 ${badge.bg} rounded-full font-normal text-xs whitespace-nowrap ${
+                    !isPending ? 'hidden sm:block' : ''
+                  }`}
                 >
                   <span className={`${badge.valueColor} leading-[0.1px]`}>
                     {badge.text.split(" ")[0]}{" "}
@@ -89,9 +95,9 @@ const StatisticsSection = ({
                     {badge.text.split(" ")[1]}
                   </span>
                 </div>
-              ) : null}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       );
     }
