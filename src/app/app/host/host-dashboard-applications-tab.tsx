@@ -424,15 +424,17 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
       useMockData={useMockData}
       onMockDataToggle={setUseMockData}
     >
-      <HostApplicationCards
-        applications={filteredApplications}
-        loadingApplicationId={loadingApplicationId}
-        onViewApplicationDetails={handleViewApplicationDetails}
-        onMessageGuest={(appName: string) => {
-          // Handle message guest action - you may need to implement this
-          console.log('Message guest:', appName);
-        }}
-      />
+      {filteredApplications.length > 0 && (
+        <HostApplicationCards
+          applications={filteredApplications}
+          loadingApplicationId={loadingApplicationId}
+          onViewApplicationDetails={handleViewApplicationDetails}
+          onMessageGuest={(appName: string) => {
+            // Handle message guest action - you may need to implement this
+            console.log('Message guest:', appName);
+          }}
+        />
+      )}
     </TabLayout>
   );
 }
