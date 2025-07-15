@@ -1421,7 +1421,7 @@ const [listingBasics, setListingBasics] = useState({
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <Loader2 className="w-16 h-16 text-blue-500 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 text-[#3c8787] animate-spin mx-auto mb-4" />
           <p className="text-xl">Loading your draft listing...</p>
         </div>
       </div>
