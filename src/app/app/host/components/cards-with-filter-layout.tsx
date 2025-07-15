@@ -154,11 +154,11 @@ export default function TabLayout({
   return (
     <div className={`${isMobile ? '' : noMargin ? '' : APP_PAGE_MARGIN} flex flex-col `}>
       {/* Header with title, search, and filters */}
-      <header ref={headerRef} className={`w-full pb-4  ${isMobile ? 'px-4' : ''}`}>
+      <header ref={headerRef} className={`w-full pb-4 ${isMobile ? 'px-0' : ''}`}>
         <div className="flex flex-col gap-6">
           <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-start gap-3'}`}>
             <div className={`${isMobile ? 'w-full' : 'w-[434px]'} ${!isMobile ? 'sm:w-full md:w-[434px]' : ''}`}>
-              <Card className="border-0 shadow-none">
+              <Card className="border-0  shadow-none">
                 <CardContent className="p-0">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -174,7 +174,7 @@ export default function TabLayout({
 
             <div className={`flex ${isMobile ? 'flex-col gap-4' : 'sm:flex-row sm:items-center sm:justify-end items-center justify-end gap-6'} flex-1`}>
               {/* Mock Data Toggle for Admins */}
-              {showMockDataToggle && isAdmin && (
+              {showMockDataToggle && isAdmin && !isMobile &&  (
                 <div className="flex items-center">
                   <BrandCheckbox
                     checked={useMockData}
@@ -185,7 +185,7 @@ export default function TabLayout({
                 </div>
               )}
               
-              <div className="flex items-center gap-3">
+              <div className="flex items-center self-end md:self-auto gap-3">
                 <span className="whitespace-nowrap text-[#6b7280] text-base leading-6 font-['Poppins',Helvetica]">
                   {filterLabel}
                 </span>
@@ -221,7 +221,7 @@ export default function TabLayout({
       </header>
 
       {/* Content Area with Scroll */}
-      <div className={`flex-1 min-h-0 ${isMobile ? 'px-4 py-4' : 'mt-1'}`}>
+      <div className={`flex-1 min-h-0 ${isMobile ? 'px-4 pb-4' : 'mt-1'}`}>
         {!hasContent ? (
           <div className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500">
             <img 
