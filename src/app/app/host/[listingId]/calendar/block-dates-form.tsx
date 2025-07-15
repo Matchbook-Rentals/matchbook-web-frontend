@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { InteractiveDatePicker } from "@/components/ui/custom-calendar/date-range-selector/interactive-date-picker";
 import { format } from "date-fns";
 import { ListingUnavailability } from '@prisma/client';
+import { useToast } from "@/components/ui/use-toast";
 
 interface BlockDatesFormProps {
   listingId: string;
@@ -28,6 +29,26 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
   const [endDateTouched, setEndDateTouched] = useState(false);
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleDateSwap = (newStartDate: Date, newEndDate: Date) => {
+    if (newStartDate > newEndDate) {
+      setStartDate(newEndDate);
+      setEndDate(newStartDate);
+      setStartDateInput(format(newEndDate, "MM/dd/yyyy"));
+      setEndDateInput(format(newStartDate, "MM/dd/yyyy"));
+      
+      toast({
+        title: "Start date after end date, swapped automatically",
+        duration: 3000,
+      });
+    } else {
+      setStartDate(newStartDate);
+      setEndDate(newEndDate);
+      setStartDateInput(format(newStartDate, "MM/dd/yyyy"));
+      setEndDateInput(format(newEndDate, "MM/dd/yyyy"));
+    }
+  };
 
   const parseDate = (value: string, isStartDate: boolean, shouldValidate: boolean = false) => {
     if (value === "") {
@@ -102,10 +123,18 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
         
         if (isStartDate) {
           if (shouldValidate) setStartDateError("");
-          setStartDate(date);
+          if (endDate && date) {
+            handleDateSwap(date, endDate);
+          } else {
+            setStartDate(date);
+          }
         } else {
           if (shouldValidate) setEndDateError("");
-          setEndDate(date);
+          if (startDate && date) {
+            handleDateSwap(startDate, date);
+          } else {
+            setEndDate(date);
+          }
         }
       } else {
         // Invalid date (like 02/30/2024)
@@ -217,8 +246,17 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                             <InteractiveDatePicker
                               selectedDate={startDate}
                               onDateSelect={(date) => {
-                                setStartDate(date);
-                                setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                if (date) {
+                                  if (endDate) {
+                                    handleDateSwap(date, endDate);
+                                  } else {
+                                    setStartDate(date);
+                                    setStartDateInput(format(date, "MM/dd/yyyy"));
+                                  }
+                                } else {
+                                  setStartDate(undefined);
+                                  setStartDateInput("");
+                                }
                                 setStartDateError("");
                               }}
                               minDate={new Date(2020, 0, 1)}
@@ -243,8 +281,17 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                             <InteractiveDatePicker
                               selectedDate={startDate}
                               onDateSelect={(date) => {
-                                setStartDate(date);
-                                setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                if (date) {
+                                  if (endDate) {
+                                    handleDateSwap(date, endDate);
+                                  } else {
+                                    setStartDate(date);
+                                    setStartDateInput(format(date, "MM/dd/yyyy"));
+                                  }
+                                } else {
+                                  setStartDate(undefined);
+                                  setStartDateInput("");
+                                }
                                 setStartDateError("");
                               }}
                               minDate={new Date(2020, 0, 1)}
@@ -301,8 +348,17 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                             <InteractiveDatePicker
                               selectedDate={endDate}
                               onDateSelect={(date) => {
-                                setEndDate(date);
-                                setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                if (date) {
+                                  if (startDate) {
+                                    handleDateSwap(startDate, date);
+                                  } else {
+                                    setEndDate(date);
+                                    setEndDateInput(format(date, "MM/dd/yyyy"));
+                                  }
+                                } else {
+                                  setEndDate(undefined);
+                                  setEndDateInput("");
+                                }
                                 setEndDateError("");
                               }}
                               minDate={startDate || new Date(2020, 0, 1)}
@@ -327,8 +383,17 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                             <InteractiveDatePicker
                               selectedDate={endDate}
                               onDateSelect={(date) => {
-                                setEndDate(date);
-                                setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                if (date) {
+                                  if (startDate) {
+                                    handleDateSwap(startDate, date);
+                                  } else {
+                                    setEndDate(date);
+                                    setEndDateInput(format(date, "MM/dd/yyyy"));
+                                  }
+                                } else {
+                                  setEndDate(undefined);
+                                  setEndDateInput("");
+                                }
                                 setEndDateError("");
                               }}
                               minDate={startDate || new Date(2020, 0, 1)}
