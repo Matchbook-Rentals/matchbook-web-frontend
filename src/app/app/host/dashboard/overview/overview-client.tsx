@@ -74,31 +74,48 @@ const StatisticsSection = ({
     // Render footer based on type
     let footerElement = null;
     if (card.footer?.type === "badges") {
+      // Filter badges for small and large screens
+      const allBadges = card.footer.badges.filter(badge => badge);
+      const smallScreenBadges = allBadges.filter(badge => 
+        badge.text.toLowerCase().includes('pending') || badge.text.toLowerCase().includes('upcoming')
+      );
+      
       footerElement = (
-        <div className="flex flex-wrap items-center gap-2">
-          {card.footer.badges.map((badge, badgeIndex) => {
-            if (!badge) return null;
-            
-            const isPending = badge.text.toLowerCase().includes('pending');
-            
-            return (
-              <div key={badgeIndex}>
-                <div
-                  className={`px-2 py-1 ${badge.bg} rounded-full font-normal text-xs whitespace-nowrap ${
-                    !isPending ? 'hidden sm:block' : ''
-                  }`}
-                >
-                  <span className={`${badge.valueColor} leading-[0.1px]`}>
-                    {badge.text.split(" ")[0]}{" "}
-                  </span>
-                  <span className={`${badge.labelColor} leading-[18px]`}>
-                    {badge.text.split(" ")[1]}
-                  </span>
-                </div>
+        <>
+          {/* Small screen layout - only show pending/upcoming badges */}
+          <div className="flex sm:hidden flex-wrap items-center gap-2 justify-start">
+            {smallScreenBadges.map((badge, badgeIndex) => (
+              <div
+                key={`small-${badgeIndex}`}
+                className={`px-2 py-1 ${badge.bg} rounded-full font-normal text-xs whitespace-nowrap`}
+              >
+                <span className={`${badge.valueColor} leading-[0.1px]`}>
+                  {badge.text.split(" ")[0]}{" "}
+                </span>
+                <span className={`${badge.labelColor} leading-[18px]`}>
+                  {badge.text.split(" ")[1]}
+                </span>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+          
+          {/* Large screen layout - show all badges */}
+          <div className="hidden sm:flex flex-wrap items-center gap-2 justify-start">
+            {allBadges.map((badge, badgeIndex) => (
+              <div
+                key={`large-${badgeIndex}`}
+                className={`px-2 py-1 ${badge.bg} rounded-full font-normal text-xs whitespace-nowrap`}
+              >
+                <span className={`${badge.valueColor} leading-[0.1px]`}>
+                  {badge.text.split(" ")[0]}{" "}
+                </span>
+                <span className={`${badge.labelColor} leading-[18px]`}>
+                  {badge.text.split(" ")[1]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </>
       );
     }
     
@@ -127,7 +144,7 @@ const StatisticsSection = ({
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2 gap-6 lg:flex lg:justify-between">
+      <div className="grid grid-cols-1 grid-cols-2 gap-x-1 gap-y-4 sm:gap-6 lg:flex lg:justify-between">
         {cards.map((card, index) => (
           <div key={index} className="min-w-0 lg:flex-1">
             {renderCard(card, index)}
