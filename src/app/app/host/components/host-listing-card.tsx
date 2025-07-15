@@ -1,0 +1,310 @@
+"use client";
+
+import { MoreVerticalIcon, MapPinIcon, BedSingleIcon, BathIcon, SquareIcon } from "lucide-react";
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ListingAndImages } from "@/types";
+import CalendarDialog from "@/components/ui/calendar-dialog";
+import { useIsMobile } from "@/hooks/useIsMobile";
+
+interface HostListingCardProps {
+  listing: ListingAndImages;
+  loadingListingId?: string | null;
+  onViewDetails?: (listingId: string) => void;
+}
+
+export default function HostListingCard({ 
+  listing, 
+  loadingListingId, 
+  onViewDetails 
+}: HostListingCardProps) {
+  const isMobile = useIsMobile();
+
+  // Map listing status to display status and color
+  const getStatusInfo = (listing: ListingAndImages) => {
+    // Check approval status first
+    if (listing.approvalStatus === 'pending' || listing.approvalStatus === 'pendingReview') {
+      return { status: "Pending Approval", statusColor: "text-[#c68087]" };
+    } else if (listing.approvalStatus === 'rejected') {
+      return { status: "Rejected", statusColor: "text-[#c68087]" };
+    } else if (listing.approvalStatus === 'approved') {
+      // For approved listings, check if marked active by user
+      if (listing.markedActiveByUser) {
+        // Check rental status for active listings
+        if (listing.status === "rented") {
+          return { status: "Rented", statusColor: "text-[#24742f]" };
+        } else {
+          return { status: "Active", statusColor: "text-[#5c9ac5]" };
+        }
+      } else {
+        return { status: "Inactive", statusColor: "text-[#c68087]" };
+      }
+    } else {
+      // Fallback to old logic if approval status is undefined
+      if (listing.status === "rented") {
+        return { status: "Rented", statusColor: "text-[#24742f]" };
+      } else if (listing.status === "booked") {
+        return { status: "Active", statusColor: "text-[#5c9ac5]" };
+      } else if (listing.status === "available") {
+        return { status: "Active", statusColor: "text-[#5c9ac5]" };
+      } else {
+        return { status: "Inactive", statusColor: "text-[#c68087]" };
+      }
+    }
+  };
+
+  // Format price range
+  const formatPrice = (listing: ListingAndImages) => {
+    if (listing.longestLeasePrice && listing.shortestLeasePrice) {
+      // If both prices are the same, display only one
+      if (listing.longestLeasePrice === listing.shortestLeasePrice) {
+        return `$${listing.longestLeasePrice.toLocaleString()} / Month`;
+      }
+      // Ensure lower price is always first (in case they were inverted)
+      const lowerPrice = Math.min(listing.longestLeasePrice, listing.shortestLeasePrice);
+      const higherPrice = Math.max(listing.longestLeasePrice, listing.shortestLeasePrice);
+      return `$${lowerPrice.toLocaleString()} - $${higherPrice.toLocaleString()} / Month`;
+    } else if (listing.shortestLeasePrice) {
+      return `$${listing.shortestLeasePrice.toLocaleString()} / Month`;
+    } else if (listing.longestLeasePrice) {
+      return `$${listing.longestLeasePrice.toLocaleString()} / Month`;
+    }
+    return "Price not set";
+  };
+
+  const { status, statusColor } = getStatusInfo(listing);
+  const fullAddress = `${listing.streetAddress1 || ''} ${listing.city || ''}, ${listing.state || ''} ${listing.postalCode || ''}`;
+  const displayAddress = isMobile 
+    ? (listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`)
+    : fullAddress;
+
+  // Mobile Layout
+  if (isMobile) {
+    return (
+      <Card className="flex flex-col w-full items-start gap-6 p-2 bg-white rounded-xl overflow-hidden mb-4">
+        <CardContent className="flex flex-col items-end justify-end gap-6 relative self-stretch w-full p-0">
+          <div className="flex items-start gap-2 relative self-stretch w-full">
+            <div className="flex flex-col items-start gap-6 relative flex-1 grow">
+              {/* Property Image */}
+              <div className="relative self-stretch w-full h-[162px] rounded-xl overflow-hidden bg-cover bg-center"
+                   style={{ backgroundImage: `url(${listing.listingImages?.[0]?.url || '/image-35.png'})` }}>
+                <div className="absolute top-2.5 right-2.5">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="w-6 h-6 p-0 bg-white rounded overflow-hidden border border-solid border-[#d9dadf] shadow-[0px_0px_4px_#ffffff7d]"
+                  >
+                    <MoreVerticalIcon className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Property Details */}
+              <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full">
+                <div className="flex flex-col items-start gap-2 relative self-stretch w-full">
+                  {/* Property Name and Status */}
+                  <div className="flex items-start gap-2 relative self-stretch w-full">
+                    <div className="relative flex-1 mt-[-1.00px] font-text-label-large-medium font-[number:var(--text-label-large-medium-font-weight)] text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)] [font-style:var(--text-label-large-medium-font-style)]">
+                      {listing.title || displayAddress}
+                    </div>
+
+                    <Badge
+                      variant="outline"
+                      className={`items-center gap-1.5 px-2.5 py-1 rounded-full border border-solid font-medium ${
+                        status === 'Active' ? 'bg-[#e9f7ee] border-[#1ca34e] text-[#1ca34e]' :
+                        status === 'Rented' ? 'bg-blue-50 border-blue-600 text-blue-600' :
+                        status === 'Pending Approval' ? 'bg-yellow-50 border-yellow-700 text-yellow-700' :
+                        status === 'Rejected' ? 'bg-red-50 border-red-600 text-red-600' :
+                        'bg-gray-50 border-gray-600 text-gray-600'
+                      }`}
+                    >
+                      {status}
+                    </Badge>
+                  </div>
+
+                  {/* Property Address */}
+                  <div className="flex w-full items-start gap-2 relative">
+                    <MapPinIcon className="w-5 h-5 text-[#777b8b] flex-shrink-0" />
+                    <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)] truncate">
+                      {displayAddress}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Property Features */}
+                <div className="flex items-center gap-[22px] relative self-stretch w-full flex-wrap-reverse">
+                  <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
+                    <BedSingleIcon className="w-5 h-5 text-[#344054]" />
+                    <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                      {listing.roomCount || 0} Bedroom{(listing.roomCount || 0) !== 1 ? 's' : ''}
+                    </div>
+                  </div>
+
+                  <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
+                    <BathIcon className="w-5 h-5 text-[#344054]" />
+                    <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                      {listing.bathroomCount || 0} Bathroom{(listing.bathroomCount || 0) !== 1 ? 's' : ''}
+                    </div>
+                  </div>
+
+                  <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
+                    <SquareIcon className="w-5 h-5 text-[#344054]" />
+                    <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                      {listing.squareFootage || 'N/A'} Sqft
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+
+        <CardFooter className="flex flex-col items-start justify-end gap-3 relative self-stretch w-full p-0">
+          {/* Price */}
+          <div className="relative self-stretch mt-[-1.00px] font-text-heading-small-semi-bold font-[number:var(--text-heading-small-semi-bold-font-weight)] text-[#484a54] text-[length:var(--text-heading-small-semi-bold-font-size)] tracking-[var(--text-heading-small-semi-bold-letter-spacing)] leading-[var(--text-heading-small-semi-bold-line-height)] [font-style:var(--text-heading-small-semi-bold-font-style)]">
+            {formatPrice(listing)}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 relative self-stretch w-full">
+            <CalendarDialog
+              bookings={listing.bookings || []}
+              unavailablePeriods={listing.unavailablePeriods || []}
+              triggerText="View Calendar"
+              listingId={listing.id}
+              showIcon={false}
+              triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-white hover:bg-[#3c8787] hover:text-white transition-all duration-300"
+              variant="outline"
+            />
+            <BrandButton
+              variant="default"
+              className="flex-1 bg-[#3c8787] text-white font-semibold"
+              href={`/app/host/${listing.id}/summary`}
+              spinOnClick={true}
+            >
+              Manage Listing
+            </BrandButton>
+          </div>
+        </CardFooter>
+      </Card>
+    );
+  }
+
+  // Desktop Layout
+  return (
+    <Card className="w-full p-6 rounded-xl mb-8">
+      <CardContent className="p-0">
+        <div className="flex gap-6">
+          {/* Property Image */}
+          <div className="w-[209px] h-[140px] rounded-xl overflow-hidden flex-shrink-0">
+            <img
+              className="w-full h-full object-cover"
+              alt="Property image"
+              src={listing.listingImages?.[0]?.url || "/image-35.png"}
+            />
+          </div>
+
+          {/* Property Details */}
+          <div className="flex flex-col gap-4 flex-grow">
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2">
+                {/* Status Badge */}
+                <Badge className={`w-fit ${
+                  status === 'Active' ? 'bg-[#e9f7ee] text-[#1ca34e] border border-[#1ca34e] hover:bg-[#e9f7ee] hover:text-[#1ca34e]' : 
+                  status === 'Rented' ? 'bg-blue-50 text-blue-600 border border-blue-600 hover:bg-blue-50 hover:text-blue-600' : 
+                  status === 'Pending Approval' ? 'bg-yellow-50 text-yellow-700 border border-yellow-700 hover:bg-yellow-50 hover:text-yellow-700' :
+                  status === 'Rejected' ? 'bg-red-50 text-red-600 border border-red-600 hover:bg-red-50 hover:text-red-600' :
+                  'bg-gray-50 text-gray-600 border border-gray-600 hover:bg-gray-50 hover:text-gray-600'
+                }`}>
+                  {status}
+                </Badge>
+
+                {/* Property Name */}
+                <h3 className="font-text-label-large-medium text-[#484a54] text-[18px]">
+                  {listing.title || displayAddress}
+                </h3>
+              </div>
+
+              {/* Property Address */}
+              <div className="flex items-center gap-2 w-full">
+                <MapPinIcon className="w-5 h-5 text-[#777b8b]" />
+                <span className="font-text-label-small-regular text-[#777b8b] text-[14px]">
+                  {displayAddress}
+                </span>
+              </div>
+            </div>
+
+            {/* Property Features */}
+            <div className="flex items-center gap-10">
+              {/* Bedroom */}
+              <div className="flex items-center gap-1.5 py-1.5">
+                <BedSingleIcon className="w-5 h-5 text-gray-500" />
+                <span className="font-medium text-sm text-[#344054]">
+                  {listing.roomCount || 0} Bedroom{(listing.roomCount|| 0) !== 1 ? 's' : ''}
+                </span>
+              </div>
+
+              {/* Bathroom */}
+              <div className="flex items-center gap-1.5 py-1.5">
+                <BathIcon className="w-5 h-5 text-gray-500" />
+                <span className="font-medium text-sm text-[#344054]">
+                  {listing.bathroomCount || 0} Bathroom{(listing.bathroomCount || 0) !== 1 ? 's' : ''}
+                </span>
+              </div>
+
+              {/* Square Footage */}
+              <div className="flex items-center gap-1.5 py-1.5">
+                <SquareIcon className="w-5 h-5 text-gray-500" />
+                <span className="font-medium text-sm text-[#344054]">
+                  {listing.squareFootage || 'N/A'} Sqft
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Price and Actions */}
+          <div className="flex flex-col justify-between items-end">
+            {/* More Options Button */}
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-lg border-[#3c8787] h-10 w-10"
+            >
+              <MoreVerticalIcon className="h-5 w-5" />
+            </Button>
+
+            <div className="flex flex-col items-end gap-3">
+              {/* Price */}
+              <p className="font-semibold text-xl text-[#484a54]">
+                {formatPrice(listing)}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3">
+                <CalendarDialog 
+                  bookings={listing.bookings || []}
+                  unavailablePeriods={listing.unavailablePeriods || []}
+                  triggerText="View Calendar"
+                  listingId={listing.id}
+                  showIcon={false}
+                  triggerClassName="!border-primaryBrand !text-primaryBrand hover:!bg-primaryBrand hover:!text-white !transition-all !duration-300 !h-[36px] !min-w-[156px] !rounded-lg !px-4 !py-3 !gap-1 !font-['Poppins'] !font-semibold !text-sm !leading-5 !tracking-normal"
+                />
+                <BrandButton 
+                  variant="default"
+                  size="sm"
+                  href={`/app/host/${listing.id}/summary`}
+                  spinOnClick={true}
+                >
+                  Manage Listing
+                </BrandButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
