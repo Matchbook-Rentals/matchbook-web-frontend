@@ -98,7 +98,15 @@ export default clerkMiddleware(async (auth, request) => {
     auth().protect();
 
     // Check terms agreement for protected routes
-    const { userId, sessionClaims } = auth();
+    let { userId, sessionClaims } = auth();
+    
+    // If no userId, wait 200ms and try auth again once
+    if (!userId) {
+      await new Promise(resolve => setTimeout(resolve, 200));
+      const authRetry = auth();
+      userId = authRetry.userId;
+      sessionClaims = authRetry.sessionClaims;
+    }
     
     if (userId) {
       try {
