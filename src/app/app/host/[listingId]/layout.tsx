@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { getListingById } from '@/app/actions/listings';
 import { getHousingRequestsByListingId } from '@/app/actions/housing-requests';
 import { getBookingsByListingId } from '@/app/actions/bookings';
@@ -156,23 +156,8 @@ export default async function ListingLayout({ children, params }: ListingLayoutP
   const { listingId } = params;
 
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex">
-        <div className="w-64 bg-gray-100 animate-pulse"></div>
-        <div className="flex-1">
-          <div className="h-16 bg-gray-200 animate-pulse border-b"></div>
-          <div className="p-4">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded mb-4"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    }>
-      <ListingDataWrapper listingId={listingId}>
-        {children}
-      </ListingDataWrapper>
-    </Suspense>
+    <ListingDataWrapper listingId={listingId}>
+      {children}
+    </ListingDataWrapper>
   );
 }
