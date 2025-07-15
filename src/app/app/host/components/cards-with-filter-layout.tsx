@@ -233,7 +233,7 @@ export default function TabLayout({
             {/* Scrollable content area - only use ScrollArea on desktop */}
             {isMobile ? (
               <>
-                <div className="space-y-4 w-fit">
+                <div className="space-y-4 w-full">
                   {children}
                 </div>
                 
