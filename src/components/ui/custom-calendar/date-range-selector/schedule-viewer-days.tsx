@@ -246,7 +246,7 @@ function CalendarDay({
               />
               
               <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-[550px] flex flex-col">
+                <DialogContent className="sm:max-w-[550px] flex flex-col !top-[15vh] sm:!top-[50%] !translate-y-0 sm:!translate-y-[-50%]" showCloseButton={false}>
                   <div className="flex items-center justify-center">
                     <h2 className="text-lg font-semibold text-gray-900">Delete this unavailable period?</h2>
                   </div>
