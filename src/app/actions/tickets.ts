@@ -3,6 +3,7 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { logTicketCreated, logStatusChanged, logNoteSaved, logChatInitiated } from "./ticket-activity";
 
 interface CreateTicketParams {
   title: string;
@@ -53,6 +54,23 @@ export async function createTicket(data: CreateTicketParams) {
     });
 
     console.log("Ticket created successfully:", { id: ticket.id, title: ticket.title });
+    
+    // Log the ticket creation activity
+    if (userId) {
+      const user = await prismadb.user.findUnique({
+        where: { id: userId },
+        select: { firstName: true, lastName: true, email: true }
+      });
+      
+      await logTicketCreated(ticket.id, user ? {
+        id: userId,
+        name: `${user.firstName} ${user.lastName}`.trim(),
+        email: user.email || data.email
+      } : undefined);
+    } else {
+      await logTicketCreated(ticket.id);
+    }
+    
     revalidatePath("/admin/tickets");
     return { success: true, ticketId: ticket.id };
   } catch (error) {
@@ -147,6 +165,16 @@ export async function updateTicketStatus(ticketId: string, status: string) {
   try {
     console.log(`Updating ticket ${ticketId} status to "${status}"`);
     
+    // Get the current ticket to log the old status
+    const currentTicket = await prismadb.ticket.findUnique({
+      where: { id: ticketId },
+      select: { status: true }
+    });
+    
+    if (!currentTicket) {
+      return { error: "Ticket not found" };
+    }
+    
     const updatedTicket = await prismadb.ticket.update({
       where: { id: ticketId },
       data: {
@@ -156,6 +184,24 @@ export async function updateTicketStatus(ticketId: string, status: string) {
     });
 
     console.log(`Ticket ${ticketId} status updated successfully`);
+    
+    // Log the status change activity
+    const { userId } = auth();
+    if (userId) {
+      const user = await prismadb.user.findUnique({
+        where: { id: userId },
+        select: { firstName: true, lastName: true, email: true }
+      });
+      
+      await logStatusChanged(ticketId, currentTicket.status, status, user ? {
+        id: userId,
+        name: `${user.firstName} ${user.lastName}`.trim(),
+        email: user.email || ''
+      } : undefined);
+    } else {
+      await logStatusChanged(ticketId, currentTicket.status, status);
+    }
+    
     revalidatePath("/admin/tickets");
     return { success: true, ticket: updatedTicket };
   } catch (error) {
@@ -174,6 +220,24 @@ export async function updateTicketSupportNotes(ticketId: string, supportNotes: s
     });
 
     console.log(`Ticket ${ticketId} support notes updated successfully`);
+    
+    // Log the note saved activity
+    const { userId } = auth();
+    if (userId) {
+      const user = await prismadb.user.findUnique({
+        where: { id: userId },
+        select: { firstName: true, lastName: true, email: true }
+      });
+      
+      await logNoteSaved(ticketId, supportNotes, user ? {
+        id: userId,
+        name: `${user.firstName} ${user.lastName}`.trim(),
+        email: user.email || ''
+      } : undefined);
+    } else {
+      await logNoteSaved(ticketId, supportNotes);
+    }
+    
     revalidatePath("/admin/tickets");
     return { success: true, ticket: updatedTicket };
   } catch (error) {

@@ -4,6 +4,7 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { checkRole } from "@/utils/roles";
 import { revalidatePath } from "next/cache";
+import { logChatInitiated } from "./ticket-activity";
 
 const CUSTOMER_SUPPORT_USER_ID = "support-user-001";
 
@@ -215,7 +216,7 @@ async function createOrGetTicketConversationForSupport(ticketId: string, ticketU
     });
 
     // Use a more robust approach with separate conversation and participant creation
-    return await prismadb.$transaction(async (tx) => {
+    const result = await prismadb.$transaction(async (tx) => {
       // Double-check for existing conversation within transaction
       const doubleCheckConversation = await tx.conversation.findFirst({
         where: {
@@ -263,6 +264,9 @@ async function createOrGetTicketConversationForSupport(ticketId: string, ticketU
           isGroup: false
         }
       });
+      
+      // Log chat initiation activity (outside the transaction to avoid nesting issues)
+      // We'll do this after the transaction completes
 
       // Create participants separately with upsert to handle duplicates
       await tx.conversationParticipant.upsert({
@@ -323,6 +327,27 @@ async function createOrGetTicketConversationForSupport(ticketId: string, ticketU
       
       return completeConversation!;
     });
+    
+    // Log chat initiation activity after successful conversation creation
+    if (result && result.id) {
+      const { userId } = auth();
+      if (userId) {
+        const user = await prismadb.user.findUnique({
+          where: { id: userId },
+          select: { firstName: true, lastName: true, email: true }
+        });
+        
+        await logChatInitiated(ticketId, user ? {
+          id: userId,
+          name: `${user.firstName} ${user.lastName}`.trim(),
+          email: user.email || ''
+        } : undefined);
+      } else {
+        await logChatInitiated(ticketId);
+      }
+    }
+    
+    return result;
   } catch (error) {
     console.error("💥 Error in createOrGetTicketConversationForSupport:", error);
     console.error("💥 Conversation creation error details:", {

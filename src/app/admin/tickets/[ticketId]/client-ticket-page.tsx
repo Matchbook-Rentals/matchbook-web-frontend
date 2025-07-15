@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowLeft, Clock, MessageSquare, Send } from 'lucide-react'
 import { SupportNotes } from './support-notes'
+import ActivityLog from './activity-log'
 import { updateTicketStatus } from '@/app/actions/tickets'
 import { sendCustomerSupportMessage, getTicketConversation } from '@/app/actions/customer-support'
 import { useWebSocketManager, MessageData as HookMessageData } from '@/hooks/useWebSocketManager';
@@ -24,6 +25,7 @@ interface ClientTicketPageProps {
 export default function ClientTicketPage({ ticket, user, conversation: initialConversation }: ClientTicketPageProps) {
   const { toast } = useToast();
   const [activeConversation, setActiveConversation] = useState(initialConversation);
+  const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0);
   const [messages, setMessages] = useState(() => {
     const initialMessages = initialConversation?.messages || [];
     console.log('Initial messages loaded:', initialMessages.map(m => ({
@@ -214,6 +216,8 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
         if (createResult.success && createResult.conversation) {
           setActiveConversation(createResult.conversation);
           setMessages(createResult.conversation.messages || []);
+          // Refresh activity log
+          setActivityRefreshTrigger(prev => prev + 1);
           toast({
             title: "Success",
             description: "Customer Support chat created successfully!",
@@ -363,6 +367,8 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
         title: "Success",
         description: `Ticket status updated to ${newStatus}`,
       });
+      // Refresh activity log
+      setActivityRefreshTrigger(prev => prev + 1);
       // Optionally refresh the page or update local state
       window.location.reload();
     } catch (error) {
@@ -415,7 +421,15 @@ export default function ClientTicketPage({ ticket, user, conversation: initialCo
                 </div>
                 
                 <div>
-                  <SupportNotes ticketId={ticket.id} defaultNotes={ticket.supportNotes || ''} />
+                  <ActivityLog ticketId={ticket.id} refreshTrigger={activityRefreshTrigger} />
+                </div>
+                
+                <div>
+                  <SupportNotes 
+                    ticketId={ticket.id} 
+                    defaultNotes={ticket.supportNotes || ''} 
+                    onNotesSaved={() => setActivityRefreshTrigger(prev => prev + 1)} 
+                  />
                 </div>
 
                 <div className="border-t pt-6">

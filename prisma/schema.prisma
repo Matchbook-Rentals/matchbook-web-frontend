@@ -1139,6 +1139,7 @@ model Ticket {
 
   // Relationships
   responses TicketResponse[]
+  activities TicketActivity[]
   user      User?            @relation(fields: [userId], references: [id])
 
   @@index([userId])
@@ -1159,6 +1160,27 @@ model TicketResponse {
   ticketId String
 
   @@index([ticketId])
+}
+
+model TicketActivity {
+  id        String   @id @default(cuid())
+  ticketId  String
+  action    String   // "ticket_created", "status_changed", "note_saved", "chat_initiated", "assignment_changed", "response_added", etc.
+  details   String?  @db.Text // JSON string with additional context (e.g., old_status, new_status, note_content, etc.)
+  createdAt DateTime @default(now())
+  
+  // Who performed the action
+  actorType String   // "user", "admin", "system"
+  actorId   String?  // User ID if applicable
+  actorName String?  // Display name for the actor
+  actorEmail String? // Email for the actor
+  
+  // Relationship
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  @@index([ticketId])
+  @@index([createdAt])
+  @@index([action])
 }
 
 model ResidentialHistory {

@@ -22,16 +22,17 @@ export default async function SummaryPage({ params }: SummaryPageProps) {
     return notFound();
   }
 
-  let titleCasedBreadcrumbText = getListingDisplayName(listing); 
+  let titleCasedBreadcrumbText = getListingDisplayName(listing);
+  // add above listing active swtich wehn wired up
+  //<HospitableConnectButton listing={listing} />
 
   return (
     <div className={HOST_PAGE_STYLE}>
-      <HostPageTitle 
-        title="Listing Summary" 
+      <HostPageTitle
+        title="Listing Summary"
         subtitle={`Summary for ${titleCasedBreadcrumbText}`}
         rightContent={
           <div className="flex items-center gap-4">
-            <HospitableConnectButton listing={listing} />
             <ListingActiveSwitch listing={listing} />
           </div>
         }

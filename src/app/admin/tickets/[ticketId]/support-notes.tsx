@@ -9,9 +9,10 @@ import { CheckCircle, AlertCircle } from 'lucide-react'
 interface SupportNotesProps {
   ticketId: string
   defaultNotes: string
+  onNotesSaved?: () => void
 }
 
-export function SupportNotes({ ticketId, defaultNotes }: SupportNotesProps) {
+export function SupportNotes({ ticketId, defaultNotes, onNotesSaved }: SupportNotesProps) {
   const [notes, setNotes] = useState(defaultNotes)
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
   
@@ -25,6 +26,8 @@ export function SupportNotes({ ticketId, defaultNotes }: SupportNotesProps) {
         setStatus({ type: 'error', message: result.error })
       } else if (result.success) {
         setStatus({ type: 'success', message: 'Notes saved successfully' })
+        // Trigger activity log refresh
+        onNotesSaved?.()
       }
     } catch (error) {
       setStatus({ type: 'error', message: 'Failed to save notes' })
