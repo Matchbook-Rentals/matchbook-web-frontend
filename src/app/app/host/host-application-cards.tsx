@@ -25,7 +25,7 @@ const transformApplicationForCard = (app: any, isMobile: boolean) => {
     status: app.status.charAt(0).toUpperCase() + app.status.slice(1),
     dates: app.period,
     address: addressDisplay,
-    description: `for ${listing?.title || 'this property'}`,
+    description: `${listing?.title || 'this property'}`,
     price: app.price,
     occupants,
     profileImage: app.user?.imageUrl,

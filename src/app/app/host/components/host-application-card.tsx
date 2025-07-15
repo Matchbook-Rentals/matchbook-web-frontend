@@ -122,7 +122,7 @@ const HostApplicationCardMobile: React.FC<HostApplicationCardProps> = ({
           </div>
 
           {/* Property Description */}
-          <div className="font-text-label-medium-regular text-[#777b8b] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)]">
+          <div className="font-text-label-medium-regular hidden lg:inline text-[#777b8b] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)]">
             {description}
           </div>
 
@@ -199,7 +199,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
 
   React.useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 640); // sm breakpoint
+      setIsMobile(window.innerWidth < 800); // sm breakpoint
     };
 
     checkIsMobile();
@@ -311,7 +311,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
           </div>
 
           {/* Right Side - Price and Actions */}
-          <div className="flex flex-col sm:items-end items-start justify-center gap-2 w-full sm:w-auto self-stretch">
+          <div className="flex flex-col sm:items-end items-start justify-center gap-2 w-fit self-stretch">
             <div className="flex flex-col items-start gap-2.5 flex-1">
               <Popover>
                 <PopoverTrigger asChild>
@@ -342,7 +342,7 @@ export const HostApplicationCard: React.FC<HostApplicationCardProps> = ({
                 {price}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <div className="flex flex-col lg:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <BrandButton
                   variant="outline"
                   onClick={onApplicationDetails}
