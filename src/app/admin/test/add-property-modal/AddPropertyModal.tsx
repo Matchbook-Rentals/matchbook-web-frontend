@@ -56,23 +56,23 @@ export default function AddPropertyModal({
         {triggerButton || defaultTrigger}
       </DialogTrigger>
       <DialogContent 
-        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] sm:max-w-md"
+        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] sm:max-w-md !top-[15vh] sm:!top-[30%] !translate-y-0 sm:!translate-y-[-50%]"
       >
         <div className="flex items-center justify-center relative self-stretch w-full">
           <h2 className="text-lg font-semibold text-gray-900">How would you like to start?</h2>
         </div>
 
-        <div className="flex flex-wrap gap-4 w-full">
+        <div className="flex flex-wrap md:flex-nowrap gap-4 w-full">
           <BrandButton 
             variant="outline" 
-            className="flex-1"
+            className="w-full  px-2"
             onClick={handleStartBlank}
           >
             Start with a blank listing
           </BrandButton>
           <BrandButton 
             variant="default" 
-            className="flex-1"
+            className="w-full "
             onClick={handlePickUpWhereLeftOff}
           >
             Pick up where you left off

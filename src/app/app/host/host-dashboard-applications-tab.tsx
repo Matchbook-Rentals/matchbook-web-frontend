@@ -343,6 +343,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
   
   // Convert housing requests to the format the UI expects and sort them
   const applications = useMemo(() => {
+    console.log('RQU', requestsToUse)
     const formattedApplications = requestsToUse.map(formatHousingRequestForDisplay);
     
     // Sort by status priority (pending -> approved -> denied) and then by oldest createdAt
@@ -407,7 +408,9 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     setSelectedFilter(filter);
   };
 
+  console.log('FA', filteredApplications)
 
+  // TEMP FIX TO SHOW NULL STATE, ADD BACK IN FILTERED Applications MAP TO APP CARDS
   return (
     <TabLayout
       title="Applications"
@@ -424,17 +427,6 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
       useMockData={useMockData}
       onMockDataToggle={setUseMockData}
     >
-      {filteredApplications.length > 0 && (
-        <HostApplicationCards
-          applications={filteredApplications}
-          loadingApplicationId={loadingApplicationId}
-          onViewApplicationDetails={handleViewApplicationDetails}
-          onMessageGuest={(appName: string) => {
-            // Handle message guest action - you may need to implement this
-            console.log('Message guest:', appName);
-          }}
-        />
-      )}
     </TabLayout>
   );
 }

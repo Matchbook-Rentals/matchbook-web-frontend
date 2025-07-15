@@ -37,7 +37,7 @@ export default function HostListingCard({
   // Map listing status to display status and color
   const getStatusInfo = (listing: ListingAndImages) => {
     // Check approval status first
-    if (listing.approvalStatus === 'pending' || listing.approvalStatus === 'pendingReview') {
+    if (listing.approvalStatus === 'pendingReview') {
       return { status: "Pending Approval", statusColor: "text-[#c68087]" };
     } else if (listing.approvalStatus === 'rejected') {
       return { status: "Rejected", statusColor: "text-[#c68087]" };
@@ -69,6 +69,20 @@ export default function HostListingCard({
 
   // Format price range
   const formatPrice = (listing: ListingAndImages) => {
+    if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
+      const prices = listing.monthlyPricing.map(pricing => pricing.price);
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+      
+      // If all prices are the same, display only one
+      if (minPrice === maxPrice) {
+        return `$${minPrice.toLocaleString()} / Month`;
+      }
+      
+      return `$${minPrice.toLocaleString()} - $${maxPrice.toLocaleString()} / Month`;
+    }
+    
+    // Fallback to deprecated fields if monthlyPricing is not available
     if (listing.longestLeasePrice && listing.shortestLeasePrice) {
       // If both prices are the same, display only one
       if (listing.longestLeasePrice === listing.shortestLeasePrice) {
@@ -184,7 +198,7 @@ export default function HostListingCard({
                   <div className="flex w-full items-start gap-2 relative">
                     <MapPinIcon className="w-5 h-5 text-[#777b8b] flex-shrink-0" />
                     <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)] truncate">
-                      {displayAddress}
+                      {listing.locationString}
                     </div>
                   </div>
                 </div>

@@ -18,6 +18,7 @@ import {
   Lease,
   BoldSignLease,
   Maybe,
+  ListingMonthlyPricing,
 } from "@prisma/client";
 export * from './websocket';
 
@@ -42,6 +43,7 @@ export interface ListingAndImages extends Listing {
   availableStart?: Date;
   availableEnd?: Date;
   isActuallyAvailable?: boolean; // Helper flag from calculation
+  monthlyPricing?: ListingMonthlyPricing[];
 }
 
 export interface RequestWithUser extends HousingRequest {
