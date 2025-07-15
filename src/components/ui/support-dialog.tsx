@@ -36,9 +36,10 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
   const { user } = useUser();
 
   const categories = [
-    { value: "general", label: "General" },
-    { value: "technical", label: "Technical" },
-    { value: "billing", label: "Billing" },
+    { value: "bug", label: "Bug" },
+    { value: "feature-request", label: "Feature Request" },
+    { value: "account", label: "Account" },
+    { value: "payments", label: "Payments" },
     { value: "other", label: "Other" },
   ];
 
@@ -136,8 +137,8 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
 
         <div className="flex flex-col items-end gap-6 w-full mt-6">
           <div className="flex flex-col items-start gap-4 w-full">
-            <div className="flex items-center gap-4 w-full">
-              <div className="flex flex-col items-start gap-1.5 flex-1">
+            <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
+              <div className="flex flex-col items-start gap-1.5 md:flex-1">
                 <div className="flex flex-col items-start gap-1.5 w-full">
                   <Label
                     htmlFor="category"
@@ -148,11 +149,10 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                   <Select value={category} onValueChange={setCategory}>
                     <SelectTrigger
                       id="category"
-                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                      className={cn("h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs !text-[#667085] !text-base")}
                     >
                       <SelectValue
                         placeholder="Select a category"
-                        className="text-[#667085]"
                       />
                     </SelectTrigger>
                     <SelectContent>
@@ -169,7 +169,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                 </div>
               </div>
 
-              <div className="flex flex-col items-start gap-1.5 flex-1">
+              <div className="flex flex-col items-start gap-1.5 md:flex-1">
                 <Label
                   htmlFor="subject"
                   className="font-medium text-sm text-[#344054]"
@@ -179,7 +179,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                 <Input
                   id="subject"
                   placeholder="Enter the Subject"
-                  className={cn("h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-[#667085] text-base")}
+                  className={cn("h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs !text-[#667085] !text-base")}
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                 />
@@ -197,7 +197,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                 <Textarea
                   id="description"
                   placeholder="Enter a description..."
-                  className={cn("flex-1 w-full h-full min-h-[150px] bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-base")}
+                  className={cn("flex-1 w-full h-full min-h-[150px] bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs !text-[#667085] !text-base")}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
