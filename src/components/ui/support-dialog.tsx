@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createTicket } from "@/app/actions/tickets";
 import { useToast } from "@/components/ui/use-toast";
 import { useUser } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
 
 interface SupportDialogProps {
   open: boolean;
@@ -178,7 +179,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                 <Input
                   id="subject"
                   placeholder="Enter the Subject"
-                  className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-[#667085]"
+                  className={cn("h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-[#667085] text-base")}
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                 />
@@ -196,7 +197,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                 <Textarea
                   id="description"
                   placeholder="Enter a description..."
-                  className="flex-1 w-full h-full min-h-[150px] bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                  className={cn("flex-1 w-full h-full min-h-[150px] bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-base")}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
