@@ -91,8 +91,10 @@ export function StatisticsCard({
             badges?.length ? "flex-1" : "min-w-[120px]"
           )}
         >
-          <div className="self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-900 text-[28px] leading-[33.6px]">
-            {value}
+          <div className="self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-900 text-[28px] leading-[33.6px] min-w-0 overflow-hidden text-ellipsis">
+            <span className="block truncate">
+              {value}
+            </span>
           </div>
 
           <div className="flex flex-col gap-4 w-full">
