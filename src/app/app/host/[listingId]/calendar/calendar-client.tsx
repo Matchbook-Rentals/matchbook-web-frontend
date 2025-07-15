@@ -50,10 +50,6 @@ export function CalendarClient({ listing: initialListing, bookings }: CalendarCl
   };
 
   const handleDeleteUnavailability = async (unavailabilityId: string) => {
-    if (!confirm("Are you sure you want to delete this unavailability period?")) {
-      return;
-    }
-    
     try {
       await deleteUnavailability(unavailabilityId);
       

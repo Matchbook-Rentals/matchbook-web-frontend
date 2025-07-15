@@ -229,11 +229,11 @@ export default function TabLayout({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center h-full">
+          <div className="flex flex-col items-center justify-center h-full">
             {/* Scrollable content area - only use ScrollArea on desktop */}
             {isMobile ? (
               <>
-                <div className="space-y-4 w-full">
+                <div className="space-y-4 w-fit">
                   {children}
                 </div>
                 
