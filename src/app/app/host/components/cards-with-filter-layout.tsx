@@ -216,7 +216,7 @@ export default function TabLayout({
       </header>
 
       {/* Content Area with Scroll */}
-      <div className={`flex-1 min-h-0 ${isMobile ? 'px-4 pb-4' : 'mt-1'}`}>
+      <div className={`flex-1 min-h-0 ${isMobile ? 'px-0 pb-4' : 'mt-1'}`}>
         {!hasContent ? (
           <div className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500">
             <img 

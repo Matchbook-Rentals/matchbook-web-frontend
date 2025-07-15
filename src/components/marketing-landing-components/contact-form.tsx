@@ -64,7 +64,7 @@ export const ContactForm = (): JSX.Element => {
         description: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\n\nMessage:\n${message}`,
         email: email,
         name: name,
-        category: "general", // Default category for contact form
+        category: "contact-form", // Default category for contact form
         pageUrl: window.location.href,
         userAgent: navigator.userAgent
       };
