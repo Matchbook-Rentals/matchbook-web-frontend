@@ -1365,7 +1365,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             </div>
           </div>
         ) : (
-          <CardContent className="flex items-start gap-6 p-0">
+          <CardContent className="flex flex-wrap items-start gap-6 p-0">
             <div className="flex flex-col items-start gap-1.5 w-[374px]">
               <div className={labelStyles}>
                 Property Title
@@ -1607,7 +1607,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-[41px] relative self-stretch w-full flex-[0_0_auto]">
+              <div className="flex flex-wrap items-center gap-[41px] relative self-stretch w-full flex-[0_0_auto]">
                 {/* Bedroom */}
                 <div className="inline-flex items-center justify-center gap-1.5 px-0 py-1.5 relative flex-[0_0_auto] rounded-full">
                   <Bed className="w-5 h-5 text-gray-500" />

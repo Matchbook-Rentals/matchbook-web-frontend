@@ -348,6 +348,13 @@ export const updateListingLocation = async (
         ...locationData,
         approvalStatus: 'pendingReview', // Set to pending review when location changes
       },
+      include: {
+        listingImages: {
+          orderBy: {
+            rank: 'asc'
+          }
+        }
+      }
     });
 
     return updatedListing;

@@ -177,8 +177,8 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                 Block Unavailable Dates
               </h2>
 
-              <div className="flex items-start gap-5 w-full">
-                <div className="flex flex-col items-start gap-1.5 flex-1">
+              <div className="flex flex-col md:flex-row items-start gap-5 w-full">
+                <div className="flex flex-col items-start gap-1.5 flex-1 w-full">
                   <div className="flex flex-col items-start gap-1.5 w-full">
                     <div className="inline-flex items-center gap-1.5">
                       <label className="inline-flex items-center gap-1.5">
@@ -191,42 +191,70 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                       </span>
                     </div>
                     <div className="relative w-full">
-                      <Input
-                        className={`h-12 w-full pr-10 bg-sidebar focus:outline-none focus:ring-2 focus:border-black ${
-                          startDateTouched && startDateError ? "focus:ring-red-500 ring-red-500 border-red-500" : "focus:ring-black"
-                        }`}
-                        placeholder="mm/dd/yyyy"
-                        value={startDateInput}
-                        onChange={(e) => {
-                          setStartDateInput(e.target.value);
-                          parseDate(e.target.value, true, false);
-                        }}
-                        onBlur={() => {
-                          setStartDateTouched(true);
-                          parseDate(startDateInput, true, true);
-                        }}
-                      />
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
-                            <CalendarIcon className="h-5 w-5" />
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="end">
-                          <InteractiveDatePicker
-                            selectedDate={startDate}
-                            onDateSelect={(date) => {
-                              setStartDate(date);
-                              setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
-                              setStartDateError("");
-                            }}
-                            minDate={new Date(2020, 0, 1)}
-                            isRangeMode={true}
-                            startDate={startDate}
-                            endDate={endDate}
-                          />
-                        </PopoverContent>
-                      </Popover>
+                      <div className="hidden md:block">
+                        <Input
+                          className={`h-12 w-full pr-10 bg-sidebar focus:outline-none focus:ring-2 focus:border-black ${
+                            startDateTouched && startDateError ? "focus:ring-red-500 ring-red-500 border-red-500" : "focus:ring-black"
+                          }`}
+                          placeholder="mm/dd/yyyy"
+                          value={startDateInput}
+                          onChange={(e) => {
+                            setStartDateInput(e.target.value);
+                            parseDate(e.target.value, true, false);
+                          }}
+                          onBlur={() => {
+                            setStartDateTouched(true);
+                            parseDate(startDateInput, true, true);
+                          }}
+                        />
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
+                              <CalendarIcon className="h-5 w-5" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="end">
+                            <InteractiveDatePicker
+                              selectedDate={startDate}
+                              onDateSelect={(date) => {
+                                setStartDate(date);
+                                setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                setStartDateError("");
+                              }}
+                              minDate={new Date(2020, 0, 1)}
+                              isRangeMode={true}
+                              startDate={startDate}
+                              endDate={endDate}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <div className="md:hidden">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button className="h-12 w-full px-3 bg-sidebar border border-gray-300 rounded-md flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-black">
+                              <span className={startDate ? "text-[#344054]" : "text-gray-400"}>
+                                {startDate ? format(startDate, "MM/dd/yyyy") : "mm/dd/yyyy"}
+                              </span>
+                              <CalendarIcon className="h-5 w-5 text-gray-400" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <InteractiveDatePicker
+                              selectedDate={startDate}
+                              onDateSelect={(date) => {
+                                setStartDate(date);
+                                setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                setStartDateError("");
+                              }}
+                              minDate={new Date(2020, 0, 1)}
+                              isRangeMode={true}
+                              startDate={startDate}
+                              endDate={endDate}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
                     </div>
                     {startDateTouched && startDateError && (
                       <p className="text-red-500 text-sm mt-1">{startDateError}</p>
@@ -234,7 +262,7 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                   </div>
                 </div>
 
-                <div className="flex flex-col items-start gap-1.5 flex-1">
+                <div className="flex flex-col items-start gap-1.5 flex-1 w-full">
                   <div className="flex flex-col items-start gap-1.5 w-full">
                     <div className="inline-flex items-center gap-1.5">
                       <label className="inline-flex items-center gap-1.5">
@@ -247,42 +275,70 @@ export function BlockDatesForm({ listingId, onUnavailabilityAdded }: BlockDatesF
                       </span>
                     </div>
                     <div className="relative w-full">
-                      <Input
-                        className={`h-12 w-full pr-10 bg-sidebar focus:outline-none focus:ring-2 focus:border-blue-500 transition-all duration-200 ${
-                          endDateTouched && endDateError ? "focus:ring-red-500 ring-red-500 border-red-500" : "focus:ring-blue-500"
-                        }`}
-                        placeholder="mm/dd/yyyy"
-                        value={endDateInput}
-                        onChange={(e) => {
-                          setEndDateInput(e.target.value);
-                          parseDate(e.target.value, false, false);
-                        }}
-                        onBlur={() => {
-                          setEndDateTouched(true);
-                          parseDate(endDateInput, false, true);
-                        }}
-                      />
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
-                            <CalendarIcon className="h-5 w-5" />
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="end">
-                          <InteractiveDatePicker
-                            selectedDate={endDate}
-                            onDateSelect={(date) => {
-                              setEndDate(date);
-                              setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
-                              setEndDateError("");
-                            }}
-                            minDate={startDate || new Date(2020, 0, 1)}
-                            isRangeMode={true}
-                            startDate={startDate}
-                            endDate={endDate}
-                          />
-                        </PopoverContent>
-                      </Popover>
+                      <div className="hidden md:block">
+                        <Input
+                          className={`h-12 w-full pr-10 bg-sidebar focus:outline-none focus:ring-2 focus:border-blue-500 transition-all duration-200 ${
+                            endDateTouched && endDateError ? "focus:ring-red-500 ring-red-500 border-red-500" : "focus:ring-blue-500"
+                          }`}
+                          placeholder="mm/dd/yyyy"
+                          value={endDateInput}
+                          onChange={(e) => {
+                            setEndDateInput(e.target.value);
+                            parseDate(e.target.value, false, false);
+                          }}
+                          onBlur={() => {
+                            setEndDateTouched(true);
+                            parseDate(endDateInput, false, true);
+                          }}
+                        />
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
+                              <CalendarIcon className="h-5 w-5" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="end">
+                            <InteractiveDatePicker
+                              selectedDate={endDate}
+                              onDateSelect={(date) => {
+                                setEndDate(date);
+                                setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                setEndDateError("");
+                              }}
+                              minDate={startDate || new Date(2020, 0, 1)}
+                              isRangeMode={true}
+                              startDate={startDate}
+                              endDate={endDate}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <div className="md:hidden">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button className="h-12 w-full px-3 bg-sidebar border border-gray-300 rounded-md flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-blue-500">
+                              <span className={endDate ? "text-[#344054]" : "text-gray-400"}>
+                                {endDate ? format(endDate, "MM/dd/yyyy") : "mm/dd/yyyy"}
+                              </span>
+                              <CalendarIcon className="h-5 w-5 text-gray-400" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <InteractiveDatePicker
+                              selectedDate={endDate}
+                              onDateSelect={(date) => {
+                                setEndDate(date);
+                                setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                                setEndDateError("");
+                              }}
+                              minDate={startDate || new Date(2020, 0, 1)}
+                              isRangeMode={true}
+                              startDate={startDate}
+                              endDate={endDate}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
                     </div>
                     {endDateTouched && endDateError && (
                       <p className="text-red-500 text-sm mt-1">{endDateError}</p>
