@@ -181,12 +181,17 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                     <div className="relative">
                       <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                       <Input
+                        type="number"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        step="10"
+                        min="0"
                         className="pl-7 text-base"
-                        placeholder="0.00"
+                        placeholder="0"
                         value={pricing.price}
                         tabIndex={2 + pricing.months}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9.]/g, '');
+                          const value = e.target.value.replace(/[^0-9]/g, '');
                           updateMonthPricing(pricing.months, value);
                         }}
                       />
@@ -221,12 +226,17 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                       <div className="relative">
                         <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                         <Input
+                          type="number"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          step="10"
+                          min="0"
                           className="pl-7 text-base"
-                          placeholder="0.00"
+                          placeholder="0"
                           value={leftPricing.price}
                           tabIndex={2 + leftPricing.months}
                           onChange={(e) => {
-                            const value = e.target.value.replace(/[^0-9.]/g, '');
+                            const value = e.target.value.replace(/[^0-9]/g, '');
                             updateMonthPricing(leftPricing.months, value);
                           }}
                         />
@@ -252,12 +262,17 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                           <div className="relative">
                             <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                             <Input
+                              type="number"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              step="10"
+                              min="0"
                               className="pl-7 text-base"
-                              placeholder="0.00"
+                              placeholder="0"
                               value={rightPricing.price}
                               tabIndex={2 + rightPricing.months}
                               onChange={(e) => {
-                                const value = e.target.value.replace(/[^0-9.]/g, '');
+                                const value = e.target.value.replace(/[^0-9]/g, '');
                                 updateMonthPricing(rightPricing.months, value);
                               }}
                             />
