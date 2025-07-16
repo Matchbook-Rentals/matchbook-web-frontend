@@ -94,9 +94,38 @@ export async function POST(request: Request) {
       return NextResponse.json(result);
     }
   } catch (error) {
-    console.error('[API] Error saving draft:', error);
+    // Log the full error details server-side
+    console.error('[API] Error saving draft:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      // Log specific Prisma error details if available
+      code: (error as any)?.code,
+      meta: (error as any)?.meta,
+    });
+    
+    // Check for specific database errors
+    if (error instanceof Error) {
+      // Check for "value too long" database error
+      if (error.message.includes('too long') || error.message.includes('Data too long')) {
+        return NextResponse.json(
+          { error: 'Some of your input fields are too long. Please shorten your text and try again.' },
+          { status: 400 }
+        );
+      }
+      
+      // Check for other Prisma errors
+      if ((error as any).code === 'P2002') {
+        return NextResponse.json(
+          { error: 'A draft with this information already exists.' },
+          { status: 400 }
+        );
+      }
+    }
+    
+    // Generic error response - don't expose internal error details to client
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to save draft' },
+      { error: 'Failed to save your draft. Please try again later.' },
       { status: 500 }
     );
   }

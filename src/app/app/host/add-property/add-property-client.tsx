@@ -446,7 +446,11 @@ const [listingBasics, setListingBasics] = useState({
       router.push('/app/host/dashboard/overview');
     } catch (error) {
       console.error('Error saving listing draft:', error);
-      alert(`Error saving your listing: ${(error as Error).message}`);
+      toast({
+        variant: 'destructive',
+        title: 'Error saving draft',
+        description: 'Failed to save draft, please try again later'
+      })
     } finally {
       setIsSavingDraft(false);
     }
