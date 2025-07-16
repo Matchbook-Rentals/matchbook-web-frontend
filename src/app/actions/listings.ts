@@ -708,6 +708,23 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
   }
 }
 
+export const getHostListingsCount = async (): Promise<number> => {
+  try {
+    const userId = await checkAuth();
+    
+    const totalCount = await prisma.listing.count({
+      where: { 
+        userId: userId,
+      }
+    });
+    
+    return totalCount;
+  } catch (error) {
+    console.error('Error in getHostListingsCount:', error);
+    return 0;
+  }
+}
+
 export const updateListingMoveInData = async (
   listingId: string,
   moveInData: {

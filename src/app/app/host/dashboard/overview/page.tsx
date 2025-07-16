@@ -2,13 +2,29 @@ import React from "react";
 import OverviewClient from "./overview-client";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import type { StatisticsCardData } from "./overview-client";
+import { getHostListingsCount } from "@/app/actions/listings";
 
 async function fetchOverviewData() {
-  // Simulate data fetching delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Return sample data to show non-empty dashboard state
-  return null;
+  try {
+    const listingsCount = await getHostListingsCount();
+    
+    return {
+      totalListings: listingsCount,
+      activeApplications: 0,
+      currentBookings: 0,
+      averageRating: 0,
+      monthlyRevenue: 0
+    };
+  } catch (error) {
+    console.error('Error fetching overview data:', error);
+    return {
+      totalListings: 0,
+      activeApplications: 0,
+      currentBookings: 0,
+      averageRating: 0,
+      monthlyRevenue: 0
+    };
+  }
 }
 
 const sampleData = {
@@ -229,8 +245,8 @@ export default async function OverviewPage() {
   // Build mock cards with sample data
   const mockCards = buildStatisticsCards(sampleData);
   
-  // Build real cards with zero values (since data is null)
-  let realCards = buildZeroStatisticsCards();
+  // Build real cards with actual data or zero values
+  let realCards = data ? buildStatisticsCards(data) : buildZeroStatisticsCards();
   
   // Handle mock data card visibility based on admin status
   if (isAdmin) {
