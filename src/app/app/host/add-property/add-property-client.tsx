@@ -1111,6 +1111,8 @@ const [listingBasics, setListingBasics] = useState({
               if (value === true && 
                   key !== 'furnished' && 
                   key !== 'petsAllowed' && 
+                  key !== 'requireBackgroundCheck' && 
+                  key !== 'varyPricingByLength' && 
                   key !== 'isApproved') {
                 amenities.push(key);
               }
