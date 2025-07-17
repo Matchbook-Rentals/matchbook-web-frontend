@@ -1,0 +1,298 @@
+import { ListingData, DraftData } from '../../src/lib/listing-actions-helpers';
+
+// Comprehensive fake listing data for testing
+export const createFakeListingData = (): ListingData => ({
+  // Basic information
+  title: 'Beautiful Downtown Apartment with City Views',
+  description: 'This stunning 2-bedroom, 2-bathroom apartment offers breathtaking city views and modern amenities. Located in the heart of downtown, you\'ll be walking distance to restaurants, shops, and public transportation. The apartment features an open-concept living area, updated kitchen with stainless steel appliances, in-unit washer and dryer, and a private balcony. Perfect for young professionals or small families looking for luxury living in the city center.',
+  
+  // Location details
+  locationString: '123 Main Street, Downtown, TX 75201',
+  streetAddress1: '123 Main Street',
+  streetAddress2: 'Apt 4B',
+  city: 'Dallas',
+  state: 'TX',
+  postalCode: '75201',
+  latitude: 32.7767,
+  longitude: -96.7970,
+  
+  // Property details
+  category: 'Apartment',
+  roomCount: 2,
+  bathroomCount: 2,
+  guestCount: 4,
+  squareFootage: 1200,
+  
+  // Pricing information
+  shortestLeaseLength: 1,
+  longestLeaseLength: 12,
+  depositSize: 2000,
+  petDeposit: 500,
+  petRent: 50,
+  rentDueAtBooking: 1500,
+  
+  // Policies
+  furnished: true,
+  petsAllowed: true,
+  requireBackgroundCheck: true,
+  
+  // Amenities - Kitchen
+  kitchen: true,
+  oven: true,
+  stove: true,
+  fridge: true,
+  microwave: true,
+  dishwasher: true,
+  garbageDisposal: true,
+  kitchenEssentials: true,
+  
+  // Amenities - Laundry
+  washerInUnit: true,
+  dryerInUnit: true,
+  
+  // Amenities - Parking
+  parking: true,
+  coveredParking: true,
+  coveredParkingFree: false,
+  
+  // Amenities - Technology
+  wifi: true,
+  tv: true,
+  
+  // Amenities - Comfort
+  airConditioner: true,
+  heater: true,
+  balcony: true,
+  cityView: true,
+  
+  // Amenities - Safety & Security
+  smokeDetector: true,
+  carbonMonoxide: true,
+  keylessEntry: true,
+  secureLobby: true,
+  
+  // Amenities - Building
+  elevator: true,
+  fitnessCenter: true,
+  
+  // Amenities - Workspace
+  dedicatedWorkspace: true,
+  workstation: true,
+  
+  // Amenities - Personal Care
+  hairDryer: true,
+  iron: true,
+  linens: true,
+  privateBathroom: true,
+  
+  // Set all other amenities to false
+  laundryFacilities: false,
+  wheelchairAccess: false,
+  doorman: false,
+  hotTub: false,
+  smokingAllowed: false,
+  eventsAllowed: false,
+  privateEntrance: false,
+  security: false,
+  waterfront: false,
+  beachfront: false,
+  mountainView: false,
+  waterView: false,
+  washerHookup: false,
+  washerNotAvailable: false,
+  washerInComplex: false,
+  dryerHookup: false,
+  dryerNotAvailable: false,
+  dryerInComplex: false,
+  offStreetParking: false,
+  streetParking: false,
+  streetParkingFree: false,
+  uncoveredParking: false,
+  uncoveredParkingFree: false,
+  garageParking: false,
+  garageParkingFree: false,
+  evCharging: false,
+  allowDogs: true,
+  allowCats: true,
+  gym: false,
+  patio: false,
+  sunroom: false,
+  fireplace: false,
+  firepit: false,
+  pool: false,
+  sauna: false,
+  jacuzzi: false,
+  grill: false,
+  wheelAccessible: false,
+  fencedInYard: false,
+  alarmSystem: false,
+  storageShed: false,
+  gatedEntry: false,
+  
+  // Listing images
+  listingImages: [
+    {
+      url: 'https://example.com/images/living-room.jpg',
+      category: 'living_room',
+      rank: 1,
+    },
+    {
+      url: 'https://example.com/images/kitchen.jpg',
+      category: 'kitchen',
+      rank: 2,
+    },
+    {
+      url: 'https://example.com/images/bedroom1.jpg',
+      category: 'bedroom',
+      rank: 3,
+    },
+    {
+      url: 'https://example.com/images/bathroom1.jpg',
+      category: 'bathroom',
+      rank: 4,
+    },
+    {
+      url: 'https://example.com/images/balcony.jpg',
+      category: 'outdoor',
+      rank: 5,
+    },
+    {
+      url: 'https://example.com/images/bedroom2.jpg',
+      category: 'bedroom',
+      rank: 6,
+    },
+    {
+      url: 'https://example.com/images/bathroom2.jpg',
+      category: 'bathroom',
+      rank: 7,
+    },
+    {
+      url: 'https://example.com/images/building-exterior.jpg',
+      category: 'exterior',
+      rank: 8,
+    },
+  ],
+  
+  // Monthly pricing
+  monthlyPricing: [
+    { months: 1, price: 2500, utilitiesIncluded: false },
+    { months: 2, price: 2400, utilitiesIncluded: false },
+    { months: 3, price: 2300, utilitiesIncluded: true },
+    { months: 4, price: 2200, utilitiesIncluded: true },
+    { months: 5, price: 2100, utilitiesIncluded: true },
+    { months: 6, price: 2000, utilitiesIncluded: true },
+    { months: 7, price: 1950, utilitiesIncluded: true },
+    { months: 8, price: 1900, utilitiesIncluded: true },
+    { months: 9, price: 1850, utilitiesIncluded: true },
+    { months: 10, price: 1800, utilitiesIncluded: true },
+    { months: 11, price: 1750, utilitiesIncluded: true },
+    { months: 12, price: 1700, utilitiesIncluded: true },
+  ],
+});
+
+// Create fake draft data
+export const createFakeDraftData = (): DraftData => ({
+  title: 'Draft - Cozy Studio in Arts District',
+  description: 'A charming studio apartment in the vibrant Arts District. Features exposed brick walls, high ceilings, and large windows. Perfect for artists and creative professionals.',
+  status: 'draft',
+  
+  // Location details
+  locationString: '456 Arts Avenue, Arts District, TX 75226',
+  streetAddress1: '456 Arts Avenue',
+  streetAddress2: 'Unit 2A',
+  city: 'Dallas',
+  state: 'TX',
+  postalCode: '75226',
+  latitude: 32.7849,
+  longitude: -96.7856,
+  
+  // Property details
+  category: 'Studio',
+  roomCount: 1,
+  bathroomCount: 1,
+  guestCount: 2,
+  squareFootage: 650,
+  
+  // Pricing
+  shortestLeaseLength: 3,
+  longestLeaseLength: 12,
+  depositSize: 1200,
+  petDeposit: 300,
+  petRent: 25,
+  rentDueAtBooking: 800,
+  
+  // Policies
+  furnished: false,
+  petsAllowed: true,
+  requireBackgroundCheck: true,
+  
+  // Some amenities (fewer than full listing)
+  kitchen: true,
+  wifi: true,
+  airConditioner: true,
+  heater: true,
+  washerInComplex: true,
+  dryerInComplex: true,
+  streetParking: true,
+  streetParkingFree: true,
+  
+  // Draft images
+  listingImages: [
+    {
+      url: 'https://example.com/images/studio-main.jpg',
+      rank: 1,
+    },
+    {
+      url: 'https://example.com/images/studio-kitchen.jpg',
+      rank: 2,
+    },
+    {
+      url: 'https://example.com/images/studio-bathroom.jpg',
+      rank: 3,
+    },
+    {
+      url: 'https://example.com/images/studio-exterior.jpg',
+      rank: 4,
+    },
+  ],
+  
+  // Monthly pricing for draft
+  monthlyPricing: [
+    { months: 3, price: 1200, utilitiesIncluded: false },
+    { months: 6, price: 1100, utilitiesIncluded: true },
+    { months: 9, price: 1000, utilitiesIncluded: true },
+    { months: 12, price: 950, utilitiesIncluded: true },
+  ],
+});
+
+// Minimal listing data for testing edge cases
+export const createMinimalListingData = (): ListingData => ({
+  title: 'Minimal Test Listing',
+  description: 'Basic listing for testing with minimal required fields.',
+  category: 'Apartment',
+  locationString: '789 Test St, Test City, TX 12345',
+  city: 'Test City',
+  state: 'TX',
+  postalCode: '12345',
+  roomCount: 1,
+  bathroomCount: 1,
+  guestCount: 1,
+  squareFootage: 500,
+  depositSize: 500,
+  shortestLeaseLength: 1,
+  longestLeaseLength: 6,
+  monthlyPricing: [
+    { months: 1, price: 800, utilitiesIncluded: false },
+    { months: 6, price: 750, utilitiesIncluded: false },
+  ],
+});
+
+// Invalid listing data for testing validation
+export const createInvalidListingData = (): Partial<ListingData> => ({
+  // Missing required fields like title, description, etc.
+  category: 'Apartment',
+  roomCount: 0, // Invalid - should be at least 1
+  bathroomCount: 0, // Invalid - should be at least 1
+  // Missing required location fields
+  // Missing required pricing fields
+});

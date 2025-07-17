@@ -10,6 +10,10 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./test/setup.ts'],
     include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    env: {
+      NODE_ENV: 'test',
+      TEST_DATABASE_URL: 'mysql://g7olyl869vsgp0xva5ak:pscale_pw_L3Y4YI9LvbMNYnQ3rwS30a7Kt70Kg7EbXNrtdssGKrq@aws.connect.psdb.cloud/matchbook-rentals-db?sslaccept=strict',
+    },
   },
   resolve: {
     alias: {

@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+// Set up test environment variables
+process.env.NODE_ENV = 'test';
+process.env.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'mysql://g7olyl869vsgp0xva5ak:pscale_pw_L3Y4YI9LvbMNYnQ3rwS30a7Kt70Kg7EbXNrtdssGKrq@aws.connect.psdb.cloud/matchbook-rentals-db?sslaccept=strict';
+
 // Mock environment variables
 vi.mock('next/config', () => () => ({
   publicRuntimeConfig: {
