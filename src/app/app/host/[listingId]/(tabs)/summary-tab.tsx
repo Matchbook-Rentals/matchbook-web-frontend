@@ -1413,7 +1413,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           </div>
 
           {editingSections['description'] ? (
-            <div className="flex flex-col gap-[18px] w-full">
+            <div className="flex test flex-col gap-[18px] w-full">
               <label className="text-sm font-medium break-words text-gray-700 break-words max-w-[80%]">Property Description</label>
               <Textarea
                 value={formData.description + '' || ''}
@@ -1449,7 +1449,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             </div>
           ) : (
             <div className="flex flex-col gap-[18px] w-full">
-              <p className={`${noLabelStyles} whitespace-pre-wrap max-w-[80%] break-all`}>
+              <p className={`${noLabelStyles} whitespace-pre-wrap w-full pr-[2%] break-all overflow-hidden`} style={{ overflowWrap: 'anywhere', wordBreak: 'break-all', hyphens: 'auto' }}>
                 {currentListing.description || 'No description provided.'}
               </p>
             </div>
