@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+import { handleSaveDraft } from '@/lib/listing-actions-helpers';
 
 // Create or update a draft listing
 export async function POST(request: Request) {
@@ -12,87 +13,17 @@ export async function POST(request: Request) {
     }
     
     const body = await request.json();
-    const { id, listingImages, monthlyPricing, includeUtilities, ...listingData } = body;
+    console.log('🔥 [API] Received draft data:', body);
     
-    // If id is provided, update existing draft, otherwise create new
-    if (id) {
-      // Update existing draft in a transaction
-      const result = await prisma.$transaction(async (tx) => {
-        const updatedDraft = await tx.listingInCreation.update({
-          where: { id },
-          data: {
-            ...listingData,
-            userId,
-            lastModified: new Date(),
-            // Map includeUtilities to utilitiesIncluded for database
-            utilitiesIncluded: includeUtilities,
-            // Save monthly pricing as JSON string
-            monthlyPricingData: monthlyPricing ? JSON.stringify(monthlyPricing) : null,
-          }
-        });
-
-        // Handle photo updates if provided
-        if (listingImages && Array.isArray(listingImages)) {
-          // Delete existing images for this draft
-          await tx.listingImage.deleteMany({
-            where: { listingId: id }
-          });
-
-          // Create new images if any provided
-          if (listingImages.length > 0) {
-            await tx.listingImage.createMany({
-              data: listingImages.map((image: any) => ({
-                url: image.url,
-                listingId: id,
-                category: image.category || null,
-                rank: image.rank || null,
-              })),
-            });
-          }
-        }
-
-        return updatedDraft;
-      });
-      
-      return NextResponse.json(result);
-    } else {
-      // Create new draft in a transaction - but first delete any existing drafts for this user
-      const result = await prisma.$transaction(async (tx) => {
-        // Delete all existing drafts for this user (there should only be one at a time)
-        await tx.listingInCreation.deleteMany({
-          where: { userId }
-        });
-
-        const newDraft = await tx.listingInCreation.create({
-          data: {
-            ...listingData,
-            userId,
-            status: 'draft',
-            approvalStatus: 'pendingReview',
-            // Map includeUtilities to utilitiesIncluded for database
-            utilitiesIncluded: includeUtilities,
-            // Save monthly pricing as JSON string
-            monthlyPricingData: monthlyPricing ? JSON.stringify(monthlyPricing) : null,
-          }
-        });
-
-        // Create images if provided
-        if (listingImages && Array.isArray(listingImages) && listingImages.length > 0) {
-          await tx.listingImage.createMany({
-            data: listingImages.map((image: any) => ({
-              url: image.url,
-              listingId: newDraft.id,
-              category: image.category || null,
-              rank: image.rank || null,
-            })),
-          });
-        }
-
-        return newDraft;
-      });
-      
-      return NextResponse.json(result);
-    }
+    // Extract the ID for updating existing draft
+    const draftId = body.id;
+    
+    // Use our helper function to save the draft
+    const result = await handleSaveDraft(body, userId, draftId);
+    
+    console.log('🔥 [API] Draft saved successfully:', result.id);
+    return NextResponse.json(result);
+    
   } catch (error) {
     // Log the full error details server-side
     console.error('[API] Error saving draft:', {

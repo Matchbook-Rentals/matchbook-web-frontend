@@ -346,7 +346,8 @@ model ListingMonthlyPricing {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   
-  listing           Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listing           Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingInCreation ListingInCreation? @relation(fields: [listingId], references: [id], onDelete: Cascade, map: "ListingMonthlyPricing_listingInCreation_fkey")
   
   @@unique([listingId, months])
   @@index([listingId])
@@ -1376,6 +1377,7 @@ model ListingInCreation {
 
   // Relationships
   listingImages     ListingImage[] // Relation to images for drafts
+  monthlyPricing    ListingMonthlyPricing[] // Relation to monthly pricing for drafts
 }
 
 model TestSuite {

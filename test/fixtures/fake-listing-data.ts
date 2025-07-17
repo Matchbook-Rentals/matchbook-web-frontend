@@ -287,6 +287,364 @@ export const createMinimalListingData = (): ListingData => ({
   ],
 });
 
+// All amenities selected listing data for testing
+export const createAllAmenitiesListingData = (): ListingData => ({
+  // Basic information
+  title: 'Luxury Penthouse with Every Amenity',
+  description: 'This is the ultimate luxury penthouse featuring every single amenity available. From in-unit laundry to rooftop pool, this property has it all. Perfect for those who want the absolute best in luxury living.',
+  
+  // Location details
+  locationString: '999 Luxury Lane, Penthouse, TX 75204',
+  streetAddress1: '999 Luxury Lane',
+  streetAddress2: 'Penthouse Suite',
+  city: 'Dallas',
+  state: 'TX',
+  postalCode: '75204',
+  latitude: 32.7800,
+  longitude: -96.8000,
+  
+  // Property details
+  category: 'Penthouse',
+  roomCount: 4,
+  bathroomCount: 3,
+  guestCount: 8,
+  squareFootage: 3000,
+  
+  // Pricing information
+  shortestLeaseLength: 1,
+  longestLeaseLength: 24,
+  depositSize: 10000,
+  petDeposit: 1000,
+  petRent: 200,
+  rentDueAtBooking: 8000,
+  
+  // Policies
+  furnished: true,
+  petsAllowed: true,
+  requireBackgroundCheck: true,
+  
+  // ALL AMENITIES SET TO TRUE
+  // Kitchen
+  kitchen: true,
+  oven: true,
+  stove: true,
+  fridge: true,
+  microwave: true,
+  dishwasher: true,
+  garbageDisposal: true,
+  kitchenEssentials: true,
+  
+  // Laundry (in-unit selected)
+  washerInUnit: true,
+  dryerInUnit: true,
+  washerHookup: true,
+  washerNotAvailable: false, // Only false one in this group
+  washerInComplex: true,
+  dryerHookup: true,
+  dryerNotAvailable: false, // Only false one in this group  
+  dryerInComplex: true,
+  laundryFacilities: true,
+  
+  // Parking
+  parking: true,
+  offStreetParking: true,
+  streetParking: true,
+  streetParkingFree: true,
+  coveredParking: true,
+  coveredParkingFree: true,
+  uncoveredParking: true,
+  uncoveredParkingFree: true,
+  garageParking: true,
+  garageParkingFree: true,
+  evCharging: true,
+  
+  // Technology
+  wifi: true,
+  tv: true,
+  
+  // Comfort & Views
+  airConditioner: true,
+  heater: true,
+  balcony: true,
+  patio: true,
+  sunroom: true,
+  fireplace: true,
+  firepit: true,
+  cityView: true,
+  waterView: true,
+  mountainView: true,
+  waterfront: true,
+  beachfront: true,
+  
+  // Safety & Security
+  smokeDetector: true,
+  carbonMonoxide: true,
+  keylessEntry: true,
+  secureLobby: true,
+  security: true,
+  wheelchairAccess: true,
+  wheelAccessible: true,
+  alarmSystem: true,
+  gatedEntry: true,
+  
+  // Building Amenities
+  elevator: true,
+  fitnessCenter: true,
+  doorman: true,
+  gym: true,
+  pool: true,
+  sauna: true,
+  jacuzzi: true,
+  hotTub: true,
+  
+  // Workspace
+  dedicatedWorkspace: true,
+  workstation: true,
+  
+  // Personal Care
+  hairDryer: true,
+  iron: true,
+  linens: true,
+  privateBathroom: true,
+  
+  // Lifestyle
+  smokingAllowed: true,
+  eventsAllowed: true,
+  privateEntrance: true,
+  fencedInYard: true,
+  storageShed: true,
+  grill: true,
+  
+  // Pets
+  allowDogs: true,
+  allowCats: true,
+  
+  // Listing images
+  listingImages: [
+    {
+      url: 'https://example.com/images/penthouse-living.jpg',
+      category: 'living_room',
+      rank: 1,
+    },
+    {
+      url: 'https://example.com/images/penthouse-kitchen.jpg',
+      category: 'kitchen',
+      rank: 2,
+    },
+    {
+      url: 'https://example.com/images/penthouse-master.jpg',
+      category: 'bedroom',
+      rank: 3,
+    },
+    {
+      url: 'https://example.com/images/penthouse-pool.jpg',
+      category: 'amenity',
+      rank: 4,
+    },
+  ],
+  
+  // Monthly pricing
+  monthlyPricing: [
+    { months: 1, price: 8000, utilitiesIncluded: true },
+    { months: 6, price: 7500, utilitiesIncluded: true },
+    { months: 12, price: 7000, utilitiesIncluded: true },
+  ],
+});
+
+// Washer not available only listing data for testing
+export const createWasherNotAvailableListingData = (): ListingData => ({
+  // Basic information
+  title: 'Basic Apartment - Laundromat Nearby',
+  description: 'Simple apartment with no in-unit laundry. Convenient laundromat located just 2 blocks away.',
+  
+  // Location details
+  locationString: '100 Simple St, Budget Area, TX 75001',
+  streetAddress1: '100 Simple St',
+  streetAddress2: 'Apt 1A',
+  city: 'Dallas',
+  state: 'TX',
+  postalCode: '75001',
+  latitude: 32.7700,
+  longitude: -96.7900,
+  
+  // Property details
+  category: 'Apartment',
+  roomCount: 1,
+  bathroomCount: 1,
+  guestCount: 2,
+  squareFootage: 600,
+  
+  // Pricing information
+  shortestLeaseLength: 1,
+  longestLeaseLength: 12,
+  depositSize: 800,
+  petDeposit: 0,
+  petRent: 0,
+  rentDueAtBooking: 600,
+  
+  // Policies
+  furnished: false,
+  petsAllowed: false,
+  requireBackgroundCheck: false,
+  
+  // ALL AMENITIES SET TO FALSE EXCEPT washerNotAvailable
+  // Kitchen
+  kitchen: false,
+  oven: false,
+  stove: false,
+  fridge: false,
+  microwave: false,
+  dishwasher: false,
+  garbageDisposal: false,
+  kitchenEssentials: false,
+  
+  // Laundry (ONLY washerNotAvailable is true)
+  washerInUnit: false,
+  dryerInUnit: false,
+  washerHookup: false,
+  washerNotAvailable: true, // ONLY TRUE AMENITY
+  washerInComplex: false,
+  dryerHookup: false,
+  dryerNotAvailable: false,
+  dryerInComplex: false,
+  laundryFacilities: false,
+  
+  // Parking
+  parking: false,
+  offStreetParking: false,
+  streetParking: false,
+  streetParkingFree: false,
+  coveredParking: false,
+  coveredParkingFree: false,
+  uncoveredParking: false,
+  uncoveredParkingFree: false,
+  garageParking: false,
+  garageParkingFree: false,
+  evCharging: false,
+  
+  // Technology
+  wifi: false,
+  tv: false,
+  
+  // Comfort & Views
+  airConditioner: false,
+  heater: false,
+  balcony: false,
+  patio: false,
+  sunroom: false,
+  fireplace: false,
+  firepit: false,
+  cityView: false,
+  waterView: false,
+  mountainView: false,
+  waterfront: false,
+  beachfront: false,
+  
+  // Safety & Security
+  smokeDetector: false,
+  carbonMonoxide: false,
+  keylessEntry: false,
+  secureLobby: false,
+  security: false,
+  wheelchairAccess: false,
+  wheelAccessible: false,
+  alarmSystem: false,
+  gatedEntry: false,
+  
+  // Building Amenities
+  elevator: false,
+  fitnessCenter: false,
+  doorman: false,
+  gym: false,
+  pool: false,
+  sauna: false,
+  jacuzzi: false,
+  hotTub: false,
+  
+  // Workspace
+  dedicatedWorkspace: false,
+  workstation: false,
+  
+  // Personal Care
+  hairDryer: false,
+  iron: false,
+  linens: false,
+  privateBathroom: false,
+  
+  // Lifestyle
+  smokingAllowed: false,
+  eventsAllowed: false,
+  privateEntrance: false,
+  fencedInYard: false,
+  storageShed: false,
+  grill: false,
+  
+  // Pets
+  allowDogs: false,
+  allowCats: false,
+  
+  // Listing images
+  listingImages: [
+    {
+      url: 'https://example.com/images/basic-apartment.jpg',
+      category: 'living_room',
+      rank: 1,
+    },
+  ],
+  
+  // Monthly pricing
+  monthlyPricing: [
+    { months: 1, price: 600, utilitiesIncluded: false },
+    { months: 12, price: 550, utilitiesIncluded: false },
+  ],
+});
+
+// Create fake data in add-property-client format
+export const createFakeAddPropertyClientData = () => ({
+  title: 'Test Property from Client',
+  description: 'This is a test property created from the add-property-client format',
+  category: 'Apartment',
+  petsAllowed: true,
+  furnished: true,
+  locationString: '123 Test St, Test City, TX 12345',
+  latitude: 32.7767,
+  longitude: -96.7970,
+  city: 'Test City',
+  state: 'TX',
+  streetAddress1: '123 Test St',
+  streetAddress2: 'Unit 1',
+  postalCode: '12345',
+  roomCount: 2,
+  bathroomCount: 2,
+  guestCount: 4,
+  squareFootage: 1000,
+  depositSize: 1500,
+  petDeposit: 500,
+  petRent: 50,
+  rentDueAtBooking: 1200,
+  shortestLeaseLength: 1,
+  longestLeaseLength: 12,
+  amenities: ['kitchen', 'wifi', 'airConditioner', 'washerInUnit'],
+  listingPhotos: [
+    { url: 'https://example.com/photo1.jpg', rank: null },
+    { url: 'https://example.com/photo2.jpg', rank: null },
+    { url: 'https://example.com/photo3.jpg', rank: null },
+    { url: 'https://example.com/photo4.jpg', rank: null },
+    { url: 'https://example.com/photo5.jpg', rank: null }
+  ],
+  selectedPhotos: [
+    { url: 'https://example.com/photo1.jpg', rank: null },
+    { url: 'https://example.com/photo2.jpg', rank: null },
+    { url: 'https://example.com/photo3.jpg', rank: null },
+    { url: 'https://example.com/photo4.jpg', rank: null }
+  ],
+  monthlyPricing: [
+    { months: 1, price: 1500, utilitiesIncluded: false },
+    { months: 6, price: 1400, utilitiesIncluded: true },
+    { months: 12, price: 1300, utilitiesIncluded: true }
+  ]
+});
+
 // Invalid listing data for testing validation
 export const createInvalidListingData = (): Partial<ListingData> => ({
   // Missing required fields like title, description, etc.

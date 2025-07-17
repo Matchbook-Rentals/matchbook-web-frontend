@@ -22,6 +22,7 @@ import ListingCreationPricing, { MonthlyPricing } from "./listing-creation-prici
 import ListingCreationVerifyPricing from "./listing-creation-verify-pricing";
 import ListingCreationDeposit from "./listing-creation-deposit";
 import { Box as ListingCreationReview } from "./listing-creation-review";
+import { loadDraftData } from "@/lib/listing-actions-helpers";
 
 // Nullable Listing type for building a new listing
 interface NullableListing {
@@ -94,12 +95,18 @@ export interface NullableListingImage {
 
 import ListingCreationSuccess from './listing-creation-success';
 
-export default function AddPropertyclient() {
+interface AddPropertyClientProps {
+  draftData?: any;
+}
+
+export default function AddPropertyclient({ draftData }: AddPropertyClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const draftId = searchParams.get('draftId');
   const { user } = useUser();
   const { toast } = useToast();
+  
+  console.log('🎯 [CLIENT] Received draftData:', draftData);
   
   // Check if user is admin
   const userRole = user?.publicMetadata?.role as string | undefined;
@@ -113,8 +120,7 @@ export default function AddPropertyclient() {
   // Track validation errors
   const [validationErrors, setValidationErrors] = useState<Record<number, string[]>>({});
   
-  // State to track if we're loading a draft
-  const [isLoadingDraft, setIsLoadingDraft] = useState<boolean>(!!draftId);
+  // No longer need isLoadingDraft state since data is passed as prop
   
   // State to track if admin skip buttons are hidden
   const [adminSkipButtonsHidden, setAdminSkipButtonsHidden] = useState<boolean>(false);
@@ -186,10 +192,10 @@ export default function AddPropertyclient() {
   });
   // State to hold the current set of photos for the listing
 // This will be used to manage photo uploads, ordering, and removal before saving to the listing
-const [listingPhotos, setListingPhotos] = useState<NullableListingImage[]>([]);
+const [listingPhotos, setListingPhotos] = useState<NullableListingImage[]>(draftData?.listingPhotos || []);
 
 // State for selected featured photos
-const [selectedPhotos, setSelectedPhotos] = useState<NullableListingImage[]>([]);
+const [selectedPhotos, setSelectedPhotos] = useState<NullableListingImage[]>(draftData?.selectedPhotos || []);
 
 const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
@@ -216,46 +222,162 @@ interface ListingLocation {
 
 // Subset states for different sections
 
+// Initialize state with draft data if available
+const initializeHighlights = (): ListingHighlights => {
+  if (draftData) {
+    console.log('🎯 Initializing highlights with draft data:', {
+      category: draftData.category,
+      petsAllowed: draftData.petsAllowed,
+      furnished: draftData.furnished
+    });
+    return {
+      category: draftData.category || "Single Family",
+      petsAllowed: draftData.petsAllowed !== null ? draftData.petsAllowed : true,
+      furnished: draftData.furnished !== null ? draftData.furnished : true
+    };
+  }
+  return {
+    category: "Single Family",
+    petsAllowed: true,
+    furnished: true
+  };
+};
+
+const initializeLocation = (): ListingLocation => {
+  if (draftData) {
+    console.log('🎯 Initializing location with draft data:', draftData);
+    return {
+      locationString: draftData.locationString,
+      latitude: draftData.latitude,
+      longitude: draftData.longitude,
+      city: draftData.city,
+      state: draftData.state,
+      streetAddress1: draftData.streetAddress1,
+      streetAddress2: draftData.streetAddress2,
+      postalCode: draftData.postalCode,
+      country: draftData.country || "United States"
+    };
+  }
+  return {
+    locationString: null,
+    latitude: null,
+    longitude: null,
+    city: null,
+    state: null,
+    streetAddress1: null,
+    streetAddress2: null,
+    postalCode: null,
+    country: "United States"
+  };
+};
+
+const initializeRooms = () => {
+  if (draftData) {
+    console.log('🎯 Initializing rooms with draft data:', {
+      bedrooms: draftData.roomCount,
+      bathrooms: draftData.bathroomCount,
+      squareFeet: draftData.squareFootage
+    });
+    return {
+      bedrooms: draftData.roomCount || 1,
+      bathrooms: draftData.bathroomCount || 1,
+      squareFeet: draftData.squareFootage ? draftData.squareFootage.toString() : ""
+    };
+  }
+  return {
+    bedrooms: 1,
+    bathrooms: 1,
+    squareFeet: ""
+  };
+};
+
+const initializeBasics = () => {
+  if (draftData) {
+    console.log('🎯 Initializing basics with draft data:', {
+      title: draftData.title,
+      description: draftData.description
+    });
+    return {
+      title: draftData.title || "",
+      description: draftData.description || ""
+    };
+  }
+  return {
+    title: "",
+    description: ""
+  };
+};
+
+const initializePricing = () => {
+  if (draftData) {
+    const monthlyPricing: MonthlyPricing[] = draftData.monthlyPricing?.map((p: any) => ({
+      months: p.months,
+      price: p.price ? p.price.toString() : '',
+      utilitiesIncluded: p.utilitiesIncluded || false
+    })) || [];
+    
+    console.log('🎯 Initializing pricing with draft data:', {
+      shortestStay: draftData.shortestLeaseLength,
+      longestStay: draftData.longestLeaseLength,
+      monthlyPricing,
+      deposit: draftData.depositSize
+    });
+    
+    return {
+      shortestStay: draftData.shortestLeaseLength || 1,
+      longestStay: draftData.longestLeaseLength || 12,
+      monthlyPricing,
+      includeUtilities: false,
+      utilitiesUpToMonths: 1,
+      varyPricingByLength: true,
+      basePrice: "",
+      deposit: draftData.depositSize ? draftData.depositSize.toString() : "",
+      rentDueAtBooking: draftData.rentDueAtBooking ? draftData.rentDueAtBooking.toString() : "",
+      petDeposit: draftData.petDeposit ? draftData.petDeposit.toString() : "",
+      petRent: draftData.petRent ? draftData.petRent.toString() : ""
+    };
+  }
+  return {
+    shortestStay: 1,
+    longestStay: 12,
+    monthlyPricing: [] as MonthlyPricing[],
+    includeUtilities: false,
+    utilitiesUpToMonths: 1,
+    varyPricingByLength: true,
+    basePrice: "",
+    deposit: "",
+    rentDueAtBooking: "",
+    petDeposit: "",
+    petRent: ""
+  };
+};
+
 // Step 0: Highlights
-const [listingHighlights, setListingHighlights] = useState<ListingHighlights>({
-  category: "Single Family",
-  petsAllowed: true,
-  furnished: true
-});
+const [listingHighlights, setListingHighlights] = useState<ListingHighlights>(initializeHighlights());
 
 // Step 1: Details (Location)
-const [listingLocation, setListingLocation] = useState<ListingLocation>({
-  locationString: null,
-  latitude: null,
-  longitude: null,
-  city: null,
-  state: null,
-  streetAddress1: null,
-  streetAddress2: null,
-  postalCode: null,
-  country: "United States"
-});
+const [listingLocation, setListingLocation] = useState<ListingLocation>(initializeLocation());
 
 // Step 4.5: Amenities
-const [listingAmenities, setListingAmenities] = useState<string[]>([]);
+const [listingAmenities, setListingAmenities] = useState<string[]>(draftData?.amenities || []);
 
 // Step 7: Pricing
-const [listingPricing, setListingPricing] = useState({
-  shortestStay: 1,
-  longestStay: 12,
-  monthlyPricing: [] as MonthlyPricing[],
-  includeUtilities: false,
-  utilitiesUpToMonths: 1,
-  varyPricingByLength: true,
-  basePrice: "",
-  deposit: "",
-  rentDueAtBooking: "",
-  petDeposit: "",
-  petRent: ""
-});
+const [listingPricing, setListingPricing] = useState(initializePricing());
 
 // Cache to preserve all pricing data, even for months outside current range
-const [pricingCache, setPricingCache] = useState<Map<number, MonthlyPricing>>(new Map());
+const [pricingCache, setPricingCache] = useState<Map<number, MonthlyPricing>>(() => {
+  const initialCache = new Map<number, MonthlyPricing>();
+  if (draftData?.monthlyPricing) {
+    draftData.monthlyPricing.forEach((p: any) => {
+      initialCache.set(p.months, {
+        months: p.months,
+        price: p.price ? p.price.toString() : '',
+        utilitiesIncluded: p.utilitiesIncluded || false
+      });
+    });
+  }
+  return initialCache;
+});
 
 // Initialize monthly pricing when component mounts or stay lengths change
 React.useEffect(() => {
@@ -300,11 +422,7 @@ React.useEffect(() => {
 }, [listingPricing.shortestStay, listingPricing.longestStay]);
 
 // Step 2: Rooms
-const [listingRooms, setListingRooms] = useState({
-  bedrooms: 1,
-  bathrooms: 1,
-  squareFeet: ""
-});
+const [listingRooms, setListingRooms] = useState(initializeRooms());
 
 // Reusable text styles
 const questionTextStyles = "font-['Poppins'] font-medium text-[#484a54] text-[16px]";
@@ -312,10 +430,7 @@ const questionSubTextStyles = "font-['Poppins'] text-xs font-normal text-[#83879
 const inputStyles = "placeholder:text-[#667085] placeholder:font-['Poppins',Helvetica] bg-[#D0D5DD]/10";
 
 // Step 3: Basics
-const [listingBasics, setListingBasics] = useState({
-  title: "",
-  description: ""
-});
+const [listingBasics, setListingBasics] = useState(initializeBasics());
 
 // Define steps
   const steps: StepInfo[] = [
@@ -337,73 +452,54 @@ const [listingBasics, setListingBasics] = useState({
 
   // Handler for Save & Exit button
   const handleSaveExit = async () => {
+    if (!user?.id) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'User not authenticated'
+      });
+      return;
+    }
+
     setIsSavingDraft(true);
     try {
-      // Create final array of photos
-      let listingImagesFinal = [...listingPhotos].map(photo => ({
-        ...photo,
-        rank: null
-      }));
-
-      // Update ranks for selected photos if any
-      if (selectedPhotos.length > 0) {
-        for (let i = 0; i < selectedPhotos.length; i++) {
-          const selectedPhoto = selectedPhotos[i];
-          const photoToUpdate = listingImagesFinal.find(p => p.url === selectedPhoto.url);
-          if (photoToUpdate) {
-            photoToUpdate.rank = i + 1;
-          }
-        }
-      }
-
-      // Assign ranks to any remaining photos with null ranks
-      const maxRank = Math.max(0, ...listingImagesFinal.filter(p => p.rank !== null).map(p => p.rank!));
-      let nextRank = maxRank + 1;
-      listingImagesFinal.forEach(photo => {
-        if (photo.rank === null) {
-          photo.rank = nextRank++;
-        }
-      });
-
-      // Prepare draft data
+      console.log('🚀 [handleSaveExit] Starting draft save with current pricing:', listingPricing.monthlyPricing);
+      
+      // Prepare draft data for the helper function
       const draftData = {
-        id: draftId || undefined, // Include ID if updating existing draft
-        title: listingBasics.title || null,
-        description: listingBasics.description || null,
+        title: listingBasics.title,
+        description: listingBasics.description,
         status: "draft",
-        // Listing location fields
-        locationString: listingLocation.locationString || null,
-        latitude: listingLocation.latitude || null,
-        longitude: listingLocation.longitude || null,
-        city: listingLocation.city || null,
-        state: listingLocation.state || null,
-        streetAddress1: listingLocation.streetAddress1 || null,
-        streetAddress2: listingLocation.streetAddress2 || null,
-        postalCode: listingLocation.postalCode || null,
+        // Location fields
+        locationString: listingLocation.locationString,
+        latitude: listingLocation.latitude,
+        longitude: listingLocation.longitude,
+        city: listingLocation.city,
+        state: listingLocation.state,
+        streetAddress1: listingLocation.streetAddress1,
+        streetAddress2: listingLocation.streetAddress2,
+        postalCode: listingLocation.postalCode,
         // Room details
-        roomCount: listingRooms.bedrooms || null,
-        bathroomCount: listingRooms.bathrooms || null,
-        guestCount: listingRooms.bedrooms || null,
+        roomCount: listingRooms.bedrooms,
+        bathroomCount: listingRooms.bathrooms,
+        guestCount: listingRooms.bedrooms,
         squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null,
         // Pricing and deposits
         depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
         petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit) : null,
         petRent: listingPricing.petRent ? Number(listingPricing.petRent) : null,
         rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : null,
-        shortestLeaseLength: listingPricing.shortestStay || null,
-        longestLeaseLength: listingPricing.longestStay || null,
-        shortestLeasePrice: null, // Deprecated
-        longestLeasePrice: null, // Deprecated
+        shortestLeaseLength: listingPricing.shortestStay,
+        longestLeaseLength: listingPricing.longestStay,
         requireBackgroundCheck: true,
         // Highlights
-        category: listingHighlights.category || null,
-        petsAllowed: listingHighlights.petsAllowed || null,
-        furnished: listingHighlights.furnished || null,
-        // Store images and pricing separately for later
-        listingImages: listingImagesFinal.map((photo, index) => ({
-          url: photo.url,
-          rank: photo.rank || index
-        })),
+        category: listingHighlights.category,
+        petsAllowed: listingHighlights.petsAllowed,
+        furnished: listingHighlights.furnished,
+        // Photos and pricing
+        listingPhotos: listingPhotos,
+        selectedPhotos: selectedPhotos,
+        amenities: listingAmenities,
         monthlyPricing: listingPricing.monthlyPricing.map(p => ({
           months: p.months,
           price: p.price ? Number(p.price) : 0,
@@ -411,15 +507,9 @@ const [listingBasics, setListingBasics] = useState({
         }))
       };
       
-      // Process amenities from the array to set the proper boolean values
-      if (listingAmenities && listingAmenities.length > 0) {
-        listingAmenities.forEach(amenity => {
-          // @ts-ignore - Dynamic property assignment
-          draftData[amenity] = true;
-        });
-      }
+      console.log('🚀 [handleSaveExit] Calling API with data:', draftData);
       
-      // Send data to the draft API
+      // Send data to the draft API (which will use our helper function)
       const response = await fetch('/api/listings/draft', {
         method: 'POST',
         headers: {
@@ -445,11 +535,11 @@ const [listingBasics, setListingBasics] = useState({
       // Exit to host overview after saving
       router.push('/app/host/dashboard/overview');
     } catch (error) {
-      console.error('Error saving listing draft:', error);
+      console.error('❌ [handleSaveExit] Error saving listing draft:', error);
       toast({
         variant: 'destructive',
         title: 'Error saving draft',
-        description: 'Failed to save draft, please try again later'
+        description: error instanceof Error ? error.message : 'Failed to save draft, please try again later'
       })
     } finally {
       setIsSavingDraft(false);
@@ -1036,150 +1126,7 @@ const [listingBasics, setListingBasics] = useState({
     }
   };
 
-  // Effect to load draft if draftId is provided
-  useEffect(() => {
-    const loadDraft = async () => {
-      if (draftId) {
-        try {
-          setIsLoadingDraft(true);
-          
-          // Fetch draft from the draft API
-          const response = await fetch(`/api/listings/draft?id=${draftId}`);
-          if (!response.ok) {
-            throw new Error('Failed to load draft');
-          }
-          
-          const draftListing = await response.json();
-          
-          if (draftListing) {
-            // Update the main listing state
-            setListing(draftListing);
-            
-            // Update all the component states with the loaded data
-            if (draftListing.category) {
-              setListingHighlights({
-                category: draftListing.category,
-                petsAllowed: draftListing.petsAllowed || false,
-                furnished: draftListing.furnished || false
-              });
-            }
-            
-            setListingLocation({
-              locationString: draftListing.locationString || null,
-              latitude: draftListing.latitude || null,
-              longitude: draftListing.longitude || null,
-              city: draftListing.city || null,
-              state: draftListing.state || null,
-              streetAddress1: draftListing.streetAddress1 || null,
-              streetAddress2: draftListing.streetAddress2 || null,
-              postalCode: draftListing.postalCode || null,
-              country: "United States"
-            });
-            
-            setListingRooms({
-              bedrooms: draftListing.roomCount || 1,
-              bathrooms: draftListing.bathroomCount || 1,
-              squareFeet: draftListing.squareFootage ? draftListing.squareFootage.toString() : ""
-            });
-            
-            setListingBasics({
-              title: draftListing.title || "",
-              description: draftListing.description || ""
-            });
-            
-            // Load photos from draft if they exist
-            if (draftListing.listingImages && Array.isArray(draftListing.listingImages)) {
-              const loadedPhotos = draftListing.listingImages.map((image: any) => ({
-                id: image.id,
-                url: image.url,
-                listingId: image.listingId,
-                category: image.category,
-                rank: image.rank,
-              }));
-              setListingPhotos(loadedPhotos);
-              
-              // Extract selected photos (ranks 1-4) and sort by rank
-              const selectedFromDraft = loadedPhotos
-                .filter(photo => photo.rank && photo.rank >= 1 && photo.rank <= 4)
-                .sort((a, b) => a.rank! - b.rank!);
-              setSelectedPhotos(selectedFromDraft);
-            }
-            
-            // Set amenities (all properties that are true)
-            const amenities: string[] = [];
-            Object.entries(draftListing).forEach(([key, value]) => {
-              if (value === true && 
-                  key !== 'furnished' && 
-                  key !== 'petsAllowed' && 
-                  key !== 'requireBackgroundCheck' && 
-                  key !== 'varyPricingByLength' && 
-                  key !== 'isApproved') {
-                amenities.push(key);
-              }
-            });
-            
-            if (amenities.length > 0) {
-              setListingAmenities(amenities);
-            }
-            
-            // Set pricing
-            const shortestStay = draftListing.shortestLeaseLength || 1;
-            const longestStay = draftListing.longestLeaseLength || 12;
-            
-            // Initialize monthly pricing array
-            let monthlyPricing: MonthlyPricing[] = [];
-            
-            // If draft has saved monthly pricing, use it, otherwise initialize empty
-            if (draftListing.monthlyPricing && Array.isArray(draftListing.monthlyPricing) && draftListing.monthlyPricing.length > 0) {
-              monthlyPricing = draftListing.monthlyPricing.map((p: any) => ({
-                months: p.months,
-                price: p.price ? p.price.toString() : '',
-                utilitiesIncluded: p.utilitiesIncluded || false
-              }));
-            } else {
-              // Initialize empty pricing for each month in range
-              for (let i = shortestStay; i <= longestStay; i++) {
-                monthlyPricing.push({
-                  months: i,
-                  price: '',
-                  utilitiesIncluded: false
-                });
-              }
-            }
-            
-            setListingPricing({
-              shortestStay,
-              longestStay,
-              monthlyPricing,
-              includeUtilities: false,
-              utilitiesUpToMonths: 1,
-              varyPricingByLength: true,
-              basePrice: "",
-              deposit: draftListing.depositSize ? draftListing.depositSize.toString() : "",
-              rentDueAtBooking: draftListing.rentDueAtBooking ? draftListing.rentDueAtBooking.toString() : "",
-              petDeposit: draftListing.petDeposit ? draftListing.petDeposit.toString() : "",
-              petRent: draftListing.petRent ? draftListing.petRent.toString() : ""
-            });
-
-            // Initialize pricing cache with all available pricing data
-            const initialCache = new Map<number, MonthlyPricing>();
-            monthlyPricing.forEach(p => {
-              initialCache.set(p.months, { ...p });
-            });
-            setPricingCache(initialCache);
-          }
-        } catch (error) {
-          console.error("Error loading draft listing:", error);
-        } finally {
-          setIsLoadingDraft(false);
-        }
-      }
-    };
-    
-    if (draftId) {
-      loadDraft();
-    }
-  }, [draftId]);
+  // No longer need to load draft data in useEffect - it's passed as prop and initialized directly
 
   // Effect to sync subset states back to main listing state
   useEffect(() => {
@@ -1217,6 +1164,15 @@ const [listingBasics, setListingBasics] = useState({
 
   // Render different content based on the current step
   const renderStepContent = () => {
+    console.log('🎨 Rendering step content for step:', currentStep);
+    console.log('📊 Current state values:', {
+      highlights: listingHighlights,
+      location: listingLocation,
+      rooms: listingRooms,
+      basics: listingBasics,
+      amenities: listingAmenities
+    });
+    
     switch (currentStep) {
       case 0:
         return (
@@ -1428,17 +1384,7 @@ const [listingBasics, setListingBasics] = useState({
     }
   };
 
-  // Loading state for draft
-  if (isLoadingDraft) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#3c8787] animate-spin mx-auto mb-4" />
-          <p className="text-xl">Loading your draft listing...</p>
-        </div>
-      </div>
-    );
-  }
+  // No longer need loading state since data is passed as prop
 
   return (
     <main className="bg-background flex flex-row justify-center w-full">
