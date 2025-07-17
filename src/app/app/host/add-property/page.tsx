@@ -10,6 +10,7 @@ export default async function AddPropertyPage({
   let draftData = null;
   
   // If user wants to continue editing a specific draft, load the draft data server-side
+  // SEUCURITY: ADD CHECK FOR USER ID
   if (searchParams.draftId) {
     try {
       console.log('🔄 [PAGE] Loading draft data for draftId:', searchParams.draftId);

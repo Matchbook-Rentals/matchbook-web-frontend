@@ -11,7 +11,7 @@ This security audit identified **12 critical vulnerabilities** that require imme
 ### Risk Summary
 - **🔴 Critical Issues:** 12 (Immediate action required)
 - **🟠 High Priority:** 8 (Fix within 1 week)  
-- **🟡 Medium Priority:** 6 (Fix within 1 month)
+- **🟡 Medium Priority:** 7 (Fix within 1 month)
 - **Overall Risk Level:** CRITICAL
 
 ---
@@ -171,6 +171,11 @@ if (!checkRole('admin')) {  // Missing await!
 **Issue:** No audit trail for administrative actions  
 **Fix:** Implement comprehensive audit logging
 
+### 27. **Missing User Authorization Check** - MEDIUM
+**File:** `src/app/app/host/add-property/page.tsx:14`  
+**Issue:** Security comment indicates missing user ID validation for draft access  
+**Fix:** Add user ID authorization check before loading draft data
+
 ---
 
 ## ✅ POSITIVE SECURITY FINDINGS
@@ -264,7 +269,7 @@ const handleApiError = (error: unknown) => {
 | Category | Critical | High | Medium | Total |
 |----------|----------|------|--------|-------|
 | Authentication | 3 | 2 | 0 | 5 |
-| Authorization | 2 | 1 | 0 | 3 |
+| Authorization | 2 | 1 | 1 | 4 |
 | Data Protection | 3 | 1 | 1 | 5 |
 | Input Validation | 1 | 1 | 3 | 5 |
 | Configuration | 2 | 3 | 2 | 7 |

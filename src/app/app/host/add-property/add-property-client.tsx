@@ -1,3 +1,12 @@
+/**
+ * Add Property Client Component
+ * 
+ * This is the main client-side component for the add property flow.
+ * It handles the multi-step form process for hosts to add new rental properties.
+ * 
+ * Primary test file: test/lib/listing-actions-helpers.test.ts
+ * Contains comprehensive tests for all helper functions used by this component.
+ */
 'use client';
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +18,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import { revalidateHostDashboard } from "../_actions";
+import {
+  initializeHighlights,
+  initializeLocation,
+  initializeRooms,
+  initializeBasicInfo,
+  initializePhotos,
+  initializeAmenities,
+  handleSaveAndExit
+} from "@/lib/listing-actions-helpers";
 import LocationForm from "./location-form";
 import LocationInput from "./listing-creation-location-input";
 import AddressConfirmation from "./listing-creation-address-confirmation";
@@ -192,10 +210,11 @@ export default function AddPropertyclient({ draftData }: AddPropertyClientProps)
   });
   // State to hold the current set of photos for the listing
 // This will be used to manage photo uploads, ordering, and removal before saving to the listing
-const [listingPhotos, setListingPhotos] = useState<NullableListingImage[]>(draftData?.listingPhotos || []);
+const initialPhotos = initializePhotos(draftData);
+const [listingPhotos, setListingPhotos] = useState<NullableListingImage[]>(initialPhotos.listingPhotos);
 
 // State for selected featured photos
-const [selectedPhotos, setSelectedPhotos] = useState<NullableListingImage[]>(draftData?.selectedPhotos || []);
+const [selectedPhotos, setSelectedPhotos] = useState<NullableListingImage[]>(initialPhotos.selectedPhotos);
 
 const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
@@ -223,90 +242,6 @@ interface ListingLocation {
 // Subset states for different sections
 
 // Initialize state with draft data if available
-const initializeHighlights = (): ListingHighlights => {
-  if (draftData) {
-    console.log('🎯 Initializing highlights with draft data:', {
-      category: draftData.category,
-      petsAllowed: draftData.petsAllowed,
-      furnished: draftData.furnished
-    });
-    return {
-      category: draftData.category || "Single Family",
-      petsAllowed: draftData.petsAllowed !== null ? draftData.petsAllowed : true,
-      furnished: draftData.furnished !== null ? draftData.furnished : true
-    };
-  }
-  return {
-    category: "Single Family",
-    petsAllowed: true,
-    furnished: true
-  };
-};
-
-const initializeLocation = (): ListingLocation => {
-  if (draftData) {
-    console.log('🎯 Initializing location with draft data:', draftData);
-    return {
-      locationString: draftData.locationString,
-      latitude: draftData.latitude,
-      longitude: draftData.longitude,
-      city: draftData.city,
-      state: draftData.state,
-      streetAddress1: draftData.streetAddress1,
-      streetAddress2: draftData.streetAddress2,
-      postalCode: draftData.postalCode,
-      country: draftData.country || "United States"
-    };
-  }
-  return {
-    locationString: null,
-    latitude: null,
-    longitude: null,
-    city: null,
-    state: null,
-    streetAddress1: null,
-    streetAddress2: null,
-    postalCode: null,
-    country: "United States"
-  };
-};
-
-const initializeRooms = () => {
-  if (draftData) {
-    console.log('🎯 Initializing rooms with draft data:', {
-      bedrooms: draftData.roomCount,
-      bathrooms: draftData.bathroomCount,
-      squareFeet: draftData.squareFootage
-    });
-    return {
-      bedrooms: draftData.roomCount || 1,
-      bathrooms: draftData.bathroomCount || 1,
-      squareFeet: draftData.squareFootage ? draftData.squareFootage.toString() : ""
-    };
-  }
-  return {
-    bedrooms: 1,
-    bathrooms: 1,
-    squareFeet: ""
-  };
-};
-
-const initializeBasics = () => {
-  if (draftData) {
-    console.log('🎯 Initializing basics with draft data:', {
-      title: draftData.title,
-      description: draftData.description
-    });
-    return {
-      title: draftData.title || "",
-      description: draftData.description || ""
-    };
-  }
-  return {
-    title: "",
-    description: ""
-  };
-};
 
 const initializePricing = () => {
   if (draftData) {
@@ -353,13 +288,13 @@ const initializePricing = () => {
 };
 
 // Step 0: Highlights
-const [listingHighlights, setListingHighlights] = useState<ListingHighlights>(initializeHighlights());
+const [listingHighlights, setListingHighlights] = useState<ListingHighlights>(initializeHighlights(draftData));
 
 // Step 1: Details (Location)
-const [listingLocation, setListingLocation] = useState<ListingLocation>(initializeLocation());
+const [listingLocation, setListingLocation] = useState<ListingLocation>(initializeLocation(draftData));
 
 // Step 4.5: Amenities
-const [listingAmenities, setListingAmenities] = useState<string[]>(draftData?.amenities || []);
+const [listingAmenities, setListingAmenities] = useState<string[]>(initializeAmenities(draftData));
 
 // Step 7: Pricing
 const [listingPricing, setListingPricing] = useState(initializePricing());
@@ -422,7 +357,14 @@ React.useEffect(() => {
 }, [listingPricing.shortestStay, listingPricing.longestStay]);
 
 // Step 2: Rooms
-const [listingRooms, setListingRooms] = useState(initializeRooms());
+const [listingRooms, setListingRooms] = useState(() => {
+  const roomsData = initializeRooms(draftData);
+  return {
+    bedrooms: roomsData.roomCount || 1,
+    bathrooms: roomsData.bathroomCount || 1,
+    squareFeet: roomsData.squareFootage ? roomsData.squareFootage.toString() : ""
+  };
+});
 
 // Reusable text styles
 const questionTextStyles = "font-['Poppins'] font-medium text-[#484a54] text-[16px]";
@@ -430,7 +372,7 @@ const questionSubTextStyles = "font-['Poppins'] text-xs font-normal text-[#83879
 const inputStyles = "placeholder:text-[#667085] placeholder:font-['Poppins',Helvetica] bg-[#D0D5DD]/10";
 
 // Step 3: Basics
-const [listingBasics, setListingBasics] = useState(initializeBasics());
+const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData));
 
 // Define steps
   const steps: StepInfo[] = [
@@ -465,82 +407,43 @@ const [listingBasics, setListingBasics] = useState(initializeBasics());
     try {
       console.log('🚀 [handleSaveExit] Starting draft save with current pricing:', listingPricing.monthlyPricing);
       
-      // Prepare draft data for the helper function
-      const draftData = {
-        title: listingBasics.title,
-        description: listingBasics.description,
-        status: "draft",
-        // Location fields
-        locationString: listingLocation.locationString,
-        latitude: listingLocation.latitude,
-        longitude: listingLocation.longitude,
-        city: listingLocation.city,
-        state: listingLocation.state,
-        streetAddress1: listingLocation.streetAddress1,
-        streetAddress2: listingLocation.streetAddress2,
-        postalCode: listingLocation.postalCode,
-        // Room details
-        roomCount: listingRooms.bedrooms,
-        bathroomCount: listingRooms.bathrooms,
-        guestCount: listingRooms.bedrooms,
-        squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null,
-        // Pricing and deposits
-        depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
-        petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit) : null,
-        petRent: listingPricing.petRent ? Number(listingPricing.petRent) : null,
-        rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : null,
-        shortestLeaseLength: listingPricing.shortestStay,
-        longestLeaseLength: listingPricing.longestStay,
-        requireBackgroundCheck: true,
-        // Highlights
-        category: listingHighlights.category,
-        petsAllowed: listingHighlights.petsAllowed,
-        furnished: listingHighlights.furnished,
-        // Photos and pricing
-        listingPhotos: listingPhotos,
-        selectedPhotos: selectedPhotos,
-        amenities: listingAmenities,
-        monthlyPricing: listingPricing.monthlyPricing.map(p => ({
-          months: p.months,
-          price: p.price ? Number(p.price) : 0,
-          utilitiesIncluded: p.utilitiesIncluded
-        }))
-      };
-      
-      console.log('🚀 [handleSaveExit] Calling API with data:', draftData);
-      
-      // Send data to the draft API (which will use our helper function)
-      const response = await fetch('/api/listings/draft', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Use the extracted helper function
+      const savedDraft = await handleSaveAndExit(
+        {
+          listingBasics,
+          listingLocation,
+          listingRooms,
+          listingPricing,
+          listingHighlights,
+          listingPhotos,
+          selectedPhotos,
+          listingAmenities
         },
-        body: JSON.stringify(draftData),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to save listing draft');
-      }
-      
-      const savedDraft = await response.json();
-      
-      // Update the URL with the draft ID if it's a new draft
-      if (!draftId && savedDraft.id) {
-        const newUrl = new URL(window.location.href);
-        newUrl.searchParams.set('draftId', savedDraft.id);
-        window.history.replaceState({}, '', newUrl.toString());
-      }
+        {
+          onSuccess: (savedDraft) => {
+            // Update the URL with the draft ID if it's a new draft
+            if (!draftId && savedDraft.id) {
+              const newUrl = new URL(window.location.href);
+              newUrl.searchParams.set('draftId', savedDraft.id);
+              window.history.replaceState({}, '', newUrl.toString());
+            }
+          },
+          onError: (error) => {
+            console.error('❌ [handleSaveExit] Error saving listing draft:', error);
+            toast({
+              variant: 'destructive',
+              title: 'Error saving draft',
+              description: error.message || 'Failed to save draft, please try again later'
+            });
+          }
+        }
+      );
       
       // Exit to host overview after saving
       router.push('/app/host/dashboard/overview');
     } catch (error) {
-      console.error('❌ [handleSaveExit] Error saving listing draft:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Error saving draft',
-        description: error instanceof Error ? error.message : 'Failed to save draft, please try again later'
-      })
+      // Error handling is done in the helper function callbacks
+      // This catch block is just for safety
     } finally {
       setIsSavingDraft(false);
     }

@@ -6,6 +6,17 @@ import {
   handleSaveDraft,
   handleSubmitListing,
   loadDraftData,
+  initializeFormDefaults,
+  initializeHighlights,
+  initializeLocation,
+  initializeRooms,
+  initializePricing,
+  initializePhotos,
+  initializeAmenities,
+  initializeMonthlyPricing,
+  initializeBasicInfo,
+  transformComponentStateToDraftData,
+  handleSaveAndExit,
   type ListingData,
   type DraftData
 } from '../../src/lib/listing-actions-helpers';
@@ -1307,6 +1318,1081 @@ describe('Listing Actions Helpers', () => {
         expect(loadedData.listingPhotos).toHaveLength(testData.listingPhotos.length);
         expect(loadedData.selectedPhotos).toHaveLength(testData.selectedPhotos.length);
         expect(loadedData.monthlyPricing).toHaveLength(testData.monthlyPricing.length);
+      });
+    });
+  });
+
+  describe('Form Field Initialization Helpers', () => {
+    describe('initializeFormDefaults', () => {
+      it('should return default values for all form fields', () => {
+        const defaults = initializeFormDefaults();
+        
+        expect(defaults.title).toBe("");
+        expect(defaults.description).toBe("");
+        expect(defaults.category).toBe("Single Family");
+        expect(defaults.petsAllowed).toBe(true);
+        expect(defaults.furnished).toBe(true);
+        expect(defaults.locationString).toBe(null);
+        expect(defaults.latitude).toBe(null);
+        expect(defaults.longitude).toBe(null);
+        expect(defaults.city).toBe(null);
+        expect(defaults.state).toBe(null);
+        expect(defaults.streetAddress1).toBe(null);
+        expect(defaults.streetAddress2).toBe(null);
+        expect(defaults.postalCode).toBe(null);
+        expect(defaults.country).toBe("United States");
+        expect(defaults.roomCount).toBe(1);
+        expect(defaults.bathroomCount).toBe(1);
+        expect(defaults.guestCount).toBe(1);
+        expect(defaults.squareFootage).toBe(null);
+        expect(defaults.depositSize).toBe(null);
+        expect(defaults.petDeposit).toBe(null);
+        expect(defaults.petRent).toBe(null);
+        expect(defaults.rentDueAtBooking).toBe(null);
+        expect(defaults.shortestLeaseLength).toBe(1);
+        expect(defaults.longestLeaseLength).toBe(12);
+        expect(defaults.listingPhotos).toEqual([]);
+        expect(defaults.selectedPhotos).toEqual([]);
+        expect(defaults.amenities).toEqual([]);
+        expect(defaults.monthlyPricing).toEqual([]);
+      });
+    });
+
+    describe('initializeHighlights', () => {
+      it('should return defaults when no draft data provided', () => {
+        const highlights = initializeHighlights();
+        
+        expect(highlights.category).toBe("Single Family");
+        expect(highlights.petsAllowed).toBe(true);
+        expect(highlights.furnished).toBe(true);
+      });
+
+      it('should return draft data when provided', () => {
+        const draftData = {
+          category: "Apartment",
+          petsAllowed: false,
+          furnished: false
+        };
+        
+        const highlights = initializeHighlights(draftData);
+        
+        expect(highlights.category).toBe("Apartment");
+        expect(highlights.petsAllowed).toBe(false);
+        expect(highlights.furnished).toBe(false);
+      });
+
+      it('should handle null values in draft data', () => {
+        const draftData = {
+          category: null,
+          petsAllowed: null,
+          furnished: null
+        };
+        
+        const highlights = initializeHighlights(draftData);
+        
+        expect(highlights.category).toBe("Single Family");
+        expect(highlights.petsAllowed).toBe(true);
+        expect(highlights.furnished).toBe(true);
+      });
+
+      it('should handle partial draft data', () => {
+        const draftData = {
+          category: "Condo",
+          petsAllowed: false
+          // furnished is missing
+        };
+        
+        const highlights = initializeHighlights(draftData);
+        
+        expect(highlights.category).toBe("Condo");
+        expect(highlights.petsAllowed).toBe(false);
+        expect(highlights.furnished).toBe(true); // should use default
+      });
+    });
+
+    describe('initializeLocation', () => {
+      it('should return defaults when no draft data provided', () => {
+        const location = initializeLocation();
+        
+        expect(location.locationString).toBe(null);
+        expect(location.latitude).toBe(null);
+        expect(location.longitude).toBe(null);
+        expect(location.city).toBe(null);
+        expect(location.state).toBe(null);
+        expect(location.streetAddress1).toBe(null);
+        expect(location.streetAddress2).toBe(null);
+        expect(location.postalCode).toBe(null);
+        expect(location.country).toBe("United States");
+      });
+
+      it('should return draft data when provided', () => {
+        const draftData = {
+          locationString: "123 Main St, Austin, TX 78701",
+          latitude: 30.2672,
+          longitude: -97.7431,
+          city: "Austin",
+          state: "TX",
+          streetAddress1: "123 Main St",
+          streetAddress2: "Apt 4B",
+          postalCode: "78701"
+        };
+        
+        const location = initializeLocation(draftData);
+        
+        expect(location.locationString).toBe("123 Main St, Austin, TX 78701");
+        expect(location.latitude).toBe(30.2672);
+        expect(location.longitude).toBe(-97.7431);
+        expect(location.city).toBe("Austin");
+        expect(location.state).toBe("TX");
+        expect(location.streetAddress1).toBe("123 Main St");
+        expect(location.streetAddress2).toBe("Apt 4B");
+        expect(location.postalCode).toBe("78701");
+        expect(location.country).toBe("United States");
+      });
+
+      it('should handle null values in draft data', () => {
+        const draftData = {
+          locationString: null,
+          latitude: null,
+          longitude: null,
+          city: null,
+          state: null,
+          streetAddress1: null,
+          streetAddress2: null,
+          postalCode: null
+        };
+        
+        const location = initializeLocation(draftData);
+        
+        expect(location.locationString).toBe(null);
+        expect(location.latitude).toBe(null);
+        expect(location.longitude).toBe(null);
+        expect(location.city).toBe(null);
+        expect(location.state).toBe(null);
+        expect(location.streetAddress1).toBe(null);
+        expect(location.streetAddress2).toBe(null);
+        expect(location.postalCode).toBe(null);
+        expect(location.country).toBe("United States");
+      });
+    });
+
+    describe('initializeRooms', () => {
+      it('should return defaults when no draft data provided', () => {
+        const rooms = initializeRooms();
+        
+        expect(rooms.roomCount).toBe(1);
+        expect(rooms.bathroomCount).toBe(1);
+        expect(rooms.guestCount).toBe(1);
+        expect(rooms.squareFootage).toBe(null);
+      });
+
+      it('should return draft data when provided', () => {
+        const draftData = {
+          roomCount: 3,
+          bathroomCount: 2,
+          guestCount: 6,
+          squareFootage: 1500
+        };
+        
+        const rooms = initializeRooms(draftData);
+        
+        expect(rooms.roomCount).toBe(3);
+        expect(rooms.bathroomCount).toBe(2);
+        expect(rooms.guestCount).toBe(6);
+        expect(rooms.squareFootage).toBe(1500);
+      });
+
+      it('should handle falsy values in draft data', () => {
+        const draftData = {
+          roomCount: 0,
+          bathroomCount: 0,
+          guestCount: 0,
+          squareFootage: null
+        };
+        
+        const rooms = initializeRooms(draftData);
+        
+        expect(rooms.roomCount).toBe(1); // should use default for 0
+        expect(rooms.bathroomCount).toBe(1); // should use default for 0
+        expect(rooms.guestCount).toBe(1); // should use default for 0
+        expect(rooms.squareFootage).toBe(null);
+      });
+    });
+
+    describe('initializePricing', () => {
+      it('should return defaults when no draft data provided', () => {
+        const pricing = initializePricing();
+        
+        expect(pricing.depositSize).toBe(null);
+        expect(pricing.petDeposit).toBe(null);
+        expect(pricing.petRent).toBe(null);
+        expect(pricing.rentDueAtBooking).toBe(null);
+        expect(pricing.shortestLeaseLength).toBe(1);
+        expect(pricing.longestLeaseLength).toBe(12);
+      });
+
+      it('should return draft data when provided', () => {
+        const draftData = {
+          depositSize: 1500,
+          petDeposit: 300,
+          petRent: 50,
+          rentDueAtBooking: 2000,
+          shortestLeaseLength: 6,
+          longestLeaseLength: 18
+        };
+        
+        const pricing = initializePricing(draftData);
+        
+        expect(pricing.depositSize).toBe(1500);
+        expect(pricing.petDeposit).toBe(300);
+        expect(pricing.petRent).toBe(50);
+        expect(pricing.rentDueAtBooking).toBe(2000);
+        expect(pricing.shortestLeaseLength).toBe(6);
+        expect(pricing.longestLeaseLength).toBe(18);
+      });
+
+      it('should handle null values correctly', () => {
+        const draftData = {
+          depositSize: null,
+          petDeposit: null,
+          petRent: null,
+          rentDueAtBooking: null,
+          shortestLeaseLength: null,
+          longestLeaseLength: null
+        };
+        
+        const pricing = initializePricing(draftData);
+        
+        expect(pricing.depositSize).toBe(null);
+        expect(pricing.petDeposit).toBe(null);
+        expect(pricing.petRent).toBe(null);
+        expect(pricing.rentDueAtBooking).toBe(null);
+        expect(pricing.shortestLeaseLength).toBe(1); // should use default
+        expect(pricing.longestLeaseLength).toBe(12); // should use default
+      });
+
+      it('should handle zero values correctly', () => {
+        const draftData = {
+          depositSize: 0,
+          petDeposit: 0,
+          petRent: 0,
+          rentDueAtBooking: 0,
+          shortestLeaseLength: 0,
+          longestLeaseLength: 0
+        };
+        
+        const pricing = initializePricing(draftData);
+        
+        expect(pricing.depositSize).toBe(0);
+        expect(pricing.petDeposit).toBe(0);
+        expect(pricing.petRent).toBe(0);
+        expect(pricing.rentDueAtBooking).toBe(0);
+        expect(pricing.shortestLeaseLength).toBe(1); // should use default for 0
+        expect(pricing.longestLeaseLength).toBe(12); // should use default for 0
+      });
+    });
+
+    describe('initializePhotos', () => {
+      it('should return empty arrays when no draft data provided', () => {
+        const photos = initializePhotos();
+        
+        expect(photos.listingPhotos).toEqual([]);
+        expect(photos.selectedPhotos).toEqual([]);
+      });
+
+      it('should return draft data when provided', () => {
+        const draftData = {
+          listingPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 },
+            { url: 'https://example.com/photo2.jpg', rank: 2 }
+          ],
+          selectedPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 }
+          ]
+        };
+        
+        const photos = initializePhotos(draftData);
+        
+        expect(photos.listingPhotos).toEqual(draftData.listingPhotos);
+        expect(photos.selectedPhotos).toEqual(draftData.selectedPhotos);
+      });
+
+      it('should filter and sort selected photos by rank', () => {
+        const draftData = {
+          listingPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 },
+            { url: 'https://example.com/photo2.jpg', rank: 2 },
+            { url: 'https://example.com/photo3.jpg', rank: 3 }
+          ],
+          selectedPhotos: [
+            { url: 'https://example.com/photo3.jpg', rank: 3 },
+            { url: 'https://example.com/photo1.jpg', rank: 1 },
+            { url: 'https://example.com/photo2.jpg', rank: 2 },
+            { url: 'https://example.com/invalid.jpg', rank: null }, // Should be filtered out
+            { url: '', rank: 4 } // Should be filtered out due to empty url
+          ]
+        };
+        
+        const photos = initializePhotos(draftData);
+        
+        expect(photos.listingPhotos).toEqual(draftData.listingPhotos);
+        expect(photos.selectedPhotos).toEqual([
+          { url: 'https://example.com/photo1.jpg', rank: 1 },
+          { url: 'https://example.com/photo2.jpg', rank: 2 },
+          { url: 'https://example.com/photo3.jpg', rank: 3 }
+        ]);
+      });
+
+      it('should handle null or undefined photo arrays', () => {
+        const draftData = {
+          listingPhotos: null,
+          selectedPhotos: undefined
+        };
+        
+        const photos = initializePhotos(draftData);
+        
+        expect(photos.listingPhotos).toEqual([]);
+        expect(photos.selectedPhotos).toEqual([]);
+      });
+    });
+
+    describe('initializeAmenities', () => {
+      it('should return empty array when no draft data provided', () => {
+        const amenities = initializeAmenities();
+        
+        expect(amenities).toEqual([]);
+      });
+
+      it('should return draft amenities when provided', () => {
+        const draftData = {
+          amenities: ['kitchen', 'wifi', 'airConditioner', 'pool']
+        };
+        
+        const amenities = initializeAmenities(draftData);
+        
+        expect(amenities).toEqual(['kitchen', 'wifi', 'airConditioner', 'pool']);
+      });
+
+      it('should handle null or undefined amenities', () => {
+        const draftData = {
+          amenities: null
+        };
+        
+        const amenities = initializeAmenities(draftData);
+        
+        expect(amenities).toEqual([]);
+      });
+    });
+
+    describe('initializeMonthlyPricing', () => {
+      it('should return empty array when no draft data provided', () => {
+        const pricing = initializeMonthlyPricing();
+        
+        expect(pricing).toEqual([]);
+      });
+
+      it('should return draft pricing when provided', () => {
+        const draftData = {
+          monthlyPricing: [
+            { months: 1, price: 1500, utilitiesIncluded: false },
+            { months: 6, price: 1400, utilitiesIncluded: true },
+            { months: 12, price: 1300, utilitiesIncluded: true }
+          ]
+        };
+        
+        const pricing = initializeMonthlyPricing(draftData);
+        
+        expect(pricing).toEqual(draftData.monthlyPricing);
+      });
+
+      it('should handle null or undefined pricing', () => {
+        const draftData = {
+          monthlyPricing: null
+        };
+        
+        const pricing = initializeMonthlyPricing(draftData);
+        
+        expect(pricing).toEqual([]);
+      });
+    });
+
+    describe('initializeBasicInfo', () => {
+      it('should return empty strings when no draft data provided', () => {
+        const basicInfo = initializeBasicInfo();
+        
+        expect(basicInfo.title).toBe("");
+        expect(basicInfo.description).toBe("");
+      });
+
+      it('should return draft data when provided', () => {
+        const draftData = {
+          title: "Test Property",
+          description: "This is a test property description"
+        };
+        
+        const basicInfo = initializeBasicInfo(draftData);
+        
+        expect(basicInfo.title).toBe("Test Property");
+        expect(basicInfo.description).toBe("This is a test property description");
+      });
+
+      it('should handle null values in draft data', () => {
+        const draftData = {
+          title: null,
+          description: null
+        };
+        
+        const basicInfo = initializeBasicInfo(draftData);
+        
+        expect(basicInfo.title).toBe("");
+        expect(basicInfo.description).toBe("");
+      });
+    });
+
+    describe('Integration with existing functions', () => {
+      it('should work with loadDraftData output', async () => {
+        // Create a draft using our existing functions
+        const originalData = createFakeAddPropertyClientData();
+        const draft = await handleSaveDraft(originalData, testUserId);
+        
+        // Load the draft data
+        const loadedData = await loadDraftData(draft.id);
+        
+        // Use our initialization helpers with the loaded data
+        const highlights = initializeHighlights(loadedData);
+        const location = initializeLocation(loadedData);
+        const rooms = initializeRooms(loadedData);
+        const pricing = initializePricing(loadedData);
+        const photos = initializePhotos(loadedData);
+        const amenities = initializeAmenities(loadedData);
+        const monthlyPricing = initializeMonthlyPricing(loadedData);
+        const basicInfo = initializeBasicInfo(loadedData);
+        
+        // Verify they match the loaded data
+        expect(highlights.category).toBe(loadedData.category);
+        expect(highlights.petsAllowed).toBe(loadedData.petsAllowed);
+        expect(highlights.furnished).toBe(loadedData.furnished);
+        
+        expect(location.city).toBe(loadedData.city);
+        expect(location.state).toBe(loadedData.state);
+        expect(location.streetAddress1).toBe(loadedData.streetAddress1);
+        
+        expect(rooms.roomCount).toBe(loadedData.roomCount);
+        expect(rooms.bathroomCount).toBe(loadedData.bathroomCount);
+        expect(rooms.guestCount).toBe(loadedData.guestCount);
+        
+        expect(pricing.depositSize).toBe(loadedData.depositSize);
+        expect(pricing.shortestLeaseLength).toBe(loadedData.shortestLeaseLength);
+        expect(pricing.longestLeaseLength).toBe(loadedData.longestLeaseLength);
+        
+        expect(photos.listingPhotos).toEqual(loadedData.listingPhotos);
+        expect(photos.selectedPhotos).toEqual(loadedData.selectedPhotos);
+        
+        expect(amenities).toEqual(loadedData.amenities);
+        expect(monthlyPricing).toEqual(loadedData.monthlyPricing);
+        
+        expect(basicInfo.title).toBe(loadedData.title);
+        expect(basicInfo.description).toBe(loadedData.description);
+      });
+    });
+  });
+
+  describe('HandleSaveExit Helper Functions', () => {
+    describe('transformComponentStateToDraftData', () => {
+      it('should transform component state to draft data format', () => {
+        const componentState = {
+          listingBasics: { title: 'Test Property', description: 'Test Description' },
+          listingLocation: {
+            locationString: '123 Test St, Test City, TX 12345',
+            latitude: 30.2672,
+            longitude: -97.7431,
+            city: 'Test City',
+            state: 'TX',
+            streetAddress1: '123 Test St',
+            streetAddress2: 'Apt 4B',
+            postalCode: '12345'
+          },
+          listingRooms: {
+            bedrooms: 2,
+            bathrooms: 1,
+            squareFeet: '1000'
+          },
+          listingPricing: {
+            deposit: '1500',
+            petDeposit: '300',
+            petRent: '50',
+            rentDueAtBooking: '2000',
+            shortestStay: 6,
+            longestStay: 12,
+            monthlyPricing: [
+              { months: 6, price: '1800', utilitiesIncluded: false },
+              { months: 12, price: '1600', utilitiesIncluded: true }
+            ]
+          },
+          listingHighlights: {
+            category: 'Apartment',
+            petsAllowed: true,
+            furnished: false
+          },
+          listingPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 },
+            { url: 'https://example.com/photo2.jpg', rank: 2 }
+          ],
+          selectedPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 }
+          ],
+          listingAmenities: ['kitchen', 'wifi', 'airConditioner']
+        };
+
+        const result = transformComponentStateToDraftData(componentState);
+
+        expect(result).toEqual({
+          title: 'Test Property',
+          description: 'Test Description',
+          status: 'draft',
+          locationString: '123 Test St, Test City, TX 12345',
+          latitude: 30.2672,
+          longitude: -97.7431,
+          city: 'Test City',
+          state: 'TX',
+          streetAddress1: '123 Test St',
+          streetAddress2: 'Apt 4B',
+          postalCode: '12345',
+          roomCount: 2,
+          bathroomCount: 1,
+          guestCount: 2,
+          squareFootage: 1000,
+          depositSize: 1500,
+          petDeposit: 300,
+          petRent: 50,
+          rentDueAtBooking: 2000,
+          shortestLeaseLength: 6,
+          longestLeaseLength: 12,
+          requireBackgroundCheck: true,
+          category: 'Apartment',
+          petsAllowed: true,
+          furnished: false,
+          listingPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 },
+            { url: 'https://example.com/photo2.jpg', rank: 2 }
+          ],
+          selectedPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 }
+          ],
+          amenities: ['kitchen', 'wifi', 'airConditioner'],
+          monthlyPricing: [
+            { months: 6, price: 1800, utilitiesIncluded: false },
+            { months: 12, price: 1600, utilitiesIncluded: true }
+          ]
+        });
+      });
+
+      it('should handle empty/null values correctly', () => {
+        const componentState = {
+          listingBasics: { title: '', description: '' },
+          listingLocation: {
+            locationString: null,
+            latitude: null,
+            longitude: null,
+            city: null,
+            state: null,
+            streetAddress1: null,
+            streetAddress2: null,
+            postalCode: null
+          },
+          listingRooms: {
+            bedrooms: 1,
+            bathrooms: 1,
+            squareFeet: ''
+          },
+          listingPricing: {
+            deposit: '',
+            petDeposit: '',
+            petRent: '',
+            rentDueAtBooking: '',
+            shortestStay: 1,
+            longestStay: 12,
+            monthlyPricing: []
+          },
+          listingHighlights: {
+            category: 'Single Family',
+            petsAllowed: false,
+            furnished: false
+          },
+          listingPhotos: [],
+          selectedPhotos: [],
+          listingAmenities: []
+        };
+
+        const result = transformComponentStateToDraftData(componentState);
+
+        expect(result.title).toBe('');
+        expect(result.description).toBe('');
+        expect(result.locationString).toBe(null);
+        expect(result.latitude).toBe(null);
+        expect(result.longitude).toBe(null);
+        expect(result.city).toBe(null);
+        expect(result.state).toBe(null);
+        expect(result.streetAddress1).toBe(null);
+        expect(result.streetAddress2).toBe(null);
+        expect(result.postalCode).toBe(null);
+        expect(result.roomCount).toBe(1);
+        expect(result.bathroomCount).toBe(1);
+        expect(result.guestCount).toBe(1);
+        expect(result.squareFootage).toBe(null);
+        expect(result.depositSize).toBe(null);
+        expect(result.petDeposit).toBe(null);
+        expect(result.petRent).toBe(null);
+        expect(result.rentDueAtBooking).toBe(null);
+        expect(result.shortestLeaseLength).toBe(1);
+        expect(result.longestLeaseLength).toBe(12);
+        expect(result.requireBackgroundCheck).toBe(true);
+        expect(result.category).toBe('Single Family');
+        expect(result.petsAllowed).toBe(false);
+        expect(result.furnished).toBe(false);
+        expect(result.listingPhotos).toEqual([]);
+        expect(result.selectedPhotos).toEqual([]);
+        expect(result.amenities).toEqual([]);
+        expect(result.monthlyPricing).toEqual([]);
+        expect(result.status).toBe('draft');
+      });
+
+      it('should handle pricing with zero values correctly', () => {
+        const componentState = {
+          listingBasics: { title: 'Test', description: 'Test' },
+          listingLocation: {
+            locationString: null,
+            latitude: null,
+            longitude: null,
+            city: null,
+            state: null,
+            streetAddress1: null,
+            streetAddress2: null,
+            postalCode: null
+          },
+          listingRooms: {
+            bedrooms: 1,
+            bathrooms: 1,
+            squareFeet: '0'
+          },
+          listingPricing: {
+            deposit: '0',
+            petDeposit: '0',
+            petRent: '0',
+            rentDueAtBooking: '0',
+            shortestStay: 1,
+            longestStay: 12,
+            monthlyPricing: [
+              { months: 1, price: '0', utilitiesIncluded: false }
+            ]
+          },
+          listingHighlights: {
+            category: 'Single Family',
+            petsAllowed: false,
+            furnished: false
+          },
+          listingPhotos: [],
+          selectedPhotos: [],
+          listingAmenities: []
+        };
+
+        const result = transformComponentStateToDraftData(componentState);
+
+        expect(result.squareFootage).toBe(0);
+        expect(result.depositSize).toBe(0);
+        expect(result.petDeposit).toBe(0);
+        expect(result.petRent).toBe(0);
+        expect(result.rentDueAtBooking).toBe(0);
+        expect(result.monthlyPricing).toEqual([
+          { months: 1, price: 0, utilitiesIncluded: false }
+        ]);
+      });
+    });
+
+    describe('handleSaveAndExit', () => {
+      it('should successfully save and exit with valid data', async () => {
+        const componentState = {
+          listingBasics: { title: 'Test Property', description: 'Test Description' },
+          listingLocation: {
+            locationString: '123 Test St, Test City, TX 12345',
+            latitude: 30.2672,
+            longitude: -97.7431,
+            city: 'Test City',
+            state: 'TX',
+            streetAddress1: '123 Test St',
+            streetAddress2: null,
+            postalCode: '12345'
+          },
+          listingRooms: {
+            bedrooms: 2,
+            bathrooms: 1,
+            squareFeet: '1000'
+          },
+          listingPricing: {
+            deposit: '1500',
+            petDeposit: '300',
+            petRent: '50',
+            rentDueAtBooking: '2000',
+            shortestStay: 6,
+            longestStay: 12,
+            monthlyPricing: [
+              { months: 6, price: '1800', utilitiesIncluded: false },
+              { months: 12, price: '1600', utilitiesIncluded: true }
+            ]
+          },
+          listingHighlights: {
+            category: 'Apartment',
+            petsAllowed: true,
+            furnished: false
+          },
+          listingPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 },
+            { url: 'https://example.com/photo2.jpg', rank: 2 }
+          ],
+          selectedPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 }
+          ],
+          listingAmenities: ['kitchen', 'wifi', 'airConditioner']
+        };
+
+        // Mock the fetch API for this test
+        global.fetch = async (url: string, options: any) => {
+          expect(url).toBe('/api/listings/draft');
+          expect(options.method).toBe('POST');
+          expect(options.headers['Content-Type']).toBe('application/json');
+          
+          const body = JSON.parse(options.body);
+          expect(body.title).toBe('Test Property');
+          expect(body.status).toBe('draft');
+          expect(body.category).toBe('Apartment');
+          expect(body.roomCount).toBe(2);
+          expect(body.bathroomCount).toBe(1);
+          expect(body.guestCount).toBe(2);
+          expect(body.squareFootage).toBe(1000);
+          expect(body.depositSize).toBe(1500);
+          expect(body.petDeposit).toBe(300);
+          expect(body.petRent).toBe(50);
+          expect(body.rentDueAtBooking).toBe(2000);
+          expect(body.shortestLeaseLength).toBe(6);
+          expect(body.longestLeaseLength).toBe(12);
+          expect(body.petsAllowed).toBe(true);
+          expect(body.furnished).toBe(false);
+          expect(body.amenities).toEqual(['kitchen', 'wifi', 'airConditioner']);
+          expect(body.monthlyPricing).toEqual([
+            { months: 6, price: 1800, utilitiesIncluded: false },
+            { months: 12, price: 1600, utilitiesIncluded: true }
+          ]);
+          
+          return {
+            ok: true,
+            json: async () => ({ id: 'test-draft-id', ...body })
+          };
+        };
+
+        let successCallbackCalled = false;
+        let savedDraftResult: any = null;
+
+        const result = await handleSaveAndExit(componentState, {
+          onSuccess: (savedDraft) => {
+            successCallbackCalled = true;
+            savedDraftResult = savedDraft;
+          },
+          onError: (error) => {
+            throw new Error(`Should not call onError: ${error.message}`);
+          }
+        });
+
+        expect(successCallbackCalled).toBe(true);
+        expect(savedDraftResult).toBeDefined();
+        expect(savedDraftResult.id).toBe('test-draft-id');
+        expect(result).toEqual(savedDraftResult);
+      });
+
+      it('should handle API errors correctly', async () => {
+        const componentState = {
+          listingBasics: { title: 'Test Property', description: 'Test Description' },
+          listingLocation: {
+            locationString: null,
+            latitude: null,
+            longitude: null,
+            city: null,
+            state: null,
+            streetAddress1: null,
+            streetAddress2: null,
+            postalCode: null
+          },
+          listingRooms: {
+            bedrooms: 1,
+            bathrooms: 1,
+            squareFeet: ''
+          },
+          listingPricing: {
+            deposit: '',
+            petDeposit: '',
+            petRent: '',
+            rentDueAtBooking: '',
+            shortestStay: 1,
+            longestStay: 12,
+            monthlyPricing: []
+          },
+          listingHighlights: {
+            category: 'Single Family',
+            petsAllowed: false,
+            furnished: false
+          },
+          listingPhotos: [],
+          selectedPhotos: [],
+          listingAmenities: []
+        };
+
+        // Mock the fetch API to return an error
+        global.fetch = async () => {
+          return {
+            ok: false,
+            json: async () => ({ error: 'Database connection failed' })
+          };
+        };
+
+        let errorCallbackCalled = false;
+        let capturedError: Error | null = null;
+
+        await expect(handleSaveAndExit(componentState, {
+          onSuccess: () => {
+            throw new Error('Should not call onSuccess');
+          },
+          onError: (error) => {
+            errorCallbackCalled = true;
+            capturedError = error;
+          }
+        })).rejects.toThrow('Database connection failed');
+
+        expect(errorCallbackCalled).toBe(true);
+        expect(capturedError).toBeDefined();
+        expect(capturedError?.message).toBe('Database connection failed');
+      });
+
+      it('should handle network errors correctly', async () => {
+        const componentState = {
+          listingBasics: { title: 'Test Property', description: 'Test Description' },
+          listingLocation: {
+            locationString: null,
+            latitude: null,
+            longitude: null,
+            city: null,
+            state: null,
+            streetAddress1: null,
+            streetAddress2: null,
+            postalCode: null
+          },
+          listingRooms: {
+            bedrooms: 1,
+            bathrooms: 1,
+            squareFeet: ''
+          },
+          listingPricing: {
+            deposit: '',
+            petDeposit: '',
+            petRent: '',
+            rentDueAtBooking: '',
+            shortestStay: 1,
+            longestStay: 12,
+            monthlyPricing: []
+          },
+          listingHighlights: {
+            category: 'Single Family',
+            petsAllowed: false,
+            furnished: false
+          },
+          listingPhotos: [],
+          selectedPhotos: [],
+          listingAmenities: []
+        };
+
+        // Mock the fetch API to throw a network error
+        global.fetch = async () => {
+          throw new Error('Network error');
+        };
+
+        let errorCallbackCalled = false;
+        let capturedError: Error | null = null;
+
+        await expect(handleSaveAndExit(componentState, {
+          onSuccess: () => {
+            throw new Error('Should not call onSuccess');
+          },
+          onError: (error) => {
+            errorCallbackCalled = true;
+            capturedError = error;
+          }
+        })).rejects.toThrow('Network error');
+
+        expect(errorCallbackCalled).toBe(true);
+        expect(capturedError).toBeDefined();
+        expect(capturedError?.message).toBe('Network error');
+      });
+
+      it('should work without callbacks', async () => {
+        const componentState = {
+          listingBasics: { title: 'Test Property', description: 'Test Description' },
+          listingLocation: {
+            locationString: null,
+            latitude: null,
+            longitude: null,
+            city: null,
+            state: null,
+            streetAddress1: null,
+            streetAddress2: null,
+            postalCode: null
+          },
+          listingRooms: {
+            bedrooms: 1,
+            bathrooms: 1,
+            squareFeet: ''
+          },
+          listingPricing: {
+            deposit: '',
+            petDeposit: '',
+            petRent: '',
+            rentDueAtBooking: '',
+            shortestStay: 1,
+            longestStay: 12,
+            monthlyPricing: []
+          },
+          listingHighlights: {
+            category: 'Single Family',
+            petsAllowed: false,
+            furnished: false
+          },
+          listingPhotos: [],
+          selectedPhotos: [],
+          listingAmenities: []
+        };
+
+        // Mock the fetch API to return success
+        global.fetch = async () => {
+          return {
+            ok: true,
+            json: async () => ({ id: 'test-draft-id', status: 'draft' })
+          };
+        };
+
+        // Should not throw when no callbacks are provided
+        const result = await handleSaveAndExit(componentState);
+        
+        expect(result).toBeDefined();
+        expect(result.id).toBe('test-draft-id');
+        expect(result.status).toBe('draft');
+      });
+    });
+
+    describe('Integration with existing helper functions', () => {
+      it('should work with data from initialization helpers', () => {
+        // Create component state using our initialization helpers
+        const mockDraftData = {
+          title: 'Integration Test Property',
+          description: 'Test Description',
+          category: 'Apartment',
+          petsAllowed: true,
+          furnished: false,
+          locationString: '123 Test St, Test City, TX 12345',
+          latitude: 30.2672,
+          longitude: -97.7431,
+          city: 'Test City',
+          state: 'TX',
+          streetAddress1: '123 Test St',
+          streetAddress2: null,
+          postalCode: '12345',
+          roomCount: 2,
+          bathroomCount: 1,
+          guestCount: 2,
+          squareFootage: 1000,
+          depositSize: 1500,
+          petDeposit: 300,
+          petRent: 50,
+          rentDueAtBooking: 2000,
+          shortestLeaseLength: 6,
+          longestLeaseLength: 12,
+          listingPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 },
+            { url: 'https://example.com/photo2.jpg', rank: 2 }
+          ],
+          selectedPhotos: [
+            { url: 'https://example.com/photo1.jpg', rank: 1 }
+          ],
+          amenities: ['kitchen', 'wifi', 'airConditioner'],
+          monthlyPricing: [
+            { months: 6, price: 1800, utilitiesIncluded: false },
+            { months: 12, price: 1600, utilitiesIncluded: true }
+          ]
+        };
+
+        // Initialize using our helpers
+        const listingBasics = initializeBasicInfo(mockDraftData);
+        const listingHighlights = initializeHighlights(mockDraftData);
+        const listingLocation = initializeLocation(mockDraftData);
+        const listingPhotos = initializePhotos(mockDraftData);
+        const listingAmenities = initializeAmenities(mockDraftData);
+        
+        // Mock component state structure
+        const componentState = {
+          listingBasics,
+          listingHighlights,
+          listingLocation,
+          listingRooms: {
+            bedrooms: mockDraftData.roomCount || 1,
+            bathrooms: mockDraftData.bathroomCount || 1,
+            squareFeet: mockDraftData.squareFootage ? mockDraftData.squareFootage.toString() : ''
+          },
+          listingPricing: {
+            deposit: mockDraftData.depositSize ? mockDraftData.depositSize.toString() : '',
+            petDeposit: mockDraftData.petDeposit ? mockDraftData.petDeposit.toString() : '',
+            petRent: mockDraftData.petRent ? mockDraftData.petRent.toString() : '',
+            rentDueAtBooking: mockDraftData.rentDueAtBooking ? mockDraftData.rentDueAtBooking.toString() : '',
+            shortestStay: mockDraftData.shortestLeaseLength || 1,
+            longestStay: mockDraftData.longestLeaseLength || 12,
+            monthlyPricing: mockDraftData.monthlyPricing.map(p => ({
+              months: p.months,
+              price: p.price.toString(),
+              utilitiesIncluded: p.utilitiesIncluded
+            }))
+          },
+          listingPhotos: listingPhotos.listingPhotos,
+          selectedPhotos: listingPhotos.selectedPhotos,
+          listingAmenities
+        };
+
+        // Transform and verify the result
+        const result = transformComponentStateToDraftData(componentState);
+        
+        expect(result.title).toBe('Integration Test Property');
+        expect(result.category).toBe('Apartment');
+        expect(result.petsAllowed).toBe(true);
+        expect(result.furnished).toBe(false);
+        expect(result.city).toBe('Test City');
+        expect(result.state).toBe('TX');
+        expect(result.roomCount).toBe(2);
+        expect(result.bathroomCount).toBe(1);
+        expect(result.guestCount).toBe(2);
+        expect(result.squareFootage).toBe(1000);
+        expect(result.depositSize).toBe(1500);
+        expect(result.petDeposit).toBe(300);
+        expect(result.petRent).toBe(50);
+        expect(result.rentDueAtBooking).toBe(2000);
+        expect(result.shortestLeaseLength).toBe(6);
+        expect(result.longestLeaseLength).toBe(12);
+        expect(result.amenities).toEqual(['kitchen', 'wifi', 'airConditioner']);
+        expect(result.monthlyPricing).toEqual([
+          { months: 6, price: 1800, utilitiesIncluded: false },
+          { months: 12, price: 1600, utilitiesIncluded: true }
+        ]);
+        expect(result.listingPhotos).toEqual([
+          { url: 'https://example.com/photo1.jpg', rank: 1 },
+          { url: 'https://example.com/photo2.jpg', rank: 2 }
+        ]);
+        expect(result.selectedPhotos).toEqual([
+          { url: 'https://example.com/photo1.jpg', rank: 1 }
+        ]);
+        expect(result.status).toBe('draft');
       });
     });
   });

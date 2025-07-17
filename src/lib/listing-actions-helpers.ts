@@ -612,6 +612,372 @@ export async function handleSubmitListing(listingData: any, userId: string, draf
  * @param draftId - The ID of the draft to load
  * @returns Transformed draft data in add-property-client format
  */
+/**
+ * Helper function to initialize form field defaults
+ */
+export function initializeFormDefaults() {
+  return {
+    title: "",
+    description: "",
+    category: "Single Family",
+    petsAllowed: true,
+    furnished: true,
+    locationString: null,
+    latitude: null,
+    longitude: null,
+    city: null,
+    state: null,
+    streetAddress1: null,
+    streetAddress2: null,
+    postalCode: null,
+    country: "United States",
+    roomCount: 1,
+    bathroomCount: 1,
+    guestCount: 1,
+    squareFootage: null,
+    depositSize: null,
+    petDeposit: null,
+    petRent: null,
+    rentDueAtBooking: null,
+    shortestLeaseLength: 1,
+    longestLeaseLength: 12,
+    listingPhotos: [],
+    selectedPhotos: [],
+    amenities: [],
+    monthlyPricing: []
+  };
+}
+
+/**
+ * Helper function to initialize highlights from draft data
+ */
+export function initializeHighlights(draftData?: any) {
+  if (draftData) {
+    return {
+      category: draftData.category || "Single Family",
+      petsAllowed: draftData.petsAllowed !== null && draftData.petsAllowed !== undefined ? draftData.petsAllowed : true,
+      furnished: draftData.furnished !== null && draftData.furnished !== undefined ? draftData.furnished : true
+    };
+  }
+  return { category: "Single Family", petsAllowed: true, furnished: true };
+}
+
+/**
+ * Helper function to initialize location from draft data
+ */
+export function initializeLocation(draftData?: any) {
+  if (draftData) {
+    return {
+      locationString: draftData.locationString || null,
+      latitude: draftData.latitude || null,
+      longitude: draftData.longitude || null,
+      city: draftData.city || null,
+      state: draftData.state || null,
+      streetAddress1: draftData.streetAddress1 || null,
+      streetAddress2: draftData.streetAddress2 || null,
+      postalCode: draftData.postalCode || null,
+      country: "United States"
+    };
+  }
+  return {
+    locationString: null,
+    latitude: null,
+    longitude: null,
+    city: null,
+    state: null,
+    streetAddress1: null,
+    streetAddress2: null,
+    postalCode: null,
+    country: "United States"
+  };
+}
+
+/**
+ * Helper function to initialize room details from draft data
+ */
+export function initializeRooms(draftData?: any) {
+  if (draftData) {
+    return {
+      roomCount: draftData.roomCount || 1,
+      bathroomCount: draftData.bathroomCount || 1,
+      guestCount: draftData.guestCount || 1,
+      squareFootage: draftData.squareFootage || null
+    };
+  }
+  return {
+    roomCount: 1,
+    bathroomCount: 1,
+    guestCount: 1,
+    squareFootage: null
+  };
+}
+
+/**
+ * Helper function to initialize pricing from draft data
+ */
+export function initializePricing(draftData?: any) {
+  if (draftData) {
+    return {
+      depositSize: draftData.depositSize !== null ? draftData.depositSize : null,
+      petDeposit: draftData.petDeposit !== null ? draftData.petDeposit : null,
+      petRent: draftData.petRent !== null ? draftData.petRent : null,
+      rentDueAtBooking: draftData.rentDueAtBooking !== null ? draftData.rentDueAtBooking : null,
+      shortestLeaseLength: draftData.shortestLeaseLength || 1,
+      longestLeaseLength: draftData.longestLeaseLength || 12
+    };
+  }
+  return {
+    depositSize: null,
+    petDeposit: null,
+    petRent: null,
+    rentDueAtBooking: null,
+    shortestLeaseLength: 1,
+    longestLeaseLength: 12
+  };
+}
+
+/**
+ * Helper function to initialize photos from draft data
+ */
+export function initializePhotos(draftData?: any) {
+  if (draftData) {
+    const listingPhotos = draftData.listingPhotos || [];
+    const selectedPhotos = draftData.selectedPhotos || [];
+    
+    // Ensure selectedPhotos are properly filtered and sorted by rank
+    const validSelectedPhotos = selectedPhotos
+      .filter((photo: any) => photo.url && photo.rank !== null && photo.rank !== undefined)
+      .sort((a: any, b: any) => (a.rank || 0) - (b.rank || 0));
+    
+    return {
+      listingPhotos,
+      selectedPhotos: validSelectedPhotos
+    };
+  }
+  return {
+    listingPhotos: [],
+    selectedPhotos: []
+  };
+}
+
+/**
+ * Helper function to initialize amenities from draft data
+ */
+export function initializeAmenities(draftData?: any) {
+  if (draftData) {
+    return draftData.amenities || [];
+  }
+  return [];
+}
+
+/**
+ * Helper function to initialize monthly pricing from draft data
+ */
+export function initializeMonthlyPricing(draftData?: any) {
+  if (draftData) {
+    return draftData.monthlyPricing || [];
+  }
+  return [];
+}
+
+/**
+ * Helper function to initialize basic info from draft data
+ */
+export function initializeBasicInfo(draftData?: any) {
+  if (draftData) {
+    return {
+      title: draftData.title || "",
+      description: draftData.description || ""
+    };
+  }
+  return {
+    title: "",
+    description: ""
+  };
+}
+
+/**
+ * Helper function to transform component state into draft data format
+ * @param componentState - The component state object containing all form data
+ * @returns Transformed draft data ready for API submission
+ */
+export function transformComponentStateToDraftData(componentState: {
+  listingBasics: { title: string; description: string };
+  listingLocation: {
+    locationString: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    city: string | null;
+    state: string | null;
+    streetAddress1: string | null;
+    streetAddress2: string | null;
+    postalCode: string | null;
+  };
+  listingRooms: {
+    bedrooms: number;
+    bathrooms: number;
+    squareFeet: string;
+  };
+  listingPricing: {
+    deposit: string;
+    petDeposit: string;
+    petRent: string;
+    rentDueAtBooking: string;
+    shortestStay: number;
+    longestStay: number;
+    monthlyPricing: Array<{
+      months: number;
+      price: string;
+      utilitiesIncluded: boolean;
+    }>;
+  };
+  listingHighlights: {
+    category: string;
+    petsAllowed: boolean;
+    furnished: boolean;
+  };
+  listingPhotos: any[];
+  selectedPhotos: any[];
+  listingAmenities: string[];
+}) {
+  return {
+    title: componentState.listingBasics.title,
+    description: componentState.listingBasics.description,
+    status: "draft",
+    // Location fields
+    locationString: componentState.listingLocation.locationString,
+    latitude: componentState.listingLocation.latitude,
+    longitude: componentState.listingLocation.longitude,
+    city: componentState.listingLocation.city,
+    state: componentState.listingLocation.state,
+    streetAddress1: componentState.listingLocation.streetAddress1,
+    streetAddress2: componentState.listingLocation.streetAddress2,
+    postalCode: componentState.listingLocation.postalCode,
+    // Room details
+    roomCount: componentState.listingRooms.bedrooms,
+    bathroomCount: componentState.listingRooms.bathrooms,
+    guestCount: componentState.listingRooms.bedrooms,
+    squareFootage: componentState.listingRooms.squareFeet ? Number(componentState.listingRooms.squareFeet) : null,
+    // Pricing and deposits
+    depositSize: componentState.listingPricing.deposit ? Number(componentState.listingPricing.deposit) : null,
+    petDeposit: componentState.listingPricing.petDeposit ? Number(componentState.listingPricing.petDeposit) : null,
+    petRent: componentState.listingPricing.petRent ? Number(componentState.listingPricing.petRent) : null,
+    rentDueAtBooking: componentState.listingPricing.rentDueAtBooking ? Number(componentState.listingPricing.rentDueAtBooking) : null,
+    shortestLeaseLength: componentState.listingPricing.shortestStay,
+    longestLeaseLength: componentState.listingPricing.longestStay,
+    requireBackgroundCheck: true,
+    // Highlights
+    category: componentState.listingHighlights.category,
+    petsAllowed: componentState.listingHighlights.petsAllowed,
+    furnished: componentState.listingHighlights.furnished,
+    // Photos and pricing
+    listingPhotos: componentState.listingPhotos,
+    selectedPhotos: componentState.selectedPhotos,
+    amenities: componentState.listingAmenities,
+    monthlyPricing: componentState.listingPricing.monthlyPricing.map(p => ({
+      months: p.months,
+      price: p.price ? Number(p.price) : 0,
+      utilitiesIncluded: p.utilitiesIncluded
+    }))
+  };
+}
+
+/**
+ * Helper function to save draft data via API
+ * @param draftData - The draft data to save
+ * @returns Promise resolving to the saved draft response
+ */
+export async function saveDraftViaAPI(draftData: any): Promise<any> {
+  const response = await fetch('/api/listings/draft', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(draftData),
+  });
+  
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to save listing draft');
+  }
+  
+  return await response.json();
+}
+
+/**
+ * Helper function to handle the complete save and exit flow
+ * @param componentState - The component state containing all form data
+ * @param callbacks - Optional callbacks for success/error handling
+ * @returns Promise resolving to the saved draft
+ */
+export async function handleSaveAndExit(
+  componentState: {
+    listingBasics: { title: string; description: string };
+    listingLocation: {
+      locationString: string | null;
+      latitude: number | null;
+      longitude: number | null;
+      city: string | null;
+      state: string | null;
+      streetAddress1: string | null;
+      streetAddress2: string | null;
+      postalCode: string | null;
+    };
+    listingRooms: {
+      bedrooms: number;
+      bathrooms: number;
+      squareFeet: string;
+    };
+    listingPricing: {
+      deposit: string;
+      petDeposit: string;
+      petRent: string;
+      rentDueAtBooking: string;
+      shortestStay: number;
+      longestStay: number;
+      monthlyPricing: Array<{
+        months: number;
+        price: string;
+        utilitiesIncluded: boolean;
+      }>;
+    };
+    listingHighlights: {
+      category: string;
+      petsAllowed: boolean;
+      furnished: boolean;
+    };
+    listingPhotos: any[];
+    selectedPhotos: any[];
+    listingAmenities: string[];
+  },
+  callbacks?: {
+    onSuccess?: (savedDraft: any) => void;
+    onError?: (error: Error) => void;
+  }
+): Promise<any> {
+  // Transform component state to draft data format
+  const draftData = transformComponentStateToDraftData(componentState);
+  
+  // Save via API
+  try {
+    const savedDraft = await saveDraftViaAPI(draftData);
+    
+    // Call success callback if provided
+    if (callbacks?.onSuccess) {
+      callbacks.onSuccess(savedDraft);
+    }
+    
+    return savedDraft;
+  } catch (error) {
+    // Call error callback if provided
+    if (callbacks?.onError) {
+      callbacks.onError(error as Error);
+    }
+    
+    throw error;
+  }
+}
+
 export async function loadDraftData(draftId: string) {
   // Fetch draft from the database using the existing helper
   const draftListing = await prisma.listingInCreation.findFirst({
@@ -636,7 +1002,8 @@ export async function loadDraftData(draftId: string) {
     state: draftListing.state,
     streetAddress1: draftListing.streetAddress1,
     category: draftListing.category,
-    title: draftListing.title
+    title: draftListing.title,
+    listingImages: draftListing.listingImages
   });
 
 
