@@ -1307,7 +1307,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
   ];
 
   return (
-    <div className="space-y-6 p-0">
+    <div className="space-y-6 p-0 ">
 
       {/* Highlights */}
       <Card className="p-6 flex flex-col gap-8 rounded-xl shadow-[0px_0px_5px_#00000029]">
@@ -1414,9 +1414,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
           {editingSections['description'] ? (
             <div className="flex flex-col gap-[18px] w-full">
-              <label className="text-sm font-medium text-gray-700">Property Description</label>
+              <label className="text-sm font-medium break-words text-gray-700 break-words max-w-[80%]">Property Description</label>
               <Textarea
-                value={formData.description || ''}
+                value={formData.description + '' || ''}
                 onChange={(e) => updateFormData('description', e.target.value)}
                 className="mt-1"
                 placeholder="Describe your property..."
@@ -1449,7 +1449,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             </div>
           ) : (
             <div className="flex flex-col gap-[18px] w-full">
-              <p className={`${noLabelStyles} whitespace-pre-wrap max-w-[80%] text-break break-words`}>
+              <p className={`${noLabelStyles} whitespace-pre-wrap max-w-[80%] break-all`}>
                 {currentListing.description || 'No description provided.'}
               </p>
             </div>
