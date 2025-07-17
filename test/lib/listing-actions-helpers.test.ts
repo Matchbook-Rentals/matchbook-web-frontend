@@ -27,6 +27,11 @@ describe('Listing Actions Helpers', () => {
   let testUserId: string;
 
   beforeAll(async () => {
+    // Log non-sensitive database config info
+    console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+    console.log('🔍 TEST_DATABASE_URL configured:', !!process.env.TEST_DATABASE_URL);
+    console.log('🔍 DATABASE_URL configured:', !!process.env.DATABASE_URL);
+    
     // Test the database connection
     await prisma.$connect();
     console.log('✅ Test database connected successfully');

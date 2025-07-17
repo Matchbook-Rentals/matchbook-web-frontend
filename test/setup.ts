@@ -3,7 +3,9 @@ import { vi } from 'vitest';
 
 // Set up test environment variables
 process.env.NODE_ENV = 'test';
+console.log('🔍 [test/setup.ts] TEST_DATABASE_URL configured:', !!process.env.TEST_DATABASE_URL);
 process.env.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'mysql://test_user:test_password@localhost:3306/test_db';
+console.log('🔍 [test/setup.ts] Using fallback database URL:', !process.env.TEST_DATABASE_URL);
 
 // Mock environment variables
 vi.mock('next/config', () => () => ({

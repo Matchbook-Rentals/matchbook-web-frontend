@@ -12,7 +12,6 @@ export default defineConfig({
     include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
     env: {
       NODE_ENV: 'test',
-      TEST_DATABASE_URL: process.env.TEST_DATABASE_URL || 'mysql://test_user:test_password@localhost:3306/test_db',
     },
   },
   resolve: {
