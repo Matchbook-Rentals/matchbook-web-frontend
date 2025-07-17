@@ -1449,7 +1449,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             </div>
           ) : (
             <div className="flex flex-col gap-[18px] w-full">
-              <p className={`${noLabelStyles} whitespace-pre-wrap`}>
+              <p className={`${noLabelStyles} whitespace-pre-wrap max-w-[80%] text-break break-words`}>
                 {currentListing.description || 'No description provided.'}
               </p>
             </div>
