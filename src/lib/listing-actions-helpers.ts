@@ -388,7 +388,6 @@ export async function saveDraft(draftData: DraftData, userId: string, draftId?: 
   });
 
   return result;
-<<<<<<< HEAD
 }
 
 /**
