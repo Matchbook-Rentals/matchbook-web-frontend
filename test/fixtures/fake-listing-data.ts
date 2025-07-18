@@ -4,7 +4,7 @@ import { ListingData, DraftData } from '../../src/lib/listing-actions-helpers';
 export const createFakeListingData = (): ListingData => ({
   // Basic information
   title: 'Beautiful Downtown Apartment with City Views',
-  description: 'This stunning 2-bedroom, 2-bathroom apartment offers breathtaking city views and modern amenities. Located in the heart of downtown, you\'ll be walking distance to restaurants, shops, and public transportation. The apartment features an open-concept living area, updated kitchen with stainless steel appliances, in-unit washer and dryer, and a private balcony. Perfect for young professionals or small families looking for luxury living in the city center.This stunning 2-bedroom, 2-bathroom apartment offers breathtaking city views and modern amenities. Located in the heart of downtown, you\'ll be walking distance to restaurants, shops, and public transportation. The apartment features an open-concept living area, updated kitchen with stainless steel appliances, in-unit washer and dryer, and a private balcony. Perfect for young professionals or small families looking for luxury living in the city center.This stunning 2-bedroom, 2-bathroom apartment offers breathtaking city views and modern amenities. Located in the heart of downtown, you\'ll be walking distance to restaurants, shops, and public transportation. The apartment features an open-concept living area, updated kitchen with stainless steel appliances, in-unit washer and dryer, and a private balcony. Perfect for young professionals or small families looking for luxury living in the city center.',
+  description: 'This stunning 2-bedroom, 2-bathroom apartment offers breathtaking city views and modern amenities. Located in the heart of downtown, you\'ll be walking distance to restaurants, shops, and public transportation. The apartment features an open-concept living area, updated kitchen with stainless steel appliances, in-unit washer and dryer, and a private balcony. Perfect for young professionals or small families looking for luxury living in the city center.',
   
   // Location details
   locationString: '123 Main Street, Downtown, TX 75201',
@@ -653,4 +653,245 @@ export const createInvalidListingData = (): Partial<ListingData> => ({
   bathroomCount: 0, // Invalid - should be at least 1
   // Missing required location fields
   // Missing required pricing fields
+});
+
+// ===========================================
+// VALIDATION TEST DATA FIXTURES
+// ===========================================
+
+import type {
+  ListingHighlights,
+  ListingLocation,
+  ListingRooms,
+  ListingBasics,
+  ListingPricing,
+  MonthlyPricing,
+  NullableListingImage
+} from '../../src/lib/listing-actions-helpers';
+
+// Valid highlights data
+export const createValidHighlights = (): ListingHighlights => ({
+  category: 'Apartment',
+  petsAllowed: true,
+  furnished: false
+});
+
+// Invalid highlights data (missing required fields)
+export const createInvalidHighlights = (): ListingHighlights => ({
+  category: null, // Missing
+  petsAllowed: null, // Missing
+  furnished: null // Missing
+});
+
+// Valid location data
+export const createValidLocation = (): ListingLocation => ({
+  locationString: '123 Main St, Dallas, TX 75201',
+  latitude: 32.7767,
+  longitude: -96.7970,
+  city: 'Dallas',
+  state: 'TX',
+  streetAddress1: '123 Main St',
+  streetAddress2: 'Apt 4B',
+  postalCode: '75201',
+  country: 'United States'
+});
+
+// Invalid location data (missing required fields)
+export const createInvalidLocation = (): ListingLocation => ({
+  locationString: null,
+  latitude: null,
+  longitude: null,
+  city: null, // Missing
+  state: null, // Missing
+  streetAddress1: null, // Missing
+  streetAddress2: null,
+  postalCode: null, // Missing
+  country: 'United States'
+});
+
+// Valid rooms data
+export const createValidRooms = (): ListingRooms => ({
+  bedrooms: 2,
+  bathrooms: 2,
+  squareFeet: '1200'
+});
+
+// Invalid rooms data
+export const createInvalidRooms = (): ListingRooms => ({
+  bedrooms: 0, // Invalid - should be at least 1
+  bathrooms: 0, // Invalid - should be at least 1
+  squareFeet: '' // Missing
+});
+
+// Valid basics data
+export const createValidBasics = (): ListingBasics => ({
+  title: 'Beautiful Downtown Apartment',
+  description: 'This stunning 2-bedroom, 2-bathroom apartment offers breathtaking city views and modern amenities.'
+});
+
+// Invalid basics data
+export const createInvalidBasics = (): ListingBasics => ({
+  title: '', // Missing
+  description: 'Short' // Too short (less than 20 characters)
+});
+
+// Valid photos (4+ photos)
+export const createValidPhotos = (): NullableListingImage[] => [
+  { id: '1', url: 'https://example.com/photo1.jpg', listingId: 'test', category: 'living_room', rank: 1 },
+  { id: '2', url: 'https://example.com/photo2.jpg', listingId: 'test', category: 'bedroom', rank: 2 },
+  { id: '3', url: 'https://example.com/photo3.jpg', listingId: 'test', category: 'kitchen', rank: 3 },
+  { id: '4', url: 'https://example.com/photo4.jpg', listingId: 'test', category: 'bathroom', rank: 4 },
+  { id: '5', url: 'https://example.com/photo5.jpg', listingId: 'test', category: 'exterior', rank: 5 }
+];
+
+// Invalid photos (too few)
+export const createInvalidPhotos = (): NullableListingImage[] => [
+  { id: '1', url: 'https://example.com/photo1.jpg', listingId: 'test', category: 'living_room', rank: 1 }
+];
+
+// Valid selected photos (exactly 4)
+export const createValidSelectedPhotos = (): NullableListingImage[] => [
+  { id: '1', url: 'https://example.com/photo1.jpg', listingId: 'test', category: 'living_room', rank: 1 },
+  { id: '2', url: 'https://example.com/photo2.jpg', listingId: 'test', category: 'bedroom', rank: 2 },
+  { id: '3', url: 'https://example.com/photo3.jpg', listingId: 'test', category: 'kitchen', rank: 3 },
+  { id: '4', url: 'https://example.com/photo4.jpg', listingId: 'test', category: 'bathroom', rank: 4 }
+];
+
+// Invalid selected photos (wrong count)
+export const createInvalidSelectedPhotos = (): NullableListingImage[] => [
+  { id: '1', url: 'https://example.com/photo1.jpg', listingId: 'test', category: 'living_room', rank: 1 },
+  { id: '2', url: 'https://example.com/photo2.jpg', listingId: 'test', category: 'bedroom', rank: 2 }
+];
+
+// Valid amenities (includes required laundry option)
+export const createValidAmenities = (): string[] => [
+  'kitchen',
+  'wifi',
+  'airConditioner',
+  'washerInUnit', // Required laundry option
+  'parking',
+  'gym'
+];
+
+// Invalid amenities (missing required laundry option)
+export const createInvalidAmenities = (): string[] => [
+  'kitchen',
+  'wifi',
+  'airConditioner',
+  'parking',
+  'gym'
+  // Missing required laundry option
+];
+
+// Create complete monthly pricing (1-12 months)
+export const createCompleteMonthlyPricing = (): MonthlyPricing[] => [
+  { months: 1, price: '2500', utilitiesIncluded: false },
+  { months: 2, price: '2400', utilitiesIncluded: false },
+  { months: 3, price: '2300', utilitiesIncluded: true },
+  { months: 4, price: '2200', utilitiesIncluded: true },
+  { months: 5, price: '2100', utilitiesIncluded: true },
+  { months: 6, price: '2000', utilitiesIncluded: true },
+  { months: 7, price: '1950', utilitiesIncluded: true },
+  { months: 8, price: '1900', utilitiesIncluded: true },
+  { months: 9, price: '1850', utilitiesIncluded: true },
+  { months: 10, price: '1800', utilitiesIncluded: true },
+  { months: 11, price: '1750', utilitiesIncluded: true },
+  { months: 12, price: '1700', utilitiesIncluded: true }
+];
+
+// Monthly pricing with missing prices (empty strings)
+export const createMissingPricesMonthlyPricing = (): MonthlyPricing[] => [
+  { months: 1, price: '2500', utilitiesIncluded: false },
+  { months: 2, price: '', utilitiesIncluded: false }, // Missing
+  { months: 3, price: '2300', utilitiesIncluded: true },
+  { months: 4, price: '', utilitiesIncluded: true }, // Missing
+  { months: 5, price: '2100', utilitiesIncluded: true },
+  { months: 6, price: '2000', utilitiesIncluded: true }
+];
+
+// Monthly pricing with zero prices (should be valid)
+export const createZeroPricesMonthlyPricing = (): MonthlyPricing[] => [
+  { months: 1, price: '0', utilitiesIncluded: false }, // Zero is valid
+  { months: 2, price: '0', utilitiesIncluded: false },
+  { months: 3, price: '2300', utilitiesIncluded: true }
+];
+
+// Monthly pricing with invalid prices (negative, non-numeric)
+export const createInvalidPricesMonthlyPricing = (): MonthlyPricing[] => [
+  { months: 1, price: '2500', utilitiesIncluded: false },
+  { months: 2, price: '-100', utilitiesIncluded: false }, // Negative
+  { months: 3, price: 'abc', utilitiesIncluded: true }, // Non-numeric
+  { months: 4, price: '2200.50', utilitiesIncluded: true } // Decimal (should be valid)
+];
+
+// Valid pricing data (basic settings)
+export const createValidPricing = (): ListingPricing => ({
+  shortestStay: 1,
+  longestStay: 12,
+  monthlyPricing: createCompleteMonthlyPricing(),
+  deposit: '2000',
+  petDeposit: '500',
+  petRent: '50',
+  rentDueAtBooking: '1500'
+});
+
+// Invalid pricing data (invalid stay lengths)
+export const createInvalidPricingSettings = (): ListingPricing => ({
+  shortestStay: 0, // Invalid - should be 1-12
+  longestStay: 15, // Invalid - should be 1-12
+  monthlyPricing: createCompleteMonthlyPricing(),
+  deposit: '2000',
+  petDeposit: '500',
+  petRent: '50',
+  rentDueAtBooking: '1500'
+});
+
+// Pricing with missing price entries
+export const createPricingWithMissingPrices = (): ListingPricing => ({
+  shortestStay: 1,
+  longestStay: 6,
+  monthlyPricing: createMissingPricesMonthlyPricing(),
+  deposit: '2000',
+  petDeposit: '500',
+  petRent: '50',
+  rentDueAtBooking: '1500'
+});
+
+// Pricing with invalid deposits (rent due exceeds monthly rent)
+export const createPricingWithInvalidDeposits = (): ListingPricing => ({
+  shortestStay: 1,
+  longestStay: 3,
+  monthlyPricing: [
+    { months: 1, price: '1000', utilitiesIncluded: false },
+    { months: 2, price: '900', utilitiesIncluded: false },
+    { months: 3, price: '800', utilitiesIncluded: true }
+  ],
+  deposit: '2000',
+  petDeposit: '500',
+  petRent: '50',
+  rentDueAtBooking: '1200' // Exceeds lowest monthly rent (800)
+});
+
+// Complete valid form data for testing validateAllSteps
+export const createValidFormData = () => ({
+  listingHighlights: createValidHighlights(),
+  listingLocation: createValidLocation(),
+  listingRooms: createValidRooms(),
+  listingBasics: createValidBasics(),
+  listingPhotos: createValidPhotos(),
+  selectedPhotos: createValidSelectedPhotos(),
+  listingAmenities: createValidAmenities(),
+  listingPricing: createValidPricing()
+});
+
+// Form data with multiple validation errors
+export const createInvalidFormData = () => ({
+  listingHighlights: createInvalidHighlights(),
+  listingLocation: createInvalidLocation(),
+  listingRooms: createInvalidRooms(),
+  listingBasics: createInvalidBasics(),
+  listingPhotos: createInvalidPhotos(),
+  selectedPhotos: createInvalidSelectedPhotos(),
+  listingAmenities: createInvalidAmenities(),
+  listingPricing: createPricingWithMissingPrices()
 });

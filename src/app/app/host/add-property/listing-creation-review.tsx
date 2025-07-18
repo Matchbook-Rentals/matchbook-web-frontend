@@ -463,7 +463,7 @@ export const Box = ({
                 </button>
               </div>
 
-              <div className={`${questionTextStyles} self-stretch w-full`}>
+              <div className={`${questionTextStyles} self-stretch w-full break-all overflow-hidden`} style={{ overflowWrap: 'anywhere', wordBreak: 'break-all', hyphens: 'auto' }}>
                 {listingBasics?.description || "No description provided"}
               </div>
             </div>

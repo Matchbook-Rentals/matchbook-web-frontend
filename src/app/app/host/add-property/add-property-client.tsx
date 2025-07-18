@@ -25,7 +25,25 @@ import {
   initializeBasicInfo,
   initializePhotos,
   initializeAmenities,
-  handleSaveAndExit
+  handleSaveAndExit,
+  handleSubmitListing as handleSubmitListingHelper,
+  validateHighlights,
+  validateLocation,
+  validateRooms,
+  validateBasics,
+  validatePhotos,
+  validateFeaturedPhotos,
+  validateAmenities,
+  validatePricing,
+  validateVerifyPricing,
+  validateDeposits,
+  validateAllSteps,
+  type ListingHighlights,
+  type ListingLocation,
+  type ListingRooms,
+  type ListingBasics,
+  type ListingPricing,
+  type NullableListingImage
 } from "@/lib/listing-actions-helpers";
 import LocationForm from "./location-form";
 import LocationInput from "./listing-creation-location-input";
@@ -449,207 +467,33 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
     }
   };
 
-  // Validation functions for each step
-  const validateHighlights = (): string[] => {
-    const errors: string[] = [];
-    
-    if (!listingHighlights.category) {
-      errors.push("You must select a property type");
-    }
-    
-    if (listingHighlights.furnished === null) {
-      errors.push("You must select a furnishing option");
-    }
-    
-    if (listingHighlights.petsAllowed === null) {
-      errors.push("You must specify if pets are allowed");
-    }
-    
-    return errors;
-  };
-  
-  const validateLocation = (): string[] => {
-    const errors: string[] = [];
-    
-    if (!listingLocation.streetAddress1) {
-      errors.push("Street address is required");
-    }
-    
-    if (!listingLocation.city) {
-      errors.push("City is required");
-    }
-    
-    if (!listingLocation.state) {
-      errors.push("State is required");
-    }
-    
-    if (!listingLocation.postalCode) {
-      errors.push("Postal code is required");
-    }
-    
-    return errors;
-  };
-  
-  const validateRooms = (): string[] => {
-    const errors: string[] = [];
-    
-    if (!listingRooms.bedrooms || listingRooms.bedrooms < 1) {
-      errors.push("Number of bedrooms is required");
-    }
-    
-    if (!listingRooms.bathrooms || listingRooms.bathrooms < 1) {
-      errors.push("Number of bathrooms is required");
-    }
-    
-    if (!listingRooms.squareFeet) {
-      errors.push("Square footage is required");
-    }
-    
-    return errors;
-  };
-  
-  const validateBasics = (): string[] => {
-    const errors: string[] = [];
-    
-    if (!listingBasics.title) {
-      errors.push("Title is required");
-    } else if (listingBasics.title.length < 5) {
-      errors.push("Title must be at least 5 characters");
-    }
-    
-    if (!listingBasics.description) {
-      errors.push("Description is required");
-    } else if (listingBasics.description.length < 20) {
-      errors.push("Description must be at least 20 characters");
-    }
-    
-    return errors;
-  };
-  
-  const validatePhotos = (): string[] => {
-    const errors: string[] = [];
-    const validPhotos = listingPhotos?.filter(photo => photo.url) || [];
-    const validPhotoCount = validPhotos.length;
-    
-    if (validPhotoCount === 0) {
-      errors.push("You must upload at least 4 photos");
-    } else if (validPhotoCount < 4) {
-      errors.push(`You need to upload ${4 - validPhotoCount} more photo${validPhotoCount === 3 ? '' : 's'} (minimum 4 required)`);
-    }
-    
-    return errors;
-  };
-  
-  const validateFeaturedPhotos = (): string[] => {
-    const errors: string[] = [];
-    if (!selectedPhotos || selectedPhotos.length !== 4) {
-      errors.push("You must select exactly four featured photos.");
-    }
-    return errors;
-  };
-  
-  const validateAmenities = (): string[] => {
-    const errors: string[] = [];
-    // Laundry options required
-    const laundryOptions = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'];
-    const selectedLaundry = listingAmenities?.filter(a => laundryOptions.includes(a)) || [];
-    if (selectedLaundry.length !== 1) {
-      errors.push("You must select one laundry option (In Unit, In Complex, or No Laundry)");
-    }
-    return errors;
-  };
-  
-  const validatePricing = (): string[] => {
-    const errors: string[] = [];
-    
-    // Step 7 validation - check basic settings
-    if (listingPricing.shortestStay < 1 || listingPricing.shortestStay > 12) {
-      errors.push("Shortest stay must be between 1 and 12 months");
-    }
-    
-    if (listingPricing.longestStay < 1 || listingPricing.longestStay > 12) {
-      errors.push("Longest stay must be between 1 and 12 months");
-    }
-    
-    if (listingPricing.shortestStay > listingPricing.longestStay) {
-      errors.push("Shortest stay cannot be longer than longest stay");
-    }
-    
-    return errors;
-  };
-  
-  const validateVerifyPricing = (): string[] => {
-    const errors: string[] = [];
-    
-    // Step 8 validation - validate that all prices are filled and valid
-    const missingPrices = listingPricing.monthlyPricing.filter(p => !p.price || p.price === '');
-    if (missingPrices.length > 0) {
-      errors.push(`Please set prices for all ${listingPricing.monthlyPricing.length} lease lengths`);
-    }
-    
-    // Check that prices are valid numbers
-    const invalidPrices = listingPricing.monthlyPricing.filter(p => {
-      const price = parseFloat(p.price);
-      return p.price && (isNaN(price) || price <= 0);
-    });
-    if (invalidPrices.length > 0) {
-      errors.push("All prices must be valid positive numbers");
-    }
-    
-    return errors;
-  };
-
-  const validateDeposits = (): string[] => {
-    const errors: string[] = [];
-    
-    // Validate rent due at booking doesn't exceed lowest monthly rent
-    if (listingPricing.rentDueAtBooking && listingPricing.rentDueAtBooking !== '') {
-      const rentDueAmount = parseFloat(listingPricing.rentDueAtBooking);
-      
-      if (!isNaN(rentDueAmount) && rentDueAmount > 0) {
-        // Find the lowest monthly rent price from the pricing array
-        const validPrices = listingPricing.monthlyPricing
-          .filter(p => p.price && p.price !== '')
-          .map(p => parseFloat(p.price))
-          .filter(price => !isNaN(price) && price > 0);
-        
-        if (validPrices.length > 0) {
-          const lowestPrice = Math.min(...validPrices);
-          if (rentDueAmount > lowestPrice) {
-            errors.push(`Rent due at booking ($${rentDueAmount}) cannot be higher than the lowest monthly rent ($${lowestPrice})`);
-          }
-        }
-      }
-    }
-    
-    return errors;
-  };
+  // Note: Validation functions have been moved to listing-actions-helpers.ts
   
   // Validate the current step
   const validateCurrentStep = (): string[] => {
     switch (currentStep) {
       case 0:
-        return validateHighlights();
+        return validateHighlights(listingHighlights);
       case 1:
-        return validateLocation();
+        return validateLocation(listingLocation);
       case 2:
-        return validateLocation(); // Address confirmation uses same validation as location input
+        return validateLocation(listingLocation); // Address confirmation uses same validation as location input
       case 3:
-        return validateRooms();
+        return validateRooms(listingRooms);
       case 4:
-        return validateBasics();
+        return validateBasics(listingBasics);
       case 5:
-        return validatePhotos();
+        return validatePhotos(listingPhotos);
       case 6:
-        return validateFeaturedPhotos();
+        return validateFeaturedPhotos(selectedPhotos);
       case 7:
-        return validateAmenities();
+        return validateAmenities(listingAmenities);
       case 8:
-        return validatePricing();
+        return validatePricing(listingPricing);
       case 9:
-        return validateVerifyPricing();
+        return validateVerifyPricing(listingPricing);
       case 10:
-        return validateDeposits();
+        return validateDeposits(listingPricing);
       default:
         return [];
     }
@@ -706,7 +550,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         }
         
         // Now check all steps to make sure everything is valid before returning to review
-        const allValid = validateAllSteps();
+        const allValid = validateAllStepsLocal();
         if (!allValid) {
           // The validateAllSteps function will handle navigation to the first step with errors
           return;
@@ -777,44 +621,19 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
   };
   
   
-  // Validate all steps before submission
-  const validateAllSteps = () => {
-    const allErrors: Record<number, string[]> = {};
-    
-    // Validate each step
-    const highlightErrors = validateHighlights();
-    if (highlightErrors.length > 0) allErrors[0] = highlightErrors;
-    
-    const locationErrors = validateLocation();
-    // Location validation applies to both steps 1 and 2 (input and confirmation)
-    if (locationErrors.length > 0) {
-      allErrors[1] = locationErrors;
-      allErrors[2] = locationErrors;
-    }
-    
-    const roomsErrors = validateRooms();
-    if (roomsErrors.length > 0) allErrors[3] = roomsErrors;
-    
-    const basicsErrors = validateBasics();
-    if (basicsErrors.length > 0) allErrors[4] = basicsErrors;
-    
-    const photosErrors = validatePhotos();
-    if (photosErrors.length > 0) allErrors[5] = photosErrors;
-    
-    const featuredPhotosErrors = validateFeaturedPhotos();
-    if (featuredPhotosErrors.length > 0) allErrors[6] = featuredPhotosErrors;
-    
-    const amenitiesErrors = validateAmenities();
-    if (amenitiesErrors.length > 0) allErrors[7] = amenitiesErrors;
-    
-    const pricingErrors = validatePricing();
-    if (pricingErrors.length > 0) allErrors[8] = pricingErrors;
-    
-    const verifyPricingErrors = validateVerifyPricing();
-    if (verifyPricingErrors.length > 0) allErrors[9] = verifyPricingErrors;
-    
-    const depositErrors = validateDeposits();
-    if (depositErrors.length > 0) allErrors[10] = depositErrors;
+  // Validate all steps before submission (using imported validation functions)
+  const validateAllStepsLocal = () => {
+    // Use the imported validateAllSteps function
+    const allErrors = validateAllSteps({
+      listingHighlights,
+      listingLocation,
+      listingRooms,
+      listingBasics,
+      listingPhotos,
+      selectedPhotos,
+      listingAmenities,
+      listingPricing
+    });
     
     setValidationErrors(allErrors);
     
@@ -848,56 +667,16 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       return;
     }
 
-    if (validateAllSteps()) {
-
+    if (validateAllStepsLocal()) {
       setIsSubmittingListing(true);
 
-      // Create final array of photos and sort them by rank
-      let listingImagesFinal = [...listingPhotos].map(photo => ({
-        ...photo,
-        rank: null // Initialize all ranks to null
-      }));
-
-      // Update ranks for selected photos
-      for (let i = 0; i < selectedPhotos.length; i++) {
-        const selectedPhoto = selectedPhotos[i];
-        const photoToUpdate = listingImagesFinal.find(p => p.url === selectedPhoto.url);
-        if (photoToUpdate) {
-          photoToUpdate.rank = i + 1; // Assign ranks 1, 2, 3, 4
-        }
-      }
-
-      // Assign ranks to any remaining photos with null ranks
-      const maxRank = Math.max(0, ...listingImagesFinal.filter(p => p.rank !== null).map(p => p.rank!));
-      let nextRank = maxRank + 1;
-      listingImagesFinal.forEach(photo => {
-        if (photo.rank === null) {
-          photo.rank = nextRank++;
-        }
-      });
-
-      // Sort photos: ranked photos first (in ascending order), then unranked photos
-      listingImagesFinal.sort((a, b) => {
-        if (a.rank === null && b.rank === null) return 0;
-        if (a.rank === null) return 1;
-        if (b.rank === null) return -1;
-        return a.rank - b.rank;
-      });
-
-      let listingImagesSorted = listingImagesFinal
-
       try {
-        // Prepare listing data with selected photos
-        const finalListing = {
+        // Use the extracted helper function
+        const listingData = {
           title: listingBasics.title,
           description: listingBasics.description,
-          status: "available", // Default status for new listings
-          // Use the correct property name that matches the Prisma schema
-          listingImages: listingImagesSorted.map((photo) => ({
-            url: photo.url,
-            rank: photo.rank // Use the assigned rank
-          })),
-          // Listing location fields
+          status: "available",
+          // Location fields
           locationString: listingLocation.locationString,
           latitude: listingLocation.latitude,
           longitude: listingLocation.longitude,
@@ -906,75 +685,47 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
           streetAddress1: listingLocation.streetAddress1,
           streetAddress2: listingLocation.streetAddress2,
           postalCode: listingLocation.postalCode,
-          // Listing highlights fields
-          category: listingHighlights.category,
-          petsAllowed: listingHighlights.petsAllowed || false,
-          furnished: listingHighlights.furnished || false,
-          // Required fields with defaults if needed
+          // Room details
           roomCount: listingRooms.bedrooms || 1,
           bathroomCount: listingRooms.bathrooms || 1,
           guestCount: listingRooms.bedrooms || 1,
           squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : 0,
+          // Pricing and deposits
           depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
           petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit) : 0,
           petRent: listingPricing.petRent ? Number(listingPricing.petRent) : 0,
           rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : 0,
           shortestLeaseLength: listingPricing.shortestStay || 1,
           longestLeaseLength: listingPricing.longestStay || 12,
-          shortestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
-          longestLeasePrice: 0, // Deprecated - will use monthlyPricing instead
-          monthlyPricing: listingPricing.monthlyPricing.map(p => ({
-            months: p.months,
-            price: p.price ? Number(p.price) : 0,
-            utilitiesIncluded: p.utilitiesIncluded
-          })),
+          shortestLeasePrice: 0, // Deprecated
+          longestLeasePrice: 0, // Deprecated
           requireBackgroundCheck: true,
-        };
-
-        
-        // Process amenities from the array to set the proper boolean values
-        if (listingAmenities && listingAmenities.length > 0) {
-          listingAmenities.forEach(amenity => {
-            // @ts-ignore - Dynamic property assignment
-            finalListing[amenity] = true;
-          });
-        }
-        
-        // If we have a draftId, submit the draft to create a listing
-        // Otherwise, create a new listing directly
-        const endpoint = draftId ? '/api/listings/draft/submit' : '/api/listings/create';
-        const payload = draftId ? {
-          draftId,
-          listingImages: listingImagesSorted.map((photo) => ({
-            url: photo.url,
-            rank: photo.rank
-          })),
+          // Highlights
+          category: listingHighlights.category,
+          petsAllowed: listingHighlights.petsAllowed || false,
+          furnished: listingHighlights.furnished || false,
+          // Photos and amenities
+          listingPhotos: listingPhotos,
+          selectedPhotos: selectedPhotos,
+          amenities: listingAmenities,
           monthlyPricing: listingPricing.monthlyPricing.map(p => ({
             months: p.months,
             price: p.price ? Number(p.price) : 0,
             utilitiesIncluded: p.utilitiesIncluded
           }))
-        } : finalListing;
-        
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-        
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to create listing');
-        }
-        
-        const createdListing = await response.json();
+        };
+
+        const createdListing = await handleSubmitListingHelper(
+          listingData,
+          user?.id || '',
+          draftId || null
+        );
+
         setCreatedListingId(createdListing.id);
-        
+
         // Revalidate the host dashboard to refresh listing data
         await revalidateHostDashboard();
-        
+
         // Show success state instead of immediate redirect
         setCurrentStep(12); // Move to success step
         setSlideDirection('right');

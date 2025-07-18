@@ -17,6 +17,17 @@ import {
   initializeBasicInfo,
   transformComponentStateToDraftData,
   handleSaveAndExit,
+  validateHighlights,
+  validateLocation,
+  validateRooms,
+  validateBasics,
+  validatePhotos,
+  validateFeaturedPhotos,
+  validateAmenities,
+  validatePricing,
+  validateVerifyPricing,
+  validateDeposits,
+  validateAllSteps,
   type ListingData,
   type DraftData
 } from '../../src/lib/listing-actions-helpers';
@@ -30,7 +41,31 @@ import {
   createMinimalListingData,
   createAllAmenitiesListingData,
   createWasherNotAvailableListingData,
-  createFakeAddPropertyClientData
+  createFakeAddPropertyClientData,
+  createValidHighlights,
+  createInvalidHighlights,
+  createValidLocation,
+  createInvalidLocation,
+  createValidRooms,
+  createInvalidRooms,
+  createValidBasics,
+  createInvalidBasics,
+  createValidPhotos,
+  createInvalidPhotos,
+  createValidSelectedPhotos,
+  createInvalidSelectedPhotos,
+  createValidAmenities,
+  createInvalidAmenities,
+  createValidPricing,
+  createInvalidPricingSettings,
+  createPricingWithMissingPrices,
+  createPricingWithInvalidDeposits,
+  createCompleteMonthlyPricing,
+  createMissingPricesMonthlyPricing,
+  createZeroPricesMonthlyPricing,
+  createInvalidPricesMonthlyPricing,
+  createValidFormData,
+  createInvalidFormData
 } from '../fixtures/fake-listing-data';
 import prisma from '@/lib/prismadb';
 
@@ -1872,14 +1907,10 @@ describe('Listing Actions Helpers', () => {
           category: 'Apartment',
           petsAllowed: true,
           furnished: false,
-          listingPhotos: [
-            { url: 'https://example.com/photo1.jpg', rank: 1 },
-            { url: 'https://example.com/photo2.jpg', rank: 2 }
-          ],
-          selectedPhotos: [
-            { url: 'https://example.com/photo1.jpg', rank: 1 }
-          ],
-          amenities: ['kitchen', 'wifi', 'airConditioner'],
+          // Individual amenity boolean fields (photos handled separately)
+          kitchen: true,
+          wifi: true,
+          airConditioner: true,
           monthlyPricing: [
             { months: 6, price: 1800, utilitiesIncluded: false },
             { months: 12, price: 1600, utilitiesIncluded: true }
@@ -1950,9 +1981,7 @@ describe('Listing Actions Helpers', () => {
         expect(result.category).toBe('Single Family');
         expect(result.petsAllowed).toBe(false);
         expect(result.furnished).toBe(false);
-        expect(result.listingPhotos).toEqual([]);
-        expect(result.selectedPhotos).toEqual([]);
-        expect(result.amenities).toEqual([]);
+        // Photos and amenities are handled separately by helper functions, not included in transform
         expect(result.monthlyPricing).toEqual([]);
         expect(result.status).toBe('draft');
       });
@@ -2077,7 +2106,10 @@ describe('Listing Actions Helpers', () => {
           expect(body.longestLeaseLength).toBe(12);
           expect(body.petsAllowed).toBe(true);
           expect(body.furnished).toBe(false);
-          expect(body.amenities).toEqual(['kitchen', 'wifi', 'airConditioner']);
+          // Check individual amenity boolean fields
+          expect(body.kitchen).toBe(true);
+          expect(body.wifi).toBe(true);
+          expect(body.airConditioner).toBe(true);
           expect(body.monthlyPricing).toEqual([
             { months: 6, price: 1800, utilitiesIncluded: false },
             { months: 12, price: 1600, utilitiesIncluded: true }
@@ -2380,19 +2412,685 @@ describe('Listing Actions Helpers', () => {
         expect(result.rentDueAtBooking).toBe(2000);
         expect(result.shortestLeaseLength).toBe(6);
         expect(result.longestLeaseLength).toBe(12);
-        expect(result.amenities).toEqual(['kitchen', 'wifi', 'airConditioner']);
+        // Check individual amenity boolean fields
+        expect(result.kitchen).toBe(true);
+        expect(result.wifi).toBe(true);
+        expect(result.airConditioner).toBe(true);
         expect(result.monthlyPricing).toEqual([
           { months: 6, price: 1800, utilitiesIncluded: false },
           { months: 12, price: 1600, utilitiesIncluded: true }
         ]);
-        expect(result.listingPhotos).toEqual([
-          { url: 'https://example.com/photo1.jpg', rank: 1 },
-          { url: 'https://example.com/photo2.jpg', rank: 2 }
-        ]);
-        expect(result.selectedPhotos).toEqual([
-          { url: 'https://example.com/photo1.jpg', rank: 1 }
-        ]);
+        // Photos are handled separately by helper functions, not included in transform
         expect(result.status).toBe('draft');
+      });
+    });
+  });
+
+  // ==========================================
+  // VALIDATION FUNCTION TESTS
+  // ==========================================
+  
+  describe('Validation Functions', () => {
+    describe('validateHighlights', () => {
+      it('should pass validation with valid highlights', () => {
+        const validHighlights = createValidHighlights();
+        const errors = validateHighlights(validHighlights);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with missing category', () => {
+        const invalidHighlights = { ...createValidHighlights(), category: null };
+        const errors = validateHighlights(invalidHighlights);
+        expect(errors).toContain('You must select a property type');
+      });
+
+      it('should fail validation with missing furnished option', () => {
+        const invalidHighlights = { ...createValidHighlights(), furnished: null };
+        const errors = validateHighlights(invalidHighlights);
+        expect(errors).toContain('You must select a furnishing option');
+      });
+
+      it('should fail validation with missing pets allowed option', () => {
+        const invalidHighlights = { ...createValidHighlights(), petsAllowed: null };
+        const errors = validateHighlights(invalidHighlights);
+        expect(errors).toContain('You must specify if pets are allowed');
+      });
+
+      it('should fail validation with all missing fields', () => {
+        const invalidHighlights = createInvalidHighlights();
+        const errors = validateHighlights(invalidHighlights);
+        expect(errors).toHaveLength(3);
+        expect(errors).toContain('You must select a property type');
+        expect(errors).toContain('You must select a furnishing option');
+        expect(errors).toContain('You must specify if pets are allowed');
+      });
+    });
+
+    describe('validateLocation', () => {
+      it('should pass validation with valid location', () => {
+        const validLocation = createValidLocation();
+        const errors = validateLocation(validLocation);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with missing street address', () => {
+        const invalidLocation = { ...createValidLocation(), streetAddress1: null };
+        const errors = validateLocation(invalidLocation);
+        expect(errors).toContain('Street address is required');
+      });
+
+      it('should fail validation with missing city', () => {
+        const invalidLocation = { ...createValidLocation(), city: null };
+        const errors = validateLocation(invalidLocation);
+        expect(errors).toContain('City is required');
+      });
+
+      it('should fail validation with missing state', () => {
+        const invalidLocation = { ...createValidLocation(), state: null };
+        const errors = validateLocation(invalidLocation);
+        expect(errors).toContain('State is required');
+      });
+
+      it('should fail validation with missing postal code', () => {
+        const invalidLocation = { ...createValidLocation(), postalCode: null };
+        const errors = validateLocation(invalidLocation);
+        expect(errors).toContain('Postal code is required');
+      });
+
+      it('should fail validation with all missing required fields', () => {
+        const invalidLocation = createInvalidLocation();
+        const errors = validateLocation(invalidLocation);
+        expect(errors).toHaveLength(4);
+        expect(errors).toContain('Street address is required');
+        expect(errors).toContain('City is required');
+        expect(errors).toContain('State is required');
+        expect(errors).toContain('Postal code is required');
+      });
+    });
+
+    describe('validateRooms', () => {
+      it('should pass validation with valid rooms', () => {
+        const validRooms = createValidRooms();
+        const errors = validateRooms(validRooms);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with zero bedrooms', () => {
+        const invalidRooms = { ...createValidRooms(), bedrooms: 0 };
+        const errors = validateRooms(invalidRooms);
+        expect(errors).toContain('Number of bedrooms is required');
+      });
+
+      it('should fail validation with zero bathrooms', () => {
+        const invalidRooms = { ...createValidRooms(), bathrooms: 0 };
+        const errors = validateRooms(invalidRooms);
+        expect(errors).toContain('Number of bathrooms is required');
+      });
+
+      it('should fail validation with missing square footage', () => {
+        const invalidRooms = { ...createValidRooms(), squareFeet: '' };
+        const errors = validateRooms(invalidRooms);
+        expect(errors).toContain('Square footage is required');
+      });
+
+      it('should fail validation with all invalid fields', () => {
+        const invalidRooms = createInvalidRooms();
+        const errors = validateRooms(invalidRooms);
+        expect(errors).toHaveLength(3);
+        expect(errors).toContain('Number of bedrooms is required');
+        expect(errors).toContain('Number of bathrooms is required');
+        expect(errors).toContain('Square footage is required');
+      });
+    });
+
+    describe('validateBasics', () => {
+      it('should pass validation with valid basics', () => {
+        const validBasics = createValidBasics();
+        const errors = validateBasics(validBasics);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with missing title', () => {
+        const invalidBasics = { ...createValidBasics(), title: '' };
+        const errors = validateBasics(invalidBasics);
+        expect(errors).toContain('Title is required');
+      });
+
+      it('should fail validation with short title', () => {
+        const invalidBasics = { ...createValidBasics(), title: 'Hi' };
+        const errors = validateBasics(invalidBasics);
+        expect(errors).toContain('Title must be at least 5 characters');
+      });
+
+      it('should fail validation with missing description', () => {
+        const invalidBasics = { ...createValidBasics(), description: '' };
+        const errors = validateBasics(invalidBasics);
+        expect(errors).toContain('Description is required');
+      });
+
+      it('should fail validation with short description', () => {
+        const invalidBasics = { ...createValidBasics(), description: 'Short desc' };
+        const errors = validateBasics(invalidBasics);
+        expect(errors).toContain('Description must be at least 20 characters');
+      });
+
+      it('should fail validation with all invalid fields', () => {
+        const invalidBasics = createInvalidBasics();
+        const errors = validateBasics(invalidBasics);
+        expect(errors).toHaveLength(2);
+        expect(errors).toContain('Title is required');
+        expect(errors).toContain('Description must be at least 20 characters');
+      });
+    });
+
+    describe('validatePhotos', () => {
+      it('should pass validation with valid photos (4+)', () => {
+        const validPhotos = createValidPhotos();
+        const errors = validatePhotos(validPhotos);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with no photos', () => {
+        const errors = validatePhotos([]);
+        expect(errors).toContain('You must upload at least 4 photos');
+      });
+
+      it('should fail validation with too few photos', () => {
+        const invalidPhotos = createInvalidPhotos();
+        const errors = validatePhotos(invalidPhotos);
+        expect(errors).toContain('You need to upload 3 more photos (minimum 4 required)');
+      });
+
+      it('should fail validation with photos without URLs', () => {
+        const photosWithoutUrls = [
+          { id: '1', url: null, listingId: 'test', category: 'living_room', rank: 1 },
+          { id: '2', url: '', listingId: 'test', category: 'bedroom', rank: 2 }
+        ];
+        const errors = validatePhotos(photosWithoutUrls);
+        expect(errors).toContain('You must upload at least 4 photos');
+      });
+    });
+
+    describe('validateFeaturedPhotos', () => {
+      it('should pass validation with exactly 4 selected photos', () => {
+        const validSelectedPhotos = createValidSelectedPhotos();
+        const errors = validateFeaturedPhotos(validSelectedPhotos);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with wrong number of selected photos', () => {
+        const invalidSelectedPhotos = createInvalidSelectedPhotos();
+        const errors = validateFeaturedPhotos(invalidSelectedPhotos);
+        expect(errors).toContain('You must select exactly four featured photos.');
+      });
+
+      it('should fail validation with no selected photos', () => {
+        const errors = validateFeaturedPhotos([]);
+        expect(errors).toContain('You must select exactly four featured photos.');
+      });
+    });
+
+    describe('validateAmenities', () => {
+      it('should pass validation with valid amenities (includes laundry option)', () => {
+        const validAmenities = createValidAmenities();
+        const errors = validateAmenities(validAmenities);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with missing laundry option', () => {
+        const invalidAmenities = createInvalidAmenities();
+        const errors = validateAmenities(invalidAmenities);
+        expect(errors).toContain('You must select one laundry option (In Unit, In Complex, or No Laundry)');
+      });
+
+      it('should pass validation with washerInComplex option', () => {
+        const amenitiesWithComplex = ['kitchen', 'wifi', 'washerInComplex'];
+        const errors = validateAmenities(amenitiesWithComplex);
+        expect(errors).toEqual([]);
+      });
+
+      it('should pass validation with washerNotAvailable option', () => {
+        const amenitiesWithNoWasher = ['kitchen', 'wifi', 'washerNotAvailable'];
+        const errors = validateAmenities(amenitiesWithNoWasher);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with multiple laundry options', () => {
+        const amenitiesWithMultipleLaundry = ['kitchen', 'wifi', 'washerInUnit', 'washerInComplex'];
+        const errors = validateAmenities(amenitiesWithMultipleLaundry);
+        expect(errors).toContain('You must select one laundry option (In Unit, In Complex, or No Laundry)');
+      });
+    });
+
+    describe('validatePricing', () => {
+      it('should pass validation with valid pricing settings', () => {
+        const validPricing = createValidPricing();
+        const errors = validatePricing(validPricing);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with invalid shortest stay (too low)', () => {
+        const invalidPricing = { ...createValidPricing(), shortestStay: 0 };
+        const errors = validatePricing(invalidPricing);
+        expect(errors).toContain('Shortest stay must be between 1 and 12 months');
+      });
+
+      it('should fail validation with invalid shortest stay (too high)', () => {
+        const invalidPricing = { ...createValidPricing(), shortestStay: 15 };
+        const errors = validatePricing(invalidPricing);
+        expect(errors).toContain('Shortest stay must be between 1 and 12 months');
+      });
+
+      it('should fail validation with invalid longest stay', () => {
+        const invalidPricing = { ...createValidPricing(), longestStay: 15 };
+        const errors = validatePricing(invalidPricing);
+        expect(errors).toContain('Longest stay must be between 1 and 12 months');
+      });
+
+      it('should fail validation with shortest stay > longest stay', () => {
+        const invalidPricing = { ...createValidPricing(), shortestStay: 6, longestStay: 3 };
+        const errors = validatePricing(invalidPricing);
+        expect(errors).toContain('Shortest stay cannot be longer than longest stay');
+      });
+
+      it('should fail validation with all invalid settings', () => {
+        const invalidPricing = createInvalidPricingSettings();
+        const errors = validatePricing(invalidPricing);
+        expect(errors.length).toBeGreaterThan(0);
+      });
+    });
+
+    describe('validateVerifyPricing', () => {
+      it('should pass validation with complete pricing (all months filled)', () => {
+        const validPricing = createValidPricing();
+        const errors = validateVerifyPricing(validPricing);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with missing prices', () => {
+        const pricingWithMissing = createPricingWithMissingPrices();
+        const errors = validateVerifyPricing(pricingWithMissing);
+        expect(errors).toContain('Please set prices for all 6 lease lengths');
+      });
+
+      it('should pass validation with zero prices (free rent)', () => {
+        const pricingWithZeros = {
+          ...createValidPricing(),
+          monthlyPricing: createZeroPricesMonthlyPricing()
+        };
+        const errors = validateVerifyPricing(pricingWithZeros);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation with negative prices', () => {
+        const pricingWithInvalid = {
+          ...createValidPricing(),
+          monthlyPricing: createInvalidPricesMonthlyPricing()
+        };
+        const errors = validateVerifyPricing(pricingWithInvalid);
+        expect(errors).toContain('All prices must be valid non-negative numbers');
+      });
+
+      it('should handle empty string prices correctly', () => {
+        const pricingWithEmptyStrings = {
+          ...createValidPricing(),
+          monthlyPricing: [
+            { months: 1, price: '', utilitiesIncluded: false },
+            { months: 2, price: '1000', utilitiesIncluded: false }
+          ]
+        };
+        const errors = validateVerifyPricing(pricingWithEmptyStrings);
+        expect(errors).toContain('Please set prices for all 2 lease lengths');
+      });
+
+      it('should handle null prices correctly', () => {
+        const pricingWithNullPrices = {
+          ...createValidPricing(),
+          monthlyPricing: [
+            { months: 1, price: null as any, utilitiesIncluded: false },
+            { months: 2, price: '1000', utilitiesIncluded: false }
+          ]
+        };
+        const errors = validateVerifyPricing(pricingWithNullPrices);
+        expect(errors).toContain('Please set prices for all 2 lease lengths');
+      });
+
+      it('should handle decimal prices correctly', () => {
+        const pricingWithDecimals = {
+          ...createValidPricing(),
+          monthlyPricing: [
+            { months: 1, price: '1000.50', utilitiesIncluded: false },
+            { months: 2, price: '999.99', utilitiesIncluded: false }
+          ]
+        };
+        const errors = validateVerifyPricing(pricingWithDecimals);
+        expect(errors).toEqual([]);
+      });
+    });
+
+    describe('validateDeposits', () => {
+      it('should pass validation with valid deposits', () => {
+        const validPricing = createValidPricing();
+        const errors = validateDeposits(validPricing);
+        expect(errors).toEqual([]);
+      });
+
+      it('should fail validation when rent due exceeds lowest monthly rent', () => {
+        const pricingWithInvalidDeposits = createPricingWithInvalidDeposits();
+        const errors = validateDeposits(pricingWithInvalidDeposits);
+        expect(errors).toContain('Rent due at booking ($1200) cannot be higher than the lowest monthly rent ($800)');
+      });
+
+      it('should pass validation with no rent due at booking', () => {
+        const pricingWithoutRentDue = { ...createValidPricing(), rentDueAtBooking: '' };
+        const errors = validateDeposits(pricingWithoutRentDue);
+        expect(errors).toEqual([]);
+      });
+
+      it('should pass validation with rent due equal to lowest monthly rent', () => {
+        const pricing = {
+          ...createValidPricing(),
+          monthlyPricing: [
+            { months: 1, price: '1000', utilitiesIncluded: false },
+            { months: 2, price: '900', utilitiesIncluded: false }
+          ],
+          rentDueAtBooking: '900' // Equal to lowest
+        };
+        const errors = validateDeposits(pricing);
+        expect(errors).toEqual([]);
+      });
+    });
+
+    describe('validateAllSteps', () => {
+      it('should pass validation with completely valid form data', () => {
+        const validFormData = createValidFormData();
+        const allErrors = validateAllSteps(validFormData);
+        expect(Object.keys(allErrors)).toHaveLength(0);
+      });
+
+      it('should fail validation with invalid form data across multiple steps', () => {
+        const invalidFormData = createInvalidFormData();
+        const allErrors = validateAllSteps(invalidFormData);
+        
+        // Should have errors for multiple steps
+        expect(Object.keys(allErrors).length).toBeGreaterThan(1);
+        
+        // Check that specific steps have errors
+        expect(allErrors[0]).toBeDefined(); // Highlights errors
+        expect(allErrors[1]).toBeDefined(); // Location errors
+        expect(allErrors[2]).toBeDefined(); // Location errors (same as step 1)
+        expect(allErrors[3]).toBeDefined(); // Rooms errors
+        expect(allErrors[4]).toBeDefined(); // Basics errors
+        expect(allErrors[5]).toBeDefined(); // Photos errors
+        expect(allErrors[6]).toBeDefined(); // Featured photos errors
+        expect(allErrors[7]).toBeDefined(); // Amenities errors
+        expect(allErrors[9]).toBeDefined(); // Verify pricing errors
+      });
+
+      it('should return errors for specific failed steps only', () => {
+        const partiallyValidData = {
+          ...createValidFormData(),
+          listingBasics: createInvalidBasics(),
+          listingPricing: createPricingWithMissingPrices()
+        };
+        
+        const allErrors = validateAllSteps(partiallyValidData);
+        
+        // Should only have errors for the invalid steps
+        expect(allErrors[4]).toBeDefined(); // Basics errors
+        expect(allErrors[9]).toBeDefined(); // Verify pricing errors
+        
+        // Should not have errors for valid steps
+        expect(allErrors[0]).toBeUndefined(); // Highlights should be valid
+        expect(allErrors[1]).toBeUndefined(); // Location should be valid
+        expect(allErrors[3]).toBeUndefined(); // Rooms should be valid
+      });
+    });
+  });
+
+  // ==========================================
+  // INTEGRATION VALIDATION TESTS
+  // ==========================================
+  
+  describe('Integration Validation Tests', () => {
+    describe('Draft Creation with Validation', () => {
+      it('should successfully create and save a draft with valid data', async () => {
+        const validFormData = createValidFormData();
+        
+        // Transform to draft data format
+        const draftData = transformComponentStateToDraftData(validFormData);
+        
+        // Validate all steps before saving
+        const validationErrors = validateAllSteps(validFormData);
+        expect(Object.keys(validationErrors)).toHaveLength(0);
+        
+        // Save draft (this should succeed since validation passed)
+        const savedDraft = await saveDraft(draftData, testUserId);
+        
+        expect(savedDraft).toBeDefined();
+        expect(savedDraft.id).toBeDefined();
+        expect(savedDraft.title).toBe(validFormData.listingBasics.title);
+        expect(savedDraft.status).toBe('draft');
+        
+        // Clean up
+        await cleanupTestData(testUserId);
+      });
+
+      it('should detect validation errors before attempting draft save', async () => {
+        const invalidFormData = createInvalidFormData();
+        
+        // Validate all steps - should find errors
+        const validationErrors = validateAllSteps(invalidFormData);
+        expect(Object.keys(validationErrors).length).toBeGreaterThan(0);
+        
+        // Should have specific validation errors
+        expect(validationErrors[0]).toContain('You must select a property type');
+        expect(validationErrors[1]).toContain('Street address is required');
+        expect(validationErrors[4]).toContain('Title is required');
+        expect(validationErrors[9]).toContain('Please set prices for all 6 lease lengths');
+      });
+
+      it('should handle pricing validation edge cases in draft flow', async () => {
+        const formDataWithPricingIssues = {
+          ...createValidFormData(),
+          listingPricing: createPricingWithMissingPrices()
+        };
+        
+        // Pricing validation should fail
+        const pricingErrors = validateVerifyPricing(formDataWithPricingIssues.listingPricing);
+        expect(pricingErrors).toContain('Please set prices for all 6 lease lengths');
+        
+        // All steps validation should include pricing errors
+        const allErrors = validateAllSteps(formDataWithPricingIssues);
+        expect(allErrors[9]).toBeDefined();
+        expect(allErrors[9]).toContain('Please set prices for all 6 lease lengths');
+      });
+    });
+
+    describe('Listing Creation with Validation', () => {
+      it('should successfully create listing after all validations pass', async () => {
+        const validFormData = createValidFormData();
+        
+        // Step 1: Validate all form data
+        const validationErrors = validateAllSteps(validFormData);
+        expect(Object.keys(validationErrors)).toHaveLength(0);
+        
+        // Step 2: Create draft first
+        const draftData = transformComponentStateToDraftData(validFormData);
+        const savedDraft = await saveDraft(draftData, testUserId);
+        
+        // Step 3: Create listing from validated draft
+        const createdListing = await createListingFromDraft(
+          savedDraft.id,
+          testUserId,
+          {
+            listingImages: validFormData.listingPhotos.map(photo => ({
+              url: photo.url!,
+              category: photo.category,
+              rank: photo.rank
+            })),
+            monthlyPricing: validFormData.listingPricing.monthlyPricing.map(p => ({
+              months: p.months,
+              price: parseFloat(p.price),
+              utilitiesIncluded: p.utilitiesIncluded
+            }))
+          }
+        );
+        
+        expect(createdListing).toBeDefined();
+        expect(createdListing.id).toBeDefined();
+        expect(createdListing.title).toBe(validFormData.listingBasics.title);
+        expect(createdListing.status).toBe('available');
+        expect(createdListing.approvalStatus).toBe('pendingReview');
+        
+        // Clean up
+        await cleanupTestData(testUserId);
+      });
+
+      it('should prevent listing creation with validation errors', async () => {
+        // Create form data with specific validation issues
+        const invalidFormData = {
+          ...createValidFormData(),
+          listingBasics: createInvalidBasics(),
+          listingPricing: createPricingWithMissingPrices()
+        };
+        
+        // Validation should fail
+        const validationErrors = validateAllSteps(invalidFormData);
+        expect(Object.keys(validationErrors).length).toBeGreaterThan(0);
+        
+        // Should not proceed with listing creation when validation fails
+        expect(validationErrors[4]).toContain('Title is required');
+        expect(validationErrors[9]).toContain('Please set prices for all 6 lease lengths');
+        
+        // In a real application, the UI would prevent submission
+        // when validateAllSteps returns errors
+      });
+
+      it('should handle complex pricing validation scenarios', async () => {
+        // Test case: rent due at booking exceeds monthly rent
+        const formDataWithDepositIssue = {
+          ...createValidFormData(),
+          listingPricing: createPricingWithInvalidDeposits()
+        };
+        
+        // Deposit validation should fail
+        const depositErrors = validateDeposits(formDataWithDepositIssue.listingPricing);
+        expect(depositErrors).toContain('Rent due at booking ($1200) cannot be higher than the lowest monthly rent ($800)');
+        
+        // All steps validation should include deposit errors
+        const allErrors = validateAllSteps(formDataWithDepositIssue);
+        expect(allErrors[10]).toBeDefined();
+        expect(allErrors[10]).toContain('Rent due at booking ($1200) cannot be higher than the lowest monthly rent ($800)');
+      });
+
+      it('should validate zero prices correctly (regression test)', async () => {
+        // This tests the specific edge case mentioned in the issue
+        const formDataWithZeroPrices = {
+          ...createValidFormData(),
+          listingPricing: {
+            ...createValidPricing(),
+            monthlyPricing: createZeroPricesMonthlyPricing()
+          }
+        };
+        
+        // Zero prices should be valid (free rent is allowed)
+        const pricingErrors = validateVerifyPricing(formDataWithZeroPrices.listingPricing);
+        expect(pricingErrors).toEqual([]);
+        
+        // All validation should pass
+        const allErrors = validateAllSteps(formDataWithZeroPrices);
+        expect(Object.keys(allErrors)).toHaveLength(0);
+      });
+    });
+
+    describe('End-to-End Validation Flow', () => {
+      it('should simulate complete add-property flow with validation', async () => {
+        const testFormData = createValidFormData();
+        
+        // Step 1: Validate highlights (step 0)
+        const highlightsErrors = validateHighlights(testFormData.listingHighlights);
+        expect(highlightsErrors).toEqual([]);
+        
+        // Step 2: Validate location (steps 1-2)
+        const locationErrors = validateLocation(testFormData.listingLocation);
+        expect(locationErrors).toEqual([]);
+        
+        // Step 3: Validate rooms (step 3)
+        const roomsErrors = validateRooms(testFormData.listingRooms);
+        expect(roomsErrors).toEqual([]);
+        
+        // Step 4: Validate basics (step 4)
+        const basicsErrors = validateBasics(testFormData.listingBasics);
+        expect(basicsErrors).toEqual([]);
+        
+        // Step 5: Validate photos (step 5)
+        const photosErrors = validatePhotos(testFormData.listingPhotos);
+        expect(photosErrors).toEqual([]);
+        
+        // Step 6: Validate featured photos (step 6)
+        const featuredPhotosErrors = validateFeaturedPhotos(testFormData.selectedPhotos);
+        expect(featuredPhotosErrors).toEqual([]);
+        
+        // Step 7: Validate amenities (step 7)
+        const amenitiesErrors = validateAmenities(testFormData.listingAmenities);
+        expect(amenitiesErrors).toEqual([]);
+        
+        // Step 8: Validate pricing settings (step 8)
+        const pricingErrors = validatePricing(testFormData.listingPricing);
+        expect(pricingErrors).toEqual([]);
+        
+        // Step 9: Validate verify pricing (step 9) - THE KEY STEP FROM THE ISSUE
+        const verifyPricingErrors = validateVerifyPricing(testFormData.listingPricing);
+        expect(verifyPricingErrors).toEqual([]);
+        
+        // Step 10: Validate deposits (step 10)
+        const depositErrors = validateDeposits(testFormData.listingPricing);
+        expect(depositErrors).toEqual([]);
+        
+        // Final: Validate all steps together
+        const allErrors = validateAllSteps(testFormData);
+        expect(Object.keys(allErrors)).toHaveLength(0);
+        
+        // If we reach here, all validations passed - proceed with submission
+        const draftData = transformComponentStateToDraftData(testFormData);
+        const savedDraft = await saveDraft(draftData, testUserId);
+        const createdListing = await createListingFromDraft(savedDraft.id, testUserId);
+        
+        expect(createdListing.status).toBe('available');
+        
+        // Clean up
+        await cleanupTestData(testUserId);
+      });
+
+      it('should identify and report first validation failure in step sequence', async () => {
+        // Create data that fails at multiple steps
+        const multiFailureData = {
+          ...createValidFormData(),
+          listingHighlights: createInvalidHighlights(), // Will fail at step 0
+          listingBasics: createInvalidBasics(),         // Will fail at step 4
+          listingPricing: createPricingWithMissingPrices() // Will fail at step 9
+        };
+        
+        // Validate individual steps to confirm they fail
+        expect(validateHighlights(multiFailureData.listingHighlights).length).toBeGreaterThan(0);
+        expect(validateBasics(multiFailureData.listingBasics).length).toBeGreaterThan(0);
+        expect(validateVerifyPricing(multiFailureData.listingPricing).length).toBeGreaterThan(0);
+        
+        // All steps validation should return errors for multiple steps
+        const allErrors = validateAllSteps(multiFailureData);
+        expect(Object.keys(allErrors).length).toBeGreaterThan(2);
+        
+        // Should include errors for all failed steps
+        expect(allErrors[0]).toBeDefined(); // Highlights errors
+        expect(allErrors[4]).toBeDefined(); // Basics errors  
+        expect(allErrors[9]).toBeDefined(); // Verify pricing errors
+        
+        // The UI would navigate to the first error step (step 0)
+        const firstErrorStep = Object.keys(allErrors)
+          .map(Number)
+          .sort((a, b) => a - b)[0];
+        expect(firstErrorStep).toBe(0);
       });
     });
   });

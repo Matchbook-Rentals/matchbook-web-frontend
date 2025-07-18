@@ -1,4 +1,6 @@
-import prisma from '@/lib/prismadb';
+// Note: Prisma operations have been moved to server actions in @/app/actions/listings.ts and @/app/actions/listings-in-creation.ts
+import { getDraftWithImages, createListingFromDraftTransaction, saveDraftTransaction, getDraftDataWithRelations } from '@/app/actions/listings-in-creation';
+import { createListingTransaction } from '@/app/actions/listings';
 
 export interface ListingData {
   listingImages?: Array<{
@@ -78,176 +80,7 @@ export async function createListingFromDraft(
     }>;
   }
 ) {
-  // Fetch the draft with images
-  const draft = await prisma.listingInCreation.findFirst({
-    where: {
-      id: draftId,
-      userId
-    },
-    include: {
-      listingImages: {
-        orderBy: { rank: 'asc' }
-      }
-    }
-  });
-
-  if (!draft) {
-    throw new Error('Draft not found');
-  }
-
-  // Create listing from draft in a transaction
-  const result = await prisma.$transaction(async (tx) => {
-    // Create the listing with all fields from draft
-    const listing = await tx.listing.create({
-      data: {
-        // Copy all fields from draft, excluding id and timestamps
-        title: draft.title || 'Untitled Listing',
-        description: draft.description || '',
-        status: 'available',
-        approvalStatus: 'pendingReview',
-        imageSrc: draft.imageSrc,
-        category: draft.category,
-        roomCount: draft.roomCount || 1,
-        bathroomCount: draft.bathroomCount || 1,
-        guestCount: draft.guestCount || draft.roomCount || 1,
-        latitude: draft.latitude || 0,
-        longitude: draft.longitude || 0,
-        locationString: draft.locationString,
-        city: draft.city,
-        state: draft.state,
-        streetAddress1: draft.streetAddress1,
-        streetAddress2: draft.streetAddress2,
-        postalCode: draft.postalCode,
-        userId: draft.userId || userId,
-        squareFootage: draft.squareFootage || 0,
-        depositSize: draft.depositSize || 0,
-        petDeposit: draft.petDeposit || 0,
-        petRent: draft.petRent || 0,
-        reservationDeposit: draft.reservationDeposit || 0,
-        rentDueAtBooking: draft.rentDueAtBooking || 0,
-        requireBackgroundCheck: draft.requireBackgroundCheck || false,
-        shortestLeaseLength: draft.shortestLeaseLength || 1,
-        longestLeaseLength: draft.longestLeaseLength || 12,
-        shortestLeasePrice: draft.shortestLeasePrice || 0,
-        longestLeasePrice: draft.longestLeasePrice || 0,
-        furnished: draft.furnished || false,
-        utilitiesIncluded: draft.utilitiesIncluded || false,
-        petsAllowed: draft.petsAllowed || false,
-        
-        // Copy all amenities
-        airConditioner: draft.airConditioner || false,
-        laundryFacilities: draft.laundryFacilities || false,
-        fitnessCenter: draft.fitnessCenter || false,
-        elevator: draft.elevator || false,
-        wheelchairAccess: draft.wheelchairAccess || false,
-        doorman: draft.doorman || false,
-        parking: draft.parking || false,
-        wifi: draft.wifi || false,
-        kitchen: draft.kitchen || false,
-        dedicatedWorkspace: draft.dedicatedWorkspace || false,
-        hairDryer: draft.hairDryer || false,
-        iron: draft.iron || false,
-        heater: draft.heater || false,
-        hotTub: draft.hotTub || false,
-        smokingAllowed: draft.smokingAllowed || false,
-        eventsAllowed: draft.eventsAllowed || false,
-        privateEntrance: draft.privateEntrance || false,
-        security: draft.security || false,
-        waterfront: draft.waterfront || false,
-        beachfront: draft.beachfront || false,
-        mountainView: draft.mountainView || false,
-        cityView: draft.cityView || false,
-        waterView: draft.waterView || false,
-        washerInUnit: draft.washerInUnit || false,
-        washerHookup: draft.washerHookup || false,
-        washerNotAvailable: draft.washerNotAvailable || false,
-        washerInComplex: draft.washerInComplex || false,
-        dryerInUnit: draft.dryerInUnit || false,
-        dryerHookup: draft.dryerHookup || false,
-        dryerNotAvailable: draft.dryerNotAvailable || false,
-        dryerInComplex: draft.dryerInComplex || false,
-        offStreetParking: draft.offStreetParking || false,
-        streetParking: draft.streetParking || false,
-        streetParkingFree: draft.streetParkingFree || false,
-        coveredParking: draft.coveredParking || false,
-        coveredParkingFree: draft.coveredParkingFree || false,
-        uncoveredParking: draft.uncoveredParking || false,
-        uncoveredParkingFree: draft.uncoveredParkingFree || false,
-        garageParking: draft.garageParking || false,
-        garageParkingFree: draft.garageParkingFree || false,
-        evCharging: draft.evCharging || false,
-        allowDogs: draft.allowDogs || false,
-        allowCats: draft.allowCats || false,
-        gym: draft.gym || false,
-        balcony: draft.balcony || false,
-        patio: draft.patio || false,
-        sunroom: draft.sunroom || false,
-        fireplace: draft.fireplace || false,
-        firepit: draft.firepit || false,
-        pool: draft.pool || false,
-        sauna: draft.sauna || false,
-        jacuzzi: draft.jacuzzi || false,
-        grill: draft.grill || false,
-        oven: draft.oven || false,
-        stove: draft.stove || false,
-        wheelAccessible: draft.wheelAccessible || false,
-        fencedInYard: draft.fencedInYard || false,
-        secureLobby: draft.secureLobby || false,
-        keylessEntry: draft.keylessEntry || false,
-        alarmSystem: draft.alarmSystem || false,
-        storageShed: draft.storageShed || false,
-        gatedEntry: draft.gatedEntry || false,
-        smokeDetector: draft.smokeDetector || false,
-        carbonMonoxide: draft.carbonMonoxide || false,
-        garbageDisposal: draft.garbageDisposal || false,
-        dishwasher: draft.dishwasher || false,
-        fridge: draft.fridge || false,
-        tv: draft.tv || false,
-        workstation: draft.workstation || false,
-        microwave: draft.microwave || false,
-        kitchenEssentials: draft.kitchenEssentials || false,
-        linens: draft.linens || false,
-        privateBathroom: draft.privateBathroom || false,
-      },
-    });
-    
-    // Handle listing images - use provided ones or existing ones from draft
-    const imagesToCreate = options?.listingImages && options.listingImages.length > 0 
-      ? options.listingImages 
-      : draft.listingImages || [];
-    
-    if (imagesToCreate.length > 0) {
-      await tx.listingImage.createMany({
-        data: imagesToCreate.map((image: any) => ({
-          url: image.url,
-          listingId: listing.id,
-          category: image.category || null,
-          rank: image.rank || null,
-        })),
-      });
-    }
-    
-    // Create monthly pricing if provided
-    if (options?.monthlyPricing && options.monthlyPricing.length > 0) {
-      await tx.listingMonthlyPricing.createMany({
-        data: options.monthlyPricing.map((pricing: any) => ({
-          listingId: listing.id,
-          months: pricing.months,
-          price: pricing.price || 0,
-          utilitiesIncluded: pricing.utilitiesIncluded || false,
-        })),
-      });
-    }
-    
-    // Delete the draft after successful creation
-    await tx.listingInCreation.delete({
-      where: { id: draftId }
-    });
-    
-    return listing;
-  });
-
-  return result;
+  return await createListingFromDraftTransaction(draftId, userId, options);
 }
 
 /**
@@ -257,59 +90,7 @@ export async function createListingFromDraft(
  * @returns The created listing
  */
 export async function createListing(listingData: ListingData, userId: string) {
-  // Extract listing images and monthly pricing from the data to handle them separately
-  const { listingImages, monthlyPricing, ...listingDataWithoutRelations } = listingData;
-  
-  // Set the userId for the listing
-  listingDataWithoutRelations.userId = userId;
-  
-  // Create the listing in a transaction to ensure all related data is created together
-  const result = await prisma.$transaction(async (tx) => {
-    // Create the main listing record
-    const listing = await tx.listing.create({
-      data: {
-        ...listingDataWithoutRelations,
-        // Set default values for any required fields not provided
-        status: listingDataWithoutRelations.status || 'available',
-        approvalStatus: 'pendingReview',
-        title: listingDataWithoutRelations.title || 'Untitled Listing',
-        description: listingDataWithoutRelations.description || '',
-        roomCount: listingDataWithoutRelations.roomCount || 1,
-        bathroomCount: listingDataWithoutRelations.bathroomCount || 1,
-        guestCount: listingDataWithoutRelations.guestCount || 1,
-        latitude: listingDataWithoutRelations.latitude || 0,
-        longitude: listingDataWithoutRelations.longitude || 0,
-      },
-    });
-    
-    // Create listing images if provided
-    if (listingImages && listingImages.length > 0) {
-      await tx.listingImage.createMany({
-        data: listingImages.map((image: any) => ({
-          url: image.url,
-          listingId: listing.id,
-          category: image.category || null,
-          rank: image.rank || null,
-        })),
-      });
-    }
-    
-    // Create monthly pricing if provided
-    if (monthlyPricing && monthlyPricing.length > 0) {
-      await tx.listingMonthlyPricing.createMany({
-        data: monthlyPricing.map((pricing: any) => ({
-          listingId: listing.id,
-          months: pricing.months,
-          price: pricing.price || 0,
-          utilitiesIncluded: pricing.utilitiesIncluded || false,
-        })),
-      });
-    }
-    
-    return listing;
-  });
-
-  return result;
+  return await createListingTransaction(listingData, userId);
 }
 
 /**
@@ -320,74 +101,7 @@ export async function createListing(listingData: ListingData, userId: string) {
  * @returns The saved/updated draft
  */
 export async function saveDraft(draftData: DraftData, userId: string, draftId?: string) {
-  // Extract listing images and monthly pricing from the data to handle them separately
-  const { listingImages, monthlyPricing, ...draftDataWithoutRelations } = draftData;
-  
-  // Set the userId for the draft
-  draftDataWithoutRelations.userId = userId;
-  
-  const result = await prisma.$transaction(async (tx) => {
-    let draft;
-    
-    if (draftId) {
-      // Update existing draft
-      draft = await tx.listingInCreation.update({
-        where: { id: draftId },
-        data: draftDataWithoutRelations,
-      });
-      
-      // Delete existing images for this draft
-      await tx.listingImage.deleteMany({
-        where: { listingId: draftId }
-      });
-    } else {
-      // Create new draft
-      draft = await tx.listingInCreation.create({
-        data: draftDataWithoutRelations,
-      });
-    }
-    
-    // Create listing images if provided
-    if (listingImages && listingImages.length > 0) {
-      await tx.listingImage.createMany({
-        data: listingImages.map((image: any) => ({
-          url: image.url,
-          listingId: draft.id,
-          rank: image.rank || null,
-        })),
-      });
-    }
-    
-    // Handle monthly pricing if provided
-    if (monthlyPricing && monthlyPricing.length > 0) {
-      console.log('💰 [saveDraft] Saving monthly pricing for draft:', draft.id, 'pricing:', monthlyPricing);
-      
-      // Delete existing monthly pricing for this draft if updating
-      if (draftId) {
-        await tx.listingMonthlyPricing.deleteMany({
-          where: { listingId: draftId }
-        });
-      }
-      
-      // Create monthly pricing for the draft
-      const pricingData = monthlyPricing.map((pricing: any) => ({
-        listingId: draft.id,
-        months: pricing.months,
-        price: pricing.price || 0,
-        utilitiesIncluded: pricing.utilitiesIncluded || false,
-      }));
-      
-      console.log('💰 [saveDraft] Creating pricing records:', pricingData);
-      
-      await tx.listingMonthlyPricing.createMany({
-        data: pricingData,
-      });
-    }
-    
-    return draft;
-  });
-
-  return result;
+  return await saveDraftTransaction(draftData, userId, draftId);
 }
 
 /**
@@ -840,7 +554,7 @@ export function transformComponentStateToDraftData(componentState: {
   selectedPhotos: any[];
   listingAmenities: string[];
 }) {
-  return {
+  const result: any = {
     title: componentState.listingBasics.title,
     description: componentState.listingBasics.description,
     status: "draft",
@@ -870,16 +584,22 @@ export function transformComponentStateToDraftData(componentState: {
     category: componentState.listingHighlights.category,
     petsAllowed: componentState.listingHighlights.petsAllowed,
     furnished: componentState.listingHighlights.furnished,
-    // Photos and pricing
-    listingPhotos: componentState.listingPhotos,
-    selectedPhotos: componentState.selectedPhotos,
-    amenities: componentState.listingAmenities,
+    // Monthly pricing
     monthlyPricing: componentState.listingPricing.monthlyPricing.map(p => ({
       months: p.months,
       price: p.price ? Number(p.price) : 0,
       utilitiesIncluded: p.utilitiesIncluded
     }))
   };
+  
+  // Process amenities from the array to set the proper boolean values
+  if (componentState.listingAmenities && componentState.listingAmenities.length > 0) {
+    componentState.listingAmenities.forEach(amenity => {
+      result[amenity] = true;
+    });
+  }
+  
+  return result;
 }
 
 /**
@@ -979,18 +699,8 @@ export async function handleSaveAndExit(
 }
 
 export async function loadDraftData(draftId: string) {
-  // Fetch draft from the database using the existing helper
-  const draftListing = await prisma.listingInCreation.findFirst({
-    where: { id: draftId },
-    include: {
-      listingImages: {
-        orderBy: { rank: 'asc' }
-      },
-      monthlyPricing: {
-        orderBy: { months: 'asc' }
-      }
-    }
-  });
+  // Fetch draft from the database using the server action
+  const draftListing = await getDraftDataWithRelations(draftId);
 
   if (!draftListing) {
     throw new Error('Draft not found');
@@ -1123,4 +833,314 @@ export async function loadDraftData(draftId: string) {
 
 
   return transformedData;
+}
+
+// Types for validation functions
+export interface ListingHighlights {
+  category: string | null;
+  petsAllowed: boolean | null;
+  furnished: boolean | null;
+}
+
+export interface ListingLocation {
+  locationString: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  city: string | null;
+  state: string | null;
+  streetAddress1: string | null;
+  streetAddress2: string | null;
+  postalCode: string | null;
+  country?: string | null;
+}
+
+export interface ListingRooms {
+  bedrooms: number;
+  bathrooms: number;
+  squareFeet: string;
+}
+
+export interface ListingBasics {
+  title: string;
+  description: string;
+}
+
+export interface MonthlyPricing {
+  months: number;
+  price: string;
+  utilitiesIncluded: boolean;
+}
+
+export interface ListingPricing {
+  shortestStay: number;
+  longestStay: number;
+  monthlyPricing: MonthlyPricing[];
+  deposit: string;
+  petDeposit: string;
+  petRent: string;
+  rentDueAtBooking: string;
+}
+
+export interface NullableListingImage {
+  id: string | null;
+  url: string | null;
+  listingId: string | null;
+  category: string | null;
+  rank: number | null;
+}
+
+/**
+ * Validation Functions
+ * These functions validate different sections of the listing creation form
+ */
+
+export function validateHighlights(listingHighlights: ListingHighlights): string[] {
+  const errors: string[] = [];
+  
+  if (!listingHighlights.category) {
+    errors.push("You must select a property type");
+  }
+  
+  if (listingHighlights.furnished === null) {
+    errors.push("You must select a furnishing option");
+  }
+  
+  if (listingHighlights.petsAllowed === null) {
+    errors.push("You must specify if pets are allowed");
+  }
+  
+  return errors;
+}
+
+export function validateLocation(listingLocation: ListingLocation): string[] {
+  const errors: string[] = [];
+  
+  if (!listingLocation.streetAddress1) {
+    errors.push("Street address is required");
+  }
+  
+  if (!listingLocation.city) {
+    errors.push("City is required");
+  }
+  
+  if (!listingLocation.state) {
+    errors.push("State is required");
+  }
+  
+  if (!listingLocation.postalCode) {
+    errors.push("Postal code is required");
+  }
+  
+  return errors;
+}
+
+export function validateRooms(listingRooms: ListingRooms): string[] {
+  const errors: string[] = [];
+  
+  if (!listingRooms.bedrooms || listingRooms.bedrooms < 1) {
+    errors.push("Number of bedrooms is required");
+  }
+  
+  if (!listingRooms.bathrooms || listingRooms.bathrooms < 1) {
+    errors.push("Number of bathrooms is required");
+  }
+  
+  if (!listingRooms.squareFeet) {
+    errors.push("Square footage is required");
+  }
+  
+  return errors;
+}
+
+export function validateBasics(listingBasics: ListingBasics): string[] {
+  const errors: string[] = [];
+  
+  if (!listingBasics.title) {
+    errors.push("Title is required");
+  } else if (listingBasics.title.length < 5) {
+    errors.push("Title must be at least 5 characters");
+  }
+  
+  if (!listingBasics.description) {
+    errors.push("Description is required");
+  } else if (listingBasics.description.length < 20) {
+    errors.push("Description must be at least 20 characters");
+  }
+  
+  return errors;
+}
+
+export function validatePhotos(listingPhotos: NullableListingImage[]): string[] {
+  const errors: string[] = [];
+  const validPhotos = listingPhotos?.filter(photo => photo.url) || [];
+  const validPhotoCount = validPhotos.length;
+  
+  if (validPhotoCount === 0) {
+    errors.push("You must upload at least 4 photos");
+  } else if (validPhotoCount < 4) {
+    errors.push(`You need to upload ${4 - validPhotoCount} more photo${validPhotoCount === 3 ? '' : 's'} (minimum 4 required)`);
+  }
+  
+  return errors;
+}
+
+export function validateFeaturedPhotos(selectedPhotos: NullableListingImage[]): string[] {
+  const errors: string[] = [];
+  if (!selectedPhotos || selectedPhotos.length !== 4) {
+    errors.push("You must select exactly four featured photos.");
+  }
+  return errors;
+}
+
+export function validateAmenities(listingAmenities: string[]): string[] {
+  const errors: string[] = [];
+  // Laundry options required
+  const laundryOptions = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'];
+  const selectedLaundry = listingAmenities?.filter(a => laundryOptions.includes(a)) || [];
+  if (selectedLaundry.length !== 1) {
+    errors.push("You must select one laundry option (In Unit, In Complex, or No Laundry)");
+  }
+  return errors;
+}
+
+export function validatePricing(listingPricing: ListingPricing): string[] {
+  const errors: string[] = [];
+  
+  // Step 7 validation - check basic settings
+  if (listingPricing.shortestStay < 1 || listingPricing.shortestStay > 12) {
+    errors.push("Shortest stay must be between 1 and 12 months");
+  }
+  
+  if (listingPricing.longestStay < 1 || listingPricing.longestStay > 12) {
+    errors.push("Longest stay must be between 1 and 12 months");
+  }
+  
+  if (listingPricing.shortestStay > listingPricing.longestStay) {
+    errors.push("Shortest stay cannot be longer than longest stay");
+  }
+  
+  return errors;
+}
+
+export function validateVerifyPricing(listingPricing: ListingPricing): string[] {
+  const errors: string[] = [];
+  
+  console.log('🔍 [validateVerifyPricing] Checking pricing:', {
+    monthlyPricing: listingPricing.monthlyPricing,
+    totalEntries: listingPricing.monthlyPricing.length
+  });
+  
+  // Check each pricing entry
+  const missingPrices: number[] = [];
+  const invalidPrices: number[] = [];
+  
+  listingPricing.monthlyPricing.forEach(p => {
+    console.log(`🔍 Month ${p.months}: price="${p.price}", type=${typeof p.price}`);
+    
+    // Check if price is missing (empty, null, undefined)
+    if (p.price === null || p.price === undefined || p.price === '') {
+      missingPrices.push(p.months);
+      return;
+    }
+    
+    // Convert to number and validate
+    const priceAsNumber = parseFloat(p.price);
+    if (isNaN(priceAsNumber) || priceAsNumber < 0) {
+      invalidPrices.push(p.months);
+    }
+  });
+  
+  if (missingPrices.length > 0) {
+    console.log('❌ [validateVerifyPricing] Found missing prices for months:', missingPrices);
+    errors.push(`Please set prices for all ${listingPricing.monthlyPricing.length} lease lengths`);
+  }
+  
+  if (invalidPrices.length > 0) {
+    console.log('❌ [validateVerifyPricing] Found invalid prices for months:', invalidPrices);
+    errors.push("All prices must be valid non-negative numbers");
+  }
+  
+  console.log('✅ [validateVerifyPricing] Final errors:', errors);
+  return errors;
+}
+
+export function validateDeposits(listingPricing: ListingPricing): string[] {
+  const errors: string[] = [];
+  
+  // Validate rent due at booking doesn't exceed lowest monthly rent
+  if (listingPricing.rentDueAtBooking && listingPricing.rentDueAtBooking !== '') {
+    const rentDueAmount = parseFloat(listingPricing.rentDueAtBooking);
+    
+    if (!isNaN(rentDueAmount) && rentDueAmount > 0) {
+      // Find the lowest monthly rent price from the pricing array
+      const validPrices = listingPricing.monthlyPricing
+        .filter(p => p.price && p.price !== '' && p.price !== '0')
+        .map(p => parseFloat(p.price))
+        .filter(price => !isNaN(price) && price > 0);
+      
+      if (validPrices.length > 0) {
+        const lowestPrice = Math.min(...validPrices);
+        if (rentDueAmount > lowestPrice) {
+          errors.push(`Rent due at booking ($${rentDueAmount}) cannot be higher than the lowest monthly rent ($${lowestPrice})`);
+        }
+      }
+    }
+  }
+  
+  return errors;
+}
+
+/**
+ * Validate all steps of the listing creation form
+ * @param formData - Complete form data
+ * @returns Object containing validation errors for each step
+ */
+export function validateAllSteps(formData: {
+  listingHighlights: ListingHighlights;
+  listingLocation: ListingLocation;
+  listingRooms: ListingRooms;
+  listingBasics: ListingBasics;
+  listingPhotos: NullableListingImage[];
+  selectedPhotos: NullableListingImage[];
+  listingAmenities: string[];
+  listingPricing: ListingPricing;
+}): Record<number, string[]> {
+  const allErrors: Record<number, string[]> = {};
+  
+  // Validate each step
+  const highlightErrors = validateHighlights(formData.listingHighlights);
+  if (highlightErrors.length > 0) allErrors[0] = highlightErrors;
+  
+  const locationErrors = validateLocation(formData.listingLocation);
+  // Location validation applies to both steps 1 and 2 (input and confirmation)
+  if (locationErrors.length > 0) {
+    allErrors[1] = locationErrors;
+    allErrors[2] = locationErrors;
+  }
+  
+  const roomsErrors = validateRooms(formData.listingRooms);
+  if (roomsErrors.length > 0) allErrors[3] = roomsErrors;
+  
+  const basicsErrors = validateBasics(formData.listingBasics);
+  if (basicsErrors.length > 0) allErrors[4] = basicsErrors;
+  
+  const photosErrors = validatePhotos(formData.listingPhotos);
+  if (photosErrors.length > 0) allErrors[5] = photosErrors;
+  
+  const featuredPhotosErrors = validateFeaturedPhotos(formData.selectedPhotos);
+  if (featuredPhotosErrors.length > 0) allErrors[6] = featuredPhotosErrors;
+  
+  const amenitiesErrors = validateAmenities(formData.listingAmenities);
+  if (amenitiesErrors.length > 0) allErrors[7] = amenitiesErrors;
+  
+  const pricingErrors = validatePricing(formData.listingPricing);
+  if (pricingErrors.length > 0) allErrors[8] = pricingErrors;
+  
+  const verifyPricingErrors = validateVerifyPricing(formData.listingPricing);
+  if (verifyPricingErrors.length > 0) allErrors[9] = verifyPricingErrors;
+  
+  const depositErrors = validateDeposits(formData.listingPricing);
+  if (depositErrors.length > 0) allErrors[10] = depositErrors;
+  
+  return allErrors;
 }

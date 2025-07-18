@@ -770,3 +770,64 @@ export const updateListingMoveInData = async (
   }
 }
 
+export const createListingTransaction = async (listingData: any, userId: string) => {
+  try {
+    // Extract listing images and monthly pricing from the data to handle them separately
+    const { listingImages, monthlyPricing, ...listingDataWithoutRelations } = listingData;
+    
+    // Set the userId for the listing
+    listingDataWithoutRelations.userId = userId;
+    
+    // Create the listing in a transaction to ensure all related data is created together
+    const result = await prisma.$transaction(async (tx) => {
+      // Create the main listing record
+      const listing = await tx.listing.create({
+        data: {
+          ...listingDataWithoutRelations,
+          // Set default values for any required fields not provided
+          status: listingDataWithoutRelations.status || 'available',
+          approvalStatus: 'pendingReview',
+          title: listingDataWithoutRelations.title || 'Untitled Listing',
+          description: listingDataWithoutRelations.description || '',
+          roomCount: listingDataWithoutRelations.roomCount || 1,
+          bathroomCount: listingDataWithoutRelations.bathroomCount || 1,
+          guestCount: listingDataWithoutRelations.guestCount || 1,
+          latitude: listingDataWithoutRelations.latitude || 0,
+          longitude: listingDataWithoutRelations.longitude || 0,
+        },
+      });
+      
+      // Create listing images if provided
+      if (listingImages && listingImages.length > 0) {
+        await tx.listingImage.createMany({
+          data: listingImages.map((image: any) => ({
+            url: image.url,
+            listingId: listing.id,
+            category: image.category || null,
+            rank: image.rank || null,
+          })),
+        });
+      }
+      
+      // Create monthly pricing if provided
+      if (monthlyPricing && monthlyPricing.length > 0) {
+        await tx.listingMonthlyPricing.createMany({
+          data: monthlyPricing.map((pricing: any) => ({
+            listingId: listing.id,
+            months: pricing.months,
+            price: pricing.price || 0,
+            utilitiesIncluded: pricing.utilitiesIncluded || false,
+          })),
+        });
+      }
+      
+      return listing;
+    });
+
+    return result;
+  } catch (error) {
+    console.error('Error creating listing:', error);
+    throw error;
+  }
+}
+
