@@ -9,7 +9,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./test/setup.ts'],
-    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    // By default, only run integration tests (not e2e tests - those run with Playwright)
+    include: ['test/integration/**/*.{test,spec}.{js,ts,jsx,tsx}'],
     env: {
       NODE_ENV: 'test',
     },

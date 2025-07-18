@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
-import { WebSocketClient } from '../ts_server/client';
+import { WebSocketClient } from '../../ts_server/client';
 import { io } from 'socket.io-client';
 
 // Create a test that verifies the basic client connection

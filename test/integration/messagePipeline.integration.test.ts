@@ -1,8 +1,8 @@
 import { renderHook, act } from '@testing-library/react';
 import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
 import { io, Socket } from 'socket.io-client';
-import { useWebSocketManager, UseWebSocketManagerProps, MessageData as WebSocketMessageData } from './useWebSocketManager';
-import { useConversationManager, UseConversationManagerProps, ManagedConversation, User, MessageData as ConversationMessageData } from './useConversationManager';
+import { useWebSocketManager, UseWebSocketManagerProps, MessageData as WebSocketMessageData } from '../../src/hooks/useWebSocketManager';
+import { useConversationManager, UseConversationManagerProps, ManagedConversation, User, MessageData as ConversationMessageData } from '../../src/hooks/useConversationManager';
 
 // --- Mock socket.io-client (similar to useWebSocketManager.test.ts) ---
 var mockSocketInstance: any | null = null;

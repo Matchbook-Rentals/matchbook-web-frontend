@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { WebSocketClient } from '../../ts_server/client';
+import { WebSocketClient } from '../../../ts_server/client';
 
 // Mock WebSocket for Node environment
 class MockWebSocket {

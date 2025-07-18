@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { vi, describe, expect, test, beforeEach, afterEach } from 'vitest';
-import { useWebSocketManager, UseWebSocketManagerProps, MessageData } from './useWebSocketManager';
+import { useWebSocketManager, UseWebSocketManagerProps, MessageData } from '../../src/hooks/useWebSocketManager';
 
 // --- Configuration ---
 // IMPORTANT: These tests require a running WebSocket server.
