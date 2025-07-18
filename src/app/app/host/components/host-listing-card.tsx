@@ -138,8 +138,8 @@ export default function HostListingCard({
   const MobileLayout = () => (
       <Card className="flex flex-col w-full items-start gap-6 p-3 bg-background rounded-xl overflow-hidden mb-4">
         <CardContent className="flex flex-col items-end justify-end gap-6 relative self-stretch w-full p-0">
-          <div className="flex items-start gap-2 relative self-stretch w-full">
-            <div className="flex flex-col items-start gap-6 relative flex-1 grow">
+          <div className="flex items-start gap-2 relative self-stretch w-full min-w-0">
+            <div className="flex flex-col items-start gap-6 relative flex-1 grow min-w-0">
               {/* Property Image */}
               <div className="relative w-full rounded-xl overflow-hidden bg-cover bg-center"
                    style={{ backgroundImage: `url(${listing.listingImages?.[0]?.url || '/image-35.png'})`, aspectRatio: '366/162' }}>
@@ -172,17 +172,17 @@ export default function HostListingCard({
               </div>
 
               {/* Property Details */}
-              <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full">
-                <div className="flex flex-col items-start gap-2 relative self-stretch w-full">
+              <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full min-w-0">
+                <div className="flex flex-col items-start gap-2 relative self-stretch w-full min-w-0">
                   {/* Property Name and Status */}
-                  <div className="flex items-start gap-2 relative self-stretch w-full">
-                    <div className="relative flex-1 mt-[-1.00px] font-text-label-large-medium font-[number:var(--text-label-large-medium-font-weight)] text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)] [font-style:var(--text-label-large-medium-font-style)]">
+                  <div className="flex items-start gap-2 relative justify-between self-stretch w-full min-w-0">
+                    <div className="relative flex-1 truncate min-w-0 mt-[-1.00px] font-text-label-large-medium font-[number:var(--text-label-large-medium-font-weight)] text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)] [font-style:var(--text-label-large-medium-font-style)]">
                       {listing.title || displayAddress}
                     </div>
 
                     <Badge
                       variant="outline"
-                      className={`items-center gap-1.5 px-2.5 py-1 rounded-full border border-solid font-medium ${
+                      className={`items-center flex-0 gap-1.5 px-2.5 py-1 rounded-full border border-solid font-medium ${
                         status === 'Active' ? 'bg-[#e9f7ee] border-[#1ca34e] text-[#1ca34e]' :
                         status === 'Rented' ? 'bg-blue-50 border-blue-600 text-blue-600' :
                         status === 'Pending Approval' ? 'bg-yellow-50 border-yellow-700 text-yellow-700' :
@@ -197,14 +197,14 @@ export default function HostListingCard({
                   {/* Property Address */}
                   <div className="flex w-full items-start gap-2 relative">
                     <MapPinIcon className="w-5 h-5 text-[#777b8b] flex-shrink-0" />
-                    <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)] truncate">
+                    <div className="relative flex-1 truncate mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)] truncate">
                       {listing.locationString}
                     </div>
                   </div>
                 </div>
 
                 {/* Property Features */}
-                <div className="flex items-center gap-[22px] relative self-stretch w-full flex-wrap-reverse">
+                <div className="flex items-center justify-between gap-[5px] relative self-stretch w-full flex-wrap max-w-[100%] flex-wrap-reverse">
                   <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
                     <BedSingleIcon className="w-5 h-5 text-[#344054]" />
                     <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
