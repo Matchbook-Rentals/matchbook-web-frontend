@@ -179,14 +179,6 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
       console.log(`  Batch ${index + 1}: ${batch.length} files, ${batchSizeMB.toFixed(1)}MB`);
     });
     
-    // Show user-friendly message about batching
-    if (batches.length > 1) {
-      toast({
-        title: "Smart Upload",
-        description: `Your ${files.length} photos will be uploaded in ${batches.length} optimized batches for better performance.`,
-        variant: "default"
-      });
-    }
     
     // Initialize progress
     setUploadProgress({
