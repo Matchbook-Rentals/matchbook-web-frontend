@@ -821,6 +821,11 @@ export const createListingTransaction = async (listingData: any, userId: string)
         });
       }
       
+      // Delete all user drafts after successful creation
+      await tx.listingInCreation.deleteMany({
+        where: { userId: userId }
+      });
+      
       return listing;
     });
 

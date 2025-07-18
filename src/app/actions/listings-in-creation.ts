@@ -223,9 +223,9 @@ export const createListingFromDraftTransaction = async (
         });
       }
       
-      // Delete the draft after successful creation
-      await tx.listingInCreation.delete({
-        where: { id: draftId }
+      // Delete all user drafts after successful creation
+      await tx.listingInCreation.deleteMany({
+        where: { userId: userId }
       });
       
       return listing;
@@ -310,6 +310,21 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
     return result;
   } catch (error) {
     console.error('Error saving draft:', error);
+    throw error;
+  }
+};
+
+export const deleteAllUserDrafts = async (userId: string) => {
+  try {
+    const result = await prisma.listingInCreation.deleteMany({
+      where: {
+        userId: userId
+      }
+    });
+
+    return result;
+  } catch (error) {
+    console.error('Error deleting user drafts:', error);
     throw error;
   }
 };
