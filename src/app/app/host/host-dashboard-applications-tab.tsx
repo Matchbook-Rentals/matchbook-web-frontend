@@ -415,7 +415,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     <TabLayout
       title="Applications"
       subtitle="Applications for all your listings"
-      searchPlaceholder="Search by guest name or address"
+      searchPlaceholder="Search by renter name or address"
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(opt => ({ value: opt.id, label: opt.label }))}
       defaultFilter="pending"

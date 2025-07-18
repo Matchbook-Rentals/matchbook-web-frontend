@@ -75,7 +75,7 @@ const HostApplicationCardMobile: React.FC<HostApplicationCardProps> = ({
                 {status}
               </Badge>
 
-              {/* Guest Name */}
+              {/* Renter Name */}
               <div className="font-text-label-large-medium text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)]">
                 {name}
               </div>

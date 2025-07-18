@@ -314,7 +314,7 @@ export const StripeConnectVerificationDialog: React.FC<StripeConnectVerification
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
                   Before you can approve applications and create leases, you need to set up your payment account with Stripe Connect. 
-                  This allows you to securely receive rent payments and security deposits from tenants.
+                  This allows you to securely receive rent payments and security deposits from renters.
                 </p>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">

@@ -71,7 +71,7 @@ export function useNavigationContent({ listingId, onNavigate }: UseNavigationCon
     },
   ];
 
-  // Function to get current application guest name if on application page
+  // Function to get current application renter name if on application page
   const getCurrentApplicationGuestName = () => {
     const pathParts = pathname.split('/');
     const isOnApplicationPage = pathParts.includes('applications');
@@ -208,7 +208,7 @@ export function useNavigationContent({ listingId, onNavigate }: UseNavigationCon
                       label={item.label}
                       isActive={isActive && !isOnApplicationDetailsPage || (isApplicationsItem && isOnApplicationDetailsPage && !currentGuestName)}
                     />
-                    {/* Show guest name as active item when on application details page */}
+                    {/* Show renter name as active item when on application details page */}
                     {isApplicationsItem && currentGuestName && isOnApplicationDetailsPage && (
                       <div className="pl-7 py-1">
                         <div className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-blue-50 text-blue-700">

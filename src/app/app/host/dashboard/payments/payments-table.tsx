@@ -41,7 +41,7 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
 
   // Column headers with responsive visibility classes
   const headers = [
-    { name: "Tenant", width: "w-fit", className: "" }, // Always visible
+    { name: "Renter", width: "w-fit", className: "" }, // Always visible
     { name: "Amount", width: "w-fit", className: "" }, // Always visible
     { name: "Type", width: "w-fit", className: "hidden xl:table-cell" }, // Hidden below xl
     { name: "Method", width: "w-fit", className: "hidden lg:table-cell" }, // Hidden below lg
@@ -68,7 +68,7 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
       <TableBody>
         {data.map((row, rowIndex) => (
           <TableRow key={`row-${rowIndex}`} className="justify-evenly border-b border-[#eaecf0]">
-            {/* Tenant - Always visible */}
+            {/* Renter - Always visible */}
             <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 flex items-center gap-2 sm:gap-3">
               <Avatar className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-[0.75px] border-[#00000014]">
                 <AvatarImage src="/avatar-5.png" alt={row.tenant} />

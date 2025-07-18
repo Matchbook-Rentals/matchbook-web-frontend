@@ -394,7 +394,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     return parts.length > 0 ? parts.join(", ") : "1 Adult";
   };
 
-  // Format guest name with fallback
+  // Format renter name with fallback
   const formatGuestName = (user?: { firstName?: string; lastName?: string; email?: string }) => {
     if (!user) return "Guest";
     if (user.firstName && user.lastName) {
@@ -605,7 +605,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
         
         if (addressFields.some(field => field?.toLowerCase().includes(searchLower))) return true;
         
-        // Search in guest name
+        // Search in renter name
         const guestName = booking.user ? 
           `${booking.user.firstName} ${booking.user.lastName}`.toLowerCase() : "";
         if (guestName.includes(searchLower)) return true;
@@ -637,7 +637,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
       <Input
         type="text"
-        placeholder="Search by title, address, or guest name"
+        placeholder="Search by title, address, or renter name"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[14px]"
@@ -728,7 +728,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     <TabLayout
       title="Bookings"
       subtitle="Bookings for all your listings"
-      searchPlaceholder="Search by title, address, or guest name"
+      searchPlaceholder="Search by title, address, or renter name"
       filterLabel="Filter by status"
       filterOptions={filterOptions.map(label => ({ value: label.toLowerCase().replace(' ', '_'), label }))}
       onSearchChange={setSearchTerm}
