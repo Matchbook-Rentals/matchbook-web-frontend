@@ -22,8 +22,10 @@ interface UploadProgress {
   errors: string[];
 }
 
-const BATCH_SIZE = 5; // Upload 5 files at a time
+const MAX_FILES_PER_BATCH = 4; // Maximum files per batch (reduced for better performance)
+const MAX_BATCH_SIZE_MB = 8; // Maximum batch size in MB (reduced for mobile/slow connections)
 const MAX_PHOTOS = 30;
+const MAX_SINGLE_FILE_SIZE_MB = 100; // Individual file size limit - generous since batch size controls upload performance
 
 export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotosProps): JSX.Element => {
   const { toast } = useToast();
@@ -90,28 +92,60 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
       if (file.name.length > 255) {
         errors.push(`File "${file.name}" has a name that's too long. Please use a shorter filename.`);
       }
+      
+      // Check individual file size limit
+      const fileSizeMB = file.size / (1024 * 1024);
+      if (fileSizeMB > MAX_SINGLE_FILE_SIZE_MB) {
+        errors.push(`File "${file.name}" is ${fileSizeMB.toFixed(1)}MB which exceeds the ${MAX_SINGLE_FILE_SIZE_MB}MB limit. Please compress or resize the image.`);
+      }
     });
     
     return { valid: errors.length === 0, errors };
   };
 
-  // Smart distribution: larger files go to later batches for better UX
-  const createBatches = (files: File[], batchSize: number): File[][] => {
+  // Smart batching: considers both file count and total size
+  const createBatches = (files: File[]): File[][] => {
     if (files.length === 0) return [];
     
-    // Calculate number of batches needed
-    const numBatches = Math.ceil(files.length / batchSize);
-    const batches: File[][] = Array.from({ length: numBatches }, () => []);
+    const batches: File[][] = [];
+    const maxBatchSizeBytes = MAX_BATCH_SIZE_MB * 1024 * 1024; // Convert MB to bytes
     
-    // Sort files by size (largest first) for smart distribution
-    const sortedFiles = [...files].sort((a, b) => b.size - a.size);
+    // Sort files by size (smallest first) for better packing
+    const sortedFiles = [...files].sort((a, b) => a.size - b.size);
     
-    // Distribute files round-robin starting from the last batch (back-loading)
-    // This puts largest files in later batches for better user psychology
-    sortedFiles.forEach((file, index) => {
-      const batchIndex = (numBatches - 1) - (index % numBatches);
-      batches[batchIndex].push(file);
-    });
+    let currentBatch: File[] = [];
+    let currentBatchSize = 0;
+    
+    for (const file of sortedFiles) {
+      const fileSizeBytes = file.size;
+      
+      // Check if adding this file would exceed limits
+      const wouldExceedFileLimit = currentBatch.length >= MAX_FILES_PER_BATCH;
+      const wouldExceedSizeLimit = (currentBatchSize + fileSizeBytes) > maxBatchSizeBytes;
+      
+      // Start new batch if we would exceed either limit
+      if (currentBatch.length > 0 && (wouldExceedFileLimit || wouldExceedSizeLimit)) {
+        batches.push([...currentBatch]);
+        currentBatch = [];
+        currentBatchSize = 0;
+      }
+      
+      // Add file to current batch
+      currentBatch.push(file);
+      currentBatchSize += fileSizeBytes;
+      
+      // If a single file exceeds the size limit, put it in its own batch
+      if (fileSizeBytes > maxBatchSizeBytes && currentBatch.length === 1) {
+        batches.push([...currentBatch]);
+        currentBatch = [];
+        currentBatchSize = 0;
+      }
+    }
+    
+    // Add the last batch if it has files
+    if (currentBatch.length > 0) {
+      batches.push(currentBatch);
+    }
     
     return batches;
   };
@@ -134,8 +168,25 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
       return;
     }
     
-    // Create batches
-    const batches = createBatches(files, BATCH_SIZE);
+    // Create batches with size-aware logic
+    const batches = createBatches(files);
+    
+    // Log batching information for debugging
+    const totalSizeMB = files.reduce((sum, file) => sum + file.size, 0) / (1024 * 1024);
+    console.log(`📦 Created ${batches.length} batches for ${files.length} files (${totalSizeMB.toFixed(1)}MB total)`);
+    batches.forEach((batch, index) => {
+      const batchSizeMB = batch.reduce((sum, file) => sum + file.size, 0) / (1024 * 1024);
+      console.log(`  Batch ${index + 1}: ${batch.length} files, ${batchSizeMB.toFixed(1)}MB`);
+    });
+    
+    // Show user-friendly message about batching
+    if (batches.length > 1) {
+      toast({
+        title: "Smart Upload",
+        description: `Your ${files.length} photos will be uploaded in ${batches.length} optimized batches for better performance.`,
+        variant: "default"
+      });
+    }
     
     // Initialize progress
     setUploadProgress({

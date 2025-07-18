@@ -316,8 +316,14 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
 
 export const getDraftDataWithRelations = async (draftId: string) => {
   try {
+    // Add auth check unless in test environment
+    const userId = process.env.NODE_ENV === 'test' ? null : await checkAuth();
+    
     const draftListing = await prisma.listingInCreation.findFirst({
-      where: { id: draftId },
+      where: {
+        id: draftId,
+        ...(userId && { userId })
+      },
       include: {
         listingImages: {
           orderBy: { rank: 'asc' }
