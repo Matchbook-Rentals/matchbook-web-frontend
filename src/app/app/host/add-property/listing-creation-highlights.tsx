@@ -47,8 +47,8 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     },
     {
       id: "townhouse",
-      name: "Town House",
-      icon: <Image src="/host-dashboard/svg/townhouse-2.svg" alt="Town House" width={28} height={28} />
+      name: "Townhouse",
+      icon: <Image src="/host-dashboard/svg/townhouse-2.svg" alt="Townhouse" width={28} height={28} />
     },
     {
       id: "private-room",
