@@ -1543,7 +1543,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
             </div>
 
             {editingSections['details'] ? (
-              <div className="grid grid-cols-3 gap-4 w-full">
+              <div className="flex justify-between flex-wrap md:grid md:grid-cols-3 md:gap-4 w-full ">
                 <div className="text-center">
                   <label className="text-sm font-medium text-gray-700">Bedrooms</label>
                   <div className="flex items-center gap-3 px-3 py-2 mt-1 w-fit mx-auto">
@@ -1594,14 +1594,14 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                     </Button>
                   </div>
                 </div>
-                <div className="text-center">
+                <div className="text-center w-auto min-w-0 max-w-[calc(50%-16px)] ">
                   <label className="text-sm font-medium text-gray-700">Square Feet</label>
                   <Input
                     type="number"
                     min="0"
                     value={formData.squareFootage || ''}
                     onChange={(e) => updateFormData('squareFootage', parseInt(e.target.value) || null)}
-                    className="mt-1"
+                    className="mt-1 "
                     placeholder="Square footage"
                   />
                 </div>
