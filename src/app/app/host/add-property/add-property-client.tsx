@@ -424,6 +424,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
     setIsSavingDraft(true);
     try {
       console.log('🚀 [handleSaveExit] Starting draft save with current pricing:', listingPricing.monthlyPricing);
+      console.log('🚀 [handleSaveExit] Current amenities:', listingAmenities);
       
       // Use the extracted helper function
       const savedDraft = await handleSaveAndExit(

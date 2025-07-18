@@ -589,7 +589,12 @@ export function transformComponentStateToDraftData(componentState: {
       months: p.months,
       price: p.price ? Number(p.price) : 0,
       utilitiesIncluded: p.utilitiesIncluded
-    }))
+    })),
+    // Photos data
+    listingPhotos: componentState.listingPhotos,
+    selectedPhotos: componentState.selectedPhotos,
+    // Amenities array (needed for handleSaveDraft)
+    amenities: componentState.listingAmenities
   };
   
   // Process amenities from the array to set the proper boolean values
