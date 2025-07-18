@@ -21,6 +21,7 @@ import { ListingCreationCard } from '@/app/app/host/add-property/listing-creatio
 import { ListingCreationCounter } from '@/app/app/host/add-property/listing-creation-counter';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { updateListing, updateListingPhotos, updateListingLocation, updateListingMonthlyPricing, getListingWithPricing } from '@/app/actions/listings';
+import { revalidateListingCache } from '@/app/app/host/_actions';
 import { toast } from '@/components/ui/use-toast';
 import { PropertyType } from '@/constants/enums';
 import * as AmenitiesIcons from '@/components/icons/amenities';
@@ -519,6 +520,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       console.log('Updating location with data:', locationData);
       const updatedListing = await updateListingLocation(listing.id, locationData);
       
+      // Invalidate listing cache
+      await revalidateListingCache(listing.id);
+      
       // Update the current listing with the new data
       setCurrentListing(updatedListing);
       setFormData(updatedListing);
@@ -634,6 +638,11 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           await updateListingMonthlyPricing(listing.id, monthlyPricingData);
         }
         
+        // Invalidate listing cache after pricing updates
+        if (Object.keys(updateData).length > 0 || termsWithPrices.length > 0) {
+          await revalidateListingCache(listing.id);
+        }
+        
         // Fetch the complete updated listing with monthly pricing
         const updatedListingWithPricing = await getListingWithPricing(listing.id);
         
@@ -685,6 +694,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         const result = await updateListingPhotos(listing.id, photos);
         
         if (result) {
+          // Invalidate listing cache after photo updates
+          await revalidateListingCache(listing.id);
+          
           // Update the current listing with the saved data
           const updatedListing = { ...currentListing, listingImages: result.listingImages };
           setCurrentListing(updatedListing);
@@ -717,6 +729,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         if (Object.keys(updateData).length > 0) {
           console.log(`Saving location section with data:`, updateData);
           const updatedListing = await updateListingLocation(listing.id, updateData);
+          
+          // Invalidate listing cache after location updates
+          await revalidateListingCache(listing.id);
           
           // Update the current listing with the new data
           setCurrentListing(updatedListing);
@@ -764,6 +779,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         if (Object.keys(updateData).length > 0) {
           console.log(`Saving section '${section}' with data:`, updateData);
           await updateListing(listing.id, updateData);
+          
+          // Invalidate listing cache after general updates
+          await revalidateListingCache(listing.id);
           
           // Update the current listing with the new data
           const updatedListing = { ...currentListing, ...updateData };

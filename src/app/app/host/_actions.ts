@@ -40,3 +40,11 @@ export const revalidateHostDashboard = async () => {
   revalidatePath("/app/host/dashboard");
   return { revalidated: true };
 };
+
+export const revalidateListingCache = async (listingId: string) => {
+  revalidatePath("/app/host/dashboard");
+  revalidatePath(`/app/host/${listingId}`);
+  revalidatePath(`/app/host/${listingId}/applications`);
+  revalidatePath(`/app/host/${listingId}/bookings`);
+  return { revalidated: true };
+};
