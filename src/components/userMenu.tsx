@@ -308,7 +308,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       <div className="group">
         {currentIsSignedIn ? (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className={mode === 'header' ? "flex items-center gap-2 rounded-md pl-2 cursor-pointer" : "flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]"}>
+          <PopoverTrigger data-testid="user-menu-trigger" className={mode === 'header' ? "flex items-center gap-2 rounded-md pl-2 cursor-pointer" : "flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]"}>
             {mode === 'header' ? (
               <>
                 <div className="flex items-center gap-3">
@@ -435,6 +435,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
               <div className="border-t border-gray-200">
                 <SignOutButton>
                   <button
+                    data-testid="sign-out-button"
                     onClick={() => {}}
                     className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset"
                   >
@@ -447,7 +448,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
         </Popover>
       ) : (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className="flex items-center gap-2 rounded-md p-2 cursor-pointer">
+          <PopoverTrigger data-testid="user-menu-trigger" className="flex items-center gap-2 rounded-md p-2 cursor-pointer">
             <div className="flex items-center gap-3">
               <div className="relative min-w-[38px] min-h-[38px] rounded-full flex items-end justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110" style={{backgroundColor: '#0B6E6E'}}>
                 <FaUserLarge className="text-white h-[24px] w-[24px]" />
@@ -465,7 +466,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
           <PopoverContent className="p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
-                <Link href="/sign-in" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
+                <Link href="/sign-in" data-testid="sign-in-button" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
                   Sign In
                 </Link>
                 <button onClick={() => setIsSupportOpen(true)} className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">

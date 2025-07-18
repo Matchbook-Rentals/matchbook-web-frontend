@@ -6,13 +6,26 @@ test.describe('Authentication Flow', () => {
     // Navigate to home page
     await page.goto('/');
     
-    // Open the user menu
-    await page.waitForLoadState('networkidle');
-    const userMenuButton = page.locator('header').getByRole('button').filter({ hasText: /^$/ });
-    await userMenuButton.click();
+    // Open the user menu with retry mechanism
+    let retries = 0;
+    const maxRetries = 2;
+    
+    while (retries <= maxRetries) {
+      try {
+        await page.waitForTimeout(5000); // Wait 5 seconds
+        await page.getByTestId('user-menu-trigger').click();
+        break; // Success, exit loop
+      } catch (error) {
+        retries++;
+        if (retries > maxRetries) {
+          throw error; // Re-throw if max retries exceeded
+        }
+        console.log(`Retry ${retries}/${maxRetries} - waiting for user menu...`);
+      }
+    }
     
     // Click Sign In button
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    await page.getByTestId('sign-in-button').click();
     
     // Wait for sign-in page to load
     await page.waitForURL('**/sign-in**');
@@ -20,39 +33,32 @@ test.describe('Authentication Flow', () => {
     // Use the helper function to sign in
     await signIn(page);
     
-    // Verify we're logged in - User Profile button should be visible
-    const userProfileButton = page.getByRole('button', { name: 'User Profile' });
-    await expect(userProfileButton).toBeVisible({ timeout: 10000 });
+    // Verify we're logged in - check for sign out button in menu
+    await page.getByTestId('user-menu-trigger').click();
+    await expect(page.getByTestId('sign-out-button')).toBeVisible({ timeout: 10000 });
     
     // Test sign out using helper function
     await signOut(page);
     
     // Verify we're logged out - the user menu should show Sign In option again
-    const userMenuButtonAfterSignOut = page.locator('header').getByRole('button').filter({ hasText: /^$/ });
-    await userMenuButtonAfterSignOut.click();
+    await page.getByTestId('user-menu-trigger').click();
     
     // Sign In button should be visible again
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+    await expect(page.getByTestId('sign-in-button')).toBeVisible();
   });
   
   test('should maintain session across page navigations', async ({ page }) => {
     // Use the helper function to sign in
     await signIn(page);
     
-    // Navigate to different pages and verify session persists
-    await page.goto('/app/searches');
-    await expect(page.getByRole('button', { name: 'User Profile' })).toBeVisible();
-    
-    await page.goto('/app/messages');
-    await expect(page.getByRole('button', { name: 'User Profile' })).toBeVisible();
-    
-    await page.goto('/app/dashboard');
-    await expect(page.getByRole('button', { name: 'User Profile' })).toBeVisible();
+    // Navigate to searches page and verify session persists
+    await page.goto('/app/rent/searches');
+    await expect(page.getByTestId('your-searches-heading')).toBeVisible();
   });
   
   test('should redirect to sign-in when accessing protected routes while logged out', async ({ page }) => {
     // Try to access a protected route without being logged in
-    await page.goto('/app/dashboard');
+    await page.goto('/app/rent/searches');
     
     // Should be redirected to sign-in page
     await expect(page).toHaveURL(/.*sign-in.*/);

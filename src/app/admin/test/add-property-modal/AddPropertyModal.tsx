@@ -45,7 +45,7 @@ export default function AddPropertyModal({
 
 
   const defaultTrigger = (
-    <BrandButton variant="default">
+    <BrandButton data-testid="add-property-trigger" variant="default">
       Add Property
     </BrandButton>
   )
@@ -64,6 +64,7 @@ export default function AddPropertyModal({
 
         <div className="flex flex-wrap md:flex-nowrap gap-4 w-full">
           <BrandButton 
+            data-testid="start-blank-button"
             variant="outline" 
             className="w-full  px-2"
             onClick={handleStartBlank}
@@ -71,6 +72,7 @@ export default function AddPropertyModal({
             Start with a blank listing
           </BrandButton>
           <BrandButton 
+            data-testid="pick-up-where-left-off-button"
             variant="default" 
             className="w-full "
             onClick={handlePickUpWhereLeftOff}

@@ -15,6 +15,7 @@ export const ListingCreationCard: React.FC<ListingCreationCardProps> = ({
 }) => {
   return (
     <div
+      data-testid={`card-${name.toLowerCase().replace(/\s+/g, '-')}`}
       className={` w-[145px] xs:w-[155px] sm:w-[165px] md:w-[194px] h-[103px] p-0 rounded-lg cursor-pointer ${
         isSelected
           ? "border-2 border-solid border-[#333333]"

@@ -39,7 +39,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
         <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
           <div className='flex items-end pb-2'>
           <div className='flex flex-col w-full sm:w-1/2'> {/* Adjust width for mobile buttons */}
-            <h1 className='text-[32px] font-medium mb-4'>Your Searches </h1>
+            <h1 data-testid="your-searches-heading" className='text-[32px] font-medium mb-4'>Your Searches </h1>
             <div className="flex flex-wrap gap-2"> {/* Wrapper for buttons */}
               {/* Original Button - Hidden on mobile */}
               <BrandButton

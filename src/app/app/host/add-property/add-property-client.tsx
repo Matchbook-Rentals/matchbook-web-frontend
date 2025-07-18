@@ -1165,6 +1165,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                     <div></div>
                   )}
                   <BrandButton 
+                    data-testid="next-button"
                     variant="default"
                     size="lg"
                     onClick={currentStep === 11 ? handleSubmitListing : currentStep === 12 ? () => setCurrentStep(11) : handleNext}
@@ -1235,6 +1236,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                   <div></div>
                 )}
                 <BrandButton 
+                  data-testid="next-button"
                   variant="default"
                   size="lg"
                   onClick={currentStep === 11 ? handleSubmitListing : currentStep === 12 ? () => setCurrentStep(11) : handleNext}

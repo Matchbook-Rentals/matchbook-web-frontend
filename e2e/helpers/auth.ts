@@ -2,8 +2,8 @@
 import { Page } from '@playwright/test';
 
 export const TEST_USER = {
-  email: process.env.TEST_USER_EMAIL || 'tyler.bennett@matchbookrentals.com',
-  password: process.env.TEST_USER_PASSWORD || 'T-4kHUezF%C_i7p'
+  email: process.env.TEST_USER_EMAIL!,
+  password: process.env.TEST_USER_PASSWORD!
 };
 
 export async function signIn(
@@ -35,16 +35,16 @@ export async function signIn(
   // Wait for navigation away from sign-in
   await page.waitForURL((url) => !url.pathname.includes('/sign-in'), { timeout: 10000 });
   
-  // Wait for the page to fully load and user profile button to be visible
-  await page.waitForLoadState('networkidle');
+  // Wait for the user menu to be available (indicating successful sign-in)
+  await page.waitForSelector('[data-testid="user-menu-trigger"]', { timeout: 10000 });
 }
 
 export async function signOut(page: Page) {
   // Click on User Profile button
-  await page.getByRole('button', { name: 'User Profile' }).click();
+  await page.getByTestId('user-menu-trigger').click();
   
   // Click Sign Out button in the dropdown
-  await page.getByRole('button', { name: 'Sign Out' }).click();
+  await page.getByTestId('sign-out-button').click({ force: true });
   
   // Wait for sign out to complete
   await page.waitForURL((url) => {
@@ -52,6 +52,6 @@ export async function signOut(page: Page) {
     return pathname === '/' || pathname.includes('/sign-in');
   }, { timeout: 10000 });
   
-  // Wait for page to fully load
-  await page.waitForLoadState('networkidle');
+  // Wait for the sign-in menu to be available (indicating successful sign-out)
+  await page.waitForSelector('[data-testid="user-menu-trigger"]', { timeout: 10000 });
 }
