@@ -2208,7 +2208,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
       {/* Location Update Brand Dialog */}
       <Dialog open={showLocationBrandDialog} onOpenChange={setShowLocationBrandDialog}>
-        <DialogContent className="max-w-[500px]">
+        <DialogContent className="max-w-[500px] sm:top-[25%]  sm:translate-y-[-20%] ">
           <div className="space-y-6 text-center">
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
