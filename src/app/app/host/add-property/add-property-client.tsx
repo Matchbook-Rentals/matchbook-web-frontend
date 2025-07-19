@@ -38,12 +38,6 @@ import {
   validateVerifyPricing,
   validateDeposits,
   validateAllSteps,
-  type ListingHighlights,
-  type ListingLocation,
-  type ListingRooms,
-  type ListingBasics,
-  type ListingPricing,
-  type NullableListingImage
 } from "@/lib/listing-actions-helpers";
 import LocationForm from "./location-form";
 import LocationInput from "./listing-creation-location-input";
@@ -155,8 +149,6 @@ export default function AddPropertyclient({ draftData }: AddPropertyClientProps)
   
   // Track validation errors
   const [validationErrors, setValidationErrors] = useState<Record<number, string[]>>({});
-  
-  // No longer need isLoadingDraft state since data is passed as prop
   
   // State to track if admin skip buttons are hidden
   const [adminSkipButtonsHidden, setAdminSkipButtonsHidden] = useState<boolean>(false);

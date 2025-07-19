@@ -138,5 +138,14 @@ export async function deleteListing(listingId: string) {
 
   revalidatePath('/admin/listing-approval')
   
+  // Also revalidate host dashboard pages in case the host is viewing their listings
+  revalidatePath('/app/host/dashboard')
+  revalidatePath('/app/host/dashboard/overview')
+  revalidatePath('/app/host/dashboard/listings')
+  revalidatePath('/app/host/listings')
+  
+  // Invalidate the specific listing detail page
+  revalidatePath(`/app/host/${listingId}`)
+  
   return { success: true }
 }

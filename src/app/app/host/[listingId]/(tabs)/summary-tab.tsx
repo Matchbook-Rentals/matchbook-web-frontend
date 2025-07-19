@@ -1752,7 +1752,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       max={Math.max(...leaseTerms.map(t => t.months))}
                       variant="outline"
                       buttonSize="sm"
-                      containerClassName='min-w-[200px]'
+                      containerClassName='sm:min-w-[200px]'
                       textSize="lg"
                       monthSuffixClassName="hidden md:inline"
                       onDecrement={() => {
@@ -1783,6 +1783,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                       onChange={() => {}} // Handled by custom logic
                       min={Math.min(...leaseTerms.map(t => t.months))}
                       max={12}
+                      containerClassName='sm:min-w-[200px]'
                       variant="outline"
                       buttonSize="sm"
                       textSize="lg"

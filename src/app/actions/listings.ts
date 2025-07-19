@@ -7,6 +7,7 @@ import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Impo
 import { statesInRadiusData } from "@/constants/state-radius-data";
 import { isValid } from 'date-fns'; // Import date-fns for validation
 import { capNumberValue } from '@/lib/number-validation';
+import { revalidatePath } from "next/cache";
 
 
 /**
@@ -451,6 +452,15 @@ export const deleteListing = async (listingId: string) => {
     await prisma.listing.delete({
       where: { id: listingId },
     });
+
+    // Revalidate cache after successful listing deletion
+    revalidatePath('/app/host/dashboard');
+    revalidatePath('/app/host/dashboard/overview');
+    revalidatePath('/app/host/dashboard/listings');
+    revalidatePath('/app/host/listings');
+    
+    // Invalidate the specific listing detail page
+    revalidatePath(`/app/host/${listingId}`);
 
     return { success: true, message: 'Listing deleted successfully' };
   } catch (error) {

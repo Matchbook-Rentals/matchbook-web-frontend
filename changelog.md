@@ -25,3 +25,9 @@
 - Added comprehensive cache revalidation for all Listing In Creation (LIC) operations
 - Cache invalidation now occurs for LIC creation, updates, and deletions across add-property and dashboard pages
 - Ensures draft state changes are immediately reflected in the UI
+
+## Comprehensive Cache Invalidation for Listing Deletions
+- Added cache revalidation to listing deletion operations for both user and admin deletion flows
+- Invalidates host dashboard pages, overview, listings pages, and specific listing detail pages
+- Ensures immediate UI updates when listings are deleted through host interface or admin actions
+- Prevents stale cached data on listing detail pages after deletion
