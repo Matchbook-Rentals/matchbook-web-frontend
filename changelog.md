@@ -18,3 +18,10 @@
 - Added `revalidateListingCache()` function to invalidate host dashboard, listing details, applications, and bookings pages
 - Integrated cache invalidation in summary-tab.tsx after all listing update operations (location, pricing, photos, general updates)
 - Ensures users see latest listing data immediately after updates across all relevant pages
+
+## Listing Creation Flow Simplification and Cache Management
+- Simplified add-property-client.tsx submission logic to use unified flow for both draft and non-draft listings
+- Removed complex branching logic that handled draft vs new listing submissions differently
+- Added comprehensive cache revalidation for all Listing In Creation (LIC) operations
+- Cache invalidation now occurs for LIC creation, updates, and deletions across add-property and dashboard pages
+- Ensures draft state changes are immediately reflected in the UI
