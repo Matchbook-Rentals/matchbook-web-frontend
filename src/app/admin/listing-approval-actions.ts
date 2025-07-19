@@ -80,7 +80,12 @@ export async function getListingDetails(listingId: string) {
           rank: 'asc'
         }
       },
-      bedrooms: true
+      bedrooms: true,
+      monthlyPricing: {
+        orderBy: {
+          months: 'asc'
+        }
+      }
     }
   })
 

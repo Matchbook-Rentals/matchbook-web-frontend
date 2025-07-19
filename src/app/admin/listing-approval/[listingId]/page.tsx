@@ -47,27 +47,46 @@ export default async function ListingApprovalDetail({
             <TabsList className="mb-4">
               <TabsTrigger value="details">Details</TabsTrigger>
               <TabsTrigger value="images">Images ({listing.listingImages.length})</TabsTrigger>
-              <TabsTrigger value="bedrooms">Bedrooms ({listing.bedrooms.length})</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="details" className="space-y-4">
-              <div>
-                <h2 className="text-lg font-semibold mb-2">Property Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p><span className="font-medium">Type:</span> {listing.category}</p>
-                    <p><span className="font-medium">Bedrooms:</span> {listing.roomCount}</p>
-                    <p><span className="font-medium">Bathrooms:</span> {listing.bathroomCount}</p>
-                    <p><span className="font-medium">Square Footage:</span> {listing.squareFootage}</p>
-                    <p><span className="font-medium">Furnished:</span> {listing.furnished ? 'Yes' : 'No'}</p>
-                    <p><span className="font-medium">Utilities Included:</span> {listing.utilitiesIncluded ? 'Yes' : 'No'}</p>
-                    <p><span className="font-medium">Pets Allowed:</span> {listing.petsAllowed ? 'Yes' : 'No'}</p>
+            <TabsContent value="details" className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h2 className="text-lg font-semibold mb-2">Property Information</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p><span className="font-medium">Type:</span> {listing.category}</p>
+                      <p><span className="font-medium">Bedrooms:</span> {listing.roomCount}</p>
+                      <p><span className="font-medium">Bathrooms:</span> {listing.bathroomCount}</p>
+                      <p><span className="font-medium">Square Footage:</span> {listing.squareFootage}</p>
+                      <p><span className="font-medium">Furnished:</span> {listing.furnished ? 'Yes' : 'No'}</p>
+                      <p><span className="font-medium">Utilities Included:</span> {listing.utilitiesIncluded ? 'Yes' : 'No'}</p>
+                      <p><span className="font-medium">Pets Allowed:</span> {listing.petsAllowed ? 'Yes' : 'No'}</p>
+                    </div>
+                    <div>
+                      <p><span className="font-medium">Lease Length:</span> {listing.shortestLeaseLength} - {listing.longestLeaseLength} months</p>
+                      <p><span className="font-medium">Deposit:</span> {listing.depositSize ? `$${listing.depositSize}` : 'Not specified'}</p>
+                      <p><span className="font-medium">Marked Active by User:</span> {listing.markedActiveByUser ? 'Yes' : 'No'}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p><span className="font-medium">Price Range:</span> ${listing.shortestLeasePrice} - ${listing.longestLeasePrice}</p>
-                    <p><span className="font-medium">Lease Length:</span> {listing.shortestLeaseLength} - {listing.longestLeaseLength} months</p>
-                    <p><span className="font-medium">Deposit:</span> {listing.depositSize ? `$${listing.depositSize}` : 'Not specified'}</p>
-                    <p><span className="font-medium">Background Check Required:</span> {listing.requireBackgroundCheck ? 'Yes' : 'No'}</p>
+                </div>
+
+                <div>
+                  <h2 className="text-lg font-semibold mb-2">Amenities</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {Object.entries(listing)
+                      .filter(([key, value]) => 
+                        typeof value === 'boolean' && 
+                        value === true && 
+                        !['isApproved', 'isTestListing', 'furnished', 'utilitiesIncluded', 'petsAllowed', 'requireBackgroundCheck', 'markedActiveByUser'].includes(key)
+                      )
+                      .map(([key]) => (
+                        <Badge key={key} variant="secondary" className="justify-center">
+                          {key
+                            .replace(/([A-Z])/g, ' $1')
+                            .replace(/^./, str => str.toUpperCase())}
+                        </Badge>
+                      ))}
                   </div>
                 </div>
               </div>
@@ -77,22 +96,42 @@ export default async function ListingApprovalDetail({
                 <p className="whitespace-pre-wrap">{listing.description}</p>
               </div>
 
-              <div>
-                <h2 className="text-lg font-semibold mb-2">Amenities</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                  {Object.entries(listing)
-                    .filter(([key, value]) => 
-                      typeof value === 'boolean' && 
-                      value === true && 
-                      !['isApproved', 'isTestListing', 'furnished', 'utilitiesIncluded', 'petsAllowed', 'requireBackgroundCheck'].includes(key)
-                    )
-                    .map(([key]) => (
-                      <Badge key={key} variant="secondary" className="justify-center">
-                        {key
-                          .replace(/([A-Z])/g, ' $1')
-                          .replace(/^./, str => str.toUpperCase())}
-                      </Badge>
-                    ))}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="lg:col-span-2">
+                  <h2 className="text-lg font-semibold mb-2">Pricing</h2>
+                  {listing.monthlyPricing && listing.monthlyPricing.length > 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm border-collapse border border-gray-300">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="border border-gray-300 px-3 py-2 text-left font-medium">Length</th>
+                            <th className="border border-gray-300 px-3 py-2 text-left font-medium">Price</th>
+                            <th className="border border-gray-300 px-3 py-2 text-left font-medium">Utils</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {listing.monthlyPricing.map((pricing) => (
+                            <tr key={pricing.months}>
+                              <td className="border border-gray-300 px-3 py-2">{pricing.months} month{pricing.months > 1 ? 's' : ''}</td>
+                              <td className="border border-gray-300 px-3 py-2 font-medium">${pricing.price.toLocaleString()}</td>
+                              <td className="border border-gray-300 px-3 py-2">
+                                {pricing.utilitiesIncluded ? (
+                                  <span className="text-green-600 text-xs font-medium">Included</span>
+                                ) : (
+                                  <span className="text-red-600 text-xs font-medium">Not included</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div>
+                      <p><span className="font-medium">Price Range:</span></p>
+                      <p className="text-lg">${listing.shortestLeasePrice} - ${listing.longestLeasePrice}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </TabsContent>
@@ -112,18 +151,6 @@ export default async function ListingApprovalDetail({
               </div>
             </TabsContent>
             
-            <TabsContent value="bedrooms">
-              <div className="space-y-4">
-                {listing.bedrooms.map((bedroom) => (
-                  <Card key={bedroom.id}>
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold">Bedroom {bedroom.bedroomNumber}</h3>
-                      <p><span className="font-medium">Bed Type:</span> {bedroom.bedType}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
           </Tabs>
 
           {listing.approvalStatus === 'pendingReview' && (
