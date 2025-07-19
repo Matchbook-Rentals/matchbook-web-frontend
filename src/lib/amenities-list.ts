@@ -99,6 +99,7 @@ export const iconAmenities = [
 
   // Accessibility
   { code: 'wheelchairAccess', label: 'Wheelchair Accessible', icon: AmenitiesIcons.UpdatedWheelchairAccessibleIcon, category: 'accessibility' },
+  { code: 'keylessEntry', label: 'Keyless Entry', icon: AmenitiesIcons.UpdatedKeylessEntryIcon, category: 'accessibility' },
   { code: 'alarmSystem', label: 'Alarm System', icon: AmenitiesIcons.UpdatedAlarmSystemIcon, category: 'accessibility' },
   { code: 'gatedEntry', label: 'Gated Entry', icon: AmenitiesIcons.UpdatedGatedEntryIcon, category: 'accessibility' },
   { code: 'smokeDetector', label: 'Smoke Detector', icon: AmenitiesIcons.UpdatedSmokeDetectorIcon, category: 'accessibility' },

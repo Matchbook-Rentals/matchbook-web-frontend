@@ -992,7 +992,24 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         displayAmenities.push(amenity);
       }
     }
-    return displayAmenities;
+    
+    // Sort by category priority: laundry, accessibility, basics, then rest
+    const categoryOrder = {
+      'laundry': 1,
+      'accessibility': 2,
+      'basics': 3,
+      'kitchen': 4,
+      'location': 5,
+      'luxury': 6,
+      'other': 7,
+      'parking': 8
+    };
+    
+    return displayAmenities.sort((a, b) => {
+      const orderA = categoryOrder[a.category as keyof typeof categoryOrder] || 999;
+      const orderB = categoryOrder[b.category as keyof typeof categoryOrder] || 999;
+      return orderA - orderB;
+    });
   };
 
   // Get selected amenities for editing

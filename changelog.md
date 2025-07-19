@@ -1,5 +1,10 @@
 # Changelog
 
+## Amenities Display Improvements
+- Fixed keyless entry not appearing as badge in summary tab by adding it to iconAmenities array
+- Implemented category-based sorting for amenity badges with priority: laundry, accessibility, basics, then others
+- Enhanced amenity display logic to show amenities in consistent, meaningful order
+
 ## Auth Utility Improvements
 - Enhanced checkAuth function with retry logic for Clerk timing issues
 - Added 200ms delay and retry when userId is not immediately available
