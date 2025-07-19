@@ -672,7 +672,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       setIsSubmittingListing(true);
 
       try {
-        // Use the extracted helper function
+        // Use the normal submission logic for both draft and non-draft listings
         const listingData = {
           title: listingBasics.title,
           description: listingBasics.description,
@@ -716,6 +716,8 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
           }))
         };
 
+        // Always use the normal submission logic - the helper will handle draft vs non-draft internally
+        // If there's a draftId, the draft will be automatically deleted after successful listing creation
         const createdListing = await handleSubmitListingHelper(
           listingData,
           user?.id || '',

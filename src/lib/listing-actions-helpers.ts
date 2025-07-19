@@ -1,6 +1,7 @@
 // Note: Prisma operations have been moved to server actions in @/app/actions/listings.ts and @/app/actions/listings-in-creation.ts
-import { getDraftWithImages, createListingFromDraftTransaction, saveDraftTransaction, getDraftDataWithRelations } from '@/app/actions/listings-in-creation';
+import { getDraftWithImages, createListingFromDraftTransaction, saveDraftTransaction, getDraftDataWithRelations, deleteAllUserDrafts } from '@/app/actions/listings-in-creation';
 import { createListingTransaction } from '@/app/actions/listings';
+import { finished } from 'stream';
 
 export interface ListingData {
   listingImages?: Array<{
@@ -179,14 +180,14 @@ export async function handleSaveDraft(draftData: any, userId: string, draftId?: 
     })),
     monthlyPricing: draftData.monthlyPricing || []
   };
-  
+
   // Process amenities from the array to set the proper boolean values
   if (draftData.amenities && draftData.amenities.length > 0) {
     draftData.amenities.forEach(amenity => {
       processedDraftData[amenity] = true;
     });
   }
-  
+
   // When updating existing draft, we need to explicitly clear old amenities
   // This mirrors the behavior in the original add-property-client.tsx
   if (draftId && draftData.amenities) {
@@ -206,7 +207,7 @@ export async function handleSaveDraft(draftData: any, userId: string, draftId?: 
       'storageShed', 'gatedEntry', 'smokeDetector', 'carbonMonoxide', 'keylessEntry',
       'secureLobby', 'tv', 'workstation'
     ];
-    
+
     // Clear all amenities that are not in the new amenities list
     allAmenities.forEach(amenity => {
       if (!draftData.amenities.includes(amenity)) {
@@ -305,20 +306,16 @@ export async function handleSubmitListing(listingData: any, userId: string, draf
       finalListing[amenity] = true;
     });
   }
-  
+
   // If we have a draftId, submit the draft to create a listing
   // Otherwise, create a new listing directly
+
+ let finishedListing = await createListing(finalListing, userId);
   if (draftId) {
-    return await createListingFromDraft(draftId, userId, {
-      listingImages: listingImagesFinal.map((photo) => ({
-        url: photo.url,
-        rank: photo.rank
-      })),
-      monthlyPricing: listingData.monthlyPricing || []
-    });
-  } else {
-    return await createListing(finalListing, userId);
+     await deleteAllUserDrafts(userId);
   }
+  return finishedListing;
+
 }
 
 /**
@@ -457,12 +454,12 @@ export function initializePhotos(draftData?: any) {
   if (draftData) {
     const listingPhotos = draftData.listingPhotos || [];
     const selectedPhotos = draftData.selectedPhotos || [];
-    
+
     // Ensure selectedPhotos are properly filtered and sorted by rank
     const validSelectedPhotos = selectedPhotos
       .filter((photo: any) => photo.url && photo.rank !== null && photo.rank !== undefined)
       .sort((a: any, b: any) => (a.rank || 0) - (b.rank || 0));
-    
+
     return {
       listingPhotos,
       selectedPhotos: validSelectedPhotos
@@ -596,14 +593,14 @@ export function transformComponentStateToDraftData(componentState: {
     // Amenities array (needed for handleSaveDraft)
     amenities: componentState.listingAmenities
   };
-  
+
   // Process amenities from the array to set the proper boolean values
   if (componentState.listingAmenities && componentState.listingAmenities.length > 0) {
     componentState.listingAmenities.forEach(amenity => {
       result[amenity] = true;
     });
   }
-  
+
   return result;
 }
 
@@ -620,12 +617,12 @@ export async function saveDraftViaAPI(draftData: any): Promise<any> {
     },
     body: JSON.stringify(draftData),
   });
-  
+
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || 'Failed to save listing draft');
   }
-  
+
   return await response.json();
 }
 
@@ -682,23 +679,23 @@ export async function handleSaveAndExit(
 ): Promise<any> {
   // Transform component state to draft data format
   const draftData = transformComponentStateToDraftData(componentState);
-  
+
   // Save via API
   try {
     const savedDraft = await saveDraftViaAPI(draftData);
-    
+
     // Call success callback if provided
     if (callbacks?.onSuccess) {
       callbacks.onSuccess(savedDraft);
     }
-    
+
     return savedDraft;
   } catch (error) {
     // Call error callback if provided
     if (callbacks?.onError) {
       callbacks.onError(error as Error);
     }
-    
+
     throw error;
   }
 }
@@ -710,7 +707,7 @@ export async function loadDraftData(draftId: string) {
   if (!draftListing) {
     throw new Error('Draft not found');
   }
-  
+
 
 
   // Transform the database format to add-property-client format
@@ -718,12 +715,12 @@ export async function loadDraftData(draftId: string) {
     // Basic info
     title: draftListing.title || "",
     description: draftListing.description || "",
-    
+
     // Highlights
     category: draftListing.category,
     petsAllowed: draftListing.petsAllowed || false,
     furnished: draftListing.furnished || false,
-    
+
     // Location
     locationString: draftListing.locationString || null,
     latitude: draftListing.latitude || null,
@@ -734,13 +731,13 @@ export async function loadDraftData(draftId: string) {
     streetAddress2: draftListing.streetAddress2 || null,
     postalCode: draftListing.postalCode || null,
     country: "United States",
-    
+
     // Rooms
     roomCount: draftListing.roomCount || 1,
     bathroomCount: draftListing.bathroomCount || 1,
     guestCount: draftListing.guestCount || 1,
     squareFootage: draftListing.squareFootage || null,
-    
+
     // Pricing and deposits
     depositSize: draftListing.depositSize !== null ? draftListing.depositSize : null,
     petDeposit: draftListing.petDeposit !== null ? draftListing.petDeposit : null,
@@ -748,14 +745,14 @@ export async function loadDraftData(draftId: string) {
     rentDueAtBooking: draftListing.rentDueAtBooking !== null ? draftListing.rentDueAtBooking : null,
     shortestLeaseLength: draftListing.shortestLeaseLength || 1,
     longestLeaseLength: draftListing.longestLeaseLength || 12,
-    
+
     // Photos
     listingPhotos: [] as any[],
     selectedPhotos: [] as any[],
-    
+
     // Amenities (convert boolean fields back to array)
     amenities: [] as string[],
-    
+
     // Monthly pricing
     monthlyPricing: [] as any[]
   };
@@ -769,9 +766,9 @@ export async function loadDraftData(draftId: string) {
       category: image.category,
       rank: image.rank,
     }));
-    
+
     transformedData.listingPhotos = loadedPhotos;
-    
+
     // Extract selected photos (ranks 1-4) and sort by rank
     const selectedFromDraft = loadedPhotos
       .filter(photo => photo.rank && photo.rank >= 1 && photo.rank <= 4)
@@ -782,12 +779,12 @@ export async function loadDraftData(draftId: string) {
   // Process amenities (convert boolean fields back to array format)
   const amenities: string[] = [];
   Object.entries(draftListing).forEach(([key, value]) => {
-    if (value === true && 
-        key !== 'furnished' && 
-        key !== 'petsAllowed' && 
-        key !== 'requireBackgroundCheck' && 
-        key !== 'varyPricingByLength' && 
-        key !== 'isApproved') {
+    if (value === true &&
+      key !== 'furnished' &&
+      key !== 'petsAllowed' &&
+      key !== 'requireBackgroundCheck' &&
+      key !== 'varyPricingByLength' &&
+      key !== 'isApproved') {
       amenities.push(key);
     }
   });
@@ -796,11 +793,11 @@ export async function loadDraftData(draftId: string) {
   // Process monthly pricing
   const shortestStay = draftListing.shortestLeaseLength || 1;
   const longestStay = draftListing.longestLeaseLength || 12;
-  
+
   // Use the included monthlyPricing relationship
-  
+
   let monthlyPricing: any[] = [];
-  
+
   if (draftListing.monthlyPricing && draftListing.monthlyPricing.length > 0) {
     // Use saved pricing data from the relationship
     monthlyPricing = draftListing.monthlyPricing.map((p: any) => {
@@ -820,7 +817,7 @@ export async function loadDraftData(draftId: string) {
       });
     }
   }
-  
+
   transformedData.monthlyPricing = monthlyPricing;
 
 
@@ -888,77 +885,77 @@ export interface NullableListingImage {
 
 export function validateHighlights(listingHighlights: ListingHighlights): string[] {
   const errors: string[] = [];
-  
+
   if (!listingHighlights.category) {
     errors.push("You must select a property type");
   }
-  
+
   if (listingHighlights.furnished === null) {
     errors.push("You must select a furnishing option");
   }
-  
+
   if (listingHighlights.petsAllowed === null) {
     errors.push("You must specify if pets are allowed");
   }
-  
+
   return errors;
 }
 
 export function validateLocation(listingLocation: ListingLocation): string[] {
   const errors: string[] = [];
-  
+
   if (!listingLocation.streetAddress1) {
     errors.push("Street address is required");
   }
-  
+
   if (!listingLocation.city) {
     errors.push("City is required");
   }
-  
+
   if (!listingLocation.state) {
     errors.push("State is required");
   }
-  
+
   if (!listingLocation.postalCode) {
     errors.push("Postal code is required");
   }
-  
+
   return errors;
 }
 
 export function validateRooms(listingRooms: ListingRooms): string[] {
   const errors: string[] = [];
-  
+
   if (!listingRooms.bedrooms || listingRooms.bedrooms < 1) {
     errors.push("Number of bedrooms is required");
   }
-  
+
   if (!listingRooms.bathrooms || listingRooms.bathrooms < 1) {
     errors.push("Number of bathrooms is required");
   }
-  
+
   if (!listingRooms.squareFeet) {
     errors.push("Square footage is required");
   }
-  
+
   return errors;
 }
 
 export function validateBasics(listingBasics: ListingBasics): string[] {
   const errors: string[] = [];
-  
+
   if (!listingBasics.title) {
     errors.push("Title is required");
   } else if (listingBasics.title.length < 5) {
     errors.push("Title must be at least 5 characters");
   }
-  
+
   if (!listingBasics.description) {
     errors.push("Description is required");
   } else if (listingBasics.description.length < 20) {
     errors.push("Description must be at least 20 characters");
   }
-  
+
   return errors;
 }
 
@@ -966,13 +963,13 @@ export function validatePhotos(listingPhotos: NullableListingImage[]): string[] 
   const errors: string[] = [];
   const validPhotos = listingPhotos?.filter(photo => photo.url) || [];
   const validPhotoCount = validPhotos.length;
-  
+
   if (validPhotoCount === 0) {
     errors.push("You must upload at least 4 photos");
   } else if (validPhotoCount < 4) {
     errors.push(`You need to upload ${4 - validPhotoCount} more photo${validPhotoCount === 3 ? '' : 's'} (minimum 4 required)`);
   }
-  
+
   return errors;
 }
 
@@ -997,71 +994,71 @@ export function validateAmenities(listingAmenities: string[]): string[] {
 
 export function validatePricing(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
-  
+
   // Step 7 validation - check basic settings
   if (listingPricing.shortestStay < 1 || listingPricing.shortestStay > 12) {
     errors.push("Shortest stay must be between 1 and 12 months");
   }
-  
+
   if (listingPricing.longestStay < 1 || listingPricing.longestStay > 12) {
     errors.push("Longest stay must be between 1 and 12 months");
   }
-  
+
   if (listingPricing.shortestStay > listingPricing.longestStay) {
     errors.push("Shortest stay cannot be longer than longest stay");
   }
-  
+
   return errors;
 }
 
 export function validateVerifyPricing(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
-  
-  
+
+
   // Check each pricing entry
   const missingPrices: number[] = [];
   const invalidPrices: number[] = [];
-  
+
   listingPricing.monthlyPricing.forEach(p => {
-    
+
     // Check if price is missing (empty, null, undefined)
     if (p.price === null || p.price === undefined || p.price === '') {
       missingPrices.push(p.months);
       return;
     }
-    
+
     // Convert to number and validate
     const priceAsNumber = parseFloat(p.price);
     if (isNaN(priceAsNumber) || priceAsNumber < 0) {
       invalidPrices.push(p.months);
     }
   });
-  
+
   if (missingPrices.length > 0) {
     errors.push(`Please set prices for all ${listingPricing.monthlyPricing.length} lease lengths`);
   }
-  
+
   if (invalidPrices.length > 0) {
     errors.push("All prices must be valid non-negative numbers");
   }
-  
+
   return errors;
 }
 
 export function validateDeposits(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
-  
+
   // Validate rent due at booking doesn't exceed lowest monthly rent
   if (listingPricing.rentDueAtBooking && listingPricing.rentDueAtBooking !== '') {
     const rentDueAmount = parseFloat(listingPricing.rentDueAtBooking);
-    
+
     if (!isNaN(rentDueAmount) && rentDueAmount > 0) {
       // Find the lowest monthly rent price from the pricing array
       const validPrices = listingPricing.monthlyPricing
         .filter(p => p.price && p.price !== '' && p.price !== '0')
         .map(p => parseFloat(p.price))
         .filter(price => !isNaN(price) && price > 0);
-      
+
       if (validPrices.length > 0) {
         const lowestPrice = Math.min(...validPrices);
         if (rentDueAmount > lowestPrice) {
@@ -1070,7 +1067,7 @@ export function validateDeposits(listingPricing: ListingPricing): string[] {
       }
     }
   }
-  
+
   return errors;
 }
 
@@ -1090,41 +1087,41 @@ export function validateAllSteps(formData: {
   listingPricing: ListingPricing;
 }): Record<number, string[]> {
   const allErrors: Record<number, string[]> = {};
-  
+
   // Validate each step
   const highlightErrors = validateHighlights(formData.listingHighlights);
   if (highlightErrors.length > 0) allErrors[0] = highlightErrors;
-  
+
   const locationErrors = validateLocation(formData.listingLocation);
   // Location validation applies to both steps 1 and 2 (input and confirmation)
   if (locationErrors.length > 0) {
     allErrors[1] = locationErrors;
     allErrors[2] = locationErrors;
   }
-  
+
   const roomsErrors = validateRooms(formData.listingRooms);
   if (roomsErrors.length > 0) allErrors[3] = roomsErrors;
-  
+
   const basicsErrors = validateBasics(formData.listingBasics);
   if (basicsErrors.length > 0) allErrors[4] = basicsErrors;
-  
+
   const photosErrors = validatePhotos(formData.listingPhotos);
   if (photosErrors.length > 0) allErrors[5] = photosErrors;
-  
+
   const featuredPhotosErrors = validateFeaturedPhotos(formData.selectedPhotos);
   if (featuredPhotosErrors.length > 0) allErrors[6] = featuredPhotosErrors;
-  
+
   const amenitiesErrors = validateAmenities(formData.listingAmenities);
   if (amenitiesErrors.length > 0) allErrors[7] = amenitiesErrors;
-  
+
   const pricingErrors = validatePricing(formData.listingPricing);
   if (pricingErrors.length > 0) allErrors[8] = pricingErrors;
-  
+
   const verifyPricingErrors = validateVerifyPricing(formData.listingPricing);
   if (verifyPricingErrors.length > 0) allErrors[9] = verifyPricingErrors;
-  
+
   const depositErrors = validateDeposits(formData.listingPricing);
   if (depositErrors.length > 0) allErrors[10] = depositErrors;
-  
+
   return allErrors;
 }

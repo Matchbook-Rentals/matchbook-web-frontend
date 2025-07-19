@@ -3,6 +3,7 @@
 import prisma from "@/lib/prismadb";
 import { checkAuth } from '@/lib/auth-utils';
 import { capNumberValue } from '@/lib/number-validation';
+import { revalidatePath } from "next/cache";
 
 
 export const getFirstListingInCreation = async (): Promise<{ id: string } | null> => {
@@ -225,6 +226,12 @@ export const createListingFromDraftTransaction = async (
       return listing;
     });
 
+    // Revalidate cache after successful draft deletion and listing creation
+    revalidatePath('/app/host/add-property');
+    revalidatePath('/app/host/dashboard');
+    revalidatePath('/app/host/dashboard/overview');
+    revalidatePath('/app/host/dashboard/listings');
+
     return result;
   } catch (error) {
     console.error('Error creating listing from draft:', error);
@@ -319,6 +326,11 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
       return draft;
     });
 
+    // Revalidate cache after successful draft creation/update
+    revalidatePath('/app/host/add-property');
+    revalidatePath('/app/host/dashboard');
+    revalidatePath('/app/host/dashboard/overview');
+
     return result;
   } catch (error) {
     console.error('Error saving draft:', error);
@@ -333,6 +345,11 @@ export const deleteAllUserDrafts = async (userId: string) => {
         userId: userId
       }
     });
+
+    // Revalidate cache after successful draft deletion
+    revalidatePath('/app/host/add-property');
+    revalidatePath('/app/host/dashboard');
+    revalidatePath('/app/host/dashboard/overview');
 
     return result;
   } catch (error) {
