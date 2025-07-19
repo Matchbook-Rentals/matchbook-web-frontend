@@ -31,3 +31,12 @@
 - Invalidates host dashboard pages, overview, listings pages, and specific listing detail pages
 - Ensures immediate UI updates when listings are deleted through host interface or admin actions
 - Prevents stale cached data on listing detail pages after deletion
+
+## Admin Listing Approval Interface Updates
+- Updated listing approval interface to use new monthly pricing model instead of legacy price ranges
+- Added monthlyPricing relation to listing approval data fetching with proper sorting
+- Implemented detailed pricing table showing 1-12 month lease terms with individual prices and utilities inclusion
+- Restructured UI layout: property info and amenities in top row, description below, pricing table spans full width
+- Added "Marked Active by User" field and removed "Background Check Required" from approval screen
+- Removed bedrooms tab to streamline approval workflow
+- Enhanced pricing display with clear "Included"/"Not included" utilities status and proper month formatting
