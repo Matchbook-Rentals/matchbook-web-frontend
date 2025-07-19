@@ -1431,7 +1431,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           </div>
 
           {editingSections['description'] ? (
-            <div className="flex test flex-col gap-[18px] w-full">
+            <div className="flex  flex-col gap-[18px] w-full">
               <label className="text-sm font-medium break-words text-gray-700 break-words max-w-[80%]">Property Description</label>
               <Textarea
                 value={formData.description + '' || ''}

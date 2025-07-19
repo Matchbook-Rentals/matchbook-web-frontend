@@ -1,5 +1,6 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
+import { createNumberChangeHandler } from "@/lib/number-validation";
 
 interface ListingCreationDepositProps {
   deposit: string;
@@ -46,14 +47,11 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 <Input
                   className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                   value={deposit}
-                  onChange={(e) => {
-                    // Only allow numbers and decimal points
-                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                    onDepositChange(value);
-                  }}
+                  onChange={createNumberChangeHandler(onDepositChange, false)}
                   placeholder="0.00"
                   type="text"
                   inputMode="decimal"
+                  max="10000000"
                 />
               </div>
             </div>
@@ -74,14 +72,11 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 <Input
                   className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                   value={rentDueAtBooking}
-                  onChange={(e) => {
-                    // Only allow numbers and decimal points
-                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                    onRentDueAtBookingChange(value);
-                  }}
+                  onChange={createNumberChangeHandler(onRentDueAtBookingChange, false)}
                   placeholder="0.00"
                   type="text"
                   inputMode="decimal"
+                  max="10000000"
                 />
               </div>
             </div>
@@ -103,14 +98,11 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   <Input
                     className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                     value={petDeposit}
-                    onChange={(e) => {
-                      // Only allow numbers and decimal points
-                      const value = e.target.value.replace(/[^0-9.]/g, '');
-                      onPetDepositChange(value);
-                    }}
+                    onChange={createNumberChangeHandler(onPetDepositChange, false)}
                     placeholder="0.00"
                     type="text"
                     inputMode="decimal"
+                    max="10000000"
                   />
                 </div>
               </div>
@@ -129,14 +121,11 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   <Input
                     className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
                     value={petRent}
-                    onChange={(e) => {
-                      // Only allow numbers and decimal points
-                      const value = e.target.value.replace(/[^0-9.]/g, '');
-                      onPetRentChange(value);
-                    }}
+                    onChange={createNumberChangeHandler(onPetRentChange, false)}
                     placeholder="0.00"
                     type="text"
                     inputMode="decimal"
+                    max="10000000"
                   />
                 </div>
               </div>

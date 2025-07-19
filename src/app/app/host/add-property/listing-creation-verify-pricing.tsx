@@ -12,6 +12,7 @@ import {
 import { ListingCreationCounter } from "./listing-creation-counter";
 import { MonthlyPricing } from "./listing-creation-pricing";
 import { styles } from "./styles";
+import { createNumberChangeHandler } from "@/lib/number-validation";
 
 interface ListingCreationVerifyPricingProps {
   shortestStay: number;
@@ -186,14 +187,12 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                         pattern="[0-9]*"
                         step="10"
                         min="0"
+                        max="10000000"
                         className="pl-7 text-base"
                         placeholder="0"
                         value={pricing.price}
                         tabIndex={2 + pricing.months}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, '');
-                          updateMonthPricing(pricing.months, value);
-                        }}
+                        onChange={createNumberChangeHandler((value) => updateMonthPricing(pricing.months, value), false)}
                       />
                     </div>
                   </TableCell>
@@ -231,14 +230,12 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                           pattern="[0-9]*"
                           step="10"
                           min="0"
+                          max="10000000"
                           className="pl-7 text-base"
                           placeholder="0"
                           value={leftPricing.price}
                           tabIndex={2 + leftPricing.months}
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/[^0-9]/g, '');
-                            updateMonthPricing(leftPricing.months, value);
-                          }}
+                          onChange={createNumberChangeHandler((value) => updateMonthPricing(leftPricing.months, value), false)}
                         />
                       </div>
                     </TableCell>
@@ -267,14 +264,12 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                               pattern="[0-9]*"
                               step="10"
                               min="0"
+                              max="10000000"
                               className="pl-7 text-base"
                               placeholder="0"
                               value={rightPricing.price}
                               tabIndex={2 + rightPricing.months}
-                              onChange={(e) => {
-                                const value = e.target.value.replace(/[^0-9]/g, '');
-                                updateMonthPricing(rightPricing.months, value);
-                              }}
+                              onChange={createNumberChangeHandler((value) => updateMonthPricing(rightPricing.months, value), false)}
                             />
                           </div>
                         </TableCell>
