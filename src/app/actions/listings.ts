@@ -1,19 +1,13 @@
 'use server'
 //Imports
 import prisma from "@/lib/prismadb";
-import { auth } from '@clerk/nextjs/server'
+import { checkAuth } from '@/lib/auth-utils';
 import { ListingAndImages } from "@/types/";
 import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
 import { statesInRadiusData } from "@/constants/state-radius-data";
 import { isValid } from 'date-fns'; // Import date-fns for validation
+import { capNumberValue } from '@/lib/number-validation';
 
-const checkAuth = async () => {
-  const { userId } = auth();
-  if (!userId) {
-    throw new Error('User not authenticated');
-  }
-  return userId;
-}
 
 /**
  * Core listing search engine that implements comprehensive filtering requirements.
@@ -208,10 +202,28 @@ export const updateListing = async (listingId: string, updateData: Partial<Listi
       throw new Error('Unauthorized to update this listing');
     }
 
+    // Apply server-side validation to cap numeric values
+    const validatedUpdateData = { ...updateData };
+    if (validatedUpdateData.squareFootage !== undefined) {
+      validatedUpdateData.squareFootage = capNumberValue(validatedUpdateData.squareFootage);
+    }
+    if (validatedUpdateData.depositSize !== undefined) {
+      validatedUpdateData.depositSize = capNumberValue(validatedUpdateData.depositSize);
+    }
+    if (validatedUpdateData.petDeposit !== undefined) {
+      validatedUpdateData.petDeposit = capNumberValue(validatedUpdateData.petDeposit);
+    }
+    if (validatedUpdateData.petRent !== undefined) {
+      validatedUpdateData.petRent = capNumberValue(validatedUpdateData.petRent);
+    }
+    if (validatedUpdateData.rentDueAtBooking !== undefined) {
+      validatedUpdateData.rentDueAtBooking = capNumberValue(validatedUpdateData.rentDueAtBooking);
+    }
+
     // Update the listing
     const updatedListing = await prisma.listing.update({
       where: { id: listingId },
-      data: updateData,
+      data: validatedUpdateData,
     });
 
     return updatedListing;
@@ -259,7 +271,7 @@ export const updateListingMonthlyPricing = async (
         data: {
           listingId: listingId,              // Schema: listingId (String) - Foreign key to Listing
           months: pricingData.months,        // Schema: months (Int) - Number of months (1-12)
-          price: pricingData.price,          // Schema: price (Int) - Price for this month length
+          price: capNumberValue(pricingData.price) || 0,          // Schema: price (Int) - Price for this month length
           utilitiesIncluded: pricingData.utilitiesIncluded, // Schema: utilitiesIncluded (Boolean) - Whether utilities are included
           // Schema: id, createdAt, updatedAt are auto-generated
         }
@@ -815,7 +827,7 @@ export const createListingTransaction = async (listingData: any, userId: string)
           data: monthlyPricing.map((pricing: any) => ({
             listingId: listing.id,
             months: pricing.months,
-            price: pricing.price || 0,
+            price: capNumberValue(pricing.price) || 0,
             utilitiesIncluded: pricing.utilitiesIncluded || false,
           })),
         });

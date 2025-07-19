@@ -5,6 +5,17 @@
 export const MAX_ALLOWED_NUMBER = 10000000;
 
 /**
+ * Server-side validation to cap numeric values at the maximum allowed limit
+ * This provides security against malicious clients bypassing client-side validation
+ */
+export function capNumberValue(value: number | null | undefined, maxValue: number = MAX_ALLOWED_NUMBER): number | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value !== 'number' || isNaN(value)) return null;
+  if (value < 0) return 0;
+  return Math.min(value, maxValue);
+}
+
+/**
  * Validates and caps a number string to the maximum allowed value
  * @param value The string value to validate
  * @param allowDecimals Whether to allow decimal points

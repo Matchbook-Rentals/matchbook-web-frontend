@@ -14,6 +14,7 @@ export default defineConfig({
       'test/components/**/*.{test,spec}.{js,ts,jsx,tsx}',
       'test/lib/**/*.{test,spec}.{js,ts,jsx,tsx}',
       'test/hooks/**/*.{test,spec}.{js,ts,jsx,tsx}',
+      'test/server-actions/**/*.{test,spec}.{js,ts,jsx,tsx}', // server action unit tests
       'src/hooks/**/*.test.{js,ts,jsx,tsx}', // unit tests in src/hooks
       'src/components/**/*.test.{js,ts,jsx,tsx}', // unit tests in src/components
       'src/lib/**/*.test.{js,ts,jsx,tsx}', // unit tests in src/lib

@@ -624,19 +624,12 @@ export const createFakeAddPropertyClientData = () => ({
   rentDueAtBooking: 1200,
   shortestLeaseLength: 1,
   longestLeaseLength: 12,
-  amenities: ['kitchen', 'wifi', 'airConditioner', 'washerInUnit'],
-  listingPhotos: [
+  listingImages: [
     { url: 'https://example.com/photo1.jpg', rank: null },
     { url: 'https://example.com/photo2.jpg', rank: null },
     { url: 'https://example.com/photo3.jpg', rank: null },
     { url: 'https://example.com/photo4.jpg', rank: null },
     { url: 'https://example.com/photo5.jpg', rank: null }
-  ],
-  selectedPhotos: [
-    { url: 'https://example.com/photo1.jpg', rank: null },
-    { url: 'https://example.com/photo2.jpg', rank: null },
-    { url: 'https://example.com/photo3.jpg', rank: null },
-    { url: 'https://example.com/photo4.jpg', rank: null }
   ],
   monthlyPricing: [
     { months: 1, price: 1500, utilitiesIncluded: false },
@@ -749,19 +742,8 @@ export const createInvalidPhotos = (): NullableListingImage[] => [
   { id: '1', url: 'https://example.com/photo1.jpg', listingId: 'test', category: 'living_room', rank: 1 }
 ];
 
-// Valid selected photos (exactly 4)
-export const createValidSelectedPhotos = (): NullableListingImage[] => [
-  { id: '1', url: 'https://example.com/photo1.jpg', listingId: 'test', category: 'living_room', rank: 1 },
-  { id: '2', url: 'https://example.com/photo2.jpg', listingId: 'test', category: 'bedroom', rank: 2 },
-  { id: '3', url: 'https://example.com/photo3.jpg', listingId: 'test', category: 'kitchen', rank: 3 },
-  { id: '4', url: 'https://example.com/photo4.jpg', listingId: 'test', category: 'bathroom', rank: 4 }
-];
-
-// Invalid selected photos (wrong count)
-export const createInvalidSelectedPhotos = (): NullableListingImage[] => [
-  { id: '1', url: 'https://example.com/photo1.jpg', listingId: 'test', category: 'living_room', rank: 1 },
-  { id: '2', url: 'https://example.com/photo2.jpg', listingId: 'test', category: 'bedroom', rank: 2 }
-];
+// createValidSelectedPhotos and createInvalidSelectedPhotos removed
+// selectedPhotos field is not part of the database schema
 
 // Valid amenities (includes required laundry option)
 export const createValidAmenities = (): string[] => [
@@ -878,8 +860,7 @@ export const createValidFormData = () => ({
   listingLocation: createValidLocation(),
   listingRooms: createValidRooms(),
   listingBasics: createValidBasics(),
-  listingPhotos: createValidPhotos(),
-  selectedPhotos: createValidSelectedPhotos(),
+  listingImages: createValidPhotos(),
   listingAmenities: createValidAmenities(),
   listingPricing: createValidPricing()
 });
@@ -890,8 +871,7 @@ export const createInvalidFormData = () => ({
   listingLocation: createInvalidLocation(),
   listingRooms: createInvalidRooms(),
   listingBasics: createInvalidBasics(),
-  listingPhotos: createInvalidPhotos(),
-  selectedPhotos: createInvalidSelectedPhotos(),
+  listingImages: createInvalidPhotos(),
   listingAmenities: createInvalidAmenities(),
   listingPricing: createPricingWithMissingPrices()
 });

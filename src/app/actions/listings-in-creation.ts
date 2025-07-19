@@ -1,15 +1,9 @@
 'use server'
 
 import prisma from "@/lib/prismadb";
-import { auth } from '@clerk/nextjs/server';
+import { checkAuth } from '@/lib/auth-utils';
+import { capNumberValue } from '@/lib/number-validation';
 
-const checkAuth = async () => {
-  const { userId } = auth();
-  if (!userId) {
-    throw new Error('User not authenticated');
-  }
-  return userId;
-}
 
 export const getFirstListingInCreation = async (): Promise<{ id: string } | null> => {
   try {
@@ -103,12 +97,12 @@ export const createListingFromDraftTransaction = async (
           streetAddress2: draft.streetAddress2,
           postalCode: draft.postalCode,
           userId: draft.userId || userId,
-          squareFootage: draft.squareFootage || 0,
-          depositSize: draft.depositSize || 0,
-          petDeposit: draft.petDeposit || 0,
-          petRent: draft.petRent || 0,
-          reservationDeposit: draft.reservationDeposit || 0,
-          rentDueAtBooking: draft.rentDueAtBooking || 0,
+          squareFootage: capNumberValue(draft.squareFootage) || 0,
+          depositSize: capNumberValue(draft.depositSize) || 0,
+          petDeposit: capNumberValue(draft.petDeposit) || 0,
+          petRent: capNumberValue(draft.petRent) || 0,
+          reservationDeposit: capNumberValue(draft.reservationDeposit) || 0,
+          rentDueAtBooking: capNumberValue(draft.rentDueAtBooking) || 0,
           requireBackgroundCheck: draft.requireBackgroundCheck || false,
           shortestLeaseLength: draft.shortestLeaseLength || 1,
           longestLeaseLength: draft.longestLeaseLength || 12,
@@ -217,7 +211,7 @@ export const createListingFromDraftTransaction = async (
           data: options.monthlyPricing.map((pricing: any) => ({
             listingId: listing.id,
             months: pricing.months,
-            price: pricing.price || 0,
+            price: capNumberValue(pricing.price) || 0,
             utilitiesIncluded: pricing.utilitiesIncluded || false,
           })),
         });
@@ -242,6 +236,26 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
   try {
     // Extract listing images and monthly pricing from the data to handle them separately
     const { listingImages, monthlyPricing, ...draftDataWithoutRelations } = draftData;
+    
+    // Apply server-side validation to numeric fields
+    if (draftDataWithoutRelations.squareFootage !== undefined) {
+      draftDataWithoutRelations.squareFootage = capNumberValue(draftDataWithoutRelations.squareFootage);
+    }
+    if (draftDataWithoutRelations.depositSize !== undefined) {
+      draftDataWithoutRelations.depositSize = capNumberValue(draftDataWithoutRelations.depositSize);
+    }
+    if (draftDataWithoutRelations.petDeposit !== undefined) {
+      draftDataWithoutRelations.petDeposit = capNumberValue(draftDataWithoutRelations.petDeposit);
+    }
+    if (draftDataWithoutRelations.petRent !== undefined) {
+      draftDataWithoutRelations.petRent = capNumberValue(draftDataWithoutRelations.petRent);
+    }
+    if (draftDataWithoutRelations.rentDueAtBooking !== undefined) {
+      draftDataWithoutRelations.rentDueAtBooking = capNumberValue(draftDataWithoutRelations.rentDueAtBooking);
+    }
+    if (draftDataWithoutRelations.reservationDeposit !== undefined) {
+      draftDataWithoutRelations.reservationDeposit = capNumberValue(draftDataWithoutRelations.reservationDeposit);
+    }
     
     // Set the userId for the draft
     draftDataWithoutRelations.userId = userId;
@@ -293,7 +307,7 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
         const pricingData = monthlyPricing.map((pricing: any) => ({
           listingId: draft.id,
           months: pricing.months,
-          price: pricing.price || 0,
+          price: capNumberValue(pricing.price) || 0,
           utilitiesIncluded: pricing.utilitiesIncluded || false,
         }));
         
@@ -332,7 +346,7 @@ export const deleteAllUserDrafts = async (userId: string) => {
 export const getDraftDataWithRelations = async (draftId: string) => {
   try {
     // Add auth check unless in test environment
-    const userId = process.env.NODE_ENV === 'test' ? null : await checkAuth();
+    const userId = await checkAuth();
     
     const draftListing = await prisma.listingInCreation.findFirst({
       where: {

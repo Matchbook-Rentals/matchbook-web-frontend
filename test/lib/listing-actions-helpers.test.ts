@@ -52,8 +52,6 @@ import {
   createInvalidBasics,
   createValidPhotos,
   createInvalidPhotos,
-  createValidSelectedPhotos,
-  createInvalidSelectedPhotos,
   createValidAmenities,
   createInvalidAmenities,
   createValidPricing,

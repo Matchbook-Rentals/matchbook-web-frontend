@@ -16,6 +16,7 @@ import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/brandDialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2, Upload } from 'lucide-react';
+import { createNumberChangeHandler } from '@/lib/number-validation';
 import Tile from '@/components/ui/tile';
 import { ListingCreationCard } from '@/app/app/host/add-property/listing-creation-card';
 import { ListingCreationCounter } from '@/app/app/host/add-property/listing-creation-counter';
@@ -1617,8 +1618,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   <Input
                     type="number"
                     min="0"
+                    max="10000000"
                     value={formData.squareFootage || ''}
-                    onChange={(e) => updateFormData('squareFootage', parseInt(e.target.value) || null)}
+                    onChange={createNumberChangeHandler((value) => updateFormData('squareFootage', parseInt(value) || null), false)}
                     className="mt-1 "
                     placeholder="Square footage"
                   />
@@ -1674,8 +1676,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   <Input
                     type="number"
                     min="0"
+                    max="10000000"
                     value={formData.depositSize || ''}
-                    onChange={(e) => updateFormData('depositSize', parseInt(e.target.value) || null)}
+                    onChange={createNumberChangeHandler((value) => updateFormData('depositSize', parseInt(value) || null), false)}
                     className="mt-1"
                     placeholder="Security deposit amount"
                   />
@@ -1686,8 +1689,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   <Input
                     type="number"
                     min="0"
+                    max="10000000"
                     value={formData.rentDueAtBooking || ''}
-                    onChange={(e) => updateFormData('rentDueAtBooking', parseInt(e.target.value) || null)}
+                    onChange={createNumberChangeHandler((value) => updateFormData('rentDueAtBooking', parseInt(value) || null), false)}
                     className={`mt-1 ${!isRentDueAtBookingValid() ? 'border-red-500 focus:border-red-500' : ''}`}
                     placeholder="Amount due at booking"
                   />
@@ -1711,8 +1715,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   <Input
                     type="number"
                     min="0"
+                    max="10000000"
                     value={formData.petDeposit || ''}
-                    onChange={(e) => updateFormData('petDeposit', parseInt(e.target.value) || null)}
+                    onChange={createNumberChangeHandler((value) => updateFormData('petDeposit', parseInt(value) || null), false)}
                     className="mt-1"
                     placeholder="Pet security deposit"
                   />
@@ -1723,8 +1728,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   <Input
                     type="number"
                     min="0"
+                    max="10000000"
                     value={formData.petRent || ''}
-                    onChange={(e) => updateFormData('petRent', parseInt(e.target.value) || null)}
+                    onChange={createNumberChangeHandler((value) => updateFormData('petRent', parseInt(value) || null), false)}
                     className="mt-1"
                     placeholder="Monthly pet rent per pet"
                   />
@@ -1825,10 +1831,10 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                               placeholder="0.00"
                               value={term.price}
                               tabIndex={100 + (term.months * 2 - 1)}
-                              onChange={(e) => {
-                                const value = e.target.value.replace(/[^0-9.]/g, '');
-                                updateLeaseTermPrice(term.months, value);
-                              }}
+                              type="number"
+                              min="0"
+                              max="10000000"
+                              onChange={createNumberChangeHandler((value) => updateLeaseTermPrice(term.months, value), false)}
                             />
                           </div>
                         </div>
