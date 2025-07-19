@@ -711,15 +711,6 @@ export async function loadDraftData(draftId: string) {
     throw new Error('Draft not found');
   }
   
-  console.log('🔍 [loadDraftData] Raw draftListing data:', {
-    id: draftListing.id,
-    city: draftListing.city,
-    state: draftListing.state,
-    streetAddress1: draftListing.streetAddress1,
-    category: draftListing.category,
-    title: draftListing.title,
-    listingImages: draftListing.listingImages
-  });
 
 
   // Transform the database format to add-property-client format
@@ -807,23 +798,19 @@ export async function loadDraftData(draftId: string) {
   const longestStay = draftListing.longestLeaseLength || 12;
   
   // Use the included monthlyPricing relationship
-  console.log('💰 [loadDraftData] Using included monthlyPricing from draftListing:', draftListing.monthlyPricing);
   
   let monthlyPricing: any[] = [];
   
   if (draftListing.monthlyPricing && draftListing.monthlyPricing.length > 0) {
     // Use saved pricing data from the relationship
     monthlyPricing = draftListing.monthlyPricing.map((p: any) => {
-      console.log('💰 [loadDraftData] Processing pricing item:', p, 'price value:', p.price, 'type:', typeof p.price);
       return {
         months: p.months,
         price: p.price, // Don't use || 0 since price could legitimately be 0
         utilitiesIncluded: p.utilitiesIncluded || false
       };
     });
-    console.log('💰 [loadDraftData] Final monthlyPricing:', monthlyPricing);
   } else {
-    console.log('💰 [loadDraftData] No saved pricing found, creating default pricing for range:', shortestStay, 'to', longestStay);
     // Initialize empty pricing for each month in range
     for (let i = shortestStay; i <= longestStay; i++) {
       monthlyPricing.push({
@@ -1030,17 +1017,12 @@ export function validatePricing(listingPricing: ListingPricing): string[] {
 export function validateVerifyPricing(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
   
-  console.log('🔍 [validateVerifyPricing] Checking pricing:', {
-    monthlyPricing: listingPricing.monthlyPricing,
-    totalEntries: listingPricing.monthlyPricing.length
-  });
   
   // Check each pricing entry
   const missingPrices: number[] = [];
   const invalidPrices: number[] = [];
   
   listingPricing.monthlyPricing.forEach(p => {
-    console.log(`🔍 Month ${p.months}: price="${p.price}", type=${typeof p.price}`);
     
     // Check if price is missing (empty, null, undefined)
     if (p.price === null || p.price === undefined || p.price === '') {
@@ -1056,16 +1038,13 @@ export function validateVerifyPricing(listingPricing: ListingPricing): string[] 
   });
   
   if (missingPrices.length > 0) {
-    console.log('❌ [validateVerifyPricing] Found missing prices for months:', missingPrices);
     errors.push(`Please set prices for all ${listingPricing.monthlyPricing.length} lease lengths`);
   }
   
   if (invalidPrices.length > 0) {
-    console.log('❌ [validateVerifyPricing] Found invalid prices for months:', invalidPrices);
     errors.push("All prices must be valid non-negative numbers");
   }
   
-  console.log('✅ [validateVerifyPricing] Final errors:', errors);
   return errors;
 }
 

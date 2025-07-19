@@ -27,15 +27,10 @@ export const pullListingsFromDb = async (
   endDate: Date    // Add endDate parameter
 ): Promise<ListingAndImages[]> => {
   const startTime = performance.now();
-  console.log(`[${(performance.now() - startTime).toFixed(2)}ms] pullListingsFromDb started with dates: ${startDate?.toISOString()} to ${endDate?.toISOString()}.`);
 
   const userId = await checkAuth();
-  console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Auth check completed.`);
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
-  console.log('STATE', state) // Keep existing state log
-  console.log('LatestStart', startDate) // Keep existing state log
-  console.log('EarliestEnd', endDate) // Keep existing state log
 
   try {
     // Input validation
@@ -67,16 +62,12 @@ export const pullListingsFromDb = async (
     // Find the states to include in the search
     const stateRadiusInfo = statesInRadiusData.find(item => item.state === trimmedState);
     const statesToSearch = stateRadiusInfo ? stateRadiusInfo.statesInRadius : [trimmedState]; // Fallback to only the input state if not found
-    console.log('STATES TO SEARCH', statesToSearch);
 
     // Log the states being used for filtering
-    console.log(`Filtering listings for states: ${statesToSearch.join(', ')}`);
-    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Input validation and state lookup completed.`);
 
     // Calculate trip length in days and months
     const tripLengthDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     const tripLengthMonths = Math.ceil(tripLengthDays / 30.44); // Average days per month
-    console.log(`Trip length: ${tripLengthDays} days (${tripLengthMonths} months)`);
 
     // First, filter by states (indexed) and then get listing IDs and distances within the radius
     // Use the raw query for combined state, distance filtering.
@@ -94,10 +85,8 @@ export const pullListingsFromDb = async (
       HAVING distance <= ${radiusMiles} -- Then filter by distance
       ORDER BY distance
     `;
-    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Raw query for IDs and distance completed.`);
 
     if (!listingsWithDistance || listingsWithDistance.length === 0) {
-      console.log(`No listings found matching states (${statesToSearch.join(', ')}) and radius criteria.`); // Updated log
       return [];
     }
 
@@ -148,7 +137,6 @@ export const pullListingsFromDb = async (
         monthlyPricing: true
       }
     });
-    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Fetched full listing details.`);
 
     // Combine the distance information with the full listing details
     const listingsWithDistanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
@@ -166,9 +154,6 @@ export const pullListingsFromDb = async (
 
     // Sort by distance (maintaining the original distance-based order)
     listingsWithFullDetails.sort((a, b) => a.distance - b.distance);
-    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Data combined and sorted.`);
-
-    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] pullListingsFromDb finished successfully.`);
     return listingsWithFullDetails;
   } catch (error) {
     console.error(`[${(performance.now() - startTime).toFixed(2)}ms] Error in pullListingsFromDb:`, error);
@@ -641,7 +626,6 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
 }> => {
   try {
     const userId = await checkAuth();
-    console.log('Fetching listings for userId:', userId, 'page:', page);
     
     // Calculate pagination
     const skip = (page - 1) * itemsPerPage;
@@ -691,7 +675,6 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
       take: itemsPerPage
     });
     
-    console.log('Found listings:', hostListings.length, 'of total:', totalCount);
     
     const listings = hostListings.map(listing => ({
       ...listing,

@@ -294,7 +294,6 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
       
       // Handle monthly pricing if provided
       if (monthlyPricing && monthlyPricing.length > 0) {
-        console.log('💰 [saveDraftTransaction] Saving monthly pricing for draft:', draft.id, 'pricing:', monthlyPricing);
         
         // Delete existing monthly pricing for this draft if updating
         if (draftId) {
@@ -311,7 +310,6 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
           utilitiesIncluded: pricing.utilitiesIncluded || false,
         }));
         
-        console.log('💰 [saveDraftTransaction] Creating pricing records:', pricingData);
         
         await tx.listingMonthlyPricing.createMany({
           data: pricingData,
