@@ -40,3 +40,7 @@
 - Added "Marked Active by User" field and removed "Background Check Required" from approval screen
 - Removed bedrooms tab to streamline approval workflow
 - Enhanced pricing display with clear "Included"/"Not included" utilities status and proper month formatting
+
+## Dialog Positioning Fix
+- Adjusted positioning for location update brand dialog to improve mobile/desktop display
+- Applied temporary positioning fix for dialog centering issues
