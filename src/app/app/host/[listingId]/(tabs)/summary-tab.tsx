@@ -22,6 +22,7 @@ import { ListingCreationCard } from '@/app/app/host/add-property/listing-creatio
 import { ListingCreationCounter } from '@/app/app/host/add-property/listing-creation-counter';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { updateListing, updateListingPhotos, updateListingLocation, updateListingMonthlyPricing, getListingWithPricing } from '@/app/actions/listings';
+import { LocationSection } from '../overview/(components)/location-section';
 import { revalidateListingCache } from '@/app/app/host/_actions';
 import { toast } from '@/components/ui/use-toast';
 import { PropertyType } from '@/constants/enums';
@@ -507,57 +508,6 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     }
   };
 
-  // Handle location update through brand dialog
-  const handleLocationUpdate = async () => {
-    try {
-      const locationFields = sectionFields['location'] || [];
-      const locationData: any = {};
-      
-      locationFields.forEach(field => {
-        const currentValue = formData[field as keyof typeof formData];
-        locationData[field] = currentValue;
-      });
-
-      console.log('Updating location with data:', locationData);
-      const updatedListing = await updateListingLocation(listing.id, locationData);
-      
-      // Invalidate listing cache
-      await revalidateListingCache(listing.id);
-      
-      // Update the current listing with the new data
-      setCurrentListing(updatedListing);
-      setFormData(updatedListing);
-      
-      // Update the context with the new listing data
-      updateContextListing(updatedListing);
-      
-      // Call the optional callback to update parent component
-      if (onListingUpdate) {
-        onListingUpdate(updatedListing);
-      }
-
-      // Exit edit mode
-      setEditingSections(prev => ({
-        ...prev,
-        location: false
-      }));
-
-      // Show success message
-      toast({
-        title: "Location Updated",
-        description: "Your listing location has been updated and is now pending review. During the review period, your listing will not be shown to renters.",
-        variant: "success"
-      });
-
-    } catch (error) {
-      console.error('Error updating location:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update location. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
 
   // Save changes
   const saveChanges = async (section: string) => {
@@ -713,55 +663,8 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
           console.log('Photos saved successfully to database');
         }
       } else if (section === 'location') {
-        // Handle location fields with special server action
-        const fields = sectionFields[section] || [];
-        const updateData: any = {};
-        
-        fields.forEach(field => {
-          const currentValue = formData[field as keyof typeof formData];
-          const originalValue = currentListing[field as keyof typeof currentListing];
-          
-          // Only include fields that have changed
-          if (currentValue !== originalValue) {
-            updateData[field] = currentValue;
-          }
-        });
-        
-        if (Object.keys(updateData).length > 0) {
-          console.log(`Saving location section with data:`, updateData);
-          const updatedListing = await updateListingLocation(listing.id, updateData);
-          
-          // Invalidate listing cache after location updates
-          await revalidateListingCache(listing.id);
-          
-          // Update the current listing with the new data
-          setCurrentListing(updatedListing);
-          
-          // Update the context with the new listing data
-          updateContextListing(updatedListing);
-          
-          // Call the optional callback to update parent component
-          if (onListingUpdate) {
-            onListingUpdate(updatedListing);
-          }
-
-          // Show success state briefly before refresh
-          setButtonStates(prev => ({ ...prev, [section]: 'success' }));
-          
-          // Wait a moment to show success, then soft refresh and reset edit mode
-          setTimeout(() => {
-            router.refresh();
-            setEditingSections(prev => ({
-              ...prev,
-              [section]: false
-            }));
-            setButtonStates(prev => ({ ...prev, [section]: null }));
-          }, 300);
-          
-          return; // Exit early to prevent normal success flow
-        } else {
-          console.log(`No changes detected for location section`);
-        }
+        // Location is now handled within the LocationSection component
+        return;
       } else {
         // Handle regular fields
         const fields = sectionFields[section] || [];
@@ -1496,77 +1399,21 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       {/* Location and Property Details Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Location */}
-        <Card className="shadow-[0px_0px_5px_#00000029] p-0 lg:min-h-[140px]">
-          <CardContent className="flex flex-col items-end gap-[18px] p-6">
-            <div className="flex items-center justify-end gap-8 relative flex-1 self-stretch w-full">
-              <div className="relative flex-1 opacity-90 text-2xl font-semibold text-gray-900">
-                Location
-              </div>
-              {editingSections['location'] ? renderEditButtons('location') : <PencilIcon className="w-6 h-6 cursor-pointer" onClick={() => setShowLocationBrandDialog(true)} />}
-            </div>
-
-            {editingSections['location'] ? (
-              <div className="space-y-4 w-full">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Street Address</label>
-                  <Input
-                    value={formData.streetAddress1 || ''}
-                    onChange={(e) => updateFormData('streetAddress1', e.target.value)}
-                    className="mt-1"
-                    placeholder="Enter street address"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Apartment/Unit (Optional)</label>
-                  <Input
-                    value={formData.streetAddress2 || ''}
-                    onChange={(e) => updateFormData('streetAddress2', e.target.value)}
-                    className="mt-1"
-                    placeholder="Apt, suite, etc."
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">City</label>
-                    <Input
-                      value={formData.city || ''}
-                      onChange={(e) => updateFormData('city', e.target.value)}
-                      className="mt-1"
-                      placeholder="City"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">State</label>
-                    <Input
-                      value={formData.state || ''}
-                      onChange={(e) => updateFormData('state', e.target.value)}
-                      className="mt-1"
-                      placeholder="State"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">ZIP Code</label>
-                    <Input
-                      value={formData.postalCode || ''}
-                      onChange={(e) => updateFormData('postalCode', e.target.value)}
-                      className="mt-1"
-                      placeholder="ZIP"
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
-                <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
-                  <MapPin className="w-5 h-5 text-gray-500" />
-                  <div className={noLabelStyles}>
-                    {formatAddress()}
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <LocationSection
+          listingId={listing.id}
+          editingSections={editingSections}
+          formData={formData}
+          currentListing={currentListing}
+          sectionFields={sectionFields}
+          updateFormData={updateFormData}
+          setShowLocationBrandDialog={setShowLocationBrandDialog}
+          setCurrentListing={setCurrentListing}
+          setEditingSections={setEditingSections}
+          formatAddress={formatAddress}
+          noLabelStyles={noLabelStyles}
+          onListingUpdate={onListingUpdate}
+          userId={listing.userId}
+        />
 
         {/* Property Details */}
         <Card className="shadow-[0px_0px_5px_#00000029] p-0 lg:min-h-[140px]">

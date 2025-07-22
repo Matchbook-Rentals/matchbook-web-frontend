@@ -82,6 +82,7 @@ model User {
   clientLogs         ClientLog[] // Relation to client logs submitted by this user
   paymentReceipts    PaymentReceipt[]
   paymentTransactions PaymentTransaction[]
+  locationChanges    ListingLocationChange[]
 
   // Hospitable integration
   hospitableAccessToken   String?   @db.VarChar(1500)
@@ -324,6 +325,7 @@ model Listing {
   Maybe              Maybe[]
   conversations      Conversation[]          @relation("ConversationToListing")
   monthlyPricing     ListingMonthlyPricing[]
+  locationChanges    ListingLocationChange[]
   @@index([state])
 }
 
@@ -1446,4 +1448,40 @@ model TestResult {
   @@index([testCaseId])
   @@index([runId])
   @@index([executedAt])
+}
+
+model ListingLocationChange {
+  id        String   @id @default(uuid())
+  listingId String
+  userId    String?  // User who made the change
+  createdAt DateTime @default(now())
+  
+  // Old location values (before change)
+  oldStreetAddress1 String?
+  oldStreetAddress2 String?
+  oldCity           String?
+  oldState          String?
+  oldPostalCode     String?
+  oldLatitude       Float?
+  oldLongitude      Float?
+  
+  // New location values (after change)
+  newStreetAddress1 String?
+  newStreetAddress2 String?
+  newCity           String?
+  newState          String?
+  newPostalCode     String?
+  newLatitude       Float?
+  newLongitude      Float?
+  
+  // Array of field names that changed (JSON array)
+  changedFields Json // e.g., ["streetAddress1", "city"]
+  
+  // Relationships
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id])
+  
+  @@index([listingId])
+  @@index([userId])
+  @@index([createdAt])
 }

@@ -841,3 +841,44 @@ export const createListingTransaction = async (listingData: any, userId: string)
   }
 }
 
+export async function saveLocationChangeHistory(
+  listingId: string,
+  currentListing: any,
+  formData: any,
+  changedFields: string[],
+  userId?: string
+) {
+  try {
+    // Create the location change record
+    await prisma.listingLocationChange.create({
+      data: {
+        listingId,
+        userId,
+        // Old values
+        oldStreetAddress1: currentListing.streetAddress1,
+        oldStreetAddress2: currentListing.streetAddress2,
+        oldCity: currentListing.city,
+        oldState: currentListing.state,
+        oldPostalCode: currentListing.postalCode,
+        oldLatitude: currentListing.latitude,
+        oldLongitude: currentListing.longitude,
+        // New values
+        newStreetAddress1: formData.streetAddress1 || currentListing.streetAddress1,
+        newStreetAddress2: formData.streetAddress2 || currentListing.streetAddress2,
+        newCity: formData.city || currentListing.city,
+        newState: formData.state || currentListing.state,
+        newPostalCode: formData.postalCode || currentListing.postalCode,
+        newLatitude: formData.latitude || currentListing.latitude,
+        newLongitude: formData.longitude || currentListing.longitude,
+        // Changed fields as JSON array
+        changedFields: changedFields,
+      },
+    });
+    
+    console.log('Location change history saved successfully');
+  } catch (error) {
+    console.error('Error saving location change history:', error);
+    // Don't throw error here - we don't want to block the main update if history saving fails
+  }
+}
+
