@@ -49,3 +49,11 @@
 ## Dialog Positioning Fix
 - Adjusted positioning for location update brand dialog to improve mobile/desktop display
 - Applied temporary positioning fix for dialog centering issues
+
+## Public Guest Listing Pages Implementation
+- Added public listing page at `/guest/listing/[listingId]` with SEO metadata generation
+- Created public-specific listing detail components separate from authenticated user components
+- Implemented dynamic pricing display supporting both price ranges and single prices
+- Added call-to-action sections directing visitors to sign up for contact/booking features
+- Enhanced sitemap with dynamic listing URLs for improved SEO coverage
+- Restricted public access to approved and active listings only
