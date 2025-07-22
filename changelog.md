@@ -57,3 +57,4 @@
 - Added call-to-action sections directing visitors to sign up for contact/booking features
 - Enhanced sitemap with dynamic listing URLs for improved SEO coverage
 - Restricted public access to approved and active listings only
+- Increased sitemap listing limit from 1,000 to 10,000 for better SEO coverage

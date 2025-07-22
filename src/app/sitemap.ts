@@ -114,7 +114,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         updatedAt: true,
         createdAt: true
       },
-      take: 1000 // Limit to prevent sitemap from becoming too large
+      take: 10000 // Limit to prevent sitemap from becoming too large
     })
 
     listingPages = listings.map((listing) => ({
