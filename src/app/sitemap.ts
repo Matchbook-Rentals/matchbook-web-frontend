@@ -74,10 +74,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // Guest routes (verified to exist)
-  const guestRoutes = [
-    '/guest/trips',
-  ]
+  // Guest routes (verified to exist) - removed trips route as it's not SEO-friendly content
+  const guestRoutes: string[] = []
 
   const guestPages = guestRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
