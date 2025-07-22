@@ -3,6 +3,7 @@ import MatchbookHeader from "@/components/marketing-landing-components/matchbook
 import { MarketingPageHeader } from "@/components/marketing-landing-components/marketing-page-header";
 import { VerificationHowItWorks } from "@/components/marketing-landing-components/verification-how-it-works";
 import { VerificationWhyItMatters } from "@/components/marketing-landing-components/verification-why-it-matters";
+import { VerificationStandOut } from "@/components/marketing-landing-components/verification-stand-out";
 import { currentUser } from "@clerk/nextjs/server";
 
 export default async function VerificationPage() {
@@ -28,6 +29,7 @@ export default async function VerificationPage() {
         <VerificationHowItWorks />
       </div>
       <VerificationWhyItMatters />
+      <VerificationStandOut />
       <Footer />
     </>
   );
