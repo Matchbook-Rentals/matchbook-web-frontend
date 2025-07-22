@@ -1,13 +1,17 @@
 # Changelog
 
-## Location Change Tracking System
-- Extracted location section into reusable LocationSection component with self-contained handlers
-- Implemented comprehensive location change audit trail with ListingLocationChange database table
-- Added admin Address Change Approvals tool for reviewing all location modifications
-- Tracks before/after values for all location fields including coordinates
-- Records which specific fields changed and user who made the change
-- Admin interface shows sortable table with detailed before/after comparison views
-- Graceful error handling prevents crashes when table doesn't exist yet
+## MatchBook Renter Verification Page
+- Created new /verification page with MatchBook header, footer, and Clerk authentication
+- Added verification-how-it-works component with simplified image-based flow diagram
+- Integrated marketing page layout consistent with existing pages like /contact
+
+## Admin Location Change Review Integration
+- Integrated location change history directly into listing approval workflow
+- Added LocationChangesSection component to show before/after address comparison
+- Created approve/reject functionality with required rejection reason text input
+- Added location change history to both pending and decided listing review pages
+- Hidden latitude/longitude coordinates from admin interface display
+- Conditional rendering only shows when location changes exist for the listing
 
 ## Amenities Display Improvements
 - Fixed keyless entry not appearing as badge in summary tab by adding it to iconAmenities array
