@@ -58,3 +58,8 @@
 - Enhanced sitemap with dynamic listing URLs for improved SEO coverage
 - Restricted public access to approved and active listings only
 - Increased sitemap listing limit from 1,000 to 10,000 for better SEO coverage
+
+## Host Listing Card Dialog Fix
+- Fixed delete confirmation dialog in host listing card to use base dialog components instead of BrandDialog wrapper
+- Eliminates unwanted header progress bar that was appearing in delete dialog
+- Maintains all functionality while providing cleaner dialog appearance

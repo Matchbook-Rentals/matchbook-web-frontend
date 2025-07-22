@@ -10,8 +10,13 @@ import { ListingAndImages } from "@/types";
 import CalendarDialog from "@/components/ui/calendar-dialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { BrandDialog } from "@/components/brandDialog";
+import { 
+  Dialog,
+  DialogContent,
+  DialogClose
+} from "@/components/brandDialog";
 import { Input } from "@/components/ui/input";
+import { XIcon } from "lucide-react";
 import { deleteListing } from "@/app/actions/listings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -399,14 +404,9 @@ export default function HostListingCard({
       {isMobile ? <MobileLayout /> : <DesktopLayout />}
       
       {/* Delete Confirmation Dialog */}
-      <BrandDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-        titleComponent={
-          <h2 className="text-xl font-semibold text-gray-900">Delete Listing</h2>
-        }
-        contentComponent={
-          <div className="flex flex-col gap-4">
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] !top-[15vh] md:!top-[25vh] sm:max-w-md md:max-w-lg">
+          <div className="flex flex-col gap-4 w-full">
             <div className="text-center">
               <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
                 <TrashIcon className="h-8 w-8 text-red-600" />
@@ -433,9 +433,8 @@ export default function HostListingCard({
               />
             </div>
           </div>
-        }
-        footerComponent={
-          <div className="flex gap-3 w-full">
+
+          <div className="flex gap-3 w-full pt-6 border-t border-gray-200">
             <BrandButton
               variant="outline"
               onClick={handleCancelDelete}
@@ -463,8 +462,8 @@ export default function HostListingCard({
               )}
             </BrandButton>
           </div>
-        }
-      />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
