@@ -6,13 +6,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { formatDate } from '@/lib/utils'
 import { ApprovalActions } from './approval-actions'
+import { LocationChangesSection } from './location-changes-section'
+import { getLocationChangesForListing } from '../../address-change-approvals/_actions'
 
 export default async function ListingApprovalDetail({
   params
 }: {
   params: { listingId: string }
 }) {
-  const listing = await getListingDetails(params.listingId)
+  const [listing, locationChanges] = await Promise.all([
+    getListingDetails(params.listingId),
+    getLocationChangesForListing(params.listingId)
+  ])
 
   if (!listing) {
     notFound()
@@ -155,12 +160,15 @@ export default async function ListingApprovalDetail({
 
           {listing.approvalStatus === 'pendingReview' && (
             <div className="mt-8">
+              <LocationChangesSection locationChanges={locationChanges} />
               <ApprovalActions listingId={listing.id} listingTitle={listing.title} />
             </div>
           )}
 
           {listing.approvalStatus !== 'pendingReview' && (
             <div className="mt-8">
+              <LocationChangesSection locationChanges={locationChanges} />
+              
               <div className="p-4 bg-muted rounded-md mb-4">
                 <h3 className="font-semibold">Decision Details</h3>
                 <p><span className="font-medium">Decision Date:</span> {listing.lastApprovalDecision ? formatDate(listing.lastApprovalDecision) : 'N/A'}</p>

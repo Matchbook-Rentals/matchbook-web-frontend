@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ExternalLink, MapPin, User, Calendar, FileText } from 'lucide-react'
+import { ApprovalActions } from './approval-actions'
 
 interface PageProps {
   params: {
@@ -133,12 +134,6 @@ export default async function LocationChangeDetailPage({ params }: PageProps) {
                         <span className="text-sm font-medium text-gray-600">ZIP Code:</span>
                         <div className="text-sm">{locationChange.oldPostalCode || 'Not provided'}</div>
                       </div>
-                      {(locationChange.oldLatitude && locationChange.oldLongitude) && (
-                        <div>
-                          <span className="text-sm font-medium text-gray-600">Coordinates:</span>
-                          <div className="text-sm">{locationChange.oldLatitude}, {locationChange.oldLongitude}</div>
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -168,12 +163,6 @@ export default async function LocationChangeDetailPage({ params }: PageProps) {
                         <span className="text-sm font-medium text-gray-600">ZIP Code:</span>
                         <div className="text-sm">{locationChange.newPostalCode || 'Not provided'}</div>
                       </div>
-                      {(locationChange.newLatitude && locationChange.newLongitude) && (
-                        <div>
-                          <span className="text-sm font-medium text-gray-600">Coordinates:</span>
-                          <div className="text-sm">{locationChange.newLatitude}, {locationChange.newLongitude}</div>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -232,6 +221,14 @@ export default async function LocationChangeDetailPage({ params }: PageProps) {
                 )}
               </CardContent>
             </Card>
+
+            {/* Approval Actions */}
+            <ApprovalActions
+              listingId={locationChange.listing.id}
+              approvalStatus={locationChange.listing.approvalStatus}
+              isApproved={locationChange.listing.isApproved}
+              lastDecisionComment={locationChange.listing.lastDecisionComment}
+            />
 
             {/* Listing Information */}
             <Card>

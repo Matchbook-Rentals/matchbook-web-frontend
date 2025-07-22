@@ -1,5 +1,14 @@
 # Changelog
 
+## Location Change Tracking System
+- Extracted location section into reusable LocationSection component with self-contained handlers
+- Implemented comprehensive location change audit trail with ListingLocationChange database table
+- Added admin Address Change Approvals tool for reviewing all location modifications
+- Tracks before/after values for all location fields including coordinates
+- Records which specific fields changed and user who made the change
+- Admin interface shows sortable table with detailed before/after comparison views
+- Graceful error handling prevents crashes when table doesn't exist yet
+
 ## Amenities Display Improvements
 - Fixed keyless entry not appearing as badge in summary tab by adding it to iconAmenities array
 - Implemented category-based sorting for amenity badges with priority: laundry, accessibility, basics, then others

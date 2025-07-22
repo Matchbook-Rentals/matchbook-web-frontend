@@ -87,6 +87,7 @@ export async function getLocationChangeById(id: string) {
             postalCode: true,
             latitude: true,
             longitude: true,
+            lastDecisionComment: true,
           }
         },
         user: {
@@ -110,5 +111,76 @@ export async function getLocationChangeById(id: string) {
     console.error('Error fetching location change:', error);
     console.error('Error details:', error);
     throw error; // Re-throw to trigger notFound() in the page
+  }
+}
+
+export async function approveLocationChange(listingId: string) {
+  try {
+    console.log(`Approving location changes for listing: ${listingId}`);
+    
+    const updatedListing = await prisma.listing.update({
+      where: { id: listingId },
+      data: {
+        approvalStatus: 'approved',
+        isApproved: true,
+        lastApprovalDecision: new Date(),
+        lastDecisionComment: 'Location changes approved by admin'
+      }
+    });
+
+    console.log(`Listing ${listingId} location changes approved successfully`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error approving location changes:', error);
+    throw new Error('Failed to approve location changes');
+  }
+}
+
+export async function rejectLocationChange(listingId: string, rejectionReason: string) {
+  try {
+    console.log(`Rejecting location changes for listing: ${listingId} with reason: ${rejectionReason}`);
+    
+    const updatedListing = await prisma.listing.update({
+      where: { id: listingId },
+      data: {
+        approvalStatus: 'rejected',
+        isApproved: false,
+        lastApprovalDecision: new Date(),
+        lastDecisionComment: rejectionReason || 'Location changes rejected by admin'
+      }
+    });
+
+    console.log(`Listing ${listingId} location changes rejected successfully`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error rejecting location changes:', error);
+    throw new Error('Failed to reject location changes');
+  }
+}
+
+export async function getLocationChangesForListing(listingId: string) {
+  try {
+    console.log(`Fetching location changes for listing: ${listingId}`);
+    
+    const locationChanges = await prisma.listingLocationChange.findMany({
+      where: { listingId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          }
+        }
+      }
+    });
+
+    console.log(`Found ${locationChanges.length} location changes for listing ${listingId}`);
+    return locationChanges;
+  } catch (error) {
+    console.error('Error fetching location changes for listing:', error);
+    return []; // Return empty array on error to prevent crashes
   }
 }
