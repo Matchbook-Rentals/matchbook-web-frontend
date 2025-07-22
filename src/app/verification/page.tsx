@@ -2,6 +2,7 @@ import Footer from "@/components/marketing-landing-components/footer";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { MarketingPageHeader } from "@/components/marketing-landing-components/marketing-page-header";
 import { VerificationHowItWorks } from "@/components/marketing-landing-components/verification-how-it-works";
+import { VerificationWhyItMatters } from "@/components/marketing-landing-components/verification-why-it-matters";
 import { currentUser } from "@clerk/nextjs/server";
 
 export default async function VerificationPage() {
@@ -26,6 +27,7 @@ export default async function VerificationPage() {
       <div className="flex justify-center">
         <VerificationHowItWorks />
       </div>
+      <VerificationWhyItMatters />
       <Footer />
     </>
   );
