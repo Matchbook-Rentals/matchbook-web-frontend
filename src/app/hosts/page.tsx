@@ -8,6 +8,7 @@ import { HostsLoveMatchbook } from "../../components/marketing-landing-component
 import { ReviewsSection } from "../../components/marketing-landing-components/reviews-section";
 import Footer from "@/components/marketing-landing-components/footer";
 import { currentUser } from "@clerk/nextjs/server";
+import { HostsPageWrapper } from "@/components/hosts-page-wrapper";
 
 
 export default async function HostsPage(): Promise<React.ReactNode> {
@@ -24,20 +25,22 @@ export default async function HostsPage(): Promise<React.ReactNode> {
   } : null;
 
   return (
-    <div className="bg-background">
-      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
-      <div className="flex justify-center p-8">
-        <MarketingPageHeader
-          headerText="Become a Host"
-          highlightedText="Earn More, Keep More"
-        />
+    <HostsPageWrapper>
+      <div className="bg-background">
+        <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+        <div className="flex justify-center p-8">
+          <MarketingPageHeader
+            headerText="Become a Host"
+            highlightedText="Earn More, Keep More"
+          />
+        </div>
+        <HostsLoveMatchbook />
+        <ReviewsSection />
+        <DitchPaperwork />
+        <TermTailoredPricing />
+        <ListYourProperty />
+        <Footer />
       </div>
-      <HostsLoveMatchbook />
-      <ReviewsSection />
-      <DitchPaperwork />
-      <TermTailoredPricing />
-      <ListYourProperty />
-      <Footer />
-    </div>
+    </HostsPageWrapper>
   );
 }

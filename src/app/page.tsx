@@ -10,6 +10,7 @@ import FAQSection from "@/components/home-components/faq-section";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { checkClientBetaAccess } from "@/utils/roles";
 import { getUserTripsCount } from "@/app/actions/trips";
+import { HomePageWrapper } from "@/components/home-page-wrapper";
 
 const WebHomePage = async () => {
   const user = await currentUser();
@@ -32,25 +33,27 @@ const WebHomePage = async () => {
   const tripCount = hasAccess && user?.id ? await getUserTripsCount() : 0;
 
   return (
-    <div className="overflow-x-hidden bg-background">
-      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
-      <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!user?.id} />
-      <div className={spacerDivClassNames} />
-      <RentEasyCopy />
-      <div className={spacerDivClassNames} />
-      <div className={spacerDivClassNames} />
-      <HowItWorks />
-      <div className={spacerDivClassNames} />
-      <BecomeHostCopy />
-      <div className={spacerDivClassNames} />
-      <ProsConsGrid />
-      <div className={spacerDivClassNames} />
-      <RecentArticle />
-      <div className={spacerDivClassNames} />
-      <FAQSection />
-      <div className={spacerDivClassNames} />
-      <Footer />
-    </div>
+    <HomePageWrapper>
+      <div className="overflow-x-hidden bg-background">
+        <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+        <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!user?.id} />
+        <div className={spacerDivClassNames} />
+        <RentEasyCopy />
+        <div className={spacerDivClassNames} />
+        <div className={spacerDivClassNames} />
+        <HowItWorks />
+        <div className={spacerDivClassNames} />
+        <BecomeHostCopy />
+        <div className={spacerDivClassNames} />
+        <ProsConsGrid />
+        <div className={spacerDivClassNames} />
+        <RecentArticle />
+        <div className={spacerDivClassNames} />
+        <FAQSection />
+        <div className={spacerDivClassNames} />
+        <Footer />
+      </div>
+    </HomePageWrapper>
   );
 };
 
