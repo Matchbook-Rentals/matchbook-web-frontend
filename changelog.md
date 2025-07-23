@@ -1,5 +1,14 @@
 # Changelog
 
+## MatchBook Renter Verification App Page
+- Created new /app/verification authenticated page with form-based verification flow
+- Added MatchbookHeader with full Clerk authentication integration and user menu
+- Implemented PersonalInformationSection and VerificationFormSection components
+- Added comprehensive form with personal info (name, SSN, DOB) and address fields
+- Updated all marketing page CTA buttons to link to /app/verification
+- Replaced HomeIcon with logo-small.svg in breadcrumb for consistency
+- Added proper authentication redirect flow for unauthenticated users
+
 ## MatchBook Renter Verification Stand Out Section
 - Added VerificationStandOut component with card layout inside light teal background
 - Features four verification benefits: Criminal History Check, Credit Report, Eviction History, Reusable Report

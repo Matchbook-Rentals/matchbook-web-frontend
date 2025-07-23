@@ -97,7 +97,7 @@ export const VerificationHowItWorks = (): JSX.Element => {
         className="relative w-[290px] flex-[0_0_auto] bg-teal-700 text-white font-medium py-3 rounded-md hover:bg-teal-800"
         asChild
       >
-        <a href="#">Start Screening</a>
+        <a href="/app/verification">Start Screening</a>
       </Button>
     </section>
   );
