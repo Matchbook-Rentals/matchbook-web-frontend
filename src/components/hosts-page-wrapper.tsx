@@ -12,10 +12,15 @@ export const HostsPageWrapper: React.FC<HostsPageWrapperProps> = ({ children }) 
 
   useEffect(() => {
     const checkAndShowPopup = () => {
-      const lastDismissed = localStorage.getItem('onboarding-popup-dismissed');
-      const twoHoursInMs = 2 * 60 * 60 * 1000; // 2 hours * 60 minutes * 60 seconds * 1000 milliseconds
-      
-      if (!lastDismissed || Date.now() - parseInt(lastDismissed) > twoHoursInMs) {
+      try {
+        const lastDismissed = localStorage.getItem('onboarding-popup-dismissed');
+        const twoHoursInMs = 2 * 60 * 60 * 1000; // 2 hours * 60 minutes * 60 seconds * 1000 milliseconds
+        
+        if (!lastDismissed || Date.now() - parseInt(lastDismissed) > twoHoursInMs) {
+          setShowPopup(true);
+        }
+      } catch {
+        // Safari private browsing or localStorage unavailable - show popup
         setShowPopup(true);
       }
     };
@@ -27,12 +32,20 @@ export const HostsPageWrapper: React.FC<HostsPageWrapperProps> = ({ children }) 
   }, []);
 
   const handleContinueToSite = () => {
-    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    try {
+      localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    } catch {
+      // Safari private browsing - ignore localStorage error
+    }
     setShowPopup(false);
   };
 
   const handleListProperty = () => {
-    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    try {
+      localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    } catch {
+      // Safari private browsing - ignore localStorage error
+    }
     setShowPopup(false);
     // Since we're already on the hosts page, just scroll to the list property section
     const listPropertySection = document.querySelector('[data-section="list-property"]');
@@ -42,7 +55,11 @@ export const HostsPageWrapper: React.FC<HostsPageWrapperProps> = ({ children }) 
   };
 
   const handleClosePopup = () => {
-    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    try {
+      localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    } catch {
+      // Safari private browsing - ignore localStorage error
+    }
     setShowPopup(false);
   };
 

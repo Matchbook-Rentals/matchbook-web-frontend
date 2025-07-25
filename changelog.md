@@ -1,5 +1,11 @@
 # Changelog
 
+## Onboarding Popup Persistence & Mobile Responsiveness
+- Added 2-hour localStorage persistence to prevent onboarding popup from showing repeatedly
+- Implemented Safari private browsing compatibility with proper error handling
+- Updated popup width for mobile responsiveness (95vw with 609px max-width)
+- Changed button layout to use flex-wrap for better mobile display
+
 ## MatchBook Renter Verification App Page
 - Created new /app/verification authenticated page with form-based verification flow
 - Added MatchbookHeader with full Clerk authentication integration and user menu

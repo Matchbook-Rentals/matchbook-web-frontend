@@ -14,10 +14,15 @@ export const HomePageWrapper: React.FC<HomePageWrapperProps> = ({ children }) =>
 
   useEffect(() => {
     const checkAndShowPopup = () => {
-      const lastDismissed = localStorage.getItem('onboarding-popup-dismissed');
-      const twoHoursInMs = 2 * 60 * 60 * 1000; // 2 hours * 60 minutes * 60 seconds * 1000 milliseconds
-      
-      if (!lastDismissed || Date.now() - parseInt(lastDismissed) > twoHoursInMs) {
+      try {
+        const lastDismissed = localStorage.getItem('onboarding-popup-dismissed');
+        const twoHoursInMs = 2 * 60 * 60 * 1000; // 2 hours * 60 minutes * 60 seconds * 1000 milliseconds
+        
+        if (!lastDismissed || Date.now() - parseInt(lastDismissed) > twoHoursInMs) {
+          setShowPopup(true);
+        }
+      } catch {
+        // Safari private browsing or localStorage unavailable - show popup
         setShowPopup(true);
       }
     };
@@ -29,18 +34,30 @@ export const HomePageWrapper: React.FC<HomePageWrapperProps> = ({ children }) =>
   }, []);
 
   const handleContinueToSite = () => {
-    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    try {
+      localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    } catch {
+      // Safari private browsing - ignore localStorage error
+    }
     setShowPopup(false);
   };
 
   const handleListProperty = () => {
-    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    try {
+      localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    } catch {
+      // Safari private browsing - ignore localStorage error
+    }
     setShowPopup(false);
     router.push("/app/host/add-property");
   };
 
   const handleClosePopup = () => {
-    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    try {
+      localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
+    } catch {
+      // Safari private browsing - ignore localStorage error
+    }
     setShowPopup(false);
   };
 
