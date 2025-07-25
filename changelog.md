@@ -99,3 +99,17 @@
 - Fixed delete confirmation dialog in host listing card to use base dialog components instead of BrandDialog wrapper
 - Eliminates unwanted header progress bar that was appearing in delete dialog
 - Maintains all functionality while providing cleaner dialog appearance
+
+## Host Onboarding Popup Implementation
+- Added onboarding popup to homepage and hosts page promoting host registration
+- Created OnboardingPopup component using brandDialog imports with native slide-in animations
+- Implemented 1000ms delay to allow page load before popup appears
+- Added wrapper components (HomePageWrapper, HostsPageWrapper) for popup state management
+- Popup includes "Continue To Site" and "List Your Property" action buttons with proper navigation
+
+## Number Input Comma Formatting
+- Enhanced number validation utilities to support comma-separated thousands formatting
+- Updated pricing inputs in listing creation flow to display commas (e.g., "1,500" instead of "1500")
+- Added comma formatting to square footage input in room configuration
+- Updated all deposit/rent inputs to use comma formatting while maintaining mobile numpad functionality
+- Raw integer values stored in state without commas, formatted display only for better UX

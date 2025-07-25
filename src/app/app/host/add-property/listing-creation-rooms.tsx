@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ListingCreationCounter } from "./listing-creation-counter";
-import { createNumberChangeHandler } from "@/lib/number-validation";
+import { createNumberChangeHandler, formatNumberWithCommas } from "@/lib/number-validation";
 
 interface RoomsProps {
   bedrooms: number;
@@ -63,12 +63,12 @@ export const Rooms: React.FC<RoomsProps> = ({
 
           <Input
             className="w-full max-w-[135px] h-8 rounded-lg border border-[#8a8a8a] text-base"
-            placeholder="123 sq feet"
-            value={squareFeet}
-            onChange={createNumberChangeHandler(onSquareFeetChange, false)}
-            type="number"
-            min="0"
-            max="10000000"
+            placeholder="1,234 sq ft"
+            value={formatNumberWithCommas(squareFeet)}
+            onChange={createNumberChangeHandler(onSquareFeetChange, false, 10000000, true)}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9,]*"
           />
         </div>
       </CardContent>

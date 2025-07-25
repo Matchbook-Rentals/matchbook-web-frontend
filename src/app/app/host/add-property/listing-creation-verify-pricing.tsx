@@ -12,7 +12,7 @@ import {
 import { ListingCreationCounter } from "./listing-creation-counter";
 import { MonthlyPricing } from "./listing-creation-pricing";
 import { styles } from "./styles";
-import { createNumberChangeHandler } from "@/lib/number-validation";
+import { createNumberChangeHandler, formatNumberWithCommas, removeCommasFromNumber } from "@/lib/number-validation";
 
 interface ListingCreationVerifyPricingProps {
   shortestStay: number;
@@ -63,9 +63,11 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
 
 
   // Update a specific month's pricing
-  const updateMonthPricing = (months: number, price: string) => {
+  const updateMonthPricing = (months: number, displayPrice: string) => {
+    // Store the raw number without commas in state
+    const rawPrice = removeCommasFromNumber(displayPrice);
     const updated = monthlyPricing.map(p => 
-      p.months === months ? { ...p, price } : p
+      p.months === months ? { ...p, price: rawPrice } : p
     );
     onMonthlyPricingChange(updated);
   };
@@ -182,17 +184,14 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                     <div className="relative">
                       <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                       <Input
-                        type="number"
+                        type="text"
                         inputMode="numeric"
-                        pattern="[0-9]*"
-                        step="10"
-                        min="0"
-                        max="10000000"
+                        pattern="[0-9,]*"
                         className="pl-7 text-base"
                         placeholder="0"
-                        value={pricing.price}
+                        value={formatNumberWithCommas(pricing.price)}
                         tabIndex={2 + pricing.months}
-                        onChange={createNumberChangeHandler((value) => updateMonthPricing(pricing.months, value), false)}
+                        onChange={createNumberChangeHandler((value) => updateMonthPricing(pricing.months, value), false, 10000000, true)}
                       />
                     </div>
                   </TableCell>
@@ -225,17 +224,14 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                       <div className="relative">
                         <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                         <Input
-                          type="number"
+                          type="text"
                           inputMode="numeric"
-                          pattern="[0-9]*"
-                          step="10"
-                          min="0"
-                          max="10000000"
+                          pattern="[0-9,]*"
                           className="pl-7 text-base"
                           placeholder="0"
-                          value={leftPricing.price}
+                          value={formatNumberWithCommas(leftPricing.price)}
                           tabIndex={2 + leftPricing.months}
-                          onChange={createNumberChangeHandler((value) => updateMonthPricing(leftPricing.months, value), false)}
+                          onChange={createNumberChangeHandler((value) => updateMonthPricing(leftPricing.months, value), false, 10000000, true)}
                         />
                       </div>
                     </TableCell>
@@ -259,17 +255,14 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                           <div className="relative">
                             <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
                             <Input
-                              type="number"
+                              type="text"
                               inputMode="numeric"
-                              pattern="[0-9]*"
-                              step="10"
-                              min="0"
-                              max="10000000"
+                              pattern="[0-9,]*"
                               className="pl-7 text-base"
                               placeholder="0"
-                              value={rightPricing.price}
+                              value={formatNumberWithCommas(rightPricing.price)}
                               tabIndex={2 + rightPricing.months}
-                              onChange={createNumberChangeHandler((value) => updateMonthPricing(rightPricing.months, value), false)}
+                              onChange={createNumberChangeHandler((value) => updateMonthPricing(rightPricing.months, value), false, 10000000, true)}
                             />
                           </div>
                         </TableCell>
