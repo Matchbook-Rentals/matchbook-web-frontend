@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import prisma from '@/lib/prismadb'
+import { ApprovalStatus } from '@prisma/client'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://matchbookrentals.com'
@@ -103,6 +104,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let listingPages: MetadataRoute.Sitemap = []
   
   try {
+    // Test basic connection first
+    const count = await prisma.listing.count()
+    console.log('Total listing count:', count)
+    
     // Fetch approved and active listings for sitemap
     const listings = await prisma.listing.findMany({
       where: {
@@ -111,7 +116,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
       select: {
         id: true,
-        updatedAt: true,
+        lastModified: true,
         createdAt: true
       },
       take: 10000 // Limit to prevent sitemap from becoming too large
@@ -119,7 +124,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     listingPages = listings.map((listing) => ({
       url: `${baseUrl}/guest/listing/${listing.id}`,
-      lastModified: listing.updatedAt || listing.createdAt,
+      lastModified: listing.lastModified || listing.createdAt,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))

@@ -23,7 +23,7 @@ interface MatchbookHeaderProps {
 export default function MatchbookHeader({ userId, user, isSignedIn, className }: MatchbookHeaderProps): JSX.Element {
 
   return (
-    <header className={cn("flex w-full items-center justify-between px-6 py-1 bg-white", className)}>
+    <header className={cn("flex w-full items-center justify-between px-6 py-1 bg-background", className)}>
       <div className="relative h-[72px] flex items-center">
         <Link href="/">
           <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
