@@ -682,12 +682,12 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
           roomCount: listingRooms.bedrooms || 1,
           bathroomCount: listingRooms.bathrooms || 1,
           guestCount: listingRooms.bedrooms || 1,
-          squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : 0,
+          squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet.replace(/,/g, '')) : 0,
           // Pricing and deposits
-          depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
-          petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit) : 0,
-          petRent: listingPricing.petRent ? Number(listingPricing.petRent) : 0,
-          rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : 0,
+          depositSize: listingPricing.deposit ? Number(listingPricing.deposit.replace(/,/g, '')) : 0,
+          petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit.replace(/,/g, '')) : 0,
+          petRent: listingPricing.petRent ? Number(listingPricing.petRent.replace(/,/g, '')) : 0,
+          rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking.replace(/,/g, '')) : 0,
           shortestLeaseLength: listingPricing.shortestStay || 1,
           longestLeaseLength: listingPricing.longestStay || 12,
           shortestLeasePrice: 0, // Deprecated
@@ -703,7 +703,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
           amenities: listingAmenities,
           monthlyPricing: listingPricing.monthlyPricing.map(p => ({
             months: p.months,
-            price: p.price ? Number(p.price) : 0,
+            price: p.price ? Number(p.price.replace(/,/g, '')) : 0,
             utilitiesIncluded: p.utilitiesIncluded
           }))
         };
@@ -797,7 +797,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       // Sync rooms
       roomCount: listingRooms.bedrooms,
       bathroomCount: listingRooms.bathrooms,
-      squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null,
+      squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet.replace(/,/g, '')) : null,
       // Sync amenities
       amenities: listingAmenities,
       // Sync pricing
@@ -805,8 +805,8 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       longestLeaseLength: listingPricing.longestStay,
       shortestLeasePrice: 0, // Deprecated
       longestLeasePrice: 0, // Deprecated
-      depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
-      rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking) : null,
+      depositSize: listingPricing.deposit ? Number(listingPricing.deposit.replace(/,/g, '')) : null,
+      rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking.replace(/,/g, '')) : null,
     }));
   }, [listingHighlights, listingLocation, listingRooms, listingAmenities, listingPricing]);
 

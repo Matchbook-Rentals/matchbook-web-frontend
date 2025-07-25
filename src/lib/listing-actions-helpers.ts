@@ -287,7 +287,7 @@ export async function handleSubmitListing(listingData: any, userId: string, draf
     roomCount: listingData.roomCount || 1,
     bathroomCount: listingData.bathroomCount || 1,
     guestCount: listingData.guestCount || 1,
-    squareFootage: listingData.squareFootage || 0,
+    squareFootage: listingData.squareFootage ? Number(String(listingData.squareFootage).replace(/,/g, '')) : 0,
     depositSize: listingData.depositSize || 0,
     petDeposit: listingData.petDeposit || 0,
     petRent: listingData.petRent || 0,
@@ -412,7 +412,7 @@ export function initializeRooms(draftData?: any) {
       roomCount: draftData.roomCount || 1,
       bathroomCount: draftData.bathroomCount || 1,
       guestCount: draftData.guestCount || 1,
-      squareFootage: draftData.squareFootage || null
+      squareFootage: draftData.squareFootage !== undefined && draftData.squareFootage !== null ? String(draftData.squareFootage) : null
     };
   }
   return {
@@ -568,12 +568,12 @@ export function transformComponentStateToDraftData(componentState: {
     roomCount: componentState.listingRooms.bedrooms,
     bathroomCount: componentState.listingRooms.bathrooms,
     guestCount: componentState.listingRooms.bedrooms,
-    squareFootage: componentState.listingRooms.squareFeet ? Number(componentState.listingRooms.squareFeet) : null,
+    squareFootage: componentState.listingRooms.squareFeet ? Number(componentState.listingRooms.squareFeet.replace(/,/g, '')) : null,
     // Pricing and deposits
-    depositSize: componentState.listingPricing.deposit ? Number(componentState.listingPricing.deposit) : null,
-    petDeposit: componentState.listingPricing.petDeposit ? Number(componentState.listingPricing.petDeposit) : null,
-    petRent: componentState.listingPricing.petRent ? Number(componentState.listingPricing.petRent) : null,
-    rentDueAtBooking: componentState.listingPricing.rentDueAtBooking ? Number(componentState.listingPricing.rentDueAtBooking) : null,
+    depositSize: componentState.listingPricing.deposit ? Number(componentState.listingPricing.deposit.replace(/,/g, '')) : null,
+    petDeposit: componentState.listingPricing.petDeposit ? Number(componentState.listingPricing.petDeposit.replace(/,/g, '')) : null,
+    petRent: componentState.listingPricing.petRent ? Number(componentState.listingPricing.petRent.replace(/,/g, '')) : null,
+    rentDueAtBooking: componentState.listingPricing.rentDueAtBooking ? Number(componentState.listingPricing.rentDueAtBooking.replace(/,/g, '')) : null,
     shortestLeaseLength: componentState.listingPricing.shortestStay,
     longestLeaseLength: componentState.listingPricing.longestStay,
     requireBackgroundCheck: true,
@@ -584,7 +584,7 @@ export function transformComponentStateToDraftData(componentState: {
     // Monthly pricing
     monthlyPricing: componentState.listingPricing.monthlyPricing.map(p => ({
       months: p.months,
-      price: p.price ? Number(p.price) : 0,
+      price: p.price ? Number(p.price.replace(/,/g, '')) : 0,
       utilitiesIncluded: p.utilitiesIncluded
     })),
     // Photos data

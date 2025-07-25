@@ -1,5 +1,18 @@
 # Changelog
 
+## Fix Square Footage and Pricing Field Persistence Issues
+- Fixed comma-formatted numeric values not persisting when saved (e.g., "1,234" became null)
+- Added comma removal before Number() conversion for all pricing fields
+- Applied fix to square footage, deposits, pet fees, rent amounts, and monthly pricing
+- Maintains comma formatting in UI while ensuring proper server submission
+
+## Dynamic "Switch to Hosting" Button Based on User Listings
+- Modified "Switch to Hosting" button to show "List your property" when users have no listings
+- Updated button to route to /app/host/add-property for users without listings  
+- Renamed PlatformNavbar to RenterNavbar for better semantic clarity
+- Added listing count fetching to MatchbookHeader and RenterNavbar components
+- Added explanatory comments for hasListings prop usage in host-side components
+
 ## Onboarding Popup Persistence & Mobile Responsiveness
 - Added 2-hour localStorage persistence to prevent onboarding popup from showing repeatedly
 - Implemented Safari private browsing compatibility with proper error handling
