@@ -13,24 +13,34 @@ export const HomePageWrapper: React.FC<HomePageWrapperProps> = ({ children }) =>
   const router = useRouter();
 
   useEffect(() => {
+    const checkAndShowPopup = () => {
+      const lastDismissed = localStorage.getItem('onboarding-popup-dismissed');
+      const twoHoursInMs = 2 * 60 * 60 * 1000; // 2 hours * 60 minutes * 60 seconds * 1000 milliseconds
+      
+      if (!lastDismissed || Date.now() - parseInt(lastDismissed) > twoHoursInMs) {
+        setShowPopup(true);
+      }
+    };
+
     // Show popup after 1000ms delay to let page load
-    const timer = setTimeout(() => {
-      setShowPopup(true);
-    }, 1000);
+    const timer = setTimeout(checkAndShowPopup, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
   const handleContinueToSite = () => {
+    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
     setShowPopup(false);
   };
 
   const handleListProperty = () => {
+    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
     setShowPopup(false);
     router.push("/app/host/add-property");
   };
 
   const handleClosePopup = () => {
+    localStorage.setItem('onboarding-popup-dismissed', Date.now().toString());
     setShowPopup(false);
   };
 

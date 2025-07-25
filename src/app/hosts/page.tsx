@@ -9,6 +9,8 @@ import { ReviewsSection } from "../../components/marketing-landing-components/re
 import Footer from "@/components/marketing-landing-components/footer";
 import { currentUser } from "@clerk/nextjs/server";
 import { HostsPageWrapper } from "@/components/hosts-page-wrapper";
+import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 
 
 export default async function HostsPage(): Promise<React.ReactNode> {
@@ -27,12 +29,24 @@ export default async function HostsPage(): Promise<React.ReactNode> {
   return (
     <HostsPageWrapper>
       <div className="bg-background">
-        <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+        <MatchbookHeader 
+          userId={user?.id || null} 
+          user={userObject} 
+          isSignedIn={!!user?.id}
+          buttonText="List Your Property"
+          buttonHref="/app/host/add-property"
+        />
         <div className="flex justify-center p-8">
           <MarketingPageHeader
             headerText="Become a Host"
             highlightedText="Earn More, Keep More"
           />
+        </div>
+
+        <div className="w-full flex justify-center mt-12" >
+          <BrandButton size='xl' className="px-10" href="/app/host/add-property">
+            List Your Property
+          </BrandButton>
         </div>
         <HostsLoveMatchbook />
         <ReviewsSection />

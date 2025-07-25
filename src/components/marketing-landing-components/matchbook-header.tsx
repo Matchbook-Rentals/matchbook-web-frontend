@@ -18,9 +18,11 @@ interface MatchbookHeaderProps {
   user: UserObject | null;
   isSignedIn: boolean;
   className?: string;
+  buttonText?: string;
+  buttonHref?: string;
 }
 
-export default function MatchbookHeader({ userId, user, isSignedIn, className }: MatchbookHeaderProps): JSX.Element {
+export default function MatchbookHeader({ userId, user, isSignedIn, className, buttonText = "Become a Host", buttonHref = "/hosts" }: MatchbookHeaderProps): JSX.Element {
 
   return (
     <header className={cn("flex w-full items-center justify-between px-6 py-1 bg-background", className)}>
@@ -37,8 +39,8 @@ export default function MatchbookHeader({ userId, user, isSignedIn, className }:
           variant="outline"
           className="text-[#3c8787] border-[#3c8787] hover:bg-primaryBrand hover:text-white font-medium transition-colors duration-300 hidden md:block"
         >
-          <Link href={'/hosts'}>
-            Become a Host
+          <Link href={buttonHref}>
+            {buttonText}
           </Link>
         </Button>
 
