@@ -1,10 +1,11 @@
 'use client'
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserMenu from "../userMenu";
 import Link from "next/link";
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from "@/constants/styles";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { getHostListingsCount } from "@/app/actions/listings";
 
 interface UserObject {
   id: string;
@@ -15,14 +16,31 @@ interface UserObject {
   publicMetadata?: Record<string, any>;
 }
 
-interface PlatformNavbarProps {
+interface RenterNavbarProps {
   userId?: string | null;
   user?: UserObject | null;
   isSignedIn?: boolean;
 }
 
-export default function PlatformNavbar({ userId, user, isSignedIn }: PlatformNavbarProps) {
+export default function RenterNavbar({ userId, user, isSignedIn }: RenterNavbarProps) {
   const pathName = usePathname();
+  const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    async function checkUserListings() {
+      if (isSignedIn && userId) {
+        try {
+          const listingsCount = await getHostListingsCount();
+          setHasListings(listingsCount > 0);
+        } catch (error) {
+          console.error('Error fetching listings count:', error);
+          setHasListings(undefined);
+        }
+      }
+    }
+    
+    checkUserListings();
+  }, [isSignedIn, userId]);
 
   let marginClass;
 
@@ -60,7 +78,7 @@ export default function PlatformNavbar({ userId, user, isSignedIn }: PlatformNav
         </motion.div>
 
         <motion.div className="w-1/3 flex py-1 justify-end" layout="position" transition={{ duration: 0.3 }}>
-          <UserMenu color="black" mode="header" userId={userId} user={user} isSignedIn={isSignedIn} />
+          <UserMenu color="black" mode="header" userId={userId} user={user} isSignedIn={isSignedIn} hasListings={hasListings} />
         </motion.div>
       </motion.div>
     </motion.nav >

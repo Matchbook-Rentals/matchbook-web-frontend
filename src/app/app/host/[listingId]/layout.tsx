@@ -140,7 +140,8 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
                 <Separator orientation="vertical" className="mr-2 h-4" />
                 <HostBreadcrumb groups={sidebarGroups} breadcrumbTitle={titleCasedBreadcrumbText} />
               </div>
-              <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" />
+              {/* hasListings={undefined} because host-side menu shows "Switch to Renting", not affected by listing count */}
+              <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" hasListings={undefined} />
             </div>
           </header>
           <div className="flex flex-1 flex-col gap-4">

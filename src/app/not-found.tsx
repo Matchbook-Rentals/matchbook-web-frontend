@@ -2,7 +2,7 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import PlatformNavbar from '@/components/platform-components/platformNavbar'
+import RenterNavbar from '@/components/platform-components/renterNavbar'
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { useUser } from '@clerk/nextjs';
 
@@ -24,7 +24,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-background">
       {/* Conditional Navigation */}
-      {isPlatformPage ? <PlatformNavbar /> : <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={isSignedIn} />}
+      {isPlatformPage ? <RenterNavbar /> : <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={isSignedIn} />}
       
       {/* 404 Content */}
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">

@@ -1,5 +1,5 @@
 'use client'
-import PlatformNavbar from './platformNavbar'
+import RenterNavbar from './renterNavbar'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 
@@ -26,7 +26,7 @@ export default function PlatformLayoutClient({ children, userId, user, isSignedI
   
   return (
     <>
-      {!shouldHideNavbar && <PlatformNavbar userId={userId} user={user} isSignedIn={isSignedIn} />}
+      {!shouldHideNavbar && <RenterNavbar userId={userId} user={user} isSignedIn={isSignedIn} />}
       <div style={{ fontFamily: 'Poppins' }}>{children}</div>
     </>
   )

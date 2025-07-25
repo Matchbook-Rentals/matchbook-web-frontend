@@ -1,9 +1,10 @@
 'use client'
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import UserMenu from "../userMenu";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { getHostListingsCount } from "@/app/actions/listings";
 interface UserObject {
   id: string;
   firstName: string | null;
@@ -23,6 +24,23 @@ interface MatchbookHeaderProps {
 }
 
 export default function MatchbookHeader({ userId, user, isSignedIn, className, buttonText = "Become a Host", buttonHref = "/hosts" }: MatchbookHeaderProps): JSX.Element {
+  const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    async function checkUserListings() {
+      if (isSignedIn && userId) {
+        try {
+          const listingsCount = await getHostListingsCount();
+          setHasListings(listingsCount > 0);
+        } catch (error) {
+          console.error('Error fetching listings count:', error);
+          setHasListings(undefined);
+        }
+      }
+    }
+    
+    checkUserListings();
+  }, [isSignedIn, userId]);
 
   return (
     <header className={cn("flex w-full items-center justify-between px-6 py-1 bg-background", className)}>
@@ -44,7 +62,7 @@ export default function MatchbookHeader({ userId, user, isSignedIn, className, b
           </Link>
         </Button>
 
-        <UserMenu color="white" mode="header" userId={userId} user={user} isSignedIn={isSignedIn} />
+        <UserMenu color="white" mode="header" userId={userId} user={user} isSignedIn={isSignedIn} hasListings={hasListings} />
       </div>
     </header>
   );

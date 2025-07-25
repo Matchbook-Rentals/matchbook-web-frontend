@@ -4,7 +4,7 @@ import { ListingAndImages } from '@/types'
 import prisma from '@/lib/prismadb'
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { PAGE_MARGIN } from '@/constants/styles'
-import PlatformNavbar from '@/components/platform-components/platformNavbar'
+import RenterNavbar from '@/components/platform-components/renterNavbar'
 import { calculateRent, calculateLengthOfStay } from '@/lib/calculate-rent';
 import ListingDetailsView from '../(listing-components)/listing-details-view'
 import { Trip } from '@prisma/client'
@@ -35,7 +35,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   return (
     <>
-      <PlatformNavbar />
+      <RenterNavbar />
       <div className={`${PAGE_MARGIN} font-montserrat `}>
         <ListingDetailsView listing={listing} locationString={trip.locationString} calculatedPrice={calculatedPrice} />
       </div>

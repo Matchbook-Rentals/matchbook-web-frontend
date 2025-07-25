@@ -17,7 +17,8 @@ export default async function NavBar() {
         <button className="rounded-full xl:mr-10 bg-white text-lg border border-gray-500 pl-6 pr-8 py-3 text-gray-500 text-center ">
           List your place
         </button>
-        <UserMenu color="white" />
+        {/* hasListings={undefined} - this navbar doesn't pass user context, so listing count is not relevant */}
+        <UserMenu color="white" hasListings={undefined} />
       </div>
     </nav>
   );

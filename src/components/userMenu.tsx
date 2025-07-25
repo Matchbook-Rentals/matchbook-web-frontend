@@ -50,9 +50,10 @@ interface UserMenuProps {
   userId?: string | null;
   user?: UserObject | null;
   isSignedIn?: boolean;
+  hasListings?: boolean;
 }
 
-export default function UserMenu({ color, mode = 'menu-only', userId, user, isSignedIn }: UserMenuProps): JSX.Element {
+export default function UserMenu({ color, mode = 'menu-only', userId, user, isSignedIn, hasListings }: UserMenuProps): JSX.Element {
   const { openUserProfile } = useClerk();
   const router = useRouter();
   const pathname = usePathname();
@@ -162,8 +163,8 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', requiresAdmin: true, section: 2 }, // TODO: Restore requiresBeta after MX
     {
       id: 'switch-mode',
-      label: 'Switch to Hosting',
-      href: '/app/host/dashboard/overview',
+      label: hasListings === false ? 'List your property' : 'Switch to Hosting',
+      href: hasListings === false ? '/app/host/add-property' : '/app/host/dashboard/overview',
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },

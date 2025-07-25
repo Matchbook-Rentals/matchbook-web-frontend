@@ -1,5 +1,5 @@
 import React from 'react'
-import PlatformNavbar from '@/components/platform-components/platformNavbar'
+import RenterNavbar from '@/components/platform-components/renterNavbar'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import { Toaster } from '@/components/ui/toaster'
 import { checkRole } from '@/utils/roles'
@@ -37,7 +37,7 @@ export default async function AdminLayout({
   
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <PlatformNavbar userId={userId} user={userObject} isSignedIn={!!userId} />
+      <RenterNavbar userId={userId} user={userObject} isSignedIn={!!userId} />
       <div className="flex flex-1">
         <AdminSidebar />
         <main className="flex-grow p-6">

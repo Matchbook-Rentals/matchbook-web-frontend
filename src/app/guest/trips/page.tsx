@@ -1,6 +1,6 @@
 import ListingPhotos from "@/app/app/rent/searches/[tripId]/listingPhotos";
 import MatchBar from "@/app/app/rent/searches/[tripId]/matchBar";
-import PlatformNavbar from "@/components/platform-components/platformNavbar";
+import RenterNavbar from "@/components/platform-components/renterNavbar";
 import PrefereceDisplay from "./preference-display";
 
 type TripsPageProps = {
@@ -11,7 +11,7 @@ type TripsPageProps = {
 export default function TripsPage({ params, searchParams }: TripsPageProps) {
   return (
     <>
-      <PlatformNavbar />
+      <RenterNavbar />
       <MatchBar />
       <ListingPhotos />
     </>
