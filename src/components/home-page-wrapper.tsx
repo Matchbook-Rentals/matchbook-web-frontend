@@ -27,7 +27,7 @@ export const HomePageWrapper: React.FC<HomePageWrapperProps> = ({ children }) =>
 
   const handleListProperty = () => {
     setShowPopup(false);
-    router.push("/hosts");
+    router.push("/app/host/add-property");
   };
 
   const handleClosePopup = () => {
