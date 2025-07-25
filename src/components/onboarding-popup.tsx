@@ -31,7 +31,7 @@ export const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className="flex flex-col items-center gap-0 p-0 bg-white w-[609px] max-w-[609px] mx-auto border-0 shadow-lg !top-[20%] translate-y-[-50%]"
+        className="flex flex-col items-center gap-0 p-0 bg-white w-[95vw] max-w-[609px] mx-auto border-0 shadow-lg !top-[20%] translate-y-[-50%]"
         showCloseButton={false}
       >
         <Card className="w-full rounded-[20px] overflow-hidden border-0 shadow-none">
@@ -46,7 +46,7 @@ export const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
             </p>
           </CardContent>
 
-          <CardFooter className="p-4 pt-0 flex gap-3">
+          <CardFooter className="p-4 pt-0 flex flex-wrap gap-3">
             <Button
               variant="outline"
               className="flex-1 rounded-lg border-[#3c8787] text-[#3c8787] font-['Poppins',Helvetica] font-semibold text-sm"
