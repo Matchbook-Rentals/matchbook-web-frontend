@@ -73,8 +73,8 @@ export const VerificationStandOut = (): JSX.Element => {
               ))}
             </div>
 
-            <Button className="relative w-[278px] h-[50px] bg-[#0a6b6c] text-white font-medium rounded-md hover:bg-[#085556] transition-colors" asChild>
-              <a href="/app/verification">Start Screening</a>
+            <Button className="relative w-[278px] h-[50px] bg-[#0a6b6c] text-white font-medium rounded-md hover:bg-[#085556] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              Start Screening
             </Button>
           </div>
         </CardContent>

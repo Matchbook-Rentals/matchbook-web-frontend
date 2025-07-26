@@ -94,10 +94,10 @@ export const VerificationHowItWorks = (): JSX.Element => {
 
       {/* CTA Button */}
       <Button
-        className="relative w-[290px] flex-[0_0_auto] bg-teal-700 text-white font-medium py-3 rounded-md hover:bg-teal-800"
-        asChild
+        className="relative w-[290px] flex-[0_0_auto] bg-teal-700 text-white font-medium py-3 rounded-md hover:bg-teal-800 disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled
       >
-        <a href="/app/verification">Start Screening</a>
+        Start Screening
       </Button>
     </section>
   );

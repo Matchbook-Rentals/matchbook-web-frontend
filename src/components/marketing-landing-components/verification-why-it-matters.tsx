@@ -81,8 +81,8 @@ export const VerificationWhyItMatters = (): JSX.Element => {
       </div>
 
       {/* CTA Button */}
-      <Button className="bg-teal-700 hover:bg-teal-800 text-white font-medium py-3 px-6 rounded-md" asChild>
-        <a href="/app/verification">Start Screening</a>
+      <Button className="bg-teal-700 hover:bg-teal-800 text-white font-medium py-3 px-6 rounded-md disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        Start Screening
       </Button>
     </section>
   );

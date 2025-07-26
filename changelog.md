@@ -1,5 +1,10 @@
 # Changelog
 
+## Disable Verification Start Screening Buttons
+- Disabled all "Start Screening" buttons on the /verification marketing page
+- Added disabled prop and cursor-not-allowed styling to buttons in three components
+- Removed link functionality from buttons to prevent navigation
+
 ## Admin Dashboard Sidebar Modernization
 - Replaced legacy AdminSidebar with modern HostSidebar component using shadcn/ui sidebar system
 - Added SidebarProvider, SidebarInset, and SidebarTrigger for responsive sidebar behavior
