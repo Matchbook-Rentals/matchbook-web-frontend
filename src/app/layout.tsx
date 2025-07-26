@@ -17,8 +17,21 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Matchbook Rentals",
+  title: "MatchBook Rentals",
   description: "Flexible Rentals",
+  openGraph: {
+    title: "MatchBook Rentals",
+    description: "Flexible Rentals",
+    images: [
+      {
+        url: "/preview-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "MatchBook Rentals"
+      }
+    ],
+    type: "website"
+  },
   ...(process.env.NODE_ENV === 'production' ? (
     console.log('Including Google verification meta tag in production'),
     {

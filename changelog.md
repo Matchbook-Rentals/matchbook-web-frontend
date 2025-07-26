@@ -1,5 +1,10 @@
 # Changelog
 
+## Add Open Graph Meta Tags for Text Message Previews
+- Added Open Graph meta tags to layout.tsx for proper social media and text message link previews
+- Configured og:image with 1200x630 preview-logo.png for optimal aspect ratio display
+- Added og:title, og:description, and og:type meta properties for complete Open Graph implementation
+
 ## Fix Square Footage and Pricing Field Persistence Issues
 - Fixed comma-formatted numeric values not persisting when saved (e.g., "1,234" became null)
 - Added comma removal before Number() conversion for all pricing fields
