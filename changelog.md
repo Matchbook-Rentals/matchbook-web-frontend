@@ -1,5 +1,12 @@
 # Changelog
 
+## Admin Dashboard Sidebar Modernization
+- Replaced legacy AdminSidebar with modern HostSidebar component using shadcn/ui sidebar system
+- Added SidebarProvider, SidebarInset, and SidebarTrigger for responsive sidebar behavior
+- Organized admin navigation into logical groups: Admin Dashboard, Integrations, and System
+- Added breadcrumb navigation and integrated UserMenu in header
+- Removed RenterNavbar in favor of unified sidebar layout pattern
+
 ## Admin Listing Approval Field Cleanup
 - Removed redundant utilitiesIncluded and requireBackgroundCheck boolean flags from listing approval display
 - Kept utilities included display in monthly pricing table where it belongs
