@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { BrandButton } from "@/components/ui/brandButton";
 import { usePathname } from 'next/navigation';
 
 interface ShareButtonProps {
@@ -21,7 +22,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   url,
   title = "Share",
   text = "Check out this listing",
-  className = "flex items-end gap-x-1 h-fit hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group"
+  className = ""
 }) => {
   const { toast } = useToast();
   const [open, setOpen] = React.useState(false);
@@ -74,10 +75,14 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 
   return (
     <>
-      <button onClick={handleShare} className={className}>
-        <ShareIcon className="" />
-        <span className="hidden xxs:block">Share</span>
-      </button>
+      <BrandButton 
+        onClick={handleShare} 
+        className={className + '!w-fit min-w-0 '}
+        variant="default"
+        leftIcon={<ShareIcon className="h-4 w-4" />}
+      >
+        Share
+      </BrandButton>
 
       <Dialog open={open} onOpenChange={setOpen} >
         <DialogContent hideCloseButton>

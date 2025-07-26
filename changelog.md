@@ -154,3 +154,12 @@
 - Added comma formatting to square footage input in room configuration
 - Updated all deposit/rent inputs to use comma formatting while maintaining mobile numpad functionality
 - Raw integer values stored in state without commas, formatted display only for better UX
+
+## Search Tab Selector UI Redesign
+- Created new SearchTabSelector component with modern card-based design and teal accent styling
+- Replaced TabSelector with SearchTabSelector in desktop search views and loading states
+- Updated search-listing-details-box with card layout, rectangular action buttons, and proper host image display
+- Fixed host image URL reference to use correct Prisma schema field (imageUrl instead of profilePicture)
+- Added Lucide icons for better consistency and replaced custom CheckCircleIcon with CheckCircle
+- Updated verification badge to use verifiedAt field for proper verification status display
+- Improved message host dialog styling with consistent teal color scheme and hover effects

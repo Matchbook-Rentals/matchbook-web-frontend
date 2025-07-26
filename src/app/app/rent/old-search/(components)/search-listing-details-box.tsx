@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
 import { X, Heart, CheckCircle } from 'lucide-react';
+import { BrandButton } from '@/components/ui/brandButton';
 
 interface ListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -63,13 +64,13 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
               <X className="h-4 w-4" />
             </Button>
 
-            <Button
+            <BrandButton
               variant="default"
-              className="rounded-lg w-[80px] h-[45px] bg-[#3c8787] hover:bg-[#2d6969] flex items-center justify-center"
+              className="rounded-lg w-[80px] h-[45px] min-w-0 flex items-center justify-center"
               onClick={onLike}
             >
               <Heart className="h-4 w-4 text-white" />
-            </Button>
+            </BrandButton>
           </div>
         </div>
 
