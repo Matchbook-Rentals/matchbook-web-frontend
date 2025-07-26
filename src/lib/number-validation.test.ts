@@ -94,6 +94,30 @@ describe('number-validation', () => {
       expect(validateAndCapNumber('1e10')).toBe('110'); // e stripped out
       expect(validateAndCapNumber('5e+45')).toBe('545'); // e and + stripped out
     });
+
+    describe('comma formatting', () => {
+      it('should format numbers with commas when formatWithCommas is true', () => {
+        expect(validateAndCapNumber('1000', false, MAX_ALLOWED_NUMBER, true)).toBe('1,000');
+        expect(validateAndCapNumber('12345', false, MAX_ALLOWED_NUMBER, true)).toBe('12,345');
+        expect(validateAndCapNumber('1234567', false, MAX_ALLOWED_NUMBER, true)).toBe('1,234,567');
+      });
+
+      it('should handle input already containing commas', () => {
+        expect(validateAndCapNumber('1,500', false, MAX_ALLOWED_NUMBER, true)).toBe('1,500');
+        expect(validateAndCapNumber('1,234,567', false, MAX_ALLOWED_NUMBER, true)).toBe('1,234,567');
+        expect(validateAndCapNumber('$1,000', false, MAX_ALLOWED_NUMBER, true)).toBe('1,000');
+      });
+
+      it('should not format with commas when formatWithCommas is false', () => {
+        expect(validateAndCapNumber('1000', false, MAX_ALLOWED_NUMBER, false)).toBe('1000');
+        expect(validateAndCapNumber('1,500', false, MAX_ALLOWED_NUMBER, false)).toBe('1500');
+      });
+
+      it('should handle empty and zero values with comma formatting', () => {
+        expect(validateAndCapNumber('', false, MAX_ALLOWED_NUMBER, true)).toBe('');
+        expect(validateAndCapNumber('0', false, MAX_ALLOWED_NUMBER, true)).toBe('0');
+      });
+    });
   });
 
   describe('createNumberChangeHandler', () => {
@@ -133,6 +157,24 @@ describe('number-validation', () => {
       handler({ target: { value: '1500' } } as React.ChangeEvent<HTMLInputElement>);
       
       expect(mockOnChange).toHaveBeenCalledWith('1000');
+    });
+
+    it('should format values with commas when formatWithCommas is true', () => {
+      const mockOnChange = vi.fn();
+      const handler = createNumberChangeHandler(mockOnChange, false, MAX_ALLOWED_NUMBER, true);
+      
+      handler({ target: { value: '1500' } } as React.ChangeEvent<HTMLInputElement>);
+      
+      expect(mockOnChange).toHaveBeenCalledWith('1,500');
+    });
+
+    it('should handle input with existing commas when formatWithCommas is true', () => {
+      const mockOnChange = vi.fn();
+      const handler = createNumberChangeHandler(mockOnChange, false, MAX_ALLOWED_NUMBER, true);
+      
+      handler({ target: { value: '12,345' } } as React.ChangeEvent<HTMLInputElement>);
+      
+      expect(mockOnChange).toHaveBeenCalledWith('12,345');
     });
   });
 
@@ -190,6 +232,29 @@ describe('number-validation', () => {
       
       expect(mockOnChange).toHaveBeenCalledWith('1000');
       expect(mockOnCapped).toHaveBeenCalledWith('1500', '1000');
+    });
+
+    it('should format value with commas on blur when formatWithCommas is true', () => {
+      const mockOnChange = vi.fn();
+      const mockOnCapped = vi.fn();
+      
+      const handler = createNumberBlurHandler('1500', mockOnChange, false, mockOnCapped, MAX_ALLOWED_NUMBER, true);
+      handler();
+      
+      expect(mockOnChange).toHaveBeenCalledWith('1,500');
+      expect(mockOnCapped).toHaveBeenCalledWith('1500', '1,500');
+    });
+
+    it('should handle already formatted value on blur', () => {
+      const mockOnChange = vi.fn();
+      const mockOnCapped = vi.fn();
+      
+      const handler = createNumberBlurHandler('1,500', mockOnChange, false, mockOnCapped, MAX_ALLOWED_NUMBER, true);
+      handler();
+      
+      // Should not call onChange if value is already properly formatted
+      expect(mockOnChange).not.toHaveBeenCalled();
+      expect(mockOnCapped).not.toHaveBeenCalled();
     });
   });
 
