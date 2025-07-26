@@ -97,7 +97,7 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
 
   if (isLoading) {
     return (
-      <Button variant='outline' className='w-full border-black mt-4' disabled>
+      <Button variant='outline' className='w-full mt-1 border-[#3c8787] text-[#3c8787] font-semibold' disabled>
         Checking for messages
       </Button>
     );
@@ -105,7 +105,7 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
 
   if (existingConversationId) {
     return (
-      <Button variant='outline' className='w-full border-black mt-4' onClick={handleViewMessagesClick}>
+      <Button variant='outline' className='w-full mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors' onClick={handleViewMessagesClick}>
         View Messages
       </Button>
     );
@@ -115,7 +115,7 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline' className='w-full border-black mt-4'>
+        <Button variant='outline' className='w-full mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors'>
           Message Host
         </Button>
       </DialogTrigger>

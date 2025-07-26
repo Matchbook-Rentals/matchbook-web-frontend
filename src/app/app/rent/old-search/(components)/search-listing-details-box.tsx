@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ListingAndImages } from '@/types';
-import { BrandHeart, ReturnIcon, RejectIcon, VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge, StarIcon } from '@/components/icons';
+import { StarIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
 import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
-
+import { X, Heart, CheckCircle } from 'lucide-react';
 
 interface ListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -13,36 +16,15 @@ interface ListingDetailsBoxProps {
   setIsDetailsVisible: (isVisible: boolean) => void;
 }
 
-const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject, onReturn, onLike, setIsDetailsVisible }) => {
+const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ 
+  listing, 
+  onReject, 
+  onReturn, 
+  onLike, 
+  setIsDetailsVisible 
+}) => {
   const host = listing.user;
   const detailsBoxRef = useRef<HTMLDivElement>(null);
-  // Style variables
-  const bigButtonControl = "max-w-[120px] min-w-[80px] aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity";
-  const smallButtonControl = "max-w-[80px] min-w-[80px] aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity";
-  const bigIcon = "w-[40%] h-[40%]";
-  const smallIcon = "w-[55%] h-[55%]";
-  const currencyStyles = "md:text-[24px] lg:text-[30px] xl:text-[32px] 2xl:text-[36px] font-medium";
-  const currencyStylesUnderline = "md:text-[16px] lg:text-[20px] xl:text-[21px] 2xl:text-[24px] font-normal underline";
-  const badgeSpans = "flex items-center gap-2 whitespace-nowrap text-[16px] font-medium";
-  const mediumText = "md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium";
-  const normalText = "md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal";
-
-  const calculateTimeOnMatchbook = () => {
-    if (!host?.createdAt) return 'New to Matchbook';
-
-    const createdDate = new Date(host?.createdAt);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - createdDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays < 30) return `${diffDays} days on Matchbook`;
-
-    const diffMonths = Math.floor(diffDays / 30);
-    if (diffMonths < 12) return `${diffMonths} months on Matchbook`;
-
-    const diffYears = Math.floor(diffDays / 365);
-    return `${diffYears} years on Matchbook`;
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,59 +40,105 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, on
   }, [setIsDetailsVisible]);
 
   return (
-    <div className='p-4 rounded-md font-poppin' style={{ fontFamily: 'Poppins' }} ref={detailsBoxRef}>
-      {/* Action Buttons Section - Reject, Return, Like */}
-      <div className="flex justify-center items-center gap-y-4 gap-x-8 my-4">
-        <button
-          onClick={onReject}
-          className={`${bigButtonControl} bg-gradient-to-br from-[#C68087BF] to-[#7D383FBF]`}
-        >
-          <RejectIcon className={`${bigIcon} text-white`} />
-        </button>
+    <Card className="w-full  border border-[#0000001a] rounded-xl" ref={detailsBoxRef}>
+      <CardContent className="flex flex-col items-start gap-5 p-4">
+        {/* Header with buttons */}
+        <div className="flex justify-between w-full mb-2">
+          <Button 
+            variant="ghost" 
+            className="h-9 px-3.5 py-2.5 rounded-lg"
+            onClick={onReturn}
+          >
+            <span className="font-semibold text-sm text-[#5d606d] underline">
+              Undo
+            </span>
+          </Button>
 
-        <button
-          onClick={onReturn}
-          className={`${smallButtonControl} bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
-        >
-          <ReturnIcon className={`${smallIcon} text-white`} />
-        </button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="rounded-lg w-[80px] h-[45px] flex items-center justify-center"
+              onClick={onReject}
+            >
+              <X className="h-4 w-4" />
+            </Button>
 
-        <button
-          onClick={onLike}
-          className={`${bigButtonControl} bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
-        >
-          <BrandHeart className={bigIcon} />
-        </button>
-      </div>
-
-      {/* Pricing Information Section */}
-      <div className='flex justify-between items-center gap-x-4 mb-4'>
-        <div className='whitespace-nowrap'>
-          <p className={currencyStyles}>${listing.price?.toLocaleString()} <span className={currencyStylesUnderline}>month</span></p>
+            <Button
+              variant="default"
+              className="rounded-lg w-[80px] h-[45px] bg-[#3c8787] hover:bg-[#2d6969] flex items-center justify-center"
+              onClick={onLike}
+            >
+              <Heart className="h-4 w-4 text-white" />
+            </Button>
+          </div>
         </div>
-        <div className='whitespace-nowrap'>
-          <p className={currencyStyles}>${listing.depositSize?.toLocaleString()} <span className={currencyStylesUnderline}>deposit</span></p>
-        </div>
-      </div>
 
-      {/* Host Information Section */}
-      <div className='mb-4 space-y-2'>
-        <div className='flex items-center justify-between'>
-          <p className={mediumText}>Hosted by {host?.firstName}</p>
-          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}
-            <span className='text-sm pt-2 pl-0 -translate-x-1'>({listing?.numberOfStays || 23})</span>
-          </p>
-        </div>
-      </div>
+        {/* Host information */}
+        <div className="flex items-center gap-3 w-full">
+          <Avatar className="w-[59px] h-[59px] rounded-xl">
+            <AvatarImage 
+              src={host?.imageUrl || ''} 
+              alt={`${host?.firstName || 'Host'} profile`}
+            />
+            <AvatarFallback className="rounded-xl bg-secondaryBrand text-white font-medium text-xl md:text-2xl lg:text-3xl">
+              {(host?.firstName?.charAt(0) + host?.lastName?.charAt(0)) || 'H'}
+            </AvatarFallback>
+          </Avatar>
 
-      {/* Host Badges Section */}
-      <div className='flex justify-between gap-2'>
-        <span className={badgeSpans}><VerifiedBadge />Verified</span>
-        <span className={badgeSpans}><TrailBlazerBadge />Trail Blazer</span>
-        <span className={badgeSpans}><HallmarkHostBadge />Hallmark Host</span>
-      </div>
-      <SearchMessageHostDialog listingId={listing.id} hostName={listing.user?.firstName || 'Host'} />
-    </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="font-medium text-[#373940] text-sm">
+              Hosted by {host?.firstName || 'Host'}
+            </div>
+
+            <div className="flex items-center gap-1 h-8">
+              <StarIcon className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+              <span className="font-normal text-[#717680] text-sm">
+                {listing?.averageRating || listing.uScore 
+                  ? (listing?.averageRating || listing.uScore?.toFixed(1)) 
+                  : 'N/A'} ({listing?.numberOfStays || 0})
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Verified badge */}
+        {host?.verifiedAt && (
+          <div className="flex items-center gap-1">
+            <CheckCircle className="w-4 h-4 text-[#717680]" />
+            <span className="font-normal text-[#717680] text-xs">
+              Verified
+            </span>
+          </div>
+        )}
+
+        <Separator className="w-full" />
+
+        {/* Pricing information */}
+        <div className="flex justify-between w-full">
+          <div className="flex flex-col gap-1">
+            <div className="font-semibold text-[#373940] text-sm">
+              ${listing.price?.toLocaleString()}
+            </div>
+            <div className="font-normal text-[#5d606d] text-base">Month</div>
+          </div>
+
+          <div className="flex flex-col gap-1 items-end">
+            <div className="font-semibold text-[#373940] text-sm">
+              ${listing.depositSize?.toLocaleString()}
+            </div>
+            <div className="font-normal text-[#5d606d] text-base">Deposit</div>
+          </div>
+        </div>
+
+        {/* Message button - Custom styled for the new design */}
+        <div className="w-full">
+          <SearchMessageHostDialog 
+            listingId={listing.id} 
+            hostName={host?.firstName || 'Host'} 
+          />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

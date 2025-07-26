@@ -2,6 +2,7 @@
 // Imports
 import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
+import { SearchTabSelector } from '@/components/ui/search-tab-selector';
 import LoadingSkeleton from './LoadingSkeleton'; // Import the LoadingSkeleton component
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
@@ -148,14 +149,14 @@ const LoadingTabs: React.FC = () => {
     <div className={`flex flex-col items-center ${PAGE_MARGIN} ${publicSans.variable}`}>
 
       {/* Desktop TabSelector - Hidden on small screens, visible on md and up */}
-      <div className="hidden md:flex w-full">
-        <TabSelector
-          tabs={desktopTabs}
-          defaultTab='recommended'
-          className='mx-auto w-full'
-          tabsClassName='w-full'
-          tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'
+      <div className="hidden md:block w-full">
+        <SearchTabSelector
+          defaultValue='recommended'
+          className='mx-0'
         />
+        <div className="w-full mt-4">
+          <LoadingSkeleton />
+        </div>
       </div>
 
       {/* Mobile TabSelector - Visible on small screens, hidden on md and up */}

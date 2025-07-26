@@ -44,7 +44,7 @@ export default function RenterNavbar({ userId, user, isSignedIn }: RenterNavbarP
 
   let marginClass;
 
-  const isWidePath = pathName === '/app/rent/messages' || pathName.includes('/host/dashboard') || pathName.includes('/host/');
+  const isWidePath = pathName === '/app/rent/messages' || pathName.includes('/host/dashboard') || pathName.includes('/host/') || pathName.includes('rent');
 
   isWidePath ? marginClass = APP_PAGE_MARGIN : marginClass = PAGE_MARGIN;
 

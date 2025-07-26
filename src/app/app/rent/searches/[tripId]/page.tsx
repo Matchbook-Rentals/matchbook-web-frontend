@@ -1,7 +1,7 @@
 'use client';
 //Imports
 import React from 'react';
-import TabSelector from '@/components/ui/tab-selector';
+import { SearchTabSelector } from '@/components/ui/search-tab-selector';
 import MatchViewTab from '../../old-search/(tabs)/search-match-tab';
 import SearchFavoritesTab from '../../old-search/(tabs)/search-favorites-tab';
 import MapView from '../../old-search/(tabs)/search-map-tab';
@@ -83,14 +83,6 @@ const TripsPage: React.FC = () => {
   const tabTriggerStyles = 'pt-1 sm:p-0 '
   const tabs: Tab[] = [
     //{
-    //  label: 'Manage Search',
-    //  value: 'overview',
-    //  content: state.trip ? <OverviewTab /> : null,
-    //  textSize: tabTriggerTextStyles,
-    //  className: tabTriggerStyles,
-    //  Icon: <SettingsIcon className='mt-1' />,
-    //  iconClassName: ""
-    //},
     {
       label: 'Recommended',
       value: 'recommended',
@@ -129,7 +121,7 @@ const TripsPage: React.FC = () => {
     },
   ];
 
-  const marginClass = PAGE_MARGIN;
+  const marginClass = APP_PAGE_MARGIN;
 
   const { width } = useWindowSize();
   const isMobile = width ? width < 640 : false; // 640px is the 'sm' breakpoint in Tailwind
@@ -154,17 +146,14 @@ const TripsPage: React.FC = () => {
       </div>
 
       {!isMobile ? (
-        <TabSelector
-          tabs={tabs}
-          activeTabValue={activeTab} // Control the active tab
-          onTabChange={handleTabSelect} // Handle tab changes initiated by the component
-          useUrlParams={false} // Disable internal URL handling as parent manages it
-          className='mx-auto w-full pb-0 mb-0 border-none'
-          tabsClassName='w-full mx-auto  '
-          tabsListClassName='flex py-0  justify-start w-full space-x-2  md:gap-x-2 '
-          secondaryButton={
-            // Conditionally render based on local activeTab state
-            ['recommended', 'allListings'].includes(activeTab) ? (
+        <>
+          <div className="flex items-center justify-between w-full">
+            <SearchTabSelector
+              activeValue={activeTab}
+              onValueChange={handleTabSelect}
+              className="mx-0"
+            />
+            {['recommended', 'allListings'].includes(activeTab) && (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
                 onOpenChange={setIsFilterOpen}
@@ -172,9 +161,12 @@ const TripsPage: React.FC = () => {
                 onFilterChange={handleFilterChange}
                 className=''
               />
-            ) : undefined
-          }
-        />
+            )}
+          </div>
+          <div className="w-full mt-4">
+            {tabs.find(tab => tab.value === activeTab)?.content}
+          </div>
+        </>
       ) : (
         <MobileTabSelector
           tabs={tabs}

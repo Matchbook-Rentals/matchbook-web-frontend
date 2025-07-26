@@ -300,8 +300,8 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         <ListingImageCarousel
           listingImages={showListings[0]?.listingImages || []}
         />
-        <div className='flex justify-between gap-x-8 relative'>
-          <div className='w-full lg:w-3/5'>
+        <div className='flex justify-between gap-x-8 lg:gap-x-16 relative'>
+          <div className='w-full lg:w-full'>
             <ListingDescription listing={showListings[0]} isFlexible={!!isFlexible}/>
 
             <h3 className="text-[24px] text-[#404040] font-medium py-3">Location</h3>
@@ -314,7 +314,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </div>
 
           <div
-            className="w-1/2 h-fit lg:w-[500px] max-w-[500px] sticky top-[10%] hidden lg:block"
+            className="w-1/2 h-fit lg:w-full shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
           >
             <ListingDetailsBox
               listing={showListings[0]}
