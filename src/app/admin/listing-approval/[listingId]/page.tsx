@@ -65,7 +65,6 @@ export default async function ListingApprovalDetail({
                       <p><span className="font-medium">Bathrooms:</span> {listing.bathroomCount}</p>
                       <p><span className="font-medium">Square Footage:</span> {listing.squareFootage}</p>
                       <p><span className="font-medium">Furnished:</span> {listing.furnished ? 'Yes' : 'No'}</p>
-                      <p><span className="font-medium">Utilities Included:</span> {listing.utilitiesIncluded ? 'Yes' : 'No'}</p>
                       <p><span className="font-medium">Pets Allowed:</span> {listing.petsAllowed ? 'Yes' : 'No'}</p>
                     </div>
                     <div>
@@ -83,7 +82,7 @@ export default async function ListingApprovalDetail({
                       .filter(([key, value]) => 
                         typeof value === 'boolean' && 
                         value === true && 
-                        !['isApproved', 'isTestListing', 'furnished', 'utilitiesIncluded', 'petsAllowed', 'requireBackgroundCheck', 'markedActiveByUser'].includes(key)
+                        !['isApproved', 'isTestListing', 'furnished', 'petsAllowed', 'markedActiveByUser'].includes(key)
                       )
                       .map(([key]) => (
                         <Badge key={key} variant="secondary" className="justify-center">
@@ -98,7 +97,7 @@ export default async function ListingApprovalDetail({
 
               <div>
                 <h2 className="text-lg font-semibold mb-2">Description</h2>
-                <p className="whitespace-pre-wrap">{listing.description}</p>
+                <p className="whitespace-pre-wrap break-words overflow-wrap-anywhere">{listing.description}</p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

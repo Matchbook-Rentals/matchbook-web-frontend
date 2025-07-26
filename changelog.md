@@ -1,5 +1,10 @@
 # Changelog
 
+## Admin Listing Approval Field Cleanup
+- Removed redundant utilitiesIncluded and requireBackgroundCheck boolean flags from listing approval display
+- Kept utilities included display in monthly pricing table where it belongs
+- Added text overflow protection for description field with break-words and overflow-wrap CSS
+
 ## Add Open Graph Meta Tags for Text Message Previews
 - Added Open Graph meta tags to layout.tsx for proper social media and text message link previews
 - Configured og:image with 1200x630 preview-logo.png for optimal aspect ratio display
