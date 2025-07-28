@@ -1,5 +1,18 @@
 # Changelog
 
+## Fixed Social Media Link Preview Images
+- Changed OpenGraph image URL from relative to absolute path to fix black/blank preview images
+- Added Twitter card metadata for proper link previews on Twitter/X
+- Preview images now display correctly across all platforms (Facebook, Twitter, LinkedIn, SMS/RCS)
+
+## Enhanced Number Input Formatting for Pricing Section
+- Added comma formatting to all pricing inputs (security deposit, rent due at booking, pet deposit, pet rent, monthly rent, square footage)
+- Numbers display with commas for better readability (e.g., "1,500" instead of "1500")
+- Commas are automatically stripped before database storage and parsing to maintain data integrity
+- Added onBlur auto-formatting to ensure consistent display when users finish editing
+- Extracted pricing section into reusable PricingSection component for better code organization
+- Added comprehensive test coverage for comma formatting functionality with 15 new test cases
+
 ## Disable Verification Start Screening Buttons
 - Disabled all "Start Screening" buttons on the /verification marketing page
 - Added disabled prop and cursor-not-allowed styling to buttons in three components

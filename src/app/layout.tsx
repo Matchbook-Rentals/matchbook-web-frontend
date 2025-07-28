@@ -24,13 +24,19 @@ export const metadata: Metadata = {
     description: "Flexible Rentals",
     images: [
       {
-        url: "/preview-logo.png",
+        url: "https://matchbookrentals.com/preview-logo.png",
         width: 1200,
         height: 630,
         alt: "MatchBook Rentals"
       }
     ],
     type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MatchBook Rentals",
+    description: "Flexible Rentals",
+    images: ["https://matchbookrentals.com/preview-logo.png"]
   },
   ...(process.env.NODE_ENV === 'production' ? (
     console.log('Including Google verification meta tag in production'),
