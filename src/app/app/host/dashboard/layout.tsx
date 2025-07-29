@@ -61,11 +61,11 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   ];
 
   const otherItems = [
-    {
-      title: "Settings",
-      url: "/app/host/dashboard/settings",
-      icon: "Settings",
-    },
+    // {
+    //   title: "Settings",
+    //   url: "/app/host/dashboard/settings",
+    //   icon: "Settings",
+    // },
   ];
 
   const sidebarGroups = [
@@ -73,10 +73,10 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
       title: "Host Dashboard",
       items: hostDashboardItems 
     },
-    { 
-      title: "Other",
-      items: otherItems 
-    }
+    // { 
+    //   title: "Other",
+    //   items: otherItems 
+    // }
   ];
 
 

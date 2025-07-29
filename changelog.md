@@ -1,5 +1,10 @@
 # Changelog
 
+## Hide Host Dashboard Settings
+- Commented out Settings navigation link in host dashboard sidebar menus
+- Removed "Other" category section from sidebar that contained Settings link
+- Disabled Hospitable integration functionality in settings page while keeping UI structure intact
+
 ## Fixed Social Media Link Preview Images
 - Changed OpenGraph image URL from relative to absolute path to fix black/blank preview images
 - Added Twitter card metadata for proper link previews on Twitter/X

@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { HospitableConnect } from "./hospitable-connect";
-import prisma from "@/lib/prismadb";
+// import { HospitableConnect } from "./hospitable-connect";
+// import prisma from "@/lib/prismadb";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
 
@@ -11,12 +11,12 @@ export default async function SettingsPage() {
   }
 
   // Fetch user from your DB to check for tokens
-  const dbUser = await prisma.user.findUnique({
-    where: { email: user.emailAddresses[0].emailAddress }, // or by id if you sync it
-    select: { hospitableAccessToken: true },
-  });
+  // const dbUser = await prisma.user.findUnique({
+  //   where: { email: user.emailAddresses[0].emailAddress }, // or by id if you sync it
+  //   select: { hospitableAccessToken: true },
+  // });
 
-  const isConnected = !!dbUser?.hospitableAccessToken;
+  // const isConnected = !!dbUser?.hospitableAccessToken;
 
   return (
     <div className={HOST_PAGE_STYLE}>
@@ -29,7 +29,7 @@ export default async function SettingsPage() {
             Connect your account to third-party services like Hospitable to sync
             your bookings.
           </p>
-          <HospitableConnect isConnected={isConnected} />
+          {/* <HospitableConnect isConnected={isConnected} /> */}
         </div>
       </div>
     </div>

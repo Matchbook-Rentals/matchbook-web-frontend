@@ -102,11 +102,11 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
   ];
 
   const otherItems = [
-    {
-      title: "Settings",
-      url: "/app/host/dashboard/settings",
-      icon: "Settings",
-    },
+    // {
+    //   title: "Settings",
+    //   url: "/app/host/dashboard/settings",
+    //   icon: "Settings",
+    // },
   ];
 
 
@@ -121,10 +121,10 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       title: titleCasedBreadcrumbText,
       items: listingItems 
     },
-    { 
-      title: "Other",
-      items: otherItems 
-    }
+    // { 
+    //   title: "Other",
+    //   items: otherItems 
+    // }
   ];
 
 
