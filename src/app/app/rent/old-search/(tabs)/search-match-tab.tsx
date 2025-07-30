@@ -16,6 +16,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent } from '@/components/ui/card';
 
 
 // Add prop interface
@@ -307,13 +308,17 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           <div className='w-full lg:w-full'>
             <ListingDescription listing={showListings[0]} isFlexible={!!isFlexible}/>
 
-            <h3 className="text-[24px] text-[#404040] font-medium py-3">Location</h3>
+            <Card className="bg-neutral-50 rounded-xl mt-5">
+              <CardContent className="flex flex-col items-start gap-[18px] p-5">
+                <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">Location</h3>
 
-            <div className=" pb-3 text-[#404040] text-[20px] font-normal">
-              {showListings[0].distance >= 10
-                ? <p>{showListings[0].distance?.toFixed(0)} miles from {state.trip.locationString} </p>
-                : <p>{showListings[0].distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
-            </div>
+                <div className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
+                  {showListings[0].distance >= 10
+                    ? <p>{showListings[0].distance?.toFixed(0)} miles from {state.trip.locationString} </p>
+                    : <p>{showListings[0].distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           <div

@@ -9,6 +9,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { BrandHeart, RejectIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface ListingDetailsViewProps {
   listingId: string;
@@ -166,17 +167,17 @@ function ListingDetailsView({
 
         {/* Location section - conditionally rendered */}
         {!hideLocationSection && (
-          <div className="pb-3 mt-3" ref={locationSectionRef}>
-            <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
+          <Card className="bg-neutral-50 rounded-xl mt-5" ref={locationSectionRef}>
+            <CardContent className="flex flex-col items-start gap-[18px] p-5">
+              <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">Location</h3>
 
-            <div className="pb-3 text-[#404040] text-[20px] font-normal">
-              {listing.distance >= 10
-                ? <p>{listing.distance?.toFixed(0)} miles from {state.trip.locationString} </p>
-                : <p>{listing.distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
+              <div className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
+                {listing.distance >= 10
+                  ? <p>{listing.distance?.toFixed(0)} miles from {state.trip.locationString} </p>
+                  : <p>{listing.distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
+              </div>
 
-            </div>
-
-            <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
+              <div className="w-full h-[526px] relative" ref={mapContainerRef} >
               {/* Map container */}
               <div className="absolute top-2 right-2 z-10 flex flex-col">
                 <button
@@ -226,8 +227,9 @@ function ListingDetailsView({
                   </svg>
                 </button>
               </div>
-            </div>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Mobile Action Buttons */}
