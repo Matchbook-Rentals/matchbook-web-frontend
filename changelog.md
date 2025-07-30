@@ -1,5 +1,14 @@
 # Changelog
 
+## Modernized Listing Details Sections with Card-Based Design
+- Updated highlights, amenities, description, and location sections to use consistent card styling
+- Applied neutral-50 background with rounded corners and proper spacing across all detail sections
+- Standardized typography: Poppins 20px semibold headers, 16px normal body text
+- Implemented responsive grid layout (single column on mobile, two columns on medium+ screens)
+- Reorganized section order: highlights → amenities → host info → description → location
+- Enhanced "Show all amenities" button with matching design system styling
+- Commented out Matchbook Verified section and updated icon positioning for better visual hierarchy
+
 ## Modernized Listing Details Title and Property Information Layout
 - Replaced old title/details layout with modern card-based design matching Frame component structure
 - Implemented responsive desktop/mobile split at lg breakpoint (1024px)

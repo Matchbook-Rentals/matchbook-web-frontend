@@ -395,10 +395,11 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           <div className="flex justify-center items-center gap-2 my-4">
             <Button
               variant="outline"
-              className="rounded-lg w-[80px] h-[45px] flex items-center justify-center bg-background border-black"
+              className="rounded-lg w-[80px] h-[45px] flex items-center justify-center border-none"
+              style={{ backgroundColor: '#F65C6D' }}
               onClick={() => handleReject(showListings[0])}
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4 text-white" />
             </Button>
 
             <BrandButton

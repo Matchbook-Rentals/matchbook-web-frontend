@@ -58,10 +58,11 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="rounded-lg w-[80px] h-[45px] flex items-center justify-center"
+              className="rounded-lg w-[80px] h-[45px] flex items-center justify-center border-none"
+              style={{ backgroundColor: '#F65C6D' }}
               onClick={onReject}
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4 text-white" />
             </Button>
 
             <BrandButton
