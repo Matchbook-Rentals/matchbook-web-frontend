@@ -221,3 +221,10 @@
 - Added Lucide icons for better consistency and replaced custom CheckCircleIcon with CheckCircle
 - Updated verification badge to use verifiedAt field for proper verification status display
 - Improved message host dialog styling with consistent teal color scheme and hover effects
+
+## Search UI Improvements: Undo Button and Layout Fixes
+- Added SearchUndoButton component for undoing like/dislike actions in recommended tab
+- Undo button appears next to filters button with responsive text sizing and disabled state handling
+- Fixed mobile dislike buttons to use pink background (#F65C6D) with white icons and no border
+- Removed hardcoded min-height from listing-info mobile layout and replaced absolute positioning with flexbox
+- Improved mobile layout responsiveness and eliminated rigid height constraints
