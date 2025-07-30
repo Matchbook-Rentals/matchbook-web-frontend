@@ -13,6 +13,8 @@ import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 import { calculateRent } from '@/lib/calculate-rent';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
 import { X } from 'lucide-react';
+import { FilterDisplay } from '../(components)/filter-display';
+import FilterOptionsDialog from './filter-options-dialog';
 
 interface MapMarker {
   lat: number;
@@ -130,6 +132,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const searchParams = useSearchParams();
   const { state } = useTripContext();
   const { showListings, likedListings, trip, filters, lookup } = state; // Destructure filters & lookup
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
@@ -377,11 +380,18 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
   return (
     <>
-      <div ref={containerRef} className="flex flex-col  md:flex-row justify-start md:justify-center mx-auto w-full sm:px-2">
-        {/* Grid container - hide when fullscreen */}
-        {!isFullscreen && (
-          <div className="w-full md:w-3/5 md:pr-4">
-            {/* Show indicator when filtering to a single listing */}
+      <FilterOptionsDialog
+        isOpen={isFilterDialogOpen}
+        onOpenChange={setIsFilterDialogOpen}
+        className="md:hidden"
+      />
+      <div ref={containerRef} className="flex flex-col mx-auto w-full sm:px-2">
+        <FilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} />
+        <div className="flex flex-col md:flex-row justify-start md:justify-center">
+          {/* Grid container - hide when fullscreen */}
+          {!isFullscreen && (
+            <div className="w-full md:w-3/5 md:pr-4">
+              {/* Show indicator when filtering to a single listing */}
             {visibleListingIds && visibleListingIds.length === 1 && (
               <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
                 <span className="text-sm text-blue-800">
@@ -514,7 +524,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
                 <div className="flex justify-center gap-x-2 mt-2">
                   {numFilteredOut > 0 && (
                     <button
-                      onClick={() => setIsFilterOpen(true)}
+                      onClick={() => setIsFilterDialogOpen(true)}
                       className="px-3 py-1 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2"
                     >
                       Adjust Filters
@@ -537,9 +547,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           </Button>
         )}
 
-        {/* Map container for Desktop - adjust width based on fullscreen state */}
-        {isClient && isDesktopView && (
-          <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
+          {/* Map container for Desktop - adjust width based on fullscreen state */}
+          {isClient && isDesktopView && (
+            <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
             <SearchMap
               center={[trip?.longitude || mapCenter.lng, trip?.latitude || mapCenter.lat]}
             zoom={zoomLevel}
@@ -560,6 +570,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           />
         </div>
         )}
+        </div>
       </div>
 
       {/* Mobile Slide-Up Map Overlay */}
