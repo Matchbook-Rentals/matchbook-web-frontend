@@ -239,3 +239,15 @@
 - Increased desktop image carousel height from 50vh to 65vh for better visual prominence
 - Enlarged modal popup height from 75vh to 90vh and scroll area to 80vh for improved viewing experience
 - Removed image counter display (x/n) from all carousel views for cleaner interface
+
+## Search Listing Card UI Redesign
+- Redesigned search listing card with fixed width (361.5px) and modern card layout structure
+- Replaced image carousel with single property image display (175px height)
+- Updated action buttons to use BrandButton component with white background and rounded corners
+- Restructured content into organized rows: title, location/rating, property features, availability
+- Added property features section with bed/bath/sqft icons using Lucide React components
+- Implemented consistent text styling with variablized styles (headerTextStyle, bodyTextStyle)
+- Added visual separators between property features using border dividers
+- Updated price display format to show "$/month" and moved to dedicated footer section
+- Enhanced category display with proper names (Private Room, Single Family, etc.)
+- Integrated trip date context for availability display instead of generic "Available now"

@@ -73,7 +73,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[65vh]">
+      <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
           {/* Placeholder */}
@@ -104,14 +104,14 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
               {chunkedImages.map((chunk, chunkIndex) => (
-                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[65vh] pl-4">
+                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[50vh] pl-4">
                   <div className="grid grid-cols-2 grid-rows-2 gap-3 lg:gap-4">
                     {chunk.map((image, idx) => {
                       const isBottomRight = idx === 3 || (idx === chunk.length - 1 && chunk.length < 4);
                       return (
                         <div
                           key={`image-${image.id}-${idx}`}
-                          className="relative cursor-pointer h-[31vh] overflow-hidden rounded-lg"
+                          className="relative cursor-pointer h-[24vh] overflow-hidden rounded-lg"
                           onClick={() => handleImageClick(uniqueImages.indexOf(image))}
                         >
                           <img
