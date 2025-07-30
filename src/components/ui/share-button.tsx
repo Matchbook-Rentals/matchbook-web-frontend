@@ -81,7 +81,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
         variant="default"
         leftIcon={<ShareIcon className="h-4 w-4" />}
       >
-        Share
+        <span className="hidden sm:inline">Share</span>
       </BrandButton>
 
       <Dialog open={open} onOpenChange={setOpen} >

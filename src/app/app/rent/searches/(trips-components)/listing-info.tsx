@@ -23,7 +23,7 @@ import {
   TallDialogTrigger,
   TallDialogTriggerText,
 } from '@/constants/styles';
-import { Star as StarIcon, MapPin, Bed, Bath, Square, Share2, Heart } from 'lucide-react'; // Added new icons
+import { Star as StarIcon, MapPin, Bed, Bath, Square, Share2, Heart, CheckCircle } from 'lucide-react'; // Added new icons
 import ShareButton from '@/components/ui/share-button';
 import { usePathname, useParams } from 'next/navigation';
 import { VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge } from '@/components/icons'; // Assuming these icons exist
@@ -31,6 +31,7 @@ import { sendInitialMessage } from '@/app/actions/messages'; // Import the serve
 import { useToast } from '@/components/ui/use-toast'; // Import useToast
 import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
 import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 // Define the desired order for amenity categories
 const categoryOrder = ['basics', 'accessibility', 'location', 'parking', 'kitchen', 'luxury', 'laundry', 'other'];
@@ -428,31 +429,56 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
         </CardContent>
       </Card>
 
-      {/* Host Information Section - Updated Rating Display */}
-      <div className={`${sectionStyles} lg:hidden`}>
-        {/* Host Information Section */}
-        <div className='mb-4 space-y-2'>
-          <div className='flex items-center justify-between'>
-            <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">Hosted by {listing.user?.firstName || 'Unknown'}</p>
-            <p className={`md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center`}>
-              <StarIcon className="w-4 h-4" /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}
-              <span className='text-sm pt-0 pl-0 -translate-x-1'>({listing?.numberOfStays || 23})</span>
-            </p>
-          </div>
-        </div>
+      {/* Host Information Section - Updated to match search-listing-details-box style */}
+      <Card className="border border-[#0000001a] rounded-xl mt-5 lg:hidden">
+        <CardContent className="flex flex-col items-start gap-5 p-4">
+          {/* Host information */}
+          <div className="flex items-center gap-3 w-full">
+            <Avatar className="w-[59px] h-[59px] rounded-xl">
+              <AvatarImage 
+                src={listing.user?.imageUrl || ''} 
+                alt={`${listing.user?.firstName || 'Host'} profile`}
+              />
+              <AvatarFallback className="rounded-xl bg-secondaryBrand text-white font-medium text-xl md:text-2xl lg:text-3xl">
+                {(listing.user?.firstName?.charAt(0) + listing.user?.lastName?.charAt(0)) || 'H'}
+              </AvatarFallback>
+            </Avatar>
 
-        {/* Host Badges Section */}
-        <div className='flex justify-between gap-2'>
-          <span className="flex items-center gap-1 text-sm"><VerifiedBadge />Verified</span>
-          <span className="flex items-center gap-1 text-sm"><TrailBlazerBadge />Trail Blazer</span>
-          <span className="flex items-center gap-1 text-sm"><HallmarkHostBadge />Hallmark Host</span>
-        </div>
-        <SearchMessageHostDialog
-          listingId={listing.id}
-          hostName={listing.user?.firstName}
-          trigger={ <Button variant='outline' className='w-full border-black mt-4'> Message Host </Button> }
-        />
-      </div>
+            <div className="flex flex-col gap-0.5">
+              <div className="font-medium text-[#373940] text-sm">
+                Hosted by {listing.user?.firstName || 'Host'}
+              </div>
+
+              <div className="flex items-center gap-1 h-8">
+                <StarIcon className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                <span className="font-normal text-[#717680] text-sm">
+                  {listing?.averageRating || listing.uScore 
+                    ? (listing?.averageRating || listing.uScore?.toFixed(1)) 
+                    : 'N/A'} ({listing?.numberOfStays || 0})
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Verified badge */}
+          {listing.user?.verifiedAt && (
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-4 h-4 text-[#717680]" />
+              <span className="font-normal text-[#717680] text-xs">
+                Verified
+              </span>
+            </div>
+          )}
+
+          {/* Message button */}
+          <div className="w-full">
+            <SearchMessageHostDialog 
+              listingId={listing.id} 
+              hostName={listing.user?.firstName || 'Host'} 
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Description section */}
       <Card className="bg-neutral-50 rounded-xl mt-5">
