@@ -132,7 +132,7 @@ const TripsPage: React.FC = () => {
           onValueChange={handleTabSelect}
           className="mx-0"
         />
-        {['recommended', 'allListings'].includes(activeTab) && (
+        {(activeTab === 'recommended' || (activeTab === 'allListings' && isMobile)) && (
           <FilterOptionsDialog
             isOpen={isFilterOpen}
             onOpenChange={setIsFilterOpen}

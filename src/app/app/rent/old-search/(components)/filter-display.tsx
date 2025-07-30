@@ -62,50 +62,16 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, clas
     // Search radius
     if (filterKey === 'searchRadius' && value > 0) return `Within ${value} miles`;
     
-    // Amenity arrays
-    const amenityLabels: Record<string, string> = {
-      wheelchairAccess: 'Wheelchair Accessible',
-      fencedInYard: 'Fenced Yard',
-      keylessEntry: 'Keyless Entry',
-      alarmSystem: 'Alarm System',
-      gatedEntry: 'Gated Entry',
-      balcony: 'Balcony',
-      patio: 'Patio',
-      dishwasher: 'Dishwasher',
-      refrigerator: 'Refrigerator',
-      stove: 'Stove',
-      microwave: 'Microwave',
-      garbageDisposal: 'Garbage Disposal',
-      heater: 'Heater',
-      centralHeating: 'Central Heating',
-      airConditioning: 'Air Conditioning',
-      centralAir: 'Central Air',
-      hardwoodFloor: 'Hardwood Floor',
-      carpet: 'Carpet',
-      fireplace: 'Fireplace',
-      ceilingFan: 'Ceiling Fan',
-      walkInCloset: 'Walk-in Closet',
-      gym: 'Gym',
-      pool: 'Pool',
-      hotTub: 'Hot Tub',
-      inUnit: 'In-Unit Laundry',
-      inComplex: 'Laundry in Complex',
-      notAvailable: 'No Laundry',
-      garage: 'Garage',
-      coveredParking: 'Covered Parking',
-      offStreetParking: 'Off-Street Parking',
-      onStreetParking: 'On-Street Parking',
-    };
-    
+    // For non-amenity arrays that should be grouped together
     if (Array.isArray(value) && value.length > 0) {
-      return value.map(item => amenityLabels[item] || item).join(', ');
+      return value.join(', ');
     }
     
     return null;
   };
   
   // Collect all active filters
-  const activeFilters: { key: string; label: string; value: any }[] = [];
+  const activeFilters: { key: string; label: string; value: any; individualValue?: string }[] = [];
   
   // Check all filter categories
   Object.entries(filters).forEach(([key, value]) => {
@@ -117,6 +83,110 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, clas
     if (typeof value === 'boolean' && !value) return;
     if (value === null || value === 0) return;
     
+    // Handle amenity arrays individually
+    const amenityCategories = ['accessibility', 'location', 'parking', 'kitchen', 'basics', 'luxury', 'laundry', 'other'];
+    if (amenityCategories.includes(key) && Array.isArray(value)) {
+      const amenityLabels: Record<string, string> = {
+        // Basics
+        airConditioner: 'Air Conditioner',
+        heater: 'Heater',
+        wifi: 'WiFi',
+        dedicatedWorkspace: 'Dedicated Workspace',
+        
+        // Accessibility and Safety
+        wheelchairAccess: 'Wheelchair Access',
+        security: 'Security',
+        secureLobby: 'Secure Lobby',
+        keylessEntry: 'Keyless Entry',
+        alarmSystem: 'Alarm System',
+        gatedEntry: 'Gated Entry',
+        smokeDetector: 'Smoke Detector',
+        carbonMonoxide: 'CO Detector',
+        
+        // Location
+        waterfront: 'Waterfront',
+        beachfront: 'Beachfront',
+        mountainView: 'Mountain View',
+        cityView: 'City View',
+        waterView: 'Water View',
+        
+        // Parking
+        parking: 'Parking',
+        streetParking: 'Street Parking',
+        streetParkingFree: 'Street Parking Free',
+        coveredParking: 'Covered Parking',
+        coveredParkingFree: 'Covered Parking Free',
+        uncoveredParking: 'Uncovered Parking',
+        uncoveredParkingFree: 'Uncovered Parking Free',
+        garageParking: 'Garage Parking',
+        garageParkingFree: 'Garage Parking Free',
+        evCharging: 'EV Charging',
+        
+        // Kitchen
+        kitchen: 'Kitchen',
+        garbageDisposal: 'Garbage Disposal',
+        dishwasher: 'Dishwasher',
+        fridge: 'Refrigerator',
+        oven: 'Oven',
+        stove: 'Stove',
+        kitchenEssentials: 'Kitchen Essentials',
+        
+        // Luxury
+        fireplace: 'Fireplace',
+        fitnessCenter: 'Fitness Center',
+        gym: 'Gym',
+        balcony: 'Balcony',
+        patio: 'Patio',
+        sunroom: 'Sunroom',
+        firepit: 'Firepit',
+        pool: 'Pool',
+        sauna: 'Sauna',
+        hotTub: 'Hot Tub',
+        jacuzzi: 'Jacuzzi',
+        grill: 'Grill',
+        
+        // Laundry
+        laundryFacilities: 'Laundry Facilities',
+        washerInUnit: 'Washer In Unit',
+        washerHookup: 'Washer Hookup',
+        washerNotAvailable: 'Washer Not Available',
+        washerInComplex: 'Washer In Complex',
+        dryerInUnit: 'Dryer In Unit',
+        dryerHookup: 'Dryer Hookup',
+        dryerNotAvailable: 'Dryer Not Available',
+        dryerInComplex: 'Dryer In Complex',
+        
+        // Other
+        elevator: 'Elevator',
+        doorman: 'Doorman',
+        hairDryer: 'Hair Dryer',
+        iron: 'Iron',
+        petsAllowed: 'Pets Allowed',
+        smokingAllowed: 'Smoking Allowed',
+        eventsAllowed: 'Events Allowed',
+        privateEntrance: 'Private Entrance',
+        storageShed: 'Storage Shed',
+        tv: 'TV',
+        workstation: 'Workstation',
+        microwave: 'Microwave',
+        linens: 'Linens',
+        privateBathroom: 'Private Bathroom',
+        fencedInYard: 'Fenced Yard',
+      };
+      
+      value.forEach((item: string) => {
+        const label = amenityLabels[item] || item;
+        // Check if this exact filter already exists to prevent duplicates
+        const exists = activeFilters.some(filter => 
+          filter.key === key && filter.individualValue === item
+        );
+        if (!exists) {
+          activeFilters.push({ key, label, value, individualValue: item });
+        }
+      });
+      return;
+    }
+    
     const label = getFilterLabel(key, value);
     if (label) {
       activeFilters.push({ key, label, value });
@@ -124,7 +194,7 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, clas
   });
   
   // Function to remove a specific filter
-  const removeFilter = (filterKey: string, filterValue?: any) => {
+  const removeFilter = (filterKey: string, individualValue?: string) => {
     const newFilters = { ...filters };
     
     if (filterKey === 'minPrice' || filterKey === 'maxPrice') {
@@ -133,6 +203,10 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, clas
     } else if (filterKey === 'furnished' || filterKey === 'unfurnished') {
       newFilters.furnished = false;
       newFilters.unfurnished = false;
+    } else if (individualValue && Array.isArray(newFilters[filterKey as keyof typeof filters])) {
+      // Remove individual amenity from array
+      const currentArray = newFilters[filterKey as keyof typeof filters] as string[];
+      newFilters[filterKey as keyof typeof filters] = currentArray.filter(item => item !== individualValue) as any;
     } else if (Array.isArray(newFilters[filterKey as keyof typeof filters])) {
       newFilters[filterKey as keyof typeof filters] = [] as any;
     } else if (typeof newFilters[filterKey as keyof typeof filters] === 'boolean') {
@@ -232,7 +306,7 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, clas
               key={`${filter.key}-${index}`}
               variant="outline"
               className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-300 hover:bg-gray-100 cursor-pointer"
-              onClick={() => removeFilter(filter.key, filter.value)}
+              onClick={() => removeFilter(filter.key, filter.individualValue)}
             >
               <span className="font-medium text-gray-700 text-sm">
                 {filter.label}
