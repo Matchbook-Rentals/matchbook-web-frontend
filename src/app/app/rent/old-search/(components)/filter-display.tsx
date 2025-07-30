@@ -10,9 +10,10 @@ import { CategoryType, getFiltersByCategory } from '@/constants/filters';
 
 interface FilterDisplayProps {
   onOpenFilter: () => void;
+  className?: string;
 }
 
-export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter }) => {
+export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, className = "" }) => {
   const { state: { filters, listings, showListings }, actions: { updateFilters } } = useTripContext();
   
   // Helper function to get filter label
@@ -175,7 +176,7 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter }) =>
   // Don't show the filter display if no filters are active
   if (activeFilters.length === 0) {
     return (
-      <div className="flex w-full items-center justify-between mb-4">
+      <div className={`flex w-full items-center justify-between mb-4 ${className}`}>
         <div className="text-sm text-gray-600">
           {totalResults.toLocaleString()} Results
         </div>
@@ -198,7 +199,7 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter }) =>
   }
   
   return (
-    <div className="w-full space-y-3 mb-4">
+    <div className={`w-full space-y-3 mb-4 ${className}`}>
       {/* Results and filter button row */}
       <div className="flex w-full items-center justify-between">
         <div className="text-sm text-gray-600">

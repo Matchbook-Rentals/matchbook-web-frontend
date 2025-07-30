@@ -15,8 +15,6 @@ import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
-import MobileTabSelector from '@/components/ui/mobile-tab-selector';
-import { useWindowSize } from '@/hooks/useWindowSize';
 import { useState, useEffect } from 'react'; // Import useState and useEffect
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
@@ -123,62 +121,28 @@ const TripsPage: React.FC = () => {
 
   const marginClass = APP_PAGE_MARGIN;
 
-  const { width } = useWindowSize();
-  const isMobile = width ? width < 640 : false; // 640px is the 'sm' breakpoint in Tailwind
 
   return (
     <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable}`}>
-      {/* Conditionally render based on local activeTab state */}
-      <div className='flex justify-end items-center sm:justify-start'>
-        {isMobile && (
-          <div className='flex gap-x-4 pt-2 items-center'>
-            {['recommended', 'allListings'].includes(activeTab) && (
-              <FilterOptionsDialog
-                isOpen={isFilterOpen}
-                onOpenChange={setIsFilterOpen}
-                filters={filters}
-                onFilterChange={handleFilterChange}
-                className=''
-              />
-            )}
-          </div>
+      <div className="flex items-end justify-between w-full">
+        <SearchTabSelector
+          activeValue={activeTab}
+          onValueChange={handleTabSelect}
+          className="mx-0"
+        />
+        {['recommended'].includes(activeTab) && (
+          <FilterOptionsDialog
+            isOpen={isFilterOpen}
+            onOpenChange={setIsFilterOpen}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            className=''
+          />
         )}
       </div>
-
-      {!isMobile ? (
-        <>
-          <div className="flex items-end justify-between w-full">
-            <SearchTabSelector
-              activeValue={activeTab}
-              onValueChange={handleTabSelect}
-              className="mx-0"
-            />
-            {['recommended'].includes(activeTab) && (
-              <FilterOptionsDialog
-                isOpen={isFilterOpen}
-                onOpenChange={setIsFilterOpen}
-                filters={filters}
-                onFilterChange={handleFilterChange}
-                className=''
-              />
-            )}
-          </div>
-          <div className="w-full mt-4">
-            {tabs.find(tab => tab.value === activeTab)?.content}
-          </div>
-        </>
-      ) : (
-        <MobileTabSelector
-          tabs={tabs}
-          activeTabValue={activeTab} // Control the active tab
-          onTabChange={handleTabSelect} // Handle tab changes initiated by the component
-          useUrlParams={false} // Disable internal URL handling as parent manages it
-          className='mx-auto w-full'
-          tabsClassName='w-full mx-auto pb-0'
-          tabsListClassName='w-full p-0 max-w-[100vw] '
-
-        />
-      )}
+      <div className="w-full mt-4">
+        {tabs.find(tab => tab.value === activeTab)?.content}
+      </div>
     </div>
   );
 };
