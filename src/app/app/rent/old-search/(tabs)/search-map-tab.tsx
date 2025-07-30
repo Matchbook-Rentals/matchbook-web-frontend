@@ -383,10 +383,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       <FilterOptionsDialog
         isOpen={isFilterDialogOpen}
         onOpenChange={setIsFilterDialogOpen}
-        className="md:hidden"
+        className="hidden"
       />
       <div ref={containerRef} className="flex flex-col mx-auto w-full sm:px-2">
-        <FilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
+        <FilterDisplay onOpenFilter={() => setIsFilterOpen(true)} className="hidden md:block" />
         <div className="flex flex-col md:flex-row justify-start md:justify-center">
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (

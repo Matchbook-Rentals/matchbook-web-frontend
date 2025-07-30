@@ -16,6 +16,7 @@ import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
 import { useState, useEffect } from 'react'; // Import useState and useEffect
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 const publicSans = Public_Sans({ subsets: ["latin"], variable: '--font-public-sans' });
@@ -120,23 +121,24 @@ const TripsPage: React.FC = () => {
   ];
 
   const marginClass = APP_PAGE_MARGIN;
+  const isMobile = useIsMobile(768); // 768px is the 'md' breakpoint
 
 
   return (
     <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable}`}>
-      <div className="flex items-end justify-between w-full">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between w-full gap-2 md:gap-4">
         <SearchTabSelector
           activeValue={activeTab}
           onValueChange={handleTabSelect}
           className="mx-0"
         />
-        {['recommended'].includes(activeTab) && (
+        {['recommended', 'allListings'].includes(activeTab) && (
           <FilterOptionsDialog
             isOpen={isFilterOpen}
             onOpenChange={setIsFilterOpen}
             filters={filters}
             onFilterChange={handleFilterChange}
-            className=''
+            className='md:self-end w-fit ml-auto text-[clamp(10px,2.5vw,14px)] sm:text-[14px]'
           />
         )}
       </div>
