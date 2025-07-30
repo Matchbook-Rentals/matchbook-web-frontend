@@ -23,13 +23,14 @@ import {
   TallDialogTrigger,
   TallDialogTriggerText,
 } from '@/constants/styles';
-import { Star as StarIcon } from 'lucide-react'; // Renamed Star to StarIcon for clarity
+import { Star as StarIcon, MapPin, Bed, Bath, Square, Share2, Heart } from 'lucide-react'; // Added new icons
 import ShareButton from '@/components/ui/share-button';
 import { usePathname, useParams } from 'next/navigation';
 import { VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge } from '@/components/icons'; // Assuming these icons exist
 import { sendInitialMessage } from '@/app/actions/messages'; // Import the server action
 import { useToast } from '@/components/ui/use-toast'; // Import useToast
 import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
+import { Card, CardContent } from '@/components/ui/card';
 
 // Define the desired order for amenity categories
 const categoryOrder = ['basics', 'accessibility', 'location', 'parking', 'kitchen', 'luxury', 'laundry', 'other'];
@@ -108,32 +109,142 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
 
   return (
     <div className='w-full'>
-      <div className='flex justify-between items-center border-b mt-6 mb-3'>
-        <h1 className="text-[#404040] text-[24px] sm:text-[32px] font-normal">
-          {listing.title}
-        </h1>
-        <ShareButton
-          title={`${listing.title} on Matchbook`}
-          text={`Check out this listing on Matchbook: ${pathname}`}
-          url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
-        />
-      </div>
-      <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px] sm:text-[24px] font-normal`}>
-        <div className="lg:hidden w-full flex flex-col space-y-6">
-          <div className="w-full flex justify-between">
-            <p>{listing.roomCount} beds | {listing.bathroomCount} Baths</p>
-            <p>${listing.price?.toLocaleString()}/month</p>
+      {/* Desktop Title and Details Section */}
+      <Card className="border-0 shadow-none mt-6 hidden lg:block">
+        <CardContent className="flex flex-col items-start gap-3 p-0">
+          <div className="items-center justify-between self-stretch w-full flex relative">
+            <div className="flex-col items-start gap-4 flex-1 grow flex relative">
+              <div className="items-center justify-between self-stretch w-full flex relative">
+                <h1 className="relative w-fit mt-[-1.00px] font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
+                  {listing.title || "Your Home Away From Home"}
+                </h1>
+              </div>
+            </div>
+
+            <ShareButton
+              title={`${listing.title} on Matchbook`}
+              text={`Check out this listing on Matchbook: ${pathname}`}
+              url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+            />
           </div>
-          <div className="w-full flex justify-between">
-            <p>{listing.squareFootage.toLocaleString()} sqft</p>
-            <p>${listing.depositSize ? listing.depositSize.toLocaleString() : 'N/A'} deposit</p>
+
+          <div className="flex flex-wrap w-full max-w-[424px] items-center justify-between gap-[24px_24px] relative">
+            <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
+              <MapPin className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[0]">
+                {listing.city || listing.address || "Location"}
+              </span>
+            </div>
+            
+            <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
+              <Bed className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[0]">
+                {listing.roomCount || 0} Bed
+              </span>
+            </div>
+            
+            <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
+              <Bath className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[0]">
+                {listing.bathroomCount || 0} Bath
+              </span>
+            </div>
+            
+            <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
+              <Square className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[0]">
+                {listing.squareFootage?.toLocaleString() || 0} sqft
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="hidden lg:flex w-full justify-between">
-          <p>{listing.roomCount} beds | {listing.bathroomCount} Baths</p>
-          <p>{listing.squareFootage.toLocaleString()} sqft</p>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
+
+      {/* Mobile Title and Details Section */}
+      <Card className="border-0 shadow-none mt-6 lg:hidden">
+        <CardContent className="flex flex-col items-start gap-3 p-0">
+          {/* Header section with title and buttons */}
+          <div className="relative self-stretch w-full h-[110px]">
+            <div className="flex flex-col w-full items-start gap-4 absolute top-0 left-0">
+              <div className="flex items-center justify-between relative self-stretch w-full">
+                <h2 className="relative flex-1 font-medium text-[#404040] text-xl md:text-2xl tracking-[-2.00px] font-['Poppins',Helvetica]">
+                  {listing.title || "Your Home Away From Home"}
+                </h2>
+
+                <ShareButton
+                  title={`${listing.title} on Matchbook`}
+                  text={`Check out this listing on Matchbook: ${pathname}`}
+                  url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+                />
+              </div>
+            </div>
+
+            {/* Price information */}
+            <div className="flex flex-col w-full items-end gap-5 absolute top-[53px] left-0">
+              <div className="flex items-start justify-between relative self-stretch w-full">
+                {/* Monthly price */}
+                <div className="flex w-[124px] items-start gap-1 relative">
+                  <div className="flex flex-col items-start gap-1 relative flex-1 grow">
+                    <div className="flex items-start gap-1 relative self-stretch w-full">
+                      <span className="relative w-fit mt-[-1.00px] font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
+                        ${listing.price?.toLocaleString()}
+                      </span>
+                    </div>
+                    <span className="relative w-fit font-normal text-[#5d606d] text-base tracking-[0] font-['Poppins',Helvetica]">
+                      Month
+                    </span>
+                  </div>
+                </div>
+
+                {/* Deposit price */}
+                <div className="inline-flex items-start justify-end gap-1 relative">
+                  <div className="inline-flex flex-col items-start gap-1 relative">
+                    <div className="flex items-start gap-1 relative self-stretch w-full">
+                      <span className="relative w-fit mt-[-1.00px] font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
+                        ${listing.depositSize ? listing.depositSize.toLocaleString() : 'N/A'}
+                      </span>
+                    </div>
+                    <span className="relative w-fit font-normal text-[#5d606d] text-base tracking-[0] font-['Poppins',Helvetica]">
+                      Deposit
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Property details section */}
+          <div className="flex flex-wrap items-center justify-between gap-[24px_24px] relative self-stretch w-full">
+            <div className="inline-flex items-center gap-2 relative">
+              <MapPin className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+                {listing.city || listing.address || "Location"}
+              </span>
+            </div>
+            
+            <div className="inline-flex items-center gap-2 relative">
+              <Bed className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+                {listing.roomCount || 0} Bed
+              </span>
+            </div>
+            
+            <div className="inline-flex items-center gap-2 relative">
+              <Bath className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+                {listing.bathroomCount || 0} Bath
+              </span>
+            </div>
+            
+            <div className="inline-flex items-center gap-2 relative">
+              <Square className="w-5 h-5 text-[#5d606d]" />
+              <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+                {listing.squareFootage?.toLocaleString() || 0} sqft
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {isFlexible && (
           <p className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px] sm:text-[24px] font-normal`}>

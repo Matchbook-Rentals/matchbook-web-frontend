@@ -1,5 +1,21 @@
 # Changelog
 
+## Modernized Listing Details Title and Property Information Layout
+- Replaced old title/details layout with modern card-based design matching Frame component structure
+- Implemented responsive desktop/mobile split at lg breakpoint (1024px)
+- Desktop: Fixed 32px title with horizontal property details layout including location, beds, baths, and square footage
+- Mobile: Responsive title (20px-24px) with stacked pricing section and wrapped property details
+- Added proper Lucide React icons (MapPin, Bed, Bath, Square) with consistent styling
+- Maintained existing ShareButton functionality and removed deprecated layout sections
+
+## Fixed Filter Display and Mobile Filter Button Visibility
+- Fixed filter display to show individual amenities as separate badges instead of grouped
+- Updated amenity labels to match existing amenities-list.ts codes (airConditioner, fridge, etc.)
+- Added individual amenity removal functionality - clicking X removes only that specific amenity
+- Added duplicate prevention logic to avoid showing the same amenity twice
+- Limited filter button display in All Listings tab to mobile devices only (sub-medium screens)
+- Filter button remains visible at all screen sizes for Recommended tab
+
 ## Updated Mobile Action Buttons to Match Design System
 - Modernized mobile action buttons in search match tab to use UI components
 - Replaced custom gradient circular buttons with rectangular Button and BrandButton components
