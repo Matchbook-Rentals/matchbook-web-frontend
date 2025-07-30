@@ -28,7 +28,7 @@ export const SearchTabSelector = ({
       className={`w-fit mt-4 ${className}`}
       onValueChange={onValueChange}
     >
-      <TabsList className="bg-white p-1 rounded-md flex gap-1">
+      <TabsList className="bg-background p-1 rounded-md flex gap-1">
         {tabOptions.map((tab) => (
           <TabsTrigger
             key={tab.id}

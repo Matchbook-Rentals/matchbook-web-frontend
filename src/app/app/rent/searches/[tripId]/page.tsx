@@ -147,7 +147,7 @@ const TripsPage: React.FC = () => {
 
       {!isMobile ? (
         <>
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-end justify-between w-full">
             <SearchTabSelector
               activeValue={activeTab}
               onValueChange={handleTabSelect}

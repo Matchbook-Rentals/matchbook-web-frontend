@@ -480,9 +480,13 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       {/* Filter Button Trigger */}
       <DialogTrigger asChild>
-        <Button variant="outline" className={`flex justify-between rounded-[5px] items-center gap-x-1 h-fit px-2 py-1 ${className}`}>
-          <UpdatedFilterIcon className='h-[18px]  ' />
-          <span className="text-[#404040] text-center  text-[10px] font-normal">Filters</span>
+        <Button variant="outline" size="sm" className={`h-9 gap-2.5 px-3 ${className}`}>
+          <span>Filters</span>
+          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.5 5.83333H17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M5 10H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M8.33333 14.1667H11.6667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
         </Button>
       </DialogTrigger>
 
