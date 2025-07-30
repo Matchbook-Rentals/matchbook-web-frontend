@@ -135,7 +135,7 @@ const TripsPage: React.FC = () => {
         />
         <div className="flex items-center gap-2">
           {activeTab === 'recommended' && (
-            <SearchUndoButton className="md:hidden pl-8" />
+            <SearchUndoButton className="md:hidden pl-4" />
           )}
           {(activeTab === 'recommended' || (activeTab === 'allListings' && isMobile)) && (
             <FilterOptionsDialog

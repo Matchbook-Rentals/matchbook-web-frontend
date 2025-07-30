@@ -115,7 +115,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
           <div className="items-center justify-between self-stretch w-full flex relative">
             <div className="flex-col items-start gap-4 flex-1 grow flex relative">
               <div className="items-center justify-between self-stretch w-full flex relative">
-                <h1 className="relative w-fit mt-[-1.00px] test font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
+                <h1 className="relative w-fit mt-[-1.00px] font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
                   {listing.title || "Your Home Away From Home"}
                 </h1>
               </div>
