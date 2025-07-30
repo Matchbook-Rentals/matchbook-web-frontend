@@ -1,5 +1,20 @@
 # Changelog
 
+## Updated Mobile Action Buttons to Match Design System
+- Modernized mobile action buttons in search match tab to use UI components
+- Replaced custom gradient circular buttons with rectangular Button and BrandButton components
+- Updated icons from custom SVGs to Lucide React icons (X and Heart)
+- Added black border to dislike button for better visual contrast
+- Removed undo button and improved button spacing and positioning
+
+## Improved Tab Selector Responsive Design and Filter Integration
+- Made SearchTabSelector responsive at all screen sizes (removed mobile-specific tab selector)
+- Added responsive text sizing using clamp() for consistent scaling across devices
+- Unified filter system across Recommended and All Listings tabs for consistent UX
+- Fixed filter button positioning and sizing to match tab styling on mobile
+- Added FilterDisplay className prop support for responsive visibility control
+- Optimized spacing between tabs and filter button on mobile (gap-2) vs desktop (gap-4)
+
 ## Hide Host Dashboard Settings
 - Commented out Settings navigation link in host dashboard sidebar menus
 - Removed "Other" category section from sidebar that contained Settings link

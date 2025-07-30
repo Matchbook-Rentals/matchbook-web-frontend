@@ -3,6 +3,9 @@
 import React, { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react';
 import ListingImageCarousel from '../../searches/(trips-components)/image-carousel';
 import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
+import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
+import { X, Heart } from 'lucide-react';
 import { amenities } from '@/lib/amenities-list';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
@@ -296,7 +299,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
       {/* Below paddings are to accomdate control buttons */}
       {/* first for buttons with mobile navigation selector */}
       {/* second is for 'tablet' view with larger button controls */}
-      <div className={`w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-[0px]`}>
+      <div className={`w-full mx-auto pb-[80px] md:pb-[100px] lg:pb-[0px]`}>
         <ListingImageCarousel
           listingImages={showListings[0]?.listingImages || []}
         />
@@ -382,37 +385,24 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </div>
         </div>
 
-        <div className="lg:hidden fixed sm:bottom-[20px] bottom-[80px] left-0 right-0 z-50">
-          {/* Action Buttons Section - Reject, Return, Like */}
-          <div className="flex justify-center items-center gap-y-4 gap-x-6 my-4">
-            <button
+        <div className="lg:hidden fixed sm:bottom-[20px] bottom-[60px] left-0 right-0 z-50">
+          {/* Action Buttons Section - Reject, Like */}
+          <div className="flex justify-center items-center gap-2 my-4">
+            <Button
+              variant="outline"
+              className="rounded-lg w-[80px] h-[45px] flex items-center justify-center bg-background border-black"
               onClick={() => handleReject(showListings[0])}
-              className={`w-[80px] drop-shadow aspect-square
-                 flex items-center justify-center rounded-full
-              hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
             >
-              <RejectIcon className={`w-[40%] h-[40%] text-white`} />
-            </button>
+              <X className="h-4 w-4" />
+            </Button>
 
-            <button
-              onClick={() => handleBack()}
-              className={`w-[54px] drop-shadow aspect-square
-                 flex items-center justify-center rounded-full
-                 hover:opacity-90 transition-opacity
-                 bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
-            >
-              <ReturnIcon className={`w-[55%] h-[55%] text-white`} />
-            </button>
-
-            <button
+            <BrandButton
+              variant="default"
+              className="rounded-lg w-[80px] h-[45px] min-w-0 flex items-center justify-center"
               onClick={() => handleLike(showListings[0])}
-              className={`w-[80px] drop-shadow aspect-square flex
-              items-center justify-center rounded-full
-              hover:opacity-90 transition-opacity
-              bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
             >
-              <BrandHeart className={`w-[40%] h-[40%]`} />
-            </button>
+              <Heart className="h-4 w-4 text-white" />
+            </BrandButton>
           </div>
         </div>
       </div>
