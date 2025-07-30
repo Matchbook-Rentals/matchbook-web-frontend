@@ -1,6 +1,8 @@
 import Image from 'next/image'
-import { Card } from "@/components/ui/card"
-import { MoreHorizontal, Star, ChevronLeft, ChevronRight, Heart } from "lucide-react"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { BrandButton } from "@/components/ui/brandButton"
+import { MoreHorizontal, Star, ChevronLeft, ChevronRight, Heart, Share2 as Share2Icon, Heart as HeartIcon, Bed, Bath, Square } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState, useRef, useEffect } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
@@ -19,6 +21,10 @@ import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus } from '@/constants/enums'
 
 const TITLE_MAX_LENGTH = 40
+
+// Text style variables
+const headerTextStyle = "font-medium text-black text-base"
+const bodyTextStyle = "font-normal text-[#4f4f4f] text-sm"
 
 interface SearchListingCardProps {
   listing: ListingAndImages
@@ -147,9 +153,7 @@ export default function SearchListingCard({ listing, status, className, style, d
   };
 
   return (
-    <Card
-      className={`w-full overflow-hidden border-0 max-w-[600px] shadow-0 shadow-none cursor-pointer ${className || ''}`}
-      style={style}
+    <Card className="flex flex-col w-[361.5px] items-start relative border border-solid border-[#0000001a] rounded-xl overflow-hidden cursor-pointer"
       onMouseEnter={() => {
         setIsHovered(true)
         setHoveredListing(listing)
@@ -160,112 +164,161 @@ export default function SearchListingCard({ listing, status, className, style, d
       }}
       onClick={handleCardClick}
     >
-      <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[600px] sm:aspect-[317/321]">
-        <Carousel className="w-full h-full" opts={{ loop: true }}>
-          <CarouselContent>
-            {listing.listingImages.map((image, index) => (
-              <CarouselItem key={index} className="relative">
-                <div className="aspect-[450/320] sm:aspect-[317/321] relative w-full h-full">
-                  <Image
-                    src={image.url}
-                    alt={`${listing.title} - Image ${index + 1}`}
-                    fill
-                    className="rounded-lg object-cover"
-                    sizes="(max-width: 267px) 100vw, 267px"
-                    priority={index === 0}
-                    unoptimized
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <CarouselPrevious Icon={ArrowLeft} className="left-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pl-[4px] " />
-            <CarouselNext Icon={ArrowRight} className="right-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pr-[4px] " />
-          </div>
-        </Carousel>
-
-        {/* Action Buttons */}
-        <div className={`absolute top-2 right-2 z-10 transition-opacity duration-300 opacity-60`}>
-          {getStatusIcon(status)}
+      <div className="relative w-full">
+        {/* Property Image */}
+        <div className="w-full">
+          <img
+            className="w-full h-[175px] object-cover"
+            alt="Property"
+            src={listing.listingImages[0]?.url || '/placeholder-property.jpg'}
+          />
         </div>
 
-        {/* Conditional render context banner only */}
-        {contextLabel && (
-          <div className="absolute top-5 mx-auto flex justify-center  w-full">
-            <button
-              onClick={contextLabel.action}
-              className={`w-4/5 py-2 px-4 text-center rounded-xl ${contextLabel.className || 'bg-white/60 hover:bg-white/80'}`}
-            >
-              {contextLabel.label}
-            </button>
-          </div>
-        )}
+        {/* Action Buttons */}
+        <div className="absolute top-4 right-4 flex items-center gap-2">
+          <BrandButton
+            variant="default"
+            size="icon"
+            className="w-[30px] h-[30px] bg-white hover:bg-white/90 text-gray-600 hover:text-gray-700 min-w-[30px] rounded-lg"
+            onClick={(e: React.MouseEvent) => {
+              if (favIds.has(listing.id)) {
+                optimisticRemoveLike(listing.id);
+              } else {
+                optimisticLike(listing.id);
+              }
+              e.stopPropagation();
+            }}
+          >
+            <HeartIcon 
+              className={`w-[18px] h-[18px] ${favIds.has(listing.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+            />
+          </BrandButton>
+          {/* <BrandButton
+            variant="default"
+            size="icon"
+            className="w-[31px] h-[31px] bg-white hover:bg-white/90 text-gray-600 hover:text-gray-700 min-w-[31px]"
+          >
+            <Share2Icon className="w-[18px] h-[18px]" />
+          </BrandButton> */}
+        </div>
       </div>
 
-      <div
-        className={`pt-1 flex flex-col text-[14px] sm:min-h-[80px] ${detailsClassName || ''}`}
-        style={detailsStyle}
-      >
-        {/* Listing Title */}
-        <div className="flex justify-between text-[14px]  font-medium gap-x-2 items-start">
-          <h3 className="truncate whitespace-nowrap">
+      <CardContent className="w-full p-4 pt-3 flex flex-col gap-0">
+        {/* Row 1: Property Title */}
+        <div className="flex flex-col gap-0 pb-1">
+          <h3 className={`${headerTextStyle} truncate whitespace-nowrap`}>
             {listing.title.length > TITLE_MAX_LENGTH
               ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
               : listing.title}
           </h3>
         </div>
 
-        {/* Listing Category and Rating */}
-        <div className='flex justify-between mt-2'>
-          {`${listing.category === 'singleFamily' ? 'Home' :
-            listing.category ? (listing.category.charAt(0).toUpperCase() + listing.category.slice(1).toLowerCase()) : 'Property'} in
-            ${listing.locationString ? (listing.locationString.split(',').at(-2)?.trim() || listing.locationString) : 'Location'}`}
-          <div className="flex items-center">
-            <Star className="w-3 h-3 fill-charcoalBrand text-charcoalBrand" />
-            <span className="">{(listing as any).rating ?? 4.9}</span>
+        {/* Row 2: Location and Rating */}
+        <div className="flex flex-col gap-0 pb-6">
+          <div className="flex items-center justify-between w-full">
+            <div className={bodyTextStyle}>
+              {(() => {
+                switch (listing.category) {
+                  case 'privateRoom':
+                    return 'Private Room';
+                  case 'singleFamily':
+                    return 'Single Family';
+                  case 'townhouse':
+                    return 'Townhouse';
+                  case 'apartment':
+                    return 'Apartment';
+                  default:
+                    return 'Property';
+                }
+              })()} in {listing.state}
+            </div>
+
+            <div className="flex items-center gap-0.5">
+              <div className="flex items-center">
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
+                <span className={bodyTextStyle}>
+                  {(listing as any).rating ?? 4.9}
+                </span>
+              </div>
+              <span className={bodyTextStyle}>
+                ({(listing as any).reviews ?? 127} reviews)
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Listing Price and beds */}
-        <div className="flex items-center justify-between mt-2">
-          <div className="">
-            ${listing.price?.toLocaleString() || 2350}
-            <span className=""> month</span>
-          </div>
-          <div className="">
-            {listing.roomCount || 4} bds | {listing.bathroomCount || 2} ba
+        {/* Row 3: Property Features */}
+        <div className="flex flex-col gap-3 pb-3">
+          <div className="flex items-center justify-between w-full">
+            <Badge
+              variant="outline"
+              className="bg-transparent border-none p-0 flex items-center gap-1.5"
+            >
+              <div className="relative w-5 h-5">
+                <Bed className="w-[18px] h-4 text-[#5d606d]" />
+              </div>
+              <span className={bodyTextStyle}>
+                {listing.roomCount || 4} bds
+              </span>
+            </Badge>
+            <div className="h-4 border-l-2 border-gray-200"></div>
+            <Badge
+              variant="outline"
+              className="bg-transparent border-none p-0 flex items-center gap-1.5"
+            >
+              <div className="relative w-5 h-5">
+                <Bath className="w-[18px] h-4 text-[#5d606d]" />
+              </div>
+              <span className={bodyTextStyle}>
+                {listing.bathroomCount || 2} ba
+              </span>
+            </Badge>
+            <div className="h-4 border-l-2 border-gray-200"></div>
+            <Badge
+              variant="outline"
+              className="bg-transparent border-none p-0 flex items-center gap-1.5"
+            >
+              <div className="relative w-5 h-5">
+                <Square className="w-5 h-5 text-[#5d606d]" />
+              </div>
+              <span className={bodyTextStyle}>
+                {listing.squareFootage?.toLocaleString() || 0} sqft
+              </span>
+            </Badge>
           </div>
         </div>
-        {/* Show flexible dates if isFlexible is true */}
-      {!!isFlexible && (
-          <p className="text-sm  mt-1">
-            Available {' '}
-            {listing.availableStart?.toLocaleDateString('en-gb', {
+
+        {/* Row 4: Availability */}
+        <div className="flex flex-col gap-3">
+          <div className={bodyTextStyle}>
+            Available {state.trip.startDate?.toLocaleDateString('en-gb', {
               day: '2-digit',
               month: 'short'
-            }) || state.trip.startDate?.toLocaleDateString('en-gb', {
+            }) || 'now'} - {state.trip.endDate?.toLocaleDateString('en-gb', {
               day: '2-digit',
               month: 'short'
-            })} - {listing.availableEnd?.toLocaleDateString('en-gb', {
-              day: '2-digit',
-              month: 'short'
-            }) || state.trip.endDate?.toLocaleDateString('en-gb', {
-              day: '2-digit',
-              month: 'short'
-            })}
-          </p>
-        )}
-      </div>
+            }) || 'ongoing'}
+          </div>
+        </div>
+      </CardContent>
+
+      <CardFooter className="w-full p-4 border-t border-[#002c581a]">
+        <div className="w-full">
+          <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-xl">
+            ${listing.price?.toLocaleString() || 2350} / month
+          </h2>
+        </div>
+      </CardFooter>
 
       {callToAction && (
-        <div className=" pt-2 ">
-          <button
+        <div className="pt-2 pb-4 w-full flex justify-center">
+          <BrandButton
+            variant="default"
             onClick={() => callToAction.action()}
-            className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blueBrand/90 text-white hover:bg-blueBrand'}`}
+            className="w-[95%] mx-auto"
           >
             {callToAction.label}
-          </button>
+          </BrandButton>
         </div>
       )}
 

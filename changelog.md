@@ -234,3 +234,8 @@
 - Replaced basic host display with card layout featuring Avatar component and proper spacing
 - Added conditional verified badge display using CheckCircle icon when host is verified
 - Made share button mobile-responsive by showing only icon at sub-small screen sizes
+
+## Image Carousel UI Improvements
+- Increased desktop image carousel height from 50vh to 65vh for better visual prominence
+- Enlarged modal popup height from 75vh to 90vh and scroll area to 80vh for improved viewing experience
+- Removed image counter display (x/n) from all carousel views for cleaner interface
