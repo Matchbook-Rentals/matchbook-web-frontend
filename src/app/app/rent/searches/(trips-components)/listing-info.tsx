@@ -115,7 +115,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
           <div className="items-center justify-between self-stretch w-full flex relative">
             <div className="flex-col items-start gap-4 flex-1 grow flex relative">
               <div className="items-center justify-between self-stretch w-full flex relative">
-                <h1 className="relative w-fit mt-[-1.00px] font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
+                <h1 className="relative w-fit mt-[-1.00px] test font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
                   {listing.title || "Your Home Away From Home"}
                 </h1>
               </div>
@@ -164,51 +164,39 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
       <Card className="border-0 shadow-none mt-6 lg:hidden">
         <CardContent className="flex flex-col items-start gap-3 p-0">
           {/* Header section with title and buttons */}
-          <div className="relative self-stretch w-full h-[110px]">
-            <div className="flex flex-col w-full items-start gap-4 absolute top-0 left-0">
-              <div className="flex items-center justify-between relative self-stretch w-full">
-                <h2 className="relative flex-1 font-medium text-[#404040] text-xl md:text-2xl tracking-[-2.00px] font-['Poppins',Helvetica]">
-                  {listing.title || "Your Home Away From Home"}
-                </h2>
+          <div className="flex flex-col gap-4 w-full">
+            <div className="flex items-center justify-between w-full">
+              <h2 className="flex-1 font-medium text-[#404040] text-xl md:text-2xl tracking-[-2.00px] font-['Poppins',Helvetica]">
+                {listing.title || "Your Home Away From Home"}
+              </h2>
 
-                <ShareButton
-                  title={`${listing.title} on Matchbook`}
-                  text={`Check out this listing on Matchbook: ${pathname}`}
-                  url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
-                />
-              </div>
+              <ShareButton
+                title={`${listing.title} on Matchbook`}
+                text={`Check out this listing on Matchbook: ${pathname}`}
+                url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+              />
             </div>
 
             {/* Price information */}
-            <div className="flex flex-col w-full items-end gap-5 absolute top-[53px] left-0">
-              <div className="flex items-start justify-between relative self-stretch w-full">
-                {/* Monthly price */}
-                <div className="flex w-[124px] items-start gap-1 relative">
-                  <div className="flex flex-col items-start gap-1 relative flex-1 grow">
-                    <div className="flex items-start gap-1 relative self-stretch w-full">
-                      <span className="relative w-fit mt-[-1.00px] font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
-                        ${listing.price?.toLocaleString()}
-                      </span>
-                    </div>
-                    <span className="relative w-fit font-normal text-[#5d606d] text-base tracking-[0] font-['Poppins',Helvetica]">
-                      Month
-                    </span>
-                  </div>
-                </div>
+            <div className="flex items-start justify-between w-full">
+              {/* Monthly price */}
+              <div className="flex flex-col items-start gap-1">
+                <span className="font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
+                  ${listing.price?.toLocaleString()}
+                </span>
+                <span className="font-normal text-[#5d606d] text-base tracking-[0] font-['Poppins',Helvetica]">
+                  Month
+                </span>
+              </div>
 
-                {/* Deposit price */}
-                <div className="inline-flex items-start justify-end gap-1 relative">
-                  <div className="inline-flex flex-col items-start gap-1 relative">
-                    <div className="flex items-start gap-1 relative self-stretch w-full">
-                      <span className="relative w-fit mt-[-1.00px] font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
-                        ${listing.depositSize ? listing.depositSize.toLocaleString() : 'N/A'}
-                      </span>
-                    </div>
-                    <span className="relative w-fit font-normal text-[#5d606d] text-base tracking-[0] font-['Poppins',Helvetica]">
-                      Deposit
-                    </span>
-                  </div>
-                </div>
+              {/* Deposit price */}
+              <div className="flex flex-col items-end gap-1">
+                <span className="font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
+                  ${listing.depositSize ? listing.depositSize.toLocaleString() : 'N/A'}
+                </span>
+                <span className="font-normal text-[#5d606d] text-base tracking-[0] font-['Poppins',Helvetica]">
+                  Deposit
+                </span>
               </div>
             </div>
           </div>

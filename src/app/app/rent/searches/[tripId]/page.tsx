@@ -11,6 +11,7 @@ import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
 import { useSearchParams } from 'next/navigation';
 // Overview tab removed
 import FilterOptionsDialog from '../../old-search/(tabs)/filter-options-dialog';
+import SearchUndoButton from '../../old-search/(components)/search-undo-button';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat, Public_Sans } from 'next/font/google';
@@ -132,15 +133,20 @@ const TripsPage: React.FC = () => {
           onValueChange={handleTabSelect}
           className="mx-0"
         />
-        {(activeTab === 'recommended' || (activeTab === 'allListings' && isMobile)) && (
-          <FilterOptionsDialog
-            isOpen={isFilterOpen}
-            onOpenChange={setIsFilterOpen}
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            className='md:self-end w-fit ml-auto text-[clamp(10px,2.5vw,14px)] sm:text-[14px]'
-          />
-        )}
+        <div className="flex items-center gap-2">
+          {activeTab === 'recommended' && (
+            <SearchUndoButton className="md:hidden" />
+          )}
+          {(activeTab === 'recommended' || (activeTab === 'allListings' && isMobile)) && (
+            <FilterOptionsDialog
+              isOpen={isFilterOpen}
+              onOpenChange={setIsFilterOpen}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              className='md:self-end w-fit ml-auto text-[clamp(10px,2.5vw,14px)] sm:text-[14px]'
+            />
+          )}
+        </div>
       </div>
       <div className="w-full mt-4">
         {tabs.find(tab => tab.value === activeTab)?.content}
