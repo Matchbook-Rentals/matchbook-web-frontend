@@ -73,7 +73,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
+      <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[65vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
           {/* Placeholder */}
@@ -104,23 +104,38 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
               {chunkedImages.map((chunk, chunkIndex) => (
-                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[50vh] pl-4">
+                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[65vh] pl-4">
                   <div className="grid grid-cols-2 grid-rows-2 gap-3 lg:gap-4">
-                    {chunk.map((image, idx) => (
-                      <div
-                        key={`image-${image.id}-${idx}`}
-                        className="relative cursor-pointer h-[24vh] overflow-hidden rounded-lg"
-                        onClick={() => handleImageClick(uniqueImages.indexOf(image))}
-                      >
-                        <img
-                          src={image.url}
-                          alt={`${image.category} image ${image.rank}`}
-                          className="object-cover w-full h-full rounded-lg"
-                          draggable={false}
-                          style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
-                        />
-                      </div>
-                    ))}
+                    {chunk.map((image, idx) => {
+                      const isBottomRight = idx === 3 || (idx === chunk.length - 1 && chunk.length < 4);
+                      return (
+                        <div
+                          key={`image-${image.id}-${idx}`}
+                          className="relative cursor-pointer h-[31vh] overflow-hidden rounded-lg"
+                          onClick={() => handleImageClick(uniqueImages.indexOf(image))}
+                        >
+                          <img
+                            src={image.url}
+                            alt={`${image.category} image ${image.rank}`}
+                            className="object-cover w-full h-full rounded-lg"
+                            draggable={false}
+                            style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+                          />
+                          {isBottomRight && (
+                            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                              <DialogTrigger className='' asChild>
+                                <Button
+                                  className="absolute bottom-2 right-2 py-1 px-2 h-fit text-white border border-white bg-transparent hover:text-black hover:bg-white"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <p className='text-[12px]'>View All</p>
+                                </Button>
+                              </DialogTrigger>
+                            </Dialog>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </CarouselItem>
               ))}
@@ -160,9 +175,6 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                         draggable={false}
                         style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                       />
-                      <p className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm z-10">
-                        {index + 1} / {uniqueImages.length}
-                      </p>
                     </div>
                   </CarouselItem>
                  );
@@ -175,32 +187,28 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger className='' asChild>
               <Button
-                className="absolute bottom-2 right-2 py-1 px-2 h-fit  flex justify-between gap-x-2 bg-white hover:bg-gray-200"
+                className="absolute bottom-2 right-2 py-1 px-2 h-fit text-white border border-white bg-transparent hover:text-black hover:bg-white"
               >
-                <img src='/picture-icon.png' className='h-4 w-4 ' />
-                <p className='text-[#404040] text-[12px] '>Show All</p>
+                <p className='text-[12px]'>View All</p>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] max-h-[75vh] sm:max-h-[90vh] pt-6 pb-4 rounded-lg flex flex-col">
+            <DialogContent className="max-w-[95vw] max-h-[90vh] sm:max-h-[95vh] pt-6 pb-4 rounded-lg flex flex-col">
               <DialogHeader> {/* Sticky class removed */}
                 <DialogTitle className="text-xl text-center">All photos</DialogTitle>
               </DialogHeader>
-              <ScrollArea className=" h-[600px]">
+              <ScrollArea className=" h-[80vh]">
                 <div
                   className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 pr-4" // Added pr-4 for scrollbar spacing
                 >
                   {uniqueImages.map((image, index) => (
-                    <div key={image.id} className="relative w-full bg-gray-100  rounded-[20px] overflow-hidden">
+                    <div key={image.id} className="relative w-full bg-gray-100 rounded-[20px] overflow-hidden" style={{ aspectRatio: '3.6/2.2' }}>
                     <img
                       src={image.url}
                       alt={`${image.category} image ${image.rank}`}
-                      className="object-contain w-full h-full min-h-[200px] max-h-[400px]"
+                      className="object-cover w-full h-full"
                       draggable={false}
                       style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                     />
-                    <p className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
-                      {index + 1} / {uniqueImages.length}
-                    </p>
                   </div>
                 ))}
                 </div>
