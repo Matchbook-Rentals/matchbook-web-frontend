@@ -10,6 +10,7 @@ import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/ho
 import SearchFavoriteGrid from '../(components)/search-favorite-grid';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 
 export default function SearchFavoritesTab() {
   const [isOpen, setIsOpen] = useState(false);
@@ -172,14 +173,20 @@ export default function SearchFavoritesTab() {
           handleTabChange('prefetch');
           return null;
         })()}
+        <img 
+          src="/search-flow/empty-states/empty-listings.png"
+          alt="No listings available" 
+          className="w-32 h-32 mb-4 opacity-60"
+        />
         <p className='font-montserrat-regular text-2xl mb-5'>You haven&apos;t liked any listings!</p>
         <p className='mt-3'> Let&apos;s get you a match! </p>
         <div className='flex justify-center gap-x-2 mt-2'>
-          <Button
+          <BrandButton
+            variant="default"
             onClick={() => handleTabChange()}
           >
             Show Recommended
-            </Button>
+          </BrandButton>
         </div>
       </div>
     )

@@ -247,6 +247,11 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   if (listings.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center h-[50vh]'>
+        <img 
+          src="/search-flow/empty-states/empty-listings.png"
+          alt="No listings available" 
+          className="w-32 h-32 mb-4 opacity-60"
+        />
         <p className="text-gray-600 text-center">
           Sorry, we couldn&apos;t find any listings in this area right now.
           <br />
@@ -258,6 +263,11 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   if (showListings.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center pb-6 h-[50vh]'>
+        <img 
+          src="/search-flow/empty-states/empty-listings.png"
+          alt="No listings available" 
+          className="w-32 h-32 mb-4 opacity-60"
+        />
         <p className=' text-2xl mb-5'>You&apos;re out of listings!</p>
         <p className='mb-3'>You can
           {numFavorites > 0 ? ' look at your favorites' : ''}
@@ -274,20 +284,20 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
         <div className='flex justify-center gap-x-2 mt-2'>
           {numFilteredOut > 0 && (
-            <button
+            <BrandButton
+              variant="outline"
               onClick={() => setIsFilterOpen(true)}
-              className="px-3 py-1 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2"
             >
               Adjust Filters
-            </button>
+            </BrandButton>
           )}
           {numFavorites > 0 && (
-            <button
+            <BrandButton
+              variant="default"
               onClick={() => handleTabChange()}
-              className="px-4 py-1 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
             >
               View Favorites
-            </button>
+            </BrandButton>
           )}
         </div>
       </div>

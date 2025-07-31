@@ -7,6 +7,7 @@ import SelectedListingDetails from '../(components)/selected-listing-details';
 import { ListingAndImages } from '@/types';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import { MapViewIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
@@ -433,6 +434,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               )
             ) : listings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh]">
+                <img 
+                  src="/search-flow/empty-states/empty-listings.png"
+                  alt="No listings available" 
+                  className="w-32 h-32 mb-4 opacity-60"
+                />
                 <p className="text-gray-600 text-center">
                   Sorry, we couldn&apos;t find any listings in this area right now.
                   <br />
@@ -441,6 +447,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-[50vh]">
+                <img 
+                  src="/search-flow/empty-states/empty-listings.png"
+                  alt="No listings available" 
+                  className="w-32 h-32 mb-4 opacity-60"
+                />
                 <p 
                   className="font-montserrat-regular text-2xl mb-5 cursor-pointer hover:text-blue-600"
                   onClick={() => {
@@ -523,12 +534,12 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
                 <div className="flex justify-center gap-x-2 mt-2">
                   {numFilteredOut > 0 && (
-                    <button
+                    <BrandButton
+                      variant="outline"
                       onClick={() => setIsFilterDialogOpen(true)}
-                      className="px-3 py-1 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2"
                     >
                       Adjust Filters
-                    </button>
+                    </BrandButton>
                   )}
                 </div>
               </div>
