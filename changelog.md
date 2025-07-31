@@ -251,3 +251,16 @@
 - Updated price display format to show "$/month" and moved to dedicated footer section
 - Enhanced category display with proper names (Private Room, Single Family, etc.)
 - Integrated trip date context for availability display instead of generic "Available now"
+
+## Image Carousel Desktop Sizing Revert
+- Reverted desktop image carousel height from 65vh back to 50vh
+- Reverted carousel items height from 65vh to 50vh
+- Reverted individual grid image height from 31vh to 24vh
+- Kept modal popup sizing improvements (90vh modal, 80vh scroll area)
+
+## Global Error Boundary Brand Styling Update
+- Updated global error boundary to use brand-consistent UI components (Card, BrandButton)
+- Replaced inline styles with proper Tailwind classes and design system colors
+- Added refresh icon and homepage navigation option
+- Improved countdown timer (5 seconds, 1-second intervals)
+- Added error boundary preview page to admin test suite at /admin/test/error-boundary

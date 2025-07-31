@@ -6,7 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
-import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home } from 'lucide-react'
+import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 
 export default function TestSuitesPage() {
@@ -99,6 +99,13 @@ export default function TestSuitesPage() {
       description: 'Test terms agreement logic, database updates, API endpoints, and middleware behavior',
       icon: <FileText className="h-5 w-5" />,
       path: '/admin/test/terms-agreement'
+    },
+    {
+      id: 'global-error-boundary',
+      name: 'Global Error Boundary',
+      description: 'Test the global error boundary by triggering a runtime error',
+      icon: <AlertTriangle className="h-5 w-5" />,
+      path: '/admin/test/error-boundary'
     }
   ]
 
