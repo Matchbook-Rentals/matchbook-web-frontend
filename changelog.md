@@ -291,3 +291,5 @@
 - Enhanced thumbnail navigation arrows with dark theme (black background, white text)
 - Added hover effects to thumbnail arrows: 10% scale increase with smooth transitions
 - Configured thumbnail carousel to scroll 5 images at a time for better pagination
+- Fixed thumbnail synchronization to properly highlight the currently displayed main image
+- Resolved runtime error by removing non-existent containerSize() method and implementing smart scrolling logic

@@ -332,7 +332,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </div>
 
           <div
-            className="w-1/2 h-fit lg:w-full shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
+            className="w-1/2 mt-6  h-fit lg:w-full shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
           >
             <ListingDetailsBox
               listing={showListings[0]}
