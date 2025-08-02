@@ -420,7 +420,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
                     <SelectedListingDetails
                       listing={selectedListing}
                       customSnapshot={enhancedSnapshot}
-                      height={`${calculatedHeight-80}px`}
+                      height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
                     />
                   ) : null;
                 })()
@@ -428,7 +428,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
                 // Pass calculatedHeight to the height prop
                 <SearchListingsGrid
                   listings={displayListings}
-                  height={`${calculatedHeight-80}px`}
+                  height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
                   customSnapshot={enhancedSnapshot}
                 />
               )
