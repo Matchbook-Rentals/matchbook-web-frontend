@@ -317,3 +317,8 @@
 - Replaced CheckCircle icon with custom verified-badge.svg for better visual consistency  
 - Updated Badge component styling to remove border and padding
 - Removed conditional rendering - verified badge now displays for all hosts
+
+## Updated Map Pin Hover Color to Teal
+- Changed map pin hover color from green (#4caf50) to teal (#0B6E6E) in search map component
+- Updated both simple marker and price bubble marker hover states for consistency
+- Fixed comment describing hover color from "Pink" to "Teal" for accuracy
