@@ -280,3 +280,7 @@
 - Added rentDueAtBooking, petRent, and petDeposit fields to listing approval interface
 - Applied comma formatting to all numeric fields (bedrooms, bathrooms, square footage, lease lengths, prices)
 - Enhanced number display readability with toLocaleString() formatting throughout admin interface
+
+## Disable Onboarding Popup Auto-Focus
+- Disabled automatic focus behavior in onboarding popup using onOpenAutoFocus preventDefault
+- Prevents dialog from automatically focusing on the "Continue to Site" button when opened

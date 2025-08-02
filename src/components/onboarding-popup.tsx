@@ -33,6 +33,7 @@ export const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       <DialogContent 
         className="flex flex-col items-center gap-0 p-0 bg-white w-[95vw] max-w-[609px] mx-auto border-0 shadow-lg !top-[20%] translate-y-[-50%]"
         showCloseButton={false}
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <Card className="w-full rounded-[20px] overflow-hidden border-0 shadow-none">
 
