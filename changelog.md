@@ -322,3 +322,9 @@
 - Changed map pin hover color from green (#4caf50) to teal (#0B6E6E) in search map component
 - Updated both simple marker and price bubble marker hover states for consistency
 - Fixed comment describing hover color from "Pink" to "Teal" for accuracy
+
+## Enhanced Mobile Action Button Sizing in Search Match Tab
+- Increased mobile action button size by 25% (from 80×45px to 100×56px)
+- Enlarged button icons from h-4 w-4 to h-5 w-5 for better touch targets
+- Increased spacing between buttons from gap-2 to gap-3
+- Repositioned buttons slightly lower (5-10px) for improved mobile ergonomics
