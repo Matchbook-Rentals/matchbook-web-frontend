@@ -400,24 +400,24 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </div>
         </div>
 
-        <div className="lg:hidden fixed sm:bottom-[20px] bottom-[60px] left-0 right-0 z-50">
+        <div className="lg:hidden fixed sm:bottom-[15px] bottom-[50px] left-0 right-0 z-50">
           {/* Action Buttons Section - Reject, Like */}
-          <div className="flex justify-center items-center gap-2 my-4">
+          <div className="flex justify-center items-center gap-3 my-4">
             <Button
               variant="outline"
-              className="rounded-lg w-[80px] h-[45px] flex items-center justify-center border-none"
+              className="rounded-lg w-[100px] h-[56px] flex items-center justify-center border-none"
               style={{ backgroundColor: '#F65C6D' }}
               onClick={() => handleReject(showListings[0])}
             >
-              <X className="h-4 w-4 text-white" />
+              <X className="h-5 w-5 text-white" />
             </Button>
 
             <BrandButton
               variant="default"
-              className="rounded-lg w-[80px] h-[45px] min-w-0 flex items-center justify-center"
+              className="rounded-lg w-[100px] h-[56px] min-w-0 flex items-center justify-center"
               onClick={() => handleLike(showListings[0])}
             >
-              <Heart className="h-4 w-4 text-white" />
+              <Heart className="h-5 w-5 text-white" />
             </BrandButton>
           </div>
         </div>
