@@ -1,5 +1,15 @@
 # Changelog
 
+## Modernize search listing card snapshot component
+- Updated search-listing-card-snapshot.tsx to match the design of search-listing-card.tsx
+- Replaced image carousel with single image display for consistency
+- Added structured card layout with CardContent and CardFooter sections
+- Implemented modern property features display with bedroom/bathroom/sqft icons and separators
+- Updated action buttons to use BrandButton with consistent styling
+- Enhanced location and rating display with reviews count
+- Fixed responsive width from hardcoded 361.5px to w-full max-w-[361.5px] for proper grid layout
+- Maintained customSnapshot functionality for state management compatibility
+
 ## Enhanced filter functionality and removed duplicate filter dialogs
 - Made filter dialog always visible on both recommended and all listings tabs (removed mobile-only restriction)
 - Removed filter dialog trigger from filter-display component to eliminate duplicate filter buttons
