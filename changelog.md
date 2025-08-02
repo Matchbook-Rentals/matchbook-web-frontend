@@ -307,3 +307,8 @@
 - Configured thumbnail carousel to scroll 5 images at a time for better pagination
 - Fixed thumbnail synchronization to properly highlight the currently displayed main image
 - Resolved runtime error by removing non-existent containerSize() method and implementing smart scrolling logic
+
+## Updated Search Listing Details Verified Badge
+- Replaced CheckCircle icon with custom verified-badge.svg for better visual consistency  
+- Updated Badge component styling to remove border and padding
+- Removed conditional rendering - verified badge now displays for all hosts

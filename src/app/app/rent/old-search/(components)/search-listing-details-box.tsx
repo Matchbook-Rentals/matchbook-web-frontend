@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
-import { X, Heart, CheckCircle } from 'lucide-react';
+import { X, Heart, CheckCircle, Check } from 'lucide-react';
 import { BrandButton } from '@/components/ui/brandButton';
+import Image from 'next/image';
 
 interface ListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -104,14 +106,20 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
         </div>
 
         {/* Verified badge */}
-        {host?.verifiedAt && (
-          <div className="flex items-center gap-1">
-            <CheckCircle className="w-4 h-4 text-[#717680]" />
-            <span className="font-normal text-[#717680] text-xs">
-              Verified
-            </span>
-          </div>
-        )}
+        <Badge
+          variant="outline"
+          className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
+        >
+          <Image 
+            src="/svg/verified-badge.svg" 
+            alt="Verified" 
+            width={16} 
+            height={16} 
+          />
+          <span className="font-normal text-xs text-greygrey-500 font-['Poppins',Helvetica]">
+            Verified
+          </span>
+        </Badge>
 
         <Separator className="w-full" />
 
