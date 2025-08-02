@@ -318,7 +318,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           <div className='w-full lg:w-full'>
             <ListingDescription listing={showListings[0]} isFlexible={!!isFlexible}/>
 
-            <Card className="bg-neutral-50 rounded-xl mt-5">
+            <Card className="bg-[#FAFAFA] border-none rounded-xl mt-5">
               <CardContent className="flex flex-col items-start gap-[18px] p-5">
                 <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">Location</h3>
 
