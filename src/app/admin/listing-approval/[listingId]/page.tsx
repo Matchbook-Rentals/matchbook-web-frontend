@@ -43,7 +43,7 @@ export default async function ListingApprovalDetail({
         <CardContent>
           <div className="mb-6">
             <h2 className="text-lg font-semibold mb-2">Host Information</h2>
-            <p><span className="font-medium">Name:</span> {listing.user.fullName}</p>
+            <p><span className="font-medium">Name:</span> {listing.user.firstName} {listing.user.lastName}</p>
             <p><span className="font-medium">Email:</span> {listing.user.email}</p>
             <p><span className="font-medium">Submitted:</span> {formatDate(listing.createdAt)}</p>
           </div>

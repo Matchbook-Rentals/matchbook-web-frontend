@@ -33,7 +33,8 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
       userId: true,
       user: {
         select: {
-          fullName: true,
+          firstName: true,
+          lastName: true,
           email: true
         }
       },
@@ -71,7 +72,8 @@ export async function getListingDetails(listingId: string) {
       user: {
         select: {
           id: true,
-          fullName: true,
+          firstName: true,
+          lastName: true,
           email: true
         }
       },
