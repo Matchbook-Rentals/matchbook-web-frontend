@@ -13,6 +13,9 @@ interface ListingImageCarouselProps {
 const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages }) => {
   const [activeImage, setActiveImage] = useState(0); // Index for desktop main image
   const [api, setApi] = useState<CarouselApi>();
+  const [dialogApi, setDialogApi] = useState<CarouselApi>(); // API for dialog carousel
+  const [thumbnailApi, setThumbnailApi] = useState<CarouselApi>(); // API for thumbnail carousel
+  const [dialogActiveImage, setDialogActiveImage] = useState(0); // Active image in dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false); // Loading state for active image
 
@@ -46,6 +49,36 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     };
   }, [api, activeImage]); // Rerun when api is available or activeImage changes externally
 
+  // Effect to sync dialog carousel with thumbnail selection
+  useEffect(() => {
+    if (!dialogApi) return;
+
+    const handleDialogSelect = () => {
+      const currentSlide = dialogApi.selectedScrollSnap();
+      setDialogActiveImage(currentSlide);
+      // Sync thumbnail carousel to show current image
+      if (thumbnailApi) {
+        thumbnailApi.scrollTo(currentSlide);
+      }
+    };
+
+    dialogApi.on("select", handleDialogSelect);
+    return () => dialogApi.off("select", handleDialogSelect);
+  }, [dialogApi, thumbnailApi]);
+
+  // Reset dialog active image when dialog opens
+  useEffect(() => {
+    if (isDialogOpen) {
+      setDialogActiveImage(activeImage);
+      if (dialogApi) {
+        dialogApi.scrollTo(activeImage);
+      }
+      if (thumbnailApi) {
+        thumbnailApi.scrollTo(activeImage);
+      }
+    }
+  }, [isDialogOpen, activeImage, dialogApi, thumbnailApi]);
+
   if (listingImages.length === 0) {
     // Still show pulse if listingImages is empty initially before this check
     return (
@@ -59,6 +92,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
 
   const handleImageClick = (index: number) => {
     setActiveImage(index);
+  };
+
+  const handleThumbnailClick = (index: number) => {
+    setDialogActiveImage(index);
+    if (dialogApi) {
+      dialogApi.scrollTo(index);
+    }
   };
 
   const chunkedImages = uniqueImages.reduce((resultArray, item, index) => {
@@ -192,28 +232,85 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 <p className='text-[12px]'>View All</p>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] max-h-[90vh] sm:max-h-[95vh] pt-6 pb-4 rounded-lg flex flex-col">
-              <DialogHeader> {/* Sticky class removed */}
+            <DialogContent className="max-w-[95vw] max-h-[90vh] sm:max-h-[95vh] lg:max-w-[90vw] lg:max-h-[90vh] pt-6 pb-4 rounded-lg flex flex-col">
+              <DialogHeader>
                 <DialogTitle className="text-xl text-center">All photos</DialogTitle>
               </DialogHeader>
-              <ScrollArea className=" h-[80vh]">
-                <div
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 pr-4" // Added pr-4 for scrollbar spacing
-                >
-                  {uniqueImages.map((image, index) => (
-                    <div key={image.id} className="relative w-full bg-gray-100 rounded-[20px] overflow-hidden" style={{ aspectRatio: '3.6/2.2' }}>
-                    <img
-                      src={image.url}
-                      alt={`${image.category} image ${image.rank}`}
-                      className="object-cover w-full h-full"
-                      draggable={false}
-                      style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
-                    />
+              
+              {/* Mobile: Grid layout */}
+              <div className="lg:hidden">
+                <ScrollArea className="h-[80vh]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pr-4">
+                    {uniqueImages.map((image, index) => (
+                      <div key={image.id} className="relative w-full bg-gray-100 rounded-[20px] overflow-hidden" style={{ aspectRatio: '3.6/2.2' }}>
+                        <img
+                          src={image.url}
+                          alt={`${image.category} image ${image.rank}`}
+                          className="object-cover w-full h-full"
+                          draggable={false}
+                          style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </ScrollArea>
+              </div>
+
+              {/* Desktop: Single large image carousel */}
+              <div className="hidden lg:flex flex-col flex-1">
+                {/* Main image carousel */}
+                <div className="flex-1 mb-4">
+                  <Carousel opts={{ loop: true }} setApi={setDialogApi}>
+                    <CarouselContent className="h-[70vh]">
+                      {uniqueImages.map((image, index) => (
+                        <CarouselItem key={image.id} className="flex items-center justify-center">
+                          <div className="relative w-full h-full flex items-center justify-center">
+                            <img
+                              src={image.url}
+                              alt={`${image.category} image ${image.rank}`}
+                              className="max-w-full max-h-full object-contain rounded-lg"
+                              draggable={false}
+                              style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 text-white bg-black/50 hover:bg-black/70 hover:text-white border-0" />
+                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 text-white bg-black/50 hover:bg-black/70 hover:text-white border-0" />
+                  </Carousel>
                 </div>
-              </ScrollArea>
-              {/* The custom close button has been removed */}
+
+                {/* Thumbnail carousel */}
+                <div className="h-24">
+                  <Carousel opts={{ loop: false, align: "start", slidesToScroll: 5 }} setApi={setThumbnailApi}>
+                    <CarouselContent className="-ml-2">
+                      {uniqueImages.map((image, index) => (
+                        <CarouselItem key={`thumb-${image.id}`} className="pl-2 basis-auto">
+                          <div 
+                            className={`relative cursor-pointer h-20 w-28 overflow-hidden rounded-lg border-2 transition-all duration-200 ${
+                              index === dialogActiveImage 
+                                ? 'border-yellow-500 shadow-lg' 
+                                : 'border-transparent hover:border-gray-300'
+                            }`}
+                            onClick={() => handleThumbnailClick(index)}
+                          >
+                            <img
+                              src={image.url}
+                              alt={`${image.category} thumbnail ${image.rank}`}
+                              className="object-cover w-full h-full"
+                              draggable={false}
+                              style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-white hover:text-white bg-black/80 hover:bg-black hover:scale-110 border border-gray-700 transition-all duration-200" />
+                    <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 text-white hover:text-white bg-black/80 hover:bg-black hover:scale-110 border border-gray-700 transition-all duration-200" />
+                  </Carousel>
+                </div>
+              </div>
             </DialogContent>
           </Dialog>
         </div>
