@@ -9,11 +9,10 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import { CategoryType, getFiltersByCategory } from '@/constants/filters';
 
 interface FilterDisplayProps {
-  onOpenFilter: () => void;
   className?: string;
 }
 
-export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, className = "" }) => {
+export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) => {
   const { state: { filters, listings, showListings }, actions: { updateFilters } } = useTripContext();
   
   // Helper function to get filter label
@@ -250,52 +249,24 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ onOpenFilter, clas
   // Don't show the filter display if no filters are active
   if (activeFilters.length === 0) {
     return (
-      <div className={`flex w-full items-center justify-between mb-4 ${className}`}>
+      <div className={`flex w-full items-center justify-start mb-4 ${className}`}>
         <div className="text-sm text-gray-600">
           {totalResults.toLocaleString()} Results
         </div>
-        
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onOpenFilter}
-          className="h-9 gap-2.5 px-3"
-        >
-          <span>Filters</span>
-          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.5 5.83333H17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M5 10H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M8.33333 14.1667H11.6667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </Button>
       </div>
     );
   }
   
   return (
     <div className={`w-full space-y-3 mb-4 ${className}`}>
-      {/* Results and filter button row */}
-      <div className="flex w-full items-center justify-between">
+      {/* Results row */}
+      <div className="flex w-full items-center justify-start">
         <div className="text-sm text-gray-600">
           {totalResults.toLocaleString()} Results
           {numFiltered > 0 && (
             <span className="text-gray-500"> ({numFiltered} filtered out)</span>
           )}
         </div>
-        
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onOpenFilter}
-          className="h-9 gap-2.5 px-3"
-        >
-          <span>Filters</span>
-          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.5 5.83333H17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M5 10H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M8.33333 14.1667H11.6667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </Button>
       </div>
       
       {/* Filter tags row */}

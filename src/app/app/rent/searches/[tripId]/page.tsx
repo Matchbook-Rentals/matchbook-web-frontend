@@ -137,7 +137,7 @@ const TripsPage: React.FC = () => {
           {activeTab === 'recommended' && (
             <SearchUndoButton className="md:hidden pl-4" />
           )}
-          {(activeTab === 'recommended' || (activeTab === 'allListings' && isMobile)) && (
+          {(activeTab === 'recommended' || activeTab === 'allListings') && (
             <FilterOptionsDialog
               isOpen={isFilterOpen}
               onOpenChange={setIsFilterOpen}

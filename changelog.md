@@ -1,7 +1,9 @@
 # Changelog
 
-## Added rounded corners to search match tab listing details
-- Added rounded-[12px] border radius styling to listing details container in search match tab
+## Enhanced filter functionality and removed duplicate filter dialogs
+- Made filter dialog always visible on both recommended and all listings tabs (removed mobile-only restriction)
+- Removed filter dialog trigger from filter-display component to eliminate duplicate filter buttons
+- Streamlined filter display to focus on showing active filters and results count
 
 ## Refactored listing-info.tsx into modular components with unified styling
 - Broke down monolithic ListingDescription component into 7 smaller, focused components:
