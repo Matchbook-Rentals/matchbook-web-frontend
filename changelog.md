@@ -1,5 +1,19 @@
 # Changelog
 
+## Refactored listing-info.tsx into modular components with unified styling
+- Broke down monolithic ListingDescription component into 7 smaller, focused components:
+  - ListingHeader: title and share functionality
+  - PropertyDetails: bedroom, bathroom, square footage info
+  - PricingInfo: monthly price and deposit display
+  - HighlightsSection: property category, furnished status, utilities, pets
+  - AmenitiesSection: amenities grid with expandable modal
+  - HostInformation: host profile, ratings, message button
+  - DescriptionSection: property description text
+- Applied consistent #FAFAFA background styling across all sections
+- Removed borders and shadows for cleaner visual design
+- Maintained responsive desktop/mobile layouts
+- Improved component reusability and maintainability
+
 ## Modernized Listing Details Sections with Card-Based Design
 - Updated highlights, amenities, description, and location sections to use consistent card styling
 - Applied neutral-50 background with rounded corners and proper spacing across all detail sections
