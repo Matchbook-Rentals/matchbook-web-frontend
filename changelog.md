@@ -284,3 +284,10 @@
 ## Disable Onboarding Popup Auto-Focus
 - Disabled automatic focus behavior in onboarding popup using onOpenAutoFocus preventDefault
 - Prevents dialog from automatically focusing on the "Continue to Site" button when opened
+
+## Image Carousel View More Dialog Enhancements
+- Increased main image carousel height from 60vh to 70vh for improved viewing experience in desktop dialog
+- Changed thumbnail highlight color from blue to yellow for better visual contrast
+- Enhanced thumbnail navigation arrows with dark theme (black background, white text)
+- Added hover effects to thumbnail arrows: 10% scale increase with smooth transitions
+- Configured thumbnail carousel to scroll 5 images at a time for better pagination

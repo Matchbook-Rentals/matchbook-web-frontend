@@ -56,9 +56,19 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     const handleDialogSelect = () => {
       const currentSlide = dialogApi.selectedScrollSnap();
       setDialogActiveImage(currentSlide);
-      // Sync thumbnail carousel to show current image
+      // Only scroll thumbnail carousel when needed - estimate 4-5 visible thumbnails
       if (thumbnailApi) {
-        thumbnailApi.scrollTo(currentSlide);
+        const visibleThumbnails = 5; // Approximate number of visible thumbnails
+        const currentThumbnailPosition = thumbnailApi.selectedScrollSnap();
+        
+        // Calculate if we need to scroll to keep the highlighted thumbnail visible
+        if (currentSlide >= currentThumbnailPosition + visibleThumbnails) {
+          // Need to scroll forward
+          thumbnailApi.scrollTo(currentSlide - visibleThumbnails + 1);
+        } else if (currentSlide < currentThumbnailPosition) {
+          // Need to scroll backward
+          thumbnailApi.scrollTo(currentSlide);
+        }
       }
     };
 
