@@ -61,15 +61,18 @@ export default async function ListingApprovalDetail({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <p><span className="font-medium">Type:</span> {listing.category}</p>
-                      <p><span className="font-medium">Bedrooms:</span> {listing.roomCount}</p>
-                      <p><span className="font-medium">Bathrooms:</span> {listing.bathroomCount}</p>
-                      <p><span className="font-medium">Square Footage:</span> {listing.squareFootage}</p>
+                      <p><span className="font-medium">Bedrooms:</span> {listing.roomCount?.toLocaleString()}</p>
+                      <p><span className="font-medium">Bathrooms:</span> {listing.bathroomCount?.toLocaleString()}</p>
+                      <p><span className="font-medium">Square Footage:</span> {listing.squareFootage?.toLocaleString()}</p>
                       <p><span className="font-medium">Furnished:</span> {listing.furnished ? 'Yes' : 'No'}</p>
                       <p><span className="font-medium">Pets Allowed:</span> {listing.petsAllowed ? 'Yes' : 'No'}</p>
                     </div>
                     <div>
-                      <p><span className="font-medium">Lease Length:</span> {listing.shortestLeaseLength} - {listing.longestLeaseLength} months</p>
-                      <p><span className="font-medium">Deposit:</span> {listing.depositSize ? `$${listing.depositSize}` : 'Not specified'}</p>
+                      <p><span className="font-medium">Lease Length:</span> {listing.shortestLeaseLength?.toLocaleString()} - {listing.longestLeaseLength?.toLocaleString()} months</p>
+                      <p><span className="font-medium">Deposit:</span> {listing.depositSize ? `$${listing.depositSize.toLocaleString()}` : 'Not specified'}</p>
+                      <p><span className="font-medium">Rent Due at Booking:</span> {listing.rentDueAtBooking ? `$${listing.rentDueAtBooking.toLocaleString()}` : 'Not specified'}</p>
+                      <p><span className="font-medium">Pet Rent:</span> {listing.petRent ? `$${listing.petRent.toLocaleString()}` : 'Not specified'}</p>
+                      <p><span className="font-medium">Pet Deposit:</span> {listing.petDeposit ? `$${listing.petDeposit.toLocaleString()}` : 'Not specified'}</p>
                       <p><span className="font-medium">Marked Active by User:</span> {listing.markedActiveByUser ? 'Yes' : 'No'}</p>
                     </div>
                   </div>
@@ -133,7 +136,7 @@ export default async function ListingApprovalDetail({
                   ) : (
                     <div>
                       <p><span className="font-medium">Price Range:</span></p>
-                      <p className="text-lg">${listing.shortestLeasePrice} - ${listing.longestLeasePrice}</p>
+                      <p className="text-lg">${listing.shortestLeasePrice?.toLocaleString()} - ${listing.longestLeasePrice?.toLocaleString()}</p>
                     </div>
                   )}
                 </div>

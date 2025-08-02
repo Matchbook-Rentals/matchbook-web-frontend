@@ -270,3 +270,13 @@
 - Updated empty state buttons to use BrandButton component with proper variants
 - Enhanced search-match-tab, search-map-tab, search-favorites-tab, and search-matchbook-tab
 - Applied consistent styling with outline variant for filter buttons and default variant for navigation buttons
+
+## Admin User Name Display Fix
+- Updated listing approval interface to display user firstName + lastName instead of fullName
+- Modified data fetching in getPendingListings and getListingDetails to select firstName and lastName fields
+- Ensures better success rate for displaying user names in admin approval workflow
+
+## Admin Listing Approval Field Updates
+- Added rentDueAtBooking, petRent, and petDeposit fields to listing approval interface
+- Applied comma formatting to all numeric fields (bedrooms, bathrooms, square footage, lease lengths, prices)
+- Enhanced number display readability with toLocaleString() formatting throughout admin interface
