@@ -58,16 +58,24 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
         </p>
       )}
 
-      <HighlightsSection listing={listing} />
+      <div className="lg:mt-8 mt-5">
+        <HighlightsSection listing={listing} />
+      </div>
       
-      <AmenitiesSection 
-        listing={listing}
-        showFullAmenities={showFullAmenities}
-      />
+      <div className="mt-5">
+        <AmenitiesSection 
+          listing={listing}
+          showFullAmenities={showFullAmenities}
+        />
+      </div>
 
-      <HostInformation listing={listing} />
+      <div className="mt-5">
+        <HostInformation listing={listing} />
+      </div>
 
-      <DescriptionSection listing={listing} />
+      <div className="mt-5">
+        <DescriptionSection listing={listing} />
+      </div>
     </div>
   );
 };

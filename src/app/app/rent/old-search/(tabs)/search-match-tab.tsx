@@ -347,7 +347,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         {/* Location section */}
         <div className="pb-20 md:pb-0 mt-0" ref={locationSectionRef}>
 
-          <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
+          <div className="w-full h-[526px] mt-4 relative rounded-[12px]" ref={mapContainerRef} >
             {/* Map container */}
             <div className="absolute top-2 right-2 z-10 flex flex-col">
               <button

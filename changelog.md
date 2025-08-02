@@ -1,5 +1,8 @@
 # Changelog
 
+## Added rounded corners to search match tab listing details
+- Added rounded-[12px] border radius styling to listing details container in search match tab
+
 ## Refactored listing-info.tsx into modular components with unified styling
 - Broke down monolithic ListingDescription component into 7 smaller, focused components:
   - ListingHeader: title and share functionality
