@@ -2,18 +2,21 @@
 
 ## Overview
 
-This guide covers how to embed Documenso's document creation and signing experience directly into your application using the official Documenso embedding SDK.
+This guide covers how to embed Documenso's document creation, template creation, and signing experience directly into your application using the official Documenso embedding SDK and iframe integration.
 
 **Your Documenso Instance:** `https://documenso-matchbook-rentals-production.up.railway.app`
 
 ---
 
-## **Two Main Approaches:**
+## **Three Main Approaches:**
 
 ### 1. **Document Creation** (Embedded Authoring)
 Users create documents directly in your app.
 
-### 2. **Document Signing** (Two Ways)
+### 2. **Template Creation** (iframe Embedding)
+Users create reusable templates directly in your app.
+
+### 3. **Document Signing** (Two Ways)
 - **Direct Template Signing** (Recommended) - Reusable templates
 - **Specific Document Signing** - For existing documents
 
@@ -74,34 +77,170 @@ function DocumentCreator() {
 }
 ```
 
-### Configuration Options:
-| Option             | Type    | Description                                                        |
-| ------------------ | ------- | ------------------------------------------------------------------ |
-| `presignToken`     | string  | **Required**. The authentication token for the embedding session  |
-| `externalId`       | string  | Optional reference ID from your system to link with the document  |
-| `host`             | string  | Optional custom host URL. Use your Railway deployment URL         |
-| `css`              | string  | Optional custom CSS to style the embedded component               |
-| `cssVars`          | object  | Optional CSS variables for colors, spacing, and more              |
-| `darkModeDisabled` | boolean | Optional flag to disable dark mode                                |
-| `className`        | string  | Optional CSS class name for the iframe                            |
+---
+
+## 2. **Template Creation** (iframe Embedding)
+
+Create reusable templates using Documenso's built-in template authoring interface.
+
+### Setup:
+
+#### Get Presign Token:
+```javascript
+// Backend endpoint to create presign token
+const getPresignToken = async () => {
+  const response = await fetch('/api/documenso/presign-token', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${YOUR_API_KEY}` }
+  });
+  return response.json();
+};
+```
+
+#### Configure Template Creation:
+```javascript
+// Template creation configuration
+const createTemplateConfig = (presignToken, externalId) => {
+  const config = {
+    token: presignToken,
+    externalId: externalId || `template-${Date.now()}`,
+    features: {
+      allowConfigureSignatureTypes: true,
+      allowConfigureLanguage: true,
+      allowConfigureDateFormat: true,
+      allowConfigureTimezone: true,
+      allowConfigureRedirectUrl: true,
+      allowConfigureCommunication: true,
+    }
+  };
+  
+  // Encode config for URL hash
+  return btoa(encodeURIComponent(JSON.stringify(config)));
+};
+```
+
+### React Component:
+```jsx
+import { useState, useEffect } from 'react';
+
+function TemplateCreator({ presignToken, externalId, onTemplateCreated }) {
+  const [templateId, setTemplateId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Listen for template creation completion
+    const handleMessage = (event) => {
+      if (event.origin !== 'https://documenso-matchbook-rentals-production.up.railway.app') {
+        return; // Security: only accept messages from your Documenso instance
+      }
+      
+      if (event.data.type === 'template-created') {
+        setTemplateId(event.data.templateId);
+        setIsLoading(false);
+        onTemplateCreated({
+          templateId: event.data.templateId,
+          externalId: event.data.externalId
+        });
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [onTemplateCreated]);
+
+  if (templateId) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>✅ Template Created Successfully!</h2>
+        <p>Template ID: {templateId}</p>
+        <p>External ID: {externalId}</p>
+      </div>
+    );
+  }
+
+  const encodedConfig = createTemplateConfig(presignToken, externalId);
+  const iframeUrl = `https://documenso-matchbook-rentals-production.up.railway.app/embed/v1/authoring/template.create#${encodedConfig}`;
+
+  return (
+    <iframe 
+      src={iframeUrl}
+      style={{ 
+        width: '100%', 
+        height: '800px', 
+        border: 'none',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+      }}
+      title="Template Creator"
+      onLoad={() => setIsLoading(false)}
+    />
+  );
+}
+```
+
+### Template Management Flow:
+```javascript
+// Complete template creation and usage workflow
+function TemplateWorkflow() {
+  const [step, setStep] = useState('create'); // 'create', 'enable', 'use'
+  const [templateData, setTemplateData] = useState(null);
+  const [directLinkToken, setDirectLinkToken] = useState(null);
+
+  // Step 1: Create template via iframe
+  const handleTemplateCreated = async (data) => {
+    setTemplateData(data);
+    setStep('enable');
+    
+    // Step 2: Enable direct link for the template
+    await enableDirectLink(data.templateId);
+  };
+
+  // Step 2: Enable direct link via API
+  const enableDirectLink = async (templateId) => {
+    try {
+      const response = await fetch(`/api/documenso/templates/${templateId}/direct-link`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${YOUR_API_KEY}` }
+      });
+      const directLink = await response.json();
+      setDirectLinkToken(directLink.token);
+      setStep('use');
+    } catch (error) {
+      console.error('Failed to enable direct link:', error);
+    }
+  };
+
+  return (
+    <div>
+      {step === 'create' && (
+        <TemplateCreator 
+          presignToken={presignToken}
+          externalId="rental-agreement-template"
+          onTemplateCreated={handleTemplateCreated}
+        />
+      )}
+      
+      {step === 'enable' && (
+        <div>Setting up template for use...</div>
+      )}
+      
+      {step === 'use' && directLinkToken && (
+        <EmbedDirectTemplate 
+          token={directLinkToken}
+          host="https://documenso-matchbook-rentals-production.up.railway.app"
+        />
+      )}
+    </div>
+  );
+}
+```
 
 ---
 
-## 2. **Document Signing**
+## 3. **Document Signing**
 
 ### A) **Direct Template Signing** (Recommended)
-Create reusable templates that generate new documents when signed.
-
-#### Setup Template:
-1. **Create template in Documenso dashboard**
-2. **Enable "Direct Link"** on template:
-   - Go to Templates page
-   - Click the actions dropdown on your template
-   - Select "Direct Link"
-   - Configure which recipient should be the direct link signer
-3. **Copy the template URL token**
-   - From URL like: `https://documenso-matchbook-rentals-production.up.railway.app/d/-WoSwWVT-fYOERS2MI37k`
-   - Token is: `-WoSwWVT-fYOERS2MI37k`
+Use templates created above for signing.
 
 #### Embed Template:
 ```jsx
@@ -111,7 +250,7 @@ function TemplateEmbedder() {
   return (
     <div style={{ height: '800px', width: '100%' }}>
       <EmbedDirectTemplate 
-        token="-WoSwWVT-fYOERS2MI37k"
+        token="YOUR_TEMPLATE_TOKEN_HERE"
         host="https://documenso-matchbook-rentals-production.up.railway.app"
         css={`
           .documenso-embed {
@@ -133,15 +272,6 @@ function TemplateEmbedder() {
 ### B) **Specific Document Signing**
 For existing documents with specific recipients.
 
-#### Get Signing Token:
-1. **Create document** (via API or manually in dashboard)
-2. **Get recipient signing URL:**
-   - Hover over recipient's avatar in document view
-   - Click their email to copy signing URL
-3. **Extract token** from URL:
-   - From: `https://documenso-matchbook-rentals-production.up.railway.app/sign/lm7Tp2_yhvFfzdeJQzYQF`
-   - Token is: `lm7Tp2_yhvFfzdeJQzYQF`
-
 #### Embed Document:
 ```jsx
 import { EmbedSignDocument } from '@documenso/embed-react';
@@ -150,7 +280,7 @@ function DocumentSigner() {
   return (
     <div style={{ height: '800px', width: '100%' }}>
       <EmbedSignDocument 
-        token="lm7Tp2_yhvFfzdeJQzYQF"
+        token="YOUR_SIGNING_TOKEN_HERE"
         host="https://documenso-matchbook-rentals-production.up.railway.app"
         darkModeDisabled={true}
       />
@@ -172,8 +302,9 @@ import {
 } from '@documenso/embed-react';
 
 function DocumensoEmbedding() {
-  const [mode, setMode] = useState('create'); // 'create', 'template', or 'sign'
+  const [mode, setMode] = useState('template'); // 'template', 'create', 'sign'
   const [presignToken, setPresignToken] = useState('');
+  const [templateToken, setTemplateToken] = useState('');
   const [documentId, setDocumentId] = useState(null);
 
   // Get presign token from your backend
@@ -194,10 +325,21 @@ function DocumensoEmbedding() {
   };
 
   useEffect(() => {
-    if (mode === 'create') {
+    if (mode === 'create' || mode === 'template') {
       getPresignToken();
     }
   }, [mode]);
+
+  const handleTemplateCreated = async (data) => {
+    // Enable direct link and get token for immediate use
+    const response = await fetch(`/api/documenso/templates/${data.templateId}/direct-link`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${process.env.DOCUMENSO_API_KEY}` }
+    });
+    const directLink = await response.json();
+    setTemplateToken(directLink.token);
+    setMode('sign');
+  };
 
   if (documentId) {
     return (
@@ -219,6 +361,16 @@ function DocumensoEmbedding() {
       {/* Mode Selection */}
       <div style={{ marginBottom: '20px' }}>
         <button 
+          onClick={() => setMode('template')}
+          style={{ 
+            marginRight: '10px', 
+            backgroundColor: mode === 'template' ? '#0000FF' : '#ccc',
+            color: mode === 'template' ? 'white' : 'black'
+          }}
+        >
+          Create Template
+        </button>
+        <button 
           onClick={() => setMode('create')}
           style={{ 
             marginRight: '10px', 
@@ -227,16 +379,6 @@ function DocumensoEmbedding() {
           }}
         >
           Create Document
-        </button>
-        <button 
-          onClick={() => setMode('template')}
-          style={{ 
-            marginRight: '10px',
-            backgroundColor: mode === 'template' ? '#0000FF' : '#ccc',
-            color: mode === 'template' ? 'white' : 'black'
-          }}
-        >
-          Sign Template
         </button>
         <button 
           onClick={() => setMode('sign')}
@@ -251,6 +393,14 @@ function DocumensoEmbedding() {
 
       {/* Embedding Container */}
       <div style={{ height: '800px', width: '100%', border: '1px solid #ddd' }}>
+        {mode === 'template' && presignToken && (
+          <TemplateCreator
+            presignToken={presignToken}
+            externalId={`template-${Date.now()}`}
+            onTemplateCreated={handleTemplateCreated}
+          />
+        )}
+
         {mode === 'create' && presignToken && (
           <EmbedCreateDocument
             presignToken={presignToken}
@@ -263,21 +413,14 @@ function DocumensoEmbedding() {
           />
         )}
 
-        {mode === 'template' && (
+        {mode === 'sign' && templateToken && (
           <EmbedDirectTemplate 
-            token="YOUR_TEMPLATE_TOKEN_HERE" // Replace with actual template token
+            token={templateToken}
             host="https://documenso-matchbook-rentals-production.up.railway.app"
           />
         )}
 
-        {mode === 'sign' && (
-          <EmbedSignDocument 
-            token="YOUR_SIGNING_TOKEN_HERE" // Replace with actual signing token
-            host="https://documenso-matchbook-rentals-production.up.railway.app"
-          />
-        )}
-
-        {mode === 'create' && !presignToken && (
+        {((mode === 'create' || mode === 'template') && !presignToken) && (
           <div style={{ padding: '20px', textAlign: 'center' }}>
             Loading presign token...
           </div>
@@ -318,6 +461,30 @@ app.post('/api/documenso/presign-token', async (req, res) => {
 });
 ```
 
+### Template Direct Link Endpoint:
+```javascript
+// Enable direct link for template
+app.post('/api/documenso/templates/:id/direct-link', async (req, res) => {
+  try {
+    const response = await fetch(
+      `https://documenso-matchbook-rentals-production.up.railway.app/api/v1/templates/${req.params.id}/direct-link`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.DOCUMENSO_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to enable direct link' });
+  }
+});
+```
+
 ---
 
 ## **Styling and Customization**
@@ -348,6 +515,21 @@ app.post('/api/documenso/presign-token', async (req, res) => {
     radius: '8px',             // Border radius
     fontFamily: 'Arial, sans-serif'
   }}
+/>
+```
+
+### iframe Styling:
+```jsx
+<iframe 
+  src={templateCreateUrl}
+  style={{
+    width: '100%',
+    height: '800px',
+    border: 'none',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+  }}
+  title="Template Creator"
 />
 ```
 
@@ -382,14 +564,68 @@ Documenso supports multiple frameworks:
 
 ---
 
+## **Security Considerations**
+
+### iframe Security:
+- Always validate `event.origin` in postMessage listeners
+- Use your specific Documenso instance URL, not wildcards
+- Implement proper CORS policies
+- Validate all data received from iframe communications
+
+### API Security:
+- Store API keys securely on your backend
+- Never expose API keys in frontend code
+- Implement proper authentication for your backend endpoints
+- Use HTTPS for all API communications
+
+---
+
+## **Error Handling**
+
+### Template Creation Errors:
+```javascript
+const handleMessage = (event) => {
+  if (event.data.type === 'template-created') {
+    onTemplateCreated(event.data);
+  } else if (event.data.type === 'template-error') {
+    console.error('Template creation failed:', event.data.error);
+    // Handle error appropriately
+  }
+};
+```
+
+### API Error Handling:
+```javascript
+const createPresignToken = async () => {
+  try {
+    const response = await fetch('/api/documenso/presign-token', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${API_KEY}` }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to create presign token:', error);
+    // Handle error - show user feedback, retry logic, etc.
+  }
+};
+```
+
+---
+
 ## **Next Steps**
 
-1. **Create a template** in your Documenso dashboard
-2. **Enable Direct Link** on the template
-3. **Copy the template token** from the URL
-4. **Install the React SDK** and try the template embedding first
-5. **Set up presign token endpoint** for document creation
-6. **Customize styling** to match your brand
+1. **Set up your backend endpoints** for presign token creation
+2. **Create your first template** using the iframe approach
+3. **Enable direct link** for the template via API
+4. **Embed the template** using `EmbedDirectTemplate`
+5. **Customize styling** to match your brand
+6. **Implement error handling** and user feedback
+7. **Test the complete workflow** end-to-end
 
 ---
 
@@ -409,3 +645,15 @@ Documenso supports multiple frameworks:
 - ✅ React/Vue/etc application for embedding
 
 **You're all set to start embedding!** 🎉
+
+---
+
+## **Complete Workflow Summary**
+
+1. **Template Creation**: Use iframe to embed template creation interface
+2. **Template Configuration**: Enable direct link via API after creation
+3. **Template Usage**: Embed template signing with `EmbedDirectTemplate`
+4. **Document Creation**: Use `EmbedCreateDocument` for one-off documents
+5. **Document Signing**: Use `EmbedSignDocument` for specific recipient signing
+
+This approach gives you a complete document workflow solution embedded directly in your application!

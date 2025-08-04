@@ -51,11 +51,11 @@ const MARKER_STYLES = {
   // Simple marker color configuration (for >30 listings)
   MARKER_COLORS: {
     DEFAULT: {
-      primary: '#404040',   // Charcoal outer circle
+      primary: '#0B6E6E',   // Charcoal outer circle
       secondary: '#FFFFFF'  // White inner circle
     },
     HOVER: {
-      primary: '#0B6E6E',   // Teal outer circle
+      primary: '#fb8c00',   // Teal outer circle
       secondary: '#FFFFFF'  // White inner circle
     },
     LIKED: {

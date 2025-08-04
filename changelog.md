@@ -338,3 +338,8 @@
 - Enlarged button icons from h-4 w-4 to h-5 w-5 for better touch targets
 - Increased spacing between buttons from gap-2 to gap-3
 - Repositioned buttons slightly lower (5-10px) for improved mobile ergonomics
+
+## Updated Map Marker Colors and Listing Layout
+- Changed default map marker color from charcoal to teal (#0B6E6E) for better brand consistency
+- Updated hover marker color from teal to orange (#fb8c00) for improved visual feedback
+- Reordered listing description to appear after highlights section instead of at the bottom

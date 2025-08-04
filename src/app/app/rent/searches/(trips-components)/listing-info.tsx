@@ -61,6 +61,10 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
       <div className="lg:mt-8 mt-5">
         <HighlightsSection listing={listing} />
       </div>
+
+      <div className="mt-5">
+        <DescriptionSection listing={listing} />
+      </div>
       
       <div className="mt-5">
         <AmenitiesSection 
@@ -73,9 +77,6 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
         <HostInformation listing={listing} />
       </div>
 
-      <div className="mt-5">
-        <DescriptionSection listing={listing} />
-      </div>
     </div>
   );
 };
