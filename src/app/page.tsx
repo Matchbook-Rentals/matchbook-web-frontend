@@ -8,7 +8,7 @@ import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import RecentArticle from "@/components/home-components/recent-article";
 import FAQSection from "@/components/home-components/faq-section";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { checkClientBetaAccess } from "@/utils/roles";
+import { checkClientBetaAccess } from "@/utils/client-roles";
 import { getUserTripsCount } from "@/app/actions/trips";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 

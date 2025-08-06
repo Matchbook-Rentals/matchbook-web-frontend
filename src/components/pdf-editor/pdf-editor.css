@@ -1,0 +1,327 @@
+/* PDF Editor Styles */
+
+/* PDF Viewer Container */
+.pdf-viewer-container {
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pdf-document {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pdf-page-wrapper {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pdf-page {
+  display: block !important;
+  cursor: crosshair;
+  transition: box-shadow 0.2s ease;
+}
+
+.pdf-page:hover {
+  box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
+}
+
+/* Field Overlay */
+.field-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.field-overlay > * {
+  pointer-events: auto;
+}
+
+/* Field Items */
+.field-item {
+  border-radius: 4px;
+  cursor: move;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  user-select: none;
+  position: relative;
+  opacity: 0.9;
+  backdrop-filter: blur(1px);
+}
+
+.field-item:hover {
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.field-item.active {
+  opacity: 1;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  z-index: 10 !important;
+}
+
+.field-item.dragging {
+  opacity: 0.8;
+  transform: rotate(2deg);
+  z-index: 1000 !important;
+}
+
+.field-item.resizing {
+  opacity: 0.9;
+}
+
+.field-item:hover .remove-btn {
+  opacity: 1;
+}
+
+.field-content {
+  padding: 4px 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.field-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.field-label {
+  font-weight: 500;
+  font-size: 11px;
+  color: inherit;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.required {
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: #ef4444;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.remove-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+/* Resize Handles */
+.react-resizable-handle {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.field-item:hover .react-resizable-handle,
+.field-item.active .react-resizable-handle {
+  opacity: 1;
+}
+
+.react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+  transform: rotate(45deg);
+}
+
+/* Field Type Buttons */
+.field-type-btn {
+  text-align: left;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.field-type-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.field-type-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.field-type-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Drag Feedback */
+.field-type-btn[draggable="true"]:hover {
+  cursor: grab;
+}
+
+.field-type-btn[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+/* Upload Area */
+.upload-area {
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+  transform: translateY(-2px);
+}
+
+/* Recipient Cards */
+.recipient-card {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.recipient-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--recipient-color);
+  opacity: 0.8;
+}
+
+.recipient-card:hover {
+  transform: translateX(2px);
+}
+
+.recipient-card.selected {
+  background: linear-gradient(90deg, var(--recipient-color-light), transparent);
+}
+
+/* Animations */
+@keyframes fieldAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.field-item {
+  animation: fieldAppear 0.3s ease-out;
+}
+
+/* PDF Page Loading States */
+.pdf-page-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 2s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .field-item {
+    min-width: 60px;
+    min-height: 30px;
+  }
+  
+  .field-label {
+    font-size: 9px;
+  }
+  
+  .field-icon {
+    font-size: 12px;
+  }
+  
+  .remove-btn {
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    right: -10px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .pdf-viewer-container {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+  
+  .field-item {
+    backdrop-filter: blur(2px);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .field-item {
+    border-width: 3px;
+    font-weight: bold;
+  }
+  
+  .field-label {
+    font-weight: 700;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .field-item,
+  .field-type-btn,
+  .recipient-card,
+  .upload-area {
+    transition: none;
+    animation: none;
+  }
+  
+  .field-item:hover {
+    transform: none;
+  }
+}

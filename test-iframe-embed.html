@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iframe Embed Test - Documenso Template Creation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .control-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 120px;
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .control-group input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 5px;
+        }
+
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background: #0056b3;
+        }
+
+        .button.secondary {
+            background: #6c757d;
+        }
+
+        .button.secondary:hover {
+            background: #545b62;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 800px;
+            border: none;
+            background: white;
+        }
+
+        .iframe-placeholder {
+            height: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 18px;
+            border: 2px dashed #dee2e6;
+            margin: 20px;
+        }
+
+        .logs {
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .logs-header {
+            padding: 15px 20px;
+            background: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logs-content {
+            padding: 15px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            background: #ffffff;
+        }
+
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-left: 3px solid #007bff;
+            background: #f8f9fa;
+        }
+
+        .log-entry.error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .log-entry.success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+
+        .log-timestamp {
+            color: #6c757d;
+            font-size: 11px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.disconnected {
+            background: #dc3545;
+        }
+
+        .status-indicator.connected {
+            background: #28a745;
+        }
+
+        .status-indicator.loading {
+            background: #ffc107;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .config-preview {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .control-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .control-group label {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Iframe Embed Test Suite</h1>
+            <p>Testing Documenso Template Creation Embed Functionality</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="baseUrl">Base URL:</label>
+                <input type="text" id="baseUrl" value="http://localhost:3000" placeholder="http://localhost:3000">
+                <span class="status-indicator disconnected" id="statusIndicator"></span>
+                <span id="statusText">Disconnected</span>
+            </div>
+
+            <div class="control-group">
+                <label for="externalId">External ID:</label>
+                <input type="text" id="externalId" value="test-template-001" placeholder="my-template-123">
+            </div>
+
+            <div class="control-group">
+                <label>Features:</label>
+                <label><input type="checkbox" id="allowAdvancedSettings" checked> Advanced Settings</label>
+                <label><input type="checkbox" id="allowRecipientRoleSelection" checked> Recipient Role Selection</label>
+                <label><input type="checkbox" id="allowSigningOrderControl"> Signing Order Control</label>
+            </div>
+
+            <div class="control-group">
+                <label for="presignToken">Presign Token:</label>
+                <input type="text" id="presignToken" placeholder="Optional - for authenticated access">
+            </div>
+
+            <div class="control-group">
+                <button class="button" onclick="loadIframe()">🚀 Load Iframe</button>
+                <button class="button secondary" onclick="testEndpoint()">🔍 Test Endpoint</button>
+                <button class="button secondary" onclick="generatePresignToken()">🔑 Generate Token</button>
+                <button class="button secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
+            </div>
+
+            <div class="config-preview" id="configPreview">
+                Configuration will appear here...
+            </div>
+        </div>
+
+        <div id="iframeWrapper">
+            <div class="iframe-placeholder" id="iframePlaceholder">
+                Click "Load Iframe" to test the embed functionality
+            </div>
+        </div>
+
+        <div class="logs">
+            <div class="logs-header">
+                <span>📋 Event Logs & Communication</span>
+                <span id="messageCount">0 messages</span>
+            </div>
+            <div class="logs-content" id="logsContent">
+                Ready to test iframe embed functionality...\n
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messageCount = 0;
+        let currentIframe = null;
+
+        // Configuration management
+        function getConfiguration() {
+            const config = {
+                features: {
+                    allowAdvancedSettings: document.getElementById('allowAdvancedSettings').checked,
+                    allowRecipientRoleSelection: document.getElementById('allowRecipientRoleSelection').checked,
+                    allowSigningOrderControl: document.getElementById('allowSigningOrderControl').checked
+                },
+                externalId: document.getElementById('externalId').value || undefined
+            };
+
+            // Remove undefined values
+            Object.keys(config).forEach(key => {
+                if (config[key] === undefined) {
+                    delete config[key];
+                }
+            });
+
+            return config;
+        }
+
+        function updateConfigPreview() {
+            const config = getConfiguration();
+            const configJson = JSON.stringify(config, null, 2);
+            const encoded = btoa(encodeURIComponent(configJson));
+            
+            document.getElementById('configPreview').textContent = 
+                `Configuration Object:\n${configJson}\n\nBase64 Encoded:\n${encoded}`;
+        }
+
+        function buildIframeUrl() {
+            const baseUrl = document.getElementById('baseUrl').value;
+            const config = getConfiguration();
+            const encoded = btoa(encodeURIComponent(JSON.stringify(config)));
+            
+            return `${baseUrl}/embed/v1/authoring/template/create#${encoded}`;
+        }
+
+        // Logging functions
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.innerHTML = `
+                <div class="log-timestamp">[${timestamp}]</div>
+                <div>${message}</div>
+            `;
+            
+            const logsContent = document.getElementById('logsContent');
+            logsContent.appendChild(logEntry);
+            logsContent.scrollTop = logsContent.scrollHeight;
+            
+            messageCount++;
+            document.getElementById('messageCount').textContent = `${messageCount} messages`;
+        }
+
+        function clearLogs() {
+            document.getElementById('logsContent').innerHTML = 'Logs cleared...\n';
+            messageCount = 0;
+            document.getElementById('messageCount').textContent = '0 messages';
+        }
+
+        // Status management
+        function updateStatus(status, text) {
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            indicator.className = `status-indicator ${status}`;
+            statusText.textContent = text;
+        }
+
+        // Iframe management
+        function loadIframe() {
+            const url = buildIframeUrl();
+            addLog(`🚀 Loading iframe with URL: ${url}`);
+            
+            updateStatus('loading', 'Loading...');
+            
+            // Remove existing iframe
+            if (currentIframe) {
+                currentIframe.remove();
+            }
+            
+            // Create new iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.className = 'iframe-container';
+            iframe.frameBorder = '0';
+            iframe.allow = 'camera; microphone; geolocation';
+            
+            iframe.onload = () => {
+                addLog('✅ Iframe loaded successfully', 'success');
+                updateStatus('connected', 'Connected');
+            };
+            
+            iframe.onerror = (error) => {
+                addLog(`❌ Iframe failed to load: ${error}`, 'error');
+                updateStatus('disconnected', 'Error');
+            };
+            
+            // Replace placeholder
+            const wrapper = document.getElementById('iframeWrapper');
+            const placeholder = document.getElementById('iframePlaceholder');
+            if (placeholder) {
+                placeholder.remove();
+            }
+            
+            wrapper.appendChild(iframe);
+            currentIframe = iframe;
+        }
+
+        // API testing
+        async function testEndpoint() {
+            const baseUrl = document.getElementById('baseUrl').value;
+            const url = `${baseUrl}/embed/v1/authoring/template/create`;
+            
+            addLog(`🔍 Testing endpoint: ${url}`);
+            updateStatus('loading', 'Testing...');
+            
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                
+                if (response.ok) {
+                    addLog(`✅ Endpoint accessible (Status: ${response.status})`, 'success');
+                    updateStatus('connected', 'Endpoint OK');
+                } else {
+                    addLog(`⚠️ Endpoint returned status: ${response.status}`, 'error');
+                    updateStatus('disconnected', `Error ${response.status}`);
+                }
+            } catch (error) {
+                addLog(`❌ Failed to reach endpoint: ${error.message}`, 'error');
+                updateStatus('disconnected', 'Unreachable');
+            }
+        }
+
+        // Token generation (mock for testing)
+        async function generatePresignToken() {
+            const baseUrl = document.getElementById('baseUrl').value;
+            const apiUrl = `${baseUrl}/api/v1/embedding/presign`;
+            
+            addLog('🔑 Attempting to generate presign token...');
+            
+            const requestBody = {
+                externalId: document.getElementById('externalId').value || 'test-template-001',
+                type: 'TEMPLATE_CREATE'
+            };
+            
+            addLog(`Request body: ${JSON.stringify(requestBody, null, 2)}`);
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_API_TOKEN_HERE' // User needs to replace this
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('presignToken').value = data.token;
+                    addLog(`✅ Presign token generated: ${data.token.substring(0, 20)}...`, 'success');
+                } else {
+                    const errorText = await response.text();
+                    addLog(`❌ Token generation failed (${response.status}): ${errorText}`, 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Token generation error: ${error.message}`, 'error');
+                addLog('💡 Note: Replace YOUR_API_TOKEN_HERE with your actual API token');
+            }
+        }
+
+        // Message listener for iframe communication
+        window.addEventListener('message', (event) => {
+            // Security check - only accept messages from expected origin
+            const baseUrl = document.getElementById('baseUrl').value;
+            const expectedOrigin = new URL(baseUrl).origin;
+            
+            if (event.origin !== expectedOrigin) {
+                addLog(`⚠️ Ignored message from unexpected origin: ${event.origin}`, 'error');
+                return;
+            }
+            
+            const data = event.data;
+            addLog(`📨 Received message: ${JSON.stringify(data, null, 2)}`);
+            
+            // Handle different message types
+            switch (data.type) {
+                case 'template-created':
+                    addLog(`🎉 Template created successfully! ID: ${data.templateId}`, 'success');
+                    if (data.externalId) {
+                        addLog(`External ID: ${data.externalId}`, 'success');
+                    }
+                    break;
+                    
+                case 'template-error':
+                    addLog(`❌ Template error: ${data.error} (Code: ${data.code})`, 'error');
+                    break;
+                    
+                case 'template-progress':
+                    addLog(`📈 Progress: ${data.step} (${data.progress}%)`, 'info');
+                    break;
+                    
+                case 'template-validation-error':
+                    addLog(`⚠️ Validation error: ${data.message}`, 'error');
+                    break;
+                    
+                default:
+                    addLog(`📋 Unknown message type: ${data.type}`, 'info');
+                    break;
+            }
+        });
+
+        // Auto-update configuration preview
+        document.addEventListener('DOMContentLoaded', () => {
+            updateConfigPreview();
+            
+            // Update preview when inputs change
+            const inputs = ['baseUrl', 'externalId', 'allowAdvancedSettings', 'allowRecipientRoleSelection', 'allowSigningOrderControl'];
+            inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', updateConfigPreview);
+                    element.addEventListener('input', updateConfigPreview);
+                }
+            });
+            
+            addLog('🏁 Test environment initialized');
+            addLog('💡 Modify configuration above and click "Load Iframe" to test');
+        });
+
+        // Quick test scenarios
+        function runQuickTest() {
+            addLog('🧪 Running quick test scenario...');
+            testEndpoint().then(() => {
+                setTimeout(() => {
+                    loadIframe();
+                }, 1000);
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        loadIframe();
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        location.reload();
+                        break;
+                    case 'k':
+                        e.preventDefault();
+                        clearLogs();
+                        break;
+                }
+            }
+        });
+
+        // Add keyboard shortcuts info
+        addLog('⌨️ Keyboard shortcuts: Ctrl+Enter (Load), Ctrl+R (Reload), Ctrl+K (Clear logs)');
+    </script>
+</body>
+</html>

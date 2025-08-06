@@ -16,7 +16,7 @@ import { getNotifications, updateNotification, deleteNotification } from "@/app/
 import { updateUserImage, updateUserLogin } from "@/app/actions/user";
 import { Notification } from "@prisma/client";
 import { SupportDialog } from "@/components/ui/support-dialog";
-import { checkClientBetaAccess, checkClientHostAccess } from "@/utils/roles";
+import { checkClientBetaAccess, checkClientHostAccess } from "@/utils/client-roles";
 import { MenuIcon, UserIcon } from "@/components/svgs/svg-components";
 
 const NOTIFICATION_REFRESH_INTERVAL = 60000; // one minute

@@ -14,7 +14,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ listing }) => {
         <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
           <MapPin className="w-5 h-5 text-[#5d606d]" />
           <span className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[0]">
-            {listing.city || listing.address || "Location"}
+            {listing.city && listing.state ? `${listing.city}, ${listing.state}` : listing.city || listing.address || "Location"}
           </span>
         </div>
         
@@ -45,7 +45,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ listing }) => {
         <div className="inline-flex items-center gap-2 relative">
           <MapPin className="w-5 h-5 text-[#5d606d]" />
           <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
-            {listing.city || listing.address || "Location"}
+            {listing.city && listing.state ? `${listing.city}, ${listing.state}` : listing.city || listing.address || "Location"}
           </span>
         </div>
         

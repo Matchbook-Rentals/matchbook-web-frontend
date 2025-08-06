@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { BrandButton } from '@/components/ui/brandButton';
 import { ListingAndImages } from '@/types';
 
 interface DescriptionSectionProps {
@@ -7,6 +8,15 @@ interface DescriptionSectionProps {
 }
 
 const DescriptionSection: React.FC<DescriptionSectionProps> = ({ listing }) => {
+  const MAX_LENGTH = 300;
+  const [showMore, setShowMore] = useState(false);
+  
+  const fullDescription = listing.description + listing.description + listing.description + listing.description;
+  const shouldTruncate = fullDescription.length > MAX_LENGTH;
+  const displayText = shouldTruncate && !showMore 
+    ? fullDescription.slice(0, MAX_LENGTH) 
+    : fullDescription;
+
   return (
     <Card className="border-none shadow-none rounded-xl mt-5">
       <CardContent className="flex flex-col items-start gap-[18px] p-5">
@@ -14,7 +24,16 @@ const DescriptionSection: React.FC<DescriptionSectionProps> = ({ listing }) => {
           Description
         </h3>
         <p className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
-          {listing.description + listing.description + listing.description + listing.description}
+          {displayText}
+          {shouldTruncate && (
+            <BrandButton
+              variant="ghost"
+              className="text-primaryBrand px-0 py-0 h-auto min-w-0 inline ml-1"
+              onClick={() => setShowMore(!showMore)}
+            >
+              {showMore ? 'See less' : 'See more'}
+            </BrandButton>
+          )}
         </p>
       </CardContent>
     </Card>

@@ -9,8 +9,6 @@ import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/di
 import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housing-requests';
 import { updateTripFilters } from '@/app/actions/trips';
 import { CategoryType, getBooleanFilters, getFiltersByCategory } from '@/constants/filters';
-import { useActionPopup } from '@/hooks/use-action-popup'
-import ActionPopup from '@/app/app/rent/old-search/(components)/action-popup'
 import { logger } from '@/lib/logger';
 import TripStateContext, { TripState } from './trip-state-context';
 import TripActionsContext, { TripActions } from './trip-actions-context';
@@ -139,7 +137,6 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
     ],
   });
 
-  const { showActionPopup, currentAction, triggerPopup } = useActionPopup();
 
   // Calculate U-Score for a listing
   const calculateUScore = (
@@ -501,9 +498,6 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
   }, [trip, lookup]);
 
   const optimisticRemoveLike = useCallback(async (listingId: string, withPopup = false) => {
-    if (withPopup) {
-      triggerPopup('back');
-    }
     try {
       // Skip if not liked
       if (!lookup.favIds.has(listingId)) return;
@@ -533,12 +527,9 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
     } catch (error) {
       logger.error('Failed to remove like', error);
     }
-  }, [trip, lookup, optimisticRemoveApply, triggerPopup]);
+  }, [trip, lookup, optimisticRemoveApply]);
 
   const optimisticLike = useCallback(async (listingId: string, withPopup = false) => {
-    if (withPopup) {
-      triggerPopup('like');
-    }
     try {
       if (lookup.favIds.has(listingId)) {
         return;
@@ -574,10 +565,9 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
     } catch (error) {
       logger.error('Failed to like listing', error);
     }
-  }, [trip, lookup, triggerPopup]);
+  }, [trip, lookup]);
 
   const optimisticDislike = useCallback(async (listingId: string) => {
-    triggerPopup('dislike');
     try {
       if (lookup.dislikedIds.has(listingId)) return;
 
@@ -610,7 +600,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
     } catch (error) {
       logger.error('Failed to dislike listing', error);
     }
-  }, [trip, lookup, triggerPopup]);
+  }, [trip, lookup]);
 
   const optimisticRemoveDislike = useCallback(async (listingId: string) => {
     try {
@@ -753,10 +743,6 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
   return (
     <TripActionsContext.Provider value={actions}>
       <TripStateContext.Provider value={state}>
-        <ActionPopup
-          action={currentAction}
-          isVisible={showActionPopup}
-        />
         {children}
       </TripStateContext.Provider>
     </TripActionsContext.Provider>

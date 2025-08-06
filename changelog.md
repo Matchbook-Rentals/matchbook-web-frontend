@@ -1,5 +1,16 @@
 # Changelog
 
+## Enhanced PDF editor with dual interaction modes and improved field system
+- Implemented dual interaction modes: click-to-place and drag-and-drop field placement with smart detection
+- Added movement threshold detection (10px) to automatically determine user interaction intent
+- Enhanced recipient system with 10 distinct colors and proper Host/Primary Renter labeling
+- Updated field labels with recipient-specific naming (e.g., "Host Signature", "3rd Rec. Name")
+- Synchronized recipient circle colors with field border colors for visual consistency
+- Streamlined field types by removing radio and checkbox options from UI
+- Enhanced required field buttons to support both interaction modes consistently
+- Improved visual feedback with different ghost cursor styles for each interaction mode
+- Added comprehensive state management for interaction modes with proper cleanup
+
 ## Modernize search listing card snapshot component
 - Updated search-listing-card-snapshot.tsx to match the design of search-listing-card.tsx
 - Replaced image carousel with single image display for consistency
@@ -343,3 +354,31 @@
 - Changed default map marker color from charcoal to teal (#0B6E6E) for better brand consistency
 - Updated hover marker color from teal to orange (#fb8c00) for improved visual feedback
 - Reordered listing description to appear after highlights section instead of at the bottom
+
+## Documenso Integration Test Interface
+- Created comprehensive test interface for Documenso lease signing integration at /admin/test/documenso-integration
+- Implemented 3-step workflow: presign token creation, PDF upload, embedded template editor
+- Added secure CORS proxy for Documenso API calls using server-side environment variables
+- Fixed iframe embedding configuration from hash-based to query parameter format
+- Enhanced debugging with token validation, detailed logging, and iframe URL inspection
+- Switched from TRPC to REST API endpoints to resolve method compatibility issues
+- Added comprehensive error handling and fallback mechanisms for API calls
+
+## PDF Template System with Document Workflow
+- Implemented comprehensive PDF template creation and document generation system
+- Added selection-based workflow starting with main menu instead of linear progression
+- Created DocumentTemplateSelector for template selection and TemplateBrowser for template management
+- Added role-based recipient system (HOST/RENTER) with automatic field pre-filling
+- Fixed field value display to show actual data (names, rent amounts, dates) instead of labels
+- Implemented proper PDF file fetching from template URLs to resolve empty PDF errors
+- Added alternating logic for consistent pre-filling: HOST/RENTER names, start/end dates
+- Enhanced FieldContent component to display values based on workflow state (template vs document mode)
+
+## PDF Document Signing Workflow Enhancements
+- Fixed signer1 to signer2 transition bug that was sending users back to selection screen
+- Corrected recipient index mapping in workflow progression (0-based indexing issue)
+- Added DocumentSelector component for choosing documents ready for signing
+- Implemented automatic signature filling with cursive font styling using recipient names
+- Enhanced SignableField component with auto-sign functionality for signature fields
+- Added proper workflow state management for signer transitions
+- Improved document creation workflow to set status and currentStep at creation time

@@ -13,7 +13,7 @@ import { Notification } from '@prisma/client';
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
 import { Bell, Loader2 } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
-import { checkClientBetaAccess, checkClientHostAccess } from '@/utils/roles';
+import { checkClientBetaAccess, checkClientHostAccess } from '@/utils/client-roles';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 60000 // five minutes

@@ -8,7 +8,7 @@ import GuestTypeCounter from "./GuestTypeCounter";
 import { ImSpinner8 } from "react-icons/im";
 import { DisabledDesktopInputs } from "./disabled-inputs.tsx"
 import { createTrip } from "@/app/actions/trips";
-import { checkClientBetaAccess } from '@/utils/roles';
+import { checkClientBetaAccess } from '@/utils/client-roles';
 import { useRouter } from "next/navigation";
 
 interface SearchInputsDesktopProps {

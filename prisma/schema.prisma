@@ -88,6 +88,10 @@ model User {
   hospitableAccessToken   String?   @db.VarChar(1500)
   hospitableRefreshToken  String?   @db.VarChar(1500)
   hospitableAccountId     String?   @unique
+  
+  // PDF Templates
+  pdfTemplates            PdfTemplate[]
+  documents               DocumentInstance[]
 }
 
 model UserPreferences {
@@ -1484,4 +1488,142 @@ model ListingLocationChange {
   @@index([listingId])
   @@index([userId])
   @@index([createdAt])
+}
+
+model PdfTemplate {
+  id           String   @id @default(uuid())
+  title        String
+  description  String?
+  userId       String
+  
+  // Template configuration (stored as JSON for fast database queries)
+  templateData Json     // Contains fields, recipients, and metadata
+  
+  // PDF file reference (stored in DigitalOcean Spaces)
+  pdfFileUrl   String   // URL to original PDF in Spaces
+  pdfFileName  String   // Original filename
+  pdfFileSize  Int?     // File size in bytes
+  pdfFileKey   String   // Unique key for file in Spaces
+  
+  // Metadata
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relationships
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents    DocumentInstance[]
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@index([title])
+}
+
+model DocumentInstance {
+  id           String   @id @default(uuid())
+  templateId   String
+  userId       String   // User who created the document
+  
+  // Document state
+  status       DocumentStatus @default(DRAFT)
+  
+  // Document data (can be modified from template)
+  documentData Json     // Contains fields, recipients (from template but can be customized)
+  
+  // PDF file reference (copy of template PDF)
+  pdfFileUrl   String   // URL to PDF in Spaces
+  pdfFileName  String   // Filename
+  pdfFileKey   String   // Unique key for file in Spaces
+  
+  // Signing workflow
+  currentStep  String   @default("document") // document, signer1, signer2, completed
+  
+  // Metadata
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  completedAt  DateTime?
+  
+  // Relationships
+  template     PdfTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  signingSessions SigningSession[]
+  fieldValues     FieldValue[]
+  
+  @@index([userId])
+  @@index([templateId])
+  @@index([status])
+  @@index([currentStep])
+  @@index([createdAt])
+}
+
+model SigningSession {
+  id           String   @id @default(uuid())
+  documentId   String
+  
+  // Signer information
+  signerIndex  Int      // 0 = first signer, 1 = second signer, etc.
+  signerEmail  String
+  signerName   String
+  
+  // Session state
+  status       SigningStatus @default(PENDING)
+  
+  // Access control
+  accessToken  String   @unique // Unique token for accessing this signing session
+  
+  // Progress tracking
+  startedAt    DateTime?
+  completedAt  DateTime?
+  
+  // Metadata
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relationships
+  document     DocumentInstance @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  @@index([documentId])
+  @@index([accessToken])
+  @@index([signerEmail])
+  @@index([status])
+}
+
+model FieldValue {
+  id           String   @id @default(uuid())
+  documentId   String
+  
+  // Field identification
+  fieldId      String   // Field ID from template
+  fieldType    String   // SIGNATURE, NAME, DATE, etc.
+  
+  // Signer information
+  signerIndex  Int      // Which signer filled this field
+  signerEmail  String
+  
+  // Field value (stored as JSON to handle different field types)
+  value        Json     // String for text, base64 for signatures, etc.
+  
+  // Metadata
+  signedAt     DateTime @default(now())
+  
+  // Relationships
+  document     DocumentInstance @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  @@index([documentId])
+  @@index([fieldId])
+  @@index([signerEmail])
+  @@unique([documentId, fieldId]) // Each field can only be signed once per document
+}
+
+enum DocumentStatus {
+  DRAFT       // Step 2: Document created, not yet sent for signing
+  IN_PROGRESS // Step 3+: Sent for signing, some signers may have completed
+  COMPLETED   // Step 4: All signers completed
+  CANCELLED   // Document cancelled
+}
+
+enum SigningStatus {
+  PENDING   // Not yet started signing
+  STARTED   // Started signing session
+  COMPLETED // Completed signing
+  EXPIRED   // Session expired
 }

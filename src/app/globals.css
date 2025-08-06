@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -231,5 +232,12 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Signature font styling */
+.font-signature {
+  font-family: 'Dancing Script', cursive;
+  font-weight: 600;
+  font-style: italic;
 }
 

@@ -5,30 +5,21 @@ import { RejectIcon } from '@/components/svgs/svg-components';
 import { Heart } from 'lucide-react';
 import { ArrowLeft, ArrowRight } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Star } from 'lucide-react';
-import AmenityListItem from './amenity-list-item';
-import * as AmenitiesIcons from '@/components/icons/amenities';
-import { MatchbookVerified } from '@/components/icons';
-import { iconAmenities } from '@/lib/amenities-list';
+import { Card, CardContent } from '@/components/ui/card';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
+import { usePathname, useParams } from 'next/navigation';
+import ShareButton from '@/components/ui/share-button';
+import PropertyDetails from '@/app/app/rent/searches/(trips-components)/property-details';
+import PricingInfo from '@/app/app/rent/searches/(trips-components)/pricing-info';
+import HighlightsSection from '@/app/app/rent/searches/(trips-components)/highlights-section';
+import AmenitiesSection from '@/app/app/rent/searches/(trips-components)/amenities-section';
+import HostInformation from '@/app/app/rent/searches/(trips-components)/host-information';
+import DescriptionSection from '@/app/app/rent/searches/(trips-components)/description-section';
+
+import { ListingAndImages } from '@/types';
 
 interface SelectedListingDetailsProps {
-  listing: {
-    listingImages: { url: string }[];
-    price: number;
-    title: string;
-    id: string;
-    bathroomCount?: number;
-    roomCount?: number;
-    squareFootage?: number;
-    depositSize?: number;
-    category?: string;
-    furnished?: boolean;
-    utilitiesIncluded?: boolean;
-    petsAllowed?: boolean;
-    description?: string;
-    [key: string]: any; // For amenities
-  };
+  listing: ListingAndImages;
   distance?: number;
   customSnapshot?: any;
   height?: string;
@@ -41,6 +32,9 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
   height = 'calc(100vh-200px)'
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const pathname = usePathname();
+  const { tripId } = useParams();
+  const baseUrl = process.env.NEXT_PUBLIC_URL || "";
   
   // Always call the hook unconditionally to comply with rules of hooks
   const snapshotFromHook = useListingsSnapshot();
@@ -50,24 +44,6 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
   // Use properties and functions from the snapshot
   const isLiked = listingsSnapshot.isLiked(listing.id);
   const isDisliked = listingsSnapshot.isDisliked(listing.id);
-
-  // Constants for styling
-  const sectionStyles = 'border-b pb-4 pt-4';
-  const sectionHeaderStyles = 'text-[#404040] text-[18px] font-medium mb-3';
-  const amenityTextStyle = 'text-[16px] font-medium';
-
-  // Calculate amenities to display
-  const calculateDisplayAmenities = () => {
-    const displayAmenities = [];
-    for (let amenity of iconAmenities) {
-      if (listing[amenity.code]) {
-        displayAmenities.push(amenity);
-      }
-    }
-    return displayAmenities;
-  };
-
-  const displayAmenities = calculateDisplayAmenities();
 
   const getStatusIcon = () => {
     if (isLiked) {
@@ -151,123 +127,59 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
             </div>
           </div>
 
-          {/* Basic Info */}
-          <div className={sectionStyles}>
-            <h2 className="font-normal text-[24px] text-[#404040] leading-tight mb-4">
-              {listing.title}
-            </h2>
-            <div className="grid grid-cols-2 gap-4 text-[#404040]">
-              <div className="space-y-3">
-                <p className="text-[16px]">
-                  {listing.roomCount || 0} beds | {listing.bathroomCount || 0} Baths
-                </p>
-                <p className="text-[16px]">{listing.squareFootage?.toLocaleString() || 0} sqft</p>
+          {/* Header Section - mirroring ListingHeader */}
+          <Card className="border-none shadow-none mt-2">
+            <CardContent className="flex flex-col items-start gap-3 p-0">
+              <div className="flex items-center justify-between w-full">
+                <h1 className="flex-1 font-medium text-[#404040] text-xl md:text-2xl lg:text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
+                  {listing.title || "Your Home Away From Home"}
+                </h1>
+
+                <ShareButton
+                  title={`${listing.title} on Matchbook`}
+                  text={`Check out this listing on Matchbook: ${pathname}`}
+                  url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+                />
               </div>
-              <div className="space-y-3 text-right">
-                <p className="text-[18px] font-medium">${listing.price.toLocaleString()}/month</p>
-                <p className="text-[16px]">${listing.depositSize?.toLocaleString() || 0} deposit</p>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
+
+          {/* Property Details Section */}
+          <Card className="border-none shadow-none rounded-xl mt-2 lg:block hidden">
+            <CardContent className="p-0">
+              <PropertyDetails listing={listing} />
+            </CardContent>
+          </Card>
+
+          <Card className="border-none bg-[#FAFAFA] rounded-xl mt-2 lg:hidden">
+            <CardContent className="p-0">
+              <PricingInfo listing={listing} />
+              <PropertyDetails listing={listing} />
+            </CardContent>
+          </Card>
 
           {/* Highlights Section */}
-          <div className={sectionStyles}>
-            <h3 className={sectionHeaderStyles}>Highlights</h3>
-            <div className="space-y-2">
-              <AmenityListItem
-                icon={MatchbookVerified}
-                label="Matchbook Verified Guests Preferred"
-                labelClassNames={amenityTextStyle}
-                iconClassNames="h-[22px] w-[22px]"
-              />
-              {listing.category === 'singleFamily' && (
-                <AmenityListItem
-                  icon={AmenitiesIcons.UpdatedSingleFamilyIcon}
-                  label="Single Family"
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[22px] w-[22px]"
-                />
-              )}
-              {listing.category === 'townhouse' && (
-                <AmenityListItem
-                  icon={AmenitiesIcons.UpdatedTownhouseIcon}
-                  label="Townhouse"
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[22px] w-[22px]"
-                />
-              )}
-              {listing.category === 'privateRoom' && (
-                <AmenityListItem
-                  icon={AmenitiesIcons.UpdatedSingleRoomIcon}
-                  label="Private Room"
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[22px] w-[22px]"
-                />
-              )}
-              {(listing.category === 'apartment' || listing.category === 'condo') && (
-                <AmenityListItem
-                  icon={AmenitiesIcons.UpdatedApartmentIcon}
-                  label="Apartment"
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[22px] w-[22px]"
-                />
-              )}
-              <AmenityListItem
-                icon={
-                  listing.furnished ? AmenitiesIcons.UpdatedFurnishedIcon : AmenitiesIcons.UpdatedUnfurnishedIcon
-                }
-                label={listing.furnished ? 'Furnished' : 'Unfurnished'}
-                labelClassNames={amenityTextStyle}
-                iconClassNames="h-[22px] w-[22px]"
-              />
-              <AmenityListItem
-                icon={
-                  listing.utilitiesIncluded
-                    ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon
-                    : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon
-                }
-                label={listing.utilitiesIncluded ? 'Utilities Included' : 'No Utilities'}
-                labelClassNames={amenityTextStyle}
-                iconClassNames="h-[22px] w-[22px]"
-              />
-              <AmenityListItem
-                icon={
-                  listing.petsAllowed
-                    ? AmenitiesIcons.UpdatedPetFriendlyIcon
-                    : AmenitiesIcons.UpdatedPetUnfriendlyIcon
-                }
-                label={listing.petsAllowed ? 'Pets Allowed' : 'No Pets'}
-                labelClassNames={amenityTextStyle}
-                iconClassNames="h-[22px] w-[22px]"
-              />
-            </div>
+          <div className="lg:mt-4 mt-2">
+            <HighlightsSection listing={listing} />
           </div>
 
           {/* Description Section */}
-          <div className={sectionStyles}>
-            <h3 className={sectionHeaderStyles}>Description</h3>
-            <p className="text-[14px] text-gray-600 leading-relaxed">
-              {listing.description || 'No description available for this property.'}
-            </p>
+          <div className="mt-2">
+            <DescriptionSection listing={listing} />
           </div>
 
           {/* Amenities Section */}
-          {displayAmenities.length > 0 && (
-            <div className={sectionStyles}>
-              <h3 className={sectionHeaderStyles}>Amenities</h3>
-              <div className="space-y-2">
-                {displayAmenities.map((amenity) => (
-                  <AmenityListItem
-                    key={amenity.code}
-                    icon={amenity.icon || Star}
-                    label={amenity.label}
-                    labelClassNames={amenityTextStyle}
-                    iconClassNames="h-[22px] w-[22px]"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          <div className="mt-2">
+            <AmenitiesSection 
+              listing={listing}
+              showFullAmenities={false}
+            />
+          </div>
+
+          {/* Host Information Section */}
+          <div className="mt-2">
+            <HostInformation listing={listing} />
+          </div>
         </div>
       </ScrollArea>
     </div>
