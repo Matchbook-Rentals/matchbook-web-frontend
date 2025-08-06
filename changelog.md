@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix React linting errors in PDF editor components
+- Fixed conditional hook usage in FieldItem component by moving useRecipientColors call outside conditional logic
+- Added missing dependencies to useEffect and useCallback hooks in PDFEditor component
+- Escaped HTML entity in text content to prevent React warnings
+
 ## Enhanced PDF editor with dual interaction modes and improved field system
 - Implemented dual interaction modes: click-to-place and drag-and-drop field placement with smart detection
 - Added movement threshold detection (10px) to automatically determine user interaction intent

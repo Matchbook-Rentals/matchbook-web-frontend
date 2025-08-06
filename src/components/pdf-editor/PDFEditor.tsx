@@ -292,7 +292,7 @@ export const PDFEditor: React.FC = () => {
       document.removeEventListener('mouseup', handleGlobalMouseUp);  
       document.removeEventListener('keydown', handleGlobalKeyDown);
     };
-  }, [interactionMode, isMouseDown, mouseDownPosition.x, mouseDownPosition.y, MOVEMENT_THRESHOLD]);
+  }, [interactionMode, isMouseDown, mouseDownPosition.x, mouseDownPosition.y, MOVEMENT_THRESHOLD, handlePageClick]);
 
   // File upload handling
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -453,7 +453,7 @@ export const PDFEditor: React.FC = () => {
     setIsMouseDown(false);
     
     console.log('🏁 handlePageClick completed');
-  }, [selectedField, selectedRecipient, recipients, fields, setFields, interactionMode]);
+  }, [selectedField, selectedRecipient, recipients, fields, setFields, interactionMode, pendingFieldLabel]);
 
   // Update field position/size
   const updateField = (formId: string, newBounds: { x: number; y: number; width: number; height: number }) => {
@@ -1245,7 +1245,7 @@ export const PDFEditor: React.FC = () => {
           <div className="max-w-4xl mx-auto p-8">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">PDF Document Workflow</h1>
-              <p className="text-lg text-gray-600">Choose what you'd like to do</p>
+              <p className="text-lg text-gray-600">Choose what you&apos;d like to do</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

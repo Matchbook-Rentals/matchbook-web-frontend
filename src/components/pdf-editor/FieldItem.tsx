@@ -40,9 +40,10 @@ export const FieldItem: React.FC<FieldItemProps> = ({
 
   const recipientIndex = field.recipientIndex ?? 0;
   // For invalid recipient indices, use default styles
+  const recipientColors = useRecipientColors(recipientIndex);
   const signerStyles = (recipientIndex < 0) ? 
     { base: 'ring-gray-400', fieldItem: 'hover:ring-gray-500' } : 
-    useRecipientColors(recipientIndex);
+    recipientColors;
 
   // Calculate pixel positions from percentages
   const calculateDimensions = useCallback(() => {
