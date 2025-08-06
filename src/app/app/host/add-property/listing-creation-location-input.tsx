@@ -222,6 +222,12 @@ export default function LocationInput({ listingLocation, setListingLocation, val
               street += component.long_name;
             } else if (types.includes('locality')) {
               city = component.long_name;
+            } else if (types.includes('sublocality_level_1') && !city) {
+              // Use sublocality_level_1 for boroughs like Brooklyn, Manhattan if locality not found
+              city = component.long_name;
+            } else if (types.includes('administrative_area_level_3') && !city) {
+              // Fallback to administrative_area_level_3 if neither locality nor sublocality found
+              city = component.long_name;
             } else if (types.includes('administrative_area_level_1')) {
               state = component.short_name;
             } else if (types.includes('postal_code')) {

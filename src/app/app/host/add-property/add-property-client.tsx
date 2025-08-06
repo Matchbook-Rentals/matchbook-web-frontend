@@ -468,9 +468,9 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       case 0:
         return validateHighlights(listingHighlights);
       case 1:
-        return validateLocation(listingLocation);
+        return []; // No validation on location input step
       case 2:
-        return validateLocation(listingLocation); // Address confirmation uses same validation as location input
+        return validateLocation(listingLocation); // Address confirmation uses validation
       case 3:
         return validateRooms(listingRooms);
       case 4:

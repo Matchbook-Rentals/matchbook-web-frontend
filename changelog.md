@@ -1,5 +1,11 @@
 # Changelog
 
+## Fix New York address validation issues in listing creation
+- Enhanced address parsing logic to properly extract borough names (Brooklyn, Manhattan, etc.) from Google Geocoding API
+- Added fallback parsing for sublocality_level_1 and administrative_area_level_3 address components
+- Moved location validation from Step 1 (location input) to Step 2 (address confirmation) to prevent blocking users
+- Resolves "City is required" errors for NYC addresses during listing upload
+
 ## Fix React linting errors in PDF editor components
 - Fixed conditional hook usage in FieldItem component by moving useRecipientColors call outside conditional logic
 - Added missing dependencies to useEffect and useCallback hooks in PDFEditor component
