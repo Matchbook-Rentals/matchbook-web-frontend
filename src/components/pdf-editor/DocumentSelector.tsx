@@ -43,8 +43,12 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
   const fetchDocuments = async () => {
     try {
       setLoading(true);
-      console.log('📄 Fetching documents from /api/documents');
-      const response = await fetch('/api/documents');
+      
+      // Filter documents based on signer type
+      const statusFilter = signerType === 'signer1' ? 'IN_PROGRESS' : 'AWAITING_SIGNER2';
+      console.log(`📄 Fetching documents with status: ${statusFilter} for ${signerType}`);
+      
+      const response = await fetch(`/api/documents?status=${statusFilter}`);
       console.log('📄 Response status:', response.status);
       if (response.ok) {
         const data = await response.json();

@@ -113,6 +113,7 @@ export const FieldItem: React.FC<FieldItemProps> = ({
 
   return (
     <Rnd
+      data-field-id={field.formId}
       className={cn('group absolute', {
         'z-[100]': active,
         'z-[20]': !active,

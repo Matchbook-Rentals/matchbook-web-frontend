@@ -96,6 +96,14 @@ export const PDFEditor: React.FC = () => {
   const [showDocumentSelector, setShowDocumentSelector] = useState(false);
   const [pendingSignerType, setPendingSignerType] = useState<'signer1' | 'signer2' | null>(null);
   
+  // Field validation state
+  const [fieldsValidated, setFieldsValidated] = useState(false);
+  const [validationStatus, setValidationStatus] = useState<'pending' | 'validating' | 'valid' | 'invalid'>('pending');
+  
+  // Field rendering validation state
+  const [fieldsRendered, setFieldsRendered] = useState(false);
+  const [renderingStatus, setRenderingStatus] = useState<'pending' | 'checking' | 'rendered' | 'failed'>('pending');
+  
   // Ghost cursor state for field placement
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [isFieldWithinBounds, setIsFieldWithinBounds] = useState(false);
@@ -312,7 +320,7 @@ export const PDFEditor: React.FC = () => {
   });
 
   // Handle clicking on PDF to add field (supports both click-to-place and drag modes)
-  const handlePageClick: OnPDFViewerPageClick = useCallback((event) => {
+  function handlePageClick(event: Parameters<OnPDFViewerPageClick>[0]) {
     console.log('🎯 handlePageClick called:', {
       selectedField,
       selectedRecipient,
@@ -453,7 +461,7 @@ export const PDFEditor: React.FC = () => {
     setIsMouseDown(false);
     
     console.log('🏁 handlePageClick completed');
-  }, [selectedField, selectedRecipient, recipients, fields, setFields, interactionMode, pendingFieldLabel]);
+  }
 
   // Update field position/size
   const updateField = (formId: string, newBounds: { x: number; y: number; width: number; height: number }) => {
@@ -741,7 +749,85 @@ export const PDFEditor: React.FC = () => {
     }
   };
 
-  // Step 3/4 → Next: Save signer progress
+  // Save signer progress for async workflow (doesn't auto-transition)
+  const saveSignerProgressAsync = async (signerIndex: number) => {
+    const documentId = sessionStorage.getItem('currentDocumentId');
+    if (!documentId) {
+      alert('Document not found. Please start over.');
+      return;
+    }
+
+    try {
+      // Save all signed fields for this signer
+      const signerFields = fields.filter(f => f.recipientIndex === signerIndex);
+      
+      for (const field of signerFields) {
+        const fieldValue = signedFields[field.formId];
+        if (fieldValue) {
+          await fetch('/api/field-values', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              documentId,
+              fieldId: field.formId,
+              fieldType: field.type,
+              signerIndex,
+              signerEmail: recipients[signerIndex]?.email || `signer${signerIndex}@example.com`,
+              value: fieldValue
+            }),
+          });
+        }
+      }
+
+      // Update signing session status
+      await fetch('/api/signing-sessions/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          documentId,
+          signerIndex
+        }),
+      });
+
+      // Update document with current progress and signed fields
+      await fetch(`/api/documents/${documentId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          documentData: {
+            fields,
+            recipients,
+            metadata: { pageWidth },
+            signedFields // Save current signed state
+          },
+          currentStep: signerIndex === 0 ? 'signer2' : 'completed',
+          status: signerIndex === 0 ? 'AWAITING_SIGNER2' : 'COMPLETED',
+          [`signer${signerIndex + 1}CompletedAt`]: new Date().toISOString()
+        }),
+      });
+
+      // Show success and return to selection
+      const signerName = recipients[signerIndex]?.name || `Signer ${signerIndex + 1}`;
+      alert(`✅ ${signerName} has completed signing!\n\n${signerIndex === 0 ? 'Document is now ready for Signer 2.' : 'Document is fully signed and complete.'}`);
+      
+      // Return to selection screen for async workflow
+      setWorkflowState('selection');
+      
+      // Reset validation state
+      setFieldsValidated(false);
+      setValidationStatus('pending');
+      setFieldsRendered(false);
+      setRenderingStatus('pending');
+      
+      console.log(`Signer ${signerIndex + 1} completed signing asynchronously`);
+      
+    } catch (error) {
+      console.error('Error in saveSignerProgressAsync:', error);
+      alert('Failed to save signer progress. Please try again.');
+    }
+  };
+
+  // Step 3/4 → Next: Save signer progress (legacy synchronous version)
   const saveSignerProgressAndContinue = async (signerIndex: number) => {
     const documentId = sessionStorage.getItem('currentDocumentId');
     if (!documentId) {
@@ -836,6 +922,71 @@ export const PDFEditor: React.FC = () => {
   // Save template functionality (manual save)
   const saveTemplate = async () => {
     await saveTemplateAndCreateDocument();
+  };
+
+  // Save document functionality (manual save without starting signing)
+  const saveDocument = async () => {
+    try {
+      console.log('🚀 Starting saveDocument workflow');
+      
+      let documentId = sessionStorage.getItem('currentDocumentId');
+      let templateId = sessionStorage.getItem('currentTemplateId');
+      
+      // If no document exists yet, create one from the current template
+      if (!documentId && templateId) {
+        console.log('📄 No document exists, creating new document from template:', templateId);
+        
+        const createResponse = await fetch('/api/documents', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            templateId,
+            documentData: {
+              fields,
+              recipients,
+              metadata: { pageWidth },
+              signedFields // Include any pre-filled values
+            },
+            status: 'DRAFT', // Keep as draft, don't start signing yet
+            currentStep: 'document'
+          }),
+        });
+
+        if (!createResponse.ok) {
+          throw new Error('Failed to create document');
+        }
+
+        const { document } = await createResponse.json();
+        documentId = document.id;
+        sessionStorage.setItem('currentDocumentId', documentId);
+        console.log('✅ Document created as draft:', documentId);
+        alert('✅ Document saved as draft successfully!');
+      } else if (documentId) {
+        // Update existing document
+        await fetch(`/api/documents/${documentId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            documentData: {
+              fields,
+              recipients,
+              metadata: { pageWidth },
+              signedFields
+            },
+            status: 'DRAFT',
+            currentStep: 'document'
+          }),
+        });
+        console.log('✅ Document updated:', documentId);
+        alert('✅ Document updated successfully!');
+      } else {
+        throw new Error('No template or document ID found. Please start from template creation.');
+      }
+      
+    } catch (error) {
+      console.error('❌ Error in saveDocument:', error);
+      alert('Failed to save document: ' + error.message);
+    }
   };
 
   // Load template functionality
@@ -980,10 +1131,25 @@ export const PDFEditor: React.FC = () => {
   // Load document functionality for signing
   const loadDocumentForSigning = async (document: any) => {
     try {
-      console.log('📄 Loading document for signing:', document.id);
+      // Reset validation state
+      setFieldsValidated(false);
+      setValidationStatus('validating');
       
-      // Parse document data
-      const documentData = document.templateData as any;
+      console.log('📄 Loading document for signing:', document.id);
+      console.log('📄 Full document object:', document);
+      console.log('📄 Available document properties:', Object.keys(document));
+      
+      // Parse document data - check multiple possible locations
+      let documentData = document.templateData || document.documentData || document.data;
+      
+      console.log('📄 Document data found:', documentData);
+      console.log('📄 Document data type:', typeof documentData);
+      console.log('📄 Document data keys:', documentData ? Object.keys(documentData) : 'null');
+      
+      if (!documentData) {
+        throw new Error('No document data found. Expected templateData, documentData, or data property.');
+      }
+      
       const documentFields = documentData.fields || [];
       const documentRecipients = documentData.recipients || [];
       
@@ -994,9 +1160,51 @@ export const PDFEditor: React.FC = () => {
         recipientsData: documentRecipients
       });
       
+      // Validate that we have the essential data
+      if (documentFields.length === 0) {
+        throw new Error('No fields found in document. Document may be corrupted or incomplete.');
+      }
+      
+      if (documentRecipients.length === 0) {
+        throw new Error('No recipients found in document. Document may be corrupted or incomplete.');
+      }
+      
+      // Validate field structure
+      const invalidFields = documentFields.filter(field => 
+        !field.formId || 
+        !field.type || 
+        field.pageX === undefined || 
+        field.pageY === undefined ||
+        field.pageWidth === undefined ||
+        field.pageHeight === undefined
+      );
+      
+      if (invalidFields.length > 0) {
+        console.error('❌ Invalid fields found:', invalidFields);
+        throw new Error(`${invalidFields.length} fields have missing required properties (formId, type, positioning). Document may be corrupted.`);
+      }
+      
+      // Validate recipient structure
+      const invalidRecipients = documentRecipients.filter(recipient =>
+        !recipient.id || 
+        !recipient.name ||
+        !recipient.color
+      );
+      
+      if (invalidRecipients.length > 0) {
+        console.error('❌ Invalid recipients found:', invalidRecipients);
+        throw new Error(`${invalidRecipients.length} recipients have missing required properties (id, name, color). Document may be corrupted.`);
+      }
+      
+      console.log('✅ Field and recipient validation passed');
+      
       // Set the document fields and recipients
       setFields(documentFields);
       setRecipients(documentRecipients);
+      
+      // Mark validation as successful
+      setValidationStatus('valid');
+      setFieldsValidated(true);
       
       // Load the PDF file from the document
       if (document.pdfFileUrl) {
@@ -1008,9 +1216,23 @@ export const PDFEditor: React.FC = () => {
         setPdfFile(pdfFile);
       }
       
-      // Load any existing signed fields if this document has been partially signed
-      // TODO: Load from document.signedFields if it exists
-      setSignedFields({}); // For now, start fresh
+      // Load any existing signed fields from the document response (already includes fieldValues)
+      console.log('📝 Loading existing signed fields from document...');
+      const existingSignedFields = {};
+      
+      if (document.fieldValues && document.fieldValues.length > 0) {
+        // Convert the field values array to an object keyed by fieldId
+        document.fieldValues.forEach(fieldValue => {
+          existingSignedFields[fieldValue.fieldId] = fieldValue.value;
+          console.log(`📝 Loaded signed value for ${fieldValue.fieldId}: "${fieldValue.value}" (signer: ${fieldValue.signerIndex})`);
+        });
+        
+        console.log('📝 All existing signed fields loaded:', existingSignedFields);
+        setSignedFields(existingSignedFields);
+      } else {
+        console.log('📝 No existing signed fields found, starting fresh');
+        setSignedFields({});
+      }
       
       // Store current document ID for signing session
       sessionStorage.setItem('currentDocumentId', document.id);
@@ -1032,6 +1254,8 @@ export const PDFEditor: React.FC = () => {
       });
     } catch (error) {
       console.error('❌ Error loading document for signing:', error);
+      setValidationStatus('invalid');
+      setFieldsValidated(false);
       alert('❌ Failed to load document: ' + error.message);
     }
   };
@@ -1060,8 +1284,8 @@ export const PDFEditor: React.FC = () => {
         break;
         
       case 'signer1':
-        // Step 3 → Step 4: Save signer 1 progress
-        await saveSignerProgressAndContinue(0);
+        // Step 3 → Async: Save signer 1 progress and return to selection
+        await saveSignerProgressAsync(0);
         break;
         
       case 'signer2':
@@ -1160,6 +1384,75 @@ export const PDFEditor: React.FC = () => {
     setIsMouseDown(false);
     setMouseDownPosition({ x: 0, y: 0 });
   };
+
+  // Validate that field components are actually rendered in the DOM
+  const validateFieldRendering = useCallback(async () => {
+    if (fields.length === 0) {
+      setRenderingStatus('pending');
+      setFieldsRendered(false);
+      return;
+    }
+
+    setRenderingStatus('checking');
+    console.log('🎨 Starting field rendering validation...');
+
+    // Wait a short time for React to finish rendering
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    let renderedCount = 0;
+    let totalFields = fields.length;
+    const missingFields: string[] = [];
+
+    for (const field of fields) {
+      // Look for the field element in the DOM using data attributes
+      const fieldElement = document.querySelector(`[data-field-id="${field.formId}"]`);
+      
+      if (fieldElement) {
+        // Check if the element is actually visible and positioned
+        const rect = fieldElement.getBoundingClientRect();
+        const isVisible = rect.width > 0 && rect.height > 0 && rect.top >= 0;
+        
+        if (isVisible) {
+          renderedCount++;
+          console.log(`✅ Field ${field.formId} (${field.type}) rendered and visible`);
+        } else {
+          missingFields.push(`${field.formId} (${field.type}) - element exists but not visible`);
+          console.warn(`⚠️ Field ${field.formId} (${field.type}) exists in DOM but not visible:`, rect);
+        }
+      } else {
+        missingFields.push(`${field.formId} (${field.type}) - not found in DOM`);
+        console.error(`❌ Field ${field.formId} (${field.type}) not found in DOM`);
+      }
+    }
+
+    const allRendered = renderedCount === totalFields;
+    
+    console.log(`🎨 Rendering validation complete: ${renderedCount}/${totalFields} fields rendered`);
+    
+    if (allRendered) {
+      setRenderingStatus('rendered');
+      setFieldsRendered(true);
+      console.log('✅ All fields successfully rendered and visible');
+    } else {
+      setRenderingStatus('failed');
+      setFieldsRendered(false);
+      console.error('❌ Some fields failed to render:', missingFields);
+    }
+
+    return allRendered;
+  }, [fields]);
+
+  // Auto-validate rendering when fields change
+  useEffect(() => {
+    if (fields.length > 0 && (workflowState === 'signer1' || workflowState === 'signer2')) {
+      // Delay validation to allow PDF and fields to fully load
+      const timeoutId = setTimeout(() => {
+        validateFieldRendering();
+      }, 1000);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [fields, workflowState, validateFieldRendering]);
 
   // Check if required fields are placed
   const getRequiredFieldStatus = (fieldType: string) => {
@@ -1305,6 +1598,18 @@ export const PDFEditor: React.FC = () => {
             </div>
           </div>
         </div>
+        
+        {/* Document Selector Modal for Selection Screen */}
+        {showDocumentSelector && pendingSignerType && (
+          <DocumentSelector
+            onLoadDocument={loadDocumentForSigning}
+            onClose={() => {
+              setShowDocumentSelector(false);
+              setPendingSignerType(null);
+            }}
+            signerType={pendingSignerType}
+          />
+        )}
       </div>
     );
   }
@@ -1331,7 +1636,7 @@ export const PDFEditor: React.FC = () => {
       {/* Main content area with sidebar and editor */}
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <div className="w-80 bg-white border-r border-gray-200 overflow-y-auto">
+        <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto overflow-x-hidden">
         <div className="p-4">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -1775,6 +2080,63 @@ export const PDFEditor: React.FC = () => {
                       <div className="text-sm text-gray-500">{getCurrentSigner()?.email}</div>
                     </div>
                   </div>
+                  
+                  {/* Validation Status */}
+                  <div className="mb-3 space-y-2">
+                    {/* Data Validation */}
+                    {validationStatus === 'validating' && (
+                      <div className="flex items-center gap-2 text-sm text-blue-600">
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+                        Validating document data...
+                      </div>
+                    )}
+                    {validationStatus === 'valid' && fieldsValidated && (
+                      <div className="flex items-center gap-2 text-sm text-green-600">
+                        <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
+                        </div>
+                        Document data validated - {fields.length} fields loaded
+                      </div>
+                    )}
+                    {validationStatus === 'invalid' && (
+                      <div className="flex items-center gap-2 text-sm text-red-600">
+                        <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">⚠</span>
+                        </div>
+                        Document validation failed - please reload
+                      </div>
+                    )}
+                    
+                    {/* Rendering Validation */}
+                    {validationStatus === 'valid' && renderingStatus === 'checking' && (
+                      <div className="flex items-center gap-2 text-sm text-blue-600">
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+                        Checking field visibility...
+                      </div>
+                    )}
+                    {renderingStatus === 'rendered' && fieldsRendered && (
+                      <div className="flex items-center gap-2 text-sm text-green-600">
+                        <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
+                        </div>
+                        All {fields.length} fields rendered and clickable
+                      </div>
+                    )}
+                    {renderingStatus === 'failed' && (
+                      <div className="flex items-center gap-2 text-sm text-red-600">
+                        <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">⚠</span>
+                        </div>
+                        Some fields not visible - <button 
+                          onClick={validateFieldRendering}
+                          className="underline hover:no-underline"
+                        >
+                          retry validation
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  
                   <p className="text-sm text-gray-600">
                     Click on the fields assigned to you to fill them out and sign the document.
                   </p>
@@ -2020,9 +2382,9 @@ export const PDFEditor: React.FC = () => {
                 <Button variant="outline" size="sm" onClick={goBackToTemplate}>
                   ← Back to Template
                 </Button>
-                <Button variant="outline" size="sm" onClick={saveTemplate} title="Save template">
+                <Button variant="outline" size="sm" onClick={saveDocument} title="Save document">
                   <Save className="w-4 h-4 mr-2" />
-                  Save Template
+                  Save Document
                 </Button>
                 <Button variant="outline" size="sm" onClick={exportPDF} title="Export with field borders">
                   <Download className="w-4 h-4 mr-2" />
@@ -2051,11 +2413,24 @@ export const PDFEditor: React.FC = () => {
                 </div>
                 <Button 
                   onClick={proceedToNextStep}
-                  disabled={fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).some(f => !signedFields[f.formId])}
+                  disabled={
+                    !fieldsValidated || 
+                    validationStatus !== 'valid' ||
+                    !fieldsRendered ||
+                    renderingStatus !== 'rendered' ||
+                    fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).some(f => !signedFields[f.formId])
+                  }
                   size="sm"
                   className="bg-green-600 hover:bg-green-700"
                 >
-                  {workflowState === 'signer1' ? 'Next Signer →' : 'Complete Document →'}
+                  {!fieldsValidated || validationStatus !== 'valid' 
+                    ? 'Validating Data...' 
+                    : !fieldsRendered || renderingStatus !== 'rendered'
+                      ? 'Checking Field Visibility...'
+                      : workflowState === 'signer1' 
+                        ? 'Complete My Signing →' 
+                        : 'Complete Document →'
+                  }
                 </Button>
               </>
             )}

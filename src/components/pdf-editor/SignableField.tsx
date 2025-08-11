@@ -123,11 +123,16 @@ export const SignableField: React.FC<SignableFieldProps> = ({
   return (
     <>
       <div
+        data-field-id={field.formId}
         className={cn(
-          'absolute cursor-pointer transition-all',
-          'border-2 rounded flex items-center justify-center text-center',
-          isForCurrentSigner ? 'hover:scale-105 hover:shadow-lg' : 'cursor-not-allowed opacity-60',
-          isSigned ? 'bg-green-50 border-green-500' : 'bg-white/90',
+          'absolute transition-all',
+          'border-2 rounded flex items-center justify-center text-center text-sm font-medium',
+          // Current signer's fields
+          isForCurrentSigner && !isSigned && 'cursor-pointer hover:scale-105 hover:shadow-lg bg-white/90 border-blue-400',
+          isForCurrentSigner && isSigned && 'cursor-pointer bg-green-50 border-green-500',
+          // Other signer's fields  
+          !isForCurrentSigner && isSigned && 'cursor-not-allowed bg-gray-100 border-gray-400 opacity-80',
+          !isForCurrentSigner && !isSigned && 'cursor-not-allowed bg-white/50 border-gray-300 opacity-60',
           signerStyles.base,
         )}
         style={{
