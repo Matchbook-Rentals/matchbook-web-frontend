@@ -15,6 +15,7 @@ import UserMenu from "@/components/userMenu";
 import { currentUser } from "@clerk/nextjs/server";
 import { ListingDashboardProvider } from './listing-dashboard-context';
 import { getListingDisplayName } from '@/utils/listing-helpers';
+import { SidebarController } from './sidebar-controller';
 
 interface ListingLayoutProps {
   children: React.ReactNode;
@@ -136,6 +137,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
   return (
     <ListingDashboardProvider data={dashboardData}>
       <SidebarProvider>
+        <SidebarController />
         <HostSidebar groups={sidebarGroups} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b">

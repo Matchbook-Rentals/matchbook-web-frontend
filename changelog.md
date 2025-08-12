@@ -1,16 +1,21 @@
 # Changelog
 
-## Implement async PDF document signing workflow with field validation
-- Added asynchronous signing workflow where signer 1 completes their fields and document becomes available for signer 2 independently
-- Implemented comprehensive field validation system checking both data integrity and visual rendering status
-- Added field rendering validation to verify form elements are painted and clickable on PDF pages
-- Enhanced document loading to display previously signed field values for multi-signer workflow
-- Updated button states and text to reflect validation progress: data validation → field rendering → signing enabled
-- Improved DocumentSelector to filter documents by signing status (IN_PROGRESS vs AWAITING_SIGNER2)
-- Added visual indicators showing validation status with retry functionality for failed renders
-- Updated SignableField styling to clearly distinguish between current signer fields and completed fields from other signers
-- Fixed modal rendering issue where DocumentSelector was hidden behind selection screen
-- Enhanced sidebar width and prevented horizontal overflow for better UX
+## Auto-close sidebar on lease creation route navigation
+- Added SidebarController component to automatically close sidebar when navigating to lease creation page
+- Implemented one-time close behavior on route change (non-persistent, allows manual reopening)
+- Restricted auto-close to desktop/tablet screens only, preserving mobile sidebar behavior
+
+## Add comprehensive lease management system with PDF document signing workflow
+- Added new lease management pages with creation and listing functionality for host dashboard
+- Implemented complete PDF template system with document upload, field placement, and validation
+- Built asynchronous multi-signer workflow where signers complete fields independently in sequence
+- Added comprehensive field validation checking both data integrity and visual rendering status
+- Created test pages for component validation and workflow testing in development
+- Enhanced PDF editor with template creation, document selection, and signature field management
+- Implemented lease signing workflow with step-by-step progress tracking and state management
+- Added proper type definitions for documents, templates, and signing workflow components
+- Built utility functions for document handling, template management, and signing operations
+- Integrated lease management into host dashboard navigation with proper routing
 
 ## Fix New York address validation issues in listing creation
 - Enhanced address parsing logic to properly extract borough names (Brooklyn, Manhattan, etc.) from Google Geocoding API
