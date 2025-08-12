@@ -1,5 +1,11 @@
 # Changelog
 
+## Add unapprove functionality to application details dropdown menu
+- Added functional dropdown menu to replace static "..." button in application header
+- Implemented unapprove action for approved applications with proper loading states
+- Added commented placeholder for future booking restriction logic
+- Used existing `undoApprovalHousingRequest` API function with proper error handling
+
 ## Implement mobile responsive design for application details page
 - Added responsive container wrapper with proper max-width constraints
 - Converted all card sections to use responsive flex layouts with `flex-col sm:flex-row`

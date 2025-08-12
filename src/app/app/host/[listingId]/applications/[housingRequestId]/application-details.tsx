@@ -19,6 +19,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -125,6 +131,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [isDeclining, setIsDeclining] = useState(false);
   const [isUndoing, setIsUndoing] = useState(false);
   const [isUndoingDecline, setIsUndoingDecline] = useState(false);
+  const [isUnapproving, setIsUnapproving] = useState(false);
   const [isUploadingLease, setIsUploadingLease] = useState(false);
   const [uploadPhase, setUploadPhase] = useState<'idle' | 'checking' | 'selecting' | 'uploading' | 'creating'>('idle');
   const selectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -390,6 +397,23 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     }
   };
 
+  // Handler for unapproving housing request
+  const handleUnapprove = async () => {
+    setIsUnapproving(true);
+    try {
+      const result = await undoApprovalHousingRequest(housingRequestId);
+      if (result.success) {
+        setCurrentStatus('pending');
+        toast.success('Application unapproved successfully.');
+      }
+    } catch (error) {
+      console.error('Error unapproving application:', error);
+      toast.error('Failed to unapprove application. Please try again.');
+    } finally {
+      setIsUnapproving(false);
+    }
+  };
+
   // Placeholder for upload lease function
   const handleUploadLease = () => {
     handleApprove();
@@ -414,7 +438,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             ? '/app/host/dashboard/applications'
             : `/app/host/${listingId}/applications`
         } 
-        className="hover:underline flex items-center gap-2 mb-8"
+        className="hover:underline pl-2 flex items-center gap-2 mb-8"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -423,7 +447,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
       </Link>
 
       {/* Application Title Section */}
-      <header className="flex items-end gap-6 relative self-stretch w-full flex-[0_0_auto]">
+      <header className="flex items-end pb-4 pl-2 gap-6 relative self-stretch w-full flex-[0_0_auto]">
         <div className="flex flex-col items-start gap-2 relative flex-1 grow">
           <h1 className="relative w-[430px] mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-transparent text-2xl tracking-[0] leading-[28.8px]">
             <span className="font-medium text-[#020202]">Application </span>
@@ -482,13 +506,34 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             </Button>
           )}
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="flex-[0_0_auto] relative h-auto w-auto p-2"
-          >
-            <MoreHorizontalIcon className="h-4 w-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="flex-[0_0_auto] relative h-auto w-auto p-2"
+              >
+                <MoreHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {currentStatus === 'approved' && (
+                <DropdownMenuItem
+                  onClick={handleUnapprove}
+                  disabled={isUnapproving}
+                  className="text-[#e62e2e] focus:text-[#e62e2e]"
+                >
+                  {isUnapproving ? 'Unapproving...' : 'Unapprove Application'}
+                </DropdownMenuItem>
+              )}
+              {/* TODO: Add check for applications that have been made into a booking */}
+              {/* {housingRequest.hasBooking && (
+                <DropdownMenuItem disabled className="text-gray-400">
+                  Cannot unapprove - has active booking
+                </DropdownMenuItem>
+              )} */}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
