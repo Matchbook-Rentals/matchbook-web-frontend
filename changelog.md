@@ -3,8 +3,9 @@
 ## Add unapprove functionality to application details dropdown menu
 - Added functional dropdown menu to replace static "..." button in application header
 - Implemented unapprove action for approved applications with proper loading states
-- Added commented placeholder for future booking restriction logic
+- Added booking restriction logic to prevent unapproving applications with active bookings
 - Used existing `undoApprovalHousingRequest` API function with proper error handling
+- Added toast error feedback when attempting to unapprove applications with bookings
 
 ## Implement mobile responsive design for application details page
 - Added responsive container wrapper with proper max-width constraints

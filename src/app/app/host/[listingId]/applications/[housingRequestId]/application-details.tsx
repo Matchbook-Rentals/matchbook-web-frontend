@@ -517,7 +517,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {currentStatus === 'approved' && (
+              {currentStatus === 'approved' && !housingRequest.hasBooking && (
                 <DropdownMenuItem
                   onClick={handleUnapprove}
                   disabled={isUnapproving}
@@ -526,12 +526,15 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                   {isUnapproving ? 'Unapproving...' : 'Unapprove Application'}
                 </DropdownMenuItem>
               )}
-              {/* TODO: Add check for applications that have been made into a booking */}
-              {/* {housingRequest.hasBooking && (
-                <DropdownMenuItem disabled className="text-gray-400">
+              {currentStatus === 'approved' && housingRequest.hasBooking && (
+                <DropdownMenuItem 
+                  disabled 
+                  className="text-gray-400"
+                  onClick={() => toast.error('Cannot unapprove application with active booking')}
+                >
                   Cannot unapprove - has active booking
                 </DropdownMenuItem>
-              )} */}
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
