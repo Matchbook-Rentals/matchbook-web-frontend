@@ -140,7 +140,7 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
         <SidebarController />
         <HostSidebar groups={sidebarGroups} />
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b">
+          <header className="flex h-16 shrink-0 bg-sidebar items-center gap-2 border-b">
             <div className="flex items-center justify-between w-full px-3">
               <div className="flex items-center gap-2">
                 <SidebarTrigger />

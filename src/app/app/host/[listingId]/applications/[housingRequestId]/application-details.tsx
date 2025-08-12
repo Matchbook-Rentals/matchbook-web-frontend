@@ -1,12 +1,28 @@
 "use client";
 
-import { ChevronDownIcon, Upload, Trash2, Loader2 } from "lucide-react";
+import { 
+  ChevronDownIcon, 
+  Upload, 
+  Trash2, 
+  Loader2,
+  MoreHorizontalIcon,
+  BabyIcon,
+  CatIcon,
+  DogIcon,
+  UsersIcon 
+} from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { APP_PAGE_MARGIN } from "@/constants/styles";
 import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
 import Link from "next/link";
@@ -18,6 +34,13 @@ import { toast } from "sonner";
 import { StripeConnectVerificationDialog } from "@/components/brandDialog";
 import { useClientLogger } from "@/hooks/useClientLogger";
 import { useUser } from "@clerk/nextjs";
+
+// Centralized styles for consistent text formatting
+const STYLES = {
+  headerText: "[font-family:'Poppins',Helvetica] font-medium text-neutralneutral-900 text-xl tracking-[0] leading-[normal] text-left",
+  labelText: "font-['Poppins'] text-base font-normal leading-normal text-[#5D606D]",
+  valueText: "font-text-label-medium-medium font-[number:var(--text-label-medium-medium-font-weight)] text-neutralneutral-900 text-[length:var(--text-label-medium-medium-font-size)] tracking-[var(--text-label-medium-medium-letter-spacing)] leading-[var(--text-label-medium-medium-line-height)] [font-style:var(--text-label-medium-medium-font-style)]"
+} as const;
 
 interface HousingRequestWithUser extends HousingRequest {
   user: User & {
@@ -56,96 +79,40 @@ interface ApplicationDetailsProps {
   from?: string;
 }
 
-// Data for the application
-const guestDetails = {
-  name: "Daniel Resner",
-  rating: "4.0",
-  averageRating: "Average Rating",
-  household: {
-    income: "$5,600/ mo",
-    incomeLabel: "Household income",
-    rentToIncomeRatio: "12%",
-    rentToIncomeStatus: "Great",
-  },
-  household_members: {
-    adults: 4,
-    kids: 2,
-    dogs: 0,
-    cats: 3,
-  },
-  guests: [
-    { name: "Daniel Resner", active: true },
-    { name: "Isabelle Resner", active: false },
-    { name: "Tyler Bennett", active: false },
-  ],
+// Hardcoded data for the new design sections (keeping other sections)
+
+
+
+
+const currentResidenceData = {
+  type: "Applicant owns this residence",
+  address: "3024 N 1400 E North Ogden, UT 84414",
+  monthlyPayment: "$5,500",
+  lengthOfResidence: "12 Months",
 };
 
-const financialDetails = {
-  earnings: {
-    monthlyRent: "$2,374.50",
-    deposit: "$3,500",
-    totalBookingEarnings: "$28,494.00",
-  },
-  dates: {
-    moveIn: "6 Jan 25",
-    moveOut: "6 Jan 25",
-    lengthOfStay: "365 days",
-  },
+const pastResidenceData = {
+  type: "Applicant rents this residence",
+  address: "3024 N 1400 E North Ogden, UT 84414",
+  monthlyPayment: "$5,500",
+  lengthOfResidence: "12 Months",
+  propertyManagerName: "Mr Cooper Resner",
+  phoneNumber: "317-908-7302",
+  email: "daniel.resner@matchbookrentals.com",
 };
 
-const residentialHistory = [
+const incomeSources = [
   {
-    type: "Current Residence",
-    ownership: "Applicant owns this residence",
-    address: "3024 N 1400 E North Ogden, UT 84414",
-    monthlyPayment: "$5,500",
-    lengthOfResidence: "12 Months",
-  },
-  {
-    type: "Past Residence 1",
-    ownership: "Applicant rents this residence",
-    address: "2155 Quincy Ave Ogden, UT, 84401",
-    monthlyPayment: "$1,450",
-    lengthOfResidence: "12 Months",
-    propertyManager: {
-      name: "Mr Cooper Resner",
-      phone: "317-908-7302",
-      email: "daniel.resner@matchbookrentals.com",
-    },
-  },
-];
-
-const incomeDetails = [
-  {
-    source: "Source 1",
-    description: "Government Moochery",
+    sourceLabel: "Source 1",
+    sourceName: "Government Moochery",
     monthlyAmount: "$5,500",
   },
   {
-    source: "Source 2",
-    description: "Social security",
+    sourceLabel: "Source 2",
+    sourceName: "Social Security",
     monthlyAmount: "$5,500",
   },
 ];
-
-const questionnaire = {
-  criminal: {
-    question:
-      "Have you been convicted of a felony or misdemeanor offense in the past 7 years?",
-    answer: "No",
-    followUp: "Please provide the date, and nature of the conviction.",
-    followUpAnswer: "N/A",
-  },
-  eviction: {
-    question:
-      "Have you been evicted from a rental property in the past 7 years?",
-    answer: "Yes",
-    followUp:
-      "Please explain the circumstances surrounding the eviction, including the reason for the eviction, and the outcome.",
-    followUpAnswer:
-      "Evicted due to lease violation in 2018; case resolved amicably.",
-  },
-};
 
 export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from }: ApplicationDetailsProps): JSX.Element => {
   const application = housingRequest.user.applications[0];
@@ -175,92 +142,10 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   
   // Check if user is admin
   const isAdmin = clerkUser?.publicMetadata?.role === 'admin';
-  
-  // Log browser/OS info for debugging Mac-specific issues
-  useEffect(() => {
-    const userAgent = navigator.userAgent;
-    const isMac = /Mac|macOS/.test(userAgent);
-    const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
-    
-    logger.info('Browser environment detected', {
-      userAgent,
-      isMac,
-      isSafari,
-      platform: navigator.platform,
-      housingRequestId
-    });
-    
-    // Cleanup timeout on unmount
-    return () => {
-      if (selectTimeoutRef.current) {
-        clearTimeout(selectTimeoutRef.current);
-      }
-    };
-  }, [housingRequestId, logger]);
-  
-  // Function to check Stripe Connect setup from database
-  const checkStripeConnectSetup = async () => {
-    try {
-      logger.debug('Checking Stripe Connect setup');
-      const response = await fetch('/api/user/stripe-account');
-      const data = await response.json();
-      const hasStripeAccount = Boolean(data.stripeAccountId);
-      logger.info('Stripe Connect setup check completed', { hasStripeAccount, stripeAccountId: data.stripeAccountId });
-      return hasStripeAccount;
-    } catch (error) {
-      logger.error('Error checking Stripe account', { error: error instanceof Error ? error.message : 'Unknown error' });
-      return false;
-    }
-  };
-
-  // Handler for when user closes the Stripe dialog
-  const handleStripeDialogClose = () => {
-    setIsStripeDialogOpen(false);
-  };
-
-  // Handler for when user completes Stripe setup and wants to continue
-  const handleStripeDialogContinue = () => {
-    logger.info('Stripe setup completed, continuing with file picker');
-    setIsStripeDialogOpen(false);
-    // Now that Stripe is set up, open the file picker
-    setTimeout(() => {
-      setUploadPhase('selecting');
-      setIsUploadingLease(true);
-      fileInputRef.current?.click();
-    }, 100); // Small delay to ensure dialog is closed
-  };
-  
-  // Get user name from actual data
-  const getUserName = () => {
-    if (user.firstName && user.lastName) {
-      return `${user.firstName} ${user.lastName}`;
-    }
-    return user.email || guestDetails.name;
-  };
 
   // Helper function to format currency
   const formatCurrency = (amount: number) => 
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-
-  // Helper function to format dates
-  const formatDate = (date: Date | string | null) => {
-    if (!date) return 'N/A';
-    return new Intl.DateTimeFormat('en-US', { 
-      day: 'numeric', 
-      month: 'short', 
-      year: '2-digit' 
-    }).format(new Date(date));
-  };
-
-  // Helper function to calculate length of stay
-  const calculateLengthOfStay = () => {
-    if (!housingRequest.startDate || !housingRequest.endDate) return 'N/A';
-    const start = new Date(housingRequest.startDate);
-    const end = new Date(housingRequest.endDate);
-    const diffTime = Math.abs(end.getTime() - start.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return `${diffDays} days`;
-  };
 
   // Helper function to calculate monthly rent
   const getMonthlyRent = () => {
@@ -294,89 +179,181 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     return monthlyRent * totalMonths;
   };
 
+  // Helper function to format dates
+  const formatDate = (date: Date | string | null) => {
+    if (!date) return 'N/A';
+    return new Intl.DateTimeFormat('en-US', { 
+      day: 'numeric', 
+      month: 'short', 
+      year: 'numeric' 
+    }).format(new Date(date));
+  };
+
+  // Helper function to calculate length of stay
+  const calculateLengthOfStay = () => {
+    if (!housingRequest.startDate || !housingRequest.endDate) return 'N/A';
+    const start = new Date(housingRequest.startDate);
+    const end = new Date(housingRequest.endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return `${diffDays} Days`;
+  };
+
+  // Helper function to get summary items with live data
+  const getSummaryItems = () => {
+    const trip = housingRequest.trip;
+    if (!trip) return [];
+    
+    const items = [];
+    
+    // Adults (only show if > 0)
+    if (trip.numAdults > 0) {
+      items.push({
+        icon: UsersIcon,
+        text: `${trip.numAdults} Adult${trip.numAdults !== 1 ? 's' : ''}`
+      });
+    }
+    
+    // Children (always show, even if 0)
+    items.push({
+      icon: BabyIcon,
+      text: `${trip.numChildren} Kid${trip.numChildren !== 1 ? 's' : ''}`
+    });
+    
+    // Pets (always show, even if 0, unified dogs and cats)
+    items.push({
+      icon: DogIcon, // Using dog icon for all pets as requested
+      text: `${trip.numPets} Pet${trip.numPets !== 1 ? 's' : ''}`
+    });
+    
+    return items;
+  };
+
+  // Helper function to get renter data with live information
+  const getRenterData = () => {
+    // Primary renter is the user who made the housing request
+    const primaryRenter = {
+      name: getUserName(),
+      rating: "N/A", // We don't have rating data in the current schema
+      hasId: application?.identifications && application.identifications.length > 0 && application.identifications[0].idPhotos.length > 0,
+    };
+    
+    return [primaryRenter];
+  };
+
+  // Get user name from actual data
+  const getUserName = () => {
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    return user.email || "Daniel Resner";
+  };
+
+  // Helper function to get residential history data
+  const getResidentialHistoryData = () => {
+    const residences = application?.residentialHistories || [];
+    
+    // Sort by most recent first (assuming index 0 is current residence)
+    const sortedResidences = residences.sort((a, b) => (a.index || 0) - (b.index || 0));
+    
+    return sortedResidences.map((residence, index) => ({
+      ...residence,
+      displayType: residence.housingStatus === 'own' ? 'Applicant owns this residence' : 'Applicant rents this residence',
+      fullAddress: [residence.street, residence.apt, residence.city, residence.state, residence.zipCode]
+        .filter(Boolean)
+        .join(', ') || 'N/A',
+      formattedPayment: residence.monthlyPayment ? `$${residence.monthlyPayment}` : 'N/A',
+      landlordName: [residence.landlordFirstName, residence.landlordLastName]
+        .filter(Boolean)
+        .join(' ') || 'N/A'
+    }));
+  };
+
+
+  // Helper function to get income data
+  const getIncomeData = () => {
+    const incomes = application?.incomes || [];
+    
+    return incomes.map((income, index) => ({
+      ...income,
+      sourceLabel: `Source ${index + 1}`,
+      formattedAmount: income.monthlyAmount ? `$${income.monthlyAmount}/month` : 'N/A',
+      sourceName: income.source || 'N/A'
+    }));
+  };
+
   // Helper function to calculate total monthly income
   const getTotalMonthlyIncome = () => {
-    // For admins, use test income if set, otherwise use actual income
-    if (isAdmin && testIncome !== null) {
-      return testIncome;
-    }
-    return application?.incomes?.reduce((acc, cur) => acc + Number(cur.monthlyAmount || 0), 0) || 0;
+    const incomes = getIncomeData();
+    const total = incomes.reduce((sum, income) => {
+      const amount = parseFloat(income.monthlyAmount) || 0;
+      return sum + amount;
+    }, 0);
+    
+    return total;
   };
 
-  // Helper function to get rent-to-income ratio classification
-  const getRentToIncomeClassification = (ratio: number) => {
-    if (ratio <= 30) {
-      return {
-        status: 'Ideal',
-        description: 'Low risk. Strong ability to pay rent.',
-        recommendation: 'Approve without hesitation.',
-        color: '#39b54a', // Green
-        bgColor: '#f0f9f0'
-      };
-    } else if (ratio <= 35) {
-      return {
-        status: 'Acceptable',
-        description: 'Still reasonable if other factors (credit, savings) are good.',
-        recommendation: 'Approve with standard screening.',
-        color: '#5c9ac5', // Blue
-        bgColor: '#f0f8ff'
-      };
-    } else if (ratio <= 40) {
-      return {
-        status: 'Borderline',
-        description: 'Moderate risk. May struggle if unexpected expenses arise.',
-        recommendation: 'Consider with compensating factors (e.g. guarantor, high credit, longer history).',
-        color: '#f39c12', // Orange
-        bgColor: '#fffbf0'
-      };
-    } else if (ratio <= 50) {
-      return {
-        status: 'High Risk',
-        description: 'Rent-heavy budget; may lead to late or missed payments.',
-        recommendation: 'Likely decline unless exceptional compensating factors exist.',
-        color: '#e67e22', // Dark orange
-        bgColor: '#fff5f0'
-      };
-    } else {
-      return {
-        status: 'Very High Risk',
-        description: 'Unsustainable. Indicates high likelihood of payment issues.',
-        recommendation: 'Decline.',
-        color: '#e74c3c', // Red
-        bgColor: '#fff0f0'
-      };
-    }
-  };
-
-  // Helper function to calculate rent-to-income ratio
+  // Helper function to calculate rent to income ratio
   const getRentToIncomeRatio = () => {
+    const totalIncome = getTotalMonthlyIncome();
     const monthlyRent = getMonthlyRent();
-    const monthlyIncome = getTotalMonthlyIncome();
     
-    if (monthlyIncome === 0) return { percentage: 'N/A', status: 'Unknown', classification: null };
+    if (totalIncome <= 0) return { ratio: 'N/A', badge: 'Unknown', color: 'gray' };
     
-    const ratio = (monthlyRent / monthlyIncome) * 100;
+    const ratio = (monthlyRent / totalIncome) * 100;
     const percentage = Math.round(ratio);
-    const classification = getRentToIncomeClassification(ratio);
     
-    return { percentage: `${percentage}%`, status: classification.status, classification, rawRatio: ratio };
+    let badge = 'Unknown';
+    let color = 'gray';
+    
+    if (percentage <= 30) {
+      badge = 'Great';
+      color = '#3c8787';
+    } else if (percentage <= 40) {
+      badge = 'Good';
+      color = '#4ade80';
+    } else if (percentage <= 50) {
+      badge = 'Fair';
+      color = '#fbbf24';
+    } else {
+      badge = 'High';
+      color = '#ef4444';
+    }
+    
+    return { ratio: `${percentage}%`, badge, color };
   };
 
-  // Helper function to get upload button text based on phase
-  const getUploadButtonText = (baseText: string) => {
-    if (uploadPhase === 'checking') return 'Checking onboard status...';
-    if (uploadPhase === 'selecting') return 'Selecting file...';
-    if (uploadPhase === 'uploading') return 'Uploading file...';
-    if (uploadPhase === 'creating') return 'Creating editable document...';
-    return baseText;
-  };
-
-  // Manual trigger for fallback picker
-  const showFallbackManually = () => {
-    logger.info('User manually triggered fallback picker');
-    setUploadPhase('idle');
-    setIsUploadingLease(false);
-    setShowFallbackPicker(true);
+  // Get questionnaire data from application
+  const getQuestionnaireData = () => {
+    const questionsData = [
+      {
+        title: "Criminal Record",
+        questions: [
+          {
+            question: "Have you been convicted of a felony or misdemeanor offense in the past 7 years?",
+            answer: application?.felony === null ? "Not answered" : application?.felony ? "Yes" : "No",
+          },
+          {
+            question: "Please provide the date and nature of the conviction.",
+            answer: application?.felony && application?.felonyExplanation ? application.felonyExplanation : "N/A",
+          },
+        ],
+      },
+      {
+        title: "Eviction History",
+        questions: [
+          {
+            question: "Have you been evicted in the past 7 years?",
+            answer: application?.evicted === null ? "Not answered" : application?.evicted ? "Yes" : "No",
+          },
+          {
+            question: "Please explain the circumstances surrounding the eviction, including the reason for the eviction and the outcome.",
+            answer: application?.evicted && application?.evictedExplanation ? application.evictedExplanation : "N/A",
+          },
+        ],
+      },
+    ];
+    return questionsData;
   };
 
   // Handler for approving housing request
@@ -413,1020 +390,588 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     }
   };
 
-  // Handler for undoing approval
-  const handleUndoApproval = async () => {
-    setIsUndoing(true);
-    try {
-      const result = await undoApprovalHousingRequest(housingRequestId);
-      if (result.success) {
-        setCurrentStatus('pending');
-        toast.success('Approval has been undone.');
-      }
-    } catch (error) {
-      console.error('Error undoing approval:', error);
-      if (error instanceof Error && error.message.includes('booking already exists')) {
-        toast.error('Cannot undo approval: A booking has already been created.');
-      } else {
-        toast.error('Failed to undo approval. Please try again.');
-      }
-    } finally {
-      setIsUndoing(false);
-    }
+  // Placeholder for upload lease function
+  const handleUploadLease = () => {
+    handleApprove();
   };
 
-  // Handler for undoing decline
-  const handleUndoDecline = async () => {
-    setIsUndoingDecline(true);
-    try {
-      const result = await undoDeclineHousingRequest(housingRequestId);
-      if (result.success) {
-        setCurrentStatus('pending');
-        toast.success('Application is being reconsidered.');
-      }
-    } catch (error) {
-      console.error('Error undoing decline:', error);
-      toast.error('Failed to undo decline. Please try again.');
-    } finally {
-      setIsUndoingDecline(false);
-    }
-  };
-
-  // Handler for uploading lease file and creating template
-  const handleUploadLease = async () => {
-    logger.info('Upload lease button clicked', { housingRequestId, listingId });
-    
-    // Check Stripe Connect setup BEFORE opening file picker to avoid dialog interference
-    try {
-      setUploadPhase('checking');
-      setIsUploadingLease(true);
-      
-      const hasStripeAccount = await checkStripeConnectSetup();
-      if (!hasStripeAccount) {
-        logger.warn('Stripe account not set up, showing dialog', { housingRequestId });
-        setUploadPhase('idle');
-        setIsUploadingLease(false);
-        setIsStripeDialogOpen(true);
-        return;
-      }
-
-      // Only open file picker if Stripe is set up
-      logger.debug('Stripe account verified, opening file picker');
-      setUploadPhase('selecting');
-      // Keep isUploadingLease true to show the selecting state
-      
-      // Add debugging for Mac file picker issues
-      logger.info('Attempting to open file picker', {
-        fileInputExists: !!fileInputRef.current,
-        fileInputType: fileInputRef.current?.type,
-        fileInputAccept: fileInputRef.current?.accept,
-        userAgent: navigator.userAgent
-      });
-      
-      // Try multiple approaches for Mac compatibility
-      if (fileInputRef.current) {
-        try {
-          // Set a timeout to detect if file picker doesn't open
-          logger.debug('Setting file picker timeout');
-          selectTimeoutRef.current = setTimeout(() => {
-            logger.warn('File picker timeout - no interaction detected, showing fallback');
-            setUploadPhase('idle');
-            setIsUploadingLease(false);
-            setShowFallbackPicker(true);
-            toast.error('File picker did not open automatically. Please use the file selector below.');
-          }, 3000); // 3 second timeout
-          
-          // Approach 1: Direct click
-          fileInputRef.current.click();
-          logger.debug('File input click executed', { timeoutSet: !!selectTimeoutRef.current });
-        } catch (error) {
-          logger.error('File input click failed', { error: error instanceof Error ? error.message : 'Unknown error' });
-          // Clear timeout and reset state if click fails
-          if (selectTimeoutRef.current) {
-            clearTimeout(selectTimeoutRef.current);
-            selectTimeoutRef.current = null;
-          }
-          setUploadPhase('idle');
-          setIsUploadingLease(false);
-          toast.error('Unable to open file picker. Please try again.');
-        }
-      } else {
-        logger.error('File input ref is null');
-        setUploadPhase('idle');
-        setIsUploadingLease(false);
-        toast.error('File picker not available. Please refresh the page.');
-      }
-    } catch (error) {
-      logger.error('Error checking Stripe setup', { error: error instanceof Error ? error.message : 'Unknown error' });
-      setUploadPhase('idle');
-      setIsUploadingLease(false);
-      toast.error('Failed to verify payment setup. Please try again.');
-    }
-  };
-
-  // Handler for file selection and template creation
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    logger.debug('File input change event fired', { 
-      hasFiles: !!event.target.files?.length,
-      filesLength: event.target.files?.length,
-      timeoutExists: !!selectTimeoutRef.current
-    });
-    
-    // Clear the timeout since user interacted with file picker
-    if (selectTimeoutRef.current) {
-      logger.debug('Clearing file picker timeout');
-      clearTimeout(selectTimeoutRef.current);
-      selectTimeoutRef.current = null;
-    }
-    
-    // Hide fallback picker since file selection worked
-    setShowFallbackPicker(false);
-    
-    const file = event.target.files?.[0];
-    logger.info('File selected for upload', { 
-      fileName: file?.name, 
-      fileSize: file?.size, 
-      fileType: file?.type,
-      housingRequestId 
-    });
-
-    if (!file) {
-      logger.debug('No file selected, user cancelled');
-      setUploadPhase('idle');
-      setIsUploadingLease(false);
-      return;
-    }
-
-    // Validate file type
-    const allowedTypes = ['application/pdf'];
-    if (!allowedTypes.includes(file.type)) {
-      logger.warn('Invalid file type selected', { fileType: file.type, allowedTypes });
-      setUploadPhase('idle');
-      setIsUploadingLease(false);
-      toast.error('Please upload a PDF document');
-      return;
-    }
-
-    // Validate file size (10MB limit)
-    if (file.size > 10 * 1024 * 1024) {
-      logger.warn('File size too large', { fileSize: file.size, maxSize: 10 * 1024 * 1024 });
-      setUploadPhase('idle');
-      setIsUploadingLease(false);
-      toast.error('File size must be less than 10MB');
-      return;
-    }
-
-    // Proceed with file upload (Stripe already verified)
-    await processFileUpload(file);
-  };
-
-  // Extracted file upload logic
-  const processFileUpload = async (file: File) => {
-    setUploadPhase('uploading');
-    setIsUploadingLease(true);
-    logger.info('Starting file upload process', { fileName: file.name, fileSize: file.size, housingRequestId });
-    
-    // Use fetch to call API route instead of server action to avoid React hydration issues
-    try {
-      logger.debug('Creating FormData for upload');
-      const formData = new FormData();
-      formData.append('housingRequestId', housingRequestId);
-      formData.append('listingId', listingId);
-      formData.append('leaseFile', file);
-
-      logger.info('Sending file upload request to API', { endpoint: '/api/leases/create-from-upload' });
-      const response = await fetch('/api/leases/create-from-upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        logger.error('Upload API returned error', { status: response.status, error: errorData });
-        throw new Error(errorData.error || 'Failed to create document');
-      }
-
-      // File upload complete, now creating editable document
-      setUploadPhase('creating');
-      logger.debug('File uploaded successfully, creating editable document');
-
-      const result = await response.json();
-      logger.info('Upload API success response', { 
-        success: result.success, 
-        documentId: result.documentId,
-        matchId: result.matchId,
-        hasEmbedUrl: !!result.embedUrl 
-      });
-      
-      if (result.success) {
-        toast.success('Lease document created! Configure your fields.');
-        
-        // Notify tenant about the lease (if matchId is available)
-        if (result.matchId) {
-          logger.info('Match created for tenant lease signing', { 
-            matchId: result.matchId, 
-            tenantUrl: `/app/match/${result.matchId}` 
-          });
-        }
-        
-        // Redirect to lease editing page with the embed URL
-        if (result.embedUrl && result.documentId) {
-          const redirectUrl = `/app/host/${listingId}/applications/${housingRequestId}/lease-editor?embedUrl=${encodeURIComponent(result.embedUrl)}&documentId=${result.documentId}`;
-          logger.info('Redirecting to lease editor', { redirectUrl });
-          router.push(redirectUrl);
-        } else {
-          logger.error('Missing embedUrl or documentId in success response', result);
-          toast.error('Document created but missing redirect data');
-        }
-      } else {
-        logger.error('Upload API returned success=false', { error: result.error });
-        toast.error(result.error || 'Failed to create document');
-      }
-    } catch (clientError) {
-      logger.error('Client-side error during file upload', { 
-        error: clientError instanceof Error ? clientError.message : 'Unknown client error',
-        stack: clientError instanceof Error ? clientError.stack : undefined
-      });
-      toast.error(`Failed to create document: ${clientError instanceof Error ? clientError.message : 'Unknown client error'}`);
-    } finally {
-      logger.debug('File upload process completed');
-      setUploadPhase('idle');
-      setIsUploadingLease(false);
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  };
-
-
-  // Handler for removing BoldSign lease
-  const handleRemoveLease = async () => {
-    if (!confirm('Are you sure you want to remove this lease? This will delete the lease document and cannot be undone.')) {
-      return;
-    }
-
-    setIsRemovingLease(true);
-    try {
-      // Use server action for lease removal
-      const result = await removeBoldSignLease(housingRequestId);
-      
-      if (result.success) {
-        toast.success('Lease removed successfully. Application status reset to pending.');
-        // Update local state
-        setBoldSignLeaseId(null);
-        setCurrentStatus('pending');
-        // Refresh the page to ensure UI is in sync
-        window.location.reload();
-      } else {
-        toast.error(result.error || 'Failed to remove lease');
-      }
-    } catch (error) {
-      console.error('Error removing lease:', error);
-      toast.error('Failed to remove lease. Please try again.');
-    } finally {
-      setIsRemovingLease(false);
-    }
+  // Get upload button text based on phase
+  const getUploadButtonText = (baseText: string) => {
+    if (uploadPhase === 'checking') return 'Checking onboard status...';
+    if (uploadPhase === 'selecting') return 'Selecting file...';
+    if (uploadPhase === 'uploading') return 'Uploading file...';
+    if (uploadPhase === 'creating') return 'Creating editable document...';
+    return baseText;
   };
 
   return (
-    <main className="bg-white flex flex-row justify-center w-full">
-      <div className={`bg-white w-full max-w-[1920px] relative ${APP_PAGE_MARGIN} py-4`}>
-        {/* Back Navigation */}
-        <Link 
-          href={
-            from === 'dashboard' 
-              ? '/app/host/dashboard/applications'
-              : `/app/host/${listingId}/applications`
-          } 
-          className="hover:underline flex items-center gap-2 mb-8"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          Back
-        </Link>
+    <main className="flex flex-col items-start gap-6 px-6 py-8 relative bg-[#f9f9f9]">
+      {/* Back Navigation */}
+      <Link 
+        href={
+          from === 'dashboard' 
+            ? '/app/host/dashboard/applications'
+            : `/app/host/${listingId}/applications`
+        } 
+        className="hover:underline flex items-center gap-2 mb-8"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Back
+      </Link>
 
-        {/* Lease Signing and Payment Status - for approved applications */}
-        {currentStatus === 'approved' && housingRequest.match && (
-          <section className="mb-8">
-            <h2 className="text-xl font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mb-4">
-              Lease & Payment Status
-            </h2>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Tenant Signature Status */}
-                <div className="flex items-center gap-3">
-                  {housingRequest.match.BoldSignLease?.tenantSigned ? (
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  ) : (
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {housingRequest.match.BoldSignLease?.tenantSigned ? 'Tenant Signed' : 'Awaiting Tenant Signature'}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {housingRequest.match.BoldSignLease?.tenantSigned 
-                        ? 'Lease has been signed by tenant' 
-                        : 'Tenant needs to sign the lease agreement'
-                      }
-                    </p>
-                  </div>
-                </div>
+      {/* Application Title Section */}
+      <header className="flex items-end gap-6 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="flex flex-col items-start gap-2 relative flex-1 grow">
+          <h1 className="relative w-[430px] mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-transparent text-2xl tracking-[0] leading-[28.8px]">
+            <span className="font-medium text-[#020202]">Application </span>
+            <span className="text-[#5d606d] text-base leading-[19.2px]">
+              / {getUserName()}
+            </span>
+          </h1>
+        </div>
 
-                {/* Payment Authorization Status */}
-                <div className="flex items-center gap-3">
-                  {housingRequest.match.paymentAuthorizedAt ? (
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  ) : (
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                        <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {housingRequest.match.paymentAuthorizedAt ? 'Payment Authorized' : 'Awaiting Payment Authorization'}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {housingRequest.match.paymentAuthorizedAt 
-                        ? `$${housingRequest.match.paymentAmount?.toLocaleString()} pre-authorized` 
-                        : 'Tenant needs to authorize payment method'
-                      }
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Ready for Host Action */}
-              {housingRequest.match.BoldSignLease?.tenantSigned && housingRequest.match.paymentAuthorizedAt && !housingRequest.match.BoldSignLease?.landlordSigned && (
-                <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="font-medium text-green-900">Ready for Your Signature!</p>
-                      <p className="text-sm text-green-800">
-                        The tenant has signed the lease and authorized payment. Complete the process by signing the lease to collect the deposit.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Payment Captured Status */}
-              {housingRequest.match.paymentCapturedAt && (
-                <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="font-medium text-blue-900">Payment Collected!</p>
-                      <p className="text-sm text-blue-800">
-                        Deposit and rent have been successfully processed and transferred to your account.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* Action Buttons */}
-        <div className="flex gap-4 mb-12">
-          {currentStatus === 'approved' && (
-            <>
-              <div className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] bg-[#39b54a] text-white flex items-center justify-center [font-family:'Poppins',Helvetica] font-medium">
-                ✓ Approved
-              </div>
-              {boldSignLeaseId ? (
-                <>
-                  {/* Show Sign Lease button if tenant has signed and payment is authorized but landlord hasn't signed */}
-                  {housingRequest.match?.BoldSignLease?.tenantSigned && 
-                   housingRequest.match?.paymentAuthorizedAt && 
-                   !housingRequest.match?.BoldSignLease?.landlordSigned ? (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        if (housingRequest.match?.BoldSignLease?.embedUrl) {
-                          window.open(housingRequest.match.BoldSignLease.embedUrl, '_blank', 'width=1200,height=800');
-                        } else {
-                          toast.error('Lease signing URL not available');
-                        }
-                      }}
-                      className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium hover:bg-green-50 flex items-center gap-2"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Sign & Collect
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        if (boldSignLeaseId) {
-                          // Use the new view endpoint for signed documents
-                          window.open(`/api/leases/view?documentId=${boldSignLeaseId}`, '_blank');
-                        } else {
-                          toast.error('No lease document available');
-                        }
-                      }}
-                      className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium hover:bg-blue-50 flex items-center gap-2"
-                    >
-                      View Lease
-                    </Button>
-                  )}
-                  <Button
-                    variant="outline"
-                    onClick={handleRemoveLease}
-                    disabled={isRemovingLease}
-                    className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-red-200 text-red-600 [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-red-50 flex items-center gap-2"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    {isRemovingLease ? 'Removing...' : 'Remove Lease'}
-                  </Button>
-                </>
-              ) : (
-                <div className="relative">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      onClick={handleUploadLease}
-                      disabled={isUploadingLease}
-                      className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-blue-50 flex items-center gap-2"
-                    >
-                      <Upload className="w-4 h-4" />
-                      {getUploadButtonText('Upload Lease')}
-                    </Button>
-                    {uploadPhase === 'selecting' && (
-                      <Button
-                        variant="outline"
-                        onClick={showFallbackManually}
-                        className="h-[63px] px-4 rounded-[5px] border-[1.5px] border-[#f39c12] text-[#f39c12] [font-family:'Poppins',Helvetica] font-medium hover:bg-orange-50 text-sm"
-                      >
-                        Try Alternative
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              )}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div>
-                      <Button
-                        variant="outline"
-                        onClick={handleUndoApproval}
-                        disabled={isUndoing || housingRequest.hasBooking}
-                        className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#666666] text-[#666666] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-gray-50 disabled:cursor-not-allowed"
-                      >
-                        {isUndoing ? 'Undoing...' : 'Undo'}
-                      </Button>
-                    </div>
-                  </TooltipTrigger>
-                  {housingRequest.hasBooking && (
-                    <TooltipContent>
-                      <p>Cannot undo: A booking has been made</p>
-                    </TooltipContent>
-                  )}
-                </Tooltip>
-              </TooltipProvider>
-            </>
-          )}
-          {currentStatus === 'declined' && (
-            <>
-              <div className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#ff3b30] bg-[#ff3b30] text-white flex items-center justify-center [font-family:'Poppins',Helvetica] font-medium">
-                ✗ Declined
-              </div>
-              <Button
-                variant="outline"
-                onClick={handleUndoDecline}
-                disabled={isUndoingDecline}
-                className="w-[140px] h-[63px] rounded-[5px] border-[1.5px] border-[#666666] text-[#666666] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 hover:bg-gray-50"
-              >
-                {isUndoingDecline ? 'Undoing...' : 'Undo'}
-              </Button>
-            </>
-          )}
+        <div className="inline-flex items-center gap-3 relative flex-[0_0_auto]">
           {currentStatus === 'pending' && (
             <>
               <Button
-                variant="outline"
+                variant="ghost"
                 onClick={handleDecline}
                 disabled={isDeclining || isApproving}
-                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#ff3b30] text-[#ff3b30] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 flex-[0_0_auto] rounded-lg overflow-hidden h-auto hover:bg-transparent"
               >
-                {isDeclining ? 'Declining...' : 'Decline'}
+                <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] text-sm tracking-[0] leading-5 underline whitespace-nowrap">
+                  {isDeclining ? 'Declining...' : 'Decline'}
+                </span>
               </Button>
+
               <Button
                 variant="outline"
-                className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] [font-family:'Poppins',Helvetica] font-medium"
+                onClick={handleUploadLease}
+                disabled={isUploadingLease || isDeclining}
+                className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto hover:bg-transparent"
               >
-                Message Guest
+                <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  {getUploadButtonText('Approve')}
+                </span>
               </Button>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={handleUploadLease}
-                  disabled={isUploadingLease || isDeclining}
-                  className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#39b54a] text-[#39b54a] [font-family:'Poppins',Helvetica] font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 flex items-center justify-center gap-2"
-                >
-                  {isUploadingLease && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {getUploadButtonText('Approve and Create Lease')}
-                </Button>
-                {uploadPhase === 'selecting' && (
-                  <Button
-                    variant="outline"
-                    onClick={showFallbackManually}
-                    className="h-[63px] px-4 rounded-[5px] border-[1.5px] border-[#f39c12] text-[#f39c12] [font-family:'Poppins',Helvetica] font-medium hover:bg-orange-50 text-sm"
-                  >
-                    Try Alternative
-                  </Button>
-                )}
-              </div>
             </>
           )}
-          
-          {/* Hidden file input for lease upload - always available */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-          
-          {/* Fallback file picker for Mac compatibility */}
-          {showFallbackPicker && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <h3 className="text-sm font-medium text-yellow-800 mb-2">
-                File Picker Alternative
-              </h3>
-              <p className="text-sm text-yellow-700 mb-3">
-                The automatic file picker didn&apos;t open. Please select your PDF lease document below:
-              </p>
-              <input
-                type="file"
-                accept=".pdf"
-                onChange={handleFileSelect}
-                disabled={isUploadingLease}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
-              />
-            </div>
-          )}
-        </div>
 
-        {/* Earnings Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mb-4">
-            Earnings
-          </h2>
-          <div className="flex gap-8 mb-4">
-            <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {formatCurrency(getMonthlyRent())}
-              </p>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Monthly Rent
-              </p>
-            </div>
-            <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {formatCurrency(housingRequest.listing?.depositSize || 0)}
-              </p>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Deposit
-              </p>
-            </div>
-            <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {formatCurrency(getTotalBookingEarnings())}
-              </p>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Total Booking Earnings
-              </p>
-            </div>
-          </div>
-          <Separator className="my-4" />
-        </section>
-
-        {/* Dates Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mb-4">
-            Dates
-          </h2>
-          <div className="flex gap-8 mb-4">
-            <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {formatDate(housingRequest.startDate)}
-              </p>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Move in
-              </p>
-            </div>
-            <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {formatDate(housingRequest.endDate)}
-              </p>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Move out
-              </p>
-            </div>
-            <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {calculateLengthOfStay()}
-              </p>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Length of stay
-              </p>
-            </div>
-          </div>
-          <Separator className="my-4" />
-        </section>
-
-        {/* Guests Summary Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mb-4">
-            Guests Summary
-          </h2>
-          <div className="flex gap-8 mb-4">
-            <div>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {user.averageRating || 'N/A'}
-              </p>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Average Rating
-              </p>
-            </div>
-            <div>
-              {isAdmin ? (
-                <div className="flex items-center gap-2">
-                  {isEditingIncome ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        value={testIncome || getTotalMonthlyIncome()}
-                        onChange={(e) => setTestIncome(Number(e.target.value) || 0)}
-                        className="text-[20px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] border border-gray-300 rounded px-2 py-1 w-32"
-                        min="0"
-                        step="100"
-                      />
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setIsEditingIncome(false)}
-                        className="text-xs"
-                      >
-                        Done
-                      </Button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => setIsEditingIncome(true)}
-                      className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] hover:text-blue-600 cursor-pointer border-b border-dashed border-gray-400 hover:border-blue-600"
-                    >
-                      {formatCurrency(getTotalMonthlyIncome())}
-                    </button>
-                  )}
-                  {testIncome !== null && (
-                    <span className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                      Test Mode
-                    </span>
-                  )}
-                </div>
-              ) : (
-                <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                  {formatCurrency(getTotalMonthlyIncome())}
-                </p>
-              )}
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Household income
-              </p>
-            </div>
-            <div>
-              <div className="flex items-center gap-3">
-                <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Helvetica-Regular',Helvetica]">
-                  {getRentToIncomeRatio().percentage}
-                </p>
-                {getRentToIncomeRatio().classification && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div 
-                          className="px-3 py-1 rounded border bg-background cursor-help"
-                          style={{
-                            borderColor: getRentToIncomeRatio().classification?.color,
-                            color: getRentToIncomeRatio().classification?.color,
-                            backgroundColor: getRentToIncomeRatio().classification?.bgColor
-                          }}
-                        >
-                          <p className="text-sm font-medium [font-family:'Poppins',Helvetica]">
-                            {getRentToIncomeRatio().status}
-                          </p>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="max-w-xs">
-                        <div className="space-y-2">
-                          <p className="font-medium">
-                            {getRentToIncomeRatio().status} (≤{getRentToIncomeRatio().rawRatio <= 30 ? '30' : getRentToIncomeRatio().rawRatio <= 35 ? '35' : getRentToIncomeRatio().rawRatio <= 40 ? '40' : getRentToIncomeRatio().rawRatio <= 50 ? '50' : '>50'}%)
-                          </p>
-                          <p className="text-sm">
-                            {getRentToIncomeRatio().classification?.description}
-                          </p>
-                          <p className="text-sm font-medium">
-                            {getRentToIncomeRatio().classification?.recommendation}
-                          </p>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </div>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
-                Rent to income ratio
-              </p>
-            </div>
-          </div>
-
-          <div className="flex gap-12 mt-8 mb-4">
-            <div>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Adults
-              </p>
-              <p className="text-[28px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {application?.numberOfAdults || 1}
-              </p>
-            </div>
-            <div>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Kids
-              </p>
-              <p className="text-[28px] font-medium text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
-                {application?.numberOfChildren || 0}
-              </p>
-            </div>
-            <div>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Dogs
-              </p>
-              <p className="text-[28px] font-medium text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
-                {application?.numberOfDogs || 0}
-              </p>
-            </div>
-            <div>
-              <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                Cats
-              </p>
-              <p className="text-[28px] font-medium text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
-                {application?.numberOfCats || 0}
-              </p>
-            </div>
-          </div>
-          <Separator className="my-4" />
-        </section>
-
-        {/* Guest Details Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mb-4">
-            Guest Details
-          </h2>
-
-          <div className="flex gap-6 mb-4">
-            <button
-              className="text-base font-normal text-black underline [font-family:'Poppins',Helvetica]"
+          {currentStatus === 'approved' && (
+            <Button
+              variant="outline"
+              className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#39b54a] h-auto hover:bg-transparent"
             >
-              {getUserName()}
-            </button>
-          </div>
+              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#39b54a] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                ✓ Approved
+              </span>
+            </Button>
+          )}
 
-          <div className="flex gap-16 mt-4">
-            <div>
-              <p className="text-[15px] font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                Rating
-              </p>
-              <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mt-2">
-                {user.averageRating || 'NO RATING'}
-              </p>
-            </div>
-            <div>
-              <p className="text-[15px] font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                Identification
-              </p>
-              {application?.identifications && application.identifications.length > 0 && application.identifications[0].idPhotos.length > 0 ? (
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="h-[31px] mt-2 rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] text-xs font-medium [font-family:'Poppins',Helvetica]"
-                    >
-                      View ID
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-3xl">
-                    <DialogHeader>
-                      <DialogTitle className="text-center">Identification Document - {application.identifications[0].idType}</DialogTitle>
-                    </DialogHeader>
-                    <div className="flex justify-center">
-                      <img 
-                        src={application.identifications[0].idPhotos[0].url} 
-                        alt="Identification document"
-                        className="max-w-full max-h-[70vh] object-contain"
-                      />
+          {currentStatus === 'declined' && (
+            <Button
+              variant="outline"
+              className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#e62e2e] h-auto hover:bg-transparent"
+            >
+              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                ✗ Declined
+              </span>
+            </Button>
+          )}
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex-[0_0_auto] relative h-auto w-auto p-2"
+          >
+            <MoreHorizontalIcon className="h-4 w-4" />
+          </Button>
+        </div>
+      </header>
+
+      {/* Main Content Sections */}
+      <section className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
+        
+        {/* Income Section - Earnings (Now with live data - Green border) */}
+        <Card className="relative self-stretch w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029] ">
+          <CardContent className="flex flex-col gap-6 p-6">
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>
+                  Earnings
+                </h2>
+                <ChevronDownIcon className="w-5 h-5" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="flex items-start gap-6 mt-6 w-full">
+                  <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                    <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                      Monthly Rent
                     </div>
-                  </DialogContent>
-                </Dialog>
-              ) : (
-                <Button
-                  variant="outline"
-                  disabled
-                  className="h-[31px] mt-2 rounded-[5px] border-[1.5px] border-gray-300 text-gray-300 text-xs font-medium [font-family:'Poppins',Helvetica]"
-                >
-                  No ID Available
-                </Button>
-              )}
-            </div>
-            <div>
-              <p className="text-[15px] font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                Matchbook Verification
-              </p>
-              <Button
-                variant="outline"
-                className="h-[31px] mt-2 rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] text-xs font-medium [font-family:'Poppins',Helvetica]"
-              >
-                View Guest Screening
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Residential History Card */}
-        <Card className="mb-8 border border-solid border-[#b4b3b4] rounded-[5px]">
-          <CardContent className="p-8">
-            <div className="flex justify-between items-start">
-              <h2 className="text-xl font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                Residential History
-              </h2>
-              <ChevronDownIcon className="w-6 h-6" />
-            </div>
-
-{(application?.residentialHistories && application.residentialHistories.length > 0 ? application.residentialHistories : []).map((residence, index) => (
-              <div key={index} className="mt-6">
-                <h3 className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                  {index === 0 ? 'Current Residence' : `Past Residence ${index}`}
-                </h3>
-                <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                  {residence.isOwned ? 'Applicant owns this residence' : 'Applicant rents this residence'}
-                </p>
-
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div>
-                    <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                      Address
-                    </p>
-                    <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {`${residence.street} ${residence.city}, ${residence.state} ${residence.zipCode}` || 'NO ADDRESS PROVIDED'}
-                    </p>
+                    <div className={`relative self-stretch ${STYLES.valueText}`}>
+                      {formatCurrency(getMonthlyRent())}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                      Monthly Payment
-                    </p>
-                    <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {residence.monthlyPayment ? formatCurrency(+residence.monthlyPayment) : 'NO PAYMENT INFO'}
-                    </p>
+                  <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                    <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                      Rent Due at Booking
+                    </div>
+                    <div className={`relative self-stretch ${STYLES.valueText}`}>
+                      {formatCurrency(getMonthlyRent())}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                      Length of residence
-                    </p>
-                    <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {residence.durationOfTenancy + ' months' || 'NO DURATION PROVIDED'}
-                    </p>
+                  <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                    <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                      Deposit
+                    </div>
+                    <div className={`relative self-stretch ${STYLES.valueText}`}>
+                      {formatCurrency(housingRequest.listing?.depositSize || 0)}
+                    </div>
+                  </div>
+                  <div className="w-[235px] gap-1.5 flex flex-col items-start relative">
+                    <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                      Total Bookings
+                    </div>
+                    <div className={`relative self-stretch ${STYLES.valueText}`}>
+                      {formatCurrency(getTotalBookingEarnings())}
+                    </div>
                   </div>
                 </div>
-
-                {residence.landlordFirstName && residence.landlordLastName && (
-                  <>
-                    <Separator className="my-4" />
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                          Property Manager Name
-                        </p>
-                        <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                          {residence.landlordFirstName + ' ' + residence.landlordLastName || 'NO NAME PROVIDED'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                          Phone Number
-                        </p>
-                        <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                          {residence.landlordPhoneNumber || 'NO PHONE PROVIDED'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                          Email
-                        </p>
-                        <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                          {residence.landlordEmail || 'NO EMAIL PROVIDED'}
-                        </p>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {index < (application?.residentialHistories?.length || 0) - 1 && (
-                  <Separator className="my-6" />
-                )}
-              </div>
-            ))}
-            
-            {(!application?.residentialHistories || application.residentialHistories.length === 0) && (
-              <div className="mt-6">
-                <p className="text-lg font-bold text-red-500 [font-family:'Poppins',Helvetica]">
-                  NO RESIDENTIAL HISTORY PROVIDED
-                </p>
-              </div>
-            )}
+              </CollapsibleContent>
+            </Collapsible>
           </CardContent>
         </Card>
 
-        {/* Income Card */}
-        <Card className="mb-8 border border-solid border-[#b4b3b4] rounded-[5px]">
-          <CardContent className="p-8">
-            <div className="flex justify-between items-start">
-              <h2 className="text-xl font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                Income
-              </h2>
-              <ChevronDownIcon className="w-6 h-6" />
+        {/* Guest Self Reporting Section - Dates (Now with live data - Green border) */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029] ">
+          <CardContent className="flex flex-col gap-6 p-6">
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>
+                  Dates
+                </h2>
+                <ChevronDownIcon className="w-5 h-5" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="flex items-start gap-6 mt-6 w-full">
+                  <div className="flex flex-col items-start gap-1.5 w-[242px]">
+                    <div className={STYLES.labelText}>
+                      Move in
+                    </div>
+                    <div className={STYLES.valueText}>
+                      {formatDate(housingRequest.startDate)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-start gap-1.5 w-[242px]">
+                    <div className={STYLES.labelText}>
+                      Move Out
+                    </div>
+                    <div className={STYLES.valueText}>
+                      {formatDate(housingRequest.endDate)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-start gap-1.5 w-[235px]">
+                    <div className={STYLES.labelText}>
+                      Length of Stay
+                    </div>
+                    <div className={STYLES.valueText}>
+                      {calculateLengthOfStay()}
+                    </div>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </CardContent>
+        </Card>
+
+        {/* Dates Section - Summary (Now with live data - Green border) */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029] ">
+          <CardContent className="flex flex-col gap-6 p-6">
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>
+                  Summary
+                </h2>
+                <ChevronDownIcon className="w-5 h-5" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="mt-6">
+                  <Separator className="w-full mb-6" />
+                  <div className="flex items-center gap-[86px] w-full">
+                    {getSummaryItems().map((item, index) => {
+                      const IconComponent = item.icon;
+                      return (
+                        <div
+                          key={index}
+                          className="inline-flex items-center justify-center gap-1.5 px-0 py-1.5 rounded-full"
+                        >
+                          <IconComponent className="w-5 h-5" />
+                          <div className="w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+                            {item.text}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </CardContent>
+        </Card>
+
+        {/* Earnings Section - Renters (Now with live data - Green border) */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029] ">
+          <CardContent className="flex flex-col items-end gap-6 p-6">
+            <Collapsible defaultOpen className="w-full">
+              <CollapsibleTrigger className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>
+                  Renters
+                </h2>
+                <ChevronDownIcon className="w-5 h-5" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="mt-6 flex flex-col gap-6 w-full">
+                  <div className="flex items-start gap-6 w-full">
+              <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                  Renter Name
+                </div>
+                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                  {getRenterData()[0].name}
+                </div>
+              </div>
+
+              <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                  Rating
+                </div>
+                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                  {getRenterData()[0].rating}
+                </div>
+              </div>
+
+              <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                  Identification
+                </div>
+                {application?.identifications && application.identifications.length > 0 && application.identifications[0].idPhotos.length > 0 ? (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-[87px] h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
+                      >
+                        <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          View ID
+                        </span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl">
+                      <DialogHeader>
+                        <DialogTitle className="text-center">Identification Document - {application.identifications[0].idType}</DialogTitle>
+                      </DialogHeader>
+                      <div className="flex justify-center">
+                        <img 
+                          src={application.identifications[0].idPhotos[0].url} 
+                          alt="Identification document"
+                          className="max-w-full max-h-[70vh] object-contain"
+                        />
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  <Button
+                    variant="outline"
+                    disabled
+                    className="w-[101px] h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
+                  >
+                    <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
+                      Request ID
+                    </span>
+                  </Button>
+                )}
+              </div>
+
+              <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
+                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                  Renter Verification Report
+                </div>
+                <Button
+                  variant="outline"
+                  disabled
+                  className="h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
+                >
+                  <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
+                    Coming Soon
+                  </span>
+                </Button>
+              </div>
             </div>
 
-{(application?.incomes && application.incomes.length > 0 ? application.incomes : incomeDetails).map((income, index) => (
-              <React.Fragment key={index}>
-                <div className="grid grid-cols-3 gap-4 mt-6">
-                  <div>
-                    <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                      {application?.incomes ? `Source ${index + 1}` : income.source}
-                    </p>
-                    <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {application?.incomes ? (income.source || 'No description provided') : income.source}
-                    </p>
+                  {/* Additional renters would go here if needed */}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </CardContent>
+        </Card>
+
+        {/* Summary Section - Residential History (Now with live data) */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardContent className="flex flex-col items-end gap-6 p-6">
+            <Collapsible defaultOpen className="w-full">
+              <CollapsibleTrigger className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>
+                  Residential History
+                </h2>
+                <ChevronDownIcon className="w-5 h-5" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="gap-6 mt-6 w-full flex flex-col items-start">
+                  {(() => {
+                    const residences = getResidentialHistoryData();
+                    const currentResidence = residences[0];
+                    
+                    if (!currentResidence) {
+                      return (
+                        <div className="text-gray-500 text-center py-4 w-full">
+                          No residential history available
+                        </div>
+                      );
+                    }
+                    
+                    return (
+                      <>
+                        <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
+                          <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
+                            <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                              Current Residence
+                            </div>
+                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                              {currentResidence.displayType}
+                            </div>
+                          </div>
+
+                          <div className="w-[389px] gap-1.5 flex flex-col items-start relative">
+                            <div className={`mt-[-1.00px] relative self-stretch ${STYLES.labelText}`}>
+                              Address
+                            </div>
+                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                              {currentResidence.fullAddress}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
+                            <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                              Monthly Payment
+                            </div>
+                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                              {currentResidence.formattedPayment}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto] pb-4">
+                          <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
+                            <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                              Length of&nbsp;&nbsp;Residence
+                            </div>
+                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                              {currentResidence.durationOfTenancy ? `${currentResidence.durationOfTenancy} months` : 'N/A'}
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+
+                {(() => {
+                  const residences = getResidentialHistoryData();
+                  const pastResidences = residences.slice(1); // Skip current residence
+                  
+                  if (pastResidences.length === 0) {
+                    return null; // No separator or past residences if none exist
+                  }
+                  
+                  return (
+                    <>
+                      <div className="flex flex-col items-start gap-8 relative self-stretch w-full flex-[0_0_auto]">
+                        {pastResidences.map((residence, index) => (
+                          <div key={index} className="flex flex-col items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
+                            <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
+                              <div className="flex flex-col w-[348px] items-start gap-1.5 relative">
+                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                                  Past Residence {index + 1}
+                                </div>
+                                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                                  {residence.displayType}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col w-[388px] items-start gap-1.5 relative">
+                                <div className={`mt-[-1.00px] relative self-stretch ${STYLES.labelText}`}>
+                                  Address
+                                </div>
+                                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                                  {residence.fullAddress}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
+                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                                  Monthly Payment
+                                </div>
+                                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                                  {residence.formattedPayment}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto] pb-4">
+                              <div className="flex flex-col w-[348px] items-start gap-1.5 relative">
+                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                                  Length of&nbsp;&nbsp;Residence
+                                </div>
+                                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                                  {residence.durationOfTenancy ? `${residence.durationOfTenancy} months` : 'N/A'}
+                                </div>
+                              </div>
+
+                              <div className="w-[389px] gap-1.5 flex flex-col items-start relative">
+                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                                  Property Manager Name
+                                </div>
+                                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                                  {residence.landlordName}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
+                                <div className={`mt-[-1.00px] relative self-stretch ${STYLES.labelText}`}>
+                                  Phone Number
+                                </div>
+                                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                                  {residence.landlordPhoneNumber || 'N/A'}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
+                              <div className="flex flex-col w-[348px] items-start gap-1.5 relative">
+                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                                  Email
+                                </div>
+                                <div className={`relative self-stretch ${STYLES.valueText}`}>
+                                  {residence.landlordEmail || 'N/A'}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
+            </CollapsibleContent>
+          </Collapsible>
+        </CardContent>
+      </Card>
+
+        {/* Renters Section - Income (Now with live data) */}
+        <Card className="flex flex-col items-end gap-6 p-6 relative self-stretch w-full flex-[0_0_auto] bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <Collapsible defaultOpen className="w-full">
+            <CollapsibleTrigger className="flex items-center justify-between w-full">
+              <h2 className={STYLES.headerText}>
+                Income
+              </h2>
+              <ChevronDownIcon className="w-5 h-5" />
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <section className="flex items-start gap-6 mt-6 w-full">
+                <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
+                  <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                    Total Income
                   </div>
-                  <div>
-                    <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                      Monthly Amount
-                    </p>
-                    <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {application?.incomes ? formatCurrency(income.monthlyAmount || 0) : income.monthlyAmount}
-                    </p>
+                  <div className={`relative self-stretch ${STYLES.valueText}`}>
+                    {formatCurrency(getTotalMonthlyIncome())}/month
                   </div>
-                  <div className="flex items-center">
-                    {application?.incomes && income.imageUrl ? (
+                </div>
+
+                <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
+                  <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                    Rent to Income Ratio
+                  </div>
+                  <div className="flex items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                    <div className={`relative w-fit mt-[-1.00px] ${STYLES.valueText}`}>
+                      {getRentToIncomeRatio().ratio}
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className="flex w-[68px] items-center justify-center gap-1 px-2 py-0.5 rounded-md overflow-hidden border border-solid"
+                      style={{ borderColor: getRentToIncomeRatio().color }}
+                    >
+                      <div className="inline-flex items-center justify-center px-0.5 py-0 relative flex-[0_0_auto]">
+                        <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap"
+                             style={{ color: getRentToIncomeRatio().color }}>
+                          {getRentToIncomeRatio().badge}
+                        </div>
+                      </div>
+                    </Badge>
+                  </div>
+                </div>
+              </section>
+
+              {(() => {
+                const incomes = getIncomeData();
+                if (incomes.length === 0) {
+                  return (
+                    <div className="text-gray-500 text-center py-4 w-full">
+                      No income information available
+                    </div>
+                  );
+                }
+                
+                return incomes.map((income, index) => (
+                  <section key={`income-source-${index}`} className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto] pb-4">
+                    <div className="flex items-center gap-6 relative flex-1 grow">
+                      <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
+                        <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                          {income.sourceLabel}
+                        </div>
+                        <div className={`relative self-stretch ${STYLES.valueText}`}>
+                          {income.sourceName}
+                        </div>
+                      </div>
+
+                      <div className="w-[389px] gap-1.5 flex flex-col items-start relative">
+                        <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                          Monthly Amount
+                        </div>
+                        <div className={`relative self-stretch ${STYLES.valueText}`}>
+                          {income.formattedAmount}
+                        </div>
+                      </div>
+                    </div>
+
+                    {income.imageUrl ? (
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
                             variant="outline"
-                            className="h-[41px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] text-xs font-medium [font-family:'Poppins',Helvetica]"
+                            className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto"
                           >
-                            View Proof of income
+                            <div className="inline-flex items-center justify-center px-0.5 py-0 relative flex-[0_0_auto]">
+                              <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                                View Proof of Income
+                              </div>
+                            </div>
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-3xl">
                           <DialogHeader>
-                            <DialogTitle className="text-center">Proof of Income - {application?.incomes ? `Source ${index + 1}` : income.source}</DialogTitle>
+                            <DialogTitle className="text-center">Proof of Income - {income.sourceName}</DialogTitle>
                           </DialogHeader>
                           <div className="flex justify-center">
                             <img 
@@ -1441,88 +986,72 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       <Button
                         variant="outline"
                         disabled
-                        className="h-[41px] rounded-[5px] border-[1.5px] border-gray-300 text-gray-300 text-xs font-medium [font-family:'Poppins',Helvetica]"
+                        className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-gray-300 h-auto"
                       >
-                        No Proof Available
+                        <div className="inline-flex items-center justify-center px-0.5 py-0 relative flex-[0_0_auto]">
+                          <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-gray-300 text-sm tracking-[0] leading-5 whitespace-nowrap">
+                            No Proof Available
+                          </div>
+                        </div>
                       </Button>
                     )}
-                  </div>
+                  </section>
+                ));
+              })()}
+            </CollapsibleContent>
+          </Collapsible>
+        </Card>
+
+        {/* Guest Self-Reporting Questionnaire Section */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardContent className="p-6">
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>
+                  Guest Self-Reporting Questionaire
+                </h2>
+                <ChevronDownIcon className="w-5 h-5" />
+              </CollapsibleTrigger>
+
+              <CollapsibleContent className="mt-6">
+                <div className="flex flex-col gap-[19px]">
+                  {getQuestionnaireData().map((section, sectionIndex) => (
+                    <Card
+                      key={sectionIndex}
+                      className="bg-[#fcfcfd] border border-[#0000001a]"
+                    >
+                      <CardContent className="p-[18px]">
+                        <h3 className="font-text-label-large-medium font-[number:var(--text-label-large-medium-font-weight)] text-neutralneutral-900 text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)] [font-style:var(--text-label-large-medium-font-style)] mb-[19px]">
+                          {section.title}
+                        </h3>
+
+                        <div className="flex flex-col gap-4">
+                          {section.questions.map((item, questionIndex) => (
+                            <React.Fragment key={questionIndex}>
+                              <div className="flex flex-col gap-1.5">
+                                <div className={STYLES.labelText}>
+                                  {item.question}
+                                </div>
+                                <div className={STYLES.valueText}>
+                                  {item.answer}
+                                </div>
+                              </div>
+                              {questionIndex < section.questions.length - 1 && (
+                                <Separator className="h-px bg-[#0000001a]" />
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-                {index < (application?.incomes?.length || incomeDetails.length) - 1 && (
-                  <Separator className="my-4" />
-                )}
-              </React.Fragment>
-            ))}
+              </CollapsibleContent>
+            </Collapsible>
           </CardContent>
         </Card>
 
-        {/* Guest Self-Reporting Questionaire Card */}
-        <Card className="mb-8 border border-solid border-[#b4b3b4] rounded-[5px]">
-          <CardContent className="p-8">
-            <div className="flex justify-between items-start">
-              <h2 className="text-xl font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                Guest Self-Reporting Questionaire
-              </h2>
-              <ChevronDownIcon className="w-6 h-6" />
-            </div>
-
-            <div className="mt-6">
-              <h3 className="text-lg font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                Criminal Record
-              </h3>
-              <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                Have you been convicted of a felony or misdemeanor offense in the past 7 years?
-              </p>
-              <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                {application?.felony !== undefined ? (application.felony ? 'Yes' : 'No') : 'NO ANSWER PROVIDED'}
-              </p>
-
-              {application?.felony && (
-                <>
-                  <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                    Please provide the date, and nature of the conviction.
-                  </p>
-                  <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                    {application?.felony || 'NO DETAILS PROVIDED'}
-                  </p>
-                </>
-              )}
-            </div>
-
-            <Separator className="my-6" />
-
-            <div className="mt-6">
-              <h3 className="text-lg font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                Eviction History
-              </h3>
-              <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                Have you been evicted from a rental property in the past 7 years?
-              </p>
-              <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                {application?.evicted !== undefined ? (application.evicted ? 'Yes' : 'No') : 'NO ANSWER PROVIDED'}
-              </p>
-
-              {application?.evicted && (
-                <>
-                  <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                    Please explain the circumstances surrounding the eviction, including the reason for the eviction, and the outcome.
-                  </p>
-                  <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                    {application?.evictedExplanation || 'NO DETAILS PROVIDED'}
-                  </p>
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Stripe Connect Verification Dialog */}
-        <StripeConnectVerificationDialog
-          isOpen={isStripeDialogOpen}
-          onClose={handleStripeDialogClose}
-          onContinue={handleStripeDialogContinue}
-        />
-      </div>
+      </section>
     </main>
   );
 };
