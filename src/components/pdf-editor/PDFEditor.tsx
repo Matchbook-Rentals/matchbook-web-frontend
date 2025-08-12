@@ -71,8 +71,20 @@ const useHistory = <T,>(initialState: T) => {
 // Workflow states for the signing process
 type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer2' | 'completed';
 
-export const PDFEditor: React.FC = () => {
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
+interface PDFEditorProps {
+  initialWorkflowState?: WorkflowState;
+  initialPdfFile?: File;
+  onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
+  onCancel?: () => void;
+}
+
+export const PDFEditor: React.FC<PDFEditorProps> = ({ 
+  initialWorkflowState = 'selection', 
+  initialPdfFile, 
+  onSave, 
+  onCancel 
+}) => {
+  const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null);
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
@@ -81,7 +93,7 @@ export const PDFEditor: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [showFieldLabels, setShowFieldLabels] = useState(true);
   const [pageWidth, setPageWidth] = useState(800);
-  const [workflowState, setWorkflowState] = useState<WorkflowState>('selection');
+  const [workflowState, setWorkflowState] = useState<WorkflowState>(initialWorkflowState);
   const [signedFields, setSignedFields] = useState<Record<string, any>>({});
   
   // Interaction mode state

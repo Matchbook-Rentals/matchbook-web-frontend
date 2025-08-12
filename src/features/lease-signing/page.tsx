@@ -15,6 +15,6 @@ const PDFEditor = dynamic(() => import('@/components/pdf-editor/PDFEditor').then
   )
 });
 
-export default function PDFHandlingTest() {
+export default function LeaseSigning() {
   return <PDFEditor />;
 }

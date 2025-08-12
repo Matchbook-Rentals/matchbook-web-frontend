@@ -91,6 +91,11 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
       url: `/app/host/${listingId}/payments`,
       icon: "CreditCard",
     },
+    {
+      title: "Leases & Addendums",
+      url: `/app/host/${listingId}/leases`,
+      icon: "FileText",
+    },
   ];
 
   const hostDashboardItems = [
