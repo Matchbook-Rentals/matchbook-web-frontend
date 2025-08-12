@@ -140,7 +140,8 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     // Host side menu items - now open to all users
     // No longer requiring host-beta access
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'properties', label: 'Your Properties', href: '/app/host/dashboard/listings', section: 1 },
+    { id: 'overview', label: 'Overview', href: '/app/host/dashboard/overview', section: 1 },
+    { id: 'all-listings', label: 'All Listings', href: '/app/host/dashboard/listings', section: 1 },
     { id: 'applications', label: 'Applications', href: '/app/host/dashboard/applications', section: 1 },
     { id: 'bookings', label: 'Bookings', href: '/app/host/dashboard/bookings', section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', requiresAdmin: true, section: 2 }, // TODO: Was requiresBeta, but messages are admin-only during MX
@@ -169,7 +170,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
-    { id: 'verification', label: 'Verification', href: '/app/rent/verification', requiresAdmin: true, section: 4 }, // TODO: Restore requiresAdmin + requiresPreview after MX
+    { id: 'verification', label: 'Verification', href: '/verification', section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 
