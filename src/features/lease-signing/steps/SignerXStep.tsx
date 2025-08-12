@@ -191,7 +191,7 @@ export function SignerXStep({
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    Document is ready to send for signatures. Review the recipients and click "Send for Signature" to begin.
+                    Document is ready to send for signatures. Review the recipients and click &quot;Send for Signature&quot; to begin.
                   </AlertDescription>
                 </Alert>
               )}
