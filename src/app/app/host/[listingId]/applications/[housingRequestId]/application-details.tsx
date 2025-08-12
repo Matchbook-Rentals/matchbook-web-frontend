@@ -405,8 +405,9 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   };
 
   return (
-    <main className="flex flex-col items-start gap-6 px-6 py-8 relative bg-[#f9f9f9]">
-      {/* Back Navigation */}
+    <main className="flex flex-col items-start gap-6 px-4 sm:px-6 py-8 relative bg-[#f9f9f9] min-h-screen">
+      <div className="w-full max-w-[1920px] relative">
+        {/* Back Navigation */}
       <Link 
         href={
           from === 'dashboard' 
@@ -505,8 +506,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 <ChevronDownIcon className="w-5 h-5" />
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="flex items-start gap-6 mt-6 w-full">
-                  <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                <div className="flex flex-col sm:flex-row items-start gap-6 mt-6 w-full">
+                  <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                     <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                       Monthly Rent
                     </div>
@@ -514,7 +515,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       {formatCurrency(getMonthlyRent())}
                     </div>
                   </div>
-                  <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                  <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                     <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                       Rent Due at Booking
                     </div>
@@ -522,7 +523,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       {formatCurrency(getMonthlyRent())}
                     </div>
                   </div>
-                  <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                  <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                     <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                       Deposit
                     </div>
@@ -530,7 +531,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       {formatCurrency(housingRequest.listing?.depositSize || 0)}
                     </div>
                   </div>
-                  <div className="w-[235px] gap-1.5 flex flex-col items-start relative">
+                  <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                     <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                       Total Bookings
                     </div>
@@ -555,8 +556,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 <ChevronDownIcon className="w-5 h-5" />
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="flex items-start gap-6 mt-6 w-full">
-                  <div className="flex flex-col items-start gap-1.5 w-[242px]">
+                <div className="flex flex-col sm:flex-row items-start gap-6 mt-6 w-full">
+                  <div className="flex flex-col items-start gap-1.5 min-w-0 flex-1 sm:w-auto sm:min-w-[200px]">
                     <div className={STYLES.labelText}>
                       Move in
                     </div>
@@ -564,7 +565,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       {formatDate(housingRequest.startDate)}
                     </div>
                   </div>
-                  <div className="flex flex-col items-start gap-1.5 w-[242px]">
+                  <div className="flex flex-col items-start gap-1.5 min-w-0 flex-1 sm:w-auto sm:min-w-[200px]">
                     <div className={STYLES.labelText}>
                       Move Out
                     </div>
@@ -572,7 +573,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       {formatDate(housingRequest.endDate)}
                     </div>
                   </div>
-                  <div className="flex flex-col items-start gap-1.5 w-[235px]">
+                  <div className="flex flex-col items-start gap-1.5 min-w-0 flex-1 sm:w-auto sm:min-w-[200px]">
                     <div className={STYLES.labelText}>
                       Length of Stay
                     </div>
@@ -599,7 +600,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               <CollapsibleContent>
                 <div className="mt-6">
                   <Separator className="w-full mb-6" />
-                  <div className="flex items-center gap-[86px] w-full">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-[86px] w-full">
                     {getSummaryItems().map((item, index) => {
                       const IconComponent = item.icon;
                       return (
@@ -633,8 +634,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="mt-6 flex flex-col gap-6 w-full">
-                  <div className="flex items-start gap-6 w-full">
-              <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+                  <div className="flex flex-col sm:flex-row items-start gap-6 w-full">
+              <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                 <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                   Renter Name
                 </div>
@@ -643,7 +644,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 </div>
               </div>
 
-              <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+              <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                 <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                   Rating
                 </div>
@@ -652,7 +653,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 </div>
               </div>
 
-              <div className="w-[242px] gap-1.5 flex flex-col items-start relative">
+              <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                 <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                   Identification
                 </div>
@@ -661,7 +662,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     <DialogTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-[87px] h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
+                        className="w-full sm:w-auto h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
                       >
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
                           View ID
@@ -685,7 +686,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                   <Button
                     variant="outline"
                     disabled
-                    className="w-[101px] h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
+                    className="w-full sm:w-auto h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
                   >
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
                       Request ID
@@ -694,14 +695,14 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 )}
               </div>
 
-              <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
+              <div className="flex flex-col min-w-0 flex-1 sm:w-auto sm:min-w-[200px] items-start gap-1.5 relative">
                 <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                   Renter Verification Report
                 </div>
                 <Button
                   variant="outline"
                   disabled
-                  className="h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
+                  className="w-full sm:w-auto h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
                 >
                   <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
                     Coming Soon
@@ -743,41 +744,41 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     
                     return (
                       <>
-                        <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                          <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
-                            <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative self-stretch w-full pb-4">
+                          {/* Row 1: Type, Address, Monthly Payment */}
+                          <div className="gap-1.5 flex flex-col items-start">
+                            <div className={`${STYLES.labelText}`}>
                               Current Residence
                             </div>
-                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                            <div className={`${STYLES.valueText}`}>
                               {currentResidence.displayType}
                             </div>
                           </div>
 
-                          <div className="w-[389px] gap-1.5 flex flex-col items-start relative">
-                            <div className={`mt-[-1.00px] relative self-stretch ${STYLES.labelText}`}>
+                          <div className="gap-1.5 flex flex-col items-start">
+                            <div className={`${STYLES.labelText}`}>
                               Address
                             </div>
-                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                            <div className={`${STYLES.valueText} break-words max-w-xs`}>
                               {currentResidence.fullAddress}
                             </div>
                           </div>
 
-                          <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
-                            <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                          <div className="gap-1.5 flex flex-col items-start">
+                            <div className={`${STYLES.labelText}`}>
                               Monthly Payment
                             </div>
-                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                            <div className={`${STYLES.valueText}`}>
                               {currentResidence.formattedPayment}
                             </div>
                           </div>
-                        </div>
 
-                        <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto] pb-4">
-                          <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
-                            <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                              Length of&nbsp;&nbsp;Residence
+                          {/* Row 2: Length of Residence spans full width */}
+                          <div className="gap-1.5 flex flex-col items-start sm:col-span-3">
+                            <div className={`${STYLES.labelText}`}>
+                              Length of Residence
                             </div>
-                            <div className={`relative self-stretch ${STYLES.valueText}`}>
+                            <div className={`${STYLES.valueText}`}>
                               {currentResidence.durationOfTenancy ? `${currentResidence.durationOfTenancy} months` : 'N/A'}
                             </div>
                           </div>
@@ -799,73 +800,70 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     <>
                       <div className="flex flex-col items-start gap-8 relative self-stretch w-full flex-[0_0_auto]">
                         {pastResidences.map((residence, index) => (
-                          <div key={index} className="flex flex-col items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                              <div className="flex flex-col w-[348px] items-start gap-1.5 relative">
-                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                                  Past Residence {index + 1}
-                                </div>
-                                <div className={`relative self-stretch ${STYLES.valueText}`}>
-                                  {residence.displayType}
-                                </div>
+                          <div key={index} className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative self-stretch w-full pb-4">
+                            {/* Row 1: Type, Address, Monthly Payment */}
+                            <div className="gap-1.5 flex flex-col items-start">
+                              <div className={`${STYLES.labelText}`}>
+                                Past Residence {index + 1}
                               </div>
-
-                              <div className="flex flex-col w-[388px] items-start gap-1.5 relative">
-                                <div className={`mt-[-1.00px] relative self-stretch ${STYLES.labelText}`}>
-                                  Address
-                                </div>
-                                <div className={`relative self-stretch ${STYLES.valueText}`}>
-                                  {residence.fullAddress}
-                                </div>
-                              </div>
-
-                              <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
-                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                                  Monthly Payment
-                                </div>
-                                <div className={`relative self-stretch ${STYLES.valueText}`}>
-                                  {residence.formattedPayment}
-                                </div>
+                              <div className={`${STYLES.valueText}`}>
+                                {residence.displayType}
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto] pb-4">
-                              <div className="flex flex-col w-[348px] items-start gap-1.5 relative">
-                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                                  Length of&nbsp;&nbsp;Residence
-                                </div>
-                                <div className={`relative self-stretch ${STYLES.valueText}`}>
-                                  {residence.durationOfTenancy ? `${residence.durationOfTenancy} months` : 'N/A'}
-                                </div>
+                            <div className="gap-1.5 flex flex-col items-start">
+                              <div className={`${STYLES.labelText}`}>
+                                Address
                               </div>
-
-                              <div className="w-[389px] gap-1.5 flex flex-col items-start relative">
-                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                                  Property Manager Name
-                                </div>
-                                <div className={`relative self-stretch ${STYLES.valueText}`}>
-                                  {residence.landlordName}
-                                </div>
-                              </div>
-
-                              <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
-                                <div className={`mt-[-1.00px] relative self-stretch ${STYLES.labelText}`}>
-                                  Phone Number
-                                </div>
-                                <div className={`relative self-stretch ${STYLES.valueText}`}>
-                                  {residence.landlordPhoneNumber || 'N/A'}
-                                </div>
+                              <div className={`${STYLES.valueText} break-words max-w-xs`}>
+                                {residence.fullAddress}
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                              <div className="flex flex-col w-[348px] items-start gap-1.5 relative">
-                                <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                                  Email
-                                </div>
-                                <div className={`relative self-stretch ${STYLES.valueText}`}>
-                                  {residence.landlordEmail || 'N/A'}
-                                </div>
+                            <div className="gap-1.5 flex flex-col items-start">
+                              <div className={`${STYLES.labelText}`}>
+                                Monthly Payment
+                              </div>
+                              <div className={`${STYLES.valueText}`}>
+                                {residence.formattedPayment}
+                              </div>
+                            </div>
+
+                            {/* Row 2: Length, Property Manager, Phone */}
+                            <div className="gap-1.5 flex flex-col items-start">
+                              <div className={`${STYLES.labelText}`}>
+                                Length of Residence
+                              </div>
+                              <div className={`${STYLES.valueText}`}>
+                                {residence.durationOfTenancy ? `${residence.durationOfTenancy} months` : 'N/A'}
+                              </div>
+                            </div>
+
+                            <div className="gap-1.5 flex flex-col items-start">
+                              <div className={`${STYLES.labelText}`}>
+                                Property Manager Name
+                              </div>
+                              <div className={`${STYLES.valueText}`}>
+                                {residence.landlordName || 'N/A'}
+                              </div>
+                            </div>
+
+                            <div className="gap-1.5 flex flex-col items-start">
+                              <div className={`${STYLES.labelText}`}>
+                                Phone Number
+                              </div>
+                              <div className={`${STYLES.valueText}`}>
+                                {residence.landlordPhoneNumber || 'N/A'}
+                              </div>
+                            </div>
+
+                            {/* Row 3: Email spans full width */}
+                            <div className="gap-1.5 flex flex-col items-start sm:col-span-3">
+                              <div className={`${STYLES.labelText}`}>
+                                Email
+                              </div>
+                              <div className={`${STYLES.valueText}`}>
+                                {residence.landlordEmail || 'N/A'}
                               </div>
                             </div>
                           </div>
@@ -889,37 +887,41 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               <ChevronDownIcon className="w-5 h-5" />
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <section className="flex items-start gap-6 mt-6 w-full">
-                <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
-                  <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                    Total Income
+              <section className="flex flex-col sm:flex-row items-start gap-6 mt-6 w-full">
+                <div className="flex items-center gap-6 pb-4 relative flex-1 grow">
+                  <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
+                    <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                      Total Income
+                    </div>
+                    <div className={`relative self-stretch ${STYLES.valueText}`}>
+                      {formatCurrency(getTotalMonthlyIncome())}/month
+                    </div>
                   </div>
-                  <div className={`relative self-stretch ${STYLES.valueText}`}>
-                    {formatCurrency(getTotalMonthlyIncome())}/month
+                  <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
+                    <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
+                      Rent to Income Ratio
+                    </div>
+                    <div className="flex items-start gap-1.5 md:gap-6 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className={`relative w-fit mt-[-1.00px] ${STYLES.valueText}`}>
+                        {getRentToIncomeRatio().ratio}
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="flex w-[68px] items-center justify-center gap-1 px-2 py-0.5 rounded-md overflow-hidden border border-solid"
+                        style={{ borderColor: getRentToIncomeRatio().color }}
+                      >
+                        <div className="inline-flex items-center justify-center px-0.5 py-0 relative flex-[0_0_auto]">
+                          <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap"
+                               style={{ color: getRentToIncomeRatio().color }}>
+                            {getRentToIncomeRatio().badge}
+                          </div>
+                        </div>
+                      </Badge>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex flex-col w-[235px] items-start gap-1.5 relative">
-                  <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                    Rent to Income Ratio
-                  </div>
-                  <div className="flex items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-                    <div className={`relative w-fit mt-[-1.00px] ${STYLES.valueText}`}>
-                      {getRentToIncomeRatio().ratio}
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className="flex w-[68px] items-center justify-center gap-1 px-2 py-0.5 rounded-md overflow-hidden border border-solid"
-                      style={{ borderColor: getRentToIncomeRatio().color }}
-                    >
-                      <div className="inline-flex items-center justify-center px-0.5 py-0 relative flex-[0_0_auto]">
-                        <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap"
-                             style={{ color: getRentToIncomeRatio().color }}>
-                          {getRentToIncomeRatio().badge}
-                        </div>
-                      </div>
-                    </Badge>
-                  </div>
+                <div className="w-[180px] flex items-center justify-end">
+                  {/* Spacer to align with View Proof buttons below */}
                 </div>
               </section>
 
@@ -934,9 +936,9 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 }
                 
                 return incomes.map((income, index) => (
-                  <section key={`income-source-${index}`} className="flex items-start gap-6 relative self-stretch w-full flex-[0_0_auto] pb-4">
+                  <section key={`income-source-${index}`} className="flex flex-col sm:flex-row items-start gap-6 relative self-stretch w-full flex-[0_0_auto] pb-4">
                     <div className="flex items-center gap-6 relative flex-1 grow">
-                      <div className="w-[300px] gap-1.5 flex flex-col items-start relative">
+                      <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                         <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                           {income.sourceLabel}
                         </div>
@@ -945,7 +947,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                         </div>
                       </div>
 
-                      <div className="w-[389px] gap-1.5 flex flex-col items-start relative">
+                      <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                         <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                           Monthly Amount
                         </div>
@@ -1052,6 +1054,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
         </Card>
 
       </section>
+      </div>
     </main>
   );
 };
