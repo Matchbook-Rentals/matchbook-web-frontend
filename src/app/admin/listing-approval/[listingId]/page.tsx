@@ -5,8 +5,8 @@ import Image from 'next/image'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { formatDate } from '@/lib/utils'
-import { ApprovalActions } from './approval-actions'
 import { LocationChangesSection } from './location-changes-section'
+import { ApprovalSectionWrapper } from './approval-section-wrapper'
 import { getLocationChangesForListing } from '../../address-change-approvals/_actions'
 
 export default async function ListingApprovalDetail({
@@ -163,7 +163,11 @@ export default async function ListingApprovalDetail({
           {listing.approvalStatus === 'pendingReview' && (
             <div className="mt-8">
               <LocationChangesSection locationChanges={locationChanges} />
-              <ApprovalActions listingId={listing.id} listingTitle={listing.title} />
+              <ApprovalSectionWrapper
+                listingId={listing.id} 
+                listingTitle={listing.title}
+                locationChanges={locationChanges}
+              />
             </div>
           )}
 
@@ -182,7 +186,11 @@ export default async function ListingApprovalDetail({
                 )}
               </div>
               
-              <ApprovalActions listingId={listing.id} listingTitle={listing.title} />
+              <ApprovalSectionWrapper
+                listingId={listing.id} 
+                listingTitle={listing.title}
+                locationChanges={locationChanges}
+              />
             </div>
           )}
         </CardContent>

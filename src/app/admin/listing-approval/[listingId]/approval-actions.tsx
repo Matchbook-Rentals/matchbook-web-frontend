@@ -9,7 +9,43 @@ import { useRouter } from 'next/navigation'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Input } from '@/components/ui/input'
 
-export function ApprovalActions({ listingId, listingTitle }: { listingId: string, listingTitle?: string }) {
+interface LocationChange {
+  id: string
+  createdAt: Date
+  changedFields: string[]
+  oldStreetAddress1: string | null
+  oldStreetAddress2: string | null
+  oldCity: string | null
+  oldState: string | null
+  oldPostalCode: string | null
+  oldLatitude: number | null
+  oldLongitude: number | null
+  newStreetAddress1: string | null
+  newStreetAddress2: string | null
+  newCity: string | null
+  newState: string | null
+  newPostalCode: string | null
+  newLatitude: number | null
+  newLongitude: number | null
+  user: {
+    id: string
+    firstName: string | null
+    lastName: string | null
+    email: string | null
+  } | null
+}
+
+export function ApprovalActions({ 
+  listingId, 
+  listingTitle,
+  locationChanges = [],
+  selectedCoordinates = null
+}: { 
+  listingId: string
+  listingTitle?: string
+  locationChanges?: LocationChange[]
+  selectedCoordinates?: { lat: number, lng: number } | null
+}) {
   const [comment, setComment] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [deleteConfirmation, setDeleteConfirmation] = useState('')
@@ -19,9 +55,18 @@ export function ApprovalActions({ listingId, listingTitle }: { listingId: string
   const handleAction = async (action: 'approve' | 'reject') => {
     setIsLoading(true)
     try {
-      await approveRejectListing(listingId, action, comment)
+      // Pass coordinates only when approving
+      const latitude = action === 'approve' && selectedCoordinates ? selectedCoordinates.lat : undefined
+      const longitude = action === 'approve' && selectedCoordinates ? selectedCoordinates.lng : undefined
+      
+      await approveRejectListing(listingId, action, comment, latitude, longitude)
+      
+      const successMessage = action === 'approve' && selectedCoordinates
+        ? `Listing approved with updated coordinates (${latitude?.toFixed(6)}, ${longitude?.toFixed(6)})`
+        : `Listing ${action === 'approve' ? 'approved' : 'rejected'} successfully`
+      
       toast({
-        title: `Listing ${action === 'approve' ? 'approved' : 'rejected'} successfully`,
+        title: successMessage,
         description: `The listing has been ${action === 'approve' ? 'approved' : 'rejected'}.`,
       })
       router.refresh()
@@ -36,6 +81,7 @@ export function ApprovalActions({ listingId, listingTitle }: { listingId: string
       setIsLoading(false)
     }
   }
+
 
   const handleDelete = async () => {
     setIsLoading(true)

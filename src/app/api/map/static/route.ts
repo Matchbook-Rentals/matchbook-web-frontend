@@ -4,6 +4,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const latitude = searchParams.get('latitude');
   const longitude = searchParams.get('longitude');
+  const zoom = searchParams.get('zoom') || '12';
 
   if (!latitude || !longitude) {
     return NextResponse.json(
@@ -12,7 +13,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const locationIqUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.LOCATIONIQ_API_KEY}&center=${latitude},${longitude}&zoom=12&size=1330x526&markers=icon:small-red-cutout|${latitude},${longitude}`;
+  const locationIqUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.LOCATIONIQ_API_KEY}&center=${latitude},${longitude}&zoom=${zoom}&size=1330x526&markers=icon:small-red-cutout|${latitude},${longitude}`;
 
   try {
     const response = await fetch(locationIqUrl);

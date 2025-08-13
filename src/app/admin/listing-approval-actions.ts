@@ -94,21 +94,42 @@ export async function getListingDetails(listingId: string) {
   return listing
 }
 
-export async function approveRejectListing(listingId: string, action: 'approve' | 'reject', comment?: string) {
+export async function approveRejectListing(
+  listingId: string, 
+  action: 'approve' | 'reject', 
+  comment?: string,
+  newLatitude?: number,
+  newLongitude?: number
+) {
   if (!checkRole('admin')) {
     throw new Error('Unauthorized')
+  }
+
+  // Build the update data
+  const updateData: any = {
+    approvalStatus: action === 'approve' ? 'approved' : 'rejected',
+    isApproved: action === 'approve',
+    lastApprovalDecision: new Date(),
+    lastDecisionComment: comment || null
+  }
+
+  // If approving with new coordinates, update them
+  if (action === 'approve' && newLatitude !== undefined && newLongitude !== undefined) {
+    updateData.latitude = newLatitude
+    updateData.longitude = newLongitude
+    
+    // Add coordinates update info to the comment
+    const coordsInfo = `Coordinates updated to: ${newLatitude.toFixed(6)}, ${newLongitude.toFixed(6)}`
+    updateData.lastDecisionComment = comment 
+      ? `${comment}\n${coordsInfo}` 
+      : coordsInfo
   }
 
   const listing = await prisma.listing.update({
     where: {
       id: listingId
     },
-    data: {
-      approvalStatus: action === 'approve' ? 'approved' : 'rejected',
-      isApproved: action === 'approve',
-      lastApprovalDecision: new Date(),
-      lastDecisionComment: comment || null
-    }
+    data: updateData
   })
 
   revalidatePath('/admin/listing-approval')

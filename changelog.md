@@ -1,5 +1,14 @@
 # Changelog
 
+## Add latitude/longitude update functionality to listing approval
+- Added LocationCoordinatesSection component for geocoding and coordinate management
+- Implemented visual map comparison with side-by-side current vs new location views
+- Added "See new coordinates" button to geocode addresses on demand
+- Enhanced map API to support zoom parameter for better detail visibility
+- Updated approval actions to accept and save new coordinates to database
+- Added coordinate update audit trail in approval comments
+- Implemented distance calculation between old and new locations using Haversine formula
+
 ## Improve photo selection UI and mobile layout for property creation
 - Replaced plus icons with image icons for better visual clarity in photo placeholders
 - Updated cover photo placeholder text to "Select 4 photos from below in the order they should appear"
