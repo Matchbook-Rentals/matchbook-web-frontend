@@ -331,7 +331,7 @@ export function LocationCoordinatesSection({ locationChanges, onCoordinatesUpdat
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-gray-500 text-sm px-4 text-center">
-                    Click "See new coordinates" above to view new map location
+                    Click &quot;See new coordinates&quot; above to view new map location
                   </div>
                 )}
               </div>

@@ -8,6 +8,7 @@
 - Updated approval actions to accept and save new coordinates to database
 - Added coordinate update audit trail in approval comments
 - Implemented distance calculation between old and new locations using Haversine formula
+- Fixed React unescaped entities linting issue in location coordinates section
 
 ## Improve photo selection UI and mobile layout for property creation
 - Replaced plus icons with image icons for better visual clarity in photo placeholders
