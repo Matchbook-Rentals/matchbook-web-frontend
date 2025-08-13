@@ -1,5 +1,12 @@
 # Changelog
 
+## Improve photo selection UI and mobile layout for property creation
+- Replaced plus icons with image icons for better visual clarity in photo placeholders
+- Updated cover photo placeholder text to "Select 4 photos from below in the order they should appear"
+- Removed text labels from smaller photo placeholders for cleaner interface
+- Repositioned "Watch Upload Tutorial" button below title on mobile screens for better accessibility
+- Maintained original button position on medium+ screens for desktop consistency
+
 ## Add unapprove functionality to application details dropdown menu
 - Added functional dropdown menu to replace static "..." button in application header
 - Implemented unapprove action for approved applications with proper loading states

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { PlusIcon } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import type { NullableListingImage } from "./add-property-client";
 
 interface ListingPhotoSelectionProps {
@@ -105,9 +105,9 @@ export const ListingPhotoSelection: React.FC<ListingPhotoSelectionProps> = ({
             ) : (
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="flex flex-col items-center gap-2">
-                  <PlusIcon className="w-6 h-6 text-[#5d606d]" />
-                  <span className="font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
-                    Add
+                  <ImageIcon className="w-6 h-6 text-[#5d606d]" />
+                  <span className="font-text-label-xsmall-regular px-4 md:px-6 font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                    Select 4 photos from below in the order they should appear
                   </span>
                 </div>
               </div>
@@ -134,10 +134,7 @@ export const ListingPhotoSelection: React.FC<ListingPhotoSelectionProps> = ({
                     />
                   ) : (
                     <div className="flex flex-col items-center gap-2">
-                      <PlusIcon className="w-6 h-6 text-[#5d606d]" />
-                      <span className="font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
-                        {idx === 3 ? 'Add More' : 'Add'}
-                      </span>
+                      <ImageIcon className="w-6 h-6 text-[#5d606d]" />
                     </div>
                   )}
                   {/* Action buttons overlay - always visible on mobile, hover on desktop */}

@@ -1046,7 +1046,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         {/* Mobile restructured header */}
         {currentStep !== 12 && (
           <div className="w-full max-w-[883px] mx-auto">
-            {/* Title row - title on left, video button on right */}
+            {/* Title row - title on left, video button on right for medium+ */}
             <div className="px-4 pt-6">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
@@ -1062,18 +1062,34 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                     </p>
                   )}
                 </div>
+                {/* Video button - hidden on mobile, shown on medium+ */}
                 <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
                   <DialogTrigger asChild>
                     <BrandButton 
                       variant="ghost"
                       size="sm"
-                      className="text-sm ml-4 whitespace-nowrap text-primaryBrand"
+                      className="hidden md:block text-sm ml-4 whitespace-nowrap text-primaryBrand"
                     >
                       Watch Upload Tutorial
                     </BrandButton>
                   </DialogTrigger>
                 </Dialog>
               </div>
+            </div>
+            
+            {/* Mobile video button - shown on mobile only, below title */}
+            <div className="px-0 pt-2 md:hidden">
+              <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
+                <DialogTrigger asChild>
+                  <BrandButton 
+                    variant="ghost"
+                    size="sm"
+                    className="text-sm whitespace-nowrap text-primaryBrand"
+                  >
+                    Watch Upload Tutorial
+                  </BrandButton>
+                </DialogTrigger>
+              </Dialog>
             </div>
             
             {/* Save & Exit button row - top left */}
