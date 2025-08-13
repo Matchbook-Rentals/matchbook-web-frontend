@@ -437,3 +437,14 @@
 - Enhanced SignableField component with auto-sign functionality for signature fields
 - Added proper workflow state management for signer transitions
 - Improved document creation workflow to set status and currentStep at creation time
+
+## Navigation and Route Updates
+- Updated user menu: made verification available to all users and changed route to /verification
+- Added Overview and All Listings menu items to host dashboard navigation
+- Converted legacy host routes (/applications, /listings, /bookings, /payouts) to redirects pointing to dashboard equivalents
+
+## Video Tutorial Feature
+- Added "Watch Upload Tutorial" button to add-property page header
+- Implemented responsive video dialog with autoplay functionality
+- Configured mobile-optimized sizing with max height constraints
+- Added tutorial video for listing upload process

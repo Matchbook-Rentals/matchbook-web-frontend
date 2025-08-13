@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogTrigger } from '@/components/brandDialog';
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -164,6 +165,9 @@ export default function AddPropertyclient({ draftData }: AddPropertyClientProps)
   
   // State to track created listing ID for Hospitable integration
   const [createdListingId, setCreatedListingId] = useState<string | null>(null);
+  
+  // State to track video dialog
+  const [isVideoDialogOpen, setIsVideoDialogOpen] = useState<boolean>(false);
   
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
@@ -1042,19 +1046,34 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         {/* Mobile restructured header */}
         {currentStep !== 12 && (
           <div className="w-full max-w-[883px] mx-auto">
-            {/* Title row - top left */}
+            {/* Title row - title on left, video button on right */}
             <div className="px-4 pt-6">
-              <h1 className="font-['Poppins'] text-xl md:text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
-                {getStepInfo(currentStep).title}
-              </h1>
-              {getStepInfo(currentStep).subtitle && (
-                <p 
-                  className="font-['Poppins'] text-sm font-normal leading-normal mt-1"
-                  style={{ color: 'var(--Nuetral-nuetral-700, #5D606D)' }}
-                >
-                  {getStepInfo(currentStep).subtitle}
-                </p>
-              )}
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h1 className="font-['Poppins'] text-xl md:text-2xl font-semibold leading-normal" style={{ color: 'var(--Nuetral-nuetral-800, #484A54)' }}>
+                    {getStepInfo(currentStep).title}
+                  </h1>
+                  {getStepInfo(currentStep).subtitle && (
+                    <p 
+                      className="font-['Poppins'] text-sm font-normal leading-normal mt-1"
+                      style={{ color: 'var(--Nuetral-nuetral-700, #5D606D)' }}
+                    >
+                      {getStepInfo(currentStep).subtitle}
+                    </p>
+                  )}
+                </div>
+                <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
+                  <DialogTrigger asChild>
+                    <BrandButton 
+                      variant="ghost"
+                      size="sm"
+                      className="text-sm ml-4 whitespace-nowrap text-primaryBrand"
+                    >
+                      Watch Upload Tutorial
+                    </BrandButton>
+                  </DialogTrigger>
+                </Dialog>
+              </div>
             </div>
             
             {/* Save & Exit button row - top left */}
@@ -1257,6 +1276,33 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
             </div>
           </div>
         )}
+        
+        {/* Video Tutorial Dialog */}
+        <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
+          <DialogContent className="w-full h-auto max-h-[90dvh] md:w-[80vw] md:h-auto md:max-w-none fixed top-[15vh] md:top-[22vh] left-[50%] translate-x-[-50%] translate-y-0" onOpenAutoFocus={(e) => e.preventDefault()}>
+            <div className="flex flex-col gap-4 h-full overflow-hidden">
+              <h2 className="text-xl text-center font-semibold text-gray-900">Listing Upload Tutorial</h2>
+              <div className="w-full flex-1 min-h-0">
+                <video 
+                  controls 
+                  autoPlay
+                  className="w-full h-full max-h-[70dvh]  object-contain rounded-lg"
+                  preload="metadata"
+                >
+                  <source 
+                    src="/videos/tutorials/listing-upload/Listing Upload Walkthrough.mov" 
+                    type="video/quicktime"
+                  />
+                  <source 
+                    src="/videos/tutorials/listing-upload/Listing Upload Walkthrough.mov" 
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video tag. Please try a different browser or download the video to view it.
+                </video>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
         
       </div>
     </main>
