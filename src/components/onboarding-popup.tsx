@@ -31,7 +31,7 @@ export const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className="flex flex-col items-center gap-0 p-0 bg-white w-[95vw] max-w-[609px] mx-auto border-0 shadow-lg !top-[20%] translate-y-[-50%]"
+        className="flex flex-col items-center gap-0 p-0 bg-white w-[95vw] max-w-[670px] mx-auto border-0 shadow-lg !top-[20%] translate-y-[-50%]"
         showCloseButton={false}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
@@ -42,8 +42,8 @@ export const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
               We Are Now Onboarding Hosts!
             </h2>
             <p className="font-['Poppins',Helvetica] text-neutralneutral-700 text-sm">
-              List now to receive priority ranking for your property. Renter Launch
-              coming this September
+              List now to receive priority ranking for your property. <span className="font-semibold">Renter Launch
+              coming this September</span>
             </p>
           </CardContent>
 
