@@ -259,8 +259,8 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     if (booking.status === "awaiting_signature" || booking.id.startsWith("match-")) {
       router.push(`/app/host/match/${booking.matchId}`);
     } else {
-      // Navigate to regular booking details page
-      router.push(`/app/host/bookings/${booking.id}`);
+      // Navigate to listing-specific booking details page
+      router.push(`/app/host/${booking.listingId}/bookings/${booking.id}`);
     }
   };
 

@@ -16,7 +16,7 @@ interface Occupant {
   icon: string;
 }
 
-interface HostBookingCardProps {
+interface HostBookingDetailsCardProps {
   name: string;
   status: string;
   dates: string;
@@ -25,17 +25,22 @@ interface HostBookingCardProps {
   price: string;
   occupants: Occupant[];
   profileImage?: string;
-  onBookingDetails?: () => void;
-  onMessageGuest?: () => void;
   onManageListing?: () => void;
   className?: string;
   isLoading?: boolean;
+  // Props for three custom buttons
+  primaryButtonText?: string;
+  secondaryButtonText?: string;
+  tertiaryButtonText?: string;
+  onPrimaryAction?: () => void;
+  onSecondaryAction?: () => void;
+  onTertiaryAction?: () => void;
   // New props for messaging functionality
   listingId?: string;
   guestUserId?: string;
 }
 
-const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
+const HostBookingDetailsCardMobile: React.FC<HostBookingDetailsCardProps> = ({
   name,
   status,
   dates,
@@ -44,11 +49,15 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
   price,
   occupants,
   profileImage = "/image-35.png",
-  onBookingDetails,
-  onMessageGuest,
   onManageListing,
   className = "",
   isLoading = false,
+  primaryButtonText,
+  secondaryButtonText,
+  tertiaryButtonText,
+  onPrimaryAction,
+  onSecondaryAction,
+  onTertiaryAction,
   listingId,
   guestUserId,
 }) => {
@@ -198,11 +207,11 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 w-full">
+        <div className="flex flex-wrap items-center gap-3 w-full">
           <Button
             variant="outline"
             className="flex-1 border-[#3c8787] text-[#3c8787] font-semibold hover:text-[#3c8787] hover:bg-transparent"
-            onClick={onBookingDetails}
+            onClick={onPrimaryAction}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -211,21 +220,29 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
                 Loading...
               </>
             ) : (
-              'Booking Details'
+              primaryButtonText || 'Primary Action'
             )}
+          </Button>
+          <Button
+            variant="outline"
+            className="flex-1 border-[#3c8787] text-[#3c8787] font-semibold hover:text-[#3c8787] hover:bg-transparent"
+            onClick={onSecondaryAction}
+            disabled={isLoading}
+          >
+            {secondaryButtonText || 'Secondary Action'}
           </Button>
           <Button 
             className="flex-1 bg-[#3c8787] hover:bg-[#3c8787]/90 text-white"
-            onClick={listingId && guestUserId ? handleMessageRenter : onMessageGuest}
+            onClick={listingId && guestUserId && tertiaryButtonText === 'Message Renter' ? handleMessageRenter : onTertiaryAction}
             disabled={isLoading || messagingLoading}
           >
-            {messagingLoading ? (
+            {(messagingLoading && tertiaryButtonText === 'Message Renter') ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 Loading...
               </>
             ) : (
-              'Message Renter'
+              tertiaryButtonText || 'Tertiary Action'
             )}
           </Button>
         </div>
@@ -234,7 +251,7 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
   );
 };
 
-export const HostBookingCard: React.FC<HostBookingCardProps> = ({
+export const HostBookingDetailsCard: React.FC<HostBookingDetailsCardProps> = ({
   name,
   status,
   dates,
@@ -243,11 +260,15 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
   price,
   occupants,
   profileImage = "/image-35.png",
-  onBookingDetails,
-  onMessageGuest,
   onManageListing,
   className = "",
   isLoading = false,
+  primaryButtonText,
+  secondaryButtonText,
+  tertiaryButtonText,
+  onPrimaryAction,
+  onSecondaryAction,
+  onTertiaryAction,
   listingId,
   guestUserId,
 }) => {
@@ -300,7 +321,7 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
   // Render mobile version on small screens
   if (isMobile) {
     return (
-      <HostBookingCardMobile
+      <HostBookingDetailsCardMobile
         name={name}
         status={status}
         dates={dates}
@@ -309,11 +330,15 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
         price={price}
         occupants={occupants}
         profileImage={profileImage}
-        onBookingDetails={onBookingDetails}
-        onMessageGuest={onMessageGuest}
         onManageListing={onManageListing}
         className={className}
         isLoading={isLoading}
+        primaryButtonText={primaryButtonText}
+        secondaryButtonText={secondaryButtonText}
+        tertiaryButtonText={tertiaryButtonText}
+        onPrimaryAction={onPrimaryAction}
+        onSecondaryAction={onSecondaryAction}
+        onTertiaryAction={onTertiaryAction}
         listingId={listingId}
         guestUserId={guestUserId}
       />
@@ -446,10 +471,10 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
                 {price}
               </div>
 
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 w-full">
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full">
                 <BrandButton
                   variant="outline"
-                  onClick={onBookingDetails}
+                  onClick={onPrimaryAction}
                   disabled={isLoading}
                   className="w-full md:w-auto whitespace-nowrap"
                 >
@@ -459,23 +484,32 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
                       Loading...
                     </>
                   ) : (
-                    'Booking Details'
+                    primaryButtonText || 'Primary Action'
                   )}
                 </BrandButton>
 
                 <BrandButton 
+                  variant="outline"
+                  onClick={onSecondaryAction}
+                  disabled={isLoading}
+                  className="w-full md:w-auto whitespace-nowrap"
+                >
+                  {secondaryButtonText || 'Secondary Action'}
+                </BrandButton>
+
+                <BrandButton 
                   variant="default"
-                  onClick={listingId && guestUserId ? handleMessageRenter : onMessageGuest}
+                  onClick={listingId && guestUserId && tertiaryButtonText === 'Message Renter' ? handleMessageRenter : onTertiaryAction}
                   disabled={isLoading || messagingLoading}
                   className="w-full md:w-auto whitespace-nowrap"
                 >
-                  {messagingLoading ? (
+                  {(messagingLoading && tertiaryButtonText === 'Message Renter') ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
                       Loading...
                     </>
                   ) : (
-                    'Message Renter'
+                    tertiaryButtonText || 'Tertiary Action'
                   )}
                 </BrandButton>
               </div>
