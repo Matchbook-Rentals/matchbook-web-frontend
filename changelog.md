@@ -1,5 +1,9 @@
 # Changelog
 
+## Pass user details to RenterNavbar in 404 page
+- Updated not-found page to pass user authentication props to RenterNavbar component
+- Ensures consistent user state management across both MatchbookHeader and RenterNavbar
+
 ## Update onboarding popup styling
 - Increased popup width by 10% for better visibility
 - Applied semibold font styling to "Renter Launch coming this September" text
