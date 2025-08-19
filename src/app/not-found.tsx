@@ -24,7 +24,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-background">
       {/* Conditional Navigation */}
-      {isPlatformPage ? <RenterNavbar /> : <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={isSignedIn} />}
+      {isPlatformPage ? <RenterNavbar userId={user?.id || null} user={userObject} isSignedIn={isSignedIn} /> : <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={isSignedIn} />}
       
       {/* 404 Content */}
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
