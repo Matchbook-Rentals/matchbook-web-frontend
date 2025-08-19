@@ -43,7 +43,7 @@ export default async function HostsPage(): Promise<React.ReactNode> {
           />
         </div>
 
-        <div className="w-full flex justify-center mt-12" >
+        <div className="w-full flex justify-center mt-12 bg-background" >
           <BrandButton size='xl' className="px-10" href="/app/host/add-property">
             List Your Property
           </BrandButton>

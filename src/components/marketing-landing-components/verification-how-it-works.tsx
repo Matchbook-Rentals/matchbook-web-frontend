@@ -84,7 +84,7 @@ export const VerificationHowItWorks = (): JSX.Element => {
       </header>
 
       {/* How it Works Image */}
-      <div className="flex justify-center">
+      <div className="flex justify-center bg-background">
         <img
           src="/marketing-images/verification/how-it-works.png"
           alt="How MatchBook Renter Verification Works"

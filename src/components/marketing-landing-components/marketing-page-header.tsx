@@ -28,8 +28,8 @@ export const MarketingPageHeader = ({
   };
 
   return (
-    <Card className="w-[1143px] px-8 md:px-[100px] py-8 md:py-10 flex flex-col items-center justify-center gap-3 rounded-xl border border-[#d1d5da]">
-      <CardContent className="p-0 flex flex-col items-center w-full">
+    <Card className="w-[1143px] px-8 md:px-[100px] py-8 md:py-10 flex flex-col items-center bg-background justify-center gap-3 rounded-xl border border-[#d1d5da]">
+      <CardContent className="p-0 flex flex-col items-center w-full bg-background">
         <div className="flex flex-col items-center">
           {highlightedText && (
             <p className="w-fit [font-family:'Lora',Helvetica] font-semibold text-[#0b6969] text-base text-center">

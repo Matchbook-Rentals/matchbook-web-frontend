@@ -22,7 +22,7 @@ export default async function VerificationPage() {
   return (
     <>
       <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
-      <div className="flex justify-center p-8">
+      <div className="flex justify-center p-8 bg-background">
         <MarketingPageHeader headerText="MatchBook Renter Verification" />
       </div>
       <div className="flex justify-center">
