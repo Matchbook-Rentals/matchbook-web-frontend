@@ -17,7 +17,8 @@ import { TemplateBrowser } from './TemplateBrowser';
 import { DocumentTemplateSelector } from './DocumentTemplateSelector';
 import { DocumentSelector } from './DocumentSelector';
 import { TripConfiguration } from './TripConfiguration';
-import { FieldFormType, FieldType, MatchDetails, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
+import { CustomFieldDialog } from './CustomFieldDialog';
+import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 
@@ -129,6 +130,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // PDF page tracking state
   const [pdfPagesReady, setPdfPagesReady] = useState(false);
   const [pageElements, setPageElements] = useState<Map<number, HTMLElement>>(new Map());
+
+  // Custom field dialog state
+  const [customFieldDialog, setCustomFieldDialog] = useState<{
+    isOpen: boolean;
+    field: FieldFormType | null;
+  }>({ isOpen: false, field: null });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -581,16 +588,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     console.log('✨ Creating new field:', newField);
     console.log('📝 Current fields before add:', fields.length, fields.map(f => ({ formId: f.formId, type: f.type })));
     
-    setFields([...fields, newField]);
-    setActiveFieldId(newField.formId);
+    // Field types that should trigger the custom field dialog
+    const customFieldTypes = [FieldType.TEXT, FieldType.NUMBER, FieldType.EMAIL, FieldType.NAME, FieldType.CHECKBOX, FieldType.DROPDOWN];
     
-    console.log('✅ Field creation completed, setting states to cleanup');
-
-    // Open settings for complex fields
-    if (ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING.includes(selectedField)) {
-      console.log('⚙️ Would open settings for:', newField);
-    }
-
     console.log('🧹 Cleaning up states:', {
       selectedField: selectedField + ' → null',
       pendingFieldLabel: pendingFieldLabel + ' → null',
@@ -599,11 +599,23 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       isMouseDown: 'false'
     });
 
+    // Clean up states first to prevent re-renders
     setSelectedField(null);
     setPendingFieldLabel(null);
     setIsDragging(false);
     setInteractionMode('idle');
     setIsMouseDown(false);
+    
+    if (customFieldTypes.includes(selectedField)) {
+      // Store the field temporarily and show custom field dialog
+      setCustomFieldDialog({ isOpen: true, field: newField });
+      console.log('⚙️ Opening custom field dialog for:', newField);
+    } else {
+      // For non-custom fields (like signature, initials), add directly
+      setFields([...fields, newField]);
+      setActiveFieldId(newField.formId);
+      console.log('✅ Field creation completed, setting states to cleanup');
+    }
     
     console.log('🏁 handlePageClick completed');
   }
@@ -1688,51 +1700,60 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     const nextField = unsignedFields[0];
     console.log('🎯 navigateToNextField: Next field:', nextField);
     
-    // Find the page element
-    const pageElement = document.querySelector(`[data-pdf-viewer-page][data-page-number="${nextField.pageNumber}"]`);
-    console.log('🎯 navigateToNextField: Page element found:', !!pageElement);
+    // Find the field element first
+    const fieldElement = document.querySelector(`[data-field-id="${nextField.formId}"]`) as HTMLElement;
+    console.log('🎯 navigateToNextField: Field element found:', !!fieldElement);
     
-    if (pageElement) {
-      // Scroll to the page
-      pageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      console.log('🎯 navigateToNextField: Scrolled to page');
+    if (fieldElement) {
+      // Scroll directly to the field and center it in the viewport
+      fieldElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center', 
+        inline: 'center' 
+      });
+      console.log('🎯 navigateToNextField: Scrolled to field');
       
-      // Find and flash the field element
+      // Apply flash effect after scroll completes
       setTimeout(() => {
-        const fieldElement = document.querySelector(`[data-field-id="${nextField.formId}"]`);
-        console.log('🎯 navigateToNextField: Field element found:', !!fieldElement);
+        // Store original styles
+        const originalBg = fieldElement.style.backgroundColor;
+        const originalTransition = fieldElement.style.transition;
+        const originalBoxShadow = fieldElement.style.boxShadow;
         
-        if (fieldElement) {
-          // Store original styles
-          const originalBg = fieldElement.style.backgroundColor;
-          const originalTransition = fieldElement.style.transition;
-          
-          // Apply flash effect using inline styles
-          fieldElement.style.transition = 'all 0.3s ease';
-          fieldElement.style.backgroundColor = '#0B6E6E'; // secondaryBrand color
-          console.log('🎯 navigateToNextField: Applied first flash');
+        // Apply flash effect using inline styles
+        fieldElement.style.transition = 'all 0.3s ease';
+        fieldElement.style.backgroundColor = '#0B6E6E'; // secondaryBrand color
+        fieldElement.style.boxShadow = '0 0 20px rgba(11, 110, 110, 0.5)'; // Add glow effect
+        console.log('🎯 navigateToNextField: Applied first flash');
+        
+        setTimeout(() => {
+          fieldElement.style.backgroundColor = originalBg || '';
+          fieldElement.style.boxShadow = originalBoxShadow || '';
+          console.log('🎯 navigateToNextField: Removed first flash');
           
           setTimeout(() => {
-            fieldElement.style.backgroundColor = originalBg || '';
-            console.log('🎯 navigateToNextField: Removed first flash');
+            fieldElement.style.backgroundColor = '#0B6E6E';
+            fieldElement.style.boxShadow = '0 0 20px rgba(11, 110, 110, 0.5)';
+            console.log('🎯 navigateToNextField: Applied second flash');
             
             setTimeout(() => {
-              fieldElement.style.backgroundColor = '#0B6E6E';
-              console.log('🎯 navigateToNextField: Applied second flash');
-              
-              setTimeout(() => {
-                fieldElement.style.backgroundColor = originalBg || '';
-                fieldElement.style.transition = originalTransition || '';
-                console.log('🎯 navigateToNextField: Completed flashing');
-              }, 300);
+              fieldElement.style.backgroundColor = originalBg || '';
+              fieldElement.style.boxShadow = originalBoxShadow || '';
+              fieldElement.style.transition = originalTransition || '';
+              console.log('🎯 navigateToNextField: Completed flashing');
             }, 300);
           }, 300);
-        } else {
-          console.warn('🎯 navigateToNextField: Could not find field element');
-        }
-      }, 500); // Wait for scroll to complete
+        }, 300);
+      }, 600); // Wait for scroll to complete
     } else {
-      console.warn('🎯 navigateToNextField: Could not find page element');
+      console.warn('🎯 navigateToNextField: Could not find field element, trying page fallback');
+      
+      // Fallback: scroll to page if field element not found
+      const pageElement = document.querySelector(`[data-pdf-viewer-page][data-page-number="${nextField.pageNumber}"]`);
+      if (pageElement) {
+        pageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        console.log('🎯 navigateToNextField: Scrolled to page as fallback');
+      }
     }
   };
 
@@ -1907,6 +1928,31 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     setInteractionMode('idle');
     setIsMouseDown(false);
     setMouseDownPosition({ x: 0, y: 0 });
+  };
+
+  // Custom field dialog handlers - simplified to avoid infinite loops
+  const handleCustomFieldSave = (fieldMeta: FieldMeta) => {
+    const currentField = customFieldDialog.field;
+    if (!currentField) return;
+
+    const updatedField = {
+      ...currentField,
+      fieldMeta: { ...currentField.fieldMeta, ...fieldMeta }
+    };
+
+    // Add field to fields array using functional update
+    setFields(prevFields => [...prevFields, updatedField]);
+    setActiveFieldId(updatedField.formId);
+    
+    // Close dialog
+    setCustomFieldDialog({ isOpen: false, field: null });
+    
+    console.log('✅ Custom field saved with metadata:', updatedField);
+  };
+
+  const handleCustomFieldCancel = () => {
+    setCustomFieldDialog({ isOpen: false, field: null });
+    console.log('❌ Custom field creation cancelled');
   };
 
   // Validate that field components are actually rendered in the DOM
@@ -2923,6 +2969,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           signerType={pendingSignerType}
         />
       )}
+
+      {/* Custom Field Configuration Dialog */}
+      <CustomFieldDialog
+        isOpen={customFieldDialog.isOpen}
+        onClose={handleCustomFieldCancel}
+        onSave={handleCustomFieldSave}
+        fieldType={customFieldDialog.field?.type || FieldType.TEXT}
+      />
     </div>
   );
 };
