@@ -56,18 +56,29 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     const handleDialogSelect = () => {
       const currentSlide = dialogApi.selectedScrollSnap();
       setDialogActiveImage(currentSlide);
-      // Only scroll thumbnail carousel when needed - estimate 4-5 visible thumbnails
+      
+      // Scroll thumbnail carousel to keep active image visible
       if (thumbnailApi) {
-        const visibleThumbnails = 5; // Approximate number of visible thumbnails
-        const currentThumbnailPosition = thumbnailApi.selectedScrollSnap();
+        // Get the scroll info from the thumbnail carousel
+        const slidesInView = thumbnailApi.slidesInView();
         
-        // Calculate if we need to scroll to keep the highlighted thumbnail visible
-        if (currentSlide >= currentThumbnailPosition + visibleThumbnails) {
-          // Need to scroll forward
-          thumbnailApi.scrollTo(currentSlide - visibleThumbnails + 1);
-        } else if (currentSlide < currentThumbnailPosition) {
-          // Need to scroll backward
-          thumbnailApi.scrollTo(currentSlide);
+        // Check if current slide is visible
+        if (!slidesInView.includes(currentSlide)) {
+          // If not visible, scroll to show it
+          // We'll position it to be the first visible slide if scrolling backward
+          // or last visible slide if scrolling forward
+          const firstVisible = slidesInView[0];
+          const lastVisible = slidesInView[slidesInView.length - 1];
+          
+          if (currentSlide < firstVisible) {
+            // Need to scroll backward - make it the first visible
+            thumbnailApi.scrollTo(currentSlide);
+          } else if (currentSlide > lastVisible) {
+            // Need to scroll forward - calculate position to make it the last visible
+            const visibleCount = slidesInView.length;
+            const targetPosition = Math.max(0, currentSlide - visibleCount + 1);
+            thumbnailApi.scrollTo(targetPosition);
+          }
         }
       }
     };
@@ -84,7 +95,10 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
         dialogApi.scrollTo(activeImage);
       }
       if (thumbnailApi) {
-        thumbnailApi.scrollTo(activeImage);
+        // Calculate position to center or show the active image optimally
+        const visibleCount = 5; // Approximate visible thumbnails
+        const targetPosition = Math.max(0, activeImage - Math.floor(visibleCount / 2));
+        thumbnailApi.scrollTo(targetPosition);
       }
     }
   }, [isDialogOpen, activeImage, dialogApi, thumbnailApi]);
@@ -108,6 +122,29 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     setDialogActiveImage(index);
     if (dialogApi) {
       dialogApi.scrollTo(index);
+    }
+    
+    // Update thumbnail carousel position to ensure clicked thumbnail is visible
+    if (thumbnailApi) {
+      const slidesInView = thumbnailApi.slidesInView();
+      
+      // Check if clicked thumbnail is already visible
+      if (!slidesInView.includes(index)) {
+        // If not visible, scroll to show it
+        const firstVisible = slidesInView[0];
+        const lastVisible = slidesInView[slidesInView.length - 1];
+        
+        if (index < firstVisible) {
+          // Clicked thumbnail is before visible range - scroll to it
+          thumbnailApi.scrollTo(index);
+        } else if (index > lastVisible) {
+          // Clicked thumbnail is after visible range
+          // Position it as the last visible thumbnail
+          const visibleCount = slidesInView.length;
+          const targetPosition = Math.max(0, index - visibleCount + 1);
+          thumbnailApi.scrollTo(targetPosition);
+        }
+      }
     }
   };
 
@@ -294,13 +331,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 {/* Thumbnail carousel */}
                 <div className="h-24">
                   <Carousel opts={{ loop: false, align: "start", slidesToScroll: 5 }} setApi={setThumbnailApi}>
-                    <CarouselContent className="-ml-2">
+                    <CarouselContent className="-ml-2 pt-1">
                       {uniqueImages.map((image, index) => (
                         <CarouselItem key={`thumb-${image.id}`} className="pl-2 basis-auto">
                           <div 
                             className={`relative cursor-pointer h-20 w-28 overflow-hidden rounded-lg border-2 transition-all duration-200 ${
                               index === dialogActiveImage 
-                                ? 'border-yellow-500 shadow-lg' 
+                                ? 'border-yellow-500 shadow-lg -translate-y-1' 
                                 : 'border-transparent hover:border-gray-300'
                             }`}
                             onClick={() => handleThumbnailClick(index)}
