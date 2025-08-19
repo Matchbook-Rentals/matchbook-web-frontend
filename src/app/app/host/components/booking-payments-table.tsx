@@ -145,24 +145,14 @@ export const BookingPaymentsTable = ({
   const tabs = [
     {
       value: "upcoming",
-      label: (
-        <>
-          <span className="hidden md:inline">Upcoming Payments</span>
-          <span className="md:hidden">Upcoming</span>
-        </>
-      ),
+      label: "Upcoming Payments",
       content: renderTable(paymentsData.upcoming),
       textSize: "text-base px-6",
       className: ''
     },
     {
       value: "past", 
-      label: (
-        <>
-          <span className="hidden md:inline">Past Payments</span>
-          <span className="md:hidden">Past</span>
-        </>
-      ),
+      label: "Past Payments",
       content: renderTable(paymentsData.past),
       textSize: "text-base px-6",
     },

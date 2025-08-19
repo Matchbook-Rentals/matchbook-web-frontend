@@ -1,85 +1,8 @@
-"use client";
-
 import React from "react";
-import { HostBookingDetailsCard } from "../../../components/host-booking-details-card";
-import { BookingPaymentsTable } from "../../../components/booking-payments-table";
-import { UserIcon, BabyIcon, PawPrintIcon } from "lucide-react";
-
-// Hardcoded booking data
-const bookingData = {
-  name: "Hassan Jehangir",
-  status: "Active",
-  dates: "5/31/2025 - 6/30/2025",
-  address: "2270 CheminBicolas-Austin Austin, TX",
-  description: "for Beville Beauty 1 bed 1 bath pet friendly",
-  price: "$2,800 / Month",
-  occupants: [
-    { type: "Adult", count: 1, icon: "/host-dashboard/svg/adult.svg" },
-    { type: "Children", count: 2, icon: "/host-dashboard/svg/kid.svg" },
-    { type: "pet", count: 0, icon: "/host-dashboard/svg/pet.svg" },
-  ],
-  profileImage: "/image-35.png",
-  // Hardcoded IDs for testing - in real implementation these would come from the booking data
-  guestUserId: "user_123", // This would be the actual renter's user ID
-};
-
-// Hardcoded payment data for this booking
-const paymentsData = {
-  upcoming: [
-    {
-      tenant: "Hassan Jehangir",
-      amount: "2,800",
-      type: "Monthly Rent",
-      method: "ACH Transfer",
-      bank: "Chase Bank",
-      dueDate: "Jan 1, 2025",
-      status: "Due",
-      avatarUrl: "/image-35.png"
-    },
-    {
-      tenant: "Hassan Jehangir",
-      amount: "2,800",
-      type: "Monthly Rent",
-      method: "ACH Transfer", 
-      bank: "Chase Bank",
-      dueDate: "Feb 1, 2025",
-      status: "Pending",
-      avatarUrl: "/image-35.png"
-    }
-  ],
-  past: [
-    {
-      tenant: "Hassan Jehangir",
-      amount: "2,800",
-      type: "Monthly Rent",
-      method: "ACH Transfer",
-      bank: "Chase Bank", 
-      dueDate: "Dec 1, 2024",
-      status: "Paid",
-      avatarUrl: "/image-35.png"
-    },
-    {
-      tenant: "Hassan Jehangir",
-      amount: "2,800",
-      type: "Monthly Rent",
-      method: "ACH Transfer",
-      bank: "Chase Bank",
-      dueDate: "Nov 1, 2024", 
-      status: "Paid",
-      avatarUrl: "/image-35.png"
-    },
-    {
-      tenant: "Hassan Jehangir",
-      amount: "1,000",
-      type: "Security Deposit",
-      method: "Wire Transfer",
-      bank: "Chase Bank",
-      dueDate: "Oct 15, 2024",
-      status: "Paid",
-      avatarUrl: "/image-35.png"
-    }
-  ]
-};
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import prisma from "@/lib/prismadb";
+import BookingDetailClient from "./booking-detail-client";
 
 interface BookingDetailPageProps {
   params: {
@@ -88,65 +11,163 @@ interface BookingDetailPageProps {
   };
 }
 
-export const Body = ({ listingId, bookingId }: { listingId: string; bookingId: string }): JSX.Element => {
-  const handleModifyDates = () => {
-    console.log('Modify dates for booking:', bookingId);
-    // TODO: Implement modify dates functionality
+function formatPrice(amount: number): string {
+  return `$${amount.toLocaleString()}`;
+}
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+function formatDateRange(startDate: Date, endDate: Date): string {
+  return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+}
+
+function formatAddress(listing: any): string {
+  const parts = [
+    listing.streetAddress1,
+    listing.city,
+    listing.state,
+    listing.postalCode
+  ].filter(Boolean);
+  return parts.join(', ');
+}
+
+type RentPayment = {
+  id: string;
+  amount: number;
+  dueDate: Date;
+  isPaid: boolean;
+};
+
+function getPaymentStatus(rentPayment: RentPayment): string {
+  if (rentPayment.isPaid) return "Paid";
+  
+  const now = new Date();
+  const dueDate = new Date(rentPayment.dueDate);
+  
+  if (dueDate < now) return "Overdue";
+  if (dueDate.getTime() - now.getTime() <= 7 * 24 * 60 * 60 * 1000) return "Due";
+  return "Pending";
+}
+
+export default async function BookingDetailPage({ params }: BookingDetailPageProps) {
+  const { userId } = auth();
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  // Fetch booking with all necessary relationships
+  const booking = await prisma.booking.findUnique({
+    where: { id: params.bookingId },
+    include: {
+      rentPayments: {
+        orderBy: { dueDate: 'asc' }
+      },
+      listing: {
+        select: {
+          userId: true,
+          title: true,
+          streetAddress1: true,
+          city: true,
+          state: true,
+          postalCode: true,
+          roomCount: true,
+          bathroomCount: true,
+          petsAllowed: true
+        }
+      },
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          fullName: true,
+          email: true,
+          imageUrl: true
+        }
+      },
+      trip: {
+        select: {
+          numAdults: true,
+          numChildren: true,
+          numPets: true
+        }
+      }
+    }
+  });
+
+  // Verify host owns the listing
+  if (!booking || booking.listing.userId !== userId) {
+    redirect("/app/host/dashboard");
+  }
+
+  // Format booking data for the card component
+  const renterName = booking.user.fullName || `${booking.user.firstName || ''} ${booking.user.lastName || ''}`.trim() || booking.user.email || 'Unknown Renter';
+  
+  const bookingData = {
+    name: renterName,
+    status: booking.status === 'active' ? 'Active' : booking.status.charAt(0).toUpperCase() + booking.status.slice(1),
+    dates: formatDateRange(booking.startDate, booking.endDate),
+    address: formatAddress(booking.listing),
+    description: `for ${booking.listing.title}`,
+    price: booking.monthlyRent ? `${formatPrice(booking.monthlyRent)} / Month` : 'Price TBD',
+    occupants: [
+      { type: "Adult", count: booking.trip?.numAdults || 1, icon: "/host-dashboard/svg/adult.svg" },
+      { type: "Children", count: booking.trip?.numChildren || 0, icon: "/host-dashboard/svg/kid.svg" },
+      { type: "pet", count: booking.trip?.numPets || 0, icon: "/host-dashboard/svg/pet.svg" },
+    ],
+    profileImage: booking.user.imageUrl || "/image-35.png",
+    guestUserId: booking.user.id,
   };
 
-  const handleViewLease = () => {
-    console.log('View lease for booking:', bookingId);
-    // TODO: Implement view lease functionality
-  };
+  // Format payment data for the table
+  const now = new Date();
+  // These are LIVE amounts from booking.rentPayments (real database data, not hardcoded)
+  const upcomingPayments = booking.rentPayments
+    .filter((payment: RentPayment) => new Date(payment.dueDate) >= now)
+    .map((payment: RentPayment) => ({
+      tenant: renterName,
+      amount: payment.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      type: "Monthly Rent",
+      method: "ACH Transfer",
+      bank: "Bank Account",
+      dueDate: formatDate(new Date(payment.dueDate)),
+      status: getPaymentStatus(payment),
+      avatarUrl: booking.user.imageUrl || "/image-35.png"
+    }));
 
-  const handleMessageRenter = () => {
-    console.log('Message renter for booking:', bookingId);
-    // TODO: Implement message renter functionality
-  };
+  const pastPayments = booking.rentPayments
+    .filter((payment: RentPayment) => new Date(payment.dueDate) < now)
+    .reverse()
+    .map((payment: RentPayment) => ({
+      tenant: renterName,
+      amount: payment.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      type: "Monthly Rent",
+      method: "ACH Transfer",
+      bank: "Bank Account",
+      dueDate: formatDate(new Date(payment.dueDate)),
+      status: getPaymentStatus(payment),
+      avatarUrl: booking.user.imageUrl || "/image-35.png"
+    }));
 
-  const handleManageListing = () => {
-    console.log('Manage listing:', listingId);
-    // TODO: Navigate to listing management
+  const paymentsData = {
+    upcoming: upcomingPayments,
+    past: pastPayments
   };
 
   return (
-    <div className="flex flex-col gap-6 px-6 py-8 bg-gray-50 min-h-screen">
-      <div className="flex flex-col gap-2 w-full">
-        <h1 className="font-medium text-gray-800 text-2xl">
-          Manage Booking
-        </h1>
-
-        <p className="text-gray-600 text-sm md:text-base leading-6">
-          Here you can make changes to dates and payments, all changes must be
-          reviewed and approved by renter before they take affect
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-6 w-full">
-        <HostBookingDetailsCard
-          {...bookingData}
-          primaryButtonText="Modify Dates"
-          secondaryButtonText="View Lease"
-          tertiaryButtonText="Message Renter"
-          onPrimaryAction={handleModifyDates}
-          onSecondaryAction={handleViewLease}
-          onTertiaryAction={handleMessageRenter}
-          onManageListing={handleManageListing}
-          listingId={listingId}
-          guestUserId={bookingData.guestUserId}
-          className="w-full"
-        />
-        
-        <BookingPaymentsTable
-          paymentsData={paymentsData}
-          renterName={bookingData.name}
-          renterAvatar={bookingData.profileImage}
-        />
-      </div>
-    </div>
+    <BookingDetailClient
+      bookingData={bookingData}
+      paymentsData={paymentsData}
+      renterName={renterName}
+      renterAvatar={booking.user.imageUrl || "/image-35.png"}
+      listingId={params.listingId}
+      bookingId={params.bookingId}
+    />
   );
-};
-
-export default async function BookingDetailPage({ params }: BookingDetailPageProps) {
-  return <Body listingId={params.listingId} bookingId={params.bookingId} />;
 }
