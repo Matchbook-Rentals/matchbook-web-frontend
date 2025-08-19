@@ -32,11 +32,11 @@ export const VerificationStandOut = (): JSX.Element => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 px-[150px] py-16 relative bg-white">
-      <Card className="flex flex-col w-[946px] items-center gap-10 px-[100px] py-8 relative bg-[#e7f0f0] rounded-xl overflow-hidden border-none">
+    <div className="flex flex-col items-center justify-center gap-2 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-32 py-16 relative bg-background">
+      <Card className="flex flex-col w-full max-w-4xl items-center gap-10 px-4 sm:px-6 md:px-12 lg:px-20 py-8 relative bg-[#e7f0f0] rounded-xl overflow-hidden border-none">
         <CardContent className="flex flex-col w-full items-center gap-10 p-0">
-          <div className="flex flex-col w-[568px] items-center gap-4 relative">
-            <h1 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
+          <div className="flex flex-col w-full max-w-2xl items-center gap-4 relative">
+            <h1 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-2xl sm:text-3xl md:text-4xl lg:text-[40px] text-center tracking-[-2.00px] leading-[normal]">
               Stand Out Without Breaking The Bank
             </h1>
 
@@ -52,10 +52,10 @@ export const VerificationStandOut = (): JSX.Element => {
                   key={index}
                   className="flex items-start gap-4 p-3 relative self-stretch w-full"
                 >
-                  <div className="absolute w-[42px] h-[43px] top-3.5 left-2 bg-[#b3d1d1] rounded-[21px/21.5px]" />
+                  <div className="absolute w-10 h-10 sm:w-[42px] sm:h-[42px] top-3.5 left-2 bg-[#b3d1d1] rounded-full" />
 
                   <img
-                    className="relative w-[42px] h-[42px]"
+                    className="relative w-10 h-10 sm:w-[42px] sm:h-[42px]"
                     alt="Feature icon"
                     src={feature.icon}
                   />
@@ -73,7 +73,7 @@ export const VerificationStandOut = (): JSX.Element => {
               ))}
             </div>
 
-            <Button className="relative w-[278px] h-[50px] bg-[#0a6b6c] text-white font-medium rounded-md hover:bg-[#085556] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <Button className="relative w-full sm:w-auto sm:min-w-[278px] h-12 sm:h-[50px] px-6 bg-[#0a6b6c] text-white font-medium rounded-md hover:bg-[#085556] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
               Start Screening
             </Button>
           </div>

@@ -26,10 +26,10 @@ export const VerificationWhyItMatters = (): JSX.Element => {
   ];
 
   return (
-    <section className="flex flex-col items-center justify-end gap-6 px-[150px] py-16 relative bg-[#fbfbfb]">
+    <section className="flex flex-col items-center justify-end gap-6 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-32 py-16 relative bg-[#fbfbfb]">
       {/* Header section with image and text */}
-      <div className="flex items-center gap-[54px] relative self-stretch w-full flex-[0_0_auto]">
-        <div className="relative w-[558px] h-[302px] rounded-xl overflow-hidden">
+      <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="relative w-full lg:w-1/2 h-64 sm:h-72 lg:h-80 rounded-xl overflow-hidden">
           <img
             src="/marketing-images/verification/why-it-works.png"
             alt="Why Renter Verification Matters"
@@ -37,8 +37,8 @@ export const VerificationWhyItMatters = (): JSX.Element => {
           />
         </div>
 
-        <div className="flex flex-col items-end justify-end gap-4 relative flex-1 grow">
-          <h1 className="relative self-stretch mt-[-1.00px] font-text-heading-small-medium font-medium text-gray-neutral900 text-[40px] tracking-[-2.00px] leading-[normal]">
+        <div className="flex flex-col items-start lg:items-end justify-start lg:justify-end gap-4 relative flex-1 grow">
+          <h1 className="relative self-stretch mt-[-1.00px] font-text-heading-small-medium font-medium text-gray-neutral900 text-2xl sm:text-3xl md:text-4xl lg:text-[40px] tracking-[-2.00px] leading-[normal]">
             Why Renter Verification Matters
           </h1>
 
@@ -53,13 +53,13 @@ export const VerificationWhyItMatters = (): JSX.Element => {
         {featureCards.map((card, index) => (
           <Card
             key={index}
-            className="flex-1 min-w-[200px] border border-solid border-[#e5e7ea] rounded-xl"
+            className="flex-1 min-w-full sm:min-w-[280px] md:min-w-[200px] border border-solid border-[#e5e7ea] rounded-xl"
           >
             <CardContent className="flex flex-col items-start gap-4 p-0">
               <div className="flex flex-col items-start gap-2 px-4 py-6 w-full">
                 <div className="relative w-11 h-11 bg-[#e7f0f0] mb-2 rounded-lg overflow-hidden">
                   <img
-                    className="absolute w-6 h-6 top-2.5 left-[11px]"
+                    className="absolute w-6 h-6 top-2.5 left-2.5"
                     alt="Icon"
                     src={card.icon}
                   />
