@@ -9,7 +9,7 @@ const PricingInfo: React.FC<PricingInfoProps> = ({ listing }) => {
   return (
     <div className="flex items-start justify-between w-full lg:hidden">
       {/* Monthly price */}
-      <div className="flex flex-col items-start gap-1">
+      <div className="flex flex-col items-start gap-1 pb-4">
         <span className="font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
           ${listing.price?.toLocaleString()}
         </span>
@@ -19,7 +19,7 @@ const PricingInfo: React.FC<PricingInfoProps> = ({ listing }) => {
       </div>
 
       {/* Deposit price */}
-      <div className="flex flex-col items-end gap-1">
+      <div className="flex flex-col items-end gap-1 pb-4">
         <span className="font-semibold text-[#373940] text-sm tracking-[0] font-['Poppins',Helvetica]">
           ${listing.depositSize ? listing.depositSize.toLocaleString() : 'N/A'}
         </span>

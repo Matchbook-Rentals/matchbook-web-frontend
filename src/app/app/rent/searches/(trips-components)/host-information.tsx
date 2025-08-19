@@ -31,11 +31,8 @@ const HostInformation: React.FC<HostInformationProps> = ({ listing }) => {
             </div>
 
             <div className="flex items-center gap-1 h-8">
-              <StarIcon className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-              <span className="font-normal text-[#717680] text-sm">
-                {listing?.averageRating || listing.uScore 
-                  ? (listing?.averageRating || listing.uScore?.toFixed(1)) 
-                  : 'N/A'} ({listing?.numberOfStays || 0})
+              <span className="italic text-gray-400 text-sm">
+                No reviews yet
               </span>
             </div>
           </div>

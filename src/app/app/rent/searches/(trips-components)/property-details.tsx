@@ -40,8 +40,8 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ listing }) => {
         </div>
       </div>
 
-      {/* Mobile Property Details */}
-      <div className="flex flex-wrap items-center justify-between gap-[24px_24px] relative self-stretch w-full lg:hidden">
+      {/* Mobile Property Details - Medium+ screens */}
+      <div className="md:flex flex-wrap items-center justify-between gap-[24px_24px] relative self-stretch w-full lg:hidden hidden">
         <div className="inline-flex items-center gap-2 relative">
           <MapPin className="w-5 h-5 text-[#5d606d]" />
           <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
@@ -68,6 +68,41 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ listing }) => {
           <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
             {listing.squareFootage?.toLocaleString() || 0} sqft
           </span>
+        </div>
+      </div>
+
+      {/* Mobile Property Details - Small screens */}
+      <div className="flex flex-wrap items-center justify-between gap-[24px_24px] relative self-stretch w-full md:hidden">
+        <div className="flex items-center justify-between gap-[24px] relative w-full">
+          <div className="inline-flex items-center gap-2 relative">
+            <MapPin className="w-5 h-5 text-[#5d606d]" />
+            <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+              {listing.city && listing.state ? `${listing.city}, ${listing.state}` : listing.city || listing.address || "Location"}
+            </span>
+          </div>
+          
+          <div className="inline-flex items-center gap-2 relative">
+            <Bed className="w-5 h-5 text-[#5d606d]" />
+            <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+              {listing.roomCount || 0} Bed
+            </span>
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between gap-[24px] relative w-full">
+          <div className="inline-flex items-center gap-2 relative">
+            <Bath className="w-5 h-5 text-[#5d606d]" />
+            <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+              {listing.bathroomCount || 0} Bath
+            </span>
+          </div>
+          
+          <div className="inline-flex items-center gap-2 relative">
+            <Square className="w-5 h-5 text-[#5d606d]" />
+            <span className="relative w-fit mt-[-1.00px] font-normal text-[#5d606d] text-sm text-center tracking-[0] font-['Poppins',Helvetica]">
+              {listing.squareFootage?.toLocaleString() || 0} sqft
+            </span>
+          </div>
         </div>
       </div>
     </>
