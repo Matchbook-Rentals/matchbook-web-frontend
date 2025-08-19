@@ -1,5 +1,9 @@
 # Changelog
 
+## Update onboarding popup styling
+- Increased popup width by 10% for better visibility
+- Applied semibold font styling to "Renter Launch coming this September" text
+
 ## Add latitude/longitude update functionality to listing approval
 - Added LocationCoordinatesSection component for geocoding and coordinate management
 - Implemented visual map comparison with side-by-side current vs new location views

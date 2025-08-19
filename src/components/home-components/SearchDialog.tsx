@@ -107,7 +107,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
       });
 
       if (response.success && response.trip) {
-        router.push(`/app/rent/searches/set-preferences/${response.trip.id}`);
+        router.push(`/app/rent/searches/${response.trip.id}`);
       } else {
         toast({
           variant: "destructive",
