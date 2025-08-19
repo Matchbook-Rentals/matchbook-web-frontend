@@ -11,7 +11,7 @@ const DescriptionSection: React.FC<DescriptionSectionProps> = ({ listing }) => {
   const MAX_LENGTH = 300;
   const [showMore, setShowMore] = useState(false);
   
-  const fullDescription = listing.description + listing.description + listing.description + listing.description;
+  const fullDescription = listing.description;
   const shouldTruncate = fullDescription.length > MAX_LENGTH;
   const displayText = shouldTruncate && !showMore 
     ? fullDescription.slice(0, MAX_LENGTH) 
@@ -23,7 +23,7 @@ const DescriptionSection: React.FC<DescriptionSectionProps> = ({ listing }) => {
         <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">
           Description
         </h3>
-        <p className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
+        <p className="font-['Poppins'] text-[16px] font-normal text-[#484A54] whitespace-pre-wrap">
           {displayText}
           {shouldTruncate && (
             <BrandButton
