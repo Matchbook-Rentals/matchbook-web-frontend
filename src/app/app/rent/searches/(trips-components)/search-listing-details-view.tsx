@@ -4,7 +4,7 @@ import ListingImageCarousel from './image-carousel';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import ListingDescription from './listing-info';
-import SearchListingDetailsBox from '../../old-search/(components)/search-listing-details-box';
+import ListingDetailsBoxWithState from './listing-details-box-with-state';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { BrandHeart, RejectIcon } from '@/components/icons';
@@ -63,6 +63,10 @@ function ListingDetailsView({
 }) {
   const { state } = useTripContext();
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
+  
+  // Check current like/dislike state for mobile buttons
+  const isLiked = state.lookup.favIds.has(listing.id);
+  const isDisliked = state.lookup.dislikedIds.has(listing.id);
   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
   const [mapCenter, setMapCenter] = useState<[number, number]>(() => [listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -96,56 +100,36 @@ function ListingDetailsView({
     };
   }, [mapCenter, listing]);
 
+  // Add this helper function for scroll to top behavior
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleLike = async () => {
-    await optimisticLike(listing.id, true);
+    scrollToTop();
+    if (isLiked) {
+      // Undo like
+      await optimisticRemoveLike(listing.id);
+    } else {
+      // Like the listing
+      await optimisticLike(listing.id, true);
+    }
   };
 
   const handleReject = async () => {
-    await optimisticDislike(listing.id);
+    scrollToTop();
+    if (isDisliked) {
+      // Undo dislike
+      await optimisticRemoveDislike(listing.id);
+    } else {
+      // Dislike the listing
+      await optimisticDislike(listing.id);
+    }
   };
 
-  // Desktop action buttons
-  const DesktopActionButtons = () => (
-    <div className="flex items-center gap-x-3">
-      <button
-        onClick={handleReject}
-        className={`w-[50px] drop-shadow aspect-square
-          flex items-center justify-center rounded-full
-          hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
-      >
-        <RejectIcon className={`w-[60%] h-[60%] text-white`} />
-      </button>
-
-      <button
-        onClick={handleLike}
-        className={`w-[50px] drop-shadow aspect-square flex
-          items-center justify-center rounded-full
-          hover:opacity-90 transition-opacity
-          bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
-      >
-        <BrandHeart className={`w-[60%] h-[60%]`} />
-      </button>
-    </div>
-  );
 
   return (
     <>
-      {/* Conditionally rendered top control box */}
-      {!isDetailsVisible && (
-        <div className="hidden lg:block sticky top-0 bg-background z-50 py-4 px-0 border-b-2 border-gray-200">
-          <div className='flex justify-between items-center'>
-            <div className='flex flex-col'>
-              <p className='text-lg font-medium'>{listing.title}</p>
-              <p className='text-sm'>Hosted by {listing.user?.firstName}</p>
-            </div>
-            <div className='flex items-center gap-x-4'>
-              <p className='text-lg font-medium'>${listing.price?.toLocaleString()}/month</p>
-              <DesktopActionButtons />
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className={cn("w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6", className)}>
         <ListingImageCarousel
           listingImages={listing.listingImages || []}
@@ -155,7 +139,7 @@ function ListingDetailsView({
           <div
             className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block"
           >
-            <SearchListingDetailsBox
+            <ListingDetailsBoxWithState
               listing={listing}
               onReject={handleReject}
               onLike={handleLike}

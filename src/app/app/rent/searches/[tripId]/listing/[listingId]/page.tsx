@@ -1,12 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { getTripById } from '@/app/actions/trips'
-import prisma from '@/lib/prismadb'
 import SearchListingDetailsView from '@/app/app/rent/searches/(trips-components)/search-listing-details-view'
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { useUser } from '@clerk/nextjs'
-import { PAGE_MARGIN } from '@/constants/styles'
 import { Loader2 } from 'lucide-react'
+import { APP_PAGE_MARGIN } from '@/constants/styles'
 
 interface ListingPageProps {
   params: {
@@ -49,8 +47,8 @@ export default function SearchListingPage({ params }: ListingPageProps) {
   }
 
   return (
-      <div className={`${PAGE_MARGIN} pt-2 md:pt-6`}>
-        <SearchListingDetailsView listingId={params.listingId} />
-      </div>
+    <div className={`${APP_PAGE_MARGIN} pt-2 md:pt-6`}>
+      <SearchListingDetailsView listingId={params.listingId} />
+    </div>
   )
 }

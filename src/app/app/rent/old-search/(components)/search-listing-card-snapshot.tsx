@@ -160,7 +160,7 @@ export default function SearchListingCard({ listing, status, className, style, d
       return;
     }
 
-    window.open(`/app/searches/${state.trip.id}/listing/${listing.id}`, '_blank', 'noopener,noreferrer');
+    window.open(`/app/rent/searches/${state.trip.id}/listing/${listing.id}`, '_blank', 'noopener,noreferrer');
   };
 
   return (

@@ -360,7 +360,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
             {/* See Full Details Button */}
             <div className="border-t border-gray-200 p-4">
               <Link
-                href={`/app/searches/${state.trip.id}/listing/${listing.id}`}
+                href={`/app/rent/searches/${state.trip.id}/listing/${listing.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
