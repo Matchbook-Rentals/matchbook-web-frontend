@@ -14,7 +14,7 @@
     --sab: env(safe-area-inset-bottom);
     --sal: env(safe-area-inset-left);
 
-    --background: white;
+    --background: 0 100% 99.6%;
     /*--background: 0 100% 99.2%;*/
     --foreground: 0 0% 25.1%;
 
