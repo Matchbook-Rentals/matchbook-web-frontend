@@ -324,7 +324,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         user-select: none;
         min-width: 40px;
         text-align: center;
-        border: 1px solid ${borderColor};
+        border: 0.5px solid ${borderColor};
         z-index: ${isHovered ? markerStyles.Z_INDEX.HOVER : marker.listing.isLiked ? markerStyles.Z_INDEX.LIKED : markerStyles.Z_INDEX.DEFAULT};
         overflow: visible;
       `;
@@ -488,7 +488,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       if (isFullscreenRef.current && selectedMarker?.listing.id === id) {
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
-        el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
+        el.style.border = `0.5px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = markerStyles.Z_INDEX.SELECTED;
 
         // Handle heart icon for selected marker in fullscreen
@@ -527,7 +527,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       } else if (hoveredListing?.id === id || (!isFullscreenRef.current && clickedMarkerId === id)) {
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
-        el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
+        el.style.border = `0.5px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = markerStyles.Z_INDEX.HOVER;
 
         // If also liked, add the heart icon while maintaining hover state
@@ -585,7 +585,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         // Keep default colors for liked listings - only the heart indicates liked status
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.text;
-        el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
+        el.style.border = `0.5px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = markerStyles.Z_INDEX.LIKED;
 
         // Update the heart icon if needed
@@ -612,7 +612,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       } else if (correspondingMarker?.listing.isDisliked) {
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED.text;
-        el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.DISLIKED.border}`;
+        el.style.border = `0.5px solid ${markerStyles.PRICE_BUBBLE_COLORS.DISLIKED.border}`;
         el.style.zIndex = markerStyles.Z_INDEX.DISLIKED;
 
         // Remove heart icon if it exists
@@ -632,7 +632,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       } else {
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.text;
-        el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
+        el.style.border = `0.5px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = markerStyles.Z_INDEX.DEFAULT;
 
         // Remove heart icon if it exists

@@ -72,8 +72,8 @@ const MARKER_STYLES = {
   PRICE_BUBBLE_COLORS: {
     DEFAULT: {
       background: '#FFFFFF',
-      text: '#404040',
-      border: '#404040'
+      text: '#1f2937',
+      border: 'grey'
     },
     HOVER: {
       background: '#0B6E6E',
@@ -81,7 +81,7 @@ const MARKER_STYLES = {
       border: '#0B6E6E'
     },
     DISLIKED: {
-      background: '#404040',
+      background: '#1f2937',
       text: '#FFFFFF',
       border: '#FFFFFF'
     }
