@@ -109,10 +109,6 @@ export function TemplateCreationStep({ onTemplateCreated, onCancel }: TemplateCr
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-[#020202]">Add Signature Fields</h2>
-            <p className="text-[#777b8b]">Add fillable fields and signature blocks to your template</p>
-          </div>
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => setStep("upload")}>
               Back

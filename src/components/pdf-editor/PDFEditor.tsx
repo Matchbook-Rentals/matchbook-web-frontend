@@ -4,6 +4,7 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import { Badge } from '@/components/ui/badge';
 import { Upload, Download, Save, Undo2, Redo2, Eye, EyeOff } from 'lucide-react';
 
@@ -76,13 +77,15 @@ interface PDFEditorProps {
   initialPdfFile?: File;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
+  onFinish?: (stepName: string) => void;
 }
 
 export const PDFEditor: React.FC<PDFEditorProps> = ({ 
   initialWorkflowState = 'selection', 
   initialPdfFile, 
   onSave, 
-  onCancel 
+  onCancel,
+  onFinish 
 }) => {
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
@@ -95,6 +98,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [pageWidth, setPageWidth] = useState(800);
   const [workflowState, setWorkflowState] = useState<WorkflowState>(initialWorkflowState);
   const [signedFields, setSignedFields] = useState<Record<string, any>>({});
+  const [stepCompleted, setStepCompleted] = useState(false);
   
   // Interaction mode state
   const [interactionMode, setInteractionMode] = useState<'idle' | 'detecting' | 'dragging' | 'click-to-place'>('idle');
@@ -1272,52 +1276,62 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   };
 
-  // Workflow navigation with database persistence
-  const proceedToNextStep = async () => {
+  // Step completion handler
+  const completeCurrentStep = async () => {
+    const stepNames = {
+      'template': 'Template Creation',
+      'document': 'Document Creation', 
+      'signer1': 'Signer 1',
+      'signer2': 'Signer 2',
+      'completed': 'Document Completion'
+    };
+
+    const stepName = stepNames[workflowState] || workflowState;
+
     switch (workflowState) {
       case 'template':
         if (fields.length === 0) {
           alert('Please add some fields to your template first!');
           return;
         }
-        
-        // Step 1 → Step 2: Save template and create document
-        await saveTemplateAndCreateDocument();
+        // Save the template
+        await saveTemplate();
+        // Call onSave if provided
+        if (onSave && pdfFile) {
+          onSave({ fields, recipients, pdfFile });
+        }
         break;
         
       case 'document':
         if (fields.length === 0) {
-          alert('Please add some fields before proceeding to signing!');
+          alert('Please add some fields before finishing!');
           return;
         }
-        
-        // Step 2 → Step 3: Save document and start signing workflow
-        await saveDocumentAndStartSigning();
         break;
         
       case 'signer1':
-        // Step 3 → Async: Save signer 1 progress and return to selection
-        await saveSignerProgressAsync(0);
-        break;
-        
       case 'signer2':
-        // Step 4 → Complete: Save final signatures and complete
-        await saveSignerProgressAndContinue(1);
+        // Check if all required fields are signed
+        const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
+        const signerFields = fields.filter(f => f.recipientIndex === currentSignerIndex);
+        const unSignedFields = signerFields.filter(f => !signedFields[f.formId]);
+        if (unSignedFields.length > 0) {
+          alert('Please complete all required fields before finishing!');
+          return;
+        }
         break;
+    }
+
+    // Set completion state
+    setStepCompleted(true);
+
+    // Call onFinish if provided, otherwise show default success
+    if (onFinish) {
+      onFinish(stepName);
     }
   };
 
-  const goBackToEditing = () => {
-    setWorkflowState('document');
-    setSignedFields({});
-  };
-
-  const goBackToTemplate = () => {
-    setWorkflowState('template');
-    setRecipients([]);
-    setSelectedRecipient(null);
-    setSignedFields({});
-  };
+  // Navigation functions removed - components are now isolated
 
   // Get current signer for signing workflow
   const getCurrentSigner = () => {
@@ -1542,86 +1556,40 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   const selectedRecipientData = recipients.find(r => r.id === selectedRecipient);
 
-  // Selection Screen
-  if (workflowState === 'selection') {
+  // Show success screen if step completed and no onFinish callback
+  if (stepCompleted && !onFinish) {
+    const stepNames = {
+      'template': 'Template Creation',
+      'document': 'Document Creation', 
+      'signer1': 'Signer 1',
+      'signer2': 'Signer 2',
+      'completed': 'Document Completion'
+    };
+    const stepName = stepNames[workflowState] || workflowState;
+
     return (
       <div className="h-screen flex flex-col bg-gray-50">
         <div className="flex flex-1 items-center justify-center">
-          <div className="max-w-4xl mx-auto p-8">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">PDF Document Workflow</h1>
-              <p className="text-lg text-gray-600">Choose what you&apos;d like to do</p>
+          <div className="max-w-md mx-auto p-8 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Create Template */}
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setWorkflowState('template')}>
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Upload className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Create Template</h3>
-                  <p className="text-sm text-gray-600">Upload a PDF and add form fields</p>
-                </CardContent>
-              </Card>
-
-              {/* Create Document */}
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setWorkflowState('document')}>
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Save className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Create Document</h3>
-                  <p className="text-sm text-gray-600">Choose a template to create a document</p>
-                </CardContent>
-              </Card>
-
-              {/* Sign Document - Signer 1 */}
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => {
-                console.log('🖱️ Sign (Signer 1) clicked');
-                setPendingSignerType('signer1');
-                setShowDocumentSelector(true);
-                console.log('🖱️ States set - pendingSignerType: signer1, showDocumentSelector: true');
-              }}>
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Eye className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Sign (Signer 1)</h3>
-                  <p className="text-sm text-gray-600">Sign as the first signer</p>
-                </CardContent>
-              </Card>
-
-              {/* Sign Document - Signer 2 */}
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => {
-                console.log('🖱️ Sign (Signer 2) clicked');
-                setPendingSignerType('signer2');
-                setShowDocumentSelector(true);
-                console.log('🖱️ States set - pendingSignerType: signer2, showDocumentSelector: true');
-              }}>
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Eye className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Sign (Signer 2)</h3>
-                  <p className="text-sm text-gray-600">Sign as the second signer</p>
-                </CardContent>
-              </Card>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{stepName} Finished</h2>
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+              ✓ Success
             </div>
+            {onCancel && (
+              <button
+                onClick={onCancel}
+                className="mt-6 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+              >
+                Close
+              </button>
+            )}
           </div>
         </div>
-        
-        {/* Document Selector Modal for Selection Screen */}
-        {showDocumentSelector && pendingSignerType && (
-          <DocumentSelector
-            onLoadDocument={loadDocumentForSigning}
-            onClose={() => {
-              setShowDocumentSelector(false);
-              setPendingSignerType(null);
-            }}
-            signerType={pendingSignerType}
-          />
-        )}
       </div>
     );
   }
@@ -2349,15 +2317,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               <span className="font-medium">{fields.length}</span> fields • 
               <span className="font-medium"> {recipients.length}</span> recipients
             </div>
-            {(workflowState !== 'template' && workflowState !== 'document') && (
-              <div className="text-sm">
-                <span className="font-medium text-blue-600">
-                  {workflowState === 'signer1' && 'Step 1 of 3: Signer 1'}
-                  {workflowState === 'signer2' && 'Step 2 of 3: Signer 2'}
-                  {workflowState === 'completed' && 'Step 3 of 3: Complete'}
-                </span>
-              </div>
-            )}
+            {/* Step indicators removed since components are isolated */}
           </div>
 
           {/* Right side - Action buttons */}
@@ -2377,14 +2337,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   <Download className="w-4 h-4 mr-2" />
                   Export Template
                 </Button>
-                <Button 
-                  onClick={proceedToNextStep}
+                <BrandButton 
+                  onClick={completeCurrentStep}
                   disabled={fields.length === 0}
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700"
+                  spinOnClick={true}
                 >
-                  {fields.length === 0 ? 'Add Fields First' : 'Create Document →'}
-                </Button>
+                  {fields.length === 0 ? 'Add Fields First' : 'Finish and Save'}
+                </BrandButton>
               </>
             )}
 
@@ -2403,12 +2363,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   Export Draft
                 </Button>
                 <Button 
-                  onClick={proceedToNextStep}
+                  onClick={completeCurrentStep}
                   disabled={fields.length === 0}
                   size="sm"
                   className="bg-green-600 hover:bg-green-700"
                 >
-                  {fields.length === 0 ? 'Add Fields First' : 'Start Signing →'}
+                  {fields.length === 0 ? 'Add Fields First' : 'Finish Document'}
                 </Button>
               </>
             )}
@@ -2424,7 +2384,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).length} fields signed
                 </div>
                 <Button 
-                  onClick={proceedToNextStep}
+                  onClick={completeCurrentStep}
                   disabled={
                     !fieldsValidated || 
                     validationStatus !== 'valid' ||
@@ -2440,8 +2400,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     : !fieldsRendered || renderingStatus !== 'rendered'
                       ? 'Checking Field Visibility...'
                       : workflowState === 'signer1' 
-                        ? 'Complete My Signing →' 
-                        : 'Complete Document →'
+                        ? 'Finish Signing' 
+                        : 'Finish Signing'
                   }
                 </Button>
               </>
