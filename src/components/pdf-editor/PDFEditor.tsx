@@ -94,6 +94,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [tripMatchDetails, setTripMatchDetails] = useState<MatchDetails | null>(matchDetails || null);
   const [showTripConfiguration, setShowTripConfiguration] = useState(!matchDetails && workflowState === 'document');
   
+  // Document creation loading state
+  const [isCreatingDocument, setIsCreatingDocument] = useState(false);
+  
   // Accordion states
   const [accordionStates, setAccordionStates] = useState({
     documentInfo: true,
@@ -280,6 +283,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     const timeout = setTimeout(() => {
       clearInterval(pollInterval);
       console.warn('⚠️ PDF pages failed to load within timeout');
+      // Set pages as ready anyway since fields are rendering successfully
+      setPdfPagesReady(true);
     }, 10000);
 
     return () => {
@@ -1466,6 +1471,81 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   };
 
+  // Create document and transition to signing
+  const createDocumentAndStartSigning = async () => {
+    if (!pdfFile) {
+      throw new Error('No PDF file available');
+    }
+    
+    console.log('🚀 Creating document and starting signing process...');
+    
+    // First save the document (similar to saveDocument but with signing transition)
+    let documentId = sessionStorage.getItem('currentDocumentId');
+    let templateId = sessionStorage.getItem('currentTemplateId');
+    
+    // If no document exists yet, create one from the current template
+    if (!documentId && templateId) {
+      console.log('📄 Creating new document from template:', templateId);
+      
+      const createResponse = await fetch('/api/documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          templateId,
+          documentData: {
+            fields,
+            recipients,
+            metadata: { pageWidth },
+            signedFields // Include any pre-filled values
+          },
+          status: 'IN_PROGRESS', // Document is now ready for signing
+          currentStep: 'signer1' // Start with first signer
+        }),
+      });
+
+      if (!createResponse.ok) {
+        throw new Error('Failed to create document');
+      }
+
+      const { document } = await createResponse.json();
+      documentId = document.id;
+      sessionStorage.setItem('currentDocumentId', documentId);
+      console.log('✅ Document created for signing:', documentId);
+      
+    } else if (documentId) {
+      // Update existing document to ready for signing
+      const updateResponse = await fetch(`/api/documents/${documentId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          documentData: {
+            fields,
+            recipients,
+            metadata: { pageWidth },
+            signedFields
+          },
+          status: 'IN_PROGRESS',
+          currentStep: 'signer1'
+        }),
+      });
+      
+      if (!updateResponse.ok) {
+        const errorText = await updateResponse.text();
+        console.error('❌ Failed to update document:', updateResponse.status, errorText);
+        throw new Error(`Failed to update document: ${updateResponse.status} ${errorText}`);
+      }
+      
+      console.log('✅ Document updated for signing:', documentId);
+    } else {
+      throw new Error('No template or document ID found. Please start from template creation.');
+    }
+    
+    // Transition to signing mode
+    setWorkflowState('signer1');
+    setIsCreatingDocument(false);
+    console.log('🖊️ Transitioned to signing mode');
+  };
+
   // Step completion handler
   const completeCurrentStep = async () => {
     const stepNames = {
@@ -1497,6 +1577,20 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           alert('Please add some fields before finishing!');
           return;
         }
+        
+        // Set loading state for document creation
+        setIsCreatingDocument(true);
+        
+        try {
+          // Create the document and transition to signing
+          await createDocumentAndStartSigning();
+          return; // Don't continue to the normal completion flow
+        } catch (error) {
+          console.error('❌ Error creating document:', error);
+          alert('Failed to create document: ' + error.message);
+          setIsCreatingDocument(false);
+          return;
+        }
         break;
         
       case 'signer1':
@@ -1507,6 +1601,37 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         const unSignedFields = signerFields.filter(f => !signedFields[f.formId]);
         if (unSignedFields.length > 0) {
           alert('Please complete all required fields before finishing!');
+          return;
+        }
+        
+        try {
+          // Save signing progress to the backend
+          await saveSignerProgressAsync(currentSignerIndex);
+          
+          // Transition workflow state
+          if (workflowState === 'signer1') {
+            // Move to signer2 if there's a second recipient
+            if (recipients.length > 1 && recipients[1]) {
+              setWorkflowState('signer2');
+              console.log('✅ Signer 1 completed, transitioning to signer 2');
+            } else {
+              // Complete the document if only one signer
+              setWorkflowState('completed');
+              console.log('✅ Signing completed (single signer)');
+            }
+          } else if (workflowState === 'signer2') {
+            // Complete the document
+            setWorkflowState('completed');
+            console.log('✅ All signing completed');
+          }
+          
+          // Reset validation states for the next step
+          setValidationStatus('valid');
+          setFieldsValidated(true);
+          
+        } catch (error) {
+          console.error('❌ Error saving signing progress:', error);
+          alert('Failed to save signing progress: ' + error.message);
           return;
         }
         break;
@@ -1528,6 +1653,87 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     if (workflowState === 'signer1') return recipients[0];
     if (workflowState === 'signer2') return recipients[1];
     return null;
+  };
+
+  // Get unsigned fields for current signer
+  const getUnsignedFields = () => {
+    const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
+    return fields.filter(f => f.recipientIndex === currentSignerIndex && !signedFields[f.formId]);
+  };
+
+  // Navigate to next unsigned field and flash it
+  const navigateToNextField = () => {
+    console.log('🎯 navigateToNextField: Starting navigation');
+    const unsignedFields = getUnsignedFields();
+    console.log('🎯 navigateToNextField: Found unsigned fields:', unsignedFields.length);
+    
+    if (unsignedFields.length === 0) {
+      console.log('🎯 navigateToNextField: No unsigned fields, returning');
+      return;
+    }
+
+    const nextField = unsignedFields[0];
+    console.log('🎯 navigateToNextField: Next field:', nextField);
+    
+    // Find the page element
+    const pageElement = document.querySelector(`[data-pdf-viewer-page][data-page-number="${nextField.pageNumber}"]`);
+    console.log('🎯 navigateToNextField: Page element found:', !!pageElement);
+    
+    if (pageElement) {
+      // Scroll to the page
+      pageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      console.log('🎯 navigateToNextField: Scrolled to page');
+      
+      // Find and flash the field element
+      setTimeout(() => {
+        const fieldElement = document.querySelector(`[data-field-id="${nextField.formId}"]`);
+        console.log('🎯 navigateToNextField: Field element found:', !!fieldElement);
+        
+        if (fieldElement) {
+          // Store original styles
+          const originalBg = fieldElement.style.backgroundColor;
+          const originalTransition = fieldElement.style.transition;
+          
+          // Apply flash effect using inline styles
+          fieldElement.style.transition = 'all 0.3s ease';
+          fieldElement.style.backgroundColor = '#0B6E6E'; // secondaryBrand color
+          console.log('🎯 navigateToNextField: Applied first flash');
+          
+          setTimeout(() => {
+            fieldElement.style.backgroundColor = originalBg || '';
+            console.log('🎯 navigateToNextField: Removed first flash');
+            
+            setTimeout(() => {
+              fieldElement.style.backgroundColor = '#0B6E6E';
+              console.log('🎯 navigateToNextField: Applied second flash');
+              
+              setTimeout(() => {
+                fieldElement.style.backgroundColor = originalBg || '';
+                fieldElement.style.transition = originalTransition || '';
+                console.log('🎯 navigateToNextField: Completed flashing');
+              }, 300);
+            }, 300);
+          }, 300);
+        } else {
+          console.warn('🎯 navigateToNextField: Could not find field element');
+        }
+      }, 500); // Wait for scroll to complete
+    } else {
+      console.warn('🎯 navigateToNextField: Could not find page element');
+    }
+  };
+
+  // Handle signing button click
+  const handleSigningAction = async () => {
+    const unsignedFields = getUnsignedFields();
+    
+    if (unsignedFields.length > 0) {
+      // Navigate to next field
+      navigateToNextField();
+    } else {
+      // All fields signed, complete the step
+      await completeCurrentStep();
+    }
   };
 
   // Handle field signing/filling
@@ -2543,11 +2749,17 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               <>
                 <BrandButton 
                   onClick={completeCurrentStep}
-                  disabled={fields.length === 0}
+                  disabled={fields.length === 0 || isCreatingDocument}
                   size="sm"
+                  loading={isCreatingDocument}
                   spinOnClick={true}
                 >
-                  {fields.length === 0 ? 'Add Fields First' : 'Sign and Send'}
+                  {isCreatingDocument 
+                    ? 'Creating Document...' 
+                    : fields.length === 0 
+                      ? 'Add Fields First' 
+                      : 'Sign and Send'
+                  }
                 </BrandButton>
               </>
             )}
@@ -2559,27 +2771,13 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).filter(f => signedFields[f.formId]).length} of{' '}
                   {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).length} fields signed
                 </div>
-                <Button 
-                  onClick={completeCurrentStep}
-                  disabled={
-                    !fieldsValidated || 
-                    validationStatus !== 'valid' ||
-                    !fieldsRendered ||
-                    renderingStatus !== 'rendered' ||
-                    fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).some(f => !signedFields[f.formId])
-                  }
+                <BrandButton 
+                  onClick={handleSigningAction}
                   size="sm"
-                  className="bg-green-600 hover:bg-green-700"
+                  spinOnClick={getUnsignedFields().length === 0}
                 >
-                  {!fieldsValidated || validationStatus !== 'valid' 
-                    ? 'Validating Data...' 
-                    : !fieldsRendered || renderingStatus !== 'rendered'
-                      ? 'Checking Field Visibility...'
-                      : workflowState === 'signer1' 
-                        ? 'Finish Signing' 
-                        : 'Finish Signing'
-                  }
-                </Button>
+                  {getUnsignedFields().length === 0 ? 'Save and Send' : 'Next Action'}
+                </BrandButton>
               </>
             )}
 

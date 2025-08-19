@@ -98,13 +98,14 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
   // Default text display for other field types
   let textToDisplay = field.fieldMeta?.label || FRIENDLY_FIELD_TYPE[field.type] || '';
   
-  // Check if this is a template-enforced field and use its specific label when not showing values
+  // Check if this is a template-enforced field and use its specific label
   const templateEnforcedLabel = getTemplateEnforcedLabel(field);
-  if (templateEnforcedLabel && !showValues) {
+  
+  if (templateEnforcedLabel) {
     textToDisplay = templateEnforcedLabel;
   }
   
-  // If we have a signed value and should show values, use that instead
+  // If we have a signed value and should show values, use that instead (but only if there's actually a value)
   if (showValues && signedValue !== undefined && signedValue !== null && signedValue !== '') {
     textToDisplay = signedValue;
   }
