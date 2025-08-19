@@ -74,7 +74,7 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
             </div>
             {displayAmenities.length > initialDisplayCount && (
               <Dialog>
-                <DialogTrigger className="mt-2 w-full sm:w-auto">
+                <DialogTrigger asChild className="mt-2 w-full sm:w-auto">
                   <Button
                     variant="outline"
                     className='font-["Poppins"] text-[14px] font-medium text-[#484A54] bg-neutral-50 mx-auto border-[#404040] rounded-[5px] w-full sm:w-auto sm:mx-0 px-3 py-2'

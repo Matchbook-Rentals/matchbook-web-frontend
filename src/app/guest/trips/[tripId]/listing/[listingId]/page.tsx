@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { ListingAndImages } from '@/types'
 import prisma from '@/lib/prismadb'
@@ -17,6 +17,8 @@ interface ListingPageProps {
 }
 
 export default async function ListingPage({ params }: ListingPageProps) {
+  const { userId } = auth()
+  const user = await currentUser()
 
   const listing = await prisma.listing.findUnique({
     where: { id: params.listingId },
@@ -29,13 +31,23 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   const calculatedPrice = calculateRent({ listing, trip })
 
-  if (!listing) {
+  if (!listing || !trip) {
     redirect('/app/listings')
   }
 
+  // Serialize user data for navbar
+  const userObject = user ? {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    imageUrl: user.imageUrl,
+    emailAddresses: user.emailAddresses?.map(email => ({ emailAddress: email.emailAddress })) || [],
+    publicMetadata: user.publicMetadata ? JSON.parse(JSON.stringify(user.publicMetadata)) : {}
+  } : null
+
   return (
     <>
-      <RenterNavbar />
+      <RenterNavbar userId={userId} user={userObject} isSignedIn={!!userId} />
       <div className={`${PAGE_MARGIN} font-montserrat `}>
         <ListingDetailsView listing={listing} locationString={trip.locationString} calculatedPrice={calculatedPrice} />
       </div>

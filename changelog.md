@@ -1,5 +1,11 @@
 # Changelog
 
+## Fix RenterNavbar user data in guest listing page
+- Added Clerk authentication and user data fetching to guest trips listing page
+- Fixed RenterNavbar component to receive proper userId, user object, and authentication state
+- Resolved Next.js serialization error by properly converting Clerk user data to plain objects
+- Fixed DialogTrigger asChild prop in amenities section for proper UI rendering
+
 ## Pass user details to RenterNavbar in 404 page
 - Updated not-found page to pass user authentication props to RenterNavbar component
 - Ensures consistent user state management across both MatchbookHeader and RenterNavbar
