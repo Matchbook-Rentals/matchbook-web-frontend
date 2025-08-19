@@ -36,6 +36,15 @@ interface LoadedTemplate {
 }
 import { nanoid } from 'nanoid';
 
+interface UserSignature {
+  id: string;
+  type: 'drawn' | 'typed';
+  data: string;
+  fontFamily?: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 // Workflow states for the signing process
 type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer2' | 'completed';
@@ -96,6 +105,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   
   // Document creation loading state
   const [isCreatingDocument, setIsCreatingDocument] = useState(false);
+  
+  // Saved signatures state
+  const [savedSignatures, setSavedSignatures] = useState<UserSignature[]>([]);
+  const [isLoadingSignatures, setIsLoadingSignatures] = useState(false);
   
   // Accordion states
   const [accordionStates, setAccordionStates] = useState({
@@ -1736,6 +1749,95 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   };
 
+  // Signature management functions
+  const fetchSavedSignatures = async () => {
+    setIsLoadingSignatures(true);
+    try {
+      const response = await fetch('/api/signatures');
+      if (response.ok) {
+        const signatures = await response.json();
+        setSavedSignatures(signatures);
+      } else {
+        console.error('Failed to fetch signatures');
+      }
+    } catch (error) {
+      console.error('Error fetching signatures:', error);
+    } finally {
+      setIsLoadingSignatures(false);
+    }
+  };
+
+  const saveSignature = async (type: 'drawn' | 'typed', data: string, fontFamily?: string, setAsDefault?: boolean) => {
+    try {
+      const response = await fetch('/api/signatures', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type,
+          data,
+          fontFamily,
+          setAsDefault
+        }),
+      });
+
+      if (response.ok) {
+        const newSignature = await response.json();
+        setSavedSignatures(prev => [newSignature, ...prev]);
+      } else {
+        console.error('Failed to save signature');
+      }
+    } catch (error) {
+      console.error('Error saving signature:', error);
+    }
+  };
+
+  const deleteSignature = async (signatureId: string) => {
+    try {
+      const response = await fetch(`/api/signatures/${signatureId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setSavedSignatures(prev => prev.filter(sig => sig.id !== signatureId));
+      } else {
+        console.error('Failed to delete signature');
+      }
+    } catch (error) {
+      console.error('Error deleting signature:', error);
+    }
+  };
+
+  const setDefaultSignature = async (signatureId: string) => {
+    try {
+      const response = await fetch(`/api/signatures/${signatureId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isDefault: true }),
+      });
+
+      if (response.ok) {
+        const updatedSignature = await response.json();
+        setSavedSignatures(prev => 
+          prev.map(sig => ({
+            ...sig,
+            isDefault: sig.id === signatureId
+          }))
+        );
+      } else {
+        console.error('Failed to set default signature');
+      }
+    } catch (error) {
+      console.error('Error setting default signature:', error);
+    }
+  };
+
+  // Fetch saved signatures when component mounts or when transitioning to signing
+  useEffect(() => {
+    if (workflowState === 'signer1' || workflowState === 'signer2') {
+      fetchSavedSignatures();
+    }
+  }, [workflowState]);
+
   // Handle field signing/filling
   const signField = (fieldId: string, value: any) => {
     const field = fields.find(f => f.formId === fieldId);
@@ -2693,6 +2795,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     signedValue={signedFields[field.formId]}
                     isForCurrentSigner={field.recipientIndex === currentSignerIndex}
                     pageElement={pageElement}
+                    savedSignatures={savedSignatures}
+                    onSaveSignature={saveSignature}
+                    onDeleteSignature={deleteSignature}
+                    onSetDefaultSignature={setDefaultSignature}
                   />
                 );
               }
@@ -2708,6 +2814,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   signedValue={signedFields[field.formId]}
                   isForCurrentSigner={false}
                   pageElement={pageElement}
+                  savedSignatures={savedSignatures}
+                  onSaveSignature={saveSignature}
+                  onDeleteSignature={deleteSignature}
+                  onSetDefaultSignature={setDefaultSignature}
                 />
               );
             })}

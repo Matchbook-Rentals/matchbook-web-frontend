@@ -92,6 +92,7 @@ model User {
   // PDF Templates
   pdfTemplates            PdfTemplate[]
   documents               DocumentInstance[]
+  signatures              UserSignature[]
 }
 
 model UserPreferences {
@@ -1553,6 +1554,21 @@ model DocumentInstance {
   @@index([status])
   @@index([currentStep])
   @@index([createdAt])
+}
+
+model UserSignature {
+  id          String   @id @default(uuid())
+  userId      String
+  type        String   // 'drawn' or 'typed'
+  data        String   @db.Text // base64 image for drawn, text for typed (using Text for large data)
+  fontFamily  String?  // for typed signatures (dancing-script, caveat, etc.)
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
 }
 
 model SigningSession {

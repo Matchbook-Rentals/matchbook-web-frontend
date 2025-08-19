@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Inter, Poppins, Cutive } from "next/font/google";
+import { Inter, Poppins, Cutive, Dancing_Script, Caveat, Kalam, Great_Vibes, Pacifico } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -14,6 +14,31 @@ const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   subsets: ["latin"],
   variable: '--font-poppins'
+});
+
+// Signature fonts
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  variable: '--font-dancing-script'
+});
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: '--font-caveat'
+});
+const kalam = Kalam({
+  weight: ['300', '400', '700'],
+  subsets: ["latin"],
+  variable: '--font-kalam'
+});
+const greatVibes = Great_Vibes({
+  weight: ['400'],
+  subsets: ["latin"],
+  variable: '--font-great-vibes'
+});
+const pacifico = Pacifico({
+  weight: ['400'],
+  subsets: ["latin"],
+  variable: '--font-pacifico'
 });
 
 export const metadata: Metadata = {
@@ -107,7 +132,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           )}
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         </head>
-        <body className={`${poppins.className}`}>
+        <body className={`${poppins.className} ${dancingScript.variable} ${caveat.variable} ${kalam.variable} ${greatVibes.variable} ${pacifico.variable}`}>
           {process.env.NODE_ENV === 'production' ? (
             (console.log('Including Google Tag Manager noscript fallback in production'),
             <noscript>

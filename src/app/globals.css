@@ -241,3 +241,29 @@
   font-style: italic;
 }
 
+/* Additional signature font options */
+.font-signature-dancing {
+  font-family: var(--font-dancing-script), cursive;
+  font-weight: 600;
+}
+
+.font-signature-caveat {
+  font-family: var(--font-caveat), cursive;
+  font-weight: 600;
+}
+
+.font-signature-kalam {
+  font-family: var(--font-kalam), cursive;
+  font-weight: 600;
+}
+
+.font-signature-vibes {
+  font-family: var(--font-great-vibes), cursive;
+  font-weight: 400;
+}
+
+.font-signature-pacifico {
+  font-family: var(--font-pacifico), cursive;
+  font-weight: 400;
+}
+

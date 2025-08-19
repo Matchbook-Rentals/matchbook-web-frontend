@@ -1,0 +1,362 @@
+'use client';
+
+import React, { useState, useCallback, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SignatureCanvas } from './SignatureCanvas';
+import { Trash2, Star, StarOff } from 'lucide-react';
+
+interface UserSignature {
+  id: string;
+  type: 'drawn' | 'typed';
+  data: string;
+  fontFamily?: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface SignatureDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSign: (signature: string, type: 'drawn' | 'typed', fontFamily?: string) => void;
+  recipientName: string;
+  savedSignatures?: UserSignature[];
+  onSaveSignature?: (type: 'drawn' | 'typed', data: string, fontFamily?: string, setAsDefault?: boolean) => Promise<void>;
+  onDeleteSignature?: (id: string) => Promise<void>;
+  onSetDefaultSignature?: (id: string) => Promise<void>;
+}
+
+const SIGNATURE_FONTS = [
+  { value: 'dancing-script', label: 'Dancing Script', className: 'font-signature-dancing' },
+  { value: 'caveat', label: 'Caveat', className: 'font-signature-caveat' },
+  { value: 'kalam', label: 'Kalam', className: 'font-signature-kalam' },
+  { value: 'great-vibes', label: 'Great Vibes', className: 'font-signature-vibes' },
+  { value: 'pacifico', label: 'Pacifico', className: 'font-signature-pacifico' },
+];
+
+export const SignatureDialog: React.FC<SignatureDialogProps> = ({
+  isOpen,
+  onClose,
+  onSign,
+  recipientName,
+  savedSignatures = [],
+  onSaveSignature,
+  onDeleteSignature,
+  onSetDefaultSignature,
+}) => {
+  const [activeTab, setActiveTab] = useState<'draw' | 'type' | 'saved'>('draw');
+  const [drawnSignature, setDrawnSignature] = useState<string>('');
+  const [typedText, setTypedText] = useState<string>(recipientName);
+  const [selectedFont, setSelectedFont] = useState<string>('dancing-script');
+  const [saveAsDefault, setSaveAsDefault] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Reset state when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setDrawnSignature('');
+      setTypedText(recipientName);
+      setSelectedFont('dancing-script');
+      setSaveAsDefault(false);
+      
+      // Auto-select saved signatures tab if user has signatures
+      if (savedSignatures.length > 0) {
+        setActiveTab('saved');
+      } else {
+        setActiveTab('draw');
+      }
+    }
+  }, [isOpen, recipientName, savedSignatures.length]);
+
+  const handleDrawnSignature = useCallback((dataUrl: string) => {
+    setDrawnSignature(dataUrl);
+  }, []);
+
+  const handleUseDrawnSignature = async () => {
+    if (!drawnSignature) return;
+    
+    setIsLoading(true);
+    try {
+      // Save signature if requested
+      if (onSaveSignature && saveAsDefault) {
+        await onSaveSignature('drawn', drawnSignature, undefined, saveAsDefault);
+      }
+      
+      onSign(drawnSignature, 'drawn');
+      onClose();
+    } catch (error) {
+      console.error('Error saving drawn signature:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUseTypedSignature = async () => {
+    if (!typedText.trim()) return;
+    
+    setIsLoading(true);
+    try {
+      // Save signature if requested
+      if (onSaveSignature && saveAsDefault) {
+        await onSaveSignature('typed', typedText.trim(), selectedFont, saveAsDefault);
+      }
+      
+      onSign(typedText.trim(), 'typed', selectedFont);
+      onClose();
+    } catch (error) {
+      console.error('Error saving typed signature:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUseSavedSignature = (signature: UserSignature) => {
+    onSign(signature.data, signature.type, signature.fontFamily);
+    onClose();
+  };
+
+  const handleDeleteSignature = async (signatureId: string) => {
+    if (!onDeleteSignature) return;
+    
+    try {
+      await onDeleteSignature(signatureId);
+    } catch (error) {
+      console.error('Error deleting signature:', error);
+    }
+  };
+
+  const handleSetDefault = async (signatureId: string) => {
+    if (!onSetDefaultSignature) return;
+    
+    try {
+      await onSetDefaultSignature(signatureId);
+    } catch (error) {
+      console.error('Error setting default signature:', error);
+    }
+  };
+
+  const selectedFontClass = SIGNATURE_FONTS.find(f => f.value === selectedFont)?.className || 'font-signature-dancing';
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Add Your Signature</DialogTitle>
+        </DialogHeader>
+
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="draw">Draw</TabsTrigger>
+            <TabsTrigger value="type">Type</TabsTrigger>
+            <TabsTrigger value="saved" disabled={savedSignatures.length === 0}>
+              Saved ({savedSignatures.length})
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="draw" className="space-y-4">
+            <div className="text-sm text-gray-600">
+              Draw your signature in the area below using your mouse or finger.
+            </div>
+            
+            <SignatureCanvas
+              onSignatureComplete={handleDrawnSignature}
+              width={500}
+              height={200}
+            />
+
+            {onSaveSignature && (
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="save-drawn"
+                  checked={saveAsDefault}
+                  onChange={(e) => setSaveAsDefault(e.target.checked)}
+                  className="rounded"
+                />
+                <Label htmlFor="save-drawn" className="text-sm">
+                  Save this signature for future use
+                </Label>
+              </div>
+            )}
+
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <BrandButton
+                onClick={handleUseDrawnSignature}
+                disabled={!drawnSignature || isLoading}
+                loading={isLoading}
+              >
+                Use Signature
+              </BrandButton>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="type" className="space-y-4">
+            <div className="text-sm text-gray-600">
+              Type your signature and choose a font style.
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="signature-text">Signature Text</Label>
+                <Input
+                  id="signature-text"
+                  value={typedText}
+                  onChange={(e) => setTypedText(e.target.value)}
+                  placeholder="Enter your name"
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="font-select">Font Style</Label>
+                <Select value={selectedFont} onValueChange={setSelectedFont}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SIGNATURE_FONTS.map((font) => (
+                      <SelectItem key={font.value} value={font.value}>
+                        <span className={font.className}>{font.label}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="border rounded-lg p-4 bg-gray-50 min-h-[100px] flex items-center justify-center">
+                <div className={`text-2xl ${selectedFontClass}`}>
+                  {typedText || 'Preview will appear here'}
+                </div>
+              </div>
+
+              {onSaveSignature && (
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="save-typed"
+                    checked={saveAsDefault}
+                    onChange={(e) => setSaveAsDefault(e.target.checked)}
+                    className="rounded"
+                  />
+                  <Label htmlFor="save-typed" className="text-sm">
+                    Save this signature for future use
+                  </Label>
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <BrandButton
+                onClick={handleUseTypedSignature}
+                disabled={!typedText.trim() || isLoading}
+                loading={isLoading}
+              >
+                Use Signature
+              </BrandButton>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="saved" className="space-y-4">
+            <div className="text-sm text-gray-600">
+              Choose from your saved signatures or manage your signature library.
+            </div>
+
+            <div className="space-y-3 max-h-[400px] overflow-y-auto">
+              {savedSignatures.map((signature) => (
+                <div
+                  key={signature.id}
+                  className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      {signature.type === 'drawn' ? (
+                        <div className="flex items-center gap-4">
+                          <img
+                            src={signature.data}
+                            alt="Saved signature"
+                            className="h-16 max-w-[200px] object-contain border rounded"
+                          />
+                          <div className="text-sm text-gray-600">
+                            Drawn signature
+                            {signature.isDefault && (
+                              <span className="ml-2 text-yellow-600">(Default)</span>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-4">
+                          <div className={`text-xl ${SIGNATURE_FONTS.find(f => f.value === signature.fontFamily)?.className || 'font-signature-dancing'} border rounded px-4 py-2 bg-white min-w-[200px] text-center`}>
+                            {signature.data}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Typed signature ({SIGNATURE_FONTS.find(f => f.value === signature.fontFamily)?.label || 'Dancing Script'})
+                            {signature.isDefault && (
+                              <span className="ml-2 text-yellow-600">(Default)</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {onSetDefaultSignature && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleSetDefault(signature.id)}
+                          title={signature.isDefault ? "Remove default" : "Set as default"}
+                        >
+                          {signature.isDefault ? (
+                            <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                          ) : (
+                            <StarOff className="h-4 w-4 text-gray-400" />
+                          )}
+                        </Button>
+                      )}
+                      
+                      {onDeleteSignature && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteSignature(signature.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                      
+                      <BrandButton
+                        size="sm"
+                        onClick={() => handleUseSavedSignature(signature)}
+                      >
+                        Use
+                      </BrandButton>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </DialogContent>
+    </Dialog>
+  );
+};
