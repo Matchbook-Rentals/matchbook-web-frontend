@@ -112,19 +112,12 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
                     {recipient.title && (
                       <div className="text-xs font-medium text-blue-600">{recipient.title}</div>
                     )}
+                    {recipient.isLocked && (
+                      <div className="text-xs text-red-600">Required</div>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {selectedRecipient === recipient.id && (
-                    <Badge variant="secondary" className="text-xs">
-                      Selected
-                    </Badge>
-                  )}
-                  {recipient.isLocked && (
-                    <Badge variant="outline" className="text-xs">
-                      Required
-                    </Badge>
-                  )}
                   {!recipient.isLocked && (
                     <Button
                       variant="ghost"

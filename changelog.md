@@ -7,6 +7,16 @@
 ## Update onboarding popup styling
 - Increased popup width by 10% for better visibility
 - Applied semibold font styling to "Renter Launch coming this September" text
+## Refactor PDF editor into isolated step components with template saving
+- Created specialized PDF editor components for each lease signing step (template, document, signer, finished)
+- Removed client-side navigation between steps - each component is now isolated
+- Added onFinish callback system to handle step completion
+- Implemented automatic template saving when finishing template creation
+- Added loading spinner to "Finish and Save" button using BrandButton component
+- Created reusable PDFUpload component extracted from TemplateCreationStep
+- Built admin test pages for each PDF editor variant at /admin/lease-sign/*
+- Deleted redundant TemplateEditor component in favor of new modular approach
+- Enhanced template workflow with metadata collection (name, type) during upload
 
 ## Add latitude/longitude update functionality to listing approval
 - Added LocationCoordinatesSection component for geocoding and coordinate management

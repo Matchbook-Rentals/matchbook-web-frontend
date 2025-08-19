@@ -18,6 +18,7 @@ interface FieldItemProps {
   pageElement?: HTMLElement;
   signedValue?: any; // Add support for showing values
   showValues?: boolean; // Add flag to show values vs labels
+  canRemove?: boolean; // Add flag to control if field can be removed
 }
 
 export const FieldItem: React.FC<FieldItemProps> = ({ 
@@ -29,7 +30,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
   active = false,
   pageElement,
   signedValue,
-  showValues = false
+  showValues = false,
+  canRemove = true
 }) => {
   const [dimensions, setDimensions] = useState({
     x: 0,
@@ -153,14 +155,16 @@ export const FieldItem: React.FC<FieldItemProps> = ({
           showValues={showValues}
         />
         
-        {/* Remove button */}
-        <button 
-          className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
-          onClick={handleRemove}
-          title="Remove field"
-        >
-          ×
-        </button>
+        {/* Remove button - only show if field can be removed */}
+        {canRemove && (
+          <button 
+            className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            onClick={handleRemove}
+            title="Remove field"
+          >
+            ×
+          </button>
+        )}
       </div>
     </Rnd>
   );

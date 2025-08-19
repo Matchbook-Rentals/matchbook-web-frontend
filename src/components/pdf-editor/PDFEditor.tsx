@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Download, Save, Undo2, Redo2, Eye, EyeOff } from 'lucide-react';
+import { Upload, Download, Eye, EyeOff, ChevronDown } from 'lucide-react';
 
 import { PDFViewer, OnPDFViewerPageClick } from './PDFViewer';
 import { FieldItem } from './FieldItem';
@@ -16,7 +16,8 @@ import { RecipientManager, type Recipient } from './RecipientManager';
 import { TemplateBrowser } from './TemplateBrowser';
 import { DocumentTemplateSelector } from './DocumentTemplateSelector';
 import { DocumentSelector } from './DocumentSelector';
-import { FieldFormType, FieldType, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
+import { TripConfiguration } from './TripConfiguration';
+import { FieldFormType, FieldType, MatchDetails, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 
@@ -35,39 +36,6 @@ interface LoadedTemplate {
 }
 import { nanoid } from 'nanoid';
 
-// Hook for undo/redo functionality
-const useHistory = <T,>(initialState: T) => {
-  const [history, setHistory] = useState([initialState]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const setState = (newState: T) => {
-    const newHistory = history.slice(0, currentIndex + 1);
-    newHistory.push(newState);
-    setHistory(newHistory);
-    setCurrentIndex(newHistory.length - 1);
-  };
-
-  const undo = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  const redo = () => {
-    if (currentIndex < history.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  return {
-    state: history[currentIndex],
-    setState,
-    undo,
-    redo,
-    canUndo: currentIndex > 0,
-    canRedo: currentIndex < history.length - 1,
-  };
-};
 
 // Workflow states for the signing process
 type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer2' | 'completed';
@@ -75,6 +43,7 @@ type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer
 interface PDFEditorProps {
   initialWorkflowState?: WorkflowState;
   initialPdfFile?: File;
+  matchDetails?: MatchDetails;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
@@ -83,6 +52,7 @@ interface PDFEditorProps {
 export const PDFEditor: React.FC<PDFEditorProps> = ({ 
   initialWorkflowState = 'selection', 
   initialPdfFile, 
+  matchDetails,
   onSave, 
   onCancel,
   onFinish 
@@ -120,13 +90,29 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [fieldsRendered, setFieldsRendered] = useState(false);
   const [renderingStatus, setRenderingStatus] = useState<'pending' | 'checking' | 'rendered' | 'failed'>('pending');
   
+  // Trip configuration state
+  const [tripMatchDetails, setTripMatchDetails] = useState<MatchDetails | null>(matchDetails || null);
+  const [showTripConfiguration, setShowTripConfiguration] = useState(!matchDetails && workflowState === 'document');
+  
+  // Accordion states
+  const [accordionStates, setAccordionStates] = useState({
+    documentInfo: true,
+    recipients: true, 
+    fieldTypes: true,
+    requiredFields: true
+  });
+  
   // Ghost cursor state for field placement
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [isFieldWithinBounds, setIsFieldWithinBounds] = useState(false);
   const fieldBounds = useRef({ width: 0, height: 0 });
 
-  // Use history hook for undo/redo
-  const { state: fields, setState: setFields, undo, redo, canUndo, canRedo } = useHistory<FieldFormType[]>([]);
+  // Fields state
+  const [fields, setFields] = useState<FieldFormType[]>([]);
+
+  // PDF page tracking state
+  const [pdfPagesReady, setPdfPagesReady] = useState(false);
+  const [pageElements, setPageElements] = useState<Map<number, HTMLElement>>(new Map());
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -140,6 +126,56 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       fields: fields.map(f => ({ id: f.formId, type: f.type, page: f.pageNumber }))
     });
   }, [fields]);
+
+  // Pre-populate fields with match details
+  const prePopulateFieldsWithMatchDetails = useCallback((matchDetails: MatchDetails) => {
+    const newSignedFields = { ...signedFields };
+    
+    // Update recipients with match details
+    const newRecipients = recipients.map(r => {
+      if (r.role === 'HOST') {
+        return { ...r, name: matchDetails.hostName, email: matchDetails.hostEmail };
+      } else if (r.role === 'RENTER') {
+        return { ...r, name: matchDetails.primaryRenterName, email: matchDetails.primaryRenterEmail };
+      }
+      return r;
+    });
+    setRecipients(newRecipients);
+
+    // Map field types to match details values
+    fields.forEach(field => {
+      if (field.type === 'NAME') {
+        if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
+          newSignedFields[field.formId] = matchDetails.hostName;
+        } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
+          newSignedFields[field.formId] = matchDetails.primaryRenterName;
+        }
+      } else if (field.type === 'EMAIL') {
+        if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
+          newSignedFields[field.formId] = matchDetails.hostEmail;
+        } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
+          newSignedFields[field.formId] = matchDetails.primaryRenterEmail;
+        }
+      } else if (field.type === 'NUMBER' || field.type === 'TEXT') {
+        // Auto-populate likely rent fields
+        const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+        if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount')) {
+          newSignedFields[field.formId] = matchDetails.monthlyPrice;
+        } else if (fieldLabel.includes('address') || fieldLabel.includes('property') || fieldLabel.includes('location')) {
+          newSignedFields[field.formId] = matchDetails.propertyAddress;
+        }
+      } else if (field.type === 'DATE') {
+        const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+        if (fieldLabel.includes('start') || fieldLabel.includes('begin')) {
+          newSignedFields[field.formId] = matchDetails.startDate;
+        } else if (fieldLabel.includes('end') || fieldLabel.includes('expire')) {
+          newSignedFields[field.formId] = matchDetails.endDate;
+        }
+      }
+    });
+
+    setSignedFields(newSignedFields);
+  }, [signedFields, recipients, fields]);
 
   // Initialize mandatory recipients when starting
   useEffect(() => {
@@ -176,6 +212,81 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       fieldBounds.current = getFieldBounds(selectedField);
     }
   }, [selectedField]);
+
+  // Pre-populate fields with match details when available
+  useEffect(() => {
+    if (tripMatchDetails && fields.length > 0 && workflowState === 'document' && pdfPagesReady) {
+      prePopulateFieldsWithMatchDetails(tripMatchDetails);
+    }
+  }, [tripMatchDetails, fields.length, workflowState, pdfPagesReady, prePopulateFieldsWithMatchDetails]);
+
+  // Wait for PDF pages to be rendered in DOM and store their references
+  useEffect(() => {
+    if (!pdfFile) {
+      setPdfPagesReady(false);
+      setPageElements(new Map());
+      return;
+    }
+
+    const checkForPdfPages = () => {
+      const pdfPageElements = document.querySelectorAll('[data-pdf-viewer-page]');
+      
+      if (pdfPageElements.length === 0) {
+        // PDF not rendered yet, try again
+        return false;
+      }
+
+      // Store all page elements by page number
+      const newPageElements = new Map<number, HTMLElement>();
+      let allPagesHaveContent = true;
+
+      pdfPageElements.forEach((element) => {
+        const pageNumber = parseInt(element.getAttribute('data-page-number') || '1');
+        const htmlElement = element as HTMLElement;
+        
+        // Check if page has actual content (not just empty container)
+        const hasContent = htmlElement.clientHeight > 0 && htmlElement.clientWidth > 0;
+        
+        if (hasContent) {
+          newPageElements.set(pageNumber, htmlElement);
+        } else {
+          allPagesHaveContent = false;
+        }
+      });
+
+      if (allPagesHaveContent && newPageElements.size > 0) {
+        console.log('📄 PDF pages ready:', newPageElements.size, 'pages found');
+        setPageElements(newPageElements);
+        setPdfPagesReady(true);
+        return true;
+      }
+
+      return false;
+    };
+
+    // Initial check
+    if (checkForPdfPages()) {
+      return;
+    }
+
+    // Set up polling to check for PDF pages
+    const pollInterval = setInterval(() => {
+      if (checkForPdfPages()) {
+        clearInterval(pollInterval);
+      }
+    }, 100);
+
+    // Cleanup after 10 seconds
+    const timeout = setTimeout(() => {
+      clearInterval(pollInterval);
+      console.warn('⚠️ PDF pages failed to load within timeout');
+    }, 10000);
+
+    return () => {
+      clearInterval(pollInterval);
+      clearTimeout(timeout);
+    };
+  }, [pdfFile]);
 
   // Mouse tracking for ghost cursor and drag behavior
   useEffect(() => {
@@ -503,8 +614,62 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     ));
   };
 
+  // Check if a field is template-enforced (based on the required fields map)
+  const isTemplateEnforcedField = (field: FieldFormType) => {
+    const requiredFieldMap = {
+      'host-signature': { type: FieldType.SIGNATURE, recipientIndex: 0 },
+      'host-name': { type: FieldType.NAME, recipientIndex: 0 },
+      'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1 },
+      'renter-name': { type: FieldType.NAME, recipientIndex: 1 },
+      'monthly-rent': { type: FieldType.NUMBER, label: 'Monthly Rent' },
+      'start-date': { type: FieldType.DATE, label: 'Start Date' },
+      'end-date': { type: FieldType.DATE, label: 'End Date' }
+    };
+
+    for (const [, config] of Object.entries(requiredFieldMap)) {
+      // Check by type, recipient index, and label (for fields with specific labels)
+      if (config.recipientIndex !== undefined) {
+        if (field.type === config.type && field.recipientIndex === config.recipientIndex) {
+          return true;
+        }
+      } else if (config.label) {
+        if (field.type === config.type && field.fieldMeta?.label === config.label) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  };
+
+  // Check if a field can be removed (template-enforced fields can only be removed if there are duplicates)
+  const canRemoveField = (formId: string) => {
+    const fieldToRemove = fields.find(f => f.formId === formId);
+    if (!fieldToRemove) return false;
+    
+    // If field is not template-enforced, it can always be removed
+    if (!isTemplateEnforcedField(fieldToRemove)) return true;
+    
+    // If field is template-enforced, check if there are other template-enforced fields of the same type
+    const sameTypeEnforcedFields = fields.filter(f => 
+      f.formId !== formId && // Don't count the field we're trying to remove
+      isTemplateEnforcedField(f) &&
+      f.type === fieldToRemove.type && 
+      f.recipientIndex === fieldToRemove.recipientIndex &&
+      f.fieldMeta?.label === fieldToRemove.fieldMeta?.label
+    );
+    
+    // Can remove if there are other template-enforced fields of this exact type
+    return sameTypeEnforcedFields.length > 0;
+  };
+
   // Remove field
   const removeField = (formId: string) => {
+    if (!canRemoveField(formId)) {
+      console.warn('Cannot remove template-enforced field - it is the last one of its type');
+      return;
+    }
+    
     setFields(fields.filter((field) => field.formId !== formId));
     if (activeFieldId === formId) {
       setActiveFieldId(null);
@@ -1003,6 +1168,31 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       console.error('❌ Error in saveDocument:', error);
       alert('Failed to save document: ' + error.message);
     }
+  };
+
+  // Trip configuration handlers
+  const handleTripConfiguration = (matchDetails: MatchDetails) => {
+    setTripMatchDetails(matchDetails);
+    setShowTripConfiguration(false);
+    // Pre-population will be triggered by useEffect when pages are ready
+  };
+
+  const goBackToTemplate = () => {
+    if (workflowState === 'document') {
+      setShowTripConfiguration(true);
+      setPdfFile(null);
+      setFields([]);
+      setSignedFields({});
+      setPdfPagesReady(false);
+      setPageElements(new Map());
+    }
+  };
+
+  const toggleAccordion = (section: keyof typeof accordionStates) => {
+    setAccordionStates(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
   };
 
   // Load template functionality
@@ -1520,15 +1710,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       <div className="h-screen flex items-center justify-center bg-gray-50">
         <Card className="w-full max-w-md">
           <CardContent className="p-8">
-            <div className="flex justify-between items-center mb-6">
+            <div className="mb-6">
               <h2 className="text-xl font-bold text-gray-900">Create Template</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setWorkflowState('selection')}
-              >
-                ← Back to Menu
-              </Button>
             </div>
             <div {...getRootProps()} className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors">
               <input {...getInputProps()} />
@@ -1595,7 +1778,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="flex flex-col bg-gray-50" style={{ height: 'calc(100vh - 80px)' }}>
       {/* Ghost cursor for field placement */}
       {selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place') && (
         <div
@@ -1639,72 +1822,55 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 {workflowState === 'completed' && 'Document Complete'}
               </div>
             </div>
-            {(workflowState === 'template' || workflowState === 'document') && (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setWorkflowState('selection')}
-                >
-                  ← Menu
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setPdfFile(null);
-                    setFields([]);
-                    setRecipients([]);
-                    setSelectedRecipient(null);
-                    setActiveFieldId(null);
-                    setSelectedField(null);
-                    setWorkflowState('template');
-                    setSignedFields({});
-                  }}
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  New PDF
-                </Button>
-              </div>
-            )}
-            {(workflowState === 'signer1' || workflowState === 'signer2') && (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setWorkflowState('selection')}
-                >
-                  ← Menu
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={goBackToEditing}
-                >
-                  ← Back to Setup
-                </Button>
-              </div>
-            )}
           </div>
 
           {/* Workflow-specific content */}
           {workflowState === 'template' && (
             <>
               {/* Recipients - Now visible in template mode */}
-              <div className="mb-6">
-                <RecipientManager
-                  recipients={recipients}
-                  selectedRecipient={selectedRecipient}
-                  onSelectRecipient={setSelectedRecipient}
-                  onAddRecipient={addRecipient}
-                  onRemoveRecipient={removeRecipient}
-                />
-              </div>
+              <Card className="mb-6">
+                <CardContent className="p-4">
+                  <div 
+                    className="flex items-center justify-between cursor-pointer mb-4"
+                    onClick={() => toggleAccordion('recipients')}
+                  >
+                    <h3 className="font-medium">Recipients</h3>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        accordionStates.recipients ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
+                  {accordionStates.recipients && (
+                    <div>
+                      <RecipientManager
+                        recipients={recipients}
+                        selectedRecipient={selectedRecipient}
+                        onSelectRecipient={setSelectedRecipient}
+                        onAddRecipient={addRecipient}
+                        onRemoveRecipient={removeRecipient}
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Required Fields Quick Add */}
               <Card className="mb-6">
                 <CardContent className="p-3">
-                  <h3 className="font-medium mb-3">Required Lease Fields</h3>
+                  <div 
+                    className="flex items-center justify-between cursor-pointer mb-3"
+                    onClick={() => toggleAccordion('requiredFields')}
+                  >
+                    <h3 className="font-medium">Required Lease Fields</h3>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        accordionStates.requiredFields ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
+                  {accordionStates.requiredFields && (
+                    <div>
                   <div className="grid grid-cols-2 gap-2">
                     <Button
                       variant="outline"
@@ -1780,26 +1946,45 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   <p className="text-xs text-gray-500 mt-2">
                     Hold mouse down to start drag, release over PDF to place field
                   </p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
               {/* Field Selector for Template */}
-              <div className="mb-6">
-                <FieldSelector
-                  selectedField={selectedField}
-                  onSelectedFieldChange={(fieldType) => {
-                    setSelectedField(fieldType);
-                    setPendingFieldLabel(null); // Clear any pending label from required field buttons
-                  }}
-                  onStartDrag={(fieldType, mouseEvent) => {
-                    const recipientToUse = selectedRecipient || recipients[0]?.id;
-                    if (recipientToUse) {
-                      startFieldDetection(fieldType, recipientToUse, mouseEvent);
-                    }
-                  }}
-                  disabled={recipients.length === 0}
-                />
-              </div>
+              <Card className="mb-6">
+                <CardContent className="p-4">
+                  <div 
+                    className="flex items-center justify-between cursor-pointer mb-4"
+                    onClick={() => toggleAccordion('fieldTypes')}
+                  >
+                    <h3 className="font-medium">Field Types</h3>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        accordionStates.fieldTypes ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
+                  {accordionStates.fieldTypes && (
+                    <div>
+                      <FieldSelector
+                        selectedField={selectedField}
+                        onSelectedFieldChange={(fieldType) => {
+                          setSelectedField(fieldType);
+                          setPendingFieldLabel(null); // Clear any pending label from required field buttons
+                        }}
+                        onStartDrag={(fieldType, mouseEvent) => {
+                          const recipientToUse = selectedRecipient || recipients[0]?.id;
+                          if (recipientToUse) {
+                            startFieldDetection(fieldType, recipientToUse, mouseEvent);
+                          }
+                        }}
+                        disabled={recipients.length === 0}
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Template Stats */}
               <Card>
@@ -1816,7 +2001,15 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             </>
           )}
 
-          {workflowState === 'document' && !pdfFile && (
+          {workflowState === 'document' && !pdfFile && showTripConfiguration && (
+            <TripConfiguration
+              defaultValues={tripMatchDetails || undefined}
+              onConfigure={handleTripConfiguration}
+              onCancel={() => setWorkflowState('selection')}
+            />
+          )}
+
+          {workflowState === 'document' && !pdfFile && !showTripConfiguration && (
             <>
               <div className="text-center mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Create Document</h3>
@@ -1835,7 +2028,19 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               {/* Real People & Document Values */}
               <Card className="mb-6">
                 <CardContent className="p-4">
-                  <h3 className="font-medium mb-4">Document Information</h3>
+                  <div 
+                    className="flex items-center justify-between cursor-pointer mb-4"
+                    onClick={() => toggleAccordion('documentInfo')}
+                  >
+                    <h3 className="font-medium">Document Information</h3>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        accordionStates.documentInfo ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
+                  {accordionStates.documentInfo && (
+                    <div>
                   
                   {/* People Section */}
                   <div className="mb-4">
@@ -1845,7 +2050,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         <label className="text-xs text-gray-600">Host Name</label>
                         <input 
                           type="text"
-                          defaultValue="John Smith"
+                          defaultValue={tripMatchDetails?.hostName || "John Smith"}
                           className="w-full text-sm border rounded px-2 py-1"
                           onChange={(e) => {
                             // Update recipient name and all host name fields
@@ -1869,7 +2074,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         <label className="text-xs text-gray-600">Host Email</label>
                         <input 
                           type="email"
-                          defaultValue="host@host.com"
+                          defaultValue={tripMatchDetails?.hostEmail || "host@host.com"}
                           className="w-full text-sm border rounded px-2 py-1"
                           onChange={(e) => {
                             const newRecipients = recipients.map(r => 
@@ -1883,7 +2088,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         <label className="text-xs text-gray-600">Renter Name</label>
                         <input 
                           type="text"
-                          defaultValue="Jane Doe"
+                          defaultValue={tripMatchDetails?.primaryRenterName || "Jane Doe"}
                           className="w-full text-sm border rounded px-2 py-1"
                           onChange={(e) => {
                             // Update recipient name and all renter name fields
@@ -1907,7 +2112,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         <label className="text-xs text-gray-600">Renter Email</label>
                         <input 
                           type="email"
-                          defaultValue="renter@renter.com"
+                          defaultValue={tripMatchDetails?.primaryRenterEmail || "renter@renter.com"}
                           className="w-full text-sm border rounded px-2 py-1"
                           onChange={(e) => {
                             const newRecipients = recipients.map(r => 
@@ -1928,7 +2133,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         <label className="text-xs text-gray-600">Monthly Rent</label>
                         <input 
                           type="text"
-                          defaultValue="2,500.00"
+                          defaultValue={tripMatchDetails?.monthlyPrice || "2,500.00"}
                           className="w-full text-sm border rounded px-2 py-1"
                           onChange={(e) => {
                             // Update any rent fields
@@ -1949,7 +2154,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         <label className="text-xs text-gray-600">Start Date</label>
                         <input 
                           type="date"
-                          defaultValue={new Date().toISOString().split('T')[0]}
+                          defaultValue={tripMatchDetails?.startDate || new Date().toISOString().split('T')[0]}
                           className="w-full text-sm border rounded px-2 py-1"
                           onChange={(e) => {
                             const newSignedFields = { ...signedFields };
@@ -1966,7 +2171,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         <label className="text-xs text-gray-600">End Date</label>
                         <input 
                           type="date"
-                          defaultValue={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                          defaultValue={tripMatchDetails?.endDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
                           className="w-full text-sm border rounded px-2 py-1"
                           onChange={(e) => {
                             const newSignedFields = { ...signedFields };
@@ -1979,39 +2184,95 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                           }}
                         />
                       </div>
+                      <div>
+                        <label className="text-xs text-gray-600">Property Address</label>
+                        <input 
+                          type="text"
+                          defaultValue={tripMatchDetails?.propertyAddress || "123 Main St, New York, NY 10001"}
+                          className="w-full text-sm border rounded px-2 py-1"
+                          onChange={(e) => {
+                            const newSignedFields = { ...signedFields };
+                            fields.forEach(field => {
+                              if ((field.type === 'TEXT' || field.type === 'TEXTAREA') && 
+                                  (field.fieldMeta?.label?.toLowerCase().includes('address') || 
+                                   field.fieldMeta?.label?.toLowerCase().includes('property') ||
+                                   field.fieldMeta?.label?.toLowerCase().includes('location'))) {
+                                newSignedFields[field.formId] = e.target.value;
+                              }
+                            });
+                            setSignedFields(newSignedFields);
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
               {/* Recipients */}
-              <div className="mb-6">
-                <RecipientManager
-                  recipients={recipients}
-                  selectedRecipient={selectedRecipient}
-                  onSelectRecipient={setSelectedRecipient}
-                  onAddRecipient={addRecipient}
-                  onRemoveRecipient={removeRecipient}
-                />
-              </div>
+              <Card className="mb-6">
+                <CardContent className="p-4">
+                  <div 
+                    className="flex items-center justify-between cursor-pointer mb-4"
+                    onClick={() => toggleAccordion('recipients')}
+                  >
+                    <h3 className="font-medium">Recipients</h3>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        accordionStates.recipients ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
+                  {accordionStates.recipients && (
+                    <div>
+                      <RecipientManager
+                        recipients={recipients}
+                        selectedRecipient={selectedRecipient}
+                        onSelectRecipient={setSelectedRecipient}
+                        onAddRecipient={addRecipient}
+                        onRemoveRecipient={removeRecipient}
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Field Selector */}
-              <div className="mb-6">
-                <FieldSelector
-                  selectedField={selectedField}
-                  onSelectedFieldChange={(fieldType) => {
-                    setSelectedField(fieldType);
-                    setPendingFieldLabel(null); // Clear any pending label from required field buttons
-                  }}
-                  onStartDrag={(fieldType, mouseEvent) => {
-                    const recipientToUse = selectedRecipient || recipients[0]?.id;
-                    if (recipientToUse) {
-                      startFieldDetection(fieldType, recipientToUse, mouseEvent);
-                    }
-                  }}
-                  disabled={recipients.length === 0}
-                />
-              </div>
+              <Card className="mb-6">
+                <CardContent className="p-4">
+                  <div 
+                    className="flex items-center justify-between cursor-pointer mb-4"
+                    onClick={() => toggleAccordion('fieldTypes')}
+                  >
+                    <h3 className="font-medium">Field Types</h3>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        accordionStates.fieldTypes ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
+                  {accordionStates.fieldTypes && (
+                    <div>
+                      <FieldSelector
+                        selectedField={selectedField}
+                        onSelectedFieldChange={(fieldType) => {
+                          setSelectedField(fieldType);
+                          setPendingFieldLabel(null); // Clear any pending label from required field buttons
+                        }}
+                        onStartDrag={(fieldType, mouseEvent) => {
+                          const recipientToUse = selectedRecipient || recipients[0]?.id;
+                          if (recipientToUse) {
+                            startFieldDetection(fieldType, recipientToUse, mouseEvent);
+                          }
+                        }}
+                        disabled={recipients.length === 0}
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Document Stats */}
               <Card>
@@ -2176,71 +2437,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
         {/* Main Editor */}
         <div className="flex-1 flex flex-col">
-        {/* Toolbar */}
-        <div className="bg-white border-b border-gray-200 p-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={undo}
-                disabled={!canUndo}
-                title="Undo"
-              >
-                <Undo2 className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={redo}
-                disabled={!canRedo}
-                title="Redo"
-              >
-                <Redo2 className="w-4 h-4" />
-              </Button>
-              <div className="w-px h-6 bg-gray-300 mx-2" />
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowFieldLabels(!showFieldLabels)}
-                title="Toggle field labels"
-              >
-                {showFieldLabels ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                <span className="ml-2 text-xs">Labels</span>
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">Zoom:</span>
-              <Button
-                variant="outline" 
-                size="sm"
-                onClick={() => setPageWidth(Math.max(400, pageWidth - 100))}
-                title="Zoom out"
-              >
-                -
-              </Button>
-              <span className="text-sm w-16 text-center">{Math.round((pageWidth / 800) * 100)}%</span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPageWidth(Math.min(1200, pageWidth + 100))}
-                title="Zoom in"
-              >
-                +
-              </Button>
-              <div className="w-px h-6 bg-gray-300 mx-2" />
-              <Button variant="outline" size="sm" onClick={saveTemplate} title="Save template">
-                <Save className="w-4 h-4 mr-2" />
-                Save
-              </Button>
-              <Button size="sm" onClick={exportPDF} title="Export PDF">
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
-            </div>
-          </div>
-        </div>
 
         {/* PDF Viewer */}
         <div className="flex-1 overflow-auto p-6">
@@ -2251,8 +2447,13 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             isFieldPlacementMode={!!selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place')}
           >
             {fields.map((field) => {
-              const pageElement = document.querySelector(`[data-pdf-viewer-page][data-page-number="${field.pageNumber}"]`) as HTMLElement;
+              const pageElement = pageElements.get(field.pageNumber);
               const recipient = recipients.find(r => r.id === field.signerEmail);
+              
+              // Skip rendering if pages aren't ready yet
+              if (!pdfPagesReady || !pageElement) {
+                return null;
+              }
               
               // During template or document editing, show draggable fields
               if (workflowState === 'template' || workflowState === 'document') {
@@ -2268,6 +2469,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     pageElement={pageElement}
                     signedValue={signedFields[field.formId]}
                     showValues={workflowState === 'document'} // Show values in document mode
+                    canRemove={canRemoveField(field.formId)} // Check if field can be removed
                   />
                 );
               }
@@ -2308,8 +2510,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         </div>
       </div>
 
-      {/* Footer Controls */}
-      <div className="bg-white border-t border-gray-200 px-6 py-4">
+      {/* Footer Controls - Fixed at bottom */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
         <div className="flex items-center justify-between">
           {/* Left side - Status info */}
           <div className="flex items-center gap-4">
@@ -2325,18 +2527,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             {/* Template state controls */}
             {workflowState === 'template' && (
               <>
-                <Button variant="outline" size="sm" onClick={() => setShowTemplateBrowser(true)} title="Load template">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Load Template
-                </Button>
-                <Button variant="outline" size="sm" onClick={saveTemplate} title="Save template">
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Template
-                </Button>
-                <Button variant="outline" size="sm" onClick={exportPDF} title="Export template with field borders">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Template
-                </Button>
                 <BrandButton 
                   onClick={completeCurrentStep}
                   disabled={fields.length === 0}
@@ -2351,34 +2541,20 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             {/* Document setup state controls */}
             {workflowState === 'document' && (
               <>
-                <Button variant="outline" size="sm" onClick={goBackToTemplate}>
-                  ← Back to Template
-                </Button>
-                <Button variant="outline" size="sm" onClick={saveDocument} title="Save document">
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Document
-                </Button>
-                <Button variant="outline" size="sm" onClick={exportPDF} title="Export with field borders">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Draft
-                </Button>
-                <Button 
+                <BrandButton 
                   onClick={completeCurrentStep}
                   disabled={fields.length === 0}
                   size="sm"
-                  className="bg-green-600 hover:bg-green-700"
+                  spinOnClick={true}
                 >
-                  {fields.length === 0 ? 'Add Fields First' : 'Finish Document'}
-                </Button>
+                  {fields.length === 0 ? 'Add Fields First' : 'Sign and Send'}
+                </BrandButton>
               </>
             )}
 
             {/* Signing state controls */}
             {(workflowState === 'signer1' || workflowState === 'signer2') && (
               <>
-                <Button variant="outline" size="sm" onClick={goBackToEditing}>
-                  ← Back to Edit
-                </Button>
                 <div className="text-xs text-gray-500">
                   {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).filter(f => signedFields[f.formId]).length} of{' '}
                   {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).length} fields signed
@@ -2410,36 +2586,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             {/* Completion state controls */}
             {workflowState === 'completed' && (
               <>
-                <Button variant="outline" size="sm" onClick={goBackToEditing}>
-                  ← Start Over
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={async () => {
-                    if (!pdfFile) return;
-                    try {
-                      const arrayBuffer = await pdfFile.arrayBuffer();
-                      const { exportPDFWithFields } = await import('@/lib/pdfExporter');
-                      const exportedPdfBytes = await exportPDFWithFields(
-                        arrayBuffer,
-                        fields,
-                        recipients,
-                        signedFields,
-                        { showFieldBorders: false, includeLabels: true, fieldOpacity: 1.0 }
-                      );
-                      const blob = new Blob([exportedPdfBytes], { type: 'application/pdf' });
-                      const url = URL.createObjectURL(blob);
-                      window.open(url, '_blank');
-                    } catch (error) {
-                      console.error('Error viewing PDF:', error);
-                    }
-                  }}
-                  title="View final PDF in new tab"
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View PDF
-                </Button>
                 <Button onClick={exportPDF} size="sm" className="bg-green-600 hover:bg-green-700">
                   <Download className="w-4 h-4 mr-2" />
                   Download Signed PDF

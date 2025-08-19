@@ -15,6 +15,34 @@ interface FieldContentProps {
 export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, signedValue, showValues = false }) => {
   const isSignatureField = field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS;
 
+  // Check if this is a template-enforced field and get its specific label
+  const getTemplateEnforcedLabel = (field: FieldFormType) => {
+    const requiredFieldMap = {
+      'host-signature': { type: FieldType.SIGNATURE, recipientIndex: 0, label: 'Host Signature' },
+      'host-name': { type: FieldType.NAME, recipientIndex: 0, label: 'Host Name' },
+      'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1, label: 'Primary Renter Signature' },
+      'renter-name': { type: FieldType.NAME, recipientIndex: 1, label: 'Primary Renter Name' },
+      'monthly-rent': { type: FieldType.NUMBER, label: 'Monthly Rent' },
+      'start-date': { type: FieldType.DATE, label: 'Start Date' },
+      'end-date': { type: FieldType.DATE, label: 'End Date' }
+    };
+
+    for (const [, config] of Object.entries(requiredFieldMap)) {
+      // Check by type, recipient index, and label (for fields with specific labels)
+      if (config.recipientIndex !== undefined) {
+        if (field.type === config.type && field.recipientIndex === config.recipientIndex) {
+          return config.label;
+        }
+      } else if (config.label) {
+        if (field.type === config.type && field.fieldMeta?.label === config.label) {
+          return config.label;
+        }
+      }
+    }
+    
+    return null;
+  };
+
   // Checkbox fields with custom layout
   if (field.type === FieldType.CHECKBOX && field.fieldMeta?.values) {
     return (
@@ -70,14 +98,20 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
   // Default text display for other field types
   let textToDisplay = field.fieldMeta?.label || FRIENDLY_FIELD_TYPE[field.type] || '';
   
+  // Check if this is a template-enforced field and use its specific label when not showing values
+  const templateEnforcedLabel = getTemplateEnforcedLabel(field);
+  if (templateEnforcedLabel && !showValues) {
+    textToDisplay = templateEnforcedLabel;
+  }
+  
   // If we have a signed value and should show values, use that instead
   if (showValues && signedValue !== undefined && signedValue !== null && signedValue !== '') {
     textToDisplay = signedValue;
   }
 
   // For signature, name, initials, and sign date fields, show recipient-specific labels
-  // BUT only when we're NOT showing actual values (i.e., in template mode)
-  if ((field.type === FieldType.SIGNATURE || field.type === FieldType.NAME || field.type === FieldType.INITIALS || field.type === FieldType.SIGN_DATE) && recipient && !showValues) {
+  // BUT only when we're NOT showing actual values AND not template-enforced (to avoid double labeling)
+  if ((field.type === FieldType.SIGNATURE || field.type === FieldType.NAME || field.type === FieldType.INITIALS || field.type === FieldType.SIGN_DATE) && recipient && !showValues && !templateEnforcedLabel) {
     const getFieldTypeLabel = (type: FieldType) => {
       switch (type) {
         case FieldType.SIGNATURE: return 'Signature';

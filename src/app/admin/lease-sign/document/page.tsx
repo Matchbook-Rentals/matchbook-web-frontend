@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { FileText, ArrowLeft } from 'lucide-react';
 import { PDFEditorDocument } from '@/components/pdf-editor/PDFEditorDocument';
 import type { Recipient } from '@/components/pdf-editor/RecipientManager';
-import type { FieldFormType } from '@/components/pdf-editor/types';
+import type { FieldFormType, MatchDetails } from '@/components/pdf-editor/types';
 
 export default function DocumentEditorTestPage() {
   const [showEditor, setShowEditor] = useState(false);
@@ -18,6 +18,18 @@ export default function DocumentEditorTestPage() {
     recipients: Recipient[];
     pdfFile: File;
   } | null>(null);
+
+  // Default match details for testing
+  const defaultMatchDetails: MatchDetails = {
+    propertyAddress: "456 Oak Avenue, Brooklyn, NY 11215",
+    monthlyPrice: "3,200.00",
+    hostName: "Sarah Johnson",
+    hostEmail: "sarah.johnson@example.com", 
+    primaryRenterName: "Michael Chen",
+    primaryRenterEmail: "michael.chen@example.com",
+    startDate: "2024-02-01",
+    endDate: "2025-01-31"
+  };
 
   const handleSave = (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => {
     setSavedData(data);
@@ -39,6 +51,7 @@ export default function DocumentEditorTestPage() {
     return (
       <div className="min-h-screen">
         <PDFEditorDocument
+          matchDetails={defaultMatchDetails}
           onSave={handleSave}
           onCancel={handleCancel}
           onFinish={handleFinish}
@@ -95,7 +108,7 @@ export default function DocumentEditorTestPage() {
         
         <h1 className="text-3xl font-bold mb-2">Document Editor Test</h1>
         <p className="text-muted-foreground">
-          Test the PDF Editor in document creation mode
+          Test the PDF Editor in document creation mode with trip configuration
         </p>
       </div>
 
@@ -114,14 +127,33 @@ export default function DocumentEditorTestPage() {
                   Workflow State: document
                 </Badge>
                 <p className="text-sm text-muted-foreground">
-                  This mode allows users to create specific lease documents from templates or upload new documents.
-                  Documents can be populated with tenant and property data, and prepared for the signing workflow.
+                  This mode starts with trip configuration where users enter listing and trip details.
+                  After configuration, users select a template and the document is pre-populated with the trip data.
+                  Documents can then be prepared for the signing workflow.
                 </p>
               </div>
               
               <Button onClick={() => setShowEditor(true)}>
                 Launch Document Editor
               </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Default Trip Configuration Data</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 text-sm">
+              <p><strong>Property Address:</strong> {defaultMatchDetails.propertyAddress}</p>
+              <p><strong>Monthly Price:</strong> ${defaultMatchDetails.monthlyPrice}</p>
+              <p><strong>Host Name:</strong> {defaultMatchDetails.hostName}</p>
+              <p><strong>Host Email:</strong> {defaultMatchDetails.hostEmail}</p>
+              <p><strong>Primary Renter:</strong> {defaultMatchDetails.primaryRenterName}</p>
+              <p><strong>Renter Email:</strong> {defaultMatchDetails.primaryRenterEmail}</p>
+              <p><strong>Start Date:</strong> {defaultMatchDetails.startDate}</p>
+              <p><strong>End Date:</strong> {defaultMatchDetails.endDate}</p>
             </div>
           </CardContent>
         </Card>

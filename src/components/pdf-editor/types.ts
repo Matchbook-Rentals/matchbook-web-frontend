@@ -100,3 +100,15 @@ export interface Recipient {
   email: string;
   role: 'signer' | 'viewer' | 'approver';
 }
+
+// Match details for pre-populating document fields
+export interface MatchDetails {
+  propertyAddress: string;
+  monthlyPrice: string;
+  hostName: string;
+  hostEmail: string;
+  primaryRenterName: string;
+  primaryRenterEmail: string;
+  startDate: string;
+  endDate: string;
+}
