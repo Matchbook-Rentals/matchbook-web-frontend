@@ -64,6 +64,8 @@ export default function CreateLeasePage() {
           },
           body: JSON.stringify({
             title: templateData.name,
+            type: templateData.type,
+            listingId: listingId,
             fields: templateData.fields,
             recipients: templateData.recipients,
           }),
@@ -94,6 +96,8 @@ export default function CreateLeasePage() {
           body: JSON.stringify({
             title: templateData.name,
             description: `${templateData.type} template`,
+            type: templateData.type,
+            listingId: listingId,
             fields: templateData.fields,
             recipients: templateData.recipients,
             pdfFileUrl: fileUrl,

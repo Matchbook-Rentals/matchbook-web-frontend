@@ -19,13 +19,14 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50');
     const offset = parseInt(searchParams.get('offset') || '0');
     const query = searchParams.get('q');
+    const listingId = searchParams.get('listingId');
 
     // Handle search vs list
     if (query) {
       const templates = await pdfTemplateService.searchTemplates(userId, query, limit);
       return NextResponse.json({ templates, total: templates.length });
     } else {
-      const result = await pdfTemplateService.listTemplates(userId, limit, offset);
+      const result = await pdfTemplateService.listTemplates(userId, limit, offset, listingId || undefined);
       return NextResponse.json(result);
     }
   } catch (error) {
@@ -53,6 +54,8 @@ export async function POST(request: NextRequest) {
     const { 
       title, 
       description,
+      type,
+      listingId,
       fields, 
       recipients, 
       pdfFileUrl,
@@ -86,6 +89,8 @@ export async function POST(request: NextRequest) {
     const template = await pdfTemplateService.createTemplate({
       title,
       description,
+      type: type || 'lease',
+      listingId,
       templateData,
       pdfFileUrl,
       pdfFileName: pdfFileName || 'document.pdf',

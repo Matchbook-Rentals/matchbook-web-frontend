@@ -27,14 +27,17 @@ export function validateDocumentForSigning(document: Document): string[] {
     }
   });
 
-  // Check required fields are filled
-  const requiredFields = document.fields.filter(field => field.required);
-  const unfilledRequired = requiredFields.filter(field => 
-    !field.value || (typeof field.value === 'string' && !field.value.trim())
-  );
+  // Skip required field validation for addendums (they're loosy goosy)
+  if (document.template?.type !== 'addendum') {
+    // Check required fields are filled
+    const requiredFields = document.fields.filter(field => field.required);
+    const unfilledRequired = requiredFields.filter(field => 
+      !field.value || (typeof field.value === 'string' && !field.value.trim())
+    );
 
-  if (unfilledRequired.length > 0) {
-    errors.push(`${unfilledRequired.length} required fields are not filled`);
+    if (unfilledRequired.length > 0) {
+      errors.push(`${unfilledRequired.length} required fields are not filled`);
+    }
   }
 
   return errors;

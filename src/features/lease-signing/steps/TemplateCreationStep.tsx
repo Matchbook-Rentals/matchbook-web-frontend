@@ -122,6 +122,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
         <PDFEditor 
           initialPdfFile={uploadedFile || undefined}
           initialWorkflowState="template"
+          templateType={templateType as 'lease' | 'addendum'}
           initialTemplate={existingTemplate}
           onSave={(templateData) => {
             // Combine the metadata from step 1 with the field data from editor

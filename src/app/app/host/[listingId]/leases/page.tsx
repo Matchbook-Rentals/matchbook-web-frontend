@@ -24,13 +24,13 @@ export default function LeasesPage() {
 
   useEffect(() => {
     fetchTemplates();
-  }, []);
+  }, [listingId]);
 
   const fetchTemplates = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('/api/pdf-templates');
+      const response = await fetch(`/api/pdf-templates?listingId=${listingId}`);
       if (response.ok) {
         const data = await response.json();
         setTemplates(data.templates || []);
@@ -53,17 +53,59 @@ export default function LeasesPage() {
     if (hasFields && hasRecipients) {
       return {
         status: "Complete",
-        statusColor: "bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]",
+        statusColor: "bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e] hover:bg-[#e9f7ee] hover:text-[#1ca34e]",
         buttonText: "Modify"
       };
     } else {
       return {
         status: "Incomplete",
-        statusColor: "bg-[#ffeaea] text-[#ff3b30] border-[#ff3b30]",
+        statusColor: "bg-[#ffeaea] text-[#ff3b30] border-[#ff3b30] hover:bg-[#ffeaea] hover:text-[#ff3b30]",
         buttonText: "Add Signature Blocks"
       };
     }
   };
+
+  const getDocumentTypeBadge = (template: PdfTemplate) => {
+    const title = template.title.toLowerCase();
+    
+    if (title.includes('lease')) {
+      return {
+        type: "Lease",
+        badgeColor: "bg-[#e8f4fd] text-[#1976d2] border-[#1976d2] hover:bg-[#e8f4fd] hover:text-[#1976d2]"
+      };
+    } else if (title.includes('addendum')) {
+      return {
+        type: "Addendum", 
+        badgeColor: "bg-[#fff3e0] text-[#f57c00] border-[#f57c00] hover:bg-[#fff3e0] hover:text-[#f57c00]"
+      };
+    } else if (title.includes('disclosure')) {
+      return {
+        type: "Disclosure",
+        badgeColor: "bg-[#f3e5f5] text-[#7b1fa2] border-[#7b1fa2] hover:bg-[#f3e5f5] hover:text-[#7b1fa2]"
+      };
+    } else {
+      return {
+        type: "Document",
+        badgeColor: "bg-[#f5f5f5] text-[#616161] border-[#616161] hover:bg-[#f5f5f5] hover:text-[#616161]"
+      };
+    }
+  };
+
+  const getSortOrder = (template: PdfTemplate) => {
+    const title = template.title.toLowerCase();
+    if (title.includes('lease')) return 1;
+    if (title.includes('addendum')) return 2;
+    return 3;
+  };
+
+  const sortedTemplates = [...templates].sort((a, b) => {
+    const orderA = getSortOrder(a);
+    const orderB = getSortOrder(b);
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+    return a.title.localeCompare(b.title);
+  });
 
   const formatLastUpdated = (updatedAt: Date) => {
     const now = new Date();
@@ -224,8 +266,9 @@ export default function LeasesPage() {
             </Button>
           </div>
         ) : (
-          templates.map((template) => {
+          sortedTemplates.map((template) => {
             const { status, statusColor, buttonText } = getTemplateStatus(template);
+            const { type, badgeColor } = getDocumentTypeBadge(template);
             
             return (
               <Card
@@ -241,6 +284,11 @@ export default function LeasesPage() {
                             <h2 className="font-text-label-large-medium font-[number:var(--text-label-large-medium-font-weight)] text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)] [font-style:var(--text-label-large-medium-font-style)]">
                               {template.title}
                             </h2>
+                            <Badge
+                              className={`${badgeColor} rounded-full border-solid font-medium text-sm text-center leading-5 whitespace-nowrap [font-family:'Poppins',Helvetica] tracking-[0]`}
+                            >
+                              {type}
+                            </Badge>
                             <Badge
                               className={`${statusColor} rounded-full border-solid font-medium text-sm text-center leading-5 whitespace-nowrap [font-family:'Poppins',Helvetica] tracking-[0]`}
                             >

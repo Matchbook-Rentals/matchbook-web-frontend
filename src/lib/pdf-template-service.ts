@@ -14,6 +14,8 @@ export interface PdfTemplateData {
 export interface CreatePdfTemplateInput {
   title: string;
   description?: string;
+  type?: string;
+  listingId?: string;
   templateData: PdfTemplateData;
   pdfFileUrl: string;
   pdfFileName: string;
@@ -25,6 +27,8 @@ export interface CreatePdfTemplateInput {
 export interface UpdatePdfTemplateInput {
   title?: string;
   description?: string;
+  type?: string;
+  listingId?: string;
   templateData?: PdfTemplateData;
 }
 
@@ -38,6 +42,8 @@ export class PdfTemplateService {
         data: {
           title: input.title,
           description: input.description,
+          type: input.type || 'lease',
+          listingId: input.listingId,
           templateData: input.templateData as any,
           pdfFileUrl: input.pdfFileUrl,
           pdfFileName: input.pdfFileName,
@@ -84,16 +90,21 @@ export class PdfTemplateService {
   }
 
   /**
-   * List PDF templates for a user
+   * List PDF templates for a user, optionally filtered by listing
    */
-  async listTemplates(userId: string, limit: number = 50, offset: number = 0): Promise<{
+  async listTemplates(userId: string, limit: number = 50, offset: number = 0, listingId?: string): Promise<{
     templates: (PdfTemplate & { user: { id: string; firstName: string | null; lastName: string | null; email: string | null } })[];
     total: number;
   }> {
     try {
+      const whereClause: any = { userId };
+      if (listingId !== undefined) {
+        whereClause.listingId = listingId;
+      }
+
       const [templates, total] = await Promise.all([
         prisma.pdfTemplate.findMany({
-          where: { userId },
+          where: whereClause,
           include: {
             user: {
               select: {
@@ -109,7 +120,7 @@ export class PdfTemplateService {
           skip: offset,
         }),
         prisma.pdfTemplate.count({
-          where: { userId },
+          where: whereClause,
         }),
       ]);
 
@@ -136,6 +147,8 @@ export class PdfTemplateService {
         data: {
           ...(input.title && { title: input.title }),
           ...(input.description !== undefined && { description: input.description }),
+          ...(input.type && { type: input.type }),
+          ...(input.listingId !== undefined && { listingId: input.listingId }),
           ...(input.templateData && { templateData: input.templateData as any }),
           updatedAt: new Date(),
         },

@@ -331,6 +331,7 @@ model Listing {
   conversations      Conversation[]          @relation("ConversationToListing")
   monthlyPricing     ListingMonthlyPricing[]
   locationChanges    ListingLocationChange[]
+  pdfTemplates       PdfTemplate[] // Listing-specific PDF templates
   @@index([state])
 }
 
@@ -1495,7 +1496,9 @@ model PdfTemplate {
   id           String   @id @default(uuid())
   title        String
   description  String?
+  type         String   @default("lease") // 'lease', 'addendum', 'disclosure', 'other'
   userId       String
+  listingId    String?  // Optional: templates can be global or listing-specific
   
   // Template configuration (stored as JSON for fast database queries)
   templateData Json     // Contains fields, recipients, and metadata
@@ -1512,9 +1515,11 @@ model PdfTemplate {
   
   // Relationships
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing      Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
   documents    DocumentInstance[]
   
   @@index([userId])
+  @@index([listingId])
   @@index([createdAt])
   @@index([title])
 }

@@ -18,6 +18,8 @@ import { DocumentTemplateSelector } from './DocumentTemplateSelector';
 import { DocumentSelector } from './DocumentSelector';
 import { TripConfiguration } from './TripConfiguration';
 import { CustomFieldDialog } from './CustomFieldDialog';
+import { RequiredLeaseFields } from './RequiredLeaseFields';
+import { FrequentlyUsedFields } from './FrequentlyUsedFields';
 import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
@@ -53,6 +55,7 @@ type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer
 interface PDFEditorProps {
   initialWorkflowState?: WorkflowState;
   initialPdfFile?: File;
+  templateType?: 'lease' | 'addendum' | 'disclosure' | 'other';
   matchDetails?: MatchDetails;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
@@ -62,6 +65,7 @@ interface PDFEditorProps {
 export const PDFEditor: React.FC<PDFEditorProps> = ({ 
   initialWorkflowState = 'selection', 
   initialPdfFile, 
+  templateType = 'lease',
   matchDetails,
   onSave, 
   onCancel,
@@ -606,15 +610,45 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     setInteractionMode('idle');
     setIsMouseDown(false);
     
-    if (customFieldTypes.includes(selectedField)) {
-      // Store the field temporarily and show custom field dialog
+    if (customFieldTypes.includes(selectedField) && !pendingFieldLabel) {
+      // Only open dialog if NOT from required fields (no pendingFieldLabel)
       setCustomFieldDialog({ isOpen: true, field: newField });
       console.log('⚙️ Opening custom field dialog for:', newField);
     } else {
-      // For non-custom fields (like signature, initials), add directly
-      setFields([...fields, newField]);
-      setActiveFieldId(newField.formId);
-      console.log('✅ Field creation completed, setting states to cleanup');
+      // For required fields or non-custom fields, add directly
+      if (pendingFieldLabel) {
+        // Add predefined metadata for ALL required fields
+        const fieldWithMetadata = {
+          ...newField,
+          fieldMeta: {
+            label: pendingFieldLabel,
+            // Add specific metadata based on field type and label
+            ...(selectedField === FieldType.NUMBER && pendingFieldLabel === 'Monthly Rent' && {
+              placeholder: '$0.00',
+              required: true
+            }),
+            ...(selectedField === FieldType.NAME && pendingFieldLabel === 'Host Name' && {
+              placeholder: 'Enter host name',
+              required: true
+            }),
+            ...(selectedField === FieldType.NAME && pendingFieldLabel === 'Renter Name' && {
+              placeholder: 'Enter renter name',
+              required: true
+            }),
+            ...(selectedField === FieldType.DATE && (pendingFieldLabel === 'Start Date' || pendingFieldLabel === 'End Date') && {
+              required: true
+            })
+          }
+        };
+        setFields([...fields, fieldWithMetadata]);
+        setActiveFieldId(fieldWithMetadata.formId);
+        console.log('✅ Required field added directly with metadata:', fieldWithMetadata);
+      } else {
+        // Non-custom fields (signatures, initials, etc.)
+        setFields([...fields, newField]);
+        setActiveFieldId(newField.formId);
+        console.log('✅ Field creation completed, setting states to cleanup');
+      }
     }
     
     console.log('🏁 handlePageClick completed');
@@ -809,6 +843,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       const templateData = {
         title: pdfFile.name.replace('.pdf', ' Template') || 'PDF Template',
         description: `Template created from ${pdfFile.name}`,
+        type: templateType,
         fields,
         recipients,
         pdfFileUrl: uploadResult.fileUrl,
@@ -1589,6 +1624,18 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           alert('Please add some fields to your template first!');
           return;
         }
+        
+        // For lease templates, check if all required fields are present
+        if (templateType === 'lease') {
+          const requiredFieldTypes = ['host-signature', 'host-name', 'renter-signature', 'renter-name', 'monthly-rent', 'start-date', 'end-date'];
+          const missingRequiredFields = requiredFieldTypes.filter(fieldType => !getRequiredFieldStatus(fieldType));
+          
+          if (missingRequiredFields.length > 0) {
+            alert(`Please place all required lease fields before saving. Missing: ${missingRequiredFields.join(', ')}`);
+            return;
+          }
+        }
+        
         // Save the template
         await saveTemplate();
         // Call onSave if provided
@@ -2209,101 +2256,21 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 </CardContent>
               </Card>
 
-              {/* Required Fields Quick Add */}
-              <Card className="mb-6">
-                <CardContent className="p-3">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-3"
-                    onClick={() => toggleAccordion('requiredFields')}
-                  >
-                    <h3 className="font-medium">Required Lease Fields</h3>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        accordionStates.requiredFields ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </div>
-                  {accordionStates.requiredFields && (
-                    <div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs justify-start ${getRequiredFieldStatus('host-signature') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
-                      onMouseDown={(e) => {
-                        startFieldDetection(FieldType.SIGNATURE, 'host-recipient', e.nativeEvent as MouseEvent);
-                      }}
-                    >
-                      {getRequiredFieldStatus('host-signature') ? '✓' : '+'} Host Signature
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs justify-start ${getRequiredFieldStatus('host-name') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
-                      onMouseDown={(e) => {
-                        startFieldDetection(FieldType.NAME, 'host-recipient', e.nativeEvent as MouseEvent);
-                      }}
-                    >
-                      {getRequiredFieldStatus('host-name') ? '✓' : '+'} Host Name
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs justify-start ${getRequiredFieldStatus('renter-signature') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
-                      onMouseDown={(e) => {
-                        startFieldDetection(FieldType.SIGNATURE, 'primary-renter-recipient', e.nativeEvent as MouseEvent);
-                      }}
-                    >
-                      {getRequiredFieldStatus('renter-signature') ? '✓' : '+'} Renter Signature
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs justify-start ${getRequiredFieldStatus('renter-name') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
-                      onMouseDown={(e) => {
-                        startFieldDetection(FieldType.NAME, 'primary-renter-recipient', e.nativeEvent as MouseEvent);
-                      }}
-                    >
-                      {getRequiredFieldStatus('renter-name') ? '✓' : '+'} Renter Name
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs justify-start ${getRequiredFieldStatus('monthly-rent') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
-                      onMouseDown={(e) => {
-                        startFieldDetection(FieldType.NUMBER, 'host-recipient', e.nativeEvent as MouseEvent, 'Monthly Rent');
-                      }}
-                    >
-                      {getRequiredFieldStatus('monthly-rent') ? '✓' : '+'} Monthly Rent
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs justify-start ${getRequiredFieldStatus('start-date') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
-                      onMouseDown={(e) => {
-                        startFieldDetection(FieldType.DATE, 'host-recipient', e.nativeEvent as MouseEvent, 'Start Date');
-                      }}
-                    >
-                      {getRequiredFieldStatus('start-date') ? '✓' : '+'} Start Date
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs justify-start ${getRequiredFieldStatus('end-date') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
-                      onMouseDown={(e) => {
-                        startFieldDetection(FieldType.DATE, 'host-recipient', e.nativeEvent as MouseEvent, 'End Date');
-                      }}
-                    >
-                      {getRequiredFieldStatus('end-date') ? '✓' : '+'} End Date
-                    </Button>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Hold mouse down to start drag, release over PDF to place field
-                  </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              {/* Required/Frequently Used Fields Quick Add */}
+              {templateType === 'lease' ? (
+                <RequiredLeaseFields
+                  accordionState={accordionStates.requiredFields}
+                  onToggleAccordion={() => toggleAccordion('requiredFields')}
+                  getRequiredFieldStatus={getRequiredFieldStatus}
+                  startFieldDetection={startFieldDetection}
+                />
+              ) : (
+                <FrequentlyUsedFields
+                  accordionState={accordionStates.requiredFields}
+                  onToggleAccordion={() => toggleAccordion('requiredFields')}
+                  startFieldDetection={startFieldDetection}
+                />
+              )}
 
               {/* Field Selector for Template */}
               <Card className="mb-6">
@@ -2891,11 +2858,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               <>
                 <BrandButton 
                   onClick={completeCurrentStep}
-                  disabled={fields.length === 0}
+                  disabled={templateType !== 'addendum' && fields.length === 0}
                   size="sm"
                   spinOnClick={true}
                 >
-                  {fields.length === 0 ? 'Add Fields First' : 'Finish and Save'}
+                  {(templateType !== 'addendum' && fields.length === 0) ? 'Add Fields First' : 'Finish and Save'}
                 </BrandButton>
               </>
             )}
@@ -2905,14 +2872,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               <>
                 <BrandButton 
                   onClick={completeCurrentStep}
-                  disabled={fields.length === 0 || isCreatingDocument}
+                  disabled={(templateType !== 'addendum' && fields.length === 0) || isCreatingDocument}
                   size="sm"
                   loading={isCreatingDocument}
                   spinOnClick={true}
                 >
                   {isCreatingDocument 
                     ? 'Creating Document...' 
-                    : fields.length === 0 
+                    : (templateType !== 'addendum' && fields.length === 0) 
                       ? 'Add Fields First' 
                       : 'Sign and Send'
                   }

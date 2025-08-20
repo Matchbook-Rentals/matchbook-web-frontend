@@ -93,6 +93,7 @@ export default function TemplateEditorTestPage() {
       <div className="min-h-screen">
         <PDFEditorTemplate
           initialPdfFile={uploadedFile || undefined}
+          templateType={templateMetadata?.templateType || 'lease'}
           onSave={handleSave}
           onCancel={handleCancel}
           onFinish={handleFinish}

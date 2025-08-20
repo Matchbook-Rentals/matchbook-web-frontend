@@ -102,9 +102,9 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { title, description, fields, recipients, author, subject } = body;
+    const { title, description, type, listingId, fields, recipients, author, subject } = body;
 
-    if (!title && !description && !fields && !recipients) {
+    if (!title && !description && !type && listingId === undefined && !fields && !recipients) {
       return NextResponse.json(
         { error: 'At least one field must be provided for update' },
         { status: 400 }
@@ -138,6 +138,8 @@ export async function PUT(
     const updatedTemplate = await pdfTemplateService.updateTemplate(params.id, userId, {
       ...(title && { title }),
       ...(description !== undefined && { description }),
+      ...(type && { type }),
+      ...(listingId !== undefined && { listingId }),
       ...(templateData && { templateData }),
     });
     
