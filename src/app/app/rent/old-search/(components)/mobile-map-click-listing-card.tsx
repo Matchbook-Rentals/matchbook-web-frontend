@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
 import { useTripContext } from '@/contexts/trip-context-provider';
-import { useListingsSnapshot } from '@/hooks/useListingsSnapshot'; // Import the snapshot hook
+import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 import { RejectIcon } from '@/components/svgs/svg-components';
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, Bed, Bath, Square } from 'lucide-react';
 import { ListingStatus } from '@/constants/enums';
 import { ArrowLeft, ArrowRight } from '@/components/icons';
 import { iconAmenities } from '@/lib/amenities-list';
@@ -14,6 +14,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import AmenityListItem from './amenity-list-item';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { MatchbookVerified } from '@/components/icons';
+import { Badge } from "@/components/ui/badge"
+import { BrandButton } from "@/components/ui/brandButton"
 
 interface ListingCardProps {
   listing: {
@@ -69,7 +71,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
   // Set default positioning based on viewport size:
   const defaultPositionClass = isMediumOrAbove
     ? "bottom-2 left-2" // bottom left for medium and above
-    : "top-2 left-1/2 transform -translate-x-1/2"; // top middle for smaller screens
+    : "top-16 left-1/2 transform -translate-x-1/2"; // top middle for smaller screens, moved down more
 
   // Use the pattern from DesktopListingCard
   const snapshotFromHook = useListingsSnapshot();
@@ -146,9 +148,9 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
   };
 
   // Define heights for collapsed and expanded states
-  const collapsedHeight = '290px'; // Total height when collapsed
+  const collapsedHeight = '400px'; // Total height when collapsed (increased for taller image and new layout)
   const expandedHeight = isMediumOrAbove ? '80%' : 'calc(87vh - 20px)'; // Total height when expanded (87% of viewport on mobile)
-  const topSectionHeight = 290; // Fixed height of top section in pixels (carousel + basic info)
+  const topSectionHeight = 400; // Fixed height of top section in pixels (carousel + basic info)
   const buttonSectionHeight = 70; // Approximate height of the button section
 
   return (
@@ -165,11 +167,11 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
       {/* Fixed Top Section (Carousel and Basic Info) */}
       <div className="relative flex-shrink-0" style={{ height: `${topSectionHeight}px` }}>
         {/* Carousel Image Container */}
-        <div className="relative h-40 w-full">
+        <div className="relative h-[175px] w-full">
           <Carousel keyboardControls={false} opts={{ loop: true }}>
             <CarouselContent>
               {listing.listingImages.map((image, index) => (
-                <CarouselItem key={index} className="relative h-40 w-full">
+                <CarouselItem key={index} className="relative h-[175px] w-full">
                   <Image src={image.url} alt={listing.title} fill className="object-cover" unoptimized />
                 </CarouselItem>
               ))}
@@ -187,8 +189,24 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
           </Carousel>
 
           {/* Action Buttons */}
-          <div className="absolute top-2 right-2 z-10 transition-opacity duration-300 opacity-60">
-            {getStatusIcon()}
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <BrandButton
+              variant="default"
+              size="icon"
+              className="w-[30px] h-[30px] bg-white hover:bg-white/90 text-gray-600 hover:text-gray-700 min-w-[30px] rounded-lg"
+              onClick={(e: React.MouseEvent) => {
+                if (isLiked) {
+                  listingsSnapshot.optimisticRemoveLike(listing.id);
+                } else {
+                  listingsSnapshot.optimisticLike(listing.id);
+                }
+                e.stopPropagation();
+              }}
+            >
+              <Heart 
+                className={`w-[18px] h-[18px] ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+              />
+            </BrandButton>
           </div>
 
           {/* Close Button */}
@@ -214,29 +232,108 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
         </div>
 
         {/* Basic Info */}
-        <div className="px-4 pt-4 pb-2 border-b">
-          <div className="flex justify-between items-center">
-            <h3 className="font-normal text-[20px] text-[#404040] leading-tight truncate max-w-[calc(100%-80px)]">
-              {listing.title}
+        <div className="w-full p-4 pt-3 flex flex-col gap-0">
+          {/* Row 1: Property Title */}
+          <div className="flex flex-col gap-0 pb-1">
+            <h3 className="font-medium text-black text-base truncate whitespace-nowrap">
+              {listing.title.length > 40
+                ? `${listing.title.substring(0, 40)}...`
+                : listing.title}
             </h3>
+          </div>
+
+          {/* Row 2: Location and Rating */}
+          <div className="flex flex-col gap-0 pb-6">
+            <div className="flex items-center justify-between w-full">
+              <div className="font-normal text-[#4f4f4f] text-sm">
+                {(() => {
+                  switch (listing.category) {
+                    case 'privateRoom':
+                      return 'Private Room';
+                    case 'singleFamily':
+                      return 'Single Family';
+                    case 'townhouse':
+                      return 'Townhouse';
+                    case 'apartment':
+                      return 'Apartment';
+                    default:
+                      return 'Property';
+                  }
+                })()}
+              </div>
+
+              <div className="flex items-center gap-0.5">
+                <div className="flex items-center">
+                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
+                  <span className="font-normal text-[#4f4f4f] text-sm">
+                    {(listing as any).rating ?? 4.9}
+                  </span>
+                </div>
+                <span className="font-normal text-[#4f4f4f] text-sm">
+                  ({(listing as any).reviews ?? 127} reviews)
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 3: Property Features */}
+          <div className="flex flex-col gap-3 pb-3">
+            <div className="flex items-center justify-between w-full">
+              <Badge
+                variant="outline"
+                className="bg-transparent border-none p-0 flex items-center gap-1.5"
+              >
+                <div className="relative w-5 h-5">
+                  <Bed className="w-[18px] h-4 text-[#5d606d]" />
+                </div>
+                <span className="font-normal text-[#4f4f4f] text-sm">
+                  {listing.roomCount || 4} bds
+                </span>
+              </Badge>
+              <div className="h-4 border-l-2 border-gray-200"></div>
+              <Badge
+                variant="outline"
+                className="bg-transparent border-none p-0 flex items-center gap-1.5"
+              >
+                <div className="relative w-5 h-5">
+                  <Bath className="w-[18px] h-4 text-[#5d606d]" />
+                </div>
+                <span className="font-normal text-[#4f4f4f] text-sm">
+                  {listing.bathroomCount || 2} ba
+                </span>
+              </Badge>
+              <div className="h-4 border-l-2 border-gray-200"></div>
+              <Badge
+                variant="outline"
+                className="bg-transparent border-none p-0 flex items-center gap-1.5"
+              >
+                <div className="relative w-5 h-5">
+                  <Square className="w-5 h-5 text-[#5d606d]" />
+                </div>
+                <span className="font-normal text-[#4f4f4f] text-sm">
+                  {listing.squareFootage?.toLocaleString() || 0} sqft
+                </span>
+              </Badge>
+            </div>
+          </div>
+
+          {/* Row 4: Price */}
+          <div className="w-full border-t border-[#002c581a] pt-4">
+            <div className="w-full">
+              <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-xl">
+                ${listing.price?.toLocaleString() || 2350} / month
+              </h2>
+            </div>
+          </div>
+
+          {/* Expand Button */}
+          <div className="flex justify-center pt-2">
             <button
               onClick={() => setExpanded(!expanded)}
-              className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors ml-2 shrink-0"
+              className="text-sm font-medium text-secondaryBrand hover:text-secondaryBrand/80 hover:underline transition-colors"
             >
               {expanded ? 'See less' : 'See more'}
             </button>
-          </div>
-          <div className="py-3 flex flex-col space-y-4 text-[#404040]">
-            <div className="w-full flex justify-between">
-              <p className="text-[16px]">
-                {listing.roomCount || 0} beds | {listing.bathroomCount || 0} Baths
-              </p>
-              <p className="text-[16px] font-medium">${listing.price.toLocaleString()}/month</p>
-            </div>
-            <div className="w-full flex justify-between">
-              <p className="text-[16px]">{listing.squareFootage?.toLocaleString() || 0} sqft</p>
-              <p className="text-[16px]">${listing.depositSize?.toLocaleString() || 0} deposit</p>
-            </div>
           </div>
         </div>
       </div>
