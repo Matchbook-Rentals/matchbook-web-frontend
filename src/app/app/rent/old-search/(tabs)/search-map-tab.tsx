@@ -8,7 +8,7 @@ import { ListingAndImages } from '@/types';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
-import { MapViewIcon } from '@/components/icons';
+import { Map } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 import { calculateRent } from '@/lib/calculate-rent';
@@ -551,10 +551,13 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         {isClient && !isDesktopView && (
           <Button
             onClick={() => setIsSlideMapOpen(true)}
-            className="fixed text-sm gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
+            className="fixed w-16 h-16 p-0 rounded-full bg-secondaryBrand text-background z-50 flex items-center justify-center overflow-visible"
+            style={{ 
+              bottom: '4dvh',
+              right: '1rem'
+            }}
           >
-            <MapViewIcon stroke="white" className='scale-90 ' strokeWidth={1.0} />
-            Map
+            <Map className="w-8 h-8" strokeWidth={2} style={{ width: '32px', height: '32px' }} />
           </Button>
         )}
 

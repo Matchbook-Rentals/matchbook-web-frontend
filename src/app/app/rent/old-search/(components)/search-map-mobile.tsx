@@ -3,7 +3,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
 import { Button } from '@/components/ui/button';
-import { RejectIcon } from '@/components/icons';
+import { ChevronDown } from 'lucide-react';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import ListingCard from './mobile-map-click-listing-card';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot'; // Import the snapshot hook
@@ -525,13 +525,16 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>
-      {/* Close button - always show this regardless of map state */}
+      {/* Back button - always show this regardless of map state */}
       <Button
         onClick={onClose}
-        className="fixed bottom-[13vh] left-1/2 transform -translate-x-1/2 z-50 gap-x-2 px-5 max-w-[300px] text-[16px] font-montserrat font-medium rounded-full bg-charcoalBrand text-background"
+        className="fixed w-16 h-16 p-0 z-50 rounded-full bg-secondaryBrand text-background flex items-center justify-center overflow-visible"
+        style={{ 
+          bottom: '4dvh',
+          right: '1rem'
+        }}
       >
-        <RejectIcon className="h-5 w-5 mb-[2px]" />
-        Close
+        <ChevronDown className="w-8 h-8" strokeWidth={2} style={{ width: '32px', height: '32px' }} />
       </Button>
       
       {mapLoaded === true && mapRef.current && (
