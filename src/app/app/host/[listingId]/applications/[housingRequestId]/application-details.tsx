@@ -9,10 +9,12 @@ import {
   BabyIcon,
   CatIcon,
   DogIcon,
-  UsersIcon 
+  UsersIcon,
+  Check
 } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -466,7 +468,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 disabled={isDeclining || isApproving}
                 className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 flex-[0_0_auto] rounded-lg overflow-hidden h-auto hover:bg-transparent"
               >
-                <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] text-sm tracking-[0] leading-5 underline whitespace-nowrap">
+                <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] text-sm tracking-[0] leading-5 hover:underline whitespace-nowrap">
                   {isDeclining ? 'Declining...' : 'Decline'}
                 </span>
               </Button>
@@ -485,14 +487,45 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           )}
 
           {currentStatus === 'approved' && (
-            <Button
-              variant="outline"
-              className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#39b54a] h-auto hover:bg-transparent"
-            >
-              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#39b54a] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                ✓ Approved
-              </span>
-            </Button>
+            <>
+              <div className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-secondaryBrand h-auto">
+                <Check className="h-4 w-4 text-secondaryBrand" />
+                <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-secondaryBrand text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  Approved
+                </span>
+              </div>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="flex-[0_0_auto] relative h-auto w-auto p-2"
+                  >
+                    <MoreHorizontalIcon className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {!housingRequest.hasBooking ? (
+                    <DropdownMenuItem
+                      onClick={handleUnapprove}
+                      disabled={isUnapproving}
+                      className="text-[#e62e2e] focus:text-[#e62e2e] cursor-pointer"
+                    >
+                      {isUnapproving ? 'Unapproving...' : 'Unapprove Application'}
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem 
+                      disabled 
+                      className="text-gray-400 cursor-pointer"
+                      onClick={() => toast.error('Cannot unapprove application with active booking')}
+                    >
+                      Cannot unapprove - has active booking
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
           )}
 
           {currentStatus === 'declined' && (
@@ -506,37 +539,6 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             </Button>
           )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="flex-[0_0_auto] relative h-auto w-auto p-2"
-              >
-                <MoreHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {currentStatus === 'approved' && !housingRequest.hasBooking && (
-                <DropdownMenuItem
-                  onClick={handleUnapprove}
-                  disabled={isUnapproving}
-                  className="text-[#e62e2e] focus:text-[#e62e2e]"
-                >
-                  {isUnapproving ? 'Unapproving...' : 'Unapprove Application'}
-                </DropdownMenuItem>
-              )}
-              {currentStatus === 'approved' && housingRequest.hasBooking && (
-                <DropdownMenuItem 
-                  disabled 
-                  className="text-gray-400"
-                  onClick={() => toast.error('Cannot unapprove application with active booking')}
-                >
-                  Cannot unapprove - has active booking
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </header>
 

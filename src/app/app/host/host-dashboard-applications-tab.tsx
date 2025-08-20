@@ -410,7 +410,6 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
 
   console.log('FA', filteredApplications)
 
-  // TEMP FIX TO SHOW NULL STATE, ADD BACK IN FILTERED Applications MAP TO APP CARDS
   return (
     <TabLayout
       title="Applications"
@@ -427,6 +426,11 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
       useMockData={useMockData}
       onMockDataToggle={setUseMockData}
     >
+      <HostApplicationCards
+        applications={filteredApplications}
+        onViewApplicationDetails={handleViewApplicationDetails}
+        loadingApplicationId={loadingApplicationId}
+      />
     </TabLayout>
   );
 }
