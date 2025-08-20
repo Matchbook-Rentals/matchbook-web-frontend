@@ -13,7 +13,7 @@ interface FilterDisplayProps {
 }
 
 export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) => {
-  const { state: { filters, listings, showListings }, actions: { updateFilters } } = useTripContext();
+  const { state: { filters, listings, showListings, likedListings }, actions: { updateFilters } } = useTripContext();
   
   // Helper function to get filter label
   const getFilterLabel = (filterKey: string, value: any): string => {
@@ -242,7 +242,10 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) 
     updateFilters(clearedFilters);
   };
   
-  const totalResults = showListings?.length || 0;
+  // Calculate results including liked listings (since they're shown on the map)
+  const likedListingsCount = likedListings?.length || 0;
+  const showListingsCount = showListings?.length || 0;
+  const totalResults = likedListingsCount + showListingsCount;
   const totalListings = listings?.length || 0;
   const numFiltered = totalListings - totalResults;
   

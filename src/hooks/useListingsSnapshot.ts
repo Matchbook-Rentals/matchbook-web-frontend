@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { ListingAndImages } from '@/types';
 import { useTripContext } from '@/contexts/trip-context-provider';
 // We'll use the main context instead of the snapshot hooks
@@ -43,6 +43,15 @@ export function useListingsSnapshot(): UseListingsSnapshotResult {
   const [dislikedIds, setDislikedIds] = useState<Set<string>>(new Set(initialDislikes));
   const [requestedIds] = useState<Set<string>>(new Set(initialRequested));
   const [matchIds] = useState<Set<string>>(new Set(initialMatches));
+
+  // Sync local state with context state changes (e.g., when database data loads)
+  useEffect(() => {
+    setFavoriteIds(new Set(state.lookup.favIds));
+  }, [state.lookup.favIds]);
+
+  useEffect(() => {
+    setDislikedIds(new Set(state.lookup.dislikedIds));
+  }, [state.lookup.dislikedIds]);
 
   // Get actions from context
   const { 

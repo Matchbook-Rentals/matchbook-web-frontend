@@ -6,6 +6,7 @@ import { Heart } from 'lucide-react';
 import { ArrowLeft, ArrowRight } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent } from '@/components/ui/card';
+import { BrandButton } from "@/components/ui/brandButton";
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 import { usePathname, useParams } from 'next/navigation';
 import ShareButton from '@/components/ui/share-button';
@@ -46,48 +47,24 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
   const isDisliked = listingsSnapshot.isDisliked(listing.id);
 
   const getStatusIcon = () => {
-    if (isLiked) {
-      return (
-        <div
-          className="bg-black/50 rounded-full p-2"
-          onClick={(e: React.MouseEvent) => {
-            listingsSnapshot.optimisticRemoveLike(listing.id);
-            e.stopPropagation();
-          }}
-        >
-          <Heart
-            className="w-6 h-6 text-white cursor-pointer fill-red-500"
-            strokeWidth={2}
-          />
-        </div>
-      );
-    } else if (isDisliked) {
-      return (
-        <div
-          className="bg-black/50 rounded-full"
-          onClick={(e: React.MouseEvent) => {
-            listingsSnapshot.optimisticRemoveDislike(listing.id);
-            e.stopPropagation();
-          }}
-        >
-          <RejectIcon className="w-9 h-9 text-white cursor-pointer p-2" />
-        </div>
-      );
-    }
-
     return (
-      <div
-        className="bg-black/50 rounded-full p-2"
+      <BrandButton
+        variant="default"
+        size="icon"
+        className="w-[30px] h-[30px] bg-white hover:bg-white/90 text-gray-600 hover:text-gray-700 min-w-[30px] rounded-lg"
         onClick={(e: React.MouseEvent) => {
-          listingsSnapshot.optimisticLike(listing.id);
+          if (isLiked) {
+            listingsSnapshot.optimisticRemoveLike(listing.id);
+          } else {
+            listingsSnapshot.optimisticLike(listing.id);
+          }
           e.stopPropagation();
         }}
       >
-        <Heart
-          className="w-6 h-6 text-white cursor-pointer"
-          strokeWidth={2}
+        <Heart 
+          className={`w-[18px] h-[18px] ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
         />
-      </div>
+      </BrandButton>
     );
   };
 
@@ -122,7 +99,7 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
             </Carousel>
 
             {/* Action Button */}
-            <div className="absolute top-3 right-3 z-10 transition-opacity duration-300 opacity-80">
+            <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
               {getStatusIcon()}
             </div>
           </div>
