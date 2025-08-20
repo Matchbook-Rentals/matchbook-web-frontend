@@ -157,13 +157,15 @@ const StatisticsSection = ({
 
 const ApplicationsSection = ({ 
   showMockData, 
-  mockChartData 
+  mockChartData,
+  realChartData
 }: { 
   showMockData: boolean; 
-  mockChartData: MockChartData; 
+  mockChartData: MockChartData;
+  realChartData: MockChartData;
 }): JSX.Element => {
-  const applicationsData = showMockData ? mockChartData.applicationsData : null;
-  const revenueData = showMockData ? mockChartData.revenueData : null;
+  const applicationsData = showMockData ? mockChartData.applicationsData : realChartData.applicationsData;
+  const revenueData = showMockData ? mockChartData.revenueData : realChartData.revenueData;
 
   return (
     <div className="flex flex-col lg:flex-row items-stretch gap-6 w-full h-full">
@@ -431,10 +433,11 @@ interface OverviewClientProps {
   cards: StatisticsCardData[];
   mockCards: StatisticsCardData[];
   mockChartData: MockChartData;
+  realChartData: MockChartData;
   userFirstName: string | null;
 }
 
-export default function OverviewClient({ cards, mockCards, mockChartData, userFirstName }: OverviewClientProps) {
+export default function OverviewClient({ cards, mockCards, mockChartData, realChartData, userFirstName }: OverviewClientProps) {
   const [showMockData, setShowMockData] = useState(false);
   
   const displayCards = showMockData ? mockCards : cards;
@@ -447,7 +450,7 @@ export default function OverviewClient({ cards, mockCards, mockChartData, userFi
         onToggleMockData={() => setShowMockData(!showMockData)}
       />
       <div className="flex-1">
-        <ApplicationsSection showMockData={showMockData} mockChartData={mockChartData} />
+        <ApplicationsSection showMockData={showMockData} mockChartData={mockChartData} realChartData={realChartData} />
       </div>
     </div>
   );

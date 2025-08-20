@@ -3,17 +3,51 @@ import OverviewClient from "./overview-client";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import type { StatisticsCardData } from "./overview-client";
 import { getHostListingsCount } from "@/app/actions/listings";
+import { getHostHousingRequests } from "@/app/actions/housing-requests";
+import { getAllHostBookings } from "@/app/actions/bookings";
 
 async function fetchOverviewData() {
   try {
-    const listingsCount = await getHostListingsCount();
+    const [listingsCount, housingRequests, hostBookings] = await Promise.all([
+      getHostListingsCount(),
+      getHostHousingRequests(),
+      getAllHostBookings()
+    ]);
+    
+    // Calculate applications breakdown
+    const approvedCount = housingRequests.filter(hr => hr.status === 'approved').length;
+    const pendingCount = housingRequests.filter(hr => hr.status === 'pending').length;
+    const declinedCount = housingRequests.filter(hr => hr.status === 'declined').length;
+    
+    // Calculate bookings breakdown 
+    const upcomingBookings = hostBookings.bookings.filter(booking => {
+      const startDate = new Date(booking.startDate);
+      const today = new Date();
+      return startDate > today;
+    }).length;
+    
+    const activeBookings = hostBookings.bookings.filter(booking => {
+      const startDate = new Date(booking.startDate);
+      const endDate = new Date(booking.endDate);
+      const today = new Date();
+      return startDate <= today && endDate >= today;
+    }).length;
     
     return {
       totalListings: listingsCount,
-      activeApplications: 0,
-      currentBookings: 0,
-      averageRating: 0,
-      monthlyRevenue: 0
+      activeApplications: housingRequests.length,
+      currentBookings: hostBookings.bookings.length,
+      averageRating: 0, // TODO: Calculate from reviews when available
+      monthlyRevenue: 0, // TODO: Calculate from bookings when available
+      applicationsBreakdown: {
+        approved: approvedCount,
+        pending: pendingCount,
+        declined: declinedCount
+      },
+      bookingsBreakdown: {
+        upcoming: upcomingBookings,
+        active: activeBookings
+      }
     };
   } catch (error) {
     console.error('Error fetching overview data:', error);
@@ -22,7 +56,16 @@ async function fetchOverviewData() {
       activeApplications: 0,
       currentBookings: 0,
       averageRating: 0,
-      monthlyRevenue: 0
+      monthlyRevenue: 0,
+      applicationsBreakdown: {
+        approved: 0,
+        pending: 0,
+        declined: 0
+      },
+      bookingsBreakdown: {
+        upcoming: 0,
+        active: 0
+      }
     };
   }
 }
@@ -35,7 +78,7 @@ const sampleData = {
   monthlyRevenue: 8500
 };
 
-function buildStatisticsCards(data: typeof sampleData) {
+function buildStatisticsCards(data: typeof sampleData & { applicationsBreakdown?: { approved: number, pending: number, declined: number }, bookingsBreakdown?: { upcoming: number, active: number } }) {
   return [
     {
       id: "applications",
@@ -50,19 +93,19 @@ function buildStatisticsCards(data: typeof sampleData) {
         type: "badges" as const,
         badges: [
           {
-            text: "4 Approved",
+            text: `${data.applicationsBreakdown?.approved || 0} Approved`,
             bg: "bg-green-50",
             valueColor: "text-green-600",
             labelColor: "text-gray-600",
           },
           {
-            text: "3 Pending",
+            text: `${data.applicationsBreakdown?.pending || 0} Pending`,
             bg: "bg-yellow-50",
             valueColor: "text-yellow-600",
             labelColor: "text-gray-600",
           },
           {
-            text: "1 Declined",
+            text: `${data.applicationsBreakdown?.declined || 0} Declined`,
             bg: "bg-red-50",
             valueColor: "text-red-600",
             labelColor: "text-gray-600",
@@ -83,13 +126,13 @@ function buildStatisticsCards(data: typeof sampleData) {
         type: "badges" as const,
         badges: [
           {
-            text: "2 Upcoming",
+            text: `${data.bookingsBreakdown?.upcoming || 0} Upcoming`,
             bg: "bg-blue-50",
             valueColor: "text-blue-600",
             labelColor: "text-gray-600",
           },
           {
-            text: "1 Active",
+            text: `${data.bookingsBreakdown?.active || 0} Active`,
             bg: "bg-green-50",
             valueColor: "text-green-600",
             labelColor: "text-gray-600",
@@ -271,7 +314,7 @@ export default async function OverviewPage() {
     realCards = realCards.filter(card => card.id !== "mock-toggle");
   }
 
-  // Mock chart data
+  // Mock chart data for sample mode
   const mockChartData = {
     applicationsData: [
       { month: "Jan", approved: 25, spacer1: 1, pending: 10, spacer2: 1, declined: 15 },
@@ -302,6 +345,13 @@ export default async function OverviewPage() {
       { month: "Dec", revenue: 71000 },
     ]
   };
+  
+  // For now, real chart data will show empty states when not in demo mode
+  // This could be enhanced later to show actual historical data
+  const realChartData = {
+    applicationsData: null, // No historical data available yet
+    revenueData: null // No revenue tracking available yet
+  };
 
-  return <OverviewClient cards={realCards} mockCards={mockCards} mockChartData={mockChartData} userFirstName={user?.firstName || null} />;
+  return <OverviewClient cards={realCards} mockCards={mockCards} mockChartData={mockChartData} realChartData={realChartData} userFirstName={user?.firstName || null} />;
 }
