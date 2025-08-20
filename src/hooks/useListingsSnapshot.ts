@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useCallback } from 'react';
 import { ListingAndImages } from '@/types';
 import { useTripContext } from '@/contexts/trip-context-provider';
-// We'll use the main context instead of the snapshot hooks
 
 interface UseListingsSnapshotResult {
   listings: ListingAndImages[];
@@ -21,130 +20,34 @@ interface UseListingsSnapshotResult {
 }
 
 /**
- * Gets a snapshot of listings data and provides methods to interact with them
- * without causing re-renders to components like the map.
+ * Gets listings data and provides methods to interact with them.
  * 
- * This hook maintains local state for likes/dislikes while still communicating
- * with the global trip context.
+ * This hook directly uses the trip context as the single source of truth
+ * for likes/dislikes/requests, eliminating state synchronization issues.
  */
 export function useListingsSnapshot(): UseListingsSnapshotResult {
   // Get the trip context
   const { state, actions } = useTripContext();
-  
-  // Get initial data from trip context
-  const initialListings = state.listings;
-  const initialFavorites = state.lookup.favIds;
-  const initialDislikes = state.lookup.dislikedIds;
-  const initialRequested = state.lookup.requestedIds;
-  const initialMatches = state.lookup.matchIds;
-
-  // Create local state for tracking likes/dislikes without causing re-renders in parent
-  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set(initialFavorites));
-  const [dislikedIds, setDislikedIds] = useState<Set<string>>(new Set(initialDislikes));
-  const [requestedIds] = useState<Set<string>>(new Set(initialRequested));
-  const [matchIds] = useState<Set<string>>(new Set(initialMatches));
-
-  // Sync local state with context state changes (e.g., when database data loads)
-  useEffect(() => {
-    setFavoriteIds(new Set(state.lookup.favIds));
-  }, [state.lookup.favIds]);
-
-  useEffect(() => {
-    setDislikedIds(new Set(state.lookup.dislikedIds));
-  }, [state.lookup.dislikedIds]);
 
   // Get actions from context
   const { 
-    optimisticLike: contextLike, 
-    optimisticDislike: contextDislike,
-    optimisticRemoveLike: contextRemoveLike,
-    optimisticRemoveDislike: contextRemoveDislike
+    optimisticLike, 
+    optimisticDislike,
+    optimisticRemoveLike,
+    optimisticRemoveDislike
   } = actions;
 
-  // Create optimistic action handlers that update local state
-  const optimisticLike = useCallback(async (listingId: string) => {
-    // Skip if already liked
-    if (favoriteIds.has(listingId)) return;
-
-    // Update local state first
-    setFavoriteIds(prev => {
-      const next = new Set(prev);
-      next.add(listingId);
-      return next;
-    });
-    
-    setDislikedIds(prev => {
-      const next = new Set(prev);
-      next.delete(listingId);
-      return next;
-    });
-
-    // Then update global state
-    await contextLike(listingId, false);
-  }, [favoriteIds, contextLike]);
-
-  const optimisticDislike = useCallback(async (listingId: string) => {
-    // Skip if already disliked
-    if (dislikedIds.has(listingId)) return;
-
-    // Update local state first
-    setDislikedIds(prev => {
-      const next = new Set(prev);
-      next.add(listingId);
-      return next;
-    });
-    
-    setFavoriteIds(prev => {
-      const next = new Set(prev);
-      next.delete(listingId);
-      return next;
-    });
-
-    // Then update global state
-    await contextDislike(listingId);
-  }, [dislikedIds, contextDislike]);
-
-  const optimisticRemoveLike = useCallback(async (listingId: string) => {
-    // Skip if not liked
-    if (!favoriteIds.has(listingId)) return;
-
-    // Update local state first
-    setFavoriteIds(prev => {
-      const next = new Set(prev);
-      next.delete(listingId);
-      return next;
-    });
-
-    // Then update global state
-    await contextRemoveLike(listingId, false);
-  }, [favoriteIds, contextRemoveLike]);
-
-  const optimisticRemoveDislike = useCallback(async (listingId: string) => {
-    // Skip if not disliked
-    if (!dislikedIds.has(listingId)) return;
-
-    // Update local state first
-    setDislikedIds(prev => {
-      const next = new Set(prev);
-      next.delete(listingId);
-      return next;
-    });
-
-    // Then update global state
-    await contextRemoveDislike(listingId);
-  }, [dislikedIds, contextRemoveDislike]);
-
-  // Helper functions to check listing states
-  const isLiked = useCallback((listingId: string) => favoriteIds.has(listingId), [favoriteIds]);
-  const isDisliked = useCallback((listingId: string) => dislikedIds.has(listingId), [dislikedIds]);
-  const isRequested = useCallback((listingId: string) => requestedIds.has(listingId), [requestedIds]);
+  // Helper functions to check listing states using context data directly
+  const isLiked = useCallback((listingId: string) => state.lookup.favIds.has(listingId), [state.lookup.favIds]);
+  const isDisliked = useCallback((listingId: string) => state.lookup.dislikedIds.has(listingId), [state.lookup.dislikedIds]);
+  const isRequested = useCallback((listingId: string) => state.lookup.requestedIds.has(listingId), [state.lookup.requestedIds]);
 
   return {
-    listings: initialListings,
-    favoriteIds,
-    dislikedIds,
-    requestedIds,
-    matchIds,
+    listings: state.listings,
+    favoriteIds: state.lookup.favIds,
+    dislikedIds: state.lookup.dislikedIds,
+    requestedIds: state.lookup.requestedIds,
+    matchIds: state.lookup.matchIds,
     optimisticLike,
     optimisticDislike,
     optimisticRemoveLike,
