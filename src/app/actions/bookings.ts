@@ -441,7 +441,6 @@ export async function getBookingsByListingId(listingId: string) {
       return []; // Return empty array instead of throwing error
     }
 
-    console.log('Fetching bookings for listingId:', listingId, 'userId:', userId);
 
     // First, ensure any completed matches have bookings created
     await createBookingsForCompletedMatches();
@@ -490,7 +489,6 @@ export async function getBookingsByListingId(listingId: string) {
       }
     });
 
-    console.log('Found bookings for listing:', bookings.length);
     return bookings;
   } catch (error) {
     console.error('Error in getBookingsByListingId:', error);
@@ -831,7 +829,6 @@ export async function createBookingsForCompletedMatches() {
       }
     });
 
-    console.log(`Found ${completedMatches.length} completed matches without bookings`);
 
     for (const match of completedMatches) {
       try {
