@@ -10,14 +10,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PDFEditor } from "@/components/pdf-editor/PDFEditor";
 
 interface TemplateCreationStepProps {
+  existingTemplate?: any;
   onTemplateCreated?: (template: any) => void;
   onCancel?: () => void;
 }
 
-export function TemplateCreationStep({ onTemplateCreated, onCancel }: TemplateCreationStepProps) {
-  const [step, setStep] = useState<"upload" | "edit">("upload");
-  const [templateName, setTemplateName] = useState("");
-  const [templateType, setTemplateType] = useState<"lease" | "addendum" | "">("");
+export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCancel }: TemplateCreationStepProps) {
+  const [step, setStep] = useState<"upload" | "edit">(existingTemplate ? "edit" : "upload");
+  const [templateName, setTemplateName] = useState(existingTemplate?.title || "");
+  const [templateType, setTemplateType] = useState<"lease" | "addendum" | "">(
+    existingTemplate ? "lease" : ""
+  );
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +32,7 @@ export function TemplateCreationStep({ onTemplateCreated, onCancel }: TemplateCr
   };
 
 
-  if (step === "upload") {
+  if (step === "upload" && !existingTemplate) {
     return (
       <div className="space-y-6">
         <div className="text-center space-y-2">
@@ -119,6 +122,7 @@ export function TemplateCreationStep({ onTemplateCreated, onCancel }: TemplateCr
         <PDFEditor 
           initialPdfFile={uploadedFile || undefined}
           initialWorkflowState="template"
+          initialTemplate={existingTemplate}
           onSave={(templateData) => {
             // Combine the metadata from step 1 with the field data from editor
             const template = {
@@ -130,7 +134,7 @@ export function TemplateCreationStep({ onTemplateCreated, onCancel }: TemplateCr
             };
             onTemplateCreated?.(template);
           }}
-          onCancel={() => setStep("upload")}
+          onCancel={existingTemplate ? onCancel : () => setStep("upload")}
         />
       </div>
     );
