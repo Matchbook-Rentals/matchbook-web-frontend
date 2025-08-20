@@ -81,7 +81,7 @@ export function DocumentCreationStep({
       
       template.fields.forEach(field => {
         // Auto-populate based on field label patterns
-        const label = field.label.toLowerCase();
+        const label = (field.label || '').toLowerCase();
         
         if (propertyData) {
           if (label.includes('property address') || label.includes('premises address')) {
@@ -342,7 +342,7 @@ export function DocumentCreationStep({
                 {template.fields.map((field) => (
                   <div key={field.id} className="flex items-center gap-4 p-3 border rounded-lg">
                     <div className="flex-1 space-y-2">
-                      <Label>{field.label}</Label>
+                      <Label>{field.label || 'Field'}</Label>
                       {field.type === 'checkbox' ? (
                         <input
                           type="checkbox"
@@ -369,7 +369,7 @@ export function DocumentCreationStep({
                             ...fieldValues,
                             [field.id]: e.target.value
                           })}
-                          placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+                          placeholder={field.placeholder || `Enter ${(field.label || 'value').toLowerCase()}`}
                         />
                       )}
                     </div>

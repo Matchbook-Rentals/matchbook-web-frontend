@@ -55,24 +55,34 @@ type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer
 interface PDFEditorProps {
   initialWorkflowState?: WorkflowState;
   initialPdfFile?: File;
+  initialFields?: FieldFormType[];
+  initialRecipients?: Recipient[];
   templateType?: 'lease' | 'addendum' | 'disclosure' | 'other';
+  isMergedDocument?: boolean;
+  mergedTemplateIds?: string[];
   matchDetails?: MatchDetails;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
+  onDocumentCreated?: (documentId: string) => void;
 }
 
 export const PDFEditor: React.FC<PDFEditorProps> = ({ 
   initialWorkflowState = 'selection', 
   initialPdfFile, 
+  initialFields,
+  initialRecipients,
   templateType = 'lease',
+  isMergedDocument = false,
+  mergedTemplateIds,
   matchDetails,
   onSave, 
   onCancel,
-  onFinish 
+  onFinish,
+  onDocumentCreated
 }) => {
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
-  const [recipients, setRecipients] = useState<Recipient[]>([]);
+  const [recipients, setRecipients] = useState<Recipient[]>(initialRecipients || []);
   const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null);
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
   const [selectedField, setSelectedField] = useState<FieldType | null>(null);
@@ -129,7 +139,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const fieldBounds = useRef({ width: 0, height: 0 });
 
   // Fields state
-  const [fields, setFields] = useState<FieldFormType[]>([]);
+  const [fields, setFields] = useState<FieldFormType[]>(initialFields || []);
 
   // PDF page tracking state
   const [pdfPagesReady, setPdfPagesReady] = useState(false);
@@ -926,8 +936,38 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       let documentId = sessionStorage.getItem('currentDocumentId');
       let templateId = sessionStorage.getItem('currentTemplateId');
       
+      // Handle merged document case
+      if (isMergedDocument && mergedTemplateIds && !documentId) {
+        console.log('📄 Creating new merged document from templates:', mergedTemplateIds);
+        
+        const createResponse = await fetch('/api/documents/merged', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            templateIds: mergedTemplateIds,
+            documentData: {
+              fields,
+              recipients,
+              metadata: { pageWidth },
+              signedFields // Include any pre-filled values
+            },
+            status: 'IN_PROGRESS', // Start in signing mode
+            currentStep: 'signer1'
+          }),
+        });
+        
+        if (!createResponse.ok) {
+          throw new Error('Failed to create merged document');
+        }
+        
+        const { document } = await createResponse.json();
+        documentId = document.id;
+        sessionStorage.setItem('currentDocumentId', documentId);
+        
+        console.log('✅ Merged document created for signing:', documentId);
+      }
       // If no document exists yet, create one from the current template
-      if (!documentId && templateId) {
+      else if (!documentId && templateId) {
         console.log('📄 No document exists, creating new document from template:', templateId);
         
         const createResponse = await fetch('/api/documents', {
@@ -1178,8 +1218,38 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       let documentId = sessionStorage.getItem('currentDocumentId');
       let templateId = sessionStorage.getItem('currentTemplateId');
       
+      // Handle merged document case
+      if (isMergedDocument && mergedTemplateIds && !documentId) {
+        console.log('📄 Creating new merged document from templates:', mergedTemplateIds);
+        
+        const createResponse = await fetch('/api/documents/merged', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            templateIds: mergedTemplateIds,
+            documentData: {
+              fields,
+              recipients,
+              metadata: { pageWidth },
+              signedFields // Include any pre-filled values
+            },
+            status: 'DRAFT',
+            currentStep: 'document'
+          }),
+        });
+        
+        if (!createResponse.ok) {
+          throw new Error('Failed to create merged document');
+        }
+        
+        const { document } = await createResponse.json();
+        documentId = document.id;
+        sessionStorage.setItem('currentDocumentId', documentId);
+        
+        console.log('✅ Merged document created:', documentId);
+      }
       // If no document exists yet, create one from the current template
-      if (!documentId && templateId) {
+      else if (!documentId && templateId) {
         console.log('📄 No document exists, creating new document from template:', templateId);
         
         const createResponse = await fetch('/api/documents', {
@@ -1543,6 +1613,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     let documentId = sessionStorage.getItem('currentDocumentId');
     let templateId = sessionStorage.getItem('currentTemplateId');
     
+    // For merged documents, we should already have a document ID
+    if (isMergedDocument && documentId) {
+      console.log('📋 [SIGNING] Using existing merged document:', documentId);
+      // Document already exists and is ready for signing
+      setWorkflowState('signer1');
+      setIsCreatingDocument(false);
+      console.log('🖊️ Transitioned to signing mode for merged document');
+      return;
+    }
+    
     // If no document exists yet, create one from the current template
     if (!documentId && templateId) {
       console.log('📄 Creating new document from template:', templateId);
@@ -1650,6 +1730,46 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           return;
         }
         
+        // If onSave callback is provided, use it instead of internal API calls
+        if (onSave && pdfFile) {
+          setIsCreatingDocument(true);
+          try {
+            await onSave({ fields, recipients, pdfFile });
+            
+            // Check if we have a document ID to transition to signing
+            const documentId = sessionStorage.getItem('currentDocumentId');
+            if (documentId && onDocumentCreated) {
+              console.log('🔄 [EDITOR] Document created, transitioning to signing:', documentId);
+              onDocumentCreated(documentId);
+              
+              // Update document status to IN_PROGRESS for signing
+              try {
+                await fetch(`/api/documents/${documentId}`, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    status: 'IN_PROGRESS',
+                    currentStep: 'signer1'
+                  }),
+                });
+                console.log('✅ [EDITOR] Document status updated for signing');
+              } catch (error) {
+                console.error('❌ [EDITOR] Failed to update document status:', error);
+              }
+              
+              // Transition to signing workflow
+              setWorkflowState('signer1');
+              console.log('🖊️ [EDITOR] Transitioned to signer1 state');
+            }
+          } catch (error) {
+            console.error('❌ Error in onSave callback:', error);
+            alert('Failed to save document: ' + error.message);
+          } finally {
+            setIsCreatingDocument(false);
+          }
+          return;
+        }
+        
         // Set loading state for document creation
         setIsCreatingDocument(true);
         
@@ -1673,6 +1793,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         const unSignedFields = signerFields.filter(f => !signedFields[f.formId]);
         if (unSignedFields.length > 0) {
           alert('Please complete all required fields before finishing!');
+          return;
+        }
+        
+        // If onSave callback is provided, use it instead of internal API calls
+        if (onSave && pdfFile) {
+          onSave({ fields, recipients, pdfFile });
           return;
         }
         
