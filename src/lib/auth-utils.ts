@@ -12,12 +12,10 @@ export const checkAuth = async (): Promise<string> => {
     return 'test-user-integration-123';
   }
   
-  console.log('🔐 [checkAuth] Performing real auth check');
   let { userId } = auth();
   
   // If no userId on first try, wait 200ms and retry (Clerk can be slow)
   if (!userId) {
-    console.log('🔐 [checkAuth] No userId on first attempt, retrying after 200ms delay');
     await new Promise(resolve => setTimeout(resolve, 200));
     ({ userId } = auth());
   }

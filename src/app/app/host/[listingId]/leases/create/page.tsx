@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { TemplateCreationStep } from "@/features/lease-signing/steps";
 import { PdfTemplate } from "@prisma/client";
+import { toast } from "@/components/ui/use-toast";
 
 export default function CreateLeasePage() {
   const router = useRouter();
@@ -30,9 +31,21 @@ export default function CreateLeasePage() {
         setExistingTemplate(data.template);
       } else {
         console.error('Failed to load template');
+        toast({
+          title: "Load failed",
+          description: "Failed to load template. Redirecting to create new template.",
+          variant: "destructive",
+        });
+        // Remove templateId from URL and continue with creating a new template
+        router.replace(`/app/host/${listingId}/leases/create`);
       }
     } catch (error) {
       console.error('Error loading template:', error);
+      toast({
+        title: "Error",
+        description: "Error loading template. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -94,15 +107,33 @@ export default function CreateLeasePage() {
       if (response.ok) {
         const result = await response.json();
         console.log('Template saved successfully:', result);
+        
+        toast({
+          title: existingTemplate ? "Template updated" : "Template created",
+          description: existingTemplate 
+            ? `"${templateData.name}" has been successfully updated.`
+            : `"${templateData.name}" has been successfully created.`,
+        });
+        
         router.push(`/app/host/${listingId}/leases`);
       } else {
         const error = await response.json();
         console.error('Failed to save template:', error);
-        alert('Failed to save template. Please try again.');
+        
+        toast({
+          title: "Save failed",
+          description: error.error || "Failed to save template. Please try again.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Error saving template:', error);
-      alert('Error saving template. Please check your connection and try again.');
+      
+      toast({
+        title: "Error",
+        description: "Error saving template. Please check your connection and try again.",
+        variant: "destructive",
+      });
     }
   };
 

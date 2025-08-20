@@ -63,17 +63,12 @@ export const metadata: Metadata = {
     description: "Flexible Rentals",
     images: ["https://matchbookrentals.com/preview-logo.png"]
   },
-  ...(process.env.NODE_ENV === 'production' ? (
-    console.log('Including Google verification meta tag in production'),
-    {
+  ...(process.env.NODE_ENV === 'production' ? {
       verification: {
         google: "XJpEs07in_iMKsAs3665PCSsVySuAk8ho1AYBzYxXos"
       }
-    }
-  ) : (
-    console.log('Skipping Google verification meta tag in development'),
-    {}
-  )),
+    } : {}),
+
   icons: {
     icon: [
       { url: "/favicon-16x16.png?v=2", sizes: "16x16", type: "image/png" },
@@ -116,8 +111,7 @@ export default function RootLayout({
     }>
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
         <head>
-          {process.env.NODE_ENV === 'production' ? (
-            (console.log('Loading Google Tag Manager script in production'),
+          {process.env.NODE_ENV === 'production' && (
             <script
               dangerouslySetInnerHTML={{
                 __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -126,15 +120,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-PKKBSZQ7');`
               }}
-            />)
-          ) : (
-            console.log('Skipping Google Tag Manager script in development')
+            />
           )}
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         </head>
         <body className={`${poppins.className} ${dancingScript.variable} ${caveat.variable} ${kalam.variable} ${greatVibes.variable} ${pacifico.variable}`}>
-          {process.env.NODE_ENV === 'production' ? (
-            (console.log('Including Google Tag Manager noscript fallback in production'),
+          {process.env.NODE_ENV === 'production' && (
             <noscript>
               <iframe
                 src="https://www.googletagmanager.com/ns.html?id=GTM-PKKBSZQ7"
@@ -142,9 +133,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 width="0"
                 style={{ display: 'none', visibility: 'hidden' }}
               />
-            </noscript>)
-          ) : (
-            console.log('Skipping Google Tag Manager noscript fallback in development')
+            </noscript>
           )}
           <main>
             {children}

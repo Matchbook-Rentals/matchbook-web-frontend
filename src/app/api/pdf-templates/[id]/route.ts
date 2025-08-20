@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { pdfTemplateService } from '@/lib/pdf-template-service';
-import { digitalOceanSpaces } from '@/lib/digitalocean-spaces';
 import { auth } from '@clerk/nextjs/server';
+import { UTApi } from 'uploadthing/server';
 
 // GET /api/pdf-templates/[id] - Load a specific template
 export async function GET(
@@ -52,7 +52,7 @@ export async function DELETE(
       );
     }
 
-    // Get template to retrieve file key for deletion from Spaces
+    // Get template to retrieve file key for deletion
     const template = await pdfTemplateService.getTemplate(params.id, userId);
     
     if (!template) {
@@ -65,12 +65,15 @@ export async function DELETE(
     // Delete from database first
     await pdfTemplateService.deleteTemplate(params.id, userId);
 
-    // Then delete PDF file from DigitalOcean Spaces
-    try {
-      await digitalOceanSpaces.deletePdf(template.pdfFileKey);
-    } catch (spacesError) {
-      console.warn('Warning: Failed to delete PDF file from Spaces:', spacesError);
-      // Don't fail the entire operation if Spaces deletion fails
+    // Then delete PDF file from UploadThing
+    if (template.pdfFileKey) {
+      try {
+        const utapi = new UTApi();
+        await utapi.deleteFiles([template.pdfFileKey]);
+      } catch (uploadThingError) {
+        console.warn('Warning: Failed to delete PDF file from UploadThing:', uploadThingError);
+        // Don't fail the entire operation if UploadThing deletion fails
+      }
     }
     
     return NextResponse.json({ success: true });

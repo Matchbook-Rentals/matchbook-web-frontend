@@ -1,12 +1,14 @@
 "use client";
 
-import { DownloadIcon, MoreVerticalIcon } from "lucide-react";
+import { DownloadIcon, MoreVerticalIcon, Trash2Icon } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PdfTemplate } from "@prisma/client";
+import { Dialog, DialogContent, DialogClose } from "@/components/brandDialog";
+import { toast } from "@/components/ui/use-toast";
 
 export default function LeasesPage() {
   const router = useRouter();
@@ -16,6 +18,9 @@ export default function LeasesPage() {
   const [templates, setTemplates] = useState<PdfTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [templateToDelete, setTemplateToDelete] = useState<PdfTemplate | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchTemplates();
@@ -76,6 +81,50 @@ export default function LeasesPage() {
       return `Last updated ${weeks} week${weeks > 1 ? 's' : ''} ago`;
     } else {
       return new Date(updatedAt).toLocaleDateString();
+    }
+  };
+
+  const openDeleteDialog = (template: PdfTemplate) => {
+    setTemplateToDelete(template);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteTemplate = async () => {
+    if (!templateToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      const response = await fetch(`/api/pdf-templates/${templateToDelete.id}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        // Remove the template from the local state
+        setTemplates(prev => prev.filter(t => t.id !== templateToDelete.id));
+        toast({
+          title: "Template deleted",
+          description: `"${templateToDelete.title}" has been successfully deleted.`,
+        });
+        setDeleteDialogOpen(false);
+        setTemplateToDelete(null);
+      } else {
+        const error = await response.json();
+        console.error('Failed to delete template:', error);
+        toast({
+          title: "Delete failed",
+          description: error.error || "Failed to delete template. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      console.error('Error deleting template:', err);
+      toast({
+        title: "Error",
+        description: "Error deleting template. Please check your connection and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -212,7 +261,7 @@ export default function LeasesPage() {
                       </Button>
                     </div>
                     <div className="inline-flex flex-col items-end justify-center gap-2">
-                      <div className="inline-flex flex-col h-px items-start gap-2.5">
+                      <div className="flex gap-2">
                         <Button
                           variant="outline"
                           size="icon"
@@ -223,13 +272,18 @@ export default function LeasesPage() {
                               window.open(template.pdfFileUrl, '_blank');
                             }
                           }}
+                          title="Download PDF"
                         >
                           <DownloadIcon className="w-5 h-5" />
                         </Button>
-                      </div>
-                      <div className="flex flex-col items-end justify-center gap-3 w-full">
-                        <Button variant="ghost" size="icon" className="h-auto p-1">
-                          <MoreVerticalIcon className="w-5 h-5 text-[#484a54]" />
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="p-2.5 rounded-lg border-red-500 hover:bg-red-50 h-auto"
+                          onClick={() => openDeleteDialog(template)}
+                          title="Delete template"
+                        >
+                          <Trash2Icon className="w-5 h-5 text-red-500" />
                         </Button>
                       </div>
                     </div>
@@ -240,6 +294,58 @@ export default function LeasesPage() {
           })
         )}
       </section>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-md mx-auto !top-[20vh] translate-y-0">
+          <div className="flex items-center justify-center relative self-stretch w-full">
+            <h2 className="text-lg font-semibold text-gray-900">Delete Template</h2>
+          </div>
+
+          <div className="flex flex-col gap-4 text-center">
+            <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
+              <Trash2Icon className="w-8 h-8 text-red-600" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Are you sure?
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                You are about to delete <strong>"{templateToDelete?.title}"</strong>. 
+                This action cannot be undone and will permanently remove the template and its associated PDF file.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 w-full">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setDeleteDialogOpen(false);
+                setTemplateToDelete(null);
+              }}
+              disabled={isDeleting}
+              className="flex-1 h-12 rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDeleteTemplate}
+              disabled={isDeleting}
+              className="flex-1 h-12 rounded-lg bg-red-600 hover:bg-red-700 text-white disabled:opacity-50"
+            >
+              {isDeleting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Deleting...
+                </>
+              ) : (
+                "Delete Template"
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
