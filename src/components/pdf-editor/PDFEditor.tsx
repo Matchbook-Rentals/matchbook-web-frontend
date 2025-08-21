@@ -841,15 +841,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       }
 
       const uploadResult = await uploadResponse.json();
-      console.log('✅ Upload successful:', {
-        fileKey: uploadResult.fileKey,
-        fileUrl: uploadResult.fileUrl,
-        fileName: uploadResult.fileName,
-        fileSize: uploadResult.fileSize
-      });
 
       // Step 2: Save template with annotations
-      console.log('💾 STEP 2: Saving template with annotations...');
       const templateData = {
         title: pdfFile.name.replace('.pdf', ' Template') || 'PDF Template',
         description: `Template created from ${pdfFile.name}`,
@@ -1043,9 +1036,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       return;
     }
 
+    console.log(`📋 Saving progress for signer ${signerIndex + 1}, document: ${documentId}`);
+
     try {
       // Save all signed fields for this signer
       const signerFields = fields.filter(f => f.recipientIndex === signerIndex);
+      console.log(`💾 Saving ${signerFields.length} field values for signer ${signerIndex + 1}`);
       
       for (const field of signerFields) {
         const fieldValue = signedFields[field.formId];
@@ -1076,6 +1072,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       });
 
       // Update document with current progress and signed fields
+      console.log(`📄 Updating document status to: ${signerIndex === 0 ? 'AWAITING_SIGNER2' : 'COMPLETED'}`);
       await fetch(`/api/documents/${documentId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -1091,6 +1088,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           [`signer${signerIndex + 1}CompletedAt`]: new Date().toISOString()
         }),
       });
+      
+      console.log('✅ Document updated successfully');
 
       // Show success and return to selection
       const signerName = recipients[signerIndex]?.name || `Signer ${signerIndex + 1}`;
@@ -1607,25 +1606,20 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       throw new Error('No PDF file available');
     }
     
-    console.log('🚀 Creating document and starting signing process...');
-    
     // First save the document (similar to saveDocument but with signing transition)
     let documentId = sessionStorage.getItem('currentDocumentId');
     let templateId = sessionStorage.getItem('currentTemplateId');
     
     // For merged documents, we should already have a document ID
     if (isMergedDocument && documentId) {
-      console.log('📋 [SIGNING] Using existing merged document:', documentId);
       // Document already exists and is ready for signing
       setWorkflowState('signer1');
       setIsCreatingDocument(false);
-      console.log('🖊️ Transitioned to signing mode for merged document');
       return;
     }
     
     // If no document exists yet, create one from the current template
     if (!documentId && templateId) {
-      console.log('📄 Creating new document from template:', templateId);
       
       const createResponse = await fetch('/api/documents', {
         method: 'POST',
@@ -1650,7 +1644,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       const { document } = await createResponse.json();
       documentId = document.id;
       sessionStorage.setItem('currentDocumentId', documentId);
-      console.log('✅ Document created for signing:', documentId);
       
     } else if (documentId) {
       // Update existing document to ready for signing
@@ -1671,11 +1664,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       
       if (!updateResponse.ok) {
         const errorText = await updateResponse.text();
-        console.error('❌ Failed to update document:', updateResponse.status, errorText);
+        console.error('Failed to update document:', updateResponse.status, errorText);
         throw new Error(`Failed to update document: ${updateResponse.status} ${errorText}`);
       }
-      
-      console.log('✅ Document updated for signing:', documentId);
     } else {
       throw new Error('No template or document ID found. Please start from template creation.');
     }
@@ -1683,7 +1674,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Transition to signing mode
     setWorkflowState('signer1');
     setIsCreatingDocument(false);
-    console.log('🖊️ Transitioned to signing mode');
   };
 
   // Step completion handler
@@ -1739,7 +1729,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             // Check if we have a document ID to transition to signing
             const documentId = sessionStorage.getItem('currentDocumentId');
             if (documentId && onDocumentCreated) {
-              console.log('🔄 [EDITOR] Document created, transitioning to signing:', documentId);
               onDocumentCreated(documentId);
               
               // Update document status to IN_PROGRESS for signing
@@ -1752,17 +1741,15 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     currentStep: 'signer1'
                   }),
                 });
-                console.log('✅ [EDITOR] Document status updated for signing');
               } catch (error) {
-                console.error('❌ [EDITOR] Failed to update document status:', error);
+                console.error('Failed to update document status:', error);
               }
               
               // Transition to signing workflow
               setWorkflowState('signer1');
-              console.log('🖊️ [EDITOR] Transitioned to signer1 state');
             }
           } catch (error) {
-            console.error('❌ Error in onSave callback:', error);
+            console.error('Error in onSave callback:', error);
             alert('Failed to save document: ' + error.message);
           } finally {
             setIsCreatingDocument(false);
@@ -1796,31 +1783,26 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           return;
         }
         
-        // If onSave callback is provided, use it instead of internal API calls
-        if (onSave && pdfFile) {
-          onSave({ fields, recipients, pdfFile });
-          return;
-        }
-        
         try {
-          // Save signing progress to the backend
+          // Save signing progress to the backend (always use proper signing workflow)
+          console.log(`🖊️ Saving signing progress for signer ${currentSignerIndex + 1}...`);
           await saveSignerProgressAsync(currentSignerIndex);
           
           // Transition workflow state
           if (workflowState === 'signer1') {
             // Move to signer2 if there's a second recipient
             if (recipients.length > 1 && recipients[1]) {
-              setWorkflowState('signer2');
               console.log('✅ Signer 1 completed, transitioning to signer 2');
+              setWorkflowState('signer2');
             } else {
               // Complete the document if only one signer
+              console.log('✅ Single signer completed, document finished');
               setWorkflowState('completed');
-              console.log('✅ Signing completed (single signer)');
             }
           } else if (workflowState === 'signer2') {
             // Complete the document
+            console.log('✅ Signer 2 completed, document finished');
             setWorkflowState('completed');
-            console.log('✅ All signing completed');
           }
           
           // Reset validation states for the next step
@@ -3007,7 +2989,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     ? 'Creating Document...' 
                     : (templateType !== 'addendum' && fields.length === 0) 
                       ? 'Add Fields First' 
-                      : 'Sign and Send'
+                      : 'Create & Sign Document'
                   }
                 </BrandButton>
               </>

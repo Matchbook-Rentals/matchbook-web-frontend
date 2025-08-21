@@ -131,13 +131,6 @@ export default function CreateLeasePage() {
 
   const handleDocumentCreated = async (documentData: any) => {
     try {
-      console.log('🚀 [CLIENT] handleDocumentCreated called with data:', {
-        fieldsCount: documentData.fields?.length || 0,
-        recipientsCount: documentData.recipients?.length || 0,
-        hasFields: !!documentData.fields,
-        hasRecipients: !!documentData.recipients
-      });
-      
       const createData = {
         templateIds: templates.map(t => t.id),
         documentData: {
@@ -153,46 +146,21 @@ export default function CreateLeasePage() {
         pdfFileName: `lease_package_${templates.length}_documents.pdf`
       };
 
-      console.log('📋 [CLIENT] Calling createMergedDocument with:', {
-        templateIds: createData.templateIds,
-        fieldsCount: createData.documentData.fields?.length || 0,
-        recipientsCount: createData.documentData.recipients?.length || 0,
-        status: createData.status,
-        currentStep: createData.currentStep,
-        pdfFileName: createData.pdfFileName
-      });
-      
-      // Create the merged document instance using server action
       const result = await createMergedDocument(createData);
 
-      console.log('📥 [CLIENT] Server action response:', {
-        success: result.success,
-        documentId: result.document?.id,
-        error: result.error
-      });
-
       if (!result.success) {
-        console.error('❌ [CLIENT] Server action failed:', result.error);
         throw new Error(result.error);
       }
 
-      console.log('✅ [CLIENT] Merged document created successfully:', {
-        documentId: result.document?.id,
-        templateId: result.document?.templateId,
-        status: result.document?.status,
-        currentStep: result.document?.currentStep
-      });
-      
       // Store document ID and transition to signing
       const documentId = result.document?.id;
       setCreatedDocumentId(documentId);
       sessionStorage.setItem('currentDocumentId', documentId);
       
-      console.log('🖊️ [CLIENT] Transitioning to signing mode with document:', documentId);
       toast.success("Lease package created! Ready for signing.");
       
     } catch (error) {
-      console.error('💥 [CLIENT] Error in handleDocumentCreated:', error);
+      console.error('Error creating document:', error);
       toast.error("Failed to create document");
     }
   };
@@ -207,7 +175,6 @@ export default function CreateLeasePage() {
   };
 
   const handleDocumentCompleted = () => {
-    console.log('📋 [CLIENT] Document signing completed, navigating back...');
     toast.success("Document signed successfully!");
     router.push(`/app/host/${listingId}/applications/${housingRequestId}`);
   };
@@ -330,12 +297,10 @@ export default function CreateLeasePage() {
             mergedTemplateIds={templates.map(t => t.id)}
             matchDetails={matchDetails}
             onSave={(data) => {
-              console.log('Document saved:', data);
               handleDocumentCreated(data);
             }}
             onCancel={handleCancel}
             onFinish={(stepName) => {
-              console.log('Step finished:', stepName);
               if (stepName === 'Document Completion') {
                 handleDocumentCompleted();
               } else {
@@ -343,7 +308,6 @@ export default function CreateLeasePage() {
               }
             }}
             onDocumentCreated={(documentId) => {
-              console.log('🎯 [CLIENT] Document created callback received:', documentId);
               setCreatedDocumentId(documentId);
             }}
           />
