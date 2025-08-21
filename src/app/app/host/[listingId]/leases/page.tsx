@@ -1,7 +1,7 @@
 "use client";
 
 import { DownloadIcon, MoreVerticalIcon, Trash2Icon } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,11 +22,7 @@ export default function LeasesPage() {
   const [templateToDelete, setTemplateToDelete] = useState<PdfTemplate | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    fetchTemplates();
-  }, [listingId]);
-
-  const fetchTemplates = async () => {
+  const fetchTemplates = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -43,7 +39,11 @@ export default function LeasesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [listingId]);
+
+  useEffect(() => {
+    fetchTemplates();
+  }, [fetchTemplates]);
 
   const getTemplateStatus = (template: PdfTemplate) => {
     const templateData = template.templateData as any;
@@ -359,7 +359,7 @@ export default function LeasesPage() {
                 Are you sure?
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                You are about to delete <strong>"{templateToDelete?.title}"</strong>. 
+                You are about to delete <strong>&quot;{templateToDelete?.title}&quot;</strong>. 
                 This action cannot be undone and will permanently remove the template and its associated PDF file.
               </p>
             </div>

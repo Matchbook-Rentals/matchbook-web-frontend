@@ -113,7 +113,7 @@ export const CustomFieldDialog: React.FC<CustomFieldDialogProps> = ({
               className="w-full"
             />
             <p className="mt-1 text-xs text-gray-500">
-              This label will help identify the field's purpose
+              This label will help identify the field&apos;s purpose
             </p>
           </div>
 
