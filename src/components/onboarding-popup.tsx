@@ -43,7 +43,7 @@ export const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
             </h2>
             <p className="font-['Poppins',Helvetica] text-neutralneutral-700 text-sm">
               List now to receive priority ranking for your property. <span className="font-semibold">Renter Launch
-              coming this September</span>
+              coming this September!</span>
             </p>
           </CardContent>
 
