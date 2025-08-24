@@ -1,5 +1,14 @@
 # Changelog
 
+## Enhance draft listing management and dashboard visibility
+- Fixed draft deletion button text to show "Delete Draft" instead of "Delete Listing" for draft cards
+- Added comprehensive placeholder handling for incomplete draft data (address, photos, room details)
+- Enhanced draft cards with proper "No photo added", "Bedrooms not set" etc. placeholders
+- Fixed double-deletion bug in listing creation that was causing draft deletion errors
+- Added draft count badge to dashboard overview listings card with yellow styling
+- Improved delete functionality by injecting appropriate delete functions for drafts vs listings
+- Created dedicated deleteDraft server action for cleaner draft deletion workflow
+
 ## Fix lease creation with real database data and resolve navigation issues
 - Updated housing request queries to include host user information and calculate actual monthly rent
 - Fixed create-lease page to pull real host names, emails, and property addresses from database instead of hardcoded placeholders

@@ -188,8 +188,12 @@ export default function HostListingCard({
               {/* Property Image */}
               <div className="relative w-full rounded-xl overflow-hidden bg-cover bg-center"
                    style={{ 
-                     backgroundImage: listing.listingImages?.[0]?.url ? `url(${listing.listingImages[0].url})` : undefined,
-                     backgroundColor: !listing.listingImages?.[0]?.url ? '#f3f4f6' : undefined,
+                     backgroundImage: listing.listingImages?.[0]?.url 
+                       ? `url(${listing.listingImages[0].url})` 
+                       : isDraft 
+                         ? undefined 
+                         : `url(/image-35.png)`,
+                     backgroundColor: isDraft && !listing.listingImages?.[0]?.url ? '#f3f4f6' : undefined,
                      aspectRatio: '366/162' 
                    }}>
                 {isDraft && !listing.listingImages?.[0]?.url && (
@@ -321,17 +325,23 @@ export default function HostListingCard({
       <CardContent className="p-0">
         <div className="flex gap-6">
           {/* Property Image */}
-          <div className="w-[209px] h-[140px] rounded-xl overflow-hidden flex-shrink-0 relative" style={{ backgroundColor: !listing.listingImages?.[0]?.url ? '#f3f4f6' : undefined }}>
+          <div className="w-[209px] h-[140px] rounded-xl overflow-hidden flex-shrink-0 relative">
             {listing.listingImages?.[0]?.url ? (
               <img
                 className="w-full h-full object-cover"
                 alt="Property image"
                 src={listing.listingImages[0].url}
               />
-            ) : (
+            ) : isDraft ? (
               <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                 <span className="text-gray-600 text-sm font-medium">No photo added</span>
               </div>
+            ) : (
+              <img
+                className="w-full h-full object-cover"
+                alt="Property image"
+                src="/image-35.png"
+              />
             )}
           </div>
 
