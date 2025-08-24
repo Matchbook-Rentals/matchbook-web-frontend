@@ -1,5 +1,14 @@
 # Changelog
 
+## Implement unlimited drafts for listing creation
+- Updated listing draft system to support multiple concurrent drafts instead of single draft limit
+- Modified getAllUserDrafts to fetch draft images and property details for proper card display
+- Changed draft deletion logic to only remove specific drafts when converted to listings
+- Updated HostListingCard component to display draft-specific UI (Finish Listing button, Draft status)
+- Fixed draft update issue where editing existing drafts created new ones instead of updating
+- Added draft filtering option and proper draft card rendering with images and property details
+- Simplified AddPropertyModal to always create new drafts without modal selection
+
 ## Fix PDF.js version mismatch and cleanup worker files
 - Updated PDF worker file to version 5.3.93 to match react-pdf API version
 - Fixed "The API version does not match the Worker version" error

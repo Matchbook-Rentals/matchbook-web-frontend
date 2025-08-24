@@ -1,5 +1,5 @@
 // Note: Prisma operations have been moved to server actions in @/app/actions/listings.ts and @/app/actions/listings-in-creation.ts
-import { getDraftWithImages, createListingFromDraftTransaction, saveDraftTransaction, getDraftDataWithRelations, deleteAllUserDrafts } from '@/app/actions/listings-in-creation';
+import { getDraftWithImages, createListingFromDraftTransaction, saveDraftTransaction, getDraftDataWithRelations, deleteAllUserDrafts, deleteDraftById } from '@/app/actions/listings-in-creation';
 import { createListingTransaction } from '@/app/actions/listings';
 import { finished } from 'stream';
 
@@ -312,7 +312,7 @@ export async function handleSubmitListing(listingData: any, userId: string, draf
 
  let finishedListing = await createListing(finalListing, userId);
   if (draftId) {
-     await deleteAllUserDrafts(userId);
+     await deleteDraftById(draftId, userId);
   }
   return finishedListing;
 
@@ -607,15 +607,19 @@ export function transformComponentStateToDraftData(componentState: {
 /**
  * Helper function to save draft data via API
  * @param draftData - The draft data to save
+ * @param draftId - Optional existing draft ID to update
  * @returns Promise resolving to the saved draft response
  */
-export async function saveDraftViaAPI(draftData: any): Promise<any> {
+export async function saveDraftViaAPI(draftData: any, draftId?: string): Promise<any> {
+  // Include the draft ID in the request body if provided
+  const requestBody = draftId ? { ...draftData, id: draftId } : draftData;
+  
   const response = await fetch('/api/listings/draft', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(draftData),
+    body: JSON.stringify(requestBody),
   });
 
   if (!response.ok) {
@@ -630,6 +634,7 @@ export async function saveDraftViaAPI(draftData: any): Promise<any> {
  * Helper function to handle the complete save and exit flow
  * @param componentState - The component state containing all form data
  * @param callbacks - Optional callbacks for success/error handling
+ * @param draftId - Optional existing draft ID to update
  * @returns Promise resolving to the saved draft
  */
 export async function handleSaveAndExit(
@@ -675,14 +680,15 @@ export async function handleSaveAndExit(
   callbacks?: {
     onSuccess?: (savedDraft: any) => void;
     onError?: (error: Error) => void;
-  }
+  },
+  draftId?: string
 ): Promise<any> {
   // Transform component state to draft data format
   const draftData = transformComponentStateToDraftData(componentState);
 
   // Save via API
   try {
-    const savedDraft = await saveDraftViaAPI(draftData);
+    const savedDraft = await saveDraftViaAPI(draftData, draftId);
 
     // Call success callback if provided
     if (callbacks?.onSuccess) {

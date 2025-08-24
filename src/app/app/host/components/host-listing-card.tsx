@@ -25,12 +25,14 @@ interface HostListingCardProps {
   listing: ListingAndImages;
   loadingListingId?: string | null;
   onViewDetails?: (listingId: string) => void;
+  isDraft?: boolean;
 }
 
 export default function HostListingCard({ 
   listing, 
   loadingListingId, 
-  onViewDetails 
+  onViewDetails,
+  isDraft = false
 }: HostListingCardProps) {
   const isMobile = useIsMobile();
   const router = useRouter();
@@ -41,6 +43,11 @@ export default function HostListingCard({
 
   // Map listing status to display status and color
   const getStatusInfo = (listing: ListingAndImages) => {
+    // Handle drafts first
+    if (isDraft || listing.status === 'draft') {
+      return { status: "Draft", statusColor: "text-[#8B7355]" };
+    }
+    
     // Check approval status first
     if (listing.approvalStatus === 'pendingReview') {
       return { status: "Pending Approval", statusColor: "text-[#c68087]" };
@@ -74,6 +81,11 @@ export default function HostListingCard({
 
   // Format price range
   const formatPrice = (listing: ListingAndImages) => {
+    // Handle drafts - they might not have pricing data
+    if (isDraft || listing.status === 'draft') {
+      return 'Pricing not set';
+    }
+    
     if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
       const prices = listing.monthlyPricing.map(pricing => pricing.price);
       const minPrice = Math.min(...prices);
@@ -374,21 +386,24 @@ export default function HostListingCard({
 
               {/* Action Buttons */}
               <div className="flex items-center gap-3">
-                <CalendarDialog 
-                  bookings={listing.bookings || []}
-                  unavailablePeriods={listing.unavailablePeriods || []}
-                  triggerText="View Calendar"
-                  listingId={listing.id}
-                  showIcon={false}
-                  triggerClassName="!border-primaryBrand !text-primaryBrand hover:!bg-primaryBrand hover:!text-white !transition-all !duration-300 !h-[36px] !min-w-[156px] !rounded-lg !px-4 !py-3 !gap-1 !font-['Poppins'] !font-semibold !text-sm !leading-5 !tracking-normal"
-                />
+                {!isDraft && (
+                  <CalendarDialog 
+                    bookings={listing.bookings || []}
+                    unavailablePeriods={listing.unavailablePeriods || []}
+                    triggerText="View Calendar"
+                    listingId={listing.id}
+                    showIcon={false}
+                    triggerClassName="!border-primaryBrand !text-primaryBrand hover:!bg-primaryBrand hover:!text-white !transition-all !duration-300 !h-[36px] !min-w-[156px] !rounded-lg !px-4 !py-3 !gap-1 !font-['Poppins'] !font-semibold !text-sm !leading-5 !tracking-normal"
+                  />
+                )}
                 <BrandButton 
                   variant="default"
                   size="sm"
-                  href={`/app/host/${listing.id}/summary`}
+                  href={isDraft ? undefined : `/app/host/${listing.id}/summary`}
+                  onClick={isDraft ? () => onViewDetails?.(listing.id) : undefined}
                   spinOnClick={true}
                 >
-                  Manage Listing
+                  {isDraft ? 'Finish Listing' : 'Manage Listing'}
                 </BrandButton>
               </div>
             </div>

@@ -29,6 +29,65 @@ export const getFirstListingInCreation = async (): Promise<{ id: string } | null
   }
 };
 
+export const getAllUserDrafts = async (): Promise<Array<{ 
+  id: string; 
+  title: string | null; 
+  createdAt: Date | null; 
+  city: string | null; 
+  state: string | null; 
+  streetAddress1: string | null;
+  streetAddress2: string | null;
+  postalCode: string | null;
+  imageSrc: string | null;
+  roomCount: number | null;
+  bathroomCount: number | null;
+  squareFootage: number | null;
+  listingImages: Array<{ id: string; url: string; rank: number | null }>;
+}> | null> => {
+  try {
+    const userId = await checkAuth();
+
+    const drafts = await prisma.listingInCreation.findMany({
+      where: {
+        userId: userId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        city: true,
+        state: true,
+        streetAddress1: true,
+        streetAddress2: true,
+        postalCode: true,
+        imageSrc: true,
+        roomCount: true,
+        bathroomCount: true,
+        squareFootage: true,
+        listingImages: {
+          select: {
+            id: true,
+            url: true,
+            rank: true
+          },
+          orderBy: {
+            rank: 'asc'
+          },
+          take: 1 // Only fetch the first image for performance
+        }
+      }
+    });
+
+    return drafts;
+  } catch (error) {
+    console.error('Error fetching user drafts:', error);
+    return null;
+  }
+};
+
 export const getDraftWithImages = async (draftId: string, userId: string) => {
   try {
     const draft = await prisma.listingInCreation.findFirst({
@@ -218,9 +277,9 @@ export const createListingFromDraftTransaction = async (
         });
       }
       
-      // Delete all user drafts after successful creation
-      await tx.listingInCreation.deleteMany({
-        where: { userId: userId }
+      // Delete only the specific draft that was converted to a listing
+      await tx.listingInCreation.delete({
+        where: { id: draftId }
       });
       
       return listing;
@@ -354,6 +413,28 @@ export const deleteAllUserDrafts = async (userId: string) => {
     return result;
   } catch (error) {
     console.error('Error deleting user drafts:', error);
+    throw error;
+  }
+};
+
+export const deleteDraftById = async (draftId: string, userId: string) => {
+  try {
+    const result = await prisma.listingInCreation.delete({
+      where: {
+        id: draftId,
+        userId: userId // Ensure user can only delete their own drafts
+      }
+    });
+
+    // Revalidate cache after successful draft deletion
+    revalidatePath('/app/host/add-property');
+    revalidatePath('/app/host/dashboard');
+    revalidatePath('/app/host/dashboard/overview');
+    revalidatePath('/app/host/dashboard/listings');
+
+    return result;
+  } catch (error) {
+    console.error('Error deleting draft by ID:', error);
     throw error;
   }
 };

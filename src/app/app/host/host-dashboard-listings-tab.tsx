@@ -21,10 +21,24 @@ interface PaginationInfo {
 interface HostDashboardListingsTabProps {
   listings: ListingAndImages[] | null;
   paginationInfo?: PaginationInfo;
-  listingInCreation?: { id: string } | null;
+  userDrafts?: Array<{ 
+    id: string; 
+    title: string | null; 
+    createdAt: Date | null; 
+    city: string | null; 
+    state: string | null; 
+    streetAddress1: string | null;
+    streetAddress2: string | null;
+    postalCode: string | null;
+    imageSrc: string | null;
+    roomCount: number | null;
+    bathroomCount: number | null;
+    squareFootage: number | null;
+    listingImages: Array<{ id: string; url: string; rank: number | null }>;
+  }> | null;
 }
 
-export default function HostDashboardListingsTab({ listings, paginationInfo, listingInCreation }: HostDashboardListingsTabProps) {
+export default function HostDashboardListingsTab({ listings, paginationInfo, userDrafts }: HostDashboardListingsTabProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -167,10 +181,8 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
 
 
 
-  // Add Property modal component or direct link
-  const addPropertyButton = listingInCreation ? (
-    <AddPropertyModal listingInCreation={listingInCreation} />
-  ) : (
+  // Add Property button - always creates a new draft
+  const addPropertyButton = (
     <Link href="/app/host/add-property?new=true">
       <BrandButton variant="default">
         Add Property
@@ -185,6 +197,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
       filterLabel="Filter by status"
       filterOptions={[
         { value: "all", label: "All" },
+        { value: "drafts", label: "Drafts" },
         { value: "rented", label: "Rented" },
         { value: "inactive", label: "Inactive" },
         { value: "active", label: "Active" },
@@ -197,6 +210,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
           setSelectedFilters([]);
         } else {
           const filterMap: { [key: string]: string } = {
+            "drafts": "Draft",
             "rented": "Rented",
             "inactive": "Inactive", 
             "active": "Active",
@@ -210,21 +224,76 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, lis
       pagination={{
         currentPage: clientPage,
         totalPages: totalClientPages,
-        totalItems: filteredListings.length,
+        totalItems: filteredListings.length + (userDrafts?.length || 0),
         itemsPerPage: clientItemsPerPage,
         startIndex,
         endIndex,
         onPageChange: handlePageChange,
         itemLabel: "listings"
       }}
-      emptyStateMessage={listings?.length === 0 ? "No properties found. Add your first property to get started!" : "No properties match the selected filters."}
+      emptyStateMessage={(listings?.length || 0) + (userDrafts?.length || 0) === 0 ? "No properties found. Add your first property to get started!" : "No properties match the selected filters."}
       totalCount={totalCount}
       noMargin={true}
     >
+      {/* Render drafts first */}
+      {userDrafts?.map((draft) => (
+        <HostListingCard
+          key={`draft-${draft.id}`}
+          listing={{
+            id: draft.id,
+            title: draft.title || 'Untitled Draft',
+            city: draft.city,
+            state: draft.state,
+            streetAddress1: draft.streetAddress1,
+            streetAddress2: draft.streetAddress2,
+            postalCode: draft.postalCode,
+            createdAt: draft.createdAt,
+            status: 'draft',
+            approvalStatus: 'draft' as any,
+            // Use real data from draft
+            roomCount: draft.roomCount,
+            bathroomCount: draft.bathroomCount,
+            squareFootage: draft.squareFootage,
+            imageSrc: draft.imageSrc,
+            listingImages: draft.listingImages?.map(img => ({
+              id: img.id,
+              url: img.url,
+              listingId: draft.id,
+              category: null,
+              rank: img.rank
+            })) || [],
+            // Add default values for fields not in draft
+            shortestLeasePrice: null,
+            longestLeasePrice: null,
+            monthlyPricing: [],
+            markedActiveByUser: false,
+            category: null,
+            guestCount: null,
+            latitude: null,
+            longitude: null,
+            locationString: null,
+            userId: '',
+            depositSize: null,
+            rentDueAtBooking: null,
+            requireBackgroundCheck: null,
+            shortestLeaseLength: null,
+            longestLeaseLength: null,
+            furnished: null,
+            petsAllowed: null,
+            description: null
+          } as any}
+          isDraft={true}
+          loadingListingId={loadingListingId}
+          onViewDetails={(id) => router.push(`/app/host/add-property?draftId=${id}`)}
+        />
+      ))}
+      
+      {/* Render regular listings */}
       {paginatedListings.map((listing) => (
         <HostListingCard
           key={listing.id}
           listing={listing}
+          isDraft={false}
           loadingListingId={loadingListingId}
           onViewDetails={handleViewListingDetails}
         />

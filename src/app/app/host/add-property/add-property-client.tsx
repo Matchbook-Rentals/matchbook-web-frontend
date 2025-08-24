@@ -451,7 +451,8 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
               description: error.message || 'Failed to save draft, please try again later'
             });
           }
-        }
+        },
+        draftId // Pass the draftId to ensure we update existing draft instead of creating new
       );
       
       // Exit to host overview after saving
