@@ -389,6 +389,7 @@ export const saveDraftTransaction = async (draftData: any, userId: string, draft
     revalidatePath('/app/host/add-property');
     revalidatePath('/app/host/dashboard');
     revalidatePath('/app/host/dashboard/overview');
+    revalidatePath('/app/host/dashboard/listings');
 
     return result;
   } catch (error) {
@@ -409,6 +410,7 @@ export const deleteAllUserDrafts = async (userId: string) => {
     revalidatePath('/app/host/add-property');
     revalidatePath('/app/host/dashboard');
     revalidatePath('/app/host/dashboard/overview');
+    revalidatePath('/app/host/dashboard/listings');
 
     return result;
   } catch (error) {
