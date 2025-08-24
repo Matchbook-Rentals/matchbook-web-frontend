@@ -36,7 +36,14 @@ export async function getHousingRequestById(housingRequestId: string) {
         },
         listing: {
           include: {
-            monthlyPricing: true
+            monthlyPricing: true,
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                email: true
+              }
+            }
           }
         },
         boldSignLease: true,
@@ -63,7 +70,13 @@ export async function getHousingRequestById(housingRequestId: string) {
       hasBooking = !!match?.booking;
     }
 
-    return { ...housingRequest, hasBooking };
+    // Calculate monthly rent for this housing request
+    const monthlyRent = calculateRent({ 
+      listing: housingRequest.listing, 
+      trip: housingRequest.trip 
+    });
+
+    return { ...housingRequest, hasBooking, monthlyRent };
   } catch (error) {
     console.error('Error fetching housing request:', error);
     throw new Error('Failed to fetch housing request');

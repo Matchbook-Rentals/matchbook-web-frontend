@@ -69,6 +69,7 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
 
   const handleNavigation = (url: string) => {
     if (pathname === url) return; // Don't navigate if already on the page
+    console.log('Sidebar: Starting navigation to:', url);
     setNavigatingTo(url)
     
     // Close mobile sidebar on navigation
@@ -76,7 +77,16 @@ export function HostSidebar({ groups, ...props }: HostSidebarProps) {
       setOpenMobile(false)
     }
     
+    console.log('Sidebar: Calling router.push');
     router.push(url)
+    
+    // Fallback: Reset navigation state if navigation takes too long
+    setTimeout(() => {
+      if (navigatingTo === url) {
+        console.log('Sidebar: Navigation timeout, resetting state');
+        setNavigatingTo(null);
+      }
+    }, 5000);
   }
 
   // Reset navigation state when pathname changes

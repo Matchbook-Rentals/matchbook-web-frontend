@@ -142,6 +142,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [isFieldWithinBounds, setIsFieldWithinBounds] = useState(false);
   const fieldBounds = useRef({ width: 0, height: 0 });
+  const pdfEditorContainerRef = useRef<HTMLDivElement>(null);
 
   // Fields state
   const [fields, setFields] = useState<FieldFormType[]>(initialFields || []);
@@ -171,53 +172,57 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Pre-populate fields with match details
   const prePopulateFieldsWithMatchDetails = useCallback((matchDetails: MatchDetails) => {
-    const newSignedFields = { ...signedFields };
-    
-    // Update recipients with match details
-    const newRecipients = recipients.map(r => {
-      if (r.role === 'HOST') {
-        return { ...r, name: matchDetails.hostName, email: matchDetails.hostEmail };
-      } else if (r.role === 'RENTER') {
-        return { ...r, name: matchDetails.primaryRenterName, email: matchDetails.primaryRenterEmail };
-      }
-      return r;
-    });
-    setRecipients(newRecipients);
+    // Update recipients with match details using functional update
+    setRecipients(currentRecipients => 
+      currentRecipients.map(r => {
+        if (r.role === 'HOST') {
+          return { ...r, name: matchDetails.hostName, email: matchDetails.hostEmail };
+        } else if (r.role === 'RENTER') {
+          return { ...r, name: matchDetails.primaryRenterName, email: matchDetails.primaryRenterEmail };
+        }
+        return r;
+      })
+    );
 
-    // Map field types to match details values
-    fields.forEach(field => {
-      if (field.type === 'NAME') {
-        if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
-          newSignedFields[field.formId] = matchDetails.hostName;
-        } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
-          newSignedFields[field.formId] = matchDetails.primaryRenterName;
+    // Update signed fields using functional update
+    setSignedFields(currentSignedFields => {
+      const newSignedFields = { ...currentSignedFields };
+      
+      // Map field types to match details values
+      fields.forEach(field => {
+        if (field.type === 'NAME') {
+          if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
+            newSignedFields[field.formId] = matchDetails.hostName;
+          } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
+            newSignedFields[field.formId] = matchDetails.primaryRenterName;
+          }
+        } else if (field.type === 'EMAIL') {
+          if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
+            newSignedFields[field.formId] = matchDetails.hostEmail;
+          } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
+            newSignedFields[field.formId] = matchDetails.primaryRenterEmail;
+          }
+        } else if (field.type === 'NUMBER' || field.type === 'TEXT') {
+          // Auto-populate likely rent fields
+          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+          if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount')) {
+            newSignedFields[field.formId] = matchDetails.monthlyPrice;
+          } else if (fieldLabel.includes('address') || fieldLabel.includes('property') || fieldLabel.includes('location')) {
+            newSignedFields[field.formId] = matchDetails.propertyAddress;
+          }
+        } else if (field.type === 'DATE') {
+          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+          if (fieldLabel.includes('start') || fieldLabel.includes('begin')) {
+            newSignedFields[field.formId] = matchDetails.startDate;
+          } else if (fieldLabel.includes('end') || fieldLabel.includes('expire')) {
+            newSignedFields[field.formId] = matchDetails.endDate;
+          }
         }
-      } else if (field.type === 'EMAIL') {
-        if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
-          newSignedFields[field.formId] = matchDetails.hostEmail;
-        } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
-          newSignedFields[field.formId] = matchDetails.primaryRenterEmail;
-        }
-      } else if (field.type === 'NUMBER' || field.type === 'TEXT') {
-        // Auto-populate likely rent fields
-        const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-        if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount')) {
-          newSignedFields[field.formId] = matchDetails.monthlyPrice;
-        } else if (fieldLabel.includes('address') || fieldLabel.includes('property') || fieldLabel.includes('location')) {
-          newSignedFields[field.formId] = matchDetails.propertyAddress;
-        }
-      } else if (field.type === 'DATE') {
-        const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-        if (fieldLabel.includes('start') || fieldLabel.includes('begin')) {
-          newSignedFields[field.formId] = matchDetails.startDate;
-        } else if (fieldLabel.includes('end') || fieldLabel.includes('expire')) {
-          newSignedFields[field.formId] = matchDetails.endDate;
-        }
-      }
-    });
+      });
 
-    setSignedFields(newSignedFields);
-  }, [signedFields, recipients, fields]);
+      return newSignedFields;
+    });
+  }, [fields]);
 
   // Initialize mandatory recipients when starting
   useEffect(() => {
@@ -334,9 +339,13 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Mouse tracking for ghost cursor and drag behavior
   useEffect(() => {
-    if (!selectedField || !isDragging) {
+    if (!selectedField || !isDragging || !pdfEditorContainerRef.current) {
       return;
     }
+    
+    console.log('PDF Editor: Attaching field placement event listeners');
+
+    const container = pdfEditorContainerRef.current;
 
     const onMouseMove = (event: MouseEvent) => {
       setIsFieldWithinBounds(
@@ -361,34 +370,40 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     };
 
     const onMouseDown = (event: MouseEvent) => {
-      // Only cancel if mousedown is outside PDF area AND we're actively dragging
-      const pdfArea = document.querySelector('[data-pdf-viewer-page]');
-      if (!pdfArea || !pdfArea.contains(event.target as Node)) {
+      // Check if click is over a PDF page - if not, cancel field placement
+      const pdfArea = (event.target as Element).closest('[data-pdf-viewer-page]');
+      if (!pdfArea) {
+        console.log('PDF Editor: Canceling field placement due to outside click');
         cancelFieldPlacement();
       }
     };
 
     // Always add mousemove and keydown immediately
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('keydown', onKeyDown);
+    container.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('keydown', onKeyDown); // Keep keyboard on document for global escape
     
     // Add mousedown listener with a small delay to avoid canceling immediately after button click
     const timeoutId = setTimeout(() => {
-      document.addEventListener('mousedown', onMouseDown);
+      container.addEventListener('mousedown', onMouseDown);
     }, 50);
 
     return () => {
       clearTimeout(timeoutId);
-      document.removeEventListener('mousemove', onMouseMove);
+      container.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('mousedown', onMouseDown);
+      container.removeEventListener('mousedown', onMouseDown);
+      console.log('PDF Editor: Removed field placement event listeners');
     };
   }, [selectedField, isDragging]);
 
   // Dual interaction mode detection
   useEffect(() => {
-    if (interactionMode === 'idle') return;
+    if (interactionMode === 'idle' || !pdfEditorContainerRef.current) {
+      console.log('PDF Editor: Dual interaction mode is idle, no event listeners');
+      return;
+    }
 
+    const container = pdfEditorContainerRef.current;
     console.log('🎯 Dual interaction effect active:', { interactionMode, isMouseDown, mouseDownPosition });
 
     const handleGlobalMouseMove = (event: MouseEvent) => {
@@ -432,7 +447,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         setIsDragging(true);
         setIsMouseDown(false);
       } else if (interactionMode === 'dragging') {
-        // Fix: Find the actual page element under the mouse (works for any page, not just page 1)
+        // Find the actual page element under the mouse (works for any page, not just page 1)
         const pdfPageElement = (event.target as Element).closest('[data-pdf-viewer-page]');
         if (pdfPageElement) {
           console.log('✅ MouseUp over PDF page - placing field');
@@ -462,14 +477,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       }
     };
 
-    document.addEventListener('mousemove', handleGlobalMouseMove);
-    document.addEventListener('mouseup', handleGlobalMouseUp);
-    document.addEventListener('keydown', handleGlobalKeyDown);
+    console.log('PDF Editor: Attaching dual interaction event listeners');
+    container.addEventListener('mousemove', handleGlobalMouseMove);
+    container.addEventListener('mouseup', handleGlobalMouseUp);
+    document.addEventListener('keydown', handleGlobalKeyDown); // Keep keyboard on document for global escape
 
     return () => {
-      document.removeEventListener('mousemove', handleGlobalMouseMove);
-      document.removeEventListener('mouseup', handleGlobalMouseUp);  
+      container.removeEventListener('mousemove', handleGlobalMouseMove);
+      container.removeEventListener('mouseup', handleGlobalMouseUp);  
       document.removeEventListener('keydown', handleGlobalKeyDown);
+      console.log('PDF Editor: Removed dual interaction event listeners');
     };
   }, [interactionMode, isMouseDown, mouseDownPosition.x, mouseDownPosition.y, MOVEMENT_THRESHOLD, handlePageClick]);
 
@@ -2311,7 +2328,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   }
 
   return (
-    <div className="flex flex-col bg-gray-50" style={{ height: 'calc(100vh - 80px)' }}>
+    <div ref={pdfEditorContainerRef} className="flex flex-col bg-gray-50" style={{ height: 'calc(100vh - 80px)' }}>
       {/* Ghost cursor for field placement */}
       {selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place') && (
         <div

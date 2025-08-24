@@ -230,13 +230,14 @@ export default function CreateLeasePage() {
 
   const user = housingRequest.user;
   const application = user.applications[0];
+  const hostUser = housingRequest.listing.user;
 
   // Create MatchDetails for PDFEditorDocument
   const matchDetails: MatchDetails = {
-    propertyAddress: `${housingRequest.listing.address}, ${housingRequest.listing.city}, ${housingRequest.listing.state} ${housingRequest.listing.zipcode || ''}`,
-    monthlyPrice: "0.00", // TODO: Calculate from housing request dates and pricing  
-    hostName: "Host Name", // TODO: Get from listing owner
-    hostEmail: "host@example.com", // TODO: Get from listing owner
+    propertyAddress: `${housingRequest.listing.streetAddress1 || ''}${housingRequest.listing.streetAddress2 ? ' ' + housingRequest.listing.streetAddress2 : ''}, ${housingRequest.listing.city || ''}, ${housingRequest.listing.state || ''} ${housingRequest.listing.postalCode || ''}`.replace(/^,\s*|,\s*$/, '').replace(/,\s*,/g, ','),
+    monthlyPrice: housingRequest.monthlyRent ? (housingRequest.monthlyRent / 100).toFixed(2) : "0.00",
+    hostName: `${hostUser.firstName || ''} ${hostUser.lastName || ''}`.trim() || hostUser.email,
+    hostEmail: hostUser.email,
     primaryRenterName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
     primaryRenterEmail: user.email,
     startDate: housingRequest.startDate ? new Date(housingRequest.startDate).toISOString().split('T')[0] : '',
