@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
@@ -23,6 +24,7 @@ import { FrequentlyUsedFields } from './FrequentlyUsedFields';
 import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
+import { handleSignerCompletion } from '@/app/actions/documents';
 
 // Template data interface for the editor
 interface LoadedTemplate {
@@ -61,6 +63,7 @@ interface PDFEditorProps {
   isMergedDocument?: boolean;
   mergedTemplateIds?: string[];
   matchDetails?: MatchDetails;
+  housingRequestId?: string;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
@@ -76,11 +79,13 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   isMergedDocument = false,
   mergedTemplateIds,
   matchDetails,
+  housingRequestId,
   onSave, 
   onCancel,
   onFinish,
   onDocumentCreated
 }) => {
+  const router = useRouter();
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
   const [recipients, setRecipients] = useState<Recipient[]>(initialRecipients || []);
   const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null);
@@ -1788,8 +1793,27 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           console.log(`🖊️ Saving signing progress for signer ${currentSignerIndex + 1}...`);
           await saveSignerProgressAsync(currentSignerIndex);
           
+          // Call server action to handle notifications and booking creation
+          const documentId = sessionStorage.getItem('currentDocumentId');
+          if (documentId) {
+            console.log(`📤 Calling server action for signer completion...`);
+            const result = await handleSignerCompletion(documentId, currentSignerIndex, recipients, housingRequestId);
+            if (!result.success) {
+              console.error('❌ Server action failed:', result.error);
+            }
+          }
+          
           // Transition workflow state
           if (workflowState === 'signer1') {
+            // Check if host should be redirected after signing
+            const hostRedirectUrl = sessionStorage.getItem('hostSigningRedirectUrl');
+            if (hostRedirectUrl) {
+              console.log('✅ Host completed signing, redirecting to:', hostRedirectUrl);
+              sessionStorage.removeItem('hostSigningRedirectUrl'); // Clean up
+              router.push(hostRedirectUrl);
+              return; // Exit early to avoid further state changes
+            }
+            
             // Move to signer2 if there's a second recipient
             if (recipients.length > 1 && recipients[1]) {
               console.log('✅ Signer 1 completed, transitioning to signer 2');

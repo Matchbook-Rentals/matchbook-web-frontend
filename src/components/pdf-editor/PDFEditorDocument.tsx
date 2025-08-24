@@ -12,6 +12,7 @@ interface PDFEditorDocumentProps {
   isMergedDocument?: boolean;
   mergedTemplateIds?: string[];
   matchDetails?: MatchDetails;
+  housingRequestId?: string;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
@@ -25,6 +26,7 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
   isMergedDocument,
   mergedTemplateIds,
   matchDetails,
+  housingRequestId,
   onSave, 
   onCancel,
   onFinish,
@@ -39,6 +41,7 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
       isMergedDocument={isMergedDocument}
       mergedTemplateIds={mergedTemplateIds}
       matchDetails={matchDetails}
+      housingRequestId={housingRequestId}
       onSave={onSave}
       onCancel={onCancel}
       onFinish={onFinish}

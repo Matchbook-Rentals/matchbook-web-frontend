@@ -1,5 +1,11 @@
 # Changelog
 
+## Fix PDF.js version mismatch and cleanup worker files
+- Updated PDF worker file to version 5.3.93 to match react-pdf API version
+- Fixed "The API version does not match the Worker version" error
+- Removed redundant PDF worker files from assets/ and pdfjs/ directories
+- Kept main worker file and backup for proper version management
+
 ## Fix RenterNavbar user data in guest listing page
 - Added Clerk authentication and user data fetching to guest trips listing page
 - Fixed RenterNavbar component to receive proper userId, user object, and authentication state

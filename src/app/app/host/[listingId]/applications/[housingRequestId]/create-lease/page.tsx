@@ -39,12 +39,14 @@ export default function CreateLeasePage() {
 
   useEffect(() => {
     if (templateIdsParam) {
+      // Store redirect URL for after host completes signing
+      sessionStorage.setItem('hostSigningRedirectUrl', `/app/host/${listingId}/applications/${housingRequestId}`);
       loadInitialData();
     } else {
       setError("No templates selected");
       setLoading(false);
     }
-  }, [templateIdsParam, housingRequestId]);
+  }, [templateIdsParam, housingRequestId, listingId]);
 
   // Merge PDFs when templates are loaded
   useEffect(() => {
@@ -296,6 +298,7 @@ export default function CreateLeasePage() {
             isMergedDocument={true}
             mergedTemplateIds={templates.map(t => t.id)}
             matchDetails={matchDetails}
+            housingRequestId={housingRequestId}
             onSave={(data) => {
               handleDocumentCreated(data);
             }}
