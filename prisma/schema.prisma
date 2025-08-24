@@ -1215,6 +1215,7 @@ model ResidentialHistory {
 model ApplicationError {
   id           String    @id @default(cuid())
   createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   errorMessage String    @db.Text
   errorStack   String?   @db.Text
   errorDigest  String?

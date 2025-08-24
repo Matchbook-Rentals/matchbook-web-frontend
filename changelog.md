@@ -1,5 +1,12 @@
 # Changelog
 
+## Fix lease creation with real database data and resolve navigation issues
+- Updated housing request queries to include host user information and calculate actual monthly rent
+- Fixed create-lease page to pull real host names, emails, and property addresses from database instead of hardcoded placeholders
+- Resolved infinite re-render loop in PDF editor that was preventing sidebar navigation
+- Improved PDF editor event handling by scoping mouse listeners to container instead of document
+- Added proper functional state updates to prevent useCallback dependency loops
+
 ## Implement unlimited drafts for listing creation
 - Updated listing draft system to support multiple concurrent drafts instead of single draft limit
 - Modified getAllUserDrafts to fetch draft images and property details for proper card display
