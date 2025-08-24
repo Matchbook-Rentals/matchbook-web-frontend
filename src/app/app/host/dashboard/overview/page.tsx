@@ -3,13 +3,15 @@ import OverviewClient from "./overview-client";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import type { StatisticsCardData } from "./overview-client";
 import { getHostListingsCount } from "@/app/actions/listings";
+import { getAllUserDrafts } from "@/app/actions/listings-in-creation";
 import { getHostHousingRequests } from "@/app/actions/housing-requests";
 import { getAllHostBookings } from "@/app/actions/bookings";
 
 async function fetchOverviewData() {
   try {
-    const [listingsCount, housingRequests, hostBookings] = await Promise.all([
+    const [listingsCount, userDrafts, housingRequests, hostBookings] = await Promise.all([
       getHostListingsCount(),
+      getAllUserDrafts(),
       getHostHousingRequests(),
       getAllHostBookings()
     ]);
@@ -35,6 +37,7 @@ async function fetchOverviewData() {
     
     return {
       totalListings: listingsCount,
+      draftsCount: userDrafts?.length || 0,
       activeApplications: housingRequests.length,
       currentBookings: hostBookings.bookings.length,
       averageRating: 0, // TODO: Calculate from reviews when available
@@ -53,6 +56,7 @@ async function fetchOverviewData() {
     console.error('Error fetching overview data:', error);
     return {
       totalListings: 0,
+      draftsCount: 0,
       activeApplications: 0,
       currentBookings: 0,
       averageRating: 0,
@@ -72,6 +76,7 @@ async function fetchOverviewData() {
 
 const sampleData = {
   totalListings: 3,
+  draftsCount: 2,
   activeApplications: 24,
   currentBookings: 3,
   averageRating: 4.5,
@@ -163,6 +168,22 @@ function buildStatisticsCards(data: typeof sampleData & { applicationsBreakdown?
       iconBg: "bg-orange-50",
       iconColor: "text-gray-700",
       link: "/app/host/dashboard/listings",
+      badges: [],
+      ...(data.draftsCount > 0 && {
+        footer: {
+          type: "badges" as const,
+          badges: [
+            {
+              text: `${data.draftsCount} Draft${data.draftsCount !== 1 ? 's' : ''}`,
+              bg: "bg-yellow-50",
+              valueColor: "text-yellow-600",
+              labelColor: "text-gray-600",
+            },
+            null, // Empty second column
+            null, // Empty third column
+          ],
+        },
+      }),
       subtitle: { text: "Listed Properties" },
     },
   ];
@@ -170,6 +191,7 @@ function buildStatisticsCards(data: typeof sampleData & { applicationsBreakdown?
 
 const zeroData = {
   totalListings: 0,
+  draftsCount: 0,
   activeApplications: 0,
   currentBookings: 0,
   averageRating: 0,
@@ -261,6 +283,7 @@ function buildZeroStatisticsCards() {
       iconBg: "bg-orange-50",
       iconColor: "text-gray-700",
       link: "/app/host/dashboard/listings",
+      badges: [],
       subtitle: { text: "Listed Properties" },
     },
     {

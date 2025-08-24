@@ -10,6 +10,8 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from "./[listingId]/useNavigationContent";
 import AddPropertyModal from "@/app/admin/test/add-property-modal/AddPropertyModal";
 import HostListingCard from "./components/host-listing-card";
+import { deleteListing } from "@/app/actions/listings";
+import { deleteDraft } from "@/app/actions/listings-in-creation";
 
 interface PaginationInfo {
   totalCount: number;
@@ -285,6 +287,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, use
           isDraft={true}
           loadingListingId={loadingListingId}
           onViewDetails={(id) => router.push(`/app/host/add-property?draftId=${id}`)}
+          deleteFunction={deleteDraft}
         />
       ))}
       
@@ -296,6 +299,7 @@ export default function HostDashboardListingsTab({ listings, paginationInfo, use
           isDraft={false}
           loadingListingId={loadingListingId}
           onViewDetails={handleViewListingDetails}
+          deleteFunction={deleteListing}
         />
       ))}
     </TabLayout>

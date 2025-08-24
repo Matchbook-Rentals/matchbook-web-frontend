@@ -307,14 +307,18 @@ export async function handleSubmitListing(listingData: any, userId: string, draf
     });
   }
 
-  // If we have a draftId, submit the draft to create a listing
+  // If we have a draftId, use the draft-specific transaction
   // Otherwise, create a new listing directly
-
- let finishedListing = await createListing(finalListing, userId);
   if (draftId) {
-     await deleteDraftById(draftId, userId);
+    // Use createListingFromDraftTransaction which handles draft deletion internally
+    return await createListingFromDraftTransaction(draftId, userId, {
+      listingImages: finalListing.listingImages,
+      monthlyPricing: finalListing.monthlyPricing
+    });
+  } else {
+    // Create a new listing directly (this will delete any existing drafts)
+    return await createListing(finalListing, userId);
   }
-  return finishedListing;
 
 }
 

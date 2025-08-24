@@ -439,6 +439,11 @@ export const deleteDraftById = async (draftId: string, userId: string) => {
   }
 };
 
+export const deleteDraft = async (draftId: string) => {
+  const userId = await checkAuth();
+  return deleteDraftById(draftId, userId);
+};
+
 export const getDraftDataWithRelations = async (draftId: string) => {
   try {
     // Add auth check unless in test environment

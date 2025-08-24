@@ -17,7 +17,6 @@ import {
 } from "@/components/brandDialog";
 import { Input } from "@/components/ui/input";
 import { XIcon } from "lucide-react";
-import { deleteListing } from "@/app/actions/listings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -26,13 +25,15 @@ interface HostListingCardProps {
   loadingListingId?: string | null;
   onViewDetails?: (listingId: string) => void;
   isDraft?: boolean;
+  deleteFunction?: (listingId: string) => Promise<any>;
 }
 
 export default function HostListingCard({ 
   listing, 
   loadingListingId, 
   onViewDetails,
-  isDraft = false
+  isDraft = false,
+  deleteFunction
 }: HostListingCardProps) {
   const isMobile = useIsMobile();
   const router = useRouter();
@@ -118,10 +119,32 @@ export default function HostListingCard({
   };
 
   const { status, statusColor } = getStatusInfo(listing);
-  const fullAddress = `${listing.streetAddress1 || ''} ${listing.city || ''}, ${listing.state || ''} ${listing.postalCode || ''}`;
-  const displayAddress = isMobile 
-    ? (listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`)
-    : fullAddress;
+  
+  // Handle address display with better placeholders for drafts
+  const getDisplayAddress = () => {
+    if (isDraft) {
+      // For drafts, be more specific about what's missing
+      if (!listing.streetAddress1 && !listing.city && !listing.state) {
+        return "No address added";
+      }
+      if (!listing.streetAddress1 && listing.city && listing.state) {
+        return `Property in ${listing.city}, ${listing.state}`;
+      }
+      if (listing.streetAddress1 && !listing.city) {
+        return listing.streetAddress1;
+      }
+    }
+    
+    const fullAddress = `${listing.streetAddress1 || ''} ${listing.city || ''}, ${listing.state || ''} ${listing.postalCode || ''}`.trim();
+    
+    if (isMobile) {
+      return listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`;
+    }
+    
+    return fullAddress || "Address not set";
+  };
+  
+  const displayAddress = getDisplayAddress();
 
   const handleDeleteListing = () => {
     setIsPopoverOpen(false);
@@ -129,16 +152,21 @@ export default function HostListingCard({
   };
 
   const handleConfirmDelete = async () => {
+    if (!deleteFunction) {
+      toast.error("Delete function not provided");
+      return;
+    }
+
     setIsDeleting(true);
     try {
-      await deleteListing(listing.id);
-      toast.success("Listing deleted successfully");
+      await deleteFunction(listing.id);
+      toast.success(isDraft ? "Draft deleted successfully" : "Listing deleted successfully");
       setIsDeleteDialogOpen(false);
       setDeleteConfirmationText("");
       router.refresh(); // Refresh the page to update the listing display
     } catch (error) {
       console.error("Error deleting listing:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to delete listing");
+      toast.error(error instanceof Error ? error.message : `Failed to delete ${isDraft ? 'draft' : 'listing'}`);
     } finally {
       setIsDeleting(false);
     }
@@ -159,7 +187,16 @@ export default function HostListingCard({
             <div className="flex flex-col items-start gap-6 relative flex-1 grow min-w-0">
               {/* Property Image */}
               <div className="relative w-full rounded-xl overflow-hidden bg-cover bg-center"
-                   style={{ backgroundImage: `url(${listing.listingImages?.[0]?.url || '/image-35.png'})`, aspectRatio: '366/162' }}>
+                   style={{ 
+                     backgroundImage: listing.listingImages?.[0]?.url ? `url(${listing.listingImages[0].url})` : undefined,
+                     backgroundColor: !listing.listingImages?.[0]?.url ? '#f3f4f6' : undefined,
+                     aspectRatio: '366/162' 
+                   }}>
+                {isDraft && !listing.listingImages?.[0]?.url && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-gray-600 text-sm font-medium">No photo added</span>
+                  </div>
+                )}
                 <div className="absolute top-2.5 right-2.5">
                   <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger asChild>
@@ -180,7 +217,7 @@ export default function HostListingCard({
                           onClick={handleDeleteListing}
                         >
                           <TrashIcon className="h-4 w-4 mr-2" />
-                          Delete Listing
+                          {isDraft ? 'Delete Draft' : 'Delete Listing'}
                         </Button>
                       </div>
                     </PopoverContent>
@@ -225,21 +262,21 @@ export default function HostListingCard({
                   <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
                     <BedSingleIcon className="w-5 h-5 text-[#344054]" />
                     <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
-                      {listing.roomCount || 0} Bedroom{(listing.roomCount || 0) !== 1 ? 's' : ''}
+                      {isDraft && !listing.roomCount ? 'Bedrooms not set' : `${listing.roomCount || 0} Bedroom${(listing.roomCount || 0) !== 1 ? 's' : ''}`}
                     </div>
                   </div>
 
                   <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
                     <BathIcon className="w-5 h-5 text-[#344054]" />
                     <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
-                      {listing.bathroomCount || 0} Bathroom{(listing.bathroomCount || 0) !== 1 ? 's' : ''}
+                      {isDraft && !listing.bathroomCount ? 'Bathrooms not set' : `${listing.bathroomCount || 0} Bathroom${(listing.bathroomCount || 0) !== 1 ? 's' : ''}`}
                     </div>
                   </div>
 
                   <div className="items-center justify-center gap-1.5 px-0 py-1.5 rounded-full inline-flex relative">
                     <SquareIcon className="w-5 h-5 text-[#344054]" />
                     <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
-                      {listing.squareFootage || 'N/A'} Sqft
+                      {isDraft && !listing.squareFootage ? 'Size not set' : `${listing.squareFootage || 'N/A'} Sqft`}
                     </div>
                   </div>
                 </div>
@@ -284,12 +321,18 @@ export default function HostListingCard({
       <CardContent className="p-0">
         <div className="flex gap-6">
           {/* Property Image */}
-          <div className="w-[209px] h-[140px] rounded-xl overflow-hidden flex-shrink-0">
-            <img
-              className="w-full h-full object-cover"
-              alt="Property image"
-              src={listing.listingImages?.[0]?.url || "/image-35.png"}
-            />
+          <div className="w-[209px] h-[140px] rounded-xl overflow-hidden flex-shrink-0 relative" style={{ backgroundColor: !listing.listingImages?.[0]?.url ? '#f3f4f6' : undefined }}>
+            {listing.listingImages?.[0]?.url ? (
+              <img
+                className="w-full h-full object-cover"
+                alt="Property image"
+                src={listing.listingImages[0].url}
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                <span className="text-gray-600 text-sm font-medium">No photo added</span>
+              </div>
+            )}
           </div>
 
           {/* Property Details */}
@@ -328,7 +371,7 @@ export default function HostListingCard({
               <div className="flex items-center gap-1.5 py-1.5">
                 <BedSingleIcon className="w-5 h-5 text-gray-500" />
                 <span className="font-medium text-sm text-[#344054]">
-                  {listing.roomCount || 0} Bedroom{(listing.roomCount|| 0) !== 1 ? 's' : ''}
+                  {isDraft && !listing.roomCount ? 'Bedrooms not set' : `${listing.roomCount || 0} Bedroom${(listing.roomCount || 0) !== 1 ? 's' : ''}`}
                 </span>
               </div>
 
@@ -336,7 +379,7 @@ export default function HostListingCard({
               <div className="flex items-center gap-1.5 py-1.5">
                 <BathIcon className="w-5 h-5 text-gray-500" />
                 <span className="font-medium text-sm text-[#344054]">
-                  {listing.bathroomCount || 0} Bathroom{(listing.bathroomCount || 0) !== 1 ? 's' : ''}
+                  {isDraft && !listing.bathroomCount ? 'Bathrooms not set' : `${listing.bathroomCount || 0} Bathroom${(listing.bathroomCount || 0) !== 1 ? 's' : ''}`}
                 </span>
               </div>
 
@@ -344,7 +387,7 @@ export default function HostListingCard({
               <div className="flex items-center gap-1.5 py-1.5">
                 <SquareIcon className="w-5 h-5 text-gray-500" />
                 <span className="font-medium text-sm text-[#344054]">
-                  {listing.squareFootage || 'N/A'} Sqft
+                  {isDraft && !listing.squareFootage ? 'Size not set' : `${listing.squareFootage || 'N/A'} Sqft`}
                 </span>
               </div>
             </div>
@@ -372,7 +415,7 @@ export default function HostListingCard({
                     onClick={handleDeleteListing}
                   >
                     <TrashIcon className="h-4 w-4 mr-2" />
-                    Delete Listing
+                    {isDraft ? 'Delete Draft' : 'Delete Listing'}
                   </Button>
                 </div>
               </PopoverContent>
@@ -472,7 +515,7 @@ export default function HostListingCard({
               ) : (
                 <>
                   <TrashIcon className="h-4 w-4 mr-2" />
-                  Delete Listing
+                  {isDraft ? 'Delete Draft' : 'Delete Listing'}
                 </>
               )}
             </BrandButton>
