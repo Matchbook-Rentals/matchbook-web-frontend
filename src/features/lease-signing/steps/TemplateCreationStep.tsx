@@ -27,7 +27,6 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
     const file = event.target.files?.[0];
     if (file && file.type === "application/pdf") {
       setUploadedFile(file);
-      setStep("edit");
     }
   };
 
@@ -86,6 +85,11 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
                     </label>
                   </p>
                   <p className="text-xs text-gray-500">PDF files only</p>
+                  {uploadedFile && (
+                    <p className="text-sm text-green-600 font-medium">
+                      ✓ {uploadedFile.name}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
