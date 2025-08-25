@@ -49,19 +49,24 @@ export default async function AdminLayout({
       icon: "Home",
     },
     {
-      title: "User Management",
+      title: "Role Management",
       url: "/admin/user-management",
       icon: "Users",
     },
     {
+      title: "Listing Management",
+      url: "/admin/listing-management",
+      icon: "Building",
+    },
+    {
       title: "Listing Approval",
       url: "/admin/listing-approval",
-      icon: "Home",
+      icon: "CheckCircle",
     },
     {
       title: "Address Changes",
       url: "/admin/address-change-approvals",
-      icon: "Home",
+      icon: "MapPin",
     },
     {
       title: "Tickets",
@@ -71,7 +76,7 @@ export default async function AdminLayout({
     {
       title: "Notifications",
       url: "/admin/notifications",
-      icon: "MessageSquare",
+      icon: "Bell",
     },
   ];
 
