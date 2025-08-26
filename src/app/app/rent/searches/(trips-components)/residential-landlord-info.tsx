@@ -141,7 +141,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
 
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full">
       {residentialHistoryErrors.overall && (
         <p onClick={() => console.log(residentialHistory)} className="text-red-500 text-sm mt-1">{residentialHistoryErrors.overall}</p>
       )}
