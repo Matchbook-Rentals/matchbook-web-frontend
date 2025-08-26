@@ -1798,7 +1798,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       case 'signer2':
         // Check if all required fields are signed
         const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-        const signerFields = fields.filter(f => f.recipientIndex === currentSignerIndex);
+        const signerFields = fields.filter(f => f.recipientIndex === currentSignerIndex && ['SIGNATURE', 'INITIALS'].includes(f.type));
         const unSignedFields = signerFields.filter(f => !signedFields[f.formId]);
         if (unSignedFields.length > 0) {
           alert('Please complete all required fields before finishing!');
@@ -1876,10 +1876,20 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     return null;
   };
 
+  // Get appropriate field label based on type and recipient
+  const getFieldLabel = (field: FieldFormType) => {
+    if (field.type === 'SIGNATURE') {
+      return field.recipientIndex === 0 ? 'Host Signature' : 'Primary Renter Signature';
+    } else if (field.type === 'INITIALS') {
+      return field.recipientIndex === 0 ? 'Host Initials' : 'Primary Renter Initials';
+    }
+    return FRIENDLY_FIELD_TYPE[field.type];
+  };
+
   // Get unsigned fields for current signer
   const getUnsignedFields = () => {
     const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-    return fields.filter(f => f.recipientIndex === currentSignerIndex && !signedFields[f.formId]);
+    return fields.filter(f => f.recipientIndex === currentSignerIndex && !signedFields[f.formId] && ['SIGNATURE', 'INITIALS'].includes(f.type));
   };
 
   // Navigate to next unsigned field and flash it
@@ -2214,7 +2224,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       // Delay validation to allow PDF and fields to fully load
       const timeoutId = setTimeout(() => {
         validateFieldRendering();
-      }, 1000);
+      }, 2000);
       
       return () => clearTimeout(timeoutId);
     }
@@ -2818,33 +2828,29 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                       </div>
                     )}
                     
-                    {/* Rendering Validation */}
-                    {validationStatus === 'valid' && renderingStatus === 'checking' && (
-                      <div className="flex items-center gap-2 text-sm text-blue-600">
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
-                        Checking field visibility...
-                      </div>
-                    )}
-                    {renderingStatus === 'rendered' && fieldsRendered && (
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">✓</span>
-                        </div>
-                        All {fields.length} fields rendered and clickable
-                      </div>
-                    )}
-                    {renderingStatus === 'failed' && (
-                      <div className="flex items-center gap-2 text-sm text-red-600">
-                        <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">⚠</span>
-                        </div>
-                        Some fields not visible - <button 
-                          onClick={validateFieldRendering}
-                          className="underline hover:no-underline"
-                        >
-                          retry validation
-                        </button>
-                      </div>
+                    {/* Rendering Validation - Hidden in production, kept for debugging */}
+                    {process.env.NODE_ENV === 'development' && (
+                      <>
+                        {validationStatus === 'valid' && renderingStatus === 'checking' && (
+                          <div className="flex items-center gap-2 text-sm text-blue-600">
+                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+                            Checking field visibility...
+                          </div>
+                        )}
+                        {renderingStatus === 'failed' && (
+                          <div className="flex items-center gap-2 text-sm text-red-600">
+                            <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-xs">⚠</span>
+                            </div>
+                            Some fields not visible - <button 
+                              onClick={validateFieldRendering}
+                              className="underline hover:no-underline"
+                            >
+                              retry validation
+                            </button>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                   
@@ -2861,6 +2867,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   <div className="space-y-2">
                     {fields
                       .filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1))
+                      .filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type))
                       .map(field => (
                         <div key={field.formId} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                           <div className="flex items-center gap-2">
@@ -3040,8 +3047,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             {(workflowState === 'signer1' || workflowState === 'signer2') && (
               <>
                 <div className="text-xs text-gray-500">
-                  {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).filter(f => signedFields[f.formId]).length} of{' '}
-                  {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).length} fields signed
+                  {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).filter(f => signedFields[f.formId]).length} of{' '}
+                  {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).length} signature fields signed
                 </div>
                 <BrandButton 
                   onClick={handleSigningAction}

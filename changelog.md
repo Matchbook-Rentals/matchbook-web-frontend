@@ -1,5 +1,13 @@
 # Changelog
 
+## Improve PDF lease signing experience with focused field display
+- Updated field filtering to only show signature fields (SIGNATURE, INITIALS) in "fields to complete" sections
+- Removed date fields from signing requirements as they auto-populate when signatures are signed
+- Added proper recipient titles to signature fields ("Host Signature", "Primary Renter Signature")
+- Fixed missing title property in PDF merger for proper field labeling
+- Hidden field rendering validation UI in production while keeping debugging logic
+- Increased field validation delay to improve rendering reliability
+
 ## Refactor map component with custom hooks architecture and fix race conditions
 - Extracted map logic into 4 specialized hooks: useMapUtilities, useMapMarkerFactory, useMapMarkerStyles, useMapMarkerManager
 - Fixed circular dependency issues in marker creation and management

@@ -205,7 +205,8 @@ function convertTemplateRecipients(templateRecipients: any[]): Recipient[] {
     name: recipient.name || recipient.title || `Recipient ${index + 1}`,
     email: recipient.email || '',
     role: mapRecipientRole(recipient.role || recipient.type),
-    color: recipient.color || generateRecipientColor(index)
+    color: recipient.color || generateRecipientColor(index),
+    title: recipient.title || (index === 0 ? 'Host' : index === 1 ? 'Primary Renter' : `Recipient ${index + 1}`)
   }));
 }
 

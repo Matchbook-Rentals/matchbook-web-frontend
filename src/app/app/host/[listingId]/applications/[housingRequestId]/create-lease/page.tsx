@@ -265,7 +265,7 @@ export default function CreateLeasePage() {
             {isMerging 
               ? `Merging ${templates.length} documents...`
               : mergedPDF 
-              ? `Merged package: ${mergedPDF.pageCount} pages • ${mergedPDF.fields.length} fields`
+              ? `Merged package: ${mergedPDF.pageCount} pages • ${mergedPDF.fields.filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).length} signature fields`
               : templates.length === 1 
               ? `Editing: ${templates[0].title}` 
               : `${templates.length} documents selected for lease package`
