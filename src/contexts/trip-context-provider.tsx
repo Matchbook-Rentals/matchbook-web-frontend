@@ -111,6 +111,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     requestedIds: new Set(),
     matchIds: new Set()
   });
+  
+  // Track operations in progress to prevent duplicates
+  const [processingOperations, setProcessingOperations] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<FilterOptions>({
     minPrice: tripData.minPrice || null,
     maxPrice: tripData.maxPrice || null,
@@ -666,9 +669,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
   const optimisticLike = useCallback(async (listingId: string, withPopup = false) => {
     try {
-      if (lookup.favIds.has(listingId)) {
+      // Check if already liked or operation in progress
+      if (lookup.favIds.has(listingId) || processingOperations.has(`like-${listingId}`)) {
         return;
       }
+
+      // Mark operation as in progress
+      setProcessingOperations(prev => new Set([...prev, `like-${listingId}`]));
 
       // Store initial state
       const wasDisliked = lookup.dislikedIds.has(listingId);
@@ -699,12 +706,30 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       }
     } catch (error) {
       logger.error('Failed to like listing', error);
+      // Rollback optimistic update on error
+      setLookup(prev => ({
+        ...prev,
+        favIds: new Set([...prev.favIds].filter(id => id !== listingId))
+      }));
+    } finally {
+      // Always remove operation from processing set
+      setProcessingOperations(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(`like-${listingId}`);
+        return newSet;
+      });
     }
-  }, [trip, lookup]);
+  }, [trip, lookup, processingOperations]);
 
   const optimisticDislike = useCallback(async (listingId: string) => {
     try {
-      if (lookup.dislikedIds.has(listingId)) return;
+      // Check if already disliked or operation in progress
+      if (lookup.dislikedIds.has(listingId) || processingOperations.has(`dislike-${listingId}`)) {
+        return;
+      }
+
+      // Mark operation as in progress
+      setProcessingOperations(prev => new Set([...prev, `dislike-${listingId}`]));
 
       // Store the initial favorite state before any changes
       const wasFavorited = lookup.favIds.has(listingId);
@@ -734,8 +759,20 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       }
     } catch (error) {
       logger.error('Failed to dislike listing', error);
+      // Rollback optimistic update on error
+      setLookup(prev => ({
+        ...prev,
+        dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId))
+      }));
+    } finally {
+      // Always remove operation from processing set
+      setProcessingOperations(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(`dislike-${listingId}`);
+        return newSet;
+      });
     }
-  }, [trip, lookup]);
+  }, [trip, lookup, processingOperations]);
 
   const optimisticRemoveDislike = useCallback(async (listingId: string) => {
     try {

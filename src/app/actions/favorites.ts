@@ -15,7 +15,8 @@ export const createDbFavorite = async (tripId: string, listingId: string): Promi
     });
 
     if (existingFavorite) {
-      throw new Error('Favorite already exists for this trip and listing');
+      console.log('Favorite already exists, returning existing favorite ID:', existingFavorite.id);
+      return existingFavorite.id; // Return existing favorite instead of throwing error
     }
 
     // Get the highest rank for the current trip
@@ -73,23 +74,15 @@ export const optimisticFavorite = async (
   listingId: string,
 ): Promise<{ success: boolean, favoriteId?: string, error?: string }> => {
   try {
-    // Perform DB operation - createDbFavorite already handles duplicate checking
-    const newFavoriteId = await createDbFavorite(tripId, listingId);
+    // Perform DB operation - createDbFavorite now handles duplicates gracefully
+    const favoriteId = await createDbFavorite(tripId, listingId);
 
     return {
       success: true,
-      favoriteId: newFavoriteId
+      favoriteId: favoriteId
     };
   } catch (error) {
-    // If the error is our duplicate check from createDbFavorite
-    if (error instanceof Error && error.message.includes('Favorite already exists')) {
-      return {
-        success: false,
-        error: 'Already favorited'
-      };
-    }
-
-    // For any other errors
+    // For any errors (database issues, etc.)
     console.error('Favorite operation failed:', error);
     return {
       success: false,

@@ -1,0 +1,108 @@
+/* Map marker base styles */
+.priceBubbleMarker {
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-weight: bold;
+  font-size: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  min-width: 40px;
+  text-align: center;
+  overflow: visible;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Default state */
+.priceBubbleMarker.default {
+  background-color: #ffffff;
+  color: #1f2937;
+  border: 0.5px solid grey;
+}
+
+/* Hover state */
+.priceBubbleMarker.hover {
+  background-color: #0b6e6e;
+  color: #ffffff;
+  border: 0.5px solid #0b6e6e;
+  z-index: 10;
+}
+
+/* Selected state (fullscreen mode) */
+.priceBubbleMarker.selected {
+  background-color: #0b6e6e;
+  color: #ffffff;
+  border: 0.5px solid #0b6e6e;
+  z-index: 5;
+}
+
+/* Liked state */
+.priceBubbleMarker.liked {
+  background-color: #ffffff;
+  color: #1f2937;
+  border: 0.5px solid grey;
+  z-index: 3;
+}
+
+/* Disliked state */
+.priceBubbleMarker.disliked {
+  background-color: #1f2937;
+  color: #ffffff;
+  border: 0.5px solid #ffffff;
+  z-index: 0;
+}
+
+/* Heart icon positioning */
+.priceBubbleMarker .heartIcon {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 12px;
+  height: 12px;
+  fill: #ff6b6b;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+}
+
+/* Simple marker heart icon styles */
+.simpleMarkerHeart {
+  overflow: visible !important;
+}
+
+.simpleMarkerHeart .markerHeartIcon {
+  pointer-events: none;
+}
+
+/* Additional z-index specificity for nested selectors if needed */
+.priceBubbleMarker.hover {
+  z-index: 10 !important;
+}
+
+.priceBubbleMarker.selected {
+  z-index: 5 !important;
+}
+
+.priceBubbleMarker.liked {
+  z-index: 3 !important;
+}
+
+.priceBubbleMarker.default {
+  z-index: 1 !important;
+}
+
+.priceBubbleMarker.disliked {
+  z-index: 0 !important;
+}
+
+/* Ensure MapLibre markers have proper overflow */
+.maplibregl-marker {
+  overflow: visible;
+}
+
+.maplibregl-marker svg {
+  overflow: visible !important;
+}
