@@ -45,17 +45,17 @@ export async function getAllListings({
   // Search filter
   if (search) {
     where.OR = [
-      { title: { contains: search, mode: 'insensitive' } },
-      { locationString: { contains: search, mode: 'insensitive' } },
-      { city: { contains: search, mode: 'insensitive' } },
-      { state: { contains: search, mode: 'insensitive' } },
-      { streetAddress1: { contains: search, mode: 'insensitive' } },
+      { title: { contains: search } },
+      { locationString: { contains: search } },
+      { city: { contains: search } },
+      { state: { contains: search } },
+      { streetAddress1: { contains: search } },
       { 
         user: {
           OR: [
-            { email: { contains: search, mode: 'insensitive' } },
-            { firstName: { contains: search, mode: 'insensitive' } },
-            { lastName: { contains: search, mode: 'insensitive' } }
+            { email: { contains: search } },
+            { firstName: { contains: search } },
+            { lastName: { contains: search } }
           ]
         }
       }
