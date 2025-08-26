@@ -185,7 +185,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Row 2: Apt + City + State + ZIP */}
+                {/* Row 2: Apt + City */}
                 <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -224,7 +224,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       />
                     </div>
                   </div>
+                </div>
 
+                {/* Row 3: State + ZIP Code */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -262,7 +265,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Row 3: Property Type (left) + Month selector (right) */}
+                {/* Row 4: Property Type (left) + Month selector (right) */}
                 <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
