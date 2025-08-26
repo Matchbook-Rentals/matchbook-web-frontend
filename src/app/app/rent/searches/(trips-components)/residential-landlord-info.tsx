@@ -311,7 +311,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                           <RadioGroupItem
                             value="rent"
                             id={`rent-${index}`}
-                            className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:bg-secondaryBrand data-[state=checked]:border-secondaryBrand"
+                            className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0"
                           />
                           <Label
                             htmlFor={`rent-${index}`}
@@ -324,7 +324,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                           <RadioGroupItem
                             value="own"
                             id={`own-${index}`}
-                            className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:bg-secondaryBrand data-[state=checked]:border-secondaryBrand"
+                            className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0"
                           />
                           <Label
                             htmlFor={`own-${index}`}
