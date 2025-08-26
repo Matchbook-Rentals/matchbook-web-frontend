@@ -120,6 +120,11 @@ export default async function AdminLayout({
       url: "/admin/cron-jobs",
       icon: "Settings",
     },
+    {
+      title: "Test Suites",
+      url: "/admin/test",
+      icon: "FlaskConical",
+    },
   ];
 
   // Build sidebar groups - only include dev tools for devs

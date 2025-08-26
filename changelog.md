@@ -1,5 +1,14 @@
 # Changelog
 
+## Implement admin_dev role with comprehensive access control
+- Added new admin_dev role to support developer access with admin permissions
+- Updated middleware authentication to allow admin_dev users to access admin routes using substring matching
+- Fixed all admin server actions to use checkAdminAccess() instead of strict role checking
+- Consolidated developer tools into single "Dev Tools" section in admin sidebar (integrations + system tools)
+- Updated client-side and server-side role checking utilities to support admin inheritance
+- Added admin_dev role option to user management interface with Code icon
+- Ensured admin_dev users have beta, host, and admin access throughout the application
+
 ## Enhance draft listing management and dashboard visibility
 - Fixed draft deletion button text to show "Delete Draft" instead of "Delete Listing" for draft cards
 - Added comprehensive placeholder handling for incomplete draft data (address, photos, room details)
