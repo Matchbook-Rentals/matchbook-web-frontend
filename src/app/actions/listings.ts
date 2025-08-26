@@ -5,7 +5,7 @@ import { checkAuth } from '@/lib/auth-utils';
 import { ListingAndImages } from "@/types/";
 import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
 import { statesInRadiusData } from "@/constants/state-radius-data";
-import { isValid } from 'date-fns'; // Import date-fns for validation
+import { differenceInDays, isValid } from 'date-fns'; // Import date-fns for validation
 import { capNumberValue } from '@/lib/number-validation';
 import { revalidatePath } from "next/cache";
 
@@ -67,8 +67,9 @@ export const pullListingsFromDb = async (
     // Log the states being used for filtering
 
     // Calculate trip length in days and months
-    const tripLengthDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    const tripLengthMonths = Math.ceil(tripLengthDays / 30.44); // Average days per month
+    const tripLengthDays: number = Math.max(1, differenceInDays(endDate, startDate)); // Accurate days, min 1 to handle short trips
+    // Floor months for inclusive min matching (e.g., 1.99 months floors to 1 to match 1-month listings)
+    const tripLengthMonths: number = Math.max(1, Math.floor(tripLengthDays / 30.44)); 
 
     // First, filter by states (indexed) and then get listing IDs and distances within the radius
     // Use the raw query for combined state, distance filtering.
@@ -118,9 +119,8 @@ export const pullListingsFromDb = async (
           { // Add condition to include only listings with compatible monthly pricing
             monthlyPricing: {
               some: {
-                months: {
-                  gte: tripLengthMonths // Must have pricing for at least the trip length
-                }
+                months: { gte: tripLengthMonths } // >= floored months for inclusivity
+                // Optional: Add { lte: longestLeaseLength } if enforcing max from schema
               }
             }
           }
