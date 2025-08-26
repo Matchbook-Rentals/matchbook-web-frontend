@@ -244,7 +244,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Row 3: ZIP Code + Property Type */}
+                {/* Row 3: ZIP Code + Months */}
                 <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -264,6 +264,39 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     </div>
                   </div>
 
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          How many months have you stayed here?
+                        </Label>
+                      </div>
+
+                      <div className="flex items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
+                        <Select defaultValue="24+">
+                          <SelectTrigger className="flex w-[120px] h-12 items-center gap-2 px-3 py-2 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
+                            <SelectValue className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1</SelectItem>
+                            <SelectItem value="6">6</SelectItem>
+                            <SelectItem value="12">12</SelectItem>
+                            <SelectItem value="24+">24+</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                          <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                            Months
+                          </Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 4: Property Type (radio buttons) */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -304,39 +337,6 @@ export const ResidentialLandlordInfo: React.FC = () => {
                           </Label>
                         </div>
                       </RadioGroup>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Row 4: Month selector (left side only) */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
-                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
-                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                          How many months have you stayed here?
-                        </Label>
-                      </div>
-
-                      <div className="flex items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
-                        <Select defaultValue="24+">
-                          <SelectTrigger className="flex w-[120px] h-12 items-center gap-2 px-3 py-2 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
-                            <SelectValue className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">1</SelectItem>
-                            <SelectItem value="6">6</SelectItem>
-                            <SelectItem value="12">12</SelectItem>
-                            <SelectItem value="24+">24+</SelectItem>
-                          </SelectContent>
-                        </Select>
-
-                        <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
-                          <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                            Months
-                          </Label>
-                        </div>
-                      </div>
                     </div>
                   </div>
 
