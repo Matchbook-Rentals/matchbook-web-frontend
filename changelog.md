@@ -1,5 +1,14 @@
 # Changelog
 
+## Refactor map component with custom hooks architecture and fix race conditions
+- Extracted map logic into 4 specialized hooks: useMapUtilities, useMapMarkerFactory, useMapMarkerStyles, useMapMarkerManager
+- Fixed circular dependency issues in marker creation and management
+- Resolved race condition in favorites system where duplicate favorites would cause errors
+- Improved marker styling system with better debouncing and style verification
+- Enhanced code maintainability by separating concerns into focused, reusable hooks
+- Preserved all existing performance optimizations (marker pooling, hover functionality)
+- Added proper error handling for duplicate favorite creation operations
+
 ## Implement admin_dev role with comprehensive access control
 - Added new admin_dev role to support developer access with admin permissions
 - Updated middleware authentication to allow admin_dev users to access admin routes using substring matching

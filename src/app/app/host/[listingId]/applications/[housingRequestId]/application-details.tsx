@@ -489,7 +489,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto hover:bg-transparent"
               >
                 <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                  {getUploadButtonText('Approve and Send Lease')}
+                  {getUploadButtonText('Approve')}
                 </span>
               </Button>
             </>
