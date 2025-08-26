@@ -25,7 +25,7 @@ export const LandlordInfo: React.FC = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 w-full">
       {/* Row 1: First Name + Last Name */}
       <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
