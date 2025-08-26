@@ -17,50 +17,72 @@ export const LandlordInfo: React.FC = () => {
   };
 
   return (
-    <div className="mt-8">
-      <h3 className={ApplicationItemSubHeaderStyles}>Current Landlord Information</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <Label className={ApplicationItemLabelStyles}>First Name</Label>
+    <div className="space-y-5">
+      {/* Row 1: First Name + Last Name */}
+      <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+              First Name
+            </Label>
+          </div>
           <Input
             name="landlordFirstName"
             value={landlordInfo.landlordFirstName}
             onChange={handleInputChange}
             placeholder="Landlord's First Name"
-            className={error?.landlordFirstName ? "border-red-500" : ""}
+            className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordFirstName ? "border-red-500" : "border-[#d0d5dd]"}`}
           />
           {error?.landlordFirstName && <p className="mt-1 text-red-500 text-sm">{error.landlordFirstName}</p>}
         </div>
-        <div>
-          <Label className={ApplicationItemLabelStyles}>Last Name</Label>
+
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+              Last Name
+            </Label>
+          </div>
           <Input
             name="landlordLastName"
             value={landlordInfo.landlordLastName}
             onChange={handleInputChange}
             placeholder="Landlord's Last Name"
-            className={error?.landlordLastName ? "border-red-500" : ""}
+            className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordLastName ? "border-red-500" : "border-[#d0d5dd]"}`}
           />
           {error?.landlordLastName && <p className="mt-1 text-red-500 text-sm">{error.landlordLastName}</p>}
         </div>
-        <div>
-          <Label className={ApplicationItemLabelStyles}>Email</Label>
+      </div>
+
+      {/* Row 2: Email + Phone Number */}
+      <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+              Email
+            </Label>
+          </div>
           <Input
             name="landlordEmail"
             value={landlordInfo.landlordEmail}
             onChange={handleInputChange}
             placeholder="Landlord's Email"
-            className={error?.landlordEmail ? "border-red-500" : ""}
+            className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordEmail ? "border-red-500" : "border-[#d0d5dd]"}`}
           />
           {error?.landlordEmail && <p className="mt-1 text-red-500 text-sm">{error.landlordEmail}</p>}
         </div>
-        <div>
-          <Label className={ApplicationItemLabelStyles}>Phone Number</Label>
+
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+              Phone Number
+            </Label>
+          </div>
           <Input
             name="landlordPhoneNumber"
             value={landlordInfo.landlordPhoneNumber}
             onChange={handleInputChange}
             placeholder="Landlord's Phone Number"
-            className={error?.landlordPhoneNumber ? "border-red-500" : ""}
+            className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordPhoneNumber ? "border-red-500" : "border-[#d0d5dd]"}`}
           />
           {error?.landlordPhoneNumber && <p className="mt-1 text-red-500 text-sm">{error.landlordPhoneNumber}</p>}
         </div>

@@ -24,6 +24,7 @@ import {
 } from '@/utils/application-validation';
 import { useApplicationStore } from '@/stores/application-store';
 import { ResidentialLandlordInfo } from '../searches/(trips-components)/residential-landlord-info';
+import { LandlordInfo } from '../searches/(trips-components)/application-landlord-info';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function ApplicationClientComponent({ 
@@ -242,6 +243,16 @@ export default function ApplicationClientComponent({
                 Please add 24 months of residential history or three previous addresses.
               </p>
               <ResidentialLandlordInfo />
+            </div>
+          </section>
+
+          {/* Current Landlord Information Section */}
+          <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+            <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+              <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
+                Current Landlord Information
+              </h2>
+              <LandlordInfo />
             </div>
           </section>
 
