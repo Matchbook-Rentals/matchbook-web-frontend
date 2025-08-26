@@ -162,7 +162,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   {headerText}
                 </h2>
 
-                {/* Row 1: Street Address (Full Width) */}
+                {/* Row 1: Street Address + Apt */}
                 <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -183,10 +183,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Row 2: Apt + City */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -206,7 +203,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       </div>
                     </div>
                   </div>
+                </div>
 
+                {/* Row 2: City + State */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -224,10 +224,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       />
                     </div>
                   </div>
-                </div>
 
-                {/* Row 3: State + ZIP Code */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -245,7 +242,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       />
                     </div>
                   </div>
+                </div>
 
+                {/* Row 3: ZIP Code + Property Type */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -263,10 +263,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       />
                     </div>
                   </div>
-                </div>
 
-                {/* Row 4: Property Type (left) + Month selector (right) */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -309,7 +306,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       </RadioGroup>
                     </div>
                   </div>
+                </div>
 
+                {/* Row 4: Month selector (left side only) */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -338,6 +338,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    {/* Empty div to maintain 2-column layout */}
                   </div>
                 </div>
               </div>
