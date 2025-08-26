@@ -6,12 +6,20 @@ import { useApplicationStore } from '@/stores/application-store';
 
 export const LandlordInfo: React.FC = () => {
   const { landlordInfo, setLandlordInfo, errors } = useApplicationStore();
-  const error = errors.landlordInfo;
+  const error = errors?.landlordInfo;
+
+  // Safety check - provide default values if landlordInfo is undefined
+  const safeInfo = landlordInfo || {
+    landlordFirstName: '',
+    landlordLastName: '',
+    landlordEmail: '',
+    landlordPhoneNumber: ''
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLandlordInfo({
-      ...landlordInfo,
+      ...safeInfo,
       [name]: value
     });
   };
@@ -28,7 +36,7 @@ export const LandlordInfo: React.FC = () => {
           </div>
           <Input
             name="landlordFirstName"
-            value={landlordInfo.landlordFirstName}
+            value={safeInfo.landlordFirstName}
             onChange={handleInputChange}
             placeholder="Landlord's First Name"
             className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordFirstName ? "border-red-500" : "border-[#d0d5dd]"}`}
@@ -44,7 +52,7 @@ export const LandlordInfo: React.FC = () => {
           </div>
           <Input
             name="landlordLastName"
-            value={landlordInfo.landlordLastName}
+            value={safeInfo.landlordLastName}
             onChange={handleInputChange}
             placeholder="Landlord's Last Name"
             className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordLastName ? "border-red-500" : "border-[#d0d5dd]"}`}
@@ -63,7 +71,7 @@ export const LandlordInfo: React.FC = () => {
           </div>
           <Input
             name="landlordEmail"
-            value={landlordInfo.landlordEmail}
+            value={safeInfo.landlordEmail}
             onChange={handleInputChange}
             placeholder="Landlord's Email"
             className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordEmail ? "border-red-500" : "border-[#d0d5dd]"}`}
@@ -79,7 +87,7 @@ export const LandlordInfo: React.FC = () => {
           </div>
           <Input
             name="landlordPhoneNumber"
-            value={landlordInfo.landlordPhoneNumber}
+            value={safeInfo.landlordPhoneNumber}
             onChange={handleInputChange}
             placeholder="Landlord's Phone Number"
             className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.landlordPhoneNumber ? "border-red-500" : "border-[#d0d5dd]"}`}
