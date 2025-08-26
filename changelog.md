@@ -1,5 +1,12 @@
 # Changelog
 
+## Add admin listing copy functionality for troubleshooting
+- Added "Copy to Admin" button in listing management interface
+- Creates complete database copy of listing with all related data (images, pricing, bedrooms, unavailability)
+- Copied listings are marked as test listings and prefixed with "[ADMIN COPY]"
+- Includes comprehensive client component with confirmation dialog and safety warnings
+- Available in both listing detail view and management table for admin users only
+
 ## Fix tenant lease viewing to show host's filled signatures and fields
 - Document linking between housing requests and matches with proper inheritance
 - Tenant PDF viewing with host's pre-filled signatures and field values visible

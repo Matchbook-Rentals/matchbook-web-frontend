@@ -51,7 +51,7 @@ export function SearchMatchbookTab() {
           label: 'Review',
           action: () => {
             if (matchId) {
-              router.push(`/app/rent/match/${matchId}`);
+              router.push(`/app/rent/tmatch/${matchId}`);
             } else {
               alert('Match not found');
             }
@@ -135,8 +135,7 @@ export function SearchMatchbookTab() {
             alt="No listings available" 
             className="w-32 h-32 mb-4 opacity-60"
           />
-          <p className='font-montserrat-regular text-2xl mb-5'>You haven&apos;t matched with any listings yet!</p>
-          <p className='mt-3'> Let&apos;s find you some options! </p>
+          <p className='font-montserrat-regular text-center text-2xl mb-5'>You haven&apos;t matched with any listings yet!</p>
           <div className='flex justify-center gap-x-2 mt-2'>
             <BrandButton
               variant="default"

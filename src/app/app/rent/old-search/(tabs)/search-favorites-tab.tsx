@@ -179,7 +179,6 @@ export default function SearchFavoritesTab() {
           className="w-32 h-32 mb-4 opacity-60"
         />
         <p className='font-montserrat-regular text-2xl mb-5'>You haven&apos;t liked any listings!</p>
-        <p className='mt-3'> Let&apos;s get you a match! </p>
         <div className='flex justify-center gap-x-2 mt-2'>
           <BrandButton
             variant="default"
