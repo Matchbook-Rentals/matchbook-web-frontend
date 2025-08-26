@@ -317,6 +317,14 @@ export async function toggleListingActive(listingId: string) {
   return updated;
 }
 
+export async function approveListing(listingId: string, comment?: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  return updateListing(listingId, { approvalStatus: 'approved' }, comment);
+}
+
 export async function bulkUpdateListingStatus(
   listingIds: string[], 
   action: 'activate' | 'deactivate' | 'approve' | 'reject',
