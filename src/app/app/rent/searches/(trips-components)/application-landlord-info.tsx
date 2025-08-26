@@ -5,7 +5,9 @@ import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/co
 import { useApplicationStore } from '@/stores/application-store';
 
 export const LandlordInfo: React.FC = () => {
-  const { landlordInfo, setLandlordInfo, errors } = useApplicationStore();
+  const landlordInfo = useApplicationStore((state) => state.landlordInfo);
+  const setLandlordInfo = useApplicationStore((state) => state.setLandlordInfo);
+  const errors = useApplicationStore((state) => state.errors);
   const error = errors?.landlordInfo;
 
   // Safety check - provide default values if landlordInfo is undefined
@@ -18,10 +20,12 @@ export const LandlordInfo: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setLandlordInfo({
-      ...safeInfo,
-      [name]: value
-    });
+    if (setLandlordInfo) {
+      setLandlordInfo({
+        ...safeInfo,
+        [name]: value
+      });
+    }
   };
 
   return (
