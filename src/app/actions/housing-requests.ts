@@ -369,7 +369,7 @@ export async function approveHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} has been approved!`,
-      url: `/app/searches/${housingRequest.tripId}`,
+      url: `/app/rent/searches/${housingRequest.tripId}`,
       actionType: 'application_approved',
       actionId: housingRequestId,
     };
@@ -379,7 +379,7 @@ export async function approveHousingRequest(housingRequestId: string) {
     // Revalidate relevant paths
     revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
     revalidatePath('/app/host/dashboard/applications');
-    revalidatePath(`/app/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
+    revalidatePath(`/app/rent/searches/${housingRequest.tripId}`);
 
     return { success: true, housingRequest: result.updatedRequest, match: result.match };
   } catch (error) {
@@ -423,7 +423,7 @@ export async function declineHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} has been declined.`,
-      url: `/app/searches/${housingRequest.tripId}`,
+      url: `/app/rent/searches/${housingRequest.tripId}`,
       actionType: 'application_declined',
       actionId: housingRequestId,
     };
@@ -531,7 +531,7 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your approval for ${housingRequest.listing.title} has been revoked.`,
-      url: `/app/searches/${housingRequest.tripId}`,
+      url: `/app/rent/searches/${housingRequest.tripId}`,
       actionType: 'application_revoked',
       actionId: housingRequestId,
     };
@@ -541,7 +541,7 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
     // Revalidate relevant paths
     revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
     revalidatePath('/app/host/dashboard/applications');
-    revalidatePath(`/app/searches/?tab=matchbook&searchId=${housingRequest.tripId}`);
+    revalidatePath(`/app/rent/searches/${housingRequest.tripId}`);
 
     return { success: true, housingRequest: result.updatedRequest };
   } catch (error) {
@@ -603,7 +603,7 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} is being reconsidered.`,
-      url: `/app/searches/${housingRequest.tripId}`,
+      url: `/app/rent/searches/${housingRequest.tripId}`,
       actionType: 'application_reconsidered',
       actionId: housingRequestId,
     };
