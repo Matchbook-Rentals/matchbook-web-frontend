@@ -1,13 +1,12 @@
 //Imports
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import BrandModal from '@/components/BrandModal'
 import Tile from "@/components/ui/tile";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
-import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 import { FilterIcon, UpdatedFilterIcon } from '@/components/icons';
 import { Wifi } from 'lucide-react'; // Import Wifi icon
 import { logger } from '@/lib/logger';
@@ -476,84 +475,97 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     });
   };
 
+  const triggerButton = (
+    <Button variant="outline" size="sm" className={`h-9 gap-2.5 px-3 ${className}`}>
+      <span>Filters</span>
+      <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2.5 5.83333H17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M5 10H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M8.33333 14.1667H11.6667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    </Button>
+  );
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      {/* Filter Button Trigger */}
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className={`h-9 gap-2.5 px-3 ${className}`}>
-          <span>Filters</span>
-          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.5 5.83333H17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M5 10H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M8.33333 14.1667H11.6667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </Button>
-      </DialogTrigger>
+    <BrandModal 
+      isOpen={isOpen} 
+      onOpenChange={onOpenChange}
+      triggerButton={triggerButton}
+      className="max-w-4xl"
+      heightStyle="!top-[5vh] h-[90vh]"
+    >
+      <div className="h-full overflow-hidden flex flex-col">
+        {/* Header with Clear Filter Button */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-[#484a54]">Filter</h2>
+          <Button variant="outline" className="h-auto inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-full border border-solid border-[#d9dadf]" onClick={handleClearFilters}>
+            <div className="text-[#3c8787] font-semibold text-base">Clear Filter</div>
+          </Button>
+        </div>
 
-      {/* Main Dialog Content */}
-      <DialogContent aria-describedby='Filter selection modal' className={TallDialogContent}>
-        <DialogTitle className={TallDialogTitle}>
-          Filters
-        </DialogTitle>
         {/* Scrollable Filter Content Area */}
-        <ScrollArea className="flex-1  px-6 py-0 ">
-          <div className="">
-            <div className="w-full">
-
-              {/* Filter Options Container */}
-              <div className="">
-                {/* Property Types Section */}
-                <div className="space-y-4 border-b-2 pb-3">
-                  <h3 className="text-[18px] font-medium text-[#404040]">Property Types</h3>
-                  <div className="flex flex-wrap xxs:flex-nowrap justify-between gap-x-2 sm:gap-4">
-                    {propertyTypeOptions.map(({ value, label, icon }) => {
-                      const isSelected = localFilters.propertyTypes.includes(value);
-                      return (
-                        <Tile
-                          key={value}
-                          icon={icon}
-                          label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
-                            ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                            : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                            }`}
-                          labelClassNames={`text-[14px] font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                            }`}
-                          onClick={() => {
-                            const updatedPropertyTypes = isSelected
-                              ? localFilters.propertyTypes.filter(type => type !== value)
-                              : [...localFilters.propertyTypes, value];
-                            handleLocalFilterChange('propertyTypes', updatedPropertyTypes);
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
+        <ScrollArea className="flex-1 px-6 py-6">
+          <div className="flex flex-col gap-8">
+            {/* Price Range Section */}
+            <div className="flex flex-col gap-3 border-b border-[#e6e6e6] pb-6">
+              <h3 className="text-sm font-semibold text-[#484a54]">Price Range</h3>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm font-medium text-[#344054]">Maximum</span>
+                  <CurrencyInput
+                    id="max-price"
+                    label=""
+                    value={priceInputs.max}
+                    onChange={(value) => handlePriceChange('max', value)}
+                    placeholder="$0.00"
+                    className="w-[157px]"
+                  />
                 </div>
-
-                {/* Price Range Section */}
-                <div className="space-y-4 border-b-2 py-6">
-                  <h3 className="text-[18px]  font-medium text-[#404040]">Price Range</h3>
-                  <div className="flex items-center justify-between gap-4">
-                    <CurrencyInput
-                      id="min-price"
-                      label="Minimum"
-                      value={priceInputs.min}
-                      onChange={(value) => handlePriceChange('min', value)}
-                      placeholder="$0"
-                      className='w-full'
-                    />
-                    <div className="border w-10  border-[#404040] mt-6" />
-                    <CurrencyInput
-                      id="max-price"
-                      label="Maximum"
-                      value={priceInputs.max}
-                      onChange={(value) => handlePriceChange('max', value)}
-                      placeholder="$10000"
-                      className='w-full'
-                    />
-                  </div>
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm font-medium text-[#344054]">Minimum</span>
+                  <CurrencyInput
+                    id="min-price"
+                    label=""
+                    value={priceInputs.min}
+                    onChange={(value) => handlePriceChange('min', value)}
+                    placeholder="$0.00"
+                    className="w-[157px]"
+                  />
                 </div>
+              </div>
+            </div>
+
+            {/* Property Types Section */}
+            <div className="flex flex-col gap-4">
+              <h3 className="text-sm font-semibold text-[#484a54]">What kind of property is it?</h3>
+              <div className="flex items-center gap-4">
+                {propertyTypeOptions.map(({ value, label, icon }) => {
+                  const isSelected = localFilters.propertyTypes.includes(value);
+                  return (
+                    <div
+                      key={value}
+                      className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg`}
+                      onClick={() => {
+                        const updatedPropertyTypes = isSelected
+                          ? localFilters.propertyTypes.filter(type => type !== value)
+                          : [...localFilters.propertyTypes, value];
+                        handleLocalFilterChange('propertyTypes', updatedPropertyTypes);
+                      }}
+                    >
+                      <div className="flex items-center gap-2 p-3 h-[72px]">
+                        <div className="w-5 h-5 flex items-center justify-center">
+                          {icon}
+                        </div>
+                        <div className="font-medium text-[#344054] text-sm text-center leading-5">
+                          {label}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
 
                 {/* Furnishings Section */}
                 <div className="space-y-4 border-b-2 py-6">
@@ -811,224 +823,390 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             </div>
           </div>
 
-          {/* Accessibility and Safety Section */}
-          <div className="space-y-4 border-b-2 py-6">
-            <h3 className="text-[18px] font-medium text-[#404040]">Accessibility and Safety</h3>
-            <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-start gap-4">
-                {accessibilityOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.accessibility?.includes(value);
-                  return (
-                    <Tile
-                      key={value}
-                      icon={icon}
-                      label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
-                        ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                        : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                        }`}
-                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                        }`}
-                      onClick={() => {
-                        logger.debug('Filter selection clicked', { localFilters, value });
-                        const updatedAmenities = isSelected
-                          ? (localFilters.accessibility || []).filter(item => item !== value)
-                          : [...(localFilters.accessibility || []), value];
-                        handleLocalFilterChange('accessibility', updatedAmenities);
-                      }}
-                    />
-                  );
-                })}
+            {/* Accessibility and Safety Section */}
+            <div className="flex flex-col gap-5 border-b border-[#e6e6e6] pb-6">
+              <h3 className="text-sm font-semibold text-[#484a54]">Accessibility and Safety</h3>
+              <div className="flex flex-col gap-5">
+                {[
+                  accessibilityOptions.slice(0, 4),
+                  accessibilityOptions.slice(4, 8)
+                ].map((row, rowIndex) => (
+                  <div key={rowIndex} className="flex items-center gap-5">
+                    {row.map(({ value, label, icon }) => {
+                      const isSelected = localFilters.accessibility?.includes(value);
+                      return (
+                        <div
+                          key={value}
+                          className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg flex-1`}
+                          onClick={() => {
+                            logger.debug('Filter selection clicked', { localFilters, value });
+                            const updatedAmenities = isSelected
+                              ? (localFilters.accessibility || []).filter(item => item !== value)
+                              : [...(localFilters.accessibility || []), value];
+                            handleLocalFilterChange('accessibility', updatedAmenities);
+                          }}
+                        >
+                          <div className="flex items-center gap-2 p-3 h-[72px]">
+                            <div className="w-5 h-5 flex items-center justify-center">
+                              {icon}
+                            </div>
+                            <div className="font-medium text-[#344054] text-sm leading-5">
+                              {label}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
 
-          <div className="space-y-4 border-b-2 py-6">
-            <h3 className="text-[18px] font-medium text-[#404040]">Location</h3>
-            <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-between gap-4">
-                {locationOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.location?.includes(value);
-                  return (
-                    <Tile
-                      key={value}
-                      icon={icon}
-                      label={label}
-                      className={`h-[109px] w-[109px] md:hover:bg-gray-100 transition-[background-color] duration-200 p-1 cursor-pointer box-border ${isSelected
-                        ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                        : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                        }`}
-                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                        }`}
-                      onClick={() => {
-                        const updatedAmenities = isSelected
-                          ? (localFilters.location || []).filter(item => item !== value)
-                          : [...(localFilters.location || []), value];
-                        handleLocalFilterChange('location', updatedAmenities);
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4 border-b-2 py-6">
-            <h3 className="text-[18px] font-medium text-[#404040]">Parking</h3>
-            <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-start gap-4">
+            {/* Parking Section */}
+            <div className="flex flex-col gap-4 border-b border-[#e6e6e6] pb-6">
+              <h3 className="text-sm font-semibold text-[#484a54]">Parking</h3>
+              <div className="flex items-center gap-5">
                 {parkingOptions.map(({ value, label, icon }) => {
                   const isSelected = localFilters.parking?.includes(value);
                   return (
-                    <Tile
+                    <div
                       key={value}
-                      icon={icon}
-                      label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
-                        ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                        : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                        }`}
-                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                        }`}
+                      className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg flex-1`}
                       onClick={() => {
                         const updatedAmenities = isSelected
                           ? (localFilters.parking || []).filter(item => item !== value)
                           : [...(localFilters.parking || []), value];
                         handleLocalFilterChange('parking', updatedAmenities);
                       }}
-                    />
+                    >
+                      <div className="flex items-center gap-2 p-3 h-[72px]">
+                        <div className="w-5 h-5 flex items-center justify-center">
+                          {icon}
+                        </div>
+                        <div className="font-medium text-[#344054] text-sm leading-5">
+                          {label}
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
             </div>
-          </div>
 
-          <div className="space-y-4 border-b-2 py-6">
-            <h3 className="text-[18px] font-medium text-[#404040]">Kitchen</h3>
-            <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-start gap-4">
-                {kitchenOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.kitchen?.includes(value);
+            {/* Basics Section */}
+            <div className="flex flex-col gap-4 border-b border-[#e6e6e6] pb-6">
+              <h3 className="text-sm font-semibold text-[#484a54]">Basics</h3>
+              <div className="flex items-center gap-5">
+                {basicsOptions.map(({ value, label, icon }) => {
+                  const isSelected = localFilters.basics?.includes(value);
                   return (
-                    <Tile
+                    <div
                       key={value}
-                      icon={icon}
-                      label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
-                        ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                        : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                        }`}
-                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                        }`}
+                      className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg flex-1`}
                       onClick={() => {
                         const updatedAmenities = isSelected
-                          ? (localFilters.kitchen || []).filter(item => item !== value)
-                          : [...(localFilters.kitchen || []), value];
-                        handleLocalFilterChange('kitchen', updatedAmenities);
+                          ? (localFilters.basics || []).filter(item => item !== value)
+                          : [...(localFilters.basics || []), value];
+                        handleLocalFilterChange('basics', updatedAmenities);
                       }}
-                    />
+                    >
+                      <div className="flex items-center gap-2 p-3 h-[72px]">
+                        <div className="w-5 h-5 flex items-center justify-center">
+                          {icon}
+                        </div>
+                        <div className="font-medium text-[#344054] text-sm leading-5">
+                          {label}
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
             </div>
-          </div>
 
-          {/* Climate Control Section - Removed/Replaced by Basics */}
-          {/* <div className="space-y-4 border-b-2 py-6"> ... </div> */}
-
-          <div className="space-y-4 border-b-2 py-6">
-            <h3 className="text-[18px] font-medium text-[#404040]">Luxury</h3>
-            <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-start gap-4">
-                {luxuryOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.luxury?.includes(value);
-                  return (
-                    <Tile
-                      key={value}
-                      icon={icon}
-                      label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
-                        ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                        : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                        }`}
-                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                        }`}
-                      onClick={() => {
-                        const updatedAmenities = isSelected
-                          ? (localFilters.luxury || []).filter(item => item !== value)
-                          : [...(localFilters.luxury || []), value];
-                        handleLocalFilterChange('luxury', updatedAmenities);
-                      }}
-                    />
-                  );
-                })}
+            {/* Furnishing and Utilities Section */}
+            <div className="flex gap-4 border-b border-[#e6e6e6] pb-6">
+              <div className="flex flex-col flex-1 gap-4">
+                <h3 className="text-sm font-semibold text-[#484a54]">Is it furnished or unfurnished?</h3>
+                <div className="flex items-center gap-4">
+                  {[
+                    {
+                      value: 'furnished',
+                      label: 'Furnished',
+                      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="p-1" />
+                    },
+                    {
+                      value: 'unfurnished',
+                      label: 'Unfurnished',
+                      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="p-1" />
+                    }
+                  ].map(({ value, label, icon }) => {
+                    const isSelected = value === 'furnished' ? localFilters.furnished : localFilters.unfurnished;
+                    return (
+                      <div
+                        key={value}
+                        className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg`}
+                        onClick={() => {
+                          if (value === 'furnished') {
+                            handleLocalFilterChange('furnished', !localFilters.furnished);
+                          } else {
+                            handleLocalFilterChange('unfurnished', !localFilters.unfurnished);
+                          }
+                        }}
+                      >
+                        <div className="flex items-center gap-2 p-3 h-[72px]">
+                          <div className="w-5 h-5 flex items-center justify-center">
+                            {icon}
+                          </div>
+                          <div className="font-medium text-[#344054] text-sm leading-5">
+                            {label}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex flex-col flex-1 gap-4">
+                <h3 className="text-sm font-semibold text-[#484a54]">Utilities</h3>
+                <div className="flex items-center gap-4">
+                  {[
+                    {
+                      value: 'utilitiesIncluded',
+                      label: 'Utilities Included',
+                      icon: <AmenitiesIcons.UpdatedUtilitiesIncludedIcon className="p-1" />
+                    },
+                    {
+                      value: 'utilitiesNotIncluded',
+                      label: 'Utilities Not Included',
+                      icon: <AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon className="p-1" />
+                    }
+                  ].map(({ value, label, icon }) => {
+                    const isSelected = localFilters.utilities.includes(value);
+                    return (
+                      <div
+                        key={value}
+                        className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg`}
+                        onClick={() => {
+                          const updatedUtilities = isSelected
+                            ? localFilters.utilities.filter(item => item !== value)
+                            : [...localFilters.utilities, value];
+                          handleLocalFilterChange('utilities', updatedUtilities);
+                        }}
+                      >
+                        <div className="flex items-center gap-2 p-3 h-[72px]">
+                          <div className="w-5 h-5 flex items-center justify-center">
+                            {icon}
+                          </div>
+                          <div className="font-medium text-[#344054] text-sm leading-5">
+                            {label}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Minimum Requirements Section */}
-          <div className='border-b-2 py-6'>
-            <h3 className="text-[18px] font-medium text-[#404040] mb-6">Minimum Requirements</h3>
-            <div className="space-y-4">
-              {minimumOptions.map(({ key, label }) => {
-                const options = key === 'minBathrooms' ? BATHROOM_OPTIONS : BEDROOM_OPTIONS;
-                return (
-                  <div key={key} className="text-center">
-                    <h4 className="text-[16px] font-normal text-[#404040] text-left mb-2 font-200">{label}</h4>
-                    <div className="flex flex-wrap justify-start gap-2">
-                      {options.map(({ label: optionLabel, value }) => (
-                        <Button
-                          key={value}
-                          variant={localFilters[key] === value ? "default" : "outline"}
-                          className="rounded-full"
-                          onClick={() => {
-                            if (localFilters[key] === value) {
-                              if (value === 0) { return; }
-                              handleLocalFilterChange(key, 0);
-                            }
-                            else {
-                              handleLocalFilterChange(key, value)
-                            }
-                          }}
-                        >
-                          {optionLabel}
-                        </Button>
-                      ))}
+            {/* Laundry and Pets Section */}
+            <div className="flex gap-6 border-b border-[#e6e6e6] pb-6">
+              <div className="flex flex-1 gap-4">
+                <h3 className="text-sm font-semibold text-[#484a54]">Laundry</h3>
+                <div className="flex h-[72px] items-center gap-5">
+                  {laundryOptions.map(({ value, label, id }) => {
+                    const isSelected = 
+                      (value === 'washerInUnit' && localFilters.laundry?.length === 1) ||
+                      (value === 'washerInComplex' && localFilters.laundry?.length === 2) ||
+                      (value === 'washerNotAvailable' && localFilters.laundry?.length === 3);
+                    
+                    return (
+                      <div
+                        key={id}
+                        className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg flex-1`}
+                        onClick={() => {
+                          if (
+                            (value === 'washerInUnit' && localFilters.laundry?.length === 1) ||
+                            (value === 'washerInComplex' && localFilters.laundry?.length === 2) ||
+                            (value === 'washerNotAvailable' && localFilters.laundry?.length === 3)
+                          ) {
+                            handleLocalFilterChange('laundry', []);
+                            return;
+                          }
+
+                          switch (value) {
+                            case 'washerInUnit':
+                              handleLocalFilterChange('laundry', ['washerInUnit']);
+                              break;
+                            case 'washerInComplex':
+                              handleLocalFilterChange('laundry', ['washerInUnit', 'washerInComplex']);
+                              break;
+                            case 'washerNotAvailable':
+                              handleLocalFilterChange('laundry', ['washerInUnit', 'washerInComplex', 'washerNotAvailable']);
+                              break;
+                          }
+                        }}
+                      >
+                        <div className="flex items-center gap-2 p-3 h-[72px]">
+                          <div className="w-5 h-5 flex items-center justify-center">
+                            <AmenitiesIcons.WasherIcon className="w-5 h-5" />
+                          </div>
+                          <div className="font-medium text-[#344054] text-sm leading-5">
+                            {label}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex flex-col w-[286px] gap-4">
+                <h3 className="text-sm font-semibold text-[#484a54]">Pets</h3>
+                <div className="flex items-center gap-4">
+                  {[
+                    {
+                      value: 'petsAllowed',
+                      label: 'Pets Allowed',
+                      icon: <AmenitiesIcons.UpdatedPetFriendlyIcon className="mt-1" />
+                    },
+                    {
+                      value: 'petsNotAllowed',
+                      label: 'No Pets',
+                      icon: <AmenitiesIcons.UpdatedPetUnfriendlyIcon className="" />
+                    }
+                  ].map(({ value, label, icon }) => {
+                    const isSelected = localFilters.pets.includes(value);
+                    return (
+                      <div
+                        key={value}
+                        className={`cursor-pointer transition-colors ${isSelected ? 'border-2 border-[#333333]' : 'border border-[#e6e6e6]'} rounded-lg`}
+                        onClick={() => {
+                          const updatedPets = isSelected
+                            ? localFilters.pets?.filter(item => item !== value) || []
+                            : [...(localFilters.pets || []), value];
+                          handleLocalFilterChange('pets', updatedPets);
+                        }}
+                      >
+                        <div className="flex items-center gap-2 p-3 h-[72px]">
+                          <div className="w-5 h-5 flex items-center justify-center">
+                            {icon}
+                          </div>
+                          <div className="font-medium text-[#344054] text-sm leading-5">
+                            {label}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Minimum Requirements Section */}
+            <div className="flex flex-col gap-4 border-b border-[#e6e6e6] pb-6">
+              <h3 className="text-sm font-semibold text-[#484a54]">Minimum Requirements</h3>
+              <div className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-[#e6e6e6] h-[51px]">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-4">
+                    <div className="text-sm font-medium text-[#777b8b]">Bedrooms</div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-6 h-6 p-0"
+                        onClick={() => handleLocalFilterChange('minBedrooms', Math.max(0, localFilters.minBedrooms - 1))}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                        </svg>
+                      </Button>
+                      <div className="text-lg font-medium text-[#5d606d]">
+                        {localFilters.minBedrooms}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-6 h-6 p-0"
+                        onClick={() => handleLocalFilterChange('minBedrooms', localFilters.minBedrooms + 1)}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      </Button>
                     </div>
                   </div>
-                );
-              })}
+                  <div className="flex items-center gap-4">
+                    <div className="text-sm font-medium text-[#777b8b]">Bathrooms</div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-6 h-6 p-0"
+                        onClick={() => handleLocalFilterChange('minBathrooms', Math.max(0, localFilters.minBathrooms - 1))}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                        </svg>
+                      </Button>
+                      <div className="text-lg font-medium text-[#5d606d]">
+                        {localFilters.minBathrooms}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-6 h-6 p-0"
+                        onClick={() => handleLocalFilterChange('minBathrooms', localFilters.minBathrooms + 1)}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </ScrollArea>
 
-
-        {/* Footer Actions Section */}
-        <div className="border-t border-gray-200 bg-background py-2 px-4 xxs:px-6 mt-0">
-          <div className="flex justify-between space-x-2 items-center ">
-            <Button variant='outline' className='rounded-full text-[12px] xxs:text-[14px] px-2 xxs:px-4' onClick={clearFilters} >
-              Clear filters
-            </Button>
-            <div className="flex space-x-2 xxs:space-x-4 ">
-              <Button
-                variant="outline"
-                className='rounded-full text-[12px] xxs:text-[14px] px-2 xxs:px-4'
-                onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSave}
-                disabled={!hasChanges}
-                className='py-0 rounded-full text-[12px] xxs:text-[14px] px-2 xxs:px-4'
-              >
-                Show {filteredListingsCount} listings
-              </Button>
+        {/* Bottom Section with Search Radius and Action Buttons */}
+        <div className="px-6 py-4 border-t border-gray-200">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-[#484a54]">Search Radius</h3>
+              <span className="font-medium text-sm text-[#344054]">{localFilters.searchRadius || 50} Miles</span>
             </div>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value={localFilters.searchRadius || 50}
+              onChange={(e) => handleLocalFilterChange('searchRadius', parseInt(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#4F4F4F]"
+            />
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        {/* Footer Actions */}
+        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+          <Button
+            variant="outline"
+            className="border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="bg-[#e7f0f0] text-[#3c8787] hover:bg-[#d1e7e7] px-[22px] py-4 text-lg font-semibold"
+            onClick={handleSave}
+            disabled={!hasChanges}
+          >
+            Show {filteredListingsCount} Listing
+          </Button>
+        </div>
+
+      </div>
+    </BrandModal>
   );
 };
 
