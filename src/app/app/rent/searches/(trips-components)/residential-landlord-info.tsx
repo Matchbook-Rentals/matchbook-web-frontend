@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from '@/components/ui/card';
 import MonthSelect from "@/components/ui/month-select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 import { useApplicationStore, defaultResidentialHistory } from '@/stores/application-store';
@@ -153,178 +155,191 @@ export const ResidentialLandlordInfo: React.FC = () => {
           headerText = `Residence ${index + 1}`;
         }
         return (
-          <div key={index} className="border p-4 rounded-md space-y-6">
-            <h3 className={ApplicationItemSubHeaderStyles}>{headerText}</h3>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <Label className={ApplicationItemLabelStyles}>Street Address</Label>
-                  <Input
-                    name="street"
-                    value={residence.street || ""}
-                    onChange={(e) => handleInputChange(index, e)}
-                    placeholder="Street Address Ex: 123 Main St"
-                    className={residentialHistoryErrors.street?.[index] ? "border-red-500" : ""}
-                  />
-                  {residentialHistoryErrors.street?.[index] && (
-                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.street[index]}</p>
-                  )}
-                </div>
-                <div>
-                  <Label className={ApplicationItemLabelStyles}>Apt, Suite, Bldg</Label>
-                  <Input
-                    name="apt"
-                    value={residence.apt || ""}
-                    onChange={(e) => handleInputChange(index, e)}
-                    placeholder="Apt, Suite, Bldg (optional)"
-                  />
-                </div>
-                <div>
-                  <Label className={ApplicationItemLabelStyles}>City</Label>
-                  <Input
-                    name="city"
-                    value={residence.city || ""}
-                    onChange={(e) => handleInputChange(index, e)}
-                    placeholder="City"
-                    className={residentialHistoryErrors.city?.[index] ? "border-red-500" : ""}
-                  />
-                  {residentialHistoryErrors.city?.[index] && (
-                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.city[index]}</p>
-                  )}
-                </div>
-                <div>
-                  <Label className={ApplicationItemLabelStyles}>State</Label>
-                  <Input
-                    name="state"
-                    value={residence.state || ""}
-                    onChange={(e) => handleInputChange(index, e)}
-                    placeholder="State"
-                    className={residentialHistoryErrors.state?.[index] ? "border-red-500" : ""}
-                  />
-                  {residentialHistoryErrors.state?.[index] && (
-                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.state[index]}</p>
-                  )}
-                </div>
-                <div>
-                  <Label className={ApplicationItemLabelStyles}>ZIP Code</Label>
-                  <Input
-                    name="zipCode"
-                    value={residence.zipCode || ""}
-                    onChange={(e) => handleInputChange(index, e)}
-                    placeholder="ZIP Code"
-                    className={residentialHistoryErrors.zipCode?.[index] ? "border-red-500" : ""}
-                  />
-                  {residentialHistoryErrors.zipCode?.[index] && (
-                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.zipCode[index]}</p>
-                  )}
-                </div>
-                <div className="space-y-4 xl:space-y-0 xl:space-x-4 py-0 flex flex-col items-start xl:flex-row">
-                  <div className="flex flex-col ">
-                    <Label className={ApplicationItemLabelStyles}>Monthly Payment</Label>
-                    <MonthlyPaymentInput
-                      id={`monthlyPayment-${index}`}
-                      className={`${residentialHistoryErrors.monthlyPayment?.[index] ? "border-red-500" : ""}`}
-                      value={residence.monthlyPayment || ""}
-                      onChange={(value) => handleMonthlyPaymentChange(index, value)}
-                    />
-                    {residentialHistoryErrors.monthlyPayment?.[index] && (
-                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.monthlyPayment[index]}</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col  items-start py-0 ">
-                    <Label className={ApplicationItemLabelStyles}>Length of Stay</Label>
-                    <MonthSelect
-                      value={residence.durationOfTenancy || ""}
-                      onChange={(value) => handleDurationChange(index, value)}
-                      className={residentialHistoryErrors.durationOfTenancy?.[index] ? "border-red-500" : ""}
-                    />
-                  {residentialHistoryErrors.durationOfTenancy?.[index] && (
-                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.durationOfTenancy[index]}</p>
-                  )}
+          <Card key={index} className="h-[534px] p-6 bg-neutral-50 rounded-xl border-0">
+            <CardContent className="p-0 flex flex-col gap-8 h-full">
+              <div className="flex flex-col items-start gap-5 w-full">
+                <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-normal">
+                  {headerText}
+                </h2>
+
+                {/* Row 1: Street Address (Full Width) */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                        <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                          <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                            Street Address
+                          </Label>
+                        </div>
+
+                        <Input
+                          name="street"
+                          value={residence.street || ""}
+                          onChange={(e) => handleInputChange(index, e)}
+                          placeholder="Enter Street Address"
+                          className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center">
-                  <RadioGroup
-                    value={residence.housingStatus || ""}
-                    onValueChange={(value) => handleRadioChange(index, value as 'rent' | 'own')}
-                    className="space-y-2"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="rent" id={`rent-${index}`} className="mb-2" />
-                      <Label className="text-[16px] sm:text-[20px] font-normal" htmlFor={`rent-${index}`}>
-                        I rent this property
-                      </Label>
+
+                {/* Row 2: Apt + City + State + ZIP */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                        <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                          <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                            Apt, Suite, Bldg
+                          </Label>
+                        </div>
+
+                        <Input
+                          name="apt"
+                          value={residence.apt || ""}
+                          onChange={(e) => handleInputChange(index, e)}
+                          placeholder="Enter Apt, Suite, Bldg"
+                          className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                        />
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="own" id={`own-${index}`} className="mb-2" />
-                      <Label className="text-[16px] sm:text-[20px] font-normal" htmlFor={`own-${index}`}>
-                        I own this property
-                      </Label>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          City
+                        </Label>
+                      </div>
+
+                      <Input
+                        name="city"
+                        value={residence.city || ""}
+                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder="Enter City"
+                        className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                      />
                     </div>
-                  </RadioGroup>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          State
+                        </Label>
+                      </div>
+
+                      <Input
+                        name="state"
+                        value={residence.state || ""}
+                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder="Enter State"
+                        className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          ZIP Code
+                        </Label>
+                      </div>
+
+                      <Input
+                        name="zipCode"
+                        value={residence.zipCode || ""}
+                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder="Enter ZIP Code"
+                        className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 3: Property Type (left) + Month selector (right) */}
+                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          Property Type
+                        </Label>
+                      </div>
+
+                      <RadioGroup
+                        value={residence.housingStatus || ""}
+                        onValueChange={(value) => handleRadioChange(index, value as 'rent' | 'own')}
+                        className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto] pt-2"
+                      >
+                        <div className="flex items-center gap-2 relative">
+                          <RadioGroupItem
+                            value="rent"
+                            id={`rent-${index}`}
+                            className="flex w-4 h-4 items-center justify-center relative"
+                          />
+                          <Label
+                            htmlFor={`rent-${index}`}
+                            className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                          >
+                            I rent this property
+                          </Label>
+                        </div>
+                        <div className="flex items-center gap-2 relative">
+                          <RadioGroupItem
+                            value="own"
+                            id={`own-${index}`}
+                            className="flex w-4 h-4 items-center justify-center relative"
+                          />
+                          <Label
+                            htmlFor={`own-${index}`}
+                            className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                          >
+                            I own this property
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          How many months have you stayed here?
+                        </Label>
+                      </div>
+
+                      <div className="flex items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
+                        <Select defaultValue="24+">
+                          <SelectTrigger className="flex w-[120px] h-12 items-center gap-2 px-3 py-2 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
+                            <SelectValue className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1</SelectItem>
+                            <SelectItem value="6">6</SelectItem>
+                            <SelectItem value="12">12</SelectItem>
+                            <SelectItem value="24+">24+</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                          <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                            Months
+                          </Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            {residence.housingStatus !== "own" && (
-              <div className="mt-8">
-                <h4 className={ApplicationItemSubHeaderStyles}>Landlord Information</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <div>
-                    <Label className={ApplicationItemLabelStyles}>First Name</Label>
-                    <Input
-                      name="landlordFirstName"
-                      value={residence.landlordFirstName || ""}
-                      onChange={(e) => handleInputChange(index, e)}
-                      placeholder="Landlord's First Name"
-                      className={residentialHistoryErrors.landlordFirstName?.[index] ? "border-red-500" : ""}
-                    />
-                    {residentialHistoryErrors.landlordFirstName?.[index] && (
-                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordFirstName[index]}</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label className={ApplicationItemLabelStyles}>Last Name</Label>
-                    <Input
-                      name="landlordLastName"
-                      value={residence.landlordLastName || ""}
-                      onChange={(e) => handleInputChange(index, e)}
-                      placeholder="Landlord's Last Name"
-                      className={residentialHistoryErrors.landlordLastName?.[index] ? "border-red-500" : ""}
-                    />
-                    {residentialHistoryErrors.landlordLastName?.[index] && (
-                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordLastName[index]}</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label className={ApplicationItemLabelStyles}>Email</Label>
-                    <Input
-                      name="landlordEmail"
-                      value={residence.landlordEmail || ""}
-                      onChange={(e) => handleInputChange(index, e)}
-                      placeholder="Landlord's Email"
-                      className={residentialHistoryErrors.landlordEmail?.[index] ? "border-red-500" : ""}
-                    />
-                    {residentialHistoryErrors.landlordEmail?.[index] && (
-                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordEmail[index]}</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label className={ApplicationItemLabelStyles}>Phone Number</Label>
-                    <Input
-                      name="landlordPhoneNumber"
-                      value={residence.landlordPhoneNumber || ""}
-                      onChange={(e) => handleInputChange(index, e)}
-                      placeholder="Landlord's Phone Number"
-                      className={residentialHistoryErrors.landlordPhoneNumber?.[index] ? "border-red-500" : ""}
-                    />
-                    {residentialHistoryErrors.landlordPhoneNumber?.[index] && (
-                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordPhoneNumber[index]}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+            </CardContent>
+          </Card>
         );
       })}
     </div>
