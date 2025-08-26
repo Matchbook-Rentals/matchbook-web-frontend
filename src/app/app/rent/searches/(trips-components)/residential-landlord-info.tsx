@@ -300,9 +300,6 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
-                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                          Property Type
-                        </Label>
                       </div>
 
                       <RadioGroup
@@ -314,7 +311,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                           <RadioGroupItem
                             value="rent"
                             id={`rent-${index}`}
-                            className="flex w-4 h-4 items-center justify-center relative"
+                            className="flex w-4 border-red-500  h-4 items-center justify-center relative"
                           />
                           <Label
                             htmlFor={`rent-${index}`}
