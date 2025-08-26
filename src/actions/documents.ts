@@ -13,6 +13,7 @@ export interface CreateMergedDocumentData {
   status?: 'DRAFT' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
   currentStep?: string;
   pdfFileName?: string;
+  housingRequestId?: string; // Add housing request ID to link to match
 }
 
 export async function createMergedDocument(data: CreateMergedDocumentData) {
@@ -23,7 +24,7 @@ export async function createMergedDocument(data: CreateMergedDocumentData) {
       throw new Error('Unauthorized');
     }
 
-    const { templateIds, documentData, status = 'DRAFT', currentStep = 'document', pdfFileName } = data;
+    const { templateIds, documentData, status = 'DRAFT', currentStep = 'document', pdfFileName, housingRequestId } = data;
 
     if (!templateIds || !Array.isArray(templateIds) || templateIds.length === 0) {
       throw new Error('Template IDs are required');
@@ -68,6 +69,56 @@ export async function createMergedDocument(data: CreateMergedDocumentData) {
         template: true
       }
     });
+
+    // If housingRequestId is provided, link the document to both housing request and any existing match
+    if (housingRequestId) {
+      try {
+        console.log(`🔍 Attempting to link document ${document.id} to housing request ${housingRequestId}`);
+        
+        // First, update the housing request with the document ID
+        const updatedHousingRequest = await prisma.housingRequest.update({
+          where: { id: housingRequestId },
+          data: { leaseDocumentId: document.id },
+          include: {
+            trip: true,
+            listing: true
+          }
+        });
+
+        console.log('✅ Linked document to housing request:', {
+          housingRequestId: updatedHousingRequest.id,
+          leaseDocumentId: updatedHousingRequest.leaseDocumentId,
+          status: updatedHousingRequest.status
+        });
+
+        // Then, try to find and update any existing match (fallback for when match already exists)
+        const match = await prisma.match.findFirst({
+          where: {
+            tripId: updatedHousingRequest.tripId,
+            listingId: updatedHousingRequest.listingId
+          }
+        });
+
+        if (match) {
+          const updatedMatch = await prisma.match.update({
+            where: { id: match.id },
+            data: { leaseDocumentId: document.id }
+          });
+
+          console.log(`✅ Also linked document ${document.id} to existing match ${match.id}`, {
+            previousLeaseDocumentId: match.leaseDocumentId,
+            newLeaseDocumentId: updatedMatch.leaseDocumentId
+          });
+        } else {
+          console.log(`🔍 No existing match found - document will be linked when match is created during approval`);
+        }
+      } catch (error) {
+        console.error('Error linking document:', error);
+        // Don't fail the whole operation if linking fails
+      }
+    } else {
+      console.log('🔍 No housingRequestId provided - skipping match linking');
+    }
 
     return { success: true, document };
     

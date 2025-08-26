@@ -45,7 +45,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
       setLoading(true);
       
       // Filter documents based on signer type
-      const statusFilter = signerType === 'signer1' ? 'IN_PROGRESS' : 'AWAITING_SIGNER2';
+      const statusFilter = signerType === 'signer1' ? 'IN_PROGRESS' : 'IN_PROGRESS';
       console.log(`📄 Fetching documents with status: ${statusFilter} for ${signerType}`);
       
       const response = await fetch(`/api/documents?status=${statusFilter}`);

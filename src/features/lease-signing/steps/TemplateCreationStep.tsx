@@ -19,7 +19,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
   const [step, setStep] = useState<"upload" | "edit">(existingTemplate ? "edit" : "upload");
   const [templateName, setTemplateName] = useState(existingTemplate?.title || "");
   const [templateType, setTemplateType] = useState<"lease" | "addendum" | "">(
-    existingTemplate ? "lease" : ""
+    existingTemplate?.type || ""
   );
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 

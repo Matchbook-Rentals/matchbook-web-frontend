@@ -147,6 +147,25 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Fields state
   const [fields, setFields] = useState<FieldFormType[]>(initialFields || []);
 
+  // Initialize signedFields with pre-filled values from initialFields
+  useEffect(() => {
+    if (initialFields && initialFields.length > 0) {
+      const preFilledValues: Record<string, any> = {};
+      
+      initialFields.forEach(field => {
+        if (field.value !== undefined && field.value !== null && field.value !== '') {
+          preFilledValues[field.formId] = field.value;
+          console.log(`📝 Pre-filled field ${field.formId} (${field.type}) with value: "${field.value}" (signer ${field.signerIndex})`);
+        }
+      });
+      
+      if (Object.keys(preFilledValues).length > 0) {
+        console.log('📝 Initializing signedFields with pre-filled values:', preFilledValues);
+        setSignedFields(preFilledValues);
+      }
+    }
+  }, [initialFields]);
+
   // PDF page tracking state
   const [pdfPagesReady, setPdfPagesReady] = useState(false);
   const [pageElements, setPageElements] = useState<Map<number, HTMLElement>>(new Map());
@@ -1094,7 +1113,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       });
 
       // Update document with current progress and signed fields
-      console.log(`📄 Updating document status to: ${signerIndex === 0 ? 'AWAITING_SIGNER2' : 'COMPLETED'}`);
+      console.log(`📄 Updating document status to: ${signerIndex === 0 ? 'IN_PROGRESS' : 'COMPLETED'}`);
       await fetch(`/api/documents/${documentId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -1106,7 +1125,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             signedFields // Save current signed state
           },
           currentStep: signerIndex === 0 ? 'signer2' : 'completed',
-          status: signerIndex === 0 ? 'AWAITING_SIGNER2' : 'COMPLETED',
+          status: signerIndex === 0 ? 'IN_PROGRESS' : 'COMPLETED',
           [`signer${signerIndex + 1}CompletedAt`]: new Date().toISOString()
         }),
       });

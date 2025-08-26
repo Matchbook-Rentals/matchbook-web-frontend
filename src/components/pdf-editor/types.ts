@@ -41,6 +41,9 @@ export interface FieldFormType {
   signerEmail: string;
   fieldMeta?: FieldMeta;
   recipientIndex?: number;
+  value?: any; // Pre-filled value from fieldValues table
+  signedAt?: Date; // When this field was signed
+  signerIndex?: number; // Which signer filled this field
 }
 
 // Constants

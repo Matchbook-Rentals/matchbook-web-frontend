@@ -11,6 +11,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
 import { PaymentMethodSelector } from '@/components/stripe/payment-method-selector';
 import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
+import { PDFEditor } from '@/components/pdf-editor/PDFEditor';
 
 interface LeaseSigningClientProps {
   match: MatchWithRelations;
@@ -21,7 +22,22 @@ interface LeaseSigningClientProps {
 export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }: LeaseSigningClientProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+  
+  // Debug logging to see what data we have
+  console.log('=== LEASE SIGNING DEBUG ===');
+  console.log('Match data:', {
+    id: match.id,
+    leaseDocumentId: match.leaseDocumentId,
+    tenantSignedAt: match.tenantSignedAt,
+    landlordSignedAt: match.landlordSignedAt,
+    BoldSignLease: match.BoldSignLease,
+    Lease: match.Lease
+  });
+  const [documentInstance, setDocumentInstance] = useState<any>(null);
+  const [documentPdfFile, setDocumentPdfFile] = useState<File | null>(null);
+  const [documentFields, setDocumentFields] = useState<any[]>([]);
+  const [documentRecipients, setDocumentRecipients] = useState<any[]>([]);
+  const [listingDocuments, setListingDocuments] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPaymentSelector, setShowPaymentSelector] = useState(false);
   const [selectedPaymentMethodType, setSelectedPaymentMethodType] = useState<string>();
@@ -30,7 +46,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(true);
   const [previewPaymentMethod, setPreviewPaymentMethod] = useState<'card' | 'ach'>(testPaymentMethodPreview || 'card');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Update preview payment method when test prop changes
   useEffect(() => {
@@ -38,6 +53,148 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
       setPreviewPaymentMethod(testPaymentMethodPreview);
     }
   }, [testPaymentMethodPreview]);
+
+  // Fetch document instance if leaseDocumentId exists
+  useEffect(() => {
+    const fetchDocument = async () => {
+      if (match.leaseDocumentId) {
+        setIsLoading(true);
+        try {
+          console.log('📄 Fetching document instance:', match.leaseDocumentId);
+          const response = await fetch(`/api/documents/${match.leaseDocumentId}`);
+          if (response.ok) {
+            const data = await response.json();
+            const document = data.document;
+            setDocumentInstance(document);
+            
+            // Set document ID in session storage so PDFEditor can access it
+            sessionStorage.setItem('currentDocumentId', document.id);
+            
+            console.log('📄 Document fetched:', {
+              id: document.id,
+              pdfFileUrl: document.pdfFileUrl,
+              hasDocumentData: !!document.documentData
+            });
+            
+            // Extract fields and recipients from document data
+            if (document.documentData) {
+              const docData = document.documentData;
+              let fields = docData.fields || [];
+              
+              // Merge field values from fieldValues table into fields
+              if (document.fieldValues && document.fieldValues.length > 0) {
+                console.log('📄 Merging field values into fields...');
+                const fieldValuesMap = new Map();
+                
+                // Create a map of fieldId -> value
+                document.fieldValues.forEach((fieldValue: any) => {
+                  fieldValuesMap.set(fieldValue.fieldId, {
+                    value: fieldValue.value,
+                    signerIndex: fieldValue.signerIndex,
+                    signedAt: fieldValue.signedAt
+                  });
+                  console.log(`📄 Field ${fieldValue.fieldId} has value: "${fieldValue.value}" (signer ${fieldValue.signerIndex})`);
+                });
+                
+                // Merge values into fields
+                fields = fields.map((field: any) => {
+                  const fieldValue = fieldValuesMap.get(field.formId);
+                  if (fieldValue) {
+                    return {
+                      ...field,
+                      value: fieldValue.value,
+                      signedAt: fieldValue.signedAt,
+                      signerIndex: fieldValue.signerIndex
+                    };
+                  }
+                  return field;
+                });
+                
+                console.log('📄 Fields with merged values:', fields.filter((f: any) => f.value).map((f: any) => ({
+                  id: f.formId,
+                  type: f.type,
+                  value: f.value,
+                  signerIndex: f.signerIndex
+                })));
+              }
+              
+              setDocumentFields(fields);
+              setDocumentRecipients(docData.recipients || []);
+              
+              console.log('📄 Extracted from document:', {
+                fieldsCount: fields?.length || 0,
+                fieldsWithValues: fields?.filter((f: any) => f.value)?.length || 0,
+                recipientsCount: docData.recipients?.length || 0,
+                recipients: docData.recipients?.map((r: any) => ({ name: r.name, email: r.email, role: r.role }))
+              });
+            }
+            
+            // Fetch the actual PDF file
+            if (document.pdfFileUrl) {
+              console.log('📄 Fetching PDF file from:', document.pdfFileUrl);
+              const pdfResponse = await fetch(document.pdfFileUrl);
+              if (pdfResponse.ok) {
+                const pdfBlob = await pdfResponse.blob();
+                const pdfFile = new File([pdfBlob], document.pdfFileName || 'lease.pdf', { type: 'application/pdf' });
+                setDocumentPdfFile(pdfFile);
+                console.log('📄 PDF file loaded:', {
+                  name: pdfFile.name,
+                  size: pdfFile.size,
+                  type: pdfFile.type
+                });
+              } else {
+                console.error('Failed to fetch PDF file');
+                toast({
+                  title: "Error",
+                  description: "Failed to load PDF file",
+                  variant: "destructive",
+                });
+              }
+            }
+            
+          } else {
+            console.error('Failed to fetch document');
+            toast({
+              title: "Error",
+              description: "Failed to load lease document",
+              variant: "destructive",
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching document:', error);
+          toast({
+            title: "Error", 
+            description: "Error loading lease document",
+            variant: "destructive",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchDocument();
+  }, [match.leaseDocumentId, toast]);
+
+  // Fetch listing documents to show available templates/documents
+  useEffect(() => {
+    const fetchListingDocuments = async () => {
+      try {
+        const response = await fetch(`/api/listings/${match.listing.id}/documents`);
+        if (response.ok) {
+          const data = await response.json();
+          setListingDocuments(data);
+          console.log('Listing documents:', data);
+        } else {
+          console.error('Failed to fetch listing documents');
+        }
+      } catch (error) {
+        console.error('Error fetching listing documents:', error);
+      }
+    };
+
+    fetchListingDocuments();
+  }, [match.listing.id]);
 
   // Generate sample rent payments for display
   const generateRentPayments = (
@@ -130,175 +287,44 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     return payments;
   };
 
-  const startLeaseSigningFlow = async () => {
-    console.log('=== LEASE SIGNING DEBUG ===');
-    console.log('Match data:', {
-      matchId: match.id,
-      hasBoldSignLease: !!match.BoldSignLease,
-      boldSignLeaseId: match.BoldSignLease?.id,
-      leaseDocumentId: match.leaseDocumentId,
-      tripUser: match.trip.user,
-      listingUser: match.listing.user
-    });
-
-    // Try to get document ID from BoldSignLease first, fallback to leaseDocumentId
-    const documentId = match.BoldSignLease?.id || match.leaseDocumentId;
-
-    if (!documentId) {
-      console.error('No lease document found on match');
-      toast({
-        title: "Error",
-        description: "No lease document found for this match",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsLoading(true);
+  const handleDocumentSigningComplete = async () => {
+    console.log('✅ Document signing completed by tenant');
+    setIsTransitioning(true);
     
     try {
-      const requestBody = {
-        documentId: documentId,
-        signerEmail: match.trip.user?.email,
-        signerName: match.trip.user?.firstName && match.trip.user?.lastName 
-          ? `${match.trip.user.firstName} ${match.trip.user.lastName}`.trim()
-          : match.trip.user?.email || 'Unknown User',
-      };
-      
-      console.log('Request body:', requestBody);
-
-      // Get the embed URL for lease signing
-      const response = await fetch(`/api/leases/start-flow`, {
+      // Update match record with tenant signature timestamp
+      const response = await fetch(`/api/matches/${matchId}/tenant-signed`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(requestBody),
       });
 
-      console.log('Response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Error Response:', errorText);
-        throw new Error(`Failed to start lease signing flow: ${response.status} - ${errorText}`);
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Lease signed successfully! Now please set up your payment method.",
+        });
+        setLeaseCompleted(true);
+        setShowPaymentSelector(true);
+      } else {
+        throw new Error('Failed to update match record');
       }
-
-      const data = await response.json();
-      console.log('API Response data:', data);
-      setEmbedUrl(data.embedUrl);
     } catch (error) {
-      console.error('Error starting lease signing flow:', error);
+      console.error('Error updating match record:', error);
       toast({
-        title: "Error",
-        description: `Failed to start lease signing process: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        title: "Warning",
+        description: "Lease signed but failed to update records. Please contact support.",
         variant: "destructive",
       });
+      // Still proceed to payment since document was signed
+      setLeaseCompleted(true);
+      setShowPaymentSelector(true);
     } finally {
-      setIsLoading(false);
+      setIsTransitioning(false);
     }
   };
 
-  useEffect(() => {
-    const handleMessage = async (event: MessageEvent) => {
-      console.log('=== BOLDSIGN EVENT DEBUG ===');
-      console.log('Event origin:', event.origin);
-      console.log('Event data:', event.data);
-      console.log('Event type:', typeof event.data);
-      console.log('Event data stringified:', JSON.stringify(event.data));
-      console.log('Event source:', event.source);
-      
-      // Check if this is a BoldSign event (ignore Stripe and other iframe events)
-      const isBoldSignEvent = event.origin.includes('boldsign.com') || event.origin === window.location.origin;
-      const isStripeEvent = event.origin.includes('stripe.com') || event.origin.includes('js.stripe.com');
-      
-      if (isStripeEvent) {
-        console.log('Event ignored - Stripe event detected:', event.origin);
-        return;
-      }
-      
-      if (!isBoldSignEvent) {
-        console.log('Event ignored - wrong origin:', event.origin);
-        return;
-      }
-      
-      console.log('✅ BoldSign event detected from origin:', event.origin);
-
-      // Handle both direct string events and object-wrapped events
-      let eventType = event.data;
-      if (typeof event.data === 'object' && event.data !== null) {
-        // Check if event is wrapped in an object
-        eventType = event.data.type || event.data.eventType || event.data.action || event.data;
-        console.log('Extracted event type from object:', eventType);
-      }
-
-      switch (eventType) {
-        case "onDocumentSigned":
-        case "onDocumentSent":
-          console.log("✅ Document signed/sent successfully - transitioning to payment");
-          setIsTransitioning(true);
-          toast({
-            title: "Success",
-            description: "Lease signed successfully! Now please set up your payment method.",
-          });
-          // Clear iframe first to prevent dual rendering
-          setEmbedUrl(null);
-          // Then set completion states
-          setLeaseCompleted(true);
-          setShowPaymentSelector(true);
-          setIsTransitioning(false);
-          break;
-        case "onDocumentSigningFailed":
-          console.error("❌ Failed to sign document");
-          toast({
-            title: "Error",
-            description: "Failed to sign lease. Please try again.",
-            variant: "destructive",
-          });
-          break;
-        case "onDocumentDeclined":
-          console.log("🚫 Document signing declined");
-          toast({
-            title: "Declined",
-            description: "Lease signing was declined",
-            variant: "destructive",
-          });
-          // Optionally close iframe and allow retry
-          setEmbedUrl(null);
-          break;
-        case "onDocumentDecliningFailed":
-          console.error("❌ Failed to decline document");
-          toast({
-            title: "Error",
-            description: "Failed to decline lease",
-            variant: "destructive",
-          });
-          break;
-        case "onDocumentReassigned":
-          console.log("🔄 Document reassigned successfully");
-          toast({
-            title: "Info",
-            description: "Document has been reassigned",
-          });
-          break;
-        case "onDocumentReassigningFailed":
-          console.error("❌ Failed to reassign document");
-          toast({
-            title: "Error",
-            description: "Failed to reassign document",
-            variant: "destructive",
-          });
-          break;
-        default:
-          console.log('🔍 Unknown BoldSign event:', event.data);
-          console.log('🔍 Event type was:', eventType);
-          console.log('🔍 Original event.data:', JSON.stringify(event.data, null, 2));
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, [toast]);
 
   const handlePaymentSuccess = () => {
     toast({
@@ -411,9 +437,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   };
 
   // Check lease signing status
-  const isLeaseSigned = match.BoldSignLease?.tenantSigned || false;
-  const isLandlordSigned = match.BoldSignLease?.landlordSigned || false;
+  const isLeaseSigned = !!match.tenantSignedAt;
+  const isLandlordSigned = !!match.landlordSignedAt;
   const isLeaseFullyExecuted = isLeaseSigned && isLandlordSigned;
+  const hasLeaseDocument = !!match.leaseDocumentId;
 
   // Check payment completion status
   const isPaymentCompleted = !!match.paymentAuthorizedAt;
@@ -422,6 +449,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
   // Determine current step
   const getCurrentStep = () => {
+    if (!hasLeaseDocument) return 'no-lease-document';
     if (!isLeaseSigned) return 'sign-lease';
     if (isLeaseSigned && hasPaymentMethod && !isPaymentCompleted) return 'payment-method-exists';
     if (!isPaymentCompleted) return 'complete-payment';
@@ -431,7 +459,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   const currentStep = getCurrentStep();
 
   const handleViewLease = async () => {
-    if (!match.BoldSignLease?.id) {
+    if (!match.leaseDocumentId) {
       toast({
         title: "Error",
         description: "Lease document not available",
@@ -440,8 +468,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
       return;
     }
     
-    // Use the new view endpoint for signed documents
-    window.open(`/api/leases/view?documentId=${match.BoldSignLease.id}`, '_blank');
+    // View the completed document
+    window.open(`/api/documents/${match.leaseDocumentId}/view`, '_blank');
   };
 
   const handleViewPaymentInfo = () => {
@@ -518,6 +546,44 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             <p className="text-gray-600">
               Complete your booking by setting up your payment method for {match.listing.locationString}
             </p>
+            
+            {/* HACKY BAD TEMPORARY CODE - REMOVE BEFORE PRODUCTION */}
+            {process.env.NODE_ENV === 'development' && match.tenantSignedAt && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700 mb-3">🚨 HACKY BAD TEMPORARY CODE - Reset lease signing for testing</p>
+                <Button 
+                  variant="outline" 
+                  onClick={async () => {
+                    if (confirm('Reset lease signing state? This will undo tenant signature.')) {
+                      try {
+                        const response = await fetch(`/api/matches/${matchId}/reset-tenant-signature`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' }
+                        });
+                        if (response.ok) {
+                          toast({
+                            title: "Success", 
+                            description: "Lease signing state reset. Refreshing page...",
+                          });
+                          setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                          throw new Error('Failed to reset');
+                        }
+                      } catch (error) {
+                        toast({
+                          title: "Error",
+                          description: "Failed to reset lease signing state",
+                          variant: "destructive",
+                        });
+                      }
+                    }
+                  }}
+                  className="text-red-700 border-red-300 hover:bg-red-100"
+                >
+                  🔄 Reset Tenant Signature (HACKY DEBUG)
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -688,213 +754,165 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
           </Button>
           
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {currentStep === 'sign-lease' ? 'Review and Sign Lease' :
+            {currentStep === 'no-lease-document' ? 'Lease Being Prepared' :
+             currentStep === 'sign-lease' ? 'Review and Sign Lease' :
              currentStep === 'complete-payment' ? 'Complete Payment' :
              currentStep === 'payment-method-exists' ? 'Complete Payment' :
              currentStep === 'completed' ? 'Booking Complete' : 'Lease Management'}
           </h1>
           <p className="text-gray-600">
-            {currentStep === 'sign-lease' ? `Please review your lease agreement for ${match.listing.locationString}` :
+            {currentStep === 'no-lease-document' ? `Your host is preparing your lease for ${match.listing.locationString}` :
+             currentStep === 'sign-lease' ? `Please review your lease agreement for ${match.listing.locationString}` :
              currentStep === 'complete-payment' ? `Complete your booking by paying for ${match.listing.locationString}` :
              currentStep === 'payment-method-exists' ? `Complete your payment for ${match.listing.locationString}` :
              currentStep === 'completed' ? `Congratulations! Your booking at ${match.listing.locationString} is complete` :
              `Manage your lease for ${match.listing.locationString}`}
           </p>
           
+          
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Property Details Sidebar */}
+        <div className={`grid grid-cols-1 gap-6 ${currentStep === 'sign-lease' ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+          {/* Sidebar - shows different content based on step */}
           <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Home className="w-5 h-5" />
-                  Property Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h3 className="font-semibold text-gray-900">{match.listing.locationString}</h3>
-                  <p className="text-sm text-gray-600">{match.listing.propertyType}</p>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <DollarSign className="w-4 h-4 text-green-600" />
-                  <span className="font-semibold">${match.monthlyRent}/month</span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-blue-600" />
+            {currentStep === 'sign-lease' && documentFields.length > 0 ? (
+              // Signing Progress Sidebar
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="w-5 h-5" />
+                    Signing Progress
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-600">Check-in</p>
-                    <p className="font-medium">{new Date(match.trip.startDate).toLocaleDateString()}</p>
+                    <h3 className="font-semibold text-gray-900">{match.listing.locationString}</h3>
+                    <p className="text-sm text-gray-600">{match.listing.propertyType}</p>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-red-600" />
-                  <div>
-                    <p className="text-sm text-gray-600">Check-out</p>
-                    <p className="font-medium">{new Date(match.trip.endDate).toLocaleDateString()}</p>
-                  </div>
-                </div>
-
-                {/* Payment Breakdown */}
-                <div className="pt-4 border-t">
-                  <h4 className="font-semibold mb-3">Payment Due at Booking</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Rent Due at Booking</span>
-                      <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Application Fee (3%)</span>
-                      <span className="font-medium">${getPaymentBreakdown(hasPaymentMethod ? undefined : previewPaymentMethod).applicationFee.toFixed(2)}</span>
-                    </div>
-                    {!hasPaymentMethod && previewPaymentMethod === 'card' && (
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Processing Fee (2.9% + $0.30)</span>
-                        <span className="font-medium">${getPaymentBreakdown(previewPaymentMethod).processingFee.toFixed(2)}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between border-t pt-2 font-semibold">
-                      <span>Total Due Today</span>
-                      <span className="text-green-600">${calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod).toFixed(2)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Future Rent Payments */}
-                <div className="pt-4 border-t">
-                  <Collapsible>
-                    <CollapsibleTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        className="w-full justify-between p-0 font-semibold text-gray-900 hover:text-gray-700"
-                      >
-                        <span>Future Rent Payments</span>
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-3 space-y-2">
+                  
+                  {/* Signing Progress */}
+                  <div className="pt-4 border-t">
+                    <h4 className="font-semibold mb-3">Fields to Sign</h4>
+                    <div className="space-y-3">
                       {(() => {
-                        const startDate = new Date(match.trip.startDate);
-                        const endDate = new Date(match.trip.endDate);
-                        const monthlyRent = match.monthlyRent;
-                        
-                        if (!monthlyRent || !startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-                          return (
-                            <div className="text-sm text-gray-500 py-2">
-                              Future payments will be available after lease details are finalized.
-                            </div>
-                          );
-                        }
-                        
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate, calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod));
-                        
-                        if (payments.length === 0) {
-                          return (
-                            <div className="text-sm text-gray-500 py-2">
-                              No additional rent payments scheduled.
-                            </div>
-                          );
-                        }
-                        
-                        const totalRent = payments.reduce((sum, payment) => sum + payment.amount, 0);
+                        // Get fields for signer2 (tenant)
+                        const tenantFields = documentFields.filter(field => field.recipientIndex === 1);
+                        const signatureFields = tenantFields.filter(field => ['SIGNATURE', 'INITIALS'].includes(field.type));
+                        const otherFields = tenantFields.filter(field => !['SIGNATURE', 'INITIALS'].includes(field.type));
                         
                         return (
-                          <div className="space-y-2">
-                            {payments.map((payment, index) => (
-                              <div key={index} className="flex justify-between items-center py-2 px-3 bg-blue-50 rounded">
-                                <div>
-                                  <p className="text-sm font-medium text-blue-900">{payment.description}</p>
-                                  <p className="text-xs text-blue-600">
-                                    Due: {payment.dueDate.toLocaleDateString()}
-                                  </p>
-                                </div>
-                                <span className="font-medium text-blue-900">
-                                  ${payment.amount.toLocaleString()}
-                                </span>
+                          <>
+                            {signatureFields.length > 0 && (
+                              <div>
+                                <p className="text-sm font-medium text-gray-700 mb-2">Signatures Required</p>
+                                {signatureFields.map((field, index) => (
+                                  <div key={field.formId} className="flex items-center gap-2 py-1">
+                                    <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
+                                    <span className="text-sm text-gray-600">
+                                      {field.type === 'SIGNATURE' ? 'Signature' : 'Initials'} {index + 1}
+                                    </span>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                            <div className="mt-3 pt-3 border-t border-blue-300 bg-blue-100 rounded px-3 py-2">
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm font-semibold text-blue-900">Total Future Rent</span>
-                                <span className="font-bold text-blue-900">${totalRent.toLocaleString()}</span>
+                            )}
+                            
+                            {otherFields.length > 0 && (
+                              <div>
+                                <p className="text-sm font-medium text-gray-700 mb-2">Information Fields</p>
+                                {otherFields.map((field) => (
+                                  <div key={field.formId} className="flex items-center gap-2 py-1">
+                                    <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
+                                    <span className="text-sm text-gray-600">
+                                      {field.fieldMeta?.label || field.type}
+                                    </span>
+                                  </div>
+                                ))}
                               </div>
-                              <p className="text-xs text-blue-700 mt-1">
-                                {payments.length} payment{payments.length !== 1 ? 's' : ''} over {Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30.44))} months
-                              </p>
+                            )}
+                            
+                            <div className="pt-3 border-t">
+                              <div className="text-center">
+                                <p className="text-sm text-gray-500">
+                                  {signatureFields.length + otherFields.length} fields remaining
+                                </p>
+                              </div>
                             </div>
-                            <div className="mt-2 pt-2 border-t border-blue-300">
-                              <p className="text-xs text-blue-700">
-                                💳 These will be automatically charged to your payment method monthly
-                              </p>
-                            </div>
-                          </div>
+                          </>
                         );
                       })()}
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
-
-                {/* Progress Status */}
-                <div className="pt-4 border-t">
-                  <h4 className="font-semibold mb-3">Progress Status</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      {isLeaseSigned ? 
-                        <CheckCircle className="w-4 h-4 text-green-600" /> : 
-                        <div className="w-4 h-4 border-2 border-gray-300 rounded-full"></div>
-                      }
-                      <span className={`text-sm ${isLeaseSigned ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
-                        Lease Signed by You
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {isPaymentCompleted ? 
-                        <CheckCircle className="w-4 h-4 text-green-600" /> : 
-                        <div className="w-4 h-4 border-2 border-gray-300 rounded-full"></div>
-                      }
-                      <span className={`text-sm ${isPaymentCompleted ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
-                        Payment Completed
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {isLandlordSigned ? 
-                        <CheckCircle className="w-4 h-4 text-green-600" /> : 
-                        <div className="w-4 h-4 border-2 border-gray-300 rounded-full"></div>
-                      }
-                      <span className={`text-sm ${isLandlordSigned ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
-                        Lease Signed by Host
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {isPaymentCaptured ? 
-                        <CheckCircle className="w-4 h-4 text-green-600" /> : 
-                        <div className="w-4 h-4 border-2 border-gray-300 rounded-full"></div>
-                      }
-                      <span className={`text-sm ${isPaymentCaptured ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
-                        Payment Processed
-                      </span>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
+            ) : (
+              // Property Details Sidebar (for other steps)
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Home className="w-5 h-5" />
+                    Property Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{match.listing.locationString}</h3>
+                    <p className="text-sm text-gray-600">{match.listing.propertyType}</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-green-600" />
+                    <span className="font-semibold">${match.monthlyRent}/month</span>
+                  </div>
 
-                <div className="pt-4 border-t">
-                  <h4 className="font-semibold mb-2">Host Contact</h4>
-                  <p className="text-sm text-gray-600">
-                    {match.listing.user?.firstName} {match.listing.user?.lastName}
-                  </p>
-                  <p className="text-sm text-gray-600">{match.listing.user?.email}</p>
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <div>
+                      <p className="text-sm text-gray-600">Check-in</p>
+                      <p className="font-medium">{new Date(match.trip.startDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-red-600" />
+                    <div>
+                      <p className="text-sm text-gray-600">Check-out</p>
+                      <p className="font-medium">{new Date(match.trip.endDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+
+                  {/* Payment Breakdown - only show on non-signing steps */}
+                  {currentStep !== 'sign-lease' && (
+                    <div className="pt-4 border-t">
+                      <h4 className="font-semibold mb-3">Payment Due at Booking</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Rent Due at Booking</span>
+                          <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Application Fee (3%)</span>
+                          <span className="font-medium">${getPaymentBreakdown(hasPaymentMethod ? undefined : previewPaymentMethod).applicationFee.toFixed(2)}</span>
+                        </div>
+                        {!hasPaymentMethod && previewPaymentMethod === 'card' && (
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Processing Fee (2.9% + $0.30)</span>
+                            <span className="font-medium">${getPaymentBreakdown(previewPaymentMethod).processingFee.toFixed(2)}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between border-t pt-2 font-semibold">
+                          <span>Total Due Today</span>
+                          <span className="text-green-600">${calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod).toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div className={currentStep === 'sign-lease' ? 'lg:col-span-3' : 'lg:col-span-2'}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -903,24 +921,40 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {currentStep === 'sign-lease' && !embedUrl ? (
+                {currentStep === 'no-lease-document' ? (
                   <div className="text-center py-12">
                     <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Ready to Review Your Lease?
+                      Lease Being Prepared
                     </h3>
                     <p className="text-gray-600 mb-6">
-                      Click the button below to open your lease agreement for review and signing.
+                      Your host is currently preparing your lease document. You will be notified when it's ready for signing.
                     </p>
-                    <Button 
-                      onClick={startLeaseSigningFlow}
-                      disabled={isLoading}
-                      size="lg"
-                    >
-                      {isLoading ? 'Loading...' : 'Open Lease Agreement'}
-                    </Button>
+                    
+                    {listingDocuments && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6 max-w-md mx-auto">
+                        <h4 className="font-semibold text-blue-900 mb-2">Debug Info</h4>
+                        <div className="text-left text-sm text-blue-800 space-y-1">
+                          <p>Templates available: {listingDocuments.summary?.totalTemplates || 0}</p>
+                          <p>Documents created: {listingDocuments.summary?.totalDocuments || 0}</p>
+                          <p>Awaiting signature: {listingDocuments.summary?.documentsAwaitingSignature || 0}</p>
+                          <p>Completed: {listingDocuments.summary?.documentsCompleted || 0}</p>
+                        </div>
+                        
+                        {listingDocuments.documents && listingDocuments.documents.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-blue-300">
+                            <p className="text-xs text-blue-700 font-semibold mb-1">Recent Documents:</p>
+                            {listingDocuments.documents.slice(0, 3).map((doc: any, index: number) => (
+                              <div key={index} className="text-xs text-blue-700">
+                                {doc.template.title} - {doc.currentStep} ({doc.status})
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                ) : currentStep === 'sign-lease' && embedUrl && !isTransitioning ? (
+                ) : currentStep === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
                   <div className="space-y-4">
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <p className="text-blue-800 text-sm">
@@ -929,51 +963,26 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       </p>
                     </div>
                     
-                    {/* Debug button for testing - remove in production */}
-                    {process.env.NODE_ENV === 'development' && (
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                        <p className="text-yellow-800 text-sm mb-3">🧪 Development Mode:</p>
-                        <div className="flex gap-2">
-                          <Button 
-                            onClick={handleManualPaymentTrigger}
-                            variant="outline"
-                            size="sm"
-                          >
-                            Test Payment Flow
-                          </Button>
-                          <Button 
-                            onClick={() => {
-                              console.log('🧪 Manually triggering onDocumentSigned event');
-                              // Simulate the BoldSign event
-                              window.postMessage('onDocumentSigned', window.location.origin);
-                            }}
-                            variant="outline"
-                            size="sm"
-                          >
-                            Test Signing Event
-                          </Button>
-                          <Button 
-                            onClick={handleClearPaymentInfo}
-                            variant="outline"
-                            size="sm"
-                            disabled={isLoading}
-                          >
-                            Clear Payment Info
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div className="border rounded-lg overflow-hidden">
-                      <iframe
-                        ref={iframeRef}
-                        src={embedUrl}
-                        width="100%"
-                        height="700px"
-                        className="border-0"
-                        title="Lease Agreement Signing"
+                    <div className="min-h-[600px]">
+                      <PDFEditor
+                        initialWorkflowState="signer2"
+                        initialPdfFile={documentPdfFile}
+                        initialFields={documentFields}
+                        initialRecipients={documentRecipients}
+                        onFinish={handleDocumentSigningComplete}
+                        onCancel={() => {
+                          toast({
+                            title: "Signing cancelled",
+                            description: "You can return to sign the lease at any time.",
+                          });
+                        }}
                       />
                     </div>
+                  </div>
+                ) : currentStep === 'sign-lease' && isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787] mx-auto mb-4"></div>
+                    <p className="text-[#777b8b]">Loading lease document...</p>
                   </div>
                 ) : currentStep === 'complete-payment' ? (
                   <div className="text-center py-12">

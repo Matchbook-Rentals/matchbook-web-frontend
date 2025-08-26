@@ -359,6 +359,7 @@ export async function approveHousingRequest(housingRequestId: string) {
           tripId: housingRequest.tripId,
           listingId: housingRequest.listingId,
           monthlyRent: monthlyRent,
+          leaseDocumentId: housingRequest.leaseDocumentId, // Copy from housing request
         },
       });
 

@@ -133,6 +133,9 @@ export default function CreateLeasePage() {
 
   const handleDocumentCreated = async (documentData: any) => {
     try {
+      console.log('🔍 handleDocumentCreated - Recipients received:', documentData.recipients);
+      console.log('🔍 handleDocumentCreated - Housing Request ID:', housingRequestId);
+      
       const createData = {
         templateIds: templates.map(t => t.id),
         documentData: {
@@ -140,13 +143,22 @@ export default function CreateLeasePage() {
           recipients: documentData.recipients,
           metadata: { 
             pageWidth: 800,
-            mergedFrom: templates.map(t => ({ id: t.id, title: t.title }))
+            mergedFrom: templates.map(t => ({ id: t.id, title: t.title })),
+            housingRequestId: housingRequestId,
+            listingId: listingId
           }
         },
         status: 'DRAFT' as const,
         currentStep: 'document',
-        pdfFileName: `lease_package_${templates.length}_documents.pdf`
+        pdfFileName: `lease_package_${templates.length}_documents.pdf`,
+        housingRequestId: housingRequestId // Pass housing request ID to link to match
       };
+
+      console.log('🔍 About to call createMergedDocument with:', {
+        hasHousingRequestId: !!createData.housingRequestId,
+        housingRequestId: createData.housingRequestId,
+        recipientEmails: createData.documentData.recipients?.map((r: any) => r.email)
+      });
 
       const result = await createMergedDocument(createData);
 
@@ -244,6 +256,26 @@ export default function CreateLeasePage() {
     endDate: housingRequest.endDate ? new Date(housingRequest.endDate).toISOString().split('T')[0] : '',
   };
 
+  // Debug logging for email values
+  console.log('🔍 Create Lease Debug - Email Values:', {
+    hostName: matchDetails.hostName,
+    hostEmail: matchDetails.hostEmail,
+    primaryRenterName: matchDetails.primaryRenterName,
+    primaryRenterEmail: matchDetails.primaryRenterEmail,
+    userObject: { 
+      id: user.id, 
+      email: user.email, 
+      firstName: user.firstName, 
+      lastName: user.lastName 
+    },
+    hostUserObject: { 
+      id: hostUser.id, 
+      email: hostUser.email, 
+      firstName: hostUser.firstName, 
+      lastName: hostUser.lastName 
+    }
+  });
+
   return (
     <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] min-h-screen">
       {/* Back Navigation */}
@@ -295,7 +327,21 @@ export default function CreateLeasePage() {
           <PDFEditorDocument
             initialPdfFile={mergedPDF.file}
             initialFields={mergedPDF.fields}
-            initialRecipients={mergedPDF.recipients}
+            initialRecipients={[
+              // Override merged recipients with actual tenant and host data
+              {
+                id: 'signer1',
+                role: 'HOST' as const,
+                name: matchDetails.hostName,
+                email: matchDetails.hostEmail
+              },
+              {
+                id: 'signer2', 
+                role: 'RENTER' as const,
+                name: matchDetails.primaryRenterName,
+                email: matchDetails.primaryRenterEmail
+              }
+            ]}
             isMergedDocument={true}
             mergedTemplateIds={templates.map(t => t.id)}
             matchDetails={matchDetails}
