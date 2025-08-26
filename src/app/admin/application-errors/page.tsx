@@ -33,8 +33,8 @@ interface PageProps {
 
 export default async function ApplicationErrorsPage({ searchParams }: PageProps) {
   // 1. Authorization Check
-  const isAdmin = await checkRole('admin'); 
-  if (!isAdmin) {
+  const isDev = await checkRole('admin_dev'); 
+  if (!isDev) {
     redirect('/unauthorized'); // Or your preferred unauthorized page
   }
 

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { checkRole } from '@/utils/roles'
+import { checkAdminAccess } from '@/utils/roles'
 import prismadb from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
 import ClientTicketPage from './client-ticket-page'
@@ -13,7 +13,7 @@ interface PageProps {
 }
 
 export default async function TicketDetailPage({ params }: PageProps) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     redirect('/unauthorized')
   }
 

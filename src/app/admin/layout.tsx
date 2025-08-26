@@ -9,7 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import UserMenu from "@/components/userMenu"
 import { Toaster } from '@/components/ui/toaster'
-import { checkRole } from '@/utils/roles'
+import { checkRole, checkAdminAccess } from '@/utils/roles'
 import { redirect } from 'next/navigation'
 import { currentUser } from "@clerk/nextjs/server"
 
@@ -22,11 +22,15 @@ export default async function AdminLayout({
 }) {
   // Check for admin role at layout level for stronger protection
   // Preview role should NOT have access to admin routes
-  const isAdmin = await checkRole('admin')
+  // Allow both 'admin' and 'admin_dev' roles
+  const hasAdminAccess = await checkAdminAccess()
   
-  if (!isAdmin) {
+  if (!hasAdminAccess) {
     redirect('/unauthorized')
   }
+
+  // Check if user has dev access for integrations and system tools
+  const isDev = await checkRole('admin_dev')
 
   // Get user data
   const user = await currentUser();
@@ -80,7 +84,7 @@ export default async function AdminLayout({
     },
   ];
 
-  const integrationItems = [
+  const devToolsItems = [
     {
       title: "Stripe Integration",
       url: "/admin/stripe-integration",
@@ -96,9 +100,6 @@ export default async function AdminLayout({
       url: "/admin/clerk-integration",
       icon: "Users",
     },
-  ];
-
-  const systemItems = [
     {
       title: "Upload Article",
       url: "/admin/upload-article",
@@ -121,19 +122,18 @@ export default async function AdminLayout({
     },
   ];
 
+  // Build sidebar groups - only include dev tools for devs
   const sidebarGroups = [
     { 
       title: "Admin Dashboard",
       items: adminDashboardItems 
     },
-    { 
-      title: "Integrations",
-      items: integrationItems 
-    },
-    { 
-      title: "System",
-      items: systemItems 
-    }
+    ...(isDev ? [
+      { 
+        title: "Dev Tools",
+        items: devToolsItems 
+      }
+    ] : [])
   ];
   
   return (

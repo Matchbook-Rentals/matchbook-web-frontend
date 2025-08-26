@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prismadb'
-import { checkRole } from '@/utils/roles'
+import { checkAdminAccess } from '@/utils/roles'
 import { revalidatePath } from 'next/cache'
 import { Listing, ListingImage, ListingMonthlyPricing } from '@prisma/client'
 
@@ -33,7 +33,7 @@ export async function getAllListings({
   status = 'all',
   active = 'all'
 }: GetAllListingsParams = {}) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -134,7 +134,7 @@ export async function getAllListings({
 }
 
 export async function getListingDetailsForEdit(listingId: string): Promise<ListingWithDetails | null> {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -204,7 +204,7 @@ interface UpdateListingData {
 }
 
 export async function updateListing(listingId: string, data: UpdateListingData, comment?: string) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -257,7 +257,7 @@ export async function updateListingPricing(
   listingId: string, 
   pricingData: Array<{ months: number; price: number; utilitiesIncluded: boolean }>
 ) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -290,7 +290,7 @@ export async function updateListingPricing(
 }
 
 export async function toggleListingActive(listingId: string) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -322,7 +322,7 @@ export async function bulkUpdateListingStatus(
   action: 'activate' | 'deactivate' | 'approve' | 'reject',
   comment?: string
 ) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 

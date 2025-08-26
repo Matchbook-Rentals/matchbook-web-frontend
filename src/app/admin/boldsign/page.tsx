@@ -8,7 +8,7 @@ import { getBoldSignStats, deleteAllBoldSignDocuments } from './_actions'
 import { DeleteAllButton } from './delete-all-button'
 
 export default async function BoldSignIntegrationPage() {
-  if (!checkRole('admin')) {
+  if (!checkRole('admin_dev')) {
     redirect('/unauthorized')
   }
 

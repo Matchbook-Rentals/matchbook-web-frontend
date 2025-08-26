@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { checkRole } from '@/utils/roles'
+import { checkAdminAccess } from '@/utils/roles'
 import { clerkClient } from '@clerk/nextjs/server'
 import { SearchUsers } from './SearchUsers'
 import { UsersTable } from './users-table'
@@ -19,7 +19,7 @@ interface SearchParams {
 export default async function UserManagementPage(params: {
   searchParams: SearchParams
 }) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     redirect('/unauthorized')
   }
 

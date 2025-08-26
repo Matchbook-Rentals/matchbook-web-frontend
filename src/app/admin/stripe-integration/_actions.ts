@@ -6,7 +6,7 @@ import { checkRole } from '@/utils/roles'
 import stripe from '@/lib/stripe'
 
 export async function getConnectedAccounts() {
-  if (!checkRole('admin')) {
+  if (!checkRole('admin_dev')) {
     throw new Error('Unauthorized')
   }
 
@@ -129,7 +129,7 @@ export async function getConnectedAccounts() {
 }
 
 export async function deleteConnectedAccount(userId: string, stripeAccountId: string) {
-  if (!checkRole('admin')) {
+  if (!checkRole('admin_dev')) {
     throw new Error('Unauthorized')
   }
 

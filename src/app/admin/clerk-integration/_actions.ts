@@ -3,7 +3,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { clerkClient } from '@clerk/nextjs/server'
 import prismadb from '@/lib/prismadb'
-import { checkRole } from '@/utils/roles'
+import { checkAdminAccess } from '@/utils/roles'
 import { redirect } from 'next/navigation'
 
 export async function resetTermsAgreement() {
@@ -14,7 +14,7 @@ export async function resetTermsAgreement() {
   }
 
   // Check if user has admin role
-  const hasAdminRole = await checkRole('admin')
+  const hasAdminRole = await checkAdminAccess()
   if (!hasAdminRole) {
     redirect('/unauthorized')
   }

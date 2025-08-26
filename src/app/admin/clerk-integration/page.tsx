@@ -4,9 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ClerkIntegrationClient } from './clerk-integration-client'
 
 export default async function ClerkIntegrationPage() {
-  const hasAdminRole = await checkRole('admin')
+  const hasDevRole = await checkRole('admin_dev')
   
-  if (!hasAdminRole) {
+  if (!hasDevRole) {
     redirect('/unauthorized')
   }
 

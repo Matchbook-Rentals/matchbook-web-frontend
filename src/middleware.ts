@@ -21,15 +21,15 @@ const isAuthRoute = createRouteMatcher([
 
 // Role-based access control functions
 const checkBetaAccess = (userRole?: string) => {
-  return userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta' || userRole === 'preview';
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta' || userRole === 'preview' || userRole === 'admin_dev';
 };
 
 const checkHostAccess = (userRole?: string) => {
-  return userRole === 'admin' || userRole === 'moderator' || userRole === 'host_beta' || userRole === 'preview';
+  return userRole === 'admin' || userRole === 'moderator' || userRole === 'host_beta' || userRole === 'preview' || userRole === 'admin_dev';
 };
 
 const checkAdminAccess = (userRole?: string) => {
-  return userRole === 'admin';
+  return userRole?.includes('admin') || false;
 };
 
 const checkPreviewAccess = (userRole?: string) => {

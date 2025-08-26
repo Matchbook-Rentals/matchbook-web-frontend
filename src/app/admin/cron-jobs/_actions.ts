@@ -37,10 +37,10 @@ export async function getCronJobs(): Promise<{
   error?: string
 }> {
   try {
-    // Check admin permissions
-    const isAdmin = await checkRole('admin')
-    if (!isAdmin) {
-      return { success: false, error: 'Unauthorized - Admin access required' }
+    // Check dev permissions
+    const isDev = await checkRole('admin_dev')
+    if (!isDev) {
+      return { success: false, error: 'Unauthorized - Developer access required' }
     }
 
     return { success: true, jobs: CRON_JOBS }
@@ -52,10 +52,10 @@ export async function getCronJobs(): Promise<{
 
 export async function triggerCronJob(jobId: string): Promise<CronJobResult> {
   try {
-    // Check admin permissions
-    const isAdmin = await checkRole('admin')
-    if (!isAdmin) {
-      return { success: false, error: 'Unauthorized - Admin access required' }
+    // Check dev permissions
+    const isDev = await checkRole('admin_dev')
+    if (!isDev) {
+      return { success: false, error: 'Unauthorized - Developer access required' }
     }
 
     const { userId } = auth()
@@ -129,10 +129,10 @@ export async function getCronJobHistory(jobId: string): Promise<{
   error?: string
 }> {
   try {
-    // Check admin permissions
-    const isAdmin = await checkRole('admin')
-    if (!isAdmin) {
-      return { success: false, error: 'Unauthorized - Admin access required' }
+    // Check dev permissions
+    const isDev = await checkRole('admin_dev')
+    if (!isDev) {
+      return { success: false, error: 'Unauthorized - Developer access required' }
     }
 
     // For now, return empty history since we don't store execution history

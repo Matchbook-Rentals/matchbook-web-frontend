@@ -88,7 +88,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   // Determine user roles and access levels
   const hasBetaAccess = checkClientBetaAccess(userRole);
   const hasHostAccess = checkClientHostAccess(userRole);
-  const isAdmin = userRole === 'admin';
+  const isAdmin = userRole?.includes('admin') || false; // Allow both 'admin' and 'admin_dev'
   const isPreview = userRole === 'preview'; // Preview role has access to everything except admin
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS

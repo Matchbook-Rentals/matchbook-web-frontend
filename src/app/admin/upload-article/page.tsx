@@ -7,10 +7,10 @@ import Link from "next/link";
 import { BookText } from "lucide-react";
 
 export default async function UploadArticlePage() {
-  // Check if user has admin role
-  const isAdmin = await checkRole("admin");
+  // Check if user has dev role
+  const isDev = await checkRole("admin_dev");
 
-  if (!isAdmin) {
+  if (!isDev) {
     redirect("/unauthorized");
   }
 

@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useToast } from "@/components/ui/use-toast"
 import { formatDistanceToNow } from 'date-fns'
-import { ChevronDown, MoreHorizontal, Shield, ShieldAlert, UserCheck, UserX, Clock } from 'lucide-react'
+import { ChevronDown, MoreHorizontal, Shield, ShieldAlert, UserCheck, UserX, Clock, Code } from 'lucide-react'
 import { SerializedUser } from './types'
 
 interface UserCardProps {
@@ -73,6 +73,8 @@ export function UserCard({ user }: UserCardProps) {
         return <UserCheck className="h-4 w-4 text-purple-500" />
       case 'preview':
         return <UserCheck className="h-4 w-4 text-orange-500" />
+      case 'admin_dev':
+        return <Code className="h-4 w-4 text-cyan-500" />
       default:
         return <UserX className="h-4 w-4 text-gray-500" />
     }
@@ -276,6 +278,19 @@ export function UserCard({ user }: UserCardProps) {
                     disabled={loading !== null}
                   >
                     {loading === 'preview' ? "Setting..." : "Make Preview User"}
+                  </Button>
+                </form>
+
+                <form action={handleRoleChange}>
+                  <Input type="hidden" value={user.id} name="id" />
+                  <Input type="hidden" value="admin_dev" name="role" />
+                  <Button 
+                    type="submit" 
+                    variant="secondary" 
+                    className="w-full"
+                    disabled={loading !== null}
+                  >
+                    {loading === 'admin_dev' ? "Setting..." : "Make Admin Developer"}
                   </Button>
                 </form>
               </div>

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ConnectedAccountsManager } from './connected-accounts-manager'
 
 export default async function StripeIntegrationPage() {
-  if (!checkRole('admin')) {
+  if (!checkRole('admin_dev')) {
     redirect('/unauthorized')
   }
 

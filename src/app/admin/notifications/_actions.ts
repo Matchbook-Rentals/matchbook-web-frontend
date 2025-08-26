@@ -1,6 +1,6 @@
 'use server'
 
-import { checkRole } from '@/utils/roles'
+import { checkAdminAccess } from '@/utils/roles'
 import { clerkClient } from '@clerk/nextjs/server'
 import { createNotification } from '@/app/actions/notifications'
 import { auth } from '@clerk/nextjs/server'
@@ -24,7 +24,7 @@ export async function searchUsers(searchTerm: string): Promise<{
 }> {
   try {
     // Check admin permissions
-    const isAdmin = await checkRole('admin')
+    const isAdmin = await checkAdminAccess()
     if (!isAdmin) {
       return { success: false, error: 'Unauthorized - Admin access required' }
     }
@@ -68,7 +68,7 @@ export async function createUserNotification(data: {
 }> {
   try {
     // Check admin permissions
-    const isAdmin = await checkRole('admin')
+    const isAdmin = await checkAdminAccess()
     if (!isAdmin) {
       return { success: false, error: 'Unauthorized - Admin access required' }
     }
@@ -118,7 +118,7 @@ export async function createBulkNotification(data: {
 }> {
   try {
     // Check admin permissions
-    const isAdmin = await checkRole('admin')
+    const isAdmin = await checkAdminAccess()
     if (!isAdmin) {
       return { success: false, error: 'Unauthorized - Admin access required' }
     }

@@ -1,12 +1,12 @@
 import { redirect } from 'next/navigation'
-import { checkRole } from '@/utils/roles'
+import { checkAdminAccess } from '@/utils/roles'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { UsersIcon, BookText, Database, TicketIcon, AlertTriangle, CreditCard, FileText, FlaskConical, Home } from 'lucide-react'
 
 export default async function AdminDashboard() {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     redirect('/unauthorized')
   }
 

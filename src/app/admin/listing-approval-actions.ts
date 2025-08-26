@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prismadb'
-import { checkRole } from '@/utils/roles'
+import { checkAdminAccess } from '@/utils/roles'
 import { revalidatePath } from 'next/cache'
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -12,7 +12,7 @@ interface GetPendingListingsParams {
 }
 
 export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZE }: GetPendingListingsParams = {}) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -60,7 +60,7 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
 }
 
 export async function getListingDetails(listingId: string) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -101,7 +101,7 @@ export async function approveRejectListing(
   newLatitude?: number,
   newLongitude?: number
 ) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 
@@ -139,7 +139,7 @@ export async function approveRejectListing(
 }
 
 export async function deleteListing(listingId: string) {
-  if (!checkRole('admin')) {
+  if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
   }
 

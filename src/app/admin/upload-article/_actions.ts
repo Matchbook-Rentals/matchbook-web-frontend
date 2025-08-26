@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prismadb';
-import { checkRole } from '@/utils/roles';
+import { checkAdminAccess } from '@/utils/roles';
 
 /**
  * Helper function to generate a slug from a title
@@ -23,7 +23,7 @@ function slugify(title: string): string {
 export async function uploadArticle(formData: FormData) {
   // Check if user has admin privileges
   console.log('uploadArticle', formData);
-  const isAdmin = await checkRole('admin');
+  const isAdmin = await checkAdminAccess();
   if (!isAdmin) {
     return {
       success: false,
