@@ -3,6 +3,7 @@
 import prisma from '@/lib/prismadb'
 import { checkAdminAccess } from '@/utils/roles'
 import { revalidatePath } from 'next/cache'
+import { auth } from '@clerk/nextjs/server'
 import { Listing, ListingImage, ListingMonthlyPricing } from '@prisma/client'
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -370,4 +371,196 @@ export async function bulkUpdateListingStatus(
   revalidatePath('/admin/listing-approval');
   
   return { success: true, updated: listingIds.length };
+}
+
+export async function copyListingToAdmin(listingId: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const { userId: adminUserId } = auth()
+  if (!adminUserId) {
+    throw new Error('Admin user not found')
+  }
+
+  // Fetch the original listing with all related data
+  const originalListing = await prisma.listing.findUnique({
+    where: { id: listingId },
+    include: {
+      listingImages: {
+        orderBy: { rank: 'asc' }
+      },
+      monthlyPricing: true,
+      bedrooms: true,
+      unavailablePeriods: true
+    }
+  })
+
+  if (!originalListing) {
+    throw new Error('Listing not found')
+  }
+
+  // Use transaction to ensure all data is copied atomically
+  const result = await prisma.$transaction(async (tx) => {
+    // Create the new listing copy
+    const newListing = await tx.listing.create({
+      data: {
+        // Copy all listing fields except ID, userId, and some metadata
+        title: `[ADMIN COPY] ${originalListing.title}`,
+        description: originalListing.description,
+        category: originalListing.category,
+        roomCount: originalListing.roomCount,
+        bathroomCount: originalListing.bathroomCount,
+        guestCount: originalListing.guestCount,
+        latitude: originalListing.latitude,
+        longitude: originalListing.longitude,
+        locationString: originalListing.locationString,
+        city: originalListing.city,
+        state: originalListing.state,
+        streetAddress1: originalListing.streetAddress1,
+        streetAddress2: originalListing.streetAddress2,
+        postalCode: originalListing.postalCode,
+        squareFootage: originalListing.squareFootage,
+        depositSize: originalListing.depositSize,
+        petDeposit: originalListing.petDeposit,
+        petRent: originalListing.petRent,
+        reservationDeposit: originalListing.reservationDeposit,
+        rentDueAtBooking: originalListing.rentDueAtBooking,
+        requireBackgroundCheck: originalListing.requireBackgroundCheck,
+        shortestLeaseLength: originalListing.shortestLeaseLength,
+        longestLeaseLength: originalListing.longestLeaseLength,
+        shortestLeasePrice: originalListing.shortestLeasePrice,
+        longestLeasePrice: originalListing.longestLeasePrice,
+        furnished: originalListing.furnished,
+        utilitiesIncluded: originalListing.utilitiesIncluded,
+        petsAllowed: originalListing.petsAllowed,
+        markedActiveByUser: originalListing.markedActiveByUser,
+        
+        // Copy all amenities
+        airConditioner: originalListing.airConditioner,
+        laundryFacilities: originalListing.laundryFacilities,
+        fitnessCenter: originalListing.fitnessCenter,
+        elevator: originalListing.elevator,
+        wheelchairAccess: originalListing.wheelchairAccess,
+        doorman: originalListing.doorman,
+        parking: originalListing.parking,
+        wifi: originalListing.wifi,
+        kitchen: originalListing.kitchen,
+        dedicatedWorkspace: originalListing.dedicatedWorkspace,
+        hairDryer: originalListing.hairDryer,
+        iron: originalListing.iron,
+        heater: originalListing.heater,
+        hotTub: originalListing.hotTub,
+        smokingAllowed: originalListing.smokingAllowed,
+        eventsAllowed: originalListing.eventsAllowed,
+        privateEntrance: originalListing.privateEntrance,
+        security: originalListing.security,
+        waterfront: originalListing.waterfront,
+        beachfront: originalListing.beachfront,
+        mountainView: originalListing.mountainView,
+        cityView: originalListing.cityView,
+        waterView: originalListing.waterView,
+        
+        // Washer and Dryer Options
+        washerInUnit: originalListing.washerInUnit,
+        washerHookup: originalListing.washerHookup,
+        washerNotAvailable: originalListing.washerNotAvailable,
+        washerInComplex: originalListing.washerInComplex,
+        dryerInUnit: originalListing.dryerInUnit,
+        dryerHookup: originalListing.dryerHookup,
+        dryerNotAvailable: originalListing.dryerNotAvailable,
+        dryerInComplex: originalListing.dryerInComplex,
+        
+        // Parking Options
+        offStreetParking: originalListing.offStreetParking,
+        streetParking: originalListing.streetParking,
+        streetParkingFree: originalListing.streetParkingFree,
+        coveredParking: originalListing.coveredParking,
+        coveredParkingFree: originalListing.coveredParkingFree,
+        uncoveredParking: originalListing.uncoveredParking,
+        uncoveredParkingFree: originalListing.uncoveredParkingFree,
+        garageParking: originalListing.garageParking,
+        garageParkingFree: originalListing.garageParkingFree,
+        evCharging: originalListing.evCharging,
+        
+        // Pet Policies
+        allowDogs: originalListing.allowDogs,
+        allowCats: originalListing.allowCats,
+        
+        // Structural Amenities
+        gym: originalListing.gym,
+        balcony: originalListing.balcony,
+        patio: originalListing.patio,
+        sunroom: originalListing.sunroom,
+        fireplace: originalListing.fireplace,
+        firepit: originalListing.firepit,
+        
+        // Admin-specific settings
+        userId: adminUserId,
+        isTestListing: true,
+        approvalStatus: 'pendingReview',
+        isApproved: false,
+        lastDecisionComment: `Admin copy of listing ${listingId} created for troubleshooting purposes`,
+        status: 'available'
+      }
+    })
+
+    // Copy listing images
+    if (originalListing.listingImages.length > 0) {
+      await tx.listingImage.createMany({
+        data: originalListing.listingImages.map(image => ({
+          listingId: newListing.id,
+          url: image.url,
+          category: image.category,
+          rank: image.rank
+        }))
+      })
+    }
+
+    // Copy monthly pricing
+    if (originalListing.monthlyPricing.length > 0) {
+      await tx.listingMonthlyPricing.createMany({
+        data: originalListing.monthlyPricing.map(pricing => ({
+          listingId: newListing.id,
+          months: pricing.months,
+          price: pricing.price,
+          utilitiesIncluded: pricing.utilitiesIncluded
+        }))
+      })
+    }
+
+    // Copy bedrooms
+    if (originalListing.bedrooms.length > 0) {
+      await tx.bedroom.createMany({
+        data: originalListing.bedrooms.map(bedroom => ({
+          listingId: newListing.id,
+          bedroomNumber: bedroom.bedroomNumber,
+          bedType: bedroom.bedType
+        }))
+      })
+    }
+
+    // Copy unavailability periods
+    if (originalListing.unavailablePeriods.length > 0) {
+      await tx.listingUnavailability.createMany({
+        data: originalListing.unavailablePeriods.map(unavail => ({
+          listingId: newListing.id,
+          startDate: unavail.startDate,
+          endDate: unavail.endDate,
+          reason: unavail.reason
+        }))
+      })
+    }
+
+    return newListing
+  })
+
+  // Revalidate paths
+  revalidatePath('/admin/listing-management')
+  
+  return { 
+    success: true, 
+    newListingId: result.id,
+    message: 'Listing copied successfully to admin account'
+  }
 }

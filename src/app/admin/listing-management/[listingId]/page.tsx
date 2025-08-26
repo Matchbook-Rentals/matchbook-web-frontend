@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Edit } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import CopyListingButton from './copy-listing-button'
 
 export default async function ListingDetailPage({
   params
@@ -46,12 +47,19 @@ export default async function ListingDetailPage({
             <div>
               <CardTitle className="flex items-center gap-3">
                 {listing.title}
-                <Link href={`/admin/listing-management/${listing.id}/edit`}>
-                  <Button size="sm" className="gap-2">
-                    <Edit className="h-4 w-4" />
-                    Edit Listing
-                  </Button>
-                </Link>
+                <div className="flex gap-2">
+                  <Link href={`/admin/listing-management/${listing.id}/edit`}>
+                    <Button size="sm" className="gap-2">
+                      <Edit className="h-4 w-4" />
+                      Edit Listing
+                    </Button>
+                  </Link>
+                  <CopyListingButton 
+                    listingId={listing.id} 
+                    listingTitle={listing.title}
+                    size="sm"
+                  />
+                </div>
               </CardTitle>
               <p className="text-muted-foreground mt-1">
                 {listing.locationString || `${listing.city}, ${listing.state}`}

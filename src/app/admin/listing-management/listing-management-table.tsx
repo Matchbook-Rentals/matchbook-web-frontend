@@ -23,12 +23,14 @@ import {
 import { 
   Search, 
   Eye, 
-  Edit
+  Edit,
+  Copy
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
+import CopyListingButton from './[listingId]/copy-listing-button'
 
 interface ListingData {
   id: string;
@@ -201,7 +203,7 @@ export default function ListingManagementTable({
               <TableHead>Status</TableHead>
               <TableHead>Price Range</TableHead>
               <TableHead>Modified</TableHead>
-              <TableHead className="w-32">Actions</TableHead>
+              <TableHead className="w-40">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -279,6 +281,12 @@ export default function ListingManagementTable({
                         Edit
                       </Button>
                     </Link>
+                    <CopyListingButton 
+                      listingId={listing.id} 
+                      listingTitle={listing.title}
+                      size="sm"
+                      showText={false}
+                    />
                   </div>
                 </TableCell>
               </TableRow>

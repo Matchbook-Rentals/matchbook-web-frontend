@@ -63,6 +63,11 @@ export default async function AdminLayout({
       icon: "Building",
     },
     {
+      title: "Booking Management",
+      url: "/admin/booking-management",
+      icon: "Calendar",
+    },
+    {
       title: "Listing Approval",
       url: "/admin/listing-approval",
       icon: "CheckCircle",

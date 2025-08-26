@@ -1,5 +1,16 @@
 # Changelog
 
+## Fix tenant lease viewing to show host's filled signatures and fields
+- Document linking between housing requests and matches with proper inheritance
+- Tenant PDF viewing with host's pre-filled signatures and field values visible
+- Debug endpoint for resetting tenant signatures (development only)
+- Recipient access control for document viewing (not just owner access)
+- Document access now allows recipients to view documents, not just owners
+- Field values are now merged from database into PDF fields for proper display
+- PDFEditor initializes with pre-filled values from existing field data
+- Lease documents now properly link to both HousingRequest and Match records
+- DocumentSelector enum validation error with invalid AWAITING_SIGNER2 status
+
 ## Improve PDF lease signing experience with focused field display
 - Updated field filtering to only show signature fields (SIGNATURE, INITIALS) in "fields to complete" sections
 - Removed date fields from signing requirements as they auto-populate when signatures are signed
