@@ -94,6 +94,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               {/* User Header */}
               <div className="flex items-start gap-6 p-6 bg-muted/50 rounded-lg">
                 {userInfo.imageUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img 
                     src={userInfo.imageUrl} 
                     alt={`${userInfo.firstName} ${userInfo.lastName}`}
@@ -150,7 +151,7 @@ export default async function UserDetailPage({ params }: PageProps) {
             <div className="text-center">
               <h2 className="text-xl font-semibold text-destructive mb-2">User Not Found</h2>
               <p className="text-muted-foreground mb-4">
-                The user you're looking for doesn't exist or has been deleted.
+                The user you&apos;re looking for doesn&apos;t exist or has been deleted.
               </p>
               <Link href="/admin/user-manager">
                 <Button variant="outline">

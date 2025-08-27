@@ -1,4 +1,5 @@
 import { SignUp } from "@clerk/nextjs";
+import Image from "next/image";
 
 const styles = {
   container: {
@@ -146,7 +147,14 @@ export default function Page() {
       <style dangerouslySetInnerHTML={{ __html: clerkStyles }} />
       <div className="relative w-full mx-auto overflow-y-auto" style={styles.container}>
       {/* Mobile image at very top */}
-      <img className=" object-cover w-full h-[200px] object-bottom block md:hidden z-0" src="/auth/4.png" alt="Matchbook sign up" />
+      <Image 
+        className="object-cover w-full h-[200px] object-bottom block md:hidden z-0" 
+        src="/auth/4.png" 
+        alt="Matchbook sign up"
+        width={600}
+        height={200}
+        priority
+      />
       
       {/* Form container */}
       <div className="flex justify-center items-center w-full relative z-10  pt-8">
@@ -155,10 +163,13 @@ export default function Page() {
       
       {/* Background gradient for desktop only */}
       <div className="absolute w-[100vw] h-[65vh] bottom-0 left-0 pointer-events-none hidden md:block">
-        <img 
+        <Image 
           src="/auth/3.png" 
           alt="Background gradient" 
           className="w-full h-full object-cover object-top"
+          width={1200}
+          height={400}
+          priority
         />
       </div>
       </div>

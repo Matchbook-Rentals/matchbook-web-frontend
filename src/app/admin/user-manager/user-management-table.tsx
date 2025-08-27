@@ -314,6 +314,7 @@ export function UserManagementTable({
                     <TableCell>
                       <div className="flex items-center gap-3">
                         {user.imageUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img 
                             src={user.imageUrl} 
                             alt="User avatar"

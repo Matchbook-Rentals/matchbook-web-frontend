@@ -104,7 +104,7 @@ export function UserTabs({ userInfo }: UserTabsProps) {
           <TabIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">No {tabLabels[activeTab as keyof typeof tabLabels]} found</h3>
           <p className="text-muted-foreground">
-            This user doesn't have any {tabLabels[activeTab as keyof typeof tabLabels]} yet.
+            This user doesn&apos;t have any {tabLabels[activeTab as keyof typeof tabLabels]} yet.
           </p>
         </div>
       )

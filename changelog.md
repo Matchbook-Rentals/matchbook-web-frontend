@@ -1,5 +1,11 @@
 # Changelog
 
+## Fix linting errors and optimize auth page images
+- Convert auth page images to Next.js Image components for better performance and SEO
+- Fix unescaped entity errors by replacing apostrophes with &apos; in React components
+- Add ESLint disable comments for admin interface img elements to avoid unnecessary optimization costs
+- Fix JSX syntax errors by properly formatting ESLint comments within JSX expressions
+
 ## Implement comprehensive admin user management system
 - Created advanced user management interface with searchable table, filtering by role/status, and sorting capabilities
 - Built detailed user profile pages with separate tabs for renter bookings, host bookings, trips, matches, listings, and housing requests
