@@ -332,36 +332,56 @@ export const Identification: React.FC = () => {
               <div className="flex flex-col items-start gap-1.5 pt-4 pb-0 px-0 w-full">
                 <div className="flex flex-col items-start gap-[18px] w-full">
                   <div className="flex flex-col items-start gap-3 w-full">
-                    <div className="flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-solid border-[#e7f0f0]">
-                      <div className="inline-flex flex-col items-center justify-center gap-3">
-                        <svg
-                          className="w-11 h-11 text-gray-600"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16"/>
-                          <path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/>
-                          <circle cx="13" cy="7" r="1" fill="currentColor"/>
-                          <rect x="8" y="2" width="14" height="14" rx="2"/>
-                        </svg>
-
-                        <div className="flex flex-col items-start justify-center w-full">
-                          <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                            ID Photos will display here
+                    {idPhotos && idPhotos.length > 0 ? (
+                      <div className="flex flex-col gap-3 w-full">
+                        {idPhotos.map((photo, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={photo.url}
+                              alt={`ID Photo ${index + 1}`}
+                              className="w-full h-[140px] object-cover rounded-xl border border-solid border-[#e7f0f0] cursor-pointer"
+                              onClick={() => handleImageClick(index)}
+                            />
+                            {photo.isPrimary && (
+                              <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs">
+                                Primary
+                              </div>
+                            )}
                           </div>
-                          <div className="w-full font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-gray-400 text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
-                            At least 1 photo is required
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-solid border-[#e7f0f0]">
+                        <div className="inline-flex flex-col items-center justify-center gap-3">
+                          <svg
+                            className="w-11 h-11 text-gray-600"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16"/>
+                            <path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/>
+                            <circle cx="13" cy="7" r="1" fill="currentColor"/>
+                            <rect x="8" y="2" width="14" height="14" rx="2"/>
+                          </svg>
+
+                          <div className="flex flex-col items-start justify-center w-full">
+                            <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                              ID Photos will display here
+                            </div>
+                            <div className="w-full font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-gray-400 text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                              At least 1 photo is required
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
