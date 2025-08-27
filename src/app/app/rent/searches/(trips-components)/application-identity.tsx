@@ -146,11 +146,7 @@ export const Identification: React.FC = () => {
                     <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       ID Type
                     </Label>
-                    <img
-                      className="w-[5.2px] h-1.5"
-                      alt="Star"
-                      src="/star-6.svg"
-                    />
+                    <span className="text-red-500 ml-1">*</span>
                   </div>
 
                   <Select>
@@ -178,11 +174,7 @@ export const Identification: React.FC = () => {
                   <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                     ID Number
                   </Label>
-                  <img
-                    className="w-[5.2px] h-1.5"
-                    alt="Star"
-                    src="/star-6.svg"
-                  />
+                  <span className="text-red-500 ml-1">*</span>
                 </div>
 
                 <Input
