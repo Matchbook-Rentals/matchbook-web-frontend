@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles, ApplicationItemInputStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
-import { Checkbox } from "@/components/ui/checkbox";
+import { BrandCheckbox } from "@/app/brandCheckbox";
 import { format } from 'date-fns';
 import { CalendarIcon } from "@radix-ui/react-icons";
 
@@ -125,16 +125,12 @@ export const PersonalInfo: React.FC = () => {
         </div>
 
         <div className="flex items-start gap-3 pt-[22px] pb-0 px-0 relative flex-1 grow">
-          <Checkbox 
-            className="relative w-5 h-5 rounded border border-solid border-[#c6c8d0]"
-            checked={personalInfo.noMiddleName} 
-            onCheckedChange={handleCheckboxChange}
+          <BrandCheckbox
+            name="noMiddleName"
+            checked={personalInfo.noMiddleName}
+            onChange={(e) => handleCheckboxChange(e.target.checked)}
+            label="No Middle Name"
           />
-          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
-            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-              No Middle Name
-            </Label>
-          </div>
         </div>
       </div>
 

@@ -75,7 +75,14 @@ export default function ApplicationClientComponent({
   }, [windowSize?.width]);
 
   const validateForm = () => {
-    const personalInfoError = validatePersonalInfo(personalInfo);
+    // Create a modified personalInfo object that considers noMiddleName checkbox
+    const personalInfoForValidation = {
+      ...personalInfo,
+      // If noMiddleName is checked, treat middleName as satisfied
+      middleName: personalInfo.noMiddleName ? 'N/A' : personalInfo.middleName
+    };
+
+    const personalInfoError = validatePersonalInfo(personalInfoForValidation);
     const identificationError = validateIdentification(ids);
     const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
     const incomeErrors = validateIncome(incomes);
