@@ -67,6 +67,7 @@ interface PDFEditorProps {
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
+  onFieldSign?: (fieldId: string, value: any) => void;
   onDocumentCreated?: (documentId: string) => void;
   customSidebarContent?: (workflowState: WorkflowState, defaultContent: JSX.Element) => JSX.Element;
 }
@@ -84,6 +85,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   onSave, 
   onCancel,
   onFinish,
+  onFieldSign,
   onDocumentCreated,
   customSidebarContent
 }) => {
@@ -2211,6 +2213,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         [fieldId]: value
       };
       
+      // Notify parent component about field signing
+      if (onFieldSign) {
+        onFieldSign(fieldId, value);
+      }
+      
       // Auto-populate sign date fields when signature is signed
       if (field && field.type === FieldType.SIGNATURE && value) {
         const currentDate = new Date().toLocaleDateString('en-US', {
@@ -2641,8 +2648,26 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             {(workflowState === 'signer1' || workflowState === 'signer2') && (
               <>
                 <div className="text-xs text-gray-500">
-                  {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).filter(f => signedFields[f.formId]).length} of{' '}
-                  {fields.filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1)).filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).length} signature fields signed
+                  {(() => {
+                    const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
+                    const signerFields = fields.filter(f => f.recipientIndex === currentSignerIndex);
+                    
+                    const signatures = signerFields.filter(f => f.type === 'SIGNATURE');
+                    const initials = signerFields.filter(f => f.type === 'INITIALS');
+                    
+                    const pendingSignatures = signatures.filter(f => !signedFields[f.formId]).length;
+                    const pendingInitials = initials.filter(f => !signedFields[f.formId]).length;
+                    
+                    const parts = [];
+                    if (pendingSignatures > 0) {
+                      parts.push(`${pendingSignatures} pending signature${pendingSignatures !== 1 ? 's' : ''}`);
+                    }
+                    if (pendingInitials > 0) {
+                      parts.push(`${pendingInitials} pending initial${pendingInitials !== 1 ? 's' : ''}`);
+                    }
+                    
+                    return parts.length > 0 ? parts.join(' • ') : 'All fields completed';
+                  })()}
                 </div>
                 <BrandButton 
                   onClick={handleSigningAction}

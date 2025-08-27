@@ -12,6 +12,7 @@ import { MatchWithRelations } from '@/types';
 import { PaymentMethodSelector } from '@/components/stripe/payment-method-selector';
 import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
 import { PDFEditor } from '@/components/pdf-editor/PDFEditor';
+import { PDFViewer } from '@/components/pdf-editor/PDFViewer';
 import { RenterSidebarFrame } from './renter-sidebar-frame';
 import { BookingSummarySidebar } from './booking-summary-sidebar';
 
@@ -98,10 +99,24 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                   console.log(`📄 Field ${fieldValue.fieldId} has value: "${fieldValue.value}" (signer ${fieldValue.signerIndex})`);
                 });
                 
-                // Merge values into fields
+                // Merge values into fields - but only for fields assigned to the current user
+                // Get current renter's signer index
+                const currentUserSignerIndex = (() => {
+                  const signedRecipients = new Set();
+                  document.fieldValues?.forEach((fieldValue: any) => {
+                    if (fieldValue.signerIndex !== undefined && fieldValue.signerIndex !== null) {
+                      signedRecipients.add(fieldValue.signerIndex);
+                    }
+                  });
+                  const maxSignerIndex = signedRecipients.size > 0 ? Math.max(...Array.from(signedRecipients) as number[]) : -1;
+                  return maxSignerIndex + 1;
+                })();
+                
                 fields = fields.map((field: any) => {
                   const fieldValue = fieldValuesMap.get(field.formId);
-                  if (fieldValue) {
+                  
+                  // Only merge values if this field belongs to the current user AND they signed it
+                  if (fieldValue && field.recipientIndex === currentUserSignerIndex && fieldValue.signerIndex === currentUserSignerIndex) {
                     return {
                       ...field,
                       value: fieldValue.value,
@@ -109,7 +124,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       signerIndex: fieldValue.signerIndex
                     };
                   }
-                  return field;
+                  return field; // Return field without pre-signed values from other users
                 });
                 
                 console.log('📄 All fields structure check:', fields.map((f: any, index: number) => ({
@@ -138,7 +153,26 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
               }
               
               setDocumentFields(fields);
-              setDocumentRecipients(docData.recipients || []);
+              
+              // Map recipients and ensure proper titles for display
+              const recipients = (docData.recipients || []).map((recipient: any, index: number) => ({
+                ...recipient,
+                title: recipient.role === 'landlord' ? 'Landlord' : 
+                       recipient.role === 'tenant' ? 'Primary Renter' :
+                       recipient.role === 'guarantor' ? 'Guarantor' :
+                       recipient.title || `Signer ${index + 1}`
+              }));
+              
+              setDocumentRecipients(recipients);
+
+              // Initialize field status based on current field values
+              const initialFieldsStatus: Record<string, 'signed' | 'pending'> = {};
+              fields.forEach((field: any) => {
+                // Field is signed if it has a value and signedAt timestamp
+                initialFieldsStatus[field.formId] = (field.value && field.signedAt) ? 'signed' : 'pending';
+              });
+              setFieldsStatus(initialFieldsStatus);
+              console.log('📄 Initial fields status:', initialFieldsStatus);
               
               console.log('📄 Extracted from document:', {
                 fieldsCount: fields?.length || 0,
@@ -468,6 +502,45 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   // Add state for overview vs signing mode
   const [showSigningMode, setShowSigningMode] = useState(false);
 
+  // Track field signing status for sidebar progress
+  const [fieldsStatus, setFieldsStatus] = useState<Record<string, 'signed' | 'pending'>>({});
+
+  // Handle field signing updates for real-time sidebar progress
+  const handleFieldSign = (fieldId: string, value: any) => {
+    console.log('🔍 Field signed:', fieldId, 'with value:', value);
+    setFieldsStatus(prev => ({
+      ...prev,
+      [fieldId]: value ? 'signed' : 'pending'
+    }));
+  };
+
+  // Determine the correct signer number for the renter
+  const getRenterSignerNumber = () => {
+    if (!documentRecipients || documentRecipients.length === 0) {
+      return 1; // Default to signer 1 if no recipients data
+    }
+    
+    // Find which recipients have already signed by checking fieldValues
+    const signedRecipients = new Set();
+    if (documentInstance?.fieldValues) {
+      documentInstance.fieldValues.forEach((fieldValue: any) => {
+        if (fieldValue.signerIndex !== undefined && fieldValue.signerIndex !== null) {
+          signedRecipients.add(fieldValue.signerIndex);
+        }
+      });
+    }
+    
+    console.log('🔍 Signed recipients:', Array.from(signedRecipients));
+    console.log('🔍 Total recipients:', documentRecipients.length);
+    
+    // Renter should be the next signer after the highest existing signer
+    const maxSignerIndex = signedRecipients.size > 0 ? Math.max(...Array.from(signedRecipients) as number[]) : -1;
+    const renterSignerIndex = maxSignerIndex + 1;
+    
+    console.log('🔍 Renter should be signer:', renterSignerIndex);
+    return renterSignerIndex;
+  };
+
   // Determine current step
   const getCurrentStep = () => {
     if (!hasLeaseDocument) return 'no-lease-document';
@@ -763,21 +836,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto p-4 ">
-        {/* Header */}
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => router.back()}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          
-          
-          
-        </div>
+      <div className="container mx-auto p-4 pb-24">
 
         <div className={`grid grid-cols-1 gap-6 ${currentStep === 'sign-lease' ? '' : 'lg:grid-cols-3'}`}>
           {/* Sidebar - shows different content based on step */}
@@ -896,30 +955,21 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                   </div>
                 ) : currentStep === 'overview-lease' && !isLoading && documentInstance && documentPdfFile ? (
                   <div className="space-y-4">
-                    <div className="text-center py-12">
-                      <FileText className="w-16 h-16 text-blue-400 mx-auto mb-4" />
+                    <div className="text-center mb-4">
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         Review Your Lease Agreement
                       </h3>
-                      <p className="text-gray-600 mb-6">
-                        Your lease document is ready for review and signing. Take a moment to review the booking details and then proceed to sign.
+                      <p className="text-gray-600">
+                        Review your lease document below, then proceed to signing.
                       </p>
-                      <div className="flex gap-3 justify-center">
-                        <Button 
-                          onClick={handleViewLease}
-                          variant="outline"
-                          size="lg"
-                        >
-                          <FileText className="w-4 h-4 mr-2" />
-                          Preview Document
-                        </Button>
-                        <Button 
-                          onClick={() => setShowSigningMode(true)}
-                          size="lg"
-                        >
-                          Continue to Sign
-                        </Button>
-                      </div>
+                    </div>
+                    
+                    {/* PDF Preview */}
+                    <div className="border rounded-lg overflow-hidden bg-gray-50">
+                      <PDFViewer
+                        file={documentPdfFile}
+                        pageWidth={800}
+                      />
                     </div>
                   </div>
                 ) : currentStep === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
@@ -927,11 +977,23 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     
                     <div className="min-h-[600px]">
                       <PDFEditor
-                        initialWorkflowState="document"
+                        initialWorkflowState={(() => {
+                          const currentUserSignerIndex = getRenterSignerNumber();
+                          console.log('🔍 Setting workflow state for renter signerIndex:', currentUserSignerIndex);
+                          
+                          // PDFEditor maps: signer1 = recipientIndex 0, signer2 = recipientIndex 1
+                          // Find what recipientIndex this renter should have in the document fields
+                          const renterFields = documentFields.filter(f => f.recipientIndex === currentUserSignerIndex);
+                          console.log('🔍 Renter fields with recipientIndex', currentUserSignerIndex, ':', renterFields.length);
+                          
+                          // Map recipientIndex to workflow state
+                          return currentUserSignerIndex === 0 ? 'signer1' : 'signer2';
+                        })()}
                         initialPdfFile={documentPdfFile}
                         initialFields={documentFields}
                         initialRecipients={documentRecipients}
                         onFinish={handleDocumentSigningComplete}
+                        onFieldSign={handleFieldSign}
                         onCancel={() => {
                           toast({
                             title: "Signing cancelled",
@@ -942,7 +1004,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                           <RenterSidebarFrame 
                             match={match} 
                             documentFields={documentFields}
-                            fieldsStatus={{}}
+                            fieldsStatus={fieldsStatus}
                           />
                         )}
                       />
@@ -1180,6 +1242,51 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             </Card>
           </div>
         </div>
+
+        {/* Footer Controls - Fixed at bottom - only show for overview and completed states */}
+        {(currentStep === 'overview-lease' || currentStep === 'completed') && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
+            <div className="flex items-center justify-between">
+              {/* Left side - Status info */}
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-gray-600">
+                  {currentStep === 'overview-lease' && (
+                    <>
+                      <span className="font-medium">{documentFields.length}</span> fields • 
+                      <span className="font-medium">{documentRecipients.length}</span> recipients
+                    </>
+                  )}
+                  {currentStep === 'completed' && (
+                    <span className="text-green-600 font-medium">✓ Lease signed and payment completed</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Right side - Action buttons */}
+              <div className="flex items-center gap-3">
+                {currentStep === 'overview-lease' && (
+                  <Button 
+                    onClick={() => setShowSigningMode(true)}
+                    size="sm"
+                    className="bg-[#0a6060] hover:bg-[#0a6060]/90"
+                  >
+                    Proceed to Sign
+                  </Button>
+                )}
+                {currentStep === 'completed' && (
+                  <Button 
+                    onClick={handleViewLease}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    View Signed Lease
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Payment Info Modal */}
         <PaymentInfoModal

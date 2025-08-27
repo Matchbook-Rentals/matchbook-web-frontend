@@ -88,23 +88,57 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {} }:
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 relative w-full">
-                <div className="w-5 h-5 bg-[#0a6060] rounded-full flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-2.5 h-2.5 text-white" />
-                </div>
-                <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#0a6060] text-sm tracking-[0] leading-tight">
-                  Document data validated {documentFields.length} fields loaded
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 relative w-full">
-                <div className="w-5 h-5 bg-[#0a6060] rounded-full flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-2.5 h-2.5 text-white" />
-                </div>
-                <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#0a6060] text-sm tracking-[0] leading-tight">
-                  All {getTenantFields().length} fields rendered and clickable
-                </div>
-              </div>
+              {(() => {
+                const tenantFields = getTenantFields();
+                const signatures = tenantFields.filter(field => {
+                  const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+                  return fieldType === 'SIGNATURE';
+                });
+                const initials = tenantFields.filter(field => {
+                  const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+                  return fieldType === 'INITIALS';
+                });
+                
+                const pendingSignatures = signatures.filter(field => fieldsStatus[field.formId] !== 'signed').length;
+                const pendingInitials = initials.filter(field => fieldsStatus[field.formId] !== 'signed').length;
+                
+                return (
+                  <>
+                    {pendingSignatures > 0 && (
+                      <div className="flex items-center gap-3 relative w-full">
+                        <div className="w-5 h-5 bg-[#0a6060] rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-2.5 h-2.5 text-white" />
+                        </div>
+                        <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#0a6060] text-sm tracking-[0] leading-tight">
+                          {pendingSignatures} pending signature{pendingSignatures !== 1 ? 's' : ''}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {pendingInitials > 0 && (
+                      <div className="flex items-center gap-3 relative w-full">
+                        <div className="w-5 h-5 bg-[#0a6060] rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-2.5 h-2.5 text-white" />
+                        </div>
+                        <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#0a6060] text-sm tracking-[0] leading-tight">
+                          {pendingInitials} pending initial{pendingInitials !== 1 ? 's' : ''}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {pendingSignatures === 0 && pendingInitials === 0 && (
+                      <div className="flex items-center gap-3 relative w-full">
+                        <div className="w-5 h-5 bg-[#0a6060] rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-2.5 h-2.5 text-white" />
+                        </div>
+                        <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#0a6060] text-sm tracking-[0] leading-tight">
+                          All signature fields completed
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
 
               <p className="w-full [font-family:'Poppins',Helvetica] font-normal text-[#717171] text-sm tracking-[0] leading-tight">
                 Click on the fields assigned to you to fill them out and sign the document.
@@ -145,7 +179,17 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {} }:
                             })()}
                           </div>
                           <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#777b8b] text-xs tracking-[0] leading-[18px] whitespace-nowrap">
-                            Page {field.page + 1}
+                            Page {(() => {
+                              const pageNum = field.page !== undefined ? field.page : field.pageNumber;
+                              console.log('🔍 Page debug for field', field.formId, ':', {
+                                page: field.page,
+                                pageNumber: field.pageNumber,
+                                calculated: pageNum
+                              });
+                              // If pageNum is already 1-based, don't add 1. If it's 0-based, add 1.
+                              // Since there's only 1 page, correct value should be 1
+                              return pageNum !== undefined ? (pageNum === 0 ? 1 : pageNum) : '?';
+                            })()}
                           </div>
                         </div>
 
@@ -209,7 +253,17 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {} }:
                             {fieldName}
                           </div>
                           <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#777b8b] text-xs tracking-[0] leading-[18px] whitespace-nowrap">
-                            Page {field.page + 1}
+                            Page {(() => {
+                              const pageNum = field.page !== undefined ? field.page : field.pageNumber;
+                              console.log('🔍 Page debug for field', field.formId, ':', {
+                                page: field.page,
+                                pageNumber: field.pageNumber,
+                                calculated: pageNum
+                              });
+                              // If pageNum is already 1-based, don't add 1. If it's 0-based, add 1.
+                              // Since there's only 1 page, correct value should be 1
+                              return pageNum !== undefined ? (pageNum === 0 ? 1 : pageNum) : '?';
+                            })()}
                           </div>
                         </div>
 
