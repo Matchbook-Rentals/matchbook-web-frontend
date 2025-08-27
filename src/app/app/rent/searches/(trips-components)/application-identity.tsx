@@ -19,8 +19,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Upload } from 'lucide-react';
 import { ImageCategory } from '@prisma/client';
-import { ApplicationItemLabelStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
 
 interface UploadData {
@@ -72,7 +72,7 @@ const ID_TYPES = [
 
 export const Identification: React.FC = () => {
   const { ids, setIds, verificationImages, setVerificationImages, errors } = useApplicationStore();
-  const error = errors.basicInfo.identification;
+  const error = errors.identification;
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   // Get current ID (or first ID) - always make it primary
@@ -105,7 +105,12 @@ export const Identification: React.FC = () => {
     setIds([updatedId, ...ids.slice(1)]);
 
     // Also keep old functionality for backward compatibility
-    const newImages = res.map((upload) => ({ url: upload.url, category: 'Identification' as ImageCategory }));
+    const newImages = res.map((upload) => ({
+      id: upload.customId || '',
+      url: upload.url,
+      category: 'Identification' as ImageCategory,
+      applicationId: ''
+    }));
     setVerificationImages([...verificationImages, ...newImages]);
   };
 
@@ -124,139 +129,153 @@ export const Identification: React.FC = () => {
       }));
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label onClick={() => console.log(ids)} htmlFor="idType" className={ApplicationItemLabelStyles}>ID Type</Label>
-          <Select
-            value={currentId.idType}
-            onValueChange={(value) => setIds([
-              { ...currentId, idType: value },
-              ...ids.slice(1)
-            ])}
-          >
-            <SelectTrigger className={`${error?.idType ? 'border-red-500' : ''}`}>
-              <SelectValue placeholder="Select Identification Type" />
-            </SelectTrigger>
-            <SelectContent>
-              {ID_TYPES.map((type) => (
-                <SelectItem key={type.value} className='cursor-pointer' value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {error?.idType && <p className="mt-1 text-red-500 text-sm">{error.idType}</p>}
-        </div>
-        <div className="space-y-2 mb-4 lg:mb-8">
-          <Label htmlFor="idNumber" className={ApplicationItemLabelStyles}>ID Number</Label>
-          <Input
-            id="idNumber"
-            value={currentId.idNumber}
-            placeholder='Identification Number'
-            onChange={(e) => setIds([
-              { ...currentId, idNumber: e.target.value },
-              ...ids.slice(1)
-            ])}
-            className={error?.idNumber ? "border-red-500" : ""}
-          />
-          {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
-        </div>
-      </div>
+    <Card className="h-[534px] w-full p-6 bg-neutral-50 rounded-xl border-0">
+      <CardContent className="p-0 flex flex-col gap-8 h-full">
+        <div className="flex flex-col items-start gap-5 w-full">
+          <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-normal">
+            Identification
+          </h2>
 
-
-      <Label className={ApplicationItemLabelStyles}>Please upload photos of your ID</Label>
-      {error?.idPhotos && <p className="mt-1 text-red-500 text-sm">{error.idPhotos}</p>}
-      {error?.primaryPhoto && <p className="mt-1 text-red-500 text-sm">{error.primaryPhoto}</p>}
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className='border border-gray-200 min-h-32 rounded-md flex justify-center items-center'>
-          <UploadButton<UploadData>
-            endpoint="idUploader"
-            onClientUploadComplete={handleUploadFinish}
-            onUploadError={(error: Error) => alert(error.message)}
-            className="mb-0"
-            appearance={{ button: 'bg-parent text-[#404040] border-[#404040] border-2  sm:4/5 px-2 focus-within:ring-[#404040] data-[state="uploading"]:after:bg-[#404040]' }}
-          />
-        </div>
-
-        {idPhotos.length > 0 ? (
-          <div className='border border-gray-300 rounded-md p-2'>
-            <div className="flex flex-col gap-2 items-center">
-              {idPhotos.map((photo, idx) => (
-                <div key={idx} className="relative group">
-                  <Dialog onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
-                    <DialogTrigger asChild>
-                      <img
-                        src={photo.url}
-                        alt={`ID image ${idx + 1}`}
-                        className={`w-full h-auto max-h-[300px] cursor-pointer `}
-                        onClick={() => handleImageClick(idx)}
-                      />
-                    </DialogTrigger>
-                    <DialogContent className="max-w-3xl">
-                      <DialogHeader>
-                        <DialogTitle>ID Image</DialogTitle>
-                        <DialogDescription>Your identification document</DialogDescription>
-                      </DialogHeader>
-                      <Card>
-                        <CardContent className="flex aspect-square  items-center justify-center p-4">
-                          <img src={photo.url} alt={`ID image ${idx + 1}`} className="w-full h-auto" />
-                        </CardContent>
-                      </Card>
-                    </DialogContent>
-                  </Dialog>
-
-                  <div className="absolute top-0 right-0 p-1 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-
-                    {/* Delete button */}
-                    <button
-                      type="button"
-                      className="bg-black/10 text-black p-1.5 rounded-full text-xs"
-                      onClick={(e) => {
-                        e.stopPropagation();
-
-                        // Remove this photo from the current ID
-                        const updatedPhotos = currentId.idPhotos?.filter((_, i) => i !== idx) || [];
-
-                        // If we're removing the primary photo, set a new primary if any photos left
-                        if (photo.isPrimary && updatedPhotos.length > 0) {
-                          updatedPhotos[0].isPrimary = true;
-                        }
-
-                        // Update the ID with the new photos array
-                        const updatedId = {
-                          ...currentId,
-                          idPhotos: updatedPhotos
-                        };
-
-                        setIds([updatedId, ...ids.slice(1)]);
-                      }}
-                      title="Delete photo"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+          <div className="flex items-start gap-5 w-full">
+            <div className="flex flex-col items-start gap-1.5 flex-1">
+              <div className="flex flex-col items-start gap-1.5 w-full">
+                <div className="flex flex-col items-start gap-1.5 w-full">
+                  <div className="inline-flex items-center gap-1.5">
+                    <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                      ID Type
+                    </Label>
+                    <img
+                      className="w-[5.2px] h-1.5"
+                      alt="Star"
+                      src="/star-6.svg"
+                    />
                   </div>
+
+                  <Select>
+                    <SelectTrigger className="h-12 px-3 py-2 bg-white rounded-lg border border-[#d0d5dd] shadow-shadows-shadow-xs">
+                      <SelectValue
+                        placeholder="Select ID Type"
+                        className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ID_TYPES.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col items-start gap-1.5 flex-1">
+              <div className="flex flex-col items-start gap-1.5 w-full">
+                <div className="inline-flex items-center gap-1.5">
+                  <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                    ID Number
+                  </Label>
+                  <img
+                    className="w-[5.2px] h-1.5"
+                    alt="Star"
+                    src="/star-6.svg"
+                  />
+                </div>
+
+                <Input
+                  placeholder="Enter ID Number"
+                  className="h-12 px-3 py-2 bg-white rounded-lg border border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                />
+              </div>
             </div>
           </div>
-        ) : (
-          <div className={`border ${error?.idPhotos ? 'border-red-500 bg-red-50' : 'border-gray-200'} rounded-md flex flex-col justify-center items-center p-4`}>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <span className={`${error?.idPhotos ? 'text-red-600 font-medium' : 'text-gray-500'}`}>
-              {error?.idPhotos ? 'Required: Please upload ID photos' : 'ID photos will display here'}
-            </span>
-            <span className="text-xs text-gray-400 mt-1">
-              At least one photo is required
-            </span>
+
+          <div className="h-[337px] flex items-center gap-5 w-full">
+            <div className="flex flex-col items-start gap-1.5 flex-1">
+              <div className="flex flex-col items-start gap-1.5 w-full">
+                <div className="flex flex-col items-start gap-1.5 w-full">
+                  <div className="inline-flex flex-col items-start justify-center gap-1.5">
+                    <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                      Please upload A photo&nbsp;&nbsp;of your ID
+                    </Label>
+                    <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                      Upload ID (Front)
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-[18px] w-full">
+                    <div className="flex flex-col items-start gap-3 w-full">
+                      <div className="flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-dashed border-[#036e49]">
+                        <div className="inline-flex flex-col items-center justify-center gap-3">
+                          <Upload className="w-8 h-8 text-secondaryBrand" />
+
+                          <div className="flex items-center gap-2 w-full">
+                            <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                              Drag and drop file or
+                            </div>
+                            <div className="font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)]">
+                              Browse
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1 w-full">
+                        <div className="flex-1 font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                          Supported formats: PNG, JPG
+                        </div>
+                        <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                          Maximum size: 50MB
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-start gap-1.5 flex-1">
+              <div className="flex flex-col items-start gap-1.5 pt-4 pb-0 px-0 w-full">
+                <div className="flex flex-col items-start gap-[18px] w-full">
+                  <div className="flex flex-col items-start gap-3 w-full">
+                    <div className="flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-solid border-[#e7f0f0]">
+                      <div className="inline-flex flex-col items-center justify-center gap-3">
+                        <svg
+                          className="w-11 h-11 text-gray-600"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16"/>
+                          <path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/>
+                          <circle cx="13" cy="7" r="1" fill="currentColor"/>
+                          <rect x="8" y="2" width="14" height="14" rx="2"/>
+                        </svg>
+
+                        <div className="flex flex-col items-start justify-center w-full">
+                          <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                            ID Photos will display here
+                          </div>
+                          <div className="w-full font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-gray-400 text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                            At least 1 photo is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
