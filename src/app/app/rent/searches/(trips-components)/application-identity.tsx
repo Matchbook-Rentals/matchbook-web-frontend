@@ -335,7 +335,7 @@ export const Identification: React.FC = () => {
                     {idPhotos && idPhotos.length > 0 ? (
                       <div className="flex flex-col gap-3 w-full">
                         {idPhotos.map((photo, index) => (
-                          <div key={index} className="relative">
+                          <div key={index} className="relative group">
                             <img
                               src={photo.url}
                               alt={`ID Photo ${index + 1}`}
@@ -347,6 +347,35 @@ export const Identification: React.FC = () => {
                                 Primary
                               </div>
                             )}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Remove photo from the array
+                                const updatedPhotos = idPhotos.filter((_, i) => i !== index);
+                                const updatedId = {
+                                  ...currentId,
+                                  idPhotos: updatedPhotos
+                                };
+                                setIds([updatedId, ...ids.slice(1)]);
+                              }}
+                              className="absolute -top-1 -right-1 w-6 h-6 bg-black/30 hover:bg-black/80 text-white hover:text-red-500 rounded-full flex items-center justify-center z-10 shadow-md transition-colors duration-200"
+                              aria-label="Delete photo"
+                            >
+                              <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                className="h-3 w-3" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                stroke="currentColor"
+                              >
+                                <path 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round" 
+                                  strokeWidth={2} 
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+                                />
+                              </svg>
+                            </button>
                           </div>
                         ))}
                       </div>
