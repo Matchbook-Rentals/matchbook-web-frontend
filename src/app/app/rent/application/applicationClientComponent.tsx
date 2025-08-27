@@ -161,8 +161,8 @@ export default function ApplicationClientComponent({
           let completeResult = await markComplete(result.application?.id);
           logger.debug('Complete application result', completeResult);
 
-          // Redirect to dashboard or other appropriate page after successful submission
-          router.push('/app/dashboard');
+          // Redirect to searches page after successful submission
+          router.push('/app/rent/searches');
         }
       } else {
         toast({
