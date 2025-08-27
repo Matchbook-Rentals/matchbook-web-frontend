@@ -353,7 +353,6 @@ export function initializeFormDefaults() {
     depositSize: null,
     petDeposit: null,
     petRent: null,
-    rentDueAtBooking: null,
     shortestLeaseLength: 1,
     longestLeaseLength: 12,
     listingPhotos: [],
@@ -445,7 +444,6 @@ export function initializePricing(draftData?: any) {
     depositSize: null,
     petDeposit: null,
     petRent: null,
-    rentDueAtBooking: null,
     shortestLeaseLength: 1,
     longestLeaseLength: 12
   };
@@ -663,7 +661,6 @@ export async function handleSaveAndExit(
       deposit: string;
       petDeposit: string;
       petRent: string;
-      rentDueAtBooking: string;
       shortestStay: number;
       longestStay: number;
       monthlyPricing: Array<{
@@ -1058,25 +1055,6 @@ export function validateVerifyPricing(listingPricing: ListingPricing): string[] 
 export function validateDeposits(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
 
-  // Validate rent due at booking doesn't exceed lowest monthly rent
-  if (listingPricing.rentDueAtBooking && listingPricing.rentDueAtBooking !== '') {
-    const rentDueAmount = parseFloat(listingPricing.rentDueAtBooking);
-
-    if (!isNaN(rentDueAmount) && rentDueAmount > 0) {
-      // Find the lowest monthly rent price from the pricing array
-      const validPrices = listingPricing.monthlyPricing
-        .filter(p => p.price && p.price !== '' && p.price !== '0')
-        .map(p => parseFloat(p.price))
-        .filter(price => !isNaN(price) && price > 0);
-
-      if (validPrices.length > 0) {
-        const lowestPrice = Math.min(...validPrices);
-        if (rentDueAmount > lowestPrice) {
-          errors.push(`Rent due at booking ($${rentDueAmount}) cannot be higher than the lowest monthly rent ($${lowestPrice})`);
-        }
-      }
-    }
-  }
 
   return errors;
 }

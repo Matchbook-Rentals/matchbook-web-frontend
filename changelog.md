@@ -584,3 +584,17 @@
 - Replaced all hard-coded pixel values with responsive Tailwind classes
 - Added responsive text sizing, button widths, and container layouts
 - Improved mobile user experience across verification page components
+
+## Enhanced Renter Lease Signing Experience
+- **Fixed Payment Redirects**: Updated all payment success/cancel URLs to use correct `/app/rent/match/` route structure
+- **Beautiful Property Cards**: Replaced generic booking summaries with stunning property cards featuring listing images, host info, and move-in details
+- **Pro-rated Rent Calculations**: Implemented proper daily pro-ration logic replacing hardcoded fallback values
+- **Real-time Progress Tracking**: Added live field completion counters and "Next Action" button during signing
+- **Data Model Fixes**: Corrected Prisma includes to use `listingImages` and proper bedroom/bathroom field access
+- **UI Consistency**: Applied Frame-specific styling across overview and payment pages for cohesive user experience
+
+## Streamlined Listing Creation Process
+- **Removed Rent Due at Booking Field**: Eliminated the "rent due at booking" field from listing creation to simplify the deposit collection process
+- **Updated UI Components**: Removed input field and related validation from deposit step
+- **Cleaned Type Definitions**: Updated interfaces across components to remove rentDueAtBooking references
+- **Simplified Validation Logic**: Removed complex validation rules that checked rent due amount against monthly pricing

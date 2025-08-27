@@ -84,7 +84,6 @@ interface NullableListing {
   userId: string | null;
   squareFootage: number | null;
   depositSize: number | null;
-  rentDueAtBooking: number | null;
   requireBackgroundCheck: boolean | null;
   shortestLeaseLength: number | null;
   longestLeaseLength: number | null;
@@ -197,7 +196,6 @@ export default function AddPropertyclient({ draftData }: AddPropertyClientProps)
     userId: null,
     squareFootage: null,
     depositSize: null,
-    rentDueAtBooking: null,
     requireBackgroundCheck: null,
     shortestLeaseLength: null,
     longestLeaseLength: null,
@@ -281,7 +279,6 @@ const initializePricing = () => {
       varyPricingByLength: true,
       basePrice: "",
       deposit: draftData.depositSize ? draftData.depositSize.toString() : "",
-      rentDueAtBooking: draftData.rentDueAtBooking ? draftData.rentDueAtBooking.toString() : "",
       petDeposit: draftData.petDeposit ? draftData.petDeposit.toString() : "",
       petRent: draftData.petRent ? draftData.petRent.toString() : ""
     };
@@ -295,7 +292,6 @@ const initializePricing = () => {
     varyPricingByLength: true,
     basePrice: "",
     deposit: "",
-    rentDueAtBooking: "",
     petDeposit: "",
     petRent: ""
   };
@@ -692,7 +688,6 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
           depositSize: listingPricing.deposit ? Number(listingPricing.deposit.replace(/,/g, '')) : 0,
           petDeposit: listingPricing.petDeposit ? Number(listingPricing.petDeposit.replace(/,/g, '')) : 0,
           petRent: listingPricing.petRent ? Number(listingPricing.petRent.replace(/,/g, '')) : 0,
-          rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking.replace(/,/g, '')) : 0,
           shortestLeaseLength: listingPricing.shortestStay || 1,
           longestLeaseLength: listingPricing.longestStay || 12,
           shortestLeasePrice: 0, // Deprecated
@@ -811,7 +806,6 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       shortestLeasePrice: 0, // Deprecated
       longestLeasePrice: 0, // Deprecated
       depositSize: listingPricing.deposit ? Number(listingPricing.deposit.replace(/,/g, '')) : null,
-      rentDueAtBooking: listingPricing.rentDueAtBooking ? Number(listingPricing.rentDueAtBooking.replace(/,/g, '')) : null,
     }));
   }, [listingHighlights, listingLocation, listingRooms, listingAmenities, listingPricing]);
 
@@ -974,11 +968,9 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         return (
           <ListingCreationDeposit
             deposit={listingPricing.deposit}
-            rentDueAtBooking={listingPricing.rentDueAtBooking}
             petDeposit={listingPricing.petDeposit}
             petRent={listingPricing.petRent}
             onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
-            onRentDueAtBookingChange={(value) => setListingPricing(prev => ({ ...prev, rentDueAtBooking: value }))}
             onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
             onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
             questionTextStyles={questionTextStyles}
