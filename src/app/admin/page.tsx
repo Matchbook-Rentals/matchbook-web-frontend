@@ -3,7 +3,7 @@ import { checkAdminAccess } from '@/utils/roles'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { UsersIcon, BookText, Database, TicketIcon, Bell, Home } from 'lucide-react'
+import { UsersIcon, BookText, Database, TicketIcon, Bell, Home, UserSearch } from 'lucide-react'
 
 export default async function AdminDashboard() {
   if (!(await checkAdminAccess())) {
@@ -32,6 +32,21 @@ export default async function AdminDashboard() {
                   Manage user access levels and roles
                 </p>
                 <Link href="/admin/user-management">
+                  <Button>Manage Users</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <UserSearch className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-semibold">User Management</h2>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Search users and view their activity
+                </p>
+                <Link href="/admin/user-manager">
                   <Button>Manage Users</Button>
                 </Link>
               </CardContent>

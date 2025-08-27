@@ -58,6 +58,11 @@ export default async function AdminLayout({
       icon: "Users",
     },
     {
+      title: "User Management",
+      url: "/admin/user-manager",
+      icon: "Search",
+    },
+    {
       title: "Listing Management",
       url: "/admin/listing-management",
       icon: "Building",
