@@ -4,13 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { UploadButton } from '@uploadthing/react';
-import { PlusCircle, X, Trash } from 'lucide-react';
+import { PlusCircle, X, Trash, Loader2 } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ApplicationItemLabelStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
 import { deleteIncome } from '@/app/actions/applications';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { useToast } from "@/components/ui/use-toast";
 
 interface UploadData {
   name: string;
@@ -26,6 +27,7 @@ interface UploadData {
 }
 
 export const Income: React.FC = () => {
+  const { toast } = useToast();
   const {
     incomes,
     setIncomes,
@@ -190,39 +192,112 @@ export const Income: React.FC = () => {
                           </button>
                         </div>
                       ) : (
-                        <div className="flex flex-col h-[140px] items-center justify-center gap-[35px] px-[100px] py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors">
-                          <div className="inline-flex flex-col items-center justify-center gap-3 relative flex-[0_0_auto]">
-                            <UploadButton<UploadData, unknown>
-                              endpoint="incomeUploader"
-                              content={{
-                                button({ ready }) {
-                                  return <UploadIcon className="relative w-8 h-8 text-[#036e49]" />;
-                                }
-                              }}
-                              onUploadError={(error) => alert(error.message)}
-                              onClientUploadComplete={(res) => handleIncomeUploadFinish(index)(res)}
-                              className="p-0"
-                              appearance={{
-                                button: 'bg-transparent border-none p-0 hover:bg-transparent',
-                                allowedContent: 'hidden',
-                                container: 'w-fit'
-                              }}
-                            />
+                        <UploadButton<UploadData, unknown>
+                          endpoint="incomeUploader"
+                          config={{
+                            mode: "auto"
+                          }}
+                          className="uploadthing-custom w-full"
+                          appearance={{
+                            button: "flex flex-col h-[140px] items-center justify-center gap-[35px] px-[100px] py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit",
+                            allowedContent: "hidden",
+                          }}
+                          onUploadBegin={(name) => {
+                            console.log('🚀 Income upload begin for file:', name);
+                          }}
+                          onUploadProgress={(progress) => {
+                            console.log('📊 Income upload progress:', progress, '%');
+                          }}
+                          onUploadAborted={() => {
+                            console.warn('⚠️ Income upload was aborted');
+                            toast({
+                              title: "Upload Cancelled",
+                              description: "Income document upload was cancelled or timed out",
+                              variant: "destructive"
+                            });
+                          }}
+                          content={{
+                            button: ({ ready, isUploading }) => (
+                              <div className="inline-flex flex-col items-center justify-center gap-3 relative flex-[0_0_auto]">
+                                {isUploading ? (
+                                  <Loader2 className="relative w-8 h-8 text-[#036e49] animate-spin" />
+                                ) : (
+                                  <UploadIcon className="relative w-8 h-8 text-[#036e49]" />
+                                )}
 
-                            <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
-                              <div className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                                Drag and drop file or
+                                <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
+                                  <div className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                                    {isUploading ? "Uploading..." : "Drag and drop file or"}
+                                  </div>
+
+                                  {!isUploading && (
+                                    <span className="relative w-fit mt-[-1.00px] font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] underline">
+                                      Browse
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-
-                              <Button
-                                variant="link"
-                                className="relative w-fit mt-[-1.00px] font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] p-0 h-auto underline"
-                              >
-                                Browse
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
+                            ),
+                          }}
+                          onBeforeUploadBegin={(files) => {
+                            console.log('📤 Income onBeforeUploadBegin called with', files.length, 'files');
+                            
+                            // Validate files
+                            const maxFiles = 1;
+                            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                            const maxSize = 50 * 1024 * 1024; // 50MB
+                            
+                            const errors: string[] = [];
+                            
+                            if (files.length > maxFiles) {
+                              errors.push(`You can only upload ${maxFiles} file at a time.`);
+                            }
+                            
+                            files.forEach((file) => {
+                              if (!allowedTypes.includes(file.type.toLowerCase())) {
+                                const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
+                                errors.push(`File "${file.name}" has unsupported type "${fileExtension}". Please use PNG, JPG, PDF, or DOC files only.`);
+                              }
+                              
+                              if (file.size > maxSize) {
+                                errors.push(`File "${file.name}" is too large. Maximum size is 50MB.`);
+                              }
+                            });
+                            
+                            if (errors.length > 0) {
+                              errors.forEach((error, index) => {
+                                setTimeout(() => {
+                                  toast({
+                                    title: "Upload Error",
+                                    description: error,
+                                    variant: "destructive"
+                                  });
+                                }, index * 100);
+                              });
+                              return [];
+                            }
+                            
+                            return files;
+                          }}
+                          onClientUploadComplete={(res) => {
+                            console.log('✅ Income upload complete:', res);
+                            handleIncomeUploadFinish(index)(res);
+                            
+                            toast({
+                              title: "Upload Successful",
+                              description: "Income document uploaded successfully.",
+                              variant: "default"
+                            });
+                          }}
+                          onUploadError={(error) => {
+                            console.error("💥 Income upload error:", error);
+                            toast({
+                              title: "Upload Error",
+                              description: error.message || "Failed to upload income document. Please try again.",
+                              variant: "destructive"
+                            });
+                          }}
+                        />
                       )}
 
                       <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">

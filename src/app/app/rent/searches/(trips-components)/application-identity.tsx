@@ -19,9 +19,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Upload } from 'lucide-react';
+import { Upload, Loader2 } from 'lucide-react';
 import { ImageCategory } from '@prisma/client';
 import { useApplicationStore } from '@/stores/application-store';
+import { useToast } from "@/components/ui/use-toast";
 
 interface UploadData {
   name: string;
@@ -71,6 +72,7 @@ const ID_TYPES = [
 ];
 
 export const Identification: React.FC = () => {
+  const { toast } = useToast();
   const { ids, setIds, verificationImages, setVerificationImages, errors } = useApplicationStore();
   const error = errors.identification;
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -206,20 +208,111 @@ export const Identification: React.FC = () => {
 
                   <div className="flex flex-col items-start gap-[18px] w-full">
                     <div className="flex flex-col items-start gap-3 w-full">
-                      <div className="flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-dashed border-[#036e49]">
-                        <div className="inline-flex flex-col items-center justify-center gap-3">
-                          <Upload className="w-8 h-8 text-secondaryBrand" />
+                      <UploadButton<UploadData, unknown>
+                        endpoint="identificationUploader"
+                        config={{
+                          mode: "auto"
+                        }}
+                        className="uploadthing-custom w-full"
+                        appearance={{
+                          button: "flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit",
+                          allowedContent: "hidden",
+                        }}
+                        onUploadBegin={(name) => {
+                          console.log('🚀 ID upload begin for file:', name);
+                        }}
+                        onUploadProgress={(progress) => {
+                          console.log('📊 ID upload progress:', progress, '%');
+                        }}
+                        onUploadAborted={() => {
+                          console.warn('⚠️ ID upload was aborted');
+                          toast({
+                            title: "Upload Cancelled",
+                            description: "ID upload was cancelled or timed out",
+                            variant: "destructive"
+                          });
+                        }}
+                        content={{
+                          button: ({ ready, isUploading }) => (
+                            <div className="inline-flex flex-col items-center justify-center gap-3">
+                              {isUploading ? (
+                                <Loader2 className="w-8 h-8 text-secondaryBrand animate-spin" />
+                              ) : (
+                                <Upload className="w-8 h-8 text-secondaryBrand" />
+                              )}
 
-                          <div className="flex items-center gap-2 w-full">
-                            <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                              Drag and drop file or
+                              <div className="flex items-center gap-2 w-full">
+                                <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                                  {isUploading ? "Uploading..." : "Drag and drop file or"}
+                                </div>
+                                {!isUploading && (
+                                  <span className="font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] underline">
+                                    Browse
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                            <div className="font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)]">
-                              Browse
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                          ),
+                        }}
+                        onBeforeUploadBegin={(files) => {
+                          console.log('📤 ID onBeforeUploadBegin called with', files.length, 'files');
+                          
+                          // Validate files
+                          const maxFiles = 5;
+                          const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                          const maxSize = 50 * 1024 * 1024; // 50MB
+                          
+                          const errors: string[] = [];
+                          
+                          if (files.length > maxFiles) {
+                            errors.push(`You can only upload up to ${maxFiles} files at once.`);
+                          }
+                          
+                          files.forEach((file) => {
+                            if (!allowedTypes.includes(file.type.toLowerCase())) {
+                              const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
+                              errors.push(`File "${file.name}" has unsupported type "${fileExtension}". Please use PNG or JPG files only.`);
+                            }
+                            
+                            if (file.size > maxSize) {
+                              errors.push(`File "${file.name}" is too large. Maximum size is 50MB.`);
+                            }
+                          });
+                          
+                          if (errors.length > 0) {
+                            errors.forEach((error, index) => {
+                              setTimeout(() => {
+                                toast({
+                                  title: "Upload Error",
+                                  description: error,
+                                  variant: "destructive"
+                                });
+                              }, index * 100);
+                            });
+                            return [];
+                          }
+                          
+                          return files;
+                        }}
+                        onClientUploadComplete={(res) => {
+                          console.log('✅ ID upload complete:', res);
+                          handleUploadFinish(res);
+                          
+                          toast({
+                            title: "Upload Successful",
+                            description: `Successfully uploaded ${res.length} ID photo${res.length !== 1 ? 's' : ''}.`,
+                            variant: "default"
+                          });
+                        }}
+                        onUploadError={(error) => {
+                          console.error("💥 ID upload error:", error);
+                          toast({
+                            title: "Upload Error",
+                            description: error.message || "Failed to upload ID photos. Please try again.",
+                            variant: "destructive"
+                          });
+                        }}
+                      />
 
                       <div className="flex items-center gap-1 w-full">
                         <div className="flex-1 font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
