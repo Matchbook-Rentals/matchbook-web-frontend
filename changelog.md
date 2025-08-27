@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix React lint errors for unescaped entities
+- Fixed unescaped apostrophes in lease-signing components by replacing with &apos;
+- Fixed unescaped quotes in copy-listing-button by replacing with &quot;
+- Removed hardcoded signer index assumptions from lease signing logic
+
 ## Complete trip searches interface with edit and delete functionality
 - Built comprehensive search trips page based on zipped design template
 - Created reusable SearchCard component with responsive design and proper trip data display

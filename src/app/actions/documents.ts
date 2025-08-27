@@ -90,15 +90,6 @@ async function sendNextSignerNotification(
       return
     }
 
-    await createNotification({
-      actionType: 'lease_signature_required',
-      actionId: documentId,
-      content: `Please sign the lease document: ${documentTitle}`,
-      url: `/app/documents/${documentId}/sign`,
-      unread: true,
-      userId: user.id,
-    })
-
     console.log(`✅ Sent signing notification to ${nextSigner.name}`)
   } catch (error) {
     console.error('❌ Error sending next signer notification:', error)

@@ -68,6 +68,7 @@ interface PDFEditorProps {
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
   onDocumentCreated?: (documentId: string) => void;
+  customSidebarContent?: (workflowState: WorkflowState, defaultContent: JSX.Element) => JSX.Element;
 }
 
 export const PDFEditor: React.FC<PDFEditorProps> = ({ 
@@ -83,7 +84,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   onSave, 
   onCancel,
   onFinish,
-  onDocumentCreated
+  onDocumentCreated,
+  customSidebarContent
 }) => {
   const router = useRouter();
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
@@ -97,6 +99,18 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [pageWidth, setPageWidth] = useState(800);
   const [workflowState, setWorkflowState] = useState<WorkflowState>(initialWorkflowState);
   const [signedFields, setSignedFields] = useState<Record<string, any>>({});
+  
+  // Debug log for signedFields changes
+  useEffect(() => {
+    console.log('🔍 PDFEditor - signedFields updated:', signedFields);
+    Object.entries(signedFields).forEach(([fieldId, value]) => {
+      console.log(`🔍 PDFEditor - signedField[${fieldId}]:`, {
+        value,
+        valueType: typeof value,
+        valueKeys: value && typeof value === 'object' ? Object.keys(value) : null
+      });
+    });
+  }, [signedFields]);
   const [stepCompleted, setStepCompleted] = useState(false);
   
   // Interaction mode state
@@ -1370,6 +1384,101 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }));
   };
 
+  // Render default sidebar content
+  const renderDefaultSidebarContent = () => {
+    return (
+      <>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">PDF Editor</h1>
+            <div className="text-sm text-gray-500 mt-1">
+              {workflowState === 'template' && (
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  Template Design
+                </span>
+              )}
+              {workflowState === 'document' && (
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  Create Document
+                </span>
+              )}
+              {workflowState === 'signer1' && `Signing as ${recipients[0]?.name}`}
+              {workflowState === 'signer2' && `Signing as ${recipients[1]?.name}`}
+              {workflowState === 'completed' && 'Document Complete'}
+            </div>
+          </div>
+        </div>
+
+        {/* Default signing interface for signer2 */}
+        {workflowState === 'signer2' && (
+          <>
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <div 
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
+                    style={{ backgroundColor: getCurrentSigner()?.color }}
+                  >
+                    {getCurrentSigner()?.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-medium">{getCurrentSigner()?.name}</div>
+                    <div className="text-sm text-gray-500">{getCurrentSigner()?.email}</div>
+                  </div>
+                </div>
+                
+                {/* Validation Status */}
+                <div className="mb-3 space-y-2">
+                  {validationStatus === 'valid' && fieldsValidated && (
+                    <div className="flex items-center gap-2 text-sm text-green-600">
+                      <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                      Document data validated - {fields.length} fields loaded
+                    </div>
+                  )}
+                </div>
+                
+                <p className="text-sm text-gray-600">
+                  Click on the fields assigned to you to fill them out and sign the document.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Fields to sign */}
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <h3 className="font-medium mb-3">Your Fields to Complete</h3>
+                <div className="space-y-2">
+                  {fields
+                    .filter(f => f.recipientIndex === 1)
+                    .filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type))
+                    .map(field => (
+                      <div key={field.formId} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{FRIENDLY_FIELD_TYPE[field.type]}</span>
+                          <span className="text-xs text-gray-500">Page {field.pageNumber}</span>
+                        </div>
+                        <div className="text-xs">
+                          {signedFields[field.formId] ? (
+                            <Badge variant="default" className="bg-green-500">✓ Signed</Badge>
+                          ) : (
+                            <Badge variant="outline">Pending</Badge>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </>
+    );
+  };
+
   // Load template functionality
   const loadTemplate = async (template: PdfTemplate) => {
     try {
@@ -1604,8 +1713,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       if (document.fieldValues && document.fieldValues.length > 0) {
         // Convert the field values array to an object keyed by fieldId
         document.fieldValues.forEach(fieldValue => {
-          existingSignedFields[fieldValue.fieldId] = fieldValue.value;
-          console.log(`📝 Loaded signed value for ${fieldValue.fieldId}: "${fieldValue.value}" (signer: ${fieldValue.signerIndex})`);
+          // Check if the value is a signature object and handle it safely
+          let displayValue = fieldValue.value;
+          if (typeof fieldValue.value === 'object' && fieldValue.value !== null && 'type' in fieldValue.value) {
+            console.log(`🔍 Found signature object for ${fieldValue.fieldId}:`, fieldValue.value);
+            // For signature objects, just store a boolean to indicate it's signed
+            displayValue = true;
+          }
+          
+          existingSignedFields[fieldValue.fieldId] = displayValue;
+          console.log(`📝 Loaded signed value for ${fieldValue.fieldId}: "${displayValue}" (signer: ${fieldValue.signerIndex})`);
         });
         
         console.log('📝 All existing signed fields loaded:', existingSignedFields);
@@ -2380,553 +2497,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         {/* Sidebar */}
         <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto overflow-x-hidden">
         <div className="p-4">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">PDF Editor</h1>
-              <div className="text-sm text-gray-500 mt-1">
-                {workflowState === 'template' && (
-                  <span className="inline-flex items-center gap-1">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                    Template Design
-                  </span>
-                )}
-                {workflowState === 'document' && (
-                  <span className="inline-flex items-center gap-1">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    Create Document
-                  </span>
-                )}
-                {workflowState === 'signer1' && `Signing as ${recipients[0]?.name}`}
-                {workflowState === 'signer2' && `Signing as ${recipients[1]?.name}`}
-                {workflowState === 'completed' && 'Document Complete'}
-              </div>
-            </div>
-          </div>
-
-          {/* Workflow-specific content */}
-          {workflowState === 'template' && (
-            <>
-              {/* Recipients - Now visible in template mode */}
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-4"
-                    onClick={() => toggleAccordion('recipients')}
-                  >
-                    <h3 className="font-medium">Recipients</h3>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        accordionStates.recipients ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </div>
-                  {accordionStates.recipients && (
-                    <div>
-                      <RecipientManager
-                        recipients={recipients}
-                        selectedRecipient={selectedRecipient}
-                        onSelectRecipient={setSelectedRecipient}
-                        onAddRecipient={addRecipient}
-                        onRemoveRecipient={removeRecipient}
-                      />
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Required/Frequently Used Fields Quick Add */}
-              {templateType === 'lease' ? (
-                <RequiredLeaseFields
-                  accordionState={accordionStates.requiredFields}
-                  onToggleAccordion={() => toggleAccordion('requiredFields')}
-                  getRequiredFieldStatus={getRequiredFieldStatus}
-                  startFieldDetection={startFieldDetection}
-                />
-              ) : (
-                <FrequentlyUsedFields
-                  accordionState={accordionStates.requiredFields}
-                  onToggleAccordion={() => toggleAccordion('requiredFields')}
-                  startFieldDetection={startFieldDetection}
-                />
-              )}
-
-              {/* Field Selector for Template */}
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-4"
-                    onClick={() => toggleAccordion('fieldTypes')}
-                  >
-                    <h3 className="font-medium">Field Types</h3>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        accordionStates.fieldTypes ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </div>
-                  {accordionStates.fieldTypes && (
-                    <div>
-                      <FieldSelector
-                        selectedField={selectedField}
-                        onSelectedFieldChange={(fieldType) => {
-                          setSelectedField(fieldType);
-                          setPendingFieldLabel(null); // Clear any pending label from required field buttons
-                        }}
-                        onStartDrag={(fieldType, mouseEvent) => {
-                          const recipientToUse = selectedRecipient || recipients[0]?.id;
-                          if (recipientToUse) {
-                            startFieldDetection(fieldType, recipientToUse, mouseEvent);
-                          }
-                        }}
-                        disabled={recipients.length === 0}
-                      />
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Template Stats */}
-              <Card>
-                <CardContent className="p-3">
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <div className="flex justify-between">
-                      <span>Template Fields:</span>
-                      <Badge variant="secondary">{fields.length}</Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-            </>
-          )}
-
-          {workflowState === 'document' && !pdfFile && showTripConfiguration && (
-            <TripConfiguration
-              defaultValues={tripMatchDetails || undefined}
-              onConfigure={handleTripConfiguration}
-              onCancel={() => setWorkflowState('selection')}
-            />
-          )}
-
-          {workflowState === 'document' && !pdfFile && !showTripConfiguration && (
-            <>
-              <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Create Document</h3>
-                <p className="text-sm text-gray-600">Choose a template to create a new document from</p>
-              </div>
-
-              <DocumentTemplateSelector
-                onLoadTemplate={loadTemplate}
-                onClose={() => setWorkflowState('selection')}
-              />
-            </>
-          )}
-
-          {workflowState === 'document' && pdfFile && (
-            <>
-              {/* Real People & Document Values */}
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-4"
-                    onClick={() => toggleAccordion('documentInfo')}
-                  >
-                    <h3 className="font-medium">Document Information</h3>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        accordionStates.documentInfo ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </div>
-                  {accordionStates.documentInfo && (
-                    <div>
-                  
-                  {/* People Section */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-3">People</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="text-xs text-gray-600">Host Name</label>
-                        <input 
-                          type="text"
-                          defaultValue={tripMatchDetails?.hostName || "John Smith"}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            // Update recipient name and all host name fields
-                            const newRecipients = recipients.map(r => 
-                              r.role === 'HOST' ? { ...r, name: e.target.value } : r
-                            );
-                            setRecipients(newRecipients);
-                            
-                            // Update all host name fields
-                            const newSignedFields = { ...signedFields };
-                            fields.forEach(field => {
-                              if (field.type === 'NAME' && (field.signerEmail?.includes('host') || field.recipientIndex === 0)) {
-                                newSignedFields[field.formId] = e.target.value;
-                              }
-                            });
-                            setSignedFields(newSignedFields);
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-600">Host Email</label>
-                        <input 
-                          type="email"
-                          defaultValue={tripMatchDetails?.hostEmail || "host@host.com"}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            const newRecipients = recipients.map(r => 
-                              r.role === 'HOST' ? { ...r, email: e.target.value } : r
-                            );
-                            setRecipients(newRecipients);
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-600">Renter Name</label>
-                        <input 
-                          type="text"
-                          defaultValue={tripMatchDetails?.primaryRenterName || "Jane Doe"}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            // Update recipient name and all renter name fields
-                            const newRecipients = recipients.map(r => 
-                              r.role === 'RENTER' ? { ...r, name: e.target.value } : r
-                            );
-                            setRecipients(newRecipients);
-                            
-                            // Update all renter name fields
-                            const newSignedFields = { ...signedFields };
-                            fields.forEach(field => {
-                              if (field.type === 'NAME' && (field.signerEmail?.includes('renter') || field.recipientIndex === 1)) {
-                                newSignedFields[field.formId] = e.target.value;
-                              }
-                            });
-                            setSignedFields(newSignedFields);
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-600">Renter Email</label>
-                        <input 
-                          type="email"
-                          defaultValue={tripMatchDetails?.primaryRenterEmail || "renter@renter.com"}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            const newRecipients = recipients.map(r => 
-                              r.role === 'RENTER' ? { ...r, email: e.target.value } : r
-                            );
-                            setRecipients(newRecipients);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Lease Details Section */}
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-700 mb-3">Lease Details</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="text-xs text-gray-600">Monthly Rent</label>
-                        <input 
-                          type="text"
-                          defaultValue={tripMatchDetails?.monthlyPrice || "2,500.00"}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            // Update any rent fields
-                            const newSignedFields = { ...signedFields };
-                            fields.forEach(field => {
-                              if (field.type === 'TEXT' || field.type === 'NUMBER') {
-                                // You could add more sophisticated field matching here
-                                if (field.pageY < 50) { // Top of page fields
-                                  newSignedFields[field.formId] = e.target.value;
-                                }
-                              }
-                            });
-                            setSignedFields(newSignedFields);
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-600">Start Date</label>
-                        <input 
-                          type="date"
-                          defaultValue={tripMatchDetails?.startDate || new Date().toISOString().split('T')[0]}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            const newSignedFields = { ...signedFields };
-                            fields.forEach(field => {
-                              if (field.type === 'DATE' && field.pageY < 50) {
-                                newSignedFields[field.formId] = e.target.value;
-                              }
-                            });
-                            setSignedFields(newSignedFields);
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-600">End Date</label>
-                        <input 
-                          type="date"
-                          defaultValue={tripMatchDetails?.endDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            const newSignedFields = { ...signedFields };
-                            fields.forEach(field => {
-                              if (field.type === 'DATE' && field.pageY >= 50) {
-                                newSignedFields[field.formId] = e.target.value;
-                              }
-                            });
-                            setSignedFields(newSignedFields);
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-600">Property Address</label>
-                        <input 
-                          type="text"
-                          defaultValue={tripMatchDetails?.propertyAddress || "123 Main St, New York, NY 10001"}
-                          className="w-full text-sm border rounded px-2 py-1"
-                          onChange={(e) => {
-                            const newSignedFields = { ...signedFields };
-                            fields.forEach(field => {
-                              if ((field.type === 'TEXT' || field.type === 'TEXTAREA') && 
-                                  (field.fieldMeta?.label?.toLowerCase().includes('address') || 
-                                   field.fieldMeta?.label?.toLowerCase().includes('property') ||
-                                   field.fieldMeta?.label?.toLowerCase().includes('location'))) {
-                                newSignedFields[field.formId] = e.target.value;
-                              }
-                            });
-                            setSignedFields(newSignedFields);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Recipients */}
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-4"
-                    onClick={() => toggleAccordion('recipients')}
-                  >
-                    <h3 className="font-medium">Recipients</h3>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        accordionStates.recipients ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </div>
-                  {accordionStates.recipients && (
-                    <div>
-                      <RecipientManager
-                        recipients={recipients}
-                        selectedRecipient={selectedRecipient}
-                        onSelectRecipient={setSelectedRecipient}
-                        onAddRecipient={addRecipient}
-                        onRemoveRecipient={removeRecipient}
-                      />
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Field Selector */}
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-4"
-                    onClick={() => toggleAccordion('fieldTypes')}
-                  >
-                    <h3 className="font-medium">Field Types</h3>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        accordionStates.fieldTypes ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </div>
-                  {accordionStates.fieldTypes && (
-                    <div>
-                      <FieldSelector
-                        selectedField={selectedField}
-                        onSelectedFieldChange={(fieldType) => {
-                          setSelectedField(fieldType);
-                          setPendingFieldLabel(null); // Clear any pending label from required field buttons
-                        }}
-                        onStartDrag={(fieldType, mouseEvent) => {
-                          const recipientToUse = selectedRecipient || recipients[0]?.id;
-                          if (recipientToUse) {
-                            startFieldDetection(fieldType, recipientToUse, mouseEvent);
-                          }
-                        }}
-                        disabled={recipients.length === 0}
-                      />
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Document Stats */}
-              <Card>
-                <CardContent className="p-3">
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <div className="flex justify-between">
-                      <span>Recipients:</span>
-                      <Badge variant="secondary">{recipients.length}</Badge>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Fields:</span>
-                      <Badge variant="secondary">{fields.length}</Badge>
-                    </div>
-                    {selectedRecipientData && (
-                      <div className="flex justify-between">
-                        <span>Selected:</span>
-                        <div className="flex items-center gap-1">
-                          <div 
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: selectedRecipientData.color }}
-                          />
-                          <span className="text-xs">{selectedRecipientData.name}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </>
-          )}
-
-          {/* Signing interface for signer1 and signer2 */}
-          {(workflowState === 'signer1' || workflowState === 'signer2') && (
-            <>
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div 
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
-                      style={{ backgroundColor: getCurrentSigner()?.color }}
-                    >
-                      {getCurrentSigner()?.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="font-medium">{getCurrentSigner()?.name}</div>
-                      <div className="text-sm text-gray-500">{getCurrentSigner()?.email}</div>
-                    </div>
-                  </div>
-                  
-                  {/* Validation Status */}
-                  <div className="mb-3 space-y-2">
-                    {/* Data Validation */}
-                    {validationStatus === 'validating' && (
-                      <div className="flex items-center gap-2 text-sm text-blue-600">
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
-                        Validating document data...
-                      </div>
-                    )}
-                    {validationStatus === 'valid' && fieldsValidated && (
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">✓</span>
-                        </div>
-                        Document data validated - {fields.length} fields loaded
-                      </div>
-                    )}
-                    {validationStatus === 'invalid' && (
-                      <div className="flex items-center gap-2 text-sm text-red-600">
-                        <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">⚠</span>
-                        </div>
-                        Document validation failed - please reload
-                      </div>
-                    )}
-                    
-                    {/* Rendering Validation - Hidden in production, kept for debugging */}
-                    {process.env.NODE_ENV === 'development' && (
-                      <>
-                        {validationStatus === 'valid' && renderingStatus === 'checking' && (
-                          <div className="flex items-center gap-2 text-sm text-blue-600">
-                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
-                            Checking field visibility...
-                          </div>
-                        )}
-                        {renderingStatus === 'failed' && (
-                          <div className="flex items-center gap-2 text-sm text-red-600">
-                            <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs">⚠</span>
-                            </div>
-                            Some fields not visible - <button 
-                              onClick={validateFieldRendering}
-                              className="underline hover:no-underline"
-                            >
-                              retry validation
-                            </button>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                  
-                  <p className="text-sm text-gray-600">
-                    Click on the fields assigned to you to fill them out and sign the document.
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Fields to sign */}
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <h3 className="font-medium mb-3">Your Fields to Complete</h3>
-                  <div className="space-y-2">
-                    {fields
-                      .filter(f => f.recipientIndex === (workflowState === 'signer1' ? 0 : 1))
-                      .filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type))
-                      .map(field => (
-                        <div key={field.formId} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm">{FRIENDLY_FIELD_TYPE[field.type]}</span>
-                            <span className="text-xs text-gray-500">Page {field.pageNumber}</span>
-                          </div>
-                          <div className="text-xs">
-                            {signedFields[field.formId] ? (
-                              <Badge variant="default" className="bg-green-500">✓ Signed</Badge>
-                            ) : (
-                              <Badge variant="outline">Pending</Badge>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-            </>
-          )}
-
-          {/* Completion interface */}
-          {workflowState === 'completed' && (
-            <>
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-white text-2xl">✓</span>
-                    </div>
-                    <h3 className="font-bold text-lg mb-2">Document Complete!</h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      All signers have completed their fields. You can now download the final signed document.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-            </>
+          {/* Use custom sidebar content if provided, otherwise use default */}
+          {customSidebarContent ? (
+            customSidebarContent(workflowState, renderDefaultSidebarContent())
+          ) : (
+            renderDefaultSidebarContent()
           )}
         </div>
         </div>

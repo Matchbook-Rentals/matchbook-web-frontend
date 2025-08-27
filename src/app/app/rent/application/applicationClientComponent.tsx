@@ -234,9 +234,6 @@ export default function ApplicationClientComponent({
           {/* Identification Section */}
           <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
             <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-              <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
-                Identification
-              </h2>
               <Identification />
             </div>
           </section>

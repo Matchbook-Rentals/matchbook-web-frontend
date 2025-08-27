@@ -107,7 +107,18 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
   
   // If we have a signed value and should show values, use that instead (but only if there's actually a value)
   if (showValues && signedValue !== undefined && signedValue !== null && signedValue !== '') {
-    textToDisplay = signedValue;
+    // Handle signature objects properly - extract the actual text value
+    if (typeof signedValue === 'object' && signedValue !== null) {
+      if (signedValue.type === 'typed' && signedValue.value) {
+        textToDisplay = signedValue.value;
+      } else if (signedValue.type === 'drawn') {
+        textToDisplay = '[Signature Image]'; // Placeholder for drawn signatures
+      } else {
+        textToDisplay = signedValue.value || signedValue.toString?.() || '[Signed]';
+      }
+    } else {
+      textToDisplay = signedValue;
+    }
   }
 
   // For signature, name, initials, and sign date fields, show recipient-specific labels

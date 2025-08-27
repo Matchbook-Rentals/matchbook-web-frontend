@@ -98,7 +98,7 @@ export default function CopyListingButton({
           <AlertDialogTitle>Copy Listing to Admin Account?</AlertDialogTitle>
           <AlertDialogDescription className="space-y-3">
             <p>
-              This will create a complete copy of "<strong>{listingTitle}</strong>" and assign it to your admin account.
+              This will create a complete copy of &quot;<strong>{listingTitle}</strong>&quot; and assign it to your admin account.
             </p>
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
               <p className="text-sm text-yellow-800 font-medium">⚠️ Troubleshooting Only</p>
@@ -106,7 +106,7 @@ export default function CopyListingButton({
                 This feature is intended for troubleshooting purposes. The copied listing will be:
               </p>
               <ul className="text-sm text-yellow-700 mt-2 space-y-1">
-                <li>• Prefixed with "[ADMIN COPY]" in the title</li>
+                <li>• Prefixed with &quot;[ADMIN COPY]&quot; in the title</li>
                 <li>• Marked as a test listing</li>
                 <li>• Set to pending review status</li>
                 <li>• Assigned to your admin account</li>

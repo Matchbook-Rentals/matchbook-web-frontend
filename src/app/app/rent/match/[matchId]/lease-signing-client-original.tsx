@@ -12,8 +12,6 @@ import { MatchWithRelations } from '@/types';
 import { PaymentMethodSelector } from '@/components/stripe/payment-method-selector';
 import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
 import { PDFEditor } from '@/components/pdf-editor/PDFEditor';
-import { RenterSidebarFrame } from './renter-sidebar-frame';
-import { BookingSummarySidebar } from './booking-summary-sidebar';
 
 interface LeaseSigningClientProps {
   match: MatchWithRelations;
@@ -112,28 +110,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                   return field;
                 });
                 
-                console.log('📄 All fields structure check:', fields.map((f: any, index: number) => ({
-                  index,
-                  id: f.formId,
-                  type: f.type,
-                  typeOf: typeof f.type,
-                  typeKeys: f.type && typeof f.type === 'object' ? Object.keys(f.type) : null,
-                  value: f.value,
-                  valueOf: typeof f.value,
-                  valueKeys: f.value && typeof f.value === 'object' ? Object.keys(f.value) : null,
-                  signerIndex: f.signerIndex,
-                  fieldMeta: f.fieldMeta,
-                  fieldMetaKeys: f.fieldMeta && typeof f.fieldMeta === 'object' ? Object.keys(f.fieldMeta) : null
-                })));
-                
                 console.log('📄 Fields with merged values:', fields.filter((f: any) => f.value).map((f: any) => ({
                   id: f.formId,
                   type: f.type,
-                  typeOf: typeof f.type,
                   value: f.value,
-                  valueOf: typeof f.value,
-                  signerIndex: f.signerIndex,
-                  fieldMeta: f.fieldMeta
+                  signerIndex: f.signerIndex
                 })));
               }
               
@@ -362,6 +343,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   // Debug function to manually trigger payment step (for testing)
   const handleManualPaymentTrigger = () => {
     console.log('🧪 Manually triggering payment step for testing');
+    setEmbedUrl(null);
     setLeaseCompleted(true);
     setShowPaymentSelector(true);
     toast({
@@ -465,14 +447,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   const isPaymentCaptured = !!match.paymentCapturedAt;
   const hasPaymentMethod = !!match.stripePaymentMethodId;
 
-  // Add state for overview vs signing mode
-  const [showSigningMode, setShowSigningMode] = useState(false);
-
   // Determine current step
   const getCurrentStep = () => {
     if (!hasLeaseDocument) return 'no-lease-document';
-    if (!isLeaseSigned && !showSigningMode) return 'overview-lease';
-    if (!isLeaseSigned && showSigningMode) return 'sign-lease';
+    if (!isLeaseSigned) return 'sign-lease';
     if (isLeaseSigned && hasPaymentMethod && !isPaymentCompleted) return 'payment-method-exists';
     if (!isPaymentCompleted) return 'complete-payment';
     return 'completed';
@@ -763,7 +741,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto p-4 ">
+      <div className="container mx-auto p-4 max-w-6xl">
         {/* Header */}
         <div className="mb-6">
           <Button
@@ -775,84 +753,166 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             Back
           </Button>
           
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {currentStep === 'no-lease-document' ? 'Lease Being Prepared' :
+             currentStep === 'sign-lease' ? 'Review and Sign Lease' :
+             currentStep === 'complete-payment' ? 'Complete Payment' :
+             currentStep === 'payment-method-exists' ? 'Complete Payment' :
+             currentStep === 'completed' ? 'Booking Complete' : 'Lease Management'}
+          </h1>
+          <p className="text-gray-600">
+            {currentStep === 'no-lease-document' ? `Your host is preparing your lease for ${match.listing.locationString}` :
+             currentStep === 'sign-lease' ? `Please review your lease agreement for ${match.listing.locationString}` :
+             currentStep === 'complete-payment' ? `Complete your booking by paying for ${match.listing.locationString}` :
+             currentStep === 'payment-method-exists' ? `Complete your payment for ${match.listing.locationString}` :
+             currentStep === 'completed' ? `Congratulations! Your booking at ${match.listing.locationString} is complete` :
+             `Manage your lease for ${match.listing.locationString}`}
+          </p>
           
           
         </div>
 
-        <div className={`grid grid-cols-1 gap-6 ${currentStep === 'sign-lease' ? '' : 'lg:grid-cols-3'}`}>
+        <div className={`grid grid-cols-1 gap-6 ${currentStep === 'sign-lease' ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
           {/* Sidebar - shows different content based on step */}
-          {currentStep !== 'sign-lease' && (
-            <div className="lg:col-span-1">
-              {currentStep === 'overview-lease' ? (
-                <BookingSummarySidebar match={match} />
-              ) : (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Home className="w-5 h-5" />
-                      Property Details
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{match.listing.locationString}</h3>
-                      <p className="text-sm text-gray-600">{match.listing.propertyType}</p>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-green-600" />
-                      <span className="font-semibold">${match.monthlyRent}/month</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-blue-600" />
-                      <div>
-                        <p className="text-sm text-gray-600">Check-in</p>
-                        <p className="font-medium">{new Date(match.trip.startDate).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-red-600" />
-                      <div>
-                        <p className="text-sm text-gray-600">Check-out</p>
-                        <p className="font-medium">{new Date(match.trip.endDate).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-
-                    {/* Payment Breakdown - only show on non-signing steps */}
-                    {currentStep !== 'sign-lease' && (
-                      <div className="pt-4 border-t">
-                        <h4 className="font-semibold mb-3">Payment Due at Booking</h4>
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Rent Due at Booking</span>
-                            <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Application Fee (3%)</span>
-                            <span className="font-medium">${getPaymentBreakdown(hasPaymentMethod ? undefined : previewPaymentMethod).applicationFee.toFixed(2)}</span>
-                          </div>
-                          {!hasPaymentMethod && previewPaymentMethod === 'card' && (
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-600">Processing Fee (2.9% + $0.30)</span>
-                              <span className="font-medium">${getPaymentBreakdown(previewPaymentMethod).processingFee.toFixed(2)}</span>
+          <div className="lg:col-span-1">
+            {currentStep === 'sign-lease' && documentFields.length > 0 ? (
+              // Signing Progress Sidebar
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="w-5 h-5" />
+                    Signing Progress
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{match.listing.locationString}</h3>
+                    <p className="text-sm text-gray-600">{match.listing.propertyType}</p>
+                  </div>
+                  
+                  {/* Signing Progress */}
+                  <div className="pt-4 border-t">
+                    <h4 className="font-semibold mb-3">Fields to Sign</h4>
+                    <div className="space-y-3">
+                      {(() => {
+                        // Get fields for signer2 (tenant)
+                        const tenantFields = documentFields.filter(field => field.recipientIndex === 1);
+                        const signatureFields = tenantFields.filter(field => ['SIGNATURE', 'INITIALS'].includes(field.type));
+                        const otherFields = tenantFields.filter(field => !['SIGNATURE', 'INITIALS'].includes(field.type));
+                        
+                        return (
+                          <>
+                            {signatureFields.length > 0 && (
+                              <div>
+                                <p className="text-sm font-medium text-gray-700 mb-2">Signatures Required</p>
+                                {signatureFields.map((field, index) => (
+                                  <div key={field.formId} className="flex items-center gap-2 py-1">
+                                    <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
+                                    <span className="text-sm text-gray-600">
+                                      {field.type === 'SIGNATURE' ? 'Signature' : 'Initials'} {index + 1}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            
+                            {otherFields.length > 0 && (
+                              <div>
+                                <p className="text-sm font-medium text-gray-700 mb-2">Information Fields</p>
+                                {otherFields.map((field) => (
+                                  <div key={field.formId} className="flex items-center gap-2 py-1">
+                                    <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
+                                    <span className="text-sm text-gray-600">
+                                      {field.fieldMeta?.label || field.type}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            
+                            <div className="pt-3 border-t">
+                              <div className="text-center">
+                                <p className="text-sm text-gray-500">
+                                  {signatureFields.length + otherFields.length} fields remaining
+                                </p>
+                              </div>
                             </div>
-                          )}
-                          <div className="flex justify-between border-t pt-2 font-semibold">
-                            <span>Total Due Today</span>
-                            <span className="text-green-600">${calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod).toFixed(2)}</span>
+                          </>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              // Property Details Sidebar (for other steps)
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Home className="w-5 h-5" />
+                    Property Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{match.listing.locationString}</h3>
+                    <p className="text-sm text-gray-600">{match.listing.propertyType}</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-green-600" />
+                    <span className="font-semibold">${match.monthlyRent}/month</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <div>
+                      <p className="text-sm text-gray-600">Check-in</p>
+                      <p className="font-medium">{new Date(match.trip.startDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-red-600" />
+                    <div>
+                      <p className="text-sm text-gray-600">Check-out</p>
+                      <p className="font-medium">{new Date(match.trip.endDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+
+                  {/* Payment Breakdown - only show on non-signing steps */}
+                  {currentStep !== 'sign-lease' && (
+                    <div className="pt-4 border-t">
+                      <h4 className="font-semibold mb-3">Payment Due at Booking</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Rent Due at Booking</span>
+                          <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Application Fee (3%)</span>
+                          <span className="font-medium">${getPaymentBreakdown(hasPaymentMethod ? undefined : previewPaymentMethod).applicationFee.toFixed(2)}</span>
+                        </div>
+                        {!hasPaymentMethod && previewPaymentMethod === 'card' && (
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Processing Fee (2.9% + $0.30)</span>
+                            <span className="font-medium">${getPaymentBreakdown(previewPaymentMethod).processingFee.toFixed(2)}</span>
                           </div>
+                        )}
+                        <div className="flex justify-between border-t pt-2 font-semibold">
+                          <span>Total Due Today</span>
+                          <span className="text-green-600">${calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod).toFixed(2)}</span>
                         </div>
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
           {/* Main Content */}
-          <div className={currentStep === 'sign-lease' ? '' : 'lg:col-span-2'}>
+          <div className={currentStep === 'sign-lease' ? 'lg:col-span-3' : 'lg:col-span-2'}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -894,40 +954,18 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       </div>
                     )}
                   </div>
-                ) : currentStep === 'overview-lease' && !isLoading && documentInstance && documentPdfFile ? (
-                  <div className="space-y-4">
-                    <div className="text-center py-12">
-                      <FileText className="w-16 h-16 text-blue-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        Review Your Lease Agreement
-                      </h3>
-                      <p className="text-gray-600 mb-6">
-                        Your lease document is ready for review and signing. Take a moment to review the booking details and then proceed to sign.
-                      </p>
-                      <div className="flex gap-3 justify-center">
-                        <Button 
-                          onClick={handleViewLease}
-                          variant="outline"
-                          size="lg"
-                        >
-                          <FileText className="w-4 h-4 mr-2" />
-                          Preview Document
-                        </Button>
-                        <Button 
-                          onClick={() => setShowSigningMode(true)}
-                          size="lg"
-                        >
-                          Continue to Sign
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
                 ) : currentStep === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
                   <div className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-blue-800 text-sm">
+                        📋 Please review all terms carefully before signing. 
+                        You can ask questions or request changes before finalizing the agreement.
+                      </p>
+                    </div>
                     
                     <div className="min-h-[600px]">
                       <PDFEditor
-                        initialWorkflowState="document"
+                        initialWorkflowState="signer2"
                         initialPdfFile={documentPdfFile}
                         initialFields={documentFields}
                         initialRecipients={documentRecipients}
@@ -938,13 +976,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                             description: "You can return to sign the lease at any time.",
                           });
                         }}
-                        customSidebarContent={(workflowState, defaultSidebar) => (
-                          <RenterSidebarFrame 
-                            match={match} 
-                            documentFields={documentFields}
-                            fieldsStatus={{}}
-                          />
-                        )}
                       />
                     </div>
                   </div>
