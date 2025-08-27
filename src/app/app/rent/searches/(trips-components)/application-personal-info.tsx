@@ -5,6 +5,7 @@ import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles, Application
 import { useApplicationStore } from '@/stores/application-store';
 import { Checkbox } from "@/components/ui/checkbox";
 import { format } from 'date-fns';
+import { CalendarIcon } from "@radix-ui/react-icons";
 
 export const PersonalInfo: React.FC = () => {
   const { personalInfo, setPersonalInfo, errors } = useApplicationStore();
@@ -49,100 +50,146 @@ export const PersonalInfo: React.FC = () => {
     });
   };
 
+  const formFields = [
+    { label: "First Name", placeholder: "Enter First Name" },
+    { label: "Last Name", placeholder: "Enter Last Name" },
+    { label: "Middle Name", placeholder: "Enter Middle Name" },
+    { label: "Email", placeholder: "Enter Email" },
+    { label: "Date of Birth", placeholder: "Select Date of Birth" },
+  ];
+
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName" className={ApplicationItemLabelStyles}>First Name</Label>
-          <Input
-            id="firstName"
-            name="firstName"
-            value={personalInfo.firstName}
-            onChange={handleInputChange}
-            placeholder="John"
-            className={error?.firstName ? "border-red-500" : ApplicationItemInputStyles}
-          />
-          {error?.firstName && <p className="mt-1 text-red-500 text-sm">{error.firstName}</p>}
+    <>
+      <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+              <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  {formFields[0].label}
+                </Label>
+                <span className="text-red-500 ml-1">*</span>
+              </div>
+              <Input
+                name="firstName"
+                value={personalInfo.firstName}
+                onChange={handleInputChange}
+                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                placeholder={formFields[0].placeholder}
+              />
+              {error?.firstName && <p className="mt-1 text-red-500 text-sm">{error.firstName}</p>}
+            </div>
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName" className={ApplicationItemLabelStyles}>Last Name</Label>
-          <Input
-            id="lastName"
-            name="lastName"
-            value={personalInfo.lastName}
-            onChange={handleInputChange}
-            placeholder="Doe"
-            className={error?.lastName ? "border-red-500" : ApplicationItemInputStyles}
-          />
-          {error?.lastName && <p className="mt-1 text-red-500 text-sm">{error.lastName}</p>}
-        </div>
-      </div>
-      
-      {/* Middle Name Section */}
-      <div className="space-y-2">
-        <Label htmlFor="middleName" className={ApplicationItemLabelStyles}>Middle Name</Label>
-        <div className="flex gap-4">
-          <div className="w-1/2  flex ">
+
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+              <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                {formFields[1].label}
+              </Label>
+              <span className="text-red-500 ml-1">*</span>
+            </div>
             <Input
-              id="middleName"
-              name="middleName"
-              value={personalInfo.middleName || ''}
+              name="lastName"
+              value={personalInfo.lastName}
               onChange={handleInputChange}
-              placeholder="Middle Name"
-              disabled={personalInfo.noMiddleName}
-              className={error?.middleName ? "border-red-500" : ApplicationItemInputStyles}
+              className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+              placeholder={formFields[1].placeholder}
             />
-            {error?.middleName && <p className="mt-1 text-red-500 text-sm">{error.middleName}</p>}
-          </div>
-          <div className="w-1/2 flex pt-1 items-start space-x-2">
-            <Checkbox 
-              id="noMiddleName" 
-              checked={personalInfo.noMiddleName} 
-              onCheckedChange={handleCheckboxChange}
-            />
-            <Label htmlFor="noMiddleName" className="text-md pt-1 font-normal">No Middle Name</Label>
+            {error?.lastName && <p className="mt-1 text-red-500 text-sm">{error.lastName}</p>}
           </div>
         </div>
-        
       </div>
-      
-      {/* Date of Birth */}
-      <div className="space-y-2">
-        <Label htmlFor="dateOfBirth" className={ApplicationItemLabelStyles}>Date of Birth</Label>
-        <Input
-          id="dateOfBirth"
-          name="dateOfBirth"
-          type="date"
-          value={personalInfo.dateOfBirth ? 
-            (typeof personalInfo.dateOfBirth === 'string' ? 
-              personalInfo.dateOfBirth.split('T')[0] : 
-              format(personalInfo.dateOfBirth, 'yyyy-MM-dd')) 
-            : ''}
-          onChange={handleInputChange}
-          className={error?.dateOfBirth ? "border-red-500" : ApplicationItemInputStyles}
-        />
-        {error?.dateOfBirth && <p className="mt-1 text-red-500 text-sm">{error.dateOfBirth}</p>}
+
+      <div className="flex-[0_0_auto] flex items-center gap-5 relative self-stretch w-full">
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+              <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  {formFields[2].label}
+                </Label>
+              </div>
+              <Input
+                name="middleName"
+                value={personalInfo.middleName || ''}
+                onChange={handleInputChange}
+                disabled={personalInfo.noMiddleName}
+                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                placeholder={formFields[2].placeholder}
+              />
+              {error?.middleName && <p className="mt-1 text-red-500 text-sm">{error.middleName}</p>}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-start gap-3 pt-[22px] pb-0 px-0 relative flex-1 grow">
+          <Checkbox 
+            className="relative w-5 h-5 rounded border border-solid border-[#c6c8d0]"
+            checked={personalInfo.noMiddleName} 
+            onCheckedChange={handleCheckboxChange}
+          />
+          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+              No Middle Name
+            </Label>
+          </div>
+        </div>
       </div>
-      
-      {/* SSN - with security considerations */}
-      <div className="space-y-2">
-        <Label htmlFor="ssn" className={ApplicationItemLabelStyles}>
-          Social Security Number <span className="text-sm font-normal text-gray-500">(Encrypted when stored)</span>
-        </Label>
-        <Input
-          id="ssn"
-          name="ssn"
-          value={personalInfo.ssn || ''}
-          onChange={handleSSNChange}
-          placeholder="XXX-XX-XXXX"
-          maxLength={11} // format XXX-XX-XXXX has 11 chars including hyphens
-          className={error?.ssn ? "border-red-500" : ApplicationItemInputStyles}
-        />
-        {error?.ssn && <p className="mt-1 text-red-500 text-sm">{error.ssn}</p>}
-        <p className="text-xs text-gray-500">
-          Your SSN is securely encrypted and is only used for verification purposes.
-        </p>
+
+      <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+              <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  {formFields[3].label}
+                </Label>
+                <span className="text-red-500 ml-1">*</span>
+              </div>
+              <Input
+                name="email"
+                type="email"
+                value={personalInfo.email || ''}
+                onChange={handleInputChange}
+                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                placeholder={formFields[3].placeholder}
+              />
+              {error?.email && <p className="mt-1 text-red-500 text-sm">{error.email}</p>}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+              <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  {formFields[4].label}
+                </Label>
+              </div>
+              <span className="text-red-500 ml-1">*</span>
+            </div>
+            <div className="relative self-stretch w-full h-12 flex items-center bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs px-3 py-2">
+              <Input
+                name="dateOfBirth"
+                type="date"
+                value={personalInfo.dateOfBirth ? 
+                  (typeof personalInfo.dateOfBirth === 'string' ? 
+                    personalInfo.dateOfBirth.split('T')[0] : 
+                    format(personalInfo.dateOfBirth, 'yyyy-MM-dd')) 
+                  : ''}
+                onChange={handleInputChange}
+                className="flex-1 border-0 bg-transparent p-0 h-auto font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                placeholder={formFields[4].placeholder}
+              />
+              <CalendarIcon className="w-5 h-5 text-[#667085]" />
+            </div>
+            {error?.dateOfBirth && <p className="mt-1 text-red-500 text-sm">{error.dateOfBirth}</p>}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

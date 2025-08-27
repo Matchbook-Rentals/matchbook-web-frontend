@@ -156,7 +156,7 @@ export default function ApplicationClientComponent({
       } else {
         toast({
           title: "Error",
-          description: "Failed to submit application",
+          description: "Failed to save application",
           variant: "destructive",
         });
       }
@@ -164,7 +164,7 @@ export default function ApplicationClientComponent({
       setIsLoading(false);
       toast({
         title: "Error",
-        description: "Failed to submit application",
+        description: "Failed to save application",
         variant: "destructive",
       });
     }
@@ -273,7 +273,7 @@ export default function ApplicationClientComponent({
               className="w-full px-8 py-3 bg-[#0b6969] hover:bg-[#085454] text-white font-medium rounded-lg"
               disabled={isLoading}
             >
-              {isLoading ? 'Submitting...' : 'Submit Application'}
+              {isLoading ? 'Submitting...' : 'Save Application'}
             </Button>
           </div>
         </>
