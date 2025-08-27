@@ -443,15 +443,52 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     return (originalAmount + 0.30) / (1 - 0.029);
   };
 
-  // Calculate payment amount (rent due at booking only + fees)
+  // Calculate pro-rated rent for partial first month
+  const calculateProRatedRent = () => {
+    const startDate = new Date(match.trip.startDate);
+    const monthlyRent = match.monthlyRent || 0;
+    
+    // Get the number of days in the first month
+    const firstMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+    const daysInMonth = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0).getDate();
+    
+    // Calculate days from move-in date to end of month
+    const daysFromStart = daysInMonth - startDate.getDate() + 1;
+    
+    // Pro-rate based on days
+    const proRatedAmount = (monthlyRent * daysFromStart) / daysInMonth;
+    
+    console.log('🔍 Pro-rated rent calculation:', 
+      'startDate:', startDate.toDateString(),
+      'startDate.getDate():', startDate.getDate(),
+      'monthlyRent:', monthlyRent,
+      'daysInMonth:', daysInMonth,
+      'daysFromStart:', daysFromStart,
+      'proRatedAmount:', proRatedAmount,
+      'finalAmount:', Math.round(proRatedAmount * 100) / 100
+    );
+    
+    return Math.round(proRatedAmount * 100) / 100;
+  };
+
+  // Get security deposit amount (typically 1x monthly rent)
+  const getSecurityDeposit = () => {
+    const deposit = match.monthlyRent || 0;
+    console.log('🔍 Security deposit calculation:', 
+      'monthlyRent:', match.monthlyRent,
+      'deposit:', deposit
+    );
+    return deposit;
+  };
+
+  // Calculate payment amount (pro-rated rent + security deposit + fees)
   const calculatePaymentAmount = (paymentMethodType?: string) => {
-    // Use rent due at booking, fallback to $77 if null
-    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have rent due at booking set
-    const rentDueAtBooking = match.listing.rentDueAtBooking || 77;
+    const proRatedRent = calculateProRatedRent();
+    const securityDeposit = getSecurityDeposit();
     
-    let subtotal = rentDueAtBooking;
+    let subtotal = proRatedRent + securityDeposit;
     
-    // Add 3% application fee
+    // Add 3% application fee on the subtotal
     const applicationFee = Math.round(subtotal * 0.03 * 100) / 100;
     subtotal += applicationFee;
     
@@ -466,22 +503,30 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   
   // Calculate breakdown for display
   const getPaymentBreakdown = (paymentMethodType?: string) => {
-    // MARKED FOR DELETION: $77 fallback logic should be removed once all listings have rent due at booking set
-    const rentDueAtBooking = match.listing.rentDueAtBooking || 77;
-    const applicationFee = Math.round(rentDueAtBooking * 0.03 * 100) / 100;
+    const proRatedRent = calculateProRatedRent();
+    const securityDeposit = getSecurityDeposit();
+    
+    console.log('🔍 Payment breakdown calculation:', 
+      'proRatedRent:', proRatedRent,
+      'securityDeposit:', securityDeposit,
+      'matchMonthlyRent:', match.monthlyRent
+    );
+    const subtotalBeforeFees = proRatedRent + securityDeposit;
+    const applicationFee = Math.round(subtotalBeforeFees * 0.03 * 100) / 100;
     
     let processingFee = 0;
-    let total = rentDueAtBooking + applicationFee;
+    let total = subtotalBeforeFees + applicationFee;
     
     if (paymentMethodType === 'card') {
-      const subtotalWithAppFee = rentDueAtBooking + applicationFee;
+      const subtotalWithAppFee = subtotalBeforeFees + applicationFee;
       const totalWithCardFee = addCreditCardFee(subtotalWithAppFee);
       processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
       total = Math.round(totalWithCardFee * 100) / 100;
     }
     
     return {
-      rentDueAtBooking,
+      proRatedRent,
+      securityDeposit,
       applicationFee,
       processingFee,
       total
@@ -631,7 +676,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   if (showPaymentSelector || currentStep === 'complete-payment') {
     return (
       <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto p-4 max-w-4xl">
+        <div className="container mx-auto p-4 pb-24">
           {/* Header */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-4">
@@ -684,138 +729,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Property Summary Sidebar */}
             <div className="lg:col-span-1">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Home className="w-5 h-5" />
-                    Booking Summary
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{match.listing.locationString}</h3>
-                    <p className="text-sm text-gray-600">{match.listing.propertyType}</p>
-                  </div>
-                  
-                  <div className="space-y-2 border-t pt-4">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Rent Due At Booking</span>
-                      <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Application Fee (3%)</span>
-                      <span className="font-medium">${getPaymentBreakdown(selectedPaymentMethodType).applicationFee.toFixed(2)}</span>
-                    </div>
-                    {selectedPaymentMethodType === 'card' && (
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Processing Fee (2.9% + $0.30)</span>
-                        <span className="font-medium">${getPaymentBreakdown(selectedPaymentMethodType).processingFee.toFixed(2)}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between border-t pt-2 font-semibold">
-                      <span>Total Due Today</span>
-                      <span className="text-green-600">${calculatePaymentAmount(selectedPaymentMethodType).toFixed(2)}</span>
-                    </div>
-                  </div>
-
-                  {/* Rent Payment Schedule */}
-                  <div className="border-t pt-4">
-                    <Collapsible open={isRentScheduleOpen} onOpenChange={setIsRentScheduleOpen}>
-                      <CollapsibleTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          className="w-full justify-between p-0 font-medium text-gray-900 hover:text-gray-700"
-                        >
-                          <span>Rent Payment Schedule</span>
-                          <ChevronDown className={`h-4 w-4 transition-transform ${isRentScheduleOpen ? 'rotate-180' : ''}`} />
-                        </Button>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent className="mt-3 space-y-2">
-                        {(() => {
-                          console.log('Debug rent payments data:', {
-                            tripStartDate: match.trip.startDate,
-                            tripEndDate: match.trip.endDate,
-                            monthlyRent: match.monthlyRent,
-                            tripData: match.trip
-                          });
-                          
-                          const startDate = new Date(match.trip.startDate);
-                          const endDate = new Date(match.trip.endDate);
-                          const monthlyRent = match.monthlyRent;
-                          
-                          console.log('Parsed dates:', {
-                            startDate: !isNaN(startDate.getTime()) ? startDate.toISOString() : 'Invalid Date',
-                            endDate: !isNaN(endDate.getTime()) ? endDate.toISOString() : 'Invalid Date',
-                            monthlyRent,
-                            isValidStart: !isNaN(startDate.getTime()),
-                            isValidEnd: !isNaN(endDate.getTime())
-                          });
-                          
-                          if (!monthlyRent || !startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-                            return (
-                              <div className="text-sm text-gray-500 py-2">
-                                Payment schedule will be available after lease details are finalized.
-                                <br />
-                                <small>Debug: monthlyRent={monthlyRent}, startDate={startDate?.toString()}, endDate={endDate?.toString()}</small>
-                              </div>
-                            );
-                          }
-                          
-                          const payments = generateRentPayments(monthlyRent, startDate, endDate, calculatePaymentAmount(selectedPaymentMethodType));
-                          
-                          if (payments.length === 0) {
-                            return (
-                              <div className="text-sm text-gray-500 py-2">
-                                No rent payments scheduled.
-                              </div>
-                            );
-                          }
-                          
-                          return payments.map((payment, index) => (
-                            <div key={index} className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
-                              <div>
-                                <p className="text-sm font-medium">{payment.description}</p>
-                                <p className="text-xs text-gray-500">
-                                  Due: {payment.dueDate.toLocaleDateString()}
-                                </p>
-                              </div>
-                              <span className="font-medium text-gray-900">
-                                ${payment.amount.toFixed(2)}
-                              </span>
-                            </div>
-                          ));
-                        })()}
-                        <div className="mt-2 pt-2 border-t border-gray-200">
-                          <p className="text-xs text-gray-500">
-                            * These payments will be automatically charged to your payment method monthly
-                          </p>
-                        </div>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-
-                  {/* Host Contact Information */}
-                  <div className="border-t pt-4">
-                    <h4 className="font-semibold mb-3">Host Contact</h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm font-medium text-gray-900">
-                          {match.listing.user?.firstName} {match.listing.user?.lastName}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">{match.listing.user?.email}</span>
-                      </div>
-                      <div className="mt-3 pt-3 border-t border-gray-200">
-                        <p className="text-xs text-gray-500">
-                          📞 Contact for move-in instructions and property questions
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} />
             </div>
 
             {/* Payment Method Setup */}
@@ -843,7 +757,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
           {currentStep !== 'sign-lease' && (
             <div className="lg:col-span-1">
               {currentStep === 'overview-lease' ? (
-                <BookingSummarySidebar match={match} />
+                <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown()} />
               ) : (
                 <Card>
                   <CardHeader>
@@ -882,11 +796,15 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     {/* Payment Breakdown - only show on non-signing steps */}
                     {currentStep !== 'sign-lease' && (
                       <div className="pt-4 border-t">
-                        <h4 className="font-semibold mb-3">Payment Due at Booking</h4>
+                        <h4 className="font-semibold mb-3">Move-in Costs</h4>
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Rent Due at Booking</span>
-                            <span className="font-medium">${(match.listing.rentDueAtBooking || 77).toFixed(2)}</span>
+                            <span className="text-sm text-gray-600">Pro-rated Rent</span>
+                            <span className="font-medium">${getPaymentBreakdown(hasPaymentMethod ? undefined : previewPaymentMethod).proRatedRent.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Security Deposit</span>
+                            <span className="font-medium">${getPaymentBreakdown(hasPaymentMethod ? undefined : previewPaymentMethod).securityDeposit.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-sm text-gray-600">Application Fee (3%)</span>
@@ -1121,11 +1039,18 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-sm text-green-700">Rent Due at Booking</span>
-                          <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).rentDueAtBooking.toFixed(2)}</span>
+                          <span className="text-sm text-green-700">Pro-rated Rent</span>
+                          <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).proRatedRent.toFixed(2)}</span>
                         </div>
                         <div className="text-xs text-green-600 mt-1 ml-4">
-                          * Partial payment toward first month&apos;s rent
+                          * Partial payment for move-in month
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-green-700">Security Deposit</span>
+                          <span className="font-medium text-green-900">${getPaymentBreakdown(selectedPaymentMethodType).securityDeposit.toFixed(2)}</span>
+                        </div>
+                        <div className="text-xs text-green-600 mt-1 ml-4">
+                          * Refundable at lease end
                         </div>
                         <div className="flex justify-between">
                           <span className="text-sm text-green-700">Application Fee (3%)</span>
@@ -1168,7 +1093,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                           );
                         }
                         
-                        const payments = generateRentPayments(monthlyRent, startDate, endDate, calculatePaymentAmount(selectedPaymentMethodType));
+                        const payments = generateRentPayments(monthlyRent, startDate, endDate, calculateProRatedRent());
                         
                         if (payments.length === 0) {
                           return (
@@ -1243,8 +1168,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
           </div>
         </div>
 
-        {/* Footer Controls - Fixed at bottom - only show for overview and completed states */}
-        {(currentStep === 'overview-lease' || currentStep === 'completed') && (
+        {/* Footer Controls - Fixed at bottom - only show for overview, signing and completed states */}
+        {(currentStep === 'overview-lease' || currentStep === 'sign-lease' || currentStep === 'completed') && (
           <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
             <div className="flex items-center justify-between">
               {/* Left side - Status info */}
@@ -1254,6 +1179,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     <>
                       <span className="font-medium">{documentFields.length}</span> fields • 
                       <span className="font-medium">{documentRecipients.length}</span> recipients
+                    </>
+                  )}
+                  {currentStep === 'sign-lease' && (
+                    <>
+                      <span className="font-medium">{Object.values(fieldsStatus).filter(status => status === 'signed').length}</span> of <span className="font-medium">{Object.keys(fieldsStatus).length}</span> fields completed
                     </>
                   )}
                   {currentStep === 'completed' && (
@@ -1271,6 +1201,15 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     className="bg-[#0a6060] hover:bg-[#0a6060]/90"
                   >
                     Proceed to Sign
+                  </Button>
+                )}
+                {currentStep === 'sign-lease' && (
+                  <Button 
+                    size="sm"
+                    className="bg-[#0a6060] hover:bg-[#0a6060]/90"
+                    disabled
+                  >
+                    Next Action
                   </Button>
                 )}
                 {currentStep === 'completed' && (

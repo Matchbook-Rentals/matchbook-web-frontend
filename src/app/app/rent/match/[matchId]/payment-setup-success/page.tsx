@@ -111,7 +111,7 @@ export default function PaymentSetupSuccessPage({ params }: PaymentSetupSuccessP
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  onClick={() => router.push(`/app/match/${params.matchId}/lease-signing`)}
+                  onClick={() => router.push(`/app/rent/match/${params.matchId}/lease-signing`)}
                   className="flex-1"
                 >
                   Try Again
@@ -190,7 +190,7 @@ export default function PaymentSetupSuccessPage({ params }: PaymentSetupSuccessP
           <div className="flex gap-3">
             <Button
               variant="outline"
-              onClick={() => router.push(`/app/match/${params.matchId}/lease-signing`)}
+              onClick={() => router.push(`/app/rent/match/${params.matchId}/lease-signing`)}
               className="flex-1"
             >
               Back to Lease

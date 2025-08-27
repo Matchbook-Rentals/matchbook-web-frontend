@@ -19,7 +19,7 @@ export async function GET(
         listing: {
           include: { 
             user: true,
-            images: true,
+            listingImages: true,
             bedrooms: true
           }
         },

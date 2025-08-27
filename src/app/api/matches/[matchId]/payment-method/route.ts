@@ -113,7 +113,7 @@ export async function POST(
       payment_method_types: ['card', 'us_bank_account'],
       capture_method: captureMethod, // Automatic for immediate processing
       confirm: true,
-      return_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/match/${params.matchId}/payment-success`,
+      return_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/rent/match/${params.matchId}/payment-success`,
       transfer_data: {
         destination: match.listing.user.stripeAccountId,
       },
