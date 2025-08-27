@@ -32,7 +32,6 @@ interface ListingPricingSchema {
   petDeposit: number | null;
   petRent: number | null;
   reservationDeposit: number | null;
-  rentDueAtBooking: number | null;
   shortestLeaseLength: number;
   longestLeaseLength: number;
   shortestLeasePrice: number;
@@ -181,13 +180,6 @@ const ListingSummaryPricing: React.FC<ListingSummaryPricingProps> = ({
       valueStyle: "font-text-label-medium-semi-bold",
     },
     {
-      id: "rent-due-at-booking",
-      label: "Rent Due at Booking",
-      value: listing.rentDueAtBooking ? `$${listing.rentDueAtBooking.toLocaleString()}` : 'Not specified',
-      width: "w-full sm:w-[320px]",
-      valueStyle: "font-text-label-medium-medium",
-    },
-    {
       id: "pet-deposit",
       label: "Pet Deposit",
       value: listing.petDeposit ? `$${listing.petDeposit.toLocaleString()}` : (listing.petsAllowed ? "Not Specified" : "No Pets"),
@@ -297,17 +289,6 @@ const ListingSummaryPricing: React.FC<ListingSummaryPricingProps> = ({
                 />
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-gray-700">Rent Due at Booking</label>
-                <Input
-                  type="number"
-                  min="0"
-                  value={formData.rentDueAtBooking || ''}
-                  onChange={(e) => onUpdateField('rentDueAtBooking', parseInt(e.target.value) || null)}
-                  className="mt-1"
-                  placeholder="Amount due at booking"
-                />
-              </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-700">Pet Deposit</label>

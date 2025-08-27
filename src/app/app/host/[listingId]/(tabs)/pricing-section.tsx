@@ -38,7 +38,6 @@ interface PricingSectionProps {
   updateLeaseTermRange: (newShortestStay: number, newLongestStay: number) => void;
   updateLeaseTermPrice: (months: number, price: string) => void;
   updateLeaseTermUtilities: (months: number, utilitiesIncluded: boolean) => void;
-  isRentDueAtBookingValid: () => boolean;
 }
 
 export function PricingSection({
@@ -59,7 +58,6 @@ export function PricingSection({
   updateLeaseTermRange,
   updateLeaseTermPrice,
   updateLeaseTermUtilities,
-  isRentDueAtBookingValid,
 }: PricingSectionProps) {
   return (
     <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl">
@@ -87,30 +85,6 @@ export function PricingSection({
                 />
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-gray-700">Rent Due at Booking</label>
-                <Input
-                  type="text"
-                  value={formData.rentDueAtBooking || ''}
-                  onChange={createNumberChangeHandler((value) => updateFormData('rentDueAtBooking', parseInt(value.replace(/,/g, '')) || null), false, 10000000, true)}
-                  onBlur={createNumberBlurHandler(formData.rentDueAtBooking?.toString() || '', (value) => updateFormData('rentDueAtBooking', parseInt(value.replace(/,/g, '')) || null), false, undefined, 10000000, true)}
-                  className={`mt-1 ${!isRentDueAtBookingValid() ? 'border-red-500 focus:border-red-500' : ''}`}
-                  placeholder="Amount due at booking"
-                />
-                {!isRentDueAtBookingValid() && (
-                  <div className="text-sm text-red-600 mt-1">
-                    Rent due at booking cannot exceed the smallest monthly rent (${(() => {
-                      const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
-                      if (termsWithPrices.length > 0) {
-                        const allPrices = termsWithPrices.map(t => parseFloat(t.price));
-                        const smallestRent = Math.min(...allPrices);
-                        return `$${smallestRent.toLocaleString()}`;
-                      }
-                      return 'N/A';
-                    })()})
-                  </div>
-                )}
-              </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-700">Pet Deposit</label>

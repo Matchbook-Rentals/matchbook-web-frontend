@@ -260,7 +260,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     basic: ['category', 'furnished', 'title', 'petsAllowed'],
     location: ['streetAddress1', 'streetAddress2', 'city', 'state', 'postalCode'],
     details: ['roomCount', 'bathroomCount', 'squareFootage'],
-    pricing: ['shortestLeasePrice', 'longestLeasePrice', 'shortestLeaseLength', 'longestLeaseLength', 'depositSize', 'rentDueAtBooking', 'petDeposit', 'petRent'],
+    pricing: ['shortestLeasePrice', 'longestLeasePrice', 'shortestLeaseLength', 'longestLeaseLength', 'depositSize', 'petDeposit', 'petRent'],
     amenities: ['wheelchairAccess', 'fencedInYard', 'keylessEntry', 'alarmSystem', 'gatedEntry', 'smokeDetector', 'carbonMonoxide', 'security', 'mountainView', 'cityView', 'waterfront', 'waterView', 'offStreetParking', 'evCharging', 'garageParking', 'garbageDisposal', 'dishwasher', 'fridge', 'oven', 'grill', 'kitchenEssentials', 'fireplace', 'heater', 'dedicatedWorkspace', 'airConditioner', 'gym', 'sauna', 'balcony', 'pool', 'hotTub', 'patio', 'sunroom', 'washerInUnit', 'washerInComplex', 'washerNotAvailable'],
     // Note: petRent and petSecurityDeposit are not yet in the database schema and should not be sent to server
     description: ['description'],
@@ -410,10 +410,8 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         return !isNaN(price) && price > 0;
       });
       
-      // Rent due at booking validation
-      const rentDueAtBookingValid = isRentDueAtBookingValid();
       
-      return allFieldsValid && rentDueAtBookingValid;
+      return allFieldsValid;
     }
     return true; // Other sections don't have validation currently
   };
@@ -524,15 +522,6 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         const updatedFormData = { ...formData };
         const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
         
-        // Validation: Check if rent due at booking exceeds smallest monthly rent
-        if (termsWithPrices.length > 0 && updatedFormData.rentDueAtBooking) {
-          const allPrices = termsWithPrices.map(t => parseFloat(t.price));
-          const smallestRent = Math.min(...allPrices);
-          
-          if (updatedFormData.rentDueAtBooking > smallestRent) {
-            throw new Error(`Rent due at booking ($${updatedFormData.rentDueAtBooking.toLocaleString()}) cannot exceed the smallest monthly rent ($${smallestRent.toLocaleString()})`);
-          }
-        }
         
         if (termsWithPrices.length > 0) {
           const sortedTerms = termsWithPrices.sort((a, b) => a.months - b.months);
@@ -825,19 +814,6 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
     return furnished ? 'Furnished' : 'Unfurnished';
   };
 
-  // Helper function to check if rent due at booking exceeds smallest monthly rent
-  const isRentDueAtBookingValid = () => {
-    const termsWithPrices = leaseTerms.filter(t => t.price && parseFloat(t.price) > 0);
-    
-    if (termsWithPrices.length === 0 || !formData.rentDueAtBooking) {
-      return true; // No validation needed if no prices or no rent due at booking
-    }
-    
-    const allPrices = termsWithPrices.map(t => parseFloat(t.price));
-    const smallestRent = Math.min(...allPrices);
-    
-    return formData.rentDueAtBooking <= smallestRent;
-  };
 
   // Format price range - now derived from monthlyPricing data for consistency
   const formatPriceRange = () => {
@@ -1217,13 +1193,6 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
       valueStyle: "font-text-label-medium-semi-bold",
     },
     {
-      id: "rent-due-at-booking",
-      label: "Rent Due at Booking",
-      value: currentListing.rentDueAtBooking ? `$${currentListing.rentDueAtBooking.toLocaleString()}` : 'Not specified',
-      width: "w-full sm:w-[320px]",
-      valueStyle: "font-text-label-medium-medium",
-    },
-    {
       id: "pet-deposit",
       label: "Pet Deposit",
       value: currentListing.petDeposit ? `$${currentListing.petDeposit.toLocaleString()}` : (currentListing.petsAllowed ? "Not Specified" : "No Pets"),
@@ -1540,7 +1509,6 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
         updateLeaseTermRange={updateLeaseTermRange}
         updateLeaseTermPrice={updateLeaseTermPrice}
         updateLeaseTermUtilities={updateLeaseTermUtilities}
-        isRentDueAtBookingValid={isRentDueAtBookingValid}
       />
 
 
