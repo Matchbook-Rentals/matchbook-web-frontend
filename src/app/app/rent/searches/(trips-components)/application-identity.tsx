@@ -149,8 +149,14 @@ export const Identification: React.FC = () => {
                     <span className="text-red-500 ml-1">*</span>
                   </div>
 
-                  <Select>
-                    <SelectTrigger className="h-12 px-3 py-2 bg-white rounded-lg border border-[#d0d5dd] shadow-shadows-shadow-xs">
+                  <Select
+                    value={currentId.idType}
+                    onValueChange={(value) => {
+                      const updatedId = { ...currentId, idType: value };
+                      setIds([updatedId, ...ids.slice(1)]);
+                    }}
+                  >
+                    <SelectTrigger className={`h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs ${error?.idType ? 'border-red-500' : 'border-[#d0d5dd]'}`}>
                       <SelectValue
                         placeholder="Select ID Type"
                         className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
@@ -164,6 +170,7 @@ export const Identification: React.FC = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  {error?.idType && <p className="mt-1 text-red-500 text-sm">{error.idType}</p>}
                 </div>
               </div>
             </div>
@@ -178,9 +185,15 @@ export const Identification: React.FC = () => {
                 </div>
 
                 <Input
+                  value={currentId.idNumber}
+                  onChange={(e) => {
+                    const updatedId = { ...currentId, idNumber: e.target.value };
+                    setIds([updatedId, ...ids.slice(1)]);
+                  }}
                   placeholder="Enter ID Number"
-                  className="h-12 px-3 py-2 bg-white rounded-lg border border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                  className={`h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.idNumber ? 'border-red-500' : 'border-[#d0d5dd]'}`}
                 />
+                {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
               </div>
             </div>
           </div>
@@ -314,6 +327,7 @@ export const Identification: React.FC = () => {
                           Maximum size: 50MB
                         </div>
                       </div>
+                      {error?.idPhotos && <p className="mt-1 text-red-500 text-sm">{error.idPhotos}</p>}
                     </div>
                   </div>
                 </div>

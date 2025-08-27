@@ -101,6 +101,17 @@ export default function ApplicationClientComponent({
   const handleSubmit = async () => {
     const isValid = validateForm();
     if (!isValid) {
+      // Scroll to first error field
+      setTimeout(() => {
+        const firstErrorElement = document.querySelector('.border-red-500, .text-red-500');
+        if (firstErrorElement) {
+          firstErrorElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
+      }, 100);
+      
       toast({
         title: "Validation Error",
         description: "Please correct errors before submitting.",

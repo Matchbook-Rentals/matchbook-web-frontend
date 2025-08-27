@@ -190,6 +190,34 @@ export const PersonalInfo: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+              <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  Social Security Number
+                </Label>
+                <span className="text-red-500 ml-1">*</span>
+              </div>
+              <Input
+                name="ssn"
+                value={personalInfo.ssn || ''}
+                onChange={handleSSNChange}
+                maxLength={11}
+                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                placeholder="XXX-XX-XXXX"
+              />
+              {error?.ssn && <p className="mt-1 text-red-500 text-sm">{error.ssn}</p>}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+          {/* Empty div to maintain 2-column layout */}
+        </div>
+      </div>
     </>
   );
 };
