@@ -209,7 +209,7 @@ export const Identification: React.FC = () => {
                   <div className="flex flex-col items-start gap-[18px] w-full">
                     <div className="flex flex-col items-start gap-3 w-full">
                       <UploadButton<UploadData, unknown>
-                        endpoint="identificationUploader"
+                        endpoint="incomeUploader"
                         config={{
                           mode: "auto"
                         }}
