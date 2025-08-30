@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix draft deletion confirmation for listings without addresses
+- Add fallback confirmation text "Delete Draft" for draft listings that don't have a street address set
+- Prevents deletion dialog from being unusable when drafts lack address information
+- Maintains security by requiring proper confirmation text input
+
 ## Fix linting errors and optimize auth page images
 - Convert auth page images to Next.js Image components for better performance and SEO
 - Fix unescaped entity errors by replacing apostrophes with &apos; in React components

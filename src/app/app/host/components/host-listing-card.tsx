@@ -177,7 +177,9 @@ export default function HostListingCard({
     setDeleteConfirmationText("");
   };
 
-  const isDeleteButtonDisabled = deleteConfirmationText.toLowerCase() !== listing.streetAddress1?.toLowerCase();
+  // For drafts without an address, use "Delete Draft" as confirmation text
+  const confirmationText = (isDraft && !listing.streetAddress1) ? "Delete Draft" : listing.streetAddress1;
+  const isDeleteButtonDisabled = deleteConfirmationText.toLowerCase() !== confirmationText?.toLowerCase();
 
   // Mobile Layout Component
   const MobileLayout = () => (
@@ -488,14 +490,14 @@ export default function HostListingCard({
             </div>
             <div className="space-y-2">
               <label htmlFor="confirmation-input" className="block text-sm font-medium text-gray-700">
-                To confirm, type <strong>{listing.streetAddress1}</strong> below:
+                To confirm, type <strong>{confirmationText}</strong> below:
               </label>
               <Input
                 id="confirmation-input"
                 type="text"
                 value={deleteConfirmationText}
                 onChange={(e) => setDeleteConfirmationText(e.target.value)}
-                placeholder={listing.streetAddress1}
+                placeholder={confirmationText}
                 className="w-full"
                 autoComplete="off"
               />
