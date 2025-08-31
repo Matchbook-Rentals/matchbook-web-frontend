@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { BrandButton } from '@/components/ui/brandButton'
 import BrandModal from '@/components/BrandModal'
 import { Button } from '@/components/ui/button'
@@ -13,6 +13,7 @@ import { XIcon, CalendarIcon, MinusIcon, PlusIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { InteractiveDatePicker } from "@/components/ui/custom-calendar/date-range-selector/interactive-date-picker"
 import { editTrip } from '@/app/actions/trips'
+import { SuggestedLocation } from '@/types'
 
 interface EditSearchModalProps {
   trip: Trip
@@ -34,11 +35,55 @@ export default function EditSearchModal({
   const [endDate, setEndDate] = useState<Date | undefined>(trip.endDate ? new Date(trip.endDate) : undefined)
   const [startDateInput, setStartDateInput] = useState(trip.startDate ? format(new Date(trip.startDate), "MM/dd/yyyy") : "")
   const [endDateInput, setEndDateInput] = useState(trip.endDate ? format(new Date(trip.endDate), "MM/dd/yyyy") : "")
+  const [suggestions, setSuggestions] = useState<Array<{ place_id: string; description: string }>>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const locationInputRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (locationInputRef.current && !locationInputRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   const handleAdultsIncrease = () => setAdults(prev => prev + 1)
   const handleAdultsDecrease = () => setAdults(prev => Math.max(1, prev - 1))
   const handleChildrenIncrease = () => setChildren(prev => prev + 1)
   const handleChildrenDecrease = () => setChildren(prev => Math.max(0, prev - 1))
+
+  const handleLocationInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    setLocation(newValue)
+    
+    if (newValue.length > 0) {
+      try {
+        const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}`)
+        const data = await response.json()
+        setSuggestions(data.predictions || [])
+        setShowSuggestions(true)
+      } catch (error) {
+        console.error("Error fetching suggestions:", error)
+        setSuggestions([])
+        setShowSuggestions(false)
+      }
+    } else {
+      setSuggestions([])
+      setShowSuggestions(false)
+    }
+  }
+
+  const handleSuggestionSelect = (description: string, place_id: string) => {
+    const trimmedDescription = description.slice(0, -5) // Remove country code
+    setLocation(trimmedDescription)
+    setSuggestions([])
+    setShowSuggestions(false)
+  }
 
   const defaultTrigger = (
     <BrandButton 
@@ -70,11 +115,27 @@ export default function EditSearchModal({
 
           <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
             <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-              <Input
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-gray-300 shadow-sm text-gray-600"
-              />
+              <div ref={locationInputRef} className="relative w-full">
+                <Input
+                  value={location}
+                  onChange={handleLocationInput}
+                  placeholder="Enter a city or location"
+                  className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-gray-300 shadow-sm text-gray-600"
+                />
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                    {suggestions.map((suggestion) => (
+                      <div
+                        key={suggestion.place_id}
+                        onClick={() => handleSuggestionSelect(suggestion.description, suggestion.place_id)}
+                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm border-b border-gray-100 last:border-b-0"
+                      >
+                        {suggestion.description.slice(0, -5)}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

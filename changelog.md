@@ -1,5 +1,12 @@
 # Changelog
 
+## Add Google Places autocomplete to EditSearchModal location input
+- Integrated Google Places Autocomplete API into EditSearchModal component for improved location search experience
+- Added real-time location suggestions dropdown with proper debouncing and error handling
+- Implemented click-outside functionality to close suggestions dropdown
+- Added proper state management for suggestions display and selection
+- Uses existing `/api/places-autocomplete` endpoint for consistency with other location inputs
+
 ## Fix draft deletion confirmation for listings without addresses
 - Add fallback confirmation text "Delete Draft" for draft listings that don't have a street address set
 - Prevents deletion dialog from being unusable when drafts lack address information
