@@ -612,6 +612,11 @@
 - **Data Model Fixes**: Corrected Prisma includes to use `listingImages` and proper bedroom/bathroom field access
 - **UI Consistency**: Applied Frame-specific styling across overview and payment pages for cohesive user experience
 
+## Remove Matchbook Verified Guests Preferred Amenity
+- Removed "Matchbook Verified Guests Preferred" amenity display from all rental search interface components
+- Cleaned up unused MatchbookVerified icon imports from mobile map card, desktop map card, and listing details
+- Simplified highlights sections by removing the hardcoded verification preference badge
+
 ## Streamlined Listing Creation Process
 - **Removed Rent Due at Booking Field**: Eliminated the "rent due at booking" field from listing creation to simplify the deposit collection process
 - **Updated UI Components**: Removed input field and related validation from deposit step
