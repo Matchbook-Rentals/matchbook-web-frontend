@@ -10,7 +10,6 @@ import { ArrowLeft, ArrowRight } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import AmenityListItem from './amenity-list-item';
 import * as AmenitiesIcons from '@/components/icons/amenities';
-import { MatchbookVerified } from '@/components/icons';
 import { iconAmenities } from '@/lib/amenities-list';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 import { Badge } from "@/components/ui/badge"
@@ -319,12 +318,6 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
             <div className={sectionStyles}>
               <h3 className={sectionHeaderStyles}>Highlights</h3>
               <div className="space-y-1 py-1">
-                <AmenityListItem
-                  icon={MatchbookVerified}
-                  label="Matchbook Verified Guests Preferred"
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[22px] w-[22px]"
-                />
                 {listing.category === 'singleFamily' && (
                   <AmenityListItem
                     icon={AmenitiesIcons.UpdatedSingleFamilyIcon}

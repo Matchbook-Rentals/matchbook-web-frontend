@@ -11,7 +11,6 @@ import {
 import Tile from '@/components/ui/tile';
 import { amenities, iconAmenities, highlightAmenities } from '@/lib/amenities-list';
 import { Montserrat } from 'next/font/google';
-import { MatchbookVerified } from '@/components/icons';
 import AmenityListItem from './amenity-list-item';
 import {
   Dialog,
@@ -124,10 +123,6 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Highlights */}
       <div className="py-12 border-b border-[#D8D9D8]">
         <h3 className="text-[24px] text-[#404040] font-medium mb-4">Highlights</h3>
-        <div className='flex space-x-4 items-center mb-4'>
-          <MatchbookVerified />
-          <h3 className="text-[#404040] text-[24px]"> Matchbook Verified Guests Preferred </h3>
-        </div>
         <div className="flex flex-col space-y-2">
           {/* Property Type */}
           {listing.category === "singleFamily" && (
