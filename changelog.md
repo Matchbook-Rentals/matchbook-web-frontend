@@ -1,5 +1,12 @@
 # Changelog
 
+## Add location validation and dynamic user greeting to search trips
+- Added location validation to EditSearchModal requiring users to select from autocomplete suggestions before saving
+- Implemented coordinate fetching and storage when locations are selected from suggestions
+- Added visual error feedback with red borders and error messages for invalid locations
+- Updated SearchResultsSection to display dynamic user greeting using Clerk authentication
+- Changed greeting from "Hello John, here's what happen with your store" to "Hello {firstName}, here are your previous searches"
+
 ## Add Google Places autocomplete to EditSearchModal location input
 - Integrated Google Places Autocomplete API into EditSearchModal component for improved location search experience
 - Added real-time location suggestions dropdown with proper debouncing and error handling

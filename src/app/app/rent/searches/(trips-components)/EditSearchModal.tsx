@@ -38,6 +38,10 @@ export default function EditSearchModal({
   const [suggestions, setSuggestions] = useState<Array<{ place_id: string; description: string }>>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const locationInputRef = useRef<HTMLDivElement>(null)
+  const [hasValidLocation, setHasValidLocation] = useState(true) // Start as true since initial location is valid
+  const [locationLat, setLocationLat] = useState<number | null>(trip.latitude || null)
+  const [locationLng, setLocationLng] = useState<number | null>(trip.longitude || null)
+  const [locationError, setLocationError] = useState<string>('')
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -61,6 +65,14 @@ export default function EditSearchModal({
     const newValue = e.target.value
     setLocation(newValue)
     
+    // Clear validation state when user starts typing manually
+    if (newValue !== trip.locationString) {
+      setHasValidLocation(false)
+      setLocationError('')
+      setLocationLat(null)
+      setLocationLng(null)
+    }
+    
     if (newValue.length > 0) {
       try {
         const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}`)
@@ -78,11 +90,36 @@ export default function EditSearchModal({
     }
   }
 
-  const handleSuggestionSelect = (description: string, place_id: string) => {
+  const handleSuggestionSelect = async (description: string, place_id: string) => {
     const trimmedDescription = description.slice(0, -5) // Remove country code
     setLocation(trimmedDescription)
     setSuggestions([])
     setShowSuggestions(false)
+    setLocationError('')
+
+    try {
+      // Fetch geocode data to get lat/lng coordinates
+      const response = await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`)
+      const data = await response.json()
+      
+      if (data.results && data.results.length > 0) {
+        const { lat, lng } = data.results[0].geometry.location
+        setLocationLat(lat)
+        setLocationLng(lng)
+        setHasValidLocation(true)
+      } else {
+        setLocationLat(null)
+        setLocationLng(null)
+        setHasValidLocation(false)
+        setLocationError('Unable to get location coordinates')
+      }
+    } catch (error) {
+      console.error('Error fetching geocode:', error)
+      setLocationLat(null)
+      setLocationLng(null)
+      setHasValidLocation(false)
+      setLocationError('Error validating location')
+    }
   }
 
   const defaultTrigger = (
@@ -120,8 +157,13 @@ export default function EditSearchModal({
                   value={location}
                   onChange={handleLocationInput}
                   placeholder="Enter a city or location"
-                  className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-gray-300 shadow-sm text-gray-600"
+                  className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-sm text-gray-600 ${
+                    !hasValidLocation && locationError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {locationError && (
+                  <div className="text-red-500 text-sm mt-1">{locationError}</div>
+                )}
                 {showSuggestions && suggestions.length > 0 && (
                   <div className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
                     {suggestions.map((suggestion) => (
@@ -360,10 +402,18 @@ export default function EditSearchModal({
           className="min-w-0 px-4 py-2"
           disabled={isLoading}
           onClick={async () => {
+            // Validate location before saving
+            if (!hasValidLocation || locationLat === null || locationLng === null) {
+              setLocationError('Please select a location from the suggestions')
+              return
+            }
+
             setIsLoading(true)
             try {
               const result = await editTrip(trip.id, {
                 locationString: location,
+                latitude: locationLat,
+                longitude: locationLng,
                 startDate: startDate,
                 endDate: endDate,
                 numAdults: adults,

@@ -3,9 +3,11 @@
 import React, { useState } from "react";
 import { BrandButton } from "@/components/ui/brandButton";
 import SearchDialog from "@/components/home-components/SearchDialog";
+import { useUser } from "@clerk/nextjs";
 
 export const SearchResultsSection = (): JSX.Element => {
   const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
+  const { user } = useUser();
 
   return (
     <>
@@ -16,7 +18,7 @@ export const SearchResultsSection = (): JSX.Element => {
               Your Searches
             </div>
             <div className="relative font-normal text-gray-500 text-base leading-6">
-              Hello John, here&apos;s what happen with your store
+              Hello {user?.firstName || 'there'}, here are your previous searches
             </div>
           </div>
         </div>
