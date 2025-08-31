@@ -1,5 +1,12 @@
 # Changelog
 
+## Update lease creation PDF upload interface with responsive design
+- Redesigned PDF upload section with modern card-based layout matching design specifications
+- Added responsive mobile support with stacked form fields, optimized upload area, and full-width buttons
+- Updated upload text to be mobile-friendly ("Tap to upload PDF" vs "Drag and drop file or Browse")
+- Replaced hard-coded widths with responsive w-full classes for better cross-device compatibility
+- Maintained all existing functionality including file validation, form state management, and step transitions
+
 ## Add location validation and dynamic user greeting to search trips
 - Added location validation to EditSearchModal requiring users to select from autocomplete suggestions before saving
 - Implemented coordinate fetching and storage when locations are selected from suggestions
@@ -636,3 +643,8 @@
 - **Updated UI Components**: Removed input field and related validation from deposit step
 - **Cleaned Type Definitions**: Updated interfaces across components to remove rentDueAtBooking references
 - **Simplified Validation Logic**: Removed complex validation rules that checked rent due amount against monthly pricing
+
+## Fix listing details box width consistency
+- Updated SearchListingDetailsView to match search-match-tab width styling for consistent right column sizing
+- Applied same width constraints: lg:w-full with min-w-[375px] max-w-[400px] instead of lg:w-3/5
+- Added matching styling: mt-6, rounded-[12px], shadow-md, pr-0 for visual consistency
