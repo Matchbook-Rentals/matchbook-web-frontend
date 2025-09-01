@@ -1,21 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
-import { Upload } from "lucide-react";
+import { Upload, FileText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PDFEditor } from "@/components/pdf-editor/PDFEditor";
+import { formatFileSize } from "@/lib/utils";
 
 interface TemplateCreationStepProps {
   existingTemplate?: any;
   onTemplateCreated?: (template: any) => void;
   onCancel?: () => void;
+  hostName?: string;
+  hostEmail?: string;
 }
 
-export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCancel }: TemplateCreationStepProps) {
+export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCancel, hostName, hostEmail }: TemplateCreationStepProps) {
   const [step, setStep] = useState<"upload" | "edit">(existingTemplate ? "edit" : "upload");
   const [templateName, setTemplateName] = useState(existingTemplate?.title || "");
   const [templateType, setTemplateType] = useState<"lease" | "addendum" | "">(
@@ -28,6 +31,10 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
     if (file && file.type === "application/pdf") {
       setUploadedFile(file);
     }
+  };
+
+  const handleFileRemove = () => {
+    setUploadedFile(null);
   };
 
 
@@ -103,38 +110,64 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
 
                     <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
                       <div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-                        <div className="flex flex-col h-[100px] sm:h-[140px] items-center justify-center gap-[35px] px-6 sm:px-[100px] py-4 sm:py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49]">
-                          <div className="inline-flex flex-col items-center justify-center gap-3 relative flex-[0_0_auto]">
-                            <Upload className="relative w-8 h-8 text-[#036e49]" />
+                        {!uploadedFile ? (
+                          <>
+                            <div className="flex flex-col h-[100px] sm:h-[140px] items-center justify-center gap-[35px] px-6 sm:px-[100px] py-4 sm:py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49]">
+                              <div className="inline-flex flex-col items-center justify-center gap-3 relative flex-[0_0_auto]">
+                                <Upload className="relative w-8 h-8 text-[#036e49]" />
 
-                            <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
-                              <span className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)] hidden sm:inline">
-                                Drag and drop file or
+                                <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
+                                  <span className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)] hidden sm:inline">
+                                    Drag and drop file or
+                                  </span>
+
+                                  <label className="relative w-fit mt-[-1.00px] font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] cursor-pointer">
+                                    <span className="sm:hidden">Tap to upload PDF</span>
+                                    <span className="hidden sm:inline">Browse</span>
+                                    <input
+                                      type="file"
+                                      accept=".pdf"
+                                      onChange={handleFileUpload}
+                                      className="hidden"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+                              <span className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                                Supported formats: PDF
                               </span>
 
-                              <label className="relative w-fit mt-[-1.00px] font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] cursor-pointer">
-                                <span className="sm:hidden">Tap to upload PDF</span>
-                                <span className="hidden sm:inline">Browse</span>
-                                <input
-                                  type="file"
-                                  accept=".pdf"
-                                  onChange={handleFileUpload}
-                                  className="hidden"
-                                />
-                              </label>
+                              <span className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                                Maximum size: 50MB
+                              </span>
                             </div>
+                          </>
+                        ) : (
+                          <div className="flex items-center gap-3 px-4 py-3 relative self-stretch w-full bg-white rounded-xl border border-solid border-[#036e49]">
+                            <FileText className="relative w-8 h-8 text-[#036e49] flex-shrink-0" />
+                            
+                            <div className="flex flex-col gap-1 relative flex-1 min-w-0">
+                              <span className="relative w-fit font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#344054] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] truncate">
+                                {uploadedFile.name}
+                              </span>
+                              <span className="relative w-fit font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                                {formatFileSize(uploadedFile.size)}
+                              </span>
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={handleFileRemove}
+                              className="relative w-6 h-6 flex items-center justify-center text-neutralneutral-400 hover:text-[#036e49] transition-colors cursor-pointer flex-shrink-0"
+                              aria-label="Remove file"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
                           </div>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
-                          <span className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                            Supported formats: PDF
-                          </span>
-
-                          <span className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                            Maximum size: 50MB
-                          </span>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -174,19 +207,14 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
   if (step === "edit") {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setStep("upload")}>
-              Back
-            </Button>
-          </div>
-        </div>
-
         <PDFEditor 
           initialPdfFile={uploadedFile || undefined}
           initialWorkflowState="template"
           templateType={templateType as 'lease' | 'addendum'}
           initialTemplate={existingTemplate}
+          hostName={hostName}
+          hostEmail={hostEmail}
+          onCancel={() => setStep("upload")}
           onSave={(templateData) => {
             // Combine the metadata from step 1 with the field data from editor
             const template = {

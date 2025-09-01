@@ -123,13 +123,14 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
 
   // For signature, name, initials, and sign date fields, show recipient-specific labels
   // BUT only when we're NOT showing actual values AND not template-enforced (to avoid double labeling)
-  if ((field.type === FieldType.SIGNATURE || field.type === FieldType.NAME || field.type === FieldType.INITIALS || field.type === FieldType.SIGN_DATE) && recipient && !showValues && !templateEnforcedLabel) {
+  if ((field.type === FieldType.SIGNATURE || field.type === FieldType.NAME || field.type === FieldType.INITIALS || field.type === FieldType.SIGN_DATE || field.type === FieldType.INITIAL_DATE) && recipient && !showValues && !templateEnforcedLabel) {
     const getFieldTypeLabel = (type: FieldType) => {
       switch (type) {
         case FieldType.SIGNATURE: return 'Signature';
         case FieldType.NAME: return 'Name';
         case FieldType.INITIALS: return 'Initials';
         case FieldType.SIGN_DATE: return 'Sign Date';
+        case FieldType.INITIAL_DATE: return 'Initial Date';
         default: return '';
       }
     };

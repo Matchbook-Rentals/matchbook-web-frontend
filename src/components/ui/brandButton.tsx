@@ -51,22 +51,24 @@ export interface BrandButtonProps
   ringOffsetColor?: string
   ringInset?: boolean
   spinOnClick?: boolean
+  isLoading?: boolean
 }
 
 const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
-  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, href, ringOffsetColor, ringInset, spinOnClick = false, onClick, ...props }, ref) => {
-    const [isLoading, setIsLoading] = React.useState(false)
+  ({ className, variant, size, asChild = false, leftIcon, rightIcon, children, href, ringOffsetColor, ringInset, spinOnClick = false, isLoading: externalIsLoading, onClick, ...props }, ref) => {
+    const [internalIsLoading, setInternalIsLoading] = React.useState(false)
+    const isLoading = externalIsLoading !== undefined ? externalIsLoading : internalIsLoading
     const Comp = asChild ? Slot : "button"
     
     // Handle click with optional spinner
     const handleClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-      if (spinOnClick) {
-        setIsLoading(true)
+      if (spinOnClick && externalIsLoading === undefined) {
+        setInternalIsLoading(true)
       }
       if (onClick) {
         onClick(e)
       }
-    }, [spinOnClick, onClick])
+    }, [spinOnClick, externalIsLoading, onClick])
     
     // Special handling for link variant with 2xl size
     const isLink2xl = variant === "link" && size === "2xl"

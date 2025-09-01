@@ -3,9 +3,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { cn } from '@/lib/utils';
-import { FieldFormType, MIN_HEIGHT_PX, MIN_WIDTH_PX } from './types';
+import { FieldFormType, MIN_HEIGHT_PX, MIN_WIDTH_PX, FieldType } from './types';
 import { useRecipientColors } from './recipient-colors';
 import { FieldContent } from './FieldContent';
+import { Calendar } from 'lucide-react';
 import type { Recipient } from './RecipientManager';
 
 interface FieldItemProps {
@@ -14,6 +15,8 @@ interface FieldItemProps {
   onResize?: (fieldId: string, newBounds: { x: number; y: number; width: number; height: number }) => void;
   onMove?: (fieldId: string, newBounds: { x: number; y: number; width: number; height: number }) => void;
   onRemove?: (fieldId: string) => void;
+  onAddSignDate?: (fieldId: string) => void;
+  onAddInitialDate?: (fieldId: string) => void;
   active?: boolean;
   pageElement?: HTMLElement;
   signedValue?: any; // Add support for showing values
@@ -27,6 +30,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
   onResize, 
   onMove, 
   onRemove,
+  onAddSignDate,
+  onAddInitialDate,
   active = false,
   pageElement,
   signedValue,
@@ -106,6 +111,16 @@ export const FieldItem: React.FC<FieldItemProps> = ({
     onRemove?.(field.formId);
   };
 
+  const handleAddSignDate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddSignDate?.(field.formId);
+  };
+
+  const handleAddInitialDate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddInitialDate?.(field.formId);
+  };
+
   const handleFieldClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     // This will activate the field for editing/selection
@@ -155,10 +170,34 @@ export const FieldItem: React.FC<FieldItemProps> = ({
           showValues={showValues}
         />
         
-        {/* Remove button - only show if field can be removed */}
-        {canRemove && (
+        {/* Add sign date button - only show for signature fields */}
+        {field.type === FieldType.SIGNATURE && onAddSignDate && (
           <button 
-            className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            className="absolute -top-2 -left-2 h-5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200] px-2 gap-1"
+            onClick={handleAddSignDate}
+            title="Add sign date field"
+          >
+            <span>+</span>
+            <span className="whitespace-nowrap">Sign Date</span>
+          </button>
+        )}
+
+        {/* Add initial date button - only show for initials fields */}
+        {field.type === FieldType.INITIALS && onAddInitialDate && (
+          <button 
+            className="absolute -top-2 -left-2 h-5 bg-green-500 text-white rounded text-xs hover:bg-green-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200] px-2 gap-1"
+            onClick={handleAddInitialDate}
+            title="Add initial date field"
+          >
+            <span>+</span>
+            <span className="whitespace-nowrap">Date</span>
+          </button>
+        )}
+        
+        {/* Remove button */}
+        {(
+          <button 
+            className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200]"
             onClick={handleRemove}
             title="Remove field"
           >

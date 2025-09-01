@@ -132,3 +132,157 @@ export const validateFieldBounds = (field: FieldFormType): boolean => {
     field.pageY + field.pageHeight <= 100
   );
 };
+
+// Find the best position for a sign date field relative to a signature field
+export const findBestPositionForSignDate = (
+  signatureField: FieldFormType,
+  existingFields: FieldFormType[],
+  pageElement: HTMLElement
+): { pageX: number; pageY: number; pageWidth: number; pageHeight: number } => {
+  const signDateDimensions = FIELD_DIMENSIONS[FieldType.SIGN_DATE];
+  const { width: pageWidth, height: pageHeight } = pageElement.getBoundingClientRect();
+  
+  // Calculate sign date field dimensions as percentages
+  const signDatePageWidth = (signDateDimensions.width / pageWidth) * 100;
+  const signDatePageHeight = (signDateDimensions.height / pageHeight) * 100;
+  
+  // Define spacing between fields (in percentage)
+  const spacing = 1; // 1% spacing
+  
+  // Priority order: right, below, left, above
+  const positions = [
+    // Right side
+    {
+      pageX: signatureField.pageX + signatureField.pageWidth + spacing,
+      pageY: signatureField.pageY,
+    },
+    // Below
+    {
+      pageX: signatureField.pageX,
+      pageY: signatureField.pageY + signatureField.pageHeight + spacing,
+    },
+    // Left side
+    {
+      pageX: signatureField.pageX - signDatePageWidth - spacing,
+      pageY: signatureField.pageY,
+    },
+    // Above
+    {
+      pageX: signatureField.pageX,
+      pageY: signatureField.pageY - signDatePageHeight - spacing,
+    },
+  ];
+  
+  // Check each position for availability
+  for (const position of positions) {
+    const proposedField = {
+      ...position,
+      pageWidth: signDatePageWidth,
+      pageHeight: signDatePageHeight,
+    };
+    
+    // Check if position is within page bounds
+    if (!validateFieldBounds(proposedField)) {
+      continue;
+    }
+    
+    // Check if position overlaps with existing fields
+    const hasOverlap = existingFields.some(field => {
+      return !(
+        proposedField.pageX + proposedField.pageWidth <= field.pageX ||
+        field.pageX + field.pageWidth <= proposedField.pageX ||
+        proposedField.pageY + proposedField.pageHeight <= field.pageY ||
+        field.pageY + field.pageHeight <= proposedField.pageY
+      );
+    });
+    
+    if (!hasOverlap) {
+      return proposedField;
+    }
+  }
+  
+  // If no position works, default to right side (may overlap)
+  return {
+    pageX: Math.min(signatureField.pageX + signatureField.pageWidth + spacing, 100 - signDatePageWidth),
+    pageY: signatureField.pageY,
+    pageWidth: signDatePageWidth,
+    pageHeight: signDatePageHeight,
+  };
+};
+
+// Find the best position for an initial date field relative to an initials field
+export const findBestPositionForInitialDate = (
+  initialsField: FieldFormType,
+  existingFields: FieldFormType[],
+  pageElement: HTMLElement
+): { pageX: number; pageY: number; pageWidth: number; pageHeight: number } => {
+  const initialDateDimensions = FIELD_DIMENSIONS[FieldType.INITIAL_DATE];
+  const { width: pageWidth, height: pageHeight } = pageElement.getBoundingClientRect();
+  
+  // Calculate initial date field dimensions as percentages
+  const initialDatePageWidth = (initialDateDimensions.width / pageWidth) * 100;
+  const initialDatePageHeight = (initialDateDimensions.height / pageHeight) * 100;
+  
+  // Define spacing between fields (in percentage)
+  const spacing = 1; // 1% spacing
+  
+  // Priority order: right, below, left, above
+  const positions = [
+    // Right side
+    {
+      pageX: initialsField.pageX + initialsField.pageWidth + spacing,
+      pageY: initialsField.pageY,
+    },
+    // Below
+    {
+      pageX: initialsField.pageX,
+      pageY: initialsField.pageY + initialsField.pageHeight + spacing,
+    },
+    // Left side
+    {
+      pageX: initialsField.pageX - initialDatePageWidth - spacing,
+      pageY: initialsField.pageY,
+    },
+    // Above
+    {
+      pageX: initialsField.pageX,
+      pageY: initialsField.pageY - initialDatePageHeight - spacing,
+    },
+  ];
+  
+  // Check each position for availability
+  for (const position of positions) {
+    const proposedField = {
+      ...position,
+      pageWidth: initialDatePageWidth,
+      pageHeight: initialDatePageHeight,
+    };
+    
+    // Check if position is within page bounds
+    if (!validateFieldBounds(proposedField)) {
+      continue;
+    }
+    
+    // Check if position overlaps with existing fields
+    const hasOverlap = existingFields.some(field => {
+      return !(
+        proposedField.pageX + proposedField.pageWidth <= field.pageX ||
+        field.pageX + field.pageWidth <= proposedField.pageX ||
+        proposedField.pageY + proposedField.pageHeight <= field.pageY ||
+        field.pageY + field.pageHeight <= proposedField.pageY
+      );
+    });
+    
+    if (!hasOverlap) {
+      return proposedField;
+    }
+  }
+  
+  // If no position works, default to right side (may overlap)
+  return {
+    pageX: Math.min(initialsField.pageX + initialsField.pageWidth + spacing, 100 - initialDatePageWidth),
+    pageY: initialsField.pageY,
+    pageWidth: initialDatePageWidth,
+    pageHeight: initialDatePageHeight,
+  };
+};

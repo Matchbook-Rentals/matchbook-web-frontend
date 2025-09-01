@@ -22,9 +22,10 @@ import { CustomFieldDialog } from './CustomFieldDialog';
 import { RequiredLeaseFields } from './RequiredLeaseFields';
 import { FrequentlyUsedFields } from './FrequentlyUsedFields';
 import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
-import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds } from './field-utils';
+import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
+import BrandModal from '@/components/BrandModal';
 
 // Template data interface for the editor
 interface LoadedTemplate {
@@ -64,6 +65,8 @@ interface PDFEditorProps {
   mergedTemplateIds?: string[];
   matchDetails?: MatchDetails;
   housingRequestId?: string;
+  hostName?: string;
+  hostEmail?: string;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
@@ -82,6 +85,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   mergedTemplateIds,
   matchDetails,
   housingRequestId,
+  hostName,
+  hostEmail,
   onSave, 
   onCancel,
   onFinish,
@@ -101,6 +106,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [pageWidth, setPageWidth] = useState(800);
   const [workflowState, setWorkflowState] = useState<WorkflowState>(initialWorkflowState);
   const [signedFields, setSignedFields] = useState<Record<string, any>>({});
+  const [isSavingTemplate, setIsSavingTemplate] = useState(false);
   
   // Debug log for signedFields changes
   useEffect(() => {
@@ -145,13 +151,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Saved signatures state
   const [savedSignatures, setSavedSignatures] = useState<UserSignature[]>([]);
   const [isLoadingSignatures, setIsLoadingSignatures] = useState(false);
+  const [showMissingFieldsDialog, setShowMissingFieldsDialog] = useState(false);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
   
   // Accordion states
   const [accordionStates, setAccordionStates] = useState({
     documentInfo: true,
     recipients: true, 
     fieldTypes: true,
-    requiredFields: true
+    requiredFields: true,
+    allFieldTypes: true
   });
   
   // Ghost cursor state for field placement
@@ -265,8 +274,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       const mandatoryRecipients: Recipient[] = [
         {
           id: 'host-recipient',
-          name: '[Host Name]', // Template placeholder
-          email: 'host@template.placeholder',
+          name: hostName || '[Host Name]', // Use actual host name if available
+          email: hostEmail || 'host@template.placeholder',
           color: '#0B6E6E', // host color
           title: 'Host',
           role: 'HOST', // Add role for better matching
@@ -286,7 +295,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       setRecipients(mandatoryRecipients);
       setSelectedRecipient(mandatoryRecipients[0].id);
     }
-  }, [recipients.length]);
+  }, [recipients.length, hostName, hostEmail]);
 
   // Update field bounds when selected field changes
   useEffect(() => {
@@ -660,7 +669,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     console.log('📝 Current fields before add:', fields.length, fields.map(f => ({ formId: f.formId, type: f.type })));
     
     // Field types that should trigger the custom field dialog
-    const customFieldTypes = [FieldType.TEXT, FieldType.NUMBER, FieldType.EMAIL, FieldType.NAME, FieldType.CHECKBOX, FieldType.DROPDOWN];
+    const customFieldTypes = [FieldType.NAME, FieldType.CHECKBOX, FieldType.DROPDOWN];
     
     console.log('🧹 Cleaning up states:', {
       selectedField: selectedField + ' → null',
@@ -700,6 +709,19 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             }),
             ...(selectedField === FieldType.NAME && pendingFieldLabel === 'Renter Name' && {
               placeholder: 'Enter renter name',
+              required: true
+            }),
+            ...(selectedField === FieldType.EMAIL && pendingFieldLabel === 'Host Email' && {
+              placeholder: hostEmail || 'Enter host email',
+              defaultValue: hostEmail || '',
+              required: true
+            }),
+            ...(selectedField === FieldType.EMAIL && pendingFieldLabel === 'Primary Renter Email' && {
+              placeholder: 'Enter renter email',
+              required: true
+            }),
+            ...(selectedField === FieldType.EMAIL && pendingFieldLabel?.includes('Renter #') && {
+              placeholder: 'Enter renter email',
               required: true
             }),
             ...(selectedField === FieldType.DATE && (pendingFieldLabel === 'Start Date' || pendingFieldLabel === 'End Date') && {
@@ -805,6 +827,112 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     if (activeFieldId === formId) {
       setActiveFieldId(null);
     }
+  };
+
+  // Add sign date field next to signature field
+  const handleAddSignDate = (signatureFieldId: string) => {
+    const signatureField = fields.find(f => f.formId === signatureFieldId);
+    if (!signatureField || signatureField.type !== FieldType.SIGNATURE) {
+      console.warn('Cannot add sign date: signature field not found');
+      return;
+    }
+
+    // Check if a sign date already exists for this recipient
+    const existingSignDate = fields.find(f => 
+      f.type === FieldType.SIGN_DATE && 
+      f.recipientIndex === signatureField.recipientIndex
+    );
+    
+    if (existingSignDate) {
+      console.warn('Sign date field already exists for this recipient');
+      return;
+    }
+
+    // Get the page element for positioning
+    const pageElement = document.querySelector(
+      `[data-pdf-viewer-page][data-page-number="${signatureField.pageNumber}"]`
+    ) as HTMLElement;
+    
+    if (!pageElement) {
+      console.warn('Cannot find page element for positioning');
+      return;
+    }
+
+    // Find the best position for the sign date field
+    const position = findBestPositionForSignDate(signatureField, fields, pageElement);
+    
+    // Create the sign date field
+    const signDateField: FieldFormType = {
+      formId: nanoid(12),
+      type: FieldType.SIGN_DATE,
+      pageNumber: signatureField.pageNumber,
+      ...position,
+      signerEmail: signatureField.signerEmail,
+      recipientIndex: signatureField.recipientIndex,
+      fieldMeta: {
+        label: 'Sign Date',
+        required: true
+      }
+    };
+
+    // Add the field to the array
+    setFields([...fields, signDateField]);
+    setActiveFieldId(signDateField.formId);
+    
+    console.log('✅ Sign date field added:', signDateField);
+  };
+
+  // Add initial date field next to initials field
+  const handleAddInitialDate = (initialsFieldId: string) => {
+    const initialsField = fields.find(f => f.formId === initialsFieldId);
+    if (!initialsField || initialsField.type !== FieldType.INITIALS) {
+      console.warn('Cannot add initial date: initials field not found');
+      return;
+    }
+
+    // Check if an initial date already exists for this recipient
+    const existingInitialDate = fields.find(f => 
+      f.type === FieldType.INITIAL_DATE && 
+      f.recipientIndex === initialsField.recipientIndex
+    );
+    
+    if (existingInitialDate) {
+      console.warn('Initial date field already exists for this recipient');
+      return;
+    }
+
+    // Get the page element for positioning
+    const pageElement = document.querySelector(
+      `[data-pdf-viewer-page][data-page-number="${initialsField.pageNumber}"]`
+    ) as HTMLElement;
+    
+    if (!pageElement) {
+      console.warn('Cannot find page element for positioning');
+      return;
+    }
+
+    // Find the best position for the initial date field
+    const position = findBestPositionForInitialDate(initialsField, fields, pageElement);
+    
+    // Create the initial date field
+    const initialDateField: FieldFormType = {
+      formId: nanoid(12),
+      type: FieldType.INITIAL_DATE,
+      pageNumber: initialsField.pageNumber,
+      ...position,
+      signerEmail: initialsField.signerEmail,
+      recipientIndex: initialsField.recipientIndex,
+      fieldMeta: {
+        label: 'Initial Date',
+        required: true
+      }
+    };
+
+    // Add the field to the array
+    setFields([...fields, initialDateField]);
+    setActiveFieldId(initialDateField.formId);
+    
+    console.log('✅ Initial date field added:', initialDateField);
   };
 
   // Add recipient
@@ -1390,28 +1518,68 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const renderDefaultSidebarContent = () => {
     return (
       <>
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">PDF Editor</h1>
-            <div className="text-sm text-gray-500 mt-1">
-              {workflowState === 'template' && (
-                <span className="inline-flex items-center gap-1">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  Template Design
-                </span>
-              )}
-              {workflowState === 'document' && (
-                <span className="inline-flex items-center gap-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  Create Document
-                </span>
-              )}
-              {workflowState === 'signer1' && `Signing as ${recipients[0]?.name}`}
-              {workflowState === 'signer2' && `Signing as ${recipients[1]?.name}`}
-              {workflowState === 'completed' && 'Document Complete'}
-            </div>
+        {onCancel && (
+          <div className="mb-6">
+            <Button variant="outline" onClick={onCancel}>
+              Back
+            </Button>
           </div>
-        </div>
+        )}
+
+        {/* Template editing interface */}
+        {workflowState === 'template' && (
+          <>
+            <RecipientManager 
+              recipients={recipients}
+              onRecipientsChange={setRecipients}
+              selectedRecipient={selectedRecipient}
+              onSelectRecipient={setSelectedRecipient}
+            />
+
+            {/* Removed RequiredLeaseFields and FrequentlyUsedFields components */}
+            {/* Files: RequiredLeaseFields.tsx and FrequentlyUsedFields.tsx */}
+            {/* Can be restored if needed for template-specific field sections */}
+
+            <FieldSelector
+              selectedField={selectedField}
+              onSelectedFieldChange={(field) => {
+                setSelectedField(field);
+                setInteractionMode('click-to-place');
+              }}
+              onStartDrag={(fieldType, mouseEvent, fieldLabel) => {
+                // For FieldSelector, we'll use the selected recipient or default to host
+                const recipientId = selectedRecipient || 'host-recipient';
+                
+                // Add labels for specific field types
+                let label = fieldLabel; // Use label passed from FieldSelector if provided
+                if (!label && fieldType === FieldType.NAME) {
+                  if (recipientId === 'host-recipient') {
+                    label = 'Host Name';
+                  } else if (recipientId === 'primary-renter-recipient') {
+                    label = 'Renter Name';
+                  }
+                }
+                if (!label && fieldType === FieldType.EMAIL) {
+                  if (recipientId === 'host-recipient') {
+                    label = 'Host Email';
+                  } else if (recipientId === 'primary-renter-recipient') {
+                    label = 'Primary Renter Email';
+                  } else {
+                    // For additional recipients, find the index
+                    const recipientIndex = recipients.findIndex(r => r.id === recipientId);
+                    if (recipientIndex > 1) {
+                      label = `Renter #${recipientIndex} Email`;
+                    }
+                  }
+                }
+                
+                startFieldDetection(fieldType, recipientId, mouseEvent, label);
+              }}
+              accordionState={accordionStates.allFieldTypes}
+              onToggleAccordion={() => toggleAccordion('allFieldTypes')}
+            />
+          </>
+        )}
 
         {/* Default signing interface for signer2 */}
         {workflowState === 'signer2' && (
@@ -1506,7 +1674,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       // Auto-populate default recipients with real names
       const defaultRecipients = templateRecipients.map(r => {
         if (r.role === 'HOST') {
-          return { ...r, name: 'John Smith', email: 'host@host.com' };
+          return { ...r, name: hostName || 'John Smith', email: hostEmail || 'host@host.com' };
         }
         if (r.role === 'RENTER') {
           return { ...r, name: 'Jane Doe', email: 'renter@renter.com' };
@@ -1850,8 +2018,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
     switch (workflowState) {
       case 'template':
+        // Start loading for template workflow
+        setIsSavingTemplate(true);
+        
         if (fields.length === 0) {
           alert('Please add some fields to your template first!');
+          setIsSavingTemplate(false);
           return;
         }
         
@@ -1861,16 +2033,22 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           const missingRequiredFields = requiredFieldTypes.filter(fieldType => !getRequiredFieldStatus(fieldType));
           
           if (missingRequiredFields.length > 0) {
-            alert(`Please place all required lease fields before saving. Missing: ${missingRequiredFields.join(', ')}`);
+            setMissingFields(missingRequiredFields);
+            setShowMissingFieldsDialog(true);
+            setIsSavingTemplate(false);
             return;
           }
         }
         
-        // Save the template
-        await saveTemplate();
-        // Call onSave if provided
-        if (onSave && pdfFile) {
-          onSave({ fields, recipients, pdfFile });
+        try {
+          // Save the template
+          await saveTemplate();
+          // Call onSave if provided
+          if (onSave && pdfFile) {
+            onSave({ fields, recipients, pdfFile });
+          }
+        } finally {
+          setIsSavingTemplate(false);
         }
         break;
         
@@ -2236,6 +2414,25 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           newSignedFields[signDateField.formId] = currentDate;
         }
       }
+
+      // Auto-populate initial date fields when initials are signed
+      if (field && field.type === FieldType.INITIALS && value) {
+        const currentDate = new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+        
+        // Find corresponding initial date field for this recipient
+        const initialDateField = fields.find(f => 
+          f.type === FieldType.INITIAL_DATE && 
+          f.recipientIndex === field.recipientIndex
+        );
+        
+        if (initialDateField && !prev[initialDateField.formId]) {
+          newSignedFields[initialDateField.formId] = currentDate;
+        }
+      }
       
       return newSignedFields;
     });
@@ -2543,6 +2740,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     onMove={updateField}
                     onResize={updateField}
                     onRemove={removeField}
+                    onAddSignDate={handleAddSignDate}
+                    onAddInitialDate={handleAddInitialDate}
                     active={field.formId === activeFieldId}
                     pageElement={pageElement}
                     signedValue={signedFields[field.formId]}
@@ -2617,7 +2816,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   onClick={completeCurrentStep}
                   disabled={templateType !== 'addendum' && fields.length === 0}
                   size="sm"
-                  spinOnClick={true}
+                  isLoading={isSavingTemplate}
                 >
                   {(templateType !== 'addendum' && fields.length === 0) ? 'Add Fields First' : 'Finish and Save'}
                 </BrandButton>
@@ -2719,6 +2918,41 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         onSave={handleCustomFieldSave}
         fieldType={customFieldDialog.field?.type || FieldType.TEXT}
       />
+
+      {/* Missing Required Fields Dialog */}
+      <BrandModal 
+        isOpen={showMissingFieldsDialog}
+        onOpenChange={setShowMissingFieldsDialog}
+        className="max-w-md"
+      >
+        <div className="p-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">
+            Required Fields Missing
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Please place all required lease fields before saving your template.
+          </p>
+          <div className="mb-6">
+            <h3 className="text-sm font-medium text-gray-900 mb-2">Missing fields:</h3>
+            <ul className="space-y-1">
+              {missingFields.map((field) => (
+                <li key={field} className="text-sm text-red-600 flex items-center">
+                  <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                  {field.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex justify-end">
+            <BrandButton 
+              onClick={() => setShowMissingFieldsDialog(false)}
+              className="px-6"
+            >
+              Got it
+            </BrandButton>
+          </div>
+        </div>
+      </BrandModal>
     </div>
   );
 };
