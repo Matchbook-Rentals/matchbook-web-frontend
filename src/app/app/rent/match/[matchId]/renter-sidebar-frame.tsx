@@ -8,9 +8,10 @@ interface RenterSidebarFrameProps {
   match: MatchWithRelations;
   documentFields: any[];
   fieldsStatus?: Record<string, 'signed' | 'pending'>;
+  showTitle?: boolean;
 }
 
-export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {} }: RenterSidebarFrameProps) {
+export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {}, showTitle = true }: RenterSidebarFrameProps) {
   // Debug logging to catch object rendering issues
   console.log('🔍 RenterSidebarFrame - documentFields:', documentFields);
   console.log('🔍 RenterSidebarFrame - fieldsStatus:', fieldsStatus);
@@ -63,9 +64,11 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {} }:
   return (
     <div className="flex items-start gap-2.5 p-4 md:p-6 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
       <div className="flex flex-col items-start gap-4 relative flex-1 min-w-0">
-        <h1 className="relative w-full [font-family:'Poppins',Helvetica] font-bold text-blackblack-500 text-lg md:text-xl lg:text-2xl tracking-[0] leading-tight">
-          Review and Sign Documents
-        </h1>
+        {showTitle && (
+          <h1 className="relative w-full [font-family:'Poppins',Helvetica] font-bold text-blackblack-500 text-lg md:text-xl lg:text-2xl tracking-[0] leading-tight">
+            Review and Sign Documents
+          </h1>
+        )}
 
         <div className="flex flex-col items-start gap-4 relative w-full">
           {/* Host Information Card */}

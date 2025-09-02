@@ -923,6 +923,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                             match={match} 
                             documentFields={documentFields}
                             fieldsStatus={fieldsStatus}
+                            showTitle={true}
                           />
                         )}
                       />
