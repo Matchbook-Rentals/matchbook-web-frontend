@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -11,7 +12,7 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { Plus, User, Trash2, ChevronDown } from 'lucide-react';
+import { Plus, User, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { AVAILABLE_RECIPIENT_COLORS } from './recipient-colors';
 
 // Helper function to get the actual color hex value for a recipient index
@@ -56,6 +57,8 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
   onRecipientsChange,
   selectedRecipient,
   onSelectRecipient,
+  accordionState = true,
+  onToggleAccordion,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [newRecipient, setNewRecipient] = useState({ name: '', email: '' });
@@ -96,10 +99,11 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
 
   const selectedRecipientData = getSelectedRecipient();
 
-  if (isAdding) {
-    return (
-      <div className="mb-4">
-        <div className="space-y-3 p-3 border-2 border-dashed border-gray-300 rounded-lg">
+  const renderContent = () => {
+    if (isAdding) {
+      return (
+        <div className="mb-4">
+          <div className="space-y-3 p-3 border-2 border-dashed border-gray-300 rounded-lg">
           <div>
             <Label htmlFor="recipient-name" className="text-sm">Name</Label>
             <Input
@@ -141,11 +145,11 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
           </div>
         </div>
       </div>
-    );
-  }
+      );
+    }
 
-  return (
-    <div className="mb-4">
+    return (
+      <div className="mb-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
@@ -232,6 +236,26 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+      </div>
+    );
+  };
+
+  return (
+    <Card className="mb-6">
+      <CardContent className="p-3">
+        <div 
+          className="flex items-center justify-between cursor-pointer mb-3"
+          onClick={onToggleAccordion}
+        >
+          <h3 className="font-medium">Recipients</h3>
+          <ChevronDown 
+            className={`w-4 h-4 transition-transform duration-200 ${
+              accordionState ? 'rotate-180' : ''
+            }`}
+          />
+        </div>
+        {accordionState && renderContent()}
+      </CardContent>
+    </Card>
   );
 };

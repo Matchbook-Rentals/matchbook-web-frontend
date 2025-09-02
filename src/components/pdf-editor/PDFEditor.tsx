@@ -1534,6 +1534,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               onRecipientsChange={setRecipients}
               selectedRecipient={selectedRecipient}
               onSelectRecipient={setSelectedRecipient}
+              accordionState={accordionStates.recipients}
+              onToggleAccordion={() => toggleAccordion('recipients')}
             />
 
             {/* Removed RequiredLeaseFields and FrequentlyUsedFields components */}
