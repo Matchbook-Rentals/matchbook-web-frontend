@@ -178,7 +178,24 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {}, s
                           <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#373940] text-base tracking-[0] leading-6 whitespace-nowrap">
                             {(() => {
                               const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
-                              return fieldType === 'SIGNATURE' ? 'Signature' : fieldType === 'INITIALS' ? 'Initials' : 'Signature';
+                              
+                              // Check if there's a corresponding date field for this signature/initial field
+                              const hasCorrespondingDateField = () => {
+                                const targetDateType = fieldType === 'SIGNATURE' ? 'SIGN_DATE' : fieldType === 'INITIALS' ? 'INITIAL_DATE' : null;
+                                if (!targetDateType) return false;
+                                
+                                return documentFields.some(f => {
+                                  const fType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                                  return fType === targetDateType && f.recipientIndex === field.recipientIndex;
+                                });
+                              };
+                              
+                              if (fieldType === 'SIGNATURE') {
+                                return hasCorrespondingDateField() ? 'Signature and Date' : 'Signature';
+                              } else if (fieldType === 'INITIALS') {
+                                return hasCorrespondingDateField() ? 'Initial and Date' : 'Initial';
+                              }
+                              return 'Signature';
                             })()}
                           </div>
                           <div className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#777b8b] text-xs tracking-[0] leading-[18px] whitespace-nowrap">

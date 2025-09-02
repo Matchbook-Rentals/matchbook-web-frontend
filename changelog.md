@@ -671,3 +671,9 @@
 - Updated SearchListingDetailsView to match search-match-tab width styling for consistent right column sizing
 - Applied same width constraints: lg:w-full with min-w-[375px] max-w-[400px] instead of lg:w-3/5
 - Added matching styling: mt-6, rounded-[12px], shadow-md, pr-0 for visual consistency
+
+## Add conditional title rendering for PDF signing sidebars
+- Added showTitle prop to both HostSidebarFrame and RenterSidebarFrame components for conditional "Review and Sign Documents" text
+- Host sidebar defaults to showTitle=false (header navigation) while renter sidebar defaults to showTitle=true (footer navigation)
+- Updated lease-signing-client.tsx to explicitly pass showTitle=true to maintain renter behavior
+- Host route automatically hides title using default false value without requiring code changes

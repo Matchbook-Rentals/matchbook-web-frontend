@@ -101,6 +101,16 @@ function CreateLeasePageContent() {
         return "$0.00";
       };
       
+      // Debug logging for housing request dates
+      console.log('📅 Housing Request Date Debug:', {
+        rawStartDate: housingRequest.startDate,
+        rawEndDate: housingRequest.endDate,
+        moveInDate: housingRequest.moveInDate, // Check if this exists too
+        moveOutDate: housingRequest.moveOutDate, // Check if this exists too
+        hasStartDate: !!housingRequest.startDate,
+        hasEndDate: !!housingRequest.endDate
+      });
+
       const matchDetailsForPopulation = {
         propertyAddress: `${housingRequest.listing.streetAddress1 || ''}${housingRequest.listing.streetAddress2 ? ' ' + housingRequest.listing.streetAddress2 : ''}, ${housingRequest.listing.city || ''}, ${housingRequest.listing.state || ''} ${housingRequest.listing.postalCode || ''}`.replace(/^,\s*|,\s*$/, '').replace(/,\s*,/g, ','),
         monthlyPrice: getMonthlyRentValue(),
@@ -108,9 +118,11 @@ function CreateLeasePageContent() {
         hostEmail: hostUser.email,
         primaryRenterName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
         primaryRenterEmail: user.email,
-        startDate: housingRequest.moveInDate ? new Date(housingRequest.moveInDate).toISOString().split('T')[0] : '',
-        endDate: housingRequest.moveOutDate ? new Date(housingRequest.moveOutDate).toISOString().split('T')[0] : ''
+        startDate: housingRequest.startDate ? new Date(housingRequest.startDate).toISOString().split('T')[0] : '',
+        endDate: housingRequest.endDate ? new Date(housingRequest.endDate).toISOString().split('T')[0] : ''
       };
+
+      console.log('📅 Match Details for Population:', matchDetailsForPopulation);
 
       const preFilledValues: Record<string, any> = {};
 
@@ -152,17 +164,35 @@ function CreateLeasePageContent() {
           }
         } else if (field.type === 'DATE') {
           const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-          if (fieldLabel.includes('start') || fieldLabel.includes('begin') || fieldLabel.includes('move') && fieldLabel.includes('in')) {
+          console.log('📅 Processing DATE field:', {
+            fieldId: field.formId,
+            originalLabel: field.fieldMeta?.label,
+            lowercaseLabel: fieldLabel,
+            fieldType: field.type
+          });
+
+          if (fieldLabel.includes('start') || fieldLabel.includes('begin') || (fieldLabel.includes('move') && fieldLabel.includes('in'))) {
+            console.log('📅 Matched START DATE pattern, setting to:', matchDetailsForPopulation.startDate);
             preFilledValues[field.formId] = matchDetailsForPopulation.startDate;
-          } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate') || fieldLabel.includes('move') && fieldLabel.includes('out')) {
+          } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate') || (fieldLabel.includes('move') && fieldLabel.includes('out'))) {
+            console.log('📅 Matched END DATE pattern, setting to:', matchDetailsForPopulation.endDate);
             preFilledValues[field.formId] = matchDetailsForPopulation.endDate;
           } else {
             // For unlabeled DATE fields, alternate between start and end dates
             const dateFields = mergedPDF.fields.filter(f => f.type === 'DATE');
             const dateFieldIndex = dateFields.findIndex(f => f.formId === field.formId);
+            console.log('📅 Unlabeled DATE field - using fallback logic:', {
+              dateFieldIndex,
+              totalDateFields: dateFields.length,
+              willUseStartDate: dateFieldIndex === 0,
+              willUseEndDate: dateFieldIndex === 1
+            });
+            
             if (dateFieldIndex === 0) {
+              console.log('📅 Setting first unlabeled DATE to start date:', matchDetailsForPopulation.startDate);
               preFilledValues[field.formId] = matchDetailsForPopulation.startDate;
             } else if (dateFieldIndex === 1) {
+              console.log('📅 Setting second unlabeled DATE to end date:', matchDetailsForPopulation.endDate);
               preFilledValues[field.formId] = matchDetailsForPopulation.endDate;
             }
           }
@@ -170,6 +200,7 @@ function CreateLeasePageContent() {
         // Note: SIGNATURE, INITIALS, SIGN_DATE, and INITIAL_DATE fields are not pre-filled
       });
 
+      console.log('📅 Final preFilledValues being sent to store:', preFilledValues);
       initializeSignedFields(preFilledValues);
     }
   }, [mergedPDF, housingRequest, templates]);
