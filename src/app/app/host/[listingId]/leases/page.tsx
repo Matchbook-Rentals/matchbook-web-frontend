@@ -66,36 +66,42 @@ export default function LeasesPage() {
   };
 
   const getDocumentTypeBadge = (template: PdfTemplate) => {
-    const title = template.title.toLowerCase();
+    // Use the actual type field from the database instead of parsing title
+    const templateType = template.type?.toLowerCase() || 'other';
     
-    if (title.includes('lease')) {
-      return {
-        type: "Lease",
-        badgeColor: "bg-[#e8f4fd] text-[#1976d2] border-[#1976d2] hover:bg-[#e8f4fd] hover:text-[#1976d2]"
-      };
-    } else if (title.includes('addendum')) {
-      return {
-        type: "Addendum", 
-        badgeColor: "bg-[#fff3e0] text-[#f57c00] border-[#f57c00] hover:bg-[#fff3e0] hover:text-[#f57c00]"
-      };
-    } else if (title.includes('disclosure')) {
-      return {
-        type: "Disclosure",
-        badgeColor: "bg-[#f3e5f5] text-[#7b1fa2] border-[#7b1fa2] hover:bg-[#f3e5f5] hover:text-[#7b1fa2]"
-      };
-    } else {
-      return {
-        type: "Document",
-        badgeColor: "bg-[#f5f5f5] text-[#616161] border-[#616161] hover:bg-[#f5f5f5] hover:text-[#616161]"
-      };
+    switch (templateType) {
+      case 'lease':
+        return {
+          type: "Lease",
+          badgeColor: "bg-[#e8f4fd] text-[#1976d2] border-[#1976d2] hover:bg-[#e8f4fd] hover:text-[#1976d2]"
+        };
+      case 'addendum':
+        return {
+          type: "Addendum", 
+          badgeColor: "bg-[#fff3e0] text-[#f57c00] border-[#f57c00] hover:bg-[#fff3e0] hover:text-[#f57c00]"
+        };
+      case 'disclosure':
+        return {
+          type: "Disclosure",
+          badgeColor: "bg-[#f3e5f5] text-[#7b1fa2] border-[#7b1fa2] hover:bg-[#f3e5f5] hover:text-[#7b1fa2]"
+        };
+      default:
+        return {
+          type: "Document",
+          badgeColor: "bg-[#f5f5f5] text-[#616161] border-[#616161] hover:bg-[#f5f5f5] hover:text-[#616161]"
+        };
     }
   };
 
   const getSortOrder = (template: PdfTemplate) => {
-    const title = template.title.toLowerCase();
-    if (title.includes('lease')) return 1;
-    if (title.includes('addendum')) return 2;
-    return 3;
+    // Use the actual type field for sorting
+    const templateType = template.type?.toLowerCase() || 'other';
+    switch (templateType) {
+      case 'lease': return 1;
+      case 'addendum': return 2;
+      case 'disclosure': return 3;
+      default: return 4;
+    }
   };
 
   const sortedTemplates = [...templates].sort((a, b) => {
