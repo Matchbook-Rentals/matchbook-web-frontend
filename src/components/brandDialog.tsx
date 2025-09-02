@@ -95,6 +95,68 @@ function DialogContent({
   )
 }
 
+// Step Progress Component
+interface StepProgressProps {
+  currentStep: number;
+  totalSteps: number;
+}
+
+const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSteps }) => {
+  const steps = Array.from({ length: totalSteps }, (_, index) => {
+    if (index < currentStep - 1) return { status: "completed" };
+    if (index === currentStep - 1) return { status: "active" };
+    return { status: "inactive" };
+  });
+
+  return (
+    <div className="flex w-full items-center justify-center">
+      <div className="flex w-[368px] items-center justify-center">
+        {steps.map((step, index) => (
+          <React.Fragment key={index}>
+            {/* Step circle */}
+            <div className="inline-flex items-start relative">
+              <div
+                className={`relative w-6 h-6 rounded-full overflow-hidden ${
+                  step.status === "active"
+                    ? "bg-[#f9f5ff] shadow-[0px_0px_0px_4px_#3c87873d]"
+                    : step.status === "completed"
+                    ? "bg-[#0b6969]"
+                    : "bg-gray-50"
+                }`}
+              >
+                <div
+                  className={`h-6 rounded-xl border-[1.5px] border-solid flex items-center justify-center ${
+                    step.status === "active"
+                      ? "bg-[#3c8787]"
+                      : step.status === "completed"
+                      ? "bg-[#0b6969] border-[#0b6969]"
+                      : "border-[#eaecf0]"
+                  }`}
+                >
+                  {step.status === "completed" ? (
+                    <CheckIcon className="w-5 h-5 text-white stroke-[3]" />
+                  ) : (
+                    <div
+                      className={`w-2 h-2 rounded ${
+                        step.status === "active" ? "bg-white" : "bg-[#d0d5dd]"
+                      }`}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Connector line (except after the last step) */}
+            {index < steps.length - 1 && (
+              <div className="relative w-20 h-0.5 bg-[#0b6969]" />
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // Brand Dialog specific interface
 interface BrandDialogProps {
   open: boolean;
@@ -119,13 +181,6 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
 }) => {
   const contentRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
-  // Generate steps based on props
-  const steps = Array.from({ length: totalSteps }, (_, index) => {
-    if (index < currentStep - 1) return { status: "completed" };
-    if (index === currentStep - 1) return { status: "active" };
-    return { status: "inactive" };
-  });
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
@@ -145,51 +200,7 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
           </div>
         )}
 
-        <div className="flex w-full items-center justify-center">
-          <div className="flex w-[368px] items-center justify-center">
-            {steps.map((step, index) => (
-              <React.Fragment key={index}>
-                {/* Step circle */}
-                <div className="inline-flex items-start relative">
-                  <div
-                    className={`relative w-6 h-6 rounded-full overflow-hidden ${
-                      step.status === "active"
-                        ? "bg-[#f9f5ff] shadow-[0px_0px_0px_4px_#3c87873d]"
-                        : step.status === "completed"
-                        ? "bg-[#0b6969]"
-                        : "bg-gray-50"
-                    }`}
-                  >
-                    <div
-                      className={`h-6 rounded-xl border-[1.5px] border-solid flex items-center justify-center ${
-                        step.status === "active"
-                          ? "bg-[#3c8787]"
-                          : step.status === "completed"
-                          ? "bg-[#0b6969] border-[#0b6969]"
-                          : "border-[#eaecf0]"
-                      }`}
-                    >
-                      {step.status === "completed" ? (
-                        <CheckIcon className="w-5 h-5 text-white stroke-[3]" />
-                      ) : (
-                        <div
-                          className={`w-2 h-2 rounded ${
-                            step.status === "active" ? "bg-white" : "bg-[#d0d5dd]"
-                          }`}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Connector line (except after the last step) */}
-                {index < steps.length - 1 && (
-                  <div className="relative w-20 h-0.5 bg-[#0b6969]" />
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
+        <StepProgress currentStep={currentStep} totalSteps={totalSteps} />
 
         <div className="flex flex-col gap-6 relative self-stretch w-full min-w-0 max-h-[70vh] lg:max-h-[85vh] overflow-hidden">
           <div className="min-w-0 overflow-y-auto overflow-x-hidden flex-1">
@@ -474,4 +485,5 @@ export {
   DialogCloseButton,
   DialogOverlay,
   DialogContent,
+  StepProgress,
 };
