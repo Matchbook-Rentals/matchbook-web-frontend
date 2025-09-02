@@ -759,7 +759,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
               {currentStep === 'overview-lease' ? (
                 <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown()} />
               ) : (
-                <Card>
+                <Card className='test'>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Home className="w-5 h-5" />
@@ -830,13 +830,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
           )}
           {/* Main Content */}
           <div className={currentStep === 'sign-lease' ? '' : 'lg:col-span-2'}>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  Lease Agreement
-                </CardTitle>
-              </CardHeader>
+            <Card className='bg-inherit border-none'>
               <CardContent>
                 {currentStep === 'no-lease-document' ? (
                   <div className="text-center py-12">
@@ -873,14 +867,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                   </div>
                 ) : currentStep === 'overview-lease' && !isLoading && documentInstance && documentPdfFile ? (
                   <div className="space-y-4">
-                    <div className="text-center mb-4">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        Review Your Lease Agreement
-                      </h3>
-                      <p className="text-gray-600">
-                        Review your lease document below, then proceed to signing.
-                      </p>
-                    </div>
                     
                     {/* PDF Preview */}
                     <div className="border rounded-lg overflow-hidden bg-gray-50">

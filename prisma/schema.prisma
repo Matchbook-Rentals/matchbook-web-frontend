@@ -93,6 +93,7 @@ model User {
   pdfTemplates            PdfTemplate[]
   documents               DocumentInstance[]
   signatures              UserSignature[]
+  signingInitials         String?   // User's preferred initials for document signing
 }
 
 model UserPreferences {

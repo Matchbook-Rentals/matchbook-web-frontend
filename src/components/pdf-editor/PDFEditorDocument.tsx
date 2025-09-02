@@ -26,6 +26,8 @@ interface PDFEditorDocumentProps {
   onWorkflowStateChange?: (newState: WorkflowState) => void;
   onSigningActionReady?: (signingActionFn: () => Promise<void>) => void;
   onFieldSign?: (fieldId: string, value: any) => void;
+  currentUserInitials?: string; // User's saved initials
+  currentUserName?: string; // User's name for generating initials
   // signedFields are now provided by context
 }
 
@@ -47,7 +49,9 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
   customSidebarContent,
   onWorkflowStateChange,
   onSigningActionReady,
-  onFieldSign
+  onFieldSign,
+  currentUserInitials,
+  currentUserName
 }) => {
   return (
     <PDFEditor
@@ -71,6 +75,8 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
       onWorkflowStateChange={onWorkflowStateChange}
       onSigningActionReady={onSigningActionReady}
       onFieldSign={onFieldSign}
+      currentUserInitials={currentUserInitials}
+      currentUserName={currentUserName}
     />
   );
 };

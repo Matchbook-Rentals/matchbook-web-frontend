@@ -147,7 +147,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add Your Signature</DialogTitle>
+          <DialogTitle className='text-center'>Add Your Signature</DialogTitle>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>

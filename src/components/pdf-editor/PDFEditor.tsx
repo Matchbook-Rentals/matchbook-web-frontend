@@ -25,6 +25,7 @@ import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
+import { updateUserInitials } from '@/app/actions/user';
 import BrandModal from '@/components/BrandModal';
 import { useBrandAlert, createBrandAlert, createBrandConfirm } from '@/hooks/useBrandAlert';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
@@ -87,6 +88,8 @@ interface PDFEditorProps {
   onWorkflowStateChange?: (newState: WorkflowState) => void;
   onSigningActionReady?: (signingActionFn: () => Promise<void>) => void;
   // signedFields is now provided by context
+  currentUserInitials?: string; // User's saved initials passed from parent
+  currentUserName?: string; // User's name for generating initials
 }
 
 export const PDFEditor: React.FC<PDFEditorProps> = ({ 
@@ -117,7 +120,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   contentHeight = 'calc(100vh - 100px)',
   signerRole,
   onWorkflowStateChange,
-  onSigningActionReady
+  onSigningActionReady,
+  currentUserInitials: initialUserInitials,
+  currentUserName
 }) => {
   const router = useRouter();
   const { showAlert, showConfirm } = useBrandAlert();
@@ -180,6 +185,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Saved signatures state
   const [savedSignatures, setSavedSignatures] = useState<UserSignature[]>([]);
   const [isLoadingSignatures, setIsLoadingSignatures] = useState(false);
+
+  // Client-side user initials state (starts with initial value, updates when user saves)
+  const [currentUserInitials, setCurrentUserInitials] = useState<string | undefined>(initialUserInitials);
+
   const [showMissingFieldsDialog, setShowMissingFieldsDialog] = useState(false);
   const [missingFields, setMissingFields] = useState<string[]>([]);
   
@@ -2883,6 +2892,18 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   };
 
+  // User initials save handler
+  const saveUserInitials = async (initials: string) => {
+    try {
+      await updateUserInitials(initials);
+      // Update client-side state immediately so dialog won't show again this session
+      setCurrentUserInitials(initials);
+    } catch (error) {
+      console.error('Error saving user initials:', error);
+      throw error;
+    }
+  };
+
   const saveSignature = async (type: 'drawn' | 'typed', data: string, fontFamily?: string, setAsDefault?: boolean) => {
     try {
       const response = await fetch('/api/signatures', {
@@ -3379,6 +3400,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     onSaveSignature={saveSignature}
                     onDeleteSignature={deleteSignature}
                     onSetDefaultSignature={setDefaultSignature}
+                    currentInitials={currentUserInitials}
+                    onSaveInitials={saveUserInitials}
                   />
                 );
               }
@@ -3398,6 +3421,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   onSaveSignature={saveSignature}
                   onDeleteSignature={deleteSignature}
                   onSetDefaultSignature={setDefaultSignature}
+                  currentInitials={currentUserInitials}
+                  onSaveInitials={saveUserInitials}
                 />
               );
             })}

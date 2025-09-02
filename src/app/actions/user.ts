@@ -28,6 +28,35 @@ export async function createUser() {
   return user;
 }
 
+export async function updateUserInitials(initials: string) {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    const user = await prismadb.user.update({
+      where: { id: clerkUser.id },
+      data: { signingInitials: initials },
+    });
+
+    logger.info('Updated user initials', {
+      userId: clerkUser.id,
+      initials: initials
+    });
+
+    revalidatePath('/');
+    return user;
+  } catch (error) {
+    logger.error('Failed to update user initials', {
+      userId: clerkUser.id,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    throw new Error("Failed to update initials");
+  }
+}
+
 
 export async function updateUserImage() {
   'use server'

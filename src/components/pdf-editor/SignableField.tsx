@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { SignatureDialog } from './SignatureDialog';
+import { InitialsDialog } from './InitialsDialog';
 import type { Recipient } from './RecipientManager';
 
 interface UserSignature {
@@ -32,6 +33,8 @@ interface SignableFieldProps {
   onSaveSignature?: (type: 'drawn' | 'typed', data: string, fontFamily?: string, setAsDefault?: boolean) => Promise<void>;
   onDeleteSignature?: (id: string) => Promise<void>;
   onSetDefaultSignature?: (id: string) => Promise<void>;
+  currentInitials?: string; // Current user's saved initials
+  onSaveInitials?: (initials: string) => Promise<void>; // Save initials to user.signingInitials
 }
 
 export const SignableField: React.FC<SignableFieldProps> = ({ 
@@ -45,10 +48,13 @@ export const SignableField: React.FC<SignableFieldProps> = ({
   savedSignatures = [],
   onSaveSignature,
   onDeleteSignature,
-  onSetDefaultSignature
+  onSetDefaultSignature,
+  currentInitials,
+  onSaveInitials
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSignatureDialogOpen, setIsSignatureDialogOpen] = useState(false);
+  const [isInitialsDialogOpen, setIsInitialsDialogOpen] = useState(false);
   const [isViewingSignature, setIsViewingSignature] = useState(false);
   const [inputValue, setInputValue] = useState(signedValue || '');
   
@@ -134,6 +140,16 @@ export const SignableField: React.FC<SignableFieldProps> = ({
     onSign(field.formId, signatureData);
   };
 
+  const handleInitialsSign = (initials: string, type: 'typed', fontFamily?: string) => {
+    // Store the initials with metadata for proper display
+    const initialsData = {
+      value: initials,
+      type: type,
+      fontFamily: fontFamily
+    };
+    onSign(field.formId, initialsData);
+  };
+
   const handleClearSignature = () => {
     // Clear the signature by setting it to null/undefined
     onSign(field.formId, null);
@@ -145,8 +161,8 @@ export const SignableField: React.FC<SignableFieldProps> = ({
       if (field.type === FieldType.CHECKBOX) {
         return signedValue ? '☑' : '☐';
       }
-      if (field.type === FieldType.SIGNATURE && typeof signedValue === 'object' && signedValue?.type) {
-        // Handle new signature format with metadata
+      if ((field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) && typeof signedValue === 'object' && signedValue?.type) {
+        // Handle new signature/initials format with metadata
         if (signedValue.type === 'drawn') {
           return (
             <img 
@@ -206,7 +222,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           
           // If field is signed and user is current signer, show viewing dialog
           if (isSigned && isForCurrentSigner) {
-            if (field.type === FieldType.SIGNATURE) {
+            if (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) {
               setIsViewingSignature(true);
             } else {
               setIsDialogOpen(true);
@@ -216,7 +232,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           
           // If field is signed but user is not current signer, show read-only view
           if (isSigned && !isForCurrentSigner) {
-            if (field.type === FieldType.SIGNATURE) {
+            if (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) {
               setIsViewingSignature(true);
             } else {
               setIsDialogOpen(true);
@@ -228,6 +244,15 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           if (!isSigned && isForCurrentSigner) {
             if (field.type === FieldType.SIGNATURE) {
               setIsSignatureDialogOpen(true);
+            } else if (field.type === FieldType.INITIALS) {
+              // Auto-sign with saved initials if they exist, otherwise show dialog
+              if (currentInitials) {
+                // User already has saved initials - auto-sign immediately
+                handleInitialsSign(currentInitials, 'typed', 'dancing-script');
+              } else {
+                // No saved initials - show dialog to collect them
+                setIsInitialsDialogOpen(true);
+              }
             } else {
               setIsDialogOpen(true);
             }
@@ -237,8 +262,8 @@ export const SignableField: React.FC<SignableFieldProps> = ({
         <div className={cn(
           'px-2 text-xs font-medium truncate',
           isSigned ? 'text-green-800' : 'text-gray-700',
-          // Apply cursive font for signed signature fields
-          isSigned && field.type === FieldType.SIGNATURE && 'font-signature text-base'
+          // Apply cursive font for signed signature/initials fields
+          isSigned && (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) && 'font-signature text-base'
         )}>
           {displayValue()}
         </div>
@@ -254,7 +279,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Sign {FRIENDLY_FIELD_TYPE[field.type]} Field</DialogTitle>
+            <DialogTitle className='text-center test'>Sign {FRIENDLY_FIELD_TYPE[field.type]} Field</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4">
@@ -307,11 +332,21 @@ export const SignableField: React.FC<SignableFieldProps> = ({
         onSetDefaultSignature={onSetDefaultSignature}
       />
 
+      {/* Initials Dialog */}
+      <InitialsDialog
+        isOpen={isInitialsDialogOpen}
+        onClose={() => setIsInitialsDialogOpen(false)}
+        onSign={handleInitialsSign}
+        recipientName={recipient?.name || 'User'}
+        currentInitials={currentInitials}
+        onSaveInitials={onSaveInitials}
+      />
+
       {/* Signature Viewing Dialog */}
       <Dialog open={isViewingSignature} onOpenChange={setIsViewingSignature}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className='test'>
               {field.type === FieldType.SIGNATURE ? 'Signature' : FRIENDLY_FIELD_TYPE[field.type]}
               {recipient?.title && ` - ${recipient.title}`}
             </DialogTitle>
@@ -319,12 +354,12 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           
           <div className="space-y-4">
             <div className="border rounded-lg p-6 bg-gray-50 min-h-[150px] flex items-center justify-center">
-              {field.type === FieldType.SIGNATURE && signedValue ? (
+              {(field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) && signedValue ? (
                 typeof signedValue === 'object' && signedValue?.type ? (
                   signedValue.type === 'drawn' ? (
                     <img 
                       src={signedValue.value} 
-                      alt="Signature" 
+                      alt={field.type === FieldType.SIGNATURE ? 'Signature' : 'Initials'} 
                       className="max-h-[120px] max-w-full object-contain"
                     />
                   ) : (
@@ -354,7 +389,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
                   variant="destructive" 
                   onClick={handleClearSignature}
                 >
-                  Clear {field.type === FieldType.SIGNATURE ? 'Signature' : FRIENDLY_FIELD_TYPE[field.type]}
+                  Clear {field.type === FieldType.SIGNATURE ? 'Signature' : field.type === FieldType.INITIALS ? 'Initials' : FRIENDLY_FIELD_TYPE[field.type]}
                 </Button>
               )}
             </div>

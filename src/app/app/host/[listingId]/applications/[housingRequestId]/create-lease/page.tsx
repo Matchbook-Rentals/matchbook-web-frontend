@@ -53,6 +53,7 @@ function CreateLeasePageContent() {
   
   const [templates, setTemplates] = useState<PdfTemplate[]>([]);
   const [housingRequest, setHousingRequest] = useState<HousingRequestWithDetails | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mergedPDF, setMergedPDF] = useState<MergedPDFResult | null>(null);
@@ -212,14 +213,16 @@ function CreateLeasePageContent() {
       
       const templateIds = templateIdsParam?.split(',') || [];
       
-      // Load templates and housing request in parallel
-      const [templatesResponse, housingRequestResponse] = await Promise.all([
+      // Load templates, housing request, and current user in parallel
+      const [templatesResponse, housingRequestResponse, currentUserResponse] = await Promise.all([
         // Load selected templates
         Promise.all(templateIds.map(id => 
           fetch(`/api/pdf-templates/${id}`).then(res => res.json())
         )),
         // Load housing request details
-        fetch(`/api/housing-requests/${housingRequestId}`)
+        fetch(`/api/housing-requests/${housingRequestId}`),
+        // Load current user profile (for signing initials)
+        fetch('/api/user/profile')
       ]);
 
       // Process templates
@@ -241,6 +244,14 @@ function CreateLeasePageContent() {
       } else {
         setError("Failed to load application details");
         return;
+      }
+
+      // Process current user
+      if (currentUserResponse.ok) {
+        const currentUserData = await currentUserResponse.json();
+        setCurrentUser(currentUserData);
+      } else {
+        console.error("Failed to load current user data (initials will not be available)");
       }
 
     } catch (err) {
@@ -558,6 +569,8 @@ function CreateLeasePageContent() {
               // Field signing is now handled by the context
               setSignedField(fieldId, value);
             }}
+            currentUserInitials={currentUser?.signingInitials}
+            currentUserName={currentUser ? `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() || currentUser.email : undefined}
             customSidebarContent={(workflowState, defaultContent) => {
               // Only show custom sidebar during signing states
               if (workflowState === 'signer1') {
