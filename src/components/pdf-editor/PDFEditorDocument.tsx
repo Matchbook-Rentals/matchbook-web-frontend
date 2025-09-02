@@ -5,6 +5,8 @@ import { PDFEditor } from './PDFEditor';
 import type { Recipient } from './RecipientManager';
 import type { FieldFormType, MatchDetails } from './types';
 
+type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer2' | 'completed';
+
 interface PDFEditorDocumentProps {
   initialPdfFile?: File;
   initialFields?: FieldFormType[];
@@ -17,6 +19,14 @@ interface PDFEditorDocumentProps {
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
   onDocumentCreated?: (documentId: string) => void;
+  onCompleteStepReady?: (completeStepFn: () => Promise<void>) => void;
+  contentHeight?: string;
+  signerRole?: 'host' | 'renter';
+  customSidebarContent?: (workflowState: WorkflowState, defaultContent: JSX.Element) => JSX.Element;
+  onWorkflowStateChange?: (newState: WorkflowState) => void;
+  onSigningActionReady?: (signingActionFn: () => Promise<void>) => void;
+  onFieldSign?: (fieldId: string, value: any) => void;
+  // signedFields are now provided by context
 }
 
 export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({ 
@@ -30,7 +40,14 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
   onSave, 
   onCancel,
   onFinish,
-  onDocumentCreated
+  onDocumentCreated,
+  onCompleteStepReady,
+  contentHeight,
+  signerRole,
+  customSidebarContent,
+  onWorkflowStateChange,
+  onSigningActionReady,
+  onFieldSign
 }) => {
   return (
     <PDFEditor
@@ -46,6 +63,14 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
       onCancel={onCancel}
       onFinish={onFinish}
       onDocumentCreated={onDocumentCreated}
+      showFooter={false}
+      onCompleteStepReady={onCompleteStepReady}
+      contentHeight={contentHeight}
+      signerRole={signerRole}
+      customSidebarContent={customSidebarContent}
+      onWorkflowStateChange={onWorkflowStateChange}
+      onSigningActionReady={onSigningActionReady}
+      onFieldSign={onFieldSign}
     />
   );
 };

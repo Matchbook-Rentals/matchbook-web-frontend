@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PDFEditorDocument } from "@/components/pdf-editor/PDFEditorDocument";
+import { HostSidebarFrame } from "@/components/pdf-editor/HostSidebarFrame";
 import type { MatchDetails, FieldFormType } from "@/components/pdf-editor/types";
 import type { Recipient } from "@/components/pdf-editor/RecipientManager";
 import { mergePDFTemplates, MergedPDFResult } from "@/lib/pdfMerger";
@@ -13,6 +14,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { createMergedDocument } from "@/actions/documents";
 import { BrandAlertProvider } from "@/hooks/useBrandAlert";
+import { useSignedFieldsStore } from "@/stores/signed-fields-store";
 
 // Helper function to get recipient color for proper styling
 const getRecipientColor = (index: number) => {
@@ -38,10 +40,12 @@ interface HousingRequestWithDetails extends HousingRequest {
   listing: Listing;
 }
 
-export default function CreateLeasePage() {
+// Inner component that uses the SignedFields context
+function CreateLeasePageContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { signedFields, setSignedField, initializeSignedFields } = useSignedFieldsStore();
   
   const listingId = params.listingId as string;
   const housingRequestId = params.housingRequestId as string;
@@ -54,6 +58,13 @@ export default function CreateLeasePage() {
   const [mergedPDF, setMergedPDF] = useState<MergedPDFResult | null>(null);
   const [isMerging, setIsMerging] = useState(false);
   const [createdDocumentId, setCreatedDocumentId] = useState<string | null>(null);
+  const [currentWorkflowState, setCurrentWorkflowState] = useState<'document' | 'signer1'>('document');
+  const [isCreatingDocument, setIsCreatingDocument] = useState(false);
+  const completeStepFunctionRef = useRef<(() => Promise<void>) | null>(null);
+  const [completeStepFunction, setCompleteStepFunction] = useState<(() => Promise<void>) | null>(null);
+  const signingActionFunctionRef = useRef<(() => Promise<void>) | null>(null);
+  const [signingActionFunction, setSigningActionFunction] = useState<(() => Promise<void>) | null>(null);
+  // signedFields state is now managed by SignedFieldsContext
 
   useEffect(() => {
     if (templateIdsParam) {
@@ -72,6 +83,96 @@ export default function CreateLeasePage() {
       mergePDFs();
     }
   }, [templates, isMerging, mergedPDF]);
+
+  // Auto-populate fields when mergedPDF is ready and we have all required data
+  useEffect(() => {
+    if (mergedPDF && mergedPDF.fields && housingRequest && templates.length > 0) {
+      
+      const user = housingRequest.user;
+      const hostUser = housingRequest.listing.user;
+      
+      // Helper function to get monthly rent value
+      const getMonthlyRentValue = () => {
+        if (housingRequest.match?.paymentAmount) {
+          return `$${housingRequest.match.paymentAmount.toFixed(2)}`;
+        } else if (housingRequest.monthlyRent) {
+          return `$${housingRequest.monthlyRent.toFixed(2)}`;
+        }
+        return "$0.00";
+      };
+      
+      const matchDetailsForPopulation = {
+        propertyAddress: `${housingRequest.listing.streetAddress1 || ''}${housingRequest.listing.streetAddress2 ? ' ' + housingRequest.listing.streetAddress2 : ''}, ${housingRequest.listing.city || ''}, ${housingRequest.listing.state || ''} ${housingRequest.listing.postalCode || ''}`.replace(/^,\s*|,\s*$/, '').replace(/,\s*,/g, ','),
+        monthlyPrice: getMonthlyRentValue(),
+        hostName: `${hostUser.firstName || ''} ${hostUser.lastName || ''}`.trim() || hostUser.email,
+        hostEmail: hostUser.email,
+        primaryRenterName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
+        primaryRenterEmail: user.email,
+        startDate: housingRequest.moveInDate ? new Date(housingRequest.moveInDate).toISOString().split('T')[0] : '',
+        endDate: housingRequest.moveOutDate ? new Date(housingRequest.moveOutDate).toISOString().split('T')[0] : ''
+      };
+
+      const preFilledValues: Record<string, any> = {};
+
+      mergedPDF.fields.forEach(field => {
+        if (field.type === 'NAME') {
+          if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.hostName;
+          } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.primaryRenterName;
+          }
+        } else if (field.type === 'EMAIL') {
+          if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.hostEmail;
+          } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.primaryRenterEmail;
+          }
+        } else if (field.type === 'NUMBER') {
+          // Auto-populate number fields based on label
+          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+          if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount') || fieldLabel.includes('monthly')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.monthlyPrice;
+          } else if (fieldLabel.includes('deposit') || fieldLabel.includes('security')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.monthlyPrice; // Assuming deposit = 1 month rent
+          } else {
+            // For unlabeled NUMBER fields, check if it's the first number field - likely rent
+            const numberFields = mergedPDF.fields.filter(f => f.type === 'NUMBER');
+            const numberFieldIndex = numberFields.findIndex(f => f.formId === field.formId);
+            if (numberFieldIndex === 0) {
+              preFilledValues[field.formId] = matchDetailsForPopulation.monthlyPrice;
+            }
+          }
+        } else if (field.type === 'TEXT') {
+          // Auto-populate text fields based on label
+          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+          if (fieldLabel.includes('address') || fieldLabel.includes('property') || fieldLabel.includes('location') || fieldLabel.includes('premises')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.propertyAddress;
+          } else if (fieldLabel.includes('rent') && (fieldLabel.includes('amount') || fieldLabel.includes('price'))) {
+            preFilledValues[field.formId] = `$${matchDetailsForPopulation.monthlyPrice}`;
+          }
+        } else if (field.type === 'DATE') {
+          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+          if (fieldLabel.includes('start') || fieldLabel.includes('begin') || fieldLabel.includes('move') && fieldLabel.includes('in')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.startDate;
+          } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate') || fieldLabel.includes('move') && fieldLabel.includes('out')) {
+            preFilledValues[field.formId] = matchDetailsForPopulation.endDate;
+          } else {
+            // For unlabeled DATE fields, alternate between start and end dates
+            const dateFields = mergedPDF.fields.filter(f => f.type === 'DATE');
+            const dateFieldIndex = dateFields.findIndex(f => f.formId === field.formId);
+            if (dateFieldIndex === 0) {
+              preFilledValues[field.formId] = matchDetailsForPopulation.startDate;
+            } else if (dateFieldIndex === 1) {
+              preFilledValues[field.formId] = matchDetailsForPopulation.endDate;
+            }
+          }
+        }
+        // Note: SIGNATURE, INITIALS, SIGN_DATE, and INITIAL_DATE fields are not pre-filled
+      });
+
+      initializeSignedFields(preFilledValues);
+    }
+  }, [mergedPDF, housingRequest, templates]);
 
   const loadInitialData = async () => {
     try {
@@ -124,19 +225,12 @@ export default function CreateLeasePage() {
       setIsMerging(true);
       setError(null);
       
-      console.log('Merging', templates.length, 'PDF templates...');
       
       const result = await mergePDFTemplates(templates, {
         fileName: `lease_package_${templates.length}_documents.pdf`,
         includeMetadata: true
       });
       
-      console.log('PDF merge successful:', {
-        pageCount: result.pageCount,
-        fieldCount: result.fields.length,
-        recipientCount: result.recipients.length,
-        templateCount: result.templateCount
-      });
       
       setMergedPDF(result);
       
@@ -151,8 +245,6 @@ export default function CreateLeasePage() {
 
   const handleDocumentCreated = async (documentData: any) => {
     try {
-      console.log('🔍 handleDocumentCreated - Recipients received:', documentData.recipients);
-      console.log('🔍 handleDocumentCreated - Housing Request ID:', housingRequestId);
       
       const createData = {
         templateIds: templates.map(t => t.id),
@@ -172,11 +264,6 @@ export default function CreateLeasePage() {
         housingRequestId: housingRequestId // Pass housing request ID to link to match
       };
 
-      console.log('🔍 About to call createMergedDocument with:', {
-        hasHousingRequestId: !!createData.housingRequestId,
-        housingRequestId: createData.housingRequestId,
-        recipientEmails: createData.documentData.recipients?.map((r: any) => r.email)
-      });
 
       const result = await createMergedDocument(createData);
 
@@ -211,9 +298,41 @@ export default function CreateLeasePage() {
     router.push(`/app/host/${listingId}/applications/${housingRequestId}`);
   };
 
+  // Helper function to determine if there are unsigned signature/initial fields for current signer (host = index 0)
+  const getUnsignedHostFields = () => {
+    if (!mergedPDF?.fields) return [];
+    return mergedPDF.fields.filter(field => 
+      field.recipientIndex === 0 && 
+      ['SIGNATURE', 'INITIALS'].includes(field.type) && 
+      !signedFields[field.formId]
+    );
+  };
+
+  // Get the appropriate button function and text
+  const getButtonProps = () => {
+    if (currentWorkflowState === 'signer1') {
+      const unsignedFields = getUnsignedHostFields();
+      if (unsignedFields.length > 0) {
+        return {
+          text: 'Next Action',
+          action: signingActionFunction
+        };
+      } else {
+        return {
+          text: 'Save and Send', 
+          action: completeStepFunction
+        };
+      }
+    }
+    return {
+      text: 'Create & Sign Document',
+      action: completeStepFunction
+    };
+  };
+
   if (loading) {
     return (
-      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] min-h-screen">
+      <main className="flex flex-col items-start gap-6 px-6  py-8 bg-[#f9f9f9] ">
         <div className="flex items-center justify-center py-12 w-full">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787] mx-auto mb-4"></div>
@@ -226,7 +345,7 @@ export default function CreateLeasePage() {
 
   if (error || !housingRequest) {
     return (
-      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] min-h-screen">
+      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] ">
         {/* Back Navigation */}
         <Link 
           href={`/app/host/${listingId}/applications/${housingRequestId}`}
@@ -262,45 +381,6 @@ export default function CreateLeasePage() {
   const application = user.applications[0];
   const hostUser = housingRequest.listing.user;
 
-  // Log monthly rent data sources for debugging
-  const logRentSources = async () => {
-    try {
-      const rentData = {
-        housingRequestId: housingRequestId,
-        housingRequest: {
-          monthlyRent: housingRequest.monthlyRent,
-          monthlyRentFormatted: housingRequest.monthlyRent ? `$${housingRequest.monthlyRent.toFixed(2)}` : null,
-        },
-        match: housingRequest.match ? {
-          id: housingRequest.match.id,
-          paymentAmount: housingRequest.match.paymentAmount,
-          paymentAmountFormatted: housingRequest.match.paymentAmount ? `$${housingRequest.match.paymentAmount.toFixed(2)}` : null,
-          paymentStatus: housingRequest.match.paymentStatus,
-        } : null,
-        listingId: listingId,
-        currentLogic: 'Using housingRequest.monthlyRent',
-        shouldUse: housingRequest.match?.paymentAmount ? 'Should consider using match.paymentAmount instead' : 'No match.paymentAmount available'
-      };
-
-      await fetch('/api/log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          level: 'info',
-          message: 'Monthly Rent Data Sources Analysis',
-          data: rentData
-        }),
-      });
-      
-      console.log('🔍 Monthly Rent Data Sources:', rentData);
-    } catch (error) {
-      console.error('Failed to log rent data sources:', error);
-    }
-  };
-
-  // Log the rent data analysis
-  logRentSources();
-
   // Determine which monthly rent value to use
   const getMonthlyRentValue = () => {
     // Priority: match.paymentAmount > housingRequest.monthlyRent
@@ -311,6 +391,7 @@ export default function CreateLeasePage() {
     }
     return "$0.00";
   };
+
 
   // Create MatchDetails for PDFEditorDocument
   const matchDetails: MatchDetails = {
@@ -325,53 +406,42 @@ export default function CreateLeasePage() {
   };
 
   // Debug logging for email values
-  console.log('🔍 Create Lease Debug - Email Values:', {
-    hostName: matchDetails.hostName,
-    hostEmail: matchDetails.hostEmail,
-    primaryRenterName: matchDetails.primaryRenterName,
-    primaryRenterEmail: matchDetails.primaryRenterEmail,
-    userObject: { 
-      id: user.id, 
-      email: user.email, 
-      firstName: user.firstName, 
-      lastName: user.lastName 
-    },
-    hostUserObject: { 
-      id: hostUser.id, 
-      email: hostUser.email, 
-      firstName: hostUser.firstName, 
-      lastName: hostUser.lastName 
-    }
-  });
 
   return (
     <BrandAlertProvider>
-      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] min-h-screen">
-      {/* Back Navigation */}
-      <Link 
-        href={`/app/host/${listingId}/applications/${housingRequestId}`}
-        className="hover:underline pl-2 flex items-center gap-2"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Application
-      </Link>
+      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] ">
 
       {/* Header */}
       <header className="flex flex-col gap-4 w-full">
-        <div>
-          <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
-            Create Lease Package
-          </h1>
-          <p className="text-[#5d606d] text-base leading-[19.2px] mt-1">
-            {isMerging 
-              ? `Merging ${templates.length} documents...`
-              : mergedPDF 
-              ? `Merged package: ${mergedPDF.pageCount} pages • ${mergedPDF.fields.filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).length} signature fields`
-              : templates.length === 1 
-              ? `Editing: ${templates[0].title}` 
-              : `${templates.length} documents selected for lease package`
-            }
-          </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
+              {currentWorkflowState === 'signer1' ? 'Sign and Send Lease' : 'Create Lease Package'}
+            </h1>
+            <p className="text-[#5d606d] text-base leading-[19.2px] mt-1">
+              {isMerging 
+                ? `Merging ${templates.length} documents...`
+                : mergedPDF 
+                ? `Merged package: ${mergedPDF.pageCount} pages • ${mergedPDF.fields.filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).length} signature fields`
+                : templates.length === 1 
+                ? `Editing: ${templates[0].title}` 
+                : `${templates.length} documents selected for lease package`
+              }
+            </p>
+          </div>
+          
+          {mergedPDF && (() => {
+            const buttonProps = getButtonProps();
+            return (
+              <Button
+                onClick={buttonProps.action}
+                disabled={!buttonProps.action || isCreatingDocument}
+                className="bg-[#3c8787] hover:bg-[#2d6666] text-white px-6 py-2"
+              >
+                {isCreatingDocument ? 'Creating Document...' : buttonProps.text}
+              </Button>
+            );
+          })()}
         </div>
         
         {templates.length > 1 && (
@@ -392,7 +462,7 @@ export default function CreateLeasePage() {
       {/* PDF Editor Document */}
       {mergedPDF ? (
         // Merged PDF is ready - show PDFEditorDocument
-        <div className="w-full h-screen">
+        <div className="w-full ">
           <PDFEditorDocument
             initialPdfFile={mergedPDF.file}
             initialFields={mergedPDF.fields}
@@ -431,6 +501,45 @@ export default function CreateLeasePage() {
             onDocumentCreated={(documentId) => {
               setCreatedDocumentId(documentId);
             }}
+            onCompleteStepReady={(completeStepFn) => {
+              completeStepFunctionRef.current = completeStepFn;
+              setCompleteStepFunction(() => async () => {
+                setIsCreatingDocument(true);
+                try {
+                  await completeStepFunctionRef.current?.();
+                } finally {
+                  setIsCreatingDocument(false);
+                }
+              });
+            }}
+            contentHeight="calc(100vh - 210px)"
+            signerRole="host"
+            onWorkflowStateChange={(newState) => {
+              setCurrentWorkflowState(newState as 'document' | 'signer1');
+            }}
+            onSigningActionReady={(signingActionFn) => {
+              signingActionFunctionRef.current = signingActionFn;
+              setSigningActionFunction(() => async () => {
+                await signingActionFunctionRef.current?.();
+              });
+            }}
+            onFieldSign={(fieldId, value) => {
+              // Field signing is now handled by the context
+              setSignedField(fieldId, value);
+            }}
+            customSidebarContent={(workflowState, defaultContent) => {
+              // Only show custom sidebar during signing states
+              if (workflowState === 'signer1') {
+                return (
+                  <HostSidebarFrame
+                    hostName={matchDetails.hostName}
+                    hostEmail={matchDetails.hostEmail}
+                    documentFields={mergedPDF.fields}
+                  />
+                );
+              }
+              return defaultContent;
+            }}
           />
         </div>
       ) : isMerging ? (
@@ -468,4 +577,9 @@ export default function CreateLeasePage() {
       </main>
     </BrandAlertProvider>
   );
+}
+
+// Main component - now using Zustand store instead of context
+export default function CreateLeasePage() {
+  return <CreateLeasePageContent />;
 }
