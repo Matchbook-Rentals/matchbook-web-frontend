@@ -253,7 +253,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
           hostEmail={hostEmail}
           listingAddress={listingAddress}
           listingId={listingId}
-          onCancel={() => setStep("upload")}
+          onCancel={existingTemplate ? onCancel : () => setStep("upload")}
           onSave={(templateData) => {
             // Combine the metadata from step 1 with the field data from editor
             const template = {
@@ -265,7 +265,6 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
             };
             onTemplateCreated?.(template);
           }}
-          onCancel={existingTemplate ? onCancel : () => setStep("upload")}
         />
       </div>
     );

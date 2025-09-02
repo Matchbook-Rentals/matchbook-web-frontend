@@ -677,3 +677,13 @@
 - Host sidebar defaults to showTitle=false (header navigation) while renter sidebar defaults to showTitle=true (footer navigation)
 - Updated lease-signing-client.tsx to explicitly pass showTitle=true to maintain renter behavior
 - Host route automatically hides title using default false value without requiring code changes
+
+## Fix PDF document ordering and field labeling issues
+- Enhanced PDF template sorting to prioritize leases before addendums with improved type detection and comprehensive debugging
+- Fixed recipient lookup in PDF editor to use fallback logic when signerEmail matching fails
+- Resolved INITIALS and INITIAL_DATE field labeling to show "Host Initials/Initial Date" instead of generic "Field" text
+- Added proper recipient role detection with recipientIndex fallback for accurate field labeling in document creation step
+
+## Fix React linting errors
+- Fixed duplicate props error in TemplateCreationStep.tsx by removing duplicate onCancel prop
+- Escaped unescaped HTML entities in success page template title and "What's Next?" text

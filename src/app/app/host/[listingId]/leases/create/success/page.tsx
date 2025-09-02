@@ -84,7 +84,7 @@ export default function LeaseTemplateSuccessPage({ params }: LeaseTemplateSucces
           
           {templateDetails && (
             <p className="text-lg text-gray-600 mb-8">
-              Your {getDocumentTypeDisplay(templateDetails.type)} template "{templateDetails.title}" has been created and is ready to use.
+              Your {getDocumentTypeDisplay(templateDetails.type)} template &quot;{templateDetails.title}&quot; has been created and is ready to use.
             </p>
           )}
 
@@ -120,7 +120,7 @@ export default function LeaseTemplateSuccessPage({ params }: LeaseTemplateSucces
           {/* Next Steps */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
             <h2 className="text-xl font-semibold text-blue-900 mb-4">
-              What's Next?
+              What&apos;s Next?
             </h2>
             
             <div className="space-y-4 text-left">
