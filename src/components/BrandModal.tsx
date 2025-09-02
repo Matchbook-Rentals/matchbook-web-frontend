@@ -42,7 +42,7 @@ export default function BrandModal({
           {triggerButton}
         </div>
       ) : (
-        defaultTrigger
+        null
       )}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
