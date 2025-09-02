@@ -1,5 +1,14 @@
 # Changelog
 
+## Add comprehensive field validation logging and fix field name mapping
+- Added server-side logging API endpoint (/api/log) for centralized client-to-server logging in development
+- Created clientLogger utility to send structured logs from client components to server console
+- Added comprehensive logging throughout PDFEditor for field operations, validation status, and user interactions
+- Updated field validation mappings to use correct field names: "Rent Amount", "Move In Date", "Move Out Date" instead of legacy "Monthly Rent", "Start Date", "End Date"
+- Fixed RequiredLeaseFields buttons to check correct field identifiers and display proper validation status
+- Enhanced template creation workflow with detailed validation status logging after every field change
+- Replaced alert() calls with branded modal alerts for better user experience consistency
+
 ## Add listing address header to PDF template creation
 - Added header above PDF display showing "Create Lease/Addendum Template for [address]" during template creation
 - Created API endpoint for fetching listing data by ID with proper authentication

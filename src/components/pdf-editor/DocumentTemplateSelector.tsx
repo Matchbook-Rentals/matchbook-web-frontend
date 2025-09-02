@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FileText, Calendar, User } from 'lucide-react';
 import { PdfTemplate } from '@prisma/client';
+import { useBrandAlert, createBrandAlert } from '@/hooks/useBrandAlert';
 
 interface DocumentTemplateSelectorProps {
   onLoadTemplate: (template: PdfTemplate) => void;
@@ -16,6 +17,8 @@ export const DocumentTemplateSelector: React.FC<DocumentTemplateSelectorProps> =
   onLoadTemplate,
   onClose,
 }) => {
+  const { showAlert } = useBrandAlert();
+  const brandAlert = createBrandAlert(showAlert);
   const [templates, setTemplates] = useState<PdfTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
@@ -49,11 +52,11 @@ export const DocumentTemplateSelector: React.FC<DocumentTemplateSelectorProps> =
         const data = await response.json();
         onLoadTemplate(data.template);
       } else {
-        alert('Failed to load template');
+        brandAlert('Failed to load template', 'error', 'Load Failed');
       }
     } catch (error) {
       console.error('Error loading template:', error);
-      alert('Error loading template');
+      brandAlert('Error loading template', 'error', 'Load Error');
     } finally {
       setLoadingTemplate(null);
     }

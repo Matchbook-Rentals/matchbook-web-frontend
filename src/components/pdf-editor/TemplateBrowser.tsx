@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Download, Trash2, Calendar, User, FileText } from 'lucide-react';
 import { PdfTemplate } from '@prisma/client';
+import { useBrandAlert, createBrandAlert, createBrandConfirm } from '@/hooks/useBrandAlert';
 
 interface TemplateBrowserProps {
   onLoadTemplate: (template: PdfTemplate) => void;
@@ -16,6 +17,9 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({
   onLoadTemplate,
   onClose,
 }) => {
+  const { showAlert, showConfirm } = useBrandAlert();
+  const brandAlert = createBrandAlert(showAlert);
+  const brandConfirm = createBrandConfirm(showConfirm);
   const [templates, setTemplates] = useState<PdfTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
@@ -50,20 +54,33 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({
         onLoadTemplate(data.template);
         // Don't auto-close - let the parent component handle navigation
       } else {
-        alert('Failed to load template');
+        brandAlert('Failed to load template', 'error', 'Load Failed');
       }
     } catch (error) {
       console.error('Error loading template:', error);
-      alert('Error loading template');
+      brandAlert('Error loading template', 'error', 'Load Error');
     } finally {
       setLoadingTemplate(null);
     }
   };
 
   const handleDeleteTemplate = async (templateId: string, templateTitle: string) => {
-    if (!confirm(`Are you sure you want to delete "${templateTitle}"?`)) {
-      return;
-    }
+    brandConfirm(
+      `Are you sure you want to delete "${templateTitle}"? This action cannot be undone.`,
+      async () => {
+        await performDelete(templateId);
+      },
+      {
+        title: 'Delete Template',
+        type: 'warning',
+        variant: 'destructive',
+        confirmText: 'Delete',
+        cancelText: 'Cancel'
+      }
+    );
+  };
+
+  const performDelete = async (templateId: string) => {
 
     try {
       const response = await fetch(`/api/pdf-templates/${templateId}`, {
@@ -72,11 +89,11 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({
       if (response.ok) {
         setTemplates(templates.filter(t => t.id !== templateId));
       } else {
-        alert('Failed to delete template');
+        brandAlert('Failed to delete template', 'error', 'Delete Failed');
       }
     } catch (error) {
       console.error('Error deleting template:', error);
-      alert('Error deleting template');
+      brandAlert('Error deleting template', 'error', 'Delete Error');
     }
   };
 

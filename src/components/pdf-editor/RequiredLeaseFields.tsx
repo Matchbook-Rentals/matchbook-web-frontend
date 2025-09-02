@@ -84,32 +84,32 @@ export const RequiredLeaseFields: React.FC<RequiredLeaseFieldsProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className={`text-xs justify-start ${getRequiredFieldStatus('monthly-rent') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
+                className={`text-xs justify-start ${getRequiredFieldStatus('rent-amount') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
                 onMouseDown={(e) => {
-                  startFieldDetection(FieldType.NUMBER, 'host-recipient', e.nativeEvent as MouseEvent, 'Monthly Rent');
+                  startFieldDetection(FieldType.NUMBER, 'host-recipient', e.nativeEvent as MouseEvent, 'Rent Amount');
                 }}
               >
-                {getRequiredFieldStatus('monthly-rent') ? '✓' : '+'} Monthly Rent
+                {getRequiredFieldStatus('rent-amount') ? '✓' : '+'} Rent Amount
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className={`text-xs justify-start ${getRequiredFieldStatus('start-date') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
+                className={`text-xs justify-start ${getRequiredFieldStatus('move-in-date') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
                 onMouseDown={(e) => {
-                  startFieldDetection(FieldType.DATE, 'host-recipient', e.nativeEvent as MouseEvent, 'Start Date');
+                  startFieldDetection(FieldType.DATE, 'host-recipient', e.nativeEvent as MouseEvent, 'Move In Date');
                 }}
               >
-                {getRequiredFieldStatus('start-date') ? '✓' : '+'} Start Date
+                {getRequiredFieldStatus('move-in-date') ? '✓' : '+'} Move In Date
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className={`text-xs justify-start ${getRequiredFieldStatus('end-date') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
+                className={`text-xs justify-start ${getRequiredFieldStatus('move-out-date') ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
                 onMouseDown={(e) => {
-                  startFieldDetection(FieldType.DATE, 'host-recipient', e.nativeEvent as MouseEvent, 'End Date');
+                  startFieldDetection(FieldType.DATE, 'host-recipient', e.nativeEvent as MouseEvent, 'Move Out Date');
                 }}
               >
-                {getRequiredFieldStatus('end-date') ? '✓' : '+'} End Date
+                {getRequiredFieldStatus('move-out-date') ? '✓' : '+'} Move Out Date
               </Button>
             </div>
             <p className="text-xs text-gray-500 mt-2">

@@ -22,9 +22,9 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
       'host-name': { type: FieldType.NAME, recipientIndex: 0, label: 'Host Name' },
       'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1, label: 'Primary Renter Signature' },
       'renter-name': { type: FieldType.NAME, recipientIndex: 1, label: 'Primary Renter Name' },
-      'monthly-rent': { type: FieldType.NUMBER, label: 'Monthly Rent' },
-      'start-date': { type: FieldType.DATE, label: 'Start Date' },
-      'end-date': { type: FieldType.DATE, label: 'End Date' }
+      'rent-amount': { type: FieldType.NUMBER, label: 'Rent Amount' },
+      'move-in-date': { type: FieldType.DATE, label: 'Move In Date' },
+      'move-out-date': { type: FieldType.DATE, label: 'Move Out Date' }
     };
 
     for (const [, config] of Object.entries(requiredFieldMap)) {

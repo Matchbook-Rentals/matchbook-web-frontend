@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PDFEditor } from "@/components/pdf-editor/PDFEditor";
 import { formatFileSize } from "@/lib/utils";
+import { clientLogger } from "@/lib/clientLogger";
 
 interface TemplateCreationStepProps {
   existingTemplate?: any;
@@ -23,9 +24,16 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
   const [step, setStep] = useState<"upload" | "edit">(existingTemplate ? "edit" : "upload");
   const [templateName, setTemplateName] = useState(existingTemplate?.title || "");
   const [templateType, setTemplateType] = useState<"lease" | "addendum" | "">(
-    existingTemplate?.type || ""
+    existingTemplate?.type || "lease"
   );
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  clientLogger.info('TemplateCreationStep - Component initialized', {
+    hasExistingTemplate: !!existingTemplate,
+    existingTemplateType: existingTemplate?.type,
+    initialTemplateType: existingTemplate?.type || "lease",
+    step
+  });
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -67,7 +75,16 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
                         </Label>
                       </div>
 
-                      <Select value={templateType} onValueChange={(value: "lease" | "addendum") => setTemplateType(value)}>
+                      <Select 
+                        value={templateType} 
+                        onValueChange={(value: "lease" | "addendum") => {
+                          clientLogger.info('TemplateCreationStep - Template type changed', {
+                            oldValue: templateType,
+                            newValue: value
+                          });
+                          setTemplateType(value);
+                        }}
+                      >
                         <SelectTrigger className="h-12 items-center gap-2 px-3 py-2 self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
                           <SelectValue
                             placeholder="Select a Type"
@@ -178,7 +195,17 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
                 <Button 
                   className="h-auto inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative w-full sm:w-auto sm:flex-[0_0_auto] bg-[#3c8787] hover:bg-[#2d6666] rounded-lg overflow-hidden border-0"
                   disabled={!templateName || !templateType || !uploadedFile}
-                  onClick={() => setStep("edit")}
+                  onClick={() => {
+                    clientLogger.info('TemplateCreationStep - Submit button clicked', {
+                      templateName,
+                      templateType,
+                      fileName: uploadedFile?.name,
+                      fileSize: uploadedFile?.size,
+                      hasAllRequiredFields: !!(templateName && templateType && uploadedFile),
+                      transitioningToEdit: true
+                    });
+                    setStep("edit");
+                  }}
                 >
                   <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-white text-sm tracking-[0] leading-5 whitespace-nowrap">
                     Submit
@@ -205,6 +232,14 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
   }
 
   if (step === "edit") {
+    clientLogger.info('TemplateCreationStep - Rendering PDFEditor', {
+      templateType,
+      templateTypeAsString: String(templateType),
+      templateName,
+      hasUploadedFile: !!uploadedFile,
+      hasExistingTemplate: !!existingTemplate
+    });
+
     return (
       <div className="space-y-6">
         <PDFEditor 

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FileText, Calendar, User, Users } from 'lucide-react';
+import { useBrandAlert, createBrandAlert } from '@/hooks/useBrandAlert';
 
 // Define Document interface based on what we expect from the API
 interface Document {
@@ -31,6 +32,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
   onClose,
   signerType,
 }) => {
+  const { showAlert } = useBrandAlert();
+  const brandAlert = createBrandAlert(showAlert);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingDocument, setLoadingDocument] = useState<string | null>(null);
@@ -74,11 +77,11 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
         const data = await response.json();
         onLoadDocument(data.document);
       } else {
-        alert('Failed to load document');
+        brandAlert('Failed to load document', 'error', 'Load Failed');
       }
     } catch (error) {
       console.error('Error loading document:', error);
-      alert('Error loading document');
+      brandAlert('Error loading document', 'error', 'Load Error');
     } finally {
       setLoadingDocument(null);
     }

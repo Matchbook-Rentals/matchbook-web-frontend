@@ -26,6 +26,8 @@ import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, fin
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
 import BrandModal from '@/components/BrandModal';
+import { useBrandAlert, createBrandAlert, createBrandConfirm } from '@/hooks/useBrandAlert';
+import { clientLogger } from '@/lib/clientLogger';
 
 // Template data interface for the editor
 interface LoadedTemplate {
@@ -60,6 +62,7 @@ interface PDFEditorProps {
   initialPdfFile?: File;
   initialFields?: FieldFormType[];
   initialRecipients?: Recipient[];
+  initialTemplate?: any;
   templateType?: 'lease' | 'addendum' | 'disclosure' | 'other';
   isMergedDocument?: boolean;
   mergedTemplateIds?: string[];
@@ -81,6 +84,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   initialPdfFile, 
   initialFields,
   initialRecipients,
+  initialTemplate,
   templateType = 'lease',
   isMergedDocument = false,
   mergedTemplateIds,
@@ -97,6 +101,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   customSidebarContent
 }) => {
   const router = useRouter();
+  const { showAlert, showConfirm } = useBrandAlert();
+  const brandAlert = createBrandAlert(showAlert);
+  const brandConfirm = createBrandConfirm(showConfirm);
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
   const [recipients, setRecipients] = useState<Recipient[]>(initialRecipients || []);
   const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null);
@@ -173,6 +180,20 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Fields state
   const [fields, setFields] = useState<FieldFormType[]>(initialFields || []);
+
+  // Component initialization logging
+  clientLogger.info('PDFEditor - Component initialized', {
+    templateType,
+    workflowState: initialWorkflowState,
+    initialFieldsCount: initialFields?.length || 0,
+    initialRecipientsCount: initialRecipients?.length || 0,
+    hasPdfFile: !!initialPdfFile,
+    hasTemplate: !!initialTemplate,
+    isMergedDocument,
+    hostName,
+    hostEmail,
+    listingAddress
+  });
 
   // Initialize signedFields with pre-filled values from initialFields
   useEffect(() => {
@@ -539,7 +560,15 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // File upload handling
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles[0]?.type === 'application/pdf') {
-      setPdfFile(acceptedFiles[0]);
+      const newFile = acceptedFiles[0];
+      clientLogger.info('PDFEditor - PDF file uploaded', {
+        fileName: newFile.name,
+        fileSize: newFile.size,
+        fileType: newFile.type,
+        currentFieldCount: fields.length,
+        workflowState
+      });
+      setPdfFile(newFile);
       // Reset state when new PDF is loaded
       setFields([]);
       setActiveFieldId(null);
@@ -701,7 +730,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           fieldMeta: {
             label: pendingFieldLabel,
             // Add specific metadata based on field type and label
-            ...(selectedField === FieldType.NUMBER && pendingFieldLabel === 'Monthly Rent' && {
+            ...(selectedField === FieldType.NUMBER && pendingFieldLabel === 'Rent Amount' && {
               placeholder: '$0.00',
               required: true
             }),
@@ -726,7 +755,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               placeholder: 'Enter renter email',
               required: true
             }),
-            ...(selectedField === FieldType.DATE && (pendingFieldLabel === 'Start Date' || pendingFieldLabel === 'End Date') && {
+            ...(selectedField === FieldType.DATE && (pendingFieldLabel === 'Move In Date' || pendingFieldLabel === 'Move Out Date') && {
               required: true
             })
           }
@@ -734,11 +763,30 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         setFields([...fields, fieldWithMetadata]);
         setActiveFieldId(fieldWithMetadata.formId);
         console.log('✅ Required field added directly with metadata:', fieldWithMetadata);
+        clientLogger.info('PDFEditor - Field added (required field)', {
+          fieldType: fieldWithMetadata.type,
+          fieldLabel: fieldWithMetadata.fieldMeta?.label,
+          recipientIndex: fieldWithMetadata.recipientIndex,
+          pageNumber: fieldWithMetadata.pageNumber,
+          formId: fieldWithMetadata.formId,
+          newFieldCount: fields.length + 1
+        });
+        // Log validation status after adding field
+        setTimeout(() => logValidationStatus('After Required Field Added'), 0);
       } else {
         // Non-custom fields (signatures, initials, etc.)
         setFields([...fields, newField]);
         setActiveFieldId(newField.formId);
         console.log('✅ Field creation completed, setting states to cleanup');
+        clientLogger.info('PDFEditor - Field added (non-custom field)', {
+          fieldType: newField.type,
+          recipientIndex: newField.recipientIndex,
+          pageNumber: newField.pageNumber,
+          formId: newField.formId,
+          newFieldCount: fields.length + 1
+        });
+        // Log validation status after adding field
+        setTimeout(() => logValidationStatus('After Non-Custom Field Added'), 0);
       }
     }
     
@@ -762,11 +810,21 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     const fieldPageWidth = (newBounds.width / pageWidth) * 100;
     const fieldPageHeight = (newBounds.height / pageHeight) * 100;
 
-    setFields(fields.map(f => 
+    const updatedFields = fields.map(f => 
       f.formId === formId 
         ? { ...f, pageX, pageY, pageWidth: fieldPageWidth, pageHeight: fieldPageHeight }
         : f
-    ));
+    );
+    setFields(updatedFields);
+    
+    const updatedField = updatedFields.find(f => f.formId === formId);
+    clientLogger.info('PDFEditor - Field position updated', {
+      formId,
+      fieldType: updatedField?.type,
+      fieldLabel: updatedField?.fieldMeta?.label,
+      newPosition: { pageX, pageY },
+      newSize: { pageWidth: fieldPageWidth, pageHeight: fieldPageHeight }
+    });
   };
 
   // Check if a field is template-enforced (based on the required fields map)
@@ -776,9 +834,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       'host-name': { type: FieldType.NAME, recipientIndex: 0 },
       'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1 },
       'renter-name': { type: FieldType.NAME, recipientIndex: 1 },
-      'monthly-rent': { type: FieldType.NUMBER, label: 'Monthly Rent' },
-      'start-date': { type: FieldType.DATE, label: 'Start Date' },
-      'end-date': { type: FieldType.DATE, label: 'End Date' }
+      'rent-amount': { type: FieldType.NUMBER, label: 'Rent Amount' },
+      'move-in-date': { type: FieldType.DATE, label: 'Move In Date' },
+      'move-out-date': { type: FieldType.DATE, label: 'Move Out Date' }
     };
 
     for (const [, config] of Object.entries(requiredFieldMap)) {
@@ -825,10 +883,21 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       return;
     }
     
+    const fieldToRemove = fields.find(f => f.formId === formId);
     setFields(fields.filter((field) => field.formId !== formId));
     if (activeFieldId === formId) {
       setActiveFieldId(null);
     }
+    clientLogger.info('PDFEditor - Field removed', {
+      formId,
+      fieldType: fieldToRemove?.type,
+      fieldLabel: fieldToRemove?.fieldMeta?.label,
+      recipientIndex: fieldToRemove?.recipientIndex,
+      pageNumber: fieldToRemove?.pageNumber,
+      newFieldCount: fields.length - 1
+    });
+    // Log validation status after removing field
+    setTimeout(() => logValidationStatus('After Field Removed'), 0);
   };
 
   // Add sign date field next to signature field
@@ -880,6 +949,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add the field to the array
     setFields([...fields, signDateField]);
     setActiveFieldId(signDateField.formId);
+    clientLogger.info('PDFEditor - Sign date field added', {
+      formId: signDateField.formId,
+      fieldType: signDateField.type,
+      recipientIndex: signDateField.recipientIndex,
+      pageNumber: signDateField.pageNumber,
+      newFieldCount: fields.length + 1
+    });
+    setTimeout(() => logValidationStatus('After Sign Date Field Added'), 0);
     
     console.log('✅ Sign date field added:', signDateField);
   };
@@ -933,6 +1010,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add the field to the array
     setFields([...fields, initialDateField]);
     setActiveFieldId(initialDateField.formId);
+    clientLogger.info('PDFEditor - Initial date field added', {
+      formId: initialDateField.formId,
+      fieldType: initialDateField.type,
+      recipientIndex: initialDateField.recipientIndex,
+      pageNumber: initialDateField.pageNumber,
+      newFieldCount: fields.length + 1
+    });
+    setTimeout(() => logValidationStatus('After Initial Date Field Added'), 0);
     
     console.log('✅ Initial date field added:', initialDateField);
   };
@@ -951,7 +1036,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     const recipientIndex = recipients.findIndex(r => r.id === id);
     setRecipients(recipients.filter(r => r.id !== id));
     // Remove all fields for this recipient
+    const fieldsToRemove = fields.filter(field => field.recipientIndex === recipientIndex);
     setFields(fields.filter(field => field.recipientIndex !== recipientIndex));
+    clientLogger.info('PDFEditor - Recipient removed with fields', {
+      recipientId: id,
+      recipientIndex,
+      fieldsRemovedCount: fieldsToRemove.length,
+      newFieldCount: fields.length - fieldsToRemove.length,
+      newRecipientCount: recipients.length - 1
+    });
+    setTimeout(() => logValidationStatus('After Recipient Removed'), 0);
     if (selectedRecipient === id) {
       setSelectedRecipient(recipients.length > 1 ? recipients.find(r => r.id !== id)?.id || null : null);
     }
@@ -987,9 +1081,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   };
 
   // Step 1 → Step 2: Save template and create document
-  const saveTemplateAndCreateDocument = async () => {
+  const saveTemplateAndCreateDocument = async (onSaveCallback?: () => void) => {
     if (!pdfFile) {
-      alert('Please upload a PDF file first.');
+      brandAlert('Please upload a PDF file first.', 'warning', 'File Required');
       return;
     }
 
@@ -1078,7 +1172,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       sessionStorage.setItem('currentTemplateId', template.id);
       console.log('✅ Template ID stored in sessionStorage:', template.id);
       
-      alert(`✅ Template saved successfully!\n\n📄 PDF: ${uploadResult.fileName}\n🎯 Fields: ${fields.length}\n👥 Recipients: ${recipients.length}\n🆔 Template ID: ${template.id}`);
+      brandAlert(
+        `Template saved successfully!\n\n📄 PDF: ${uploadResult.fileName}\n🎯 Fields: ${fields.length}\n👥 Recipients: ${recipients.length}\n🆔 Template ID: ${template.id}`, 
+        'success', 
+        'Template Saved',
+        onSaveCallback // Call the callback when user clicks OK
+      );
       
       setWorkflowState('selection');
       setSelectedField(null);
@@ -1104,7 +1203,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       }
       
       errorMessage += '\n\n🔍 Check console for detailed logs.';
-      alert(errorMessage);
+      brandAlert(errorMessage, 'error', 'Save Failed');
     }
   };
 
@@ -1177,7 +1276,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       }
       
       if (!documentId) {
-        alert('Unable to create document. Please start over from template selection.');
+        brandAlert('Unable to create document. Please start over from template selection.', 'error', 'Document Creation Failed');
         return;
       }
 
@@ -1211,7 +1310,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       
     } catch (error) {
       console.error('❌ Error in saveDocumentAndStartSigning:', error);
-      alert('Failed to start signing workflow: ' + error.message);
+      brandAlert('Failed to start signing workflow: ' + error.message, 'error', 'Signing Failed');
     }
   };
 
@@ -1219,7 +1318,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const saveSignerProgressAsync = async (signerIndex: number) => {
     const documentId = sessionStorage.getItem('currentDocumentId');
     if (!documentId) {
-      alert('Document not found. Please start over.');
+      brandAlert('Document not found. Please start over.', 'error', 'Document Not Found');
       return;
     }
 
@@ -1280,7 +1379,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
       // Show success and return to selection
       const signerName = recipients[signerIndex]?.name || `Signer ${signerIndex + 1}`;
-      alert(`✅ ${signerName} has completed signing!\n\n${signerIndex === 0 ? 'Document is now ready for Signer 2.' : 'Document is fully signed and complete.'}`);
+      brandAlert(`${signerName} has completed signing!\n\n${signerIndex === 0 ? 'Document is now ready for Signer 2.' : 'Document is fully signed and complete.'}`, 'success', 'Signing Complete');
       
       // Return to selection screen for async workflow
       setWorkflowState('selection');
@@ -1295,7 +1394,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       
     } catch (error) {
       console.error('Error in saveSignerProgressAsync:', error);
-      alert('Failed to save signer progress. Please try again.');
+      brandAlert('Failed to save signer progress. Please try again.', 'error', 'Save Failed');
     }
   };
 
@@ -1303,7 +1402,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const saveSignerProgressAndContinue = async (signerIndex: number) => {
     const documentId = sessionStorage.getItem('currentDocumentId');
     if (!documentId) {
-      alert('Document not found. Please start over.');
+      brandAlert('Document not found. Please start over.', 'error', 'Document Not Found');
       return;
     }
 
@@ -1357,7 +1456,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       
     } catch (error) {
       console.error('Error in saveSignerProgressAndContinue:', error);
-      alert('Failed to save signer progress. Please try again.');
+      brandAlert('Failed to save signer progress. Please try again.', 'error', 'Save Failed');
     }
   };
 
@@ -1365,7 +1464,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const completeSigning = async () => {
     const documentId = sessionStorage.getItem('currentDocumentId');
     if (!documentId) {
-      alert('Document not found. Please start over.');
+      brandAlert('Document not found. Please start over.', 'error', 'Document Not Found');
       return;
     }
 
@@ -1387,13 +1486,13 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       
     } catch (error) {
       console.error('Error in completeSigning:', error);
-      alert('Failed to complete signing. Please try again.');
+      brandAlert('Failed to complete signing. Please try again.', 'error', 'Signing Failed');
     }
   };
 
   // Save template functionality (manual save)
-  const saveTemplate = async () => {
-    await saveTemplateAndCreateDocument();
+  const saveTemplate = async (onSaveCallback?: () => void) => {
+    await saveTemplateAndCreateDocument(onSaveCallback);
   };
 
   // Save document functionality (manual save without starting signing)
@@ -1462,7 +1561,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         documentId = document.id;
         sessionStorage.setItem('currentDocumentId', documentId);
         console.log('✅ Document created as draft:', documentId);
-        alert('✅ Document saved as draft successfully!');
+        brandAlert('Document saved as draft successfully!', 'success', 'Draft Saved');
       } else if (documentId) {
         // Update existing document
         await fetch(`/api/documents/${documentId}`, {
@@ -1480,14 +1579,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           }),
         });
         console.log('✅ Document updated:', documentId);
-        alert('✅ Document updated successfully!');
+        brandAlert('Document updated successfully!', 'success', 'Document Updated');
       } else {
         throw new Error('No template or document ID found. Please start from template creation.');
       }
       
     } catch (error) {
       console.error('❌ Error in saveDocument:', error);
-      alert('Failed to save document: ' + error.message);
+      brandAlert('Failed to save document: ' + error.message, 'error', 'Save Failed');
     }
   };
 
@@ -1788,7 +1887,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       });
     } catch (error) {
       console.error('❌ Error loading template:', error);
-      alert('❌ Failed to load template: ' + error.message);
+      brandAlert('Failed to load template: ' + error.message, 'error', 'Load Failed');
     }
   };
 
@@ -1928,7 +2027,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       console.error('❌ Error loading document for signing:', error);
       setValidationStatus('invalid');
       setFieldsValidated(false);
-      alert('❌ Failed to load document: ' + error.message);
+      brandAlert('Failed to load document: ' + error.message, 'error', 'Load Failed');
     }
   };
 
@@ -2025,18 +2124,65 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         // Start loading for template workflow
         setIsSavingTemplate(true);
         
+        if (!pdfFile) {
+          brandAlert('Please upload a PDF file first.', 'warning', 'File Required');
+          setIsSavingTemplate(false);
+          return;
+        }
+        
+        clientLogger.info('PDFEditor - Template validation starting', {
+          templateType,
+          fieldsCount: fields.length,
+          hasTemplateType: !!templateType
+        });
+
+        if (!templateType || templateType === '') {
+          clientLogger.warn('PDFEditor - Template type validation failed', {
+            templateType,
+            isEmpty: templateType === '',
+            isNull: !templateType
+          });
+          brandAlert('Please select a template type (lease or addendum).', 'warning', 'Template Type Required');
+          setIsSavingTemplate(false);
+          return;
+        }
+        
         if (fields.length === 0) {
-          alert('Please add some fields to your template first!');
+          brandAlert('Please add some fields to your template first!', 'warning', 'Fields Required');
           setIsSavingTemplate(false);
           return;
         }
         
         // For lease templates, check if all required fields are present
-        if (templateType === 'lease') {
-          const requiredFieldTypes = ['host-signature', 'host-name', 'renter-signature', 'renter-name', 'monthly-rent', 'start-date', 'end-date'];
+        // Note: API defaults empty type to 'lease', so validate unless explicitly 'addendum'
+        clientLogger.info('PDFEditor - Checking required fields validation', {
+          templateType,
+          isLeaseType: templateType === 'lease',
+          isEmpty: !templateType || templateType === '',
+          shouldValidateRequiredFields: templateType === 'lease' || !templateType || templateType === ''
+        });
+
+        if (templateType === 'lease' || !templateType || templateType === '') {
+          const requiredFieldTypes = ['host-signature', 'host-name', 'renter-signature', 'renter-name', 'rent-amount', 'move-in-date', 'move-out-date'];
+          const fieldStatuses = requiredFieldTypes.map(fieldType => ({
+            fieldType,
+            status: getRequiredFieldStatus(fieldType)
+          }));
           const missingRequiredFields = requiredFieldTypes.filter(fieldType => !getRequiredFieldStatus(fieldType));
           
+          clientLogger.info('PDFEditor - Required fields validation results', {
+            templateType,
+            requiredFieldTypes,
+            fieldStatuses,
+            missingRequiredFields,
+            missingCount: missingRequiredFields.length
+          });
+          
           if (missingRequiredFields.length > 0) {
+            clientLogger.warn('PDFEditor - Missing required fields detected', {
+              missingRequiredFields,
+              missingCount: missingRequiredFields.length
+            });
             setMissingFields(missingRequiredFields);
             setShowMissingFieldsDialog(true);
             setIsSavingTemplate(false);
@@ -2045,12 +2191,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         }
         
         try {
-          // Save the template
-          await saveTemplate();
-          // Call onSave if provided
-          if (onSave && pdfFile) {
-            onSave({ fields, recipients, pdfFile });
-          }
+          // Save the template with callback for success navigation
+          await saveTemplate(() => {
+            if (onSave && pdfFile) {
+              onSave({ fields, recipients, pdfFile });
+            }
+          });
         } finally {
           setIsSavingTemplate(false);
         }
@@ -2058,7 +2204,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         
       case 'document':
         if (fields.length === 0) {
-          alert('Please add some fields before finishing!');
+          brandAlert('Please add some fields before finishing!', 'warning', 'Fields Required');
           return;
         }
         
@@ -2092,7 +2238,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             }
           } catch (error) {
             console.error('Error in onSave callback:', error);
-            alert('Failed to save document: ' + error.message);
+            brandAlert('Failed to save document: ' + error.message, 'error', 'Save Failed');
           } finally {
             setIsCreatingDocument(false);
           }
@@ -2108,7 +2254,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           return; // Don't continue to the normal completion flow
         } catch (error) {
           console.error('❌ Error creating document:', error);
-          alert('Failed to create document: ' + error.message);
+          brandAlert('Failed to create document: ' + error.message, 'error', 'Creation Failed');
           setIsCreatingDocument(false);
           return;
         }
@@ -2121,7 +2267,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         const signerFields = fields.filter(f => f.recipientIndex === currentSignerIndex && ['SIGNATURE', 'INITIALS'].includes(f.type));
         const unSignedFields = signerFields.filter(f => !signedFields[f.formId]);
         if (unSignedFields.length > 0) {
-          alert('Please complete all required fields before finishing!');
+          brandAlert('Please complete all required fields before finishing!', 'warning', 'Fields Incomplete');
           return;
         }
         
@@ -2172,7 +2318,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           
         } catch (error) {
           console.error('❌ Error saving signing progress:', error);
-          alert('Failed to save signing progress: ' + error.message);
+          brandAlert('Failed to save signing progress: ' + error.message, 'error', 'Save Failed');
           return;
         }
         break;
@@ -2493,6 +2639,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add field to fields array using functional update
     setFields(prevFields => [...prevFields, updatedField]);
     setActiveFieldId(updatedField.formId);
+    clientLogger.info('PDFEditor - Custom field added', {
+      formId: updatedField.formId,
+      fieldType: updatedField.type,
+      fieldLabel: updatedField.fieldMeta?.label,
+      recipientIndex: updatedField.recipientIndex,
+      pageNumber: updatedField.pageNumber,
+      newFieldCount: fields.length + 1
+    });
+    // Log validation status after adding custom field
+    setTimeout(() => logValidationStatus('After Custom Field Added'), 0);
     
     // Close dialog
     setCustomFieldDialog({ isOpen: false, field: null });
@@ -2574,6 +2730,43 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   }, [fields, workflowState, validateFieldRendering]);
 
+  // Log comprehensive validation status
+  const logValidationStatus = (context: string) => {
+    const requiredFieldTypes = ['host-signature', 'host-name', 'renter-signature', 'renter-name', 'rent-amount', 'move-in-date', 'move-out-date'];
+    const fieldStatuses = requiredFieldTypes.map(fieldType => ({
+      fieldType,
+      status: getRequiredFieldStatus(fieldType),
+      fieldsOfType: fields.filter(f => {
+        const requiredFieldMap = {
+          'host-signature': { type: FieldType.SIGNATURE, recipientIndex: 0 },
+          'host-name': { type: FieldType.NAME, recipientIndex: 0 },
+          'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1 },
+          'renter-name': { type: FieldType.NAME, recipientIndex: 1 },
+          'rent-amount': { type: FieldType.NUMBER, label: 'Rent Amount' },
+          'move-in-date': { type: FieldType.DATE, label: 'Move In Date' },
+          'move-out-date': { type: FieldType.DATE, label: 'Move Out Date' }
+        };
+        const config = requiredFieldMap[fieldType as keyof typeof requiredFieldMap];
+        if (config.recipientIndex !== undefined) {
+          return f.type === config.type && f.recipientIndex === config.recipientIndex;
+        }
+        return f.type === config.type && f.fieldMeta?.label === config.label;
+      }).length
+    }));
+
+    const missingFields = fieldStatuses.filter(f => !f.status).map(f => f.fieldType);
+    
+    clientLogger.info(`PDFEditor - Validation Status [${context}]`, {
+      templateType,
+      totalFields: fields.length,
+      shouldValidate: templateType === 'lease' || !templateType || templateType === '',
+      fieldStatuses,
+      missingFields,
+      missingCount: missingFields.length,
+      allFieldsPresent: missingFields.length === 0
+    });
+  };
+
   // Check if required fields are placed
   const getRequiredFieldStatus = (fieldType: string) => {
     const requiredFieldMap = {
@@ -2581,9 +2774,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       'host-name': { type: FieldType.NAME, recipientIndex: 0 },
       'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1 },
       'renter-name': { type: FieldType.NAME, recipientIndex: 1 },
-      'monthly-rent': { type: FieldType.NUMBER, label: 'Monthly Rent' },
-      'start-date': { type: FieldType.DATE, label: 'Start Date' },
-      'end-date': { type: FieldType.DATE, label: 'End Date' }
+      'rent-amount': { type: FieldType.NUMBER, label: 'Rent Amount' },
+      'move-in-date': { type: FieldType.DATE, label: 'Move In Date' },
+      'move-out-date': { type: FieldType.DATE, label: 'Move Out Date' }
     };
 
     const config = requiredFieldMap[fieldType as keyof typeof requiredFieldMap];

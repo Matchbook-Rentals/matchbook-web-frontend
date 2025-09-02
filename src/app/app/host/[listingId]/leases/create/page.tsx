@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { TemplateCreationStep } from "@/features/lease-signing/steps";
 import { PdfTemplate } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
+import { BrandAlertProvider } from "@/hooks/useBrandAlert";
 
 interface ListingData {
   id: string;
@@ -206,15 +207,17 @@ export default function CreateLeasePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9] p-6">
-      <TemplateCreationStep
-        existingTemplate={existingTemplate}
-        onTemplateCreated={handleTemplateCreated}
-        onCancel={handleCancel}
-        hostName={user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : undefined}
-        hostEmail={user?.emailAddresses?.[0]?.emailAddress}
-        listingAddress={listing?.streetAddress1 || ''}
-      />
-    </div>
+    <BrandAlertProvider>
+      <div className="min-h-screen bg-[#f9f9f9] p-6">
+        <TemplateCreationStep
+          existingTemplate={existingTemplate}
+          onTemplateCreated={handleTemplateCreated}
+          onCancel={handleCancel}
+          hostName={user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : undefined}
+          hostEmail={user?.emailAddresses?.[0]?.emailAddress}
+          listingAddress={listing?.streetAddress1 || ''}
+        />
+      </div>
+    </BrandAlertProvider>
   );
 }

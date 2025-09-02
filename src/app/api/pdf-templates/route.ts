@@ -66,6 +66,16 @@ export async function POST(request: NextRequest) {
       subject 
     } = body;
 
+    console.info('PDF Template Creation - Request received', {
+      title,
+      type,
+      listingId,
+      fieldsCount: fields?.length || 0,
+      recipientsCount: recipients?.length || 0,
+      hasFileUrl: !!pdfFileUrl,
+      hasFileKey: !!pdfFileKey
+    });
+
     // Validate required fields
     if (!title || !fields || !recipients || !pdfFileUrl || !pdfFileKey) {
       return NextResponse.json(

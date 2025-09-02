@@ -118,7 +118,7 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
               className?.replace(/focus-visible:[\w-]+/g, '').trim()
             )}
           >
-            {(isLoading && spinOnClick) ? (
+            {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
             ) : (
               leftIcon && <span className="mr-0">{leftIcon}</span>
@@ -163,7 +163,7 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
         ref={ref}
         {...props}
       >
-        {(isLoading && spinOnClick) ? (
+        {isLoading ? (
           <Loader2 className="h-4 w-4 animate-spin mr-2" />
         ) : (
           leftIcon && <span className="mr-0">{leftIcon}</span>
