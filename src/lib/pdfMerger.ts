@@ -61,17 +61,76 @@ export async function mergePDFTemplates(
   const mergedRecipients: Recipient[] = [];
   let currentPageOffset = 0;
 
+  // Debug: Log all templates before sorting
+  console.log('🔄 PDF Merger - Templates before sorting:', templates.map(t => ({
+    id: t.id,
+    title: t.title,
+    type: t.type || 'unknown',
+    originalIndex: templates.indexOf(t)
+  })));
+
   // Sort templates: leases first, then addendums in selection order
   const sortedTemplates = [...templates].sort((a, b) => {
-    const aIsLease = a.title.toLowerCase().includes('lease');
-    const bIsLease = b.title.toLowerCase().includes('lease');
+    // Improved lease detection: use type field first, then fallback to title analysis
+    const getIsLease = (template: PdfTemplate) => {
+      // First, check if type field exists and indicates lease
+      if (template.type) {
+        const type = template.type.toLowerCase();
+        if (type === 'lease' || type === 'rental_agreement' || type === 'tenancy_agreement') {
+          return true;
+        }
+        if (type === 'addendum' || type === 'amendment') {
+          return false;
+        }
+      }
+      
+      // Fallback to title analysis with broader detection
+      const title = template.title.toLowerCase();
+      const leaseKeywords = ['lease', 'rental agreement', 'tenancy agreement', 'residential lease', 'rental contract'];
+      const addendumKeywords = ['addendum', 'amendment', 'rider', 'supplement'];
+      
+      // If it explicitly mentions addendum-related terms, it's not a lease
+      if (addendumKeywords.some(keyword => title.includes(keyword))) {
+        return false;
+      }
+      
+      // If it mentions lease-related terms, it's likely a lease
+      if (leaseKeywords.some(keyword => title.includes(keyword))) {
+        return true;
+      }
+      
+      // Default: assume it's a lease if we can't determine otherwise
+      return true;
+    };
     
+    const aIsLease = getIsLease(a);
+    const bIsLease = getIsLease(b);
+    
+    console.log('🔄 PDF Merger - Sorting comparison:', {
+      aTitle: a.title,
+      aIsLease,
+      aType: a.type,
+      bTitle: b.title, 
+      bIsLease,
+      bType: b.type,
+      result: aIsLease && !bIsLease ? -1 : !aIsLease && bIsLease ? 1 : templates.indexOf(a) - templates.indexOf(b)
+    });
+    
+    // Leases come first
     if (aIsLease && !bIsLease) return -1;
     if (!aIsLease && bIsLease) return 1;
     
     // If both are leases or both are addendums, maintain selection order
     return templates.indexOf(a) - templates.indexOf(b);
   });
+
+  // Debug: Log final sorted order
+  console.log('🔄 PDF Merger - Templates after sorting:', sortedTemplates.map(t => ({
+    id: t.id,
+    title: t.title,
+    type: t.type || 'unknown',
+    wasDetectedAsLease: t.title.toLowerCase().includes('lease')
+  })));
 
   // Process each template in sorted order
   for (let templateIndex = 0; templateIndex < sortedTemplates.length; templateIndex++) {

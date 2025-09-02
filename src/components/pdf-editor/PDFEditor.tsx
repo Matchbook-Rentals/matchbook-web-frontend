@@ -3330,7 +3330,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           >
             {fields.map((field) => {
               const pageElement = pageElements.get(field.pageNumber);
-              const recipient = recipients.find(r => r.id === field.signerEmail);
+              // Find recipient by signerEmail first, then fall back to recipientIndex
+              let recipient = recipients.find(r => r.id === field.signerEmail);
+              if (!recipient && field.recipientIndex !== undefined) {
+                recipient = recipients.find(r => r.id === `recipient_${field.recipientIndex}`) || recipients[field.recipientIndex];
+              }
               
               // Skip rendering if pages aren't ready yet
               if (!pdfPagesReady || !pageElement) {

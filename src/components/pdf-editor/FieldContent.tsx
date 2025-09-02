@@ -121,9 +121,22 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
     }
   }
 
-  // For signature, name, initials, and sign date fields, show recipient-specific labels
-  // BUT only when we're NOT showing actual values AND not template-enforced (to avoid double labeling)
-  if ((field.type === FieldType.SIGNATURE || field.type === FieldType.NAME || field.type === FieldType.INITIALS || field.type === FieldType.SIGN_DATE || field.type === FieldType.INITIAL_DATE) && recipient && !showValues && !templateEnforcedLabel) {
+  // For INITIALS and INITIAL_DATE fields, always show proper host/renter labeling
+  if ((field.type === FieldType.INITIALS || field.type === FieldType.INITIAL_DATE) && (!showValues || !signedValue) && !templateEnforcedLabel) {
+    const recipientRole = recipient?.role || (field.recipientIndex === 0 ? 'HOST' : 'RENTER');
+    const fieldLabel = field.type === FieldType.INITIALS ? 'Initials' : 'Initial Date';
+    textToDisplay = `${recipientRole === 'HOST' ? 'Host' : 'Renter'} ${fieldLabel}`;
+    
+    console.log('🔧 INITIALS/INITIAL_DATE Field Debug:', {
+      fieldType: field.type,
+      recipientRole,
+      finalTextToDisplay: textToDisplay
+    });
+  }
+  
+  // For signature, name, and sign date fields, show recipient-specific labels
+  // Show recipient labels when: NOT showing values OR no actual value to display
+  else if ((field.type === FieldType.SIGNATURE || field.type === FieldType.NAME || field.type === FieldType.SIGN_DATE) && recipient && (!showValues || !textToDisplay || textToDisplay === FRIENDLY_FIELD_TYPE[field.type]) && !templateEnforcedLabel) {
     const getFieldTypeLabel = (type: FieldType) => {
       switch (type) {
         case FieldType.SIGNATURE: return 'Signature';
