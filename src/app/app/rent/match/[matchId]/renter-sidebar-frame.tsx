@@ -191,9 +191,9 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {}, s
                               };
                               
                               if (fieldType === 'SIGNATURE') {
-                                return hasCorrespondingDateField() ? 'Signature and Date' : 'Signature';
+                                return 'Signature';
                               } else if (fieldType === 'INITIALS') {
-                                return hasCorrespondingDateField() ? 'Initial and Date' : 'Initial';
+                                return 'Initials';
                               }
                               return 'Signature';
                             })()}

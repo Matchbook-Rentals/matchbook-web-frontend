@@ -240,9 +240,9 @@ export function HostSidebarFrame({
                               };
                               
                               if (fieldType === 'SIGNATURE') {
-                                return hasCorrespondingDateField() ? 'Signature and Date' : 'Signature';
+                                return 'Signature';
                               } else if (fieldType === 'INITIALS') {
-                                return hasCorrespondingDateField() ? 'Initial and Date' : 'Initial';
+                                return 'Initials';
                               }
                               return 'Signature';
                             })()}
