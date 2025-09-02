@@ -16,9 +16,10 @@ interface TemplateCreationStepProps {
   onCancel?: () => void;
   hostName?: string;
   hostEmail?: string;
+  listingAddress?: string;
 }
 
-export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCancel, hostName, hostEmail }: TemplateCreationStepProps) {
+export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCancel, hostName, hostEmail, listingAddress }: TemplateCreationStepProps) {
   const [step, setStep] = useState<"upload" | "edit">(existingTemplate ? "edit" : "upload");
   const [templateName, setTemplateName] = useState(existingTemplate?.title || "");
   const [templateType, setTemplateType] = useState<"lease" | "addendum" | "">(
@@ -214,6 +215,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
           initialTemplate={existingTemplate}
           hostName={hostName}
           hostEmail={hostEmail}
+          listingAddress={listingAddress}
           onCancel={() => setStep("upload")}
           onSave={(templateData) => {
             // Combine the metadata from step 1 with the field data from editor

@@ -7,6 +7,16 @@ import { TemplateCreationStep } from "@/features/lease-signing/steps";
 import { PdfTemplate } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
 
+interface ListingData {
+  id: string;
+  title: string | null;
+  streetAddress1: string | null;
+  streetAddress2: string | null;
+  city: string | null;
+  state: string | null;
+  postalCode: string | null;
+}
+
 export default function CreateLeasePage() {
   const router = useRouter();
   const params = useParams();
@@ -16,17 +26,56 @@ export default function CreateLeasePage() {
   const templateId = searchParams.get('templateId');
   
   const [existingTemplate, setExistingTemplate] = useState<PdfTemplate | null>(null);
-  const [loading, setLoading] = useState(!!templateId);
+  const [listing, setListing] = useState<ListingData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (templateId) {
-      loadExistingTemplate(templateId);
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        // Load listing data
+        await loadListingData();
+        
+        // Load template data if templateId exists
+        if (templateId) {
+          await loadExistingTemplate(templateId);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadData();
+  }, [templateId, listingId]);
+
+  const loadListingData = async () => {
+    try {
+      const response = await fetch(`/api/listings/${listingId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setListing(data);
+      } else {
+        console.error('Failed to load listing');
+        toast({
+          title: "Error",
+          description: "Failed to load listing information.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error loading listing:', error);
+      toast({
+        title: "Error",
+        description: "Error loading listing. Please try again.",
+        variant: "destructive",
+      });
     }
-  }, [templateId]);
+  };
 
   const loadExistingTemplate = async (id: string) => {
     try {
-      setLoading(true);
       const response = await fetch(`/api/pdf-templates/${id}`);
       if (response.ok) {
         const data = await response.json();
@@ -48,8 +97,6 @@ export default function CreateLeasePage() {
         description: "Error loading template. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -166,6 +213,7 @@ export default function CreateLeasePage() {
         onCancel={handleCancel}
         hostName={user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : undefined}
         hostEmail={user?.emailAddresses?.[0]?.emailAddress}
+        listingAddress={listing?.streetAddress1 || ''}
       />
     </div>
   );

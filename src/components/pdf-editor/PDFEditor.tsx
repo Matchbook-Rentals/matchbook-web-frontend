@@ -67,6 +67,7 @@ interface PDFEditorProps {
   housingRequestId?: string;
   hostName?: string;
   hostEmail?: string;
+  listingAddress?: string;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
@@ -87,6 +88,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   housingRequestId,
   hostName,
   hostEmail,
+  listingAddress,
   onSave, 
   onCancel,
   onFinish,
@@ -2717,6 +2719,18 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
         {/* PDF Viewer */}
         <div className="flex-1 overflow-auto p-6">
+          {/* Header for template creation */}
+          {workflowState === 'template' && listingAddress && (
+            <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <h2 className="text-lg font-medium text-gray-900">
+                Create {templateType === 'lease' ? 'Lease' : 'Addendum'} Template for {listingAddress}
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Add fields and configure signing requirements for this template
+              </p>
+            </div>
+          )}
+          
           <PDFViewer 
             file={pdfFile} 
             onPageClick={handlePageClick}
