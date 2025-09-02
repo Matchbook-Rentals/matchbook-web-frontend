@@ -175,14 +175,16 @@ const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSteps }) 
 
             {/* Connector line (except after the last step) */}
             {index < steps.length - 1 && (
-              <motion.div
-                className="relative w-20 h-0.5 bg-[#0b6969]"
-                initial={{ width: 0 }}
-                animate={{ 
-                  width: steps[index + 1].status !== "inactive" ? "100%" : 0 
-                }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              />
+              <div className="relative w-20 h-0.5 bg-[#0b6969]/80">
+                <motion.div
+                  className="absolute left-0 top-0 h-0.5 bg-[#0b6969]"
+                  initial={{ width: 0 }}
+                  animate={{ 
+                    width: steps[index + 1].status !== "inactive" ? "100%" : 0 
+                  }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                />
+              </div>
             )}
           </React.Fragment>
         ))}
