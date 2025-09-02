@@ -18,9 +18,10 @@ interface TemplateCreationStepProps {
   hostName?: string;
   hostEmail?: string;
   listingAddress?: string;
+  listingId?: string;
 }
 
-export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCancel, hostName, hostEmail, listingAddress }: TemplateCreationStepProps) {
+export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCancel, hostName, hostEmail, listingAddress, listingId }: TemplateCreationStepProps) {
   const [step, setStep] = useState<"upload" | "edit">(existingTemplate ? "edit" : "upload");
   const [templateName, setTemplateName] = useState(existingTemplate?.title || "");
   const [templateType, setTemplateType] = useState<"lease" | "addendum" | "">(
@@ -246,10 +247,12 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
           initialPdfFile={uploadedFile || undefined}
           initialWorkflowState="template"
           templateType={templateType as 'lease' | 'addendum'}
+          templateName={templateName}
           initialTemplate={existingTemplate}
           hostName={hostName}
           hostEmail={hostEmail}
           listingAddress={listingAddress}
+          listingId={listingId}
           onCancel={() => setStep("upload")}
           onSave={(templateData) => {
             // Combine the metadata from step 1 with the field data from editor

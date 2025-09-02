@@ -53,23 +53,30 @@ export const LeaseSelectionDialog: React.FC<LeaseSelectionDialogProps> = ({
   };
 
   const getDocumentTypeBadge = (template: PdfTemplate) => {
-    const title = template.title.toLowerCase();
+    // Use the actual type field from the database instead of parsing title
+    const templateType = template.type?.toLowerCase() || 'other';
     
-    if (title.includes('lease')) {
-      return {
-        type: "Lease",
-        badgeColor: "bg-[#e8f4fd] text-[#1976d2] border-[#1976d2]"
-      };
-    } else if (title.includes('addendum')) {
-      return {
-        type: "Addendum", 
-        badgeColor: "bg-[#fff3e0] text-[#f57c00] border-[#f57c00]"
-      };
-    } else {
-      return {
-        type: "Document",
-        badgeColor: "bg-[#f5f5f5] text-[#616161] border-[#616161]"
-      };
+    switch (templateType) {
+      case 'lease':
+        return {
+          type: "Lease",
+          badgeColor: "bg-[#e8f4fd] text-[#1976d2] border-[#1976d2]"
+        };
+      case 'addendum':
+        return {
+          type: "Addendum", 
+          badgeColor: "bg-[#fff3e0] text-[#f57c00] border-[#f57c00]"
+        };
+      case 'disclosure':
+        return {
+          type: "Disclosure",
+          badgeColor: "bg-[#f3e5f5] text-[#7b1fa2] border-[#7b1fa2]"
+        };
+      default:
+        return {
+          type: "Document",
+          badgeColor: "bg-[#f5f5f5] text-[#616161] border-[#616161]"
+        };
     }
   };
 
@@ -81,12 +88,33 @@ export const LeaseSelectionDialog: React.FC<LeaseSelectionDialogProps> = ({
     const hasRecipients = templateData?.recipients?.length > 0;
     return hasFields && hasRecipients;
   });
+
+  const getSortOrder = (template: PdfTemplate) => {
+    // Use the actual type field for sorting
+    const templateType = template.type?.toLowerCase() || 'other';
+    switch (templateType) {
+      case 'lease': return 1;
+      case 'addendum': return 2;
+      case 'disclosure': return 3;
+      default: return 4;
+    }
+  };
+
+  // Sort templates by type and then by title
+  const sortedCompletedTemplates = [...completedTemplates].sort((a, b) => {
+    const orderA = getSortOrder(a);
+    const orderB = getSortOrder(b);
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+    return a.title.localeCompare(b.title);
+  });
   
-  const leaseTemplates = completedTemplates.filter(t => 
-    t.title.toLowerCase().includes('lease')
+  const leaseTemplates = sortedCompletedTemplates.filter(t => 
+    t.type?.toLowerCase() === 'lease'
   );
-  const addendumTemplates = completedTemplates.filter(t => 
-    t.title.toLowerCase().includes('addendum')
+  const addendumTemplates = sortedCompletedTemplates.filter(t => 
+    t.type?.toLowerCase() === 'addendum'
   );
 
   // Check if at least one lease is selected

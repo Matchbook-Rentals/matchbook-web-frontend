@@ -216,6 +216,7 @@ export default function CreateLeasePage() {
           hostName={user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : undefined}
           hostEmail={user?.emailAddresses?.[0]?.emailAddress}
           listingAddress={listing?.streetAddress1 || ''}
+          listingId={listingId}
         />
       </div>
     </BrandAlertProvider>

@@ -12,6 +12,24 @@ import { PdfTemplate, HousingRequest, User, Application, Listing } from "@prisma
 import { toast } from "sonner";
 import Link from "next/link";
 import { createMergedDocument } from "@/actions/documents";
+import { BrandAlertProvider } from "@/hooks/useBrandAlert";
+
+// Helper function to get recipient color for proper styling
+const getRecipientColor = (index: number) => {
+  const colorMap = {
+    0: '#0B6E6E', // host
+    1: '#fb8c00', // primaryRenter
+    2: '#3B82F6', // blue
+    3: '#8B5CF6', // purple
+    4: '#22C55E', // green
+    5: '#EF4444', // red
+    6: '#EC4899', // pink
+    7: '#6366F1', // indigo
+    8: '#EAB308', // yellow
+    9: '#10B981', // emerald
+  };
+  return colorMap[index as keyof typeof colorMap] || '#6B7280'; // fallback to gray
+};
 
 interface HousingRequestWithDetails extends HousingRequest {
   user: User & {
@@ -244,10 +262,60 @@ export default function CreateLeasePage() {
   const application = user.applications[0];
   const hostUser = housingRequest.listing.user;
 
+  // Log monthly rent data sources for debugging
+  const logRentSources = async () => {
+    try {
+      const rentData = {
+        housingRequestId: housingRequestId,
+        housingRequest: {
+          monthlyRent: housingRequest.monthlyRent,
+          monthlyRentFormatted: housingRequest.monthlyRent ? `$${housingRequest.monthlyRent.toFixed(2)}` : null,
+        },
+        match: housingRequest.match ? {
+          id: housingRequest.match.id,
+          paymentAmount: housingRequest.match.paymentAmount,
+          paymentAmountFormatted: housingRequest.match.paymentAmount ? `$${housingRequest.match.paymentAmount.toFixed(2)}` : null,
+          paymentStatus: housingRequest.match.paymentStatus,
+        } : null,
+        listingId: listingId,
+        currentLogic: 'Using housingRequest.monthlyRent',
+        shouldUse: housingRequest.match?.paymentAmount ? 'Should consider using match.paymentAmount instead' : 'No match.paymentAmount available'
+      };
+
+      await fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          level: 'info',
+          message: 'Monthly Rent Data Sources Analysis',
+          data: rentData
+        }),
+      });
+      
+      console.log('🔍 Monthly Rent Data Sources:', rentData);
+    } catch (error) {
+      console.error('Failed to log rent data sources:', error);
+    }
+  };
+
+  // Log the rent data analysis
+  logRentSources();
+
+  // Determine which monthly rent value to use
+  const getMonthlyRentValue = () => {
+    // Priority: match.paymentAmount > housingRequest.monthlyRent
+    if (housingRequest.match?.paymentAmount) {
+      return `$${housingRequest.match.paymentAmount.toFixed(2)}`;
+    } else if (housingRequest.monthlyRent) {
+      return `$${housingRequest.monthlyRent.toFixed(2)}`;
+    }
+    return "$0.00";
+  };
+
   // Create MatchDetails for PDFEditorDocument
   const matchDetails: MatchDetails = {
     propertyAddress: `${housingRequest.listing.streetAddress1 || ''}${housingRequest.listing.streetAddress2 ? ' ' + housingRequest.listing.streetAddress2 : ''}, ${housingRequest.listing.city || ''}, ${housingRequest.listing.state || ''} ${housingRequest.listing.postalCode || ''}`.replace(/^,\s*|,\s*$/, '').replace(/,\s*,/g, ','),
-    monthlyPrice: housingRequest.monthlyRent ? (housingRequest.monthlyRent / 100).toFixed(2) : "0.00",
+    monthlyPrice: getMonthlyRentValue(),
     hostName: `${hostUser.firstName || ''} ${hostUser.lastName || ''}`.trim() || hostUser.email,
     hostEmail: hostUser.email,
     primaryRenterName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
@@ -277,7 +345,8 @@ export default function CreateLeasePage() {
   });
 
   return (
-    <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] min-h-screen">
+    <BrandAlertProvider>
+      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] min-h-screen">
       {/* Back Navigation */}
       <Link 
         href={`/app/host/${listingId}/applications/${housingRequestId}`}
@@ -333,13 +402,15 @@ export default function CreateLeasePage() {
                 id: 'signer1',
                 role: 'HOST' as const,
                 name: matchDetails.hostName,
-                email: matchDetails.hostEmail
+                email: matchDetails.hostEmail,
+                color: getRecipientColor(0)
               },
               {
                 id: 'signer2', 
                 role: 'RENTER' as const,
                 name: matchDetails.primaryRenterName,
-                email: matchDetails.primaryRenterEmail
+                email: matchDetails.primaryRenterEmail,
+                color: getRecipientColor(1)
               }
             ]}
             isMergedDocument={true}
@@ -394,6 +465,7 @@ export default function CreateLeasePage() {
           </div>
         </div>
       )}
-    </main>
+      </main>
+    </BrandAlertProvider>
   );
 }

@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Download, Eye, EyeOff, ChevronDown } from 'lucide-react';
+import { Upload, Download, Eye, EyeOff, ChevronDown, FileText, User, Save, Send } from 'lucide-react';
 
 import { PDFViewer, OnPDFViewerPageClick } from './PDFViewer';
 import { FieldItem } from './FieldItem';
@@ -64,6 +64,7 @@ interface PDFEditorProps {
   initialRecipients?: Recipient[];
   initialTemplate?: any;
   templateType?: 'lease' | 'addendum' | 'disclosure' | 'other';
+  templateName?: string;
   isMergedDocument?: boolean;
   mergedTemplateIds?: string[];
   matchDetails?: MatchDetails;
@@ -71,6 +72,7 @@ interface PDFEditorProps {
   hostName?: string;
   hostEmail?: string;
   listingAddress?: string;
+  listingId?: string;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
@@ -86,6 +88,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   initialRecipients,
   initialTemplate,
   templateType = 'lease',
+  templateName,
   isMergedDocument = false,
   mergedTemplateIds,
   matchDetails,
@@ -93,6 +96,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   hostName,
   hostEmail,
   listingAddress,
+  listingId,
   onSave, 
   onCancel,
   onFinish,
@@ -239,6 +243,38 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Pre-populate fields with match details
   const prePopulateFieldsWithMatchDetails = useCallback((matchDetails: MatchDetails) => {
+    // Log the match details being used for field population
+    const logFieldPopulation = async () => {
+      try {
+        await fetch('/api/log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            level: 'info',
+            message: 'PDFEditor Field Auto-Population with MatchDetails',
+            data: {
+              monthlyPrice: matchDetails.monthlyPrice,
+              propertyAddress: matchDetails.propertyAddress,
+              startDate: matchDetails.startDate,
+              endDate: matchDetails.endDate,
+              hostName: matchDetails.hostName,
+              primaryRenterName: matchDetails.primaryRenterName,
+              fieldsCount: fields.length,
+              fieldTypes: fields.map(f => ({ type: f.type, id: f.formId, label: f.fieldMeta?.label }))
+            }
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to log field population:', error);
+      }
+    };
+    
+    logFieldPopulation();
+    console.log('🔍 PDFEditor - Pre-populating fields with matchDetails:', {
+      monthlyPrice: matchDetails.monthlyPrice,
+      fieldsToProcess: fields.length
+    });
+
     // Update recipients with match details using functional update
     setRecipients(currentRecipients => 
       currentRecipients.map(r => {
@@ -269,21 +305,57 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
             newSignedFields[field.formId] = matchDetails.primaryRenterEmail;
           }
-        } else if (field.type === 'NUMBER' || field.type === 'TEXT') {
-          // Auto-populate likely rent fields
+        } else if (field.type === 'NUMBER') {
+          // Auto-populate number fields based on label
           const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-          if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount')) {
+          if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount') || fieldLabel.includes('monthly')) {
             newSignedFields[field.formId] = matchDetails.monthlyPrice;
-          } else if (fieldLabel.includes('address') || fieldLabel.includes('property') || fieldLabel.includes('location')) {
+            console.log(`💰 Populating rent field ${field.formId} (label: "${field.fieldMeta?.label}") with monthlyPrice: ${matchDetails.monthlyPrice}`);
+          } else if (fieldLabel.includes('deposit') || fieldLabel.includes('security')) {
+            // Default security deposit (could be enhanced with actual deposit amount from housing request)
+            newSignedFields[field.formId] = matchDetails.monthlyPrice; // Assuming deposit = 1 month rent
+            console.log(`💰 Populating deposit field ${field.formId} (label: "${field.fieldMeta?.label}") with monthlyPrice: ${matchDetails.monthlyPrice}`);
+          } else {
+            // For unlabeled NUMBER fields, check if it's the first number field - likely rent
+            const numberFields = fields.filter(f => f.type === 'NUMBER');
+            const numberFieldIndex = numberFields.findIndex(f => f.formId === field.formId);
+            if (numberFieldIndex === 0) {
+              newSignedFields[field.formId] = matchDetails.monthlyPrice;
+              console.log(`💰 Populating first NUMBER field ${field.formId} (unlabeled, assumed rent) with monthlyPrice: ${matchDetails.monthlyPrice}`);
+            }
+          }
+        } else if (field.type === 'TEXT') {
+          // Auto-populate text fields based on label
+          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+          if (fieldLabel.includes('address') || fieldLabel.includes('property') || fieldLabel.includes('location') || fieldLabel.includes('premises')) {
             newSignedFields[field.formId] = matchDetails.propertyAddress;
+          } else if (fieldLabel.includes('rent') && (fieldLabel.includes('amount') || fieldLabel.includes('price'))) {
+            newSignedFields[field.formId] = `$${matchDetails.monthlyPrice}`;
           }
         } else if (field.type === 'DATE') {
           const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-          if (fieldLabel.includes('start') || fieldLabel.includes('begin')) {
+          if (fieldLabel.includes('start') || fieldLabel.includes('begin') || fieldLabel.includes('move') && fieldLabel.includes('in')) {
             newSignedFields[field.formId] = matchDetails.startDate;
-          } else if (fieldLabel.includes('end') || fieldLabel.includes('expire')) {
+          } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate') || fieldLabel.includes('move') && fieldLabel.includes('out')) {
             newSignedFields[field.formId] = matchDetails.endDate;
+          } else {
+            // For unlabeled DATE fields, alternate between start and end dates
+            const dateFields = fields.filter(f => f.type === 'DATE');
+            const dateFieldIndex = dateFields.findIndex(f => f.formId === field.formId);
+            if (dateFieldIndex === 0) {
+              newSignedFields[field.formId] = matchDetails.startDate;
+            } else if (dateFieldIndex === 1) {
+              newSignedFields[field.formId] = matchDetails.endDate;
+            }
           }
+        } else if (field.type === 'SIGN_DATE') {
+          // Auto-populate sign date with current date
+          const currentDate = new Date().toISOString().split('T')[0];
+          newSignedFields[field.formId] = currentDate;
+        } else if (field.type === 'INITIAL_DATE') {
+          // Auto-populate initial date with current date
+          const currentDate = new Date().toISOString().split('T')[0];
+          newSignedFields[field.formId] = currentDate;
         }
       });
 
@@ -1125,9 +1197,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
       // Step 2: Save template with annotations
       const templateData = {
-        title: pdfFile.name.replace('.pdf', ' Template') || 'PDF Template',
+        title: templateName || pdfFile.name.replace('.pdf', ' Template') || 'PDF Template',
         description: `Template created from ${pdfFile.name}`,
         type: templateType,
+        listingId,
         fields,
         recipients,
         pdfFileUrl: uploadResult.fileUrl,
@@ -1172,12 +1245,19 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       sessionStorage.setItem('currentTemplateId', template.id);
       console.log('✅ Template ID stored in sessionStorage:', template.id);
       
-      brandAlert(
-        `Template saved successfully!\n\n📄 PDF: ${uploadResult.fileName}\n🎯 Fields: ${fields.length}\n👥 Recipients: ${recipients.length}\n🆔 Template ID: ${template.id}`, 
-        'success', 
-        'Template Saved',
-        onSaveCallback // Call the callback when user clicks OK
-      );
+      // Navigate to success page instead of showing alert
+      if (listingId) {
+        const successUrl = `/app/host/${listingId}/leases/create/success?templateId=${template.id}&templateName=${encodeURIComponent(template.title)}&templateType=${templateType}&fieldsCount=${fields.length}&recipientsCount=${recipients.length}&pdfFileName=${encodeURIComponent(uploadResult.fileName)}`;
+        router.push(successUrl);
+      } else {
+        // Fallback if no listingId provided
+        brandAlert(
+          `Template saved successfully!\n\n📄 PDF: ${uploadResult.fileName}\n🎯 Fields: ${fields.length}\n👥 Recipients: ${recipients.length}\n🆔 Template ID: ${template.id}`, 
+          'success', 
+          'Template Saved',
+          onSaveCallback
+        );
+      }
       
       setWorkflowState('selection');
       setSelectedField(null);
@@ -1681,6 +1761,169 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               accordionState={accordionStates.allFieldTypes}
               onToggleAccordion={() => toggleAccordion('allFieldTypes')}
             />
+          </>
+        )}
+
+        {/* Document creation interface */}
+        {workflowState === 'document' && (
+          <>
+            {/* Document Information Card */}
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <FileText className="w-5 h-5 text-[#3c8787]" />
+                  <h3 className="font-medium text-gray-900">Document Information</h3>
+                </div>
+                
+                {tripMatchDetails && (
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <div className="text-gray-600">Property Address</div>
+                      <div className="font-medium">{tripMatchDetails.propertyAddress}</div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <div className="text-gray-600">Monthly Rent</div>
+                        <div className="font-medium">${tripMatchDetails.monthlyPrice}</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-600">Lease Term</div>
+                        <div className="font-medium">{tripMatchDetails.startDate && tripMatchDetails.endDate ? `${new Date(tripMatchDetails.startDate).toLocaleDateString()} - ${new Date(tripMatchDetails.endDate).toLocaleDateString()}` : 'Not set'}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Recipients Summary */}
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <User className="w-5 h-5 text-[#3c8787]" />
+                  <h3 className="font-medium text-gray-900">Recipients</h3>
+                </div>
+                
+                <div className="space-y-3">
+                  {recipients.map((recipient, index) => (
+                    <div key={recipient.id} className="flex items-center gap-3 p-2 bg-gray-50 rounded">
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                        style={{ backgroundColor: recipient.color || '#3c8787' }}
+                      >
+                        {recipient.name.charAt(0) || recipient.role.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-sm truncate">{recipient.name || `${recipient.role} User`}</div>
+                        <div className="text-xs text-gray-500 truncate">{recipient.email}</div>
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {recipient.role}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Field Summary */}
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-[#3c8787]" />
+                    <h3 className="font-medium text-gray-900">Field Summary</h3>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {fields.length} fields
+                  </Badge>
+                </div>
+                
+                {fields.length > 0 ? (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {fields.map((field, index) => {
+                      const fieldValue = signedFields[field.formId];
+                      const hasValue = fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+                      // Try to find recipient by ID first, then by email, then by role mapping
+                      let recipient = recipients.find(r => r.id === field.signerEmail);
+                      if (!recipient) {
+                        recipient = recipients.find(r => r.email === field.signerEmail);
+                      }
+                      
+                      // Handle different recipient ID patterns by mapping to roles
+                      if (!recipient) {
+                        const signerEmail = field.signerEmail.toLowerCase();
+                        if (signerEmail.includes('host')) {
+                          recipient = recipients.find(r => r.role === 'HOST');
+                        } else if (signerEmail.includes('renter') || signerEmail.includes('tenant')) {
+                          recipient = recipients.find(r => r.role === 'RENTER');
+                        }
+                      }
+                      
+                      // Debug logging to understand signerEmail values
+                      if (!recipient) {
+                        console.log(`🔍 Field ${field.formId} signerEmail: "${field.signerEmail}", Available recipient IDs:`, recipients.map(r => r.id), 'Available emails:', recipients.map(r => r.email), 'Available roles:', recipients.map(r => r.role));
+                      }
+                      
+                      return (
+                        <div 
+                          key={field.formId} 
+                          className="flex items-center gap-2 p-2 bg-gray-50 hover:bg-gray-100 rounded text-sm cursor-pointer transition-colors duration-150"
+                          onClick={() => navigateToField(field.formId)}
+                          title="Click to navigate to this field in the PDF"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium truncate">
+                              {(field.fieldMeta?.label && field.fieldMeta.label !== 'Field') ? field.fieldMeta.label : getFieldLabel(field)}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Page {field.pageNumber} • {recipient?.name || 'Unassigned'}
+                            </div>
+                          </div>
+                          <div className="text-right min-w-0 flex-shrink-0">
+                            {hasValue ? (
+                              <div className="text-xs text-green-600 font-medium truncate max-w-24" title={String(fieldValue)}>
+                                {String(fieldValue).length > 20 ? `${String(fieldValue).substring(0, 20)}...` : String(fieldValue)}
+                              </div>
+                            ) : (
+                              <Badge variant="outline" className="text-xs">
+                                Empty
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-4 text-gray-500 text-sm">
+                    No fields available
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              <Button 
+                onClick={saveDocument}
+                variant="outline" 
+                className="w-full"
+                disabled={isCreatingDocument}
+              >
+                <Save className="w-4 h-4 mr-2" />
+                Save as Draft
+              </Button>
+              
+              <Button 
+                onClick={saveTemplateAndCreateDocument}
+                className="w-full bg-[#3c8787] hover:bg-[#2d6666] text-white"
+                disabled={isCreatingDocument || isSavingTemplate}
+              >
+                <Send className="w-4 h-4 mr-2" />
+                {isCreatingDocument || isSavingTemplate ? 'Processing...' : 'Continue to Signing'}
+              </Button>
+            </div>
           </>
         )}
 
@@ -2344,18 +2587,225 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Get appropriate field label based on type and recipient
   const getFieldLabel = (field: FieldFormType) => {
-    if (field.type === 'SIGNATURE') {
-      return field.recipientIndex === 0 ? 'Host Signature' : 'Primary Renter Signature';
-    } else if (field.type === 'INITIALS') {
-      return field.recipientIndex === 0 ? 'Host Initials' : 'Primary Renter Initials';
+    // Add debug logging for field type issues
+    if (!field.type) {
+      console.warn('Field has no type:', field);
+      return 'Unknown Field';
     }
-    return FRIENDLY_FIELD_TYPE[field.type];
+
+    // Better recipient determination with proper undefined handling
+    let recipientPrefix = 'Unassigned';
+    if (field.recipientIndex === 0) {
+      recipientPrefix = 'Host';
+    } else if (field.recipientIndex === 1) {
+      recipientPrefix = 'Primary Renter';
+    } else if (field.signerEmail) {
+      // Fallback to signerEmail analysis
+      if (field.signerEmail.includes('host')) {
+        recipientPrefix = 'Host';
+      } else if (field.signerEmail.includes('renter')) {
+        recipientPrefix = 'Primary Renter';
+      }
+    }
+    
+    switch (field.type) {
+      case 'SIGNATURE':
+      case FieldType.SIGNATURE:
+        return `${recipientPrefix} Signature`;
+      case 'INITIALS':
+      case FieldType.INITIALS:
+        return `${recipientPrefix} Initials`;
+      case 'NAME':
+      case FieldType.NAME:
+        return `${recipientPrefix} Name`;
+      case 'EMAIL':
+      case FieldType.EMAIL:
+        return `${recipientPrefix} Email`;
+      case 'SIGN_DATE':
+      case FieldType.SIGN_DATE:
+        return `${recipientPrefix} Sign Date`;
+      case 'INITIAL_DATE':
+      case FieldType.INITIAL_DATE:
+        return `${recipientPrefix} Initial Date`;
+      case 'DATE':
+      case FieldType.DATE:
+        // Try to identify date purpose from context
+        const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
+        if (fieldLabel.includes('move') || fieldLabel.includes('start') || fieldLabel.includes('begin')) {
+          return 'Move-in Date';
+        } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate')) {
+          return 'Move-out Date';
+        } else if (fieldLabel.includes('sign')) {
+          return 'Signing Date';
+        } else {
+          return `Date (Page ${field.pageNumber})`;
+        }
+      case 'NUMBER':
+      case FieldType.NUMBER:
+        // Try to identify number field purpose
+        const numberLabel = field.fieldMeta?.label?.toLowerCase() || '';
+        if (numberLabel.includes('rent') || numberLabel.includes('price')) {
+          return 'Monthly Rent';
+        } else if (numberLabel.includes('deposit')) {
+          return 'Security Deposit';
+        } else {
+          return `Amount (Page ${field.pageNumber})`;
+        }
+      case 'TEXT':
+      case FieldType.TEXT:
+        // Try to identify text field purpose
+        const textLabel = field.fieldMeta?.label?.toLowerCase() || '';
+        if (textLabel.includes('address') || textLabel.includes('property')) {
+          return 'Property Address';
+        } else if (textLabel.includes('rent')) {
+          return 'Rent Amount';
+        } else {
+          return `Text (Page ${field.pageNumber})`;
+        }
+      case 'RADIO':
+      case FieldType.RADIO:
+        return `Radio Options (Page ${field.pageNumber})`;
+      case 'CHECKBOX':
+      case FieldType.CHECKBOX:
+        return `Checkbox (Page ${field.pageNumber})`;
+      case 'DROPDOWN':
+      case FieldType.DROPDOWN:
+        return `Dropdown (Page ${field.pageNumber})`;
+      default:
+        console.warn('Unknown field type in getFieldLabel:', {
+          type: field.type,
+          recipientIndex: field.recipientIndex,
+          signerEmail: field.signerEmail,
+          formId: field.formId,
+          fieldMeta: field.fieldMeta
+        });
+        const friendlyName = FRIENDLY_FIELD_TYPE[field.type] || field.type;
+        return recipientPrefix !== 'Unassigned' ? `${recipientPrefix} ${friendlyName}` : friendlyName;
+    }
   };
 
   // Get unsigned fields for current signer
   const getUnsignedFields = () => {
     const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
     return fields.filter(f => f.recipientIndex === currentSignerIndex && !signedFields[f.formId] && ['SIGNATURE', 'INITIALS'].includes(f.type));
+  };
+
+  // Navigate to specific field and flash it
+  const navigateToField = (fieldId: string) => {
+    console.log('🎯 navigateToField: Starting navigation to field:', fieldId);
+    
+    const targetField = fields.find(f => f.formId === fieldId);
+    if (!targetField) {
+      console.warn('🎯 navigateToField: Field not found:', fieldId);
+      return;
+    }
+
+    // Log field information to API for troubleshooting
+    const logFieldClick = async () => {
+      try {
+        const recipient = recipients.find(r => r.id === targetField.signerEmail);
+        const fieldValue = signedFields[targetField.formId];
+        
+        await fetch('/api/log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            level: 'info',
+            message: 'Field Click Debug Information',
+            data: {
+              fieldId: fieldId,
+              field: {
+                formId: targetField.formId,
+                type: targetField.type,
+                recipientIndex: targetField.recipientIndex,
+                signerEmail: targetField.signerEmail,
+                pageNumber: targetField.pageNumber,
+                fieldMeta: targetField.fieldMeta,
+                pageX: targetField.pageX,
+                pageY: targetField.pageY,
+                pageWidth: targetField.pageWidth,
+                pageHeight: targetField.pageHeight
+              },
+              recipient: recipient ? {
+                id: recipient.id,
+                name: recipient.name,
+                email: recipient.email,
+                role: recipient.role,
+                color: recipient.color
+              } : null,
+              fieldValue: fieldValue,
+              hasValue: fieldValue !== undefined && fieldValue !== null && fieldValue !== '',
+              generatedLabel: getFieldLabel(targetField),
+              workflowState: workflowState,
+              totalFields: fields.length,
+              timestamp: new Date().toISOString()
+            }
+          }),
+        });
+        console.log('✅ Field click logged to API');
+      } catch (error) {
+        console.error('❌ Failed to log field click:', error);
+      }
+    };
+
+    // Log field information asynchronously
+    logFieldClick();
+    
+    // Find the field element first
+    const fieldElement = document.querySelector(`[data-field-id="${fieldId}"]`) as HTMLElement;
+    console.log('🎯 navigateToField: Field element found:', !!fieldElement);
+    
+    if (fieldElement) {
+      // Scroll directly to the field and center it in the viewport
+      fieldElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center', 
+        inline: 'center' 
+      });
+      console.log('🎯 navigateToField: Scrolled to field');
+      
+      // Apply flash effect after scroll completes
+      setTimeout(() => {
+        // Store original styles
+        const originalBg = fieldElement.style.backgroundColor;
+        const originalTransition = fieldElement.style.transition;
+        const originalBoxShadow = fieldElement.style.boxShadow;
+        
+        // Apply flash effect using inline styles
+        fieldElement.style.transition = 'all 0.3s ease';
+        fieldElement.style.backgroundColor = '#3c8787'; // brand color
+        fieldElement.style.boxShadow = '0 0 20px rgba(60, 135, 135, 0.5)'; // Add glow effect
+        console.log('🎯 navigateToField: Applied first flash');
+        
+        setTimeout(() => {
+          fieldElement.style.backgroundColor = originalBg || '';
+          fieldElement.style.boxShadow = originalBoxShadow || '';
+          console.log('🎯 navigateToField: Removed first flash');
+          
+          setTimeout(() => {
+            fieldElement.style.backgroundColor = '#3c8787';
+            fieldElement.style.boxShadow = '0 0 20px rgba(60, 135, 135, 0.5)';
+            console.log('🎯 navigateToField: Applied second flash');
+            
+            setTimeout(() => {
+              fieldElement.style.backgroundColor = originalBg || '';
+              fieldElement.style.boxShadow = originalBoxShadow || '';
+              fieldElement.style.transition = originalTransition || '';
+              console.log('🎯 navigateToField: Completed flashing');
+            }, 300);
+          }, 300);
+        }, 300);
+      }, 600); // Wait for scroll to complete
+    } else {
+      console.warn('🎯 navigateToField: Could not find field element, trying page fallback');
+      
+      // Fallback: scroll to page if field element not found
+      const pageElement = document.querySelector(`[data-pdf-viewer-page][data-page-number="${targetField.pageNumber}"]`);
+      if (pageElement) {
+        pageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        console.log('🎯 navigateToField: Scrolled to page as fallback');
+      }
+    }
   };
 
   // Navigate to next unsigned field and flash it
