@@ -67,7 +67,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
                         </Label>
                       </div>
 
-                      <Select value={templateType} onValueChange={(value: "lease" | "addendum" | "other") => setTemplateType(value as "lease" | "addendum")}>
+                      <Select value={templateType} onValueChange={(value: "lease" | "addendum") => setTemplateType(value)}>
                         <SelectTrigger className="h-12 items-center gap-2 px-3 py-2 self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
                           <SelectValue
                             placeholder="Select a Type"
@@ -77,7 +77,6 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
                         <SelectContent>
                           <SelectItem value="lease">Lease Agreement</SelectItem>
                           <SelectItem value="addendum">Addendum</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

@@ -1,5 +1,11 @@
 # Changelog
 
+## Add listing address header to PDF template creation
+- Added header above PDF display showing "Create Lease/Addendum Template for [address]" during template creation
+- Created API endpoint for fetching listing data by ID with proper authentication
+- Updated template creation flow to pass listing address through component props
+- Enhanced PDF editor with contextual header that displays only during template workflow state
+
 ## Update lease creation PDF upload interface with responsive design
 - Redesigned PDF upload section with modern card-based layout matching design specifications
 - Added responsive mobile support with stacked form fields, optimized upload area, and full-width buttons
