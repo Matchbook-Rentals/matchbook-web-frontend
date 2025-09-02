@@ -349,13 +349,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             }
           }
         } else if (field.type === 'SIGN_DATE') {
-          // Auto-populate sign date with current date
-          const currentDate = new Date().toISOString().split('T')[0];
-          newSignedFields[field.formId] = currentDate;
+          // Sign date fields will be filled during the actual signing process
+          // Do not pre-populate with current date
         } else if (field.type === 'INITIAL_DATE') {
-          // Auto-populate initial date with current date
-          const currentDate = new Date().toISOString().split('T')[0];
-          newSignedFields[field.formId] = currentDate;
+          // Initial date fields will be filled during the actual signing process
+          // Do not pre-populate with current date
         }
       });
 
@@ -1840,7 +1838,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 </div>
                 
                 {fields.length > 0 ? (
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                  <div className="space-y-2">
                     {fields.map((field, index) => {
                       const fieldValue = signedFields[field.formId];
                       const hasValue = fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
@@ -1903,27 +1901,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               </CardContent>
             </Card>
 
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              <Button 
-                onClick={saveDocument}
-                variant="outline" 
-                className="w-full"
-                disabled={isCreatingDocument}
-              >
-                <Save className="w-4 h-4 mr-2" />
-                Save as Draft
-              </Button>
-              
-              <Button 
-                onClick={saveTemplateAndCreateDocument}
-                className="w-full bg-[#3c8787] hover:bg-[#2d6666] text-white"
-                disabled={isCreatingDocument || isSavingTemplate}
-              >
-                <Send className="w-4 h-4 mr-2" />
-                {isCreatingDocument || isSavingTemplate ? 'Processing...' : 'Continue to Signing'}
-              </Button>
-            </div>
           </>
         )}
 
@@ -2996,43 +2973,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         onFieldSign(fieldId, value);
       }
       
-      // Auto-populate sign date fields when signature is signed
-      if (field && field.type === FieldType.SIGNATURE && value) {
-        const currentDate = new Date().toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        });
-        
-        // Find corresponding sign date field for this recipient
-        const signDateField = fields.find(f => 
-          f.type === FieldType.SIGN_DATE && 
-          f.recipientIndex === field.recipientIndex
-        );
-        
-        if (signDateField && !prev[signDateField.formId]) {
-          newSignedFields[signDateField.formId] = currentDate;
-        }
-      }
-
-      // Auto-populate initial date fields when initials are signed
-      if (field && field.type === FieldType.INITIALS && value) {
-        const currentDate = new Date().toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        });
-        
-        // Find corresponding initial date field for this recipient
-        const initialDateField = fields.find(f => 
-          f.type === FieldType.INITIAL_DATE && 
-          f.recipientIndex === field.recipientIndex
-        );
-        
-        if (initialDateField && !prev[initialDateField.formId]) {
-          newSignedFields[initialDateField.formId] = currentDate;
-        }
-      }
+      // Sign dates and initial dates will be filled during the actual lease signing process
+      // Do not auto-populate these fields here
       
       return newSignedFields;
     });
@@ -3325,7 +3267,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   }
 
   return (
-    <div ref={pdfEditorContainerRef} className="flex flex-col bg-gray-50" style={{ height: 'calc(100vh - 80px)' }}>
+    <div ref={pdfEditorContainerRef} className="flex flex-col bg-gray-50">
       {/* Ghost cursor for field placement */}
       {selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place') && (
         <div
@@ -3346,7 +3288,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       {/* Main content area with sidebar and editor */}
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto overflow-x-hidden">
+        <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto overflow-x-hidden max-h-screen">
         <div className="p-4">
           {/* Use custom sidebar content if provided, otherwise use default */}
           {customSidebarContent ? (
@@ -3358,10 +3300,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         </div>
 
         {/* Main Editor */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
 
         {/* PDF Viewer */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto px-6 pb-6 max-h-screen">
           {/* Header for template creation */}
           {workflowState === 'template' && listingAddress && (
             <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
@@ -3583,6 +3525,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         isOpen={showMissingFieldsDialog}
         onOpenChange={setShowMissingFieldsDialog}
         className="max-w-md"
+        triggerButton={<div style={{ display: 'none' }} />}
       >
         <div className="p-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-900">

@@ -104,7 +104,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           value = field.signerEmail;
           break;
         case FieldType.DATE:
-          value = new Date().toLocaleDateString();
+          value = '';  // Date fields should be empty until filled during signing
           break;
         case FieldType.TEXT:
           value = 'Sample text';

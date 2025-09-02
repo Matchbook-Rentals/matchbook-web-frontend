@@ -1,5 +1,13 @@
 # Changelog
 
+## Fix recipient name display in document field summary
+- Fixed "Unassigned" recipients in PDF field summary by adding proper color properties to recipient objects  
+- Added recipient mapping logic to handle different signerEmail patterns (host-recipient, primary-renter-recipient, signer1, signer2)
+- Updated LeaseSelectionDialog to use database type field instead of title parsing for document filtering
+- Added BrandAlertProvider wrapper to create-lease page to fix context provider error
+- Enhanced recipient lookup with role-based fallback matching when ID lookup fails
+- Added proper TypeScript typing and color assignment for recipients in create-lease workflow
+
 ## Add comprehensive field validation logging and fix field name mapping
 - Added server-side logging API endpoint (/api/log) for centralized client-to-server logging in development
 - Created clientLogger utility to send structured logs from client components to server console
