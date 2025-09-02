@@ -27,6 +27,7 @@ import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
 import BrandModal from '@/components/BrandModal';
 import { useBrandAlert, createBrandAlert, createBrandConfirm } from '@/hooks/useBrandAlert';
+import { useSignedFields } from '@/contexts/signed-fields-context';
 import { clientLogger } from '@/lib/clientLogger';
 
 // Template data interface for the editor
@@ -79,6 +80,14 @@ interface PDFEditorProps {
   onFieldSign?: (fieldId: string, value: any) => void;
   onDocumentCreated?: (documentId: string) => void;
   customSidebarContent?: (workflowState: WorkflowState, defaultContent: JSX.Element) => JSX.Element;
+  showFooter?: boolean;
+  hideFooterControls?: boolean;
+  onCompleteStepReady?: (completeStepFn: () => Promise<void>) => void;
+  contentHeight?: string;
+  signerRole?: 'host' | 'renter';
+  onWorkflowStateChange?: (newState: WorkflowState) => void;
+  onSigningActionReady?: (signingActionFn: () => Promise<void>) => void;
+  // signedFields is now provided by context
 }
 
 export const PDFEditor: React.FC<PDFEditorProps> = ({ 
@@ -102,12 +111,20 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   onFinish,
   onFieldSign,
   onDocumentCreated,
-  customSidebarContent
+  customSidebarContent,
+  showFooter = true,
+  hideFooterControls = false,
+  onCompleteStepReady,
+  contentHeight = 'calc(100vh - 100px)',
+  signerRole,
+  onWorkflowStateChange,
+  onSigningActionReady
 }) => {
   const router = useRouter();
   const { showAlert, showConfirm } = useBrandAlert();
   const brandAlert = createBrandAlert(showAlert);
   const brandConfirm = createBrandConfirm(showConfirm);
+  const { signedFields, setSignedField } = useSignedFields();
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
   const [recipients, setRecipients] = useState<Recipient[]>(initialRecipients || []);
   const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null);
@@ -117,9 +134,18 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [showFieldLabels, setShowFieldLabels] = useState(true);
   const [pageWidth, setPageWidth] = useState(800);
-  const [workflowState, setWorkflowState] = useState<WorkflowState>(initialWorkflowState);
-  const [signedFields, setSignedFields] = useState<Record<string, any>>({});
+  const [workflowState, setWorkflowStateInternal] = useState<WorkflowState>(initialWorkflowState);
+  
+  // Wrapper function to handle workflow state changes and notify parent
+  const setWorkflowState = (newState: WorkflowState) => {
+    setWorkflowStateInternal(newState);
+    if (onWorkflowStateChange) {
+      onWorkflowStateChange(newState);
+    }
+  };
+  // signedFields now comes from context
   const [isSavingTemplate, setIsSavingTemplate] = useState(false);
+
   
   // Debug log for signedFields changes
   useEffect(() => {
@@ -212,8 +238,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       });
       
       if (Object.keys(preFilledValues).length > 0) {
-        console.log('📝 Initializing signedFields with pre-filled values:', preFilledValues);
-        setSignedFields(preFilledValues);
+        console.log('📝 Pre-filled values found (should be handled by parent):', preFilledValues);
       }
     }
   }, [initialFields]);
@@ -240,6 +265,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       fields: fields.map(f => ({ id: f.formId, type: f.type, page: f.pageNumber }))
     });
   }, [fields]);
+
 
   // Pre-populate fields with match details
   const prePopulateFieldsWithMatchDetails = useCallback((matchDetails: MatchDetails) => {
@@ -287,78 +313,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       })
     );
 
-    // Update signed fields using functional update
-    setSignedFields(currentSignedFields => {
-      const newSignedFields = { ...currentSignedFields };
-      
-      // Map field types to match details values
-      fields.forEach(field => {
-        if (field.type === 'NAME') {
-          if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
-            newSignedFields[field.formId] = matchDetails.hostName;
-          } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
-            newSignedFields[field.formId] = matchDetails.primaryRenterName;
-          }
-        } else if (field.type === 'EMAIL') {
-          if (field.recipientIndex === 0 || field.signerEmail?.includes('host')) {
-            newSignedFields[field.formId] = matchDetails.hostEmail;
-          } else if (field.recipientIndex === 1 || field.signerEmail?.includes('renter')) {
-            newSignedFields[field.formId] = matchDetails.primaryRenterEmail;
-          }
-        } else if (field.type === 'NUMBER') {
-          // Auto-populate number fields based on label
-          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-          if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount') || fieldLabel.includes('monthly')) {
-            newSignedFields[field.formId] = matchDetails.monthlyPrice;
-            console.log(`💰 Populating rent field ${field.formId} (label: "${field.fieldMeta?.label}") with monthlyPrice: ${matchDetails.monthlyPrice}`);
-          } else if (fieldLabel.includes('deposit') || fieldLabel.includes('security')) {
-            // Default security deposit (could be enhanced with actual deposit amount from housing request)
-            newSignedFields[field.formId] = matchDetails.monthlyPrice; // Assuming deposit = 1 month rent
-            console.log(`💰 Populating deposit field ${field.formId} (label: "${field.fieldMeta?.label}") with monthlyPrice: ${matchDetails.monthlyPrice}`);
-          } else {
-            // For unlabeled NUMBER fields, check if it's the first number field - likely rent
-            const numberFields = fields.filter(f => f.type === 'NUMBER');
-            const numberFieldIndex = numberFields.findIndex(f => f.formId === field.formId);
-            if (numberFieldIndex === 0) {
-              newSignedFields[field.formId] = matchDetails.monthlyPrice;
-              console.log(`💰 Populating first NUMBER field ${field.formId} (unlabeled, assumed rent) with monthlyPrice: ${matchDetails.monthlyPrice}`);
-            }
-          }
-        } else if (field.type === 'TEXT') {
-          // Auto-populate text fields based on label
-          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-          if (fieldLabel.includes('address') || fieldLabel.includes('property') || fieldLabel.includes('location') || fieldLabel.includes('premises')) {
-            newSignedFields[field.formId] = matchDetails.propertyAddress;
-          } else if (fieldLabel.includes('rent') && (fieldLabel.includes('amount') || fieldLabel.includes('price'))) {
-            newSignedFields[field.formId] = `$${matchDetails.monthlyPrice}`;
-          }
-        } else if (field.type === 'DATE') {
-          const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-          if (fieldLabel.includes('start') || fieldLabel.includes('begin') || fieldLabel.includes('move') && fieldLabel.includes('in')) {
-            newSignedFields[field.formId] = matchDetails.startDate;
-          } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate') || fieldLabel.includes('move') && fieldLabel.includes('out')) {
-            newSignedFields[field.formId] = matchDetails.endDate;
-          } else {
-            // For unlabeled DATE fields, alternate between start and end dates
-            const dateFields = fields.filter(f => f.type === 'DATE');
-            const dateFieldIndex = dateFields.findIndex(f => f.formId === field.formId);
-            if (dateFieldIndex === 0) {
-              newSignedFields[field.formId] = matchDetails.startDate;
-            } else if (dateFieldIndex === 1) {
-              newSignedFields[field.formId] = matchDetails.endDate;
-            }
-          }
-        } else if (field.type === 'SIGN_DATE') {
-          // Sign date fields will be filled during the actual signing process
-          // Do not pre-populate with current date
-        } else if (field.type === 'INITIAL_DATE') {
-          // Initial date fields will be filled during the actual signing process
-          // Do not pre-populate with current date
-        }
-      });
-
-      return newSignedFields;
-    });
+    // Auto-population of fields is now handled by the parent component
+    // which passes signedFields as a prop
   }, [fields]);
 
   // Initialize mandatory recipients when starting
@@ -1680,7 +1636,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       setShowTripConfiguration(true);
       setPdfFile(null);
       setFields([]);
-      setSignedFields({});
       setPdfPagesReady(false);
       setPageElements(new Map());
     }
@@ -1697,13 +1652,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const renderDefaultSidebarContent = () => {
     return (
       <>
-        {onCancel && (
-          <div className="mb-6">
-            <Button variant="outline" onClick={onCancel}>
-              Back
-            </Button>
-          </div>
-        )}
 
         {/* Template editing interface */}
         {workflowState === 'template' && (
@@ -1901,6 +1849,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               </CardContent>
             </Card>
 
+
           </>
         )}
 
@@ -2088,8 +2037,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           }
         });
         
-        setSignedFields(preFilledFields);
-        console.log('✅ Pre-filled fields:', preFilledFields);
+        console.log('✅ Pre-filled fields (should be handled by parent):', preFilledFields);
       }, 100);
       
       // Store current template ID for document creation
@@ -2218,11 +2166,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           console.log(`📝 Loaded signed value for ${fieldValue.fieldId}: "${displayValue}" (signer: ${fieldValue.signerIndex})`);
         });
         
-        console.log('📝 All existing signed fields loaded:', existingSignedFields);
-        setSignedFields(existingSignedFields);
+        console.log('📝 All existing signed fields loaded (should be handled by parent):', existingSignedFields);
       } else {
-        console.log('📝 No existing signed fields found, starting fresh');
-        setSignedFields({});
+        console.log('📝 No existing signed fields found, starting fresh (should be handled by parent)');
       }
       
       // Store current document ID for signing session
@@ -2553,6 +2499,26 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   };
 
+  // Expose complete step function to parent component using ref approach to avoid loops
+  const onCompleteStepReadyRef = useRef(onCompleteStepReady);
+  onCompleteStepReadyRef.current = onCompleteStepReady;
+  
+  useEffect(() => {
+    if (onCompleteStepReadyRef.current && workflowState === 'document') {
+      onCompleteStepReadyRef.current(completeCurrentStep);
+    }
+  }, [workflowState]);
+
+  // Expose signing action function to parent component during signing states
+  const onSigningActionReadyRef = useRef(onSigningActionReady);
+  onSigningActionReadyRef.current = onSigningActionReady;
+
+  useEffect(() => {
+    if (onSigningActionReadyRef.current && (workflowState === 'signer1' || workflowState === 'signer2')) {
+      onSigningActionReadyRef.current(handleSigningAction);
+    }
+  }, [workflowState]);
+
   // Navigation functions removed - components are now isolated
 
   // Get current signer for signing workflow
@@ -2664,7 +2630,34 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Get unsigned fields for current signer
   const getUnsignedFields = () => {
     const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-    return fields.filter(f => f.recipientIndex === currentSignerIndex && !signedFields[f.formId] && ['SIGNATURE', 'INITIALS'].includes(f.type));
+    const allSignatureFields = fields.filter(f => f.recipientIndex === currentSignerIndex && ['SIGNATURE', 'INITIALS'].includes(f.type));
+    
+    // Properly check if field has a meaningful signed value (not null, undefined, empty string, or empty object)
+    const unsignedFields = allSignatureFields.filter(f => {
+      const value = signedFields[f.formId];
+      const isSigned = value !== null && value !== undefined && value !== '' && 
+                     (typeof value !== 'object' || (typeof value === 'object' && Object.keys(value).length > 0));
+      return !isSigned;
+    });
+    
+    // Focus on first unsigned field for debugging
+    const firstUnsignedField = unsignedFields[0];
+    if (firstUnsignedField) {
+      const value = signedFields[firstUnsignedField.formId];
+      console.log('🔍 FIRST UNSIGNED FIELD:', {
+        formId: firstUnsignedField.formId,
+        type: firstUnsignedField.type,
+        isInSignedFields: firstUnsignedField.formId in signedFields,
+        signedFieldValue: value,
+        signedFieldType: typeof value,
+        signedFieldKeys: typeof value === 'object' && value ? Object.keys(value) : null,
+        totalUnsignedCount: unsignedFields.length
+      });
+    } else {
+      console.log('🔍 NO UNSIGNED FIELDS - All signature fields are signed');
+    }
+    
+    return unsignedFields;
   };
 
   // Navigate to specific field and flash it
@@ -2962,22 +2955,26 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const signField = (fieldId: string, value: any) => {
     const field = fields.find(f => f.formId === fieldId);
     
-    setSignedFields(prev => {
-      const newSignedFields = {
-        ...prev,
-        [fieldId]: value
-      };
-      
-      // Notify parent component about field signing
-      if (onFieldSign) {
-        onFieldSign(fieldId, value);
-      }
-      
-      // Sign dates and initial dates will be filled during the actual lease signing process
-      // Do not auto-populate these fields here
-      
-      return newSignedFields;
-    });
+    // Check if this is a signature/initial field being signed
+    if (field && ['SIGNATURE', 'INITIALS'].includes(field.type)) {
+      console.log('🖋️ SIGNING FIELD:', {
+        fieldId,
+        fieldType: field.type,
+        wasAlreadySigned: !!signedFields[fieldId],
+        signedValue: value
+      });
+    }
+    
+    // Update the field in context
+    setSignedField(fieldId, value);
+    
+    // Also notify parent component if callback exists (for backward compatibility)
+    if (onFieldSign) {
+      onFieldSign(fieldId, value);
+    }
+    
+    // Sign dates and initial dates will be filled during the actual lease signing process
+    // Do not auto-populate these fields here
   };
 
   // Start field placement with movement detection
@@ -3267,7 +3264,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   }
 
   return (
-    <div ref={pdfEditorContainerRef} className="flex flex-col bg-gray-50">
+    <div ref={pdfEditorContainerRef} className="flex flex-col bg-gray-50" style={{ height: contentHeight }}>
       {/* Ghost cursor for field placement */}
       {selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place') && (
         <div
@@ -3397,19 +3394,21 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       </div>
 
       {/* Footer Controls - Fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
-        <div className="flex items-center justify-between">
-          {/* Left side - Status info */}
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-600">
-              <span className="font-medium">{fields.length}</span> fields • 
-              <span className="font-medium"> {recipients.length}</span> recipients
+      {showFooter && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
+          <div className="flex items-center justify-between">
+            {/* Left side - Status info */}
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-600">
+                <span className="font-medium">{fields.length}</span> fields • 
+                <span className="font-medium"> {recipients.length}</span> recipients
+              </div>
+              {/* Step indicators removed since components are isolated */}
             </div>
-            {/* Step indicators removed since components are isolated */}
-          </div>
 
-          {/* Right side - Action buttons */}
-          <div className="flex items-center gap-3">
+            {/* Right side - Action buttons */}
+            {!hideFooterControls && (
+              <div className="flex items-center gap-3">
             {/* Template state controls */}
             {workflowState === 'template' && (
               <>
@@ -3488,9 +3487,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 </Button>
               </>
             )}
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
       
       {/* Template Browser Modal */}
       {showTemplateBrowser && (
