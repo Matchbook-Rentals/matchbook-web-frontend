@@ -7,6 +7,8 @@ import type { FieldFormType } from './types';
 
 interface PDFEditorSignerProps {
   initialPdfFile?: File;
+  initialFields?: FieldFormType[];
+  initialRecipients?: Recipient[];
   signerStep?: 'signer1' | 'signer2';
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
@@ -14,7 +16,9 @@ interface PDFEditorSignerProps {
 }
 
 export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({ 
-  initialPdfFile, 
+  initialPdfFile,
+  initialFields,
+  initialRecipients, 
   signerStep = 'signer1',
   onSave, 
   onCancel,
@@ -24,6 +28,8 @@ export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({
     <PDFEditor
       initialWorkflowState={signerStep}
       initialPdfFile={initialPdfFile}
+      initialFields={initialFields}
+      initialRecipients={initialRecipients}
       onSave={onSave}
       onCancel={onCancel}
       onFinish={onFinish}

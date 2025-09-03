@@ -1,5 +1,13 @@
 # Changelog
 
+## Fix PDF signing footer field count and button state for renter workflow
+- Fixed footer showing "0 of 18 fields" instead of "0 of 2 fields" for renter signing
+- Removed duplicate footer from lease-signing-client during signing mode (PDFEditor has its own footer)
+- Fixed Zustand store initialization to include all signed fields from host
+- Updated field filtering to show only renter's SIGNATURE/INITIALS fields in signer2 workflow
+- Added comprehensive debugging for field counting and Zustand store initialization
+- Created data_flow.md documentation to track component data sources and issues
+
 ## Fix lease signing flow to approve housing requests and create matches
 - Fixed critical issue where "Sign and Send" button wasn't triggering housing request approval
 - Added housing request approval logic to PDFEditor document workflow state

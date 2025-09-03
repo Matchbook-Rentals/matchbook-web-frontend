@@ -6,5 +6,5 @@ interface MatchRedirectPageProps {
 
 export default async function MatchRedirectPage({ params }: MatchRedirectPageProps) {
   // Redirect to the new platform route
-  redirect(`/app/match/${params.matchId}`);
+  redirect(`/app/rent/match/${params.matchId}`);
 }

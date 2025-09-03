@@ -47,14 +47,27 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {}, s
     return { signatures, otherFields };
   };
 
-  // Calculate completion status
+  // Calculate completion status - only count SIGNATURE/INITIALS fields for renter
   const getCompletionStatus = () => {
     const tenantFields = getTenantFields();
-    const completedFields = tenantFields.filter(field => fieldsStatus[field.formId] === 'signed');
+    // Filter to only signature/initial fields (consistent with PDFEditor filtering)
+    const signatureFields = tenantFields.filter(field => {
+      const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+      return ['SIGNATURE', 'INITIALS'].includes(fieldType);
+    });
+    const completedFields = signatureFields.filter(field => fieldsStatus[field.formId] === 'signed');
+    
+    console.log('🏷️ RenterSidebarFrame completion status:', {
+      totalTenantFields: tenantFields.length,
+      signatureFields: signatureFields.length,
+      completedSignatureFields: completedFields.length,
+      fieldsStatus
+    });
+    
     return {
       completed: completedFields.length,
-      total: tenantFields.length,
-      percentage: tenantFields.length > 0 ? Math.round((completedFields.length / tenantFields.length) * 100) : 0
+      total: signatureFields.length, // Only count signature/initial fields
+      percentage: signatureFields.length > 0 ? Math.round((completedFields.length / signatureFields.length) * 100) : 0
     };
   };
 

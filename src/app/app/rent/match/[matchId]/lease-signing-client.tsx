@@ -12,7 +12,10 @@ import { MatchWithRelations } from '@/types';
 import { PaymentMethodSelector } from '@/components/stripe/payment-method-selector';
 import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
 import { PDFEditor } from '@/components/pdf-editor/PDFEditor';
+import { PDFEditorSigner } from '@/components/pdf-editor/PDFEditorSigner';
 import { PDFViewer } from '@/components/pdf-editor/PDFViewer';
+import { useSignedFieldsStore } from '@/stores/signed-fields-store';
+
 import { RenterSidebarFrame } from './renter-sidebar-frame';
 import { BookingSummarySidebar } from './booking-summary-sidebar';
 import { StepProgress } from '@/components/StepProgress';
@@ -27,6 +30,7 @@ interface LeaseSigningClientProps {
 export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }: LeaseSigningClientProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const { initializeSignedFields } = useSignedFieldsStore();
   
   // Debug logging to see what data we have
   console.log('=== LEASE SIGNING DEBUG ===');
@@ -36,7 +40,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     tenantSignedAt: match.tenantSignedAt,
     landlordSignedAt: match.landlordSignedAt,
     BoldSignLease: match.BoldSignLease,
-    Lease: match.Lease
+    Lease: match.Lease,
+    hasTrip: !!match.trip,
+    hasHousingRequests: !!match.trip?.housingRequests,
+    housingRequestsCount: match.trip?.housingRequests?.length || 0,
+    hasListing: !!match.listing,
+    hasListingUser: !!match.listing?.user
   });
   const [documentInstance, setDocumentInstance] = useState<any>(null);
   const [documentPdfFile, setDocumentPdfFile] = useState<File | null>(null);
@@ -51,6 +60,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(true);
   const [previewPaymentMethod, setPreviewPaymentMethod] = useState<'card' | 'ach'>(testPaymentMethodPreview || 'card');
+  
+  // Note: Workflow state management removed - PDFEditorSigner handles this internally
 
   // Update preview payment method when test prop changes
   useEffect(() => {
@@ -117,8 +128,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                 fields = fields.map((field: any) => {
                   const fieldValue = fieldValuesMap.get(field.formId);
                   
-                  // Only merge values if this field belongs to the current user AND they signed it
-                  if (fieldValue && field.recipientIndex === currentUserSignerIndex && fieldValue.signerIndex === currentUserSignerIndex) {
+                  // Merge ALL field values (including host's) so we know what's already signed
+                  if (fieldValue) {
                     return {
                       ...field,
                       value: fieldValue.value,
@@ -126,7 +137,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       signerIndex: fieldValue.signerIndex
                     };
                   }
-                  return field; // Return field without pre-signed values from other users
+                  return field;
                 });
                 
                 console.log('📄 All fields structure check:', fields.map((f: any, index: number) => ({
@@ -169,12 +180,56 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
               // Initialize field status based on current field values
               const initialFieldsStatus: Record<string, 'signed' | 'pending'> = {};
+              const signedFieldsMap: Record<string, any> = {};
+              
+              // Debug: Check what we have before initialization
+              console.log('🔍 DEBUG: Total fields:', fields.length);
+              console.log('🔍 DEBUG: Fields by recipient:', {
+                recipient0: fields.filter((f: any) => f.recipientIndex === 0).length,
+                recipient1: fields.filter((f: any) => f.recipientIndex === 1).length
+              });
+              
               fields.forEach((field: any) => {
                 // Field is signed if it has a value and signedAt timestamp
-                initialFieldsStatus[field.formId] = (field.value && field.signedAt) ? 'signed' : 'pending';
+                const isSigned = (field.value && field.signedAt);
+                initialFieldsStatus[field.formId] = isSigned ? 'signed' : 'pending';
+                
+                // Debug each field
+                console.log(`🔍 Field ${field.formId}:`, {
+                  recipientIndex: field.recipientIndex,
+                  type: field.type,
+                  value: field.value,
+                  signedAt: field.signedAt,
+                  signerIndex: field.signerIndex,
+                  isSigned: isSigned
+                });
+                
+                // Also populate Zustand store with signed field values
+                if (isSigned) {
+                  signedFieldsMap[field.formId] = field.value;
+                  console.log(`🏪 Field ${field.formId} is signed (recipient ${field.recipientIndex}), adding to Zustand: ${field.value}`);
+                }
               });
+              
               setFieldsStatus(initialFieldsStatus);
               console.log('📄 Initial fields status:', initialFieldsStatus);
+              console.log('📄 Fields status summary:', {
+                total: Object.keys(initialFieldsStatus).length,
+                signed: Object.values(initialFieldsStatus).filter(s => s === 'signed').length,
+                pending: Object.values(initialFieldsStatus).filter(s => s === 'pending').length
+              });
+              
+              // Initialize Zustand store with the same data as fieldsStatus
+              console.log('🏪 Initializing Zustand store with', Object.keys(signedFieldsMap).length, 'signed fields');
+              console.log('🏪 Zustand signed fields map:', signedFieldsMap);
+              initializeSignedFields(signedFieldsMap);
+              
+              // Verify Zustand was initialized
+              setTimeout(() => {
+                const storeState = useSignedFieldsStore.getState().signedFields;
+                console.log('🏪 VERIFY: Zustand store after init has', Object.keys(storeState).length, 'fields');
+                console.log('🏪 VERIFY: Zustand store contents:', storeState);
+              }, 100);
               
               console.log('📄 Extracted from document:', {
                 fieldsCount: fields?.length || 0,
@@ -679,6 +734,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     }
   };
 
+  // Note: Simplified for PDFEditorSigner - it handles workflow internally
+
   // Show loading during transition
   if (isTransitioning) {
     return (
@@ -781,7 +838,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             />
           </div>
 
-          <div className={`grid grid-cols-1 gap-6 ${currentStepState === 'sign-lease' ? '' : 'lg:grid-cols-3'}`}>
+          <div className={`${currentStepState === 'sign-lease' ? 'w-full' : 'grid grid-cols-1 gap-6 lg:grid-cols-3'}`}>
             {/* Sidebar - shows different content based on step */}
             {currentStepState !== 'sign-lease' && (
               <div className="lg:col-span-1">
@@ -906,41 +963,24 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       </div>
                     </div>
                   ) : currentStepState === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
-                    <div className="space-y-4">
-                      
-                      <div className="min-h-[600px]">
-                        <PDFEditor
-                          initialWorkflowState={(() => {
-                            const currentUserSignerIndex = getRenterSignerNumber();
-                            console.log('🔍 Setting workflow state for renter signerIndex:', currentUserSignerIndex);
-                            
-                            // PDFEditor maps: signer1 = recipientIndex 0, signer2 = recipientIndex 1
-                            // Find what recipientIndex this renter should have in the document fields
-                            const renterFields = documentFields.filter(f => f.recipientIndex === currentUserSignerIndex);
-                            console.log('🔍 Renter fields with recipientIndex', currentUserSignerIndex, ':', renterFields.length);
-                            
-                            // Map recipientIndex to workflow state
-                            return currentUserSignerIndex === 0 ? 'signer1' : 'signer2';
-                          })()}
+                    <div className="w-full">
+                      {/* PDFEditorDocument - no header needed for renter interface */}
+                      <div className="w-full min-h-[600px]">
+                        <PDFEditorSigner
                           initialPdfFile={documentPdfFile}
                           initialFields={documentFields}
                           initialRecipients={documentRecipients}
-                          onFinish={handleDocumentSigningComplete}
-                          onFieldSign={handleFieldSign}
+                          signerStep="signer2"
+                          onSave={(data) => {
+                            console.log('Document save called:', data);
+                          }}
                           onCancel={() => {
                             toast({
                               title: "Signing cancelled",
                               description: "You can return to sign the lease at any time.",
                             });
                           }}
-                          customSidebarContent={(workflowState, defaultSidebar) => (
-                            <RenterSidebarFrame 
-                              match={match} 
-                              documentFields={documentFields}
-                              fieldsStatus={fieldsStatus}
-                              showTitle={true}
-                            />
-                          )}
+                          onFinish={handleDocumentSigningComplete}
                         />
                       </div>
                     </div>
@@ -1184,8 +1224,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             </div>
           </div>
 
-          {/* Footer Controls - Fixed at bottom - only show for overview, signing and completed states */}
-          {(currentStepState === 'overview-lease' || currentStepState === 'sign-lease' || currentStepState === 'completed') && (
+          {/* Footer Controls - Fixed at bottom - only show for overview and completed states (PDFEditor has its own footer for signing) */}
+          {(currentStepState === 'overview-lease' || currentStepState === 'completed') && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
               <div className="flex items-center justify-between">
                 {/* Left side - Status info */}
@@ -1199,7 +1239,22 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     )}
                     {currentStepState === 'sign-lease' && (
                       <>
-                        <span className="font-medium">{Object.values(fieldsStatus).filter(status => status === 'signed').length}</span> of <span className="font-medium">{Object.keys(fieldsStatus).length}</span> fields completed
+                        {(() => {
+                          // Only count renter's signature/initial fields
+                          const renterSignatureFields = documentFields.filter((field: any) => {
+                            if (field.recipientIndex !== 1) return false;
+                            const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+                            return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
+                          });
+                          const completedRenterFields = renterSignatureFields.filter((field: any) => 
+                            fieldsStatus[field.formId] === 'signed'
+                          );
+                          return (
+                            <>
+                              <span className="font-medium">{completedRenterFields.length}</span> of <span className="font-medium">{renterSignatureFields.length}</span> fields completed
+                            </>
+                          );
+                        })()}
                       </>
                     )}
                     {currentStepState === 'completed' && (

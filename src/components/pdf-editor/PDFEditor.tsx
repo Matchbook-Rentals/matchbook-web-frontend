@@ -2902,6 +2902,63 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const handleSigningAction = async () => {
     console.log('🚨🚨🚨 YOU CLICKED THE SAVE AND SEND BUTTON (PDFEditor)! 🚨🚨🚨');
     const currentSignedFields = useSignedFieldsStore.getState().signedFields;
+    
+    // COMPREHENSIVE DEBUG LOGGING
+    console.group('🔍 DEBUG: Footer Field Analysis for Next Action Button');
+    console.log('Workflow State:', workflowState);
+    console.log('Total fields in document:', fields.length);
+    console.log('All fields with details:', fields.map(f => ({
+      id: f.formId,
+      type: typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || 'unknown'),
+      recipientIndex: f.recipientIndex,
+      isSigned: !!currentSignedFields[f.formId],
+      signedValue: currentSignedFields[f.formId]
+    })));
+
+    // Show filtering for signer2 (renter)
+    if (workflowState === 'signer2') {
+      console.log('--- RENTER FIELD FILTERING ANALYSIS ---');
+      
+      // Show what the display filter would show
+      const displayFilteredFields = fields.filter((field) => {
+        const signedFields = useSignedFieldsStore.getState().signedFields;
+        
+        // If it's the host's field (index 0), only show if it's already signed
+        if (field.recipientIndex === 0) {
+          return !!signedFields[field.formId];
+        }
+        // If it's the renter's field (index 1), only show signature/initial fields
+        if (field.recipientIndex === 1) {
+          const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+          return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
+        }
+        return false;
+      });
+      console.log('Display filtered fields (what renter should see):', displayFilteredFields.length, displayFilteredFields);
+      
+      // Show what the footer counter should count
+      const footerCountedFields = fields.filter(f => {
+        // For renter, only count their signature/initial fields
+        if (f.recipientIndex === 1) {
+          const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+          return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
+        }
+        return false;
+      });
+      console.log('Footer should count these fields:', footerCountedFields.length, footerCountedFields);
+      
+      // Show what getUnsignedFields returns
+      const unsignedFromFunction = getUnsignedFields(currentSignedFields);
+      console.log('getUnsignedFields returns:', unsignedFromFunction.length, unsignedFromFunction);
+      
+      console.log('--- FIELD COUNT MISMATCH CHECK ---');
+      console.log('Expected: Display=', displayFilteredFields.length, ', Footer=', footerCountedFields.length, ', Unsigned=', unsignedFromFunction.length);
+      console.log('If footer shows 18 instead of', footerCountedFields.length, ', the footer counting logic is not working');
+    }
+    
+    console.log('Signed fields state:', Object.keys(currentSignedFields).length, 'signed fields:', currentSignedFields);
+    console.groupEnd();
+
     console.log('🎬 handleSigningAction - signedFields keys:', Object.keys(currentSignedFields));
     console.log('🎬 handleSigningAction - LxS-E2U7k7Z7 value:', currentSignedFields['LxS-E2U7k7Z7']);
     const unsignedFields = getUnsignedFields(currentSignedFields);
@@ -3423,7 +3480,27 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             pageWidth={pageWidth}
             isFieldPlacementMode={!!selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place')}
           >
-            {fields.map((field) => {
+            {/* Helper function to determine if a field should be shown for renter (signer2) */}
+            {fields.filter((field) => {
+              // For signer2 (renter), filter fields to show only what's needed
+              if (workflowState === 'signer2') {
+                const signedFields = useSignedFieldsStore.getState().signedFields;
+                
+                // If it's the host's field (index 0), only show if it's already signed
+                if (field.recipientIndex === 0) {
+                  return !!signedFields[field.formId];
+                }
+                // If it's the renter's field (index 1), only show signature/initial fields
+                if (field.recipientIndex === 1) {
+                  const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+                  return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
+                }
+                // Don't show fields for other recipients
+                return false;
+              }
+              // For all other workflow states, show all fields
+              return true;
+            }).map((field) => {
               const pageElement = pageElements.get(field.pageNumber);
               // Find recipient by signerEmail first, then fall back to recipientIndex
               let recipient = recipients.find(r => r.id === field.signerEmail);
@@ -3561,13 +3638,62 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 <div className="text-xs text-gray-500">
                   {(() => {
                     const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-                    const signerFields = fields.filter(f => f.recipientIndex === currentSignerIndex);
                     
-                    const signatures = signerFields.filter(f => f.type === 'SIGNATURE');
-                    const initials = signerFields.filter(f => f.type === 'INITIALS');
+                    console.group('🏷️ DEBUG: Footer Field Count Calculation');
+                    console.log('Workflow state:', workflowState, 'Current signer index:', currentSignerIndex);
+                    console.log('Total fields in document:', fields.length);
                     
-                    const pendingSignatures = signatures.filter(f => !useSignedFieldsStore.getState().signedFields[f.formId]).length;
-                    const pendingInitials = initials.filter(f => !useSignedFieldsStore.getState().signedFields[f.formId]).length;
+                    // For signer2 (renter), only count SIGNATURE/INITIALS fields (consistent with display filtering)
+                    const signerFields = workflowState === 'signer2' 
+                      ? fields.filter(f => {
+                          console.log(`Field ${f.formId}: recipientIndex=${f.recipientIndex}, type=${typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || 'unknown')}`);
+                          // For renter, only count their signature/initial fields
+                          if (f.recipientIndex === 1) {
+                            const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                            const isSignatureOrInitial = fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
+                            console.log(`  -> Renter field, isSignatureOrInitial=${isSignatureOrInitial}`);
+                            return isSignatureOrInitial;
+                          }
+                          console.log(`  -> Not renter field (recipientIndex ${f.recipientIndex})`);
+                          return false;
+                        })
+                      : fields.filter(f => {
+                          console.log(`Field ${f.formId}: recipientIndex=${f.recipientIndex}, matches currentSigner=${f.recipientIndex === currentSignerIndex}`);
+                          return f.recipientIndex === currentSignerIndex;
+                        });
+                    
+                    console.log('Filtered signer fields:', signerFields.length, signerFields.map(f => ({
+                      id: f.formId,
+                      type: typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || 'unknown'),
+                      recipientIndex: f.recipientIndex
+                    })));
+                    
+                    const signatures = signerFields.filter(f => {
+                      const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                      return fieldType === 'SIGNATURE';
+                    });
+                    const initials = signerFields.filter(f => {
+                      const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                      return fieldType === 'INITIALS';
+                    });
+                    
+                    console.log('Signatures found:', signatures.length, signatures.map(f => f.formId));
+                    console.log('Initials found:', initials.length, initials.map(f => f.formId));
+                    
+                    const currentSignedFields = useSignedFieldsStore.getState().signedFields;
+                    const pendingSignatures = signatures.filter(f => {
+                      const isSigned = !!currentSignedFields[f.formId];
+                      console.log(`Signature ${f.formId}: signed=${isSigned}, value=${currentSignedFields[f.formId]}`);
+                      return !isSigned;
+                    }).length;
+                    const pendingInitials = initials.filter(f => {
+                      const isSigned = !!currentSignedFields[f.formId];
+                      console.log(`Initial ${f.formId}: signed=${isSigned}, value=${currentSignedFields[f.formId]}`);
+                      return !isSigned;
+                    }).length;
+                    
+                    console.log('Final counts: pendingSignatures=', pendingSignatures, ', pendingInitials=', pendingInitials);
+                    console.groupEnd();
                     
                     const parts = [];
                     if (pendingSignatures > 0) {
@@ -3577,7 +3703,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                       parts.push(`${pendingInitials} pending initial${pendingInitials !== 1 ? 's' : ''}`);
                     }
                     
-                    return parts.length > 0 ? parts.join(' • ') : 'All fields completed';
+                    const finalText = parts.length > 0 ? parts.join(' • ') : 'All fields completed';
+                    console.log('🏷️ Final footer text should be:', finalText);
+                    console.log('🏷️ If you see "0 of 18" instead, something else is overriding this text');
+                    
+                    return finalText;
                   })()}
                 </div>
                 <BrandButton 
