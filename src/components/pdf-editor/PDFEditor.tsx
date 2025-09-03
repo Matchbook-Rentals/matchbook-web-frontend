@@ -2894,12 +2894,21 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // User initials save handler
   const saveUserInitials = async (initials: string) => {
+    console.log('💾 PDFEditor - saveUserInitials called with:', {
+      initials: initials,
+      currentUserInitials: currentUserInitials
+    });
+    
     try {
+      console.log('💾 PDFEditor - Calling updateUserInitials server action');
       await updateUserInitials(initials);
+      console.log('💾 PDFEditor - Server action completed successfully');
+      
       // Update client-side state immediately so dialog won't show again this session
       setCurrentUserInitials(initials);
+      console.log('💾 PDFEditor - Updated client-side currentUserInitials to:', initials);
     } catch (error) {
-      console.error('Error saving user initials:', error);
+      console.error('💾 PDFEditor - Error saving user initials:', error);
       throw error;
     }
   };

@@ -50,17 +50,28 @@ export const InitialsDialog: React.FC<InitialsDialogProps> = ({
   const handleUseTypedInitials = async () => {
     if (!typedText.trim()) return;
     
+    console.log('🔤 InitialsDialog - Starting to save initials:', {
+      initials: typedText.trim(),
+      hasOnSaveInitials: !!onSaveInitials,
+      recipientName: recipientName
+    });
+    
     setIsLoading(true);
     try {
       // ALWAYS save initials - no choice for first-time users
       if (onSaveInitials) {
+        console.log('🔤 InitialsDialog - Calling onSaveInitials with:', typedText.trim());
         await onSaveInitials(typedText.trim());
+        console.log('🔤 InitialsDialog - Successfully saved initials');
+      } else {
+        console.log('🔤 InitialsDialog - No onSaveInitials function provided');
       }
       
+      console.log('🔤 InitialsDialog - Calling onSign with initials');
       onSign(typedText.trim(), 'typed', 'dancing-script');
       onClose();
     } catch (error) {
-      console.error('Error saving typed initials:', error);
+      console.error('🔤 InitialsDialog - Error saving typed initials:', error);
     } finally {
       setIsLoading(false);
     }

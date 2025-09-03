@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from '@/lib/prismadb'
+import prismadb from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { createNotification } from './notifications'
 import { HousingRequest, Notification } from '@prisma/client'
@@ -13,19 +13,27 @@ type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedA
 
 export async function getHousingRequestById(housingRequestId: string) {
   try {
-    const housingRequest = await prisma.housingRequest.findUnique({
+    const housingRequest = await prismadb.housingRequest.findUnique({
       where: {
         id: housingRequestId,
       },
       include: {
         user: {
-          include: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            imageUrl: true,
+            signingInitials: true, // Add signing initials field
             applications: {
-              include: {
+              select: {
+                id: true,
                 verificationImages: true,
                 incomes: true,
                 identifications: {
-                  include: {
+                  select: {
+                    id: true,
                     idPhotos: true,
                   }
                 },
@@ -39,9 +47,12 @@ export async function getHousingRequestById(housingRequestId: string) {
             monthlyPricing: true,
             user: {
               select: {
+                id: true,
                 firstName: true,
                 lastName: true,
-                email: true
+                email: true,
+                imageUrl: true,
+                signingInitials: true // Add signing initials for host user too
               }
             }
           }
@@ -58,7 +69,7 @@ export async function getHousingRequestById(housingRequestId: string) {
     // Check if there's a booking for this housing request (via match)
     let hasBooking = false;
     if (housingRequest.status === 'approved') {
-      const match = await prisma.match.findFirst({
+      const match = await prismadb.match.findFirst({
         where: {
           tripId: housingRequest.tripId,
           listingId: housingRequest.listingId
@@ -86,7 +97,7 @@ export async function getHousingRequestById(housingRequestId: string) {
 export async function getHousingRequestsByListingId(listingId: string) {
   try {
     // Use a single query with proper joins to avoid N+1 problem
-    const housingRequests = await prisma.housingRequest.findMany({
+    const housingRequests = await prismadb.housingRequest.findMany({
       where: {
         listingId: listingId,
       },
@@ -125,7 +136,7 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
   }
 
   try {
-    const newHousingRequest = await prisma.housingRequest.create({
+    const newHousingRequest = await prismadb.housingRequest.create({
       data: {
         userId: trip.userId,
         listingId: listing.id,
@@ -136,7 +147,7 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
     });
 
 
-    const requester = await prisma.user.findUnique({
+    const requester = await prismadb.user.findUnique({
       where: {
         id: trip.userId
       }
@@ -175,7 +186,7 @@ export const deleteDbHousingRequest = async (tripId: string, listingId: string) 
   console.log(`Deleting HousingRequest with trip ${tripId} and listing ${listingId}`);
   try {
     // Delete the favorite
-    const deletedRequest = await prisma.housingRequest.delete({
+    const deletedRequest = await prismadb.housingRequest.delete({
       where: {
         listingId_tripId: {
           tripId,
@@ -185,7 +196,7 @@ export const deleteDbHousingRequest = async (tripId: string, listingId: string) 
     });
 
     try {
-      await prisma.notification.deleteMany({
+      await prismadb.notification.deleteMany({
         where: {
           AND: [
             { actionType: 'view' },
@@ -216,7 +227,7 @@ export async function optimisticApplyDb(tripId: string, listing: ListingAndImage
     const { userId } = auth();
     if (!userId) throw new Error('Unauthorized');
 
-    const trip = await prisma.trip.findUnique({
+    const trip = await prismadb.trip.findUnique({
       where: { id: tripId },
       include: {
         favorites: true,
@@ -268,7 +279,7 @@ export async function getHostHousingRequests() {
     console.log('Fetching housing requests for userId:', userId);
 
     // Use a single query with proper joins to avoid N+1 problem
-    const housingRequests = await prisma.housingRequest.findMany({
+    const housingRequests = await prismadb.housingRequest.findMany({
       where: {
         listing: {
           userId: userId // Get housing requests where the listing belongs to the current user (host)
@@ -323,7 +334,7 @@ export async function approveHousingRequest(housingRequestId: string) {
     }
 
     // First verify that the housing request belongs to a listing owned by the current user
-    const housingRequest = await prisma.housingRequest.findUnique({
+    const housingRequest = await prismadb.housingRequest.findUnique({
       where: { id: housingRequestId },
       include: {
         listing: true,
@@ -341,7 +352,7 @@ export async function approveHousingRequest(housingRequestId: string) {
     }
 
     // Start a transaction to ensure both operations succeed or fail together
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prismadb.$transaction(async (tx) => {
       // Update the housing request status to approved
       const updatedRequest = await tx.housingRequest.update({
         where: { id: housingRequestId },
@@ -398,7 +409,7 @@ export async function declineHousingRequest(housingRequestId: string) {
     }
 
     // First verify that the housing request belongs to a listing owned by the current user
-    const housingRequest = await prisma.housingRequest.findUnique({
+    const housingRequest = await prismadb.housingRequest.findUnique({
       where: { id: housingRequestId },
       include: {
         listing: true,
@@ -415,7 +426,7 @@ export async function declineHousingRequest(housingRequestId: string) {
     }
 
     // Update the housing request status to declined
-    const updatedRequest = await prisma.housingRequest.update({
+    const updatedRequest = await prismadb.housingRequest.update({
       where: { id: housingRequestId },
       data: { status: 'declined' }
     });
@@ -451,7 +462,7 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
     }
 
     // First verify that the housing request belongs to a listing owned by the current user
-    const housingRequest = await prisma.housingRequest.findUnique({
+    const housingRequest = await prismadb.housingRequest.findUnique({
       where: { id: housingRequestId },
       include: {
         listing: true,
@@ -472,7 +483,7 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
     }
 
     // Start a transaction to ensure both operations succeed or fail together
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prismadb.$transaction(async (tx) => {
       // Find and delete the match associated with this housing request
       const match = await tx.match.findFirst({
         where: {
@@ -560,7 +571,7 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     }
 
     // First verify that the housing request belongs to a listing owned by the current user
-    const housingRequest = await prisma.housingRequest.findUnique({
+    const housingRequest = await prismadb.housingRequest.findUnique({
       where: { id: housingRequestId },
       include: {
         listing: true,
@@ -581,7 +592,7 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     }
 
     // Start a transaction to ensure both operations succeed or fail together
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prismadb.$transaction(async (tx) => {
       // Update the housing request status back to pending
       const updatedRequest = await tx.housingRequest.update({
         where: { id: housingRequestId },
@@ -631,7 +642,7 @@ export async function updateHousingRequest(housingRequestId: string, data: { lea
     }
 
     // First verify that the housing request belongs to a listing owned by the current user
-    const housingRequest = await prisma.housingRequest.findUnique({
+    const housingRequest = await prismadb.housingRequest.findUnique({
       where: { id: housingRequestId },
       include: {
         listing: true
@@ -647,7 +658,7 @@ export async function updateHousingRequest(housingRequestId: string, data: { lea
     }
 
     // Update the housing request
-    const updatedRequest = await prisma.housingRequest.update({
+    const updatedRequest = await prismadb.housingRequest.update({
       where: { id: housingRequestId },
       data: data
     });

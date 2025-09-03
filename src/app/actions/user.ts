@@ -36,6 +36,7 @@ export async function updateUserInitials(initials: string) {
   }
 
   try {
+    // Update the user's initials
     const user = await prismadb.user.update({
       where: { id: clerkUser.id },
       data: { signingInitials: initials },
@@ -44,6 +45,30 @@ export async function updateUserInitials(initials: string) {
     logger.info('Updated user initials', {
       userId: clerkUser.id,
       initials: initials
+    });
+
+    // Immediately verify the save by pulling the user back from database
+    const verificationUser = await prismadb.user.findUnique({
+      where: { id: clerkUser.id },
+      select: { 
+        id: true, 
+        signingInitials: true 
+      }
+    });
+
+    if (!verificationUser || verificationUser.signingInitials !== initials) {
+      logger.error('Verification failed after saving initials', {
+        userId: clerkUser.id,
+        expectedInitials: initials,
+        actualInitials: verificationUser?.signingInitials || 'null',
+        userExists: !!verificationUser
+      });
+      throw new Error("Failed to verify initials save to database");
+    }
+
+    logger.info('Successfully verified initials saved to database', {
+      userId: clerkUser.id,
+      verifiedInitials: verificationUser.signingInitials
     });
 
     revalidatePath('/');

@@ -245,12 +245,21 @@ export const SignableField: React.FC<SignableFieldProps> = ({
             if (field.type === FieldType.SIGNATURE) {
               setIsSignatureDialogOpen(true);
             } else if (field.type === FieldType.INITIALS) {
+              console.log('✍️ SignableField - INITIALS field clicked:', {
+                fieldId: field.formId,
+                currentInitials: currentInitials,
+                hasCurrentInitials: !!currentInitials,
+                hasOnSaveInitials: !!onSaveInitials
+              });
+              
               // Auto-sign with saved initials if they exist, otherwise show dialog
               if (currentInitials) {
                 // User already has saved initials - auto-sign immediately
+                console.log('✍️ SignableField - Auto-signing with saved initials:', currentInitials);
                 handleInitialsSign(currentInitials, 'typed', 'dancing-script');
               } else {
                 // No saved initials - show dialog to collect them
+                console.log('✍️ SignableField - No saved initials, showing dialog');
                 setIsInitialsDialogOpen(true);
               }
             } else {
