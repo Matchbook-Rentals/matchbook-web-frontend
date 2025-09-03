@@ -14,6 +14,14 @@ export async function handleSignerCompletion(
   housingRequestId?: string
 ) {
   try {
+    console.log('🚀 handleSignerCompletion called with:', {
+      documentId,
+      currentSignerIndex,
+      recipientsCount: recipients.length,
+      housingRequestId: housingRequestId || 'UNDEFINED',
+      hasHousingRequestId: !!housingRequestId
+    });
+
     const { userId } = await auth()
     if (!userId) {
       throw new Error('Unauthorized')
@@ -39,7 +47,10 @@ export async function handleSignerCompletion(
 
     // If this is the host (signer1) signing, approve the housing request
     if (currentSignerIndex === 0 && housingRequestId) {
+      console.log('🏠 Host signing detected - approving housing request:', housingRequestId);
       await handleHostSigningCompletion(documentId, recipients, housingRequestId)
+    } else if (currentSignerIndex === 0) {
+      console.log('⚠️ Host signing detected but NO housingRequestId provided!');
     }
 
     // Check if this was the last signer
@@ -62,9 +73,11 @@ export async function handleSignerCompletion(
       }
     }
 
+    console.log('✅ handleSignerCompletion completed successfully');
     return { success: true }
   } catch (error) {
-    console.error('❌ Error in handleSignerCompletion:', error)
+    console.error('❌ Error in handleSignerCompletion:', error);
+    console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Unknown error' 
@@ -277,19 +290,31 @@ async function handleHostSigningCompletion(
   housingRequestId: string
 ) {
   try {
-    console.log('🏠 Host signed document, approving housing request:', housingRequestId)
+    console.log('🏠 Host signed document, approving housing request:', {
+      documentId,
+      housingRequestId,
+      recipientsCount: recipients.length
+    });
     
     // Approve the housing request (this creates the match and notifies the applicant)
+    console.log('🔄 Calling approveHousingRequest with ID:', housingRequestId);
     const result = await approveHousingRequest(housingRequestId)
     
+    console.log('📋 approveHousingRequest result:', result);
+    
     if (result.success) {
-      console.log('✅ Housing request approved, match created')
+      console.log('✅ Housing request approved, match created:', {
+        housingRequestStatus: result.housingRequest?.status,
+        matchId: result.match?.id,
+        matchLeaseDocumentId: result.match?.leaseDocumentId
+      });
       // Note: Booking will be created only when both parties have signed the document
     } else {
-      console.error('❌ Failed to approve housing request')
+      console.error('❌ Failed to approve housing request - no result.success');
     }
   } catch (error) {
-    console.error('❌ Error handling host signing completion:', error)
+    console.error('❌ Error handling host signing completion:', error);
+    throw error; // Re-throw to bubble up the error
   }
 }
 

@@ -2277,6 +2277,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Step completion handler
   const completeCurrentStep = async () => {
+    console.log('🎯🎯🎯 COMPLETE CURRENT STEP CALLED! 🎯🎯🎯');
+    console.log('📋 PDFEditor completeCurrentStep context:', {
+      workflowState,
+      housingRequestId: housingRequestId || 'UNDEFINED!',
+      hasHousingRequestId: !!housingRequestId,
+      recipientsCount: recipients.length
+    });
+    
     const stepNames = {
       'template': 'Template Creation',
       'document': 'Document Creation', 
@@ -2375,6 +2383,38 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 console.error('Failed to update document status:', error);
               }
               
+              // If this is being called from the host signing flow, approve the housing request
+              if (housingRequestId && signerRole === 'host') {
+                console.log('🏠 Document creation complete - approving housing request from document case');
+                try {
+                  const result = await handleSignerCompletion(documentId, 0, recipients, housingRequestId);
+                  if (!result.success) {
+                    console.error('❌ Housing request approval failed:', result.error);
+                    brandAlert(`Failed to approve housing request: ${result.error}`, 'error', 'Approval Error');
+                  } else {
+                    console.log('✅ Housing request approved successfully from document case');
+                    
+                    // Show success message
+                    brandAlert('🎉 Success! The lease has been signed and the housing request has been approved. The applicant will be notified and can now view the match in their search results.', 'success', 'Lease Signed & Request Approved');
+                    
+                    // Navigate to success page or back to application details
+                    setTimeout(() => {
+                      const hostRedirectUrl = sessionStorage.getItem('hostSigningRedirectUrl');
+                      if (hostRedirectUrl) {
+                        console.log('🔄 Redirecting to:', hostRedirectUrl);
+                        sessionStorage.removeItem('hostSigningRedirectUrl'); // Clean up
+                        window.location.href = hostRedirectUrl;
+                      } else if (onFinish) {
+                        onFinish('Housing Request Approved');
+                      }
+                    }, 2000); // Give user time to read the success message
+                  }
+                } catch (error) {
+                  console.error('❌ Error approving housing request from document case:', error);
+                  brandAlert('Error approving housing request. Please try again.', 'error', 'Approval Error');
+                }
+              }
+              
               // Transition to signing workflow
               setWorkflowState('signer1');
             }
@@ -2420,12 +2460,36 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           
           // Call server action to handle notifications and booking creation
           const documentId = sessionStorage.getItem('currentDocumentId');
+          console.log(`🔍 Debug - Complete step called with:`, {
+            currentSignerIndex,
+            documentId,
+            housingRequestId,
+            hasHousingRequestId: !!housingRequestId,
+            recipientsCount: recipients.length,
+            workflowState
+          });
+          
           if (documentId) {
             console.log(`📤 Calling server action for signer completion...`);
+            console.log(`📋 handleSignerCompletion params:`, {
+              documentId,
+              currentSignerIndex,
+              recipientsLength: recipients.length,
+              housingRequestId: housingRequestId || 'MISSING!',
+              isHost: currentSignerIndex === 0
+            });
+            
             const result = await handleSignerCompletion(documentId, currentSignerIndex, recipients, housingRequestId);
             if (!result.success) {
               console.error('❌ Server action failed:', result.error);
+              brandAlert(`Failed to process signing completion: ${result.error}`, 'error', 'Signing Error');
+              return; // Stop processing if server action failed
+            } else {
+              console.log('✅ handleSignerCompletion succeeded');
             }
+          } else {
+            console.error('❌ No document ID found in session storage!');
+            brandAlert('Document ID not found. Please try refreshing the page.', 'error', 'Document Error');
           }
           
           // Transition workflow state
@@ -2836,6 +2900,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Handle signing button click - using Zustand store directly
   const handleSigningAction = async () => {
+    console.log('🚨🚨🚨 YOU CLICKED THE SAVE AND SEND BUTTON (PDFEditor)! 🚨🚨🚨');
     const currentSignedFields = useSignedFieldsStore.getState().signedFields;
     console.log('🎬 handleSigningAction - signedFields keys:', Object.keys(currentSignedFields));
     console.log('🎬 handleSigningAction - LxS-E2U7k7Z7 value:', currentSignedFields['LxS-E2U7k7Z7']);

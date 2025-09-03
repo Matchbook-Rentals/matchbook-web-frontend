@@ -341,20 +341,31 @@ function CreateLeasePageContent() {
 
   // Get the appropriate button function and text
   const getButtonProps = () => {
+    console.log('🔍 getButtonProps called with:', {
+      currentWorkflowState,
+      hasCompleteStepFunction: !!completeStepFunction,
+      hasSigningActionFunction: !!signingActionFunction
+    });
+
     if (currentWorkflowState === 'signer1') {
       const unsignedFields = getUnsignedHostFields();
+      console.log('📋 In signer1 state, unsigned fields:', unsignedFields.length);
+      
       if (unsignedFields.length > 0) {
+        console.log('🎯 Returning Next Action button');
         return {
           text: 'Next Action',
           action: signingActionFunction
         };
       } else {
+        console.log('🎯 Returning Save and Send button');
         return {
           text: 'Save and Send', 
           action: completeStepFunction
         };
       }
     }
+    console.log('🎯 Returning Create & Sign Document button');
     return {
       text: 'Create & Sign Document',
       action: completeStepFunction
@@ -463,9 +474,37 @@ function CreateLeasePageContent() {
           
           {mergedPDF && (() => {
             const buttonProps = getButtonProps();
+            const isDisabled = !buttonProps.action || isCreatingDocument;
+            console.log('🔧 Button render state:', {
+              isDisabled,
+              hasAction: !!buttonProps.action,
+              isCreatingDocument,
+              buttonText: buttonProps.text
+            });
             return (
               <Button
-                onClick={buttonProps.action}
+                onClick={(e) => {
+                  console.log('CLICK REGISTERED!');
+                  console.log('Event:', e);
+                  try {
+                    console.log('🔴🔴🔴 HEADER BUTTON CLICKED ON CREATE-LEASE PAGE! 🔴🔴🔴');
+                    console.log('📋 Header button details:', {
+                      buttonText: buttonProps.text,
+                      hasAction: !!buttonProps.action,
+                      currentWorkflowState,
+                      housingRequestId,
+                      listingId
+                    });
+                    if (buttonProps.action) {
+                      console.log('Calling buttonProps.action...');
+                      buttonProps.action();
+                    } else {
+                      console.error('❌ No action function found for header button!');
+                    }
+                  } catch (error) {
+                    console.error('ERROR IN CLICK HANDLER:', error);
+                  }
+                }}
                 disabled={!buttonProps.action || isCreatingDocument}
                 className="bg-[#3c8787] hover:bg-[#2d6666] text-white px-6 py-2"
               >
@@ -535,6 +574,14 @@ function CreateLeasePageContent() {
             onCompleteStepReady={(completeStepFn) => {
               completeStepFunctionRef.current = completeStepFn;
               setCompleteStepFunction(() => async () => {
+                console.log('🚨🚨🚨 YOU CLICKED THE SAVE AND SEND BUTTON! 🚨🚨🚨');
+                console.log('📋 Button click context:', {
+                  housingRequestId,
+                  listingId,
+                  currentWorkflowState,
+                  hasCompleteStepFunctionRef: !!completeStepFunctionRef.current
+                });
+                
                 setIsCreatingDocument(true);
                 try {
                   await completeStepFunctionRef.current?.();

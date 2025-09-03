@@ -328,12 +328,17 @@ export async function getHostHousingRequests() {
 // Approve a housing request
 export async function approveHousingRequest(housingRequestId: string) {
   try {
+    console.log('🏠 approveHousingRequest called with ID:', housingRequestId);
+    
     const { userId } = auth();
     if (!userId) {
       throw new Error('Unauthorized');
     }
 
+    console.log('👤 User ID:', userId);
+
     // First verify that the housing request belongs to a listing owned by the current user
+    console.log('🔍 Looking up housing request:', housingRequestId);
     const housingRequest = await prismadb.housingRequest.findUnique({
       where: { id: housingRequestId },
       include: {
@@ -341,6 +346,14 @@ export async function approveHousingRequest(housingRequestId: string) {
         user: true,
         trip: true
       }
+    });
+
+    console.log('📋 Housing request found:', {
+      id: housingRequest?.id,
+      status: housingRequest?.status,
+      listingUserId: housingRequest?.listing?.userId,
+      currentUserId: userId,
+      authorized: housingRequest?.listing?.userId === userId
     });
 
     if (!housingRequest) {
@@ -352,18 +365,33 @@ export async function approveHousingRequest(housingRequestId: string) {
     }
 
     // Start a transaction to ensure both operations succeed or fail together
+    console.log('💾 Starting transaction to approve housing request and create match');
     const result = await prismadb.$transaction(async (tx) => {
       // Update the housing request status to approved
+      console.log('🔄 Updating housing request status to approved:', housingRequestId);
       const updatedRequest = await tx.housingRequest.update({
         where: { id: housingRequestId },
         data: { status: 'approved' }
       });
+      console.log('✅ Housing request status updated:', updatedRequest.status);
 
       // Create a match for this approved housing request
       const monthlyRent = calculateRent({ 
         listing: housingRequest.listing, 
         trip: housingRequest.trip 
       });
+
+      console.log('🔄 Creating match with data:', {
+        tripId: housingRequest.tripId,
+        listingId: housingRequest.listingId,
+        monthlyRent,
+        leaseDocumentId: housingRequest.leaseDocumentId
+      });
+
+      // Ensure leaseDocumentId exists on housing request
+      if (!housingRequest.leaseDocumentId) {
+        console.warn('⚠️ Housing request does not have leaseDocumentId - match will be created without document link');
+      }
 
       const match = await tx.match.create({
         data: {
@@ -374,25 +402,36 @@ export async function approveHousingRequest(housingRequestId: string) {
         },
       });
 
+      console.log('✅ Match created:', {
+        id: match.id,
+        leaseDocumentId: match.leaseDocumentId,
+        monthlyRent: match.monthlyRent
+      });
+
       return { updatedRequest, match };
     });
 
     // Create a notification for the applicant
+    console.log('📧 Creating notification for applicant');
     const notificationData = {
       userId: housingRequest.userId,
       content: `Your application for ${housingRequest.listing.title} has been approved!`,
-      url: `/app/rent/searches/${housingRequest.tripId}`,
+      url: `/app/rent/searches/${housingRequest.tripId}?tab=matchbook`,
       actionType: 'application_approved',
       actionId: housingRequestId,
     };
     
+    console.log('📋 Notification data:', notificationData);
     await createNotification(notificationData);
+    console.log('✅ Notification created successfully');
 
     // Revalidate relevant paths
+    console.log('🔄 Revalidating paths');
     revalidatePath(`/app/host/${housingRequest.listingId}/applications`);
     revalidatePath('/app/host/dashboard/applications');
     revalidatePath(`/app/rent/searches/${housingRequest.tripId}`);
 
+    console.log('🎉 approveHousingRequest completed successfully');
     return { success: true, housingRequest: result.updatedRequest, match: result.match };
   } catch (error) {
     console.error('Error approving housing request:', error);

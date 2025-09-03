@@ -1,5 +1,14 @@
 # Changelog
 
+## Fix lease signing flow to approve housing requests and create matches
+- Fixed critical issue where "Sign and Send" button wasn't triggering housing request approval
+- Added housing request approval logic to PDFEditor document workflow state
+- Enhanced handleSignerCompletion with comprehensive logging and error handling  
+- Fixed match creation to properly link leaseDocumentId from housing request
+- Added success notification and automatic redirect after lease signing completion
+- Updated notification URL to include tab=matchbook query parameter for better UX
+- Added extensive debugging logs throughout the signing workflow for troubleshooting
+
 ## Fix recipient name display in document field summary
 - Fixed "Unassigned" recipients in PDF field summary by adding proper color properties to recipient objects  
 - Added recipient mapping logic to handle different signerEmail patterns (host-recipient, primary-renter-recipient, signer1, signer2)
