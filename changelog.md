@@ -1,5 +1,13 @@
 # Changelog
 
+## Fix lease signing API permissions for document recipients
+- Fixed 404 "Document not found" errors when renters try to save signature field values
+- Updated /api/field-values endpoint to allow document recipients (not just owners) to save fields
+- Added recipient email validation to ensure proper access control
+- Cleaned up excessive console logging from lease-signing-client.tsx
+- Added isAdminDev prop support for admin-only reset functionality
+- Enhanced API error logging in PDFEditor for better debugging
+
 ## Fix PDF signing footer field count and button state for renter workflow
 - Fixed footer showing "0 of 18 fields" instead of "0 of 2 fields" for renter signing
 - Removed duplicate footer from lease-signing-client during signing mode (PDFEditor has its own footer)

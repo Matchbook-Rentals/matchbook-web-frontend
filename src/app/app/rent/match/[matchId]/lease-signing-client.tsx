@@ -26,9 +26,10 @@ interface LeaseSigningClientProps {
   matchId: string;
   testPaymentMethodPreview?: 'card' | 'ach';
   isAdminDev?: boolean;
+  initialStep?: string;
 }
 
-export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, isAdminDev = false }: LeaseSigningClientProps) {
+export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, isAdminDev = false, initialStep }: LeaseSigningClientProps) {
   const router = useRouter();
   const { toast } = useToast();
   const { initializeSignedFields } = useSignedFieldsStore();
@@ -46,6 +47,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(true);
   const [previewPaymentMethod, setPreviewPaymentMethod] = useState<'card' | 'ach'>(testPaymentMethodPreview || 'card');
+  
+  // Track server-provided initial step (clear after first render to allow client transitions)
+  const [serverInitialStep, setServerInitialStep] = useState(initialStep);
   
   // Note: Workflow state management removed - PDFEditorSigner handles this internally
 
@@ -321,8 +325,14 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           title: "Success",
           description: "Lease signed successfully! Now please set up your payment method.",
         });
+        
+        // Transition to payment step (stay on same route)
         setLeaseCompleted(true);
         setShowPaymentSelector(true);
+        
+        // Clear server initial step so client-side logic takes over for transitions
+        setServerInitialStep(undefined);
+        
       } else {
         throw new Error('Failed to update match record');
       }
@@ -477,8 +487,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     };
   };
 
-  // Check lease signing status
-  const isLeaseSigned = !!match.tenantSignedAt;
+  // Check lease signing status - use local state for tenant signing since match props don't update
+  const isLeaseSigned = !!match.tenantSignedAt || leaseCompleted;
   const isLandlordSigned = !!match.landlordSignedAt;
   const isLeaseFullyExecuted = isLeaseSigned && isLandlordSigned;
   const hasLeaseDocument = !!match.leaseDocumentId;
@@ -526,8 +536,14 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     return renterSignerIndex;
   };
 
-  // Determine current step
+  // Determine current step - use server-provided initial step to prevent flickering
   const getCurrentStep = () => {
+    // If server provided initial step, use it (prevents flickering on initial render)
+    if (serverInitialStep) {
+      return serverInitialStep;
+    }
+    
+    // Fallback to client-side logic (for transitions after initial render)
     if (!hasLeaseDocument) return 'no-lease-document';
     if (!isLeaseSigned && !showSigningMode) return 'overview-lease';
     if (!isLeaseSigned && showSigningMode) return 'sign-lease';
