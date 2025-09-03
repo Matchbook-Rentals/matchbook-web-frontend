@@ -1,12 +1,21 @@
 # Changelog
 
-## Fix lease signing API permissions for document recipients
-- Fixed 404 "Document not found" errors when renters try to save signature field values
-- Updated /api/field-values endpoint to allow document recipients (not just owners) to save fields
-- Added recipient email validation to ensure proper access control
-- Cleaned up excessive console logging from lease-signing-client.tsx
-- Added isAdminDev prop support for admin-only reset functionality
-- Enhanced API error logging in PDFEditor for better debugging
+## Implement dynamic pricing system and fix payment/SSR issues
+- Added dynamic pricing calculation using ListingMonthlyPricing table with trip length matching
+- Fixed server-side rendering errors with PDF components by implementing dynamic imports with ssr:false
+- Resolved payment success page failures by removing incorrect amount validation
+- Enhanced payment session API to include monthlyPricing data and comprehensive pricing logic
+- Updated match queries to include necessary pricing relationships
+
+## Fix lease signing flow completion and eliminate step flickering
+
+## Fix lease signing flow completion and eliminate step flickering
+- Fixed critical issue where renter lease signing never completed due to API permission errors
+- Updated signing-sessions/complete API to allow document recipients (not just owners)
+- Made signing flow resilient to non-critical API failures - ensures onFinish callback always executes
+- Added server-side initial step determination to eliminate client-side flickering on page load
+- Enhanced error handling to continue signing completion even if auxiliary APIs fail
+- Added comprehensive server logging for step determination debugging
 
 ## Fix PDF signing footer field count and button state for renter workflow
 - Fixed footer showing "0 of 18 fields" instead of "0 of 2 fields" for renter signing

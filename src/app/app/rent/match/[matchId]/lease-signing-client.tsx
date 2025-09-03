@@ -11,10 +11,13 @@ import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
 import { PaymentMethodSelector } from '@/components/stripe/payment-method-selector';
 import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
-import { PDFEditor } from '@/components/pdf-editor/PDFEditor';
-import { PDFEditorSigner } from '@/components/pdf-editor/PDFEditorSigner';
-import { PDFViewer } from '@/components/pdf-editor/PDFViewer';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for PDF components to prevent SSR issues
+const PDFEditor = dynamic(() => import('@/components/pdf-editor/PDFEditor').then(mod => ({ default: mod.PDFEditor })), { ssr: false });
+const PDFEditorSigner = dynamic(() => import('@/components/pdf-editor/PDFEditorSigner').then(mod => ({ default: mod.PDFEditorSigner })), { ssr: false });
+const PDFViewer = dynamic(() => import('@/components/pdf-editor/PDFViewer').then(mod => ({ default: mod.PDFViewer })), { ssr: false });
 
 import { RenterSidebarFrame } from './renter-sidebar-frame';
 import { BookingSummarySidebar } from './booking-summary-sidebar';

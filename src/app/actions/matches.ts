@@ -163,6 +163,7 @@ export async function getMatchById(matchId: string) {
             },
             user: true,
             bedrooms: true,
+            monthlyPricing: true,
           }
         },
         trip: {

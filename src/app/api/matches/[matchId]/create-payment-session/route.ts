@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+import { calculateLengthOfStay } from '@/lib/calculate-rent';
 
 export async function POST(
   request: NextRequest,
@@ -20,7 +21,10 @@ export async function POST(
       where: { id: params.matchId },
       include: {
         listing: {
-          include: { user: true }
+          include: { 
+            user: true,
+            monthlyPricing: true
+          }
         },
         trip: {
           include: { user: true }
@@ -79,10 +83,51 @@ export async function POST(
       });
     }
 
+    // Calculate trip length and find appropriate monthly pricing
+    const tripLength = calculateLengthOfStay(match.trip.startDate, match.trip.endDate);
+    const monthsNeeded = tripLength.months;
+    
+    // Find the closest monthly pricing (prefer exact match, otherwise find closest)
+    let monthlyPrice = 0;
+    if (match.listing.monthlyPricing && match.listing.monthlyPricing.length > 0) {
+      // First try to find exact match
+      const exactMatch = match.listing.monthlyPricing.find(pricing => pricing.months === monthsNeeded);
+      if (exactMatch) {
+        monthlyPrice = exactMatch.price;
+      } else {
+        // Find closest pricing tier (prefer shorter duration if no exact match)
+        const sortedPricing = match.listing.monthlyPricing
+          .filter(pricing => pricing.months <= monthsNeeded)
+          .sort((a, b) => b.months - a.months);
+        
+        if (sortedPricing.length > 0) {
+          monthlyPrice = sortedPricing[0].price;
+        } else {
+          // If no pricing for shorter duration, use shortest available
+          const shortestPricing = match.listing.monthlyPricing
+            .sort((a, b) => a.months - b.months)[0];
+          monthlyPrice = shortestPricing?.price || 0;
+        }
+      }
+    } else {
+      // Fallback to match.monthlyRent if no pricing table exists
+      monthlyPrice = match.monthlyRent || 0;
+    }
+
     // Calculate payment breakdown
-    const monthlyRent = match.monthlyRent || 0;
+    const monthlyRent = monthlyPrice;
     const securityDeposit = match.listing.depositSize || 0;
     const petDeposit = match.listing.petDeposit || 0;
+    
+    console.log('💰 Pricing calculation:', {
+      tripLength: `${tripLength.months} months, ${tripLength.days} days`,
+      monthsNeeded,
+      availablePricingTiers: match.listing.monthlyPricing?.map(p => ({ months: p.months, price: p.price })),
+      selectedMonthlyPrice: monthlyPrice,
+      fallbackMonthlyRent: match.monthlyRent,
+      securityDeposit,
+      petDeposit
+    });
     
     // Calculate MatchBook fee (3% of total amount)
     const matchBookFee = Math.round(amount * 0.03 * 100); // 3% in cents

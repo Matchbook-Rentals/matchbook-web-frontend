@@ -32,16 +32,6 @@ export default function PaymentSuccessPage({ params }: PaymentSuccessPageProps) 
       }
 
       try {
-        // Get match data to determine the payment amount
-        const matchResponse = await fetch(`/api/matches/${params.matchId}`);
-        const matchData = await matchResponse.json();
-        
-        // Calculate payment amount (this should match the calculation in PaymentMethodSelector)
-        const monthlyRent = matchData.monthlyRent || 0;
-        const deposit = matchData.listing?.depositSize || 0;
-        const petDeposit = matchData.listing?.petDeposit || 0;
-        const amount = monthlyRent + deposit + petDeposit;
-
         const response = await fetch(`/api/matches/${params.matchId}/payment-setup-success`, {
           method: 'POST',
           headers: {
@@ -49,7 +39,7 @@ export default function PaymentSuccessPage({ params }: PaymentSuccessPageProps) 
           },
           body: JSON.stringify({
             sessionId,
-            amount,
+            amount: 0, // Amount is validated by Stripe, not by our API
           }),
         });
 
