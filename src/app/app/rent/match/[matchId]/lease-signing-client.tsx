@@ -15,6 +15,7 @@ import { PDFEditor } from '@/components/pdf-editor/PDFEditor';
 import { PDFViewer } from '@/components/pdf-editor/PDFViewer';
 import { RenterSidebarFrame } from './renter-sidebar-frame';
 import { BookingSummarySidebar } from './booking-summary-sidebar';
+import { StepProgress } from '@/components/brandDialog';
 
 interface LeaseSigningClientProps {
   match: MatchWithRelations;
@@ -596,7 +597,24 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     return 'completed';
   };
 
-  const currentStep = getCurrentStep();
+  const currentStepState = getCurrentStep();
+
+  // Map current step state to progress bar step number
+  const progressCurrentStep = (() => {
+    switch (currentStepState) {
+      case 'no-lease-document':
+      case 'overview-lease':
+      case 'sign-lease':
+        return 1;
+      case 'complete-payment':
+      case 'payment-method-exists':
+        return 2;
+      case 'completed':
+        return 3;
+      default:
+        return 1;
+    }
+  })();
 
   const handleViewLease = async () => {
     if (!match.leaseDocumentId) {
@@ -673,7 +691,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   }
 
   // Show payment selector if lease is completed or if forced by showPaymentSelector
-  if (showPaymentSelector || currentStep === 'complete-payment') {
+  if (showPaymentSelector || currentStepState === 'complete-payment') {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto p-4 pb-24">
@@ -751,12 +769,20 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto p-4 pb-24">
+        {/* Step Progress Bar */}
+        <div className="mb-8">
+          <StepProgress 
+            currentStep={progressCurrentStep}
+            totalSteps={3}
+            labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+          />
+        </div>
 
-        <div className={`grid grid-cols-1 gap-6 ${currentStep === 'sign-lease' ? '' : 'lg:grid-cols-3'}`}>
+        <div className={`grid grid-cols-1 gap-6 ${currentStepState === 'sign-lease' ? '' : 'lg:grid-cols-3'}`}>
           {/* Sidebar - shows different content based on step */}
-          {currentStep !== 'sign-lease' && (
+          {currentStepState !== 'sign-lease' && (
             <div className="lg:col-span-1">
-              {currentStep === 'overview-lease' ? (
+              {currentStepState === 'overview-lease' ? (
                 <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown()} />
               ) : (
                 <Card className='test'>
@@ -794,7 +820,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     </div>
 
                     {/* Payment Breakdown - only show on non-signing steps */}
-                    {currentStep !== 'sign-lease' && (
+                    {currentStepState !== 'sign-lease' && (
                       <div className="pt-4 border-t">
                         <h4 className="font-semibold mb-3">Move-in Costs</h4>
                         <div className="space-y-2">
@@ -829,10 +855,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             </div>
           )}
           {/* Main Content */}
-          <div className={currentStep === 'sign-lease' ? '' : 'lg:col-span-2'}>
+          <div className={currentStepState === 'sign-lease' ? '' : 'lg:col-span-2'}>
             <Card className='bg-inherit border-none'>
               <CardContent>
-                {currentStep === 'no-lease-document' ? (
+                {currentStepState === 'no-lease-document' ? (
                   <div className="text-center py-12">
                     <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -865,7 +891,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       </div>
                     )}
                   </div>
-                ) : currentStep === 'overview-lease' && !isLoading && documentInstance && documentPdfFile ? (
+                ) : currentStepState === 'overview-lease' && !isLoading && documentInstance && documentPdfFile ? (
                   <div className="space-y-4">
                     
                     {/* PDF Preview */}
@@ -876,7 +902,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       />
                     </div>
                   </div>
-                ) : currentStep === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
+                ) : currentStepState === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
                   <div className="space-y-4">
                     
                     <div className="min-h-[600px]">
@@ -915,12 +941,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       />
                     </div>
                   </div>
-                ) : currentStep === 'sign-lease' && isLoading ? (
+                ) : currentStepState === 'sign-lease' && isLoading ? (
                   <div className="text-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787] mx-auto mb-4"></div>
                     <p className="text-[#777b8b]">Loading lease document...</p>
                   </div>
-                ) : currentStep === 'complete-payment' ? (
+                ) : currentStepState === 'complete-payment' ? (
                   <div className="text-center py-12">
                     <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -946,7 +972,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                       </Button>
                     </div>
                   </div>
-                ) : currentStep === 'payment-method-exists' ? (
+                ) : currentStepState === 'payment-method-exists' ? (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CreditCard className="w-8 h-8 text-blue-600" />
@@ -1156,24 +1182,24 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
         </div>
 
         {/* Footer Controls - Fixed at bottom - only show for overview, signing and completed states */}
-        {(currentStep === 'overview-lease' || currentStep === 'sign-lease' || currentStep === 'completed') && (
+        {(currentStepState === 'overview-lease' || currentStepState === 'sign-lease' || currentStepState === 'completed') && (
           <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
             <div className="flex items-center justify-between">
               {/* Left side - Status info */}
               <div className="flex items-center gap-4">
                 <div className="text-sm text-gray-600">
-                  {currentStep === 'overview-lease' && (
+                  {currentStepState === 'overview-lease' && (
                     <>
                       <span className="font-medium">{documentFields.length}</span> fields • 
                       <span className="font-medium">{documentRecipients.length}</span> recipients
                     </>
                   )}
-                  {currentStep === 'sign-lease' && (
+                  {currentStepState === 'sign-lease' && (
                     <>
                       <span className="font-medium">{Object.values(fieldsStatus).filter(status => status === 'signed').length}</span> of <span className="font-medium">{Object.keys(fieldsStatus).length}</span> fields completed
                     </>
                   )}
-                  {currentStep === 'completed' && (
+                  {currentStepState === 'completed' && (
                     <span className="text-green-600 font-medium">✓ Lease signed and payment completed</span>
                   )}
                 </div>
@@ -1181,7 +1207,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
               {/* Right side - Action buttons */}
               <div className="flex items-center gap-3">
-                {currentStep === 'overview-lease' && (
+                {currentStepState === 'overview-lease' && (
                   <Button 
                     onClick={() => setShowSigningMode(true)}
                     size="sm"
@@ -1190,7 +1216,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     Proceed to Sign
                   </Button>
                 )}
-                {currentStep === 'sign-lease' && (
+                {currentStepState === 'sign-lease' && (
                   <Button 
                     size="sm"
                     className="bg-[#0a6060] hover:bg-[#0a6060]/90"
@@ -1199,7 +1225,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     Next Action
                   </Button>
                 )}
-                {currentStep === 'completed' && (
+                {currentStepState === 'completed' && (
                   <Button 
                     onClick={handleViewLease}
                     variant="outline"
