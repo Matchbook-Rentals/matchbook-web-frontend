@@ -15,7 +15,7 @@ import { PDFEditor } from '@/components/pdf-editor/PDFEditor';
 import { PDFViewer } from '@/components/pdf-editor/PDFViewer';
 import { RenterSidebarFrame } from './renter-sidebar-frame';
 import { BookingSummarySidebar } from './booking-summary-sidebar';
-import { StepProgress } from '@/components/brandDialog';
+import { StepProgress } from '@/components/StepProgress';
 import { BrandAlertProvider } from '@/hooks/useBrandAlert';
 
 interface LeaseSigningClientProps {
@@ -772,11 +772,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto p-4 pb-24">
           {/* Step Progress Bar */}
-          <div className="mb-8">
+          <div className="mb-8 ">
             <StepProgress 
               currentStep={progressCurrentStep}
               totalSteps={3}
               labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+              className='w-full max-w-2xl'
             />
           </div>
 
