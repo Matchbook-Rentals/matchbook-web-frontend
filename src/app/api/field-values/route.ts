@@ -20,16 +20,37 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Verify user owns the document
+    // Verify user has access to the document (either owns it or is a recipient)
     const document = await prisma.documentInstance.findUnique({
-      where: { 
-        id: documentId,
-        userId
-      }
+      where: { id: documentId }
     });
 
     if (!document) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
+    }
+
+    // Check if user owns the document
+    if (document.userId === userId) {
+      // User owns the document, allow access
+    } else {
+      // Check if user is a recipient
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { email: true }
+      });
+
+      if (!user?.email) {
+        return NextResponse.json({ error: 'User email not found' }, { status: 404 });
+      }
+
+      // Check if user's email is in the recipients array
+      const documentData = document.documentData as any;
+      const recipients = documentData?.recipients || [];
+      const isRecipient = recipients.some((r: any) => r.email === user.email);
+
+      if (!isRecipient) {
+        return NextResponse.json({ error: 'Access denied - not a document owner or recipient' }, { status: 403 });
+      }
     }
 
     // Create or update field value (upsert)

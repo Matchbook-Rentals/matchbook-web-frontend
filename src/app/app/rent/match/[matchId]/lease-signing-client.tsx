@@ -25,28 +25,14 @@ interface LeaseSigningClientProps {
   match: MatchWithRelations;
   matchId: string;
   testPaymentMethodPreview?: 'card' | 'ach';
+  isAdminDev?: boolean;
 }
 
-export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }: LeaseSigningClientProps) {
+export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, isAdminDev = false }: LeaseSigningClientProps) {
   const router = useRouter();
   const { toast } = useToast();
   const { initializeSignedFields } = useSignedFieldsStore();
   
-  // Debug logging to see what data we have
-  console.log('=== LEASE SIGNING DEBUG ===');
-  console.log('Match data:', {
-    id: match.id,
-    leaseDocumentId: match.leaseDocumentId,
-    tenantSignedAt: match.tenantSignedAt,
-    landlordSignedAt: match.landlordSignedAt,
-    BoldSignLease: match.BoldSignLease,
-    Lease: match.Lease,
-    hasTrip: !!match.trip,
-    hasHousingRequests: !!match.trip?.housingRequests,
-    housingRequestsCount: match.trip?.housingRequests?.length || 0,
-    hasListing: !!match.listing,
-    hasListingUser: !!match.listing?.user
-  });
   const [documentInstance, setDocumentInstance] = useState<any>(null);
   const [documentPdfFile, setDocumentPdfFile] = useState<File | null>(null);
   const [documentFields, setDocumentFields] = useState<any[]>([]);
@@ -76,7 +62,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
       if (match.leaseDocumentId) {
         setIsLoading(true);
         try {
-          console.log('📄 Fetching document instance:', match.leaseDocumentId);
           const response = await fetch(`/api/documents/${match.leaseDocumentId}`);
           if (response.ok) {
             const data = await response.json();
@@ -86,11 +71,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             // Set document ID in session storage so PDFEditor can access it
             sessionStorage.setItem('currentDocumentId', document.id);
             
-            console.log('📄 Document fetched:', {
-              id: document.id,
-              pdfFileUrl: document.pdfFileUrl,
-              hasDocumentData: !!document.documentData
-            });
             
             // Extract fields and recipients from document data
             if (document.documentData) {
@@ -99,7 +79,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
               
               // Merge field values from fieldValues table into fields
               if (document.fieldValues && document.fieldValues.length > 0) {
-                console.log('📄 Merging field values into fields...');
                 const fieldValuesMap = new Map();
                 
                 // Create a map of fieldId -> value
@@ -109,7 +88,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                     signerIndex: fieldValue.signerIndex,
                     signedAt: fieldValue.signedAt
                   });
-                  console.log(`📄 Field ${fieldValue.fieldId} has value: "${fieldValue.value}" (signer ${fieldValue.signerIndex})`);
                 });
                 
                 // Merge values into fields - but only for fields assigned to the current user
@@ -140,29 +118,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                   return field;
                 });
                 
-                console.log('📄 All fields structure check:', fields.map((f: any, index: number) => ({
-                  index,
-                  id: f.formId,
-                  type: f.type,
-                  typeOf: typeof f.type,
-                  typeKeys: f.type && typeof f.type === 'object' ? Object.keys(f.type) : null,
-                  value: f.value,
-                  valueOf: typeof f.value,
-                  valueKeys: f.value && typeof f.value === 'object' ? Object.keys(f.value) : null,
-                  signerIndex: f.signerIndex,
-                  fieldMeta: f.fieldMeta,
-                  fieldMetaKeys: f.fieldMeta && typeof f.fieldMeta === 'object' ? Object.keys(f.fieldMeta) : null
-                })));
                 
-                console.log('📄 Fields with merged values:', fields.filter((f: any) => f.value).map((f: any) => ({
-                  id: f.formId,
-                  type: f.type,
-                  typeOf: typeof f.type,
-                  value: f.value,
-                  valueOf: typeof f.value,
-                  signerIndex: f.signerIndex,
-                  fieldMeta: f.fieldMeta
-                })));
               }
               
               setDocumentFields(fields);
@@ -182,76 +138,38 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
               const initialFieldsStatus: Record<string, 'signed' | 'pending'> = {};
               const signedFieldsMap: Record<string, any> = {};
               
-              // Debug: Check what we have before initialization
-              console.log('🔍 DEBUG: Total fields:', fields.length);
-              console.log('🔍 DEBUG: Fields by recipient:', {
-                recipient0: fields.filter((f: any) => f.recipientIndex === 0).length,
-                recipient1: fields.filter((f: any) => f.recipientIndex === 1).length
-              });
               
               fields.forEach((field: any) => {
                 // Field is signed if it has a value and signedAt timestamp
                 const isSigned = (field.value && field.signedAt);
                 initialFieldsStatus[field.formId] = isSigned ? 'signed' : 'pending';
                 
-                // Debug each field
-                console.log(`🔍 Field ${field.formId}:`, {
-                  recipientIndex: field.recipientIndex,
-                  type: field.type,
-                  value: field.value,
-                  signedAt: field.signedAt,
-                  signerIndex: field.signerIndex,
-                  isSigned: isSigned
-                });
                 
                 // Also populate Zustand store with signed field values
                 if (isSigned) {
                   signedFieldsMap[field.formId] = field.value;
-                  console.log(`🏪 Field ${field.formId} is signed (recipient ${field.recipientIndex}), adding to Zustand: ${field.value}`);
                 }
               });
               
               setFieldsStatus(initialFieldsStatus);
-              console.log('📄 Initial fields status:', initialFieldsStatus);
-              console.log('📄 Fields status summary:', {
-                total: Object.keys(initialFieldsStatus).length,
-                signed: Object.values(initialFieldsStatus).filter(s => s === 'signed').length,
-                pending: Object.values(initialFieldsStatus).filter(s => s === 'pending').length
-              });
               
               // Initialize Zustand store with the same data as fieldsStatus
-              console.log('🏪 Initializing Zustand store with', Object.keys(signedFieldsMap).length, 'signed fields');
-              console.log('🏪 Zustand signed fields map:', signedFieldsMap);
               initializeSignedFields(signedFieldsMap);
               
-              // Verify Zustand was initialized
+              // Allow components to re-render with initialized Zustand store
               setTimeout(() => {
-                const storeState = useSignedFieldsStore.getState().signedFields;
-                console.log('🏪 VERIFY: Zustand store after init has', Object.keys(storeState).length, 'fields');
-                console.log('🏪 VERIFY: Zustand store contents:', storeState);
+                setIsLoading(false);
               }, 100);
               
-              console.log('📄 Extracted from document:', {
-                fieldsCount: fields?.length || 0,
-                fieldsWithValues: fields?.filter((f: any) => f.value)?.length || 0,
-                recipientsCount: docData.recipients?.length || 0,
-                recipients: docData.recipients?.map((r: any) => ({ name: r.name, email: r.email, role: r.role }))
-              });
             }
             
             // Fetch the actual PDF file
             if (document.pdfFileUrl) {
-              console.log('📄 Fetching PDF file from:', document.pdfFileUrl);
               const pdfResponse = await fetch(document.pdfFileUrl);
               if (pdfResponse.ok) {
                 const pdfBlob = await pdfResponse.blob();
                 const pdfFile = new File([pdfBlob], document.pdfFileName || 'lease.pdf', { type: 'application/pdf' });
                 setDocumentPdfFile(pdfFile);
-                console.log('📄 PDF file loaded:', {
-                  name: pdfFile.name,
-                  size: pdfFile.size,
-                  type: pdfFile.type
-                });
               } else {
                 console.error('Failed to fetch PDF file');
                 toast({
@@ -294,7 +212,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
         if (response.ok) {
           const data = await response.json();
           setListingDocuments(data);
-          console.log('Listing documents:', data);
         } else {
           console.error('Failed to fetch listing documents');
         }
@@ -313,20 +230,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     endDate: Date,
     actualPaymentAmount: number
   ) => {
-    console.log('generateRentPayments called with:', { monthlyRent, startDate, endDate, actualPaymentAmount });
     const payments: { amount: number; dueDate: Date; description: string }[] = [];
     
     const start = new Date(startDate);
     const end = new Date(endDate);
     
-    console.log('Date processing:', {
-      originalStart: startDate,
-      originalEnd: endDate,
-      processedStart: start,
-      processedEnd: end,
-      startValid: !isNaN(start.getTime()),
-      endValid: !isNaN(end.getTime())
-    });
     
     // Start from the first of the month after start date (or same month if starts on 1st)
     let currentDate = new Date(start.getFullYear(), start.getMonth(), 1);
@@ -393,12 +301,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
       currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
     }
     
-    console.log('Generated payments:', payments);
     return payments;
   };
 
   const handleDocumentSigningComplete = async () => {
-    console.log('✅ Document signing completed by tenant');
     setIsTransitioning(true);
     
     try {
@@ -452,7 +358,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
   // Debug function to manually trigger payment step (for testing)
   const handleManualPaymentTrigger = () => {
-    console.log('🧪 Manually triggering payment step for testing');
     setLeaseCompleted(true);
     setShowPaymentSelector(true);
     toast({
@@ -515,15 +420,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     // Pro-rate based on days
     const proRatedAmount = (monthlyRent * daysFromStart) / daysInMonth;
     
-    console.log('🔍 Pro-rated rent calculation:', 
-      'startDate:', startDate.toDateString(),
-      'startDate.getDate():', startDate.getDate(),
-      'monthlyRent:', monthlyRent,
-      'daysInMonth:', daysInMonth,
-      'daysFromStart:', daysFromStart,
-      'proRatedAmount:', proRatedAmount,
-      'finalAmount:', Math.round(proRatedAmount * 100) / 100
-    );
     
     return Math.round(proRatedAmount * 100) / 100;
   };
@@ -531,10 +427,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
   // Get security deposit amount (typically 1x monthly rent)
   const getSecurityDeposit = () => {
     const deposit = match.monthlyRent || 0;
-    console.log('🔍 Security deposit calculation:', 
-      'monthlyRent:', match.monthlyRent,
-      'deposit:', deposit
-    );
     return deposit;
   };
 
@@ -563,11 +455,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
     const proRatedRent = calculateProRatedRent();
     const securityDeposit = getSecurityDeposit();
     
-    console.log('🔍 Payment breakdown calculation:', 
-      'proRatedRent:', proRatedRent,
-      'securityDeposit:', securityDeposit,
-      'matchMonthlyRent:', match.monthlyRent
-    );
     const subtotalBeforeFees = proRatedRent + securityDeposit;
     const applicationFee = Math.round(subtotalBeforeFees * 0.03 * 100) / 100;
     
@@ -609,7 +496,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
 
   // Handle field signing updates for real-time sidebar progress
   const handleFieldSign = (fieldId: string, value: any) => {
-    console.log('🔍 Field signed:', fieldId, 'with value:', value);
     setFieldsStatus(prev => ({
       ...prev,
       [fieldId]: value ? 'signed' : 'pending'
@@ -632,14 +518,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
       });
     }
     
-    console.log('🔍 Signed recipients:', Array.from(signedRecipients));
-    console.log('🔍 Total recipients:', documentRecipients.length);
     
     // Renter should be the next signer after the highest existing signer
     const maxSignerIndex = signedRecipients.size > 0 ? Math.max(...Array.from(signedRecipients) as number[]) : -1;
     const renterSignerIndex = maxSignerIndex + 1;
     
-    console.log('🔍 Renter should be signer:', renterSignerIndex);
     return renterSignerIndex;
   };
 
@@ -764,7 +647,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
             </p>
             
             {/* HACKY BAD TEMPORARY CODE - REMOVE BEFORE PRODUCTION */}
-            {process.env.NODE_ENV === 'development' && match.tenantSignedAt && (
+            {(process.env.NODE_ENV === 'development' || isAdminDev) && match.tenantSignedAt && (
               <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-700 mb-3">🚨 HACKY BAD TEMPORARY CODE - Reset lease signing for testing</p>
                 <Button 
@@ -972,7 +855,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview }:
                           initialRecipients={documentRecipients}
                           signerStep="signer2"
                           onSave={(data) => {
-                            console.log('Document save called:', data);
                           }}
                           onCancel={() => {
                             toast({

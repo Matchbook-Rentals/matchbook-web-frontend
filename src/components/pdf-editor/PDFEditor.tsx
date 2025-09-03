@@ -1294,48 +1294,128 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       for (const field of signerFields) {
         const fieldValue = useSignedFieldsStore.getState().signedFields[field.formId];
         if (fieldValue) {
-          await fetch('/api/field-values', {
+          const requestBody = {
+            documentId,
+            fieldId: field.formId,
+            fieldType: field.type,
+            signerIndex,
+            signerEmail: recipients[signerIndex]?.email || `signer${signerIndex}@example.com`,
+            value: fieldValue
+          };
+          
+          console.log(`📤 Saving field ${field.formId} to /api/field-values:`, requestBody);
+          
+          const response = await fetch('/api/field-values', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              documentId,
-              fieldId: field.formId,
-              fieldType: field.type,
-              signerIndex,
-              signerEmail: recipients[signerIndex]?.email || `signer${signerIndex}@example.com`,
-              value: fieldValue
-            }),
+            body: JSON.stringify(requestBody),
           });
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`❌ FIELD SAVE FAILED - /api/field-values`, {
+              request: {
+                url: '/api/field-values',
+                method: 'POST',
+                body: requestBody
+              },
+              response: {
+                status: response.status,
+                statusText: response.statusText,
+                body: errorText
+              },
+              field: {
+                formId: field.formId,
+                type: field.type,
+                recipientIndex: field.recipientIndex,
+                value: fieldValue
+              }
+            });
+            throw new Error(`API /api/field-values returned ${response.status}: ${errorText || response.statusText}`);
+          }
+          console.log(`✅ Field ${field.formId} saved successfully`);
         }
       }
 
       // Update signing session status
-      await fetch('/api/signing-sessions/complete', {
+      const sessionBody = {
+        documentId,
+        signerIndex
+      };
+      
+      console.log('📤 Updating signing session at /api/signing-sessions/complete:', sessionBody);
+      
+      const sessionResponse = await fetch('/api/signing-sessions/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          documentId,
-          signerIndex
-        }),
+        body: JSON.stringify(sessionBody),
       });
+      
+      if (!sessionResponse.ok) {
+        const errorText = await sessionResponse.text();
+        console.error('❌ SESSION UPDATE FAILED - /api/signing-sessions/complete', {
+          request: {
+            url: '/api/signing-sessions/complete',
+            method: 'POST',
+            body: sessionBody
+          },
+          response: {
+            status: sessionResponse.status,
+            statusText: sessionResponse.statusText,
+            body: errorText
+          }
+        });
+        throw new Error(`API /api/signing-sessions/complete returned ${sessionResponse.status}: ${errorText || sessionResponse.statusText}`);
+      }
+      console.log('✅ Signing session updated successfully');
 
       // Update document with current progress and signed fields
-      console.log(`📄 Updating document status to: ${signerIndex === 0 ? 'IN_PROGRESS' : 'COMPLETED'}`);
-      await fetch(`/api/documents/${documentId}`, {
+      const docUpdateBody = {
+        documentData: {
+          fields,
+          recipients,
+          metadata: { pageWidth },
+          signedFields // Save current signed state
+        },
+        currentStep: signerIndex === 0 ? 'signer2' : 'completed',
+        status: signerIndex === 0 ? 'IN_PROGRESS' : 'COMPLETED',
+        [`signer${signerIndex + 1}CompletedAt`]: new Date().toISOString()
+      };
+      
+      console.log(`📤 Updating document at /api/documents/${documentId}:`, {
+        status: docUpdateBody.status,
+        currentStep: docUpdateBody.currentStep,
+        fieldsCount: fields.length,
+        recipientsCount: recipients.length
+      });
+      
+      const docUpdateResponse = await fetch(`/api/documents/${documentId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          documentData: {
-            fields,
-            recipients,
-            metadata: { pageWidth },
-            signedFields // Save current signed state
-          },
-          currentStep: signerIndex === 0 ? 'signer2' : 'completed',
-          status: signerIndex === 0 ? 'IN_PROGRESS' : 'COMPLETED',
-          [`signer${signerIndex + 1}CompletedAt`]: new Date().toISOString()
-        }),
+        body: JSON.stringify(docUpdateBody),
       });
+      
+      if (!docUpdateResponse.ok) {
+        const errorText = await docUpdateResponse.text();
+        console.error(`❌ DOCUMENT UPDATE FAILED - /api/documents/${documentId}`, {
+          request: {
+            url: `/api/documents/${documentId}`,
+            method: 'PATCH',
+            bodyPreview: {
+              status: docUpdateBody.status,
+              currentStep: docUpdateBody.currentStep,
+              fieldsCount: fields.length,
+              signedFieldsCount: Object.keys(signedFields || {}).length
+            }
+          },
+          response: {
+            status: docUpdateResponse.status,
+            statusText: docUpdateResponse.statusText,
+            body: errorText
+          }
+        });
+        throw new Error(`API /api/documents/${documentId} returned ${docUpdateResponse.status}: ${errorText || docUpdateResponse.statusText}`);
+      }
       
       console.log('✅ Document updated successfully');
 
@@ -1355,8 +1435,26 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       console.log(`Signer ${signerIndex + 1} completed signing asynchronously`);
       
     } catch (error) {
-      console.error('Error in saveSignerProgressAsync:', error);
-      brandAlert('Failed to save signer progress. Please try again.', 'error', 'Save Failed');
+      console.error('❌ SAVE SIGNER PROGRESS FAILED:', error);
+      
+      // Show the ACTUAL error to the user
+      const errorMessage = `SIGNING SAVE FAILED:\n\n${error.message}\n\nDocument ID: ${sessionStorage.getItem('currentDocumentId')}\nSigner: ${signerIndex + 1}\n\nCheck console for full details.`;
+      
+      // Log everything for debugging
+      console.error('❌ COMPLETE ERROR DUMP:', {
+        error: error,
+        errorMessage: error.message,
+        errorStack: error.stack,
+        documentId: sessionStorage.getItem('currentDocumentId'),
+        signerIndex: signerIndex,
+        signerFields: fields.filter(f => f.recipientIndex === signerIndex),
+        signedFieldsStore: useSignedFieldsStore.getState().signedFields,
+        recipients: recipients,
+        timestamp: new Date().toISOString()
+      });
+      
+      brandAlert(errorMessage, 'error', 'Save Failed - Check Console');
+      throw error; // Re-throw to stop the flow
     }
   };
 
@@ -1375,18 +1473,46 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       for (const field of signerFields) {
         const fieldValue = useSignedFieldsStore.getState().signedFields[field.formId];
         if (fieldValue) {
-          await fetch('/api/field-values', {
+          const requestBody = {
+            documentId,
+            fieldId: field.formId,
+            fieldType: field.type,
+            signerIndex,
+            signerEmail: recipients[signerIndex]?.email || `signer${signerIndex}@example.com`,
+            value: fieldValue
+          };
+          
+          console.log(`📤 Saving field ${field.formId} to /api/field-values:`, requestBody);
+          
+          const response = await fetch('/api/field-values', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              documentId,
-              fieldId: field.formId,
-              fieldType: field.type,
-              signerIndex,
-              signerEmail: recipients[signerIndex]?.email || `signer${signerIndex}@example.com`,
-              value: fieldValue
-            }),
+            body: JSON.stringify(requestBody),
           });
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`❌ FIELD SAVE FAILED - /api/field-values`, {
+              request: {
+                url: '/api/field-values',
+                method: 'POST',
+                body: requestBody
+              },
+              response: {
+                status: response.status,
+                statusText: response.statusText,
+                body: errorText
+              },
+              field: {
+                formId: field.formId,
+                type: field.type,
+                recipientIndex: field.recipientIndex,
+                value: fieldValue
+              }
+            });
+            throw new Error(`API /api/field-values returned ${response.status}: ${errorText || response.statusText}`);
+          }
+          console.log(`✅ Field ${field.formId} saved successfully`);
         }
       }
 
@@ -2523,8 +2649,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           setFieldsValidated(true);
           
         } catch (error) {
-          console.error('❌ Error saving signing progress:', error);
-          brandAlert('Failed to save signing progress: ' + error.message, 'error', 'Save Failed');
+          console.error('❌ Error in signing flow:', error);
+          // The error has already been shown by saveSignerProgressAsync, just stop the flow
           return;
         }
         break;

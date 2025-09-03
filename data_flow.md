@@ -157,9 +157,40 @@ The fix attempted to merge ALL field values, but the issue is likely that:
 
 The real issue might be that `fieldValuesMap` only contains values for fields that have been signed, but we're not checking the right signer index.
 
-## Debugging Steps Needed
+## The Solutions Applied
 
-1. Check what's in `fieldValuesMap` after loading
-2. Check what's in `signedFieldsMap` before initializing Zustand
-3. Check what Zustand store contains after initialization
-4. Check why footer shows 18 instead of 2 for total count
+### Fix 1: Include ALL signed fields in Zustand initialization
+Changed the field merging to include ALL signed fields (including host's) so Zustand knows what's already signed:
+```javascript
+// Now merges ALL field values, not just current user's
+if (fieldValue) {
+  return {
+    ...field,
+    value: fieldValue.value,
+    signedAt: fieldValue.signedAt,
+    signerIndex: fieldValue.signerIndex
+  };
+}
+```
+
+### Fix 2: Remove duplicate footer during signing
+The lease-signing-client.tsx had its own footer that was showing during signing mode with:
+- Wrong count: "0 of 18 fields" (counting ALL fields instead of just renter's 2)  
+- Disabled button that did nothing
+
+Solution: Only show lease-signing-client footer for `overview-lease` and `completed` states. Let PDFEditor's footer handle the `sign-lease` state.
+
+### Fix 3: Added extensive debugging
+Added console logs to track:
+- What fields are loaded from the database
+- What gets added to Zustand store
+- Verification that Zustand is properly initialized
+
+## Expected Result After Fixes
+
+1. **Zustand store** will be initialized with host's signed fields
+2. **PDFEditor footer** will:
+   - Count only renter's 2 SIGNATURE/INITIALS fields
+   - Show "0 of 2 fields completed"
+   - Have "Next Action" button enabled (since there are unsigned fields)
+3. **No duplicate footer** from lease-signing-client during signing
