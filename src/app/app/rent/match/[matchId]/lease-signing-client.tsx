@@ -16,6 +16,7 @@ import { PDFViewer } from '@/components/pdf-editor/PDFViewer';
 import { RenterSidebarFrame } from './renter-sidebar-frame';
 import { BookingSummarySidebar } from './booking-summary-sidebar';
 import { StepProgress } from '@/components/brandDialog';
+import { BrandAlertProvider } from '@/hooks/useBrandAlert';
 
 interface LeaseSigningClientProps {
   match: MatchWithRelations;
