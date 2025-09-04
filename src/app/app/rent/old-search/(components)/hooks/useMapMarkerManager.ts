@@ -43,6 +43,9 @@ export const useMapMarkerManager = ({
   createPriceBubbleMarker,
   verifyAllMarkerStyles
 }: UseMapMarkerManagerProps) => {
+  
+  // Track markers currently being transitioned to prevent race conditions
+  const transitioningMarkers = new Set<string>();
 
   // Create a single marker using unified factory - DEFINE FIRST to avoid circular dependency
   const createSingleMarker = useCallback((marker: any) => {
@@ -139,11 +142,21 @@ export const useMapMarkerManager = ({
 
   // Update existing marker position and style without recreation
   const updateExistingMarker = useCallback((mapMarker: maplibregl.Marker, markerData: any) => {
+    // Check if this marker is already transitioning
+    if (transitioningMarkers.has(markerData.listing.id)) {
+      return; // Skip update if marker is already being transitioned
+    }
+    
     // Update marker position
     mapMarker.setLngLat([markerData.lng, markerData.lat]);
     
     // Get the marker element and check what type it currently is
     const el = mapMarker.getElement();
+    
+    // Skip if element is still being created
+    if (el.dataset.creating === 'true') {
+      return;
+    }
     
     // Use same visible markers calculation as renderMarkers for consistency
     const visibleMarkers = getVisibleMarkers();
@@ -154,12 +167,23 @@ export const useMapMarkerManager = ({
     const isCurrentlySimple = el.querySelector('svg circle') !== null;
     const isCurrentlyPriceBubble = el.className.includes('price-bubble-marker');
     
-    // If marker type needs to change, remove and recreate it
+    // If marker type needs to change, remove and recreate it with transition lock
     if ((shouldUseSimpleMarkers && isCurrentlyPriceBubble) || (!shouldUseSimpleMarkers && isCurrentlySimple)) {
+      // Add to transitioning set to prevent concurrent updates
+      transitioningMarkers.add(markerData.listing.id);
+      
       // Remove the old marker and create a new one with the correct type
       mapMarker.remove();
       markersRef.current.delete(markerData.listing.id);
-      createSingleMarker(markerData);
+      
+      // Create new marker after a micro-task to ensure clean removal
+      Promise.resolve().then(() => {
+        createSingleMarker(markerData);
+        // Remove from transitioning set after creation
+        setTimeout(() => {
+          transitioningMarkers.delete(markerData.listing.id);
+        }, 100);
+      });
       return;
     }
     

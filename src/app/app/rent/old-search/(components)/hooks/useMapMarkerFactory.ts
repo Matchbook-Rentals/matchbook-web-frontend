@@ -67,15 +67,25 @@ const createHeartGroup = (markerStyles: any, isSimpleMarker = false): SVGGElemen
 };
 
 const applyMarkerStylesUtility = (element: HTMLElement, styles: Record<string, string>) => {
-  // Store intended styles as data attributes first
+  // Store intended styles as data attributes for recovery
   Object.entries(styles).forEach(([key, value]) => {
     element.dataset[`style${key.charAt(0).toUpperCase() + key.slice(1)}`] = value;
   });
   
-  // Apply styles after next frame to ensure DOM is ready
+  // Apply critical styles synchronously for immediate visual feedback
+  const criticalStyles = ['backgroundColor', 'color', 'border', 'padding', 'borderRadius', 'display'];
+  Object.entries(styles).forEach(([key, value]) => {
+    if (criticalStyles.includes(key)) {
+      (element.style as any)[key] = value;
+    }
+  });
+  
+  // Apply non-critical styles (shadows, animations) after next frame
   requestAnimationFrame(() => {
     Object.entries(styles).forEach(([key, value]) => {
-      (element.style as any)[key] = value;
+      if (!criticalStyles.includes(key)) {
+        (element.style as any)[key] = value;
+      }
     });
   });
 };
@@ -178,6 +188,9 @@ export const useMapMarkerFactory = ({
 
     const el = document.createElement('div');
     el.className = 'price-bubble-marker';
+    
+    // Mark element as being created to prevent concurrent updates
+    el.dataset.creating = 'true';
 
     const colors = getMarkerColors(marker, isHovered);
     const price = marker.listing.calculatedPrice || marker.listing.price;
@@ -207,6 +220,9 @@ export const useMapMarkerFactory = ({
       overflow: 'visible'
     };
 
+    // Apply styles before adding to map to ensure initial render is correct
+    applyMarkerStylesUtility(el, markerElementStyles);
+
     const mapMarker = new maplibregl.Marker({
       element: el,
       anchor: 'center'
@@ -214,11 +230,14 @@ export const useMapMarkerFactory = ({
       .setLngLat([marker.lng, marker.lat])
       .addTo(mapRef.current);
 
-    // Apply styles after DOM insertion
-    applyMarkerStylesUtility(el, markerElementStyles);
-
-    // Verify styles after DOM insertion
-    setTimeout(() => verifyAndFixMarkerStyles(el), STYLE_UPDATE_DELAY);
+    // Double-verify styles after DOM insertion with immediate check
+    requestAnimationFrame(() => {
+      delete el.dataset.creating;
+      verifyAndFixMarkerStyles(el);
+      
+      // Secondary verification after a brief delay
+      setTimeout(() => verifyAndFixMarkerStyles(el), STYLE_UPDATE_DELAY);
+    });
 
     el.addEventListener('click', clickHandler);
     return mapMarker;

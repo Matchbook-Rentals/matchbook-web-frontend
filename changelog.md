@@ -1,5 +1,13 @@
 # Changelog
 
+## Fix map pin styling race conditions
+- Fixed map pins losing styles when switching between simple/price bubble markers
+- Applied critical styles synchronously to prevent visual glitches during transitions
+- Added transition locks to prevent concurrent marker updates causing style loss
+- Implemented double-verification of styles with immediate and delayed checks
+- Optimized marker color updates using batched requestAnimationFrame
+- Enhanced style recovery mechanism to restore lost classes and critical styles
+
 ## Implement dynamic pricing system and fix payment/SSR issues
 - Added dynamic pricing calculation using ListingMonthlyPricing table with trip length matching
 - Fixed server-side rendering errors with PDF components by implementing dynamic imports with ssr:false

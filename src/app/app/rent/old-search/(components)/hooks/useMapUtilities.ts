@@ -72,25 +72,59 @@ export const useMapUtilities = ({ mapRef }: UseMapUtilitiesProps) => {
   // Marker style verifier utility
   const createMarkerStyleVerifier = useCallback(() => {
     const verifyAndFixMarkerStyles = (element: HTMLElement): boolean => {
+      // Skip verification if element is being created
+      if (element.dataset.creating === 'true') {
+        return false;
+      }
+      
       let stylesFixed = false;
       
+      // First check if element has lost its class
+      if (element.dataset.styleBackgroundColor && !element.className.includes('price-bubble-marker')) {
+        element.className = 'price-bubble-marker';
+        stylesFixed = true;
+      }
+      
       // Get expected styles from data attributes
+      const criticalStyles = ['backgroundColor', 'color', 'border', 'padding', 'borderRadius', 'display'];
+      
       Object.keys(element.dataset)
         .filter(attr => attr.startsWith('style'))
         .forEach(attr => {
           const styleProp = attr.replace('style', '').charAt(0).toLowerCase() + attr.slice(6);
           const expectedValue = element.dataset[attr]!;
+          const currentValue = (element.style as any)[styleProp];
           
-          if ((element.style as any)[styleProp] !== expectedValue) {
-            (element.style as any)[styleProp] = expectedValue;
-            stylesFixed = true;
+          // Only fix critical styles immediately, defer others
+          const isCritical = criticalStyles.includes(styleProp);
+          
+          if (currentValue !== expectedValue) {
+            if (isCritical || !currentValue) {
+              // Fix critical styles or missing styles immediately
+              (element.style as any)[styleProp] = expectedValue;
+              stylesFixed = true;
+            }
           }
         });
+      
+      // Ensure element is visible if styles were fixed
+      if (stylesFixed && element.style.display === 'none') {
+        element.style.display = 'flex';
+      }
       
       return stylesFixed;
     };
     
     const verifyAllMarkerStyles = (markersRef: React.MutableRefObject<Map<string, maplibregl.Marker>>) => {
+      // Use immediate execution for critical style recovery
+      markersRef.current.forEach((marker) => {
+        const el = marker.getElement();
+        if (el.className === 'price-bubble-marker' || el.dataset.styleBackgroundColor) {
+          verifyAndFixMarkerStyles(el);
+        }
+      });
+      
+      // Schedule a secondary check after next paint
       requestAnimationFrame(() => {
         markersRef.current.forEach((marker) => {
           const el = marker.getElement();

@@ -293,30 +293,49 @@ export const useMapMarkerStyles = ({
     const threshold = isFullscreenRef.current ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD : markerStyles.SIMPLE_MARKER_THRESHOLD;
     const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
     
-    markersRef.current.forEach((marker, id) => {
-      const el = marker.getElement();
-      const correspondingMarker = markersDataRef.current.find(m => m.listing.id === id);
-      const state = getMarkerState(id, correspondingMarker);
-
-      if (shouldUseSimpleMarkers) {
-        // Handle simple markers (>threshold listings)
-        updateSimpleMarkerColors(el, state);
-        const svg = el.querySelector('svg');
-        if (svg) {
-          manageSimpleMarkerHeart(svg, state.isLiked);
-        }
-      } else {
-        // Handle price bubble markers (≤threshold listings)
-        updatePriceBubbleColors(el, state);
-        const formattedPrice = getFormattedPrice(correspondingMarker);
-        const useDOM = state.type === 'hover'; // Use DOM manipulation for hover state
-        managePriceBubbleHeart(el, state.isLiked, formattedPrice, useDOM);
+    // Batch updates in requestAnimationFrame for better performance
+    requestAnimationFrame(() => {
+      const updates: Array<() => void> = [];
+      
+      markersRef.current.forEach((marker, id) => {
+        const el = marker.getElement();
         
-        // Verify price bubble marker styles after updating
-        if (el.className === 'price-bubble-marker') {
-          setTimeout(() => verifyAndFixMarkerStyles(el), BATCH_STYLE_DELAY);
+        // Skip markers that are being created or transitioned
+        if (el.dataset.creating === 'true') {
+          return;
         }
-      }
+        
+        const correspondingMarker = markersDataRef.current.find(m => m.listing.id === id);
+        const state = getMarkerState(id, correspondingMarker);
+
+        if (shouldUseSimpleMarkers) {
+          // Handle simple markers (>threshold listings)
+          updates.push(() => {
+            updateSimpleMarkerColors(el, state);
+            const svg = el.querySelector('svg');
+            if (svg) {
+              manageSimpleMarkerHeart(svg, state.isLiked);
+            }
+          });
+        } else {
+          // Handle price bubble markers (≤threshold listings)
+          updates.push(() => {
+            // Only update if element is still a price bubble
+            if (el.className === 'price-bubble-marker') {
+              updatePriceBubbleColors(el, state);
+              const formattedPrice = getFormattedPrice(correspondingMarker);
+              const useDOM = state.type === 'hover'; // Use DOM manipulation for hover state
+              managePriceBubbleHeart(el, state.isLiked, formattedPrice, useDOM);
+              
+              // Immediate style verification for price bubbles
+              verifyAndFixMarkerStyles(el);
+            }
+          });
+        }
+      });
+      
+      // Execute all updates
+      updates.forEach(update => update());
     });
   }, [
     getVisibleMarkers,
