@@ -78,11 +78,13 @@ export const useMapUtilities = ({ mapRef }: UseMapUtilitiesProps) => {
       }
       
       let stylesFixed = false;
+      const fixes: any[] = [];
       
       // First check if element has lost its class
       if (element.dataset.styleBackgroundColor && !element.className.includes('price-bubble-marker')) {
         element.className = 'price-bubble-marker';
         stylesFixed = true;
+        fixes.push({ type: 'class', fixed: 'price-bubble-marker' });
       }
       
       // Get expected styles from data attributes
@@ -101,6 +103,12 @@ export const useMapUtilities = ({ mapRef }: UseMapUtilitiesProps) => {
           if (currentValue !== expectedValue) {
             if (isCritical || !currentValue) {
               // Fix critical styles or missing styles immediately
+              fixes.push({ 
+                prop: styleProp, 
+                from: currentValue, 
+                to: expectedValue,
+                critical: isCritical
+              });
               (element.style as any)[styleProp] = expectedValue;
               stylesFixed = true;
             }
@@ -110,6 +118,13 @@ export const useMapUtilities = ({ mapRef }: UseMapUtilitiesProps) => {
       // Ensure element is visible if styles were fixed
       if (stylesFixed && element.style.display === 'none') {
         element.style.display = 'flex';
+      }
+      
+      if (fixes.length > 0) {
+        console.log('🔧 verifyAndFixMarkerStyles made changes:', {
+          element: element.className,
+          fixes
+        });
       }
       
       return stylesFixed;

@@ -79,7 +79,6 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     if (!setsAreEqual) {
       // Scroll to top when the list changes
       if (scrollAreaRef.current?.children[0]) { // Access the viewport element within ScrollArea
-        console.log('chilen', scrollAreaRef.current.children)
         const viewport = scrollAreaRef.current.children[1] as HTMLElement;
         viewport.scrollTo({ top: 0, behavior: 'auto' }); // Use smooth scroll
     }

@@ -331,38 +331,46 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     const contextFavIds = lookup.favIds;
     const contextDislikedIds = lookup.dislikedIds;
 
-    return displayListings.map((listing) => {
-      // Prioritize context's favIds, then snapshot's favoriteIds
-      const isLikedByContext = contextFavIds.has(listing.id);
-      const isLikedBySnapshot = favoriteIdsArray.includes(listing.id); // favoriteIdsArray is from listingsSnapshot.favoriteIds
-      const isLiked = isLikedByContext || isLikedBySnapshot;
-      
-      // Prioritize context's dislikedIds, then snapshot's dislikedIds
-      // Ensure a disliked listing isn't also marked as liked
-      const isDislikedByContext = contextDislikedIds.has(listing.id);
-      const isDislikedBySnapshot = dislikedIdsArray.includes(listing.id); // dislikedIdsArray is from listingsSnapshot.dislikedIds
-      const isDisliked = (isDislikedByContext || isDislikedBySnapshot) && !isLiked;
-      
-      // Ensure price data persists - preserve both original price and calculated price
-      const originalPrice = listing.shortestLeasePrice || listing.price || 0;
-      const calculatedPrice = trip ? calculateRent({ listing, trip }) : (listing.price || originalPrice);
-      
-      
-      return {
-        title: listing.title,
-        lat: listing.latitude,
-        lng: listing.longitude,
-        listing: {
-          ...listing,
-          price: listing.price || calculatedPrice, // Preserve current price or use calculated
-          calculatedPrice, // Always ensure calculatedPrice is available
-          isLiked,
-          isDisliked,
-          customSnapshot: enhancedSnapshot // Attach the enhanced snapshot to each marker
-        },
-        color: getListingStatus(listing)
-      };
-    });
+    return displayListings
+      .filter(listing => {
+        // Filter out listings with invalid coordinates
+        return typeof listing.latitude === 'number' && 
+               typeof listing.longitude === 'number' && 
+               !isNaN(listing.latitude) && 
+               !isNaN(listing.longitude);
+      })
+      .map((listing) => {
+        // Prioritize context's favIds, then snapshot's favoriteIds
+        const isLikedByContext = contextFavIds.has(listing.id);
+        const isLikedBySnapshot = favoriteIdsArray.includes(listing.id); // favoriteIdsArray is from listingsSnapshot.favoriteIds
+        const isLiked = isLikedByContext || isLikedBySnapshot;
+        
+        // Prioritize context's dislikedIds, then snapshot's dislikedIds
+        // Ensure a disliked listing isn't also marked as liked
+        const isDislikedByContext = contextDislikedIds.has(listing.id);
+        const isDislikedBySnapshot = dislikedIdsArray.includes(listing.id); // dislikedIdsArray is from listingsSnapshot.dislikedIds
+        const isDisliked = (isDislikedByContext || isDislikedBySnapshot) && !isLiked;
+        
+        // Ensure price data persists - preserve both original price and calculated price
+        const originalPrice = listing.shortestLeasePrice || listing.price || 0;
+        const calculatedPrice = trip ? calculateRent({ listing, trip }) : (listing.price || originalPrice);
+        
+        
+        return {
+          title: listing.title || '',
+          lat: listing.latitude,
+          lng: listing.longitude,
+          listing: {
+            ...listing,
+            price: listing.price || calculatedPrice, // Preserve current price or use calculated
+            calculatedPrice, // Always ensure calculatedPrice is available
+            isLiked,
+            isDisliked,
+            customSnapshot: enhancedSnapshot // Attach the enhanced snapshot to each marker
+          },
+          color: getListingStatus(listing)
+        };
+      });
   }, [displayListings, lookup, favoriteIdsArray, dislikedIdsArray, getListingStatus, trip, enhancedSnapshot]);
 
   // Use the current map center for the map, fallback to initial center

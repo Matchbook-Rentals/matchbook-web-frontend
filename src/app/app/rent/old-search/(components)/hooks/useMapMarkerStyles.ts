@@ -80,6 +80,13 @@ export const useMapMarkerStyles = ({
 
   // Style update scheduler
   const scheduleStyleUpdate = useCallback((element: HTMLElement, styles: Record<string, string>) => {
+    console.log('📍 Scheduling style update:', {
+      element: element.className,
+      styles,
+      currentBg: element.style.backgroundColor,
+      currentDataBg: element.dataset.styleBackgroundColor
+    });
+    
     scheduledStyleUpdates.current.set(element, styles);
     
     if (styleUpdateTimer.current) clearTimeout(styleUpdateTimer.current);
@@ -87,8 +94,24 @@ export const useMapMarkerStyles = ({
     styleUpdateTimer.current = setTimeout(() => {
       requestAnimationFrame(() => {
         scheduledStyleUpdates.current.forEach((styles, el) => {
+          console.log('📍 Applying scheduled styles:', {
+            element: el.className,
+            styles,
+            beforeBg: el.style.backgroundColor
+          });
+          
           Object.entries(styles).forEach(([key, value]) => {
+            // Update the style
             (el.style as any)[key] = value;
+            // Also update the data attribute to prevent verifyAndFixMarkerStyles from reverting it
+            const dataKey = `style${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+            el.dataset[dataKey] = value;
+          });
+          
+          console.log('📍 After applying styles:', {
+            element: el.className,
+            afterBg: el.style.backgroundColor,
+            afterDataBg: el.dataset.styleBackgroundColor
           });
         });
         scheduledStyleUpdates.current.clear();
@@ -102,6 +125,16 @@ export const useMapMarkerStyles = ({
     const isHovered = hoveredListing?.id === id || (!isFullscreenRef.current && clickedMarkerId === id);
     const isLiked = correspondingMarker?.listing.isLiked;
     const isDisliked = correspondingMarker?.listing.isDisliked;
+
+    // Log hover detection
+    if (hoveredListing && hoveredListing.id === id) {
+      console.log('🎯 Hover match found:', {
+        markerId: id,
+        hoveredListingId: hoveredListing.id,
+        isHovered,
+        willReturnType: isSelected ? 'selected' : 'hover'
+      });
+    }
 
     if (isSelected) return { type: 'selected', isLiked, isDisliked };
     if (isHovered) return { type: 'hover', isLiked, isDisliked };
@@ -285,6 +318,7 @@ export const useMapMarkerStyles = ({
   const updateMarkerColors = useCallback(() => {
     const now = Date.now();
     if (now - lastUpdateRef.current < DEBOUNCE_DELAY) {
+      console.log('⏭️ Skipping update due to debounce');
       return;
     }
     lastUpdateRef.current = now;
@@ -293,6 +327,14 @@ export const useMapMarkerStyles = ({
     const threshold = isFullscreenRef.current ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD : markerStyles.SIMPLE_MARKER_THRESHOLD;
     const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
     
+    console.log('🔄 updateMarkerColors called:', {
+      hoveredListingId: hoveredListing?.id,
+      numMarkers: markersRef.current.size,
+      visibleMarkers: visibleMarkers.length,
+      shouldUseSimpleMarkers,
+      threshold
+    });
+    
     // Batch updates in requestAnimationFrame for better performance
     requestAnimationFrame(() => {
       const updates: Array<() => void> = [];
@@ -300,12 +342,25 @@ export const useMapMarkerStyles = ({
       markersRef.current.forEach((marker, id) => {
         const el = marker.getElement();
         
+        console.log('🔍 Processing marker:', {
+          markerId: id,
+          elementClass: el.className,
+          isCreating: el.dataset.creating
+        });
+        
         // Skip markers that are being created or transitioned
         if (el.dataset.creating === 'true') {
+          console.log('⏩ Skipping - marker is being created');
           return;
         }
         
         const correspondingMarker = markersDataRef.current.find(m => m.listing.id === id);
+        
+        if (!correspondingMarker) {
+          console.log('⚠️ No corresponding marker data found for:', id);
+          return;
+        }
+        
         const state = getMarkerState(id, correspondingMarker);
 
         if (shouldUseSimpleMarkers) {
@@ -319,9 +374,24 @@ export const useMapMarkerStyles = ({
           });
         } else {
           // Handle price bubble markers (≤threshold listings)
+          console.log('📌 Will update price bubble, checking class:', {
+            markerId: id,
+            elementClass: el.className,
+            exactMatch: el.className === 'price-bubble-marker',
+            includesMatch: el.className.includes('price-bubble-marker')
+          });
+          
           updates.push(() => {
-            // Only update if element is still a price bubble
-            if (el.className === 'price-bubble-marker') {
+            // Check if element contains the price-bubble-marker class (not exact match)
+            if (el.className.includes('price-bubble-marker')) {
+              console.log('💰 Updating price bubble marker:', {
+                markerId: id,
+                state: state.type,
+                isLiked: state.isLiked,
+                isDisliked: state.isDisliked,
+                elementClass: el.className
+              });
+              
               updatePriceBubbleColors(el, state);
               const formattedPrice = getFormattedPrice(correspondingMarker);
               const useDOM = state.type === 'hover'; // Use DOM manipulation for hover state
@@ -329,6 +399,8 @@ export const useMapMarkerStyles = ({
               
               // Immediate style verification for price bubbles
               verifyAndFixMarkerStyles(el);
+            } else {
+              console.log('❌ Not a price bubble, skipping:', el.className);
             }
           });
         }
