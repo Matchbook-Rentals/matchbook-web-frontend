@@ -205,7 +205,7 @@ export default function EditSearchModal({
                         <CalendarIcon className="h-5 w-5" />
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="end">
+                    <PopoverContent className="w-auto p-0 z-[1001]" align="end">
                       <InteractiveDatePicker
                         selectedDate={startDate}
                         onDateSelect={(date) => {
@@ -230,7 +230,7 @@ export default function EditSearchModal({
                         <CalendarIcon className="h-5 w-5 text-gray-400" />
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 z-[1001]" align="start">
                       <InteractiveDatePicker
                         selectedDate={startDate}
                         onDateSelect={(date) => {
@@ -271,7 +271,7 @@ export default function EditSearchModal({
                         <CalendarIcon className="h-5 w-5" />
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="end">
+                    <PopoverContent className="w-auto p-0 z-[1001]" align="end">
                       <InteractiveDatePicker
                         selectedDate={endDate}
                         onDateSelect={(date) => {
@@ -296,7 +296,7 @@ export default function EditSearchModal({
                         <CalendarIcon className="h-5 w-5 text-gray-400" />
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 z-[1001]" align="start">
                       <InteractiveDatePicker
                         selectedDate={endDate}
                         onDateSelect={(date) => {

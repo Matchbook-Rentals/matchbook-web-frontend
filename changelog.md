@@ -1,5 +1,10 @@
 # Changelog
 
+## Fix date picker z-index in EditSearchModal
+- Fixed date selector popovers appearing behind modal dialog
+- Added z-[1001] to PopoverContent components to ensure proper layering
+- Applied fix locally to EditSearchModal without affecting global popover usage
+
 ## Refactor map marker hooks to clean code style
 - Applied "Declarative Functional Decomposition" pattern to marker hooks
 - Broke complex functions into small, semantic steps (10 lines max)
