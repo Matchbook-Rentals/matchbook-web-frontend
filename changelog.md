@@ -1,5 +1,12 @@
 # Changelog
 
+## Refactor map marker hooks to clean code style
+- Applied "Declarative Functional Decomposition" pattern to marker hooks
+- Broke complex functions into small, semantic steps (10 lines max)
+- Replaced comments with self-documenting function names
+- Extracted all magic values to named constants
+- Improved code readability and maintainability
+
 ## Fix map pin styling race conditions
 - Fixed map pins losing styles when switching between simple/price bubble markers
 - Applied critical styles synchronously to prevent visual glitches during transitions

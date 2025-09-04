@@ -10,22 +10,39 @@
 - Never use any command that wipes/resets the database
 - Always use safe read-only commands to inspect data
 
-## Development Commands
-
-### Testing
-- Run tests: `npm test`
-- Run type checking: `npm run type-check` 
-- Run linting: `npm run lint`
-
 ### Database
 - View database safely: `npx prisma studio`
 - Generate Prisma client: `npx prisma generate`
 - Apply migrations safely: `npx prisma db push` (without --force-reset)
 
-## Project Structure
 
-This is a Next.js application with:
-- PDF editing functionality using pdf-lib
-- Document template merging system
-- Prisma database with DocumentInstance and PdfTemplate models
-- Server actions for document creation
+## API
+Prefer server actions to new api routes
+
+## Coding Style: "Declarative Functional Decomposition"
+
+Break complex functions into small, named steps that read like English.
+
+**Rules:**
+1. **Radical Decomposition** - Every logical step gets its own function
+2. **Semantic Naming** - Function names ARE the documentation  
+3. **Tell, Don't Ask** - `isMapAvailable()` not `mapRef.current !== null`
+4. **Vertical Reading** - Main functions read top-to-bottom like prose
+5. **No Magic Values** - Extract all constants
+6. **10-Line Maximum** - Keep functions short
+
+**Example:**
+```typescript
+// Main function reads like a story
+const renderMarkers = () => {
+  if (!isMapAvailable()) return;
+  
+  removeObsoleteMarkers();
+  updateOrCreateMarkers();  
+  scheduleStyleVerification();
+};
+
+// Each helper does ONE thing
+const isMapAvailable = () => mapRef.current !== null;
+const removeObsoleteMarkers = () => {...};
+```

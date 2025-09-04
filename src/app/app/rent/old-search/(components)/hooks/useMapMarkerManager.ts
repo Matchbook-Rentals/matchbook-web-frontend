@@ -9,6 +9,7 @@ const HEART_PATH_REGULAR = 'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 
 const HEART_FILTER = 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))';
 const BORDER_WIDTH = '0.5px';
 const STYLE_UPDATE_DELAY = 50;
+const TRANSITION_CLEANUP_DELAY = 100;
 
 interface UseMapMarkerManagerProps {
   mapRef: React.MutableRefObject<maplibregl.Map | null>;
@@ -47,267 +48,414 @@ export const useMapMarkerManager = ({
   // Track markers currently being transitioned to prevent race conditions
   const transitioningMarkers = new Set<string>();
 
-  // Create a single marker using unified factory - DEFINE FIRST to avoid circular dependency
-  const createSingleMarker = useCallback((marker: any) => {
-    if (!mapRef.current) return;
+  // ============================================
+  // Marker State Helpers
+  // ============================================
+  
+  const isMapAvailable = () => {
+    return mapRef.current !== null;
+  };
 
-    // Get current visible markers count for threshold decision
+  const getMarkerThreshold = useCallback(() => {
+    return isFullscreenRef.current 
+      ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD 
+      : markerStyles.SIMPLE_MARKER_THRESHOLD;
+  }, [isFullscreenRef, markerStyles]);
+
+  const shouldUseSimpleMarkers = useCallback(() => {
     const visibleMarkers = getVisibleMarkers();
-    const threshold = isFullscreenRef.current ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD : markerStyles.SIMPLE_MARKER_THRESHOLD;
-    const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
-    
-    // Check if this marker is currently hovered or selected
-    const isHovered = hoveredListing?.id === marker.listing.id ||
-      (!isFullscreenRef?.current && clickedMarkerId === marker.listing.id) ||
-      (isFullscreenRef?.current && selectedMarker?.listing.id === marker.listing.id);
+    const threshold = getMarkerThreshold();
+    return visibleMarkers.length > threshold;
+  }, [getVisibleMarkers, getMarkerThreshold]);
 
-    // Create click handler
-    const clickHandler = (e: Event) => {
+  const isMarkerHovered = useCallback((marker: any) => {
+    const isHoveredInList = hoveredListing?.id === marker.listing.id;
+    const isClickedInNormalMode = !isFullscreenRef?.current && clickedMarkerId === marker.listing.id;
+    const isSelectedInFullscreen = isFullscreenRef?.current && selectedMarker?.listing.id === marker.listing.id;
+    
+    return isHoveredInList || isClickedInNormalMode || isSelectedInFullscreen;
+  }, [hoveredListing, isFullscreenRef, clickedMarkerId, selectedMarker]);
+
+  // ============================================
+  // Click Handler Management
+  // ============================================
+  
+  const handleFullscreenMarkerClick = useCallback((marker: any) => {
+    const isSameMarker = selectedMarker?.listing.id === marker.listing.id;
+    setSelectedMarker(isSameMarker ? null : marker);
+  }, [selectedMarker, setSelectedMarker]);
+
+  const handleNormalMarkerClick = useCallback((marker: any) => {
+    const isSameMarker = clickedMarkerId === marker.listing.id;
+    
+    if (isSameMarker) {
+      clearVisibleListings();
+      setClickedMarkerId(null);
+    } else {
+      filterToSingleListing(marker.listing.id);
+      setClickedMarkerId(marker.listing.id);
+    }
+  }, [clickedMarkerId, setClickedMarkerId]);
+
+  const clearVisibleListings = () => {
+    useVisibleListingsStore.getState().setVisibleListingIds(null);
+  };
+
+  const filterToSingleListing = (listingId: string) => {
+    useVisibleListingsStore.getState().setVisibleListingIds([listingId]);
+  };
+
+  const createMarkerClickHandler = useCallback((marker: any) => {
+    return (e: Event) => {
       e.stopPropagation();
+      
       if (isFullscreenRef?.current) {
-        setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+        handleFullscreenMarkerClick(marker);
       } else {
-        setClickedMarkerId(prev => {
-          if (prev === marker.listing.id) {
-            useVisibleListingsStore.getState().setVisibleListingIds(null);
-            return null;
-          } else {
-            useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
-            return marker.listing.id;
-          }
-        });
+        handleNormalMarkerClick(marker);
       }
     };
+  }, [isFullscreenRef, handleFullscreenMarkerClick, handleNormalMarkerClick]);
 
-    // Create marker using appropriate factory method
-    const mapMarker = shouldUseSimpleMarkers 
-      ? createSimpleMarker(marker, isHovered, clickHandler)
-      : createPriceBubbleMarker(marker, isHovered, clickHandler);
-    
+  // ============================================
+  // Single Marker Creation
+  // ============================================
+  
+  const selectMarkerFactory = useCallback((shouldUseSimple: boolean) => {
+    return shouldUseSimple ? createSimpleMarker : createPriceBubbleMarker;
+  }, [createSimpleMarker, createPriceBubbleMarker]);
+
+  const storeMarkerReference = useCallback((markerId: string, mapMarker: maplibregl.Marker) => {
     if (mapMarker) {
-      markersRef.current.set(marker.listing.id, mapMarker);
+      markersRef.current.set(markerId, mapMarker);
     }
+  }, [markersRef]);
+
+  const createSingleMarker = useCallback((marker: any) => {
+    if (!isMapAvailable()) return;
+
+    const isHovered = isMarkerHovered(marker);
+    const clickHandler = createMarkerClickHandler(marker);
+    const shouldUseSimple = shouldUseSimpleMarkers();
+    
+    const markerFactory = selectMarkerFactory(shouldUseSimple);
+    const mapMarker = markerFactory(marker, isHovered, clickHandler);
+    
+    storeMarkerReference(marker.listing.id, mapMarker);
   }, [
-    mapRef,
-    getVisibleMarkers,
-    isFullscreenRef,
-    markerStyles,
-    hoveredListing,
-    clickedMarkerId,
-    selectedMarker,
-    setSelectedMarker,
-    setClickedMarkerId,
-    createSimpleMarker,
-    createPriceBubbleMarker,
-    markersRef
+    isMarkerHovered,
+    createMarkerClickHandler,
+    shouldUseSimpleMarkers,
+    selectMarkerFactory,
+    storeMarkerReference
   ]);
 
-  // Render markers with pooling - reuse existing markers instead of recreating
-  const renderMarkers = useCallback(() => {
-    if (!mapRef.current) return;
+  // ============================================
+  // Marker Removal
+  // ============================================
+  
+  const getRequiredMarkerIds = useCallback(() => {
+    return new Set(markersDataRef.current.map(m => m.listing.id));
+  }, [markersDataRef]);
+
+  const findObsoleteMarkers = useCallback(() => {
+    const requiredIds = getRequiredMarkerIds();
+    const obsoleteMarkers: string[] = [];
     
-    // Get visible markers count for threshold decision
-    const visibleMarkers = getVisibleMarkers();
-    const threshold = isFullscreenRef.current ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD : markerStyles.SIMPLE_MARKER_THRESHOLD;
-    const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
-    
-    // Create a set of required marker IDs from current data
-    const requiredMarkerIds = new Set(markersDataRef.current.map(m => m.listing.id));
-    
-    // Remove markers that are no longer needed
-    const markersToRemove: string[] = [];
     markersRef.current.forEach((marker, id) => {
-      if (!requiredMarkerIds.has(id)) {
-        marker.remove();
-        markersToRemove.push(id);
+      if (!requiredIds.has(id)) {
+        obsoleteMarkers.push(id);
       }
     });
-    markersToRemove.forEach(id => markersRef.current.delete(id));
     
-    // Update existing markers and create new ones only as needed
+    return obsoleteMarkers;
+  }, [markersRef, getRequiredMarkerIds]);
+
+  const removeMarker = useCallback((markerId: string) => {
+    const marker = markersRef.current.get(markerId);
+    if (marker) {
+      marker.remove();
+      markersRef.current.delete(markerId);
+    }
+  }, [markersRef]);
+
+  const removeObsoleteMarkers = useCallback(() => {
+    const obsoleteMarkers = findObsoleteMarkers();
+    obsoleteMarkers.forEach(removeMarker);
+  }, [findObsoleteMarkers, removeMarker]);
+
+  // ============================================
+  // Marker Type Transition
+  // ============================================
+  
+  const isMarkerTransitioning = (markerId: string) => {
+    return transitioningMarkers.has(markerId);
+  };
+
+  const markTransitionStart = (markerId: string) => {
+    transitioningMarkers.add(markerId);
+  };
+
+  const markTransitionEnd = (markerId: string) => {
+    setTimeout(() => {
+      transitioningMarkers.delete(markerId);
+    }, TRANSITION_CLEANUP_DELAY);
+  };
+
+  const isElementBeingCreated = (element: HTMLElement) => {
+    return element.dataset.creating === 'true';
+  };
+
+  const getCurrentMarkerType = (element: HTMLElement) => {
+    const hasCircle = element.querySelector('svg circle') !== null;
+    const hasPriceBubbleClass = element.className.includes('price-bubble-marker');
+    
+    return {
+      isSimple: hasCircle,
+      isPriceBubble: hasPriceBubbleClass
+    };
+  };
+
+  const needsMarkerTypeChange = useCallback((element: HTMLElement) => {
+    const shouldUseSimple = shouldUseSimpleMarkers();
+    const { isSimple, isPriceBubble } = getCurrentMarkerType(element);
+    
+    const needsChangeToSimple = shouldUseSimple && isPriceBubble;
+    const needsChangeToPriceBubble = !shouldUseSimple && isSimple;
+    
+    return needsChangeToSimple || needsChangeToPriceBubble;
+  }, [shouldUseSimpleMarkers]);
+
+  const transitionMarkerType = useCallback((mapMarker: maplibregl.Marker, markerData: any) => {
+    markTransitionStart(markerData.listing.id);
+    
+    mapMarker.remove();
+    markersRef.current.delete(markerData.listing.id);
+    
+    Promise.resolve().then(() => {
+      createSingleMarker(markerData);
+      markTransitionEnd(markerData.listing.id);
+    });
+  }, [markersRef, createSingleMarker]);
+
+  // ============================================
+  // Style Updates for Existing Markers
+  // ============================================
+  
+  const updateSimpleMarkerStyles = useCallback((element: HTMLElement, markerData: any, isHovered: boolean) => {
+    updateSimpleMarkerColors(element, markerData, isHovered);
+    updateSimpleMarkerHeart(element, markerData);
+  }, [markerStyles]);
+
+  const updateSimpleMarkerColors = (element: HTMLElement, markerData: any, isHovered: boolean) => {
+    const svg = element.querySelector('svg');
+    const innerCircle = element.querySelector('svg circle:last-child');
+    
+    if (!svg || !innerCircle) return;
+    
+    const colors = getSimpleMarkerColors(markerData, isHovered);
+    updateCircleColors(svg, innerCircle, colors);
+  };
+
+  const getSimpleMarkerColors = (markerData: any, isHovered: boolean) => {
+    if (isHovered) return markerStyles.MARKER_COLORS.HOVER;
+    if (markerData.listing.isDisliked) return markerStyles.MARKER_COLORS.DISLIKED;
+    if (markerData.listing.isLiked) return markerStyles.MARKER_COLORS.DEFAULT;
+    return markerStyles.MARKER_COLORS.DEFAULT;
+  };
+
+  const updateCircleColors = (svg: SVGElement, innerCircle: Element, colors: any) => {
+    const outerCircle = svg.querySelector('circle:first-child');
+    if (outerCircle) {
+      outerCircle.setAttribute('fill', colors.primary);
+    }
+    innerCircle.setAttribute('fill', colors.secondary);
+  };
+
+  const updateSimpleMarkerHeart = (element: HTMLElement, markerData: any) => {
+    const svg = element.querySelector('svg');
+    if (!svg) return;
+    
+    const heartIcon = svg.querySelector('.marker-heart-icon');
+    const shouldHaveHeart = markerData.listing.isLiked;
+    
+    if (shouldHaveHeart && !heartIcon) {
+      addHeartToSimpleMarker(svg);
+    } else if (!shouldHaveHeart && heartIcon) {
+      heartIcon.remove();
+    }
+  };
+
+  const addHeartToSimpleMarker = (svg: Element) => {
+    const heartPath = createHeartPathElement();
+    svg.appendChild(heartPath);
+  };
+
+  const createHeartPathElement = () => {
+    const heartPath = document.createElementNS(SVG_NAMESPACE, 'path');
+    heartPath.setAttribute('class', 'marker-heart-icon');
+    heartPath.setAttribute('fill-rule', 'evenodd');
+    heartPath.setAttribute('d', HEART_PATH_REGULAR);
+    heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
+    heartPath.setAttribute('transform', 
+      `${markerStyles.HEART_ICON.simpleMarkerTransform} ${markerStyles.HEART_ICON.simpleMarkerScale}`
+    );
+    heartPath.style.filter = HEART_FILTER;
+    return heartPath;
+  };
+
+  const updatePriceBubbleStyles = useCallback((element: HTMLElement, markerData: any, isHovered: boolean) => {
+    const colors = getPriceBubbleColors(markerData, isHovered);
+    applyPriceBubbleStyles(element, colors);
+    updatePriceBubbleContent(element, markerData);
+  }, [markerStyles]);
+
+  const getPriceBubbleColors = (markerData: any, isHovered: boolean) => {
+    if (isHovered) return markerStyles.PRICE_BUBBLE_COLORS.HOVER;
+    if (markerData.listing.isDisliked) return markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
+    return markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
+  };
+
+  const applyPriceBubbleStyles = (element: HTMLElement, colors: any) => {
+    Object.assign(element.style, {
+      backgroundColor: colors.background,
+      color: colors.text,
+      border: `${BORDER_WIDTH} solid ${colors.border}`,
+      zIndex: markerStyles.Z_INDEX.DEFAULT
+    });
+  };
+
+  const updatePriceBubbleContent = (element: HTMLElement, markerData: any) => {
+    const price = markerData.listing.calculatedPrice || markerData.listing.price;
+    const formattedPrice = formatPrice(price);
+    
+    if (markerData.listing.isLiked) {
+      updatePriceBubbleWithHeart(element, formattedPrice);
+    } else {
+      updatePriceBubbleWithoutHeart(element, formattedPrice);
+    }
+  };
+
+  const formatPrice = (price: number | null | undefined): string => {
+    return (price !== null && price !== undefined) 
+      ? `$${price.toLocaleString()}` 
+      : 'N/A';
+  };
+
+  const updatePriceBubbleWithHeart = (element: HTMLElement, formattedPrice: string) => {
+    if (!element.querySelector('svg')) {
+      element.innerHTML = createPriceWithHeartHtml(formattedPrice);
+    }
+  };
+
+  const updatePriceBubbleWithoutHeart = (element: HTMLElement, formattedPrice: string) => {
+    const svg = element.querySelector('svg');
+    if (svg) {
+      svg.remove();
+      updateElementText(element, formattedPrice);
+    }
+  };
+
+  const updateElementText = (element: HTMLElement, text: string) => {
+    const span = element.querySelector('span');
+    if (span) {
+      span.textContent = text;
+    } else {
+      element.textContent = text;
+    }
+  };
+
+  const createPriceWithHeartHtml = (formattedPrice: string): string => {
+    return `
+      <span style="position: relative;">
+        ${formattedPrice}
+        <svg style="
+          position: absolute;
+          top: ${markerStyles.HEART_ICON.priceBubblePosition.top};
+          right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
+          width: ${markerStyles.HEART_ICON.size};
+          height: ${markerStyles.HEART_ICON.size};
+          fill: ${markerStyles.HEART_ICON.color};
+          filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+        " viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="${HEART_PATH_REGULAR}" />
+        </svg>
+      </span>
+    `;
+  };
+
+  // ============================================
+  // Update Existing Marker
+  // ============================================
+  
+  const updateMarkerPosition = (mapMarker: maplibregl.Marker, markerData: any) => {
+    mapMarker.setLngLat([markerData.lng, markerData.lat]);
+  };
+
+  const updateExistingMarker = useCallback((mapMarker: maplibregl.Marker, markerData: any) => {
+    if (isMarkerTransitioning(markerData.listing.id)) {
+      return;
+    }
+    
+    updateMarkerPosition(mapMarker, markerData);
+    
+    const element = mapMarker.getElement();
+    
+    if (isElementBeingCreated(element)) {
+      return;
+    }
+    
+    if (needsMarkerTypeChange(element)) {
+      transitionMarkerType(mapMarker, markerData);
+      return;
+    }
+    
+    updateMarkerInPlace(element, markerData);
+  }, [needsMarkerTypeChange, transitionMarkerType]);
+
+  const updateMarkerInPlace = (element: HTMLElement, markerData: any) => {
+    const isHovered = isMarkerHovered(markerData);
+    const isSimple = shouldUseSimpleMarkers();
+    
+    if (isSimple) {
+      updateSimpleMarkerStyles(element, markerData, isHovered);
+    } else {
+      updatePriceBubbleStyles(element, markerData, isHovered);
+    }
+  };
+
+  // ============================================
+  // Main Render Function
+  // ============================================
+  
+  const updateOrCreateMarkers = useCallback(() => {
     markersDataRef.current.forEach(markerData => {
       const existingMarker = markersRef.current.get(markerData.listing.id);
+      
       if (existingMarker) {
-        // Update existing marker position and style
         updateExistingMarker(existingMarker, markerData);
       } else {
-        // Create new marker only if it doesn't exist
         createSingleMarker(markerData);
       }
     });
-    
-    // Verify all marker styles after rendering
+  }, [markersDataRef, markersRef, updateExistingMarker, createSingleMarker]);
+
+  const scheduleStyleVerification = useCallback(() => {
     setTimeout(() => verifyAllMarkerStyles(markersRef), STYLE_UPDATE_DELAY);
-  }, [mapRef, getVisibleMarkers, isFullscreenRef, markerStyles, markersDataRef, markersRef, verifyAllMarkerStyles, createSingleMarker]);
+  }, [verifyAllMarkerStyles, markersRef]);
 
-  // Update existing marker position and style without recreation
-  const updateExistingMarker = useCallback((mapMarker: maplibregl.Marker, markerData: any) => {
-    // Check if this marker is already transitioning
-    if (transitioningMarkers.has(markerData.listing.id)) {
-      return; // Skip update if marker is already being transitioned
-    }
+  const renderMarkers = useCallback(() => {
+    if (!isMapAvailable()) return;
     
-    // Update marker position
-    mapMarker.setLngLat([markerData.lng, markerData.lat]);
-    
-    // Get the marker element and check what type it currently is
-    const el = mapMarker.getElement();
-    
-    // Skip if element is still being created
-    if (el.dataset.creating === 'true') {
-      return;
-    }
-    
-    // Use same visible markers calculation as renderMarkers for consistency
-    const visibleMarkers = getVisibleMarkers();
-    const threshold = isFullscreenRef.current ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD : markerStyles.SIMPLE_MARKER_THRESHOLD;
-    const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
-    
-    // Check current marker type
-    const isCurrentlySimple = el.querySelector('svg circle') !== null;
-    const isCurrentlyPriceBubble = el.className.includes('price-bubble-marker');
-    
-    // If marker type needs to change, remove and recreate it with transition lock
-    if ((shouldUseSimpleMarkers && isCurrentlyPriceBubble) || (!shouldUseSimpleMarkers && isCurrentlySimple)) {
-      // Add to transitioning set to prevent concurrent updates
-      transitioningMarkers.add(markerData.listing.id);
-      
-      // Remove the old marker and create a new one with the correct type
-      mapMarker.remove();
-      markersRef.current.delete(markerData.listing.id);
-      
-      // Create new marker after a micro-task to ensure clean removal
-      Promise.resolve().then(() => {
-        createSingleMarker(markerData);
-        // Remove from transitioning set after creation
-        setTimeout(() => {
-          transitioningMarkers.delete(markerData.listing.id);
-        }, 100);
-      });
-      return;
-    }
-    
-    // Same marker type, just update styles
-    if (shouldUseSimpleMarkers) {
-      // Handle simple marker updates
-      const svg = el.querySelector('svg');
-      const innerCircle = el.querySelector('svg circle:last-child');
-      
-      if (svg && innerCircle) {
-        const isHovered = hoveredListing?.id === markerData.listing.id ||
-          (!isFullscreenRef?.current && clickedMarkerId === markerData.listing.id) ||
-          (isFullscreenRef?.current && selectedMarker?.listing.id === markerData.listing.id);
-        
-        let colors;
-        if (isHovered) {
-          colors = markerStyles.MARKER_COLORS.HOVER;
-        } else if (markerData.listing.isLiked) {
-          colors = markerStyles.MARKER_COLORS.DEFAULT;
-        } else if (markerData.listing.isDisliked) {
-          colors = markerStyles.MARKER_COLORS.DISLIKED;
-        } else {
-          colors = markerStyles.MARKER_COLORS.DEFAULT;
-        }
-        
-        // Update colors without recreation
-        const outerCircle = svg.querySelector('circle:first-child');
-        if (outerCircle) outerCircle.setAttribute('fill', colors.primary);
-        innerCircle.setAttribute('fill', colors.secondary);
-        
-        // Handle heart icon for liked markers
-        let heartIcon = svg.querySelector('.marker-heart-icon');
-        if (markerData.listing.isLiked && !heartIcon) {
-          // Add heart icon
-          const heartPath = document.createElementNS(SVG_NAMESPACE, 'path');
-          heartPath.setAttribute('class', 'marker-heart-icon');
-          heartPath.setAttribute('fill-rule', 'evenodd');
-          heartPath.setAttribute('d', HEART_PATH_REGULAR);
-          heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
-          heartPath.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerTransform + ' ' + markerStyles.HEART_ICON.simpleMarkerScale);
-          heartPath.style.filter = HEART_FILTER;
-          svg.appendChild(heartPath);
-        } else if (!markerData.listing.isLiked && heartIcon) {
-          // Remove heart icon
-          heartIcon.remove();
-        }
-      }
-    } else {
-      // Handle price bubble marker updates
-      const isHovered = hoveredListing?.id === markerData.listing.id ||
-        (!isFullscreenRef?.current && clickedMarkerId === markerData.listing.id) ||
-        (isFullscreenRef?.current && selectedMarker?.listing.id === markerData.listing.id);
-      
-      let colors;
-      if (isHovered) {
-        colors = markerStyles.PRICE_BUBBLE_COLORS.HOVER;
-      } else if (markerData.listing.isDisliked) {
-        colors = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
-      } else {
-        colors = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
-      }
-      
-      // Update price bubble styles
-      const markerElementStyles = {
-        backgroundColor: colors.background,
-        color: colors.text,
-        border: `${BORDER_WIDTH} solid ${colors.border}`,
-        zIndex: (isHovered ? markerStyles.Z_INDEX.HOVER : markerData.listing.isLiked ? markerStyles.Z_INDEX.LIKED : markerStyles.Z_INDEX.DEFAULT),
-      };
-      
-      // Apply styles without recreating element
-      Object.assign(el.style, markerElementStyles);
-      
-      // Update price text and heart icon
-      const price = markerData.listing.calculatedPrice || markerData.listing.price;
-      const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
-      
-      if (markerData.listing.isLiked) {
-        // Add heart if not present
-        if (!el.querySelector('svg')) {
-          el.innerHTML = `
-            <span style="position: relative;">
-              ${formattedPrice}
-              <svg style="
-                position: absolute;
-                top: ${markerStyles.HEART_ICON.priceBubblePosition.top};
-                right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
-                width: ${markerStyles.HEART_ICON.size};
-                height: ${markerStyles.HEART_ICON.size};
-                fill: ${markerStyles.HEART_ICON.color};
-                filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
-              " viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="${HEART_PATH_REGULAR}" />
-              </svg>
-            </span>
-          `;
-        }
-      } else {
-        // Remove heart and update text
-        const svg = el.querySelector('svg');
-        if (svg) {
-          svg.remove();
-          const span = el.querySelector('span');
-          if (span) {
-            span.textContent = formattedPrice;
-          } else {
-            el.textContent = formattedPrice;
-          }
-        } else {
-          el.textContent = formattedPrice;
-        }
-      }
-    }
-  }, [
-    getVisibleMarkers,
-    isFullscreenRef,
-    markerStyles,
-    hoveredListing,
-    clickedMarkerId,
-    selectedMarker,
-    markersRef,
-    createSingleMarker
-  ]);
+    removeObsoleteMarkers();
+    updateOrCreateMarkers();
+    scheduleStyleVerification();
+  }, [removeObsoleteMarkers, updateOrCreateMarkers, scheduleStyleVerification]);
 
+  // ============================================
+  // Public API
+  // ============================================
+  
   return {
     renderMarkers,
     updateExistingMarker,
