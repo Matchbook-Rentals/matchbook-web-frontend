@@ -301,7 +301,8 @@ export async function getHostHousingRequests() {
             streetAddress1: true,
             city: true,
             state: true,
-            postalCode: true
+            postalCode: true,
+            monthlyPricing: true
           }
         },
         trip: {

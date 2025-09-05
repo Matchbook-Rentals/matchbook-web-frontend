@@ -19,6 +19,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationContent } from "./[listingId]/useNavigationContent";
 import { useUser } from "@clerk/nextjs";
 import HostApplicationCards from "./host-application-cards";
+import { calculateRent } from "@/lib/calculate-rent";
 
 // Base filter options
 const baseFilterOptions = [
@@ -249,10 +250,24 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
     ? `${trip.numAdults || 0} adults, ${trip.numChildren || 0} kids, ${trip.numPets || 0} pets`
     : 'Not specified';
     
-  // Calculate price based on trip budget
-  const price = trip && trip.minPrice && trip.maxPrice
-    ? `$${trip.minPrice.toLocaleString()} - $${trip.maxPrice.toLocaleString()} / Month`
-    : "$2,800 / Month"; // Default fallback
+  // Calculate actual monthly rent using the calculateRent function
+  let price = "$77,777 / Month"; // Default fallback
+  
+  if (request.listing && request.startDate && request.endDate) {
+    const tripData = {
+      startDate: new Date(request.startDate),
+      endDate: new Date(request.endDate)
+    };
+    
+    const monthlyRent = calculateRent({
+      listing: request.listing as any, // listing includes monthlyPricing
+      trip: tripData as any
+    });
+    
+    if (monthlyRent && monthlyRent !== 77777) {
+      price = `$${monthlyRent.toLocaleString()} / Month`;
+    }
+  }
   
   return {
     id: request.id,

@@ -20,6 +20,7 @@ import { useNavigationContent } from '../useNavigationContent';
 import { useUser } from "@clerk/nextjs";
 import { getListingDisplayName } from "@/utils/listing-helpers";
 import { HostApplicationCard } from "../../components/host-application-card";
+import { calculateRent } from "@/lib/calculate-rent";
 
 // Sample housing requests for when no real data exists
 const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => [
@@ -214,7 +215,7 @@ const getStatusColor = (status: string) => {
 };
 
 // Helper function to format housing request data for display
-const formatHousingRequestForDisplay = (request: RequestWithUser) => {
+const formatHousingRequestForDisplay = (request: RequestWithUser, listing?: ListingAndImages) => {
   const user = request.user;
   const trip = request.trip;
   
@@ -230,8 +231,24 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
     ? `${trip.numAdults || 0} adults, ${trip.numChildren || 0} kids, ${trip.numPets || 0} pets`
     : 'Not specified';
     
-  // You'll need to calculate this based on your pricing logic
-  const price = "$2,800 / Month"; // TODO: Calculate actual price
+  // Calculate actual monthly rent using the calculateRent function
+  let price = "$77,777 / Month"; // Default fallback
+  
+  if (listing && request.startDate && request.endDate) {
+    const tripData = {
+      startDate: new Date(request.startDate),
+      endDate: new Date(request.endDate)
+    };
+    
+    const monthlyRent = calculateRent({
+      listing: listing as any, // listing includes monthlyPricing
+      trip: tripData as any
+    });
+    
+    if (monthlyRent && monthlyRent !== 77777) {
+      price = `$${monthlyRent.toLocaleString()} / Month`;
+    }
+  }
   
   return {
     id: request.id,
@@ -341,7 +358,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   
   // Convert housing requests to the format the UI expects and sort them
   const applications = useMemo(() => {
-    const formattedApplications = requestsToUse.map(formatHousingRequestForDisplay);
+    const formattedApplications = requestsToUse.map(request => formatHousingRequestForDisplay(request, listing));
     
     // Sort by status priority (pending -> approved -> denied) and then by oldest createdAt
     return formattedApplications.sort((a, b) => {
