@@ -576,14 +576,6 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                   </div>
                   <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
                     <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
-                      Rent Due at Booking
-                    </div>
-                    <div className={`relative self-stretch ${STYLES.valueText}`}>
-                      {formatCurrency(getMonthlyRent())}
-                    </div>
-                  </div>
-                  <div className="min-w-0 flex-1 sm:w-auto sm:min-w-[200px] gap-1.5 flex flex-col items-start relative">
-                    <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                       Deposit
                     </div>
                     <div className={`relative self-stretch ${STYLES.valueText}`}>
