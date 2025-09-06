@@ -13,6 +13,7 @@ import { PaymentMethodSelector } from '@/components/stripe/payment-method-select
 import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
 import dynamic from 'next/dynamic';
+import { calculatePayments, PaymentDetails } from '@/lib/calculate-payments';
 
 // Dynamic imports for PDF components to prevent SSR issues
 const PDFEditor = dynamic(() => import('@/components/pdf-editor/PDFEditor').then(mod => ({ default: mod.PDFEditor })), { ssr: false });
@@ -418,10 +419,17 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     return (originalAmount + 0.30) / (1 - 0.029);
   };
 
-  // Calculate pro-rated rent for partial first month
+  // Calculate all payment details
+  const paymentDetails = calculatePayments({
+    listing: match.listing,
+    trip: match.trip,
+    monthlyRentOverride: match.monthlyRent
+  });
+
+  // Calculate pro-rated rent for partial first month (includes pet rent)
   const calculateProRatedRent = () => {
     const startDate = new Date(match.trip.startDate);
-    const monthlyRent = match.monthlyRent || 0;
+    const monthlyRent = paymentDetails.totalMonthlyRent; // This includes pet rent
     
     // Get the number of days in the first month
     const firstMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
@@ -433,14 +441,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     // Pro-rate based on days
     const proRatedAmount = (monthlyRent * daysFromStart) / daysInMonth;
     
-    
     return Math.round(proRatedAmount * 100) / 100;
   };
 
-  // Get security deposit amount (typically 1x monthly rent)
+  // Get total deposit amount (security + pet)
   const getSecurityDeposit = () => {
-    const deposit = match.monthlyRent || 0;
-    return deposit;
+    return paymentDetails.totalDeposit;
   };
 
   // Calculate payment amount (pro-rated rent + security deposit + fees)
@@ -707,7 +713,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Property Summary Sidebar */}
             <div className="lg:col-span-1">
-              <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} />
+              <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} paymentDetails={paymentDetails} />
             </div>
 
             {/* Payment Method Setup */}
@@ -745,7 +751,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
             {currentStepState !== 'sign-lease' && (
               <div className="lg:col-span-1">
                 {currentStepState === 'overview-lease' ? (
-                  <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown()} />
+                  <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown()} paymentDetails={paymentDetails} />
                 ) : (
                   <Card className='test'>
                     <CardHeader>
@@ -762,7 +768,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                       
                       <div className="flex items-center gap-2">
                         <DollarSign className="w-4 h-4 text-green-600" />
-                        <span className="font-semibold">${match.monthlyRent}/month</span>
+                        <span className="font-semibold">${paymentDetails.totalMonthlyRent}/month</span>
                       </div>
 
                       <div className="flex items-center gap-2">
@@ -1040,7 +1046,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                         {(() => {
                           const startDate = new Date(match.trip.startDate);
                           const endDate = new Date(match.trip.endDate);
-                          const monthlyRent = match.monthlyRent;
+                          const monthlyRent = paymentDetails.totalMonthlyRent;
                           
                           if (!monthlyRent || !startDate || !endDate || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
                             return (

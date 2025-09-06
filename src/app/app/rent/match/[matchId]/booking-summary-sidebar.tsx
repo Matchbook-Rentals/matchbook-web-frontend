@@ -4,6 +4,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { Home, Calendar, MapPinIcon, ChevronDownIcon } from 'lucide-react';
 import { MatchWithRelations } from '@/types';
+import { calculateRent } from '@/lib/calculate-rent';
+import { PaymentDetails } from '@/lib/calculate-payments';
 
 interface BookingSummarySidebarProps {
   match: MatchWithRelations;
@@ -14,15 +16,30 @@ interface BookingSummarySidebarProps {
     processingFee: number;
     total: number;
   };
+  paymentDetails?: PaymentDetails;
 }
 
-export function BookingSummarySidebar({ match, paymentBreakdown }: BookingSummarySidebarProps) {
+export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails }: BookingSummarySidebarProps) {
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric'
     });
+  };
+
+  // Calculate the actual monthly rent based on length of stay
+  const getMonthlyRent = () => {
+    const calculatedRent = calculateRent({ 
+      listing: match.listing, 
+      trip: match.trip 
+    });
+    
+    // Use calculated rent if valid, otherwise fall back to match.monthlyRent or 0
+    if (calculatedRent && calculatedRent !== 77777) {
+      return calculatedRent;
+    }
+    return match.monthlyRent || 0;
   };
 
   // Get bedroom count from bedrooms relation array length
@@ -36,16 +53,58 @@ export function BookingSummarySidebar({ match, paymentBreakdown }: BookingSummar
     { icon: Calendar, label: `${Math.ceil((new Date(match.trip.endDate).getTime() - new Date(match.trip.startDate).getTime()) / (1000 * 60 * 60 * 24))} days` }
   ];
 
-  const rentBreakdownItems = [
-    { label: 'Base rent', amount: `$${match.monthlyRent?.toFixed(2) || '0.00'}` },
-    { label: 'Utilities', amount: 'Included' },
-    { label: 'Parking', amount: 'Included' }
-  ];
+  // Build rent breakdown items - show all items including pet rent
+  const rentBreakdownItems = [];
+  
+  // Use paymentDetails if available, otherwise fall back to getMonthlyRent
+  if (paymentDetails) {
+    rentBreakdownItems.push(
+      { label: 'Base rent', amount: `$${paymentDetails.monthlyRent.toFixed(2)}` },
+      { 
+        label: match.trip.numPets > 0 
+          ? `Pet rent (${match.trip.numPets} pet${match.trip.numPets > 1 ? 's' : ''})` 
+          : 'Pet rent',
+        amount: `$${paymentDetails.monthlyPetRent.toFixed(2)}` 
+      }
+    );
+  } else {
+    rentBreakdownItems.push(
+      { label: 'Base rent', amount: `$${getMonthlyRent().toFixed(2)}` },
+      { label: 'Pet rent', amount: '$0.00' }
+    );
+  }
+  
+  // Add utilities and parking status
+  const utilitiesStatus = paymentDetails 
+    ? (paymentDetails.utilitiesIncluded ? 'Included' : 'Not included')
+    : (match.listing.utilitiesIncluded ? 'Included' : 'Not included');
+    
+  rentBreakdownItems.push(
+    { label: 'Utilities', amount: utilitiesStatus },
+    { label: 'Parking', amount: match.listing.parking ? 'Included' : 'Not included' }
+  );
 
-  const depositBreakdownItems = [
-    { label: 'Security deposit', amount: `$${paymentBreakdown.securityDeposit.toFixed(2)}` },
-    { label: 'Refundable', amount: 'Yes' }
-  ];
+  // Build deposit breakdown items - show all items including pet deposit
+  const depositBreakdownItems = [];
+  
+  if (paymentDetails) {
+    depositBreakdownItems.push(
+      { label: 'Security deposit', amount: `$${paymentDetails.securityDeposit.toFixed(2)}` },
+      { 
+        label: match.trip.numPets > 0 
+          ? `Pet deposit (${match.trip.numPets} pet${match.trip.numPets > 1 ? 's' : ''})` 
+          : 'Pet deposit',
+        amount: `$${paymentDetails.petDeposit.toFixed(2)}` 
+      }
+    );
+  } else {
+    depositBreakdownItems.push(
+      { label: 'Security deposit', amount: `$${paymentBreakdown.securityDeposit.toFixed(2)}` },
+      { label: 'Pet deposit', amount: '$0.00' }
+    );
+  }
+  
+  depositBreakdownItems.push({ label: 'Refundable', amount: 'Yes' });
 
   return (
     <div className="flex w-[410px] items-center gap-2.5 p-8 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
@@ -117,7 +176,7 @@ export function BookingSummarySidebar({ match, paymentBreakdown }: BookingSummar
               </div>
               <div className="flex items-center gap-2">
                 <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
-                  ${match.monthlyRent?.toFixed(2) || '0.00'}
+                  ${paymentDetails ? paymentDetails.totalMonthlyRent.toFixed(2) : getMonthlyRent().toFixed(2)}
                 </div>
                 <ChevronDownIcon className="w-5 h-5" />
               </div>
@@ -146,7 +205,7 @@ export function BookingSummarySidebar({ match, paymentBreakdown }: BookingSummar
               </div>
               <div className="flex items-center gap-2">
                 <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
-                  ${paymentBreakdown.securityDeposit.toFixed(2)}
+                  ${paymentDetails ? paymentDetails.totalDeposit.toFixed(2) : paymentBreakdown.securityDeposit.toFixed(2)}
                 </div>
                 <ChevronDownIcon className="w-5 h-5" />
               </div>
