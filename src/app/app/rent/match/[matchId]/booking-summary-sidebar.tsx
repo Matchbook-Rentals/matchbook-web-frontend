@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { Home, Calendar, MapPinIcon, ChevronDownIcon } from 'lucide-react';
@@ -20,6 +21,9 @@ interface BookingSummarySidebarProps {
 }
 
 export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails }: BookingSummarySidebarProps) {
+  const [isRentOpen, setIsRentOpen] = useState(false);
+  const [isDepositOpen, setIsDepositOpen] = useState(false);
+  
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString('en-US', {
       month: 'short',
@@ -53,11 +57,22 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
     { icon: Calendar, label: `${Math.ceil((new Date(match.trip.endDate).getTime() - new Date(match.trip.startDate).getTime()) / (1000 * 60 * 60 * 24))} days` }
   ];
 
+  // Calculate trip duration in months
+  const tripStartDate = new Date(match.trip.startDate);
+  const tripEndDate = new Date(match.trip.endDate);
+  const monthsDiff = (tripEndDate.getFullYear() - tripStartDate.getFullYear()) * 12 + 
+                     (tripEndDate.getMonth() - tripStartDate.getMonth());
+  
+  // Use 1.5% for trips longer than 6 months, otherwise 3%
+  const serviceFeeRate = monthsDiff > 6 ? 0.015 : 0.03;
+
   // Build rent breakdown items - show all items including pet rent
   const rentBreakdownItems = [];
   
   // Use paymentDetails if available, otherwise fall back to getMonthlyRent
+  let rentSubtotal = 0;
   if (paymentDetails) {
+    rentSubtotal = paymentDetails.monthlyRent + paymentDetails.monthlyPetRent;
     rentBreakdownItems.push(
       { label: 'Base rent', amount: `$${paymentDetails.monthlyRent.toFixed(2)}` },
       { 
@@ -68,26 +83,34 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
       }
     );
   } else {
+    rentSubtotal = getMonthlyRent();
     rentBreakdownItems.push(
       { label: 'Base rent', amount: `$${getMonthlyRent().toFixed(2)}` },
       { label: 'Pet rent', amount: '$0.00' }
     );
   }
   
-  // Add utilities and parking status
+  // Add service fee (1.5% for >6 months, 3% otherwise)
+  const rentServiceFee = rentSubtotal * serviceFeeRate;
+  rentBreakdownItems.push(
+    { label: 'Service fee', amount: `$${rentServiceFee.toFixed(2)}` }
+  );
+  
+  // Add utilities status
   const utilitiesStatus = paymentDetails 
     ? (paymentDetails.utilitiesIncluded ? 'Included' : 'Not included')
     : (match.listing.utilitiesIncluded ? 'Included' : 'Not included');
     
   rentBreakdownItems.push(
-    { label: 'Utilities', amount: utilitiesStatus },
-    { label: 'Parking', amount: match.listing.parking ? 'Included' : 'Not included' }
+    { label: 'Utilities', amount: utilitiesStatus }
   );
 
   // Build deposit breakdown items - show all items including pet deposit
   const depositBreakdownItems = [];
   
+  let depositSubtotal = 0;
   if (paymentDetails) {
+    depositSubtotal = paymentDetails.securityDeposit + paymentDetails.petDeposit;
     depositBreakdownItems.push(
       { label: 'Security deposit', amount: `$${paymentDetails.securityDeposit.toFixed(2)}` },
       { 
@@ -98,13 +121,18 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
       }
     );
   } else {
+    depositSubtotal = paymentBreakdown.securityDeposit;
     depositBreakdownItems.push(
       { label: 'Security deposit', amount: `$${paymentBreakdown.securityDeposit.toFixed(2)}` },
       { label: 'Pet deposit', amount: '$0.00' }
     );
   }
   
-  depositBreakdownItems.push({ label: 'Refundable', amount: 'Yes' });
+  // Add service fee (1.5% for >6 months, 3% otherwise)
+  const depositServiceFee = depositSubtotal * serviceFeeRate;
+  depositBreakdownItems.push(
+    { label: 'Service fee', amount: `$${depositServiceFee.toFixed(2)}` }
+  );
 
   return (
     <div className="flex w-[410px] items-center gap-2.5 p-8 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
@@ -169,16 +197,20 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
         </Card>
 
         <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-          <Collapsible className="flex flex-col items-start gap-5 pt-0 pb-6 px-0 relative self-stretch w-full flex-[0_0_auto] border-b [border-bottom-style:solid] border-[#8fbaba]">
+          <Collapsible 
+            className="flex flex-col items-start gap-5 pt-0 pb-6 px-0 relative self-stretch w-full flex-[0_0_auto] border-b [border-bottom-style:solid] border-[#8fbaba]"
+            open={isRentOpen}
+            onOpenChange={setIsRentOpen}
+          >
             <CollapsibleTrigger className="relative self-stretch w-full h-[42px] flex items-center justify-between">
               <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#333333] text-lg tracking-[0] leading-[21.6px]">
                 Monthly Rent
               </div>
               <div className="flex items-center gap-2">
                 <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
-                  ${paymentDetails ? paymentDetails.totalMonthlyRent.toFixed(2) : getMonthlyRent().toFixed(2)}
+                  ${(rentSubtotal + rentServiceFee).toFixed(2)}
                 </div>
-                <ChevronDownIcon className="w-5 h-5" />
+                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${isRentOpen ? 'rotate-180' : ''}`} />
               </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="flex flex-col gap-5 w-full">
@@ -198,16 +230,20 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
             </CollapsibleContent>
           </Collapsible>
 
-          <Collapsible className="flex flex-col items-start gap-5 pt-0 pb-6 px-0 relative self-stretch w-full flex-[0_0_auto] border-b [border-bottom-style:solid] border-[#8fbaba]">
+          <Collapsible 
+            className="flex flex-col items-start gap-5 pt-0 pb-6 px-0 relative self-stretch w-full flex-[0_0_auto] border-b [border-bottom-style:solid] border-[#8fbaba]"
+            open={isDepositOpen}
+            onOpenChange={setIsDepositOpen}
+          >
             <CollapsibleTrigger className="relative self-stretch w-full h-[22px] flex items-center justify-between">
               <div className="[font-family:'Poppins',Helvetica] font-bold text-[#333333] text-lg tracking-[0] leading-[21.6px]">
                 Deposit
               </div>
               <div className="flex items-center gap-2">
                 <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
-                  ${paymentDetails ? paymentDetails.totalDeposit.toFixed(2) : paymentBreakdown.securityDeposit.toFixed(2)}
+                  ${(depositSubtotal + depositServiceFee).toFixed(2)}
                 </div>
-                <ChevronDownIcon className="w-5 h-5" />
+                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${isDepositOpen ? 'rotate-180' : ''}`} />
               </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="flex flex-col gap-5 w-full">
