@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogClose } from "@/components/brandDialog";
 import { PdfTemplate } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 interface LeaseSelectionDialogProps {
   open: boolean;
@@ -22,6 +23,7 @@ export const LeaseSelectionDialog: React.FC<LeaseSelectionDialogProps> = ({
   listingId,
   onDocumentsSelected,
 }) => {
+  const router = useRouter();
   const [templates, setTemplates] = useState<PdfTemplate[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -117,24 +119,39 @@ export const LeaseSelectionDialog: React.FC<LeaseSelectionDialogProps> = ({
     t.type?.toLowerCase() === 'addendum'
   );
 
-  // Check if at least one lease is selected
-  const hasSelectedLease = leaseTemplates.some(t => selectedTemplateIds.has(t.id));
-  const canProceed = hasSelectedLease && !loading;
+  // Check if exactly one lease is selected
+  const selectedLeaseCount = leaseTemplates.filter(t => selectedTemplateIds.has(t.id)).length;
+  const hasExactlyOneLease = selectedLeaseCount === 1;
+  const canProceed = hasExactlyOneLease && !loading;
 
   const handleTemplateToggle = (templateId: string) => {
+    const template = templates.find(t => t.id === templateId);
+    const isLease = template?.type?.toLowerCase() === 'lease';
+    
     const newSelected = new Set(selectedTemplateIds);
+    
     if (newSelected.has(templateId)) {
+      // Always allow deselection
       newSelected.delete(templateId);
     } else {
+      // If selecting a lease, deselect all other leases first
+      if (isLease) {
+        leaseTemplates.forEach(t => newSelected.delete(t.id));
+      }
       newSelected.add(templateId);
     }
     setSelectedTemplateIds(newSelected);
   };
 
   const handleProceed = () => {
-    const selectedTemplates = templates.filter(t => selectedTemplateIds.has(t.id));
-    onDocumentsSelected(selectedTemplates);
-    onOpenChange(false);
+    if (completedTemplates.length === 0) {
+      router.push(`/app/host/${listingId}/leases/create`);
+      onOpenChange(false);
+    } else {
+      const selectedTemplates = templates.filter(t => selectedTemplateIds.has(t.id));
+      onDocumentsSelected(selectedTemplates);
+      onOpenChange(false);
+    }
   };
 
   const handleCancel = () => {
@@ -175,12 +192,14 @@ export const LeaseSelectionDialog: React.FC<LeaseSelectionDialogProps> = ({
                 <p className="text-gray-600 mb-2">
                   Choose the lease and addendum documents that will be included in this rental agreement.
                 </p>
-                <div className="flex items-center justify-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <AlertTriangle className="h-4 w-4 text-amber-600" />
-                  <span className="text-sm text-amber-700 font-medium">
-                    At least one lease document must be selected
-                  </span>
-                </div>
+                {!hasExactlyOneLease && leaseTemplates.length > 0 && (
+                  <div className="flex items-center justify-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <AlertTriangle className="h-4 w-4 text-amber-600" />
+                    <span className="text-sm text-amber-700 font-medium">
+                      Exactly one lease document must be selected
+                    </span>
+                  </div>
+                )}
               </div>
 
               {loading ? (
@@ -318,12 +337,14 @@ export const LeaseSelectionDialog: React.FC<LeaseSelectionDialogProps> = ({
           </Button>
           <Button
             onClick={handleProceed}
-            disabled={!canProceed}
+            disabled={loading || (completedTemplates.length > 0 && !hasExactlyOneLease)}
             className="flex-1 h-12 rounded-lg bg-[#3c8787] hover:bg-[#2d6666] text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            {selectedTemplateIds.size === 0 
-              ? 'Select Documents' 
-              : `Continue with ${selectedTemplateIds.size} Document${selectedTemplateIds.size !== 1 ? 's' : ''}`
+            {completedTemplates.length === 0
+              ? 'Create Lease'
+              : selectedTemplateIds.size === 0 
+                ? 'Select Documents' 
+                : `Continue with ${selectedTemplateIds.size} Document${selectedTemplateIds.size !== 1 ? 's' : ''}`
             }
           </Button>
         </div>
