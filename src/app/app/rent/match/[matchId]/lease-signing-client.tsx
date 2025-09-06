@@ -51,6 +51,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(true);
   const [previewPaymentMethod, setPreviewPaymentMethod] = useState<'card' | 'ach'>(testPaymentMethodPreview || 'card');
+  const [isInitializing, setIsInitializing] = useState(true);
   
   // Track server-provided initial step (clear after first render to allow client transitions)
   const [serverInitialStep, setServerInitialStep] = useState(initialStep);
@@ -167,8 +168,13 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
               // Allow components to re-render with initialized Zustand store
               setTimeout(() => {
                 setIsLoading(false);
+                setIsInitializing(false);
               }, 100);
               
+            } else {
+              // No document data, but still mark as initialized
+              setIsLoading(false);
+              setIsInitializing(false);
             }
             
             // Fetch the actual PDF file
@@ -205,7 +211,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           });
         } finally {
           setIsLoading(false);
+          setIsInitializing(false);
         }
+      } else {
+        // No lease document, still mark as initialized
+        setIsInitializing(false);
       }
     };
 
@@ -644,17 +654,18 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
   // Note: Simplified for PDFEditorSigner - it handles workflow internally
 
-  // Show loading during transition
-  if (isTransitioning) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Processing lease signature...</p>
-        </div>
+  // Loading states
+  const renderLoadingSpinner = (message: string) => (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">{message}</p>
       </div>
-    );
-  }
+    </div>
+  );
+
+  if (isInitializing) return renderLoadingSpinner("Loading lease details...");
+  if (isTransitioning) return renderLoadingSpinner("Processing lease signature...");
 
   // Show payment selector if lease is completed or if forced by showPaymentSelector
   if (showPaymentSelector || currentStepState === 'complete-payment') {

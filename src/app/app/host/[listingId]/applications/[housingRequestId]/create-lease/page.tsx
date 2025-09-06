@@ -141,17 +141,19 @@ function CreateLeasePageContent() {
           }
         } else if (field.type === 'NUMBER') {
           // Auto-populate number fields based on label
+          // Remove dollar sign from monthlyPrice for NUMBER fields
+          const cleanMonthlyPrice = matchDetailsForPopulation.monthlyPrice.replace('$', '');
           const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
           if (fieldLabel.includes('rent') || fieldLabel.includes('price') || fieldLabel.includes('amount') || fieldLabel.includes('monthly')) {
-            preFilledValues[field.formId] = matchDetailsForPopulation.monthlyPrice;
+            preFilledValues[field.formId] = cleanMonthlyPrice;
           } else if (fieldLabel.includes('deposit') || fieldLabel.includes('security')) {
-            preFilledValues[field.formId] = matchDetailsForPopulation.monthlyPrice; // Assuming deposit = 1 month rent
+            preFilledValues[field.formId] = cleanMonthlyPrice; // Assuming deposit = 1 month rent
           } else {
             // For unlabeled NUMBER fields, check if it's the first number field - likely rent
             const numberFields = mergedPDF.fields.filter(f => f.type === 'NUMBER');
             const numberFieldIndex = numberFields.findIndex(f => f.formId === field.formId);
             if (numberFieldIndex === 0) {
-              preFilledValues[field.formId] = matchDetailsForPopulation.monthlyPrice;
+              preFilledValues[field.formId] = cleanMonthlyPrice;
             }
           }
         } else if (field.type === 'TEXT') {

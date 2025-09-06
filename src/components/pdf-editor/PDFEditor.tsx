@@ -21,6 +21,7 @@ import { TripConfiguration } from './TripConfiguration';
 import { CustomFieldDialog } from './CustomFieldDialog';
 import { TextFieldConfigModal } from './TextFieldConfigModal';
 import { FieldValidationModal } from './FieldValidationModal';
+import { FieldValueEditModal } from './FieldValueEditModal';
 import { FrequentlyUsedFields } from './FrequentlyUsedFields';
 import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
@@ -235,6 +236,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Text field configuration modal state
   const [textFieldConfigModal, setTextFieldConfigModal] = useState<{
+    isOpen: boolean;
+    field: FieldFormType | null;
+  }>({ isOpen: false, field: null });
+
+  // Field value edit modal state (for document mode)
+  const [fieldValueEditModal, setFieldValueEditModal] = useState<{
     isOpen: boolean;
     field: FieldFormType | null;
   }>({ isOpen: false, field: null });
@@ -1720,7 +1727,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <div className="text-gray-600">Monthly Rent</div>
-                        <div className="font-medium">${tripMatchDetails.monthlyPrice}</div>
+                        <div className="font-medium">{tripMatchDetails.monthlyPrice}</div>
                       </div>
                       <div>
                         <div className="text-gray-600">Lease Term</div>
@@ -3269,17 +3276,25 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     console.log('❌ Custom field creation cancelled');
   };
 
-  // Handle clicking on a field to configure it
+  // Handle clicking on a field to configure it or edit its value
   const handleFieldClick = (field: FieldFormType) => {
-    // Only allow configuration in template mode
-    if (workflowState !== 'template') return;
-    
-    // Only open modal for configurable field types
-    const configurableTypes = [FieldType.TEXT, FieldType.NUMBER, FieldType.EMAIL, FieldType.NAME, FieldType.DATE];
-    if (!configurableTypes.includes(field.type as FieldType)) return;
-    
-    setTextFieldConfigModal({ isOpen: true, field });
-    setActiveFieldId(field.formId);
+    // In template mode, configure field settings
+    if (workflowState === 'template') {
+      // Only open modal for configurable field types
+      const configurableTypes = [FieldType.TEXT, FieldType.NUMBER, FieldType.EMAIL, FieldType.NAME, FieldType.DATE];
+      if (!configurableTypes.includes(field.type as FieldType)) return;
+      
+      setTextFieldConfigModal({ isOpen: true, field });
+      setActiveFieldId(field.formId);
+    }
+    // In document mode, edit field values
+    else if (workflowState === 'document') {
+      // Don't allow editing signature/initials fields - those are handled during signing
+      if (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) return;
+      
+      setFieldValueEditModal({ isOpen: true, field });
+      setActiveFieldId(field.formId);
+    }
   };
 
   // Handle saving text field configuration
@@ -3291,6 +3306,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     ));
     setTextFieldConfigModal({ isOpen: false, field: null });
     console.log('✅ Field configuration saved:', fieldId, fieldMeta);
+  };
+
+  // Handle saving field value in document mode
+  const handleFieldValueSave = (fieldId: string, value: any) => {
+    setSignedField(fieldId, value);
+    setFieldValueEditModal({ isOpen: false, field: null });
   };
 
   // Handle closing text field configuration modal
@@ -3792,6 +3813,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         onProceed={handleFieldValidationProceed}
         missingHostSignature={!validateSignatureFields().hasHostSignature}
         missingRenterSignature={!validateSignatureFields().hasRenterSignature}
+      />
+
+      {/* Field Value Edit Modal (for document mode) */}
+      <FieldValueEditModal
+        isOpen={fieldValueEditModal.isOpen}
+        onClose={() => setFieldValueEditModal({ isOpen: false, field: null })}
+        field={fieldValueEditModal.field}
+        onSave={handleFieldValueSave}
       />
 
     </div>

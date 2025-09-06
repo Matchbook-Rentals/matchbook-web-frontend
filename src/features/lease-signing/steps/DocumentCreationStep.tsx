@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { PDFEditor } from "@/components/pdf-editor/PDFEditor";
+import { PDFViewer } from "@/components/pdf-editor/PDFViewer";
+import { DocumentFieldsOverlay } from "../components/DocumentFieldsOverlay";
 import type { Template, DocumentCreateInput, DocumentField } from "../types";
 
 interface DocumentCreationStepProps {
@@ -38,6 +39,7 @@ interface DocumentCreationStepProps {
   onBack?: () => void;
 }
 
+
 export function DocumentCreationStep({ 
   template, 
   propertyData, 
@@ -53,6 +55,7 @@ export function DocumentCreationStep({
   const [monthlyRent, setMonthlyRent] = useState(propertyData?.monthlyRent?.toString() || "");
   const [securityDeposit, setSecurityDeposit] = useState(propertyData?.securityDeposit?.toString() || "");
   const [fieldValues, setFieldValues] = useState<Record<string, any>>({});
+  const [pdfLoaded, setPdfLoaded] = useState(false);
   const [recipients, setRecipients] = useState([
     {
       role: 'HOST' as const,
@@ -335,49 +338,47 @@ export function DocumentCreationStep({
           <Card>
             <CardHeader>
               <CardTitle>Document Fields</CardTitle>
-              <CardDescription>Review and edit field values</CardDescription>
+              <CardDescription>Click on fields in the document to edit their values</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {template.fields.map((field) => (
-                  <div key={field.id} className="flex items-center gap-4 p-3 border rounded-lg">
-                    <div className="flex-1 space-y-2">
-                      <Label>{field.label || 'Field'}</Label>
-                      {field.type === 'checkbox' ? (
-                        <input
-                          type="checkbox"
-                          checked={fieldValues[field.id] || false}
-                          onChange={(e) => setFieldValues({
-                            ...fieldValues,
-                            [field.id]: e.target.checked
-                          })}
-                          className="w-4 h-4"
-                        />
-                      ) : field.type === 'date' ? (
-                        <Input
-                          type="date"
-                          value={fieldValues[field.id] || ''}
-                          onChange={(e) => setFieldValues({
-                            ...fieldValues,
-                            [field.id]: e.target.value
-                          })}
-                        />
-                      ) : (
-                        <Input
-                          value={fieldValues[field.id] || ''}
-                          onChange={(e) => setFieldValues({
-                            ...fieldValues,
-                            [field.id]: e.target.value
-                          })}
-                          placeholder={field.placeholder || `Enter ${(field.label || 'value').toLowerCase()}`}
-                        />
-                      )}
-                    </div>
-                    <Badge variant={field.required ? "default" : "secondary"}>
-                      {field.required ? 'Required' : 'Optional'}
+            <CardContent className="p-0">
+              {template.pdfUrl ? (
+                <div className="relative overflow-auto max-h-[700px] bg-gray-50">
+                  <PDFViewer 
+                    file={template.pdfUrl}
+                    pageWidth={800}
+                  />
+                  <DocumentFieldsOverlay
+                    fields={template.fields}
+                    fieldValues={fieldValues}
+                    onFieldValueChange={(fieldId, value) => {
+                      setFieldValues({
+                        ...fieldValues,
+                        [fieldId]: value
+                      });
+                    }}
+                    recipients={recipients}
+                  />
+                </div>
+              ) : (
+                <div className="p-8 text-center text-gray-500">
+                  <p>No PDF document available for this template</p>
+                </div>
+              )}
+              
+              {/* Field summary section */}
+              <div className="p-4 border-t bg-white">
+                <h4 className="text-sm font-medium mb-2">Field Summary</h4>
+                <div className="flex flex-wrap gap-2">
+                  {template.fields.map((field) => (
+                    <Badge 
+                      key={field.id}
+                      variant={fieldValues[field.id] ? "default" : "outline"}
+                      className="text-xs"
+                    >
+                      {field.label}: {fieldValues[field.id] ? '✓' : '○'}
                     </Badge>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -387,12 +388,32 @@ export function DocumentCreationStep({
           <Card>
             <CardHeader>
               <CardTitle>Document Preview</CardTitle>
-              <CardDescription>Review the document before sending</CardDescription>
+              <CardDescription>Review the document with all filled fields before sending</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="h-[600px] bg-gray-50 flex items-center justify-center">
-                <p className="text-gray-500">Document preview will be displayed here</p>
-              </div>
+              {template.pdfUrl ? (
+                <div className="relative overflow-auto max-h-[700px] bg-gray-50">
+                  <PDFViewer 
+                    file={template.pdfUrl}
+                    pageWidth={800}
+                  />
+                  <DocumentFieldsOverlay
+                    fields={template.fields}
+                    fieldValues={fieldValues}
+                    onFieldValueChange={(fieldId, value) => {
+                      setFieldValues({
+                        ...fieldValues,
+                        [fieldId]: value
+                      });
+                    }}
+                    recipients={recipients}
+                  />
+                </div>
+              ) : (
+                <div className="h-[600px] bg-gray-50 flex items-center justify-center">
+                  <p className="text-gray-500">No PDF document available for preview</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

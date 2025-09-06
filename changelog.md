@@ -1,5 +1,12 @@
 # Changelog
 
+## Add loading spinner to prevent payment screen flash in lease signing
+- Added isInitializing state to show loading spinner while determining initial step
+- Prevents payment selector from flashing before proper step determination
+- Ensures smooth user experience by loading lease details before displaying content
+- Applied declarative functional decomposition with renderLoadingSpinner helper
+- Fixed dollar sign in NUMBER fields for lease creation
+
 ## Fix date picker z-index in EditSearchModal
 - Fixed date selector popovers appearing behind modal dialog
 - Added z-[1001] to PopoverContent components to ensure proper layering
