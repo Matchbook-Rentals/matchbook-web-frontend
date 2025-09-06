@@ -1432,7 +1432,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
       // Show success and return to selection
       const signerName = recipients[signerIndex]?.name || `Signer ${signerIndex + 1}`;
-      brandAlert(`${signerName} has completed signing!\n\n${signerIndex === 0 ? 'Document is now ready for Signer 2.' : 'Document is fully signed and complete.'}`, 'success', 'Signing Complete');
+      brandAlert(`${signerName} has completed signing!\n\n${signerIndex === 0 ? 'Document is now ready for the Renter.' : 'Document is fully signed and complete.'}`, 'success', 'Signing Complete');
       
       // Return to selection screen for async workflow
       setWorkflowState('selection');
@@ -2520,39 +2520,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 console.error('Failed to update document status:', error);
               }
               
-              // If this is being called from the host signing flow, approve the housing request
-              if (housingRequestId && signerRole === 'host') {
-                console.log('🏠 Document creation complete - approving housing request from document case');
-                try {
-                  const result = await handleSignerCompletion(documentId, 0, recipients, housingRequestId);
-                  if (!result.success) {
-                    console.error('❌ Housing request approval failed:', result.error);
-                    brandAlert(`Failed to approve housing request: ${result.error}`, 'error', 'Approval Error');
-                  } else {
-                    console.log('✅ Housing request approved successfully from document case');
-                    
-                    // Show success message
-                    brandAlert('🎉 Success! The lease has been signed and the housing request has been approved. The applicant will be notified and can now view the match in their search results.', 'success', 'Lease Signed & Request Approved');
-                    
-                    // Navigate to success page or back to application details
-                    setTimeout(() => {
-                      const hostRedirectUrl = sessionStorage.getItem('hostSigningRedirectUrl');
-                      if (hostRedirectUrl) {
-                        console.log('🔄 Redirecting to:', hostRedirectUrl);
-                        sessionStorage.removeItem('hostSigningRedirectUrl'); // Clean up
-                        window.location.href = hostRedirectUrl;
-                      } else if (onFinish) {
-                        onFinish('Housing Request Approved');
-                      }
-                    }, 2000); // Give user time to read the success message
-                  }
-                } catch (error) {
-                  console.error('❌ Error approving housing request from document case:', error);
-                  brandAlert('Error approving housing request. Please try again.', 'error', 'Approval Error');
-                }
-              }
-              
-              // Transition to signing workflow
+              // Transition to signing workflow for the host
+              // The approval will happen AFTER the host completes signing in signer1 state
+              console.log('📝 Document created, transitioning to signer1 for host signature');
               setWorkflowState('signer1');
             }
           } catch (error) {
@@ -2700,7 +2670,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   onCompleteStepReadyRef.current = onCompleteStepReady;
   
   useEffect(() => {
-    if (onCompleteStepReadyRef.current && workflowState === 'document') {
+    if (onCompleteStepReadyRef.current && (workflowState === 'document' || workflowState === 'signer1')) {
       onCompleteStepReadyRef.current(completeCurrentStep);
     }
   }, [workflowState]);

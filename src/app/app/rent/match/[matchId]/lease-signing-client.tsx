@@ -1174,7 +1174,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 <div className="flex items-center gap-3">
                   {currentStepState === 'overview-lease' && (
                     <Button 
-                      onClick={() => setShowSigningMode(true)}
+                      onClick={() => {
+                        setShowSigningMode(true);
+                        setServerInitialStep(undefined); // Clear server step to allow client transition
+                      }}
                       size="sm"
                       className="bg-[#0a6060] hover:bg-[#0a6060]/90"
                     >
