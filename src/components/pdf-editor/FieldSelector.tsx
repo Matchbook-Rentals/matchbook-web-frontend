@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -12,15 +12,14 @@ import {
   User, 
   CalendarDays, 
   Clock,
-  Hash,
   Disc,
   CheckSquare,
   ChevronDown,
   ChevronUp,
-  Plus,
-  Minus,
   DollarSign
 } from 'lucide-react';
+
+import { Recipient } from './RecipientManager';
 
 interface FieldSelectorProps {
   selectedField: FieldType | null;
@@ -29,12 +28,44 @@ interface FieldSelectorProps {
   disabled?: boolean;
   accordionState?: boolean;
   onToggleAccordion?: () => void;
+  selectedRecipient?: string | null;
+  recipients?: Recipient[];
 }
 
+// Helper function to get dynamic field label based on selected recipient
+const getFieldLabel = (fieldType: FieldType, recipients?: Recipient[], selectedRecipientId?: string | null): string => {
+  if (!recipients || !selectedRecipientId) {
+    // Default labels when no recipient is selected
+    const defaultLabels: Record<string, string> = {
+      [FieldType.SIGNATURE]: 'Signature',
+      [FieldType.INITIALS]: 'Initials',
+      [FieldType.NAME]: 'Name',
+    };
+    return defaultLabels[fieldType] || 'Field';
+  }
+
+  const selectedRecipient = recipients.find(r => r.id === selectedRecipientId);
+  const recipientIndex = recipients.findIndex(r => r.id === selectedRecipientId);
+  
+  // Determine if this is Host (index 0) or Renter (index 1)
+  const recipientLabel = recipientIndex === 0 ? 'Host' : recipientIndex === 1 ? 'Renter' : selectedRecipient?.name || 'Signer';
+  
+  switch (fieldType) {
+    case FieldType.SIGNATURE:
+      return `${recipientLabel} Signature`;
+    case FieldType.INITIALS:
+      return `${recipientLabel} Initials`;
+    case FieldType.NAME:
+      return `${recipientLabel} Name`;
+    default:
+      return 'Field';
+  }
+};
+
 const PRIMARY_FIELD_TYPES = [
-  { type: FieldType.SIGNATURE, label: 'Signature', icon: PenTool },
-  { type: FieldType.INITIALS, label: 'Initials', icon: User },
-  { type: FieldType.NAME, label: 'Name', icon: User },
+  { type: FieldType.SIGNATURE, icon: PenTool },
+  { type: FieldType.INITIALS, icon: User },
+  { type: FieldType.NAME, icon: User },
 ];
 
 const LEASE_SPECIFIC_FIELDS = [
@@ -46,7 +77,6 @@ const LEASE_SPECIFIC_FIELDS = [
 const OTHER_FIELD_TYPES = [
   { type: FieldType.EMAIL, label: 'Email', icon: Mail },
   { type: FieldType.TEXT, label: 'Text', icon: Type },
-  { type: FieldType.NUMBER, label: 'Number', icon: Hash },
   // { type: FieldType.RADIO, label: 'Radio', icon: Disc },
   // { type: FieldType.CHECKBOX, label: 'Checkbox', icon: CheckSquare },
   // { type: FieldType.DROPDOWN, label: 'Dropdown', icon: ChevronDown },
@@ -58,9 +88,10 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
   onStartDrag,
   disabled = false,
   accordionState = true,
-  onToggleAccordion
+  onToggleAccordion,
+  selectedRecipient,
+  recipients
 }) => {
-  const [showMore, setShowMore] = useState(false);
   return (
     <Card className="mb-6">
       <CardContent className="p-3">
@@ -81,10 +112,103 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
               {selectedField ? 'Click on the PDF to place the field' : onStartDrag ? 'Click for click-to-place or drag to drop on PDF' : 'Select a field type to add'}
             </p>
             
-            {/* All fields - Primary + Expanded */}
+            {/* All field types displayed at once */}
             <div className="grid grid-cols-2 gap-2 mb-3">
               {/* Primary field types */}
               {PRIMARY_FIELD_TYPES.map((field) => {
+                const IconComponent = field.icon;
+                const isSelected = selectedField === field.type;
+                const label = getFieldLabel(field.type, recipients, selectedRecipient);
+                
+                return (
+                  <button
+                    key={field.type}
+                    onPointerDown={(e) => {
+                      if (onStartDrag) {
+                        onStartDrag(field.type, e.nativeEvent as MouseEvent, label);
+                      } else {
+                        onSelectedFieldChange(isSelected ? null : field.type);
+                      }
+                    }}
+                    disabled={disabled}
+                    className={cn(
+                      'flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all duration-200',
+                      'hover:bg-gray-50 active:scale-95',
+                      disabled && 'opacity-50 cursor-not-allowed',
+                      // Only show selected state when not using drag system
+                      !onStartDrag && isSelected && 'border-blue-500 bg-blue-50 shadow-sm',
+                      (!isSelected || onStartDrag) && 'border-gray-200'
+                    )}
+                  >
+                    <IconComponent className="h-5 w-5" />
+                    <span className="text-xs font-medium text-center leading-tight">
+                      {label}
+                    </span>
+                  </button>
+                );
+              })}
+              
+              {/* Lease-specific fields */}
+              {LEASE_SPECIFIC_FIELDS.map((field) => {
+                const IconComponent = field.icon;
+                const isSelected = selectedField === field.type;
+                
+                return (
+                  <button
+                    key={field.fieldLabel}
+                    onPointerDown={(e) => {
+                      if (onStartDrag) {
+                        onStartDrag(field.type, e.nativeEvent as MouseEvent, field.fieldLabel);
+                      } else {
+                        onSelectedFieldChange(isSelected ? null : field.type);
+                      }
+                    }}
+                    disabled={disabled}
+                    className={cn(
+                      'flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all duration-200',
+                      'hover:bg-gray-50 active:scale-95',
+                      disabled && 'opacity-50 cursor-not-allowed',
+                      // Only show selected state when not using drag system
+                      !onStartDrag && isSelected && 'border-blue-500 bg-blue-50 shadow-sm',
+                      (!isSelected || onStartDrag) && 'border-gray-200'
+                    )}
+                  >
+                    <IconComponent className="h-5 w-5" />
+                    <span className="text-xs font-medium text-center leading-tight">
+                      {field.label}
+                    </span>
+                  </button>
+                );
+              })}
+              
+              {/* Regular Date field */}
+              <button
+                onPointerDown={(e) => {
+                  if (onStartDrag) {
+                    onStartDrag(FieldType.DATE, e.nativeEvent as MouseEvent);
+                  } else {
+                    const isSelected = selectedField === FieldType.DATE;
+                    onSelectedFieldChange(isSelected ? null : FieldType.DATE);
+                  }
+                }}
+                disabled={disabled}
+                className={cn(
+                  'flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all duration-200',
+                  'hover:bg-gray-50 active:scale-95',
+                  disabled && 'opacity-50 cursor-not-allowed',
+                  // Only show selected state when not using drag system
+                  !onStartDrag && selectedField === FieldType.DATE && 'border-blue-500 bg-blue-50 shadow-sm',
+                  (selectedField !== FieldType.DATE || onStartDrag) && 'border-gray-200'
+                )}
+              >
+                <CalendarDays className="h-5 w-5" />
+                <span className="text-xs font-medium text-center leading-tight">
+                  Date
+                </span>
+              </button>
+              
+              {/* Generic field types */}
+              {OTHER_FIELD_TYPES.map((field) => {
                 const IconComponent = field.icon;
                 const isSelected = selectedField === field.type;
                 
@@ -115,118 +239,6 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
                   </button>
                 );
               })}
-              
-              {/* Expanded fields (revealed when More is clicked) */}
-              {showMore && (
-                <>
-                  {/* Lease-specific fields */}
-                  {LEASE_SPECIFIC_FIELDS.map((field) => {
-                    const IconComponent = field.icon;
-                    const isSelected = selectedField === field.type;
-                    
-                    return (
-                      <button
-                        key={field.fieldLabel}
-                        onPointerDown={(e) => {
-                          if (onStartDrag) {
-                            onStartDrag(field.type, e.nativeEvent as MouseEvent, field.fieldLabel);
-                          } else {
-                            onSelectedFieldChange(isSelected ? null : field.type);
-                          }
-                        }}
-                        disabled={disabled}
-                        className={cn(
-                          'flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all duration-200',
-                          'hover:bg-gray-50 active:scale-95',
-                          disabled && 'opacity-50 cursor-not-allowed',
-                          // Only show selected state when not using drag system
-                          !onStartDrag && isSelected && 'border-blue-500 bg-blue-50 shadow-sm',
-                          (!isSelected || onStartDrag) && 'border-gray-200'
-                        )}
-                      >
-                        <IconComponent className="h-5 w-5" />
-                        <span className="text-xs font-medium text-center leading-tight">
-                          {field.label}
-                        </span>
-                      </button>
-                    );
-                  })}
-                  
-                  {/* Regular Date field */}
-                  <button
-                    onPointerDown={(e) => {
-                      if (onStartDrag) {
-                        onStartDrag(FieldType.DATE, e.nativeEvent as MouseEvent);
-                      } else {
-                        const isSelected = selectedField === FieldType.DATE;
-                        onSelectedFieldChange(isSelected ? null : FieldType.DATE);
-                      }
-                    }}
-                    disabled={disabled}
-                    className={cn(
-                      'flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all duration-200',
-                      'hover:bg-gray-50 active:scale-95',
-                      disabled && 'opacity-50 cursor-not-allowed',
-                      // Only show selected state when not using drag system
-                      !onStartDrag && selectedField === FieldType.DATE && 'border-blue-500 bg-blue-50 shadow-sm',
-                      (selectedField !== FieldType.DATE || onStartDrag) && 'border-gray-200'
-                    )}
-                  >
-                    <CalendarDays className="h-5 w-5" />
-                    <span className="text-xs font-medium text-center leading-tight">
-                      Date
-                    </span>
-                  </button>
-                  
-                  {/* Generic field types */}
-                  {OTHER_FIELD_TYPES.map((field) => {
-                    const IconComponent = field.icon;
-                    const isSelected = selectedField === field.type;
-                    
-                    return (
-                      <button
-                        key={field.type}
-                        onPointerDown={(e) => {
-                          if (onStartDrag) {
-                            onStartDrag(field.type, e.nativeEvent as MouseEvent);
-                          } else {
-                            onSelectedFieldChange(isSelected ? null : field.type);
-                          }
-                        }}
-                        disabled={disabled}
-                        className={cn(
-                          'flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all duration-200',
-                          'hover:bg-gray-50 active:scale-95',
-                          disabled && 'opacity-50 cursor-not-allowed',
-                          // Only show selected state when not using drag system
-                          !onStartDrag && isSelected && 'border-blue-500 bg-blue-50 shadow-sm',
-                          (!isSelected || onStartDrag) && 'border-gray-200'
-                        )}
-                      >
-                        <IconComponent className="h-5 w-5" />
-                        <span className="text-xs font-medium text-center leading-tight">
-                          {field.label}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </>
-              )}
-              
-              {/* More/Less button - always last */}
-              <button
-                onClick={() => setShowMore(!showMore)}
-                className={cn(
-                  'flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all duration-200',
-                  'hover:bg-gray-50 active:scale-95',
-                  showMore ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200'
-                )}
-              >
-                {showMore ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
-                <span className="text-xs font-medium text-center leading-tight">
-                  {showMore ? 'Less' : 'More'}
-                </span>
-              </button>
             </div>
         
         {selectedField && !onStartDrag && (
@@ -253,6 +265,7 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
               <ul className="text-xs text-gray-600 space-y-1">
                 <li>• Click field button then click PDF to place</li>
                 <li>• Or hold and drag field button to PDF</li>
+                <li>• Click text box to add label or value</li>
                 <li>• Drag existing fields to reposition</li>
                 <li>• Resize fields by dragging the corners</li>
               </ul>

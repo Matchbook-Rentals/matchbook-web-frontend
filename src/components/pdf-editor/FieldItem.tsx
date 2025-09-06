@@ -17,6 +17,7 @@ interface FieldItemProps {
   onRemove?: (fieldId: string) => void;
   onAddSignDate?: (fieldId: string) => void;
   onAddInitialDate?: (fieldId: string) => void;
+  onFieldClick?: (field: FieldFormType) => void; // Add field click handler
   active?: boolean;
   pageElement?: HTMLElement;
   signedValue?: any; // Add support for showing values
@@ -32,6 +33,7 @@ export const FieldItem: React.FC<FieldItemProps> = ({
   onRemove,
   onAddSignDate,
   onAddInitialDate,
+  onFieldClick,
   active = false,
   pageElement,
   signedValue,
@@ -123,7 +125,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
 
   const handleFieldClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // This will activate the field for editing/selection
+    // Call the field click handler if provided
+    onFieldClick?.(field);
   };
 
   if (!pageElement) return null;

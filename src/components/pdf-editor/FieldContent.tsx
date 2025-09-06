@@ -96,7 +96,8 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
   }
 
   // Default text display for other field types
-  let textToDisplay = field.fieldMeta?.label || FRIENDLY_FIELD_TYPE[field.type] || '';
+  // Prioritize showing value over label if available
+  let textToDisplay = field.fieldMeta?.defaultValue || field.fieldMeta?.label || FRIENDLY_FIELD_TYPE[field.type] || '';
   
   // Check if this is a template-enforced field and use its specific label
   const templateEnforcedLabel = getTemplateEnforcedLabel(field);

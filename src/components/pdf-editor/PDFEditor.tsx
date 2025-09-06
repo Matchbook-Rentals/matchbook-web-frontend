@@ -19,7 +19,8 @@ import { DocumentTemplateSelector } from './DocumentTemplateSelector';
 import { DocumentSelector } from './DocumentSelector';
 import { TripConfiguration } from './TripConfiguration';
 import { CustomFieldDialog } from './CustomFieldDialog';
-import { RequiredLeaseFields } from './RequiredLeaseFields';
+import { TextFieldConfigModal } from './TextFieldConfigModal';
+import { FieldValidationModal } from './FieldValidationModal';
 import { FrequentlyUsedFields } from './FrequentlyUsedFields';
 import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
@@ -167,11 +168,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [showDocumentSelector, setShowDocumentSelector] = useState(false);
   const [pendingSignerType, setPendingSignerType] = useState<'signer1' | 'signer2' | null>(null);
   
-  // Field validation state
-  const [fieldsValidated, setFieldsValidated] = useState(false);
-  const [validationStatus, setValidationStatus] = useState<'pending' | 'validating' | 'valid' | 'invalid'>('pending');
-  
-  // Field rendering validation state
+  // Field rendering state
   const [fieldsRendered, setFieldsRendered] = useState(false);
   const [renderingStatus, setRenderingStatus] = useState<'pending' | 'checking' | 'rendered' | 'failed'>('pending');
   
@@ -189,15 +186,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Client-side user initials state (starts with initial value, updates when user saves)
   const [currentUserInitials, setCurrentUserInitials] = useState<string | undefined>(initialUserInitials);
 
-  const [showMissingFieldsDialog, setShowMissingFieldsDialog] = useState(false);
-  const [missingFields, setMissingFields] = useState<string[]>([]);
   
   // Accordion states
   const [accordionStates, setAccordionStates] = useState({
     documentInfo: true,
     recipients: true, 
     fieldTypes: true,
-    requiredFields: true,
     allFieldTypes: true
   });
   
@@ -238,6 +232,15 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     isOpen: boolean;
     field: FieldFormType | null;
   }>({ isOpen: false, field: null });
+
+  // Text field configuration modal state
+  const [textFieldConfigModal, setTextFieldConfigModal] = useState<{
+    isOpen: boolean;
+    field: FieldFormType | null;
+  }>({ isOpen: false, field: null });
+
+  // Field validation modal state
+  const [showFieldValidationModal, setShowFieldValidationModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -697,8 +700,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       // Always assign recipient, even in template mode
       signerEmail: selectedRecipient,
       recipientIndex,
-      // Add specific field label if set from required field buttons
-      fieldMeta: pendingFieldLabel ? { label: pendingFieldLabel } : undefined,
+      // Add specific field label if set from required field buttons or default for text fields
+      fieldMeta: pendingFieldLabel 
+        ? { label: pendingFieldLabel } 
+        : selectedField === FieldType.TEXT 
+          ? { label: 'Text' }
+          : undefined,
     };
     
     console.log('✨ Creating new field:', newField);
@@ -768,15 +775,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         setFields([...fields, fieldWithMetadata]);
         setActiveFieldId(fieldWithMetadata.formId);
         console.log('✅ Required field added directly with metadata:', fieldWithMetadata);
-        // Log validation status after adding field
-        setTimeout(() => logValidationStatus('After Required Field Added'), 0);
       } else {
         // Non-custom fields (signatures, initials, etc.)
         setFields([...fields, newField]);
         setActiveFieldId(newField.formId);
         console.log('✅ Field creation completed, setting states to cleanup');
-        // Log validation status after adding field
-        setTimeout(() => logValidationStatus('After Non-Custom Field Added'), 0);
       }
     }
     
@@ -810,69 +813,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     const updatedField = updatedFields.find(f => f.formId === formId);
   };
 
-  // Check if a field is template-enforced (based on the required fields map)
-  const isTemplateEnforcedField = (field: FieldFormType) => {
-    const requiredFieldMap = {
-      'host-signature': { type: FieldType.SIGNATURE, recipientIndex: 0 },
-      'host-name': { type: FieldType.NAME, recipientIndex: 0 },
-      'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1 },
-      'renter-name': { type: FieldType.NAME, recipientIndex: 1 },
-      'rent-amount': { type: FieldType.NUMBER, label: 'Rent Amount' },
-      'move-in-date': { type: FieldType.DATE, label: 'Move In Date' },
-      'move-out-date': { type: FieldType.DATE, label: 'Move Out Date' }
-    };
-
-    for (const [, config] of Object.entries(requiredFieldMap)) {
-      // Check by type, recipient index, and label (for fields with specific labels)
-      if (config.recipientIndex !== undefined) {
-        if (field.type === config.type && field.recipientIndex === config.recipientIndex) {
-          return true;
-        }
-      } else if (config.label) {
-        if (field.type === config.type && field.fieldMeta?.label === config.label) {
-          return true;
-        }
-      }
-    }
-    
-    return false;
-  };
-
-  // Check if a field can be removed (template-enforced fields can only be removed if there are duplicates)
-  const canRemoveField = (formId: string) => {
-    const fieldToRemove = fields.find(f => f.formId === formId);
-    if (!fieldToRemove) return false;
-    
-    // If field is not template-enforced, it can always be removed
-    if (!isTemplateEnforcedField(fieldToRemove)) return true;
-    
-    // If field is template-enforced, check if there are other template-enforced fields of the same type
-    const sameTypeEnforcedFields = fields.filter(f => 
-      f.formId !== formId && // Don't count the field we're trying to remove
-      isTemplateEnforcedField(f) &&
-      f.type === fieldToRemove.type && 
-      f.recipientIndex === fieldToRemove.recipientIndex &&
-      f.fieldMeta?.label === fieldToRemove.fieldMeta?.label
-    );
-    
-    // Can remove if there are other template-enforced fields of this exact type
-    return sameTypeEnforcedFields.length > 0;
-  };
 
   // Remove field
   const removeField = (formId: string) => {
-    if (!canRemoveField(formId)) {
-      console.warn('Cannot remove template-enforced field - it is the last one of its type');
-      return;
-    }
-    
     const fieldToRemove = fields.find(f => f.formId === formId);
     setFields(fields.filter((field) => field.formId !== formId));
     if (activeFieldId === formId) {
       setActiveFieldId(null);
     }
-    // Log validation status after removing field
-    setTimeout(() => logValidationStatus('After Field Removed'), 0);
   };
 
   // Add sign date field next to signature field
@@ -924,7 +872,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add the field to the array
     setFields([...fields, signDateField]);
     setActiveFieldId(signDateField.formId);
-    setTimeout(() => logValidationStatus('After Sign Date Field Added'), 0);
     
     console.log('✅ Sign date field added:', signDateField);
   };
@@ -978,7 +925,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add the field to the array
     setFields([...fields, initialDateField]);
     setActiveFieldId(initialDateField.formId);
-    setTimeout(() => logValidationStatus('After Initial Date Field Added'), 0);
     
     console.log('✅ Initial date field added:', initialDateField);
   };
@@ -999,7 +945,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Remove all fields for this recipient
     const fieldsToRemove = fields.filter(field => field.recipientIndex === recipientIndex);
     setFields(fields.filter(field => field.recipientIndex !== recipientIndex));
-    setTimeout(() => logValidationStatus('After Recipient Removed'), 0);
     if (selectedRecipient === id) {
       setSelectedRecipient(recipients.length > 1 ? recipients.find(r => r.id !== id)?.id || null : null);
     }
@@ -1438,8 +1383,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       setWorkflowState('selection');
       
       // Reset validation state
-      setFieldsValidated(false);
-      setValidationStatus('pending');
       setFieldsRendered(false);
       setRenderingStatus('pending');
       
@@ -1740,32 +1683,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 setSelectedField(field);
                 setInteractionMode('click-to-place');
               }}
+              selectedRecipient={selectedRecipient}
+              recipients={recipients}
               onStartDrag={(fieldType, mouseEvent, fieldLabel) => {
                 // For FieldSelector, we'll use the selected recipient or default to host
                 const recipientId = selectedRecipient || 'host-recipient';
                 
-                // Add labels for specific field types
-                let label = fieldLabel; // Use label passed from FieldSelector if provided
-                if (!label && fieldType === FieldType.NAME) {
-                  if (recipientId === 'host-recipient') {
-                    label = 'Host Name';
-                  } else if (recipientId === 'primary-renter-recipient') {
-                    label = 'Renter Name';
-                  }
-                }
-                if (!label && fieldType === FieldType.EMAIL) {
-                  if (recipientId === 'host-recipient') {
-                    label = 'Host Email';
-                  } else if (recipientId === 'primary-renter-recipient') {
-                    label = 'Primary Renter Email';
-                  } else {
-                    // For additional recipients, find the index
-                    const recipientIndex = recipients.findIndex(r => r.id === recipientId);
-                    if (recipientIndex > 1) {
-                      label = `Renter #${recipientIndex} Email`;
-                    }
-                  }
-                }
+                // Use the label passed from FieldSelector which now includes recipient-specific labels
+                const label = fieldLabel || '';
                 
                 startFieldDetection(fieldType, recipientId, mouseEvent, label);
               }}
@@ -2010,17 +1935,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   </div>
                 </div>
                 
-                {/* Validation Status */}
-                <div className="mb-3 space-y-2">
-                  {validationStatus === 'valid' && fieldsValidated && (
-                    <div className="flex items-center gap-2 text-sm text-green-600">
-                      <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs">✓</span>
-                      </div>
-                      Document data validated - {fields.length} fields loaded
-                    </div>
-                  )}
-                </div>
                 
                 <p className="text-sm text-gray-600">
                   Click on the fields assigned to you to fill them out and sign the document.
@@ -2202,8 +2116,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const loadDocumentForSigning = async (document: any) => {
     try {
       // Reset validation state
-      setFieldsValidated(false);
-      setValidationStatus('validating');
       
       console.log('📄 Loading document for signing:', document.id);
       console.log('📄 Full document object:', document);
@@ -2273,8 +2185,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       setRecipients(documentRecipients);
       
       // Mark validation as successful
-      setValidationStatus('valid');
-      setFieldsValidated(true);
       
       // Load the PDF file from the document
       if (document.pdfFileUrl) {
@@ -2330,8 +2240,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       });
     } catch (error) {
       console.error('❌ Error loading document for signing:', error);
-      setValidationStatus('invalid');
-      setFieldsValidated(false);
       brandAlert('Failed to load document: ' + error.message, 'error', 'Load Failed');
     }
   };
@@ -2412,6 +2320,51 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     setIsCreatingDocument(false);
   };
 
+  // Validate signature fields
+  const validateSignatureFields = () => {
+    const hostSignature = fields.find(f => 
+      f.type === FieldType.SIGNATURE && f.recipientIndex === 0
+    );
+    const renterSignature = fields.find(f => 
+      f.type === FieldType.SIGNATURE && f.recipientIndex === 1
+    );
+    
+    return {
+      hasHostSignature: !!hostSignature,
+      hasRenterSignature: !!renterSignature,
+      isValid: !!hostSignature && !!renterSignature
+    };
+  };
+
+  // Handle field validation modal actions
+  const handleFieldValidationEdit = () => {
+    setShowFieldValidationModal(false);
+    // Switch to primary renter (recipient index 1)
+    const primaryRenter = recipients.find(r => r.recipientIndex === 1);
+    if (primaryRenter) {
+      setSelectedRecipient(primaryRenter.id);
+    }
+  };
+
+  const handleFieldValidationProceed = async () => {
+    setShowFieldValidationModal(false);
+    // Continue with the original flow
+    await proceedWithTemplateCompletion();
+  };
+
+  // Extracted template completion logic
+  const proceedWithTemplateCompletion = async () => {
+    setIsSavingTemplate(true);
+    try {
+      await saveTemplateAndCreateDocument(() => {
+        setIsSavingTemplate(false);
+      });
+    } catch (error) {
+      setIsSavingTemplate(false);
+      console.error('Error completing template:', error);
+    }
+  };
+
   // Step completion handler
   const completeCurrentStep = async () => {
     console.log('🎯🎯🎯 COMPLETE CURRENT STEP CALLED! 🎯🎯🎯');
@@ -2451,42 +2404,22 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           return;
         }
         
+        // Check for signature fields validation
+        const validation = validateSignatureFields();
+        if (!validation.isValid && templateType === 'lease') {
+          setIsSavingTemplate(false);
+          setShowFieldValidationModal(true);
+          return;
+        }
+        
         if (fields.length === 0) {
           brandAlert('Please add some fields to your template first!', 'warning', 'Fields Required');
           setIsSavingTemplate(false);
           return;
         }
         
-        // For lease templates, check if all required fields are present
-        // Note: API defaults empty type to 'lease', so validate unless explicitly 'addendum'
-
-        if (templateType === 'lease' || !templateType || templateType === '') {
-          const requiredFieldTypes = ['host-signature', 'host-name', 'renter-signature', 'renter-name', 'rent-amount', 'move-in-date', 'move-out-date'];
-          const fieldStatuses = requiredFieldTypes.map(fieldType => ({
-            fieldType,
-            status: getRequiredFieldStatus(fieldType)
-          }));
-          const missingRequiredFields = requiredFieldTypes.filter(fieldType => !getRequiredFieldStatus(fieldType));
-          
-          
-          if (missingRequiredFields.length > 0) {
-            setMissingFields(missingRequiredFields);
-            setShowMissingFieldsDialog(true);
-            setIsSavingTemplate(false);
-            return;
-          }
-        }
-        
-        try {
-          // Save the template with callback for success navigation
-          await saveTemplate(() => {
-            if (onSave && pdfFile) {
-              onSave({ fields, recipients, pdfFile });
-            }
-          });
-        } finally {
-          setIsSavingTemplate(false);
-        }
+        // Validation passed or user chose to proceed - save template
+        await proceedWithTemplateCompletion();
         break;
         
       case 'document':
@@ -2551,14 +2484,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         
       case 'signer1':
       case 'signer2':
-        // Check if all required fields are signed
+        // Get signer info without validation
         const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-        const signerFields = fields.filter(f => f.recipientIndex === currentSignerIndex && ['SIGNATURE', 'INITIALS'].includes(f.type));
-        const unSignedFields = signerFields.filter(f => !useSignedFieldsStore.getState().signedFields[f.formId]);
-        if (unSignedFields.length > 0) {
-          brandAlert('Please complete all required fields before finishing!', 'warning', 'Fields Incomplete');
-          return;
-        }
         
         let signingProgressSuccess = false;
         let serverActionSuccess = false;
@@ -2651,8 +2578,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         }
         
         // Reset validation states for the next step
-        setValidationStatus('valid');
-        setFieldsValidated(true);
         break;
     }
 
@@ -3332,8 +3257,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add field to fields array using functional update
     setFields(prevFields => [...prevFields, updatedField]);
     setActiveFieldId(updatedField.formId);
-    // Log validation status after adding custom field
-    setTimeout(() => logValidationStatus('After Custom Field Added'), 0);
     
     // Close dialog
     setCustomFieldDialog({ isOpen: false, field: null });
@@ -3344,6 +3267,35 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const handleCustomFieldCancel = () => {
     setCustomFieldDialog({ isOpen: false, field: null });
     console.log('❌ Custom field creation cancelled');
+  };
+
+  // Handle clicking on a field to configure it
+  const handleFieldClick = (field: FieldFormType) => {
+    // Only allow configuration in template mode
+    if (workflowState !== 'template') return;
+    
+    // Only open modal for configurable field types
+    const configurableTypes = [FieldType.TEXT, FieldType.NUMBER, FieldType.EMAIL, FieldType.NAME, FieldType.DATE];
+    if (!configurableTypes.includes(field.type as FieldType)) return;
+    
+    setTextFieldConfigModal({ isOpen: true, field });
+    setActiveFieldId(field.formId);
+  };
+
+  // Handle saving text field configuration
+  const handleTextFieldConfigSave = (fieldId: string, fieldMeta: FieldMeta) => {
+    setFields(fields.map(f => 
+      f.formId === fieldId 
+        ? { ...f, fieldMeta: { ...f.fieldMeta, ...fieldMeta } }
+        : f
+    ));
+    setTextFieldConfigModal({ isOpen: false, field: null });
+    console.log('✅ Field configuration saved:', fieldId, fieldMeta);
+  };
+
+  // Handle closing text field configuration modal
+  const handleTextFieldConfigClose = () => {
+    setTextFieldConfigModal({ isOpen: false, field: null });
   };
 
   // Validate that field components are actually rendered in the DOM
@@ -3362,7 +3314,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
     let renderedCount = 0;
     let totalFields = fields.length;
-    const missingFields: string[] = [];
 
     for (const field of fields) {
       // Look for the field element in the DOM using data attributes
@@ -3377,18 +3328,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           renderedCount++;
           console.log(`✅ Field ${field.formId} (${field.type}) rendered and visible`);
         } else {
-          missingFields.push(`${field.formId} (${field.type}) - element exists but not visible`);
           console.warn(`⚠️ Field ${field.formId} (${field.type}) exists in DOM but not visible:`, rect);
         }
       } else {
-        missingFields.push(`${field.formId} (${field.type}) - not found in DOM`);
-        console.error(`❌ Field ${field.formId} (${field.type}) not found in DOM`);
+        console.warn(`⚠️ Field ${field.formId} (${field.type}) not found in DOM yet`);
       }
     }
 
     const allRendered = renderedCount === totalFields;
     
-    console.log(`🎨 Rendering validation complete: ${renderedCount}/${totalFields} fields rendered`);
+    console.log(`🎨 Rendering check: ${renderedCount}/${totalFields} fields rendered`);
     
     if (allRendered) {
       setRenderingStatus('rendered');
@@ -3397,7 +3346,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     } else {
       setRenderingStatus('failed');
       setFieldsRendered(false);
-      console.error('❌ Some fields failed to render:', missingFields);
+      console.log('⚠️ Some fields are not yet visible');
     }
 
     return allRendered;
@@ -3415,68 +3364,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   }, [fields, workflowState, validateFieldRendering]);
 
-  // Log comprehensive validation status
-  const logValidationStatus = (context: string) => {
-    const requiredFieldTypes = ['host-signature', 'host-name', 'renter-signature', 'renter-name', 'rent-amount', 'move-in-date', 'move-out-date'];
-    const fieldStatuses = requiredFieldTypes.map(fieldType => ({
-      fieldType,
-      status: getRequiredFieldStatus(fieldType),
-      fieldsOfType: fields.filter(f => {
-        const requiredFieldMap = {
-          'host-signature': { type: FieldType.SIGNATURE, recipientIndex: 0 },
-          'host-name': { type: FieldType.NAME, recipientIndex: 0 },
-          'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1 },
-          'renter-name': { type: FieldType.NAME, recipientIndex: 1 },
-          'rent-amount': { type: FieldType.NUMBER, label: 'Rent Amount' },
-          'move-in-date': { type: FieldType.DATE, label: 'Move In Date' },
-          'move-out-date': { type: FieldType.DATE, label: 'Move Out Date' }
-        };
-        const config = requiredFieldMap[fieldType as keyof typeof requiredFieldMap];
-        if (config.recipientIndex !== undefined) {
-          return f.type === config.type && f.recipientIndex === config.recipientIndex;
-        }
-        return f.type === config.type && f.fieldMeta?.label === config.label;
-      }).length
-    }));
-
-    const missingFields = fieldStatuses.filter(f => !f.status).map(f => f.fieldType);
-    
-  };
-
-  // Check if required fields are placed
-  const getRequiredFieldStatus = (fieldType: string) => {
-    const requiredFieldMap = {
-      'host-signature': { type: FieldType.SIGNATURE, recipientIndex: 0 },
-      'host-name': { type: FieldType.NAME, recipientIndex: 0 },
-      'renter-signature': { type: FieldType.SIGNATURE, recipientIndex: 1 },
-      'renter-name': { type: FieldType.NAME, recipientIndex: 1 },
-      'rent-amount': { type: FieldType.NUMBER, label: 'Rent Amount' },
-      'move-in-date': { type: FieldType.DATE, label: 'Move In Date' },
-      'move-out-date': { type: FieldType.DATE, label: 'Move Out Date' }
-    };
-
-    const config = requiredFieldMap[fieldType as keyof typeof requiredFieldMap];
-    if (!config) return false;
-
-    // Always check specific recipient assignments (since we now assign recipients in template mode)
-    if (config.recipientIndex !== undefined) {
-      return fields.some(field => 
-        field.type === config.type && 
-        field.recipientIndex === config.recipientIndex
-      );
-    }
-
-    // For document fields with specific labels, check both type and label
-    if (config.label) {
-      return fields.some(field => 
-        field.type === config.type && 
-        field.fieldMeta?.label === config.label
-      );
-    }
-
-    // Fallback: just check if the field type exists
-    return fields.some(field => field.type === config.type);
-  };
 
   if (!pdfFile && workflowState === 'template') {
     return (
@@ -3651,11 +3538,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     onRemove={removeField}
                     onAddSignDate={handleAddSignDate}
                     onAddInitialDate={handleAddInitialDate}
+                    onFieldClick={handleFieldClick}
                     active={field.formId === activeFieldId}
                     pageElement={pageElement}
                     signedValue={useSignedFieldsStore.getState().signedFields[field.formId]}
                     showValues={workflowState === 'document'} // Show values in document mode
-                    canRemove={canRemoveField(field.formId)} // Check if field can be removed
                   />
                 );
               }
@@ -3889,41 +3776,24 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         fieldType={customFieldDialog.field?.type || FieldType.TEXT}
       />
 
-      {/* Missing Required Fields Dialog */}
-      <BrandModal 
-        isOpen={showMissingFieldsDialog}
-        onOpenChange={setShowMissingFieldsDialog}
-        className="max-w-md"
-        triggerButton={<div style={{ display: 'none' }} />}
-      >
-        <div className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">
-            Required Fields Missing
-          </h2>
-          <p className="text-gray-600 mb-4">
-            Please place all required lease fields before saving your template.
-          </p>
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-900 mb-2">Missing fields:</h3>
-            <ul className="space-y-1">
-              {missingFields.map((field) => (
-                <li key={field} className="text-sm text-red-600 flex items-center">
-                  <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
-                  {field.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex justify-end">
-            <BrandButton 
-              onClick={() => setShowMissingFieldsDialog(false)}
-              className="px-6"
-            >
-              Got it
-            </BrandButton>
-          </div>
-        </div>
-      </BrandModal>
+      {/* Text Field Configuration Modal */}
+      <TextFieldConfigModal
+        isOpen={textFieldConfigModal.isOpen}
+        onClose={handleTextFieldConfigClose}
+        field={textFieldConfigModal.field}
+        onSave={handleTextFieldConfigSave}
+      />
+
+      {/* Field Validation Modal */}
+      <FieldValidationModal
+        isOpen={showFieldValidationModal}
+        onClose={() => setShowFieldValidationModal(false)}
+        onEdit={handleFieldValidationEdit}
+        onProceed={handleFieldValidationProceed}
+        missingHostSignature={!validateSignatureFields().hasHostSignature}
+        missingRenterSignature={!validateSignatureFields().hasRenterSignature}
+      />
+
     </div>
   );
 };
