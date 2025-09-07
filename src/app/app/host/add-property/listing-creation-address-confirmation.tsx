@@ -1,7 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AddressConfirmationForm } from "./address-confirmation-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { GeocodeResponse } from "@/app/api/geocode/route";
+
+// Constants
+const GEOCODE_DEBOUNCE_MS = 1000;
+const DEFAULT_COUNTRY = "United States";
+
+// Types
+interface Address {
+  street: string;
+  street2: string;
+  city: string;
+  state: string;
+  zip: string;
+}
 
 // Using the same interface as in add-property-client.tsx
 interface ListingLocation {
@@ -24,26 +38,101 @@ interface AddressConfirmationProps {
   labelStyles?: string;
 }
 
+// Helper functions
+const buildLocationString = (city: string, state: string): string | null => {
+  return city && state ? `${city}, ${state}` : null;
+};
+
+const buildFullAddress = (address: Address): string => {
+  const { street, city, state, zip } = address;
+  return `${street}, ${city}, ${state} ${zip}`.trim();
+};
+
+const hasRequiredAddressFields = (address: Address): boolean => {
+  return Boolean(address.street && address.city && address.state);
+};
+
+const extractCoordinates = (geocodeResponse: GeocodeResponse) => {
+  if (!geocodeResponse.results?.length) return null;
+  
+  const location = geocodeResponse.results[0].geometry?.location;
+  if (!location) return null;
+  
+  return {
+    latitude: location.lat,
+    longitude: location.lng
+  };
+};
+
 export default function AddressConfirmation({ listingLocation, setListingLocation, validationErrors, inputStyles, labelStyles }: AddressConfirmationProps) {
-  const [address, setAddress] = useState({
+  const [address, setAddress] = useState<Address>({
     street: listingLocation.streetAddress1 || "",
     street2: listingLocation.streetAddress2 || "",
     city: listingLocation.city || "",
     state: listingLocation.state || "",
     zip: listingLocation.postalCode || "",
   });
-
-  // Update listing location when address changes
+  const geocodeDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const listingLocationRef = useRef(listingLocation);
+  
+  // Keep ref in sync
   useEffect(() => {
-    setListingLocation({
-      ...listingLocation,
-      streetAddress1: address.street,
-      streetAddress2: address.street2,
-      city: address.city,
-      state: address.state,
-      postalCode: address.zip,
-    });
-  }, [address]);
+    listingLocationRef.current = listingLocation;
+  }, [listingLocation]);
+
+  // Geocode address and update listing location with debouncing
+  useEffect(() => {
+    // Clear any existing timer
+    if (geocodeDebounceTimer.current) {
+      clearTimeout(geocodeDebounceTimer.current);
+    }
+
+    // Debounce geocoding
+    geocodeDebounceTimer.current = setTimeout(async () => {
+      // Build base location update
+      const locationString = buildLocationString(address.city, address.state);
+      const updatedLocation = {
+        ...listingLocationRef.current,
+        streetAddress1: address.street,
+        streetAddress2: address.street2,
+        city: address.city,
+        state: address.state,
+        postalCode: address.zip,
+        locationString: locationString,
+        country: DEFAULT_COUNTRY
+      };
+
+      // Early return if missing required fields
+      if (!hasRequiredAddressFields(address)) {
+        setListingLocation(updatedLocation);
+        return;
+      }
+
+      // Attempt geocoding
+      try {
+        const fullAddress = buildFullAddress(address);
+        const response = await fetch(`/api/geocode?address=${encodeURIComponent(fullAddress)}`);
+        const data = await response.json() as GeocodeResponse;
+        
+        const coordinates = extractCoordinates(data);
+        if (coordinates) {
+          updatedLocation.latitude = coordinates.latitude;
+          updatedLocation.longitude = coordinates.longitude;
+        }
+      } catch (error) {
+        console.error('Geocoding error:', error);
+      }
+
+      setListingLocation(updatedLocation);
+    }, GEOCODE_DEBOUNCE_MS);
+
+    // Cleanup
+    return () => {
+      if (geocodeDebounceTimer.current) {
+        clearTimeout(geocodeDebounceTimer.current);
+      }
+    };
+  }, [address, setListingLocation]);
 
   return (
     <main className="relative w-full">

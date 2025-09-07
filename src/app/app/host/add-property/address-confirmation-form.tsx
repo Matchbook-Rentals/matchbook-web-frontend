@@ -273,15 +273,15 @@ export const AddressConfirmationForm = ({
     }
   };
 
-  // Helper function to normalize state input to full name
+  // Helper function to normalize state input to state code
   const normalizeState = (input: string): string => {
-    // Check if it's a state code
+    // Check if it's already a state code
     const stateByCode = US_STATES.find(s => s.code.toUpperCase() === input.toUpperCase());
-    if (stateByCode) return stateByCode.name;
+    if (stateByCode) return stateByCode.code;
     
-    // Check if it's already a full state name
+    // Check if it's a full state name and convert to code
     const stateByName = US_STATES.find(s => s.name.toLowerCase() === input.toLowerCase());
-    if (stateByName) return stateByName.name;
+    if (stateByName) return stateByName.code;
     
     // Return as is if no match
     return input;
@@ -323,7 +323,7 @@ export const AddressConfirmationForm = ({
                     </SelectTrigger>
                     <SelectContent>
                       {US_STATES.map((state) => (
-                        <SelectItem key={state.code} value={state.name}>{state.name}</SelectItem>
+                        <SelectItem key={state.code} value={state.code}>{state.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
