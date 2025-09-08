@@ -60,6 +60,69 @@ export const SignableField: React.FC<SignableFieldProps> = ({
   
   const recipientIndex = field.recipientIndex ?? 0;
   const signerStyles = useRecipientColors(recipientIndex);
+  
+  // Helper function to get the border color for the signer
+  const getSignerBorderColor = () => {
+    const colorMap: Record<string, string> = {
+      'host': '#0B6E6E',
+      'primaryRenter': '#fb8c00',
+      'blue': 'rgb(59, 130, 246)',
+      'purple': 'rgb(168, 85, 247)',
+      'green': 'rgb(34, 197, 94)',
+      'red': 'rgb(239, 68, 68)',
+      'pink': 'rgb(236, 72, 153)',
+      'indigo': 'rgb(99, 102, 241)',
+      'yellow': 'rgb(234, 179, 8)',
+      'emerald': 'rgb(16, 185, 129)',
+    };
+    const colorKey = ['host', 'primaryRenter', 'blue', 'purple', 'green', 'red', 'pink', 'indigo', 'yellow', 'emerald'][recipientIndex % 10];
+    return colorMap[colorKey];
+  };
+  
+  // Helper function to get signer label with field type
+  const getSignerLabel = () => {
+    let signerName = '';
+    if (recipient?.role === 'HOST') {
+      signerName = 'Host';
+    } else if (recipient?.role === 'RENTER') {
+      signerName = 'Tenant';
+    } else {
+      signerName = recipient?.name || `Signer ${recipientIndex + 1}`;
+    }
+    
+    // Get field type name
+    let fieldTypeName = '';
+    switch (field.type) {
+      case FieldType.SIGNATURE:
+        fieldTypeName = 'Signature';
+        break;
+      case FieldType.INITIALS:
+        fieldTypeName = 'Initials';
+        break;
+      case FieldType.NAME:
+        fieldTypeName = 'Name';
+        break;
+      case FieldType.EMAIL:
+        fieldTypeName = 'Email';
+        break;
+      case FieldType.DATE:
+        fieldTypeName = 'Date';
+        break;
+      case FieldType.TEXT:
+        fieldTypeName = 'Text';
+        break;
+      case FieldType.NUMBER:
+        fieldTypeName = 'Number';
+        break;
+      case FieldType.CHECKBOX:
+        fieldTypeName = 'Checkbox';
+        break;
+      default:
+        fieldTypeName = FRIENDLY_FIELD_TYPE[field.type] || 'Field';
+    }
+    
+    return `${signerName} ${fieldTypeName}`;
+  };
 
   // Early return if pageElement is not available
   if (!pageElement) {
@@ -157,6 +220,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
   };
 
   const displayValue = () => {
+    // When signed, show the actual value
     if (isSigned) {
       if (field.type === FieldType.CHECKBOX) {
         return signedValue ? '☑' : '☐';
@@ -185,13 +249,23 @@ export const SignableField: React.FC<SignableFieldProps> = ({
       return signedValue?.value || signedValue;
     }
     
-    // For signature and name fields, show recipient title if available
-    if ((field.type === FieldType.SIGNATURE || field.type === FieldType.NAME) && recipient?.title) {
-      const fieldTypeName = field.type === FieldType.SIGNATURE ? 'Signature' : 'Name';
-      return `${recipient.title} ${fieldTypeName}`;
+    // When not signed, show a placeholder/label
+    // Get signer designation for placeholder
+    let signerName = '';
+    if (recipient?.role === 'HOST') {
+      signerName = 'Host';
+    } else if (recipient?.role === 'RENTER') {
+      signerName = 'Tenant';
+    } else if (recipient?.title) {
+      signerName = recipient.title;
+    } else {
+      signerName = `Signer ${recipientIndex + 1}`;
     }
     
-    return FRIENDLY_FIELD_TYPE[field.type];
+    // Get field type name
+    let fieldTypeName = FRIENDLY_FIELD_TYPE[field.type] || 'Field';
+    
+    return `${signerName} ${fieldTypeName}`;
   };
 
   return (
@@ -202,12 +276,11 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           'absolute transition-all',
           'border-2 rounded flex items-center justify-center text-center text-sm font-medium',
           // Current signer's fields
-          isForCurrentSigner && !isSigned && 'cursor-pointer hover:scale-105 hover:shadow-lg bg-white/90 border-blue-400',
-          isForCurrentSigner && isSigned && 'cursor-pointer bg-green-50 border-green-500',
-          // Other signer's fields  
-          !isForCurrentSigner && isSigned && 'cursor-not-allowed bg-gray-100 border-gray-400 opacity-80',
-          !isForCurrentSigner && !isSigned && 'cursor-not-allowed bg-white/50 border-gray-300 opacity-60',
-          signerStyles.base,
+          isForCurrentSigner && !isSigned && 'cursor-pointer hover:scale-105 hover:shadow-lg bg-white/90',
+          isForCurrentSigner && isSigned && 'cursor-pointer bg-green-50',
+          // Other signer's fields - neutral gray styling, no green
+          !isForCurrentSigner && isSigned && 'cursor-not-allowed bg-gray-50 opacity-75',
+          !isForCurrentSigner && !isSigned && 'cursor-not-allowed bg-white/50 opacity-60',
         )}
         style={{
           left: x,
@@ -215,27 +288,30 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           width: width,
           height: height,
           zIndex: 30,
+          borderColor: getSignerBorderColor(),
+          borderWidth: '2px',
         }}
         onClick={() => {
-          // Allow current signer to interact with all fields, others can only view
+          // Prevent any interaction with unsigned fields that belong to other signers
           if (!isForCurrentSigner && !isSigned) return;
+          
+          // Prevent interaction with signed fields that belong to other signers
+          // Only allow viewing signature/initials for transparency
+          if (!isForCurrentSigner && isSigned) {
+            if (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) {
+              setIsViewingSignature(true);
+            }
+            // For other field types, don't allow any interaction
+            return;
+          }
           
           // If field is signed and user is current signer, show viewing dialog
           if (isSigned && isForCurrentSigner) {
             if (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) {
               setIsViewingSignature(true);
             } else {
-              setIsDialogOpen(true);
-            }
-            return;
-          }
-          
-          // If field is signed but user is not current signer, show read-only view
-          if (isSigned && !isForCurrentSigner) {
-            if (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) {
+              // Show read-only view for current signer's signed fields
               setIsViewingSignature(true);
-            } else {
-              setIsDialogOpen(true);
             }
             return;
           }
@@ -270,61 +346,101 @@ export const SignableField: React.FC<SignableFieldProps> = ({
       >
         <div className={cn(
           'px-2 text-xs font-medium truncate',
-          isSigned ? 'text-green-800' : 'text-gray-700',
+          // Use green text only for current signer's signed fields
+          isSigned && isForCurrentSigner ? 'text-green-800' : 
+          isSigned && !isForCurrentSigner ? 'text-gray-600' : 'text-gray-700',
           // Apply cursive font for signed signature/initials fields
           isSigned && (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) && 'font-signature text-base'
         )}>
           {displayValue()}
         </div>
         
-        {isSigned && (
+        {/* Only show green checkmark for current signer's completed fields */}
+        {isSigned && isForCurrentSigner && (
           <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
             <span className="text-white text-xs">✓</span>
           </div>
         )}
+        
+        {/* Signer label in top-left corner */}
+        <div 
+          className="absolute -top-2 -left-2 px-1.5 py-0.5 text-[10px] font-semibold text-white rounded shadow-sm"
+          style={{
+            backgroundColor: getSignerBorderColor(),
+          }}
+        >
+          {getSignerLabel()}
+        </div>
       </div>
 
-      {/* Signing Dialog */}
+      {/* Signing Dialog - Only for current signer's unsigned fields */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className='text-center test'>Sign {FRIENDLY_FIELD_TYPE[field.type]} Field</DialogTitle>
+            <DialogTitle className='text-center'>
+              {isForCurrentSigner && !isSigned ? `Sign ${FRIENDLY_FIELD_TYPE[field.type]} Field` : `View ${FRIENDLY_FIELD_TYPE[field.type]} Field`}
+            </DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Enter your {FRIENDLY_FIELD_TYPE[field.type].toLowerCase()}:</label>
-              {field.type === FieldType.CHECKBOX ? (
-                <div className="mt-2">
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={inputValue === true}
-                      onChange={(e) => setInputValue(e.target.checked)}
-                      className="w-4 h-4"
+            {isForCurrentSigner && !isSigned ? (
+              <>
+                <div>
+                  <label className="text-sm font-medium">Enter your {FRIENDLY_FIELD_TYPE[field.type].toLowerCase()}:</label>
+                  {field.type === FieldType.CHECKBOX ? (
+                    <div className="mt-2">
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={inputValue === true}
+                          onChange={(e) => setInputValue(e.target.checked)}
+                          className="w-4 h-4"
+                        />
+                        <span className="text-sm">Check this box</span>
+                      </label>
+                    </div>
+                  ) : (
+                    <Input
+                      type={field.type === FieldType.EMAIL ? 'email' : field.type === FieldType.NUMBER ? 'number' : 'text'}
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      placeholder={`Enter ${FRIENDLY_FIELD_TYPE[field.type].toLowerCase()}...`}
+                      className="mt-2"
                     />
-                    <span className="text-sm">Check this box</span>
-                  </label>
+                  )}
                 </div>
-              ) : (
-                <Input
-                  type={field.type === FieldType.EMAIL ? 'email' : field.type === FieldType.NUMBER ? 'number' : 'text'}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder={`Enter ${FRIENDLY_FIELD_TYPE[field.type].toLowerCase()}...`}
-                  className="mt-2"
-                />
-              )}
-            </div>
-            
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleSign}>
-                Sign Field
-              </Button>
-            </div>
+                
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSign}>
+                    Sign Field
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="border rounded-lg p-4 bg-gray-50">
+                  <div className="text-sm text-gray-600 mb-1">{FRIENDLY_FIELD_TYPE[field.type]}:</div>
+                  <div className="text-lg font-medium">{signedValue || 'Not filled'}</div>
+                </div>
+                
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Close
+                  </Button>
+                  {isForCurrentSigner && (
+                    <Button 
+                      variant="destructive" 
+                      onClick={handleClearSignature}
+                    >
+                      Clear {FRIENDLY_FIELD_TYPE[field.type]}
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </DialogContent>
       </Dialog>
@@ -355,7 +471,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
       <Dialog open={isViewingSignature} onOpenChange={setIsViewingSignature}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className='test'>
+            <DialogTitle>
               {field.type === FieldType.SIGNATURE ? 'Signature' : FRIENDLY_FIELD_TYPE[field.type]}
               {recipient?.title && ` - ${recipient.title}`}
             </DialogTitle>

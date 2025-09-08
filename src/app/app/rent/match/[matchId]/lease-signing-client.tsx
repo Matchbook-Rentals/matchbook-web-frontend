@@ -10,7 +10,9 @@ import Link from 'next/link';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
 import { PaymentMethodSelector } from '@/components/stripe/payment-method-selector';
+import { PaymentReviewScreen } from '@/components/payment-review/PaymentReviewScreen';
 import { PaymentInfoModal } from '@/components/stripe/payment-info-modal';
+import { AdminDebugPanel } from '@/components/admin/AdminDebugPanel';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
 import dynamic from 'next/dynamic';
 import { calculatePayments, PaymentDetails } from '@/lib/calculate-payments';
@@ -682,41 +684,14 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
               Complete your booking by setting up your payment method for {match.listing.locationString}
             </p>
             
-            {/* HACKY BAD TEMPORARY CODE - REMOVE BEFORE PRODUCTION */}
-            {(process.env.NODE_ENV === 'development' || isAdminDev) && match.tenantSignedAt && (
-              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-700 mb-3">🚨 HACKY BAD TEMPORARY CODE - Reset lease signing for testing</p>
-                <Button 
-                  variant="outline" 
-                  onClick={async () => {
-                    if (confirm('Reset lease signing state? This will undo tenant signature.')) {
-                      try {
-                        const response = await fetch(`/api/matches/${matchId}/reset-tenant-signature`, {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' }
-                        });
-                        if (response.ok) {
-                          toast({
-                            title: "Success", 
-                            description: "Lease signing state reset. Refreshing page...",
-                          });
-                          setTimeout(() => window.location.reload(), 1000);
-                        } else {
-                          throw new Error('Failed to reset');
-                        }
-                      } catch (error) {
-                        toast({
-                          title: "Error",
-                          description: "Failed to reset lease signing state",
-                          variant: "destructive",
-                        });
-                      }
-                    }
-                  }}
-                  className="text-red-700 border-red-300 hover:bg-red-100"
-                >
-                  🔄 Reset Tenant Signature (HACKY DEBUG)
-                </Button>
+            {/* Admin Debug Panel */}
+            {isAdminDev && (
+              <div className="mt-4">
+                <AdminDebugPanel 
+                  match={match}
+                  matchId={matchId}
+                  isAdminDev={isAdminDev}
+                />
               </div>
             )}
           </div>
@@ -729,12 +704,23 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
             {/* Payment Method Setup */}
             <div className="lg:col-span-2">
-              <PaymentMethodSelector
+              <PaymentReviewScreen
                 matchId={matchId}
                 amount={calculatePaymentAmount(selectedPaymentMethodType)}
+                paymentBreakdown={{
+                  monthlyRent: calculateProRatedRent(),
+                  securityDeposit: getSecurityDeposit(),
+                  petDeposit: paymentDetails.petDeposit || 0,
+                  serviceFee: Math.round(((calculateProRatedRent() + getSecurityDeposit()) * 0.03) * 100) / 100,
+                  processingFee: selectedPaymentMethodType === 'card' 
+                    ? Math.round(((calculateProRatedRent() + getSecurityDeposit()) * 1.03 * 0.029 + 0.30) * 100) / 100
+                    : undefined,
+                  total: calculatePaymentAmount(selectedPaymentMethodType)
+                }}
                 onSuccess={handlePaymentSuccess}
-                onCancel={handlePaymentCancel}
-                onPaymentMethodTypeChange={setSelectedPaymentMethodType}
+                onAddPaymentMethod={() => setShowPaymentSelector(false)}
+                tripStartDate={match.trip.startDate}
+                tripEndDate={match.trip.endDate}
               />
             </div>
           </div>
@@ -757,6 +743,17 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
             />
           </div>
 
+          {/* Admin Debug Panel for main view */}
+          {isAdminDev && (
+            <div className="mb-6">
+              <AdminDebugPanel 
+                match={match}
+                matchId={matchId}
+                isAdminDev={isAdminDev}
+              />
+            </div>
+          )}
+
           <div className={`${currentStepState === 'sign-lease' ? 'w-full' : 'grid grid-cols-1 gap-6 lg:grid-cols-3'}`}>
             {/* Sidebar - shows different content based on step */}
             {currentStepState !== 'sign-lease' && (
@@ -764,7 +761,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 {currentStepState === 'overview-lease' ? (
                   <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown()} paymentDetails={paymentDetails} />
                 ) : (
-                  <Card className='test'>
+                  <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <Home className="w-5 h-5" />
