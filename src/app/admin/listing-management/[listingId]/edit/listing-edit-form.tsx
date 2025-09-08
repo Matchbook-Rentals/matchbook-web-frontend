@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -18,10 +18,11 @@ import {
 } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useToast } from '@/components/ui/use-toast'
-import { Save, ArrowLeft, Loader2 } from 'lucide-react'
+import { Save, ArrowLeft, Loader2, MapPin, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { updateListing, updateListingPricing } from '../../../listing-management-actions'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface ListingEditFormProps {
   listing: any; // We'll use the ListingWithDetails type from the server actions
@@ -31,6 +32,7 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
   const router = useRouter()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const [isGeocoding, setIsGeocoding] = useState(false)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -103,11 +105,86 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
   // Comments for approval changes
   const [comment, setComment] = useState('')
 
+  // Auto-update locationString when address fields change
+  useEffect(() => {
+    const addressParts = [
+      formData.city,
+      formData.state
+    ].filter(part => part && part.trim())
+    
+    if (addressParts.length > 0) {
+      const newLocationString = addressParts.join(', ')
+      setFormData(prev => ({
+        ...prev,
+        locationString: newLocationString
+      }))
+    }
+  }, [formData.city, formData.state])
+
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }))
+  }
+
+  const handleGeocoding = async () => {
+    // Build address from current form data
+    const addressParts = [
+      formData.streetAddress1,
+      formData.streetAddress2,
+      formData.city,
+      formData.state,
+      formData.postalCode
+    ].filter(part => part && part.trim())
+    
+    if (addressParts.length === 0) {
+      toast({
+        variant: 'destructive',
+        title: 'Missing Address',
+        description: 'Please enter an address before geocoding.',
+      })
+      return
+    }
+    
+    const fullAddress = addressParts.join(', ')
+    
+    setIsGeocoding(true)
+    try {
+      const response = await fetch(`/api/geocode?address=${encodeURIComponent(fullAddress)}`)
+      const data = await response.json()
+      
+      if (data.results && data.results.length > 0) {
+        const location = data.results[0].geometry.location
+        
+        // Update the form with new coordinates
+        setFormData(prev => ({
+          ...prev,
+          latitude: location.lat,
+          longitude: location.lng
+        }))
+        
+        toast({
+          title: 'Geocoding Successful',
+          description: `Coordinates updated: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`,
+        })
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Geocoding Failed',
+          description: 'Could not find coordinates for this address. Please verify the address is correct.',
+        })
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error)
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to geocode address. Please try again.',
+      })
+    } finally {
+      setIsGeocoding(false)
+    }
   }
 
   const handleAmenityChange = (amenity: string, checked: boolean) => {
@@ -381,7 +458,7 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
               </div>
               
               <div>
-                <Label htmlFor="locationString">Location Description</Label>
+                <Label htmlFor="locationString">Display Address</Label>
                 <Input
                   id="locationString"
                   value={formData.locationString}
@@ -390,30 +467,63 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                 />
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="latitude">Latitude</Label>
-                  <Input
-                    id="latitude"
-                    type="number"
-                    step="any"
-                    value={formData.latitude}
-                    onChange={(e) => handleInputChange('latitude', parseFloat(e.target.value) || 0)}
-                    placeholder="Enter latitude"
-                  />
+              {/* Coordinates section with geocoding */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>Coordinates</Label>
+                  {(formData.latitude === 0 && formData.longitude === 0) && (
+                    <Badge variant="destructive" className="text-xs">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      Invalid Coordinates
+                    </Badge>
+                  )}
                 </div>
                 
-                <div>
-                  <Label htmlFor="longitude">Longitude</Label>
-                  <Input
-                    id="longitude"
-                    type="number"
-                    step="any"
-                    value={formData.longitude}
-                    onChange={(e) => handleInputChange('longitude', parseFloat(e.target.value) || 0)}
-                    placeholder="Enter longitude"
-                  />
+                {(formData.latitude === 0 && formData.longitude === 0) && (
+                  <Alert className="border-orange-200 bg-orange-50">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      This listing has invalid coordinates (0, 0). Please retry geocoding after verifying the address.
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="latitude">Latitude</Label>
+                    <Input
+                      id="latitude"
+                      type="number"
+                      step="any"
+                      value={formData.latitude}
+                      onChange={(e) => handleInputChange('latitude', parseFloat(e.target.value) || 0)}
+                      placeholder="Enter latitude"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="longitude">Longitude</Label>
+                    <Input
+                      id="longitude"
+                      type="number"
+                      step="any"
+                      value={formData.longitude}
+                      onChange={(e) => handleInputChange('longitude', parseFloat(e.target.value) || 0)}
+                      placeholder="Enter longitude"
+                    />
+                  </div>
                 </div>
+                
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleGeocoding}
+                  disabled={isGeocoding}
+                  className="w-full"
+                >
+                  <MapPin className="h-4 w-4 mr-2" />
+                  {isGeocoding ? 'Geocoding...' : 'Retry Geocoding'}
+                </Button>
               </div>
             </div>
           </TabsContent>
