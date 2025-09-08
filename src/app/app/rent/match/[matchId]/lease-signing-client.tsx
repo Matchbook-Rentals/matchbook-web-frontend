@@ -1164,7 +1164,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                           const completedRenterFields = renterSignatureFields.filter((field: any) => 
                             fieldsStatus[field.formId] === 'signed'
                           );
-                          return (
+                          return renterSignatureFields.length === 0 ? (
+                            <span className="text-gray-600">No signature required - you may review the document</span>
+                          ) : (
                             <>
                               <span className="font-medium">{completedRenterFields.length}</span> of <span className="font-medium">{renterSignatureFields.length}</span> fields completed
                             </>

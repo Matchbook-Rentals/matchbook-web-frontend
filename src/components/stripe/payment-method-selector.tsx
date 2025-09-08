@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CreditCard, Shield, CheckCircle, Plus, Trash2, Building2, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { EmbeddedCheckoutModal } from './embedded-checkout-modal';
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 console.log('🔑 Stripe publishable key available:', !!stripePublishableKey);
@@ -388,6 +389,8 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
   const [isProcessing, setIsProcessing] = useState(false);
   const [deletingPaymentMethodId, setDeletingPaymentMethodId] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [showEmbeddedCheckout, setShowEmbeddedCheckout] = useState(false);
+  const [checkoutClientSecret, setCheckoutClientSecret] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Fetch saved payment methods on component mount
@@ -516,7 +519,7 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
   const handleStripeCheckout = async (includeCardFee: boolean = true) => {
     setIsProcessing(true);
     try {
-      console.log('🔗 Creating Stripe Checkout session with card fee:', includeCardFee);
+      console.log('🔗 Creating Stripe Embedded Checkout session with card fee:', includeCardFee);
       
       const response = await fetch(`/api/matches/${matchId}/create-payment-session`, {
         method: 'POST',
@@ -531,10 +534,12 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
         throw new Error(errorData.details || errorData.error || 'Failed to create payment session');
       }
 
-      const { url } = await response.json();
+      const { clientSecret } = await response.json();
       
-      // Redirect to Stripe Checkout
-      window.location.href = url;
+      // Open embedded checkout modal instead of redirecting
+      setCheckoutClientSecret(clientSecret);
+      setShowEmbeddedCheckout(true);
+      setIsProcessing(false);
     } catch (error) {
       console.error('❌ Error creating Stripe session:', error);
       toast({
@@ -544,6 +549,21 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
       });
       setIsProcessing(false);
     }
+  };
+
+  const handleCheckoutSuccess = () => {
+    setShowEmbeddedCheckout(false);
+    setCheckoutClientSecret(null);
+    toast({
+      title: "Payment Successful!",
+      description: "Your payment has been processed successfully.",
+    });
+    onSuccess();
+  };
+
+  const handleCheckoutClose = () => {
+    setShowEmbeddedCheckout(false);
+    setCheckoutClientSecret(null);
   };
 
   const handleDeletePaymentMethod = async (paymentMethodId: string) => {
@@ -602,17 +622,18 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="w-5 h-5" />
-          Payment Method Setup
-        </CardTitle>
-        <p className="text-sm text-gray-600">
-          To complete your lease, please select or add a payment method (credit card or bank account) for security deposit and rent charges.
-        </p>
-      </CardHeader>
-      <CardContent>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CreditCard className="w-5 h-5" />
+            Payment Method Setup
+          </CardTitle>
+          <p className="text-sm text-gray-600">
+            To complete your lease, please select or add a payment method (credit card or bank account) for security deposit and rent charges.
+          </p>
+        </CardHeader>
+        <CardContent>
         {!showNewMethodForm ? (
           <div className="space-y-6">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -626,28 +647,28 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
               </p>
             </div>
 
-            {/* Temporary Stripe Checkout Options */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-yellow-900 mb-2">🧪 Temporary: Complete Payment via Stripe Checkout</h3>
-              <p className="text-yellow-800 text-sm mb-4">
-                Complete full payment immediately with dynamic fee calculation based on payment method.
+            {/* Stripe Embedded Checkout Options */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <h3 className="font-semibold text-blue-900 mb-2">Complete Payment via Secure Checkout</h3>
+              <p className="text-blue-800 text-sm mb-4">
+                Complete your payment securely without leaving this page. Choose your preferred payment method below.
               </p>
               <div className="flex gap-3">
                 <Button 
                   onClick={() => handleStripeCheckout(true)}
                   disabled={isProcessing}
                   variant="outline"
-                  className="flex-1 bg-yellow-100 border-yellow-300 hover:bg-yellow-200"
+                  className="flex-1 bg-white border-gray-300 hover:bg-gray-50"
                 >
-                  {isProcessing ? 'Opening Stripe...' : '💳 Pay with Card (includes 2.9% + 30¢ fee)'}
+                  {isProcessing ? 'Loading...' : '💳 Pay with Card (includes 2.9% + 30¢ fee)'}
                 </Button>
                 <Button 
                   onClick={() => handleStripeCheckout(false)}
                   disabled={isProcessing}
                   variant="outline"
-                  className="flex-1 bg-blue-100 border-blue-300 hover:bg-blue-200"
+                  className="flex-1 bg-white border-gray-300 hover:bg-gray-50"
                 >
-                  {isProcessing ? 'Opening Stripe...' : '🏦 Pay with Bank (no extra fees)'}
+                  {isProcessing ? 'Loading...' : '🏦 Pay with Bank (no extra fees)'}
                 </Button>
               </div>
             </div>
@@ -863,5 +884,15 @@ export function PaymentMethodSelector({ matchId, amount, onSuccess, onCancel, on
         )}
       </CardContent>
     </Card>
+    
+    {/* Embedded Checkout Modal */}
+    <EmbeddedCheckoutModal
+      isOpen={showEmbeddedCheckout}
+      onClose={handleCheckoutClose}
+      clientSecret={checkoutClientSecret}
+      amount={amount}
+      onSuccess={handleCheckoutSuccess}
+    />
+    </>
   );
 }

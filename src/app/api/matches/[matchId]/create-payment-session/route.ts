@@ -201,9 +201,9 @@ export async function POST(
       customer: customerId,
       payment_method_types: includeCardFee ? ['card', 'us_bank_account'] : ['us_bank_account', 'card'], // Cards first when including fee
       mode: 'payment', // Payment mode for immediate payment
+      ui_mode: 'embedded', // Use embedded checkout instead of redirect
       line_items: lineItems,
-      success_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/rent/match/${params.matchId}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/rent/match/${params.matchId}/lease-signing`,
+      return_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/rent/match/${params.matchId}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       metadata: {
         matchId: params.matchId,
         userId,
@@ -250,6 +250,7 @@ export async function POST(
 
     return NextResponse.json({
       sessionId: session.id,
+      clientSecret: session.client_secret, // Add client secret for embedded checkout
       url: session.url,
     });
 

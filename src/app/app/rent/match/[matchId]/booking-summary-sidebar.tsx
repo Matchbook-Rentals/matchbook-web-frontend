@@ -128,8 +128,8 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
     );
   }
   
-  // Add service fee (1.5% for >6 months, 3% otherwise)
-  const depositServiceFee = depositSubtotal * serviceFeeRate;
+  // Add service fee (flat $5 for security deposit)
+  const depositServiceFee = 5;
   depositBreakdownItems.push(
     { label: 'Service fee', amount: `$${depositServiceFee.toFixed(2)}` }
   );
