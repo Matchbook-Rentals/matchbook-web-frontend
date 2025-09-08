@@ -74,6 +74,14 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {}, s
   const completionStatus = getCompletionStatus();
   const { signatures, otherFields } = getFieldsByType();
 
+  console.log('🔍 RenterSidebarFrame render:', {
+    completionStatus,
+    signaturesCount: signatures.length,
+    otherFieldsCount: otherFields.length,
+    allTenantFields: getTenantFields(),
+    shouldShowNoFields: completionStatus.total === 0
+  });
+
   return (
     <div className="flex items-start gap-2.5 p-4 md:p-6 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
       <div className="flex flex-col items-start gap-4 relative flex-1 min-w-0">
@@ -165,8 +173,26 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {}, s
           {/* Required Lease Fields Card */}
           <Card className="relative w-full bg-white rounded border border-solid border-[#e3e3e3]">
             <CardContent className="p-4">
-              <h2 className="w-full [font-family:'Poppins',Helvetica] font-medium text-black text-sm tracking-[0] leading-tight mb-3">
-                Required Lease Fields ({completionStatus.completed}/{completionStatus.total})
+              {completionStatus.total === 0 ? (
+                // No fields required for this signer
+                <div className="text-center py-8">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4">
+                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="[font-family:'Poppins',Helvetica] font-medium text-gray-700 text-base mb-2">
+                    No signature required
+                  </h3>
+                  <p className="[font-family:'Poppins',Helvetica] font-normal text-gray-500 text-sm">
+                    This document does not require any fields from you.
+                    You may review the document and proceed when ready.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <h2 className="w-full [font-family:'Poppins',Helvetica] font-medium text-black text-sm tracking-[0] leading-tight mb-3">
+                    Required Lease Fields ({completionStatus.completed}/{completionStatus.total})
               </h2>
 
               {/* Progress Bar */}
@@ -321,6 +347,8 @@ export function RenterSidebarFrame({ match, documentFields, fieldsStatus = {}, s
                   );
                 })}
               </div>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
