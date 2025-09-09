@@ -7,7 +7,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { FEES, calculateCreditCardFee, calculateTotalWithCardFee, calculateServiceFee } from '@/lib/fee-constants';
+import { 
+  calculateCreditCardFee, 
+  calculateServiceFee,
+  calculateProratedRent,
+  calculateTripMonths
+} from '@/lib/payment-calculations';
 
 interface UpcomingPaymentsSectionProps {
   monthlyRent: number;
@@ -31,32 +36,63 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
     const start = new Date(tripStartDate);
     const end = new Date(tripEndDate);
     
-    // Calculate trip duration for service fee
-    const tripMonths = Math.ceil(
-      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30)
-    );
+    console.log('🔍 [UpcomingPayments] Generating payment schedule:', {
+      tripStartDate: start.toISOString(),
+      tripEndDate: end.toISOString(),
+      monthlyRent,
+      startDay: start.getUTCDate(),
+      startMonth: start.getUTCMonth() + 1,
+      startYear: start.getUTCFullYear()
+    });
     
-    // Calculate if first month is prorated
-    const firstDayOfMonth = new Date(start.getFullYear(), start.getMonth(), 1);
-    const lastDayOfFirstMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0);
-    const daysInFirstMonth = lastDayOfFirstMonth.getDate();
-    const daysRemainingInFirstMonth = lastDayOfFirstMonth.getDate() - start.getDate() + 1;
-    const isFirstMonthProrated = start.getDate() !== 1;
+    // Calculate trip duration for service fee
+    const tripMonths = calculateTripMonths(start, end);
+    console.log('📅 Trip duration in months:', tripMonths);
+    
+    // Calculate if first month is prorated (using UTC to avoid timezone issues)
+    const firstDayOfMonth = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
+    const lastDayOfFirstMonth = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 0));
+    const daysInFirstMonth = lastDayOfFirstMonth.getUTCDate();
+    const daysRemainingInFirstMonth = lastDayOfFirstMonth.getUTCDate() - start.getUTCDate() + 1;
+    const isFirstMonthProrated = start.getUTCDate() !== 1;
     
     let paymentIndex = 0;
     
     // Add first month payment (prorated or full)
     if (isFirstMonthProrated) {
-      // Prorated first month
-      const proratedRent = (monthlyRent / daysInFirstMonth) * daysRemainingInFirstMonth;
+      console.log('🏠 First month is PRORATED');
+      console.log('  Days in first month:', daysInFirstMonth);
+      console.log('  Days remaining in first month (old calc):', daysRemainingInFirstMonth);
+      
+      // Prorated first month - use our clean calculation
+      const proratedDetails = calculateProratedRent(monthlyRent, start);
+      const proratedRent = proratedDetails.amount;
+      
+      console.log('💰 Proration details:', {
+        monthlyRent,
+        proratedAmount: proratedRent,
+        daysToCharge: proratedDetails.daysToCharge,
+        daysInMonth: proratedDetails.daysInMonth,
+        dailyRate: proratedDetails.dailyRate,
+        isProrated: proratedDetails.isProrated
+      });
+      
       const serviceFee = calculateServiceFee(proratedRent, tripMonths);
       const baseAmount = proratedRent + serviceFee;
       const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
       const totalAmount = baseAmount + cardFee;
       
+      console.log('🧮 First month payment breakdown:', {
+        proratedRent,
+        serviceFee,
+        baseAmount,
+        cardFee,
+        totalAmount
+      });
+      
       const subItems = [
         {
-          description: `${daysRemainingInFirstMonth} days of ${formatMonthYear(start)} (prorated)`,
+          description: `${proratedDetails.daysToCharge} days of ${formatMonthYear(start)} (prorated)`,
           amount: proratedRent,
         },
         {
@@ -80,11 +116,20 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       });
       paymentIndex++;
     } else {
+      console.log('🏠 First month is FULL (move-in on the 1st)');
       // Full first month (move-in on the 1st)
       const serviceFee = calculateServiceFee(monthlyRent, tripMonths);
       const baseAmount = monthlyRent + serviceFee;
       const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
       const totalAmount = baseAmount + cardFee;
+      
+      console.log('💰 Full first month payment:', {
+        monthlyRent,
+        serviceFee,
+        baseAmount,
+        cardFee,
+        totalAmount
+      });
       
       const subItems = [
         { description: 'Monthly rent', amount: monthlyRent },
@@ -107,18 +152,62 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       paymentIndex++;
     }
     
-    // Add subsequent full months starting from month 2
-    let currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+    // Add subsequent months starting from month 2 (using UTC)
+    let currentDate = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 1));
+    console.log('📆 Starting subsequent months from:', currentDate.toISOString());
     
     while (currentDate <= end && paymentIndex < 36) {
-      const serviceFee = calculateServiceFee(monthlyRent, tripMonths);
-      const baseAmount = monthlyRent + serviceFee;
+      console.log(`
+📅 Payment #${paymentIndex + 1} for:`, currentDate.toLocaleDateString());
+      
+      // Check if this is the last month and if it needs proration
+      const isLastMonth = currentDate.getUTCMonth() === end.getUTCMonth() && 
+                         currentDate.getUTCFullYear() === end.getUTCFullYear();
+      
+      let rentAmount = monthlyRent;
+      let description = 'Monthly rent';
+      
+      if (isLastMonth) {
+        // Check if move-out is before the last day of the month
+        const lastDayOfMonth = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth() + 1, 0));
+        const endDay = end.getUTCDate();
+        const lastDay = lastDayOfMonth.getUTCDate();
+        
+        if (endDay < lastDay) {
+          // Prorate the last month
+          console.log('🏠 Last month is PRORATED');
+          console.log('  End date:', end.toISOString());
+          console.log('  End day:', endDay, 'Last day of month:', lastDay);
+          
+          const dailyRate = monthlyRent / lastDay;
+          rentAmount = Math.round(dailyRate * endDay * 100) / 100;
+          description = `${endDay} days of ${formatMonthYear(currentDate)} (prorated)`;
+          
+          console.log('💰 Last month proration:', {
+            monthlyRent,
+            daysToCharge: endDay,
+            daysInMonth: lastDay,
+            dailyRate,
+            proratedAmount: rentAmount
+          });
+        }
+      }
+      
+      const serviceFee = calculateServiceFee(rentAmount, tripMonths);
+      const baseAmount = rentAmount + serviceFee;
       const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
       const totalAmount = baseAmount + cardFee;
       
+      console.log('  Amount breakdown:', {
+        rentAmount,
+        serviceFee,
+        baseAmount,
+        totalAmount
+      });
+      
       // Always show breakdown to include service fee
       const subItems = [
-        { description: 'Monthly rent', amount: monthlyRent },
+        { description, amount: rentAmount },
         { description: 'Service fee', amount: serviceFee }
       ];
       
@@ -136,7 +225,7 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
         subItems,
       });
       
-      currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+      currentDate = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1));
       paymentIndex++;
     }
     

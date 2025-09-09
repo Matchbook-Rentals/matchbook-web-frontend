@@ -825,7 +825,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 matchId={matchId}
                 amount={calculatePaymentAmount(selectedPaymentMethodType)}
                 paymentBreakdown={{
-                  monthlyRent: calculateProRatedRent(),
+                  monthlyRent: paymentDetails.totalMonthlyRent, // Pass actual monthly rent, not prorated
                   securityDeposit: getSecurityDeposit(),
                   petDeposit: paymentDetails.petDeposit || 0,
                   serviceFee: Math.round(((calculateProRatedRent() + getSecurityDeposit()) * 0.03) * 100) / 100,
