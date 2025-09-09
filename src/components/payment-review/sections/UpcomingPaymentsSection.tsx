@@ -7,17 +7,20 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { FEES, calculateCreditCardFee, calculateTotalWithCardFee } from '@/lib/fee-constants';
 
 interface UpcomingPaymentsSectionProps {
   monthlyRent: number;
   tripStartDate: Date;
   tripEndDate: Date;
+  isUsingCard?: boolean;
 }
 
 export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = ({
   monthlyRent,
   tripStartDate,
   tripEndDate,
+  isUsingCard = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedPayments, setExpandedPayments] = useState<Set<number>>(new Set());
@@ -41,25 +44,56 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
     // Add first month if prorated
     if (isFirstMonthProrated) {
       const proratedAmount = (monthlyRent / daysInFirstMonth) * daysRemainingInFirstMonth;
-      payments.push({
-        date: formatPaymentDate(start),
-        amount: proratedAmount,
-        hasSubItem: true,
-        subItem: {
+      const cardFee = isUsingCard ? calculateCreditCardFee(proratedAmount) : 0;
+      const totalAmount = proratedAmount + cardFee;
+      
+      const subItems = [
+        {
           description: `${daysRemainingInFirstMonth} days of ${formatMonthYear(start)} (prorated)`,
           amount: proratedAmount,
-        },
+        }
+      ];
+      
+      if (isUsingCard) {
+        subItems.push({
+          description: 'Credit card processing fee (3%)',
+          amount: cardFee,
+        });
+      }
+      
+      payments.push({
+        date: formatPaymentDate(start),
+        amount: totalAmount,
+        hasSubItem: true,
+        subItems,
       });
       paymentIndex++;
     }
     
     // Add full months
     while (currentDate <= end && paymentIndex < 12) {
-      payments.push({
-        date: formatPaymentDate(currentDate),
-        amount: monthlyRent,
-        hasSubItem: false,
-      });
+      const cardFee = isUsingCard ? calculateCreditCardFee(monthlyRent) : 0;
+      const totalAmount = monthlyRent + cardFee;
+      
+      if (isUsingCard) {
+        // Show breakdown when using card
+        payments.push({
+          date: formatPaymentDate(currentDate),
+          amount: totalAmount,
+          hasSubItem: true,
+          subItems: [
+            { description: 'Monthly rent', amount: monthlyRent },
+            { description: 'Credit card processing fee (3%)', amount: cardFee }
+          ],
+        });
+      } else {
+        // Simple display for bank transfers
+        payments.push({
+          date: formatPaymentDate(currentDate),
+          amount: monthlyRent,
+          hasSubItem: false,
+        });
+      }
       
       currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
       paymentIndex++;
@@ -129,17 +163,19 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
                     </CollapsibleTrigger>
 
                     <CollapsibleContent>
-                      <div className="items-end justify-between px-6 md:px-8 py-2 self-stretch w-full flex-[0_0_auto] flex relative">
-                        <div className="relative w-fit mt-[-1.00px] font-poppins font-normal text-[#545454] text-sm md:text-base tracking-[0] leading-tight whitespace-nowrap">
-                          {payment.subItem?.description}
-                        </div>
-
-                        <div className="flex items-center justify-end gap-2 md:gap-4 relative">
+                      {payment.subItems?.map((subItem, subIndex) => (
+                        <div key={subIndex} className="items-end justify-between px-6 md:px-8 py-2 self-stretch w-full flex-[0_0_auto] flex relative">
                           <div className="relative w-fit mt-[-1.00px] font-poppins font-normal text-[#545454] text-sm md:text-base tracking-[0] leading-tight whitespace-nowrap">
-                            ${payment.subItem?.amount.toFixed(2)}
+                            {subItem.description}
+                          </div>
+
+                          <div className="flex items-center justify-end gap-2 md:gap-4 relative">
+                            <div className="relative w-fit mt-[-1.00px] font-poppins font-normal text-[#545454] text-sm md:text-base tracking-[0] leading-tight whitespace-nowrap">
+                              ${subItem.amount.toFixed(2)}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      ))}
                     </CollapsibleContent>
                   </Collapsible>
                 ) : (

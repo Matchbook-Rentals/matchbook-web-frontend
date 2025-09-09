@@ -16,6 +16,7 @@ import { AdminDebugPanel } from '@/components/admin/AdminDebugPanel';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
 import dynamic from 'next/dynamic';
 import { calculatePayments, PaymentDetails } from '@/lib/calculate-payments';
+import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
 
 // Dynamic imports for PDF components to prevent SSR issues
 const PDFEditor = dynamic(() => import('@/components/pdf-editor/PDFEditor').then(mod => ({ default: mod.PDFEditor })), { ssr: false });
@@ -427,10 +428,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     }
   };
 
-  // Helper function to add credit card processing fee
-  const addCreditCardFee = (originalAmount: number) => {
-    return (originalAmount + 0.30) / (1 - 0.029);
-  };
+  // Note: Credit card fee calculation uses Stripe's inclusive formula
+  // to ensure we receive the intended amount after fees are deducted
 
   // Calculate all payment details
   const paymentDetails = calculatePayments({
@@ -473,9 +472,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     const applicationFee = Math.round(subtotal * 0.03 * 100) / 100;
     subtotal += applicationFee;
     
-    // Add credit card processing fees if payment method is card
+    // Add Stripe's credit card processing fees (2.9% + $0.30) if using card
     if (paymentMethodType === 'card') {
-      const totalWithCardFee = addCreditCardFee(subtotal);
+      const totalWithCardFee = calculateTotalWithStripeCardFee(subtotal);
       return Math.round(totalWithCardFee * 100) / 100;
     }
     
@@ -495,7 +494,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     
     if (paymentMethodType === 'card') {
       const subtotalWithAppFee = subtotalBeforeFees + applicationFee;
-      const totalWithCardFee = addCreditCardFee(subtotalWithAppFee);
+      const totalWithCardFee = calculateTotalWithStripeCardFee(subtotalWithAppFee);
       processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
       total = Math.round(totalWithCardFee * 100) / 100;
     }
@@ -701,7 +700,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Property Summary Sidebar */}
             <div className="lg:col-span-1">
-              <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} paymentDetails={paymentDetails} />
+              <BookingSummarySidebar 
+                match={match} 
+                paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} 
+                paymentDetails={paymentDetails}
+                isUsingCard={selectedPaymentMethodType === 'card'}
+              />
             </div>
 
             {/* Payment Method Setup */}
@@ -721,6 +725,13 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 }}
                 onSuccess={handlePaymentSuccess}
                 onAddPaymentMethod={() => setShowPaymentSelector(false)}
+                onPaymentMethodChange={(methodType) => {
+                  setSelectedPaymentMethodType(methodType || undefined);
+                }}
+                onBack={() => {
+                  // Navigate back to view the signed PDF lease
+                  setShowPaymentSelector(false);
+                }}
                 tripStartDate={match.trip.startDate}
                 tripEndDate={match.trip.endDate}
                 hidePaymentMethods={hidePaymentMethods}
@@ -763,7 +774,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
             {currentStepState !== 'sign-lease' && (
               <div className="lg:col-span-1">
                 {currentStepState === 'overview-lease' ? (
-                  <BookingSummarySidebar match={match} paymentBreakdown={getPaymentBreakdown()} paymentDetails={paymentDetails} />
+                  <BookingSummarySidebar 
+                    match={match} 
+                    paymentBreakdown={getPaymentBreakdown()} 
+                    paymentDetails={paymentDetails}
+                    isUsingCard={false}
+                  />
                 ) : (
                   <Card>
                     <CardHeader>

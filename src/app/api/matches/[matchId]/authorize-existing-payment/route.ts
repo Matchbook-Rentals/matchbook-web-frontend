@@ -58,21 +58,19 @@ export async function POST(
       return NextResponse.json({ error: 'No Stripe customer found' }, { status: 400 });
     }
 
-    // Get payment method details to determine capture method
+    // Get payment method details
     const paymentMethod = await stripe.paymentMethods.retrieve(match.stripePaymentMethodId);
-    const isBankAccount = paymentMethod.type === 'us_bank_account';
-    const captureMethod = isBankAccount ? 'automatic' : 'manual';
 
-    console.log('💳 Existing payment method type:', paymentMethod.type, 'Capture method:', captureMethod);
+    console.log('💳 Existing payment method type:', paymentMethod.type, 'Using automatic capture');
 
-    // Create payment intent for authorization with Stripe Connect transfer
+    // Create payment intent with automatic capture (immediate charge)
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100, // Convert to cents
       currency: 'usd',
       customer: user.stripeCustomerId,
       payment_method: match.stripePaymentMethodId,
       payment_method_types: ['card', 'us_bank_account'],
-      capture_method: captureMethod, // Automatic for bank accounts, manual for cards
+      capture_method: 'automatic', // Automatic capture for all payment types - charge immediately
       confirm: true,
       return_url: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/app/rent/match/${params.matchId}/payment-success`,
       transfer_data: {
@@ -88,18 +86,22 @@ export async function POST(
       receipt_email: match.trip.user?.email || undefined, // Send receipt to user
     });
 
-    // Update match with authorization info
+    // Update match with payment info
     const updateData: any = {
       stripePaymentIntentId: paymentIntent.id,
       paymentAuthorizedAt: new Date(),
       paymentAmount: amount,
     };
 
-    // If bank account (automatic capture), mark as captured immediately
-    if (isBankAccount && paymentIntent.status === 'succeeded') {
+    // Since we're using automatic capture for all payment types, mark as captured if succeeded
+    if (paymentIntent.status === 'succeeded') {
       updateData.paymentCapturedAt = new Date();
       updateData.paymentStatus = 'captured';
+    } else if (paymentIntent.status === 'processing') {
+      // Payment is still processing (common for bank transfers)
+      updateData.paymentStatus = 'processing';
     } else {
+      // In case of any other status
       updateData.paymentStatus = 'authorized';
     }
 

@@ -8,6 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ArrowLeft, FileText, Home, Calendar, DollarSign, CheckCircle, CreditCard, Shield, User, RefreshCw, ChevronDown } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
+import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
 
 interface HostMatchClientProps {
   match: MatchWithRelations;
@@ -420,10 +421,8 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
     }
   };
 
-  // Helper function to add credit card processing fee
-  const addCreditCardFee = (originalAmount: number) => {
-    return (originalAmount + 0.30) / (1 - 0.029);
-  };
+  // Note: Credit card fee calculation uses Stripe's inclusive formula
+  // to ensure we receive the intended amount after fees are deducted
 
   // Calculate payment amount (rent due at booking + fees only - matches lease signing client)
   const calculatePaymentAmount = (paymentMethodType?: string) => {
@@ -436,9 +435,9 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
     const applicationFee = Math.round(subtotal * 0.03 * 100) / 100;
     subtotal += applicationFee;
     
-    // Add credit card processing fees if payment method is card
+    // Add Stripe's credit card processing fees (2.9% + $0.30) if using card
     if (paymentMethodType === 'card') {
-      const totalWithCardFee = addCreditCardFee(subtotal);
+      const totalWithCardFee = calculateTotalWithStripeCardFee(subtotal);
       return Math.round(totalWithCardFee * 100) / 100;
     }
     
@@ -455,7 +454,7 @@ export default function HostMatchClient({ match, matchId }: HostMatchClientProps
     
     if (paymentMethodType === 'card') {
       const subtotalWithAppFee = rentDueAtBooking + applicationFee;
-      const totalWithCardFee = addCreditCardFee(subtotalWithAppFee);
+      const totalWithCardFee = calculateTotalWithStripeCardFee(subtotalWithAppFee);
       processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
       total = Math.round(totalWithCardFee * 100) / 100;
     }

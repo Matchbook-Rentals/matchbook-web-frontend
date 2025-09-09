@@ -1,3 +1,17 @@
+/**
+ * Booking Summary Sidebar Component
+ * 
+ * Fee Structure:
+ * - SERVICE FEE: Applied to monthly rent (base rent + pet rent)
+ *   • 3% for trips 6 months or shorter
+ *   • 1.5% for trips longer than 6 months
+ * 
+ * - TRANSFER FEE: Applied to deposits (security + pet deposits)
+ *   • Flat $5 fee regardless of deposit amount
+ *   • One-time fee for deposit transfers
+ * 
+ * @module booking-summary-sidebar
+ */
 'use client';
 
 import { useState } from 'react';
@@ -7,6 +21,7 @@ import { Home, Calendar, MapPinIcon, ChevronDownIcon } from 'lucide-react';
 import { MatchWithRelations } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
 import { PaymentDetails } from '@/lib/calculate-payments';
+import { FEES, getServiceFeeRate, calculateCreditCardFee } from '@/lib/fee-constants';
 
 interface BookingSummarySidebarProps {
   match: MatchWithRelations;
@@ -18,11 +33,38 @@ interface BookingSummarySidebarProps {
     total: number;
   };
   paymentDetails?: PaymentDetails;
+  isUsingCard?: boolean;
 }
 
-export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails }: BookingSummarySidebarProps) {
-  const [isRentOpen, setIsRentOpen] = useState(false);
-  const [isDepositOpen, setIsDepositOpen] = useState(false);
+interface BreakdownItem {
+  label: string;
+  amount: string;
+}
+
+export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails, isUsingCard = false }: BookingSummarySidebarProps) {
+  // Consolidated state for section toggles
+  const [sectionStates, setSectionStates] = useState({
+    rent: false,
+    deposit: false,
+    creditCard: false
+  });
+  
+  const toggleSection = (section: 'rent' | 'deposit' | 'creditCard') => {
+    setSectionStates(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+  
+  // Helper functions
+  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+  
+  const formatPetLabel = (numPets: number, type: 'rent' | 'deposit') => {
+    if (numPets <= 0) return `Pet ${type}`;
+    return `Pet ${type} (${numPets} pet${numPets > 1 ? 's' : ''})`;
+  };
+  
+  const getUtilitiesStatus = () => {
+    const included = paymentDetails?.utilitiesIncluded ?? match.listing.utilitiesIncluded;
+    return included ? 'Included' : 'Not included';
+  };
   
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -38,12 +80,8 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
       listing: match.listing, 
       trip: match.trip 
     });
-    
-    // Use calculated rent if valid, otherwise fall back to match.monthlyRent or 0
-    if (calculatedRent && calculatedRent !== 77777) {
-      return calculatedRent;
-    }
-    return match.monthlyRent || 0;
+    const isValidRent = calculatedRent && calculatedRent !== 77777;
+    return isValidRent ? calculatedRent : (match.monthlyRent || 0);
   };
 
   // Get bedroom count from bedrooms relation array length
@@ -57,82 +95,85 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
     { icon: Calendar, label: `${Math.ceil((new Date(match.trip.endDate).getTime() - new Date(match.trip.startDate).getTime()) / (1000 * 60 * 60 * 24))} days` }
   ];
 
-  // Calculate trip duration in months
+  // Calculate trip duration in months for service fee calculation
   const tripStartDate = new Date(match.trip.startDate);
   const tripEndDate = new Date(match.trip.endDate);
   const monthsDiff = (tripEndDate.getFullYear() - tripStartDate.getFullYear()) * 12 + 
                      (tripEndDate.getMonth() - tripStartDate.getMonth());
   
-  // Use 1.5% for trips longer than 6 months, otherwise 3%
-  const serviceFeeRate = monthsDiff > 6 ? 0.015 : 0.03;
+  // Get service fee rate based on trip duration (3% for ≤6 months, 1.5% for >6 months)
+  const serviceFeeRate = getServiceFeeRate(monthsDiff);
 
-  // Build rent breakdown items - show all items including pet rent
-  const rentBreakdownItems = [];
-  
-  // Use paymentDetails if available, otherwise fall back to getMonthlyRent
-  let rentSubtotal = 0;
-  if (paymentDetails) {
-    rentSubtotal = paymentDetails.monthlyRent + paymentDetails.monthlyPetRent;
-    rentBreakdownItems.push(
-      { label: 'Base rent', amount: `$${paymentDetails.monthlyRent.toFixed(2)}` },
-      { 
-        label: match.trip.numPets > 0 
-          ? `Pet rent (${match.trip.numPets} pet${match.trip.numPets > 1 ? 's' : ''})` 
-          : 'Pet rent',
-        amount: `$${paymentDetails.monthlyPetRent.toFixed(2)}` 
-      }
-    );
-  } else {
-    rentSubtotal = getMonthlyRent();
-    rentBreakdownItems.push(
-      { label: 'Base rent', amount: `$${getMonthlyRent().toFixed(2)}` },
-      { label: 'Pet rent', amount: '$0.00' }
-    );
-  }
-  
-  // Add service fee (1.5% for >6 months, 3% otherwise)
-  const rentServiceFee = rentSubtotal * serviceFeeRate;
-  rentBreakdownItems.push(
-    { label: 'Service fee', amount: `$${rentServiceFee.toFixed(2)}` }
-  );
-  
-  // Add utilities status
-  const utilitiesStatus = paymentDetails 
-    ? (paymentDetails.utilitiesIncluded ? 'Included' : 'Not included')
-    : (match.listing.utilitiesIncluded ? 'Included' : 'Not included');
+  // Calculate rent breakdown
+  const calculateRentBreakdown = (): { items: BreakdownItem[], subtotal: number, serviceFee: number } => {
+    const items: BreakdownItem[] = [];
+    let subtotal = 0;
     
-  rentBreakdownItems.push(
-    { label: 'Utilities', amount: utilitiesStatus }
-  );
+    if (paymentDetails) {
+      subtotal = paymentDetails.monthlyRent + paymentDetails.monthlyPetRent;
+      items.push(
+        { label: 'Base rent', amount: formatCurrency(paymentDetails.monthlyRent) },
+        { 
+          label: formatPetLabel(match.trip.numPets, 'rent'),
+          amount: formatCurrency(paymentDetails.monthlyPetRent)
+        }
+      );
+    } else {
+      subtotal = getMonthlyRent();
+      items.push(
+        { label: 'Base rent', amount: formatCurrency(getMonthlyRent()) },
+        { label: 'Pet rent', amount: formatCurrency(0) }
+      );
+    }
+    
+    const serviceFee = subtotal * serviceFeeRate;
+    items.push(
+      { label: 'Service fee', amount: formatCurrency(serviceFee) },
+      { label: 'Utilities', amount: getUtilitiesStatus() }
+    );
+    
+    return { items, subtotal, serviceFee };
+  };
+  
+  const rentBreakdown = calculateRentBreakdown();
+  const rentBreakdownItems = rentBreakdown.items;
+  const rentSubtotal = rentBreakdown.subtotal;
+  const rentServiceFee = rentBreakdown.serviceFee;
 
-  // Build deposit breakdown items - show all items including pet deposit
-  const depositBreakdownItems = [];
-  
-  let depositSubtotal = 0;
-  if (paymentDetails) {
-    depositSubtotal = paymentDetails.securityDeposit + paymentDetails.petDeposit;
-    depositBreakdownItems.push(
-      { label: 'Security deposit', amount: `$${paymentDetails.securityDeposit.toFixed(2)}` },
-      { 
-        label: match.trip.numPets > 0 
-          ? `Pet deposit (${match.trip.numPets} pet${match.trip.numPets > 1 ? 's' : ''})` 
-          : 'Pet deposit',
-        amount: `$${paymentDetails.petDeposit.toFixed(2)}` 
-      }
+  // Calculate deposit breakdown
+  const calculateDepositBreakdown = (): { items: BreakdownItem[], subtotal: number, transferFee: number } => {
+    const items: BreakdownItem[] = [];
+    let subtotal = 0;
+    
+    if (paymentDetails) {
+      subtotal = paymentDetails.securityDeposit + paymentDetails.petDeposit;
+      items.push(
+        { label: 'Security deposit', amount: formatCurrency(paymentDetails.securityDeposit) },
+        { 
+          label: formatPetLabel(match.trip.numPets, 'deposit'),
+          amount: formatCurrency(paymentDetails.petDeposit)
+        }
+      );
+    } else {
+      subtotal = paymentBreakdown.securityDeposit;
+      items.push(
+        { label: 'Security deposit', amount: formatCurrency(paymentBreakdown.securityDeposit) },
+        { label: 'Pet deposit', amount: formatCurrency(0) }
+      );
+    }
+    
+    const transferFee = FEES.TRANSFER_FEE;
+    items.push(
+      { label: 'Transfer fee', amount: formatCurrency(transferFee) }
     );
-  } else {
-    depositSubtotal = paymentBreakdown.securityDeposit;
-    depositBreakdownItems.push(
-      { label: 'Security deposit', amount: `$${paymentBreakdown.securityDeposit.toFixed(2)}` },
-      { label: 'Pet deposit', amount: '$0.00' }
-    );
-  }
+    
+    return { items, subtotal, transferFee };
+  };
   
-  // Add service fee (flat $5 for security deposit)
-  const depositServiceFee = 5;
-  depositBreakdownItems.push(
-    { label: 'Service fee', amount: `$${depositServiceFee.toFixed(2)}` }
-  );
+  const depositBreakdown = calculateDepositBreakdown();
+  const depositBreakdownItems = depositBreakdown.items;
+  const depositSubtotal = depositBreakdown.subtotal;
+  const depositTransferFee = depositBreakdown.transferFee;
 
   return (
     <div className="flex w-[410px] items-center gap-2.5 p-8 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
@@ -199,8 +240,8 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
         <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
           <Collapsible 
             className="flex flex-col items-start gap-5 pt-0 pb-6 px-0 relative self-stretch w-full flex-[0_0_auto] border-b [border-bottom-style:solid] border-[#8fbaba]"
-            open={isRentOpen}
-            onOpenChange={setIsRentOpen}
+            open={sectionStates.rent}
+            onOpenChange={() => toggleSection('rent')}
           >
             <CollapsibleTrigger className="relative self-stretch w-full h-[42px] flex items-center justify-between">
               <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#333333] text-lg tracking-[0] leading-[21.6px]">
@@ -208,9 +249,9 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
               </div>
               <div className="flex items-center gap-2">
                 <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
-                  ${(rentSubtotal + rentServiceFee).toFixed(2)}
+                  {formatCurrency(rentSubtotal + rentServiceFee)}
                 </div>
-                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${isRentOpen ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${sectionStates.rent ? 'rotate-180' : ''}`} />
               </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="flex flex-col gap-5 w-full">
@@ -232,8 +273,8 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
 
           <Collapsible 
             className="flex flex-col items-start gap-5 pt-0 pb-6 px-0 relative self-stretch w-full flex-[0_0_auto] border-b [border-bottom-style:solid] border-[#8fbaba]"
-            open={isDepositOpen}
-            onOpenChange={setIsDepositOpen}
+            open={sectionStates.deposit}
+            onOpenChange={() => toggleSection('deposit')}
           >
             <CollapsibleTrigger className="relative self-stretch w-full h-[22px] flex items-center justify-between">
               <div className="[font-family:'Poppins',Helvetica] font-bold text-[#333333] text-lg tracking-[0] leading-[21.6px]">
@@ -241,9 +282,9 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
               </div>
               <div className="flex items-center gap-2">
                 <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
-                  ${(depositSubtotal + depositServiceFee).toFixed(2)}
+                  {formatCurrency(depositSubtotal + depositTransferFee)}
                 </div>
-                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${isDepositOpen ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${sectionStates.deposit ? 'rotate-180' : ''}`} />
               </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="flex flex-col gap-5 w-full">
@@ -262,6 +303,50 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails 
               ))}
             </CollapsibleContent>
           </Collapsible>
+
+          {/* Credit Card Processing Fee Section - Only show when using card */}
+          {isUsingCard && (
+            <Collapsible 
+              className="flex flex-col items-start gap-5 pt-0 pb-6 px-0 relative self-stretch w-full flex-[0_0_auto] border-b [border-bottom-style:solid] border-[#8fbaba]"
+              open={sectionStates.creditCard}
+              onOpenChange={() => toggleSection('creditCard')}
+            >
+              <CollapsibleTrigger className="relative self-stretch w-full h-[22px] flex items-center justify-between">
+                <div className="[font-family:'Poppins',Helvetica] font-bold text-[#333333] text-lg tracking-[0] leading-[21.6px]">
+                  Credit Card Processing
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
+                    {formatCurrency(calculateCreditCardFee((rentSubtotal + rentServiceFee) + (depositSubtotal + depositTransferFee)))}
+                  </div>
+                  <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${sectionStates.creditCard ? 'rotate-180' : ''}`} />
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="flex flex-col gap-5 w-full">
+                <div className="flex items-end justify-between relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="relative mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-[#333333] text-lg tracking-[0] leading-[21.6px]">
+                    Monthly Rent (3%)
+                  </div>
+                  <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-[#333333] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
+                    {formatCurrency(calculateCreditCardFee(rentSubtotal + rentServiceFee))}
+                  </div>
+                </div>
+                <div className="flex items-end justify-between relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="relative mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-[#333333] text-lg tracking-[0] leading-[21.6px]">
+                    Deposit (3%)
+                  </div>
+                  <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-[#333333] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
+                    {formatCurrency(calculateCreditCardFee(depositSubtotal + depositTransferFee))}
+                  </div>
+                </div>
+                <div className="flex items-end justify-between relative self-stretch w-full flex-[0_0_auto] pt-3 border-t border-[#d9dadf]">
+                  <div className="relative mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-[#666666] text-sm tracking-[0] leading-[16.8px]">
+                    Processing fee for credit card payments
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          )}
         </div>
       </div>
     </div>

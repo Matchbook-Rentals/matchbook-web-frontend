@@ -7,28 +7,53 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { FEES, calculateCreditCardFee } from '@/lib/fee-constants';
 
 interface PaymentBreakdown {
   monthlyRent: number;
   securityDeposit: number;
   petDeposit?: number;
-  serviceFee: number;
+  transferFee?: number;
+  serviceFee?: number; // Backward compatibility
   processingFee?: number;
   total: number;
 }
 
 interface TotalDueSectionProps {
   paymentBreakdown: PaymentBreakdown;
+  isUsingCard?: boolean;
 }
 
-export const TotalDueSection: React.FC<TotalDueSectionProps> = ({ paymentBreakdown }) => {
+/**
+ * Total Due Section Component
+ * 
+ * Displays the total amount due today, which includes:
+ * - Security Deposit
+ * - Pet Deposit (if applicable)
+ * - Transfer Fee (flat $5 for deposit transfers)
+ * 
+ * Note: Monthly rent is NOT included here - it's shown in the Upcoming Payments section
+ */
+export const TotalDueSection: React.FC<TotalDueSectionProps> = ({ 
+  paymentBreakdown, 
+  isUsingCard = false 
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Always use the flat transfer fee from constants ($5)
+  // This is for deposit transfers, not rent service fees
+  const transferFee = FEES.TRANSFER_FEE;
+
+  // Calculate base amount (deposits + transfer fee)
+  const baseAmount = paymentBreakdown.securityDeposit + 
+                     (paymentBreakdown.petDeposit || 0) + 
+                     transferFee;
+
+  // Calculate credit card fee if applicable (3% of base amount)
+  const creditCardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
+
+  // Build payment items array
   const paymentItems = [
-    {
-      label: 'First Month Rent',
-      amount: paymentBreakdown.monthlyRent,
-    },
     {
       label: 'Security Deposit',
       amount: paymentBreakdown.securityDeposit,
@@ -38,14 +63,17 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({ paymentBreakdo
       amount: paymentBreakdown.petDeposit,
     }] : []),
     {
-      label: 'Service Fee',
-      amount: paymentBreakdown.serviceFee,
+      label: 'Transfer Fee',
+      amount: transferFee,
     },
-    ...(paymentBreakdown.processingFee ? [{
-      label: 'Processing Fee',
-      amount: paymentBreakdown.processingFee,
+    ...(isUsingCard ? [{
+      label: 'Credit Card Processing Fee',
+      amount: creditCardFee,
     }] : []),
   ];
+
+  // Calculate total including credit card fee if applicable
+  const calculatedTotal = baseAmount + creditCardFee;
 
   return (
     <section className="flex flex-col items-start gap-3 md:gap-4 relative self-stretch w-full flex-[0_0_auto]">
@@ -59,7 +87,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({ paymentBreakdo
 
           <div className="flex items-center justify-end gap-2 md:gap-4 relative">
             <div className="relative w-fit font-poppins font-semibold text-[#020202] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
-              ${paymentBreakdown.total.toFixed(2)}
+              ${calculatedTotal.toFixed(2)}
             </div>
 
             <ChevronDownIcon className={`relative w-5 h-5 md:w-6 md:h-6 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
@@ -92,7 +120,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({ paymentBreakdo
 
               <div className="flex items-center justify-end gap-2 md:gap-4 relative">
                 <div className="relative w-fit mt-[-1.00px] font-poppins font-bold text-[#020202] text-lg md:text-xl tracking-[0] leading-tight whitespace-nowrap">
-                  ${paymentBreakdown.total.toFixed(2)}
+                  ${calculatedTotal.toFixed(2)}
                 </div>
               </div>
             </div>

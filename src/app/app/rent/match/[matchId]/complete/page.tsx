@@ -1,11 +1,13 @@
 import { getMatchById } from '@/app/actions/matches';
 import { notFound, redirect } from 'next/navigation';
+import { checkRole } from '@/utils/roles';
+import { CompleteClient } from './complete-client';
 
-interface MatchLeasePageProps {
+interface CompletePageProps {
   params: { matchId: string };
 }
 
-export default async function MatchLeasePage({ params }: MatchLeasePageProps) {
+export default async function CompletePage({ params }: CompletePageProps) {
   const result = await getMatchById(params.matchId);
   
   if (!result.success || !result.match) {
@@ -14,14 +16,26 @@ export default async function MatchLeasePage({ params }: MatchLeasePageProps) {
   
   const match = result.match;
   
-  // Redirect to the appropriate step based on match state
+  // Redirect if not complete
   if (!match.leaseDocumentId) {
     redirect(`/app/rent/match/${params.matchId}/awaiting-lease`);
-  } else if (!match.tenantSignedAt) {
-    redirect(`/app/rent/match/${params.matchId}/review`);
-  } else if (!match.paymentAuthorizedAt) {
-    redirect(`/app/rent/match/${params.matchId}/payment`);
-  } else {
-    redirect(`/app/rent/match/${params.matchId}/complete`);
   }
+  
+  if (!match.tenantSignedAt) {
+    redirect(`/app/rent/match/${params.matchId}/review`);
+  }
+  
+  if (!match.paymentAuthorizedAt) {
+    redirect(`/app/rent/match/${params.matchId}/payment`);
+  }
+  
+  const isAdminDev = await checkRole('admin_dev');
+  
+  return (
+    <CompleteClient 
+      match={match}
+      matchId={params.matchId}
+      isAdminDev={isAdminDev}
+    />
+  );
 }

@@ -114,28 +114,24 @@ export async function POST(
       monthlyPrice = match.monthlyRent || 0;
     }
 
-    // Calculate payment breakdown
-    const monthlyRent = monthlyPrice;
+    // Get deposit amounts
     const securityDeposit = match.listing.depositSize || 0;
     const petDeposit = match.listing.petDeposit || 0;
     
-    console.log('💰 Pricing calculation:', {
-      tripLength: `${tripLength.months} months, ${tripLength.days} days`,
-      monthsNeeded,
-      availablePricingTiers: match.listing.monthlyPricing?.map(p => ({ months: p.months, price: p.price })),
-      selectedMonthlyPrice: monthlyPrice,
-      fallbackMonthlyRent: match.monthlyRent,
+    console.log('💰 Deposit calculation:', {
       securityDeposit,
-      petDeposit
+      petDeposit,
+      totalDeposits: securityDeposit + petDeposit
     });
     
-    // Calculate MatchBook fee (3% of total amount)
-    const matchBookFee = Math.round(amount * 0.03 * 100); // 3% in cents
+    // Fixed transfer fee for deposits ($5)
+    const TRANSFER_FEE = 500; // $5 in cents
     
     // Calculate credit card processing fee (2.9% + 30¢ for cards)
     const cardProcessingFee = includeCardFee ? Math.round(amount * 0.029 * 100) + 30 : 0; // 2.9% + 30¢ in cents
     
-    const landlordAmount = (amount * 100) - matchBookFee; // Remaining amount in cents
+    // Landlord gets the deposits minus the transfer fee
+    const landlordAmount = (amount * 100) - TRANSFER_FEE - cardProcessingFee; // Amount after fees
 
     // Build line items dynamically
     const lineItems = [
@@ -143,13 +139,12 @@ export async function POST(
         price_data: {
           currency: 'usd',
           product_data: {
-            name: `Lease Payment - ${match.listing.locationString}`,
-            description: `Security deposit and first month rent for ${match.listing.locationString}${petDeposit > 0 ? '\n\nBreakdown:\n• Monthly Rent: $' + monthlyRent.toLocaleString() + '\n• Security Deposit: $' + securityDeposit.toLocaleString() + '\n• Pet Deposit: $' + petDeposit.toLocaleString() : '\n\nBreakdown:\n• Monthly Rent: $' + monthlyRent.toLocaleString() + '\n• Security Deposit: $' + securityDeposit.toLocaleString()}`,
+            name: `Security Deposit - ${match.listing.locationString}`,
+            description: `Security deposit${petDeposit > 0 ? ' and pet deposit' : ''} for ${match.listing.locationString}${petDeposit > 0 ? '\n\nBreakdown:\n• Security Deposit: $' + securityDeposit.toLocaleString() + '\n• Pet Deposit: $' + petDeposit.toLocaleString() : '\n\nAmount: $' + securityDeposit.toLocaleString()}`,
             metadata: {
               matchId: params.matchId,
               listingId: match.listingId,
               propertyAddress: match.listing.locationString,
-              monthlyRent: monthlyRent.toString(),
               securityDeposit: securityDeposit.toString(),
               petDeposit: petDeposit.toString(),
             }
@@ -162,15 +157,15 @@ export async function POST(
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'MatchBook Service Fee',
-            description: 'Platform processing and service fee (3% of lease payment)',
+            name: 'Transfer Fee',
+            description: 'Deposit transfer fee',
             metadata: {
               matchId: params.matchId,
-              feePercentage: '3%',
-              calculatedFrom: amount.toString(),
+              feeType: 'transfer_fee',
+              feeAmount: '$5',
             }
           },
-          unit_amount: matchBookFee, // MatchBook fee as separate line item
+          unit_amount: TRANSFER_FEE, // Fixed $5 transfer fee
         },
         quantity: 1,
       },
@@ -208,9 +203,9 @@ export async function POST(
         matchId: params.matchId,
         userId,
         amount: amount.toString(),
-        type: 'lease_payment_full',
+        type: 'security_deposit_payment',
         hostUserId: match.listing.userId,
-        matchBookFee: (matchBookFee / 100).toString(),
+        transferFee: (TRANSFER_FEE / 100).toString(),
         landlordAmount: (landlordAmount / 100).toString(),
         cardProcessingFee: (cardProcessingFee / 100).toString(),
         includeCardFee: includeCardFee.toString(),
@@ -224,8 +219,8 @@ export async function POST(
           matchId: params.matchId,
           userId,
           hostUserId: match.listing.userId,
-          type: 'lease_deposit_and_rent_checkout',
-          matchBookFee: (matchBookFee / 100).toString(),
+          type: 'security_deposit_checkout',
+          transferFee: (TRANSFER_FEE / 100).toString(),
           landlordAmount: (landlordAmount / 100).toString(),
           totalAmount: amount.toString(),
           cardProcessingFee: (cardProcessingFee / 100).toString(),

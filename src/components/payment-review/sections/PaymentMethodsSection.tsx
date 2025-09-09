@@ -23,11 +23,12 @@ interface PaymentMethod {
 
 interface PaymentMethodsSectionProps {
   selectedMethod: string;
-  onSelectMethod: (methodId: string) => void;
+  onSelectMethod: (methodId: string, methodType: 'card' | 'bank') => void;
   onProceedToPayment: (includeCardFee: boolean) => void;
   isProcessing: boolean;
   hidePaymentMethods?: boolean;
   onPaymentMethodsRefresh?: () => void;
+  initialPaymentMethods?: PaymentMethod[];
 }
 
 export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
@@ -37,9 +38,10 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
   isProcessing,
   hidePaymentMethods = false,
   onPaymentMethodsRefresh,
+  initialPaymentMethods = [],
 }) => {
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(initialPaymentMethods);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchPaymentMethods = async () => {
       try {
@@ -97,7 +99,11 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
     };
     
   useEffect(() => {
-    fetchPaymentMethods();
+    // Only fetch if we don't have initial payment methods
+    if (initialPaymentMethods.length === 0) {
+      setIsLoading(true);
+      fetchPaymentMethods();
+    }
   }, []);
 
   const handlePaymentMethodAdded = () => {
@@ -189,7 +195,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
                 ? 'bg-[#e7f0f0] border-2 border-[#0a6060]' 
                 : 'bg-background border-2 border-gray-300 hover:border-[#0a6060]'
             }`}
-            onClick={() => onSelectMethod(method.id)}
+            onClick={() => onSelectMethod(method.id, method.type)}
           >
             <CardContent className="flex items-start gap-1 p-4 h-full">
               <div className="flex items-start gap-3 relative flex-1 grow">
@@ -247,22 +253,6 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
           </Card>
         );
       }))}
-
-
-      {selectedMethod && (
-        <div className="flex gap-3 mt-4 w-full">
-          <Button
-            onClick={() => {
-              const method = displayedPaymentMethods.find(m => m.id === selectedMethod);
-              onProceedToPayment(method?.type === 'card');
-            }}
-            disabled={isProcessing}
-            className="flex-1 bg-[#0a6060] hover:bg-[#063a3a] text-white"
-          >
-            {isProcessing ? 'Processing...' : 'Continue to Payment'}
-          </Button>
-        </div>
-      )}
 
     </section>
   );
