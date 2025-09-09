@@ -235,55 +235,54 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
       </div>
 
       {/* Footer Controls - Fixed at bottom */}
-      {selectedPaymentMethod && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
-          <div className="flex items-center justify-between">
-            {/* Left side - Back button and payment method info */}
-            <div className="flex items-center gap-4">
-              {onBack && (
-                <Button
-                  onClick={onBack}
-                  variant="outline"
-                  className="flex items-center gap-2"
-                  size="lg"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back
-                </Button>
-              )}
-              <div className="text-sm text-gray-600">
-                {selectedPaymentMethodType === 'card' ? (
-                  <>
-                    <span className="font-medium">Credit Card Selected</span>
-                    <span className="text-xs text-gray-500 ml-2">• 3% processing fee applies</span>
-                  </>
-                ) : selectedPaymentMethodType === 'bank' ? (
-                  <>
-                    <span className="font-medium">Bank Account Selected</span>
-                    <span className="text-xs text-green-600 ml-2">• No additional fees</span>
-                  </>
-                ) : (
-                  <span className="font-medium">Payment method selected</span>
-                )}
-              </div>
-            </div>
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
+        <div className="flex items-center justify-between">
 
-            {/* Right side - Complete booking button */}
-            <div className="flex items-center gap-3">
+          {/* Left side - Back button and payment method info */}
+          <div className="flex items-center gap-4">
+            {onBack && (
               <Button
-                onClick={() => {
-                  handleProceedToPayment(selectedPaymentMethodType === 'card');
-                }}
-                disabled={isProcessing}
-                className="bg-[#0a6060] hover:bg-[#063a3a] text-white px-6 py-2"
+                onClick={onBack}
+                variant="outline"
+                className="flex items-center gap-2"
                 size="lg"
               >
-                {isProcessing ? 'Processing...' : 'Complete Booking'}
+                <ArrowLeft className="w-4 h-4" />
+                Back
               </Button>
+            )}
+            <div className="text-sm text-gray-600">
+              {selectedPaymentMethodType === 'card' ? (
+                <>
+                  <span className="font-medium">Credit Card Selected</span>
+                  <span className="text-xs text-gray-500 ml-2">• 3% processing fee applies</span>
+                </>
+              ) : selectedPaymentMethodType === 'bank' ? (
+                <>
+                  <span className="font-medium">Bank Account Selected</span>
+                  <span className="text-xs text-green-600 ml-2">• No additional fees</span>
+                </>
+              ) : (
+                <span className="font-medium">Select a payment method to continue</span>
+              )}
             </div>
           </div>
+
+          {/* Right side - Complete booking button */}
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => {
+                handleProceedToPayment(selectedPaymentMethodType === 'card');
+              }}
+              disabled={!selectedPaymentMethod || isProcessing}
+              className="bg-[#0a6060] hover:bg-[#063a3a] text-white px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              size="lg"
+            >
+              {isProcessing ? 'Processing...' : 'Complete Booking'}
+            </Button>
+          </div>
         </div>
-      )}
+      </div>
 
       <EmbeddedCheckoutModal
         isOpen={showEmbeddedCheckout}

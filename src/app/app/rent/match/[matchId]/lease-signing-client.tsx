@@ -18,6 +18,16 @@ import dynamic from 'next/dynamic';
 import { calculatePayments, PaymentDetails } from '@/lib/calculate-payments';
 import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
 
+// Define step types for cleaner state management
+type LeaseSigningStep = 
+  | 'no-lease'
+  | 'overview'
+  | 'signing'
+  | 'pdf-review'
+  | 'payment'
+  | 'payment-method-exists'
+  | 'completed';
+
 // Dynamic imports for PDF components to prevent SSR issues
 const PDFEditor = dynamic(() => import('@/components/pdf-editor/PDFEditor').then(mod => ({ default: mod.PDFEditor })), { ssr: false });
 const PDFEditorSigner = dynamic(() => import('@/components/pdf-editor/PDFEditorSigner').then(mod => ({ default: mod.PDFEditorSigner })), { ssr: false });
@@ -47,7 +57,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const [documentRecipients, setDocumentRecipients] = useState<any[]>([]);
   const [listingDocuments, setListingDocuments] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showPaymentSelector, setShowPaymentSelector] = useState(false);
+  // Unified step state to replace multiple booleans
+  const [currentStep, setCurrentStep] = useState<LeaseSigningStep>('overview');
   const [selectedPaymentMethodType, setSelectedPaymentMethodType] = useState<string>();
   const [leaseCompleted, setLeaseCompleted] = useState(false);
   const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
@@ -59,6 +70,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   
   // Track server-provided initial step (clear after first render to allow client transitions)
   const [serverInitialStep, setServerInitialStep] = useState(initialStep);
+  
+  // Track previous step for back navigation
+  const [previousStep, setPreviousStep] = useState<LeaseSigningStep | null>(null);
   
   // Note: Workflow state management removed - PDFEditorSigner handles this internally
 
@@ -339,9 +353,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
       });
 
       if (response.ok) {
+        // Save current step before transitioning
+        setPreviousStep('signing');
+        
         // Transition to payment step (stay on same route)
         setLeaseCompleted(true);
-        setShowPaymentSelector(true);
+        setCurrentStep('payment');
         
         // Clear server initial step so client-side logic takes over for transitions
         setServerInitialStep(undefined);
@@ -357,8 +374,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
         variant: "destructive",
       });
       // Still proceed to payment since document was signed
+      setPreviousStep('signing');
       setLeaseCompleted(true);
-      setShowPaymentSelector(true);
+      setCurrentStep('payment');
     } finally {
       setIsTransitioning(false);
     }
@@ -375,14 +393,15 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   };
 
   const handlePaymentCancel = () => {
-    setShowPaymentSelector(false);
+    setCurrentStep('overview');
     setLeaseCompleted(false);
   };
 
   // Debug function to manually trigger payment step (for testing)
   const handleManualPaymentTrigger = () => {
+    setPreviousStep(currentStep);
     setLeaseCompleted(true);
-    setShowPaymentSelector(true);
+    setCurrentStep('payment');
     toast({
       title: "Debug",
       description: "Payment step triggered manually",
@@ -514,8 +533,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const isPaymentCaptured = !!match.paymentCapturedAt;
   const hasPaymentMethod = !!match.stripePaymentMethodId;
 
-  // Add state for overview vs signing mode
-  const [showSigningMode, setShowSigningMode] = useState(false);
 
   // Track field signing status for sidebar progress
   const [fieldsStatus, setFieldsStatus] = useState<Record<string, 'signed' | 'pending'>>({});
@@ -552,23 +569,29 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     return renterSignerIndex;
   };
 
-  // Determine current step - use server-provided initial step to prevent flickering
-  const getCurrentStep = () => {
-    // If server provided initial step, use it (prevents flickering on initial render)
-    if (serverInitialStep) {
-      return serverInitialStep;
+  // Initialize current step based on state
+  useEffect(() => {
+    // Only set initial step once based on server or current state
+    if (serverInitialStep && currentStep === 'overview') {
+      if (serverInitialStep === 'no-lease-document') setCurrentStep('no-lease');
+      else if (serverInitialStep === 'overview-lease') setCurrentStep('overview');
+      else if (serverInitialStep === 'sign-lease') setCurrentStep('signing');
+      else if (serverInitialStep === 'payment-method-exists') setCurrentStep('payment-method-exists');
+      else if (serverInitialStep === 'complete-payment') setCurrentStep('payment');
+      else if (serverInitialStep === 'completed') setCurrentStep('completed');
+      setServerInitialStep(undefined);
     }
-    
-    // Fallback to client-side logic (for transitions after initial render)
-    if (!hasLeaseDocument) return 'no-lease-document';
-    if (!isLeaseSigned && !showSigningMode) return 'overview-lease';
-    if (!isLeaseSigned && showSigningMode) return 'sign-lease';
-    if (isLeaseSigned && hasPaymentMethod && !isPaymentCompleted) return 'payment-method-exists';
-    if (!isPaymentCompleted) return 'complete-payment';
-    return 'completed';
-  };
+  }, [serverInitialStep, currentStep]);
 
-  const currentStepState = getCurrentStep();
+  // Determine legacy step for components that still use it
+  const currentStepState = (() => {
+    if (currentStep === 'no-lease') return 'no-lease-document';
+    if (currentStep === 'overview') return 'overview-lease';
+    if (currentStep === 'signing') return 'sign-lease';
+    if (currentStep === 'payment') return 'complete-payment';
+    if (currentStep === 'pdf-review') return 'overview-lease'; // Treat PDF review as overview for progress
+    return currentStep;
+  })();
 
   // Map current step state to progress bar step number
   const progressCurrentStep = (() => {
@@ -664,10 +687,88 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   if (isInitializing) return renderLoadingSpinner("Loading lease details...");
   if (isTransitioning) return renderLoadingSpinner("Processing lease signature...");
 
-  // Show payment selector if lease is completed or if forced by showPaymentSelector
-  if (showPaymentSelector || currentStepState === 'complete-payment') {
+  // Show PDF review screen when user clicks back from payment
+  if (currentStep === 'pdf-review' && documentPdfFile) {
     return (
       <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto p-4 pb-24">
+          {/* Step Progress Bar */}
+          <div className="mb-8">
+            <StepProgress 
+              currentStep={1}
+              totalSteps={3}
+              labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+              className='w-full max-w-2xl'
+            />
+          </div>
+
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">Review Your Signed Lease</h1>
+            <p className="text-gray-600 mt-2">
+              Your lease has been signed. Review the document below or proceed to payment.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <BookingSummarySidebar 
+                match={match} 
+                paymentBreakdown={getPaymentBreakdown()} 
+                paymentDetails={paymentDetails}
+                isUsingCard={false}
+              />
+            </div>
+
+            {/* PDF Viewer */}
+            <div className="lg:col-span-2">
+              <Card className="bg-white">
+                <CardContent className="p-6">
+                  <div className="border rounded-lg overflow-hidden bg-gray-50">
+                    <PDFViewer
+                      file={documentPdfFile}
+                      pageWidth={800}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Fixed Footer Controls */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40" style={{ height: '80px' }}>
+            <div className="flex items-center justify-between">
+              {/* Left side - Status info */}
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-gray-600">
+                  <span className="text-green-600 font-medium">✓ Lease signed successfully</span>
+                </div>
+              </div>
+
+              {/* Right side - Action button */}
+              <div className="flex items-center gap-3">
+                <Button
+                  onClick={() => {
+                    setCurrentStep('payment');
+                  }}
+                  size="lg"
+                  className="bg-[#0A6060] hover:bg-[#085050]"
+                >
+                  Continue to Payment
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show payment selector if in payment step
+  if (currentStep === 'payment' || (leaseCompleted && currentStepState === 'complete-payment')) {
+    return (
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto p-4 pb-24">
           {/* Step Progress Bar */}
           <div className="mb-8">
@@ -729,13 +830,14 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                   total: calculatePaymentAmount(selectedPaymentMethodType)
                 }}
                 onSuccess={handlePaymentSuccess}
-                onAddPaymentMethod={() => setShowPaymentSelector(false)}
+                onAddPaymentMethod={() => setCurrentStep('overview')}
                 onPaymentMethodChange={(methodType) => {
                   setSelectedPaymentMethodType(methodType || undefined);
                 }}
                 onBack={() => {
-                  // Navigate back to view the signed PDF lease
-                  setShowPaymentSelector(false);
+                  console.log('🔙 Back button clicked - showing PDF review screen');
+                  // Show the PDF review screen
+                  setCurrentStep('pdf-review');
                 }}
                 tripStartDate={match.trip.startDate}
                 tripEndDate={match.trip.endDate}
@@ -905,7 +1007,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                       {/* Action Buttons */}
                       <div className="flex justify-end gap-3 pt-4">
                         <Button
-                          onClick={() => setShowSigningMode(true)}
+                          onClick={() => {
+                            setPreviousStep('overview');
+                            setCurrentStep('signing');
+                          }}
                           size="lg"
                           className="bg-[#0A6060] hover:bg-[#085050]"
                         >
@@ -925,7 +1030,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                           onSave={(data) => {
                           }}
                           onCancel={() => {
-                            setShowSigningMode(false);
+                            setCurrentStep('overview');
                             toast({
                               title: "Returned to lease review",
                               description: "You can proceed to sign when ready.",
@@ -966,7 +1071,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                           View Lease
                         </Button>
                         <Button 
-                          onClick={() => setShowPaymentSelector(true)}
+                          onClick={() => {
+                            setPreviousStep('payment-method-exists');
+                            setCurrentStep('payment');
+                          }}
                           variant="outline"
                           size="lg"
                         >
@@ -1195,7 +1303,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                   {currentStepState === 'overview-lease' && (
                     <Button 
                       onClick={() => {
-                        setShowSigningMode(true);
+                        setPreviousStep('overview');
+                        setCurrentStep('signing');
                         setServerInitialStep(undefined); // Clear server step to allow client transition
                       }}
                       size="sm"

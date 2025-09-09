@@ -1,9 +1,11 @@
 'use client';
 import { Booking } from '@prisma/client';
-import Image from 'next/image';
 import React from 'react';
-import { Trash, MoreHorizontal, Calendar, Check, XCircle, Clock } from 'lucide-react';
+import { MapPinIcon, MoreVertical, Trash } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { BrandButton } from "@/components/ui/brandButton";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useRouter } from 'next/navigation';
 
@@ -12,6 +14,7 @@ type BookingWithRelations = Booking & {
   listing?: {
     title: string;
     imageSrc?: string;
+    address?: string;
   };
   trip?: {
     numAdults: number;
@@ -23,10 +26,9 @@ type BookingWithRelations = Booking & {
 interface BookingCardProps {
   booking: BookingWithRelations;
   onDelete: (bookingId: string) => void;
-  headerText?: string;
 }
 
-const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete, headerText }) => {
+const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   const router = useRouter();
 
   // Format date range for display
@@ -34,78 +36,69 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete, headerText
   const endDate = new Date(booking.endDate);
   
   const dateRangeText = booking.startDate && booking.endDate ?
-    `${startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - 
-     ${endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}` :
+    `${startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}` :
     'No dates selected';
-  
-  const daysCount = booking.startDate && booking.endDate
-    ? Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
-    : 0;
-    
-  const dateDisplayText = booking.startDate && booking.endDate
-    ? `${dateRangeText} (${daysCount} days)`
-    : dateRangeText;
 
-  // Get status information
-  const getStatusInfo = () => {
+  // Get status badge style
+  const getStatusBadgeStyle = () => {
     switch (booking.status) {
-      case 'upcoming':
-        return {
-          label: 'Upcoming',
-          icon: <Calendar className="h-4 w-4 mr-1" />,
-          className: 'bg-blue-100 text-blue-800'
-        };
       case 'active':
-        return {
-          label: 'Active',
-          icon: <Clock className="h-4 w-4 mr-1" />,
-          className: 'bg-green-100 text-green-800'
-        };
+      case 'approved':
+        return 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]';
+      case 'upcoming':
+      case 'pending':
+        return 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]';
       case 'completed':
-        return {
-          label: 'Past',
-          icon: <Check className="h-4 w-4 mr-1" />,
-          className: 'bg-gray-100 text-gray-800'
-        };
+        return 'bg-gray-100 text-gray-600 border-gray-400';
       case 'cancelled':
-        return {
-          label: 'Cancelled',
-          icon: <XCircle className="h-4 w-4 mr-1" />,
-          className: 'bg-red-100 text-red-800'
-        };
+      case 'declined':
+        return 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]';
       default:
-        return {
-          label: 'Pending',
-          icon: <Clock className="h-4 w-4 mr-1" />,
-          className: 'bg-yellow-100 text-yellow-800'
-        };
+        return 'bg-gray-100 text-gray-600 border-gray-400';
     }
   };
 
-  const statusInfo = getStatusInfo();
+  // Get status label
+  const getStatusLabel = () => {
+    switch (booking.status) {
+      case 'active': return 'Active';
+      case 'upcoming': return 'Upcoming';
+      case 'completed': return 'Completed';
+      case 'cancelled': return 'Cancelled';
+      default: return booking.status || 'Pending';
+    }
+  };
 
-
-  // Format guest count
-  const getTotalGuests = () => {
-    if (!booking.trip) return '';
-    const { numAdults, numChildren, numPets } = booking.trip;
+  // Format guest/occupant details
+  const getOccupants = () => {
+    if (!booking.trip) return [];
+    const occupants = [];
     
-    let guestText = '';
-    if (numAdults > 0) {
-      guestText += `${numAdults} adult${numAdults !== 1 ? 's' : ''}`;
+    if (booking.trip.numAdults > 0) {
+      occupants.push({
+        type: booking.trip.numAdults === 1 ? 'Adult' : 'Adults',
+        count: booking.trip.numAdults,
+        icon: '/icons/user.svg' // You'll need to add appropriate icons
+      });
     }
     
-    if (numChildren > 0) {
-      if (guestText) guestText += ', ';
-      guestText += `${numChildren} child${numChildren !== 1 ? 'ren' : ''}`;
+    if (booking.trip.numChildren > 0) {
+      occupants.push({
+        type: booking.trip.numChildren === 1 ? 'Child' : 'Children',
+        count: booking.trip.numChildren,
+        icon: '/icons/child.svg'
+      });
     }
     
-    if (numPets > 0) {
-      if (guestText) guestText += ', ';
-      guestText += `${numPets} pet${numPets !== 1 ? 's' : ''}`;
+    if (booking.trip.numPets > 0) {
+      occupants.push({
+        type: booking.trip.numPets === 1 ? 'Pet' : 'Pets',
+        count: booking.trip.numPets,
+        icon: '/icons/pet.svg'
+      });
     }
     
-    return guestText;
+    return occupants;
   };
 
   // Calculate price display
@@ -115,106 +108,121 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete, headerText
       ? `$${(booking.monthlyRent / 100).toFixed(2)}/mo` 
       : '$0.00';
 
-  // Get listing title
+  // Get listing details
   const listingTitle = booking.listing?.title || 'Unnamed Property';
+  const listingAddress = booking.listing?.address || 'Address not available';
+  const listingImage = booking.listing?.imageSrc || '/placeholderImages/image_1.jpg';
 
-  // Calculate days left if it's an active booking
-  const daysLeft = booking.status === 'active' && booking.endDate ?
-    Math.ceil((new Date(booking.endDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
-    
+  const occupants = getOccupants();
+  
   return (
-    <>
-      <div className="border border-blueBrand rounded-md overflow-hidden shadow-md">
-        {headerText && (
-          <div className="px-4 py-2">
-            <p className="text-gray-500 font-medium">{headerText}</p>
-          </div>
-        )}
-        <div className="p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-background">
-          <div className="flex justify-between items-start w-full md:w-auto">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <h2 className="font-medium text-gray-900">{listingTitle}</h2>
+    <Card className="w-full p-6 rounded-xl">
+      <CardContent className="p-0">
+        <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 w-full">
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 flex-1 w-full min-w-0">
+            {/* Listing Image */}
+            <div 
+              className="relative w-[105px] h-[70px] sm:w-[157px] sm:h-[105px] lg:w-[209px] lg:h-[140px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+              style={{ backgroundImage: `url(${listingImage})` }}
+            />
+
+            {/* Booking Details */}
+            <div className="flex flex-col items-start gap-2.5 flex-1 min-w-0">
+              <div className="flex flex-col items-start justify-center gap-2 w-full">
+                <div className="flex flex-col sm:flex-row sm:items-start items-start gap-2 w-full">
+                  <div className="font-medium text-[#484a54] text-lg">
+                    {listingTitle}
+                  </div>
+
+                  <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
+                    {getStatusLabel()}
+                  </Badge>
+                </div>
+
+                <div className="text-sm text-[#777b8b]">
+                  {dateRangeText}
+                </div>
               </div>
-              <p className="text-sm text-gray-600">{dateDisplayText}</p>
-              {booking.trip && (
-                <p className="text-sm text-gray-500">{getTotalGuests()}</p>
+
+              <div className="flex items-start gap-2 w-full">
+                <MapPinIcon className="w-5 h-5 text-[#777b8b] flex-shrink-0 mt-0.5" />
+                <div className="flex-1 text-sm text-[#777b8b] min-w-0">
+                  <span className="block break-words">
+                    {listingAddress}
+                  </span>
+                </div>
+              </div>
+
+              {occupants.length > 0 && (
+                <div className="flex flex-wrap items-center gap-3 md:gap-6 w-full">
+                  {occupants.map((occupant, index) => (
+                    <div
+                      key={index}
+                      className="inline-flex items-center justify-center gap-1.5 py-1.5 rounded-full"
+                    >
+                      <div className="font-medium text-[#344054] text-sm leading-5 whitespace-nowrap">
+                        {occupant.count} {occupant.type}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
-            <div className="md:hidden">
+          </div>
+
+          {/* Right Side - Price and Actions */}
+          <div className="flex flex-col md:items-end items-start justify-start gap-4 w-full md:w-auto md:min-w-[280px] flex-shrink-0">
+            <div className="flex w-full md:justify-end justify-start">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
-                    className="rounded-md h-10 w-10 border border-gray-200"
+                    className="p-2.5 rounded-lg border-[#3c8787] text-[#3c8787]"
                   >
-                    <MoreHorizontal className="h-5 w-5 text-gray-500" />
-                    <span className="sr-only">Open menu</span>
+                    <MoreVertical className="w-5 h-5" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-fit p-1">
+                <PopoverContent className="w-48 p-0" align="end">
                   <Button
                     variant="ghost"
-                    className="w-full text-left flex items-center gap-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDelete(booking.id);
-                    }}
+                    className="w-full justify-start gap-2"
+                    onClick={() => onDelete(booking.id)}
                   >
-                   <Trash className="h-4 w-4" /> Delete booking
+                    <Trash className="w-4 h-4" />
+                    Delete Booking
                   </Button>
                 </PopoverContent>
               </Popover>
             </div>
-          </div>
-          <div className="flex flex-col items-start md:items-end gap-3 w-full md:w-auto">
-            <div className="text-right font-medium">{priceDisplay}</div>
-            <div className="flex justify-center gap-2 w-full md:w-auto">
-              <Button
-                className="bg-blueBrand hover:bg-blueBrand/90 text-white rounded-md px-4 py-2 text-sm font-medium flex-1 md:w-auto"
-                onClick={() => router.push(`bookings/${booking.id}`)}
-              >
-                View Details
-              </Button>
-              <Button
-                className="bg-blueBrand hover:bg-blueBrand/90 text-white rounded-md px-4 py-2 text-sm font-medium flex-1 md:w-auto"
-                onClick={() => {}}
-              >
-                Payment
-              </Button>
-              <div className="hidden md:block">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-md h-10 w-10 border border-gray-200"
-                    >
-                      <MoreHorizontal className="h-5 w-5 text-gray-500" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-fit p-1">
-                    <Button
-                      variant="ghost"
-                      className="w-full text-left flex items-center gap-2"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(booking.id);
-                      }}
-                    >
-                     <Trash className="h-4 w-4" /> Delete booking
-                    </Button>
-                  </PopoverContent>
-                </Popover>
+
+            <div className="flex flex-col md:items-end items-start justify-center gap-3 w-full">
+              <div className="w-full font-semibold text-[#484a54] text-xl md:text-right text-left">
+                {priceDisplay}
+              </div>
+
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 w-full">
+                <BrandButton
+                  variant="outline"
+                  onClick={() => router.push(`/app/rent/bookings/${booking.id}`)}
+                  className="w-full md:w-auto whitespace-nowrap"
+                >
+                  View Details
+                </BrandButton>
+
+                <BrandButton 
+                  variant="default"
+                  onClick={() => router.push(`/app/rent/bookings/${booking.id}/payment`)}
+                  className="w-full md:w-auto whitespace-nowrap"
+                >
+                  Payment
+                </BrandButton>
               </div>
             </div>
           </div>
         </div>
-        
-      </div>
-    </>
+      </CardContent>
+    </Card>
   )
 }
 

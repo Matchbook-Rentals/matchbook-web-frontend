@@ -13,34 +13,34 @@ This document catalogs all user notifications created throughout the Matchbook a
 ## Applications & Housing Requests
 
 ### Application Submitted (Host Notification)
-- **Message**: "New application from [renterName] for [listingTitle]"
+- **Message**: "New Application - [streetAddress1]"
 - **Action**: When a renter submits a housing request/application
-- **Link**: `/app/host/[listingId]/applications/[housingRequestId]`
-- **Source**: `src/app/actions/housing-requests.ts:175` (createHousingRequest)
+- **Link**: `/app/host/[listingId]/applications`
+- **Source**: `src/app/actions/housing-requests.ts:170-175` (createHousingRequest)
 
 ### Application Approved
 - **Message**: "Your application for [listingTitle] has been approved!"
-- **Action**: When host approves a housing request
-- **Link**: `/app/rent/match/[matchId]`
-- **Source**: `src/app/actions/housing-requests.ts:426` (approveHousingRequest)
+- **Action**: When host approves a housing request (Note: Often combined with lease signing notification via BoldSign webhook)
+- **Link**: `/app/rent/searches/[tripId]?tab=matchbook`
+- **Source**: `src/app/actions/housing-requests.ts:420-426` (approveHousingRequest)
 
 ### Application Declined
 - **Message**: "Your application for [listingTitle] has been declined."
 - **Action**: When host declines a housing request
 - **Link**: `/app/rent/searches/[tripId]`
-- **Source**: `src/app/actions/housing-requests.ts:483` (declineHousingRequest)
+- **Source**: `src/app/actions/housing-requests.ts:477-483` (declineHousingRequest)
 
-### Application Approval Reverted
-- **Message**: "Your approval for [listingTitle] has been reverted."
+### Application Approval Revoked
+- **Message**: "Your approval for [listingTitle] has been revoked."
 - **Action**: When host undoes an approval
 - **Link**: `/app/rent/searches/[tripId]`
-- **Source**: `src/app/actions/housing-requests.ts:591` (undoApproval)
+- **Source**: `src/app/actions/housing-requests.ts:585-591` (undoApproval)
 
 ### Application Decline Reverted
-- **Message**: "Good news! Your application for [listingTitle] is being reconsidered."
+- **Message**: "Your application for [listingTitle] is being reconsidered."
 - **Action**: When host undoes a decline
 - **Link**: `/app/rent/searches/[tripId]`
-- **Source**: `src/app/actions/housing-requests.ts:663` (undoDecline)
+- **Source**: `src/app/actions/housing-requests.ts:657-663` (undoDeclineHousingRequest)
 
 ---
 
@@ -51,8 +51,8 @@ This document catalogs all user notifications created throughout the Matchbook a
 - **Action**: When a booking is created (either via lease signing completion or payment completion)
 - **Link**: `/app/host-dashboard/[listingId]?tab=bookings`
 - **Source**: 
-  - `src/app/actions/bookings.ts:414` (createBookingFromCompletedMatch)
-  - `src/app/actions/documents.ts:411` (via webhook)
+  - `src/app/actions/bookings.ts:414-421` (createBookingFromCompletedMatch)
+  - `src/app/actions/documents.ts:125-148` (via document completion)
 
 ### Booking Created (General)
 - **Message**: Context-dependent notification content
@@ -64,7 +64,7 @@ This document catalogs all user notifications created throughout the Matchbook a
 - **Message**: "Your move-in has been confirmed! Please authorize your first month's rent payment of $[amount]."
 - **Action**: When host confirms move-in for a booking
 - **Link**: `/app/renter/bookings/[bookingId]/authorize-payment`
-- **Source**: `src/app/actions/bookings.ts:552` (confirmMoveIn)
+- **Source**: `src/app/actions/bookings.ts:552-559` (confirmMoveIn)
 
 ---
 
@@ -74,27 +74,28 @@ This document catalogs all user notifications created throughout the Matchbook a
 - **Message**: 
   - **Landlord**: "Application approved! Your lease agreement for [documentTitle] is ready for your signature."
   - **Tenant**: "Congratulations! Your application for [documentTitle] has been approved and your lease is ready for signature."
-- **Action**: When lease document is sent via BoldSign
+- **Action**: When lease document is sent via BoldSign ("Sent" event)
 - **Link**: 
   - **Landlord**: `/app/host/match/[matchId]`
   - **Tenant**: `/app/match/[matchId]`
-- **Source**: `src/app/api/boldsign/webhook/route.ts:111-137` (BoldSign "Sent" event)
+- **Source**: `src/app/api/boldsign/webhook/route.ts:111-137` (BoldSign webhook)
+- **ActionType**: `application_approved_lease_ready`
 
 ### Document Fully Signed
 - **Message**: "The lease document \"[documentTitle]\" has been fully signed. Payment setup is the next step."
 - **Action**: When all parties have signed a lease document
 - **Link**: `/app/documents/[documentId]`
-- **Source**: `src/app/actions/documents.ts:129` (updateDocumentSigningStatus)
+- **Source**: `src/app/actions/documents.ts:131-135` (sendCompletionNotifications)
 
 ### Lease Fully Executed
 - **Message**: 
   - With booking: "Your lease for [listingTitle] has been fully executed and your booking is confirmed!"
   - Without booking: "The document \"[documentTitle]\" has been fully executed."
-- **Action**: When lease is fully signed and executed
+- **Action**: When lease is fully signed and executed (triggers approval if not already approved)
 - **Link**: 
   - With booking: `/app/rent/match/[matchId]/complete`
   - Without booking: `/app/documents`
-- **Source**: `src/app/actions/documents.ts:270` (via BoldSign webhook)
+- **Source**: `src/app/actions/documents.ts:265-270` (handleHostSigningCompletion via BoldSign webhook)
 
 ---
 
@@ -128,20 +129,21 @@ This document catalogs all user notifications created throughout the Matchbook a
 ## Matches
 
 ### Match Created (Renter Notification)
-- **Message**: "Your request for [listingTitle] has been matched with a host!"
+- **Message**: "New Match"
 - **Action**: When a match is created between a housing request and a listing
-- **Link**: `/trips/[tripId]`
-- **Source**: `src/app/actions/matches.ts:57` (createMatch)
+- **Link**: `/app/rent/searches/?tab=matchbook&searchId=[tripId]`
+- **Source**: `src/app/actions/matches.ts:52-57` (createMatch)
 
 ---
 
 ## Admin Notifications
 
 ### Custom Admin Notification
-- **Message**: Custom content based on notification type
+- **Message**: "[title]: [message]" (Combined format)
 - **Action**: Admin manually creates a notification for a user
 - **Link**: Configurable (defaults to `/app/dashboard`)
-- **Source**: `src/app/admin/notifications/_actions.ts:85` (createAdminNotification)
+- **ActionType**: `ADMIN_[type]` format
+- **Source**: `src/app/admin/notifications/_actions.ts:82-91` (createAdminNotification)
 
 ---
 
@@ -170,6 +172,9 @@ The following notification types respect user email preferences (found in `src/a
 - `view` → emailApplicationReceivedNotifications
 - `application_approved` → emailApplicationApprovedNotifications
 - `application_declined` → emailApplicationDeclinedNotifications
+- `application_revoked` → No specific email preference (uses default)
+- `application_reconsidered` → No specific email preference (uses default)
+- `application_approved_lease_ready` → emailApplicationApprovedNotifications
 - `submit_host_review` → emailSubmitHostReviewNotifications
 - `submit_renter_review` → emailSubmitRenterReviewNotifications
 - `landlord_info_request` → emailLandlordInfoRequestNotifications
@@ -180,9 +185,10 @@ The following notification types respect user email preferences (found in `src/a
 - `move_in_upcoming` → emailMoveInUpcomingNotifications
 - `payment_success` → emailPaymentSuccessNotifications
 - `payment_failed` → emailPaymentFailedNotifications
+- `payment_authorization_required` → No specific email preference (uses default)
 - `off_platform_host` → emailOffPlatformHostNotifications
-- `lease_signature_required` → emailApplicationApprovedNotifications
 - `lease_fully_executed` → emailBookingCompletedNotifications
+- `ADMIN_[type]` → Always sent (bypasses preferences)
 
 ---
 
