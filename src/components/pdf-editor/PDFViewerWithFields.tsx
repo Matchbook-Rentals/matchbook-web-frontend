@@ -153,7 +153,10 @@ export const PDFViewerWithFields: React.FC<PDFViewerWithFieldsProps> = ({
       } else {
         signerName = recipient?.name || `Signer ${recipientIndex + 1}`;
       }
-      return signerName;
+      
+      // Add field type to the label
+      const fieldTypeName = FRIENDLY_FIELD_TYPE[field.type] || 'Field';
+      return `${signerName} - ${fieldTypeName}`;
     };
 
     const isSigned = !!field.value || !!field.signedValue;
@@ -184,7 +187,7 @@ export const PDFViewerWithFields: React.FC<PDFViewerWithFieldsProps> = ({
           className="absolute -top-6 left-0 text-xs px-1 py-0.5 rounded-t text-white whitespace-nowrap"
           style={{ backgroundColor: signerStyles.borderColor }}
         >
-          {getFieldLabel()} {field.signerIndex !== undefined ? `#${field.signerIndex + 1}` : ''}
+          {getFieldLabel()}
         </div>
       </div>
     );

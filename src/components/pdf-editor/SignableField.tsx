@@ -273,7 +273,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
       <div
         data-field-id={field.formId}
         className={cn(
-          'absolute transition-all',
+          'absolute transition-all group',
           'border-2 rounded flex items-center justify-center text-center text-sm font-medium',
           // Current signer's fields
           isForCurrentSigner && !isSigned && 'cursor-pointer hover:scale-105 hover:shadow-lg bg-white/90',
@@ -362,9 +362,9 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           </div>
         )}
         
-        {/* Signer label in top-left corner */}
+        {/* Signer label in top-left corner - only visible on hover */}
         <div 
-          className="absolute -top-2 -left-2 px-1.5 py-0.5 text-[10px] font-semibold text-white rounded shadow-sm"
+          className="absolute -top-2 -left-2 px-1.5 py-0.5 text-[10px] font-semibold text-white rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
           style={{
             backgroundColor: getSignerBorderColor(),
           }}

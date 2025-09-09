@@ -690,8 +690,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   // Show PDF review screen when user clicks back from payment
   if (currentStep === 'pdf-review' && documentPdfFile) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto p-4 pb-24">
+      <BrandAlertProvider>
+        <div className="min-h-screen bg-gray-50">
+          <div className="container mx-auto p-4 pb-24">
           {/* Step Progress Bar */}
           <div className="mb-8">
             <StepProgress 
@@ -721,18 +722,19 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
               />
             </div>
 
-            {/* PDF Viewer */}
+            {/* PDF Viewer with Fields - Using PDFEditor in completion mode for read-only view */}
             <div className="lg:col-span-2">
-              <Card className="bg-white">
-                <CardContent className="p-6">
-                  <div className="border rounded-lg overflow-hidden bg-gray-50">
-                    <PDFViewer
-                      file={documentPdfFile}
-                      pageWidth={800}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="w-full">
+                <PDFEditor
+                  initialWorkflowState="completion"
+                  initialPdfFile={documentPdfFile}
+                  initialFields={documentFields}
+                  initialRecipients={documentRecipients}
+                  onSave={() => {}} // No saving in review mode
+                  onCancel={() => {}} // No cancel needed
+                  onFinish={() => {}} // No finish action
+                />
+              </div>
             </div>
           </div>
 
@@ -762,6 +764,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           </div>
         </div>
       </div>
+      </BrandAlertProvider>
     );
   }
 
