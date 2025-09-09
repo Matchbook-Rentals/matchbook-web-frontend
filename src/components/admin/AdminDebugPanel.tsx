@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Input } from '@/components/ui/input';
 import { 
   AlertTriangle, 
   ChevronDown, 
@@ -14,7 +15,10 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  X
+  X,
+  PawPrint,
+  Calendar,
+  Save
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
@@ -32,9 +36,125 @@ export function AdminDebugPanel({ match, matchId, isAdminDev, onReset, onHidePay
   const [isHidden, setIsHidden] = useState(false);
   const [isResetting, setIsResetting] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  // Pet fee editing state
+  const [editingPetFees, setEditingPetFees] = useState(false);
+  const [petRentValue, setPetRentValue] = useState(match.petRent?.toString() || '0');
+  const [petDepositValue, setPetDepositValue] = useState(match.petDeposit?.toString() || '0');
+  const [numPetsValue, setNumPetsValue] = useState(match.trip.numPets?.toString() || '0');
+  
+  // Trip dates editing state
+  const [editingTripDates, setEditingTripDates] = useState(false);
+  const [startDateValue, setStartDateValue] = useState(
+    match.trip.startDate ? new Date(match.trip.startDate).toISOString().split('T')[0] : ''
+  );
+  const [endDateValue, setEndDateValue] = useState(
+    match.trip.endDate ? new Date(match.trip.endDate).toISOString().split('T')[0] : ''
+  );
 
   // Don't render if not admin dev or if hidden
   if (!isAdminDev || isHidden) return null;
+
+  const handleUpdatePetFees = async () => {
+    setIsResetting('updatePetFees');
+    
+    try {
+      const response = await fetch(`/api/matches/${matchId}/admin-reset`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          resetType: 'updatePetFees',
+          isAdminDev: true,
+          petRent: parseInt(petRentValue) || 0,
+          petDeposit: parseInt(petDepositValue) || 0,
+          numPets: parseInt(numPetsValue) || 0
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Update failed');
+      }
+
+      const result = await response.json();
+      
+      toast({
+        title: "Pet Fees Updated",
+        description: `Pet rent: $${petRentValue}/pet, Pet deposit: $${petDepositValue}/pet, Num pets: ${numPetsValue}`,
+      });
+      
+      setEditingPetFees(false);
+      
+      // Refresh after a short delay
+      setTimeout(() => {
+        if (onReset) {
+          onReset();
+        } else {
+          window.location.reload();
+        }
+      }, 1500);
+      
+    } catch (error) {
+      console.error('Update error:', error);
+      toast({
+        title: "Update Failed",
+        description: error instanceof Error ? error.message : 'Failed to update pet fees',
+        variant: "destructive",
+      });
+    } finally {
+      setIsResetting(null);
+    }
+  };
+
+  const handleUpdateTripDates = async () => {
+    setIsResetting('updateTripDates');
+    
+    try {
+      const response = await fetch(`/api/matches/${matchId}/admin-reset`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          resetType: 'updateTripDates',
+          isAdminDev: true,
+          startDate: startDateValue,
+          endDate: endDateValue
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Update failed');
+      }
+
+      const result = await response.json();
+      
+      toast({
+        title: "Trip Dates Updated",
+        description: `Start: ${startDateValue}, End: ${endDateValue}`,
+      });
+      
+      setEditingTripDates(false);
+      
+      // Refresh after a short delay
+      setTimeout(() => {
+        if (onReset) {
+          onReset();
+        } else {
+          window.location.reload();
+        }
+      }, 1500);
+      
+    } catch (error) {
+      console.error('Update error:', error);
+      toast({
+        title: "Update Failed",
+        description: error instanceof Error ? error.message : 'Failed to update trip dates',
+        variant: "destructive",
+      });
+    } finally {
+      setIsResetting(null);
+    }
+  };
 
   const handleReset = async (resetType: 'all' | 'tenant' | 'payment' | 'paymentMethod') => {
     const confirmMessages = {
@@ -308,6 +428,207 @@ export function AdminDebugPanel({ match, matchId, isAdminDev, onReset, onHidePay
                   </Button>
                 )}
               </div>
+            </div>
+
+            {/* Pet Fee Controls */}
+            <div className="bg-white rounded-lg p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <PawPrint className="w-4 h-4" />
+                  Pet Fee Controls
+                </h3>
+                {!editingPetFees && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingPetFees(true)}
+                    className="text-xs"
+                  >
+                    Edit
+                  </Button>
+                )}
+              </div>
+              
+              {editingPetFees ? (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-sm text-gray-600 mb-1 block">Number of Pets</label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={numPetsValue}
+                        onChange={(e) => setNumPetsValue(e.target.value)}
+                        placeholder="0"
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600 mb-1 block">Pet Rent (per pet)</label>
+                      <Input
+                        type="number"
+                        value={petRentValue}
+                        onChange={(e) => setPetRentValue(e.target.value)}
+                        placeholder="0"
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600 mb-1 block">Pet Deposit (per pet)</label>
+                      <Input
+                        type="number"
+                        value={petDepositValue}
+                        onChange={(e) => setPetDepositValue(e.target.value)}
+                        placeholder="0"
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  
+                  {parseInt(numPetsValue) > 0 && (
+                    <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                      <p className="font-medium">Calculated Totals:</p>
+                      <p>Total pet rent: ${(parseInt(petRentValue) || 0) * (parseInt(numPetsValue) || 0)}/month</p>
+                      <p>Total pet deposit: ${(parseInt(petDepositValue) || 0) * (parseInt(numPetsValue) || 0)}</p>
+                    </div>
+                  )}
+                  
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={handleUpdatePetFees}
+                      disabled={!!isResetting}
+                      className="flex items-center gap-2"
+                    >
+                      {isResetting === 'updatePetFees' ? (
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Save className="w-4 h-4" />
+                      )}
+                      Save
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingPetFees(false);
+                        setPetRentValue(match.petRent?.toString() || '0');
+                        setPetDepositValue(match.petDeposit?.toString() || '0');
+                        setNumPetsValue(match.trip.numPets?.toString() || '0');
+                      }}
+                      disabled={!!isResetting}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-1 text-sm">
+                  <p className="text-gray-700">Number of Pets: {match.trip.numPets || 0}</p>
+                  <p className="text-gray-700">Pet Rent: ${match.petRent || 0}/pet/month</p>
+                  <p className="text-gray-700">Pet Deposit: ${match.petDeposit || 0}/pet</p>
+                  {match.trip.numPets > 0 && (
+                    <div className="text-gray-500 text-xs mt-2 space-y-1">
+                      <p>Total pet rent: ${(match.petRent || 0) * match.trip.numPets}/month</p>
+                      <p>Total pet deposit: ${(match.petDeposit || 0) * match.trip.numPets}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Trip Dates Controls */}
+            <div className="bg-white rounded-lg p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Trip Dates Controls
+                </h3>
+                {!editingTripDates && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingTripDates(true)}
+                    className="text-xs"
+                  >
+                    Edit
+                  </Button>
+                )}
+              </div>
+              
+              {editingTripDates ? (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-sm text-gray-600 mb-1 block">Start Date</label>
+                      <Input
+                        type="date"
+                        value={startDateValue}
+                        onChange={(e) => setStartDateValue(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600 mb-1 block">End Date</label>
+                      <Input
+                        type="date"
+                        value={endDateValue}
+                        onChange={(e) => setEndDateValue(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  
+                  {startDateValue && endDateValue && (
+                    <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                      <p>Trip duration: {Math.ceil((new Date(endDateValue).getTime() - new Date(startDateValue).getTime()) / (1000 * 60 * 60 * 24))} days</p>
+                      <p>Proration info will be calculated based on these dates</p>
+                    </div>
+                  )}
+                  
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={handleUpdateTripDates}
+                      disabled={!!isResetting}
+                      className="flex items-center gap-2"
+                    >
+                      {isResetting === 'updateTripDates' ? (
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Save className="w-4 h-4" />
+                      )}
+                      Save
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingTripDates(false);
+                        setStartDateValue(
+                          match.trip.startDate ? new Date(match.trip.startDate).toISOString().split('T')[0] : ''
+                        );
+                        setEndDateValue(
+                          match.trip.endDate ? new Date(match.trip.endDate).toISOString().split('T')[0] : ''
+                        );
+                      }}
+                      disabled={!!isResetting}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-1 text-sm">
+                  <p className="text-gray-700">Start: {formatDate(match.trip.startDate)}</p>
+                  <p className="text-gray-700">End: {formatDate(match.trip.endDate)}</p>
+                  {match.trip.startDate && match.trip.endDate && (
+                    <p className="text-gray-500 text-xs mt-2">
+                      Duration: {Math.ceil((new Date(match.trip.endDate).getTime() - new Date(match.trip.startDate).getTime()) / (1000 * 60 * 60 * 24))} days
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Warning Notice */}
