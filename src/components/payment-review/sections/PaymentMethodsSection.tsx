@@ -1,9 +1,10 @@
 'use client';
 
-import { CheckIcon, PlusIcon } from 'lucide-react';
+import { CheckIcon, PlusIcon, Trash2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import BrandModal from '@/components/BrandModal';
 
 // Extend window interface for payment method refresh
 declare global {
@@ -42,6 +43,9 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
 }) => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(initialPaymentMethods);
   const [isLoading, setIsLoading] = useState(false);
+  const [deletingMethodId, setDeletingMethodId] = useState<string | null>(null);
+  const [methodToDelete, setMethodToDelete] = useState<PaymentMethod | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchPaymentMethods = async () => {
       try {
@@ -133,6 +137,52 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
   // Apply hidePaymentMethods override if needed
   const displayedPaymentMethods = hidePaymentMethods ? [] : paymentMethods;
 
+  const handleDeletePaymentMethod = async () => {
+    if (!methodToDelete) return;
+    
+    setIsDeleting(true);
+    try {
+      console.log('🗑️ [PaymentMethods] Deleting payment method:', methodToDelete.id);
+      
+      const response = await fetch(`/api/user/payment-methods/${methodToDelete.id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('❌ [PaymentMethods] Failed to delete:', error);
+        
+        // Show user-friendly error message
+        if (error.details) {
+          alert(error.details);
+        } else {
+          alert('Failed to delete payment method. Please try again.');
+        }
+        return;
+      }
+      
+      console.log('✅ [PaymentMethods] Payment method deleted successfully');
+      
+      // Remove from local state
+      setPaymentMethods(prev => prev.filter(m => m.id !== methodToDelete.id));
+      
+      // Clear selection if deleted method was selected
+      if (selectedMethod === methodToDelete.id) {
+        onSelectMethod('', 'card');
+      }
+      
+      // Refresh payment methods
+      fetchPaymentMethods();
+      
+    } catch (error) {
+      console.error('💥 [PaymentMethods] Error deleting payment method:', error);
+      alert('An error occurred while deleting the payment method. Please try again.');
+    } finally {
+      setIsDeleting(false);
+      setMethodToDelete(null);
+    }
+  };
+
   // Helper function to capitalize brand names properly
   const capitalizeBrand = (brand?: string) => {
     if (!brand) return 'Card';
@@ -160,7 +210,8 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
   };
 
   return (
-    <section className="flex-col items-start gap-4 md:gap-5 self-stretch w-full flex-[0_0_auto] flex relative">
+    <>
+      <section className="flex-col items-start gap-4 md:gap-5 self-stretch w-full flex-[0_0_auto] flex relative">
       <div className="flex flex-col w-full items-start gap-2 relative">
         <h2 className="relative self-stretch mt-[-1.00px] font-poppins font-semibold text-[#1a1a1a] text-lg md:text-xl tracking-[0] leading-tight">
           Payment Methods
@@ -190,7 +241,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
         return (
           <Card
             key={method.id}
-            className={`w-full h-[100px] rounded-xl cursor-pointer transition-colors ${
+            className={`group w-full h-[100px] rounded-xl cursor-pointer transition-colors relative ${
               isSelected 
                 ? 'bg-[#e7f0f0] border-2 border-[#0a6060]' 
                 : 'bg-background border-2 border-gray-300 hover:border-[#0a6060]'
@@ -242,18 +293,91 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
                 </div>
               </div>
 
-              {isSelected ? (
-                <div className="relative w-4 h-4 bg-[#0a6060] rounded-lg overflow-hidden border border-solid flex items-center justify-center">
-                  <CheckIcon className="w-2.5 h-2.5 text-white" />
-                </div>
-              ) : (
-                <div className="relative w-4 h-4 bg-white rounded-lg border border-solid border-[#cfd4dc]" />
-              )}
+              <div className="flex items-center gap-2">
+                {/* Delete button - only visible on hover, same size as checkbox */}
+                <button
+                  className="hidden group-hover:flex items-center justify-center w-4 h-4  bg-red-50 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMethodToDelete(method);
+                  }}
+                >
+                  <Trash2 className="w-4 h-4 text-red-600 hover:text-black transition-all" />
+                </button>
+                
+                {isSelected ? (
+                  <div className="relative w-4 h-4 bg-[#0a6060] rounded-lg overflow-hidden border border-solid flex items-center justify-center">
+                    <CheckIcon className="w-2.5 h-2.5 text-white" />
+                  </div>
+                ) : (
+                  <div className="relative w-4 h-4 bg-white rounded-lg border border-solid border-[#cfd4dc]" />
+                )}
+              </div>
             </CardContent>
           </Card>
         );
       }))}
 
-    </section>
+      </section>
+
+      {/* Delete Confirmation Modal */}
+      <BrandModal
+        isOpen={!!methodToDelete}
+        onOpenChange={(open) => {
+          if (!open) {
+            setMethodToDelete(null);
+          }
+        }}
+        heightStyle="!top-[30vh]"
+        className="max-w-md"
+      >
+        <div className="p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Delete Payment Method
+          </h2>
+          
+          {methodToDelete && (
+            <div className="mb-4">
+              <p className="text-gray-600 mb-3">
+                Are you sure you want to delete this payment method?
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                <p className="font-medium text-gray-900">
+                  {methodToDelete.type === 'card' 
+                    ? `${capitalizeBrand(methodToDelete.brand)} ending in ${methodToDelete.lastFour}`
+                    : `${methodToDelete.bankName || 'Bank'} ending in ${methodToDelete.lastFour}`
+                  }
+                </p>
+                {methodToDelete.type === 'card' && methodToDelete.expiry && (
+                  <p className="text-sm text-gray-600">Expires {methodToDelete.expiry}</p>
+                )}
+              </div>
+              
+              <p className="text-sm text-red-600">
+                This action cannot be undone. You will need to add the payment method again if you want to use it in the future.
+              </p>
+            </div>
+          )}
+          
+          <div className="flex gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setMethodToDelete(null)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={handleDeletePaymentMethod}
+              disabled={isDeleting}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete Payment Method'}
+            </Button>
+          </div>
+        </div>
+      </BrandModal>
+    </>
   );
 };

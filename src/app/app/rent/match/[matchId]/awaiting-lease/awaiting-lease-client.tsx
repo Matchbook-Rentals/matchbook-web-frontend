@@ -64,7 +64,9 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: Awai
   const paymentDetails = calculatePayments({
     listing: match.listing,
     trip: match.trip,
-    monthlyRentOverride: match.monthlyRent
+    monthlyRentOverride: match.monthlyRent,
+    petRentOverride: match.petRent,
+    petDepositOverride: match.petDeposit
   });
 
   const calculateProRatedRent = () => {
@@ -119,9 +121,9 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: Awai
             </div>
           )}
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
+          <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
+            {/* Sidebar - Shows first on mobile, first on desktop (left) */}
+            <div className="w-full lg:col-span-1 order-1">
               <BookingSummarySidebar 
                 match={match} 
                 paymentBreakdown={getPaymentBreakdown()} 
@@ -130,8 +132,8 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: Awai
               />
             </div>
 
-            {/* Main Content */}
-            <div className="lg:col-span-2">
+            {/* Main Content - Shows second on mobile, second on desktop (right) */}
+            <div className="w-full lg:col-span-2 order-2">
               <Card className='bg-inherit border-none'>
                 <CardContent>
                   <div className="text-center py-12">

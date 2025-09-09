@@ -110,7 +110,7 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
     // Add subsequent full months starting from month 2
     let currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
     
-    while (currentDate <= end && paymentIndex < 12) {
+    while (currentDate <= end && paymentIndex < 36) {
       const serviceFee = calculateServiceFee(monthlyRent, tripMonths);
       const baseAmount = monthlyRent + serviceFee;
       const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
@@ -140,7 +140,7 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       paymentIndex++;
     }
     
-    return payments.slice(0, 3); // Show only first 3 payments
+    return payments; // Show all payments for the full trip
   };
 
   const formatPaymentDate = (date: Date) => {

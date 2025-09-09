@@ -1384,7 +1384,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
       // Show success and return to selection
       const signerName = recipients[signerIndex]?.name || `Signer ${signerIndex + 1}`;
-      if (signerIndex > 0) {
+      if (signerIndex === 0) {
         brandAlert(`${signerName} has completed signing!\n\n${signerIndex === 0 ? 'Document is now ready for the Renter.' : 'Document is fully signed and complete.'}`, 'success', 'Signing Complete');
       }
 

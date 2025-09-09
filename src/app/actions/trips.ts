@@ -18,7 +18,11 @@ export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
         userId: userId,
       },
       include: {
-        matches: true,
+        matches: {
+          include: {
+            booking: true
+          }
+        },
         dislikes: true,
         favorites: true,
         housingRequests: true,
@@ -44,7 +48,11 @@ export async function getAllUserTrips(options?: { next?: { tags?: string[] } }):
         userId: userId,
       },
       include: {
-        matches: true,
+        matches: {
+          include: {
+            booking: true
+          }
+        },
         dislikes: true,
         favorites: true,
         housingRequests: true,
@@ -142,7 +150,11 @@ export async function updateTrip(updatedTrip: TripAndMatches): Promise<TripAndMa
       where: { id },
       data: updateData,
       include: {
-        matches: true,
+        matches: {
+          include: {
+            booking: true
+          }
+        },
         dislikes: true,
         favorites: true,
         maybes: true,
@@ -204,7 +216,11 @@ export async function getTripById(tripId: string, options?: { next?: { tags?: st
     const trip = await prisma.trip.findUnique({
       where: { id: tripId },
       include: {
-        matches: true,
+        matches: {
+          include: {
+            booking: true
+          }
+        },
         dislikes: true,
         favorites: true,
         maybes: true,
@@ -375,7 +391,11 @@ export const updateTripFilters = async (tripId: string, filters: Object): Promis
       where: { id: tripId },
       data: { ...filters },
       include: {
-        matches: true,
+        matches: {
+          include: {
+            booking: true
+          }
+        },
         dislikes: true,
         favorites: true,
         housingRequests: true,

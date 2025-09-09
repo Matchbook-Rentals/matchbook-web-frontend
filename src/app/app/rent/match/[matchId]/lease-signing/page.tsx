@@ -16,13 +16,23 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
   
   const match = result.match;
   
+  console.log('🔍 [Lease Signing Page] Match state:', {
+    matchId: params.matchId,
+    hasLeaseDocument: !!match.leaseDocumentId,
+    tenantSignedAt: match.tenantSignedAt,
+    paymentAuthorizedAt: match.paymentAuthorizedAt,
+    paymentCapturedAt: match.paymentCapturedAt
+  });
+  
   // Redirect if no lease document
   if (!match.leaseDocumentId) {
+    console.log('⚠️ [Lease Signing Page] Redirecting to awaiting-lease: no lease document');
     redirect(`/app/rent/match/${params.matchId}/awaiting-lease`);
   }
   
   // Redirect if already completed payment
   if (match.paymentAuthorizedAt) {
+    console.log('⚠️ [Lease Signing Page] Redirecting to complete: payment already authorized');
     redirect(`/app/rent/match/${params.matchId}/complete`);
   }
   

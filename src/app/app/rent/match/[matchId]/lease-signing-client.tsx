@@ -449,7 +449,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const paymentDetails = calculatePayments({
     listing: match.listing,
     trip: match.trip,
-    monthlyRentOverride: match.monthlyRent
+    monthlyRentOverride: match.monthlyRent,
+    petRentOverride: match.petRent,
+    petDepositOverride: match.petDeposit
   });
 
   // Calculate pro-rated rent for partial first month (includes pet rent)
@@ -711,9 +713,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
+          <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
+            {/* Sidebar - Shows first on mobile, first on desktop (left) */}
+            <div className="w-full lg:col-span-1 order-1">
               <BookingSummarySidebar 
                 match={match} 
                 paymentBreakdown={getPaymentBreakdown()} 
@@ -722,8 +724,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
               />
             </div>
 
-            {/* PDF Viewer with Fields - Using PDFEditor in completion mode for read-only view */}
-            <div className="lg:col-span-2">
+            {/* PDF Viewer with Fields - Shows second on mobile, second on desktop (right) */}
+            <div className="w-full lg:col-span-2 order-2">
               <div className="w-full">
                 <PDFEditor
                   initialWorkflowState="completion"
@@ -806,9 +808,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
             )}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Property Summary Sidebar */}
-            <div className="lg:col-span-1">
+          <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
+            {/* Property Summary Sidebar - Shows first on mobile, first on desktop (left) */}
+            <div className="w-full lg:col-span-1 order-1">
               <BookingSummarySidebar 
                 match={match} 
                 paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} 
@@ -817,8 +819,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
               />
             </div>
 
-            {/* Payment Method Setup */}
-            <div className="lg:col-span-2">
+            {/* Payment Method Setup - Shows second on mobile, second on desktop (right) */}
+            <div className="w-full lg:col-span-2 order-2">
               <PaymentReviewScreen
                 matchId={matchId}
                 amount={calculatePaymentAmount(selectedPaymentMethodType)}

@@ -16,7 +16,7 @@ import {
   ListingUnavailability,
   Booking,
   Lease,
-  BoldSignLease,
+  BoldSignLease, // @deprecated - Use Match.tenantSignedAt and Match.landlordSignedAt instead
   Maybe,
   ListingMonthlyPricing,
 } from "@prisma/client";
@@ -89,7 +89,7 @@ export interface ApplicationWithArrays extends Application {
 
 export interface MatchWithRelations extends Match {
   Lease?: Lease
-  BoldSignLease: BoldSignLease
+  BoldSignLease: BoldSignLease // @deprecated - Use Match.tenantSignedAt and Match.landlordSignedAt instead
   listing: Listing
   trip: Trip
 }

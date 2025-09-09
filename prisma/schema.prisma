@@ -681,6 +681,8 @@ model Match {
   listingId             String
   booking               Booking?
   monthlyRent           Int?
+  petRent               Int?      // Pet rent per pet (preserved from listing at lease approval)
+  petDeposit            Int?      // Pet deposit per pet (preserved from listing at lease approval)
   leaseDocumentId       String?
   stripePaymentMethodId String?
   stripePaymentIntentId String?
@@ -1041,6 +1043,8 @@ model BoldSignTemplate {
   @@index([userId])
 }
 
+// @deprecated - Use Match.tenantSignedAt and Match.landlordSignedAt fields instead
+// This model is kept for backward compatibility but should not be used for new code
 model BoldSignLease {
   id                String   @id @default(cuid())
   embedUrl          String?

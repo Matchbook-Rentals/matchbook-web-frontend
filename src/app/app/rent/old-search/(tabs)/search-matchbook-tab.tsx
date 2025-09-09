@@ -33,9 +33,9 @@ export function SearchMatchbookTab() {
   };
 
   const getCallToAction = (status: Status, listingId: string) => {
-    const findMatchId = (listingId: string) => {
+    const findMatchAndBooking = (listingId: string) => {
       const match = trip?.matches.find(match => match.listingId === listingId);
-      return match?.id;
+      return { matchId: match?.id, bookingId: match?.booking?.id };
     };
 
     switch (status) {
@@ -46,12 +46,16 @@ export function SearchMatchbookTab() {
           className: 'bg-blueBrand text-white hover:bg-blueBrand'
         };
       case Status.Favorite:
-        const matchId = findMatchId(listingId);
+        const { matchId, bookingId } = findMatchAndBooking(listingId);
         return {
-          label: 'Review',
+          label: bookingId ? 'Review Booking' : 'Sign and Book',
           action: () => {
             if (matchId) {
-              router.push(`/app/rent/match/${matchId}`);
+              if (bookingId) {
+                router.push(`/app/rent/bookings/${bookingId}`);
+              } else {
+                router.push(`/app/rent/match/${matchId}`);
+              }
             } else {
               alert('Match not found');
             }
@@ -70,9 +74,9 @@ export function SearchMatchbookTab() {
   };
 
   const getContextLabel = (status: Status, listingId: string) => {
-    const findMatchId = (listingId: string) => {
+    const findMatchAndBooking = (listingId: string) => {
       const match = trip?.matches.find(match => match.listingId === listingId);
-      return match?.id;
+      return { matchId: match?.id, bookingId: match?.booking?.id };
     };
 
     switch (status) {
@@ -83,12 +87,16 @@ export function SearchMatchbookTab() {
           className: 'bg-blueBrand/80 text-white hover:bg-blueBrand/80'
         };
       case Status.Favorite:
-        const matchId = findMatchId(listingId);
+        const { matchId, bookingId } = findMatchAndBooking(listingId);
         return {
-          label: 'Review',
+          label: bookingId ? 'Review Booking' : 'Sign and Book',
           action: () => {
             if (matchId) {
-              router.push(`/app/match/${matchId}`);
+              if (bookingId) {
+                router.push(`/app/rent/bookings/${bookingId}`);
+              } else {
+                router.push(`/app/rent/match/${matchId}`);
+              }
             } else {
               alert('Match not found');
             }

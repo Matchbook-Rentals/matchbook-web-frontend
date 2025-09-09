@@ -9,6 +9,8 @@ interface PaymentParams {
   listing: ListingWithPricing | null;
   trip: Trip;
   monthlyRentOverride?: number | null; // Optional override from match.monthlyRent
+  petRentOverride?: number | null; // Optional override from match.petRent (preserved at lease approval)
+  petDepositOverride?: number | null; // Optional override from match.petDeposit (preserved at lease approval)
 }
 
 export interface PaymentDetails {
@@ -21,7 +23,7 @@ export interface PaymentDetails {
   utilitiesIncluded: boolean;
 }
 
-export function calculatePayments({ listing, trip, monthlyRentOverride }: PaymentParams): PaymentDetails {
+export function calculatePayments({ listing, trip, monthlyRentOverride, petRentOverride, petDepositOverride }: PaymentParams): PaymentDetails {
   // Calculate base monthly rent and utilities inclusion
   let monthlyRent = 0;
   let utilitiesIncluded = false;
@@ -76,14 +78,26 @@ export function calculatePayments({ listing, trip, monthlyRentOverride }: Paymen
   }
   
   // Calculate pet rent (monthly charge per pet)
-  const monthlyPetRent = listing && trip.numPets > 0 
-    ? (listing.petRent || 0) * trip.numPets 
+  // Use override from match if available (preserved at lease approval), otherwise use listing's current value
+  const petRentPerPet = petRentOverride !== null && petRentOverride !== undefined
+    ? petRentOverride
+    : (listing?.petRent || 0);
+  
+  const monthlyPetRent = trip.numPets > 0 
+    ? petRentPerPet * trip.numPets 
     : 0;
   
   // Get deposits
   const securityDeposit = listing?.depositSize || monthlyRent; // Default to one month's rent if not specified
-  const petDeposit = listing && trip.numPets > 0 
-    ? (listing.petDeposit || 0) * trip.numPets 
+  
+  // Calculate pet deposit
+  // Use override from match if available (preserved at lease approval), otherwise use listing's current value
+  const petDepositPerPet = petDepositOverride !== null && petDepositOverride !== undefined
+    ? petDepositOverride
+    : (listing?.petDeposit || 0);
+    
+  const petDeposit = trip.numPets > 0 
+    ? petDepositPerPet * trip.numPets 
     : 0;
   
   return {

@@ -117,7 +117,7 @@ export async function processDirectPayment({
      *   Stripe fee (2.9% + $0.30): $7.11
      *   Amount we receive: $227 ✓
      */
-    const totalAmount = amount * 100; // Convert to cents
+    const totalAmount = Math.round(amount * 100); // Convert to cents
     
     let baseAmountBeforeCardFee = totalAmount;
     let cardProcessingFee = 0;
@@ -196,38 +196,60 @@ export async function processDirectPayment({
     };
 
     // Since we're using automatic capture for all payment types, mark as captured if succeeded
+    console.log('💳 Payment Intent Status:', paymentIntent.status);
+    
     if (paymentIntent.status === 'succeeded') {
       updateData.paymentCapturedAt = new Date();
       updateData.paymentStatus = 'captured';
+      console.log('✅ Payment succeeded - marking as captured');
     } else if (paymentIntent.status === 'processing') {
       // Payment is still processing (common for bank transfers)
+      // For ACH payments, we consider them "captured" even while processing
+      updateData.paymentCapturedAt = new Date(); // Set this for ACH payments too!
       updateData.paymentStatus = 'processing';
+      console.log('⏳ Payment processing (ACH) - marking capture time for booking creation');
     } else {
       // In case of any other status
       updateData.paymentStatus = 'authorized';
+      console.log('⚠️ Payment status:', paymentIntent.status, '- marked as authorized only');
     }
 
+    console.log('📝 Updating match with payment data:', {
+      matchId,
+      paymentStatus: updateData.paymentStatus,
+      hasCapturedAt: !!updateData.paymentCapturedAt,
+      paymentIntentId: updateData.stripePaymentIntentId
+    });
+    
     await prisma.match.update({
       where: { id: matchId },
       data: updateData,
     });
 
     // Check if lease is fully signed and create booking if so
+    console.log('🔍 Checking lease status for booking creation...');
     const matchWithLease = await prisma.match.findUnique({
       where: { id: matchId },
       include: {
-        BoldSignLease: true,
+        // BoldSignLease: true, // @deprecated - Using Match.tenantSignedAt and Match.landlordSignedAt instead
         booking: true,
         trip: true
       }
     });
 
-    // If both parties have signed and no booking exists, create one
-    if (matchWithLease?.BoldSignLease?.landlordSigned && 
-        matchWithLease?.BoldSignLease?.tenantSigned && 
-        !matchWithLease.booking) {
+    console.log('📋 Lease status:', {
+      landlordSignedAt: matchWithLease?.landlordSignedAt,
+      tenantSignedAt: matchWithLease?.tenantSignedAt,
+      hasExistingBooking: !!matchWithLease?.booking,
+      bookingId: matchWithLease?.booking?.id || null
+    });
+
+    // If no booking exists, create one
+    // TODO: We might bring back the lease signing requirement later
+    // Original condition was: if (matchWithLease?.landlordSignedAt && matchWithLease?.tenantSignedAt && !matchWithLease.booking)
+    if (!matchWithLease.booking) {
       
-      console.log('✅ Payment authorized and lease fully signed - creating booking');
+      console.log('✅ Payment successful and no existing booking - creating booking now!');
       
       try {
         const booking = await prisma.booking.create({
@@ -247,6 +269,17 @@ export async function processDirectPayment({
       } catch (bookingError) {
         console.error('❌ Failed to create booking:', bookingError);
         // Don't fail the payment if booking creation fails
+      }
+    } else {
+      console.log('⚠️ Booking NOT created because:');
+      if (!matchWithLease?.landlordSignedAt) {
+        console.log('  - Landlord has not signed (landlordSignedAt is null)');
+      }
+      if (!matchWithLease?.tenantSignedAt) {
+        console.log('  - Tenant has not signed (tenantSignedAt is null)');
+      }
+      if (matchWithLease?.booking) {
+        console.log('  - Booking already exists:', matchWithLease.booking.id);
       }
     }
 

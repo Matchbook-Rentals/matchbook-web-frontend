@@ -45,7 +45,9 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
   const paymentDetails = calculatePayments({
     listing: match.listing,
     trip: match.trip,
-    monthlyRentOverride: match.monthlyRent
+    monthlyRentOverride: match.monthlyRent,
+    petRentOverride: match.petRent,
+    petDepositOverride: match.petDeposit
   });
 
   // Fixed transfer fee for deposits
@@ -280,9 +282,9 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Property Summary Sidebar */}
-          <div className="lg:col-span-1">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
+          {/* Property Summary Sidebar - Shows first on mobile, first on desktop (left) */}
+          <div className="w-full lg:col-span-1 order-1">
             <BookingSummarySidebar 
               match={match} 
               paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} 
@@ -291,13 +293,13 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
             />
           </div>
 
-          {/* Payment Method Setup */}
-          <div className="lg:col-span-2">
+          {/* Payment Method Setup - Shows second on mobile, second on desktop (right) */}
+          <div className="w-full lg:col-span-2 order-2">
             <PaymentReviewScreen
               matchId={matchId}
               amount={calculatePaymentAmount(selectedPaymentMethodType)}
               paymentBreakdown={{
-                monthlyRent: 0, // No rent charged today
+                monthlyRent: paymentDetails.totalMonthlyRent, // Pass actual rent for upcoming payments display
                 securityDeposit: getSecurityDeposit(),
                 petDeposit: getPetDeposit(),
                 transferFee: TRANSFER_FEE, // Flat $5 transfer fee for deposits

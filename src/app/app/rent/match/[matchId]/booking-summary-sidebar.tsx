@@ -17,7 +17,7 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
-import { Home, Calendar, MapPinIcon, ChevronDownIcon } from 'lucide-react';
+import { Users, Baby, Dog, MapPinIcon, ChevronDownIcon } from 'lucide-react';
 import { MatchWithRelations } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
 import { PaymentDetails } from '@/lib/calculate-payments';
@@ -83,15 +83,11 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
     return isValidRent ? calculatedRent : (match.monthlyRent || 0);
   };
 
-  // Get bedroom count from bedrooms relation array length
-  const bedroomCount = match.listing.bedrooms?.length || match.listing.roomCount || 0;
-  // Get bathroom count from bathroomCount field
-  const bathroomCount = match.listing.bathroomCount || 0;
-
+  // Get guest details from trip
   const guestDetails = [
-    { icon: Home, label: `${bedroomCount} bed` },
-    { icon: Home, label: `${bathroomCount} bath` },
-    { icon: Calendar, label: `${Math.ceil((new Date(match.trip.endDate).getTime() - new Date(match.trip.startDate).getTime()) / (1000 * 60 * 60 * 24))} days` }
+    { icon: Users, label: `${match.trip.numAdults} ${match.trip.numAdults === 1 ? 'adult' : 'adults'}` },
+    { icon: Baby, label: `${match.trip.numChildren} ${match.trip.numChildren === 1 ? 'child' : 'children'}` },
+    { icon: Dog, label: `${match.trip.numPets} ${match.trip.numPets === 1 ? 'pet' : 'pets'}` }
   ];
 
   // Calculate trip duration in months for service fee calculation
@@ -198,14 +194,14 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
   const depositTransferFee = depositBreakdown.transferFee;
 
   return (
-    <div className="flex w-[410px] items-center gap-2.5 p-8 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
-      <div className="flex flex-col w-[347px] items-start gap-6 relative mr-[-1.00px]">
+    <div className="flex w-full lg:max-w-md items-center gap-2.5 p-8 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
+      <div className="flex flex-col w-full items-start gap-6 relative">
         <h1 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-blackblack-500 text-[28px] tracking-[0] leading-[33.6px]">
           Booking Summary
         </h1>
 
         <Card 
-          className="flex flex-col h-[365px] items-end justify-end gap-[263px] pt-4 pb-0 px-0 relative self-stretch w-full rounded-xl border-0"
+          className="flex flex-col min-h-[300px] items-end justify-end pt-4 pb-0 px-0 relative self-stretch w-full rounded-xl border-0"
           style={{
             backgroundImage: `url(${match.listing.listingImages?.[0]?.url || ''})`,
             backgroundSize: 'cover',
@@ -225,7 +221,7 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
               <div className="flex items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
                 <MapPinIcon className="relative w-5 h-5 text-[#f3f3f5]" />
                 <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#f3f3f5] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                  {match.listing.locationString || 'Austin, TX'}
+                  {`${match.listing.city}, ${match.listing.state}` || 'Austin, TX'}
                 </div>
               </div>
             </div>
@@ -240,13 +236,13 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-[16px_32px] pl-0 pr-5 py-0 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pl-0  py-0 relative self-stretch w-full ">
               {guestDetails.map((detail, index) => {
                 const IconComponent = detail.icon;
                 return (
                   <div
                     key={index}
-                    className="inline-flex items-start gap-1.5 relative flex-[0_0_auto]"
+                    className="inline-flex items-start gap-1.5 relative"
                   >
                     <IconComponent className="relative w-5 h-5 text-white" />
                     <div className="relative w-fit mt-[-1.00px] font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-white text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)]">
@@ -265,7 +261,7 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
             open={sectionStates.rent}
             onOpenChange={() => toggleSection('rent')}
           >
-            <CollapsibleTrigger className="relative self-stretch w-full h-[42px] flex items-center justify-between">
+            <CollapsibleTrigger className="relative self-stretch w-full flex items-center justify-between py-2">
               <div className="[font-family:'Poppins',Helvetica] font-semibold text-[#333333] text-lg tracking-[0] leading-[21.6px]">
                 Monthly Rent
               </div>
@@ -298,7 +294,7 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
             open={sectionStates.deposit}
             onOpenChange={() => toggleSection('deposit')}
           >
-            <CollapsibleTrigger className="relative self-stretch w-full h-[22px] flex items-center justify-between">
+            <CollapsibleTrigger className="relative self-stretch w-full flex items-center justify-between py-2">
               <div className="[font-family:'Poppins',Helvetica] font-bold text-[#333333] text-lg tracking-[0] leading-[21.6px]">
                 Deposit
               </div>

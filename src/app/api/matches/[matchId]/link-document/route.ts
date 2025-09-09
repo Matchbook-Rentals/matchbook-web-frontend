@@ -52,10 +52,16 @@ export async function POST(
       return NextResponse.json({ error: 'Document does not belong to this listing' }, { status: 400 });
     }
 
-    // Update the match with the document ID
+    // Update the match with the document ID and preserve current pet fees from listing
+    // This locks in the pet fees at the time of lease approval
     const updatedMatch = await prisma.match.update({
       where: { id: matchId },
-      data: { leaseDocumentId: documentId }
+      data: { 
+        leaseDocumentId: documentId,
+        // Preserve pet fees from listing at time of lease approval
+        petRent: match.listing.petRent,
+        petDeposit: match.listing.petDeposit
+      }
     });
 
     return NextResponse.json({ 

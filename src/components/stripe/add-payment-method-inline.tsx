@@ -111,8 +111,23 @@ function AddPaymentMethodForm({ onSuccess, onCancel }: { onSuccess: () => void; 
           layout: 'tabs',
           defaultValues: {
             billingDetails: {
-              // Pre-fill if you have user data
+              // Keep empty to not pre-fill
             }
+          },
+          fields: {
+            billingDetails: {
+              address: 'auto'
+            }
+          },
+          wallets: {
+            applePay: 'never',
+            googlePay: 'never'
+          },
+          // Don't auto-select any payment method but keep Link authentication
+          defaultPaymentMethod: undefined,
+          // Allow saved payment methods but don't auto-expand
+          savedPaymentMethods: {
+            allow_redisplay_filters: ['always', 'limited', 'unspecified']
           }
         }}
       />
@@ -160,6 +175,7 @@ export function AddPaymentMethodInline({
 }: AddPaymentMethodInlineProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [componentKey, setComponentKey] = useState(Date.now());
   const { toast } = useToast();
 
   useEffect(() => {
@@ -235,6 +251,7 @@ export function AddPaymentMethodInline({
           </div>
         ) : clientSecret ? (
           <Elements 
+            key={`payment-form-${componentKey}`} // Force fresh payment selection
             stripe={stripePromise} 
             options={{ 
               clientSecret,
@@ -244,6 +261,7 @@ export function AddPaymentMethodInline({
                   colorPrimary: '#0a6060',
                 },
               },
+              loader: 'auto' // Keep Link authentication
             }}
           >
             <AddPaymentMethodForm onSuccess={onSuccess} onCancel={onCancel} />

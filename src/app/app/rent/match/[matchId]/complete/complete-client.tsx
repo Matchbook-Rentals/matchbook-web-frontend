@@ -116,7 +116,9 @@ const PaymentSummarySection = ({ match }: { match: MatchWithRelations }) => {
   const paymentDetails = calculatePayments({
     listing: match.listing,
     trip: match.trip,
-    monthlyRentOverride: match.monthlyRent
+    monthlyRentOverride: match.monthlyRent,
+    petRentOverride: match.petRent,
+    petDepositOverride: match.petDeposit
   });
 
   // Fixed transfer fee
@@ -257,7 +259,7 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
                 </div>
 
                 <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#484a54] text-[22px] tracking-0 leading-normal">
-                  {match.listing.locationString || 'Location'}
+                  {`${match.listing.city}, ${match.listing.state}` || 'Location'}
                 </div>
               </div>
             </div>

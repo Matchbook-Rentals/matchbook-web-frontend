@@ -104,12 +104,34 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
         });
         
         if (result.success) {
-          setProcessingStatus('success');
-          // Wait a moment to show success state
-          setTimeout(() => {
-            setShowProcessingDialog(false);
-            onSuccess();
-          }, 1500);
+          // Confirm payment and create booking
+          console.log('💳 Payment successful, confirming booking...');
+          
+          const bookingResponse = await fetch(`/api/matches/${matchId}/confirm-payment-and-book`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+          
+          if (bookingResponse.ok) {
+            const bookingData = await bookingResponse.json();
+            console.log('✅ Booking confirmed:', bookingData.booking.id);
+            setProcessingStatus('success');
+            // Wait a moment to show success state
+            setTimeout(() => {
+              setShowProcessingDialog(false);
+              onSuccess();
+            }, 1500);
+          } else {
+            // Payment succeeded but booking creation failed
+            console.error('Failed to create booking after payment');
+            setProcessingStatus('success'); // Still show payment success
+            setTimeout(() => {
+              setShowProcessingDialog(false);
+              onSuccess();
+            }, 1500);
+          }
         } else {
           setProcessingStatus('error');
           setProcessingError(result.error || 'Payment failed. Please try again.');
@@ -153,7 +175,28 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
     }
   };
 
-  const handleCheckoutSuccess = () => {
+  const handleCheckoutSuccess = async () => {
+    // Confirm payment and create booking after Stripe Checkout success
+    console.log('💳 Stripe Checkout successful, confirming booking...');
+    
+    try {
+      const bookingResponse = await fetch(`/api/matches/${matchId}/confirm-payment-and-book`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (bookingResponse.ok) {
+        const bookingData = await bookingResponse.json();
+        console.log('✅ Booking confirmed:', bookingData.booking.id);
+      } else {
+        console.error('Failed to create booking after Stripe Checkout');
+      }
+    } catch (error) {
+      console.error('Error confirming booking:', error);
+    }
+    
     setShowEmbeddedCheckout(false);
     setCheckoutClientSecret(null);
     onSuccess();
@@ -251,11 +294,11 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
                 Back
               </Button>
             )}
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 hidden md:block">
               {selectedPaymentMethodType === 'card' ? (
                 <>
                   <span className="font-medium">Credit Card Selected</span>
-                  <span className="text-xs text-gray-500 ml-2">• 3% processing fee applies</span>
+                  <span className="text-xs text-red-500 ml-2">• Processing fee applies</span>
                 </>
               ) : selectedPaymentMethodType === 'bank' ? (
                 <>
@@ -263,7 +306,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
                   <span className="text-xs text-green-600 ml-2">• No additional fees</span>
                 </>
               ) : (
-                <span className="font-medium">Select a payment method to continue</span>
+                <span className="font-medium hidden md:block">Select a payment method to continue</span>
               )}
             </div>
           </div>
