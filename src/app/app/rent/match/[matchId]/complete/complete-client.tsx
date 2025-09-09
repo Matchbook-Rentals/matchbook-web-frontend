@@ -6,6 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { calculatePayments } from '@/lib/calculate-payments';
 import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
 import { PAGE_MARGIN } from '@/constants/styles';
+import { AdminDebugPanel } from '@/components/admin/AdminDebugPanel';
+import { StepProgress } from '@/components/StepProgress';
 
 interface CompleteClientProps {
   match: MatchWithRelations;
@@ -305,6 +307,25 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
 export function CompleteClient({ match, matchId, isAdminDev = false }: CompleteClientProps) {
   return (
     <main className={`${PAGE_MARGIN}`}>
+      {/* Step Progress Bar */}
+      <div className="mb-8">
+        <StepProgress 
+          currentStep={3}
+          totalSteps={3}
+          labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+          className='w-full max-w-2xl mx-auto'
+        />
+      </div>
+      
+      {isAdminDev && (
+        <div className="max-w-4xl mx-auto mb-6">
+          <AdminDebugPanel 
+            match={match}
+            matchId={matchId}
+            isAdminDev={isAdminDev}
+          />
+        </div>
+      )}
       <div className="max-w-4xl mx-auto flex flex-col items-start gap-2.5 p-6 bg-white rounded-lg overflow-hidden">
         <section className="flex flex-col items-start gap-8 relative self-stretch w-full flex-[0_0_auto]">
           <ConfirmationMessageSection />

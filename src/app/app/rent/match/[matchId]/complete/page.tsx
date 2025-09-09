@@ -22,7 +22,7 @@ export default async function CompletePage({ params }: CompletePageProps) {
   }
   
   if (!match.tenantSignedAt) {
-    redirect(`/app/rent/match/${params.matchId}/review`);
+    redirect(`/app/rent/match/${params.matchId}/lease-signing`);
   }
   
   if (!match.paymentAuthorizedAt) {

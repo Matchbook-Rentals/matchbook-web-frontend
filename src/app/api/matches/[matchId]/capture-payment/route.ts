@@ -3,6 +3,7 @@ import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { createPaymentReceipt } from '@/lib/receipt-utils';
+import { createNotification } from '@/app/actions/notifications';
 
 export async function POST(
   request: NextRequest,
@@ -78,12 +79,14 @@ export async function POST(
         },
       });
 
-      // Create the booking record now that payment is captured
+      // Check if booking already exists (it should if payment was automatic)
       let booking = await prisma.booking.findFirst({
         where: { matchId: params.matchId }
       });
 
       if (!booking) {
+        // Create booking if it doesn't exist (fallback for manual capture or legacy flows)
+        console.log('Booking not found, creating new booking for match:', params.matchId);
         booking = await prisma.booking.create({
           data: {
             userId: match.trip.userId,
@@ -98,17 +101,47 @@ export async function POST(
           }
         });
 
-        // Create listing unavailability
-        await prisma.listingUnavailability.create({
-          data: {
+        // Create listing unavailability if not already created
+        const existingUnavailability = await prisma.listingUnavailability.findFirst({
+          where: {
+            listingId: booking.listingId,
             startDate: booking.startDate,
             endDate: booking.endDate,
-            reason: 'Booking',
-            listingId: booking.listingId
+            reason: 'Booking'
           }
         });
 
+        if (!existingUnavailability) {
+          await prisma.listingUnavailability.create({
+            data: {
+              startDate: booking.startDate,
+              endDate: booking.endDate,
+              reason: 'Booking',
+              listingId: booking.listingId
+            }
+          });
+        }
+
+        // Send notification to host about confirmed booking
+        await createNotification({
+          userId: match.listing.userId,  // Host's user ID
+          content: `Your booking for "${match.listing.title}" with "${match.trip.user.firstName} ${match.trip.user.lastName}" is confirmed.`,
+          url: `/app/host/${match.listingId}/bookings/${booking.id}`,
+          unread: true,
+          actionType: 'booking',
+          actionId: booking.id
+        });
+
         console.log('Created booking record:', booking.id);
+      } else {
+        console.log('Booking already exists for match:', params.matchId, 'Booking ID:', booking.id);
+        // Update booking status if needed
+        if (booking.status !== 'confirmed') {
+          await prisma.booking.update({
+            where: { id: booking.id },
+            data: { status: 'confirmed' }
+          });
+        }
       }
 
       // Generate receipt for the tenant

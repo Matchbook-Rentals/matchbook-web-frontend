@@ -59,8 +59,6 @@ export async function handleSignerCompletion(
       // Booking should be created after payment is completed
       console.log('✅ Document fully signed - awaiting payment before creating booking')
       
-      // Just send notifications that signing is complete
-      await sendDocumentSignedNotifications(documentId, recipients, document)
     } else {
       // Send notification to next signer
       const nextSignerIndex = currentSignerIndex + 1
@@ -110,38 +108,6 @@ async function sendNextSignerNotification(
 }
 
 // Send notifications when document is fully signed (but don't create booking yet)
-async function sendDocumentSignedNotifications(
-  documentId: string,
-  recipients: Array<{ id: string; name: string; email: string; role: string }>,
-  document: any
-) {
-  try {
-    console.log('📧 Sending document signed notifications')
-    
-    // Send notifications to all signers that the document is fully signed
-    for (const recipient of recipients) {
-      const user = await prisma.user.findUnique({
-        where: { email: recipient.email },
-        select: { id: true }
-      })
-
-      if (user) {
-        await createNotification({
-          actionType: 'document_fully_signed',
-          actionId: documentId,
-          content: `The lease document "${document.template.title}" has been fully signed. Payment setup is the next step.`,
-          url: `/app/documents/${documentId}`,
-          unread: true,
-          userId: user.id,
-        })
-      }
-    }
-
-    console.log('✅ Document signed notifications sent')
-  } catch (error) {
-    console.error('❌ Error sending document signed notifications:', error)
-  }
-}
 
 // Handle document completion - create booking and send notifications
 async function handleDocumentCompletion(

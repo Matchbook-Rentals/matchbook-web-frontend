@@ -17,10 +17,9 @@ export default async function MatchLeasePage({ params }: MatchLeasePageProps) {
   // Redirect to the appropriate step based on match state
   if (!match.leaseDocumentId) {
     redirect(`/app/rent/match/${params.matchId}/awaiting-lease`);
-  } else if (!match.tenantSignedAt) {
-    redirect(`/app/rent/match/${params.matchId}/review`);
   } else if (!match.paymentAuthorizedAt) {
-    redirect(`/app/rent/match/${params.matchId}/payment`);
+    // Use single lease-signing page for review, sign, and payment steps
+    redirect(`/app/rent/match/${params.matchId}/lease-signing`);
   } else {
     redirect(`/app/rent/match/${params.matchId}/complete`);
   }

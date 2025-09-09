@@ -278,7 +278,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
                 className="bg-[#0a6060] hover:bg-[#063a3a] text-white px-6 py-2"
                 size="lg"
               >
-                {isProcessing ? 'Processing...' : 'Complete booking'}
+                {isProcessing ? 'Processing...' : 'Complete Booking'}
               </Button>
             </div>
           </div>

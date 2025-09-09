@@ -23,7 +23,7 @@ export default async function PaymentSetupPage({ params }: PaymentSetupPageProps
   }
   
   if (!match.tenantSignedAt) {
-    redirect(`/app/rent/match/${params.matchId}/review`);
+    redirect(`/app/rent/match/${params.matchId}/lease-signing`);
   }
   
   if (match.paymentAuthorizedAt) {

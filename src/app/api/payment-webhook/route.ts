@@ -76,15 +76,75 @@ export async function POST(req: Request) {
         // Handle lease deposit and rent payment
         console.log(`Processing lease payment for match ${matchId}`);
         
-        // Update match with payment success
-        await prismadb.match.update({
+        // Get the match with all relations
+        const match = await prismadb.match.findUnique({
           where: { id: matchId },
-          data: {
-            paymentStatus: 'completed',
-            paymentIntentId: paymentIntent.id,
-            paymentCompletedAt: new Date(),
-          },
+          include: {
+            listing: true,
+            trip: true
+          }
         });
+
+        if (match) {
+          // Update match with payment success
+          await prismadb.match.update({
+            where: { id: matchId },
+            data: {
+              paymentStatus: 'captured',
+              paymentCapturedAt: new Date(),
+              stripePaymentIntentId: paymentIntent.id,
+              paymentCompletedAt: new Date(),
+            },
+          });
+          
+          // Check if booking already exists
+          let booking = await prismadb.booking.findFirst({
+            where: { matchId: matchId }
+          });
+
+          if (!booking) {
+            console.log(`Creating booking for match ${matchId} via webhook`);
+            // Create booking if it doesn't exist (backup for when payment-method route didn't create it)
+            booking = await prismadb.booking.create({
+              data: {
+                userId: match.trip.userId,
+                listingId: match.listingId,
+                tripId: match.tripId,
+                matchId: matchId,
+                startDate: match.trip.startDate,
+                endDate: match.trip.endDate,
+                totalPrice: paymentIntent.amount,
+                monthlyRent: match.monthlyRent,
+                status: 'confirmed'
+              }
+            });
+
+            // Create listing unavailability if not already created
+            const existingUnavailability = await prismadb.listingUnavailability.findFirst({
+              where: {
+                listingId: booking.listingId,
+                startDate: booking.startDate,
+                endDate: booking.endDate,
+                reason: 'Booking'
+              }
+            });
+
+            if (!existingUnavailability) {
+              await prismadb.listingUnavailability.create({
+                data: {
+                  startDate: booking.startDate,
+                  endDate: booking.endDate,
+                  reason: 'Booking',
+                  listingId: booking.listingId
+                }
+              });
+            }
+
+            console.log(`Created booking ${booking.id} for match ${matchId}`);
+          } else {
+            console.log(`Booking already exists for match ${matchId}`);
+          }
+        }
         
         console.log(`Match ${matchId} payment completed successfully`);
       }

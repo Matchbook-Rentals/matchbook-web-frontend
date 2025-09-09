@@ -1,13 +1,13 @@
 import { getMatchById } from '@/app/actions/matches';
 import { notFound, redirect } from 'next/navigation';
 import { checkRole } from '@/utils/roles';
-import { ReviewLeaseClient } from './review-lease-client';
+import { LeaseSigningClient } from '../lease-signing-client';
 
-interface ReviewLeasePageProps {
+interface LeaseSigningPageProps {
   params: { matchId: string };
 }
 
-export default async function ReviewLeasePage({ params }: ReviewLeasePageProps) {
+export default async function LeaseSigningPage({ params }: LeaseSigningPageProps) {
   const result = await getMatchById(params.matchId);
   
   if (!result.success || !result.match) {
@@ -16,26 +16,30 @@ export default async function ReviewLeasePage({ params }: ReviewLeasePageProps) 
   
   const match = result.match;
   
-  // Redirect based on state
+  // Redirect if no lease document
   if (!match.leaseDocumentId) {
     redirect(`/app/rent/match/${params.matchId}/awaiting-lease`);
   }
   
-  if (match.tenantSignedAt) {
-    if (!match.paymentAuthorizedAt) {
-      redirect(`/app/rent/match/${params.matchId}/payment`);
-    } else {
-      redirect(`/app/rent/match/${params.matchId}/complete`);
-    }
+  // Redirect if already completed payment
+  if (match.paymentAuthorizedAt) {
+    redirect(`/app/rent/match/${params.matchId}/complete`);
   }
   
   const isAdminDev = await checkRole('admin_dev');
   
+  // Determine initial step based on match state
+  let serverInitialStep = 'overview-lease';
+  if (match.tenantSignedAt) {
+    serverInitialStep = 'complete-payment';
+  }
+  
   return (
-    <ReviewLeaseClient 
+    <LeaseSigningClient 
       match={match}
       matchId={params.matchId}
       isAdminDev={isAdminDev}
+      initialStep={serverInitialStep}
     />
   );
 }

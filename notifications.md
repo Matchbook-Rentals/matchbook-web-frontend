@@ -1,125 +1,195 @@
-# Notifications Documentation
+# User Notifications Documentation
 
-This document lists all `createNotification` usage throughout the Matchbook web frontend application, documenting their language content and associated URLs.
+This document catalogs all user notifications created throughout the Matchbook application.
 
-## Overview
+## Notification Structure
+- **Message**: The notification content displayed to the user
+- **Action**: What triggers the notification
+- **Link**: The URL the notification navigates to (if applicable)
+- **Source**: Where in the codebase the notification is created
 
-The `createNotification` function is defined in `/src/app/actions/notifications.ts` and is used across 8 files for various user notifications including housing requests, matches, bookings, lease signatures, and administrative notifications.
+---
 
-## Usage by Source File
+## Applications & Housing Requests
 
-### 1. `/src/app/actions/housing-requests.ts`
+### Application Submitted (Host Notification)
+- **Message**: "New application from [renterName] for [listingTitle]"
+- **Action**: When a renter submits a housing request/application
+- **Link**: `/app/host/[listingId]/applications/[housingRequestId]`
+- **Source**: `src/app/actions/housing-requests.ts:175` (createHousingRequest)
 
-**Import:** Line 5 - `import { createNotification } from './notifications'`
+### Application Approved
+- **Message**: "Your application for [listingTitle] has been approved!"
+- **Action**: When host approves a housing request
+- **Link**: `/app/rent/match/[matchId]`
+- **Source**: `src/app/actions/housing-requests.ts:426` (approveHousingRequest)
 
-| Line | Content | URL | Action Type | Context |
-|------|---------|-----|-------------|---------|
-| 146 | "New Housing Request" | `/app/host/${listing.id}/applications` | 'view' | New application received |
-| 353 | "Your application for ${housingRequest.listing.title} has been approved!" | `/app/searches/${housingRequest.tripId}` | 'application_approved' | Application approval |
-| 407 | "Your application for ${housingRequest.listing.title} has been declined." | `/app/searches/${housingRequest.tripId}` | 'application_declined' | Application rejection |
-| 515 | "Your approval for ${housingRequest.listing.title} has been revoked." | `/app/searches/${housingRequest.tripId}` | 'application_revoked' | Approval revocation |
-| 587 | "Your application for ${housingRequest.listing.title} is being reconsidered." | `/app/searches/${housingRequest.tripId}` | 'application_reconsidered' | Application reconsideration |
+### Application Declined
+- **Message**: "Your application for [listingTitle] has been declined."
+- **Action**: When host declines a housing request
+- **Link**: `/app/rent/searches/[tripId]`
+- **Source**: `src/app/actions/housing-requests.ts:483` (declineHousingRequest)
 
-### 2. `/src/app/actions/matches.ts`
+### Application Approval Reverted
+- **Message**: "Your approval for [listingTitle] has been reverted."
+- **Action**: When host undoes an approval
+- **Link**: `/app/rent/searches/[tripId]`
+- **Source**: `src/app/actions/housing-requests.ts:591` (undoApproval)
 
-**Import:** Line 7 - `import { createNotification } from './notifications'`
+### Application Decline Reverted
+- **Message**: "Good news! Your application for [listingTitle] is being reconsidered."
+- **Action**: When host undoes a decline
+- **Link**: `/app/rent/searches/[tripId]`
+- **Source**: `src/app/actions/housing-requests.ts:663` (undoDecline)
 
-| Line | Content | URL | Action Type | Context |
-|------|---------|-----|-------------|---------|
-| 57 | "New Match" | `/app/rent/searches/?tab=matchbook&searchId=${trip.id}` | 'view' | New match found |
+---
 
-### 3. `/src/app/api/payment/webhook/route.ts`
+## Bookings
 
-**Import:** Line 8 - `import { createNotification } from '@/app/actions/notifications'`
+### New Booking (Host Notification)
+- **Message**: "You have a new booking for [listingTitle] from [startDate] to [endDate]"
+- **Action**: When a booking is created (either via lease signing completion or payment completion)
+- **Link**: `/app/host-dashboard/[listingId]?tab=bookings`
+- **Source**: 
+  - `src/app/actions/bookings.ts:414` (createBookingFromCompletedMatch)
+  - `src/app/actions/documents.ts:411` (via webhook)
 
-| Line | Content | URL | Action Type | Context |
-|------|---------|-----|-------------|---------|
-| 143 | "You have a new booking for ${match?.listing.title} from ${match?.trip.startDate} to ${match?.trip.endDate}" | `/app/host-dashboard/${match?.listing.id}?tab=bookings` | 'booking' | Stripe webhook booking |
+### Booking Created (General)
+- **Message**: Context-dependent notification content
+- **Action**: When a booking is created through the createBooking function
+- **Link**: `/bookings`
+- **Source**: `src/app/actions/bookings.ts:143` (createBooking)
 
-### 4. `/src/app/api/cron/check-unread-messages/route.ts`
+### Move-In Confirmed / Payment Authorization Required
+- **Message**: "Your move-in has been confirmed! Please authorize your first month's rent payment of $[amount]."
+- **Action**: When host confirms move-in for a booking
+- **Link**: `/app/renter/bookings/[bookingId]/authorize-payment`
+- **Source**: `src/app/actions/bookings.ts:552` (confirmMoveIn)
 
-**Import:** Line 3 - `import { createNotification } from '@/app/actions/notifications'`
+---
 
-| Line | Content | URL | Action Type | Context |
-|------|---------|-----|-------------|---------|
-| 129 | "You have a new message from ${senderName}." | `/app/messages?convo=${message.conversation.id}` | 'message' | Unread message notification (cron job) |
+## Lease Signing
 
-### 5. `/src/app/api/boldsign/webhook/route.ts`
+### Lease Ready for Signature (Combined with Approval)
+- **Message**: 
+  - **Landlord**: "Application approved! Your lease agreement for [documentTitle] is ready for your signature."
+  - **Tenant**: "Congratulations! Your application for [documentTitle] has been approved and your lease is ready for signature."
+- **Action**: When lease document is sent via BoldSign
+- **Link**: 
+  - **Landlord**: `/app/host/match/[matchId]`
+  - **Tenant**: `/app/match/[matchId]`
+- **Source**: `src/app/api/boldsign/webhook/route.ts:111-137` (BoldSign "Sent" event)
 
-**Import:** Line 3 - `import { createNotification } from '@/app/actions/notifications'`
+### Document Fully Signed
+- **Message**: "The lease document \"[documentTitle]\" has been fully signed. Payment setup is the next step."
+- **Action**: When all parties have signed a lease document
+- **Link**: `/app/documents/[documentId]`
+- **Source**: `src/app/actions/documents.ts:129` (updateDocumentSigningStatus)
 
-| Line | Content | URL | Action Type | Context |
-|------|---------|-----|-------------|---------|
-| 110 | "Application approved! Your lease agreement for ${body.data.messageTitle} is ready for your signature." | `/app/host/match/${boldSignLease.matchId}` | 'application_approved_lease_ready' | Landlord - lease ready |
-| 125 | "Congratulations! Your application for ${body.data.messageTitle} has been approved and your lease is ready for signature." | `/app/match/${boldSignLease.matchId}` | 'application_approved_lease_ready' | Tenant - lease ready |
-| 217 | "Your lease agreement for ${body.data.messageTitle} is ready for your signature." | `/app/host/match/${boldSignLease.matchId}` | 'lease_signature_required' | Landlord signature needed |
-| 236 | "Your lease agreement for ${body.data.messageTitle} is ready for your signature." | `/app/searches/book/${boldSignLease.matchId}` | 'lease_signature_required' | Primary tenant signature needed |
-| 252 | "Your lease agreement for ${body.data.messageTitle} is ready for your signature." | `/app/searches/book/${boldSignLease.matchId}` | 'lease_signature_required' | Secondary tenant signature needed |
-| 337 | "Congratulations! The lease agreement for ${body.data.messageTitle} has been fully executed by all parties." | `/app/host/match/${boldSignLease.matchId}` or `/app/searches/book/${boldSignLease.matchId}` | 'lease_fully_executed' | Lease completion (multiple users) |
+### Lease Fully Executed
+- **Message**: 
+  - With booking: "Your lease for [listingTitle] has been fully executed and your booking is confirmed!"
+  - Without booking: "The document \"[documentTitle]\" has been fully executed."
+- **Action**: When lease is fully signed and executed
+- **Link**: 
+  - With booking: `/app/rent/match/[matchId]/complete`
+  - Without booking: `/app/documents`
+- **Source**: `src/app/actions/documents.ts:270` (via BoldSign webhook)
 
-### 6. `/src/app/admin/notifications/_actions.ts`
+---
 
-**Import:** Line 5 - `import { createNotification } from '@/app/actions/notifications'`
+## Messages
 
-| Line | Content | URL | Action Type | Context |
-|------|---------|-----|-------------|---------|
-| 85 | "${data.title}: ${data.message}" | `${data.actionUrl}` or `/app/dashboard` | `ADMIN_${data.type}` | Single admin notification |
-| 139 | "${data.title}: ${data.message}" | `${data.actionUrl}` or `/app/dashboard` | `ADMIN_${data.type}` | Bulk admin notifications |
+### New Message Notification
+- **Message**: "You have a new message from [senderName]."
+- **Action**: When a message is unread for more than 2 minutes (via cron job)
+- **Link**: `/app/messages?convo=[conversationId]`
+- **Source**: `src/app/api/cron/check-unread-messages/route.ts:129` (cron job)
+- **Note**: Includes email with additional details like listing title and message content
 
-### 7. `/src/app/actions/bookings.ts`
+---
 
-**Import:** Line 7 - `import { createNotification } from './notifications'`
+## Payments
 
-| Line | Content | URL | Action Type | Context |
-|------|---------|-----|-------------|---------|
-| 143 | "You have a new booking for ${match?.listing.title} from ${match?.trip.startDate} to ${match?.trip.endDate}" | `/app/host-dashboard/${match?.listing.id}?tab=bookings` | 'booking' | New booking created |
-| 201 | ⚠️ **Invalid format** - Missing content | N/A | 'BOOKING_UPDATED' | Booking update (needs fix) |
-| 222 | ⚠️ **Invalid format** - Missing content | N/A | 'BOOKING_DELETED' | Booking deletion (needs fix) |
-| 480 | "Your move-in has been confirmed! Please authorize your first month's rent payment of $${firstRentPayment.amount}." | `/app/renter/bookings/${bookingId}/authorize-payment` | 'payment_authorization_required' | Payment authorization needed |
+### Payment Success (Stripe Webhook)
+- **Message**: Varies based on payment type
+- **Action**: When a Stripe payment succeeds
+- **Link**: Varies
+- **Source**: `src/app/api/payment-webhook/route.ts` (webhook handler)
 
-### 8. `/src/app/api/leases/create-from-upload/route.ts`
+### Payment Failed (Stripe Webhook)
+- **Message**: Varies based on payment type
+- **Action**: When a Stripe payment fails
+- **Link**: Varies
+- **Source**: `src/app/api/payment-webhook/route.ts` (webhook handler)
 
-**Import:** Line 4 - `import { createNotification } from '@/app/actions/notifications'`
+---
 
-*Note: This file imports the function but doesn't use it in the current code.*
+## Matches
 
-## Summary Statistics
+### Match Created (Renter Notification)
+- **Message**: "Your request for [listingTitle] has been matched with a host!"
+- **Action**: When a match is created between a housing request and a listing
+- **Link**: `/trips/[tripId]`
+- **Source**: `src/app/actions/matches.ts:57` (createMatch)
 
-- **Total Files Using createNotification:** 8 files
-- **Total Notification Instances:** 20+ individual calls
-- **Languages Used:** English (all notifications)
-- **URL Patterns:**
-  - Host dashboard routes: `/app/host/`, `/app/host-dashboard/`
-  - Renter routes: `/app/searches/`, `/app/rent/`, `/app/renter/`
-  - Match routes: `/app/match/`, `/app/host/match/`
-  - Message routes: `/app/messages`
-  - Admin routes: `/app/dashboard`
+---
 
-## Action Types Used
+## Admin Notifications
 
-- `'view'` - General viewing actions
-- `'application_approved'` - Application approvals
-- `'application_declined'` - Application rejections
-- `'application_revoked'` - Approval revocations
-- `'application_reconsidered'` - Application reconsiderations
-- `'booking'` - Booking-related notifications
-- `'message'` - Message notifications
-- `'application_approved_lease_ready'` - Lease ready notifications
-- `'lease_signature_required'` - Signature required notifications
-- `'lease_fully_executed'` - Lease completion notifications
-- `'payment_authorization_required'` - Payment authorization notifications
-- `ADMIN_*` - Various admin notification types
+### Custom Admin Notification
+- **Message**: Custom content based on notification type
+- **Action**: Admin manually creates a notification for a user
+- **Link**: Configurable (defaults to `/app/dashboard`)
+- **Source**: `src/app/admin/notifications/_actions.ts:85` (createAdminNotification)
 
-## Issues Found
+---
 
-**Lines 201 and 222 in `/src/app/actions/bookings.ts`:**
-- These calls use invalid schema format
-- Missing required `content` field
-- Using `type` instead of proper notification schema
-- **Recommendation:** Fix these to follow proper createNotification schema
+## Client-Side Toast Notifications
 
-## Related Files
+### Contact Form Submission
+- **Success**: "Message Sent - Thank you for contacting us. We'll get back to you soon."
+- **Error**: "Something went wrong - We couldn't send your message. Please try again later."
+- **Validation Errors**: Various validation messages for missing fields
+- **Action**: When submitting the contact form
+- **Source**: `src/components/marketing-landing-components/contact-form.tsx`
 
-- **Function Definition:** `/src/app/actions/notifications.ts`
-- **Database Schema:** Likely in database migration files (not analyzed)
-- **Email Templates:** Referenced in cron job for email notifications
+### Various UI Toasts
+- Multiple components use toast notifications for immediate user feedback
+- These are typically for form submissions, errors, and success confirmations
+- Source files include various client components with `useToast` hook
+
+---
+
+## Email Notification Preferences
+
+The following notification types respect user email preferences (found in `src/app/actions/notifications.ts:10-45`):
+
+- `message` → emailNewMessageNotifications
+- `new_conversation` → emailNewConversationNotifications
+- `view` → emailApplicationReceivedNotifications
+- `application_approved` → emailApplicationApprovedNotifications
+- `application_declined` → emailApplicationDeclinedNotifications
+- `submit_host_review` → emailSubmitHostReviewNotifications
+- `submit_renter_review` → emailSubmitRenterReviewNotifications
+- `landlord_info_request` → emailLandlordInfoRequestNotifications
+- `verification_completed` → emailVerificationCompletedNotifications
+- `booking` → emailBookingCompletedNotifications
+- `booking_canceled` → emailBookingCanceledNotifications
+- `move_out_upcoming` → emailMoveOutUpcomingNotifications
+- `move_in_upcoming` → emailMoveInUpcomingNotifications
+- `payment_success` → emailPaymentSuccessNotifications
+- `payment_failed` → emailPaymentFailedNotifications
+- `off_platform_host` → emailOffPlatformHostNotifications
+- `lease_signature_required` → emailApplicationApprovedNotifications
+- `lease_fully_executed` → emailBookingCompletedNotifications
+
+---
+
+## Notes
+
+1. All server-side notifications are created using the `createNotification` function from `src/app/actions/notifications.ts`
+2. Notifications include both in-app notifications and optional email notifications based on user preferences
+3. The `actionType` field is used to map notifications to email preference settings
+4. Unread message notifications are sent via a cron job that checks every 2 minutes
+5. Some notifications (like admin notifications) bypass preference checks and are always sent

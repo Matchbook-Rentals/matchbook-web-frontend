@@ -339,11 +339,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
       });
 
       if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Lease signed successfully! Now please set up your payment method.",
-        });
-        
         // Transition to payment step (stay on same route)
         setLeaseCompleted(true);
         setShowPaymentSelector(true);
@@ -674,6 +669,16 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto p-4 pb-24">
+          {/* Step Progress Bar */}
+          <div className="mb-8">
+            <StepProgress 
+              currentStep={2}
+              totalSteps={3}
+              labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+              className='w-full max-w-2xl'
+            />
+          </div>
+          
           {/* Header */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-4">
@@ -889,13 +894,23 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                     </div>
                   ) : currentStepState === 'overview-lease' && !isLoading && documentInstance && documentPdfFile ? (
                     <div className="space-y-4">
-                      
                       {/* PDF Preview */}
                       <div className="border rounded-lg overflow-hidden bg-gray-50">
                         <PDFViewer
                           file={documentPdfFile}
                           pageWidth={800}
                         />
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex justify-end gap-3 pt-4">
+                        <Button
+                          onClick={() => setShowSigningMode(true)}
+                          size="lg"
+                          className="bg-[#0A6060] hover:bg-[#085050]"
+                        >
+                          Proceed to Sign Lease
+                        </Button>
                       </div>
                     </div>
                   ) : currentStepState === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
@@ -910,9 +925,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                           onSave={(data) => {
                           }}
                           onCancel={() => {
+                            setShowSigningMode(false);
                             toast({
-                              title: "Signing cancelled",
-                              description: "You can return to sign the lease at any time.",
+                              title: "Returned to lease review",
+                              description: "You can proceed to sign when ready.",
                             });
                           }}
                           onFinish={handleDocumentSigningComplete}
@@ -923,32 +939,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                     <div className="text-center py-12">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787] mx-auto mb-4"></div>
                       <p className="text-[#777b8b]">Loading lease document...</p>
-                    </div>
-                  ) : currentStepState === 'complete-payment' ? (
-                    <div className="text-center py-12">
-                      <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        Lease Signed Successfully!
-                      </h3>
-                      <p className="text-gray-600 mb-6">
-                        Your lease has been signed. Now complete the process by setting up your payment method.
-                      </p>
-                      <div className="flex gap-3 justify-center">
-                        <Button 
-                          onClick={handleViewLease}
-                          variant="outline"
-                          size="lg"
-                        >
-                          <FileText className="w-4 h-4 mr-2" />
-                          View Signed Lease
-                        </Button>
-                        <Button 
-                          onClick={() => setShowPaymentSelector(true)}
-                          size="lg"
-                        >
-                          Complete Payment
-                        </Button>
-                      </div>
                     </div>
                   ) : currentStepState === 'payment-method-exists' ? (
                     <div className="text-center py-12">

@@ -312,7 +312,7 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
                 setSelectedPaymentMethodType(methodType || undefined);
               }}
               onBack={() => {
-                router.push(`/app/rent/match/${matchId}/review`);
+                router.push(`/app/rent/match/${matchId}/lease-signing`);
               }}
               tripStartDate={match.trip.startDate}
               tripEndDate={match.trip.endDate}

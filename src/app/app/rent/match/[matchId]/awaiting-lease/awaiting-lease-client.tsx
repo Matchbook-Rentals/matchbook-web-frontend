@@ -29,8 +29,8 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: Awai
       if (response.ok) {
         const data = await response.json();
         if (data.match?.leaseDocumentId) {
-          // Lease is now available, redirect to review
-          router.push(`/app/rent/match/${matchId}/review`);
+          // Lease is now available, redirect to lease-signing
+          router.push(`/app/rent/match/${matchId}/lease-signing`);
         }
       }
     };

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+import { createPaymentReceipt } from '@/lib/receipt-utils';
 
 export async function POST(
   request: NextRequest,
@@ -139,9 +140,15 @@ export async function POST(
       paymentAmount: amount,
     };
 
-    // All payment methods start as authorized, capture happens later when payment settles
-    // ACH payments can take 3+ days to settle and can fail during that time
-    updateData.paymentStatus = 'authorized';
+    // Check if payment succeeded immediately (for card payments)
+    if (paymentIntent.status === 'succeeded') {
+      // Payment succeeded immediately, mark as captured
+      updateData.paymentStatus = 'captured';
+      updateData.paymentCapturedAt = new Date();
+    } else {
+      // ACH payments can take 3+ days to settle and can fail during that time
+      updateData.paymentStatus = 'authorized';
+    }
 
     await prisma.match.update({
       where: { id: params.matchId },
@@ -149,6 +156,66 @@ export async function POST(
     });
 
     console.log('💾 Match updated successfully');
+
+    // Create booking immediately if payment succeeded
+    if (paymentIntent.status === 'succeeded') {
+      // Check if booking already exists
+      let booking = await prisma.booking.findFirst({
+        where: { matchId: params.matchId }
+      });
+
+      if (!booking) {
+        console.log('📚 Creating booking for match:', params.matchId);
+        booking = await prisma.booking.create({
+          data: {
+            userId: match.trip.userId,
+            listingId: match.listingId,
+            tripId: match.tripId,
+            matchId: params.matchId,
+            startDate: match.trip.startDate,
+            endDate: match.trip.endDate,
+            totalPrice: paymentIntent.amount,
+            monthlyRent: match.monthlyRent,
+            status: 'confirmed'
+          }
+        });
+
+        // Create listing unavailability
+        await prisma.listingUnavailability.create({
+          data: {
+            startDate: booking.startDate,
+            endDate: booking.endDate,
+            reason: 'Booking',
+            listingId: booking.listingId
+          }
+        });
+
+        console.log('Created booking record:', booking.id);
+      }
+
+      // Generate receipt for the tenant
+      try {
+        const rentDueAtBooking = match.listing.rentDueAtBooking || 77;
+        const paymentMethodType = paymentMethod.type;
+        
+        await createPaymentReceipt({
+          userId: match.trip.userId, // Receipt for the tenant
+          matchId: params.matchId,
+          bookingId: booking.id,
+          paymentType: 'reservation',
+          rentDueAtBooking,
+          paymentMethodType,
+          stripePaymentIntentId: paymentIntent.id,
+          stripeChargeId: paymentIntent.latest_charge as string,
+          transactionStatus: 'succeeded'
+        });
+        
+        console.log('Generated payment receipt for match:', params.matchId);
+      } catch (receiptError) {
+        console.error('Error generating receipt:', receiptError);
+        // Don't fail the payment if receipt generation fails
+      }
+    }
 
     return NextResponse.json({
       success: true,
