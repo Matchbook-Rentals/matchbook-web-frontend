@@ -20,7 +20,7 @@ export default async function VerificationPage() {
   } : null;
 
   return (
-    <>
+    <main className="max-w-full overflow-hidden">
       <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
       <div className="flex justify-center p-8 bg-background">
         <MarketingPageHeader headerText="MatchBook Renter Verification" breadcrumbText="Renter Verification" />
@@ -31,6 +31,6 @@ export default async function VerificationPage() {
       <VerificationWhyItMatters />
       <VerificationStandOut />
       <Footer />
-    </>
+    </main>
   );
 }
