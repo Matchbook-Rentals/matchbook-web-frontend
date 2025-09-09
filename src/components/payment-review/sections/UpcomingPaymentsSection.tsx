@@ -40,21 +40,21 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       tripStartDate: start.toISOString(),
       tripEndDate: end.toISOString(),
       monthlyRent,
-      startDay: start.getUTCDate(),
-      startMonth: start.getUTCMonth() + 1,
-      startYear: start.getUTCFullYear()
+      startDay: start.getDate(),
+      startMonth: start.getMonth() + 1,
+      startYear: start.getFullYear()
     });
     
     // Calculate trip duration for service fee
     const tripMonths = calculateTripMonths(start, end);
     console.log('📅 Trip duration in months:', tripMonths);
     
-    // Calculate if first month is prorated (using UTC to avoid timezone issues)
-    const firstDayOfMonth = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
-    const lastDayOfFirstMonth = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 0));
-    const daysInFirstMonth = lastDayOfFirstMonth.getUTCDate();
-    const daysRemainingInFirstMonth = lastDayOfFirstMonth.getUTCDate() - start.getUTCDate() + 1;
-    const isFirstMonthProrated = start.getUTCDate() !== 1;
+    // Calculate if first month is prorated (using listing's local time)
+    const firstDayOfMonth = new Date(start.getFullYear(), start.getMonth(), 1);
+    const lastDayOfFirstMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0);
+    const daysInFirstMonth = lastDayOfFirstMonth.getDate();
+    const daysRemainingInFirstMonth = lastDayOfFirstMonth.getDate() - start.getDate() + 1;
+    const isFirstMonthProrated = start.getDate() !== 1;
     
     let paymentIndex = 0;
     
@@ -152,8 +152,8 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       paymentIndex++;
     }
     
-    // Add subsequent months starting from month 2 (using UTC)
-    let currentDate = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 1));
+    // Add subsequent months starting from month 2 (using listing's local time)
+    let currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
     console.log('📆 Starting subsequent months from:', currentDate.toISOString());
     
     while (currentDate <= end && paymentIndex < 36) {
@@ -161,17 +161,17 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
 📅 Payment #${paymentIndex + 1} for:`, currentDate.toLocaleDateString());
       
       // Check if this is the last month and if it needs proration
-      const isLastMonth = currentDate.getUTCMonth() === end.getUTCMonth() && 
-                         currentDate.getUTCFullYear() === end.getUTCFullYear();
+      const isLastMonth = currentDate.getMonth() === end.getMonth() && 
+                         currentDate.getFullYear() === end.getFullYear();
       
       let rentAmount = monthlyRent;
       let description = 'Monthly rent';
       
       if (isLastMonth) {
         // Check if move-out is before the last day of the month
-        const lastDayOfMonth = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth() + 1, 0));
-        const endDay = end.getUTCDate();
-        const lastDay = lastDayOfMonth.getUTCDate();
+        const lastDayOfMonth = new Date(end.getFullYear(), end.getMonth() + 1, 0);
+        const endDay = end.getDate();
+        const lastDay = lastDayOfMonth.getDate();
         
         if (endDay < lastDay) {
           // Prorate the last month
@@ -225,7 +225,7 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
         subItems,
       });
       
-      currentDate = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1));
+      currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
       paymentIndex++;
     }
     

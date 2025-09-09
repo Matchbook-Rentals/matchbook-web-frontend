@@ -160,10 +160,10 @@ export function calculateProratedRent(
   endDate?: Date
 ): ProratedRentDetails {
   const start = new Date(startDate);
-  // Use UTC methods to avoid timezone issues
-  const startDay = start.getUTCDate();
-  const startMonth = start.getUTCMonth();
-  const startYear = start.getUTCFullYear();
+  // Use standard date methods (will be in listing's timezone)
+  const startDay = start.getDate();
+  const startMonth = start.getMonth();
+  const startYear = start.getFullYear();
   
   console.log('🧑 [calculateProratedRent] Input:', {
     monthlyRent,
@@ -174,9 +174,9 @@ export function calculateProratedRent(
     endDate: endDate?.toISOString() || 'none (will use end of month)'
   });
   
-  // Get the last day of the start month (using UTC)
-  const lastDayOfMonth = new Date(Date.UTC(startYear, startMonth + 1, 0));
-  const daysInMonth = lastDayOfMonth.getUTCDate();
+  // Get the last day of the start month
+  const lastDayOfMonth = new Date(startYear, startMonth + 1, 0);
+  const daysInMonth = lastDayOfMonth.getDate();
   
   console.log('📅 Month details:', {
     lastDayOfMonth: lastDayOfMonth.toISOString(),
@@ -197,7 +197,7 @@ export function calculateProratedRent(
   
   // Calculate days to charge (from start date to end of month)
   const effectiveEndDate = endDate || lastDayOfMonth;
-  const effectiveEndDay = effectiveEndDate.getUTCDate();
+  const effectiveEndDay = effectiveEndDate.getDate();
   
   console.log('🎯 Effective end date:', effectiveEndDate.toISOString());
   console.log('🧑 Calculation:', {
