@@ -116,13 +116,104 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   const occupants = getOccupants();
   
   return (
-    <Card className="w-full p-6 rounded-xl">
+    <Card className="w-full p-4 sm:p-6 rounded-xl">
       <CardContent className="p-0">
-        <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 w-full">
+        {/* Mobile Layout - Column with rows */}
+        <div className="flex flex-col gap-4 sm:hidden">
+          {/* Row 1: Image | Menu Button */}
+          <div className="flex flex-row items-start justify-between gap-4">
+            <div 
+              className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+              style={{ backgroundImage: `url(${listingImage})` }}
+            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="p-2 rounded-lg border-[#3c8787] text-[#3c8787]"
+                >
+                  <MoreVertical className="w-4 h-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0" align="end">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-2"
+                  onClick={() => onDelete(booking.id)}
+                >
+                  <Trash className="w-4 h-4" />
+                  Delete Booking
+                </Button>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {/* Row 2: Title | Badge */}
+          <div className="flex flex-row items-center justify-between gap-2">
+            <div className="font-medium text-[#484a54] text-base flex-1 min-w-0 truncate">
+              {listingTitle}
+            </div>
+            <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
+              {getStatusLabel()}
+            </Badge>
+          </div>
+
+          {/* Row 3: Address | Dates */}
+          <div className="flex flex-row items-start justify-between gap-2">
+            <div className="flex items-start gap-1 flex-1 min-w-0">
+              <MapPinIcon className="w-4 h-4 text-[#777b8b] flex-shrink-0 mt-0.5" />
+              <div className="text-xs text-[#777b8b] truncate">
+                {listingAddress}
+              </div>
+            </div>
+            <div className="text-xs text-[#777b8b] flex-shrink-0">
+              {startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </div>
+          </div>
+
+          {/* Row 4: Guest Types | Price */}
+          <div className="flex flex-row items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {occupants.map((occupant, index) => (
+                <div
+                  key={index}
+                  className="text-xs text-[#344054]"
+                >
+                  {occupant.count} {occupant.type}
+                </div>
+              ))}
+            </div>
+            <div className="font-semibold text-[#484a54] text-lg flex-shrink-0">
+              {priceDisplay}
+            </div>
+          </div>
+
+          {/* Row 5: Action Buttons */}
+          <div className="flex flex-col gap-2 w-full">
+            <BrandButton
+              variant="outline"
+              onClick={() => router.push(`/app/rent/bookings/${booking.id}`)}
+              className="w-full"
+            >
+              View Details
+            </BrandButton>
+            <BrandButton 
+              variant="default"
+              onClick={() => router.push(`/app/rent/bookings/${booking.id}/payment`)}
+              className="w-full"
+            >
+              Payment
+            </BrandButton>
+          </div>
+        </div>
+
+        {/* Desktop/Tablet Layout - Keep existing */}
+        <div className="hidden sm:flex flex-col md:flex-row items-start gap-4 md:gap-6 w-full">
           <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 flex-1 w-full min-w-0">
             {/* Listing Image */}
             <div 
-              className="relative w-[105px] h-[70px] sm:w-[157px] sm:h-[105px] lg:w-[209px] lg:h-[140px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+              className="relative w-[157px] h-[105px] lg:w-[209px] lg:h-[140px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
               style={{ backgroundImage: `url(${listingImage})` }}
             />
 
