@@ -13,7 +13,8 @@ import {
   Trash2,
   CheckCircle,
   XCircle,
-  Clock
+  Clock,
+  X
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { MatchWithRelations } from '@/types';
@@ -23,21 +24,24 @@ interface AdminDebugPanelProps {
   matchId: string;
   isAdminDev: boolean;
   onReset?: () => void;
+  onHidePaymentMethods?: () => void;
 }
 
-export function AdminDebugPanel({ match, matchId, isAdminDev, onReset }: AdminDebugPanelProps) {
+export function AdminDebugPanel({ match, matchId, isAdminDev, onReset, onHidePaymentMethods }: AdminDebugPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [isResetting, setIsResetting] = useState<string | null>(null);
   const { toast } = useToast();
 
-  // Don't render if not admin dev
-  if (!isAdminDev) return null;
+  // Don't render if not admin dev or if hidden
+  if (!isAdminDev || isHidden) return null;
 
-  const handleReset = async (resetType: 'all' | 'tenant' | 'payment') => {
+  const handleReset = async (resetType: 'all' | 'tenant' | 'payment' | 'paymentMethod') => {
     const confirmMessages = {
       all: 'Reset ALL lease and payment data? This will clear signatures AND payment information.',
       tenant: 'Reset TENANT signature only? Landlord signature and payment data will be preserved.',
-      payment: 'Reset payment data only? Lease signatures will be preserved.'
+      payment: 'Reset payment data only? Lease signatures will be preserved.',
+      paymentMethod: 'Clear payment method only? This will show the first-time payment selection UI.'
     };
 
     if (!confirm(confirmMessages[resetType])) return;
@@ -99,13 +103,27 @@ export function AdminDebugPanel({ match, matchId, isAdminDev, onReset }: AdminDe
     <Card className="border-orange-300 bg-orange-50">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
-          <CardHeader className="cursor-pointer hover:bg-orange-100 transition-colors">
+          <CardHeader className="cursor-pointer hover:bg-orange-100 transition-colors relative">
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-orange-800">
                 <AlertTriangle className="w-5 h-5" />
                 <span className="text-lg">Admin Debug Panel</span>
               </div>
-              <ChevronDown className={`w-5 h-5 text-orange-600 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+              <div className="flex items-center gap-2">
+                <ChevronDown className={`w-5 h-5 text-orange-600 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsHidden(true);
+                  }}
+                  className="h-auto p-1 hover:bg-orange-200"
+                  title="Hide panel for this session"
+                >
+                  <X className="w-4 h-4 text-orange-700" />
+                </Button>
+              </div>
             </CardTitle>
           </CardHeader>
         </CollapsibleTrigger>
@@ -262,6 +280,33 @@ export function AdminDebugPanel({ match, matchId, isAdminDev, onReset }: AdminDe
                   )}
                   Reset Payment Only
                 </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleReset('paymentMethod')}
+                  disabled={!!isResetting || !match.stripePaymentMethodId}
+                  className="flex items-center gap-2 border-blue-300 text-blue-700 hover:bg-blue-100"
+                >
+                  {isResetting === 'paymentMethod' ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <CreditCard className="w-4 h-4" />
+                  )}
+                  Clear Payment Method
+                </Button>
+
+                {onHidePaymentMethods && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={onHidePaymentMethods}
+                    className="flex items-center gap-2 border-purple-300 text-purple-700 hover:bg-purple-100"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    Hide Payment Methods (UI Only)
+                  </Button>
+                )}
               </div>
             </div>
 

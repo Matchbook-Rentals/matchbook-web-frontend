@@ -67,6 +67,10 @@ export async function POST(
       updateData.paymentAuthorizedAt = null;
       updateData.paymentCapturedAt = null;
       console.log(`🔄 ADMIN: Resetting payment data for match ${matchId}`);
+    } else if (resetType === 'paymentMethod') {
+      // Only clear the payment method to show first-time user UI
+      updateData.stripePaymentMethodId = null;
+      console.log(`🔄 ADMIN: Clearing payment method only for match ${matchId}`);
     }
 
     // Perform the update

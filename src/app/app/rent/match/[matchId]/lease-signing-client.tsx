@@ -53,6 +53,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isRentScheduleOpen, setIsRentScheduleOpen] = useState(true);
   const [previewPaymentMethod, setPreviewPaymentMethod] = useState<'card' | 'ach'>(testPaymentMethodPreview || 'card');
+  const [hidePaymentMethods, setHidePaymentMethods] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   
   // Track server-provided initial step (clear after first render to allow client transitions)
@@ -691,6 +692,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                   match={match}
                   matchId={matchId}
                   isAdminDev={isAdminDev}
+                  onHidePaymentMethods={() => setHidePaymentMethods(true)}
                 />
               </div>
             )}
@@ -721,6 +723,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 onAddPaymentMethod={() => setShowPaymentSelector(false)}
                 tripStartDate={match.trip.startDate}
                 tripEndDate={match.trip.endDate}
+                hidePaymentMethods={hidePaymentMethods}
               />
             </div>
           </div>
@@ -750,6 +753,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 match={match}
                 matchId={matchId}
                 isAdminDev={isAdminDev}
+                onHidePaymentMethods={() => setHidePaymentMethods(true)}
               />
             </div>
           )}

@@ -9,6 +9,7 @@ import { UpcomingPaymentsSection } from './sections/UpcomingPaymentsSection';
 import { SecurityDepositPolicySection } from './sections/SecurityDepositPolicySection';
 import { CancellationPolicySection } from './sections/CancellationPolicySection';
 import { EmbeddedCheckoutModal } from '@/components/stripe/embedded-checkout-modal';
+import { AddPaymentMethodInline } from '@/components/stripe/add-payment-method-inline';
 
 interface PaymentReviewScreenProps {
   matchId: string;
@@ -25,6 +26,7 @@ interface PaymentReviewScreenProps {
   onAddPaymentMethod?: () => void;
   tripStartDate: Date;
   tripEndDate: Date;
+  hidePaymentMethods?: boolean;
 }
 
 export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
@@ -35,11 +37,13 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
   onAddPaymentMethod,
   tripStartDate,
   tripEndDate,
+  hidePaymentMethods = false,
 }) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
   const [showEmbeddedCheckout, setShowEmbeddedCheckout] = useState(false);
   const [checkoutClientSecret, setCheckoutClientSecret] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
 
   const handlePaymentMethodSelect = (methodId: string) => {
     setSelectedPaymentMethod(methodId);
@@ -83,8 +87,8 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
 
   return (
     <>
-      <div className="flex flex-col w-full max-w-[777px] items-start gap-8 relative">
-        <header className="relative self-stretch mt-[-1.00px] font-poppins font-bold text-[#1a1a1a] text-[28px] tracking-[0] leading-[33.6px]">
+      <div className="flex flex-col w-full max-w-3xl items-start gap-6 md:gap-8 relative">
+        <header className="relative self-stretch mt-[-1.00px] font-poppins font-bold text-[#1a1a1a] text-2xl md:text-3xl tracking-[0] leading-tight">
           REVIEW PAYMENTS
         </header>
 
@@ -93,18 +97,37 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
           onSelectMethod={handlePaymentMethodSelect}
           onProceedToPayment={handleProceedToPayment}
           isProcessing={isProcessing}
+          hidePaymentMethods={hidePaymentMethods}
+          onPaymentMethodsRefresh={() => {
+            // This provides a callback for refresh
+          }}
         />
 
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2 text-teal-600 hover:text-teal-700 h-auto p-0 font-normal"
-          onClick={onAddPaymentMethod}
-        >
-          <div className="w-6 h-6 rounded-full border-2 border-teal-600 flex items-center justify-center">
-            <PlusIcon className="w-4 h-4" />
-          </div>
-          Add New Payment Method
-        </Button>
+        {!showAddPaymentForm && (
+          <Button
+            variant="ghost"
+            className="flex items-center gap-2 text-teal-600 hover:text-teal-700 h-auto p-0 font-normal"
+            onClick={() => setShowAddPaymentForm(true)}
+          >
+            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-teal-600 flex items-center justify-center">
+              <PlusIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            </div>
+            Add New Payment Method
+          </Button>
+        )}
+
+        {showAddPaymentForm && (
+          <AddPaymentMethodInline
+            onSuccess={() => {
+              setShowAddPaymentForm(false);
+              // Trigger a refresh of payment methods
+              if (window.refreshPaymentMethods) {
+                window.refreshPaymentMethods();
+              }
+            }}
+            onCancel={() => setShowAddPaymentForm(false)}
+          />
+        )}
 
         <TotalDueSection paymentBreakdown={paymentBreakdown} />
         <UpcomingPaymentsSection 
@@ -123,6 +146,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
         amount={amount}
         onSuccess={handleCheckoutSuccess}
       />
+
     </>
   );
 };

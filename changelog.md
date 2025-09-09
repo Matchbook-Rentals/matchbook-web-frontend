@@ -1,5 +1,19 @@
 # Changelog
 
+## Fix Stripe payment method addition and remove modal nesting
+- Fixed Prisma error by changing User model field from 'name' to 'fullName'
+- Removed modal wrapper from payment method addition to prevent modal-within-modal issues
+- Created inline payment method component that renders directly in page flow
+- Added comprehensive logging throughout payment flow for better debugging
+- Created webhook handler for setup_intent.succeeded events
+- Enhanced error handling with detailed logging at each step
+
+## Update security deposit service fee to flat $5
+- Changed deposit service fee from percentage-based (1.5% or 3%) to flat $5 fee
+- Updated booking summary sidebar calculation for consistent pricing
+- Added Security Deposit Policy and Cancellation Policy sections to payment review screen
+- Reordered payment review sections with policies at the bottom
+
 ## Add loading spinner to prevent payment screen flash in lease signing
 - Added isInitializing state to show loading spinner while determining initial step
 - Prevents payment selector from flashing before proper step determination
@@ -748,3 +762,10 @@
 ## Fix React linting errors
 - Fixed duplicate props error in TemplateCreationStep.tsx by removing duplicate onCancel prop
 - Escaped unescaped HTML entities in success page template title and "What's Next?" text
+
+## Update booking summary with service fees and accordion animations
+- Added dynamic 3%/1.5% service fee to rent and deposit sections (1.5% for trips >6 months)
+- Removed parking line from rent breakdown section
+- Removed "Refundable: Yes" text from deposit section
+- Added smooth 180° rotation animation to accordion chevron icons on open/close
+- Updated totals in section headers to include service fees
