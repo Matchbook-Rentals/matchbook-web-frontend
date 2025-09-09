@@ -1,5 +1,12 @@
 # Changelog
 
+## Fix lease document download with signatures and annotations
+- Created `/api/documents/[id]/view` route to serve PDFs with field values and signatures applied
+- Added support for download vs inline viewing with `?download=true` parameter
+- Implemented PDF annotation merging using pdf-lib to include all signed fields
+- Refactored confirmation page with new component structure and simplified download UI
+- Removed payment receipt placeholder to focus on lease document download
+
 ## Fix Stripe payment method addition and remove modal nesting
 - Fixed Prisma error by changing User model field from 'name' to 'fullName'
 - Removed modal wrapper from payment method addition to prevent modal-within-modal issues
