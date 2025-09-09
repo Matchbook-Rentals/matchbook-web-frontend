@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { FEES, calculateCreditCardFee, calculateTotalWithCardFee } from '@/lib/fee-constants';
+import { FEES, calculateCreditCardFee, calculateTotalWithCardFee, calculateServiceFee } from '@/lib/fee-constants';
 
 interface UpcomingPaymentsSectionProps {
   monthlyRent: number;
@@ -31,6 +31,11 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
     const start = new Date(tripStartDate);
     const end = new Date(tripEndDate);
     
+    // Calculate trip duration for service fee
+    const tripMonths = Math.ceil(
+      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30)
+    );
+    
     // Calculate if first month is prorated
     const firstDayOfMonth = new Date(start.getFullYear(), start.getMonth(), 1);
     const lastDayOfFirstMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0);
@@ -38,26 +43,58 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
     const daysRemainingInFirstMonth = lastDayOfFirstMonth.getDate() - start.getDate() + 1;
     const isFirstMonthProrated = start.getDate() !== 1;
     
-    let currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1); // Start from second month
     let paymentIndex = 0;
     
-    // Add first month if prorated
+    // Add first month payment (prorated or full)
     if (isFirstMonthProrated) {
-      const proratedAmount = (monthlyRent / daysInFirstMonth) * daysRemainingInFirstMonth;
-      const cardFee = isUsingCard ? calculateCreditCardFee(proratedAmount) : 0;
-      const totalAmount = proratedAmount + cardFee;
+      // Prorated first month
+      const proratedRent = (monthlyRent / daysInFirstMonth) * daysRemainingInFirstMonth;
+      const serviceFee = calculateServiceFee(proratedRent, tripMonths);
+      const baseAmount = proratedRent + serviceFee;
+      const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
+      const totalAmount = baseAmount + cardFee;
       
       const subItems = [
         {
           description: `${daysRemainingInFirstMonth} days of ${formatMonthYear(start)} (prorated)`,
-          amount: proratedAmount,
+          amount: proratedRent,
+        },
+        {
+          description: 'Service fee',
+          amount: serviceFee,
         }
       ];
       
       if (isUsingCard) {
         subItems.push({
-          description: 'Credit card processing fee (3%)',
+          description: 'Credit card processing fee',
           amount: cardFee,
+        });
+      }
+      
+      payments.push({
+        date: formatPaymentDate(start),
+        amount: totalAmount,
+        hasSubItem: true,
+        subItems,
+      });
+      paymentIndex++;
+    } else {
+      // Full first month (move-in on the 1st)
+      const serviceFee = calculateServiceFee(monthlyRent, tripMonths);
+      const baseAmount = monthlyRent + serviceFee;
+      const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
+      const totalAmount = baseAmount + cardFee;
+      
+      const subItems = [
+        { description: 'Monthly rent', amount: monthlyRent },
+        { description: 'Service fee', amount: serviceFee }
+      ];
+      
+      if (isUsingCard) {
+        subItems.push({
+          description: 'Credit card processing fee',
+          amount: cardFee
         });
       }
       
@@ -70,30 +107,34 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       paymentIndex++;
     }
     
-    // Add full months
+    // Add subsequent full months starting from month 2
+    let currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+    
     while (currentDate <= end && paymentIndex < 12) {
-      const cardFee = isUsingCard ? calculateCreditCardFee(monthlyRent) : 0;
-      const totalAmount = monthlyRent + cardFee;
+      const serviceFee = calculateServiceFee(monthlyRent, tripMonths);
+      const baseAmount = monthlyRent + serviceFee;
+      const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
+      const totalAmount = baseAmount + cardFee;
+      
+      // Always show breakdown to include service fee
+      const subItems = [
+        { description: 'Monthly rent', amount: monthlyRent },
+        { description: 'Service fee', amount: serviceFee }
+      ];
       
       if (isUsingCard) {
-        // Show breakdown when using card
-        payments.push({
-          date: formatPaymentDate(currentDate),
-          amount: totalAmount,
-          hasSubItem: true,
-          subItems: [
-            { description: 'Monthly rent', amount: monthlyRent },
-            { description: 'Credit card processing fee (3%)', amount: cardFee }
-          ],
-        });
-      } else {
-        // Simple display for bank transfers
-        payments.push({
-          date: formatPaymentDate(currentDate),
-          amount: monthlyRent,
-          hasSubItem: false,
+        subItems.push({
+          description: 'Credit card processing fee',
+          amount: cardFee
         });
       }
+      
+      payments.push({
+        date: formatPaymentDate(currentDate),
+        amount: totalAmount,
+        hasSubItem: true,
+        subItems,
+      });
       
       currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
       paymentIndex++;
