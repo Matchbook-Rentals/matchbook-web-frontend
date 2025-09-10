@@ -44,7 +44,7 @@ export const BookingsContainerSection = ({ bookings }: BookingsContainerSectionP
   if (localBookings.length === 0) {
     return (
       <div className="text-center py-10 border border-dashed border-gray-300 rounded-lg bg-white w-full">
-        <p className="text-lg text-gray-600">You currently don't have any bookings.</p>
+        <p className="text-lg text-gray-600">You currently don&apos;t have any bookings.</p>
       </div>
     );
   }
