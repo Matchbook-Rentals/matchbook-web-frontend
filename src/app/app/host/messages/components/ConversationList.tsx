@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { getImageWithFallback } from '@/lib/utils';
 import { AvatarWithFallback } from '@/components/ui/avatar-with-fallback';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // Define the conversation participant structure
 interface ConversationParticipant {
@@ -201,12 +202,258 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </div>
     );
   };
-  const MainContentSection = () => null;
-  const SearchBarSection = () => null;
-  const MessageListSection = () => null;
-  const SidebarSection = () => null;
-  const MessageItemSection = () => null;
-  const UserProfileSection = () => null;
+  const MainContentSection = () => {
+    // Transform conversations data for the new UI
+    const transformedConversations = filteredConversations.map((conv) => {
+      const { displayName, imageUrl } = getParticipantInfo(conv, user);
+      const lastMessage = conv.messages && conv.messages.length > 0
+        ? conv.messages[conv.messages.length - 1]
+        : null;
+      
+      const otherParticipant = conv.participants.find(p => p.User.id !== user.id);
+      const participantUser = otherParticipant?.User;
+      
+      // Get initials for avatar fallback
+      const getInitials = (name: string) => {
+        const parts = name.split(' ');
+        if (parts.length >= 2) {
+          return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+      };
+
+      return {
+        id: conv.id,
+        name: displayName,
+        initials: getInitials(displayName),
+        avatarSrc: imageUrl,
+        hasAvatar: !!imageUrl,
+        avatarColor: 'bg-[#063a3a]', // Default color, you can vary this
+        isHighlighted: selectedConversationId === conv.id,
+        isOnline: false, // You'd need to implement online status
+        time: formatLastMessageTime(lastMessage?.createdAt || conv.createdAt),
+        message: lastMessage?.content || 'No messages yet'
+      };
+    });
+
+    return (
+      <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+        {transformedConversations.map((conversation) => (
+          <div
+            key={conversation.id}
+            onClick={() => onSelectConversation(conversation.id)}
+            className={`flex items-start gap-3 p-2 relative self-stretch w-full flex-[0_0_auto] cursor-pointer ${
+              conversation.isHighlighted ? "bg-[#e7f0f0]" : ""
+            } ${conversation.isHighlighted ? "rounded-2xl" : ""}`}
+          >
+            <div className="relative">
+              {conversation.hasAvatar ? (
+                <Avatar className="w-12 h-12">
+                  <AvatarImage
+                    src={conversation.avatarSrc}
+                    alt={conversation.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className={conversation.avatarColor}>
+                    <div className="relative w-fit [font-family:'DM_Sans',Helvetica] font-bold text-white text-base tracking-[0] leading-6 whitespace-nowrap">
+                      {conversation.initials}
+                    </div>
+                  </AvatarFallback>
+                </Avatar>
+              ) : (
+                <div
+                  className={`flex w-11 h-11 items-center justify-center gap-2.5 p-2.5 relative ${conversation.avatarColor} rounded-[35px]`}
+                >
+                  <div className="relative w-fit mt-[-1.00px] ml-[-0.50px] mr-[-0.50px] [font-family:'DM_Sans',Helvetica] font-bold text-white text-base tracking-[0] leading-6 whitespace-nowrap">
+                    {conversation.initials}
+                  </div>
+                </div>
+              )}
+
+              {conversation.isOnline && (
+                <div className="absolute w-[15px] h-[15px] top-[34px] left-[34px] bg-success-500 rounded-md border-[1.5px] border-solid border-white" />
+              )}
+            </div>
+
+            <div className="flex flex-col items-start gap-1 relative flex-1 grow">
+              <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+                <div className="relative flex-1 mt-[-1.00px] font-text-4-medium font-[number:var(--text-4-medium-font-weight)] text-[#2d2d2d] text-[length:var(--text-4-medium-font-size)] tracking-[var(--text-4-medium-letter-spacing)] leading-[var(--text-4-medium-line-height)] [font-style:var(--text-4-medium-font-style)]">
+                  {conversation.name}
+                </div>
+
+                <div className="relative w-fit font-text-1-regular font-[number:var(--text-1-regular-font-weight)] text-text-3 text-[length:var(--text-1-regular-font-size)] tracking-[var(--text-1-regular-letter-spacing)] leading-[var(--text-1-regular-line-height)] whitespace-nowrap [font-style:var(--text-1-regular-font-style)]">
+                  {conversation.time}
+                </div>
+              </div>
+
+              <div className="relative self-stretch font-text-4-regular font-[number:var(--text-4-regular-font-weight)] text-[#696969] text-[length:var(--text-4-regular-font-size)] tracking-[var(--text-4-regular-letter-spacing)] leading-[var(--text-4-regular-line-height)] [font-style:var(--text-4-regular-font-style)]">
+                {conversation.message}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  const SearchBarSection = () => {
+    return (
+      <div className="flex items-end gap-3 p-2 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="relative">
+          <Avatar className="w-12 h-12">
+            <AvatarImage
+              src="../avatar-1.png"
+              alt="Ella Martinez"
+              className="object-cover"
+            />
+            <AvatarFallback className="bg-gray-200 text-gray-600">
+              EM
+            </AvatarFallback>
+          </Avatar>
+          <div className="absolute bottom-0 right-0 w-[15px] h-[15px] bg-[#696969] rounded-md border-[1.5px] border-solid border-white" />
+        </div>
+
+        <div className="flex flex-col items-start gap-1 relative flex-1 grow">
+          <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="relative flex-1 mt-[-1.00px] font-text-4-medium font-[number:var(--text-4-medium-font-weight)] text-[#2d2d2d] text-[length:var(--text-4-medium-font-size)] tracking-[var(--text-4-medium-letter-spacing)] leading-[var(--text-4-medium-line-height)] [font-style:var(--text-4-medium-font-style)]">
+              Ella Martinez
+            </div>
+
+            <div className="relative w-fit font-text-1-regular font-[number:var(--text-1-regular-font-weight)] text-text-3 text-[length:var(--text-1-regular-font-size)] tracking-[var(--text-1-regular-letter-spacing)] leading-[var(--text-1-regular-line-height)] whitespace-nowrap [font-style:var(--text-1-regular-font-style)]">
+              10:30 AM
+            </div>
+          </div>
+
+          <div className="relative self-stretch font-text-4-regular font-[number:var(--text-4-regular-font-weight)] text-[#696969] text-[length:var(--text-4-regular-font-size)] tracking-[var(--text-4-regular-letter-spacing)] leading-[var(--text-4-regular-line-height)] [font-style:var(--text-4-regular-font-style)]">
+            Hey! How are you doing
+          </div>
+        </div>
+      </div>
+    );
+  };
+  const MessageListSection = () => {
+    return (
+      <div className="flex items-end gap-3 p-2 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="relative">
+          <Avatar className="w-12 h-12">
+            <AvatarImage
+              src="../avatar-4.png"
+              alt="Esther"
+              className="object-cover"
+            />
+            <AvatarFallback>E</AvatarFallback>
+          </Avatar>
+          <div className="absolute w-[15px] h-[15px] top-[34px] left-[34px] bg-success-500 rounded-md border-[1.5px] border-solid border-white" />
+        </div>
+
+        <div className="flex flex-col items-start gap-1 relative flex-1 grow">
+          <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="relative flex-1 mt-[-1.00px] font-text-4-medium font-[number:var(--text-4-medium-font-weight)] text-[#2d2d2d] text-[length:var(--text-4-medium-font-size)] tracking-[var(--text-4-medium-letter-spacing)] leading-[var(--text-4-medium-line-height)] [font-style:var(--text-4-medium-font-style)]">
+              Esther
+            </div>
+
+            <div className="relative w-fit font-text-1-regular font-[number:var(--text-1-regular-font-weight)] text-text-3 text-[length:var(--text-1-regular-font-size)] tracking-[var(--text-1-regular-letter-spacing)] leading-[var(--text-1-regular-line-height)] whitespace-nowrap [font-style:var(--text-1-regular-font-style)]">
+              10:30 AM
+            </div>
+          </div>
+
+          <div className="relative self-stretch font-text-4-regular font-[number:var(--text-4-regular-font-weight)] text-[#696969] text-[length:var(--text-4-regular-font-size)] tracking-[var(--text-4-regular-letter-spacing)] leading-[var(--text-4-regular-line-height)] [font-style:var(--text-4-regular-font-style)]">
+            Hey! How are you doing
+          </div>
+        </div>
+      </div>
+    );
+  };
+  const SidebarSection = () => {
+    return (
+      <div className="flex items-center gap-3 p-2 relative self-stretch w-full flex-[0_0_auto]">
+        <Avatar className="w-11 h-11 bg-[#b0b0b0]">
+          <AvatarFallback className="bg-[#b0b0b0] text-white font-bold text-base [font-family:'DM_Sans',Helvetica]">
+            MP
+          </AvatarFallback>
+        </Avatar>
+
+        <div className="flex flex-col items-start gap-1 relative flex-1 grow">
+          <div className="flex items-center justify-between gap-1 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="relative flex-1 mt-[-1.00px] font-text-4-medium font-[number:var(--text-4-medium-font-weight)] text-[#2d2d2d] text-[length:var(--text-4-medium-font-size)] tracking-[var(--text-4-medium-letter-spacing)] leading-[var(--text-4-medium-line-height)] [font-style:var(--text-4-medium-font-style)]">
+              Miles
+            </div>
+
+            <div className="relative w-fit font-text-1-regular font-[number:var(--text-1-regular-font-weight)] text-text-3 text-[length:var(--text-1-regular-font-size)] tracking-[var(--text-1-regular-letter-spacing)] leading-[var(--text-1-regular-line-height)] whitespace-nowrap [font-style:var(--text-1-regular-font-style)]">
+              10:30 AM
+            </div>
+          </div>
+
+          <div className="relative self-stretch font-text-4-regular font-[number:var(--text-4-regular-font-weight)] text-[#696969] text-[length:var(--text-4-regular-font-size)] tracking-[var(--text-4-regular-letter-spacing)] leading-[var(--text-4-regular-line-height)] [font-style:var(--text-4-regular-font-style)]">
+            Hey! How are you doing
+          </div>
+        </div>
+      </div>
+    );
+  };
+  const MessageItemSection = () => {
+    return (
+      <div className="flex items-end gap-3 p-2 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="relative">
+          <Avatar className="w-12 h-12">
+            <AvatarImage src="../avatar-3.png" alt="Albert Flores" />
+            <AvatarFallback>AF</AvatarFallback>
+          </Avatar>
+          <div className="absolute w-[15px] h-[15px] top-[34px] left-[34px] bg-success-500 rounded-md border-[1.5px] border-solid border-white" />
+        </div>
+
+        <div className="flex flex-col items-start gap-1 relative flex-1 grow">
+          <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="relative flex-1 mt-[-1.00px] font-text-4-medium font-[number:var(--text-4-medium-font-weight)] text-[#2d2d2d] text-[length:var(--text-4-medium-font-size)] tracking-[var(--text-4-medium-letter-spacing)] leading-[var(--text-4-medium-line-height)] [font-style:var(--text-4-medium-font-style)]">
+              Albert Flores
+            </div>
+
+            <div className="relative w-fit font-text-1-regular font-[number:var(--text-1-regular-font-weight)] text-text-3 text-[length:var(--text-1-regular-font-size)] tracking-[var(--text-1-regular-letter-spacing)] leading-[var(--text-1-regular-line-height)] whitespace-nowrap [font-style:var(--text-1-regular-font-style)]">
+              10:30 AM
+            </div>
+          </div>
+
+          <div className="relative self-stretch font-text-4-regular font-[number:var(--text-4-regular-font-weight)] text-[#696969] text-[length:var(--text-4-regular-font-size)] tracking-[var(--text-4-regular-letter-spacing)] leading-[var(--text-4-regular-line-height)] [font-style:var(--text-4-regular-font-style)]">
+            Hey! How are you doing
+          </div>
+        </div>
+      </div>
+    );
+  };
+  const UserProfileSection = () => {
+    return (
+      <div className="flex items-end gap-3 p-2 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="relative">
+          <Avatar className="w-12 h-12">
+            <AvatarImage
+              src="../avatar-4.png"
+              alt="Esther"
+              className="object-cover"
+            />
+            <AvatarFallback className="bg-gray-200 text-gray-600">
+              E
+            </AvatarFallback>
+          </Avatar>
+          <div className="absolute w-[15px] h-[15px] top-[34px] left-[34px] bg-success-500 rounded-md border-[1.5px] border-solid border-white" />
+        </div>
+
+        <div className="flex flex-col items-start gap-1 relative flex-1 grow">
+          <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="relative flex-1 mt-[-1.00px] font-text-4-medium font-[number:var(--text-4-medium-font-weight)] text-[#2d2d2d] text-[length:var(--text-4-medium-font-size)] tracking-[var(--text-4-medium-letter-spacing)] leading-[var(--text-4-medium-line-height)] [font-style:var(--text-4-medium-font-style)]">
+              Esther
+            </div>
+
+            <div className="relative w-fit font-text-1-regular font-[number:var(--text-1-regular-font-weight)] text-text-3 text-[length:var(--text-1-regular-font-size)] tracking-[var(--text-1-regular-letter-spacing)] leading-[var(--text-1-regular-line-height)] whitespace-nowrap [font-style:var(--text-1-regular-font-style)]">
+              10:30 AM
+            </div>
+          </div>
+
+          <div className="relative self-stretch font-text-4-regular font-[number:var(--text-4-regular-font-weight)] text-[#696969] text-[length:var(--text-4-regular-font-size)] tracking-[var(--text-4-regular-letter-spacing)] leading-[var(--text-4-regular-line-height)] [font-style:var(--text-4-regular-font-style)]">
+            Hey! How are you doing
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col w-[352px] h-[904px] items-end gap-8 p-4 relative bg-white rounded-xl overflow-hidden border border-solid border-[#ebf6ee99]">

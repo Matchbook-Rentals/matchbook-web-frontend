@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import stripe from '@/lib/stripe';
 import { calculatePayments } from '@/lib/calculate-payments';
+import { generatePaymentSchedule } from '@/lib/payment-calculations';
 import { getServiceFeeRate, calculateCreditCardFee } from '@/lib/fee-constants';
 
 export async function POST(
@@ -27,7 +28,10 @@ export async function POST(
           include: { user: true }
         },
         listing: {
-          include: { user: true }
+          include: { 
+            user: true,
+            monthlyPricing: true
+          }
         },
         booking: true
         // BoldSignLease: true // @deprecated - Using Match.tenantSignedAt and Match.landlordSignedAt instead
@@ -46,30 +50,102 @@ export async function POST(
     // Check if booking already exists
     if (match.booking) {
       console.log('✅ [Confirm Payment & Book] Booking already exists:', match.booking.id);
+      
+      // Quick fix: Check if payment schedule exists, create if missing
+      // This handles bookings created before payment schedule generation was added
+      const existingPayments = await prisma.rentPayment.findMany({
+        where: { bookingId: match.booking.id },
+        orderBy: { dueDate: 'asc' }
+      });
+      
+      if (existingPayments.length === 0) {
+        console.log('🔧 [Confirm Payment & Book] Booking missing payment schedule - creating now');
+        
+        // Calculate payment details (same as below)
+        console.log('🔍 [Debug] Input data for payment calculation:', {
+          'match.monthlyRent': match.monthlyRent,
+          'match.petRent': match.petRent,
+          'match.petDeposit': match.petDeposit,
+          'match.trip.numPets': match.trip.numPets,
+          'listing.monthlyRent': match.listing?.monthlyRent,
+          'listing.petRent': match.listing?.petRent,
+          'listing.petDeposit': match.listing?.petDeposit
+        });
+        
+        const paymentDetails = calculatePayments({
+          listing: match.listing,
+          trip: match.trip,
+          monthlyRentOverride: match.monthlyRent,
+          petRentOverride: match.petRent,
+          petDepositOverride: match.petDeposit
+        });
+        
+        console.log('🔍 [Debug] Payment details result:', {
+          monthlyRent: paymentDetails.monthlyRent,
+          monthlyPetRent: paymentDetails.monthlyPetRent,
+          totalMonthlyRent: paymentDetails.totalMonthlyRent,
+          securityDeposit: paymentDetails.securityDeposit,
+          petDeposit: paymentDetails.petDeposit
+        });
+
+        // Generate payment schedule using centralized calculation
+        const paymentSchedule = generatePaymentSchedule(
+          {
+            startDate: match.trip.startDate!,
+            endDate: match.trip.endDate!,
+            petCount: match.trip.numPets
+          },
+          paymentDetails.monthlyRent,
+          paymentDetails.monthlyPetRent,
+          true // includeServiceFee
+        );
+
+        // Validate payment schedule
+        if (!paymentSchedule || paymentSchedule.length === 0) {
+          throw new Error('No payment schedule generated for existing booking');
+        }
+        
+        const totalScheduleAmount = paymentSchedule.reduce((sum, p) => sum + p.amount, 0);
+        console.log('📅 [Confirm Payment & Book] Creating missing payment schedule:', {
+          baseRent: paymentDetails.monthlyRent,
+          petRent: paymentDetails.monthlyPetRent,
+          totalPayments: paymentSchedule.length,
+          totalScheduleAmount: Math.round(totalScheduleAmount * 100) / 100
+        });
+
+        // Create missing RentPayment records
+        const rentPayments = await Promise.all(
+          paymentSchedule.map((payment) => 
+            prisma.rentPayment.create({
+              data: {
+                bookingId: match.booking!.id,
+                amount: Math.round(payment.amount * 100), // Convert to cents for storage
+                dueDate: payment.dueDate,
+                isPaid: false
+              }
+            })
+          )
+        );
+        
+        return NextResponse.json({ 
+          success: true, 
+          message: 'Booking exists, payment schedule created',
+          booking: match.booking,
+          paymentSchedule: rentPayments
+        });
+      }
+      
       return NextResponse.json({ 
         success: true, 
         message: 'Booking already exists',
         booking: match.booking,
-        paymentSchedule: await prisma.rentPayment.findMany({
-          where: { bookingId: match.booking.id },
-          orderBy: { dueDate: 'asc' }
-        })
+        paymentSchedule: existingPayments
       });
     }
 
     // Verify payment is captured
-    console.log('💳 [Confirm Payment & Book] Payment status check:', {
-      paymentCapturedAt: match.paymentCapturedAt,
-      stripePaymentIntentId: match.stripePaymentIntentId,
-      paymentStatus: match.paymentStatus,
-      paymentAuthorizedAt: match.paymentAuthorizedAt
-    });
-    
     if (!match.paymentCapturedAt || !match.stripePaymentIntentId) {
-      console.log('❌ [Confirm Payment & Book] Payment not captured:', {
-        hasPaymentCapturedAt: !!match.paymentCapturedAt,
-        hasStripePaymentIntentId: !!match.stripePaymentIntentId
-      });
+      console.log('❌ [Confirm Payment & Book] Payment not captured');
       return NextResponse.json({ 
         error: 'Payment not confirmed. Please complete payment first.' 
       }, { status: 400 });
@@ -78,16 +154,14 @@ export async function POST(
     // Verify with Stripe that payment is successful (optional extra verification)
     try {
       const paymentIntent = await stripe.paymentIntents.retrieve(match.stripePaymentIntentId);
-      console.log('🎯 [Confirm Payment & Book] Stripe payment intent status:', paymentIntent.status);
       
       // For ACH payments in 'processing' status, we still allow booking creation
       if (paymentIntent.status !== 'succeeded' && paymentIntent.status !== 'processing') {
-        console.log('❌ [Confirm Payment & Book] Payment not in acceptable status:', paymentIntent.status);
+        console.log('❌ [Confirm Payment & Book] Payment not acceptable:', paymentIntent.status);
         return NextResponse.json({ 
           error: `Payment not successful. Status: ${paymentIntent.status}` 
         }, { status: 400 });
       }
-      console.log('✅ [Confirm Payment & Book] Stripe payment verified:', paymentIntent.id, 'Status:', paymentIntent.status);
     } catch (stripeError) {
       console.error('⚠️ [Confirm Payment & Book] Could not verify with Stripe:', stripeError);
       // Continue anyway if we have paymentCapturedAt
@@ -96,17 +170,9 @@ export async function POST(
     // Verify lease is fully signed
     // TODO: We might bring back the lease signing requirement later
     // For now, we're allowing booking creation without requiring lease signatures
-    console.log('📜 [Confirm Payment & Book] Lease status (informational only):', {
-      tenantSignedAt: match.tenantSignedAt,
-      landlordSignedAt: match.landlordSignedAt
-    });
     
     // Commented out for now - may re-enable later
     // if (!match.tenantSignedAt || !match.landlordSignedAt) {
-    //   console.log('❌ [Confirm Payment & Book] Lease not fully signed:', {
-    //     tenantSigned: !!match.tenantSignedAt,
-    //     landlordSigned: !!match.landlordSignedAt
-    //   });
     //   return NextResponse.json({ 
     //     error: 'Lease must be fully signed by both parties' 
     //   }, { status: 400 });
@@ -130,11 +196,6 @@ export async function POST(
     const totalPrice = (paymentDetails.totalMonthlyRent * tripMonths) + 
                       paymentDetails.totalDeposit;
 
-    console.log('💰 [Confirm Payment & Book] Creating booking with:', {
-      monthlyRent: match.monthlyRent,
-      totalPrice,
-      tripMonths
-    });
 
     // Create booking and payment schedule in a transaction
     const result = await prisma.$transaction(async (tx) => {
@@ -155,14 +216,30 @@ export async function POST(
 
       console.log('✅ [Confirm Payment & Book] Booking created:', booking.id);
 
-      // Generate payment schedule
+      // Generate payment schedule using centralized calculation
       const paymentSchedule = generatePaymentSchedule(
-        match.trip.startDate!,
-        match.trip.endDate!,
+        {
+          startDate: match.trip.startDate!,
+          endDate: match.trip.endDate!,
+          petCount: match.trip.numPets
+        },
         paymentDetails.monthlyRent,
         paymentDetails.monthlyPetRent,
-        tripMonths
+        true // includeServiceFee
       );
+
+      // Validate payment schedule
+      if (!paymentSchedule || paymentSchedule.length === 0) {
+        throw new Error('No payment schedule generated');
+      }
+      
+      const totalScheduleAmount = paymentSchedule.reduce((sum, p) => sum + p.amount, 0);
+      console.log('📅 [Confirm Payment & Book] Payment schedule created:', {
+        baseRent: paymentDetails.monthlyRent,
+        petRent: paymentDetails.monthlyPetRent,
+        totalPayments: paymentSchedule.length,
+        totalScheduleAmount: Math.round(totalScheduleAmount * 100) / 100
+      });
 
       // Create RentPayment records
       const rentPayments = await Promise.all(
@@ -178,7 +255,6 @@ export async function POST(
         )
       );
 
-      console.log(`✅ [Confirm Payment & Book] Created ${rentPayments.length} payment schedule records`);
 
       // Update trip status to booked
       await tx.trip.update({
@@ -210,80 +286,6 @@ export async function POST(
   }
 }
 
-// Helper function to generate payment schedule
-function generatePaymentSchedule(
-  startDate: Date,
-  endDate: Date,
-  monthlyRent: number,
-  monthlyPetRent: number,
-  tripMonths: number
-): Array<{
-  amount: number;
-  dueDate: Date;
-  description: string;
-  isProrated?: boolean;
-}> {
-  const payments = [];
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  
-  // Get service fee rate based on trip length
-  const serviceFeeRate = getServiceFeeRate(tripMonths);
-  
-  // Calculate if first month is prorated
-  const firstDayOfMonth = new Date(start.getFullYear(), start.getMonth(), 1);
-  const lastDayOfFirstMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0);
-  const daysInFirstMonth = lastDayOfFirstMonth.getDate();
-  const daysRemainingInFirstMonth = lastDayOfFirstMonth.getDate() - start.getDate() + 1;
-  const isFirstMonthProrated = start.getDate() !== 1;
-  
-  // First payment (potentially prorated)
-  if (isFirstMonthProrated) {
-    const proratedRent = ((monthlyRent + monthlyPetRent) / daysInFirstMonth) * daysRemainingInFirstMonth;
-    const serviceFee = proratedRent * serviceFeeRate;
-    
-    payments.push({
-      amount: Math.round((proratedRent + serviceFee) * 100) / 100,
-      dueDate: start,
-      description: `Rent for ${daysRemainingInFirstMonth} days of ${formatMonth(start)} (prorated) + service fee`,
-      isProrated: true
-    });
-  } else {
-    const totalRent = monthlyRent + monthlyPetRent;
-    const serviceFee = totalRent * serviceFeeRate;
-    
-    payments.push({
-      amount: Math.round((totalRent + serviceFee) * 100) / 100,
-      dueDate: start,
-      description: `${formatMonth(start)} rent + service fee`
-    });
-  }
-  
-  // Subsequent monthly payments
-  let currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
-  let paymentCount = 1;
-  const maxPayments = 36; // Limit to 36 months as per requirement
-  
-  while (currentDate <= end && paymentCount < maxPayments) {
-    const totalRent = monthlyRent + monthlyPetRent;
-    const serviceFee = totalRent * serviceFeeRate;
-    
-    payments.push({
-      amount: Math.round((totalRent + serviceFee) * 100) / 100,
-      dueDate: currentDate,
-      description: `${formatMonth(currentDate)} rent + service fee`
-    });
-    
-    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-    paymentCount++;
-  }
-  
-  return payments;
-}
-
-function formatMonth(date: Date): string {
-  return date.toLocaleDateString('en-US', { 
-    month: 'long', 
-    year: 'numeric' 
-  });
-}
+// Using centralized payment calculation from payment-calculations.ts
+// This ensures consistency between what users see on the review page
+// and what gets created in the database

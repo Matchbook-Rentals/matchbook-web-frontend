@@ -180,6 +180,9 @@ export async function getUserBookings() {
           numPets: true,
           numChildren: true
         }
+      },
+      rentPayments: {
+        orderBy: { amount: 'desc' }
       }
     }
   });
@@ -214,8 +217,17 @@ export async function deleteBooking(id: string): Promise<void> {
     throw new Error('Unauthorized');
   }
 
-  await prisma.booking.delete({
-    where: { id, userId },
+  // Delete in transaction to handle related records
+  await prisma.$transaction(async (tx) => {
+    // First delete all related RentPayment records
+    await tx.rentPayment.deleteMany({
+      where: { bookingId: id }
+    });
+    
+    // Then delete the booking
+    await tx.booking.delete({
+      where: { id, userId },
+    });
   });
 
   revalidatePath('/bookings');

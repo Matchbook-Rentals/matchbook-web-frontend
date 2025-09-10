@@ -21,6 +21,12 @@ type BookingWithRelations = Booking & {
     numPets: number;
     numChildren: number;
   };
+  rentPayments?: {
+    id: string;
+    amount: number;
+    dueDate: Date;
+    paidAt?: Date | null;
+  }[];
 };
 
 interface BookingCardProps {
@@ -101,12 +107,42 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
     return occupants;
   };
 
-  // Calculate price display
-  const priceDisplay = booking.totalPrice 
-    ? `$${(booking.totalPrice / 100).toFixed(2)}` 
-    : booking.monthlyRent 
-      ? `$${(booking.monthlyRent / 100).toFixed(2)}/mo` 
-      : '$0.00';
+  // Calculate price display - use largest rent payment if available
+  const getLargestRentPayment = () => {
+    if (!booking.rentPayments || booking.rentPayments.length === 0) return null;
+    return booking.rentPayments[0]; // Already sorted by amount desc from the query
+  };
+
+  const calculatePriceDisplay = () => {
+    const largestPayment = getLargestRentPayment();
+    if (largestPayment) {
+      return `$${(largestPayment.amount / 100).toFixed(2)}/mo`;
+    }
+    if (booking.totalPrice) {
+      return `$${(booking.totalPrice / 100).toFixed(2)}`;
+    }
+    if (booking.monthlyRent) {
+      return `$${(booking.monthlyRent / 100).toFixed(2)}/mo`;
+    }
+    return '$0.00';
+  };
+
+  const priceDisplay = calculatePriceDisplay();
+
+  // Log pricing details when card is clicked
+  const handleCardClick = () => {
+    console.log('=== Booking Card Pricing Details ===');
+    console.log('Booking ID:', booking.id);
+    console.log('Total Price:', booking.totalPrice);
+    console.log('Monthly Rent:', booking.monthlyRent);
+    console.log('Rent Payments:', booking.rentPayments);
+    if (booking.rentPayments && booking.rentPayments.length > 0) {
+      console.log('Largest Payment Amount:', booking.rentPayments[0].amount);
+      console.log('Largest Payment (formatted):', `$${(booking.rentPayments[0].amount / 100).toFixed(2)}`);
+    }
+    console.log('Final Display Price:', priceDisplay);
+    console.log('===================================');
+  };
 
   // Get listing details
   const listingTitle = booking.listing?.title || 'Unnamed Property';
@@ -116,7 +152,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   const occupants = getOccupants();
   
   return (
-    <Card className="w-full p-4 sm:p-6 rounded-xl">
+    <Card className="w-full p-4 sm:p-6 rounded-xl cursor-pointer" onClick={handleCardClick}>
       <CardContent className="p-0">
         {/* Mobile Layout - Column with rows */}
         <div className="flex flex-col gap-4 sm:hidden">
@@ -126,27 +162,30 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
               className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
               style={{ backgroundImage: `url(${listingImage})` }}
             />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="p-2 rounded-lg border-[#3c8787] text-[#3c8787]"
-                >
-                  <MoreVertical className="w-4 h-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-48 p-0" align="end">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-2"
-                  onClick={() => onDelete(booking.id)}
-                >
-                  <Trash className="w-4 h-4" />
-                  Delete Booking
-                </Button>
-              </PopoverContent>
-            </Popover>
+{/* Only show delete option in development */}
+            {process.env.NODE_ENV === 'development' && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="p-2 rounded-lg border-[#3c8787] text-[#3c8787]"
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-48 p-0" align="end">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    onClick={() => onDelete(booking.id)}
+                  >
+                    <Trash className="w-4 h-4" />
+                    Delete Booking (Dev)
+                  </Button>
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
 
           {/* Row 2: Title | Badge */}

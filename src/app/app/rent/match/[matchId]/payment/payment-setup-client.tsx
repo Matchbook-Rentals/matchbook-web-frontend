@@ -15,13 +15,7 @@ import { calculatePayments } from '@/lib/calculate-payments';
 import type { PaymentMethod } from '@/app/actions/payment-methods';
 import { processDirectPayment } from '@/app/actions/process-payment';
 import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import BrandModal from '@/components/BrandModal';
 
 interface PaymentSetupClientProps {
   match: MatchWithRelations;
@@ -53,9 +47,9 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
   // Fixed transfer fee for deposits
   const TRANSFER_FEE = 5;
 
-  // Get total deposit amount
+  // Get security deposit amount (NOT including pet deposit)
   const getSecurityDeposit = () => {
-    return paymentDetails.totalDeposit;
+    return paymentDetails.securityDeposit;
   };
   
   // Get pet deposit if applicable
@@ -299,7 +293,8 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
               matchId={matchId}
               amount={calculatePaymentAmount(selectedPaymentMethodType)}
               paymentBreakdown={{
-                monthlyRent: paymentDetails.totalMonthlyRent, // Pass actual rent for upcoming payments display
+                monthlyRent: paymentDetails.monthlyRent, // Pass base rent for upcoming payments display
+                petRent: paymentDetails.monthlyPetRent, // Pass pet rent separately
                 securityDeposit: getSecurityDeposit(),
                 petDeposit: getPetDeposit(),
                 transferFee: TRANSFER_FEE, // Flat $5 transfer fee for deposits
@@ -335,23 +330,25 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
           onClose={() => setShowPaymentInfoModal(false)}
         />
         
-        {/* Payment Processing Dialog */}
-        <Dialog open={showProcessingDialog} onOpenChange={(open) => {
-          // Only allow closing if there's an error
-          if (!open && processingStatus === 'error') {
-            setShowProcessingDialog(false);
-          }
-        }}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>
-                {processingStatus === 'processing' && 'Processing Payment'}
-                {processingStatus === 'success' && 'Payment Successful!'}
-                {processingStatus === 'error' && 'Payment Failed'}
-              </DialogTitle>
-            </DialogHeader>
+        {/* Payment Processing Modal */}
+        <BrandModal
+          isOpen={showProcessingDialog}
+          onOpenChange={(open) => {
+            // Only allow closing if there's an error
+            if (!open && processingStatus === 'error') {
+              setShowProcessingDialog(false);
+            }
+          }}
+          className="max-w-md"
+        >
+          <div className="p-6">
+            <h2 className="text-xl font-semibold mb-6 text-center">
+              {processingStatus === 'processing' && 'Processing Payment'}
+              {processingStatus === 'success' && 'Payment Successful!'}
+              {processingStatus === 'error' && 'Payment Failed'}
+            </h2>
             
-            <div className="flex flex-col items-center py-6">
+            <div className="flex flex-col items-center">
               {processingStatus === 'processing' && (
                 <>
                   <Loader2 className="h-12 w-12 animate-spin text-blue-600 mb-4" />
@@ -395,8 +392,8 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
                 </>
               )}
             </div>
-          </DialogContent>
-        </Dialog>
+          </div>
+        </BrandModal>
       </div>
     </div>
   );

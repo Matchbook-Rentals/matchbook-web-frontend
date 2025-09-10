@@ -16,6 +16,7 @@ import {
 
 interface UpcomingPaymentsSectionProps {
   monthlyRent: number;
+  monthlyPetRent?: number;
   tripStartDate: Date;
   tripEndDate: Date;
   isUsingCard?: boolean;
@@ -23,6 +24,7 @@ interface UpcomingPaymentsSectionProps {
 
 export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = ({
   monthlyRent,
+  monthlyPetRent = 0,
   tripStartDate,
   tripEndDate,
   isUsingCard = false,
@@ -40,6 +42,8 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       tripStartDate: start.toISOString(),
       tripEndDate: end.toISOString(),
       monthlyRent,
+      monthlyPetRent,
+      totalMonthlyRent: monthlyRent + monthlyPetRent,
       startDay: start.getDate(),
       startMonth: start.getMonth() + 1,
       startYear: start.getFullYear()
@@ -65,8 +69,17 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       console.log('  Days remaining in first month (old calc):', daysRemainingInFirstMonth);
       
       // Prorated first month - use our clean calculation
-      const proratedDetails = calculateProratedRent(monthlyRent, start);
+      const totalMonthlyRent = monthlyRent + monthlyPetRent;
+      const proratedDetails = calculateProratedRent(totalMonthlyRent, start);
       const proratedRent = proratedDetails.amount;
+      
+      // Calculate prorated amounts for base and pet rent
+      const proratedBaseRent = monthlyPetRent > 0 
+        ? Math.round((monthlyRent / totalMonthlyRent) * proratedRent * 100) / 100
+        : proratedRent;
+      const proratedPetRent = monthlyPetRent > 0
+        ? Math.round((monthlyPetRent / totalMonthlyRent) * proratedRent * 100) / 100
+        : 0;
       
       console.log('💰 Proration details:', {
         monthlyRent,
@@ -90,16 +103,26 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
         totalAmount
       });
       
-      const subItems = [
-        {
-          description: `${proratedDetails.daysToCharge} days of ${formatMonthYear(start)} (prorated)`,
-          amount: proratedRent,
-        },
-        {
-          description: 'Service fee',
-          amount: serviceFee,
-        }
-      ];
+      const subItems = [];
+      
+      // Add base rent
+      subItems.push({
+        description: `Base rent - ${proratedDetails.daysToCharge} days (prorated)`,
+        amount: proratedBaseRent,
+      });
+      
+      // Add pet rent if applicable
+      if (monthlyPetRent > 0) {
+        subItems.push({
+          description: `Pet rent - ${proratedDetails.daysToCharge} days (prorated)`,
+          amount: proratedPetRent,
+        });
+      }
+      
+      subItems.push({
+        description: 'Service fee',
+        amount: serviceFee,
+      });
       
       if (isUsingCard) {
         subItems.push({
@@ -118,8 +141,9 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
     } else {
       console.log('🏠 First month is FULL (move-in on the 1st)');
       // Full first month (move-in on the 1st)
-      const serviceFee = calculateServiceFee(monthlyRent, tripMonths);
-      const baseAmount = monthlyRent + serviceFee;
+      const totalMonthlyRent = monthlyRent + monthlyPetRent;
+      const serviceFee = calculateServiceFee(totalMonthlyRent, tripMonths);
+      const baseAmount = totalMonthlyRent + serviceFee;
       const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
       const totalAmount = baseAmount + cardFee;
       
@@ -131,10 +155,17 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
         totalAmount
       });
       
-      const subItems = [
-        { description: 'Monthly rent', amount: monthlyRent },
-        { description: 'Service fee', amount: serviceFee }
-      ];
+      const subItems = [];
+      
+      // Add base rent
+      subItems.push({ description: 'Base rent', amount: monthlyRent });
+      
+      // Add pet rent if applicable
+      if (monthlyPetRent > 0) {
+        subItems.push({ description: 'Pet rent', amount: monthlyPetRent });
+      }
+      
+      subItems.push({ description: 'Service fee', amount: serviceFee });
       
       if (isUsingCard) {
         subItems.push({
@@ -164,8 +195,11 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
       const isLastMonth = currentDate.getMonth() === end.getMonth() && 
                          currentDate.getFullYear() === end.getFullYear();
       
-      let rentAmount = monthlyRent;
-      let description = 'Monthly rent';
+      let baseRentAmount = monthlyRent;
+      let petRentAmount = monthlyPetRent;
+      let totalRentAmount = monthlyRent + monthlyPetRent;
+      let baseDescription = 'Base rent';
+      let petDescription = 'Pet rent';
       
       if (isLastMonth) {
         // Check if move-out is before the last day of the month
@@ -179,37 +213,58 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
           console.log('  End date:', end.toISOString());
           console.log('  End day:', endDay, 'Last day of month:', lastDay);
           
-          const dailyRate = monthlyRent / lastDay;
-          rentAmount = Math.round(dailyRate * endDay * 100) / 100;
-          description = `${endDay} days of ${formatMonthYear(currentDate)} (prorated)`;
+          const dailyRate = totalRentAmount / lastDay;
+          const proratedTotal = Math.round(dailyRate * endDay * 100) / 100;
+          
+          // Prorate base and pet rent proportionally
+          baseRentAmount = monthlyPetRent > 0
+            ? Math.round((monthlyRent / totalRentAmount) * proratedTotal * 100) / 100
+            : proratedTotal;
+          petRentAmount = monthlyPetRent > 0
+            ? Math.round((monthlyPetRent / totalRentAmount) * proratedTotal * 100) / 100
+            : 0;
+          
+          baseDescription = `Base rent - ${endDay} days (prorated)`;
+          petDescription = `Pet rent - ${endDay} days (prorated)`;
+          totalRentAmount = proratedTotal;
           
           console.log('💰 Last month proration:', {
-            monthlyRent,
+            baseRentAmount,
+            petRentAmount,
+            totalRentAmount,
             daysToCharge: endDay,
             daysInMonth: lastDay,
-            dailyRate,
-            proratedAmount: rentAmount
+            dailyRate
           });
         }
       }
       
-      const serviceFee = calculateServiceFee(rentAmount, tripMonths);
-      const baseAmount = rentAmount + serviceFee;
+      const serviceFee = calculateServiceFee(totalRentAmount, tripMonths);
+      const baseAmount = totalRentAmount + serviceFee;
       const cardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
       const totalAmount = baseAmount + cardFee;
       
       console.log('  Amount breakdown:', {
-        rentAmount,
+        baseRentAmount,
+        petRentAmount,
+        totalRentAmount,
         serviceFee,
         baseAmount,
         totalAmount
       });
       
       // Always show breakdown to include service fee
-      const subItems = [
-        { description, amount: rentAmount },
-        { description: 'Service fee', amount: serviceFee }
-      ];
+      const subItems = [];
+      
+      // Add base rent
+      subItems.push({ description: baseDescription, amount: baseRentAmount });
+      
+      // Add pet rent if applicable
+      if (petRentAmount > 0) {
+        subItems.push({ description: petDescription, amount: petRentAmount });
+      }
+      
+      subItems.push({ description: 'Service fee', amount: serviceFee });
       
       if (isUsingCard) {
         subItems.push({

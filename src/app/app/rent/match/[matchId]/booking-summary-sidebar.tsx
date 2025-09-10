@@ -107,17 +107,21 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
     if (paymentDetails) {
       subtotal = paymentDetails.monthlyRent + paymentDetails.monthlyPetRent;
       items.push(
-        { label: 'Base rent', amount: formatCurrency(paymentDetails.monthlyRent) },
-        { 
-          label: formatPetLabel(match.trip.numPets, 'rent'),
-          amount: formatCurrency(paymentDetails.monthlyPetRent)
-        }
+        { label: 'Base rent', amount: formatCurrency(paymentDetails.monthlyRent) }
       );
+      // Only add pet rent if it's greater than 0
+      if (paymentDetails.monthlyPetRent > 0) {
+        items.push(
+          { 
+            label: formatPetLabel(match.trip.numPets, 'rent'),
+            amount: formatCurrency(paymentDetails.monthlyPetRent)
+          }
+        );
+      }
     } else {
       subtotal = getMonthlyRent();
       items.push(
-        { label: 'Base rent', amount: formatCurrency(getMonthlyRent()) },
-        { label: 'Pet rent', amount: formatCurrency(0) }
+        { label: 'Base rent', amount: formatCurrency(getMonthlyRent()) }
       );
     }
     
@@ -156,17 +160,21 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
     if (paymentDetails) {
       subtotal = paymentDetails.securityDeposit + paymentDetails.petDeposit;
       items.push(
-        { label: 'Security deposit', amount: formatCurrency(paymentDetails.securityDeposit) },
-        { 
-          label: formatPetLabel(match.trip.numPets, 'deposit'),
-          amount: formatCurrency(paymentDetails.petDeposit)
-        }
+        { label: 'Security deposit', amount: formatCurrency(paymentDetails.securityDeposit) }
       );
+      // Only add pet deposit if it's greater than 0
+      if (paymentDetails.petDeposit > 0) {
+        items.push(
+          { 
+            label: formatPetLabel(match.trip.numPets, 'deposit'),
+            amount: formatCurrency(paymentDetails.petDeposit)
+          }
+        );
+      }
     } else {
       subtotal = paymentBreakdown.securityDeposit;
       items.push(
-        { label: 'Security deposit', amount: formatCurrency(paymentBreakdown.securityDeposit) },
-        { label: 'Pet deposit', amount: formatCurrency(0) }
+        { label: 'Security deposit', amount: formatCurrency(paymentBreakdown.securityDeposit) }
       );
     }
     

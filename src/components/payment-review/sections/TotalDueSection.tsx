@@ -7,7 +7,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { FEES, calculateCreditCardFee } from '@/lib/fee-constants';
+import {
+  calculateTotalDeposits,
+  calculateCreditCardFee,
+  getTransferFee,
+  formatCurrency
+} from '@/lib/payment-calculations';
 
 interface PaymentBreakdown {
   monthlyRent: number;
@@ -40,16 +45,17 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Always use the flat transfer fee from constants ($5)
-  // This is for deposit transfers, not rent service fees
-  const transferFee = FEES.TRANSFER_FEE;
-
+  // Use our clean calculation functions
+  const transferFee = getTransferFee();
+  const totalDeposits = calculateTotalDeposits(
+    paymentBreakdown.securityDeposit,
+    paymentBreakdown.petDeposit || 0
+  );
+  
   // Calculate base amount (deposits + transfer fee)
-  const baseAmount = paymentBreakdown.securityDeposit + 
-                     (paymentBreakdown.petDeposit || 0) + 
-                     transferFee;
+  const baseAmount = totalDeposits + transferFee;
 
-  // Calculate credit card fee if applicable (3% of base amount)
+  // Calculate credit card fee if applicable
   const creditCardFee = isUsingCard ? calculateCreditCardFee(baseAmount) : 0;
 
   // Build payment items array
@@ -87,7 +93,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
 
           <div className="flex items-center justify-end gap-2 md:gap-4 relative">
             <div className="relative w-fit font-poppins font-semibold text-[#020202] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
-              ${calculatedTotal.toFixed(2)}
+              {formatCurrency(calculatedTotal)}
             </div>
 
             <ChevronDownIcon className={`relative w-5 h-5 md:w-6 md:h-6 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
@@ -106,7 +112,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
 
               <div className="flex items-center justify-end gap-2 md:gap-4 relative">
                 <div className="relative w-fit mt-[-1.00px] font-poppins font-semibold text-[#020202] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
-                  ${item.amount.toFixed(2)}
+                  {formatCurrency(item.amount)}
                 </div>
               </div>
             </div>
@@ -120,7 +126,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
 
               <div className="flex items-center justify-end gap-2 md:gap-4 relative">
                 <div className="relative w-fit mt-[-1.00px] font-poppins font-bold text-[#020202] text-lg md:text-xl tracking-[0] leading-tight whitespace-nowrap">
-                  ${calculatedTotal.toFixed(2)}
+                  {formatCurrency(calculatedTotal)}
                 </div>
               </div>
             </div>

@@ -24,6 +24,16 @@ export interface PaymentDetails {
 }
 
 export function calculatePayments({ listing, trip, monthlyRentOverride, petRentOverride, petDepositOverride }: PaymentParams): PaymentDetails {
+  console.log('🔍 [calculatePayments] Starting calculation with:', {
+    monthlyRentOverride,
+    petRentOverride,
+    petDepositOverride,
+    'listing.monthlyRent': listing?.monthlyRent,
+    'listing.petRent': listing?.petRent,
+    'listing.petDeposit': listing?.petDeposit,
+    'trip.numPets': trip.numPets
+  });
+  
   // Calculate base monthly rent and utilities inclusion
   let monthlyRent = 0;
   let utilitiesIncluded = false;
@@ -31,6 +41,7 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
   // First try to use override if provided and valid (but not if it's the fallback value)
   if (monthlyRentOverride && monthlyRentOverride > 0 && monthlyRentOverride !== 77777) {
     monthlyRent = monthlyRentOverride;
+    console.log('🔍 [calculatePayments] Using monthlyRentOverride:', monthlyRentOverride);
     // When using override, check if there's a matching monthly pricing for utilities info
     if (listing?.monthlyPricing) {
       const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
@@ -40,6 +51,7 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
       utilitiesIncluded = listing?.utilitiesIncluded ?? false;
     }
   } else if (listing) {
+    console.log('🔍 [calculatePayments] monthlyRentOverride invalid (77777), trying calculateRent with listing');
     // Otherwise calculate from listing pricing
     const calculatedRent = calculateRent({ listing, trip });
     if (calculatedRent && calculatedRent !== 77777) {
@@ -49,31 +61,44 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
       const monthlyPricing = listing.monthlyPricing?.find(pricing => pricing.months === lengthOfStay.months);
       utilitiesIncluded = monthlyPricing?.utilitiesIncluded ?? listing.utilitiesIncluded ?? false;
     } else {
-      // If we get the fallback value, try to use listing's default prices
-      // Use the shortest or longest lease price as a fallback
+      console.log('🔍 [calculatePayments] calculateRent returned 77777, using ListingMonthlyPricing fallback');
+      // If we get the fallback value, try to find a suitable price from monthlyPricing
       const lengthOfStayMonths = Math.ceil(
         (new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) / (1000 * 60 * 60 * 24 * 30.44)
       );
       
-      if (lengthOfStayMonths <= (listing.shortestLeaseLength || 1)) {
-        monthlyRent = listing.shortestLeasePrice || 0;
-      } else if (lengthOfStayMonths >= (listing.longestLeaseLength || 12)) {
-        monthlyRent = listing.longestLeasePrice || 0;
-      } else {
-        // Interpolate between shortest and longest prices
-        const shortPrice = listing.shortestLeasePrice || 0;
-        const longPrice = listing.longestLeasePrice || 0;
-        const shortLength = listing.shortestLeaseLength || 1;
-        const longLength = listing.longestLeaseLength || 12;
+      console.log('🔍 [calculatePayments] Fallback calculation:', {
+        lengthOfStayMonths,
+        'listing.monthlyPricing': listing.monthlyPricing?.map(p => ({ months: p.months, price: p.price })) || 'none'
+      });
+      
+      if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
+        // Try to find the closest pricing match
+        let bestMatch = listing.monthlyPricing[0]; // Start with first option
+        let bestDifference = Math.abs(bestMatch.months - lengthOfStayMonths);
         
-        if (longLength > shortLength) {
-          const ratio = (lengthOfStayMonths - shortLength) / (longLength - shortLength);
-          monthlyRent = Math.round(shortPrice - (shortPrice - longPrice) * ratio);
-        } else {
-          monthlyRent = shortPrice;
+        for (const pricing of listing.monthlyPricing) {
+          const difference = Math.abs(pricing.months - lengthOfStayMonths);
+          if (difference < bestDifference) {
+            bestMatch = pricing;
+            bestDifference = difference;
+          }
         }
+        
+        monthlyRent = bestMatch.price;
+        utilitiesIncluded = bestMatch.utilitiesIncluded;
+        
+        console.log('🔍 [calculatePayments] Using closest pricing match:', {
+          targetMonths: lengthOfStayMonths,
+          selectedMonths: bestMatch.months,
+          price: bestMatch.price,
+          difference: bestDifference
+        });
+      } else {
+        console.log('❌ [calculatePayments] No monthly pricing available - rent will be 0');
+        monthlyRent = 0;
+        utilitiesIncluded = listing.utilitiesIncluded ?? false;
       }
-      utilitiesIncluded = listing.utilitiesIncluded ?? false;
     }
   }
   
@@ -82,6 +107,14 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
   const petRentPerPet = petRentOverride !== null && petRentOverride !== undefined
     ? petRentOverride
     : (listing?.petRent || 0);
+  
+  console.log('🔍 [calculatePayments] Pet rent calculation:', {
+    'trip.numPets': trip.numPets,
+    petRentOverride,
+    'listing?.petRent': listing?.petRent,
+    petRentPerPet,
+    'petRentPerPet * trip.numPets': petRentPerPet * trip.numPets
+  });
   
   const monthlyPetRent = trip.numPets > 0 
     ? petRentPerPet * trip.numPets 
@@ -100,7 +133,7 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
     ? petDepositPerPet * trip.numPets 
     : 0;
   
-  return {
+  const result = {
     monthlyRent,
     monthlyPetRent,
     totalMonthlyRent: monthlyRent + monthlyPetRent,
@@ -109,6 +142,10 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
     totalDeposit: securityDeposit + petDeposit,
     utilitiesIncluded,
   };
+  
+  console.log('🔍 [calculatePayments] Final result:', result);
+  
+  return result;
 }
 
 // Helper function to calculate length of stay (copied from calculate-rent.tsx to avoid circular dependency)

@@ -12,13 +12,7 @@ import { EmbeddedCheckoutModal } from '@/components/stripe/embedded-checkout-mod
 import { AddPaymentMethodInline } from '@/components/stripe/add-payment-method-inline';
 import { processDirectPayment } from '@/app/actions/process-payment';
 import { useToast } from '@/components/ui/use-toast';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import BrandModal from '@/components/BrandModal';
 
 interface PaymentMethod {
   id: string;
@@ -34,6 +28,7 @@ interface PaymentReviewScreenProps {
   amount: number;
   paymentBreakdown: {
     monthlyRent: number;
+    petRent?: number;
     securityDeposit: number;
     petDeposit?: number;
     transferFee?: number;
@@ -269,6 +264,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
         />
         <UpcomingPaymentsSection 
           monthlyRent={paymentBreakdown.monthlyRent}
+          monthlyPetRent={paymentBreakdown.petRent}
           tripStartDate={tripStartDate}
           tripEndDate={tripEndDate}
           isUsingCard={selectedPaymentMethodType === 'card'}
@@ -335,23 +331,25 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
         onSuccess={handleCheckoutSuccess}
       />
 
-      {/* Payment Processing Dialog */}
-      <Dialog open={showProcessingDialog} onOpenChange={(open) => {
-        // Only allow closing if there's an error
-        if (!open && processingStatus === 'error') {
-          setShowProcessingDialog(false);
-        }
-      }}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {processingStatus === 'processing' && 'Processing Payment'}
-              {processingStatus === 'success' && 'Payment Successful!'}
-              {processingStatus === 'error' && 'Payment Failed'}
-            </DialogTitle>
-          </DialogHeader>
+      {/* Payment Processing Modal */}
+      <BrandModal
+        isOpen={showProcessingDialog}
+        onOpenChange={(open) => {
+          // Only allow closing if there's an error
+          if (!open && processingStatus === 'error') {
+            setShowProcessingDialog(false);
+          }
+        }}
+        className="max-w-md"
+      >
+        <div className="p-6">
+          <h2 className="text-xl font-semibold mb-6 text-center">
+            {processingStatus === 'processing' && 'Processing Payment'}
+            {processingStatus === 'success' && 'Payment Successful!'}
+            {processingStatus === 'error' && 'Payment Failed'}
+          </h2>
           
-          <div className="flex flex-col items-center py-6">
+          <div className="flex flex-col items-center">
             {processingStatus === 'processing' && (
               <>
                 <Loader2 className="h-12 w-12 animate-spin text-blue-600 mb-4" />
@@ -395,8 +393,8 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
               </>
             )}
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </BrandModal>
 
     </>
   );
