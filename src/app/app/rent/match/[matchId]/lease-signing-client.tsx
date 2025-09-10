@@ -17,6 +17,7 @@ import { useSignedFieldsStore } from '@/stores/signed-fields-store';
 import dynamic from 'next/dynamic';
 import { calculatePayments, PaymentDetails } from '@/lib/calculate-payments';
 import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
+import { calculateCreditCardFee } from '@/lib/payment-calculations';
 
 // Define step types for cleaner state management
 type LeaseSigningStep = 
@@ -454,6 +455,16 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     petDepositOverride: match.petDeposit
   });
 
+  // Calculate total due today ONCE - this is the single source of truth
+  const totalDeposits = paymentDetails.securityDeposit + (paymentDetails.petDeposit || 0);
+  const transferFee = 5; // Fixed $5 transfer fee
+  const baseAmountDue = totalDeposits + transferFee;
+  
+  // Calculate with/without card fee
+  const totalDueTodayNoCard = baseAmountDue;
+  const creditCardFee = calculateCreditCardFee(baseAmountDue);
+  const totalDueTodayWithCard = baseAmountDue + creditCardFee;
+
   // Calculate pro-rated rent for partial first month (includes pet rent)
   const calculateProRatedRent = () => {
     const startDate = new Date(match.trip.startDate);
@@ -477,24 +488,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     return paymentDetails.totalDeposit;
   };
 
-  // Calculate payment amount (pro-rated rent + security deposit + fees)
-  const calculatePaymentAmount = (paymentMethodType?: string) => {
-    const proRatedRent = calculateProRatedRent();
-    const securityDeposit = getSecurityDeposit();
-    
-    let subtotal = proRatedRent + securityDeposit;
-    
-    // Add 3% application fee on the subtotal
-    const applicationFee = Math.round(subtotal * 0.03 * 100) / 100;
-    subtotal += applicationFee;
-    
-    // Add Stripe's credit card processing fees (2.9% + $0.30) if using card
-    if (paymentMethodType === 'card') {
-      const totalWithCardFee = calculateTotalWithStripeCardFee(subtotal);
-      return Math.round(totalWithCardFee * 100) / 100;
-    }
-    
-    return Math.round(subtotal * 100) / 100;
+  // Get the total due today based on payment method - uses pre-calculated values
+  const getTotalDueToday = (paymentMethodType?: string) => {
+    return paymentMethodType === 'card' ? totalDueTodayWithCard : totalDueTodayNoCard;
   };
   
   // Calculate breakdown for display
@@ -648,7 +644,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: calculatePaymentAmount()
+          amount: getTotalDueToday()
         }),
       });
 
@@ -823,17 +819,17 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
             <div className="w-full lg:col-span-2 order-2">
               <PaymentReviewScreen
                 matchId={matchId}
-                amount={calculatePaymentAmount(selectedPaymentMethodType)}
+                amount={getTotalDueToday(selectedPaymentMethodType)}
                 paymentBreakdown={{
                   monthlyRent: paymentDetails.monthlyRent, // Pass base rent
                   petRent: paymentDetails.monthlyPetRent, // Pass pet rent separately
-                  securityDeposit: getSecurityDeposit(),
+                  securityDeposit: paymentDetails.securityDeposit, // Pass only security deposit, not total
                   petDeposit: paymentDetails.petDeposit || 0,
-                  serviceFee: Math.round(((calculateProRatedRent() + getSecurityDeposit()) * 0.03) * 100) / 100,
+                  transferFee: 5, // Fixed $5 transfer fee for deposits
                   processingFee: selectedPaymentMethodType === 'card' 
-                    ? Math.round(((calculateProRatedRent() + getSecurityDeposit()) * 1.03 * 0.029 + 0.30) * 100) / 100
+                    ? getTotalDueToday('card') - getTotalDueToday() // Difference between card and non-card total
                     : undefined,
-                  total: calculatePaymentAmount(selectedPaymentMethodType)
+                  total: getTotalDueToday(selectedPaymentMethodType)
                 }}
                 onSuccess={handlePaymentSuccess}
                 onAddPaymentMethod={() => setCurrentStep('overview')}
@@ -953,7 +949,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                             )}
                             <div className="flex justify-between border-t pt-2 font-semibold">
                               <span>Total Due Today</span>
-                              <span className="text-green-600">${calculatePaymentAmount(hasPaymentMethod ? undefined : previewPaymentMethod).toFixed(2)}</span>
+                              <span className="text-green-600">${getTotalDueToday(hasPaymentMethod ? undefined : previewPaymentMethod).toFixed(2)}</span>
                             </div>
                           </div>
                         </div>
@@ -1060,7 +1056,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                         Payment Method Found
                       </h3>
                       <p className="text-gray-600 mb-6">
-                        We found an existing payment method on your account. Please complete your payment of ${calculatePaymentAmount().toFixed(2)}.
+                        We found an existing payment method on your account. Please complete your payment of ${getTotalDueToday().toFixed(2)}.
                       </p>
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 mx-auto max-w-md">
                         <p className="text-blue-800 text-sm">
@@ -1159,7 +1155,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                           )}
                           <div className="flex justify-between border-t border-green-300 pt-2 font-semibold">
                             <span className="text-green-900">Total Paid</span>
-                            <span className="text-green-900">${calculatePaymentAmount(selectedPaymentMethodType).toFixed(2)}</span>
+                            <span className="text-green-900">${getTotalDueToday(selectedPaymentMethodType).toFixed(2)}</span>
                           </div>
                           <div className="mt-4 pt-4 border-t border-green-300">
                             <p className="text-xs text-green-700">
