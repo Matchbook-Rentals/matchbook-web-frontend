@@ -36,6 +36,11 @@ function formatAddress(listing: any): string {
   return parts.join(', ');
 }
 
+function getLargestRentPayment(rentPayments: RentPayment[]): number {
+  if (rentPayments.length === 0) return 0;
+  return Math.max(...rentPayments.map(payment => payment.amount));
+}
+
 type RentPayment = {
   id: string;
   amount: number;
@@ -106,13 +111,16 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   const host = booking.listing.user;
   const hostName = host.fullName || `${host.firstName || ''} ${host.lastName || ''}`.trim() || host.email || 'Unknown Host';
   
+  // Get the largest rent payment amount (convert from cents to dollars)
+  const largestPaymentAmount = getLargestRentPayment(booking.rentPayments) / 100;
+  
   const bookingData = {
     name: hostName,
     status: booking.status === 'active' ? 'Active' : booking.status.charAt(0).toUpperCase() + booking.status.slice(1),
     dates: formatDateRange(booking.startDate, booking.endDate),
     address: formatAddress(booking.listing),
     description: booking.listing.title,
-    price: booking.monthlyRent ? `${formatPrice(booking.monthlyRent)} / Month` : 'Price TBD',
+    price: largestPaymentAmount > 0 ? `${formatPrice(largestPaymentAmount)} / Month` : 'Price TBD',
     occupants: [
       { type: "Adult", count: booking.trip?.numAdults || 1, icon: "/host-dashboard/svg/adult.svg" },
       { type: "Children", count: booking.trip?.numChildren || 0, icon: "/host-dashboard/svg/kid.svg" },
@@ -132,7 +140,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   const upcomingPayments = booking.rentPayments
     .filter((payment: RentPayment) => new Date(payment.dueDate) >= now)
     .map((payment: RentPayment) => ({
-      amount: payment.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       type: "Monthly Rent",
       method: "ACH Transfer",
       bank: "Bank Account",
@@ -145,7 +153,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     .filter((payment: RentPayment) => new Date(payment.dueDate) < now)
     .reverse()
     .map((payment: RentPayment) => ({
-      amount: payment.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       type: "Monthly Rent",
       method: "ACH Transfer",
       bank: "Bank Account",

@@ -57,7 +57,7 @@ const DownloadableDocumentsSection = ({ match }: { match: MatchWithRelations }) 
 
   return (
     <section className="flex flex-col items-start justify-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-      <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#373940] text-2xl tracking-[0.15px] leading-[normal]">
+      <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#373940] text-xl tracking-[0.15px] leading-[normal]">
         Downloadable Documents
       </h2>
 
@@ -74,7 +74,7 @@ const DownloadableDocumentsSection = ({ match }: { match: MatchWithRelations }) 
             <CardContent className="flex items-center gap-3 px-5 py-4">
               <IconComponent className="relative w-10 h-10 text-[#484a54]" />
 
-              <div className="relative flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#484a54] text-xl tracking-[0] leading-[normal]">
+              <div className="relative flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#484a54] text-lg tracking-[0] leading-[normal]">
                 {document.name}
                 {!document.available && (
                   <span className="text-sm text-gray-400 ml-2">(Coming soon)</span>
@@ -98,11 +98,11 @@ const ConfirmationMessageSection = () => {
       <CheckCircle className="w-20 h-20 text-green-600" />
 
       <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
-        <h1 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-bold text-blackblack-500 text-[28px] text-center tracking-[0] leading-[33.6px]">
+        <h1 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-bold text-blackblack-500 text-[25px] text-center tracking-[0] leading-[33.6px]">
           BOOKING CONFIRMED!
         </h1>
 
-        <p className="relative self-stretch [font-family:'Poppins',Helvetica] font-normal text-[#333333] text-base text-center tracking-[0] leading-[19.2px]">
+        <p className="relative self-stretch [font-family:'Poppins',Helvetica] font-normal text-[#333333] text-sm text-center tracking-[0] leading-[19.2px]">
           Thank you, your lease has been signed and payment has been processed
           successfully.
         </p>
@@ -180,7 +180,7 @@ const PaymentSummarySection = ({ match }: { match: MatchWithRelations }) => {
 
   return (
     <section className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-      <h2 className="self-stretch font-medium text-[#373940] text-2xl tracking-[0.15px] leading-[normal] relative mt-[-1.00px] [font-family:'Poppins',Helvetica]">
+      <h2 className="self-stretch font-medium text-[#373940] text-xl tracking-[0.15px] leading-[normal] relative mt-[-1.00px] [font-family:'Poppins',Helvetica]">
         Payment Summary
       </h2>
 
@@ -192,13 +192,13 @@ const PaymentSummarySection = ({ match }: { match: MatchWithRelations }) => {
               className={`flex items-end justify-between relative self-stretch w-full flex-[0_0_auto] ${item.isIndented ? "px-5 py-0" : ""}`}
             >
               <div
-                className={`relative w-fit [font-family:'Poppins',Helvetica] font-normal text-lg tracking-[0] leading-[21.6px] whitespace-nowrap ${item.isIndented ? "text-[#545454] mt-[-1.00px]" : "text-[#333333]"} ${!item.isMain ? "mt-[-1.00px]" : ""}`}
+                className={`relative w-fit [font-family:'Poppins',Helvetica] font-normal text-base tracking-[0] leading-[21.6px] whitespace-nowrap ${item.isIndented ? "text-[#545454] mt-[-1.00px]" : "text-[#333333]"} ${!item.isMain ? "mt-[-1.00px]" : ""}`}
               >
                 {item.label}
               </div>
 
               <div className="flex items-center justify-end gap-4 relative">
-                <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-lg tracking-[0] leading-[21.6px] whitespace-nowrap">
+                <div className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#020202] text-base tracking-[0] leading-[21.6px] whitespace-nowrap">
                   {item.amount}
                 </div>
 
@@ -230,7 +230,7 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
 
   return (
     <section className="flex flex-col items-start justify-center gap-6 w-full">
-      <h2 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-2xl tracking-[0.15px] leading-normal">
+      <h2 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-xl tracking-[0.15px] leading-normal">
         Lease &amp; Booking Summary
       </h2>
 
@@ -247,7 +247,7 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
             <div className="flex flex-col items-start gap-2 w-full">
               <div className="flex flex-col items-start gap-2 w-full">
                 <div className="flex items-center gap-2 w-full">
-                  <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-[26px] tracking-0 leading-normal">
+                  <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-[23px] tracking-0 leading-normal">
                     Hosted by {match.listing.user?.firstName || 'Host'}
                   </h3>
                 </div>
@@ -258,7 +258,7 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
                   <MapPin className="w-7 h-7" />
                 </div>
 
-                <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#484a54] text-[22px] tracking-0 leading-normal">
+                <div className="flex-1 [font-family:'Poppins',Helvetica] font-normal text-[#484a54] text-xl tracking-0 leading-normal">
                   {`${match.listing.city}, ${match.listing.state}` || 'Location'}
                 </div>
               </div>
@@ -266,21 +266,21 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
 
             <div className="flex flex-wrap items-center justify-between gap-[16px_32px] pr-3 w-full">
               <div className="inline-flex flex-col items-start justify-center gap-3">
-                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-base tracking-0 leading-[19.2px] whitespace-nowrap">
+                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-sm tracking-0 leading-[19.2px] whitespace-nowrap">
                   Move-in
                 </div>
 
-                <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484a54] text-[22px] tracking-0 leading-[26.4px] whitespace-nowrap">
+                <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484a54] text-xl tracking-0 leading-[26.4px] whitespace-nowrap">
                   {formatDate(match.trip.startDate)}
                 </div>
               </div>
 
               <div className="inline-flex flex-col items-start justify-center gap-3">
-                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-base tracking-0 leading-[19.2px] whitespace-nowrap">
+                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-sm tracking-0 leading-[19.2px] whitespace-nowrap">
                   Move-out
                 </div>
 
-                <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484a54] text-[22px] tracking-0 leading-[26.4px] whitespace-nowrap">
+                <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484a54] text-xl tracking-0 leading-[26.4px] whitespace-nowrap">
                   {formatDate(match.trip.endDate)}
                 </div>
               </div>
@@ -292,7 +292,7 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
                 return (
                   <div key={index} className="inline-flex items-center gap-1.5">
                     <IconComponent className="w-7 h-7" />
-                    <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484a54] text-lg tracking-0 leading-normal">
+                    <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484a54] text-base tracking-0 leading-normal">
                       {guest.label}
                     </div>
                   </div>
@@ -310,7 +310,7 @@ export function CompleteClient({ match, matchId, isAdminDev = false }: CompleteC
   return (
     <main className={`${PAGE_MARGIN}`}>
       {/* Step Progress Bar */}
-      <div className="mb-8">
+      <div className="mb-8 mt-4">
         <StepProgress 
           currentStep={3}
           totalSteps={3}

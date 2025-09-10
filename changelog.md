@@ -1,5 +1,15 @@
 # Changelog
 
+## Fix payment calculations and booking deletion functionality
+- Fixed baseRent calculation when monthlyRentOverride returns error code (77777) by using ListingMonthlyPricing fallback
+- Added pet rent breakdown to upcoming payments accordion with separate base rent and pet rent line items
+- Fixed booking deletion to handle related RentPayment records in transaction to prevent foreign key constraint errors
+- Added development-only delete button to booking card with environment check
+- Centralized payment schedule generation to ensure consistency between review page and actual booking creation
+- Updated confirm-payment-and-book route to use centralized payment calculations and include monthlyPricing relation
+- Added payment schedule creation for existing bookings missing payment records (handles legacy bookings)
+- Cleaned up excessive console logging while maintaining essential debugging information
+
 ## Fix lease document download with signatures and annotations
 - Created `/api/documents/[id]/view` route to serve PDFs with field values and signatures applied
 - Added support for download vs inline viewing with `?download=true` parameter

@@ -96,7 +96,7 @@ export const StepProgress: React.FC<StepProgressProps> = ({
                 </motion.div>
               </div>
               {labels[index] && (
-                <span className={`text-sm font-medium ${getTextColor(step.status)} ${textPosition === 'left' ? 'mr-2' : 'ml-2'}`}>
+                <span className={`text-xs font-medium ${getTextColor(step.status)} ${textPosition === 'left' ? 'mr-2' : 'ml-2'}`}>
                   {labels[index]}
                 </span>
               )}
