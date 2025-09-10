@@ -17,6 +17,9 @@ export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
         tripStatus: 'searching',
         userId: userId,
       },
+      orderBy: {
+        createdAt: 'desc'
+      },
       include: {
         matches: {
           include: {
@@ -46,6 +49,9 @@ export async function getAllUserTrips(options?: { next?: { tags?: string[] } }):
     const userTrips = await prisma.trip.findMany({
       where: {
         userId: userId,
+      },
+      orderBy: {
+        createdAt: 'desc'
       },
       include: {
         matches: {
