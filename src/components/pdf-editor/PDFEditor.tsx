@@ -2455,8 +2455,21 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           return;
         }
 
-        // Validation passed or user chose to proceed - save template
-        await proceedWithTemplateCompletion();
+        // If onSave callback is provided (editing existing template), use it
+        if (onSave && pdfFile) {
+          try {
+            await onSave({ fields, recipients, pdfFile });
+            setIsSavingTemplate(false);
+            // onSave should handle navigation/completion
+          } catch (error) {
+            console.error('Error in onSave callback:', error);
+            brandAlert('Failed to save template. Please try again.', 'error', 'Save Failed');
+            setIsSavingTemplate(false);
+          }
+        } else {
+          // Creating new template - use the original flow
+          await proceedWithTemplateCompletion();
+        }
         break;
 
       case 'document':

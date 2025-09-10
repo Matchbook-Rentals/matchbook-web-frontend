@@ -309,7 +309,7 @@ export default function LeasesPage() {
                       <Button
                         variant="default"
                         className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto"
-                        onClick={() => router.push(`/app/host/${listingId}/leases/create?templateId=${template.id}`)}
+                        onClick={() => router.push(`/app/host/${listingId}/leases/${template.id}/edit`)}
                       >
                         {buttonText}
                       </Button>
