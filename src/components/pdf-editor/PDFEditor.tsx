@@ -577,7 +577,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       document.removeEventListener('keydown', handleGlobalKeyDown);
       console.log('PDF Editor: Removed dual interaction event listeners');
     };
-  }, [interactionMode, isMouseDown, mouseDownPosition.x, mouseDownPosition.y, MOVEMENT_THRESHOLD, handlePageClick]);
+  }, [interactionMode, isMouseDown, mouseDownPosition, MOVEMENT_THRESHOLD, handlePageClick]);
 
   // File upload handling
   const onDrop = useCallback((acceptedFiles: File[]) => {

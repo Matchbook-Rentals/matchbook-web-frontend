@@ -16,7 +16,7 @@ export const CancellationPolicySection: React.FC = () => {
             Cancellations made 30 days or more before the rental start date will receive a full refund of all payments made, including the security deposit.
             <br />
             <br />
-            Cancellations made within 30 days of the rental start date will forfeit the first month's rent and guest service fee. The security deposit will be refunded in full.
+            Cancellations made within 30 days of the rental start date will forfeit the first month&apos;s rent and guest service fee. The security deposit will be refunded in full.
             <br />
             <br />
             No-shows or cancellations made after the rental start date will forfeit all payments made.

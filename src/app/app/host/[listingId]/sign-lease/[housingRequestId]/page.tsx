@@ -1,7 +1,8 @@
 
 import { NextPage } from 'next';
 import DocumentEmbed from './lease-host-sign-embed';
-import { createLease } from '@/app/actions/documents';
+// DEPRECATED: BoldSign integration removed
+// import { createLease } from '@/app/actions/documents';
 
 export const revalidate = 0;
 
@@ -11,7 +12,9 @@ const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async
   const handleComplete = async (documentId, housingRequestId) => {
     'use server'
 
-    let newLease = await createLease(documentId, housingRequestId);
+    // DEPRECATED: BoldSign integration removed
+    // let newLease = await createLease(documentId, housingRequestId);
+    let newLease = { success: false, error: 'BoldSign integration deprecated' };
     return newLease;
   }
 

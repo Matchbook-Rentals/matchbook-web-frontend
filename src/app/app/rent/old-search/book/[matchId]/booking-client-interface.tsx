@@ -11,7 +11,8 @@ import { Match, Trip, Listing } from "@prisma/client"
 import { useState } from "react"
 import StripeCheckoutEmbed from "./stripe-checkout-embed"
 import { useUser } from '@clerk/nextjs'
-import { updateBoldSignLease } from "@/app/actions/documents"
+// DEPRECATED: BoldSign integration removed
+// import { updateBoldSignLease } from "@/app/actions/documents"
 import { toast } from "@/components/ui/use-toast"
 import { MatchWithRelations } from "@/types"
 
@@ -44,12 +45,13 @@ export default function PropertyBookingPage({ match, clientSecret }: PropertyBoo
   };
 
   const handleUpdateLease = async () => {
-    const response = await updateBoldSignLease(match.BoldSignLease.id, { tenantSigned: true })
+    // DEPRECATED: BoldSign integration removed
+    // const response = await updateBoldSignLease(match.BoldSignLease.id, { tenantSigned: true })
     toast({
-      title: 'Lease Signed',
-      description: 'The lease has been signed by the tenant',
+      title: 'DEPRECATED: Lease Update Unavailable',
+      description: 'BoldSign integration has been removed - this functionality is deprecated',
     })
-    console.log(response)
+    console.log('DEPRECATED: updateBoldSignLease function call skipped')
   }
 
 

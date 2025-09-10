@@ -1,7 +1,7 @@
 'use client';
 
 import { CheckIcon, PlusIcon, Trash2 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import BrandModal from '@/components/BrandModal';
@@ -47,7 +47,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
   const [methodToDelete, setMethodToDelete] = useState<PaymentMethod | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const fetchPaymentMethods = async () => {
+  const fetchPaymentMethods = useCallback(async () => {
       try {
         console.log('💳 [PaymentMethods] Fetching payment methods...');
         const response = await fetch('/api/user/payment-methods');
@@ -100,7 +100,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
       } finally {
         setIsLoading(false);
       }
-    };
+    }, []); // Empty dependency array since the function doesn't use any external values
     
   useEffect(() => {
     // Only fetch if we don't have initial payment methods
@@ -108,7 +108,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
       setIsLoading(true);
       fetchPaymentMethods();
     }
-  }, []);
+  }, [initialPaymentMethods.length, fetchPaymentMethods]);
 
   const handlePaymentMethodAdded = () => {
     console.log('🆕 [PaymentMethods] Payment method added, refreshing list...');
@@ -132,7 +132,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
         delete window.refreshPaymentMethods;
       }
     };
-  }, [onPaymentMethodsRefresh]);
+  }, [onPaymentMethodsRefresh, fetchPaymentMethods]);
 
   // Apply hidePaymentMethods override if needed
   const displayedPaymentMethods = hidePaymentMethods ? [] : paymentMethods;

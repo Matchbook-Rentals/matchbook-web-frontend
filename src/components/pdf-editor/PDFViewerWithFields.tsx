@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -8,7 +8,7 @@ import '@/lib/pdfWorker';
 import './pdf-editor.css';
 import { cn } from '@/lib/utils';
 import { FieldFormType, FieldType, FRIENDLY_FIELD_TYPE } from './types';
-import { useRecipientColors } from './recipient-colors';
+import { RECIPIENT_COLOR_STYLES, AVAILABLE_RECIPIENT_COLORS } from './recipient-colors';
 import type { Recipient } from './RecipientManager';
 
 interface PDFViewerWithFieldsProps {
@@ -29,6 +29,43 @@ export const PDFViewerWithFields: React.FC<PDFViewerWithFieldsProps> = ({
   const [numPages, setNumPages] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+  // Helper function to get recipient colors (non-hook version)
+  const getRecipientColors = (index: number) => {
+    const key = AVAILABLE_RECIPIENT_COLORS[index % AVAILABLE_RECIPIENT_COLORS.length];
+    const colorStyles = RECIPIENT_COLOR_STYLES[key];
+    
+    // Extract color from the ring class for borderColor
+    const colorMap: Record<string, string> = {
+      'host': '#0B6E6E',
+      'primaryRenter': '#fb8c00',
+      'blue': '#3b82f6',
+      'purple': '#a855f7',
+      'green': '#22c55e',
+      'red': '#ef4444',
+      'pink': '#ec4899',
+      'indigo': '#6366f1',
+      'yellow': '#eab308',
+      'emerald': '#10b981'
+    };
+    
+    return {
+      ...colorStyles,
+      borderColor: colorMap[key] || '#6b7280'
+    };
+  };
+
+  // Create memoized recipient colors mapping
+  const recipientColorsMap = useMemo(() => {
+    const maxIndex = Math.max(...fields.map(f => f.recipientIndex ?? 0), recipients.length - 1);
+    const colorsMap = new Map<number, ReturnType<typeof getRecipientColors>>();
+    
+    for (let i = 0; i <= maxIndex; i++) {
+      colorsMap.set(i, getRecipientColors(i));
+    }
+    
+    return colorsMap;
+  }, [fields, recipients.length]);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -141,7 +178,7 @@ export const PDFViewerWithFields: React.FC<PDFViewerWithFieldsProps> = ({
     const height = (field.pageHeight / 100) * pageRect.height;
 
     const recipientIndex = field.recipientIndex ?? 0;
-    const signerStyles = useRecipientColors(recipientIndex);
+    const signerStyles = recipientColorsMap.get(recipientIndex) || getRecipientColors(0);
     const recipient = recipients[recipientIndex];
 
     const getFieldLabel = () => {

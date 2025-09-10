@@ -8,7 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from 'next/navigation';
 import { toast } from '@/components/ui/use-toast';
 import { createMatch } from '@/app/actions/matches';
-import { createInitialLease } from '@/app/actions/documents';
+// DEPRECATED: BoldSign integration removed
+// import { createInitialLease } from '@/app/actions/documents';
 import { HostPageTitle } from '../(components)/host-page-title';
 import { HOST_PAGE_STYLE } from '@/constants/styles';
 
@@ -154,10 +155,10 @@ const SendLeasePage: React.FC = () => {
           try {
             console.log('try create match');
             const result = await createMatch(trip, currListing);
-            console.log('try create lease');
-            const lease = await createInitialLease(docId, result.match.id, currListing.userId, currApplication?.userId);
+            console.log('DEPRECATED: BoldSign lease creation skipped (integration removed)');
+            // const lease = await createInitialLease(docId, result.match.id, currListing.userId, currApplication?.userId);
             console.log('Match creation result:', result);
-            console.log('Lease creation result:', lease);
+            console.log('DEPRECATED: Lease creation skipped (BoldSign integration removed)');
             toast({
               title: 'Match created',
               description: 'The match has been created',

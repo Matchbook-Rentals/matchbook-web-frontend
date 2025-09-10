@@ -95,7 +95,7 @@ const DownloadableDocumentsSection = ({ match }: { match: MatchWithRelations }) 
 const ConfirmationMessageSection = () => {
   return (
     <section className="flex flex-col items-center justify-center gap-5 relative self-stretch w-full flex-[0_0_auto]">
-      <CheckCircle className="w-20 h-20 text-green-600" />
+      <CheckCircle className="w-16 h-16 text-green-600" />
 
       <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
         <h1 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-bold text-blackblack-500 text-[25px] text-center tracking-[0] leading-[33.6px]">

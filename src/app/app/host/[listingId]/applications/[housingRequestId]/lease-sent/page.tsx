@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle, MessageSquare, Clock, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { updateHousingRequestWithBoldSignLease } from '@/app/actions/documents';
+// DEPRECATED: BoldSign integration removed
+// import { updateHousingRequestWithBoldSignLease } from '@/app/actions/documents';
 import { toast } from 'sonner';
 
 interface LeaseSuccessPageProps {
@@ -20,24 +21,27 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
   const documentId = searchParams.get('documentId');
 
   useEffect(() => {
-    // Update the housing request with the BoldSign lease document ID
+    // DEPRECATED: BoldSign integration removed - this functionality is no longer available
     if (documentId) {
-      console.log('Lease sent with document ID:', documentId);
+      console.log('DEPRECATED: Lease sent with document ID (BoldSign integration removed):', documentId);
       
-      updateHousingRequestWithBoldSignLease(params.housingRequestId, documentId)
-        .then((result) => {
-          if (result.success) {
-            console.log('Housing request updated with BoldSign lease');
-            toast.success('Lease configuration completed successfully!');
-          } else {
-            console.error('Failed to update housing request:', result.error);
-            toast.error('Lease sent but failed to update records');
-          }
-        })
-        .catch((error) => {
-          console.error('Error updating housing request:', error);
-          toast.error('Lease sent but failed to update records');
-        });
+      // updateHousingRequestWithBoldSignLease(params.housingRequestId, documentId)
+      //   .then((result) => {
+      //     if (result.success) {
+      //       console.log('Housing request updated with BoldSign lease');
+      //       toast.success('Lease configuration completed successfully!');
+      //     } else {
+      //       console.error('Failed to update housing request:', result.error);
+      //       toast.error('Lease sent but failed to update records');
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error('Error updating housing request:', error);
+      //     toast.error('Lease sent but failed to update records');
+      //   });
+      
+      // For now, just show success message since BoldSign integration is removed
+      toast.success('Lease page loaded (BoldSign integration deprecated)');
     }
   }, [documentId, params.housingRequestId]);
 

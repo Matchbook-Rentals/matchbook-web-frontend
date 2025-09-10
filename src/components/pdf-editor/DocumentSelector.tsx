@@ -41,7 +41,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
   useEffect(() => {
     console.log('📄 DocumentSelector mounted with signerType:', signerType);
     fetchDocuments();
-  }, []);
+  }, [fetchDocuments, signerType]);
 
   const fetchDocuments = async () => {
     try {
