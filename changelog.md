@@ -1,5 +1,12 @@
 # Changelog
 
+## Remove SSN field and update questionnaire styling
+- Removed Social Security Number field from rental application form for improved privacy and reduced PII exposure
+- Removed SSN validation logic from application store and validation utilities
+- Removed SSN column from Application model in Prisma schema
+- Updated questionnaire radio buttons to use consistent green secondaryBrand styling matching rent/own property selection
+- Applied uniform radio button styling with border-secondaryBrand and proper checked state colors
+
 ## Fix payment calculations and booking deletion functionality
 - Fixed baseRent calculation when monthlyRentOverride returns error code (77777) by using ListingMonthlyPricing fallback
 - Added pet rent breakdown to upcoming payments accordion with separate base rent and pet rent line items

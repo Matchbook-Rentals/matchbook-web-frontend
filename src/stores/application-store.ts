@@ -43,7 +43,6 @@ interface PersonalInfo {
   middleName?: string;
   noMiddleName?: boolean;
   dateOfBirth?: Date | string;
-  ssn?: string;
 }
 
 interface Identification {
@@ -82,7 +81,6 @@ interface ApplicationErrors {
       lastName?: string;
       middleName?: string;
       dateOfBirth?: string;
-      ssn?: string;
     };
     identification: { idType?: string; idNumber?: string };
   };
@@ -125,8 +123,7 @@ export const initialState = {
     lastName: '',
     middleName: '',
     noMiddleName: false,
-    dateOfBirth: '',
-    ssn: ''
+    dateOfBirth: ''
   },
   ids: [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
   verificationImages: [] as VerificationImage[],
@@ -257,8 +254,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
         lastName: application.lastName || '',
         middleName: application.middleName || '',
         noMiddleName: application.noMiddleName || false,
-        dateOfBirth: application.dateOfBirth || '',
-        ssn: application.ssn || ''
+        dateOfBirth: application.dateOfBirth || ''
       },
       ids: application.identifications?.map((id: any) => ({
         id: id.id || '',
@@ -346,17 +342,6 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       missingFields.push('personalInfo.middleName');
     }
     if (!state.personalInfo.dateOfBirth) missingFields.push('personalInfo.dateOfBirth');
-    // Check SSN
-    if (!state.personalInfo.ssn || state.personalInfo.ssn.trim() === '') {
-      missingFields.push('personalInfo.ssn (required)');
-    } else {
-      // Remove all non-digits first
-      const digitsOnly = state.personalInfo.ssn.replace(/\D/g, '');
-      // Check if we have exactly 9 digits
-      if (digitsOnly.length !== 9) {
-        missingFields.push('personalInfo.ssn (must contain 9 digits)');
-      }
-    }
 
     // Check Identification(s)
     if (!state.ids || state.ids.length === 0) {

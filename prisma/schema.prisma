@@ -758,7 +758,6 @@ model Application {
   lastName     String?
   noMiddleName Boolean?  @default(false)
   dateOfBirth  DateTime?
-  ssn          String? // Encrypted value to be stored
 
   residentialHistories ResidentialHistory[]
 

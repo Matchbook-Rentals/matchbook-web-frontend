@@ -5,7 +5,6 @@ type PersonalInfoErrors = {
   lastName?: string;
   middleName?: string;
   dateOfBirth?: string;
-  ssn?: string;
 };
 
 type IdentificationErrors = {
@@ -22,7 +21,6 @@ export const validatePersonalInfo = (personalInfo: {
   middleName?: string;
   noMiddleName?: boolean;
   dateOfBirth?: Date | string;
-  ssn?: string;
 }) => {
   let errorObj: PersonalInfoErrors = {};
   
@@ -41,18 +39,6 @@ export const validatePersonalInfo = (personalInfo: {
   
   if (!personalInfo.dateOfBirth) {
     errorObj.dateOfBirth = 'Date of birth is required';
-  }
-  
-  // SSN validation - required field
-  if (!personalInfo.ssn || personalInfo.ssn.trim() === '') {
-    errorObj.ssn = 'Social Security Number is required';
-  } else {
-    // Remove all non-digits first
-    const digitsOnly = personalInfo.ssn.replace(/\D/g, '');
-    // Check if we have exactly 9 digits
-    if (digitsOnly.length !== 9) {
-      errorObj.ssn = 'SSN must contain 9 digits';
-    }
   }
   
   return errorObj;

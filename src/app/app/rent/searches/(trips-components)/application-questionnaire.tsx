@@ -62,22 +62,30 @@ const Questionnaire: React.FC = () => {
                   }
                 }}
                 value={answers.felony?.toString()}
-                className="flex justify-center space-x-2"
+                className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]"
               >
-                <div className="flex items-center space-x-1 ">
-                  <RadioGroupItem value="true" id="felony-yes" />
+                <div className="flex items-center gap-2 relative">
+                  <RadioGroupItem 
+                    value="true" 
+                    id="felony-yes" 
+                    className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0" 
+                  />
                   <Label
-                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
                     htmlFor="felony-yes"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
                   >
                     Yes
                   </Label>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <RadioGroupItem value="false" id="felony-no" />
+                <div className="flex items-center gap-2 relative">
+                  <RadioGroupItem 
+                    value="false" 
+                    id="felony-no" 
+                    className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0" 
+                  />
                   <Label
-                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
                     htmlFor="felony-no"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
                   >
                     No
                   </Label>
@@ -126,22 +134,30 @@ const Questionnaire: React.FC = () => {
                   }
                 }}
                 value={answers.evicted?.toString()}
-                className="flex justify-center space-x-2"
+                className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]"
               >
-                <div className="flex items-center space-x-1">
-                  <RadioGroupItem value="true" id="evicted-yes" />
+                <div className="flex items-center gap-2 relative">
+                  <RadioGroupItem 
+                    value="true" 
+                    id="evicted-yes" 
+                    className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0" 
+                  />
                   <Label
-                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
                     htmlFor="evicted-yes"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
                   >
                     Yes
                   </Label>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <RadioGroupItem value="false" id="evicted-no" />
+                <div className="flex items-center gap-2 relative">
+                  <RadioGroupItem 
+                    value="false" 
+                    id="evicted-no" 
+                    className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0" 
+                  />
                   <Label
-                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
                     htmlFor="evicted-no"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
                   >
                     No
                   </Label>
