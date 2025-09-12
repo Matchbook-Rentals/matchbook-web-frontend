@@ -57,6 +57,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
   
   const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
   const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
+  const [calendarOpen, setCalendarOpen] = useState(false);
   
   // Generate month names and year range
   const months = [
@@ -142,7 +143,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
     });
   };
 
-  const handleDateSelect = (date: Date | undefined) => {
+  const handleDateSelect = async (date: Date | undefined) => {
     if (date) {
       // Create a date at noon to avoid UTC offset issues
       const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
@@ -161,14 +162,59 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
         });
       }
       
-      const syntheticEvent = {
-        target: {
-          name: 'dateOfBirth',
-          value: formattedDate
-        }
-      } as React.ChangeEvent<HTMLInputElement>;
+      const fieldPath = 'personalInfo.dateOfBirth';
       
-      handleInputChange(syntheticEvent);
+      // Update state immediately
+      setPersonalInfo({
+        ...personalInfo,
+        dateOfBirth: formattedDate
+      });
+      
+      // Validate immediately
+      const validationError = validateField(fieldPath, formattedDate);
+      if (validationError) {
+        setFieldError(fieldPath, validationError);
+        if (isDevelopment) {
+          console.log(`[PersonalInfo] Validation error for ${fieldPath}:`, validationError);
+          toast({
+            title: "Validation Error",
+            description: validationError,
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      } else {
+        clearFieldError(fieldPath);
+        // Save immediately without debouncing for date fields
+        if (isDevelopment) {
+          console.log(`[PersonalInfo] Saving date immediately for ${fieldPath}`);
+        }
+        
+        const result = await saveField(fieldPath, formattedDate);
+        if (isDevelopment) {
+          if (result.success) {
+            console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+            toast({
+              title: "Auto-Save",
+              description: `Date of birth saved`,
+              duration: 2000,
+            });
+          } else {
+            console.error(`[Auto-Save] Error:`, result.error);
+            toast({
+              title: "Save Failed",
+              description: result.error || 'Failed to save date of birth',
+              variant: "destructive",
+              duration: 4000,
+            });
+          }
+        }
+        
+        // Close calendar after successful validation and save
+        if (result.success) {
+          setCalendarOpen(false);
+        }
+      }
     }
   };
 
@@ -270,7 +316,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
               </div>
               <span className="text-red-500 ml-1">*</span>
             </div>
-            <Popover>
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"

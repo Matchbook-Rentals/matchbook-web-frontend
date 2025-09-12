@@ -501,8 +501,22 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       if (fieldName === 'middleName' && !state.personalInfo.noMiddleName && !value?.trim()) {
         return 'Middle name is required unless "No Middle Name" is checked';
       }
-      if (fieldName === 'dateOfBirth' && !value) {
-        return 'Date of birth is required';
+      if (fieldName === 'dateOfBirth') {
+        if (!value) {
+          return 'Date of birth is required';
+        }
+        // Check if user is at least 18 years old
+        const birthDate = new Date(value);
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+        
+        const isAtLeast18 = age > 18 || (age === 18 && (monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0)));
+        
+        if (!isAtLeast18) {
+          return 'You must be at least 18 years old';
+        }
       }
     }
     
