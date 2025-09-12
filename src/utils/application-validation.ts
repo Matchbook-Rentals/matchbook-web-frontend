@@ -179,7 +179,7 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
 };
 
 export const validateIncome = (
-  incomes: { source: string; monthlyAmount: string; imageUrl: string }[]
+  incomes: { source: string; monthlyAmount: string; imageUrl?: string; fileKey?: string }[]
 ) => {
   const errors: {
     source?: string[];
@@ -207,7 +207,8 @@ export const validateIncome = (
       errors.monthlyAmount = errors.monthlyAmount || [];
       errors.monthlyAmount[index] = 'Monthly Amount is required';
     }
-    if (!income.imageUrl.trim()) {
+    // Check for either imageUrl (backward compatibility) or fileKey (new secure uploads)
+    if (!income.fileKey && (!income.imageUrl || !income.imageUrl.trim())) {
       errors.imageUrl = errors.imageUrl || [];
       errors.imageUrl[index] = 'Income Proof is required';
     }

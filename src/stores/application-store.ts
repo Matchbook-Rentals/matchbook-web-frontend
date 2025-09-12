@@ -3,6 +3,15 @@ import { VerificationImage } from '@prisma/client';
 import { markComplete } from '@/app/actions/applications';
 import { ResidentialHistory } from '@prisma/client';
 
+// Helper function to extract file key from UploadThing URL
+function extractFileKeyFromUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  
+  // UploadThing URLs look like: https://utfs.io/f/FILE_KEY or https://APP_ID.ufs.sh/f/FILE_KEY
+  const matches = url.match(/\/f\/([^/?]+)/);
+  return matches ? matches[1] : undefined;
+}
+
 export const defaultResidentialHistory: ResidentialHistory = {
   street: "",
   apt: "",
@@ -55,7 +64,10 @@ interface Identification {
 
 interface IDPhoto {
   id?: string;
-  url: string;
+  url?: string; // Optional for backward compatibility
+  fileKey?: string; // New: for secure file access
+  customId?: string; // New: alternative identifier
+  fileName?: string; // New: original file name
   isPrimary: boolean;
 }
 
@@ -64,7 +76,10 @@ interface Income {
   id?: string;
   source: string;
   monthlyAmount: string;
-  imageUrl: string;
+  imageUrl?: string; // Optional for backward compatibility
+  fileKey?: string; // New: for secure file access
+  customId?: string; // New: alternative identifier
+  fileName?: string; // New: original file name
 }
 
 interface QuestionnaireAnswers {
@@ -261,7 +276,14 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
         idType: id.idType || '',
         idNumber: id.idNumber || '',
         isPrimary: id.isPrimary || false,
-        idPhotos: id.idPhotos || [] // Map idPhotos from the backend to photos in our store
+        idPhotos: id.idPhotos?.map((photo: any) => ({
+          id: photo.id,
+          url: photo.url, // Keep for backward compatibility
+          fileKey: photo.fileKey || extractFileKeyFromUrl(photo.url), // Extract key from URL if not stored
+          customId: photo.customId,
+          fileName: photo.fileName,
+          isPrimary: photo.isPrimary || false
+        })) || []
       })) || [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
       verificationImages: application.verificationImages || [] as VerificationImage[],
       residentialHistory: residences,
@@ -269,7 +291,10 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
         id: income.id || null,
         source: income.source || '',
         monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0],
-        imageUrl: income.imageUrl || ''
+        imageUrl: income.imageUrl || '', // Keep for backward compatibility
+        fileKey: income.fileKey || extractFileKeyFromUrl(income.imageUrl), // Extract key from URL if not stored
+        customId: income.customId,
+        fileName: income.fileName
       })) || [{ source: '', monthlyAmount: '', imageUrl: '' }],
       answers: {
         evicted: application.evicted || false,

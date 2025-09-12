@@ -43,6 +43,7 @@ import { StripeConnectVerificationDialog } from "@/components/brandDialog";
 import { LeaseSelectionDialog } from "@/components/LeaseSelectionDialog";
 import { useClientLogger } from "@/hooks/useClientLogger";
 import { useUser } from "@clerk/nextjs";
+import { SecureFileViewer } from "@/components/secure-file-viewer";
 
 // Centralized styles for consistent text formatting
 const STYLES = {
@@ -725,10 +726,13 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                         <DialogTitle className="text-center">Identification Document - {application.identifications[0].idType}</DialogTitle>
                       </DialogHeader>
                       <div className="flex justify-center">
-                        <img 
-                          src={application.identifications[0].idPhotos[0].url} 
-                          alt="Identification document"
+                        <SecureFileViewer
+                          fileKey={application.identifications[0].idPhotos[0].fileKey}
+                          customId={application.identifications[0].idPhotos[0].customId}
+                          fileName={application.identifications[0].idPhotos[0].fileName || 'ID Document'}
+                          fileType="image"
                           className="max-w-full max-h-[70vh] object-contain"
+                          fallbackUrl={application.identifications[0].idPhotos[0].url}
                         />
                       </div>
                     </DialogContent>
@@ -1008,7 +1012,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       </div>
                     </div>
 
-                    {income.imageUrl ? (
+                    {(income.imageUrl || income.fileKey) ? (
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
@@ -1027,10 +1031,13 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                             <DialogTitle className="text-center">Proof of Income - {income.sourceName}</DialogTitle>
                           </DialogHeader>
                           <div className="flex justify-center">
-                            <img 
-                              src={income.imageUrl} 
-                              alt="Proof of income document"
+                            <SecureFileViewer
+                              fileKey={income.fileKey}
+                              customId={income.customId}
+                              fileName={income.fileName || 'Income Document'}
+                              fileType="auto"
                               className="max-w-full max-h-[70vh] object-contain"
+                              fallbackUrl={income.imageUrl}
                             />
                           </div>
                         </DialogContent>

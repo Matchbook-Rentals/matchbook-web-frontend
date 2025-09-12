@@ -482,6 +482,9 @@ export async function upsertApplication(data: any) {
               prisma.iDPhoto.create({
                 data: {
                   url: photo.url || '',
+                  fileKey: photo.fileKey,
+                  customId: photo.customId,
+                  fileName: photo.fileName,
                   isPrimary: !!photo.isPrimary,
                   identification: { connect: { id: newId.id } }
                 }
@@ -501,7 +504,12 @@ export async function upsertApplication(data: any) {
           const { id, ...incomeData } = income;
           return prisma.income.create({
             data: {
-              ...incomeData,
+              source: incomeData.source,
+              monthlyAmount: incomeData.monthlyAmount,
+              imageUrl: incomeData.imageUrl,
+              fileKey: incomeData.fileKey,
+              customId: incomeData.customId,
+              fileName: incomeData.fileName,
               application: { connect: { id: existingApp.id } }
             }
           });
@@ -579,6 +587,9 @@ export async function upsertApplication(data: any) {
                   const { id: photoId, ...photoData } = photo;
                   return {
                     url: photoData.url || '',
+                    fileKey: photoData.fileKey,
+                    customId: photoData.customId,
+                    fileName: photoData.fileName,
                     isPrimary: !!photoData.isPrimary
                   };
                 })
@@ -596,7 +607,14 @@ export async function upsertApplication(data: any) {
       // Process incomes for creation
       if (incomes) {
         filteredData.incomes = {
-          create: incomes.map(({ id, ...incomeData }: any) => incomeData)
+          create: incomes.map(({ id, ...incomeData }: any) => ({
+            source: incomeData.source,
+            monthlyAmount: incomeData.monthlyAmount,
+            imageUrl: incomeData.imageUrl,
+            fileKey: incomeData.fileKey,
+            customId: incomeData.customId,
+            fileName: incomeData.fileName
+          }))
         };
       }
 

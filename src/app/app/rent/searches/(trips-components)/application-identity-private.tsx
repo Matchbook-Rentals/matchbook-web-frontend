@@ -4,11 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UploadButton } from '@/app/utils/uploadthing';
 import { Card, CardContent } from '@/components/ui/card';
-import { SecureFileList } from '@/components/secure-file-viewer';
 import { Upload, Loader2 } from 'lucide-react';
-import { ImageCategory } from '@prisma/client';
 import { useApplicationStore } from '@/stores/application-store';
 import { useToast } from "@/components/ui/use-toast";
+import { SecureFileList } from '@/components/secure-file-viewer';
 
 interface UploadData {
   name: string;
@@ -25,11 +24,6 @@ interface UploadData {
   url: string;
   customId: string | null;
   type: string;
-}
-
-interface VerificationImage {
-  url: string;
-  category: ImageCategory
 }
 
 interface IDPhoto {
@@ -49,24 +43,14 @@ interface IdentificationItem {
   idPhotos?: IDPhoto[];
 }
 
-interface IdentificationProps {
-  error?: {
-    idType?: string;
-    idNumber?: string;
-    isPrimary?: string;
-    idPhotos?: string;
-    primaryPhoto?: string;
-  };
-}
-
 const ID_TYPES = [
-  { value: "driversLicense", label: "Driver\'s License" },
+  { value: "driversLicense", label: "Driver's License" },
   { value: "passport", label: "Passport" }
 ];
 
-export const Identification: React.FC = () => {
+export const IdentificationPrivate: React.FC = () => {
   const { toast } = useToast();
-  const { ids, setIds, verificationImages, setVerificationImages, errors } = useApplicationStore();
+  const { ids, setIds, errors } = useApplicationStore();
   const error = errors.identification;
 
   // Get current ID (or first ID) - always make it primary
@@ -78,24 +62,19 @@ export const Identification: React.FC = () => {
   }
 
   const handleUploadFinish = (res: UploadData[]) => {
-    console.log('Upload complete, received data:', res);
     // Check if we have existing photos
     const hasExistingPhotos = currentId.idPhotos && currentId.idPhotos.length > 0;
 
     // Convert uploaded images to IDPhotos - store file keys instead of direct URLs
-    const newPhotos = res.map((upload, index) => {
-      const photo = {
-        fileKey: upload.key || upload.serverData?.fileKey,
-        customId: upload.customId,
-        fileName: upload.name || upload.serverData?.fileName,
-        // Only set as primary if there are no existing photos and this is the first uploaded photo
-        isPrimary: !hasExistingPhotos && index === 0,
-        // Don't store direct URL for security
-        url: undefined
-      };
-      console.log('Created photo object:', photo);
-      return photo;
-    });
+    const newPhotos = res.map((upload, index) => ({
+      fileKey: upload.key || upload.serverData?.fileKey,
+      customId: upload.customId,
+      fileName: upload.name || upload.serverData?.fileName,
+      // Only set as primary if there are no existing photos and this is the first uploaded photo
+      isPrimary: !hasExistingPhotos && index === 0,
+      // Don't store direct URL for security
+      url: undefined
+    }));
 
     // Add photos to current ID without creating a new ID
     const updatedId = {
@@ -107,26 +86,25 @@ export const Identification: React.FC = () => {
     // Only update the current ID, keeping all other IDs unchanged
     setIds([updatedId, ...ids.slice(1)]);
 
-    // Also keep old functionality for backward compatibility
-    const newImages = res.map((upload) => ({
-      id: upload.customId || '',
-      url: upload.url,
-      category: 'Identification' as ImageCategory,
-      applicationId: ''
-    }));
-    setVerificationImages([...verificationImages, ...newImages]);
+    toast({
+      title: "Upload Successful",
+      description: `Successfully uploaded ${res.length} ID photo${res.length !== 1 ? 's' : ''}.`,
+      variant: "default"
+    });
   };
 
+  const handleRemovePhoto = (index: number) => {
+    // Remove photo from the array
+    const updatedPhotos = currentId.idPhotos?.filter((_, i) => i !== index) || [];
+    const updatedId = {
+      ...currentId,
+      idPhotos: updatedPhotos
+    };
+    setIds([updatedId, ...ids.slice(1)]);
+  };
 
-  // Find ID photos either from new schema or old schema for backward compatibility
-  const idPhotos = currentId.idPhotos?.length ?
-    currentId.idPhotos :
-    verificationImages
-      .filter(img => img.category === 'Identification')
-      .map((img, idx) => ({
-        url: img.url,
-        isPrimary: idx === 0 // Make first one primary by default
-      }));
+  // Get ID photos for secure viewing
+  const idPhotos = currentId.idPhotos || [];
 
   return (
     <Card className="h-[534px] w-full p-6 bg-neutral-50 rounded-xl border-0">
@@ -202,7 +180,7 @@ export const Identification: React.FC = () => {
                 <div className="flex flex-col items-start gap-1.5 w-full">
                   <div className="inline-flex flex-col items-start justify-center gap-1.5">
                     <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                      Please upload A photo&nbsp;&nbsp;of your ID
+                      Please upload A photo of your ID
                     </Label>
                     <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
                       Upload ID (Front)
@@ -212,7 +190,7 @@ export const Identification: React.FC = () => {
                   <div className="flex flex-col items-start gap-[18px] w-full">
                     <div className="flex flex-col items-start gap-3 w-full">
                       <UploadButton<UploadData, unknown>
-                        endpoint="incomeUploader"
+                        endpoint="idUploader"
                         config={{
                           mode: "auto"
                         }}
@@ -263,7 +241,7 @@ export const Identification: React.FC = () => {
                           // Validate files
                           const maxFiles = 5;
                           const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                          const maxSize = 50 * 1024 * 1024; // 50MB
+                          const maxSize = 8 * 1024 * 1024; // 8MB
                           
                           const errors: string[] = [];
                           
@@ -278,7 +256,7 @@ export const Identification: React.FC = () => {
                             }
                             
                             if (file.size > maxSize) {
-                              errors.push(`File "${file.name}" is too large. Maximum size is 50MB.`);
+                              errors.push(`File "${file.name}" is too large. Maximum size is 8MB.`);
                             }
                           });
                           
@@ -300,12 +278,6 @@ export const Identification: React.FC = () => {
                         onClientUploadComplete={(res) => {
                           console.log('✅ ID upload complete:', res);
                           handleUploadFinish(res);
-                          
-                          toast({
-                            title: "Upload Successful",
-                            description: `Successfully uploaded ${res.length} ID photo${res.length !== 1 ? 's' : ''}.`,
-                            variant: "default"
-                          });
                         }}
                         onUploadError={(error) => {
                           console.error("💥 ID upload error:", error);
@@ -319,12 +291,13 @@ export const Identification: React.FC = () => {
 
                       <div className="flex items-center gap-1 w-full">
                         <div className="flex-1 font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                          Supported formats: PNG, JPG
+                          Supported formats: PNG, JPG, PDF
                         </div>
                         <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                          Maximum size: 50MB
+                          Maximum size: 8MB
                         </div>
                       </div>
+                      
                       {error?.idPhotos && <p className="mt-1 text-red-500 text-sm">{error.idPhotos}</p>}
                     </div>
                   </div>
@@ -342,21 +315,11 @@ export const Identification: React.FC = () => {
                           fileKey: photo.fileKey,
                           customId: photo.customId,
                           fileName: photo.fileName || 'ID Photo',
-                          isPrimary: photo.isPrimary,
-                          // Support backward compatibility with direct URLs
-                          url: photo.url
+                          isPrimary: photo.isPrimary
                         }))}
                         fileType="image"
                         className="w-full"
-                        onRemove={(index) => {
-                          // Remove photo from the array
-                          const updatedPhotos = idPhotos.filter((_, i) => i !== index);
-                          const updatedId = {
-                            ...currentId,
-                            idPhotos: updatedPhotos
-                          };
-                          setIds([updatedId, ...ids.slice(1)]);
-                        }}
+                        onRemove={handleRemovePhoto}
                       />
                     ) : (
                       <div className="flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-solid border-[#e7f0f0]">

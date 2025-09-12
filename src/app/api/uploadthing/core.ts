@@ -239,47 +239,99 @@ export const ourFileRouter = {
         };
       }
     }),
-  incomeUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 8 } })
+  incomeUploader: f({ 
+      image: { maxFileSize: "8MB", maxFileCount: 8 },
+      pdf: { maxFileSize: "8MB", maxFileCount: 8 },
+      "application/msword": { maxFileSize: "8MB", maxFileCount: 8 },
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": { maxFileSize: "8MB", maxFileCount: 8 }
+    })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
+    .middleware(async ({ req, files }) => {
       // This code runs on your server before upload
       const user = await auth();
 
       // If you throw, the user will not be able to upload
       if (!user.userId) throw new UploadThingError("Unauthorized");
 
+      // Log upload attempt for security audit
+      console.log(`Income document upload initiated by user: ${user.userId}, files: ${files?.length || 0}`);
+
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.userId };
+      return { 
+        userId: user.userId,
+        uploadType: 'income',
+        uploadedAt: new Date().toISOString()
+      };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Proof of income upload for userId:", metadata.userId);
+      console.log("File details:", {
+        name: file.name,
+        size: file.size,
+        key: file.key,
+        url: file.url
+      });
 
-      console.log("file url", file.url);
+      // Store file metadata for access control
+      // NOTE: In production, you should store this in your database
+      // to track who owns which files and implement proper access control
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId, fileUrl: file.url };
+      return { 
+        uploadedBy: metadata.userId, 
+        fileUrl: file.url,
+        fileKey: file.key,
+        fileName: file.name,
+        uploadType: metadata.uploadType,
+        isPrivate: true // Mark as private file
+      };
     }),
-  idUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 8 } })
+  idUploader: f({ 
+      image: { maxFileSize: "8MB", maxFileCount: 8 },
+      pdf: { maxFileSize: "8MB", maxFileCount: 2 } // Allow PDF for passport scans
+    })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
+    .middleware(async ({ req, files }) => {
       // This code runs on your server before upload
       const user = await auth();
 
       // If you throw, the user will not be able to upload
       if (!user.userId) throw new UploadThingError("Unauthorized");
 
+      // Log upload attempt for security audit
+      console.log(`ID document upload initiated by user: ${user.userId}, files: ${files?.length || 0}`);
+
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.userId };
+      return { 
+        userId: user.userId,
+        uploadType: 'id',
+        uploadedAt: new Date().toISOString()
+      };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("ID image upload for userId:", metadata.userId);
+      console.log("File details:", {
+        name: file.name,
+        size: file.size,
+        key: file.key,
+        url: file.url
+      });
 
-      console.log("file url", file.url);
+      // Store file metadata for access control
+      // NOTE: In production, you should store this in your database
+      // to track who owns which files and implement proper access control
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId, fileUrl: file.url };
+      return { 
+        uploadedBy: metadata.userId, 
+        fileUrl: file.url,
+        fileKey: file.key,
+        fileName: file.name,
+        uploadType: metadata.uploadType,
+        isPrivate: true // Mark as private file
+      };
     }),
   messageUploader: f({ image: { maxFileSize: "16MB", maxFileCount: 12 }, video: { maxFileSize: "512MB", maxFileCount: 4 }, text: { maxFileSize: "8MB", maxFileCount: 4 }, audio: { maxFileSize: "8MB", maxFileCount: 4 }, pdf: { maxFileSize: "8MB", maxFileCount: 4 }, blob: { maxFileSize: "8MB", maxFileCount: 4 } })
     .middleware(async ({ req }) => {

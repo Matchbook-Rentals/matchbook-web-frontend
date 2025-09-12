@@ -146,6 +146,9 @@ export default function ApplicationClientComponent({
         idPhotos: id.idPhotos?.length ? id.idPhotos.map(photo => ({
           id: photo.id,
           url: photo.url,
+          fileKey: photo.fileKey,
+          customId: photo.customId,
+          fileName: photo.fileName,
           isPrimary: photo.isPrimary
         })) : []
       })),

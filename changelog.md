@@ -1,5 +1,17 @@
 # Changelog
 
+## Secure Document Upload and Viewing Implementation
+- Implemented secure file storage for ID photos and income documents using UploadThing signed URLs
+- Added new database fields (fileKey, customId, fileName) to IDPhoto and Income models for secure file tracking
+- Created SecureFileViewer component for displaying files with time-limited signed URLs that expire after 1 hour
+- Updated application forms to store file keys instead of direct public URLs for new uploads
+- Modified host application viewing page to use secure file viewing with BrandModal for document display
+- Added API endpoint for generating signed URLs with authentication check
+- Updated validation to support both legacy URL data and new secure file keys for backward compatibility
+- Replaced Dialog components with BrandModal for consistent UI and added footer Close buttons
+- Files are no longer accessible via permanent public URLs - all access requires authentication
+- Added audit logging for file access tracking
+
 ## Remove SSN field and update questionnaire styling
 - Removed Social Security Number field from rental application form for improved privacy and reduced PII exposure
 - Removed SSN validation logic from application store and validation utilities

@@ -794,7 +794,10 @@ model Identification {
 
 model IDPhoto {
   id               String         @id @default(cuid())
-  url              String
+  url              String         // Keep for backward compatibility
+  fileKey          String?        // New: UploadThing file key for secure access
+  customId         String?        // New: Custom identifier
+  fileName         String?        // New: Original file name
   identification   Identification @relation(fields: [identificationId], references: [id], onDelete: Cascade)
   identificationId String
   isPrimary        Boolean        @default(false)
@@ -809,7 +812,10 @@ model Income {
   applicationId String
   source        String
   monthlyAmount String
-  imageUrl      String?
+  imageUrl      String?     // Keep for backward compatibility
+  fileKey       String?     // New: UploadThing file key for secure access
+  customId      String?     // New: Custom identifier
+  fileName      String?     // New: Original file name
 
   @@index([applicationId])
 }
