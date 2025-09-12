@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles, ApplicationItemInputStyles } from '@/constants/styles';
@@ -6,17 +6,113 @@ import { useApplicationStore } from '@/stores/application-store';
 import { BrandCheckbox } from "@/app/brandCheckbox";
 import { format } from 'date-fns';
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { debounce } from 'lodash';
+import { useToast } from "@/components/ui/use-toast";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-export const PersonalInfo: React.FC = () => {
-  const { personalInfo, setPersonalInfo, errors } = useApplicationStore();
+interface PersonalInfoProps {
+  inputClassName?: string;
+}
+
+export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) => {
+  const { 
+    personalInfo, 
+    setPersonalInfo, 
+    errors, 
+    fieldErrors,
+    saveField,
+    validateField,
+    setFieldError,
+    clearFieldError 
+  } = useApplicationStore();
   const error = errors.basicInfo.personalInfo;
+  const { toast } = useToast();
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  // State for calendar month/year navigation
+  const currentDate = personalInfo.dateOfBirth ? 
+    (typeof personalInfo.dateOfBirth === 'string' ? 
+      (() => {
+        const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
+        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      })() : 
+      new Date(personalInfo.dateOfBirth)
+    ) : new Date();
+  
+  const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
+  const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
+  
+  // Generate month names and year range
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 121 }, (_, i) => currentYear - 120 + i).reverse(); // 120 years back from current year
+
+  // Create debounced save function with toast feedback (increased to 1000ms for onChange)
+  const debouncedSave = useCallback(
+    debounce(async (fieldPath: string, value: any) => {
+      const result = await saveField(fieldPath, value);
+      
+      // Only show toasts in development
+      if (isDevelopment) {
+        if (result.success) {
+          toast({
+            title: "Field Saved",
+            description: `${fieldPath} saved successfully`,
+            variant: "default",
+            duration: 2000,
+          });
+        } else {
+          toast({
+            title: "Save Failed",
+            description: `Failed to save ${fieldPath}: ${result.error}`,
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      }
+    }, 1000), // Increased from 500ms to 1000ms for onChange
+    [isDevelopment, toast, saveField]
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const fieldPath = `personalInfo.${name}`;
+    
+    // Update state immediately
     setPersonalInfo({
       ...personalInfo,
       [name]: value
     });
+    
+    // Validate immediately
+    const validationError = validateField(fieldPath, value);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[PersonalInfo] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // Save if valid (debounced)
+      if (isDevelopment) {
+        console.log(`[PersonalInfo] Calling debouncedSave for ${fieldPath}`);
+      }
+      debouncedSave(fieldPath, value);
+    }
   };
 
   const handleCheckboxChange = (checked: boolean) => {
@@ -28,12 +124,27 @@ export const PersonalInfo: React.FC = () => {
     });
   };
 
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) {
+      // Create a date at noon to avoid UTC offset issues
+      const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
+      const formattedDate = format(localDate, 'yyyy-MM-dd');
+      const syntheticEvent = {
+        target: {
+          name: 'dateOfBirth',
+          value: formattedDate
+        }
+      } as React.ChangeEvent<HTMLInputElement>;
+      
+      handleInputChange(syntheticEvent);
+    }
+  };
+
 
   const formFields = [
     { label: "First Name", placeholder: "Enter First Name" },
     { label: "Last Name", placeholder: "Enter Last Name" },
     { label: "Middle Name", placeholder: "Enter Middle Name" },
-    { label: "Email", placeholder: "Enter Email" },
     { label: "Date of Birth", placeholder: "Select Date of Birth" },
   ];
 
@@ -53,10 +164,11 @@ export const PersonalInfo: React.FC = () => {
                 name="firstName"
                 value={personalInfo.firstName}
                 onChange={handleInputChange}
-                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
                 placeholder={formFields[0].placeholder}
               />
-              {error?.firstName && <p className="mt-1 text-red-500 text-sm">{error.firstName}</p>}
+              {(fieldErrors['personalInfo.firstName'] || error?.firstName) && 
+                <p className="mt-1 text-red-500 text-sm">{fieldErrors['personalInfo.firstName'] || error.firstName}</p>}
             </div>
           </div>
         </div>
@@ -73,10 +185,11 @@ export const PersonalInfo: React.FC = () => {
               name="lastName"
               value={personalInfo.lastName}
               onChange={handleInputChange}
-              className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+              className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
               placeholder={formFields[1].placeholder}
             />
-            {error?.lastName && <p className="mt-1 text-red-500 text-sm">{error.lastName}</p>}
+            {(fieldErrors['personalInfo.lastName'] || error?.lastName) && 
+              <p className="mt-1 text-red-500 text-sm">{fieldErrors['personalInfo.lastName'] || error.lastName}</p>}
           </div>
         </div>
       </div>
@@ -95,10 +208,11 @@ export const PersonalInfo: React.FC = () => {
                 value={personalInfo.middleName || ''}
                 onChange={handleInputChange}
                 disabled={personalInfo.noMiddleName}
-                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
                 placeholder={formFields[2].placeholder}
               />
-              {error?.middleName && <p className="mt-1 text-red-500 text-sm">{error.middleName}</p>}
+              {(fieldErrors['personalInfo.middleName'] || error?.middleName) && 
+                <p className="mt-1 text-red-500 text-sm">{fieldErrors['personalInfo.middleName'] || error.middleName}</p>}
             </div>
           </div>
         </div>
@@ -116,54 +230,123 @@ export const PersonalInfo: React.FC = () => {
       <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
           <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-            <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
                 <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                   {formFields[3].label}
                 </Label>
-                <span className="text-red-500 ml-1">*</span>
-              </div>
-              <Input
-                name="email"
-                type="email"
-                value={personalInfo.email || ''}
-                onChange={handleInputChange}
-                className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
-                placeholder={formFields[3].placeholder}
-              />
-              {error?.email && <p className="mt-1 text-red-500 text-sm">{error.email}</p>}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
-          <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-            <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
-              <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
-                <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                  {formFields[4].label}
-                </Label>
               </div>
               <span className="text-red-500 ml-1">*</span>
             </div>
-            <div className="relative self-stretch w-full h-12 flex items-center bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs px-3 py-2">
-              <Input
-                name="dateOfBirth"
-                type="date"
-                value={personalInfo.dateOfBirth ? 
-                  (typeof personalInfo.dateOfBirth === 'string' ? 
-                    personalInfo.dateOfBirth.split('T')[0] : 
-                    format(personalInfo.dateOfBirth, 'yyyy-MM-dd')) 
-                  : ''}
-                onChange={handleInputChange}
-                className="flex-1 border-0 bg-transparent p-0 h-auto font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
-                placeholder={formFields[4].placeholder}
-              />
-              <CalendarIcon className="w-5 h-5 text-[#667085]" />
-            </div>
-            {error?.dateOfBirth && <p className="mt-1 text-red-500 text-sm">{error.dateOfBirth}</p>}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 justify-between bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs px-3 py-2 font-normal hover:bg-white"
+                >
+                  <span className={personalInfo.dateOfBirth ? "text-gray-900" : "text-gray-400"}>
+                    {personalInfo.dateOfBirth ? 
+                      (typeof personalInfo.dateOfBirth === 'string' ? 
+                        (() => {
+                          const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
+                          return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                          });
+                        })() : 
+                        format(personalInfo.dateOfBirth, 'MMMM d, yyyy')) 
+                      : formFields[3].placeholder}
+                  </span>
+                  <CalendarIcon className="w-5 h-5 text-[#667085]" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[320px] p-3" align="start" sideOffset={5}>
+                <div className="space-y-3">
+                  {/* Month and Year Selectors */}
+                  <div className="flex gap-2">
+                    <Select 
+                      value={calendarMonth.toString()} 
+                      onValueChange={(value) => setCalendarMonth(parseInt(value))}
+                    >
+                      <SelectTrigger className="flex-1 h-8 text-sm font-medium text-secondaryBrand">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <ScrollArea className="h-[200px]">
+                          {months.map((monthName, index) => (
+                            <SelectItem key={index} value={index.toString()}>
+                              {monthName}
+                            </SelectItem>
+                          ))}
+                        </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                    
+                    <Select 
+                      value={calendarYear.toString()} 
+                      onValueChange={(value) => setCalendarYear(parseInt(value))}
+                    >
+                      <SelectTrigger className="w-[100px] h-8 text-sm font-medium text-secondaryBrand">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <ScrollArea className="h-[200px]">
+                          {years.map((yearOption) => (
+                            <SelectItem key={yearOption} value={yearOption.toString()}>
+                              {yearOption}
+                            </SelectItem>
+                          ))}
+                        </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {/* Calendar */}
+                  <div className="w-full">
+                    <Calendar
+                      mode="single"
+                      month={new Date(calendarYear, calendarMonth)}
+                      onMonthChange={(date) => {
+                        setCalendarMonth(date.getMonth());
+                        setCalendarYear(date.getFullYear());
+                      }}
+                      selected={personalInfo.dateOfBirth ? 
+                        (() => {
+                          if (typeof personalInfo.dateOfBirth === 'string') {
+                            const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
+                            return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0);
+                          }
+                          return new Date(personalInfo.dateOfBirth);
+                        })()
+                        : undefined}
+                      onSelect={handleDateSelect}
+                      initialFocus
+                      classNames={{
+                        day_selected: "bg-secondaryBrand text-primary-foreground hover:bg-secondaryBrand hover:text-primary-foreground focus:bg-secondaryBrand focus:text-primary-foreground",
+                        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 w-full",
+                        month: "space-y-4 w-full",
+                        caption: "hidden", // Hide the default caption with month/year
+                        table: "w-full border-collapse space-y-1",
+                        head_row: "flex w-full",
+                        head_cell: "text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem]",
+                        row: "flex w-full mt-2 justify-between",
+                        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                        day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+                      }}
+                      className="rounded-md border w-full"
+                    />
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+            {(fieldErrors['personalInfo.dateOfBirth'] || error?.dateOfBirth) && 
+              <p className="mt-1 text-red-500 text-sm">{fieldErrors['personalInfo.dateOfBirth'] || error.dateOfBirth}</p>}
           </div>
         </div>
+        
+        {/* Spacer div to maintain layout */}
+        <div className="flex-1 grow"></div>
       </div>
 
     </>

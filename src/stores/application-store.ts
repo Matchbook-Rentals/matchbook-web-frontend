@@ -1,7 +1,14 @@
 import { create } from 'zustand';
 import { VerificationImage } from '@prisma/client';
-import { markComplete } from '@/app/actions/applications';
+import { markComplete, upsertApplication, updateApplicationField } from '@/app/actions/applications';
 import { ResidentialHistory } from '@prisma/client';
+import { 
+  validatePersonalInfo, 
+  validateIdentification, 
+  validateResidentialHistory, 
+  validateIncome, 
+  validateQuestionnaire 
+} from '@/utils/application-validation';
 
 // Helper function to extract file key from UploadThing URL
 function extractFileKeyFromUrl(url: string | undefined): string | undefined {
@@ -149,7 +156,12 @@ export const initialState = {
     felony: false,
     felonyExplanation: '',
     evictedExplanation: ''
-  }
+  },
+  // Auto-save state
+  isSaving: false,
+  lastSaveTime: null as Date | null,
+  saveError: null as string | null,
+  fieldErrors: {} as { [key: string]: string }
 };
 
 interface ApplicationState {
@@ -160,6 +172,12 @@ interface ApplicationState {
   incomes: Income[];
   answers: QuestionnaireAnswers;
   originalData: typeof initialState;
+
+  // Auto-save state
+  isSaving: boolean;
+  lastSaveTime: Date | null;
+  saveError: string | null;
+  fieldErrors: { [key: string]: string };
 
   // Actions
   setPersonalInfo: (info: PersonalInfo) => void;
@@ -189,6 +207,14 @@ interface ApplicationState {
 
   // New action to add a residential history entry if total duration is less than 24
   addResidentialHistoryEntry: (newEntry: ResidentialHistory) => void;
+
+  // Auto-save actions
+  setSaving: (isSaving: boolean) => void;
+  setSaveError: (error: string | null) => void;
+  setFieldError: (fieldPath: string, error: string | null) => void;
+  clearFieldError: (fieldPath: string) => void;
+  saveField: (fieldPath: string, value: any) => Promise<{ success: boolean; error?: string; fieldPath?: string }>;
+  validateField: (fieldPath: string, value: any) => string | null;
 }
 
 const initialErrors: ApplicationErrors = {
@@ -441,5 +467,137 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     }
     console.log('Application Completion Check:', result);
     return result;
+  },
+
+  // Auto-save actions
+  setSaving: (isSaving) => set({ isSaving }),
+  setSaveError: (error) => set({ saveError: error }),
+  setFieldError: (fieldPath, error) => set(state => ({
+    fieldErrors: error 
+      ? { ...state.fieldErrors, [fieldPath]: error }
+      : Object.fromEntries(Object.entries(state.fieldErrors).filter(([key]) => key !== fieldPath))
+  })),
+  clearFieldError: (fieldPath) => set(state => ({
+    fieldErrors: Object.fromEntries(Object.entries(state.fieldErrors).filter(([key]) => key !== fieldPath))
+  })),
+
+  // Validate a single field
+  validateField: (fieldPath, value) => {
+    const state = get();
+    
+    // Parse the field path to determine what to validate
+    const pathParts = fieldPath.split('.');
+    
+    if (pathParts[0] === 'personalInfo') {
+      const fieldName = pathParts[1];
+      
+      // Special validation for specific fields
+      if (fieldName === 'firstName' && !value?.trim()) {
+        return 'First Name is required';
+      }
+      if (fieldName === 'lastName' && !value?.trim()) {
+        return 'Last Name is required';
+      }
+      if (fieldName === 'middleName' && !state.personalInfo.noMiddleName && !value?.trim()) {
+        return 'Middle name is required unless "No Middle Name" is checked';
+      }
+      if (fieldName === 'dateOfBirth' && !value) {
+        return 'Date of birth is required';
+      }
+    }
+    
+    if (pathParts[0] === 'residentialHistory') {
+      const index = parseInt(pathParts[1]);
+      const fieldName = pathParts[2];
+      
+      if (fieldName === 'durationOfTenancy') {
+        const numValue = parseInt(value);
+        if (value && (isNaN(numValue) || numValue <= 0)) {
+          return 'Duration must be greater than 0';
+        }
+      }
+      
+      // Required field validations
+      if (fieldName === 'street' && !value?.trim()) {
+        return 'Street Address is required';
+      }
+      if (fieldName === 'city' && !value?.trim()) {
+        return 'City is required';
+      }
+      if (fieldName === 'state' && !value?.trim()) {
+        return 'State is required';
+      }
+      if (fieldName === 'zipCode' && !value?.trim()) {
+        return 'ZIP Code is required';
+      }
+      if (fieldName === 'monthlyPayment' && !value?.trim()) {
+        return 'Monthly Payment is required';
+      }
+    }
+    
+    return null;
+  },
+
+  // Save a single field with debouncing handled by the component
+  saveField: async (fieldPath, value) => {
+    const state = get();
+    
+    // Validate the field first
+    const error = get().validateField(fieldPath, value);
+    if (error) {
+      get().setFieldError(fieldPath, error);
+      return { success: false, error };
+    } else {
+      get().clearFieldError(fieldPath);
+    }
+    
+    // Set saving state
+    set({ isSaving: true, saveError: null });
+    
+    // Log for development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Auto-Save] Saving field: ${fieldPath} with value:`, value);
+    }
+    
+    try {
+      // Use the new updateApplicationField function for individual field updates
+      const result = await updateApplicationField(fieldPath, value, state.tripId);
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Auto-Save] Server response:', result);
+      }
+      
+      if (result.success) {
+        set({ 
+          isSaving: false, 
+          lastSaveTime: new Date(),
+          saveError: null 
+        });
+        
+        // Update original data to reflect saved state for this specific field
+        const pathParts = fieldPath.split('.');
+        if (pathParts.length === 1) {
+          (state.originalData as any)[fieldPath] = value;
+        } else {
+          const [parent, child] = pathParts;
+          if (!(state.originalData as any)[parent]) {
+            (state.originalData as any)[parent] = {};
+          }
+          (state.originalData as any)[parent][child] = value;
+        }
+        
+        return { success: true, fieldPath };
+      } else {
+        throw new Error(result.error || 'Failed to save');
+      }
+    } catch (error) {
+      console.error('[Auto-Save] Error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save changes';
+      set({ 
+        isSaving: false, 
+        saveError: errorMessage
+      });
+      return { success: false, error: errorMessage, fieldPath };
+    }
   },
 }));

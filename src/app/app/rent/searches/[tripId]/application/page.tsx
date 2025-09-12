@@ -217,50 +217,114 @@ export default function ApplicationPage() {
     setCurrentStep(newStep);
   }, [api]);
 
-  // Update validateStep function
-  const validateStep = (step: number) => {
+  // Helper function to get the first error message from validation errors
+  const getFirstErrorMessage = (errors: any): string | null => {
+    // Handle basic info errors (personal info and identification)
+    if (errors.personalInfo) {
+      const firstError = Object.values(errors.personalInfo)[0];
+      if (firstError) return firstError as string;
+    }
+    if (errors.identification) {
+      const firstError = Object.values(errors.identification)[0];
+      if (firstError) return firstError as string;
+    }
+    
+    // Handle residential history errors
+    if (errors.overall) {
+      return errors.overall;
+    }
+    // Check array-based errors in residential history
+    const arrayFields = ['street', 'city', 'state', 'zipCode', 'monthlyPayment', 'durationOfTenancy', 
+                         'landlordFirstName', 'landlordLastName', 'landlordEmail', 'landlordPhoneNumber'];
+    for (const field of arrayFields) {
+      if (errors[field] && Array.isArray(errors[field])) {
+        const firstError = errors[field].find((err: any) => err);
+        if (firstError) return firstError;
+      }
+    }
+    
+    // Handle income errors
+    if (errors.source && Array.isArray(errors.source)) {
+      const firstError = errors.source.find((err: any) => err);
+      if (firstError) return firstError;
+    }
+    if (errors.monthlyAmount && Array.isArray(errors.monthlyAmount)) {
+      const firstError = errors.monthlyAmount.find((err: any) => err);
+      if (firstError) return firstError;
+    }
+    if (errors.imageUrl && Array.isArray(errors.imageUrl)) {
+      const firstError = errors.imageUrl.find((err: any) => err);
+      if (firstError) return firstError;
+    }
+    
+    // Handle questionnaire errors
+    if (errors.felony) return errors.felony;
+    if (errors.evicted) return errors.evicted;
+    if (errors.felonyExplanation) return errors.felonyExplanation;
+    if (errors.evictedExplanation) return errors.evictedExplanation;
+    
+    // Handle any other direct string errors
+    const firstError = Object.values(errors).find(err => typeof err === 'string');
+    if (firstError) return firstError as string;
+    
+    return null;
+  };
+
+  // Update validateStep function to return both validation status and error message
+  const validateStep = (step: number): { isValid: boolean; errorMessage: string | null } => {
+    let errors: any = {};
+    let isValid = true;
+    
     switch (step) {
       case 0: {
         const personalInfoError = validatePersonalInfo(personalInfo);
         const identificationError = validateIdentification(ids);
-        setErrors('basicInfo', {
+        errors = {
           personalInfo: personalInfoError,
           identification: identificationError,
-        });
-        return Object.keys(personalInfoError).length === 0 &&
+        };
+        setErrors('basicInfo', errors);
+        isValid = Object.keys(personalInfoError).length === 0 &&
           Object.keys(identificationError).length === 0;
+        break;
       }
       case 1: {
-        const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
-        setErrors('residentialHistory', residentialHistoryErrors as any);
-        console.log('residentialHistoryErrors', residentialHistoryErrors);
-        return Object.keys(residentialHistoryErrors).length === 0;
+        errors = validateResidentialHistory(residentialHistory);
+        setErrors('residentialHistory', errors as any);
+        console.log('residentialHistoryErrors', errors);
+        isValid = Object.keys(errors).length === 0;
+        break;
       }
       case 2: {
-        const incomeErrors = validateIncome(incomes);
-        setErrors('income', incomeErrors);
-        return Object.keys(incomeErrors).length === 0;
+        errors = validateIncome(incomes);
+        setErrors('income', errors);
+        isValid = Object.keys(errors).length === 0;
+        break;
       }
       case 3: {
         // Ensure 'answers' has all required properties, even if null.
         // The actual fix needs to be in your application-store.ts,
         // making sure the initial state of 'answers' includes:
         // { felony: null, felonyExplanation: '', evicted: null, evictedExplanation: '' }
-        const questionnaireErrors = validateQuestionnaire(answers);
-        setErrors('questionnaire', questionnaireErrors);
-        return Object.keys(questionnaireErrors).length === 0;
+        errors = validateQuestionnaire(answers);
+        setErrors('questionnaire', errors);
+        isValid = Object.keys(errors).length === 0;
+        break;
       }
       default:
-        return true;
+        return { isValid: true, errorMessage: null };
     }
+    
+    const errorMessage = isValid ? null : getFirstErrorMessage(errors);
+    return { isValid, errorMessage };
   };
 
   const scrollToIndex = async (index: number) => {
-    let isValid = validateStep(currentStep);
-    if (!isValid) {
+    const validation = validateStep(currentStep);
+    if (!validation.isValid) {
       toast({
         title: "Validation Error",
-        description: "Please correct errors before navigating.",
+        description: validation.errorMessage || "Please correct errors before navigating.",
         variant: "destructive",
       });
       return;
@@ -336,6 +400,28 @@ export default function ApplicationPage() {
     };
   }, [api, onSelect]);
 
+  // Navigate back to where user came from
+  const handleDone = () => {
+    // Check if we came from a specific trip
+    if (trip?.id) {
+      router.push(`/app/rent/searches/${trip.id}`);
+    } else {
+      // Default to searches page
+      router.push('/app/rent/searches');
+    }
+  };
+
+  // Standardized input styles for all form components
+  const inputClassName = `
+    flex h-12 items-center gap-2 px-3 py-2 
+    relative self-stretch w-full 
+    bg-white rounded-lg border border-solid border-[#d0d5dd] 
+    shadow-shadows-shadow-xs
+    text-gray-900
+    placeholder:text-gray-400
+    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+  `.trim().replace(/\s+/g, ' ');
+
   const handleSubmit = async () => {
     // Format the date if it exists
     const formattedDateOfBirth = personalInfo.dateOfBirth ? 
@@ -407,6 +493,7 @@ export default function ApplicationPage() {
 
   return (
     <div className={PAGE_MARGIN}>
+      <SaveStatusIndicator />
 
 
       {isMobile ? (
@@ -458,9 +545,9 @@ export default function ApplicationPage() {
                     <h2 className={ApplicationItemHeaderStyles}>
                       Basic Information
                     </h2>
-                    <PersonalInfo />
+                    <PersonalInfo inputClassName={inputClassName} />
                     <div className="mt-8">
-                      <Identification />
+                      <Identification inputClassName={inputClassName} />
                     </div>
                   </div>
                 </CarouselItem>
@@ -474,7 +561,7 @@ export default function ApplicationPage() {
         <p className="text-sm text-gray-500 mb-4">
           Please add 24 months of residential history or three previous addresses.
         </p>
-                    <ResidentialLandlordInfo />
+                    <ResidentialLandlordInfo inputClassName={inputClassName} />
                     </ScrollArea>
                   </div>
                 </CarouselItem>
@@ -484,7 +571,7 @@ export default function ApplicationPage() {
                     <h2 className={ApplicationItemHeaderStyles}>
                       Income
                     </h2>
-                    <Income />
+                    <Income inputClassName={inputClassName} />
                   </div>
                 </CarouselItem>
 
@@ -495,11 +582,11 @@ export default function ApplicationPage() {
                     </h2>
                     <Questionnaire />
                     <Button
-                      onClick={handleSubmit}
+                      onClick={handleDone}
                       className="w-full mt-4"
-                      disabled={!isEdited()}
+                      variant="default"
                     >
-                      {isEdited() ? 'Save Changes' : 'No Changes'}
+                      Done
                     </Button>
                   </div>
                 </CarouselItem>
@@ -510,10 +597,11 @@ export default function ApplicationPage() {
             <div className="flex justify-between px-6 mt-1 mb-4">
               <Button
                 onClick={() => {
-                  if (!validateStep(currentStep)) {
+                  const validation = validateStep(currentStep);
+                  if (!validation.isValid) {
                     toast({
                       title: "Validation Error",
-                      description: "Please correct errors before navigating.",
+                      description: validation.errorMessage || "Please correct errors before navigating.",
                       variant: "destructive"
                     });
                     return;
@@ -526,10 +614,11 @@ export default function ApplicationPage() {
               </Button>
               <Button
                 onClick={() => {
-                  if (!validateStep(currentStep)) {
+                  const validation = validateStep(currentStep);
+                  if (!validation.isValid) {
                     toast({
                       title: "Validation Error",
-                      description: "Please correct errors before navigating.",
+                      description: validation.errorMessage || "Please correct errors before navigating.",
                       variant: "destructive"
                     });
                     return;

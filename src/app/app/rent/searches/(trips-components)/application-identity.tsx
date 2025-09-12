@@ -64,7 +64,11 @@ const ID_TYPES = [
   { value: "passport", label: "Passport" }
 ];
 
-export const Identification: React.FC = () => {
+interface IdentificationProps {
+  inputClassName?: string;
+}
+
+export const Identification: React.FC<IdentificationProps> = ({ inputClassName }) => {
   const { toast } = useToast();
   const { ids, setIds, verificationImages, setVerificationImages, errors } = useApplicationStore();
   const error = errors.identification;
@@ -189,7 +193,7 @@ export const Identification: React.FC = () => {
                     setIds([updatedId, ...ids.slice(1)]);
                   }}
                   placeholder="Enter ID Number"
-                  className={`h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.idNumber ? 'border-red-500' : 'border-[#d0d5dd]'}`}
+                  className={`${inputClassName || "h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${error?.idNumber ? 'border-red-500' : ''}`}
                 />
                 {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
               </div>

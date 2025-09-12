@@ -31,7 +31,11 @@ interface UploadData {
   type: string;
 }
 
-export const Income: React.FC = () => {
+interface IncomeProps {
+  inputClassName?: string;
+}
+
+export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
   const { toast } = useToast();
   const {
     incomes,
@@ -141,7 +145,7 @@ export const Income: React.FC = () => {
                       value={item.source}
                       onChange={(e) => handleInputChange(index, 'source', e.target.value)}
                       placeholder="Enter your Income Source"
-                      className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.source?.[index] ? "border-red-500" : "border-[#d0d5dd]"}`}
+                      className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${error?.source?.[index] ? "border-red-500" : ""}`}
                     />
                     {error?.source?.[index] && (
                       <p className="mt-1 text-red-500 text-sm">{error.source[index]}</p>
@@ -163,7 +167,7 @@ export const Income: React.FC = () => {
                     value={formatCurrency(item.monthlyAmount)}
                     onChange={(e) => handleMonthlyAmountChange(index, e.target.value)}
                     placeholder="Enter Monthly Amount"
-                    className={`flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)] ${error?.monthlyAmount?.[index] ? "border-red-500" : "border-[#d0d5dd]"}`}
+                    className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
                   />
                   {error?.monthlyAmount?.[index] && (
                     <p className="mt-1 text-red-500 text-sm">{error.monthlyAmount[index]}</p>

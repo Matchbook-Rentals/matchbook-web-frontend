@@ -683,6 +683,81 @@ export async function deleteIncome(incomeId: string) {
   }
 }
 
+export async function updateApplicationField(fieldPath: string, value: any, tripId?: string) {
+  const { userId } = auth();
+  if (!userId) return { success: false, error: 'Unauthorized' };
+
+  try {
+    // Parse the field path to handle nested fields like "personalInfo.firstName"
+    const pathParts = fieldPath.split('.');
+    let updateData: any = {};
+    
+    // Map frontend nested structure to flat database structure
+    if (pathParts.length === 2 && pathParts[0] === 'personalInfo') {
+      // Personal info fields are stored directly on the Application model
+      // Map personalInfo.firstName -> firstName
+      const fieldName = pathParts[1];
+      updateData[fieldName] = value;
+    } else if (pathParts.length === 2 && pathParts[0] === 'currentAddress') {
+      // Current address fields are also stored directly on the Application model
+      // Map currentAddress.street -> street
+      const fieldName = pathParts[1];
+      updateData[fieldName] = value;
+    } else if (pathParts.length === 2 && pathParts[0] === 'questionnaire') {
+      // Questionnaire fields are stored directly on the Application model
+      // Map questionnaire.evicted -> evicted
+      const fieldName = pathParts[1];
+      updateData[fieldName] = value;
+    } else if (pathParts.length === 1) {
+      // Simple field - use as is
+      updateData[fieldPath] = value;
+    } else {
+      // For other nested structures, we might need special handling
+      return { success: false, error: `Unsupported field path: ${fieldPath}` };
+    }
+    
+    // Handle SSN encryption if updating SSN field
+    if (fieldPath === 'ssn' || fieldPath.endsWith('.ssn')) {
+      try {
+        const { encryptData } = await import('@/utils/encryption');
+        const encryptedSsn = await encryptData(value);
+        if (encryptedSsn) {
+          updateData.ssn = encryptedSsn;
+        }
+      } catch (error) {
+        console.error('SSN encryption error:', error);
+      }
+    }
+    
+    // Handle date fields
+    if (fieldPath.endsWith('dateOfBirth') && value) {
+      // Ensure date is in ISO format
+      updateData[pathParts.length === 2 ? pathParts[1] : fieldPath] = new Date(value).toISOString();
+    }
+    
+    // Determine where clause
+    const whereClause = tripId 
+      ? { userId_tripId: { userId, tripId } }
+      : { userId_isDefault: { userId, isDefault: true } };
+    
+    // Log for debugging
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[updateApplicationField] Updating with:', { whereClause, updateData });
+    }
+    
+    // Update the application
+    const application = await prisma.application.update({
+      where: whereClause,
+      data: updateData
+    });
+    
+    return { success: true, application };
+  } catch (error) {
+    console.error('Failed to update application field:', error);
+    return { success: false, error: `Failed to update field: ${error}` };
+  }
+}
+
 export async function markComplete(applicationId: string) {
   try {
     const application = await prisma.application.update({

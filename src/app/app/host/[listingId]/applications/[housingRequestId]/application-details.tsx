@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -44,6 +43,7 @@ import { LeaseSelectionDialog } from "@/components/LeaseSelectionDialog";
 import { useClientLogger } from "@/hooks/useClientLogger";
 import { useUser } from "@clerk/nextjs";
 import { SecureFileViewer } from "@/components/secure-file-viewer";
+import BrandModal from "@/components/BrandModal";
 
 // Centralized styles for consistent text formatting
 const STYLES = {
@@ -134,6 +134,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [isApproving, setIsApproving] = useState(false);
   const [isDeclining, setIsDeclining] = useState(false);
   const [isUndoing, setIsUndoing] = useState(false);
+  const [idModalOpen, setIdModalOpen] = useState(false);
+  const [incomeModalOpen, setIncomeModalOpen] = useState<{[key: string]: boolean}>({});
   const [isUndoingDecline, setIsUndoingDecline] = useState(false);
   const [isUnapproving, setIsUnapproving] = useState(false);
   const [isUploadingLease, setIsUploadingLease] = useState(false);
@@ -710,8 +712,11 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                   Identification
                 </div>
                 {application?.identifications && application.identifications.length > 0 && application.identifications[0].idPhotos.length > 0 ? (
-                  <Dialog>
-                    <DialogTrigger asChild>
+                  <BrandModal
+                    className="max-w-3xl"
+                    isOpen={idModalOpen}
+                    onOpenChange={setIdModalOpen}
+                    triggerButton={
                       <Button
                         variant="outline"
                         className="w-full sm:w-auto h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
@@ -720,11 +725,12 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                           View ID
                         </span>
                       </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-3xl">
-                      <DialogHeader>
-                        <DialogTitle className="text-center">Identification Document - {application.identifications[0].idType}</DialogTitle>
-                      </DialogHeader>
+                    }
+                  >
+                    <div className="flex flex-col gap-4">
+                      <h2 className="text-center text-xl font-semibold">
+                        {getUserName()} - ID Photo
+                      </h2>
                       <div className="flex justify-center">
                         <SecureFileViewer
                           fileKey={application.identifications[0].idPhotos[0].fileKey}
@@ -735,8 +741,18 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                           fallbackUrl={application.identifications[0].idPhotos[0].url}
                         />
                       </div>
-                    </DialogContent>
-                  </Dialog>
+                      <div className="flex justify-end pt-4 border-t">
+                        <BrandButton
+                          onClick={() => setIdModalOpen(false)}
+                          variant="default"
+                          size="sm"
+                          className="min-w-[100px]"
+                        >
+                          Close
+                        </BrandButton>
+                      </div>
+                    </div>
+                  </BrandModal>
                 ) : (
                   <Button
                     variant="outline"
@@ -1013,8 +1029,11 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     </div>
 
                     {(income.imageUrl || income.fileKey) ? (
-                      <Dialog>
-                        <DialogTrigger asChild>
+                      <BrandModal
+                        className="max-w-3xl"
+                        isOpen={incomeModalOpen[income.id || index.toString()]}
+                        onOpenChange={(open) => setIncomeModalOpen(prev => ({ ...prev, [income.id || index.toString()]: open }))}
+                        triggerButton={
                           <Button
                             variant="outline"
                             className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto"
@@ -1025,11 +1044,12 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                               </div>
                             </div>
                           </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-3xl">
-                          <DialogHeader>
-                            <DialogTitle className="text-center">Proof of Income - {income.sourceName}</DialogTitle>
-                          </DialogHeader>
+                        }
+                      >
+                        <div className="flex flex-col gap-4">
+                          <h2 className="text-center text-xl font-semibold">
+                            {getUserName()} - Proof of Income
+                          </h2>
                           <div className="flex justify-center">
                             <SecureFileViewer
                               fileKey={income.fileKey}
@@ -1040,8 +1060,18 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                               fallbackUrl={income.imageUrl}
                             />
                           </div>
-                        </DialogContent>
-                      </Dialog>
+                          <div className="flex justify-end pt-4 border-t">
+                            <BrandButton
+                              onClick={() => setIncomeModalOpen(prev => ({ ...prev, [income.id || index.toString()]: false }))}
+                              variant="default"
+                              size="sm"
+                              className="min-w-[100px]"
+                            >
+                              Close
+                            </BrandButton>
+                          </div>
+                        </div>
+                      </BrandModal>
                     ) : (
                       <Button
                         variant="outline"

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -9,6 +9,8 @@ import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/co
 import { useApplicationStore, defaultResidentialHistory } from '@/stores/application-store';
 import { ResidentialHistory } from '@prisma/client';
 import { validateResidentialHistory } from '@/utils/application-validation';
+import { debounce } from 'lodash';
+import { useToast } from "@/components/ui/use-toast";
 
 // New MonthlyPaymentInput component
 interface MonthlyPaymentInputProps {
@@ -53,20 +55,72 @@ const MonthlyPaymentInput: React.FC<MonthlyPaymentInputProps> = ({ value, onChan
   );
 };
 
-export const ResidentialLandlordInfo: React.FC = () => {
+interface ResidentialLandlordInfoProps {
+  inputClassName?: string;
+}
+
+export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = ({ inputClassName }) => {
   // Directly use residentialHistory from the store
   const residentialHistory = useApplicationStore((state) => state.residentialHistory);
   const setResidentialHistory = useApplicationStore((state) => state.setResidentialHistory);
   const residentialHistoryErrors = useApplicationStore((state) => state.errors.residentialHistory);
+  const { fieldErrors, saveField, validateField, setFieldError, clearFieldError } = useApplicationStore();
+  const { toast } = useToast();
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  // Create debounced save function with toast feedback (increased to 1000ms for onChange)
+  const debouncedSave = useCallback(
+    debounce(async (fieldPath: string, value: any) => {
+      const result = await saveField(fieldPath, value);
+      
+      // Only show toasts in development
+      if (isDevelopment) {
+        if (result.success) {
+          toast({
+            title: "Field Saved",
+            description: `${fieldPath} saved successfully`,
+            variant: "default",
+            duration: 2000,
+          });
+        } else {
+          toast({
+            title: "Save Failed",
+            description: `Failed to save ${fieldPath}: ${result.error}`,
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      }
+    }, 1000), // Increased from 500ms to 1000ms for onChange
+    [isDevelopment, toast, saveField]
+  );
 
   const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // Directly update the store's residentialHistory
+    const fieldPath = `residentialHistory.${index}.${name}`;
+    
+    // Update state immediately
     setResidentialHistory(
       residentialHistory.map((residence, i) =>
         i === index ? { ...residence, [name]: value } : residence
       )
     );
+    
+    // Validate immediately
+    const validationError = validateField(fieldPath, value);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // Save if valid (debounced)
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+      }
+      debouncedSave(fieldPath, value);
+    }
   };
 
   const handleRadioChange = (index: number, value: 'rent' | 'own') => {
@@ -89,12 +143,30 @@ export const ResidentialLandlordInfo: React.FC = () => {
   };
 
   const handleDurationChange = (index: number, value: string) => {
-    // Directly update the store
+    const fieldPath = `residentialHistory.${index}.durationOfTenancy`;
+    
+    // Update state immediately
     setResidentialHistory(
       residentialHistory.map((residence, i) =>
         i === index ? { ...residence, durationOfTenancy: value } : residence
       )
     );
+    
+    // Validate immediately
+    const validationError = validateField(fieldPath, value);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // Save if valid (debounced)
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+      }
+      debouncedSave(fieldPath, value);
+    }
   };
 
   // Function to add a new residence with a cap of 3
@@ -142,6 +214,14 @@ export const ResidentialLandlordInfo: React.FC = () => {
 
   return (
     <div className="space-y-8 w-full">
+      {/* Show warning if total months < 24, but don't block saving */}
+      {totalMonths > 0 && totalMonths < 24 && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+          <p className="text-yellow-800 text-sm">
+            ⚠️ Total residential history is {totalMonths} months. At least 24 months is recommended for a complete application.
+          </p>
+        </div>
+      )}
       {residentialHistoryErrors.overall && (
         <p onClick={() => console.log(residentialHistory)} className="text-red-500 text-sm mt-1">{residentialHistoryErrors.overall}</p>
       )}
@@ -178,8 +258,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                           value={residence.street || ""}
                           onChange={(e) => handleInputChange(index, e)}
                           placeholder="Enter Street Address"
-                          className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                          className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
                         />
+                        {fieldErrors[`residentialHistory.${index}.street`] && 
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.street`]}</p>}
                       </div>
                     </div>
                   </div>
@@ -198,7 +280,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                           value={residence.apt || ""}
                           onChange={(e) => handleInputChange(index, e)}
                           placeholder="Enter Apt, Suite, Bldg"
-                          className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                          className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
                         />
                       </div>
                     </div>
@@ -220,8 +302,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                         value={residence.city || ""}
                         onChange={(e) => handleInputChange(index, e)}
                         placeholder="Enter City"
-                        className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                        className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
                       />
+                      {fieldErrors[`residentialHistory.${index}.city`] && 
+                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.city`]}</p>}
                     </div>
                   </div>
 
@@ -238,8 +322,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                         value={residence.state || ""}
                         onChange={(e) => handleInputChange(index, e)}
                         placeholder="Enter State"
-                        className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                        className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
                       />
+                      {fieldErrors[`residentialHistory.${index}.state`] && 
+                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.state`]}</p>}
                     </div>
                   </div>
                 </div>
@@ -259,8 +345,10 @@ export const ResidentialLandlordInfo: React.FC = () => {
                         value={residence.zipCode || ""}
                         onChange={(e) => handleInputChange(index, e)}
                         placeholder="Enter ZIP Code"
-                        className="flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                        className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
                       />
+                      {fieldErrors[`residentialHistory.${index}.zipCode`] && 
+                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.zipCode`]}</p>}
                     </div>
                   </div>
 
@@ -273,17 +361,23 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
-                        <Select defaultValue="24+">
-                          <SelectTrigger className="flex w-[120px] h-12 items-center gap-2 px-3 py-2 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
-                            <SelectValue className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">1</SelectItem>
-                            <SelectItem value="6">6</SelectItem>
-                            <SelectItem value="12">12</SelectItem>
-                            <SelectItem value="24+">24+</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Input
+                          type="number"
+                          name="durationOfTenancy"
+                          value={residence.durationOfTenancy || ""}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            // Prevent 0 or negative values
+                            if (value === "" || (parseInt(value) > 0)) {
+                              handleDurationChange(index, value);
+                            }
+                          }}
+                          min="1"
+                          placeholder="Enter months"
+                          className={`w-[120px] ${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}`}
+                        />
+                        {fieldErrors[`residentialHistory.${index}.durationOfTenancy`] && 
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.durationOfTenancy`]}</p>}
 
                         <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
                           <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
