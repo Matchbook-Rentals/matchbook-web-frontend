@@ -1,5 +1,15 @@
 # Changelog
 
+## Date of Birth Handling and Calendar UI Improvements
+- Fixed date storage to use MySQL DATE type instead of DATETIME to prevent timezone shifts
+- Enhanced date picker with month/year dropdown selectors for easier navigation
+- Added proper UTC date component extraction to prevent date shifting when displaying stored dates
+- Implemented full-width calendar popover that matches input field width
+- Changed calendar selected date color from blue to secondaryBrand (teal) for brand consistency
+- Fixed calendar day/header alignment using justify-around for even spacing
+- Added development logging for date selection and storage debugging
+- Resolved issue where dates would shift one day left due to UTC conversion
+
 ## Secure Document Upload and Viewing Implementation
 - Implemented secure file storage for ID photos and income documents using UploadThing signed URLs
 - Added new database fields (fileKey, customId, fileName) to IDPhoto and Income models for secure file tracking

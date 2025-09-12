@@ -41,13 +41,19 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
   
   // State for calendar month/year navigation
   const currentDate = personalInfo.dateOfBirth ? 
-    (typeof personalInfo.dateOfBirth === 'string' ? 
-      (() => {
+    (() => {
+      if (typeof personalInfo.dateOfBirth === 'string') {
         const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
         return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-      })() : 
-      new Date(personalInfo.dateOfBirth)
-    ) : new Date();
+      } else if (personalInfo.dateOfBirth instanceof Date) {
+        // Handle Date objects from database - use UTC components
+        const utcYear = personalInfo.dateOfBirth.getUTCFullYear();
+        const utcMonth = personalInfo.dateOfBirth.getUTCMonth();
+        const utcDay = personalInfo.dateOfBirth.getUTCDate();
+        return new Date(utcYear, utcMonth, utcDay);
+      }
+      return new Date(personalInfo.dateOfBirth);
+    })() : new Date();
   
   const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
   const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
@@ -60,6 +66,18 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
   
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 121 }, (_, i) => currentYear - 120 + i).reverse(); // 120 years back from current year
+  
+  // Debug logging for date of birth value on load
+  if (isDevelopment && personalInfo.dateOfBirth) {
+    console.log('[PersonalInfo] Date of Birth on load:', {
+      storedValue: personalInfo.dateOfBirth,
+      typeOfValue: typeof personalInfo.dateOfBirth,
+      parsedDate: typeof personalInfo.dateOfBirth === 'string' ? 
+        new Date(personalInfo.dateOfBirth) : personalInfo.dateOfBirth,
+      displayDate: typeof personalInfo.dateOfBirth === 'string' ? 
+        personalInfo.dateOfBirth.split('T')[0] : 'not a string'
+    });
+  }
 
   // Create debounced save function with toast feedback (increased to 1000ms for onChange)
   const debouncedSave = useCallback(
@@ -129,6 +147,20 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
       // Create a date at noon to avoid UTC offset issues
       const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
       const formattedDate = format(localDate, 'yyyy-MM-dd');
+      
+      if (isDevelopment) {
+        console.log('[PersonalInfo] Date selected:', {
+          originalDate: date,
+          originalDateString: date.toString(),
+          localDate: localDate,
+          localDateString: localDate.toString(),
+          formattedDate: formattedDate,
+          year: date.getFullYear(),
+          month: date.getMonth() + 1, // +1 for human readable month
+          day: date.getDate()
+        });
+      }
+      
       const syntheticEvent = {
         target: {
           name: 'dateOfBirth',
@@ -246,16 +278,28 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
                 >
                   <span className={personalInfo.dateOfBirth ? "text-gray-900" : "text-gray-400"}>
                     {personalInfo.dateOfBirth ? 
-                      (typeof personalInfo.dateOfBirth === 'string' ? 
-                        (() => {
+                      (() => {
+                        if (typeof personalInfo.dateOfBirth === 'string') {
                           const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
                           return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0).toLocaleDateString('en-US', { 
                             year: 'numeric', 
                             month: 'long', 
                             day: 'numeric' 
                           });
-                        })() : 
-                        format(personalInfo.dateOfBirth, 'MMMM d, yyyy')) 
+                        } else if (personalInfo.dateOfBirth instanceof Date) {
+                          // Handle Date objects from database - extract UTC date components
+                          const utcYear = personalInfo.dateOfBirth.getUTCFullYear();
+                          const utcMonth = personalInfo.dateOfBirth.getUTCMonth();
+                          const utcDay = personalInfo.dateOfBirth.getUTCDate();
+                          return new Date(utcYear, utcMonth, utcDay, 12, 0, 0).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                          });
+                        } else {
+                          return format(personalInfo.dateOfBirth, 'MMMM d, yyyy');
+                        }
+                      })()
                       : formFields[3].placeholder}
                   </span>
                   <CalendarIcon className="w-5 h-5 text-[#667085]" />
@@ -316,6 +360,12 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
                           if (typeof personalInfo.dateOfBirth === 'string') {
                             const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
                             return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0);
+                          } else if (personalInfo.dateOfBirth instanceof Date) {
+                            // Handle Date objects from database - use UTC components
+                            const utcYear = personalInfo.dateOfBirth.getUTCFullYear();
+                            const utcMonth = personalInfo.dateOfBirth.getUTCMonth();
+                            const utcDay = personalInfo.dateOfBirth.getUTCDate();
+                            return new Date(utcYear, utcMonth, utcDay, 12, 0, 0);
                           }
                           return new Date(personalInfo.dateOfBirth);
                         })()
@@ -328,9 +378,9 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
                         month: "space-y-4 w-full",
                         caption: "hidden", // Hide the default caption with month/year
                         table: "w-full border-collapse space-y-1",
-                        head_row: "flex w-full",
-                        head_cell: "text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem]",
-                        row: "flex w-full mt-2 justify-between",
+                        head_row: "flex w-full justify-around",
+                        head_cell: "text-muted-foreground rounded-md w-9 text-center font-normal text-[0.8rem]",
+                        row: "flex w-full mt-2 justify-around",
                         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
                         day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
                       }}

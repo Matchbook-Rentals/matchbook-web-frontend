@@ -731,8 +731,20 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
     
     // Handle date fields
     if (fieldPath.endsWith('dateOfBirth') && value) {
-      // Ensure date is in ISO format
-      updateData[pathParts.length === 2 ? pathParts[1] : fieldPath] = new Date(value).toISOString();
+      // Even with @db.Date, Prisma client expects ISO-8601 DateTime format
+      // But MySQL will store it as DATE only (no time component)
+      // We append T00:00:00.000Z to make it a valid DateTime string
+      const dateValue = `${value}T00:00:00.000Z`;
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[updateApplicationField] Date of Birth handling:', {
+          originalValue: value,
+          convertedValue: dateValue,
+          fieldPath: fieldPath
+        });
+      }
+      
+      updateData[pathParts.length === 2 ? pathParts[1] : fieldPath] = dateValue;
     }
     
     // Determine where clause

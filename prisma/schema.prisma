@@ -757,7 +757,7 @@ model Application {
   middleName   String?
   lastName     String?
   noMiddleName Boolean?  @default(false)
-  dateOfBirth  DateTime?
+  dateOfBirth  DateTime? @db.Date
 
   residentialHistories ResidentialHistory[]
 
