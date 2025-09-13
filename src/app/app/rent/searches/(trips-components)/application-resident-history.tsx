@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -6,6 +6,8 @@ import CurrencyInput from "@/components/ui/currency-input";
 import MonthSelect from "@/components/ui/month-select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
+import { useToast } from "@/components/ui/use-toast";
+import { debounce } from 'lodash';
 
 const emptyResidentialHistory = {
   currentStreet: '',
@@ -19,13 +21,71 @@ const emptyResidentialHistory = {
 };
 
 export const ResidentialHistory: React.FC = () => {
+  const { toast } = useToast();
   const {
     residentialHistory,
     setResidentialHistory,
-    errors
+    errors,
+    fieldErrors,
+    saveField,
+    validateField,
+    setFieldError,
+    clearFieldError
   } = useApplicationStore();
 
   const error = errors.residentialHistory;
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  // Create debounced save function with toast feedback and completion checking
+  const debouncedSave = useCallback(
+    debounce(async (fieldPath: string, value: any) => {
+      const result = await saveField(fieldPath, value, { checkCompletion: true });
+      
+      // Handle completion status changes
+      if (result.success && result.completionStatus) {
+        if (result.completionStatus.statusChanged) {
+          if (result.completionStatus.isComplete) {
+            toast({
+              title: "Application Complete! 🎉",
+              description: "All required information has been provided",
+              duration: 4000,
+            });
+          } else if (result.completionStatus.missingRequirements?.length > 0) {
+            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+            const more = result.completionStatus.missingRequirements.length > 3 
+              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+              : '';
+            toast({
+              title: "Application Incomplete",
+              description: `Still need: ${missing}${more}`,
+              duration: 4000,
+            });
+          }
+        }
+      }
+      
+      // Only show save toasts in development
+      if (isDevelopment) {
+        if (result.success) {
+          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+          toast({
+            title: "Auto-Save",
+            description: `${fieldPath.split('.').pop()} saved`,
+            duration: 2000,
+          });
+        } else {
+          console.error(`[Auto-Save] Error:`, result.error);
+          toast({
+            title: "Save Failed",
+            description: result.error || `Failed to save ${fieldPath}`,
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      }
+    }, 1000),
+    [isDevelopment, toast, saveField]
+  );
 
   const normalizedResidentialHistory = {
     ...emptyResidentialHistory,
@@ -35,33 +95,142 @@ export const ResidentialHistory: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const fieldPath = `residentialHistory.0.${name.replace('current', '').toLowerCase()}`;
+    
+    // Update local state immediately
     setResidentialHistory({
       ...residentialHistory,
       [name]: value
     });
+    
+    // Validate and save
+    const validationError = validateField(fieldPath, value);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // Save if valid (debounced)
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+      }
+      debouncedSave(fieldPath, value);
+    }
   };
 
-  const handleRadioChange = (value: 'rent' | 'own') => {
+  const handleRadioChange = async (value: 'rent' | 'own') => {
+    const fieldPath = 'residentialHistory.0.housingStatus';
+    
+    // Update local state immediately
     setResidentialHistory({
       ...residentialHistory,
       housingStatus: value
     });
+    
+    // Save immediately for radio buttons
+    if (isDevelopment) {
+      console.log(`[ResidentialHistory] Saving housingStatus immediately for ${fieldPath}`);
+    }
+    
+    const result = await saveField(fieldPath, value, { checkCompletion: true });
+    
+    // Handle completion status changes
+    if (result.success && result.completionStatus) {
+      if (result.completionStatus.statusChanged) {
+        if (result.completionStatus.isComplete) {
+          toast({
+            title: "Application Complete! 🎉",
+            description: "All required information has been provided",
+            duration: 4000,
+          });
+        } else if (result.completionStatus.missingRequirements?.length > 0) {
+          const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+          const more = result.completionStatus.missingRequirements.length > 3 
+            ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+            : '';
+          toast({
+            title: "Application Incomplete",
+            description: `Still need: ${missing}${more}`,
+            duration: 4000,
+          });
+        }
+      }
+    }
+    
+    if (isDevelopment) {
+      if (result.success) {
+        console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+        toast({
+          title: "Auto-Save",
+          description: `Housing status saved`,
+          duration: 2000,
+        });
+      } else {
+        console.error(`[Auto-Save] Error:`, result.error);
+        toast({
+          title: "Save Failed",
+          description: result.error || 'Failed to save housing status',
+          variant: "destructive",
+          duration: 4000,
+        });
+      }
+    }
   };
 
   const handleMonthlyPaymentChange = (value: string) => {
+    const fieldPath = 'residentialHistory.0.monthlyPayment';
     // Strip out currency formatting (dollar signs, commas, and decimals)
     const strippedValue = value.replace(/[$,]/g, '').split('.')[0];
+    
+    // Update local state immediately
     setResidentialHistory({
       ...residentialHistory,
       monthlyPayment: strippedValue
     });
+    
+    // Validate and save
+    const validationError = validateField(fieldPath, strippedValue);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // Save if valid (debounced)
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+      }
+      debouncedSave(fieldPath, strippedValue);
+    }
   };
 
   const handleDurationChange = (value: string) => {
+    const fieldPath = 'residentialHistory.0.durationOfTenancy';
+    
+    // Update local state immediately
     setResidentialHistory({
       ...residentialHistory,
       durationOfTenancy: value
     });
+    
+    // Validate and save
+    const validationError = validateField(fieldPath, value);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // Save if valid (debounced)
+      if (isDevelopment) {
+        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+      }
+      debouncedSave(fieldPath, value);
+    }
   };
 
   return (

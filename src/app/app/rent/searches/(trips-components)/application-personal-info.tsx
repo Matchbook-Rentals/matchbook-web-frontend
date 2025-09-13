@@ -33,7 +33,8 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
     saveField,
     validateField,
     setFieldError,
-    clearFieldError 
+    clearFieldError,
+    isApplicationComplete 
   } = useApplicationStore();
   const error = errors.basicInfo.personalInfo;
   const { toast } = useToast();
@@ -82,8 +83,8 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
 
   // Create debounced save function with toast feedback (increased to 1000ms for onChange)
   const debouncedSave = useCallback(
-    debounce(async (fieldPath: string, value: any) => {
-      const result = await saveField(fieldPath, value);
+    debounce(async (fieldPath: string, value: any, checkCompletion?: boolean) => {
+      const result = await saveField(fieldPath, value, checkCompletion ? { checkCompletion } : undefined);
       
       // Only show toasts in development
       if (isDevelopment) {
@@ -94,6 +95,24 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
             variant: "default",
             duration: 2000,
           });
+          
+          // Show completion status change if it occurred
+          if (result.completionStatus?.statusChanged) {
+            if (result.completionStatus.isComplete) {
+              toast({
+                title: "Application Complete! 🎉",
+                description: "Your application is now complete and ready for review.",
+                duration: 5000,
+              });
+            } else {
+              toast({
+                title: "Application Incomplete",
+                description: `Missing: ${result.completionStatus.missingRequirements?.join(', ')}`,
+                variant: "destructive",
+                duration: 5000,
+              });
+            }
+          }
         } else {
           toast({
             title: "Save Failed",
@@ -111,6 +130,9 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
     const { name, value } = e.target;
     const fieldPath = `personalInfo.${name}`;
     
+    // Check completion status before update
+    const wasComplete = isApplicationComplete();
+    
     // Update state immediately
     setPersonalInfo({
       ...personalInfo,
@@ -126,11 +148,16 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
       }
     } else {
       clearFieldError(fieldPath);
+      
+      // Check if completion status might change
+      const willBeComplete = isApplicationComplete();
+      const checkCompletion = wasComplete !== willBeComplete;
+      
       // Save if valid (debounced)
       if (isDevelopment) {
-        console.log(`[PersonalInfo] Calling debouncedSave for ${fieldPath}`);
+        console.log(`[PersonalInfo] Calling debouncedSave for ${fieldPath}, checkCompletion: ${checkCompletion}`);
       }
-      debouncedSave(fieldPath, value);
+      debouncedSave(fieldPath, value, checkCompletion);
     }
   };
 
@@ -185,12 +212,22 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
         }
       } else {
         clearFieldError(fieldPath);
+        
+        // Check if completion status might change
+        const wasComplete = isApplicationComplete();
+        setPersonalInfo({
+          ...personalInfo,
+          dateOfBirth: formattedDate
+        });
+        const willBeComplete = isApplicationComplete();
+        const checkCompletion = wasComplete !== willBeComplete;
+        
         // Save immediately without debouncing for date fields
         if (isDevelopment) {
-          console.log(`[PersonalInfo] Saving date immediately for ${fieldPath}`);
+          console.log(`[PersonalInfo] Saving date immediately for ${fieldPath}, checkCompletion: ${checkCompletion}`);
         }
         
-        const result = await saveField(fieldPath, formattedDate);
+        const result = await saveField(fieldPath, formattedDate, checkCompletion ? { checkCompletion } : undefined);
         if (isDevelopment) {
           if (result.success) {
             console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
@@ -199,6 +236,24 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
               description: `Date of birth saved`,
               duration: 2000,
             });
+            
+            // Show completion status change if it occurred
+            if (result.completionStatus?.statusChanged) {
+              if (result.completionStatus.isComplete) {
+                toast({
+                  title: "Application Complete! 🎉",
+                  description: "Your application is now complete and ready for review.",
+                  duration: 5000,
+                });
+              } else {
+                toast({
+                  title: "Application Incomplete",
+                  description: `Missing: ${result.completionStatus.missingRequirements?.join(', ')}`,
+                  variant: "destructive",
+                  duration: 5000,
+                });
+              }
+            }
           } else {
             console.error(`[Auto-Save] Error:`, result.error);
             toast({

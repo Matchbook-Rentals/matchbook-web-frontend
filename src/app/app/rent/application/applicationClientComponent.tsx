@@ -13,7 +13,7 @@ import { Identification } from '../searches/(trips-components)/application-ident
 import { Income } from '../searches/(trips-components)/application-income';
 import Questionnaire from '../searches/(trips-components)/application-questionnaire';
 import MobileApplicationEdit from '../searches/(trips-components)/mobile-application-edit';
-import { upsertApplication, markComplete } from '@/app/actions/applications';
+import { upsertApplication, markComplete, updateApplicationCompletionStatus } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
   validatePersonalInfo,
@@ -24,8 +24,8 @@ import {
 } from '@/utils/application-validation';
 import { useApplicationStore } from '@/stores/application-store';
 import { ResidentialLandlordInfo } from '../searches/(trips-components)/residential-landlord-info';
-import { LandlordInfo } from '../searches/(trips-components)/application-landlord-info';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { checkApplicationCompletionClient } from '@/utils/application-completion';
 
 export default function ApplicationClientComponent({ 
   application, 
@@ -48,7 +48,9 @@ export default function ApplicationClientComponent({
     isEdited,
     setErrors,
     markSynced,
-    checkCompletion
+    checkCompletion,
+    isApplicationComplete,
+    serverIsComplete
   } = useApplicationStore();
 
   // Initialize store with application data received from the server component
@@ -264,16 +266,6 @@ export default function ApplicationClientComponent({
             </div>
           </section>
 
-          {/* Current Landlord Information Section */}
-          <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
-            <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-              <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
-                Current Landlord Information
-              </h2>
-              <LandlordInfo />
-            </div>
-          </section>
-
           {/* Questionnaire Section */}
           <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
             <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
@@ -295,6 +287,128 @@ export default function ApplicationClientComponent({
             </Button>
           </div>
         </>
+      )}
+
+      {/* Development Troubleshooting Section */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-8 bg-gray-900 text-white p-4 border-4 border-yellow-500 font-mono text-xs rounded-lg">
+          <div className="">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-yellow-400 font-bold text-sm">🔧 DEV TROUBLESHOOTING - Completion Status</h3>
+              <button
+                onClick={async () => {
+                  if (application?.id) {
+                    const result = await updateApplicationCompletionStatus(application.id);
+                    if (result.success) {
+                      toast({
+                        title: "Completion Status Updated",
+                        description: `Server now reports: ${result.isComplete ? 'Complete' : 'Incomplete'}`,
+                        duration: 3000,
+                      });
+                      // Refresh the page to get updated data
+                      window.location.reload();
+                    }
+                  }
+                }}
+                className="px-3 py-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded text-xs"
+              >
+                Force Server Check
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              {/* Server Status */}
+              <div className="bg-gray-800 p-3 rounded">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-bold">Server Status (Live):</span>
+                  <span className={serverIsComplete ? "text-green-400" : "text-red-400"}>
+                    {serverIsComplete ? "✅ Complete" : "❌ Incomplete"}
+                  </span>
+                </div>
+                <div className="text-gray-400 text-xs">
+                  Initial DB value: {application?.isComplete !== undefined ? application.isComplete.toString() : 'undefined'}
+                </div>
+                <div className="text-gray-400 text-xs">
+                  Live store value: {serverIsComplete.toString()}
+                </div>
+                <div className="text-gray-400 text-xs mt-1">
+                  Application ID: {application?.id || 'No application'}
+                </div>
+              </div>
+
+              {/* Client Status */}
+              <div className="bg-gray-800 p-3 rounded">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-bold">Client Status (Store):</span>
+                  <span className={isApplicationComplete() ? "text-green-400" : "text-red-400"}>
+                    {isApplicationComplete() ? "✅ Complete" : "❌ Incomplete"}
+                  </span>
+                </div>
+                {(() => {
+                  const result = checkApplicationCompletionClient({
+                    personalInfo,
+                    ids,
+                    incomes,
+                    answers,
+                    residentialHistory
+                  });
+                  return (
+                    <>
+                      <div className="text-gray-400 text-xs">
+                        Missing ({result.missingRequirements.length}):
+                      </div>
+                      <div className="text-yellow-300 text-xs mt-1">
+                        {result.missingRequirements.length > 0 
+                          ? result.missingRequirements.join(", ")
+                          : "None"}
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+
+            {/* Status Mismatch Warning */}
+            {serverIsComplete !== isApplicationComplete() && (
+              <div className="mt-2 p-2 bg-yellow-900 border border-yellow-600 rounded">
+                <span className="text-yellow-300">⚠️ Status Mismatch: </span>
+                <span className="text-white">
+                  Server says {serverIsComplete ? "complete" : "incomplete"}, 
+                  Client says {isApplicationComplete() ? "complete" : "incomplete"}
+                </span>
+              </div>
+            )}
+
+            {/* Debug Info */}
+            <div className="mt-2 text-gray-500 text-xs">
+              <details>
+                <summary className="cursor-pointer hover:text-gray-300">Debug Info (click to expand)</summary>
+                <div className="mt-2 grid grid-cols-3 gap-2">
+                  <div>
+                    <strong>Personal Info:</strong>
+                    <div>First: {personalInfo.firstName ? "✓" : "✗"}</div>
+                    <div>Last: {personalInfo.lastName ? "✓" : "✗"}</div>
+                    <div>DOB: {personalInfo.dateOfBirth ? "✓" : "✗"}</div>
+                  </div>
+                  <div>
+                    <strong>IDs:</strong> {ids.length} total
+                    <div>Valid: {ids.filter(id => id.idType && id.idNumber && id.idPhotos?.length).length}</div>
+                    <strong>Income:</strong> {incomes.length} total
+                    <div>Valid: {incomes.filter(i => i.source && i.monthlyAmount).length}</div>
+                  </div>
+                  <div>
+                    <strong>Residential:</strong> {residentialHistory.length} total
+                    <div>First has address: {residentialHistory[0]?.street ? "✓" : "✗"}</div>
+                    <div>Housing: {residentialHistory[0]?.housingStatus || "not set"}</div>
+                    {residentialHistory[0]?.housingStatus === 'rent' && (
+                      <div>Landlord: {residentialHistory[0]?.landlordFirstName ? "✓" : "✗"}</div>
+                    )}
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -125,7 +125,6 @@ export function SecureFileViewer({
         className
       )}>
         <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-        <span className="ml-2 text-gray-500">Loading secure file...</span>
       </div>
     );
   }

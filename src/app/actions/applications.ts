@@ -2,6 +2,8 @@
 
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
+import { UTApi } from 'uploadthing/server'
+import { checkApplicationCompletionServer } from '@/utils/application-completion'
 
 export async function createApplication(data: any) {
   try {
@@ -249,7 +251,8 @@ export async function getUserApplication() {
   if (!userId) return null;
 
   try {
-    const application = await prisma.application.findFirst({
+    // First try to find existing application
+    let application = await prisma.application.findFirst({
       where: {
         userId,
         isDefault: true,
@@ -269,6 +272,33 @@ export async function getUserApplication() {
         },
       },
     });
+    
+    // If no application exists, create an empty one
+    if (!application) {
+      console.log('[getUserApplication] No default application found, creating empty one for user:', userId);
+      application = await prisma.application.create({
+        data: {
+          userId,
+          isDefault: true,
+          // All other fields are nullable and will be filled in later
+        },
+        include: {
+          incomes: true,
+          verificationImages: true,
+          identifications: {
+            include: {
+              idPhotos: true
+            }
+          },
+          residentialHistories: {
+            orderBy: {
+              index: 'asc',
+            },
+          },
+        },
+      });
+    }
+    
     // Debug data if needed
 
     // Decrypt SSN if it exists
@@ -683,7 +713,107 @@ export async function deleteIncome(incomeId: string) {
   }
 }
 
-export async function updateApplicationField(fieldPath: string, value: any, tripId?: string) {
+export async function deleteIDPhoto(photoId: string) {
+  const { userId } = auth();
+  if (!userId) return { success: false, error: 'Unauthorized' };
+
+  try {
+    // First verify the photo belongs to the user's application
+    const photo = await prisma.iDPhoto.findUnique({
+      where: { id: photoId },
+      include: {
+        identification: {
+          include: {
+            application: true
+          }
+        }
+      }
+    });
+
+    if (!photo) {
+      return { success: false, error: 'Photo not found' };
+    }
+
+    if (photo.identification.application.userId !== userId) {
+      return { success: false, error: 'Unauthorized to delete this photo' };
+    }
+
+    // Delete the photo from database
+    await prisma.iDPhoto.delete({
+      where: { id: photoId }
+    });
+
+    // Delete from UploadThing if fileKey exists
+    if (photo.fileKey) {
+      try {
+        const utapi = new UTApi();
+        await utapi.deleteFiles([photo.fileKey]);
+        console.log(`Successfully deleted ID photo from UploadThing: ${photo.fileKey}`);
+      } catch (uploadThingError) {
+        console.warn('Warning: Failed to delete ID photo from UploadThing:', uploadThingError);
+        // Don't fail the entire operation if UploadThing deletion fails
+      }
+    }
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to delete ID photo:', error);
+    return { success: false, error: 'Failed to delete photo' };
+  }
+}
+
+export async function deleteIncomeProof(incomeId: string) {
+  const { userId } = auth();
+  if (!userId) return { success: false, error: 'Unauthorized' };
+
+  try {
+    // First verify the income belongs to the user's application
+    const income = await prisma.income.findUnique({
+      where: { id: incomeId },
+      include: {
+        application: true
+      }
+    });
+
+    if (!income) {
+      return { success: false, error: 'Income not found' };
+    }
+
+    if (income.application.userId !== userId) {
+      return { success: false, error: 'Unauthorized to delete this proof' };
+    }
+
+    // Delete from UploadThing if fileKey exists
+    if (income.fileKey) {
+      try {
+        const utapi = new UTApi();
+        await utapi.deleteFiles([income.fileKey]);
+        console.log(`Successfully deleted income proof from UploadThing: ${income.fileKey}`);
+      } catch (uploadThingError) {
+        console.warn('Warning: Failed to delete income proof from UploadThing:', uploadThingError);
+        // Don't fail the entire operation if UploadThing deletion fails
+      }
+    }
+
+    // Clear all proof-related fields in the database
+    await prisma.income.update({
+      where: { id: incomeId },
+      data: {
+        imageUrl: null,     // Clear legacy unsigned URL field
+        fileKey: null,      // Clear UploadThing file key
+        customId: null,     // Clear custom identifier
+        fileName: null      // Clear original file name
+      }
+    });
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to delete income proof:', error);
+    return { success: false, error: 'Failed to delete proof' };
+  }
+}
+
+export async function updateApplicationField(fieldPath: string, value: any, tripId?: string, checkCompletion?: boolean) {
   const { userId } = auth();
   if (!userId) return { success: false, error: 'Unauthorized' };
 
@@ -708,6 +838,196 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
       // Map questionnaire.evicted -> evicted
       const fieldName = pathParts[1];
       updateData[fieldName] = value;
+    } else if (pathParts.length === 3 && pathParts[0] === 'identifications') {
+      // Handle identification fields (e.g., identifications.0.idType, identifications.0.idPhotos)
+      const index = parseInt(pathParts[1]);
+      const fieldName = pathParts[2];
+      
+      // First, get the application to see if identifications exist
+      const app = await prisma.application.findFirst({
+        where: tripId 
+          ? { userId, tripId }
+          : { userId, isDefault: true },
+        include: { 
+          identifications: {
+            include: {
+              idPhotos: true
+            }
+          } 
+        }
+      });
+      
+      if (!app) {
+        return { success: false, error: 'Application not found' };
+      }
+      
+      // Special handling for idPhotos
+      if (fieldName === 'idPhotos') {
+        let identificationId: string;
+        
+        // Get or create the identification
+        if (app.identifications && app.identifications[index]) {
+          identificationId = app.identifications[index].id;
+        } else {
+          // Create new identification if it doesn't exist
+          const newIdentification = await prisma.identification.create({
+            data: {
+              applicationId: app.id,
+              idType: '',
+              idNumber: '',
+              isPrimary: index === 0
+            }
+          });
+          identificationId = newIdentification.id;
+        }
+        
+        // Delete existing photos for this identification
+        await prisma.iDPhoto.deleteMany({
+          where: { identificationId }
+        });
+        
+        // Create new photos
+        if (value && Array.isArray(value) && value.length > 0) {
+          await Promise.all(value.map((photo: any, photoIndex: number) =>
+            prisma.iDPhoto.create({
+              data: {
+                identificationId,
+                fileKey: photo.fileKey || '',
+                fileName: photo.fileName || '',
+                customId: photo.customId || '',
+                isPrimary: photo.isPrimary || photoIndex === 0,
+                url: photo.url || ''
+              }
+            })
+          ));
+        }
+      } else {
+        // Handle other identification fields (idType, idNumber)
+        if (app.identifications && app.identifications[index]) {
+          await prisma.identification.update({
+            where: { id: app.identifications[index].id },
+            data: { [fieldName]: value }
+          });
+        } else {
+          // Create new identification
+          await prisma.identification.create({
+            data: {
+              applicationId: app.id,
+              idType: fieldName === 'idType' ? value : '',
+              idNumber: fieldName === 'idNumber' ? value : '',
+              isPrimary: index === 0
+            }
+          });
+        }
+      }
+      
+      // Check completion status if requested
+      if (checkCompletion) {
+        const completionStatus = await updateApplicationCompletionStatus(app.id);
+        return { 
+          success: true, 
+          application: app, 
+          completionStatus,
+          isComplete: completionStatus?.isComplete ?? false 
+        };
+      }
+      
+      return { success: true, application: app };
+    } else if (pathParts.length === 3 && pathParts[0] === 'incomes') {
+      // Handle income fields (e.g., incomes.0.source)
+      const index = parseInt(pathParts[1]);
+      const fieldName = pathParts[2];
+      
+      // First, get the application to see if incomes exist
+      const app = await prisma.application.findFirst({
+        where: tripId 
+          ? { userId, tripId }
+          : { userId, isDefault: true },
+        include: { incomes: true }
+      });
+      
+      if (!app) {
+        return { success: false, error: 'Application not found' };
+      }
+      
+      // If income exists at this index, update it
+      if (app.incomes && app.incomes[index]) {
+        await prisma.income.update({
+          where: { id: app.incomes[index].id },
+          data: { [fieldName]: value }
+        });
+      } else {
+        // Create new income
+        await prisma.income.create({
+          data: {
+            applicationId: app.id,
+            source: fieldName === 'source' ? value : '',
+            monthlyAmount: fieldName === 'monthlyAmount' ? value : '',
+            fileKey: fieldName === 'fileKey' ? value : undefined,
+            fileName: fieldName === 'fileName' ? value : undefined,
+            customId: fieldName === 'customId' ? value : undefined
+          }
+        });
+      }
+      
+      // Check completion status if requested
+      if (checkCompletion) {
+        const completionStatus = await updateApplicationCompletionStatus(app.id);
+        return { 
+          success: true, 
+          application: app, 
+          completionStatus,
+          isComplete: completionStatus?.isComplete ?? false 
+        };
+      }
+      
+      return { success: true, application: app };
+    } else if (pathParts.length === 3 && pathParts[0] === 'residentialHistory') {
+      // Handle residential history fields (e.g., residentialHistory.0.street)
+      const index = parseInt(pathParts[1]);
+      const fieldName = pathParts[2];
+      
+      // First, get the application to see if residential histories exist
+      const app = await prisma.application.findFirst({
+        where: tripId 
+          ? { userId, tripId }
+          : { userId, isDefault: true },
+        include: { residentialHistories: { orderBy: { index: 'asc' } } }
+      });
+      
+      if (!app) {
+        return { success: false, error: 'Application not found' };
+      }
+      
+      // If residential history exists at this index, update it
+      if (app.residentialHistories && app.residentialHistories[index]) {
+        await prisma.residentialHistory.update({
+          where: { id: app.residentialHistories[index].id },
+          data: { [fieldName]: value }
+        });
+      } else {
+        // Create new residential history
+        await prisma.residentialHistory.create({
+          data: {
+            applicationId: app.id,
+            index: index,
+            [fieldName]: value
+          }
+        });
+      }
+      
+      // Check completion status if requested
+      if (checkCompletion) {
+        const completionStatus = await updateApplicationCompletionStatus(app.id);
+        return { 
+          success: true, 
+          application: app, 
+          completionStatus,
+          isComplete: completionStatus?.isComplete ?? false 
+        };
+      }
+      
+      return { success: true, application: app };
     } else if (pathParts.length === 1) {
       // Simple field - use as is
       updateData[fieldPath] = value;
@@ -763,6 +1083,17 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
       data: updateData
     });
     
+    // Check completion status if requested
+    if (checkCompletion) {
+      const completionStatus = await updateApplicationCompletionStatus(application.id);
+      return { 
+        success: true, 
+        application, 
+        completionStatus,
+        isComplete: completionStatus?.isComplete ?? false 
+      };
+    }
+    
     return { success: true, application };
   } catch (error) {
     console.error('Failed to update application field:', error);
@@ -780,6 +1111,65 @@ export async function markComplete(applicationId: string) {
   } catch (error) {
     console.error("Failed to mark application as complete:", error);
     return { success: false, error: 'Failed to mark application as complete.' };
+  }
+}
+
+export async function updateApplicationCompletionStatus(applicationId?: string) {
+  const { userId } = auth();
+  if (!userId) return { success: false, error: 'Unauthorized' };
+
+  try {
+    // Get the application with all related data
+    const application = await prisma.application.findFirst({
+      where: applicationId 
+        ? { id: applicationId, userId }
+        : { userId, isDefault: true },
+      include: {
+        identifications: {
+          include: {
+            idPhotos: true
+          }
+        },
+        incomes: true,
+        residentialHistories: true,
+      }
+    });
+
+    if (!application) {
+      return { success: false, error: 'Application not found' };
+    }
+
+    // Use centralized completion check
+    const completionResult = checkApplicationCompletionServer(application);
+    const missingRequirements = completionResult.missingRequirements;
+    const isNowComplete = completionResult.isComplete;
+    
+    // Update if status changed
+    if (application.isComplete !== isNowComplete) {
+      await prisma.application.update({
+        where: { id: application.id },
+        data: { isComplete: isNowComplete }
+      });
+
+      console.log(`Application ${application.id} completion status updated: ${isNowComplete}`);
+      
+      return { 
+        success: true, 
+        isComplete: isNowComplete,
+        statusChanged: true,
+        missingRequirements 
+      };
+    }
+
+    return { 
+      success: true, 
+      isComplete: isNowComplete,
+      statusChanged: false,
+      missingRequirements 
+    };
+  } catch (error) {
+    console.error('Failed to update application completion status:', error);
+    return { success: false, error: 'Failed to update completion status' };
   }
 }
 

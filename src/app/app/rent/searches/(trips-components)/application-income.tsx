@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -8,11 +8,13 @@ import { PlusCircle, X, Trash, Loader2 } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ApplicationItemLabelStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
-import { deleteIncome } from '@/app/actions/applications';
+import { deleteIncome, deleteIncomeProof } from '@/app/actions/applications';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from "@/components/ui/use-toast";
 import { SecureFileViewer } from '@/components/secure-file-viewer';
+import { debounce } from 'lodash';
+import BrandModal from '@/components/BrandModal';
 
 interface UploadData {
   name: string;
@@ -42,12 +44,82 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
     setIncomes,
     verificationImages,
     setVerificationImages,
-    errors
+    errors,
+    fieldErrors,
+    saveField,
+    validateField,
+    setFieldError,
+    clearFieldError
   } = useApplicationStore();
 
   const error = errors.income;
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  // State for deletion modals
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [photoToDelete, setPhotoToDelete] = useState<{ index: number } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  // State for income source deletion
+  const [deleteIncomeModalOpen, setDeleteIncomeModalOpen] = useState(false);
+  const [incomeToDelete, setIncomeToDelete] = useState<number | null>(null);
+  const [isDeletingIncome, setIsDeletingIncome] = useState(false);
+
+  // Create debounced save function with toast feedback and completion checking
+  const debouncedSave = useCallback(
+    debounce(async (fieldPath: string, value: any) => {
+      const result = await saveField(fieldPath, value, { checkCompletion: true });
+      
+      // Handle completion status changes
+      if (result.success && result.completionStatus) {
+        if (result.completionStatus.statusChanged) {
+          if (result.completionStatus.isComplete) {
+            toast({
+              title: "Application Complete! 🎉",
+              description: "All required information has been provided",
+              duration: 4000,
+            });
+          } else if (result.completionStatus.missingRequirements?.length > 0) {
+            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+            const more = result.completionStatus.missingRequirements.length > 3 
+              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+              : '';
+            toast({
+              title: "Application Incomplete",
+              description: `Still need: ${missing}${more}`,
+              duration: 4000,
+            });
+          }
+        }
+      }
+      
+      // Only show save toasts in development
+      if (isDevelopment) {
+        if (result.success) {
+          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+          toast({
+            title: "Auto-Save",
+            description: `${fieldPath.split('.').pop()} saved`,
+            duration: 2000,
+          });
+        } else {
+          console.error(`[Auto-Save] Error:`, result.error);
+          toast({
+            title: "Save Failed",
+            description: result.error || `Failed to save ${fieldPath}`,
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      }
+    }, 1000),
+    [isDevelopment, toast, saveField]
+  );
 
   const handleInputChange = (index: number, field: 'source' | 'monthlyAmount', value: string) => {
+    const fieldPath = `incomes.${index}.${field}`;
+    
+    // Update local state immediately
     const updatedIncomes = incomes.map((item, i) => {
       if (i === index) {
         const finalValue = field === 'monthlyAmount' && value === '$' ? '' : value;
@@ -56,9 +128,25 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
       return item;
     });
     setIncomes(updatedIncomes);
+    
+    // Validate and save
+    const validationError = validateField(fieldPath, value);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[Income] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // Save if valid (debounced)
+      if (isDevelopment) {
+        console.log(`[Income] Calling debouncedSave for ${fieldPath}`);
+      }
+      debouncedSave(fieldPath, value);
+    }
   };
 
-  const handleIncomeUploadFinish = (index: number) => (res: UploadData[]) => {
+  const handleIncomeUploadFinish = (index: number) => async (res: UploadData[]) => {
     if (res && res.length > 0) {
       const upload = res[0];
       const updatedIncomes = incomes.map((income, i) =>
@@ -71,6 +159,31 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
         } : income
       );
       setIncomes(updatedIncomes);
+      
+      // IMMEDIATELY save the income proof to the backend
+      const fieldPath = `incomes.${index}.fileKey`;
+      if (isDevelopment) {
+        console.log(`[Income] Saving income proof immediately for ${fieldPath}`);
+      }
+      
+      const fileKey = upload.key || upload.serverData?.fileKey;
+      const result = await saveField(fieldPath, fileKey, { checkCompletion: false });
+      
+      if (result.success) {
+        toast({
+          title: "Income Proof Uploaded",
+          description: `Successfully uploaded proof for Income Source ${index + 1}`,
+          duration: 3000,
+        });
+      } else {
+        console.error(`[Income] Failed to save income proof:`, result.error);
+        toast({
+          title: "Save Failed",
+          description: "Proof uploaded but failed to save. Please try again.",
+          variant: "destructive",
+          duration: 4000,
+        });
+      }
     }
   };
 
@@ -81,16 +194,112 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
 
   const handleDelete = (index: number) => {
     if (incomes.length > 1) {
-      deleteIncome(incomes[index].id || '');
-      setIncomes(incomes.filter((_, i) => i !== index));
+      setIncomeToDelete(index);
+      setDeleteIncomeModalOpen(true);
+    }
+  };
+  
+  // Handle income source deletion confirmation
+  const handleConfirmDeleteIncome = async () => {
+    if (incomeToDelete === null) return;
+    
+    setIsDeletingIncome(true);
+    const income = incomes[incomeToDelete];
+    
+    try {
+      // Only call server action if income has an ID (exists in database)
+      if (income.id) {
+        await deleteIncome(income.id);
+      }
+      
+      // Update local state
+      setIncomes(incomes.filter((_, i) => i !== incomeToDelete));
+      
+      toast({
+        title: "Income Source Removed",
+        description: `Income Source ${incomeToDelete + 1} has been removed`,
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Error removing income source:', error);
+      toast({
+        title: "Error",
+        description: "Failed to remove income source",
+        variant: "destructive",
+        duration: 4000,
+      });
+    } finally {
+      setIsDeletingIncome(false);
+      setDeleteIncomeModalOpen(false);
+      setIncomeToDelete(null);
     }
   };
 
   const clearIncomeImage = (index: number) => {
-    const updatedIncomes = incomes.map((income, i) =>
-      i === index ? { ...income, imageUrl: '', fileKey: undefined, customId: undefined, fileName: undefined } : income
-    );
-    setIncomes(updatedIncomes);
+    // Show confirmation modal
+    setPhotoToDelete({ index });
+    setDeleteModalOpen(true);
+  };
+  
+  // Handle income proof deletion confirmation
+  const handleDeleteIncomeProof = async () => {
+    if (!photoToDelete) return;
+    
+    setIsDeleting(true);
+    const { index } = photoToDelete;
+    const income = incomes[index];
+    
+    try {
+      // Only call server action if income has an ID (exists in database)
+      if (income.id) {
+        const result = await deleteIncomeProof(income.id);
+        
+        if (result.success) {
+          // Update local state to reflect the deletion
+          const updatedIncomes = incomes.map((inc, i) =>
+            i === index ? { ...inc, imageUrl: '', fileKey: undefined, customId: undefined, fileName: undefined } : inc
+          );
+          setIncomes(updatedIncomes);
+          
+          toast({
+            title: "Proof Removed",
+            description: `Income proof for Source ${index + 1} has been removed`,
+            duration: 3000,
+          });
+        } else {
+          toast({
+            title: "Removal Failed",
+            description: result.error || "Failed to remove proof",
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      } else {
+        // For new incomes not yet saved to database, just clear local state
+        const updatedIncomes = incomes.map((inc, i) =>
+          i === index ? { ...inc, imageUrl: '', fileKey: undefined, customId: undefined, fileName: undefined } : inc
+        );
+        setIncomes(updatedIncomes);
+        
+        toast({
+          title: "Proof Removed",
+          description: `Income proof for Source ${index + 1} has been removed`,
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error removing income proof:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+        duration: 4000,
+      });
+    } finally {
+      setIsDeleting(false);
+      setDeleteModalOpen(false);
+      setPhotoToDelete(null);
+    }
   };
 
   const incomeImages = verificationImages.filter(img => img.category === 'Income');
@@ -116,6 +325,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
   };
 
   return (
+    <>
     <div className="flex flex-col items-end justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
       <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
         {incomes.map((item, index) => (
@@ -125,17 +335,17 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
               <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                 <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-                    <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
-                      <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                    <div className="flex items-start  relative ">
+                      <Label className="relative w-fit  [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         Income Source {index + 1}
                       </Label>
                       {index > 0 && (
                         <button
                           onClick={() => handleDelete(index)}
-                          className="ml-2 text-red-500 hover:text-red-700"
+                          className="ml-2 pt-[1px] px-4 text-[#404040] hover:text-red-500"
                           type="button"
                         >
-                          <X className="h-4 w-4" />
+                          <Trash className="h-4 w-4" />
                         </button>
                       )}
                     </div>
@@ -145,10 +355,10 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
                       value={item.source}
                       onChange={(e) => handleInputChange(index, 'source', e.target.value)}
                       placeholder="Enter your Income Source"
-                      className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${error?.source?.[index] ? "border-red-500" : ""}`}
+                      className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${fieldErrors[`incomes.${index}.source`] || error?.source?.[index] ? "border-red-500" : ""}`}
                     />
-                    {error?.source?.[index] && (
-                      <p className="mt-1 text-red-500 text-sm">{error.source[index]}</p>
+                    {(fieldErrors[`incomes.${index}.source`] || error?.source?.[index]) && (
+                      <p className="mt-1 text-red-500 text-sm">{fieldErrors[`incomes.${index}.source`] || error.source?.[index]}</p>
                     )}
                   </div>
                 </div>
@@ -167,10 +377,10 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
                     value={formatCurrency(item.monthlyAmount)}
                     onChange={(e) => handleMonthlyAmountChange(index, e.target.value)}
                     placeholder="Enter Monthly Amount"
-                    className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
+                    className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
                   />
-                  {error?.monthlyAmount?.[index] && (
-                    <p className="mt-1 text-red-500 text-sm">{error.monthlyAmount[index]}</p>
+                  {(fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index]) && (
+                    <p className="mt-1 text-red-500 text-sm">{fieldErrors[`incomes.${index}.monthlyAmount`] || error.monthlyAmount?.[index]}</p>
                   )}
                 </div>
               </div>
@@ -203,8 +413,8 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
                             // Support backward compatibility with direct URLs
                             fallbackUrl={item.imageUrl}
                           />
-                          <button type="button" onClick={() => clearIncomeImage(index)} className="p-1">
-                            <Trash className="h-5 w-5 text-[#404040]" />
+                          <button type="button" onClick={() => clearIncomeImage(index)} className="p-1 text-red-500 hover:text-red-700">
+                            <X className="h-5 w-5" />
                           </button>
                         </div>
                       ) : (
@@ -356,5 +566,88 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
         </div>
       </Button>
     </div>
+    
+    {/* Delete Confirmation Modal */}
+    <BrandModal
+      isOpen={deleteModalOpen}
+      onOpenChange={setDeleteModalOpen}
+      heightStyle="!top-[30vh]"
+      className="max-w-md"
+    >
+      <div className="p-6">
+        <h2 className="text-xl font-semibold mb-4">Remove Income Proof</h2>
+        <p className="text-gray-600 mb-6">
+          Are you sure you want to remove this income proof? You can upload a new one at any time.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            variant="outline"
+            onClick={() => {
+              setDeleteModalOpen(false);
+              setPhotoToDelete(null);
+            }}
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={handleDeleteIncomeProof}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Removing...
+              </>
+            ) : (
+              'Remove Proof'
+            )}
+          </Button>
+        </div>
+      </div>
+    </BrandModal>
+    
+    {/* Delete Income Source Confirmation Modal */}
+    <BrandModal
+      isOpen={deleteIncomeModalOpen}
+      onOpenChange={setDeleteIncomeModalOpen}
+      heightStyle="!top-[30vh]"
+      className="max-w-md"
+    >
+      <div className="p-6">
+        <h2 className="text-xl font-semibold mb-4">Remove Income Source</h2>
+        <p className="text-gray-600 mb-6">
+          Are you sure you want to remove this income source? This will also delete any uploaded proof documents.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            variant="outline"
+            onClick={() => {
+              setDeleteIncomeModalOpen(false);
+              setIncomeToDelete(null);
+            }}
+            disabled={isDeletingIncome}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={handleConfirmDeleteIncome}
+            disabled={isDeletingIncome}
+          >
+            {isDeletingIncome ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Removing...
+              </>
+            ) : (
+              'Remove Income Source'
+            )}
+          </Button>
+        </div>
+      </div>
+    </BrandModal>
+    </>
   );
 };

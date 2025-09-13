@@ -9,6 +9,7 @@ import {
   validateIncome, 
   validateQuestionnaire 
 } from '@/utils/application-validation';
+import { checkApplicationCompletionClient } from '@/utils/application-completion';
 
 // Helper function to extract file key from UploadThing URL
 function extractFileKeyFromUrl(url: string | undefined): string | undefined {
@@ -150,6 +151,7 @@ export const initialState = {
   ids: [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
   verificationImages: [] as VerificationImage[],
   residentialHistory: [defaultResidentialHistory],
+  preservedResidentialHistory: [] as ResidentialHistory[], // Store for preserving data when trimming
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
   answers: {
     evicted: false,
@@ -161,7 +163,10 @@ export const initialState = {
   isSaving: false,
   lastSaveTime: null as Date | null,
   saveError: null as string | null,
-  fieldErrors: {} as { [key: string]: string }
+  fieldErrors: {} as { [key: string]: string },
+  
+  // Server completion status
+  serverIsComplete: false
 };
 
 interface ApplicationState {
@@ -169,6 +174,7 @@ interface ApplicationState {
   ids: Identification[];
   verificationImages: VerificationImage[];
   residentialHistory: ResidentialHistory[];
+  preservedResidentialHistory: ResidentialHistory[];
   incomes: Income[];
   answers: QuestionnaireAnswers;
   originalData: typeof initialState;
@@ -178,12 +184,16 @@ interface ApplicationState {
   lastSaveTime: Date | null;
   saveError: string | null;
   fieldErrors: { [key: string]: string };
+  
+  // Server completion status
+  serverIsComplete: boolean;
 
   // Actions
   setPersonalInfo: (info: PersonalInfo) => void;
   setIds: (ids: Identification[]) => void;
   setVerificationImages: (images: VerificationImage[]) => void;
   setResidentialHistory: (history: ResidentialHistory[]) => void;
+  setPreservedResidentialHistory: (history: ResidentialHistory[]) => void;
   setIncomes: (incomes: Income[]) => void;
   setAnswers: (answers: QuestionnaireAnswers) => void;
   resetStore: () => void;
@@ -191,6 +201,9 @@ interface ApplicationState {
 
   // Add new property
   isEdited: () => boolean;
+  
+  // Check if application meets all requirements
+  isApplicationComplete: () => boolean;
 
   // Add error state
   errors: ApplicationErrors;
@@ -213,7 +226,7 @@ interface ApplicationState {
   setSaveError: (error: string | null) => void;
   setFieldError: (fieldPath: string, error: string | null) => void;
   clearFieldError: (fieldPath: string) => void;
-  saveField: (fieldPath: string, value: any) => Promise<{ success: boolean; error?: string; fieldPath?: string }>;
+  saveField: (fieldPath: string, value: any, options?: { checkCompletion?: boolean }) => Promise<{ success: boolean; error?: string; fieldPath?: string; completionStatus?: any }>;
   validateField: (fieldPath: string, value: any) => string | null;
 }
 
@@ -263,6 +276,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   setIds: (ids) => set({ ids }),
   setVerificationImages: (images) => set({ verificationImages: images }),
   setResidentialHistory: (history: ResidentialHistory[]) => set({ residentialHistory: history }),
+  setPreservedResidentialHistory: (history: ResidentialHistory[]) => set({ preservedResidentialHistory: history }),
   // New action to add a residential history entry if total duration is less than 24
   addResidentialHistoryEntry: (newEntry: ResidentialHistory) => {
     const currentHistory = get().residentialHistory;
@@ -331,7 +345,10 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     };
     set(newData);
     // Update the pristine/original state for proper comparison
-    set({ originalData: newData });
+    set({ 
+      originalData: newData,
+      serverIsComplete: application.isComplete || false 
+    });
   },
 
   isEdited: () => {
@@ -344,6 +361,21 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       incomes: state.incomes,
       answers: state.answers
     }) !== JSON.stringify(state.originalData);
+  },
+  
+  isApplicationComplete: () => {
+    const state = get();
+    
+    // Use the centralized completion check
+    const result = checkApplicationCompletionClient({
+      personalInfo: state.personalInfo,
+      ids: state.ids,
+      incomes: state.incomes,
+      answers: state.answers,
+      residentialHistory: state.residentialHistory
+    });
+    
+    return result.isComplete;
   },
 
   errors: initialErrors,
@@ -520,6 +552,47 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       }
     }
     
+    if (pathParts[0] === 'identifications') {
+      const index = parseInt(pathParts[1]);
+      const fieldName = pathParts[2];
+      
+      if (fieldName === 'idType' && !value?.trim()) {
+        return 'ID Type is required';
+      }
+      if (fieldName === 'idNumber' && !value?.trim()) {
+        return 'ID Number is required';
+      }
+    }
+    
+    if (pathParts[0] === 'incomes') {
+      const index = parseInt(pathParts[1]);
+      const fieldName = pathParts[2];
+      
+      if (fieldName === 'source' && !value?.trim()) {
+        return 'Income source is required';
+      }
+      if (fieldName === 'monthlyAmount') {
+        const numValue = parseInt(value);
+        if (!value?.trim()) {
+          return 'Monthly amount is required';
+        }
+        if (isNaN(numValue) || numValue <= 0) {
+          return 'Monthly amount must be greater than 0';
+        }
+      }
+    }
+    
+    if (pathParts[0] === 'questionnaire') {
+      const fieldName = pathParts[1];
+      
+      if (fieldName === 'felonyExplanation' && state.answers.felony && !value?.trim()) {
+        return 'Please provide an explanation';
+      }
+      if (fieldName === 'evictedExplanation' && state.answers.evicted && !value?.trim()) {
+        return 'Please provide an explanation';
+      }
+    }
+    
     if (pathParts[0] === 'residentialHistory') {
       const index = parseInt(pathParts[1]);
       const fieldName = pathParts[2];
@@ -553,7 +626,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   },
 
   // Save a single field with debouncing handled by the component
-  saveField: async (fieldPath, value) => {
+  saveField: async (fieldPath, value, options) => {
     const state = get();
     
     // Validate the field first
@@ -570,23 +643,30 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     
     // Log for development
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[Auto-Save] Saving field: ${fieldPath} with value:`, value);
+      console.log(`[Auto-Save] Saving field: ${fieldPath} with value:`, value, 'options:', options);
     }
     
     try {
       // Use the new updateApplicationField function for individual field updates
-      const result = await updateApplicationField(fieldPath, value, state.tripId);
+      const result = await updateApplicationField(fieldPath, value, state.tripId, options?.checkCompletion);
       
       if (process.env.NODE_ENV === 'development') {
         console.log('[Auto-Save] Server response:', result);
       }
       
       if (result.success) {
-        set({ 
+        // Update server completion status if provided
+        const updates: any = { 
           isSaving: false, 
           lastSaveTime: new Date(),
           saveError: null 
-        });
+        };
+        
+        if (result.isComplete !== undefined) {
+          updates.serverIsComplete = result.isComplete;
+        }
+        
+        set(updates);
         
         // Update original data to reflect saved state for this specific field
         const pathParts = fieldPath.split('.');
@@ -600,7 +680,12 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
           (state.originalData as any)[parent][child] = value;
         }
         
-        return { success: true, fieldPath };
+        return { 
+          success: true, 
+          fieldPath, 
+          completionStatus: result.completionStatus,
+          isComplete: result.isComplete 
+        };
       } else {
         throw new Error(result.error || 'Failed to save');
       }

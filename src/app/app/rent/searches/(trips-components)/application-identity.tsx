@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { UploadButton } from '@/app/utils/uploadthing';
 import { Card, CardContent } from '@/components/ui/card';
 import { SecureFileList } from '@/components/secure-file-viewer';
@@ -9,6 +10,9 @@ import { Upload, Loader2 } from 'lucide-react';
 import { ImageCategory } from '@prisma/client';
 import { useApplicationStore } from '@/stores/application-store';
 import { useToast } from "@/components/ui/use-toast";
+import { debounce } from 'lodash';
+import BrandModal from '@/components/BrandModal';
+import { deleteIDPhoto } from '@/app/actions/applications';
 
 interface UploadData {
   name: string;
@@ -70,8 +74,25 @@ interface IdentificationProps {
 
 export const Identification: React.FC<IdentificationProps> = ({ inputClassName }) => {
   const { toast } = useToast();
-  const { ids, setIds, verificationImages, setVerificationImages, errors } = useApplicationStore();
+  const { 
+    ids, 
+    setIds, 
+    verificationImages, 
+    setVerificationImages, 
+    errors,
+    fieldErrors,
+    saveField,
+    validateField,
+    setFieldError,
+    clearFieldError
+  } = useApplicationStore();
   const error = errors.identification;
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  // State for deletion modal
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [photoToDelete, setPhotoToDelete] = useState<{ index: number; photo: any } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Get current ID (or first ID) - always make it primary
   const currentId = ids[0] || { id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] };
@@ -81,7 +102,58 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
     currentId.isPrimary = true;
   }
 
-  const handleUploadFinish = (res: UploadData[]) => {
+  // Create debounced save function with toast feedback and completion checking
+  const debouncedSave = useCallback(
+    debounce(async (fieldPath: string, value: any) => {
+      const result = await saveField(fieldPath, value, { checkCompletion: true });
+      
+      // Handle completion status changes
+      if (result.success && result.completionStatus) {
+        if (result.completionStatus.statusChanged) {
+          if (result.completionStatus.isComplete) {
+            toast({
+              title: "Application Complete! 🎉",
+              description: "All required information has been provided",
+              duration: 4000,
+            });
+          } else if (result.completionStatus.missingRequirements?.length > 0) {
+            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+            const more = result.completionStatus.missingRequirements.length > 3 
+              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+              : '';
+            toast({
+              title: "Application Incomplete",
+              description: `Still need: ${missing}${more}`,
+              duration: 4000,
+            });
+          }
+        }
+      }
+      
+      // Only show save toasts in development
+      if (isDevelopment) {
+        if (result.success) {
+          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+          toast({
+            title: "Auto-Save",
+            description: `${fieldPath.split('.').pop()} saved`,
+            duration: 2000,
+          });
+        } else {
+          console.error(`[Auto-Save] Error:`, result.error);
+          toast({
+            title: "Save Failed",
+            description: result.error || `Failed to save ${fieldPath}`,
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      }
+    }, 1000),
+    [isDevelopment, toast, saveField]
+  );
+
+  const handleUploadFinish = async (res: UploadData[]) => {
     console.log('Upload complete, received data:', res);
     // Check if we have existing photos
     const hasExistingPhotos = currentId.idPhotos && currentId.idPhotos.length > 0;
@@ -119,8 +191,151 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
       applicationId: ''
     }));
     setVerificationImages([...verificationImages, ...newImages]);
+    
+    // IMMEDIATELY save the ID photos to the backend with completion checking
+    const fieldPath = 'identifications.0.idPhotos';
+    if (isDevelopment) {
+      console.log(`[Identification] Saving ID photos immediately for ${fieldPath}`);
+    }
+    
+    const result = await saveField(fieldPath, updatedId.idPhotos, { checkCompletion: true });
+    
+    // Handle completion status changes
+    if (result.success && result.completionStatus) {
+      if (result.completionStatus.statusChanged) {
+        if (result.completionStatus.isComplete) {
+          toast({
+            title: "Application Complete! 🎉",
+            description: "All required information has been provided",
+            duration: 4000,
+          });
+        } else if (result.completionStatus.missingRequirements?.length > 0) {
+          const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+          const more = result.completionStatus.missingRequirements.length > 3 
+            ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+            : '';
+          toast({
+            title: "Application Incomplete",
+            description: `Still need: ${missing}${more}`,
+            duration: 4000,
+          });
+        }
+      }
+    }
+    
+    if (result.success) {
+      toast({
+        title: "ID Photo Uploaded",
+        description: `Successfully uploaded ${res.length} photo${res.length !== 1 ? 's' : ''}`,
+        duration: 3000,
+      });
+    } else {
+      console.error(`[Identification] Failed to save ID photos:`, result.error);
+      toast({
+        title: "Save Failed",
+        description: "Photos uploaded but failed to save. Please try again.",
+        variant: "destructive",
+        duration: 4000,
+      });
+    }
   };
 
+
+  // Handle photo deletion confirmation
+  const handleDeletePhoto = async () => {
+    if (!photoToDelete) return;
+    
+    setIsDeleting(true);
+    const { index, photo } = photoToDelete;
+    
+    try {
+      // Remove from local state immediately
+      const updatedPhotos = idPhotos.filter((_, i) => i !== index);
+      const updatedId = {
+        ...currentId,
+        idPhotos: updatedPhotos
+      };
+      setIds([updatedId, ...ids.slice(1)]);
+      
+      // If photo exists in database, delete it
+      if (photo.id) {
+        const result = await deleteIDPhoto(photo.id);
+        
+        if (result.success) {
+          toast({
+            title: "Photo Deleted",
+            description: "ID photo has been removed successfully",
+            duration: 3000,
+          });
+          
+          // Save the updated photos list and check completion status
+          const fieldPath = 'identifications.0.idPhotos';
+          const saveResult = await saveField(fieldPath, updatedPhotos, { checkCompletion: true });
+          
+          // Handle completion status changes
+          if (saveResult.success && saveResult.completionStatus) {
+            if (saveResult.completionStatus.statusChanged && !saveResult.completionStatus.isComplete) {
+              toast({
+                title: "Application Incomplete",
+                description: "Your application is now incomplete. Please add an ID photo.",
+                variant: "destructive",
+                duration: 5000,
+              });
+            }
+          }
+        } else {
+          // Restore the photo in local state if deletion failed
+          const restoredId = {
+            ...currentId,
+            idPhotos: currentId.idPhotos
+          };
+          setIds([restoredId, ...ids.slice(1)]);
+          
+          toast({
+            title: "Deletion Failed",
+            description: result.error || "Failed to delete photo",
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      } else {
+        // New photo not in DB yet, just removed from local state
+        toast({
+          title: "Photo Removed",
+          description: "Photo has been removed",
+          duration: 2000,
+        });
+        
+        // Save the updated photos list and check completion status
+        const fieldPath = 'identifications.0.idPhotos';
+        const saveResult = await saveField(fieldPath, updatedPhotos, { checkCompletion: true });
+        
+        // Handle completion status changes
+        if (saveResult.success && saveResult.completionStatus) {
+          if (saveResult.completionStatus.statusChanged && !saveResult.completionStatus.isComplete) {
+            toast({
+              title: "Application Incomplete",
+              description: "Your application is now incomplete. Please add an ID photo.",
+              variant: "destructive",
+              duration: 5000,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+        duration: 4000,
+      });
+    } finally {
+      setIsDeleting(false);
+      setDeleteModalOpen(false);
+      setPhotoToDelete(null);
+    }
+  };
 
   // Find ID photos either from new schema or old schema for backward compatibility
   const idPhotos = currentId.idPhotos?.length ?
@@ -153,9 +368,71 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
 
                   <Select
                     value={currentId.idType}
-                    onValueChange={(value) => {
+                    onValueChange={async (value) => {
+                      const fieldPath = 'identifications.0.idType';
+                      
+                      // Update local state immediately
                       const updatedId = { ...currentId, idType: value };
                       setIds([updatedId, ...ids.slice(1)]);
+                      
+                      // Validate
+                      const validationError = validateField(fieldPath, value);
+                      if (validationError) {
+                        setFieldError(fieldPath, validationError);
+                        if (isDevelopment) {
+                          console.log(`[Identification] Validation error for ${fieldPath}:`, validationError);
+                        }
+                      } else {
+                        clearFieldError(fieldPath);
+                        // Save immediately without debouncing for select fields
+                        if (isDevelopment) {
+                          console.log(`[Identification] Saving idType immediately for ${fieldPath}`);
+                        }
+                        
+                        const result = await saveField(fieldPath, value, { checkCompletion: true });
+                        
+                        // Handle completion status changes
+                        if (result.success && result.completionStatus) {
+                          if (result.completionStatus.statusChanged) {
+                            if (result.completionStatus.isComplete) {
+                              toast({
+                                title: "Application Complete! 🎉",
+                                description: "All required information has been provided",
+                                duration: 4000,
+                              });
+                            } else if (result.completionStatus.missingRequirements?.length > 0) {
+                              const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+                              const more = result.completionStatus.missingRequirements.length > 3 
+                                ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+                                : '';
+                              toast({
+                                title: "Application Incomplete",
+                                description: `Still need: ${missing}${more}`,
+                                duration: 4000,
+                              });
+                            }
+                          }
+                        }
+                        
+                        if (isDevelopment) {
+                          if (result.success) {
+                            console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+                            toast({
+                              title: "Auto-Save",
+                              description: `ID Type saved`,
+                              duration: 2000,
+                            });
+                          } else {
+                            console.error(`[Auto-Save] Error:`, result.error);
+                            toast({
+                              title: "Save Failed",
+                              description: result.error || 'Failed to save ID Type',
+                              variant: "destructive",
+                              duration: 4000,
+                            });
+                          }
+                        }
+                      }
                     }}
                   >
                     <SelectTrigger className={`h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs ${error?.idType ? 'border-red-500' : 'border-[#d0d5dd]'}`}>
@@ -189,8 +466,28 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
                 <Input
                   value={currentId.idNumber}
                   onChange={(e) => {
-                    const updatedId = { ...currentId, idNumber: e.target.value };
+                    const { value } = e.target;
+                    const fieldPath = 'identifications.0.idNumber';
+                    
+                    // Update local state immediately
+                    const updatedId = { ...currentId, idNumber: value };
                     setIds([updatedId, ...ids.slice(1)]);
+                    
+                    // Validate
+                    const validationError = validateField(fieldPath, value);
+                    if (validationError) {
+                      setFieldError(fieldPath, validationError);
+                      if (isDevelopment) {
+                        console.log(`[Identification] Validation error for ${fieldPath}:`, validationError);
+                      }
+                    } else {
+                      clearFieldError(fieldPath);
+                      // Save if valid (debounced)
+                      if (isDevelopment) {
+                        console.log(`[Identification] Calling debouncedSave for ${fieldPath}`);
+                      }
+                      debouncedSave(fieldPath, value);
+                    }
                   }}
                   placeholder="Enter ID Number"
                   className={`${inputClassName || "h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${error?.idNumber ? 'border-red-500' : ''}`}
@@ -301,7 +598,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
                           
                           return files;
                         }}
-                        onClientUploadComplete={(res) => {
+                        onClientUploadComplete={async (res) => {
                           console.log('✅ ID upload complete:', res);
                           handleUploadFinish(res);
                           
@@ -353,13 +650,9 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
                         fileType="image"
                         className="w-full"
                         onRemove={(index) => {
-                          // Remove photo from the array
-                          const updatedPhotos = idPhotos.filter((_, i) => i !== index);
-                          const updatedId = {
-                            ...currentId,
-                            idPhotos: updatedPhotos
-                          };
-                          setIds([updatedId, ...ids.slice(1)]);
+                          // Show confirmation modal
+                          setPhotoToDelete({ index, photo: idPhotos[index] });
+                          setDeleteModalOpen(true);
                         }}
                       />
                     ) : (
@@ -401,6 +694,47 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
           </div>
         </div>
       </CardContent>
+      
+      {/* Delete Confirmation Modal */}
+      <BrandModal
+        isOpen={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        heightStyle="!top-[30vh]"
+        className="max-w-md"
+      >
+        <div className="p-4">
+          <h2 className="text-xl font-semibold mb-3">Delete Photo</h2>
+          <p className="text-gray-600 mb-4">
+            Are you sure you want to delete this photo? This action cannot be undone.
+          </p>
+          <div className="flex gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setDeleteModalOpen(false);
+                setPhotoToDelete(null);
+              }}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeletePhoto}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete Photo'
+              )}
+            </Button>
+          </div>
+        </div>
+      </BrandModal>
     </Card>
   );
 };

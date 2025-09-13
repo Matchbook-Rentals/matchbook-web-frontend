@@ -1,26 +1,182 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useApplicationStore } from '@/stores/application-store';
 import { ApplicationItemInputStyles, ApplicationItemLabelStyles } from '@/constants/styles';
+import { useToast } from "@/components/ui/use-toast";
+import { debounce } from 'lodash';
 
 const Questionnaire: React.FC = () => {
-  const { answers, setAnswers, errors } = useApplicationStore();
+  const { toast } = useToast();
+  const { 
+    answers, 
+    setAnswers, 
+    errors,
+    fieldErrors,
+    saveField,
+    validateField,
+    setFieldError,
+    clearFieldError
+  } = useApplicationStore();
   const error = errors.questionnaire;
   const felonyTextareaRef = useRef<HTMLTextAreaElement>(null);
   const evictedTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
   // State flags to trigger autofocus only when the user clicks "Yes"
   const [shouldFocusFelony, setShouldFocusFelony] = useState(false);
   const [shouldFocusEvicted, setShouldFocusEvicted] = useState(false);
+  
+  // Create debounced save function with toast feedback and completion checking
+  const debouncedSave = useCallback(
+    debounce(async (fieldPath: string, value: any) => {
+      const result = await saveField(fieldPath, value, { checkCompletion: true });
+      
+      // Handle completion status changes
+      if (result.success && result.completionStatus) {
+        if (result.completionStatus.statusChanged) {
+          if (result.completionStatus.isComplete) {
+            toast({
+              title: "Application Complete! 🎉",
+              description: "All required information has been provided",
+              duration: 4000,
+            });
+          } else if (result.completionStatus.missingRequirements?.length > 0) {
+            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+            const more = result.completionStatus.missingRequirements.length > 3 
+              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+              : '';
+            toast({
+              title: "Application Incomplete",
+              description: `Still need: ${missing}${more}`,
+              duration: 4000,
+            });
+          }
+        }
+      }
+      
+      // Only show save toasts in development
+      if (isDevelopment) {
+        if (result.success) {
+          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+          toast({
+            title: "Auto-Save",
+            description: `${fieldPath.split('.').pop()} saved`,
+            duration: 2000,
+          });
+        } else {
+          console.error(`[Auto-Save] Error:`, result.error);
+          toast({
+            title: "Save Failed",
+            description: result.error || `Failed to save ${fieldPath}`,
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
+      }
+    }, 1000),
+    [isDevelopment, toast, saveField]
+  );
 
-  const handleChange = (question: string, value: string | boolean) => {
+  const handleChange = async (question: string, value: string | boolean) => {
+    const fieldPath = `questionnaire.${question}`;
+    
+    // Update local state immediately
     setAnswers({
       ...answers,
       [question]: value
     });
+    
+    // Validate and save
+    const validationError = validateField(fieldPath, value);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+      if (isDevelopment) {
+        console.log(`[Questionnaire] Validation error for ${fieldPath}:`, validationError);
+      }
+    } else {
+      clearFieldError(fieldPath);
+      // For boolean values (radio buttons), save immediately; for text areas, debounce
+      if (typeof value === 'boolean') {
+        // If setting to true (Yes), immediately validate the explanation field
+        if (value === true) {
+          const explanationField = question === 'felony' ? 'felonyExplanation' : 'evictedExplanation';
+          const explanationPath = `questionnaire.${explanationField}`;
+          const currentExplanation = answers[explanationField as keyof typeof answers];
+          
+          // Validate the explanation field
+          const explanationError = validateField(explanationPath, currentExplanation);
+          if (explanationError) {
+            setFieldError(explanationPath, explanationError);
+            if (isDevelopment) {
+              console.log(`[Questionnaire] Missing explanation for ${question}`);
+            }
+          } else {
+            clearFieldError(explanationPath);
+          }
+        } else {
+          // If setting to false (No), clear any explanation errors
+          const explanationField = question === 'felony' ? 'felonyExplanation' : 'evictedExplanation';
+          const explanationPath = `questionnaire.${explanationField}`;
+          clearFieldError(explanationPath);
+        }
+        
+        if (isDevelopment) {
+          console.log(`[Questionnaire] Saving boolean field immediately for ${fieldPath}`);
+        }
+        const result = await saveField(fieldPath, value, { checkCompletion: true });
+        
+        // Handle completion status changes
+        if (result.success && result.completionStatus) {
+          if (result.completionStatus.statusChanged) {
+            if (result.completionStatus.isComplete) {
+              toast({
+                title: "Application Complete! 🎉",
+                description: "All required information has been provided",
+                duration: 4000,
+              });
+            } else if (result.completionStatus.missingRequirements?.length > 0) {
+              const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
+              const more = result.completionStatus.missingRequirements.length > 3 
+                ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+                : '';
+              toast({
+                title: "Application Incomplete",
+                description: `Still need: ${missing}${more}`,
+                duration: 4000,
+              });
+            }
+          }
+        }
+        
+        if (isDevelopment) {
+          if (result.success) {
+            console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
+            toast({
+              title: "Auto-Save",
+              description: `${fieldPath.split('.').pop()} saved`,
+              duration: 2000,
+            });
+          } else {
+            console.error(`[Auto-Save] Error:`, result.error);
+            toast({
+              title: "Save Failed",
+              description: result.error || `Failed to save ${fieldPath}`,
+              variant: "destructive",
+              duration: 4000,
+            });
+          }
+        }
+      } else {
+        // For text fields, use debounced save
+        if (isDevelopment) {
+          console.log(`[Questionnaire] Calling debouncedSave for ${fieldPath}`);
+        }
+        debouncedSave(fieldPath, value);
+      }
+    }
   };
 
   useEffect(() => {
@@ -105,14 +261,22 @@ const Questionnaire: React.FC = () => {
                 ref={felonyTextareaRef}
                 id="felonyExplanation"
                 className={`mt-1 text-md ${ApplicationItemInputStyles} ${
-                  error?.felonyExplanation ? "border-red-500" : ""
+                  (fieldErrors['questionnaire.felonyExplanation'] || error?.felonyExplanation) ? "border-red-500" : ""
                 }`}
                 value={answers.felonyExplanation || ''}
-                onChange={(e) => handleChange('felonyExplanation', e.target.value)}
-                placeholder=""
+                onChange={(e) => {
+                  handleChange('felonyExplanation', e.target.value);
+                  // Clear error immediately when user starts typing
+                  if (e.target.value.trim() && fieldErrors['questionnaire.felonyExplanation']) {
+                    clearFieldError('questionnaire.felonyExplanation');
+                  }
+                }}
+                placeholder="Please provide details about the conviction"
               />
-              {error?.felonyExplanation && (
-                <p className="mt-1 text-red-500 text-sm">{error.felonyExplanation}</p>
+              {(fieldErrors['questionnaire.felonyExplanation'] || error?.felonyExplanation) && (
+                <p className="mt-1 text-red-500 text-sm font-medium">
+                  {fieldErrors['questionnaire.felonyExplanation'] || error.felonyExplanation}
+                </p>
               )}
             </div>
           )}
@@ -163,8 +327,8 @@ const Questionnaire: React.FC = () => {
                   </Label>
                 </div>
               </RadioGroup>
-              {error?.evicted && (
-                <p className="mt-1 text-red-500 text-md text-center">{error.evicted}</p>
+              {(fieldErrors['questionnaire.evicted'] || error?.evicted) && (
+                <p className="mt-1 text-red-500 text-md text-center">{fieldErrors['questionnaire.evicted'] || error.evicted}</p>
               )}
             </div>
           </div>
@@ -180,14 +344,22 @@ const Questionnaire: React.FC = () => {
                 ref={evictedTextareaRef}
                 id="evictedExplanation"
                 className={`mt-1 text-md ${ApplicationItemInputStyles} ${
-                  error?.evictedExplanation ? "border-red-500" : ""
+                  (fieldErrors['questionnaire.evictedExplanation'] || error?.evictedExplanation) ? "border-red-500" : ""
                 }`}
                 value={answers.evictedExplanation || ''}
-                onChange={(e) => handleChange('evictedExplanation', e.target.value)}
-                placeholder=""
+                onChange={(e) => {
+                  handleChange('evictedExplanation', e.target.value);
+                  // Clear error immediately when user starts typing
+                  if (e.target.value.trim() && fieldErrors['questionnaire.evictedExplanation']) {
+                    clearFieldError('questionnaire.evictedExplanation');
+                  }
+                }}
+                placeholder="Please explain the circumstances"
               />
-              {error?.evictedExplanation && (
-                <p className="mt-1 text-red-500 text-sm">{error.evictedExplanation}</p>
+              {(fieldErrors['questionnaire.evictedExplanation'] || error?.evictedExplanation) && (
+                <p className="mt-1 text-red-500 text-sm font-medium">
+                  {fieldErrors['questionnaire.evictedExplanation'] || error.evictedExplanation}
+                </p>
               )}
             </div>
           )}

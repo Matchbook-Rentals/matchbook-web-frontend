@@ -63,6 +63,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
   // Directly use residentialHistory from the store
   const residentialHistory = useApplicationStore((state) => state.residentialHistory);
   const setResidentialHistory = useApplicationStore((state) => state.setResidentialHistory);
+  const preservedResidentialHistory = useApplicationStore((state) => state.preservedResidentialHistory);
+  const setPreservedResidentialHistory = useApplicationStore((state) => state.setPreservedResidentialHistory);
   const residentialHistoryErrors = useApplicationStore((state) => state.errors.residentialHistory);
   const { fieldErrors, saveField, validateField, setFieldError, clearFieldError } = useApplicationStore();
   const { toast } = useToast();
@@ -123,13 +125,40 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
     }
   };
 
-  const handleRadioChange = (index: number, value: 'rent' | 'own') => {
-    // Directly update the store
+  const handleRadioChange = async (index: number, value: 'rent' | 'own') => {
+    // Update the residence with new housing status
+    const updatedResidence = { ...residentialHistory[index], housingStatus: value };
+    
+    // Clear landlord info if switching to "own"
+    if (value === 'own') {
+      updatedResidence.landlordFirstName = '';
+      updatedResidence.landlordLastName = '';
+      updatedResidence.landlordEmail = '';
+      updatedResidence.landlordPhoneNumber = '';
+    }
+    
+    // Update the store
     setResidentialHistory(
       residentialHistory.map((residence, i) =>
-        i === index ? { ...residence, housingStatus: value } : residence
+        i === index ? updatedResidence : residence
       )
     );
+    
+    // Save housing status immediately with completion check
+    const fieldPath = `residentialHistory.${index}.housingStatus`;
+    const result = await saveField(fieldPath, value, { checkCompletion: true });
+    
+    // If switching to "own", also clear landlord fields in database
+    if (value === 'own') {
+      await saveField(`residentialHistory.${index}.landlordFirstName`, '', { checkCompletion: false });
+      await saveField(`residentialHistory.${index}.landlordLastName`, '', { checkCompletion: false });
+      await saveField(`residentialHistory.${index}.landlordEmail`, '', { checkCompletion: false });
+      await saveField(`residentialHistory.${index}.landlordPhoneNumber`, '', { checkCompletion: false });
+    }
+    
+    if (isDevelopment && result.success) {
+      console.log(`[Residential] Housing status saved for index ${index}`);
+    }
   };
 
   const handleMonthlyPaymentChange = (index: number, value: string) => {
@@ -193,9 +222,36 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
         break;
       }
     }
-    // If we've reached (or exceeded) 24 and have extra residences, trim them.
+    // If we've reached (or exceeded) 24 and have extra residences, preserve then trim them.
     if (cumulativeMonths >= 24 && residentialHistory.length > neededProperties) {
+      // Preserve the full history before trimming (only if we have more data than preserved)
+      if (residentialHistory.length > preservedResidentialHistory.length) {
+        setPreservedResidentialHistory([...residentialHistory]);
+      }
       setResidentialHistory(residentialHistory.slice(0, neededProperties));
+    }
+    // If we're below 24 months and have preserved data, restore it
+    else if (cumulativeMonths < 24 && preservedResidentialHistory.length > residentialHistory.length) {
+      // Check if we should restore from preserved history
+      // Only restore if the preserved history has more entries and is relevant
+      const shouldRestore = preservedResidentialHistory.some((preserved, index) => {
+        // Check if there's data in preserved history that's not in current
+        return index >= residentialHistory.length && 
+               (preserved.street || preserved.city || preserved.state || 
+                preserved.landlordFirstName || preserved.landlordLastName);
+      });
+      
+      if (shouldRestore) {
+        // Restore up to 3 addresses from preserved history
+        const restoredCount = Math.min(3, preservedResidentialHistory.length);
+        setResidentialHistory(preservedResidentialHistory.slice(0, restoredCount));
+      } else if (cumulativeMonths < 24) {
+        // Auto-add a new residence if needed and we haven't reached the maximum of 3
+        const lastResidence = residentialHistory[residentialHistory.length - 1];
+        if (lastResidence && lastResidence.durationOfTenancy !== "" && residentialHistory.length < 3) {
+          addResidence();
+        }
+      }
     }
     // Otherwise, if we're below 24 and the last residence's duration is filled,
     // auto-add a new residence (if we haven't reached the maximum of 3).
@@ -205,7 +261,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
         addResidence();
       }
     }
-  }, [residentialHistory, setResidentialHistory]); // Include setResidentialHistory in dependency array
+  }, [residentialHistory, setResidentialHistory, preservedResidentialHistory, setPreservedResidentialHistory]); // Include dependencies
 
 
   // Calculate total months from all residences (if needed elsewhere)
@@ -214,14 +270,6 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
 
   return (
     <div className="space-y-8 w-full">
-      {/* Show warning if total months < 24, but don't block saving */}
-      {totalMonths > 0 && totalMonths < 24 && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-          <p className="text-yellow-800 text-sm">
-            ⚠️ Total residential history is {totalMonths} months. At least 24 months is recommended for a complete application.
-          </p>
-        </div>
-      )}
       {residentialHistoryErrors.overall && (
         <p onClick={() => console.log(residentialHistory)} className="text-red-500 text-sm mt-1">{residentialHistoryErrors.overall}</p>
       )}
@@ -235,8 +283,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
           headerText = `Residence ${index + 1}`;
         }
         return (
-          <Card key={index} className="h-[534px] p-6 bg-neutral-50 rounded-xl border-0">
-            <CardContent className="p-0 flex flex-col gap-8 h-full">
+          <Card key={index} className="p-6 bg-neutral-50 rounded-xl border-0">
+            <CardContent className="p-0 flex flex-col gap-8">
               <div className="flex flex-col items-start gap-5 w-full">
                 <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-normal">
                   {headerText}
@@ -435,6 +483,105 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                     {/* Empty div to maintain 2-column layout */}
                   </div>
                 </div>
+
+                {/* Row 5: Landlord Info (only show if renting) */}
+                {residence.housingStatus === 'rent' && (
+                  <>
+                    <div className="mt-4 mb-2">
+                      <h3 className={ApplicationItemSubHeaderStyles}>
+                        {index === 0 ? 'Current Landlord Information' : 'Previous Landlord Information'}
+                      </h3>
+                    </div>
+                    
+                    {/* Landlord First Name + Last Name */}
+                    <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                        <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                              Landlord First Name
+                            </Label>
+                          </div>
+
+                          <Input
+                            name="landlordFirstName"
+                            value={residence.landlordFirstName || ""}
+                            onChange={(e) => handleInputChange(index, e)}
+                            placeholder="Enter landlord's first name"
+                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                          />
+                          {fieldErrors[`residentialHistory.${index}.landlordFirstName`] && 
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordFirstName`]}</p>}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                        <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                              Landlord Last Name
+                            </Label>
+                          </div>
+
+                          <Input
+                            name="landlordLastName"
+                            value={residence.landlordLastName || ""}
+                            onChange={(e) => handleInputChange(index, e)}
+                            placeholder="Enter landlord's last name"
+                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                          />
+                          {fieldErrors[`residentialHistory.${index}.landlordLastName`] && 
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordLastName`]}</p>}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Landlord Email + Phone */}
+                    <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                        <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                              Landlord Email
+                            </Label>
+                          </div>
+
+                          <Input
+                            name="landlordEmail"
+                            value={residence.landlordEmail || ""}
+                            onChange={(e) => handleInputChange(index, e)}
+                            placeholder="Enter landlord's email"
+                            type="email"
+                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                          />
+                          {fieldErrors[`residentialHistory.${index}.landlordEmail`] && 
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordEmail`]}</p>}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                        <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                          <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                            <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                              Landlord Phone
+                            </Label>
+                          </div>
+
+                          <Input
+                            name="landlordPhoneNumber"
+                            value={residence.landlordPhoneNumber || ""}
+                            onChange={(e) => handleInputChange(index, e)}
+                            placeholder="Enter landlord's phone"
+                            type="tel"
+                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                          />
+                          {fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`] && 
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`]}</p>}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
