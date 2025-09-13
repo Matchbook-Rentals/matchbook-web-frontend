@@ -46,7 +46,7 @@ export const StepProgress: React.FC<StepProgressProps> = ({
 
   return (
     <div className="flex w-full items-center justify-center">
-      <div className={cn("flex w-[420px] items-center justify-between", className)}>
+      <div className={cn("flex w-full max-w-3xl items-center justify-between", className)}>
         {steps.map((step, index) => (
           <React.Fragment key={index}>
             {/* Step group (circle + optional text) */}

@@ -5,6 +5,7 @@ import { ConnectComponentsProvider } from '@stripe/react-connect-js';
 import { useStripeConnect } from '@/hooks/useStripeConnect';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useUser } from '@clerk/nextjs';
@@ -97,21 +98,39 @@ export default function EmbeddedComponentContainer({
                 <RadioGroup
                   value={accountType}
                   onValueChange={setAccountType}
-                  className="mb-6"
+                  className="mb-6 flex gap-6"
                 >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="individual" id="individual" />
-                    <Label htmlFor="individual">Individual</Label>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem 
+                      value="individual" 
+                      id="individual"
+                      className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0"
+                    />
+                    <Label 
+                      htmlFor="individual"
+                      className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                    >
+                      Individual
+                    </Label>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="company" id="business" />
-                    <Label htmlFor="business">Business</Label>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem 
+                      value="company" 
+                      id="business"
+                      className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0"
+                    />
+                    <Label 
+                      htmlFor="business"
+                      className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                    >
+                      Business
+                    </Label>
                   </div>
                 </RadioGroup>
 
-                <Button onClick={createStripeAccount} className="w-full">
+                <BrandButton onClick={createStripeAccount} className="w-full">
                   Create Payment Account
-                </Button>
+                </BrandButton>
               </>
             )}
 
@@ -182,7 +201,6 @@ export default function EmbeddedComponentContainer({
     <div className="container mx-auto p-4">
       <Card>
         <CardContent className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Complete your payment setup</h2>
           <ConnectComponentsProvider connectInstance={stripeConnectInstance}>
             {children}
           </ConnectComponentsProvider>

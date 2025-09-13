@@ -56,6 +56,7 @@ model User {
   hallmarkHostAt   DateTime? // Timestamp of when user became hallmark host
   trailblazerAt    DateTime? // Timestamp of when user became trailblazer
   agreedToTerms    DateTime? // Timestamp of when user last agreed to terms
+  agreedToHostTerms DateTime? // Timestamp of when user agreed to host-specific terms
 
   // Relationships trips          Trip[]
   accounts           Account[]

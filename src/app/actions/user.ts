@@ -5,6 +5,69 @@ import { redirect } from 'next/navigation'
 import { currentUser, auth } from '@clerk/nextjs/server'
 import { clerkClient } from '@clerk/nextjs/server'
 import { logger } from '@/lib/logger';
+import { unstable_noStore as noStore } from 'next/cache';
+
+export async function getHostUserData() {
+  noStore(); // Prevent caching to always get fresh data
+  const clerkUser = await currentUser();
+  
+  if (!clerkUser) {
+    return null;
+  }
+
+  try {
+    const user = await prismadb.user.findUnique({
+      where: { id: clerkUser.id },
+      select: {
+        id: true,
+        stripeAccountId: true,
+        agreedToHostTerms: true,
+        stripeChargesEnabled: true,
+        stripeDetailsSubmitted: true,
+      }
+    });
+
+    return user;
+  } catch (error) {
+    logger.error('Failed to fetch host user data', {
+      userId: clerkUser.id,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    return null;
+  }
+}
+
+export async function updateUserStripeAccount(stripeAccountId: string) {
+  const clerkUser = await currentUser();
+  
+  if (!clerkUser) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    const user = await prismadb.user.update({
+      where: { id: clerkUser.id },
+      data: { stripeAccountId },
+    });
+
+    // Revalidate the overview page to show updated checklist
+    revalidatePath('/app/host/dashboard/overview');
+    revalidatePath('/app/host');
+    
+    logger.info('Updated user Stripe account', {
+      userId: clerkUser.id,
+      stripeAccountId
+    });
+
+    return user;
+  } catch (error) {
+    logger.error('Failed to update user Stripe account', {
+      userId: clerkUser.id,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    throw new Error("Failed to update Stripe account");
+  }
+}
 
 export async function createUser() {
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import prisma from '@/lib/prismadb';
+import { logger } from '@/lib/logger';
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -20,6 +21,108 @@ const verifyWebhookSignature = async (
   } catch (err) {
     console.error('⚠️ [Webhook] Signature verification failed:', err);
     throw new Error('Invalid signature');
+  }
+};
+
+// Helper function to handle account.updated event
+const handleAccountUpdated = async (account: any) => {
+  logger.info('🔄 [Webhook] Processing account.updated:', {
+    id: account.id,
+    charges_enabled: account.charges_enabled,
+    payouts_enabled: account.payouts_enabled,
+    requirements: {
+      currently_due: account.requirements?.currently_due?.length || 0,
+      past_due: account.requirements?.past_due?.length || 0,
+      eventually_due: account.requirements?.eventually_due?.length || 0,
+      disabled_reason: account.requirements?.disabled_reason,
+      current_deadline: account.requirements?.current_deadline,
+    }
+  });
+
+  try {
+    // Find user by Stripe account ID
+    const user = await prisma.user.findFirst({
+      where: { stripeAccountId: account.id }
+    });
+
+    if (!user) {
+      logger.warn('⚠️ [Webhook] No user found for Stripe account:', account.id);
+      return;
+    }
+
+    // Check if account needs additional information
+    const requirementsNeeded = account.requirements?.currently_due?.length > 0 || 
+                               account.requirements?.past_due?.length > 0;
+    
+    if (requirementsNeeded) {
+      logger.warn('📋 [Webhook] Account has requirements:', {
+        userId: user.id,
+        accountId: account.id,
+        currently_due: account.requirements.currently_due,
+        past_due: account.requirements.past_due,
+        deadline: account.requirements.current_deadline 
+          ? new Date(account.requirements.current_deadline * 1000).toISOString()
+          : null,
+      });
+
+      // TODO: Send notification to user about requirements
+      // TODO: Store requirements in database for dashboard display
+    }
+
+    // Log capability status
+    if (!account.charges_enabled || !account.payouts_enabled) {
+      logger.warn('⚠️ [Webhook] Account capabilities limited:', {
+        userId: user.id,
+        charges_enabled: account.charges_enabled,
+        payouts_enabled: account.payouts_enabled,
+        disabled_reason: account.requirements?.disabled_reason,
+      });
+    }
+
+    logger.info('✅ [Webhook] Account update processed successfully');
+  } catch (error) {
+    logger.error('💥 [Webhook] Error processing account update:', error);
+    throw error;
+  }
+};
+
+// Helper function to handle person.updated event
+const handlePersonUpdated = async (person: any) => {
+  logger.info('👤 [Webhook] Processing person.updated:', {
+    id: person.id,
+    account: person.account,
+    verification_status: person.verification?.status,
+    requirements: person.requirements,
+  });
+
+  // Log if verification is needed
+  if (person.requirements?.currently_due?.length > 0) {
+    logger.warn('📋 [Webhook] Person has verification requirements:', {
+      personId: person.id,
+      accountId: person.account,
+      requirements: person.requirements.currently_due,
+    });
+  }
+};
+
+// Helper function to handle capability.updated event
+const handleCapabilityUpdated = async (capability: any) => {
+  logger.info('🎯 [Webhook] Processing capability.updated:', {
+    id: capability.id,
+    account: capability.account,
+    status: capability.status,
+    requested: capability.requested,
+    requirements: capability.requirements,
+  });
+
+  // Log if capability is not active
+  if (capability.status !== 'active') {
+    logger.warn('⚠️ [Webhook] Capability not active:', {
+      capabilityId: capability.id,
+      accountId: capability.account,
+      status: capability.status,
+      requirements: capability.requirements,
+    });
   }
 };
 
@@ -83,6 +186,20 @@ export async function POST(request: NextRequest) {
 
     // Handle different event types
     switch (event.type) {
+      // Connect account events
+      case 'account.updated':
+        await handleAccountUpdated(event.data.object);
+        break;
+        
+      case 'person.updated':
+        await handlePersonUpdated(event.data.object);
+        break;
+        
+      case 'capability.updated':
+        await handleCapabilityUpdated(event.data.object);
+        break;
+      
+      // Payment method events
       case 'setup_intent.succeeded':
         await handleSetupIntentSucceeded(event.data.object);
         break;

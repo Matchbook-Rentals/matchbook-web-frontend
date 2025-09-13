@@ -1,55 +1,27 @@
 'use client';
 
 import React from 'react';
-import { ConnectAccountOnboarding } from '@stripe/react-connect-js';
-import EmbeddedComponentContainer from '@/app/components/EmbeddedComponentContainer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {  CheckCircle, AlertCircle } from 'lucide-react';
+import { BrandButton } from '@/components/ui/brandButton';
+import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 import { useRouter, useSearchParams } from 'next/navigation';
-
-interface OnboardingStep {
-  id: string;
-  title: string;
-  description: string;
-  completed: boolean;
-}
-
-const onboardingSteps: OnboardingStep[] = [
-  {
-    id: 'account-creation',
-    title: 'Create Payment Account',
-    description: 'Set up your Stripe Connect account to receive payments',
-    completed: false,
-  },
-  {
-    id: 'identity-verification',
-    title: 'Verify Your Identity',
-    description: 'Provide required documents and information',
-    completed: false,
-  },
-  {
-    id: 'bank-details',
-    title: 'Add Bank Account',
-    description: 'Connect your bank account for payouts',
-    completed: false,
-  },
-  {
-    id: 'review',
-    title: 'Review & Activate',
-    description: 'Review your information and activate your account',
-    completed: false,
-  },
-];
+import { SupportDialog } from '@/components/ui/support-dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 export default function StripeConnectOnboardingPage() {
   const { user } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [accountReady, setAccountReady] = React.useState(false);
-  const [currentStep, setCurrentStep] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isCheckingStatus, setIsCheckingStatus] = React.useState(true);
+  const [hasStripeAccount, setHasStripeAccount] = React.useState(false);
+  const [stripeAccountId, setStripeAccountId] = React.useState<string | null>(null);
   const [isOnboardingComplete, setIsOnboardingComplete] = React.useState(false);
+  const [supportDialogOpen, setSupportDialogOpen] = React.useState(false);
+  const [accountType, setAccountType] = React.useState('individual');
 
   React.useEffect(() => {
     if (user) {
@@ -63,27 +35,83 @@ export default function StripeConnectOnboardingPage() {
       const response = await fetch('/api/user/stripe-account');
       const data = await response.json();
       
-      if (data.stripeAccountId && data.onboardingComplete) {
-        setIsOnboardingComplete(true);
-      } else if (data.stripeAccountId) {
-        setAccountReady(true);
+      if (data.stripeAccountId) {
+        setHasStripeAccount(true);
+        setStripeAccountId(data.stripeAccountId);
+        
+        if (data.onboardingComplete) {
+          setIsOnboardingComplete(true);
+        }
       }
     } catch (error) {
       console.error('Error checking onboarding status:', error);
+    } finally {
+      setIsCheckingStatus(false);
     }
   };
 
-  const handleOnboardingComplete = () => {
-    setIsOnboardingComplete(true);
-    // Redirect based on 'from' query param or default to host dashboard listings
-    setTimeout(() => {
-      const from = searchParams.get('from');
-      if (from) {
-        router.push(decodeURIComponent(from));
-      } else {
-        router.push('/app/host/dashboard/listings');
+  const handleCreateAndRedirect = async () => {
+    setIsLoading(true);
+    try {
+      // Step 1: Create Stripe account if needed
+      let accountId = stripeAccountId;
+      
+      if (!accountId) {
+        const createResponse = await fetch('/api/payment/account-create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ accountType }),
+        });
+        
+        const createData = await createResponse.json();
+        if (createData.error) {
+          console.error('Error creating Stripe account:', createData.error);
+          setIsLoading(false);
+          return;
+        }
+        accountId = createData.account;
       }
-    }, 2000);
+      
+      // Step 2: Create account link and redirect
+      const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+      const from = searchParams.get('from');
+      
+      // Set up callback URLs
+      const callbackUrl = new URL('/stripe-callback', window.location.origin);
+      callbackUrl.searchParams.set('redirect_to', from || '/app/host/dashboard/overview');
+      callbackUrl.searchParams.set('account_id', accountId);
+      
+      const refreshUrl = new URL('/stripe-callback', window.location.origin);
+      refreshUrl.searchParams.set('redirect_to', from || '/app/host/dashboard/overview');
+      refreshUrl.searchParams.set('account_id', accountId);
+      
+      // Create account link
+      const linkResponse = await fetch('/api/payment/account-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          account: accountId,
+          returnUrl: callbackUrl.toString(),
+          refreshUrl: refreshUrl.toString()
+        }),
+      });
+      
+      const linkData = await linkResponse.json();
+      if (linkData.url) {
+        // Redirect to Stripe's hosted onboarding
+        window.location.href = linkData.url;
+      } else {
+        console.error('Error creating account link:', linkData.error);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error setting up Stripe payments:', error);
+      setIsLoading(false);
+    }
   };
 
   if (isOnboardingComplete) {
@@ -102,7 +130,7 @@ export default function StripeConnectOnboardingPage() {
                 if (from) {
                   router.push(decodeURIComponent(from));
                 } else {
-                  router.push('/app/host/dashboard/listings');
+                  router.push('/app/host/dashboard/overview');
                 }
               }}>
                 Continue
@@ -125,65 +153,88 @@ export default function StripeConnectOnboardingPage() {
         </div>
       </div>
 
-      {/* Progress Steps */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Setup Progress</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {onboardingSteps.map((step, index) => (
-              <div key={step.id} className="flex items-center space-x-4">
-                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                  step.completed 
-                    ? 'bg-green-100 text-green-600' 
-                    : index === currentStep
-                    ? 'bg-blue-100 text-blue-600'
-                    : 'bg-gray-100 text-gray-400'
-                }`}>
-                  {step.completed ? (
-                    <CheckCircle className="w-5 h-5" />
-                  ) : (
-                    <span className="text-sm font-medium">{index + 1}</span>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <h3 className={`font-medium ${
-                    step.completed ? 'text-green-600' : 'text-foreground'
-                  }`}>
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Onboarding Component */}
       <Card>
-        <CardHeader>
-          <CardTitle>Complete Your Account Setup</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <EmbeddedComponentContainer 
-            componentName="ConnectAccountOnboarding"
-            onAccountCreated={(accountId) => {
-              setAccountReady(true);
-              setCurrentStep(1);
-            }}
-          >
-            {!accountReady ? (
-              <div className="flex items-center justify-center gap-1 py-16 text-center">
-                <span className="text-lg font-medium">Initializing onboarding...</span>
+        <CardContent className="p-6">
+          {isCheckingStatus ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#3c8787]" />
+                <p>Checking your account status...</p>
               </div>
-            ) : (
-              <ConnectAccountOnboarding 
-                onExit={handleOnboardingComplete}
-              />
-            )}
-          </EmbeddedComponentContainer>
+            </div>
+          ) : (
+            <>
+              <h2 className="text-xl font-semibold mb-4">Set up your payment account</h2>
+              <p className="text-gray-600 mb-6">
+                Set up your account to receive payments from tenants securely.
+              </p>
+
+              {!hasStripeAccount && !isLoading && (
+                <>
+                  <RadioGroup
+                    value={accountType}
+                    onValueChange={setAccountType}
+                    className="mb-6 flex gap-6"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem 
+                        value="individual" 
+                        id="individual"
+                        className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0"
+                      />
+                      <Label 
+                        htmlFor="individual"
+                        className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                      >
+                        Individual
+                      </Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem 
+                        value="company" 
+                        id="business"
+                        className="flex w-4 h-4 items-center justify-center relative border-secondaryBrand data-[state=checked]:border-secondaryBrand data-[state=checked]:text-secondaryBrand focus:ring-0 focus:ring-offset-0"
+                      />
+                      <Label 
+                        htmlFor="business"
+                        className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                      >
+                        Business
+                      </Label>
+                    </div>
+                  </RadioGroup>
+
+                  <BrandButton 
+                    onClick={handleCreateAndRedirect} 
+                    className="w-full"
+                    disabled={isLoading}
+                  >
+                    Create Payment Account
+                  </BrandButton>
+                </>
+              )}
+
+              {hasStripeAccount && !isLoading && (
+                <BrandButton 
+                  onClick={handleCreateAndRedirect} 
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  Continue Setup
+                </BrandButton>
+              )}
+
+              {isLoading && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#3c8787]" />
+                    <p>Redirecting to Stripe...</p>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </CardContent>
       </Card>
 
@@ -192,16 +243,27 @@ export default function StripeConnectOnboardingPage() {
         <CardContent className="p-6">
           <div className="flex items-start space-x-3">
             <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-            <div>
+            <div className="flex-1">
               <h4 className="font-medium mb-1">Need Help?</h4>
               <p className="text-sm text-muted-foreground">
-                This process is secure and powered by Stripe. Your information is encrypted and 
-                protected according to industry standards. If you have questions, contact our support team.
+                This process is powered by Stripe. If you have questions or encounter any issues, please contact our{' '}
+                <span 
+                  className="font-semibold text-secondaryBrand hover:underline cursor-pointer"
+                  onClick={() => setSupportDialogOpen(true)}
+                >
+                  support team
+                </span>.
               </p>
             </div>
           </div>
         </CardContent>
       </Card>
+      
+      {/* Support Dialog */}
+      <SupportDialog 
+        open={supportDialogOpen} 
+        onOpenChange={setSupportDialogOpen} 
+      />
     </div>
   );
 }

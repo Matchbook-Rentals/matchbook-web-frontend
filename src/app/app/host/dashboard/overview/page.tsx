@@ -6,6 +6,7 @@ import { getHostListingsCount } from "@/app/actions/listings";
 import { getAllUserDrafts } from "@/app/actions/listings-in-creation";
 import { getHostHousingRequests } from "@/app/actions/housing-requests";
 import { getAllHostBookings } from "@/app/actions/bookings";
+import { getHostUserData } from "@/app/actions/user";
 
 async function fetchOverviewData() {
   try {
@@ -307,6 +308,10 @@ export default async function OverviewPage() {
   const user = await currentUser();
   const { sessionClaims } = await auth();
   const isAdmin = sessionClaims?.metadata?.role === 'admin';
+  const isAdminDev = sessionClaims?.metadata?.role === 'admin_dev';
+  
+  // Get host user data for onboarding checklist
+  const hostUserData = await getHostUserData();
   
   // Build mock cards with sample data
   const mockCards = buildStatisticsCards(sampleData);
@@ -376,5 +381,13 @@ export default async function OverviewPage() {
     revenueData: null // No revenue tracking available yet
   };
 
-  return <OverviewClient cards={realCards} mockCards={mockCards} mockChartData={mockChartData} realChartData={realChartData} userFirstName={user?.firstName || null} />;
+  return <OverviewClient 
+    cards={realCards} 
+    mockCards={mockCards} 
+    mockChartData={mockChartData} 
+    realChartData={realChartData} 
+    userFirstName={user?.firstName || null}
+    hostUserData={hostUserData}
+    isAdminDev={isAdminDev}
+  />;
 }

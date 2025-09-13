@@ -60,23 +60,23 @@ export const useStripeConnect = (
   const appearanceVariables = useMemo(() => {
     if (theme === 'dark') {
       return {
-        colorPrimary: '#635BFF',
+        colorPrimary: '#3c8787', // secondaryBrand color
         colorBackground: '#0A0E27',
         colorText: '#FFFFFF',
         colorDanger: '#DF1B41',
-        fontFamily: 'Ideal Sans, system-ui, sans-serif',
+        fontFamily: 'Poppins, system-ui, sans-serif',
         spacingUnit: '2px',
-        borderRadius: '4px',
+        borderRadius: '8px',
       };
     }
     return {
-      colorPrimary: '#635BFF',
+      colorPrimary: '#3c8787', // secondaryBrand color
       colorBackground: '#FFFFFF',
-      colorText: '#30313D',
+      colorText: '#344054',
       colorDanger: '#DF1B41',
-      fontFamily: 'Ideal Sans, system-ui, sans-serif',
+      fontFamily: 'Poppins, system-ui, sans-serif',
       spacingUnit: '2px',
-      borderRadius: '4px',
+      borderRadius: '8px',
     };
   }, [theme]);
 
