@@ -4,12 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { UploadButton } from '@/app/utils/uploadthing';
-import { PlusCircle, X, Trash, Loader2 } from 'lucide-react';
+import { PlusCircle, X, Trash, Loader2, Camera } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ApplicationItemLabelStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
 import { deleteIncome, deleteIncomeProof } from '@/app/actions/applications';
 import { UploadIcon } from '@radix-ui/react-icons';
+import { Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from "@/components/ui/use-toast";
 import { SecureFileViewer } from '@/components/secure-file-viewer';
@@ -35,9 +36,10 @@ interface UploadData {
 
 interface IncomeProps {
   inputClassName?: string;
+  isMobile?: boolean;
 }
 
-export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
+export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false }) => {
   const { toast } = useToast();
   const {
     incomes,
@@ -331,7 +333,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
         {incomes.map((item, index) => (
           <div key={index} className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
             {/* Row 1: Income Source + Monthly Amount */}
-            <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+            <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
               <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                 <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                   <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -355,7 +357,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
                       value={item.source}
                       onChange={(e) => handleInputChange(index, 'source', e.target.value)}
                       placeholder="Enter your Income Source"
-                      className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${fieldErrors[`incomes.${index}.source`] || error?.source?.[index] ? "border-red-500" : ""}`}
+                      className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${fieldErrors[`incomes.${index}.source`] || error?.source?.[index] ? "border-red-500" : ""}`}
                     />
                     {(fieldErrors[`incomes.${index}.source`] || error?.source?.[index]) && (
                       <p className="mt-1 text-red-500 text-sm">{fieldErrors[`incomes.${index}.source`] || error.source?.[index]}</p>
@@ -377,7 +379,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
                     value={formatCurrency(item.monthlyAmount)}
                     onChange={(e) => handleMonthlyAmountChange(index, e.target.value)}
                     placeholder="Enter Monthly Amount"
-                    className={`${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
+                    className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
                   />
                   {(fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index]) && (
                     <p className="mt-1 text-red-500 text-sm">{fieldErrors[`incomes.${index}.monthlyAmount`] || error.monthlyAmount?.[index]}</p>
@@ -421,11 +423,17 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
                         <UploadButton<UploadData, unknown>
                           endpoint="incomeUploader"
                           config={{
-                            mode: "auto"
+                            mode: "auto",
+                            ...(isMobile && {
+                              input: {
+                                accept: "image/*,application/pdf",
+                                capture: "environment"
+                              }
+                            })
                           }}
                           className="uploadthing-custom w-full"
                           appearance={{
-                            button: "flex flex-col h-[140px] items-center justify-center gap-[35px] px-[100px] py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit",
+                            button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col h-[140px] gap-[35px] px-[100px] py-[21px]'} items-center justify-center relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
                             allowedContent: "hidden",
                           }}
                           onUploadBegin={(name) => {
@@ -444,19 +452,23 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName }) => {
                           }}
                           content={{
                             button: ({ ready, isUploading }) => (
-                              <div className="inline-flex flex-col items-center justify-center gap-3 relative flex-[0_0_auto]">
+                              <div className={`inline-flex ${isMobile ? 'flex-row' : 'flex-col'} items-center justify-center gap-3 relative flex-[0_0_auto]`}>
                                 {isUploading ? (
-                                  <Loader2 className="relative w-8 h-8 text-[#036e49] animate-spin" />
+                                  <Loader2 className={`relative ${isMobile ? 'w-6 h-6' : 'w-8 h-8'} text-[#036e49] animate-spin`} />
                                 ) : (
-                                  <UploadIcon className="relative w-8 h-8 text-[#036e49]" />
+                                  isMobile ? (
+                                    <Camera className="w-6 h-6 text-[#036e49]" />
+                                  ) : (
+                                    <UploadIcon className="w-8 h-8 text-[#036e49]" />
+                                  )
                                 )}
 
-                                <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
+                                <div className="flex items-center gap-2 relative flex-[0_0_auto]">
                                   <div className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                                    {isUploading ? "Uploading..." : "Drag and drop file or"}
+                                    {isUploading ? "Uploading..." : (isMobile ? "Upload document or photo" : "Drag and drop file or")}
                                   </div>
 
-                                  {!isUploading && (
+                                  {!isUploading && !isMobile && (
                                     <span className="relative w-fit mt-[-1.00px] font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] underline">
                                       Browse
                                     </span>

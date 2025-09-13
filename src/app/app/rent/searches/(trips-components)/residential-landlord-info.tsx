@@ -57,9 +57,10 @@ const MonthlyPaymentInput: React.FC<MonthlyPaymentInputProps> = ({ value, onChan
 
 interface ResidentialLandlordInfoProps {
   inputClassName?: string;
+  isMobile?: boolean;
 }
 
-export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = ({ inputClassName }) => {
+export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = ({ inputClassName, isMobile = false }) => {
   // Directly use residentialHistory from the store
   const residentialHistory = useApplicationStore((state) => state.residentialHistory);
   const setResidentialHistory = useApplicationStore((state) => state.setResidentialHistory);
@@ -291,7 +292,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                 </h2>
 
                 {/* Row 1: Street Address + Apt */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -306,7 +307,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           value={residence.street || ""}
                           onChange={(e) => handleInputChange(index, e)}
                           placeholder="Enter Street Address"
-                          className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                          className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                         />
                         {fieldErrors[`residentialHistory.${index}.street`] && 
                           <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.street`]}</p>}
@@ -328,7 +329,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           value={residence.apt || ""}
                           onChange={(e) => handleInputChange(index, e)}
                           placeholder="Enter Apt, Suite, Bldg"
-                          className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                          className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                         />
                       </div>
                     </div>
@@ -336,7 +337,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                 </div>
 
                 {/* Row 2: City + State */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -350,7 +351,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                         value={residence.city || ""}
                         onChange={(e) => handleInputChange(index, e)}
                         placeholder="Enter City"
-                        className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                        className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                       />
                       {fieldErrors[`residentialHistory.${index}.city`] && 
                         <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.city`]}</p>}
@@ -370,7 +371,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                         value={residence.state || ""}
                         onChange={(e) => handleInputChange(index, e)}
                         placeholder="Enter State"
-                        className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                        className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                       />
                       {fieldErrors[`residentialHistory.${index}.state`] && 
                         <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.state`]}</p>}
@@ -379,7 +380,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                 </div>
 
                 {/* Row 3: ZIP Code + Months */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -393,7 +394,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                         value={residence.zipCode || ""}
                         onChange={(e) => handleInputChange(index, e)}
                         placeholder="Enter ZIP Code"
-                        className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                        className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                       />
                       {fieldErrors[`residentialHistory.${index}.zipCode`] && 
                         <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.zipCode`]}</p>}
@@ -422,7 +423,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           }}
                           min="1"
                           placeholder="Enter months"
-                          className={`w-[120px] ${inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}`}
+                          className={`w-[120px] ${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}`}
                         />
                         {fieldErrors[`residentialHistory.${index}.durationOfTenancy`] && 
                           <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.durationOfTenancy`]}</p>}
@@ -438,7 +439,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                 </div>
 
                 {/* Row 4: Property Type (radio buttons) */}
-                <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                       <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -447,7 +448,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                       <RadioGroup
                         value={residence.housingStatus || ""}
                         onValueChange={(value) => handleRadioChange(index, value as 'rent' | 'own')}
-                        className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto] pt-2"
+                        className={`flex ${isMobile ? 'flex-col items-start gap-3' : 'items-center gap-6'} relative self-stretch w-full flex-[0_0_auto] pt-2`}
                       >
                         <div className="flex items-center gap-2 relative">
                           <RadioGroupItem
@@ -494,7 +495,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                     </div>
                     
                     {/* Landlord First Name + Last Name */}
-                    <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                    <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
                       <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                         <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                           <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -508,7 +509,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             value={residence.landlordFirstName || ""}
                             onChange={(e) => handleInputChange(index, e)}
                             placeholder="Enter landlord's first name"
-                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                            className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
                           {fieldErrors[`residentialHistory.${index}.landlordFirstName`] && 
                             <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordFirstName`]}</p>}
@@ -528,7 +529,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             value={residence.landlordLastName || ""}
                             onChange={(e) => handleInputChange(index, e)}
                             placeholder="Enter landlord's last name"
-                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                            className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
                           {fieldErrors[`residentialHistory.${index}.landlordLastName`] && 
                             <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordLastName`]}</p>}
@@ -537,7 +538,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                     </div>
 
                     {/* Landlord Email + Phone */}
-                    <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                    <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
                       <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                         <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                           <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -552,7 +553,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             onChange={(e) => handleInputChange(index, e)}
                             placeholder="Enter landlord's email"
                             type="email"
-                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                            className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
                           {fieldErrors[`residentialHistory.${index}.landlordEmail`] && 
                             <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordEmail`]}</p>}
@@ -573,7 +574,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             onChange={(e) => handleInputChange(index, e)}
                             placeholder="Enter landlord's phone"
                             type="tel"
-                            className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                            className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
                           {fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`] && 
                             <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`]}</p>}

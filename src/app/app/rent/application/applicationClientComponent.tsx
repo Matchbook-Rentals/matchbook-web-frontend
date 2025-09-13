@@ -12,7 +12,6 @@ import { logger } from '@/lib/logger';
 import { Identification } from '../searches/(trips-components)/application-identity';
 import { Income } from '../searches/(trips-components)/application-income';
 import Questionnaire from '../searches/(trips-components)/application-questionnaire';
-import MobileApplicationEdit from '../searches/(trips-components)/mobile-application-edit';
 import { upsertApplication, markComplete, updateApplicationCompletionStatus } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
@@ -196,14 +195,10 @@ export default function ApplicationClientComponent({
 
   return (
     <div className="flex flex-col w-full max-w-[1140px] mx-auto items-start justify-center gap-4 p-4">
-      {isMobile ? (
-        <MobileApplicationEdit application={application} />
-      ) : (
-        <>
-          {/* Page Title */}
-          <h1 className="w-full text-center text-[#373940] font-['Poppins'] text-[28px] md:text-[24px] sm:text-[20px] font-medium leading-normal">
-            Review Your Application
-          </h1>
+      {/* Page Title */}
+      <h1 className="w-full text-center text-[#373940] font-['Poppins'] text-[28px] md:text-[24px] sm:text-[20px] font-medium leading-normal">
+        Review Your Application
+      </h1>
 
           {/* Loading Overlay */}
           {isLoading && (
@@ -230,7 +225,7 @@ export default function ApplicationClientComponent({
                   <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
                     Personal Information
                   </h2>
-                  <PersonalInfo />
+                  <PersonalInfo isMobile={isMobile} />
                 </div>
               </CardContent>
             </Card>
@@ -239,7 +234,7 @@ export default function ApplicationClientComponent({
           {/* Identification Section */}
           <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
             <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-              <Identification />
+              <Identification isMobile={isMobile} />
             </div>
           </section>
 
@@ -249,7 +244,7 @@ export default function ApplicationClientComponent({
               <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
                 Income
               </h2>
-              <Income />
+              <Income isMobile={isMobile} />
             </div>
           </section>
 
@@ -262,7 +257,7 @@ export default function ApplicationClientComponent({
               <p className="text-sm text-gray-500 mb-4">
                 Please add 24 months of residential history or three previous addresses.
               </p>
-              <ResidentialLandlordInfo />
+              <ResidentialLandlordInfo isMobile={isMobile} />
             </div>
           </section>
 
@@ -272,7 +267,7 @@ export default function ApplicationClientComponent({
               <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
                 Questionnaire
               </h2>
-              <Questionnaire />
+              <Questionnaire isMobile={isMobile} />
             </div>
           </section>
 
@@ -286,8 +281,6 @@ export default function ApplicationClientComponent({
               {isLoading ? 'Submitting...' : 'Save Application'}
             </Button>
           </div>
-        </>
-      )}
 
       {/* Development Troubleshooting Section */}
       {process.env.NODE_ENV === 'development' && (

@@ -8,7 +8,11 @@ import { ApplicationItemInputStyles, ApplicationItemLabelStyles } from '@/consta
 import { useToast } from "@/components/ui/use-toast";
 import { debounce } from 'lodash';
 
-const Questionnaire: React.FC = () => {
+interface QuestionnaireProps {
+  isMobile?: boolean;
+}
+
+const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
   const { toast } = useToast();
   const { 
     answers, 
@@ -203,8 +207,8 @@ const Questionnaire: React.FC = () => {
     <div className="w-full">
       <div>
         <div className="mb-6">
-          <div className="flex mb-2 space-x-4 items-center">
-            <div className="w-4/5 flex items-center">
+          <div className={`${isMobile ? 'flex-col space-y-3' : 'flex space-x-4 items-center'} mb-2`}>
+            <div className={`${isMobile ? 'w-full' : 'w-4/5'} flex items-center`}>
               <span className={ApplicationItemLabelStyles}>
                 Have you been convicted of a felony or misdemeanor offense in the past 7 years?
               </span>
@@ -218,7 +222,7 @@ const Questionnaire: React.FC = () => {
                   }
                 }}
                 value={answers.felony?.toString()}
-                className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]"
+                className={`flex items-center ${isMobile ? 'gap-4' : 'gap-6'} relative self-stretch w-full flex-[0_0_auto]`}
               >
                 <div className="flex items-center gap-2 relative">
                   <RadioGroupItem 
@@ -283,8 +287,8 @@ const Questionnaire: React.FC = () => {
         </div>
 
         <div className="mb-6">
-          <div className="flex mb-6 space-x-4 items-center">
-            <div className="w-4/5 flex items-center">
+          <div className={`${isMobile ? 'flex-col space-y-3' : 'flex space-x-4 items-center'} mb-6`}>
+            <div className={`${isMobile ? 'w-full' : 'w-4/5'} flex items-center`}>
               <span className={ApplicationItemLabelStyles}>
                 Have you been evicted from a rental property in the past 7 years?
               </span>
@@ -298,7 +302,7 @@ const Questionnaire: React.FC = () => {
                   }
                 }}
                 value={answers.evicted?.toString()}
-                className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]"
+                className={`flex items-center ${isMobile ? 'gap-4' : 'gap-6'} relative self-stretch w-full flex-[0_0_auto]`}
               >
                 <div className="flex items-center gap-2 relative">
                   <RadioGroupItem 

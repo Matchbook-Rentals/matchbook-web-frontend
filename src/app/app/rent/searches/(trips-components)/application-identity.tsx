@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { UploadButton } from '@/app/utils/uploadthing';
 import { Card, CardContent } from '@/components/ui/card';
 import { SecureFileList } from '@/components/secure-file-viewer';
-import { Upload, Loader2 } from 'lucide-react';
+import { Upload, Loader2, Camera } from 'lucide-react';
 import { ImageCategory } from '@prisma/client';
 import { useApplicationStore } from '@/stores/application-store';
 import { useToast } from "@/components/ui/use-toast";
@@ -70,9 +70,10 @@ const ID_TYPES = [
 
 interface IdentificationProps {
   inputClassName?: string;
+  isMobile?: boolean;
 }
 
-export const Identification: React.FC<IdentificationProps> = ({ inputClassName }) => {
+export const Identification: React.FC<IdentificationProps> = ({ inputClassName, isMobile = false }) => {
   const { toast } = useToast();
   const { 
     ids, 
@@ -348,14 +349,14 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
       }));
 
   return (
-    <Card className="h-[534px] w-full p-6 bg-neutral-50 rounded-xl border-0">
+    <Card className={`${isMobile ? '' : 'h-[534px]'} w-full p-6 bg-neutral-50 rounded-xl border-0`}>
       <CardContent className="p-0 flex flex-col gap-8 h-full">
         <div className="flex flex-col items-start gap-5 w-full">
           <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-normal">
             Identification
           </h2>
 
-          <div className="flex items-start gap-5 w-full">
+          <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} w-full`}>
             <div className="flex flex-col items-start gap-1.5 flex-1">
               <div className="flex flex-col items-start gap-1.5 w-full">
                 <div className="flex flex-col items-start gap-1.5 w-full">
@@ -490,14 +491,14 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
                     }
                   }}
                   placeholder="Enter ID Number"
-                  className={`${inputClassName || "h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"} ${error?.idNumber ? 'border-red-500' : ''}`}
+                  className={`${inputClassName || `${isMobile ? 'py-3' : 'h-12'} px-3 ${isMobile ? '' : 'py-2'} bg-white rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${error?.idNumber ? 'border-red-500' : ''}`}
                 />
                 {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
               </div>
             </div>
           </div>
 
-          <div className="h-[337px] flex items-center gap-5 w-full">
+          <div className={`${isMobile ? '' : 'h-[337px]'} flex ${isMobile ? 'flex-col gap-3' : 'items-center gap-5'} w-full`}>
             <div className="flex flex-col items-start gap-1.5 flex-1">
               <div className="flex flex-col items-start gap-1.5 w-full">
                 <div className="flex flex-col items-start gap-1.5 w-full">
@@ -515,11 +516,17 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
                       <UploadButton<UploadData, unknown>
                         endpoint="incomeUploader"
                         config={{
-                          mode: "auto"
+                          mode: "auto",
+                          ...(isMobile && {
+                            input: {
+                              accept: "image/*",
+                              capture: "environment"
+                            }
+                          })
                         }}
                         className="uploadthing-custom w-full"
                         appearance={{
-                          button: "flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit",
+                          button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col h-[140px] gap-[35px] px-[100px] py-[21px]'} box-border items-center justify-center w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
                           allowedContent: "hidden",
                         }}
                         onUploadBegin={(name) => {
@@ -538,18 +545,22 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
                         }}
                         content={{
                           button: ({ ready, isUploading }) => (
-                            <div className="inline-flex flex-col items-center justify-center gap-3">
+                            <div className={`inline-flex ${isMobile ? 'flex-row' : 'flex-col'} items-center justify-center gap-3`}>
                               {isUploading ? (
-                                <Loader2 className="w-8 h-8 text-secondaryBrand animate-spin" />
+                                <Loader2 className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'} text-secondaryBrand animate-spin`} />
                               ) : (
-                                <Upload className="w-8 h-8 text-secondaryBrand" />
+                                isMobile ? (
+                                  <Camera className="w-6 h-6 text-secondaryBrand" />
+                                ) : (
+                                  <Upload className="w-8 h-8 text-secondaryBrand" />
+                                )
                               )}
 
-                              <div className="flex items-center gap-2 w-full">
+                              <div className="flex items-center gap-2">
                                 <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                                  {isUploading ? "Uploading..." : "Drag and drop file or"}
+                                  {isUploading ? "Uploading..." : (isMobile ? "Upload or take photo" : "Drag and drop file or")}
                                 </div>
-                                {!isUploading && (
+                                {!isUploading && !isMobile && (
                                   <span className="font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] underline">
                                     Browse
                                   </span>
@@ -656,7 +667,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName }
                         }}
                       />
                     ) : (
-                      <div className="flex flex-col h-[140px] box-border items-center justify-center gap-[35px] px-[100px] py-[21px] w-full bg-white rounded-xl border border-solid border-[#e7f0f0]">
+                      <div className={`flex flex-col ${isMobile ? 'gap-3 px-4 py-4' : 'h-[140px] gap-[35px] px-[100px] py-[21px]'} box-border items-center justify-center w-full bg-white rounded-xl border border-solid border-[#e7f0f0]`}>
                         <div className="inline-flex flex-col items-center justify-center gap-3">
                           <svg
                             className="w-11 h-11 text-gray-600"

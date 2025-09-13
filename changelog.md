@@ -1,5 +1,15 @@
 # Changelog
 
+## Mobile-Responsive Rental Application Form
+- Consolidated mobile and desktop views into single responsive component, removing separate MobileApplicationEdit
+- Implemented single-column layout for all form fields on mobile devices (< 640px width)
+- Added responsive flex direction switching (flex-col on mobile, flex-row on desktop) for all field pairs
+- Removed fixed heights on mobile: Cards, upload areas, and inputs now use natural height with padding
+- Created mobile-friendly upload buttons with horizontal layout (icon left, text right) and camera icon
+- Added native mobile camera/gallery support with accept="image/*" and capture="environment" attributes
+- Updated questionnaire to stack questions and radio buttons vertically on mobile
+- Made rent/own radio buttons display in column layout on mobile for better touch targets
+
 ## Application Auto-Save and Completion Tracking
 - Implemented auto-save functionality with 1-second debouncing for text fields across all application forms
 - Added immediate save for file uploads (ID photos, income proofs) and radio/select field changes

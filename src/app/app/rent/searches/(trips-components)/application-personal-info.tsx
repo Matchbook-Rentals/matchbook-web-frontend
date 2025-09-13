@@ -22,9 +22,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface PersonalInfoProps {
   inputClassName?: string;
+  isMobile?: boolean;
 }
 
-export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) => {
+export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMobile = false }) => {
   const { 
     personalInfo, 
     setPersonalInfo, 
@@ -283,7 +284,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
 
   return (
     <>
-      <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+      <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
         <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
           <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
             <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -297,7 +298,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
                 name="firstName"
                 value={personalInfo.firstName}
                 onChange={handleInputChange}
-                className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                 placeholder={formFields[0].placeholder}
               />
               {(fieldErrors['personalInfo.firstName'] || error?.firstName) && 
@@ -327,7 +328,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
         </div>
       </div>
 
-      <div className="flex-[0_0_auto] flex items-center gap-5 relative self-stretch w-full">
+      <div className={`flex-[0_0_auto] flex ${isMobile ? 'flex-col gap-3' : 'items-center gap-5'} relative self-stretch w-full`}>
         <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
           <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
             <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -341,7 +342,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
                 value={personalInfo.middleName || ''}
                 onChange={handleInputChange}
                 disabled={personalInfo.noMiddleName}
-                className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+                className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                 placeholder={formFields[2].placeholder}
               />
               {(fieldErrors['personalInfo.middleName'] || error?.middleName) && 
@@ -360,7 +361,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
         </div>
       </div>
 
-      <div className="flex items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+      <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
         <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
           <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
             <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
@@ -375,7 +376,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName }) =>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full h-12 justify-between bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs px-3 py-2 font-normal hover:bg-white"
+                  className={`w-full ${isMobile ? 'py-3' : 'h-12 py-2'} justify-between bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs px-3 font-normal hover:bg-white`}
                 >
                   <span className={personalInfo.dateOfBirth ? "text-gray-900" : "text-gray-400"}>
                     {personalInfo.dateOfBirth ? 
