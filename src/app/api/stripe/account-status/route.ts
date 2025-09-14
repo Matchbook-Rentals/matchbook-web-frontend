@@ -18,10 +18,14 @@ export async function GET(request: NextRequest) {
     }
 
     const account = await stripe.accounts.retrieve(accountId);
-    
-    // Check if there are any outstanding requirements
-    const onboardingComplete = account.requirements?.currently_due?.length === 0 && 
-                              account.requirements?.eventually_due?.length === 0;
+
+    // For Express accounts, completion is simpler - just check charges_enabled and details_submitted
+    // For Standard accounts, also check requirements
+    const isExpressAccount = account.type === 'express';
+    const onboardingComplete = isExpressAccount
+      ? (account.charges_enabled && account.details_submitted)
+      : (account.charges_enabled && account.details_submitted &&
+         account.requirements?.currently_due?.length === 0);
 
     return NextResponse.json({ 
       onboardingComplete,

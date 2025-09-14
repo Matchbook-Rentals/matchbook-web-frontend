@@ -113,6 +113,10 @@ export interface NotificationEmailData {
   companyWebsite: string;
   senderLine?: string;
   footerText?: string;
+  tagLink?: {
+    text: string;
+    url: string;
+  };
 }
 
 export interface SendNotificationEmailInput {

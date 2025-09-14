@@ -39,15 +39,32 @@ export default function StripeCallbackPage() {
           userAccountId = userData.stripeAccountId
         }
 
-        // Check onboarding status if we have an account
+        // Check onboarding status and update database
         let chargesEnabled = false
         let detailsSubmitted = false
+        let payoutsEnabled = false
         if (userAccountId) {
-          const statusResponse = await fetch(`/api/stripe/account-status?account_id=${userAccountId}`)
-          const statusData = await statusResponse.json()
-          onboardingComplete = statusData.onboardingComplete
-          chargesEnabled = statusData.chargesEnabled
-          detailsSubmitted = statusData.detailsSubmitted
+          // Update and get the latest status from Stripe
+          const updateResponse = await fetch('/api/user/update-stripe-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          })
+
+          if (updateResponse.ok) {
+            const updateData = await updateResponse.json()
+            chargesEnabled = updateData.chargesEnabled
+            detailsSubmitted = updateData.detailsSubmitted
+            payoutsEnabled = updateData.payoutsEnabled
+            onboardingComplete = chargesEnabled && detailsSubmitted
+          } else {
+            // Fallback to checking status without updating
+            const statusResponse = await fetch(`/api/stripe/account-status?account_id=${userAccountId}`)
+            const statusData = await statusResponse.json()
+            onboardingComplete = statusData.onboardingComplete
+            chargesEnabled = statusData.chargesEnabled
+            detailsSubmitted = statusData.detailsSubmitted
+            payoutsEnabled = statusData.payoutsEnabled
+          }
         }
 
         // If onboarding is not complete, redirect to a completion page instead

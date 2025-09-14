@@ -28,21 +28,18 @@ export async function POST(request: NextRequest) {
 
     // Create Stripe account if needed
     if (!accountId) {
-      // Prepare account data with prefilled information
+      // Prefill for Express accounts - they'll see and can confirm/edit during onboarding
       const accountData: any = {
-        type: 'standard',
+        type: 'express', // Express account for simpler onboarding
+        business_type: 'individual', // Auto-assume individual account
         email: user?.email || clerkUser.emailAddresses[0]?.emailAddress,
+        business_profile: {
+          mcc: '6513', // Real Estate Agents and Managers - Rentals
+          product_description: 'Property rental and management services',
+        }
       };
 
-      // Add business profile if we have the info
-      if (user?.firstName || user?.lastName || clerkUser.firstName || clerkUser.lastName) {
-        accountData.business_profile = {
-          name: `${user?.firstName || clerkUser.firstName || ''} ${user?.lastName || clerkUser.lastName || ''}`.trim(),
-          url: request.nextUrl.origin, // Use our site as the business URL
-        };
-      }
-
-      // Add individual information for prefilling
+      // Prefill individual info - they'll see this during onboarding and can edit if needed
       if (user?.firstName || user?.lastName || clerkUser.firstName || clerkUser.lastName) {
         accountData.individual = {
           first_name: user?.firstName || clerkUser.firstName,
@@ -60,31 +57,9 @@ export async function POST(request: NextRequest) {
       });
       
       accountId = account.id;
-    } else {
-      // If account exists but onboarding incomplete, try to update with latest user info
-      try {
-        const existingAccount = await stripe.accounts.retrieve(accountId);
-        
-        // Only update if details haven't been submitted yet
-        if (!existingAccount.details_submitted) {
-          await stripe.accounts.update(accountId, {
-            email: user?.email || clerkUser.emailAddresses[0]?.emailAddress,
-            business_profile: {
-              name: `${user?.firstName || clerkUser.firstName || ''} ${user?.lastName || clerkUser.lastName || ''}`.trim(),
-              url: request.nextUrl.origin,
-            },
-            individual: {
-              first_name: user?.firstName || clerkUser.firstName,
-              last_name: user?.lastName || clerkUser.lastName,
-              email: user?.email || clerkUser.emailAddresses[0]?.emailAddress,
-            }
-          });
-        }
-      } catch (updateError) {
-        // If update fails (e.g., account already has some info), continue anyway
-        console.log('Could not update existing account with prefilled data:', updateError);
-      }
     }
+    // Note: For Express accounts, we can't update KYC info after the first Account Link is created
+    // So we skip any update attempts for existing accounts
 
     // Create account link for onboarding
     const callbackUrl = new URL('/stripe-callback', request.nextUrl.origin);
@@ -101,7 +76,7 @@ export async function POST(request: NextRequest) {
       return_url: callbackUrl.toString(),
       type: "account_onboarding",
       collection_options: {
-        fields: 'eventually_due',
+        fields: 'currently_due', // Minimum required fields for faster onboarding
       },
     });
 

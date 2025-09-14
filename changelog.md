@@ -1,5 +1,15 @@
 # Changelog
 
+## Stripe Express Account Integration
+- Switched from Standard to Express accounts for simpler, faster host onboarding
+- Added automatic syncing of Stripe account status to database (charges_enabled, details_submitted, payouts_enabled)
+- Fixed completion detection for Express accounts with appropriate criteria
+- Simplified prefilling to only essential fields (business_type, MCC, product description)
+- Removed problematic URL validation by making business URL optional
+- Updated collection_options to 'currently_due' for minimum required fields
+- Created API endpoint to update Stripe status from live data on callback
+- Fixed Express account completion logic (charges_enabled && details_submitted)
+
 ## Host Onboarding and Stripe Connect Integration
 - Added onboarding checklist card to host dashboard showing setup requirements (Stripe account, host terms)
 - Implemented direct Stripe Connect integration with one-click setup from dashboard
