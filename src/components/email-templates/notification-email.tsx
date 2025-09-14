@@ -10,6 +10,12 @@ interface NotificationEmailProps {
   companyAddress: string;
   companyCity: string;
   companyWebsite: string;
+  senderLine?: string;
+  footerText?: string;
+  tagLink?: {
+    text: string;
+    url: string;
+  };
 }
 
 const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
@@ -22,6 +28,9 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
   companyAddress,
   companyCity,
   companyWebsite,
+  senderLine,
+  footerText,
+  tagLink,
 }) => {
   return (
     <html>
@@ -101,6 +110,22 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                 <tr>
                   <td className="message-wrapper" style={{ backgroundColor: '#e7ebe2', borderRadius: '20px', padding: '20px' }}>
                     <table width="100%" cellPadding="0" cellSpacing="0" border="0">
+                      {tagLink && (
+                        <tr>
+                          <td style={{ padding: '10px 20px 7px 20px', textAlign: 'left' }}>
+                            <a 
+                              href={tagLink.url}
+                              style={{
+                                color: '#666',
+                                fontSize: '16px',
+                                textDecoration: 'none'
+                              }}
+                            >
+                              {tagLink.text}
+                            </a>
+                          </td>
+                        </tr>
+                      )}
                       <tr>
                         <td style={{ fontWeight: 'bold', paddingBottom: '15px', fontSize: '16px', textAlign: 'center' }}>
                           {contentTitle}
@@ -108,9 +133,19 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                       </tr>
                       <tr>
                         <td className="inner-box" style={{ backgroundColor: '#ffffff', borderRadius: '20px', padding: '20px', fontSize: '16px', lineHeight: 1.6 }}>
+                          {senderLine && (
+                            <p style={{ margin: '0 0 10px 0', fontWeight: 'bold' }}>
+                              {senderLine}
+                            </p>
+                          )}
                           <p style={{ margin: 0 }}>
                             {contentText}
                           </p>
+                          {footerText && (
+                            <p style={{ margin: '15px 0 0 0', fontStyle: 'italic', color: '#666' }}>
+                              {footerText}
+                            </p>
+                          )}
                         </td>
                       </tr>
                       <tr>
@@ -128,42 +163,94 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                     <table cellPadding="0" cellSpacing="0" border="0" align="center">
                       <tr>
                         <td align="center" style={{ padding: '0 8px' }}>
-                          <a href="https://www.facebook.com/matchbookrentals">
+                          <a 
+                            href="https://www.facebook.com/matchbookrentals"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '40px',
+                              height: '40px',
+                              backgroundColor: '#0B6E6E',
+                              borderRadius: '50%',
+                              boxSizing: 'border-box'
+                            }}
+                          >
                             <img 
-                              src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"
+                              src="https://img.icons8.com/?size=100&id=98972&format=png&color=FFFFFF"
                               alt="Facebook"
-                              width="32"
-                              height="32"
+                              width="24"
+                              height="24"
+                              style={{ display: 'block', borderRadius: '50%' }}
                             />
                           </a>
                         </td>
                         <td align="center" style={{ padding: '0 8px' }}>
-                          <a href="https://www.instagram.com/matchbookrentals">
+                          <a 
+                            href="https://www.instagram.com/matchbookrentals"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '40px',
+                              height: '40px',
+                              backgroundColor: '#0B6E6E',
+                              borderRadius: '50%',
+                              boxSizing: 'border-box'
+                            }}
+                          >
                             <img 
-                              src="https://img.icons8.com/?size=100&id=32323&format=png&color=000000"
+                              src="https://img.icons8.com/?size=100&id=32292&format=png&color=FFFFFF"
                               alt="Instagram"
-                              width="32"
-                              height="32"
+                              width="24"
+                              height="24"
+                              style={{ display: 'block', borderRadius: '50%' }}
                             />
                           </a>
                         </td>
                         <td align="center" style={{ padding: '0 8px' }}>
-                          <a href="https://twitter.com/matchbookrent">
+                          <a 
+                            href="https://twitter.com/matchbookrent"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '40px',
+                              height: '40px',
+                              backgroundColor: '#0B6E6E',
+                              borderRadius: '50%',
+                              boxSizing: 'border-box'
+                            }}
+                          >
                             <img 
-                              src="https://img.icons8.com/?size=100&id=ClbD5JTFM7FA&format=png&color=000000"
+                              src="https://img.icons8.com/?size=100&id=YfCbGWCWcuar&format=png&color=FFFFFF"
                               alt="X (Twitter)"
-                              width="32"
-                              height="32"
+                              width="24"
+                              height="24"
+                              style={{ display: 'block', borderRadius: '50%' }}
                             />
                           </a>
                         </td>
                         <td align="center" style={{ padding: '0 8px' }}>
-                          <a href="https://www.tiktok.com/@matchbookrentals">
+                          <a 
+                            href="https://www.tiktok.com/@matchbookrentals"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '40px',
+                              height: '40px',
+                              backgroundColor: '#0B6E6E',
+                              borderRadius: '50%',
+                              boxSizing: 'border-box'
+                            }}
+                          >
                             <img 
-                              src="https://img.icons8.com/?size=100&id=118640&format=png&color=000000"
+                              src="https://matchbook-web-frontend.vercel.app/svg/tiktok-brands-solid-full.svg"
                               alt="TikTok"
-                              width="32"
-                              height="32"
+                              width="24"
+                              height="24"
+                              style={{ display: 'block' }}
                             />
                           </a>
                         </td>

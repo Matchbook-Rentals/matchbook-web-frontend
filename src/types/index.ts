@@ -111,6 +111,8 @@ export interface NotificationEmailData {
   companyAddress: string;
   companyCity: string;
   companyWebsite: string;
+  senderLine?: string;
+  footerText?: string;
 }
 
 export interface SendNotificationEmailInput {

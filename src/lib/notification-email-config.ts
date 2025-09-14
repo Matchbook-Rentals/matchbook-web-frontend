@@ -31,20 +31,13 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
 
   // Message notifications
   message: {
-    subject: 'New Message - MatchBook Rentals',
-    headerText: 'New Message!', // This will be dynamically replaced
-    contentTitle: 'You have a new message', // This will be dynamically replaced
-    buttonText: 'Read here',
+    subject: "You've Got a New Message on MatchBook",
+    headerText: "You've Got a New Message on MatchBook",
+    contentTitle: '',
+    buttonText: 'View Message',
     getContentText: (content, notification) => {
       // Return the actual message content from email data
       return notification?.messageContent || content;
-    },
-    getHeaderText: (notification) => {
-      const senderName = notification?.senderName || 'someone';
-      return `New Message from ${senderName}`;
-    },
-    getContentTitle: (notification) => {
-      return notification?.listingTitle || 'You have a new message';
     }
   },
 
@@ -108,13 +101,15 @@ export function buildNotificationEmailData(
     senderName?: string;
     conversationId?: string;
     listingTitle?: string;
+    messageContent?: string;
     [key: string]: any;
   }
 ): NotificationEmailData {
   const config = getNotificationEmailConfig(actionType);
   const notificationContext = { user, ...additionalData };
   
-  return {
+  // Build base email data
+  const emailData: NotificationEmailData = {
     companyName: 'MatchBook',
     headerText: config.getHeaderText?.(notificationContext) || config.headerText,
     contentTitle: config.getContentTitle?.(notificationContext) || config.contentTitle,
@@ -125,6 +120,33 @@ export function buildNotificationEmailData(
     companyCity: 'Ogden, UT 84414',
     companyWebsite: 'matchbookrentals.com'
   };
+
+  // Add special formatting for message notifications
+  if (actionType === 'message' && additionalData?.senderName) {
+    emailData.senderLine = `From ${additionalData.senderName},`;
+    emailData.footerText = `You have a new message from ${additionalData.senderName}`;
+    
+    // Add tagLink for conversation with listing title
+    if (additionalData.conversationId) {
+      const linkText = additionalData.listingTitle 
+        ? `RE: ${additionalData.listingTitle}`
+        : 'RE: Listing you liked';
+      emailData.tagLink = {
+        text: linkText,
+        url: `${process.env.NEXT_PUBLIC_URL}/app/messages?convo=${additionalData.conversationId}`
+      };
+    }
+    
+    // Truncate message preview if too long
+    if (additionalData.messageContent) {
+      const preview = additionalData.messageContent.length > 200 
+        ? additionalData.messageContent.substring(0, 197) + '...'
+        : additionalData.messageContent;
+      emailData.contentText = preview;
+    }
+  }
+  
+  return emailData;
 }
 
 export function getNotificationEmailSubject(actionType: string): string {

@@ -58,8 +58,9 @@ export default function HostPaymentsTestPage() {
 
   useEffect(() => {
     if (user) {
-      const isAdmin = user.publicMetadata?.role === 'admin'
-      if (!isAdmin) {
+      const userRole = user.publicMetadata?.role as string
+      const hasAdminAccess = userRole?.includes('admin')
+      if (!hasAdminAccess) {
         router.push('/unauthorized')
         return
       }

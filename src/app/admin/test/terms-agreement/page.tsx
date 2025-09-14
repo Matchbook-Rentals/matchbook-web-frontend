@@ -25,7 +25,8 @@ export default function TermsAgreementTestPage() {
 
   useEffect(() => {
     if (user) {
-      const isAdmin = user.publicMetadata?.role === 'admin'
+      const userRole = user.publicMetadata?.role as string
+      const isAdmin = userRole?.includes('admin')
       if (!isAdmin) {
         router.push('/unauthorized')
         return
