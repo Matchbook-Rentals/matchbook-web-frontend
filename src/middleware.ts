@@ -79,13 +79,7 @@ export default clerkMiddleware(async (auth, request) => {
     return;
   }
 
-  // Handle terms page - requires auth but no terms check
-  if (request.nextUrl.pathname.startsWith('/terms')) {
-    auth().protect(); // Still need to be authenticated to access terms
-    return; // Skip terms agreement check
-  }
-
-  // Skip auth entirely for other auth routes (sign-in, sign-up, etc.)
+  // Skip auth entirely for auth routes (sign-in, sign-up, etc.)
   if (isAuthRoute(request)) {
     return;
   }
@@ -93,70 +87,16 @@ export default clerkMiddleware(async (auth, request) => {
   if (isProtectedRoute(request)) {
     auth().protect();
 
-    // Check terms agreement for protected routes
-    let { userId, sessionClaims } = auth();
+    // Role-based access control check
+    const { sessionClaims } = auth();
+    const userRole = sessionClaims?.metadata?.role as Roles | undefined;
     
-    // If no userId, wait 200ms and try auth again once
-    if (!userId) {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      const authRetry = auth();
-      userId = authRetry.userId;
-      sessionClaims = authRetry.sessionClaims;
-    }
+    const hasRouteAccess = checkRouteAccess(request.nextUrl.pathname, userRole);
     
-    if (userId) {
-      try {
-        // Check if user just agreed to terms (bypass session metadata check)
-        const termsJustAgreed = request.nextUrl.searchParams.get('terms_agreed') === 'true';
-        
-        if (termsJustAgreed) {
-          // Remove the parameter and allow access
-          const cleanUrl = new URL(request.url);
-          cleanUrl.searchParams.delete('terms_agreed');
-          return NextResponse.redirect(cleanUrl);
-        }
-
-        // First check session metadata (fastest) - check both metadata and publicMetadata
-        let hasAgreedToTerms = sessionClaims?.metadata?.agreedToTerms || sessionClaims?.publicMetadata?.agreedToTerms || false;
-
-        // If not in session metadata, check database as fallback
-        if (!hasAgreedToTerms) {
-          try {
-            const checkUrl = new URL('/api/check-terms', request.url);
-            checkUrl.searchParams.set('userId', userId);
-            
-            const response = await fetch(checkUrl.toString());
-            const data = await response.json();
-            
-            if (response.ok && data.hasAgreedToTerms) {
-              hasAgreedToTerms = true;
-            }
-          } catch (dbError) {
-            // Continue with session-only check if DB fails
-          }
-        }
-
-        if (!hasAgreedToTerms) {
-          const termsUrl = new URL("/terms", request.url);
-          // Only pass the pathname, not the full URL with query params
-          const redirectPath = request.nextUrl.pathname;
-          termsUrl.searchParams.set("redirect_url", redirectPath);
-          return NextResponse.redirect(termsUrl);
-        }
-        
-        // Role-based access control check
-        const userRole = sessionClaims?.metadata?.role as Roles | undefined;
-        
-        const hasRouteAccess = checkRouteAccess(request.nextUrl.pathname, userRole);
-        
-        if (!hasRouteAccess) {
-          // Redirect to unauthorized page
-          const unauthorizedUrl = new URL("/unauthorized", request.url);
-          return NextResponse.redirect(unauthorizedUrl);
-        }
-      } catch (error) {
-        // Error checking terms agreement
-      }
+    if (!hasRouteAccess) {
+      // Redirect to unauthorized page
+      const unauthorizedUrl = new URL("/unauthorized", request.url);
+      return NextResponse.redirect(unauthorizedUrl);
     }
   }
 });

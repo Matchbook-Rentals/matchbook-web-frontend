@@ -30,6 +30,7 @@ import {
 import { useApplicationStore } from '@/stores/application-store';
 import { ResidentialLandlordInfo } from '../../(trips-components)/residential-landlord-info';
 import { checkApplicationCompletionClient } from '@/utils/application-completion';
+import { SaveStatusIndicator } from '@/components/ui/save-status-indicator';
 
 const navigationItems = [
   { id: 'basic', label: 'Basic Information' },

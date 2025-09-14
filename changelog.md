@@ -1,5 +1,17 @@
 # Changelog
 
+## Host Onboarding and Stripe Connect Integration
+- Added onboarding checklist card to host dashboard showing setup requirements (Stripe account, host terms)
+- Implemented direct Stripe Connect integration with one-click setup from dashboard
+- Converted from embedded to hosted Stripe onboarding for better user experience
+- Added automatic prefilling of user data (name, email, business info) for Stripe account creation
+- Created new database field `agreedToHostTerms` to track host-specific terms acceptance
+- Implemented dynamic checklist text showing "Finish creating your Stripe Account" for incomplete accounts
+- Added Stripe webhook handlers for account verification status tracking
+- Removed intermediate onboarding page - users now go directly to Stripe from dashboard
+- Updated Stripe Connect appearance settings to use brand colors (#3c8787) and Poppins font
+- Added server actions with proper cache management (noStore, revalidatePath) for real-time updates
+
 ## Mobile-Responsive Rental Application Form
 - Consolidated mobile and desktop views into single responsive component, removing separate MobileApplicationEdit
 - Implemented single-column layout for all form fields on mobile devices (< 640px width)
