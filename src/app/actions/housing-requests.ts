@@ -165,13 +165,28 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
 
     const messageContent = `${requesterName.trim()} wants to stay at your property ${listing.title}`;
 
+    // Format date range for notification
+    const formatDate = (date: Date) => {
+      return new Intl.DateTimeFormat('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: 'numeric'
+      }).format(new Date(date));
+    };
+    const dateRange = `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`;
+
     const notificationData: CreateNotificationInput = {
       userId: listing.userId,
-      content: `New Application - ${listing.streetAddress1}`,
+      content: `New application to ${listing.title} for ${dateRange}`,
       url: `/app/host/${listing.id}/applications`,
       actionType: 'view',
       actionId: newHousingRequest.id,
-    }
+      emailData: {
+        renterName: requesterName.trim(),
+        listingTitle: listing.title,
+        dateRange: dateRange
+      }
+    } as CreateNotificationInput;
     createNotification(notificationData)
 
     return newHousingRequest;
@@ -412,15 +427,26 @@ export async function approveHousingRequest(housingRequestId: string) {
       return { updatedRequest, match };
     });
 
+    // Get host name for notification
+    const host = await prismadb.user.findUnique({
+      where: { id: housingRequest.listing.userId },
+      select: { firstName: true, lastName: true }
+    });
+    const hostName = host?.firstName || 'the host';
+
     // Create a notification for the applicant
     console.log('📧 Creating notification for applicant');
     const notificationData = {
       userId: housingRequest.userId,
-      content: `Your application for ${housingRequest.listing.title} has been approved!`,
-      url: `/app/rent/searches/${housingRequest.tripId}?tab=matchbook`,
+      content: `You have a Match!`,
+      url: `/app/rent/match/${result.match.id}/lease-signing`,
       actionType: 'application_approved',
       actionId: housingRequestId,
-    };
+      emailData: {
+        listingTitle: housingRequest.listing.title,
+        hostName: hostName
+      }
+    } as CreateNotificationInput;
     
     console.log('📋 Notification data:', notificationData);
     await createNotification(notificationData);

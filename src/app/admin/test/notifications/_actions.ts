@@ -65,28 +65,32 @@ export async function sendTestNotification({
         break
         
       case 'new_conversation':
-        notificationContent = `${senderName} started a new conversation about ${listingTitle}`
+        notificationContent = `You have a new conversation with ${senderName}`
         notificationUrl = '/app/messages'
         emailData = {
           senderName,
+          messagePreview: 'Hi! I\'m interested in your property and would love to learn more about the availability and amenities.',
+          conversationId: 'test-conversation-id',
           listingTitle
         }
         break
         
       case 'view': // Application received
-        notificationContent = `New Application - ${listingTitle}`
+        notificationContent = `New application to ${listingTitle} for ${messageContent || 'Jan 1 - Jan 31'}`
         notificationUrl = '/app/host/listings/applications'
         emailData = {
           listingTitle,
-          senderName
+          renterName: senderName,
+          dateRange: messageContent || 'Jan 1 - Jan 31'
         }
         break
         
       case 'application_approved':
-        notificationContent = `Your application for ${listingTitle} has been approved!`
-        notificationUrl = '/app/rent/searches?tab=matchbook'
+        notificationContent = `You have a Match!`
+        notificationUrl = '/app/rent/match/test-match-id/lease-signing'
         emailData = {
-          listingTitle
+          listingTitle,
+          hostName: senderName || 'Sarah Johnson'
         }
         break
         

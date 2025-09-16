@@ -354,7 +354,9 @@ export default function NotificationTestPage() {
   // List of notification types that have email templates configured
   const configuredNotificationTypes = [
     'message',
+    'new_conversation',
     'view', // Application received
+    'application_approved',
     'booking',
     'ADMIN_INFO',
     'ADMIN_WARNING',

@@ -22,11 +22,14 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
 
   // Application/Housing Request notifications
   view: {
-    subject: 'New Application - MatchBook Rentals', 
-    headerText: 'New Application!',
-    contentTitle: 'You have a new rental application',
+    subject: 'A New Application Has Been Submitted', 
+    headerText: 'New application received',
+    contentTitle: '',
     buttonText: 'Review Application',
-    getContentText: (content) => content
+    getContentText: (content, notification) => {
+      // Content will be formatted in the buildNotificationEmailData function
+      return content;
+    }
   },
 
   // Message notifications
@@ -38,6 +41,30 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
     getContentText: (content, notification) => {
       // Return the actual message content from email data
       return notification?.messageContent || content;
+    }
+  },
+
+  // New conversation notifications
+  new_conversation: {
+    subject: 'A New Conversation Has Started',
+    headerText: 'A New Conversation Has Started',
+    contentTitle: '',
+    buttonText: 'Read here',
+    getContentText: (content, notification) => {
+      // Return the message preview from email data
+      return notification?.messagePreview || content;
+    }
+  },
+
+  // Application approved notifications
+  application_approved: {
+    subject: "It's a Match!",
+    headerText: 'You have a match',
+    contentTitle: '',
+    buttonText: 'Sign and Book',
+    getContentText: (content, notification) => {
+      // Content will be formatted in the buildNotificationEmailData function
+      return content;
     }
   },
 
@@ -145,11 +172,60 @@ export function buildNotificationEmailData(
       emailData.contentText = preview;
     }
   }
+
+  // Add special formatting for new conversation notifications
+  if (actionType === 'new_conversation' && additionalData?.senderName) {
+    emailData.senderLine = `From ${additionalData.senderName},`;
+    emailData.footerText = `You have a new conversation with ${additionalData.senderName}`;
+    
+    // Truncate message preview if too long
+    if (additionalData.messagePreview) {
+      const preview = additionalData.messagePreview.length > 200 
+        ? additionalData.messagePreview.substring(0, 197) + '...'
+        : additionalData.messagePreview;
+      emailData.contentText = preview;
+    }
+  }
+
+  // Add special formatting for application notifications
+  if (actionType === 'view' && additionalData) {
+    const hostName = user?.firstName || 'there';
+    const renterName = additionalData.renterName || 'A renter';
+    const listingTitle = additionalData.listingTitle || 'your listing';
+    const dateRange = additionalData.dateRange || '';
+    
+    // Update subject with listing name
+    const config = getNotificationEmailConfig(actionType);
+    if (additionalData.listingTitle) {
+      // Note: We can't modify the subject here, but we format the body
+    }
+    
+    // Format the email body
+    emailData.contentText = `Hi ${hostName},\n\nYou've received a new application from ${renterName} for your listing${dateRange ? `: ${dateRange}` : ''}.`;
+    emailData.footerText = `New application to ${listingTitle}${dateRange ? ` for ${dateRange}` : ''}`;
+  }
+
+  // Add special formatting for application approved notifications
+  if (actionType === 'application_approved' && additionalData) {
+    const renterFirstName = user?.firstName || 'there';
+    const listingTitle = additionalData.listingTitle || 'the listing';
+    const hostName = additionalData.hostName || 'the host';
+    
+    // Format the email body
+    emailData.contentText = `Hi ${renterFirstName},\n\nGreat news, your application for "${listingTitle}" has been approved by ${hostName}.`;
+    emailData.footerText = `You have a Match!`;
+  }
   
   return emailData;
 }
 
-export function getNotificationEmailSubject(actionType: string): string {
+export function getNotificationEmailSubject(actionType: string, additionalData?: any): string {
   const config = getNotificationEmailConfig(actionType);
+  
+  // Handle dynamic subject for application notifications
+  if (actionType === 'view' && additionalData?.listingTitle) {
+    return `A New Application Has Been Submitted for ${additionalData.listingTitle}`;
+  }
+  
   return config.subject;
 }

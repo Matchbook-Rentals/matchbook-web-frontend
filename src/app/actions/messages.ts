@@ -31,11 +31,23 @@ export async function sendInitialMessage(listingId: string, content: string) {
       return { success: false, error: 'Unauthorized' };
     }
 
-    // 1. Fetch the listing to get the host's userId (receiverId)
-    const listing = await prisma.listing.findUnique({
-      where: { id: listingId },
-      select: { userId: true } // Select only the host's userId
-    });
+    // 1. Fetch the listing to get the host's userId (receiverId) and sender info
+    const [listing, sender] = await Promise.all([
+      prisma.listing.findUnique({
+        where: { id: listingId },
+        select: { 
+          userId: true, // Select only the host's userId
+          title: true // Also get listing title for notification
+        }
+      }),
+      prisma.user.findUnique({
+        where: { id: senderId },
+        select: {
+          firstName: true,
+          lastName: true
+        }
+      })
+    ]);
 
     if (!listing) {
       return { success: false, error: 'Listing not found' };
@@ -58,6 +70,8 @@ export async function sendInitialMessage(listingId: string, content: string) {
         }
       }
     });
+
+    const isNewConversation = !conversation;
 
     if (!conversation) {
       conversation = await prisma.conversation.create({
@@ -83,6 +97,31 @@ export async function sendInitialMessage(listingId: string, content: string) {
       },
     });
 
+    // 4. If this is a new conversation, create a notification for the host
+    if (isNewConversation) {
+      const { createNotification } = await import('@/app/actions/notifications');
+      const senderName = sender?.firstName || 'A user';
+      
+      try {
+        await createNotification({
+          userId: receiverId,
+          actionType: 'new_conversation',
+          actionId: conversation.id,
+          content: `You have a new conversation with ${senderName}`,
+          url: `/app/host/messages?convo=${conversation.id}`,
+          emailData: {
+            senderName: senderName,
+            messagePreview: content.substring(0, 200),
+            conversationId: conversation.id,
+            listingTitle: listing.title || 'your property'
+          }
+        });
+      } catch (notificationError) {
+        console.error('Failed to create new conversation notification:', notificationError);
+        // Don't fail the message send if notification fails
+      }
+    }
+
     // TODO: Optionally trigger WebSocket event here to notify receiver
 
     return { success: true, message, conversationId: conversation.id };
@@ -105,11 +144,29 @@ export async function sendHostMessage(listingId: string, guestUserId: string, co
       return { success: false, error: 'Unauthorized' };
     }
 
-    // 1. Verify the sender is the host of the listing
-    const listing = await prisma.listing.findUnique({
-      where: { id: listingId },
-      select: { userId: true }
-    });
+    // 1. Verify the sender is the host of the listing and get sender info
+    const [listing, sender, receiver] = await Promise.all([
+      prisma.listing.findUnique({
+        where: { id: listingId },
+        select: { 
+          userId: true,
+          title: true // Get listing title for notification
+        }
+      }),
+      prisma.user.findUnique({
+        where: { id: senderId },
+        select: {
+          firstName: true,
+          lastName: true
+        }
+      }),
+      prisma.user.findUnique({
+        where: { id: guestUserId },
+        select: {
+          firstName: true
+        }
+      })
+    ]);
 
     if (!listing) {
       return { success: false, error: 'Listing not found' };
@@ -138,6 +195,8 @@ export async function sendHostMessage(listingId: string, guestUserId: string, co
       }
     });
 
+    const isNewConversation = !conversation;
+
     if (!conversation) {
       conversation = await prisma.conversation.create({
         data: {
@@ -160,6 +219,31 @@ export async function sendHostMessage(listingId: string, guestUserId: string, co
         conversationId: conversation.id,
       },
     });
+
+    // 4. If this is a new conversation, create a notification for the guest
+    if (isNewConversation) {
+      const { createNotification } = await import('@/app/actions/notifications');
+      const senderName = sender?.firstName || 'The host';
+      
+      try {
+        await createNotification({
+          userId: receiverId,
+          actionType: 'new_conversation',
+          actionId: conversation.id,
+          content: `You have a new conversation with ${senderName}`,
+          url: `/app/rent/messages?convo=${conversation.id}`,
+          emailData: {
+            senderName: senderName,
+            messagePreview: content.substring(0, 200),
+            conversationId: conversation.id,
+            listingTitle: listing.title || 'a property'
+          }
+        });
+      } catch (notificationError) {
+        console.error('Failed to create new conversation notification:', notificationError);
+        // Don't fail the message send if notification fails
+      }
+    }
 
     return { success: true, message, conversationId: conversation.id };
 

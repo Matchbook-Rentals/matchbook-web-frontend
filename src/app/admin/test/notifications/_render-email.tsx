@@ -111,9 +111,9 @@ export function renderEmailToHtml(emailData: NotificationEmailData): string {
                       ${emailData.senderLine}
                     </p>
                     ` : ''}
-                    <p style="margin: 0;">
-                      ${emailData.contentText}
-                    </p>
+                    ${emailData.contentText.split('\n\n').map((paragraph, index) => 
+                      `<p style="margin: ${index === 0 ? '0 0 15px 0' : '0 0 10px 0'};">${paragraph}</p>`
+                    ).join('')}
                     ${emailData.footerText ? `
                     <p style="margin: 15px 0 0 0; font-style: italic; color: #666;">
                       ${emailData.footerText}

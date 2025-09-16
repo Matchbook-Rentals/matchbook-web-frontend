@@ -53,6 +53,9 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
             max-width: 100%;
             height: auto;
           }
+          .message-wrapper {
+            background-color: #e7ebe2;
+          }
           a.button {
             font-size: 16px;
             font-weight: bold;
@@ -72,7 +75,7 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
               color: #ffffff !important;
             }
             .message-wrapper {
-              background-color: #1a1a1a !important;
+              background-color: #ff0000 !important;
             }
             .inner-box {
               background-color: #2a2a2a !important;
@@ -108,7 +111,7 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                   </td>
                 </tr>
                 <tr>
-                  <td className="message-wrapper" style={{ backgroundColor: '#e7ebe2', borderRadius: '20px', padding: '20px' }}>
+                  <td className="message-wrapper" style={{ borderRadius: '20px', padding: '20px' }}>
                     <table width="100%" cellPadding="0" cellSpacing="0" border="0">
                       {tagLink && (
                         <tr>
@@ -138,9 +141,11 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                               {senderLine}
                             </p>
                           )}
-                          <p style={{ margin: 0 }}>
-                            {contentText}
-                          </p>
+                          {contentText.split('\n\n').map((paragraph, index) => (
+                            <p key={index} style={{ margin: index === 0 ? '0 0 15px 0' : '0 0 10px 0' }}>
+                              {paragraph}
+                            </p>
+                          ))}
                           {footerText && (
                             <p style={{ margin: '15px 0 0 0', fontStyle: 'italic', color: '#666' }}>
                               {footerText}

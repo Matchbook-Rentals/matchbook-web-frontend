@@ -124,7 +124,7 @@ export async function createNotification(notificationData: CreateNotificationInp
             customEmailData
           );
 
-          const subject = getNotificationEmailSubject(notification.actionType);
+          const subject = getNotificationEmailSubject(notification.actionType, customEmailData);
 
           const emailResult = await sendNotificationEmail({
             to: user.email,
@@ -167,7 +167,7 @@ export async function createNotification(notificationData: CreateNotificationInp
             customEmailData
           );
 
-          const subject = getNotificationEmailSubject(notification.actionType);
+          const subject = getNotificationEmailSubject(notification.actionType, customEmailData);
 
           const emailResult = await sendNotificationEmail({
             to: user.email,
