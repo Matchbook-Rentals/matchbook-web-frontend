@@ -136,3 +136,11 @@
 - Added smooth scrolling to bottom when payment form opens for better UX
 - Set minimum height of 600px for payment form container to accommodate expanded Stripe PaymentElement
 - Updated payment status terminology from "Pending" to "Scheduled" with brand teal colors
+
+## Pre-fetch Payment Methods in RSC
+- Added payment methods fetching to React Server Component to eliminate loading spinner
+- Integrated Stripe API calls in booking page RSC for card and bank account methods
+- Added proper error handling with graceful fallback to client-side fetching
+- Updated component interfaces to support initialPaymentMethods prop
+- Maintained existing authentication and authorization checks
+- Improved UX by providing instant payment method access without client-side delays
