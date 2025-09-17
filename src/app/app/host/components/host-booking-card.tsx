@@ -170,8 +170,8 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
     }
   };
   return (
-    <Card className={`w-full mx-auto rounded-xl overflow-hidden p-4 ${className} ${isLoading ? 'opacity-75' : ''}`}>
-      <CardContent className="p-0 space-y-6 relative">
+    <Card className={`w-full p-4 rounded-xl ${className} ${isLoading ? 'opacity-75' : ''}`}>
+      <CardContent className="p-0">
         {/* Loading overlay */}
         {isLoading && (
           <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-xl">
@@ -179,175 +179,162 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
           </div>
         )}
         
-        <div className="flex items-start gap-6">
-          {/* Property Image */}
-          {status.toLowerCase() === 'approved' ? (
-            <div 
-              className="relative w-[114.71px] h-[98px] rounded-[9.12px] bg-cover bg-[50%_50%]" 
-              style={{ backgroundImage: `url(${profileImage})` }}
-            />
-          ) : (
-            <div 
-              className="relative w-[114.71px] h-[98px] rounded-[9.12px] bg-cover bg-[50%_50%]" 
-              style={{ backgroundImage: `url(https://placehold.co/600x400/0B6E6E/FFF?text=${name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')})` }}
-            />
-          )}
+        {/* Mobile Layout - Column with organized rows */}
+        <div className="flex flex-col gap-4">
+          {/* Row 1: Image | Menu Button */}
+          <div className="flex flex-row items-start justify-between gap-4">
+            {status.toLowerCase() === 'approved' ? (
+              <div 
+                className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+                style={{ backgroundImage: `url(${profileImage})` }}
+              />
+            ) : (
+              <div 
+                className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+                style={{ backgroundImage: `url(https://placehold.co/600x400/0B6E6E/FFF?text=${name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')})` }}
+              />
+            )}
+            
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="p-2 rounded-lg border-[#3c8787] text-[#3c8787]"
+                  disabled={isLoading}
+                >
+                  <MoreVertical className="w-4 h-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0" align="end">
+                {bookingId && bookingStartDate && bookingEndDate && guestUserId && (
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
+                    onClick={() => setIsDateModificationModalOpen(true)}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Modify Dates
+                  </Button>
+                )}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
+                  onClick={onManageListing}
+                >
+                  <Home className="w-4 h-4" />
+                  Manage Listing
+                </Button>
+              </PopoverContent>
+            </Popover>
+          </div>
 
-          <div className="flex flex-col items-start justify-center gap-2 flex-1">
-            <div className="flex flex-col items-start gap-2 w-full">
-              {/* Status Badge */}
-              <Badge className={`${
-                status.toLowerCase() === 'approved' 
-                  ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e] hover:bg-[#e9f7ee] hover:text-[#1ca34e]'
-                  : status.toLowerCase() === 'pending'
-                  ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22] hover:bg-[#fff3cd] hover:text-[#e67e22]'
-                  : status.toLowerCase() === 'declined'
-                  ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545] hover:bg-[#f8d7da] hover:text-[#dc3545]'
-                  : 'bg-gray-100 text-gray-600 border-gray-400 hover:bg-gray-100 hover:text-gray-600'
-              }`}>
-                {status}
-              </Badge>
+          {/* Row 2: Title | Badge */}
+          <div className="flex flex-row items-center justify-between gap-2">
+            <div className="font-medium text-[#484a54] text-base flex-1 min-w-0 truncate">
+              {name}
+            </div>
+            <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${
+              status.toLowerCase() === 'approved' 
+                ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]'
+                : status.toLowerCase() === 'pending'
+                ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'
+                : status.toLowerCase() === 'declined'
+                ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]'
+                : 'bg-gray-100 text-gray-600 border-gray-400'
+            }`}>
+              {status}
+            </Badge>
+          </div>
 
-              {/* Renter Name */}
-              <div className="font-text-label-large-medium text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)]">
-                {name}
+          {/* Row 3: Address | Dates */}
+          <div className="flex flex-row items-start justify-between gap-2">
+            <div className="flex items-start gap-1 flex-1 min-w-0">
+              <MapPinIcon className="w-4 h-4 text-[#777b8b] flex-shrink-0 mt-0.5" />
+              <div className="text-xs text-[#777b8b] truncate">
+                {address}
               </div>
             </div>
-
-            {/* Rental Period */}
-            <div className="font-text-label-small-regular text-[#777b8b] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)]">
+            <div className="text-xs text-[#777b8b] flex-shrink-0">
               {dates}
             </div>
           </div>
 
-          {/* Menu Button */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="w-6 h-6 p-0 border-[#d9dadf] shadow-[0px_0px_4px_#ffffff7d]"
-                disabled={isLoading}
-              >
-                <MoreVerticalIcon className="h-3 w-3" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-48 p-0" align="end">
-              {bookingId && bookingStartDate && bookingEndDate && guestUserId && (
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
-                  onClick={() => setIsDateModificationModalOpen(true)}
+          {/* Row 4: Guest Types | Price */}
+          <div className="flex flex-row items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {occupants.map((occupant, index) => (
+                <div
+                  key={index}
+                  className="text-xs text-[#344054]"
                 >
-                  <Calendar className="w-4 h-4" />
-                  Modify Dates
-                </Button>
-              )}
-              <Button
-                variant="ghost"
-                className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
-                onClick={onManageListing}
-              >
-                <Home className="w-4 h-4" />
-                Manage Listing
-              </Button>
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        <div className="flex flex-col items-start gap-2.5">
-          {/* Address */}
-          <div className="flex items-center gap-2 w-full">
-            <MapPinIcon className="w-5 h-5 text-[#777b8b]" />
-            <div className="flex-1 font-text-label-medium-regular text-[#777b8b] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)]">
-              {address}
+                  {occupant.count} {occupant.type}
+                </div>
+              ))}
+            </div>
+            <div className="font-semibold text-[#484a54] text-lg flex-shrink-0">
+              {price}
             </div>
           </div>
 
-          {/* Property Description */}
-          <div className="font-text-label-medium-regular hidden lg:inline text-[#777b8b] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)]">
-            {description}
-          </div>
-
-          {/* Occupancy Details */}
-          <div className="flex items-center gap-6 w-full">
-            {occupants.map((occupant, index) => (
-              <div
-                key={index}
-                className="inline-flex items-center justify-center gap-1.5 py-1.5"
+          {/* Row 5: Action Buttons */}
+          <div className="flex flex-col gap-2 w-full">
+            <BrandButton
+              variant="outline"
+              onClick={onBookingDetails}
+              disabled={isLoading}
+              className="w-full"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Loading...
+                </>
+              ) : (
+                'Booking Details'
+              )}
+            </BrandButton>
+            {hasModifications && (
+              <BrandModal
+                isOpen={isModificationsModalOpen}
+                onOpenChange={setIsModificationsModalOpen}
+                className="!max-w-[1050px] w-full max-h-[85vh] overflow-y-auto"
+                triggerButton={
+                  <BrandButton
+                    variant="outline"
+                    disabled={isLoading}
+                    className="w-full"
+                  >
+                    View Changes
+                  </BrandButton>
+                }
               >
-                <img className="w-5 h-5" alt={occupant.type} src={occupant.icon} />
-                <div className="font-medium text-[#344054] text-sm leading-5 whitespace-nowrap">
-                  {occupant.count} {occupant.type}
+                <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
+                  <BookingModificationsView
+                    bookingId={bookingId!}
+                    bookingTitle={description}
+                  />
                 </div>
-              </div>
-            ))}
+              </BrandModal>
+            )}
+            <BrandButton 
+              variant="default"
+              onClick={listingId && guestUserId ? handleMessageRenter : onMessageGuest}
+              disabled={isLoading || messagingLoading}
+              className="w-full"
+            >
+              {messagingLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Loading...
+                </>
+              ) : (
+                'Message Renter'
+              )}
+            </BrandButton>
           </div>
         </div>
       </CardContent>
-
-      <CardFooter className="flex flex-col items-start p-0 mt-6 gap-3">
-        {/* Price */}
-        <div className="self-stretch font-semibold text-[#484a54] text-xl">
-          {price}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3 w-full">
-          {hasModifications && (
-            <BrandModal
-              isOpen={isModificationsModalOpen}
-              onOpenChange={setIsModificationsModalOpen}
-              className="!max-w-[1050px] w-full max-h-[85vh] overflow-y-auto"
-              triggerButton={
-                <Button
-                  variant="outline"
-                  className="flex-1 border-[#3c8787] text-[#3c8787] font-semibold hover:text-[#3c8787] hover:bg-transparent"
-                  disabled={isLoading}
-                >
-                  View Changes
-                </Button>
-              }
-            >
-              <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
-                <BookingModificationsView
-                  bookingId={bookingId!}
-                  bookingTitle={description}
-                />
-              </div>
-            </BrandModal>
-          )}
-          <Button
-            variant="outline"
-            className="flex-1 border-[#3c8787] text-[#3c8787] font-semibold hover:text-[#3c8787] hover:bg-transparent"
-            onClick={onBookingDetails}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                Loading...
-              </>
-            ) : (
-              'Booking Details'
-            )}
-          </Button>
-          <Button 
-            className="flex-1 bg-[#3c8787] hover:bg-[#3c8787]/90 text-white"
-            onClick={listingId && guestUserId ? handleMessageRenter : onMessageGuest}
-            disabled={isLoading || messagingLoading}
-          >
-            {messagingLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                Loading...
-              </>
-            ) : (
-              'Message Renter'
-            )}
-          </Button>
-        </div>
-      </CardFooter>
 
       {/* Date Modification Modal */}
       {bookingId && bookingStartDate && bookingEndDate && guestUserId && (
