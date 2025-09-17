@@ -70,10 +70,10 @@ export default function ApplicationsClient({ housingRequests }: ApplicationsClie
   }, [housingRequests, searchTerm, statusFilter]);
 
   return (
-    <div className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] min-h-screen">
+    <div className="flex flex-col items-start gap-8 px-4 sm:px-6 py-6 sm:py-8 bg-[#f9f9f9] min-h-screen">
       <ApplicationsHeader />
       
-      <div className="flex flex-col items-start gap-[18px] w-full">
+      <div className="flex flex-col items-start gap-6 sm:gap-8 w-full">
         <SearchAndFilterBar 
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
@@ -113,24 +113,24 @@ const SearchAndFilterBar = ({
   statusFilter, 
   onStatusFilterChange 
 }: SearchAndFilterBarProps) => (
-  <div className="flex items-start gap-3 w-full">
-    <div className="relative w-[434px]">
+  <div className="flex flex-col sm:flex-row items-start gap-3 w-full">
+    <div className="relative w-full sm:w-auto sm:min-w-[300px] md:min-w-[400px] lg:w-[434px]">
       <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
       <Input
         placeholder="Search by title"
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="pl-10 h-12 bg-white rounded-lg border-gray-200"
+        className="pl-10 h-12 bg-white rounded-lg border-gray-200 w-full"
       />
     </div>
 
-    <div className="flex items-center justify-end gap-3 flex-1">
-      <span className="[font-family:'Poppins',Helvetica] font-normal text-greygrey-500 text-base tracking-[0] leading-6 whitespace-nowrap">
+    <div className="flex flex-row items-center justify-end gap-3 flex-1 w-full sm:w-auto">
+      <span className="[font-family:'Poppins',Helvetica] font-normal text-greygrey-500 text-base tracking-[0] leading-6 whitespace-nowrap hidden sm:inline">
         Filter by status
       </span>
 
       <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-        <SelectTrigger className="w-[142px] h-12 bg-white">
+        <SelectTrigger className="w-full sm:w-[142px] h-12 bg-white">
           <SelectValue placeholder="All" />
         </SelectTrigger>
         <SelectContent>
@@ -144,6 +144,7 @@ const SearchAndFilterBar = ({
       <BrandButton
         variant="outline"
         href="/app/rent/applications/general"
+        className="w-full sm:w-auto whitespace-nowrap"
       >
         Edit General Application
       </BrandButton>
@@ -173,7 +174,7 @@ interface ApplicationCardsProps {
 }
 
 const ApplicationCards = ({ applications }: ApplicationCardsProps) => (
-  <div className="flex flex-col items-start gap-6 w-full">
+  <div className="flex flex-col items-start gap-6 sm:gap-8 w-full">
     {applications.map((application) => (
       <ApplicationCard key={application.id} application={application} />
     ))}
@@ -202,9 +203,76 @@ interface ApplicationCardProps {
 }
 
 const ApplicationCard = ({ application }: ApplicationCardProps) => (
-  <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029] border-0">
-    <CardContent className="p-6">
-      <div className="flex items-start gap-2">
+  <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029] border-0 p-4 sm:p-6">
+    <CardContent className="p-0">
+      {/* Mobile Layout - Column with rows */}
+      <div className="flex flex-col gap-4 sm:hidden">
+        {/* Row 1: Image | Menu Button */}
+        <div className="flex flex-row items-start justify-between gap-4">
+          <div 
+            className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+            style={{ backgroundImage: `url(${application.image})` }}
+          />
+          <BrandButton
+            variant="outline"
+            size="icon"
+            className="p-2 rounded-lg"
+          >
+            <MoreVerticalIcon className="w-4 h-4" />
+          </BrandButton>
+        </div>
+
+        {/* Row 2: Title | Status Badge */}
+        <div className="flex flex-row items-center justify-between gap-2">
+          <div className="font-medium text-[#484a54] text-base flex-1 min-w-0 truncate">
+            {application.title}
+          </div>
+          <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${application.statusColor}`}>
+            {application.status}
+          </Badge>
+        </div>
+
+        {/* Row 3: Location | Applied Date */}
+        <div className="flex flex-row items-start justify-between gap-2">
+          <div className="flex items-start gap-1 flex-1 min-w-0">
+            <MapPinIcon className="w-4 h-4 text-[#777b8b] flex-shrink-0 mt-0.5" />
+            <div className="text-xs text-[#777b8b] truncate">
+              {application.location}
+            </div>
+          </div>
+          <div className="text-xs text-[#777b8b] flex-shrink-0">
+            {application.appliedDate.replace('Applied on ', '')}
+          </div>
+        </div>
+
+        {/* Row 4: Trip Details */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1">
+            <UserIcon className="w-4 h-4 text-[#344054]" />
+            <span className="text-xs text-[#344054]">
+              {application.adults} Adult{application.adults !== 1 ? 's' : ''}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <UsersIcon className="w-4 h-4 text-[#344054]" />
+            <span className="text-xs text-[#344054]">
+              {application.kids} Kid{application.kids !== 1 ? 's' : ''}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <PawPrintIcon className="w-4 h-4 text-[#344054]" />
+            <span className="text-xs text-[#344054]">
+              {application.pets} pet{application.pets !== 1 ? 's' : ''}
+            </span>
+          </div>
+        </div>
+
+        {/* Row 5: Action Buttons */}
+        <MobileApplicationButtons application={application} />
+      </div>
+
+      {/* Desktop Layout - Keep existing horizontal layout */}
+      <div className="hidden sm:flex items-start gap-2">
         <ApplicationContent application={application} />
         <ApplicationActions application={application} />
       </div>
@@ -220,7 +288,7 @@ const ApplicationContent = ({ application }: ApplicationCardProps) => (
 );
 
 const ApplicationImage = ({ image, title }: { image: string; title: string }) => (
-  <div className="w-[209px] h-[140px] rounded-xl overflow-hidden flex-shrink-0">
+  <div className="w-[157px] h-[105px] lg:w-[209px] lg:h-[140px] rounded-xl overflow-hidden flex-shrink-0">
     <img
       className="w-full h-full object-cover"
       alt={title}
@@ -292,23 +360,24 @@ const TripDetails = ({ adults, kids, pets }: TripDetailsProps) => (
 );
 
 const ApplicationActions = ({ application }: ApplicationCardProps) => (
-  <div className="flex flex-col w-[219px] items-end justify-between h-[147px]">
-    <div className="flex justify-end">
+  <div className="flex flex-col items-end justify-start gap-4 w-full md:w-auto md:min-w-[280px] flex-shrink-0">
+    <div className="flex w-full md:justify-end justify-start">
       <BrandButton
         variant="outline"
         size="icon"
+        className="p-2.5 rounded-lg"
       >
         <MoreVerticalIcon className="w-5 h-5" />
       </BrandButton>
     </div>
 
-    <div className="text-right">
-      <p className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-base tracking-[0] leading-[normal]">
+    <div className="flex flex-col md:items-end items-start justify-center gap-3 w-full">
+      <div className="w-full [font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-base tracking-[0] leading-[normal] md:text-right text-left">
         {application.appliedDate}
-      </p>
-    </div>
+      </div>
 
-    <ApplicationButtons application={application} />
+      <ApplicationButtons application={application} />
+    </div>
   </div>
 );
 
@@ -335,8 +404,13 @@ const ApplicationButtons = ({ application }: ApplicationCardProps) => {
   };
 
   return (
-    <div className="flex items-center gap-3">
-      <BrandButton variant="outline" size="sm">
+    <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 w-full">
+      <BrandButton 
+        variant="outline" 
+        size="sm"
+        href={`/app/rent/applications/${application.id}`}
+        className="w-full md:w-auto whitespace-nowrap"
+      >
         View this application
       </BrandButton>
 
@@ -345,13 +419,18 @@ const ApplicationButtons = ({ application }: ApplicationCardProps) => {
           variant="outline" 
           size="sm"
           onClick={handleMessageHost}
+          className="w-full md:w-auto whitespace-nowrap"
         >
           Message Host
         </BrandButton>
       )}
 
       {application.showBookNow && (
-        <BrandButton variant="default" size="sm">
+        <BrandButton 
+          variant="default" 
+          size="sm"
+          className="w-full md:w-auto whitespace-nowrap"
+        >
           Book Now
         </BrandButton>
       )}
@@ -361,6 +440,71 @@ const ApplicationButtons = ({ application }: ApplicationCardProps) => {
           variant="default" 
           size="sm"
           href={`/app/rent/bookings/${application.bookingId}`}
+          className="w-full md:w-auto whitespace-nowrap"
+        >
+          Go to Booking
+        </BrandButton>
+      )}
+    </div>
+  );
+};
+
+const MobileApplicationButtons = ({ application }: ApplicationCardProps) => {
+  const router = useRouter();
+
+  const handleMessageHost = async () => {
+    if (!application.hostUserId) return;
+    
+    try {
+      const result = await getOrCreateListingConversation(
+        application.listingId, 
+        application.hostUserId
+      );
+      
+      if (result.success && result.conversationId) {
+        router.push(`/app/rent/messages?convo=${result.conversationId}`);
+      } else {
+        console.error('Failed to create conversation:', result.error);
+      }
+    } catch (error) {
+      console.error('Error messaging host:', error);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <BrandButton
+        variant="outline"
+        href={`/app/rent/applications/${application.id}`}
+        className="w-full"
+      >
+        View this application
+      </BrandButton>
+      
+      {application.showMessageHost && application.hostUserId && (
+        <BrandButton
+          variant="outline"
+          onClick={handleMessageHost}
+          className="w-full"
+        >
+          Message Host
+        </BrandButton>
+      )}
+
+      {application.showBookNow && (
+        <BrandButton 
+          variant="default"
+          className="w-full"
+        >
+          Book Now
+        </BrandButton>
+      )}
+      
+      {application.showGoToBooking && application.bookingId && (
+        <BrandButton 
+          variant="default"
+          href={`/app/rent/bookings/${application.bookingId}`}
+          className="w-full"
         >
           Go to Booking
         </BrandButton>
