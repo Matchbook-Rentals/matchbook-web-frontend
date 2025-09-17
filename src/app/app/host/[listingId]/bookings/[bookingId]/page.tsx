@@ -52,7 +52,7 @@ function getPaymentStatus(rentPayment: RentPayment): string {
   
   if (dueDate < now) return "Overdue";
   if (dueDate.getTime() - now.getTime() <= 7 * 24 * 60 * 60 * 1000) return "Due";
-  return "Pending";
+  return "Scheduled";
 }
 
 export default async function BookingDetailPage({ params }: BookingDetailPageProps) {

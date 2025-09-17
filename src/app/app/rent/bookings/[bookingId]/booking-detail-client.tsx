@@ -84,7 +84,7 @@ export default function BookingDetailClient({
   const handleMakePayment = () => {
     // Find the next unpaid payment
     const nextPayment = paymentsData.upcoming.find(payment => 
-      payment.status === "Due" || payment.status === "Overdue" || payment.status === "Pending"
+      payment.status === "Due" || payment.status === "Overdue" || payment.status === "Scheduled"
     );
     
     if (nextPayment) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVerticalIcon } from "lucide-react";
+import { MoreVerticalIcon, ArrowLeft, PlusIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -23,8 +23,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import TabSelector from "@/components/ui/tab-selector";
 import PaymentModificationReviewModal from "@/components/PaymentModificationReviewModal";
+import { PaymentMethodsSection } from "@/components/payment-review/sections/PaymentMethodsSection";
+import { AddPaymentMethodInline } from "@/components/stripe/add-payment-method-inline";
 
 interface RentPaymentData {
   amount: string;
@@ -75,6 +78,9 @@ export const RentPaymentsTable = ({
   const [selectedModification, setSelectedModification] = useState<RentPaymentData['modificationData'] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
 
   // Column headers with responsive visibility classes
   const headers = [
@@ -150,9 +156,11 @@ export const RentPaymentsTable = ({
                       ? 'bg-green-50 text-green-600 border border-green-200' 
                       : row.status === 'Failed' || row.status === 'Overdue'
                       ? 'bg-red-50 text-red-600 border border-red-200'
-                      : row.status === 'Pending' || row.status === 'Due'
+                      : row.status === 'Scheduled'
+                      ? 'bg-[#e7f0f0] text-[#0b6969] border border-[#3c8787]'
+                      : row.status === 'Due'
                       ? 'bg-yellow-50 text-yellow-600 border border-yellow-200'
-                      : 'bg-[#e7f0f0] text-[#0b6969] border border-[#3c8787]'
+                      : 'bg-gray-50 text-gray-600 border border-gray-200'
                   }`}
                 >
                   {row.status}
@@ -219,21 +227,103 @@ export const RentPaymentsTable = ({
     window.location.reload();
   };
 
+  const handleSelectPaymentMethod = (methodId: string, methodType: 'card' | 'bank') => {
+    setSelectedPaymentMethod(methodId);
+  };
+
+  const handleProceedToPayment = (includeCardFee: boolean) => {
+    // This is just for managing payment methods, so we don't need to proceed to payment
+    console.log('Payment method selected:', selectedPaymentMethod);
+  };
+
+  const handleBackToTable = () => {
+    setShowPaymentMethods(false);
+  };
+
   return (
     <>
-      <div className="flex flex-col w-full rounded-[20px] overflow-hidden bg-white shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
-        </div>
-        <div className="p-0">
+      <div className="flex flex-col w-full rounded-lg overflow-hidden bg-white shadow-sm border border-gray-100">
+        {showPaymentMethods ? (
+          <>
+            <div className="p-6 border-b border-gray-100">
+              <div className="flex items-center">
+                <Button
+                  variant="ghost"
+                  onClick={handleBackToTable}
+                  className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Payments
+                </Button>
+              </div>
+            </div>
+            <div className="p-6">
+              <PaymentMethodsSection
+                selectedMethod={selectedPaymentMethod}
+                onSelectMethod={handleSelectPaymentMethod}
+                onProceedToPayment={handleProceedToPayment}
+                isProcessing={false}
+                hidePaymentMethods={false}
+              />
+
+              {!showAddPaymentForm && (
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 text-teal-600 hover:text-teal-700 h-auto p-0 font-normal mt-4"
+                  onClick={() => {
+                    setShowAddPaymentForm(true);
+                    // Scroll to bottom after a brief delay to allow form to render
+                    setTimeout(() => {
+                      window.scrollTo({ 
+                        top: document.body.scrollHeight, 
+                        behavior: 'smooth' 
+                      });
+                    }, 100);
+                  }}
+                >
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-teal-600 flex items-center justify-center">
+                    <PlusIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  </div>
+                  Add New Payment Method
+                </Button>
+              )}
+
+              {showAddPaymentForm && (
+                <div className="mt-4 min-h-[600px]">
+                  <AddPaymentMethodInline
+                    onSuccess={() => {
+                      setShowAddPaymentForm(false);
+                      // Trigger a refresh of payment methods
+                      if (window.refreshPaymentMethods) {
+                        window.refreshPaymentMethods();
+                      }
+                    }}
+                    onCancel={() => setShowAddPaymentForm(false)}
+                  />
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
           <TabSelector
             tabs={tabs}
             defaultTab="upcoming"
             selectedTabColor="#0b6969"
             className="justify-start py-0"
-            tabsListClassName="justify-between w-full md:justify-start pt-4 pb-4 px-6 "
+            tabsListClassName="justify-between w-full md:justify-start pt-4 pb-4 px-6"
             tabsClassName="pt-0 px-0"
+            secondaryButton={
+              <div className="">
+                <BrandButton
+                  variant="default"
+                  onClick={() => setShowPaymentMethods(true)}
+                >
+                  Manage Payment Methods
+                </BrandButton>
+              </div>
+            }
           />
-        </div>
+        )}
       </div>
 
       {selectedModification && (
