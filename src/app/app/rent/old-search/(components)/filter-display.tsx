@@ -10,9 +10,10 @@ import { CategoryType, getFiltersByCategory } from '@/constants/filters';
 
 interface FilterDisplayProps {
   className?: string;
+  onOpenFilter?: () => void;
 }
 
-export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) => {
+export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "", onOpenFilter }) => {
   const { state: { filters, listings, showListings, likedListings }, actions: { updateFilters } } = useTripContext();
   
   // Helper function to get filter label
@@ -58,8 +59,9 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) 
       if (value.includes('petsNotAllowed')) return 'Pets Not Allowed';
     }
     
-    // Search radius
-    if (filterKey === 'searchRadius' && value > 0) return `Within ${value} miles`;
+    // Search radius - >= 100 means unlimited
+    if (filterKey === 'searchRadius' && value > 0 && value < 100) return `Within ${value} miles`;
+    if (filterKey === 'searchRadius' && value >= 100) return null; // Don't show unlimited as a filter
     
     // For non-amenity arrays that should be grouped together
     if (Array.isArray(value) && value.length > 0) {
@@ -211,7 +213,12 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) 
     } else if (typeof newFilters[filterKey as keyof typeof filters] === 'boolean') {
       (newFilters[filterKey as keyof typeof filters] as any) = false;
     } else if (typeof newFilters[filterKey as keyof typeof filters] === 'number') {
-      (newFilters[filterKey as keyof typeof filters] as any) = 0;
+      // Special handling for searchRadius to use most inclusive value
+      if (filterKey === 'searchRadius') {
+        (newFilters[filterKey as keyof typeof filters] as any) = 100;
+      } else {
+        (newFilters[filterKey as keyof typeof filters] as any) = 0;
+      }
     }
     
     updateFilters(newFilters);
@@ -230,7 +237,7 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) 
       unfurnished: false,
       utilities: [],
       pets: [],
-      searchRadius: 0,
+      searchRadius: 100, // Set to most inclusive value (unlimited)
       accessibility: [],
       location: [],
       parking: [],
@@ -249,13 +256,34 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "" }) 
   const totalListings = listings?.length || 0;
   const numFiltered = totalListings - totalResults;
   
-  // Don't show the filter display if no filters are active
+  // Debug log for filter state
+  console.log(`🔍 FilterDisplay: activeFilters.length=${activeFilters.length}, searchRadius=${filters.searchRadius}, totalResults=${totalResults}`);
+
+  // Show results with "No filters" badge when no filters are active
   if (activeFilters.length === 0) {
     return (
-      <div className={`flex w-full items-center justify-start mb-4 ${className}`}>
-        <div className="text-sm text-gray-600">
-          {totalResults.toLocaleString()} Results
+      <div className={`w-full space-y-3 mb-4 ${className}`}>
+        {/* Results row */}
+        <div className="flex w-full items-center justify-start">
+          <div className="text-sm text-gray-600">
+            {totalResults.toLocaleString()} Results
+          </div>
         </div>
+
+        {/* No filters card - styled like active filters */}
+        <Card className="flex w-full items-center justify-between p-3 rounded-lg border border-gray-200">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge
+              variant="outline"
+              className="inline-flex items-center justify-center px-3 py-1.5 bg-gray-50 rounded-full border border-gray-300 hover:bg-gray-100 cursor-pointer text-gray-700 text-sm"
+              onClick={onOpenFilter}
+            >
+              <span className="font-medium text-gray-700 text-sm">
+                No Filters
+              </span>
+            </Badge>
+          </div>
+        </Card>
       </div>
     );
   }

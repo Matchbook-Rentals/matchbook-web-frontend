@@ -234,7 +234,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   // Calculate the number of liked/maybed and filtered out listings
   const numFavorites = state.likedListings.length;
-  const numFilteredOut = listings.length - state.likedListings.length;
+  const numFilteredOut = listings.length - (state.filteredCount || listings.length);
 
   // Early returns for edge cases
   if (state.isLoading) {

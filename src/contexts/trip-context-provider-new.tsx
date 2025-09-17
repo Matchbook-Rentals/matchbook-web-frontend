@@ -362,7 +362,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
       const matchesPrice = (filters.minPrice === null || price >= filters.minPrice) &&
         (filters.maxPrice === null || price <= filters.maxPrice);
 
-      const matchesRadius = filters.searchRadius === 0 || (listing.distance || 100) < filters.searchRadius;
+      const matchesRadius = filters.searchRadius >= 100 || (listing.distance || 100) < filters.searchRadius;
 
       // Room filters
       const matchesBedrooms = !filters.minBedrooms || (listing.bedrooms?.length || 0) >= filters.minBedrooms;

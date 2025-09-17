@@ -325,12 +325,22 @@ export async function createBookingModification({
     const requestorName = bookingModification.requestor.fullName || 
       `${bookingModification.requestor.firstName || ''} ${bookingModification.requestor.lastName || ''}`.trim()
     
+    // Determine correct URL based on who the recipient is
+    const isRecipientHost = booking.listing.userId === recipientId
+    const notificationUrl = isRecipientHost 
+      ? `/app/host/${booking.listing.id}/bookings/${bookingId}/changes`
+      : `/app/rent/bookings/${bookingId}/changes`
+    
     await createNotification({
       userId: recipientId,
-      content: `${requestorName} has requested to modify booking dates for ${bookingModification.booking.listing.title}`,
-      url: `/app/host/${bookingModification.booking.listing.id}/bookings/${bookingId}/changes`,
-      actionType: 'view',
-      actionId: bookingModification.id
+      content: `A change has been requested for your booking at ${bookingModification.booking.listing.title}.`,
+      url: notificationUrl,
+      actionType: 'booking_change_request',
+      actionId: bookingModification.id,
+      emailData: {
+        listingTitle: bookingModification.booking.listing.title,
+        senderName: requestorName
+      }
     })
 
     revalidatePath('/app/host')
@@ -357,7 +367,7 @@ export async function approveBookingModification(bookingModificationId: string) 
         requestor: { select: { fullName: true, firstName: true, lastName: true } },
         booking: {
           include: {
-            listing: { select: { title: true } }
+            listing: { select: { id: true, title: true, userId: true } }
           }
         }
       }
@@ -402,12 +412,30 @@ export async function approveBookingModification(bookingModificationId: string) 
     const requestorName = bookingModification.requestor.fullName || 
       `${bookingModification.requestor.firstName || ''} ${bookingModification.requestor.lastName || ''}`.trim()
     
+    // Get the approver's name from the current user
+    const approver = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { fullName: true, firstName: true, lastName: true }
+    })
+    
+    const approverName = approver?.fullName || 
+      `${approver?.firstName || ''} ${approver?.lastName || ''}`.trim() || 'the other party'
+    
+    // Determine correct URL based on who the requestor is
+    const isRequestorHost = bookingModification.booking.listing.userId === bookingModification.requestorId
+    const notificationUrl = isRequestorHost 
+      ? `/app/host/${bookingModification.booking.listing.id}/bookings/${bookingModification.bookingId}/changes`
+      : `/app/rent/bookings/${bookingModification.bookingId}/changes`
+    
     await createNotification({
       userId: bookingModification.requestorId,
-      content: `Your booking date modification request for ${bookingModification.booking.listing.title} has been approved`,
-      url: `/app/rent/bookings/${bookingModification.bookingId}`,
-      actionType: 'view',
-      actionId: bookingModification.id
+      content: `Your requested change has been approved by ${approverName}`,
+      url: notificationUrl,
+      actionType: 'booking_change_approved',
+      actionId: bookingModification.id,
+      emailData: {
+        senderName: approverName
+      }
     })
 
     revalidatePath('/app/host')
@@ -434,7 +462,7 @@ export async function rejectBookingModification(bookingModificationId: string, r
         requestor: { select: { fullName: true, firstName: true, lastName: true } },
         booking: {
           include: {
-            listing: { select: { title: true } }
+            listing: { select: { id: true, title: true, userId: true } }
           }
         }
       }
@@ -466,12 +494,30 @@ export async function rejectBookingModification(bookingModificationId: string, r
     })
 
     // Notify the requestor of rejection
+    // Get the rejecter's name from the current user
+    const rejecter = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { fullName: true, firstName: true, lastName: true }
+    })
+    
+    const rejecterName = rejecter?.fullName || 
+      `${rejecter?.firstName || ''} ${rejecter?.lastName || ''}`.trim() || 'the other party'
+    
+    // Determine correct URL based on who the requestor is
+    const isRequestorHost = bookingModification.booking.listing.userId === bookingModification.requestorId
+    const notificationUrl = isRequestorHost 
+      ? `/app/host/${bookingModification.booking.listing.id}/bookings/${bookingModification.bookingId}/changes`
+      : `/app/rent/bookings/${bookingModification.bookingId}/changes`
+    
     await createNotification({
       userId: bookingModification.requestorId,
-      content: `Your booking date modification request for ${bookingModification.booking.listing.title} has been rejected${rejectionReason ? `: ${rejectionReason}` : ''}`,
-      url: `/app/rent/bookings/${bookingModification.bookingId}`,
-      actionType: 'view',
-      actionId: bookingModification.id
+      content: `Your requested change has been declined by ${rejecterName}`,
+      url: notificationUrl,
+      actionType: 'booking_change_declined',
+      actionId: bookingModification.id,
+      emailData: {
+        senderName: rejecterName
+      }
     })
 
     revalidatePath('/app/host')

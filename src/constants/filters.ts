@@ -7,7 +7,7 @@ export enum CategoryType {
   LOCATION = 'location',
   PARKING = 'parking',
   KITCHEN = 'kitchen',
-  CLIMATE_CONTROL = 'climateControl',
+  BASICS = 'basics', // Renamed from CLIMATE_CONTROL to match UI
   LUXURY = 'luxury',
   LAUNDRY = 'laundry',
   PETS = 'pets',
@@ -17,7 +17,7 @@ export enum CategoryType {
 interface Filter {
   name: string;
   type: FilterType;
-  category: 'highlight' | 'propertyType' | 'accessibility' | 'location' | 'parking' | 'kitchen' | 'climateControl' | 'luxury' | 'laundry' | 'pets' | 'general';
+  category: 'highlight' | 'propertyType' | 'accessibility' | 'location' | 'parking' | 'kitchen' | 'basics' | 'luxury' | 'laundry' | 'pets' | 'general';
 }
 
 export const filters: Filter[] = [
@@ -60,13 +60,14 @@ export const filters: Filter[] = [
   { name: 'waterView', type: 'boolean', category: 'location' },
   { name: 'beachfront', type: 'boolean', category: 'location' },
 
-  // Climate Control
-  { name: 'fireplace', type: 'boolean', category: 'climateControl' },
-  { name: 'heater', type: 'boolean', category: 'climateControl' },
-  { name: 'dedicatedWorkspace', type: 'boolean', category: 'climateControl' },
-  { name: 'airConditioner', type: 'boolean', category: 'climateControl' },
+  // Basics (Climate Control + WiFi + Workspace)
+  { name: 'heater', type: 'boolean', category: 'basics' },
+  { name: 'airConditioner', type: 'boolean', category: 'basics' },
+  { name: 'wifi', type: 'boolean', category: 'basics' },
+  { name: 'dedicatedWorkspace', type: 'boolean', category: 'basics' },
 
-  // Luxury
+  // Luxury (includes fireplace from UI layout)
+  { name: 'fireplace', type: 'boolean', category: 'luxury' },
   { name: 'gym', type: 'boolean', category: 'luxury' },
   { name: 'sauna', type: 'boolean', category: 'luxury' },
   { name: 'balcony', type: 'boolean', category: 'luxury' },
@@ -102,7 +103,6 @@ export const filters: Filter[] = [
   { name: 'laundryFacilities', type: 'boolean', category: 'general' },
   { name: 'elevator', type: 'boolean', category: 'general' },
   { name: 'doorman', type: 'boolean', category: 'general' },
-  { name: 'wifi', type: 'boolean', category: 'general' },
   { name: 'hairDryer', type: 'boolean', category: 'general' },
   { name: 'iron', type: 'boolean', category: 'general' },
   { name: 'smokingAllowed', type: 'boolean', category: 'general' },

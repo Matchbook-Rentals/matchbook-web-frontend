@@ -183,7 +183,6 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
     // Use the height prop for minHeight, keep flex structure
     <div
       className="relative flex flex-col h-full" // Use flex-col and h-full
-      style={{ height: height ? `${height}px` : '640px' }} // Use height prop, provide fallback
     >
       {listings.length === 0 ? (
         <div className="flex-grow w-full flex items-center justify-center text-gray-500"> {/* Use flex-grow */}

@@ -9,29 +9,12 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 import { FilterIcon, UpdatedFilterIcon } from '@/components/icons';
-import { Wifi } from 'lucide-react'; // Import Wifi icon
+import { Wifi } from 'lucide-react';
 import { logger } from '@/lib/logger';
+import { FilterOptions } from '@/lib/listing-filters';
+import { useFilterPreview } from '@/hooks/useFilteredListings';
 
-interface FilterOptions {
-  propertyTypes: string[];
-  minPrice: number | null;
-  maxPrice: number | null;
-  minBedrooms: number;
-  minBeds: number;
-  minBathrooms: number;
-  furnished: boolean;
-  unfurnished: boolean;
-  utilities: string[];
-  pets: string[];
-  searchRadius: number;
-  accessibility: string[];
-  location: string[];
-  parking: string[];
-  kitchen: string[];
-  basics: string[]; // Renamed from climateControl
-  luxury: string[];
-  laundry: string[];
-}
+// FilterOptions now imported from lib/listing-filters.ts
 
 interface FilterOptionsDialogProps {
   isOpen: boolean;
@@ -44,12 +27,15 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   onOpenChange,
   className,
 }) => {
-  const { state: { filters: contextFilters, listings, showListings, likedListings }, actions: { updateFilters } } = useTripContext();
+  const { state: { filters: contextFilters, listings, trip, likedListings, dislikedListings }, actions: { updateFilters } } = useTripContext();
   const [localFilters, setLocalFilters] = useState(contextFilters);
   const [priceInputs, setPriceInputs] = useState({
     min: `$${contextFilters.minPrice || ''}`,
     max: `$${contextFilters.maxPrice || ''}`
   });
+
+  // Use the new filter preview hook for efficient count calculation
+  const filteredListingsCount = useFilterPreview(listings, localFilters, trip, likedListings, dislikedListings);
 
   const propertyTypeOptions = [
     {
@@ -308,100 +294,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     { label: '4+', value: 4 },
   ];
 
-  // Calculate filtered listings count based on local filters
-  // This matches the logic in search-map-tab.tsx where we combine liked listings with filtered listings
-  const filteredListingsCount = useMemo(() => {
-    // First, filter all listings based on the local filters
-    const filteredListings = listings.filter(listing => {
-      // Property type filter
-      const matchesPropertyType = localFilters.propertyTypes.length === 0 ||
-        localFilters.propertyTypes.includes(listing.category);
-
-      // Price filter - use calculatedPrice instead of price
-      const price = listing.calculatedPrice || 0;
-      const matchesPrice = (
-        (!localFilters.minPrice && !localFilters.maxPrice) || // No price filters set
-        (localFilters.minPrice && !localFilters.maxPrice && price >= localFilters.minPrice) || // Only min price set
-        (!localFilters.minPrice && localFilters.maxPrice && price <= localFilters.maxPrice) || // Only max price set
-        (localFilters.minPrice && localFilters.maxPrice && price >= localFilters.minPrice && price <= localFilters.maxPrice) // Both prices set
-      );
-
-      const matchesRadius = localFilters.searchRadius === 0 || (listing.distance || 100) < localFilters.searchRadius;
-
-      // Room filters
-      const matchesBedrooms = !localFilters.minBedrooms || (listing.bedrooms?.length || 0) >= localFilters.minBedrooms;
-      const matchesBaths = !localFilters.minBathrooms || listing.bathroomCount >= localFilters.minBathrooms;
-
-      // Furniture filter
-      const matchesFurniture =
-        (!localFilters.furnished && !localFilters.unfurnished) ||
-        (localFilters.furnished && listing.furnished) ||
-        (localFilters.unfurnished && !listing.furnished);
-
-
-      // Utilities filter
-      const matchesUtilities =
-        localFilters.utilities.length === 0 || localFilters.utilities.length === 2 ||
-        (localFilters.utilities.includes('utilitiesIncluded') && listing.utilitiesIncluded) ||
-        (localFilters.utilities.includes('utilitiesNotIncluded') && !listing.utilitiesIncluded);
-
-      // Pets filter
-      const matchesPets =
-        localFilters.pets.length === 0 || localFilters.pets.length === 2 ||
-        (localFilters.pets.includes('petsAllowed') && listing.petsAllowed) ||
-        (localFilters.pets.includes('petsNotAllowed') && !listing.petsAllowed);
-
-      // Amenity filters
-      const matchesAccessibility = localFilters.accessibility?.length === 0 ||
-        localFilters.accessibility?.every(option => listing[option]);
-
-      const matchesLocation = localFilters.location?.length === 0 ||
-        localFilters.location?.every(option => listing[option]);
-
-      const matchesParking = localFilters.parking?.length === 0 ||
-        localFilters.parking?.every(option => listing[option]);
-
-      const matchesKitchen = localFilters.kitchen?.length === 0 ||
-        localFilters.kitchen?.every(option => listing[option]);
-
-      const matchesBasics = localFilters.basics?.length === 0 ||
-        localFilters.basics?.every(option => listing[option]);
-
-      const matchesLuxury = localFilters.luxury?.length === 0 ||
-        localFilters.luxury?.every(option => listing[option]);
-
-      // Reason for filter.laundry.length ===3 is right now we are only doing a check for
-      // (inComplex, inUnit, notAvailable). If we need to add dryer or
-      // another category this must change
-      const matchesLaundry = localFilters.laundry?.length === 0 || localFilters.laundry?.length === 3 ||
-        localFilters.laundry?.some(option => listing[option]);
-
-      return matchesPropertyType &&
-        matchesPrice &&
-        matchesRadius &&
-        matchesBedrooms &&
-        matchesBaths &&
-        matchesFurniture &&
-        matchesUtilities &&
-        matchesPets &&
-        matchesAccessibility &&
-        matchesLocation &&
-        matchesParking &&
-        matchesKitchen &&
-        matchesBasics && // Renamed from matchesClimateControl
-        matchesLuxury &&
-        matchesLaundry;
-    });
-    
-    // Get IDs of filtered listings
-    const filteredIds = new Set(filteredListings.map(l => l.id));
-    
-    // Include liked listings that aren't already in the filtered set
-    const likedNotInFiltered = likedListings.filter(listing => !filteredIds.has(listing.id));
-    
-    // Return combined count: filtered listings + liked listings not already included
-    return filteredListings.length + likedNotInFiltered.length;
-  }, [listings, localFilters, likedListings]);
+  // Filter count is now calculated by the useFilterPreview hook
 
   // Reset local filters when dialog opens
   useEffect(() => {
@@ -426,7 +319,16 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     return JSON.stringify(localFilters) !== JSON.stringify(contextFilters);
   }, [localFilters, contextFilters]);
 
+  // Debug log for dialog preview count
+  console.log('🎭 Dialog preview count (render #' + Math.random() + '):', {
+    filteredListingsCount,
+    localFilters: localFilters,
+    searchRadius: localFilters.searchRadius,
+    hasChanges
+  });
+
   const handleSave = () => {
+    console.log('🔧 Dialog handleSave called with localFilters:', localFilters);
     updateFilters(localFilters);
     onOpenChange(false);
   };
@@ -448,7 +350,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   };
 
   const clearFilters = () => {
-    const defaultFilters = {
+    const defaultFilters: FilterOptions = {
       propertyTypes: [],
       minPrice: null,
       maxPrice: null,
@@ -459,12 +361,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       unfurnished: false,
       utilities: [],
       pets: [],
-      searchRadius: 50,
+      searchRadius: 100, // Set to unlimited for most inclusive
       accessibility: [],
       location: [],
       parking: [],
       kitchen: [],
-      basics: [], // Renamed from climateControl
+      basics: [],
       luxury: [],
       laundry: [],
     };
@@ -682,7 +584,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   <div className="px-4">
                     <div className="flex justify-end ">
                       <span className=" font-medium text-[14px] text-[#2D2F2E80]">
-                        {localFilters.searchRadius || 50} miles
+                        {(localFilters.searchRadius || 50) >= 100 ? 'Unlimited' : `${localFilters.searchRadius || 50} miles`}
                       </span>
                     </div>
                     <input

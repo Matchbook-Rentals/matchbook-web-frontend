@@ -8,7 +8,9 @@ import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favo
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
 import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housing-requests';
 import { updateTripFilters } from '@/app/actions/trips';
-import { CategoryType, getBooleanFilters, getFiltersByCategory, tripFilters } from '@/constants/filters';
+import { CategoryType, getBooleanFilters } from '@/constants/filters';
+import { FilterOptions, initializeFiltersFromTrip, convertFiltersToDbFormat } from '@/lib/listing-filters';
+import { useFilteredListings } from '@/hooks/useFilteredListings';
 import { logger } from '@/lib/logger';
 
 interface ListingWithAvailability extends ListingAndImages {
@@ -23,26 +25,7 @@ interface ViewedListing {
   actionId: string;
 }
 
-interface FilterOptions {
-  propertyTypes: string[];
-  minPrice: number | null;
-  maxPrice: number | null;
-  minBedrooms: number;
-  minBeds: number | null;
-  minBathrooms: number;
-  furnished: boolean;
-  unfurnished: boolean;
-  utilities: string[];
-  pets: string[];
-  searchRadius: number;
-  accessibility: string[];
-  location: string[];
-  parking: string[];
-  kitchen: string[];
-  basics: string[]; // Renamed from climateControl, includes wifi
-  luxury: string[];
-  laundry: string[];
-}
+// FilterOptions now imported from lib/listing-filters.ts
 
 interface TripContextType {
   state: {
@@ -64,6 +47,7 @@ interface TripContextType {
       matchIds: Set<string>;
     };
     filters: FilterOptions;
+    filteredCount: number;
   };
   actions: {
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
@@ -114,67 +98,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   
   // Track operations in progress to prevent duplicates
   const [processingOperations, setProcessingOperations] = useState<Set<string>>(new Set());
-  const [filters, setFilters] = useState<FilterOptions>({
-    minPrice: tripData.minPrice || null,
-    maxPrice: tripData.maxPrice || null,
-    minBeds: tripData.minBeds || 0,
-    minBedrooms: tripData.minBedrooms || 0,
-    minBathrooms: tripData.minBathrooms || 0,
-    furnished: tripData.furnished || false,
-    unfurnished: tripData.unfurnished || false,
-    propertyTypes: [
-      ...getFiltersByCategory(CategoryType.PROPERTY_TYPE)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
-    ],
-    utilities: [
-      ...(tripData.utilitiesIncluded ? ['utilitiesIncluded'] : []),
-      ...(tripData.utilitiesNotIncluded ? ['utilitiesNotIncluded'] : [])
-    ] as ('utilitiesIncluded' | 'utilitiesNotIncluded')[],
-    pets: [
-      ...(tripData.petsAllowed ? ['petsAllowed'] : []),
-      ...(tripData.petsNotAllowed ? ['petsNotAllowed'] : [])
-    ] as ('petsAllowed' | 'petsNotAllowed')[],
-    searchRadius: tripData.searchRadius || 50,
-    accessibility: [
-      ...getFiltersByCategory(CategoryType.ACCESSIBILITY)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
-    ],
-    location: [
-      ...getFiltersByCategory(CategoryType.LOCATION)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
-    ],
-    parking: [
-      ...getFiltersByCategory(CategoryType.PARKING)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
-    ],
-    kitchen: [
-      ...getFiltersByCategory(CategoryType.KITCHEN)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
-    ],
-    // Combine Climate Control and Wifi into Basics
-    basics: [
-      ...getFiltersByCategory(CategoryType.CLIMATE_CONTROL)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name),
-      ...(tripData.wifi ? ['wifi'] : []), // Add wifi from general category if true
-      ...(tripData.dedicatedWorkspace ? ['dedicatedWorkspace'] : []) // Add dedicatedWorkspace if true
-    ],
-    luxury: [
-      ...getFiltersByCategory(CategoryType.LUXURY)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
-    ],
-    laundry: [
-      ...getFiltersByCategory(CategoryType.LAUNDRY)
-        .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
-    ],
-  });
+  const [filters, setFilters] = useState<FilterOptions>(
+    initializeFiltersFromTrip(tripData)
+  );
 
 
   // Calculate U-Score for a listing
@@ -257,6 +183,14 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     setListings(sortedListings);
   }, []);
 
+  // Use the centralized filtering hook
+  const filteredResults = useFilteredListings({
+    listings,
+    filters,
+    trip,
+    lookup
+  });
+
   useEffect(() => {
     setLookup({
       favIds: new Set(trip?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
@@ -268,334 +202,22 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
   const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
 
-  // Helper function to check if a listing matches all filter criteria (except liked/disliked/requested status)
-  const matchesFilters = useCallback((listing: ListingWithAvailability) => {
-    // Property type filter
-    const matchesPropertyType = filters.propertyTypes.length === 0 ||
-      filters.propertyTypes.includes(listing.category);
+  // Extract filtered results from the hook
+  const {
+    showListings,
+    likedListings: hookLikedListings,
+    dislikedListings: hookDislikedListings,
+    requestedListings: hookRequestedListings,
+    displayListings: hookDisplayListings,
+    filteredCount
+  } = filteredResults;
 
-    // Price filter - only apply if min or max price is set
-    const price = listing.calculatedPrice || 0;
-    const matchesPrice = (filters.minPrice === null || price >= filters.minPrice) &&
-      (filters.maxPrice === null || price <= filters.maxPrice);
+  // Use hook results for liked listings
+  const likedListings = hookLikedListings;
 
-    const matchesRadius = filters.searchRadius === 0 || (listing.distance ?? 100) < filters.searchRadius;
-
-    // Room filters
-    const matchesBedrooms = !filters.minBedrooms || (listing.bedrooms?.length || 0) >= filters.minBedrooms;
-    const matchesBaths = !filters.minBathrooms || listing.bathroomCount >= filters.minBathrooms;
-
-    // Furniture filter
-    const matchesFurniture =
-      (!filters.furnished && !filters.unfurnished) ||
-      (filters.furnished && listing.furnished) ||
-      (filters.unfurnished && !listing.furnished);
-
-    // Utilities filter
-    const matchesUtilities =
-      filters.utilities.length === 0 || filters.utilities.length === 2 ||
-      (filters.utilities.includes('utilitiesIncluded') && listing.utilitiesIncluded) ||
-      (filters.utilities.includes('utilitiesNotIncluded') && !listing.utilitiesIncluded);
-
-    // Pets filter
-    const matchesPets =
-      filters.pets.length === 0 || filters.pets.length === 2 ||
-      (filters.pets.includes('petsAllowed') && listing.petsAllowed) ||
-      (filters.pets.includes('petsNotAllowed') && !listing.petsAllowed);
-
-    // Amenity filters
-    const matchesAccessibility = filters.accessibility?.length === 0 ||
-      filters.accessibility?.every(amenity => listing[amenity]);
-
-    const matchesLocation = filters.location?.length === 0 ||
-      filters.location?.every(feature => listing[feature]);
-
-    const matchesParking = filters.parking?.length === 0 ||
-      filters.parking?.every(option => listing[option]);
-
-    const matchesKitchen = filters.kitchen?.length === 0 ||
-      filters.kitchen?.every(appliance => listing[appliance]);
-
-    const matchesBasics = filters.basics?.length === 0 ||
-      filters.basics?.every(basic => listing[basic]);
-
-    const matchesLuxury = filters.luxury?.length === 0 ||
-      filters.luxury?.every(amenity => listing[amenity]);
-
-    // For laundry, we check for (inComplex, inUnit, notAvailable)
-    const matchesLaundry = filters.laundry?.length === 0 || filters.laundry?.length === 3 ||
-      filters.laundry?.some(option => listing[option]);
-
-    // Determine availability based on successful calculation of start/end dates
-    const isAvailable = listing.isActuallyAvailable;
-
-    return matchesPropertyType &&
-      matchesPrice &&
-      matchesRadius &&
-      matchesBedrooms &&
-      matchesBaths &&
-      matchesFurniture &&
-      matchesUtilities &&
-      matchesPets &&
-      matchesAccessibility &&
-      matchesLocation &&
-      matchesParking &&
-      matchesKitchen &&
-      matchesBasics &&
-      matchesLuxury &&
-      matchesLaundry &&
-      isAvailable;
-  }, [filters]);
-
-  // This code filters and memoizes the listings to be shown
-  const showListings = useMemo((): ListingWithAvailability[] => { // <-- Update return type
-    // --- Calculate Core Dates, Duration, and Flexible Window ---
-    const coreStartDate = trip?.startDate ? new Date(trip.startDate) : null;
-    const coreEndDate = trip?.endDate ? new Date(trip.endDate) : null;
-    let stayDurationDays = 0;
-    let earliestValidStart: Date | null = null;
-    let latestValidEnd: Date | null = null;
-
-    if (coreStartDate && coreEndDate && isValid(coreStartDate) && isValid(coreEndDate) && coreEndDate >= coreStartDate) {
-      // Calculate duration (add 1 for inclusive days)
-      stayDurationDays = differenceInDays(coreEndDate, coreStartDate) + 1;
-      earliestValidStart = subDays(coreStartDate, trip.flexibleStart || 0);
-      latestValidEnd = addDays(coreEndDate, trip.flexibleEnd || 0);
-    }
-    // --- End Date Calculations ---
-
-    // 1. Map listings to calculate availability and specific dates
-    const processedListings = listings.map((listing): ListingWithAvailability => {
-      let isActuallyAvailable = false;
-      let availableStart: Date | undefined = undefined;
-      let availableEnd: Date | undefined = undefined;
-
-      // Initial check: Are core dates valid for calculation?
-      if (coreStartDate && coreEndDate && earliestValidStart && latestValidEnd && stayDurationDays > 0) {
-
-        // --- Perform the isAvailable check (determines if *any* placement is possible) ---
-        isActuallyAvailable = !listing.unavailablePeriods?.some(period => {
-          const periodStart = new Date(period.startDate);
-          const periodEnd = new Date(period.endDate);
-          if (!isValid(periodStart) || !isValid(periodEnd)) return false;
-          const latestStartBeforePeriod = subDays(periodStart, stayDurationDays);
-          const earliestStartAfterPeriod = addDays(periodEnd, 1);
-          const endDateIfStartingAfter = addDays(earliestStartAfterPeriod, stayDurationDays - 1);
-          const blockedBefore = latestStartBeforePeriod < earliestValidStart;
-          const blockedAfter = endDateIfStartingAfter > latestValidEnd;
-          return blockedBefore && blockedAfter;
-        });
-        // --- End isAvailable check ---
-
-        // --- If available, find the earliest start and latest end ---
-        if (isActuallyAvailable) {
-          // Find Earliest Valid Start
-          let currentCheckStart = earliestValidStart;
-          // Calculate the latest possible date the stay could START and still fit
-          const latestPossibleStartDate = subDays(latestValidEnd, stayDurationDays - 1);
-
-          while (currentCheckStart <= latestPossibleStartDate) { // Check all potential start dates within the flexible window
-            const currentCheckEnd = addDays(currentCheckStart, stayDurationDays - 1);
-
-            // Check if the *entire interval* [currentCheckStart, currentCheckEnd] overlaps with *any* unavailability period
-            const overlaps = listing.unavailablePeriods?.some(p => {
-              const pStart = new Date(p.startDate);
-              const pEnd = new Date(p.endDate);
-              // Check if [currentCheckStart, currentCheckEnd] overlaps with [pStart, pEnd]
-              return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-            });
-
-            if (!overlaps) {
-              // If NO overlap is found for this entire interval, this is the earliest valid start date.
-              availableStart = currentCheckStart;
-              break; // Found the earliest, exit the loop.
-            }
-
-            // If there WAS an overlap, we need to find the end of the blocking period
-            // to determine the *next* potential start date to check.
-            const blockingPeriod = listing.unavailablePeriods?.find(p => {
-              const pStart = new Date(p.startDate);
-              const pEnd = new Date(p.endDate);
-              // Find the specific period that caused the overlap for this interval
-              return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-            });
-
-            // Jump the next check to the day *after* the blocking period ends.
-            // This is the earliest the stay could possibly start now.
-            currentCheckStart = blockingPeriod ? addDays(new Date(blockingPeriod.endDate), 1) : addDays(currentCheckStart, 1); // Fallback: increment day-by-day if find fails (should be rare)
-          }
-
-          // Find Latest Valid End
-          let currentCheckEnd = latestValidEnd;
-          while (currentCheckEnd >= coreEndDate) { // Optimization: Check only down to core end
-            const currentCheckStart = subDays(currentCheckEnd, stayDurationDays - 1);
-            if (currentCheckStart < earliestValidStart) break; // Exceeds flexible start window
-
-            const overlaps = listing.unavailablePeriods?.some(p => {
-              const pStart = new Date(p.startDate);
-              const pEnd = new Date(p.endDate);
-              // Check if [currentCheckStart, currentCheckEnd] overlaps with [pStart, pEnd]
-              return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-            });
-
-            if (!overlaps) {
-              availableEnd = currentCheckEnd; // Found the latest
-              break;
-            }
-
-            // If overlap, find the start of the blocking period to jump back
-             const blockingPeriod = listing.unavailablePeriods?.find(p => {
-               const pStart = new Date(p.startDate);
-               const pEnd = new Date(p.endDate);
-               return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-            });
-            currentCheckEnd = blockingPeriod ? subDays(new Date(blockingPeriod.startDate), 1) : subDays(currentCheckEnd, 1); // Jump or decrement
-          }
-        }
-        // --- End earliest/latest calculation ---
-      } // End check for valid core dates
-
-      return {
-        ...listing,
-        isActuallyAvailable, // Store the result of the availability check
-        availableStart,
-        availableEnd
-      };
-    }); // End listings.map
-
-    // 2. Filter the processed listings based on availability and other criteria
-    return processedListings.filter(listing => {
-      // Check if the listing is not favorited, disliked, or requested
-      const isNotFavorited = !lookup.favIds.has(listing.id);
-      const isNotDisliked = !lookup.dislikedIds.has(listing.id);
-      const isNotRequested = !lookup.requestedIds.has(listing.id);
-
-      // Apply all other filters using the helper function
-      const meetsFilterCriteria = matchesFilters(listing);
-
-      // Return true if the listing meets all criteria
-      return isNotFavorited &&
-        isNotDisliked &&
-        isNotRequested &&
-        meetsFilterCriteria;
-    }); // <-- This is now the closing parenthesis for processedListings.filter()
-    // Ensure trip object (containing dates and flexibility) is a dependency
-    }, [listings, lookup, trip, filters, matchesFilters]
-  );
-
-  const likedListings = useMemo(() => {
-    // First, process liked listings through the same availability calculation as showListings
-    const coreStartDate = trip?.startDate ? new Date(trip.startDate) : null;
-    const coreEndDate = trip?.endDate ? new Date(trip.endDate) : null;
-    let stayDurationDays = 0;
-    let earliestValidStart: Date | null = null;
-    let latestValidEnd: Date | null = null;
-
-    if (coreStartDate && coreEndDate && isValid(coreStartDate) && isValid(coreEndDate) && coreEndDate >= coreStartDate) {
-      stayDurationDays = differenceInDays(coreEndDate, coreStartDate) + 1;
-      earliestValidStart = subDays(coreStartDate, trip.flexibleStart || 0);
-      latestValidEnd = addDays(coreEndDate, trip.flexibleEnd || 0);
-    }
-
-    // Process liked listings with availability calculation
-    const processedLikedListings = listings
-      .filter(listing => lookup.favIds.has(listing.id))
-      .map((listing): ListingWithAvailability => {
-        let isActuallyAvailable = false;
-        let availableStart: Date | undefined = undefined;
-        let availableEnd: Date | undefined = undefined;
-
-        if (coreStartDate && coreEndDate && earliestValidStart && latestValidEnd && stayDurationDays > 0) {
-          isActuallyAvailable = !listing.unavailablePeriods?.some(period => {
-            const periodStart = new Date(period.startDate);
-            const periodEnd = new Date(period.endDate);
-            if (!isValid(periodStart) || !isValid(periodEnd)) return false;
-            const latestStartBeforePeriod = subDays(periodStart, stayDurationDays);
-            const earliestStartAfterPeriod = addDays(periodEnd, 1);
-            const endDateIfStartingAfter = addDays(earliestStartAfterPeriod, stayDurationDays - 1);
-            const blockedBefore = latestStartBeforePeriod < earliestValidStart;
-            const blockedAfter = endDateIfStartingAfter > latestValidEnd;
-            return blockedBefore && blockedAfter;
-          });
-
-          if (isActuallyAvailable) {
-            let currentCheckStart = earliestValidStart;
-            const latestPossibleStartDate = subDays(latestValidEnd, stayDurationDays - 1);
-            
-            while (currentCheckStart <= latestPossibleStartDate) {
-              const currentCheckEnd = addDays(currentCheckStart, stayDurationDays - 1);
-              const overlaps = listing.unavailablePeriods?.some(p => {
-                const pStart = new Date(p.startDate);
-                const pEnd = new Date(p.endDate);
-                return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-              });
-
-              if (!overlaps) {
-                availableStart = currentCheckStart;
-                break;
-              }
-
-              const blockingPeriod = listing.unavailablePeriods?.find(p => {
-                const pStart = new Date(p.startDate);
-                const pEnd = new Date(p.endDate);
-                return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-              });
-              currentCheckStart = blockingPeriod ? addDays(new Date(blockingPeriod.endDate), 1) : addDays(currentCheckStart, 1);
-            }
-
-            let currentCheckEnd = latestValidEnd;
-            while (currentCheckEnd >= addDays(earliestValidStart, stayDurationDays - 1)) {
-              const currentCheckStart = subDays(currentCheckEnd, stayDurationDays - 1);
-              if (currentCheckStart < earliestValidStart) break;
-
-              const overlaps = listing.unavailablePeriods?.some(p => {
-                const pStart = new Date(p.startDate);
-                const pEnd = new Date(p.endDate);
-                return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-              });
-
-              if (!overlaps) {
-                availableEnd = currentCheckEnd;
-                break;
-              }
-
-              const blockingPeriod = listing.unavailablePeriods?.find(p => {
-                const pStart = new Date(p.startDate);
-                const pEnd = new Date(p.endDate);
-                return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
-              });
-              currentCheckEnd = blockingPeriod ? subDays(new Date(blockingPeriod.startDate), 1) : subDays(currentCheckEnd, 1);
-            }
-          }
-        }
-
-        return {
-          ...listing,
-          isActuallyAvailable,
-          availableStart,
-          availableEnd
-        };
-      });
-
-    // Apply filters to liked listings and sort by rank
-    return processedLikedListings
-      .filter(listing => matchesFilters(listing))
-      .sort((a, b) => getRank(a.id) - getRank(b.id));
-  }, [listings, lookup.favIds, getRank, trip, filters, matchesFilters]);
-
-  const dislikedListings = useMemo(() =>
-    listings
-      .filter(listing => lookup.dislikedIds.has(listing.id))
-      .sort((a, b) => getRank(a.id) - getRank(b.id)),
-    [listings, lookup.dislikedIds, getRank]
-  );
-
-  const requestedListings = useMemo(() =>
-    listings
-      .filter(listing => lookup.requestedIds.has(listing.id))
-      .sort((a, b) => getRank(a.id) - getRank(b.id)),
-    [listings, lookup.requestedIds, getRank]
-  );
+  // Use hook results for other listing types
+  const dislikedListings = hookDislikedListings;
+  const requestedListings = hookRequestedListings;
 
   const matchedListings = useMemo(() =>
     listings
@@ -843,48 +465,14 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const updateFilters = useCallback(async (newFilters: FilterOptions) => {
     setFilters(newFilters);
     setTrip(prevTrip => ({ ...prevTrip, searchRadius: newFilters.searchRadius }));
-    const dbFilters = {
-      maxPrice: newFilters.maxPrice,
-      minPrice: newFilters.minPrice,
-      minBedrooms: newFilters.minBedrooms,
-      minBathrooms: newFilters.minBathrooms,
-      searchRadius: newFilters.searchRadius,
-    };
 
-    // Initialize all boolean filters defined in constants/filters.ts to false
+    // Use the new utility to convert filters to database format
     const allBooleanFilterNames = getBooleanFilters().map(f => f.name);
-    allBooleanFilterNames.forEach(name => {
-      dbFilters[name] = false;
-    });
-
-    // Set true for filters selected in the newFilters object
-    // Handle array filters (propertyTypes, utilities, pets, accessibility, location, parking, kitchen, basics, luxury, laundry)
-    Object.keys(newFilters).forEach(key => {
-      const filterValue = newFilters[key as keyof FilterOptions];
-      if (Array.isArray(filterValue)) {
-        filterValue.forEach(selectedValue => {
-          // Ensure the selectedValue corresponds to a known boolean filter
-          if (allBooleanFilterNames.includes(selectedValue)) {
-            dbFilters[selectedValue] = true;
-          }
-        });
-      } else if (typeof filterValue === 'boolean' && allBooleanFilterNames.includes(key)) {
-        // Handle direct boolean filters like furnished, unfurnished
-        // Note: utilitiesIncluded, petsAllowed etc. are handled via their arrays now
-        dbFilters[key] = filterValue;
-      }
-    });
-
-    // Special handling for filters that might not be directly in arrays but are boolean
-    // Example: furnished/unfurnished are handled directly
-    dbFilters.furnished = newFilters.furnished;
-    dbFilters.unfurnished = newFilters.unfurnished;
-
-    // Ensure numeric filters are correctly passed (already handled by initial dbFilters setup)
+    const dbFilters = convertFiltersToDbFormat(newFilters, allBooleanFilterNames);
 
     console.log("Updating trip filters with:", dbFilters); // Debug log
     await updateTripFilters(trip.id, dbFilters);
-  }, [trip.id]); // Add trip.id dependency
+  }, [trip.id]);
 
   const contextValue: TripContextType = {
     state: {
@@ -901,6 +489,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       application,
       matchedListings,
       filters,
+      filteredCount,
     },
     actions: {
       setViewedListings,

@@ -120,10 +120,10 @@ const MARKER_STYLES = {
 const getZoomLevel = (radius: number | undefined): number => {
   if (!radius) return 6; // Default zoom if radius is undefined
 
-  if (radius >= 100) return 5;
-  if (radius >= 65) return 6;
-  if (radius >= 40) return 7;
+  if (radius >= 100) return 6;
+  if (radius >= 30) return 7;
   if (radius >= 20) return 8;
+  if (radius >= 10) return 9;
   return 8; // Default for anything less than 20
 };
 
@@ -132,7 +132,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
-  const { showListings, likedListings, trip, filters, lookup } = state; // Destructure filters & lookup
+  const { showListings, likedListings, trip, filters, lookup, filteredCount } = state; // Destructure filters & lookup
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
@@ -190,7 +190,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         const containerRect = containerRef.current.getBoundingClientRect();
         const newStartY = containerRect.top;
         const newViewportHeight = window.innerHeight;
-        const newCalculatedHeight = newViewportHeight - newStartY;
+        // Account for FilterDisplay height on desktop (approximately 100px)
+        const filterDisplayHeight = isDesktopView ? 115 : 0;
+        const newCalculatedHeight = newViewportHeight - newStartY - filterDisplayHeight;
         setStartY(newStartY);
         setViewportHeight(newViewportHeight);
         setCalculatedHeight(newCalculatedHeight);
@@ -205,7 +207,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     return () => {
       window.removeEventListener('resize', setHeight);
     };
-  }, []);
+  }, [isDesktopView]);
 
   // Handle map mounting/unmounting with delay
   useEffect(() => {
@@ -385,7 +387,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
   // Calculate the number of liked and filtered out listings
   const numFavorites = likedListings.length;
-  const numFilteredOut = listings.length - likedListings.length;
+  // Use the filteredCount from context which includes all listings that pass filters
+  const numFilteredOut = listings.length - filteredCount;
 
   return (
     <>
@@ -395,7 +398,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         className="hidden"
       />
       <div ref={containerRef} className="flex flex-col mx-auto w-full sm:px-2">
-        <FilterDisplay onOpenFilter={() => setIsFilterOpen(true)} className="hidden md:block" />
+        <FilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
         <div className="flex flex-col md:flex-row justify-start md:justify-center">
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (

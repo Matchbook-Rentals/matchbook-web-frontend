@@ -119,6 +119,30 @@ export async function sendTestNotification({
         }
         break
         
+      case 'booking_change_request':
+        notificationContent = `A change has been requested for your booking at ${listingTitle}.`
+        notificationUrl = '/app/renter/bookings'
+        emailData = {
+          listingTitle
+        }
+        break
+        
+      case 'booking_change_declined':
+        notificationContent = `Your requested change has been declined by ${senderName}`
+        notificationUrl = '/app/renter/bookings'
+        emailData = {
+          senderName
+        }
+        break
+        
+      case 'booking_change_approved':
+        notificationContent = `Your requested change has been approved by ${senderName}`
+        notificationUrl = '/app/renter/bookings'
+        emailData = {
+          senderName
+        }
+        break
+        
       case 'move_in_upcoming':
         notificationContent = `Move-in reminder: Your stay at ${listingTitle} begins soon!`
         notificationUrl = '/app/renter/bookings'
