@@ -16,6 +16,8 @@ interface NotificationEmailProps {
     text: string;
     url: string;
   };
+  secondaryButtonText?: string;
+  secondaryButtonUrl?: string;
 }
 
 const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
@@ -31,6 +33,8 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
   senderLine,
   footerText,
   tagLink,
+  secondaryButtonText,
+  secondaryButtonUrl,
 }) => {
   return (
     <html>
@@ -160,6 +164,15 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                           </a>
                         </td>
                       </tr>
+                      {secondaryButtonText && secondaryButtonUrl && (
+                        <tr>
+                          <td align="center" style={{ paddingTop: '15px' }}>
+                            <a href={secondaryButtonUrl} className="button" style={{ backgroundColor: '#6c757d' }}>
+                              {secondaryButtonText}
+                            </a>
+                          </td>
+                        </tr>
+                      )}
                     </table>
                   </td>
                 </tr>

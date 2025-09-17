@@ -504,6 +504,9 @@ export async function declineHousingRequest(housingRequestId: string) {
       url: `/app/rent/searches/${housingRequest.tripId}`,
       actionType: 'application_declined',
       actionId: housingRequestId,
+      emailData: {
+        listingTitle: housingRequest.listing.title
+      }
     };
     
     await createNotification(notificationData);
@@ -612,6 +615,9 @@ export async function undoApprovalHousingRequest(housingRequestId: string) {
       url: `/app/rent/searches/${housingRequest.tripId}`,
       actionType: 'application_revoked',
       actionId: housingRequestId,
+      emailData: {
+        listingTitle: housingRequest.listing.title
+      }
     };
     
     await createNotification(notificationData);

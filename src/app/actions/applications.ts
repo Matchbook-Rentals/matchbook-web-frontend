@@ -1083,6 +1083,58 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
       data: updateData
     });
     
+    // Send notifications to hosts if this is a trip application with pending housing requests
+    if (tripId) {
+      try {
+        // Find all pending housing requests for this trip
+        const housingRequests = await prisma.housingRequest.findMany({
+          where: {
+            tripId: tripId,
+            status: 'pending'
+          },
+          include: {
+            listing: {
+              select: {
+                id: true,
+                title: true,
+                userId: true
+              }
+            },
+            user: {
+              select: {
+                firstName: true,
+                lastName: true
+              }
+            }
+          }
+        });
+        
+        // Send notification to each host
+        if (housingRequests.length > 0) {
+          const { createNotification } = await import('@/app/actions/notifications');
+          
+          for (const housingRequest of housingRequests) {
+            const renterName = `${housingRequest.user.firstName || ''} ${housingRequest.user.lastName || ''}`.trim() || 'A renter';
+            
+            await createNotification({
+              userId: housingRequest.listing.userId,
+              content: `${renterName} has updated their application for ${housingRequest.listing.title}`,
+              url: `/app/host/${housingRequest.listing.id}/applications`,
+              actionType: 'application_updated',
+              actionId: housingRequest.id,
+              emailData: {
+                renterName: renterName,
+                listingTitle: housingRequest.listing.title
+              }
+            });
+          }
+        }
+      } catch (error) {
+        // Log error but don't fail the update
+        console.error('Failed to send application update notifications:', error);
+      }
+    }
+    
     // Check completion status if requested
     if (checkCompletion) {
       const completionStatus = await updateApplicationCompletionStatus(application.id);

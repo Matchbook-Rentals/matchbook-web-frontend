@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { toast } from '@/hooks/use-toast'
-import { Bell, Send, CheckCircle, XCircle, Loader2, Mail, Home, Check, UserPlus, Info, DollarSign, AlertTriangle, FileText, MessageSquare, Calendar, Eye, Code, Maximize2 } from 'lucide-react'
+import { Bell, Send, CheckCircle, XCircle, Loader2, Mail, Home, Check, UserPlus, Info, DollarSign, AlertTriangle, FileText, MessageSquare, Calendar, Eye, Code, Maximize2, Star, Users } from 'lucide-react'
 import { sendTestNotification } from './_actions'
 import { previewNotificationEmail } from './_preview-actions'
 import {
@@ -19,6 +19,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -119,6 +125,27 @@ export default function NotificationTestPage() {
       }
     },
     {
+      id: 'application_revoked',
+      name: 'Approval Withdrawn',
+      description: 'When an approval is withdrawn',
+      icon: <XCircle className="h-4 w-4" />,
+      category: 'application',
+      sampleData: {
+        listingTitle: 'Downtown Studio'
+      }
+    },
+    {
+      id: 'application_updated',
+      name: 'Application Updated',
+      description: 'When a renter updates their application',
+      icon: <FileText className="h-4 w-4" />,
+      category: 'application',
+      sampleData: {
+        listingTitle: 'Beachfront Condo',
+        senderName: 'Alex Thompson'
+      }
+    },
+    {
       id: 'application_approved_lease_ready',
       name: 'Lease Ready for Signature',
       description: 'Application approved and lease is ready',
@@ -130,14 +157,57 @@ export default function NotificationTestPage() {
     },
     // Bookings
     {
-      id: 'booking',
-      name: 'New Booking',
-      description: 'When a new booking is created',
+      id: 'booking_host',
+      name: 'Booking Confirmation (Host)',
+      description: 'When a host receives a booking confirmation',
       icon: <Home className="h-4 w-4" />,
       category: 'booking',
       sampleData: {
         listingTitle: 'Beachfront Condo',
-        senderName: 'David Thompson'
+        senderName: 'David Thompson',
+        amount: 'April 1, 2024'  // Using amount for move-in date
+      }
+    },
+    {
+      id: 'booking_confirmed',
+      name: 'Booking Confirmation (Renter)',
+      description: 'When a renter\'s booking is confirmed',
+      icon: <CheckCircle className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        listingTitle: 'Ocean View Apartment',
+        messageContent: 'Miami Beach',  // Using messageContent for city
+        amount: 'Mar 15 - Mar 22'  // Using amount for date range
+      }
+    },
+    {
+      id: 'booking_change_request',
+      name: 'Booking Change Request',
+      description: 'When a booking change is requested',
+      icon: <AlertTriangle className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        listingTitle: 'Downtown Loft'
+      }
+    },
+    {
+      id: 'booking_change_declined',
+      name: 'Booking Change Declined',
+      description: 'When a booking change is declined',
+      icon: <XCircle className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        senderName: 'Michael Davis'
+      }
+    },
+    {
+      id: 'booking_change_approved',
+      name: 'Booking Change Approved',
+      description: 'When a booking change is approved',
+      icon: <CheckCircle className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        senderName: 'Lisa Anderson'
       }
     },
     {
@@ -148,6 +218,17 @@ export default function NotificationTestPage() {
       category: 'booking',
       sampleData: {
         listingTitle: 'Mountain View Cabin'
+      }
+    },
+    {
+      id: 'move_in_upcoming_host',
+      name: 'Move-In Reminder (Host)',
+      description: 'Host notification for upcoming guest arrival',
+      icon: <Calendar className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        listingTitle: 'Mountain View Cabin',
+        senderName: 'Emily Johnson'
       }
     },
     {
@@ -184,6 +265,41 @@ export default function NotificationTestPage() {
       }
     },
     {
+      id: 'payment_failed_severe',
+      name: 'Payment Failed (Second Attempt)',
+      description: 'When payment fails after second attempt',
+      icon: <AlertTriangle className="h-4 w-4" />,
+      category: 'payment',
+      sampleData: {
+        amount: '2,200',
+        listingTitle: 'Downtown Loft'
+      }
+    },
+    {
+      id: 'payment_failed_host',
+      name: 'Payment Failed (Host Notification)',
+      description: 'Notify host when renter payment fails',
+      icon: <AlertTriangle className="h-4 w-4" />,
+      category: 'payment',
+      sampleData: {
+        amount: '1,950',
+        listingTitle: 'Seaside Villa',
+        senderName: 'John Smith'  // Using senderName for renterName
+      }
+    },
+    {
+      id: 'payment_failed_host_severe',
+      name: 'Payment Failed Severe (Host)',
+      description: 'Notify host after second payment failure',
+      icon: <AlertTriangle className="h-4 w-4" />,
+      category: 'payment',
+      sampleData: {
+        amount: '2,500',
+        listingTitle: 'Mountain Retreat',
+        senderName: 'Sarah Johnson'  // Using senderName for renterName
+      }
+    },
+    {
       id: 'payment_authorization_required',
       name: 'Payment Authorization Required',
       description: 'When payment authorization is needed',
@@ -193,6 +309,48 @@ export default function NotificationTestPage() {
         amount: '3,200',
         listingTitle: 'Penthouse Suite'
       }
+    },
+    // Reviews
+    {
+      id: 'review_prompt',
+      name: 'Review Prompt (Host)',
+      description: 'Prompting host to review after guest checkout',
+      icon: <Star className="h-4 w-4" />,
+      category: 'review',
+      sampleData: {
+        renterName: 'John Smith',
+        listingTitle: 'Downtown Loft'
+      }
+    },
+    {
+      id: 'review_prompt_renter',
+      name: 'Review Prompt (Renter)',
+      description: 'Prompting renter to review after checkout',
+      icon: <Star className="h-4 w-4" />,
+      category: 'review',
+      sampleData: {
+        listingTitle: 'Seaside Cottage'
+      }
+    },
+    // Host
+    {
+      id: 'listing_approved',
+      name: 'Listing Approved',
+      description: 'When a host\'s listing is approved',
+      icon: <CheckCircle className="h-4 w-4" />,
+      category: 'host',
+      sampleData: {
+        listingTitle: 'Luxury Downtown Condo'
+      }
+    },
+    // Onboarding
+    {
+      id: 'welcome_renter',
+      name: 'Welcome (Renter)',
+      description: 'Welcome email for new renters',
+      icon: <Users className="h-4 w-4" />,
+      category: 'onboarding',
+      sampleData: {}
     },
     // Admin
     {
@@ -273,13 +431,16 @@ export default function NotificationTestPage() {
         case 'view':
         case 'application_approved':
         case 'application_declined':
+        case 'application_revoked':
+        case 'application_updated':
         case 'application_approved_lease_ready':
           tagLink = {
             text: 'View Listing',
             url: `/searches/test-trip/listing/test-listing-${testId}`
           }
           break
-        case 'booking':
+        case 'booking_host':
+        case 'booking_confirmed':
         case 'move_in_upcoming':
         case 'move_out_upcoming':
           tagLink = {
@@ -346,7 +507,9 @@ export default function NotificationTestPage() {
       application: 'bg-green-100 text-green-800',
       booking: 'bg-purple-100 text-purple-800',
       payment: 'bg-yellow-100 text-yellow-800',
-      admin: 'bg-red-100 text-red-800'
+      admin: 'bg-red-100 text-red-800',
+      host: 'bg-indigo-100 text-indigo-800',
+      onboarding: 'bg-teal-100 text-teal-800'
     }
     return categoryColors[category] || 'bg-gray-100 text-gray-800'
   }
@@ -357,7 +520,24 @@ export default function NotificationTestPage() {
     'new_conversation',
     'view', // Application received
     'application_approved',
-    'booking',
+    'application_declined',
+    'application_revoked',
+    'application_updated',
+    'review_prompt',
+    'review_prompt_renter',
+    'booking_host',
+    'booking_confirmed',
+    'booking_change_request',
+    'booking_change_declined',
+    'booking_change_approved',
+    'move_in_upcoming',
+    'move_in_upcoming_host',
+    'payment_failed',
+    'payment_failed_severe',
+    'payment_failed_host',
+    'payment_failed_host_severe',
+    'listing_approved',
+    'welcome_renter',
     'ADMIN_INFO',
     'ADMIN_WARNING',
     'ADMIN_ERROR',
@@ -366,6 +546,27 @@ export default function NotificationTestPage() {
 
   const isNotificationConfigured = (notificationId: string) => {
     return configuredNotificationTypes.includes(notificationId)
+  }
+
+  // Group notifications by category
+  const groupedNotifications = notificationTypes.reduce((acc, notification) => {
+    if (!acc[notification.category]) {
+      acc[notification.category] = []
+    }
+    acc[notification.category].push(notification)
+    return acc
+  }, {} as Record<string, typeof notificationTypes>)
+
+  // Category display names
+  const categoryDisplayNames: Record<string, string> = {
+    message: 'Messages',
+    application: 'Applications',
+    booking: 'Bookings',
+    payment: 'Payments',
+    review: 'Reviews',
+    host: 'Host',
+    onboarding: 'Onboarding',
+    admin: 'Admin'
   }
 
   const handlePreviewNotification = async (notification: NotificationTypeConfig) => {
@@ -433,77 +634,91 @@ export default function NotificationTestPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[50px]">Icon</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead className="text-right">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {notificationTypes.map((notification) => {
-                const isConfigured = isNotificationConfigured(notification.id)
-                return (
-                  <TableRow 
-                    key={notification.id} 
-                    className={!isConfigured ? 'border-l-4 border-l-red-500 bg-red-50/30' : ''}
-                  >
-                    <TableCell>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted">
-                        {notification.icon}
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {notification.name}
-                      {!isConfigured && (
-                        <span className="ml-2 text-xs text-red-600 font-normal">(uses default template)</span>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {notification.description}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getCategoryBadge(notification.category)} variant="secondary">
-                        {notification.category}
+          <Accordion type="multiple" className="w-full">
+            {Object.entries(groupedNotifications).map(([category, notifications]) => (
+              <AccordionItem key={category} value={category}>
+                <AccordionTrigger className="hover:no-underline">
+                  <div className="flex items-center justify-between w-full pr-4">
+                    <div className="flex items-center gap-3">
+                      <span className="font-medium text-base">
+                        {categoryDisplayNames[category] || category}
+                      </span>
+                      <Badge className={getCategoryBadge(category)} variant="secondary">
+                        {notifications.length} notification{notifications.length !== 1 ? 's' : ''}
                       </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex gap-2 justify-end">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handlePreviewNotification(notification)}
-                        >
-                          <Eye className="mr-2 h-3 w-3" />
-                          Preview
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => handleSendNotification(notification)}
-                          disabled={sendingNotificationId === notification.id}
-                        >
-                          {sendingNotificationId === notification.id ? (
-                            <>
-                              <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                              Sending...
-                            </>
-                          ) : (
-                            <>
-                              <Send className="mr-2 h-3 w-3" />
-                              Send
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pt-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[50px]">Icon</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {notifications.map((notification) => {
+                        const isConfigured = isNotificationConfigured(notification.id)
+                        return (
+                          <TableRow 
+                            key={notification.id} 
+                            className={!isConfigured ? 'border-l-4 border-l-red-500 bg-red-50/30' : ''}
+                          >
+                            <TableCell>
+                              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted">
+                                {notification.icon}
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {notification.name}
+                              {!isConfigured && (
+                                <span className="ml-2 text-xs text-red-600 font-normal">(uses default template)</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                              {notification.description}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex gap-2 justify-end">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handlePreviewNotification(notification)}
+                                >
+                                  <Eye className="mr-2 h-3 w-3" />
+                                  Preview
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleSendNotification(notification)}
+                                  disabled={sendingNotificationId === notification.id}
+                                >
+                                  {sendingNotificationId === notification.id ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                      Sending...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Send className="mr-2 h-3 w-3" />
+                                      Send
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </CardContent>
       </Card>
 

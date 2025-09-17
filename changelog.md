@@ -1,5 +1,17 @@
 # Changelog
 
+## Email Notification System Expansion
+- Implemented comprehensive email notification templates for payment failures, booking changes, and user onboarding
+- Added payment failure notifications for renters with retry information and dual CTAs for severe failures
+- Created host-side payment failure notifications to alert hosts of renter payment issues
+- Implemented move-in/move-out reminders for both renters and hosts with personalized dates
+- Added booking change request, approval, and decline notifications with dynamic recipient names
+- Created welcome email for new renters with CEO message and platform exploration CTA
+- Added listing approval notification for hosts with calendar management reminder
+- Organized admin notification test page with collapsible accordions grouped by category
+- Added secondary button support in email templates for multi-action scenarios
+- Enhanced notification preview system with dynamic subject lines based on listing titles
+
 ## Stripe Express Account Integration
 - Switched from Standard to Express accounts for simpler, faster host onboarding
 - Added automatic syncing of Stripe account status to database (charges_enabled, details_submitted, payouts_enabled)

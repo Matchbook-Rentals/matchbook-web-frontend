@@ -81,6 +81,40 @@ export async function previewNotificationEmail({
         }
         break
         
+      case 'application_revoked':
+        notificationContent = `Your approval for ${listingTitle} has been revoked.`
+        notificationUrl = '/app/rent/searches'
+        emailData = {
+          listingTitle
+        }
+        break
+        
+      case 'application_updated':
+        notificationContent = `${senderName || 'A renter'} has updated their application for ${listingTitle}`
+        notificationUrl = '/app/host/applications'
+        emailData = {
+          listingTitle,
+          renterName: senderName || 'Alex Thompson'
+        }
+        break
+        
+      case 'review_prompt':
+        notificationContent = `${senderName || 'John Smith'} has checked out of ${listingTitle}. Ready to write a review?`
+        notificationUrl = '/app/reviews/write'
+        emailData = {
+          listingTitle,
+          renterName: senderName || 'John Smith'
+        }
+        break
+        
+      case 'review_prompt_renter':
+        notificationContent = `How was your stay at ${listingTitle}? Ready to rate your host?`
+        notificationUrl = '/app/reviews/write'
+        emailData = {
+          listingTitle
+        }
+        break
+        
       case 'application_approved_lease_ready':
         notificationContent = `Congratulations! Your application for ${listingTitle} has been approved and your lease is ready for signature.`
         notificationUrl = '/app/match/test'
@@ -89,12 +123,47 @@ export async function previewNotificationEmail({
         }
         break
         
-      case 'booking':
-        notificationContent = `You have a new booking for ${listingTitle} from ${senderName}`
+      case 'booking_host':
+        notificationContent = `Your booking for "${listingTitle}" with "${senderName}" is confirmed.`
         notificationUrl = '/app/host-dashboard?tab=bookings'
         emailData = {
           listingTitle,
-          senderName
+          renterName: senderName,
+          moveInDate: amount || 'March 15, 2024'
+        }
+        break
+        
+      case 'booking_confirmed':
+        notificationContent = `You booked ${listingTitle} in ${messageContent || 'San Francisco'} for ${amount || 'Jan 1 - Jan 31'}.`
+        notificationUrl = '/app/renter/bookings'
+        emailData = {
+          listingTitle,
+          city: messageContent || 'San Francisco',
+          dateRange: amount || 'Jan 1 - Jan 31'
+        }
+        break
+        
+      case 'booking_change_request':
+        notificationContent = `A change has been requested to your booking for ${listingTitle}`
+        notificationUrl = '/app/host-dashboard?tab=bookings'
+        emailData = {
+          listingTitle
+        }
+        break
+        
+      case 'booking_change_declined':
+        notificationContent = `Your requested change has been declined`
+        notificationUrl = '/app/renter/bookings'
+        emailData = {
+          declinerName: senderName || 'Sarah Johnson'
+        }
+        break
+        
+      case 'booking_change_approved':
+        notificationContent = `Your requested change has been approved`
+        notificationUrl = '/app/renter/bookings'
+        emailData = {
+          approverName: senderName || 'Robert Wilson'
         }
         break
         
@@ -102,7 +171,18 @@ export async function previewNotificationEmail({
         notificationContent = `Move-in reminder: Your stay at ${listingTitle} begins soon!`
         notificationUrl = '/app/renter/bookings'
         emailData = {
-          listingTitle
+          listingTitle,
+          moveInDate: amount || 'March 20, 2024'
+        }
+        break
+        
+      case 'move_in_upcoming_host':
+        notificationContent = `${senderName || 'John Smith'} is moving into ${listingTitle} in 3 days`
+        notificationUrl = '/app/host-dashboard?tab=bookings'
+        emailData = {
+          listingTitle,
+          renterName: senderName || 'John Smith',
+          moveInDate: amount || 'March 20, 2024'
         }
         break
         
@@ -124,11 +204,42 @@ export async function previewNotificationEmail({
         break
         
       case 'payment_failed':
-        notificationContent = `Payment of $${amount} for ${listingTitle} failed. Please update your payment method.`
-        notificationUrl = '/app/renter/payments'
+        notificationContent = `Payment of $${amount || '1,800'} for ${listingTitle} failed. Please update your payment method.`
+        notificationUrl = '/app/payment-methods'
         emailData = {
-          amount,
+          amount: amount || '1,800',
+          listingTitle,
+          nextRetryDate: 'tomorrow, January 17, 2025'
+        }
+        break
+        
+      case 'payment_failed_severe':
+        notificationContent = `Payment of $${amount || '2,200'} for ${listingTitle} failed on second attempt. Immediate action required.`
+        notificationUrl = '/app/payment-methods'
+        emailData = {
+          amount: amount || '2,200',
           listingTitle
+        }
+        break
+        
+      case 'payment_failed_host':
+        notificationContent = `Payment issue for ${listingTitle}. ${senderName || 'John Smith'}'s payment failed.`
+        notificationUrl = '/app/messages'
+        emailData = {
+          amount: amount || '1,950',
+          listingTitle,
+          renterName: senderName || 'John Smith',
+          nextRetryDate: 'tomorrow, January 17, 2025'
+        }
+        break
+        
+      case 'payment_failed_host_severe':
+        notificationContent = `Payment failure for ${listingTitle}. ${senderName || 'Sarah Johnson'}'s payment failed after second attempt.`
+        notificationUrl = '/app/messages'
+        emailData = {
+          amount: amount || '2,500',
+          listingTitle,
+          renterName: senderName || 'Sarah Johnson'
         }
         break
         
@@ -139,6 +250,20 @@ export async function previewNotificationEmail({
           amount,
           listingTitle
         }
+        break
+        
+      case 'listing_approved':
+        notificationContent = `Your listing "${listingTitle}" has been approved and is now live!`
+        notificationUrl = '/app/host-dashboard?tab=calendar'
+        emailData = {
+          listingTitle
+        }
+        break
+        
+      case 'welcome_renter':
+        notificationContent = 'Welcome to MatchBook! Start exploring flexible rentals.'
+        notificationUrl = '/app/rent/searches'
+        emailData = {}
         break
         
       case 'ADMIN_INFO':

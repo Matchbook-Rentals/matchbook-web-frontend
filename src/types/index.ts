@@ -117,6 +117,8 @@ export interface NotificationEmailData {
     text: string;
     url: string;
   };
+  secondaryButtonText?: string;
+  secondaryButtonUrl?: string;
 }
 
 export interface SendNotificationEmailInput {
