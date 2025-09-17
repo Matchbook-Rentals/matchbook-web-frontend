@@ -10,6 +10,8 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
+import BrandModal from '@/components/BrandModal';
+import BookingModificationsView from '@/components/BookingModificationsView';
 
 // Extended booking type with included relations
 type BookingWithRelations = Booking & {
@@ -28,6 +30,10 @@ type BookingWithRelations = Booking & {
     amount: number;
     dueDate: Date;
     paidAt?: Date | null;
+    paymentModifications?: {
+      id: string;
+      status: string;
+    }[];
   }[];
   bookingModifications?: {
     id: string;
@@ -66,6 +72,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   const router = useRouter();
   const { user } = useUser();
   const [isDateModificationModalOpen, setIsDateModificationModalOpen] = useState(false);
+  const [isModificationsModalOpen, setIsModificationsModalOpen] = useState(false);
   
   // Determine recipient ID (host in this case, since renter is requesting)
   const recipientId = booking.listing?.userId || ''; // This should come from the booking relations
@@ -296,6 +303,30 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
             >
               View Details
             </BrandButton>
+            {hasModifications && (
+              <BrandModal
+                isOpen={isModificationsModalOpen}
+                onOpenChange={setIsModificationsModalOpen}
+                className="!max-w-[1050px] w-full max-h-[85vh] overflow-y-auto !p-3 sm:!p-6"
+                heightStyle="!top-[10vh] md:!top-[25vh]"
+                triggerButton={
+                  <BrandButton
+                    variant="outline"
+                    className="w-full"
+                  >
+                    View Changes
+                  </BrandButton>
+                }
+              >
+                <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
+                  <BookingModificationsView
+                    bookingId={booking.id}
+                    bookingTitle={booking.listing?.title || 'Booking'}
+                    isMobile={true}
+                  />
+                </div>
+              </BrandModal>
+            )}
             <BrandButton 
               variant="default"
               onClick={() => router.push(`/app/rent/bookings/${booking.id}/payment`)}
@@ -413,16 +444,6 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
               </div>
 
               <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 w-full">
-                {hasModifications && (
-                  <BrandButton
-                    variant="outline"
-                    onClick={() => router.push(`/app/rent/bookings/${booking.id}/changes`)}
-                    className="w-full md:w-auto whitespace-nowrap"
-                  >
-                    View Changes
-                  </BrandButton>
-                )}
-                
                 <BrandButton
                   variant="outline"
                   onClick={() => router.push(`/app/rent/bookings/${booking.id}`)}
@@ -430,6 +451,31 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                 >
                   View Details
                 </BrandButton>
+
+                {hasModifications && (
+                  <BrandModal
+                    isOpen={isModificationsModalOpen}
+                    onOpenChange={setIsModificationsModalOpen}
+                    className="!max-w-[1050px] w-full max-h-[85vh] overflow-y-auto !p-3 sm:!p-6"
+                    heightStyle="!top-[10vh] md:!top-[25vh]"
+                    triggerButton={
+                      <BrandButton
+                        variant="outline"
+                        className="w-full md:w-auto whitespace-nowrap"
+                      >
+                        View Changes
+                      </BrandButton>
+                    }
+                  >
+                    <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
+                      <BookingModificationsView
+                        bookingId={booking.id}
+                        bookingTitle={booking.listing?.title || 'Booking'}
+                        isMobile={false}
+                      />
+                    </div>
+                  </BrandModal>
+                )}
 
                 <BrandButton 
                   variant="default"
