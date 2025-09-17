@@ -199,7 +199,10 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     bathroomCount: booking.listing.bathroomCount,
     petsAllowed: booking.listing.petsAllowed,
     leaseDocumentId: booking.match?.leaseDocumentId || null,
-    matchId: booking.match?.id || booking.matchId
+    matchId: booking.match?.id || booking.matchId,
+    // Add booking dates for date modification
+    startDate: booking.startDate,
+    endDate: booking.endDate
   };
 
   // Format payment data for the table

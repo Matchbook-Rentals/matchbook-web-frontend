@@ -1,7 +1,7 @@
 "use client";
 
-import { MapPinIcon, MoreVertical, MoreVerticalIcon, Home, Loader2 } from "lucide-react";
-import React from "react";
+import { MapPinIcon, MoreVertical, MoreVerticalIcon, Home, Loader2, Calendar } from "lucide-react";
+import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
 import { findConversationBetweenUsers, createListingConversation } from "@/app/actions/conversations";
+import BookingDateModificationModal from '@/components/BookingDateModificationModal';
 
 interface Occupant {
   type: string;
@@ -33,6 +34,10 @@ interface HostBookingCardProps {
   // New props for messaging functionality
   listingId?: string;
   guestUserId?: string;
+  // Props for date modification
+  bookingId?: string;
+  bookingStartDate?: Date;
+  bookingEndDate?: Date;
 }
 
 const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
@@ -51,9 +56,13 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
   isLoading = false,
   listingId,
   guestUserId,
+  bookingId,
+  bookingStartDate,
+  bookingEndDate,
 }) => {
   const router = useRouter();
   const [messagingLoading, setMessagingLoading] = React.useState(false);
+  const [isDateModificationModalOpen, setIsDateModificationModalOpen] = React.useState(false);
 
   const handleMessageRenter = async () => {
     if (!listingId || !guestUserId) {
@@ -148,6 +157,16 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-48 p-0" align="end">
+              {bookingId && bookingStartDate && bookingEndDate && guestUserId && (
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-2 text-[#3c8787] hover:text-[#3c8787] hover:bg-[#3c8787]/10"
+                  onClick={() => setIsDateModificationModalOpen(true)}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Modify Dates
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 className="w-full justify-start gap-2"
@@ -230,6 +249,21 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
           </Button>
         </div>
       </CardFooter>
+
+      {/* Date Modification Modal */}
+      {bookingId && bookingStartDate && bookingEndDate && guestUserId && (
+        <BookingDateModificationModal
+          isOpen={isDateModificationModalOpen}
+          onOpenChange={setIsDateModificationModalOpen}
+          booking={{
+            id: bookingId,
+            startDate: bookingStartDate,
+            endDate: bookingEndDate,
+            listing: { title: address || 'Property' }
+          }}
+          recipientId={guestUserId}
+        />
+      )}
     </Card>
   );
 };
@@ -250,9 +284,13 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
   isLoading = false,
   listingId,
   guestUserId,
+  bookingId,
+  bookingStartDate,
+  bookingEndDate,
 }) => {
   const router = useRouter();
   const [messagingLoading, setMessagingLoading] = React.useState(false);
+  const [isDateModificationModalOpen, setIsDateModificationModalOpen] = React.useState(false);
 
   const handleMessageRenter = async () => {
     if (!listingId || !guestUserId) {
@@ -316,6 +354,9 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
         isLoading={isLoading}
         listingId={listingId}
         guestUserId={guestUserId}
+        bookingId={bookingId}
+        bookingStartDate={bookingStartDate}
+        bookingEndDate={bookingEndDate}
       />
     );
   }
@@ -429,6 +470,16 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-48 p-0" align="end">
+                  {bookingId && bookingStartDate && bookingEndDate && guestUserId && (
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start gap-2 text-[#3c8787] hover:text-[#3c8787] hover:bg-[#3c8787]/10"
+                      onClick={() => setIsDateModificationModalOpen(true)}
+                    >
+                      <Calendar className="w-4 h-4" />
+                      Modify Dates
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     className="w-full justify-start gap-2"
@@ -483,6 +534,21 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
           </div>
         </div>
       </CardContent>
+
+      {/* Date Modification Modal */}
+      {bookingId && bookingStartDate && bookingEndDate && guestUserId && (
+        <BookingDateModificationModal
+          isOpen={isDateModificationModalOpen}
+          onOpenChange={setIsDateModificationModalOpen}
+          booking={{
+            id: bookingId,
+            startDate: bookingStartDate,
+            endDate: bookingEndDate,
+            listing: { title: address || 'Property' }
+          }}
+          recipientId={guestUserId}
+        />
+      )}
     </Card>
   );
 };

@@ -1,13 +1,14 @@
 'use client';
 import { Booking } from '@prisma/client';
-import React from 'react';
-import { MapPinIcon, MoreVertical, Trash, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPinIcon, MoreVertical, Trash, X, Calendar } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useRouter } from 'next/navigation';
+import BookingDateModificationModal from '@/components/BookingDateModificationModal';
 
 // Extended booking type with included relations
 type BookingWithRelations = Booking & {
@@ -15,6 +16,7 @@ type BookingWithRelations = Booking & {
     title: string;
     imageSrc?: string;
     address?: string;
+    userId?: string;
   };
   trip?: {
     numAdults: number;
@@ -36,6 +38,10 @@ interface BookingCardProps {
 
 const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   const router = useRouter();
+  const [isDateModificationModalOpen, setIsDateModificationModalOpen] = useState(false);
+  
+  // Determine recipient ID (host in this case, since renter is requesting)
+  const recipientId = booking.listing?.userId || ''; // This should come from the booking relations
 
   // Format date range for display
   const startDate = new Date(booking.startDate);
@@ -173,6 +179,17 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-48 p-0" align="end">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-2 text-[#3c8787] hover:text-[#3c8787] hover:bg-[#3c8787]/10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDateModificationModalOpen(true);
+                  }}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Modify Dates
+                </Button>
                 {process.env.NODE_ENV === 'development' ? (
                   <Button
                     variant="ghost"
@@ -322,6 +339,17 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-48 p-0" align="end">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-2 text-[#3c8787] hover:text-[#3c8787] hover:bg-[#3c8787]/10"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsDateModificationModalOpen(true);
+                    }}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Modify Dates
+                  </Button>
                   {process.env.NODE_ENV === 'development' ? (
                     <Button
                       variant="ghost"
@@ -371,6 +399,19 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
           </div>
         </div>
       </CardContent>
+
+      {/* Date Modification Modal */}
+      <BookingDateModificationModal
+        isOpen={isDateModificationModalOpen}
+        onOpenChange={setIsDateModificationModalOpen}
+        booking={{
+          id: booking.id,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          listing: booking.listing
+        }}
+        recipientId={recipientId}
+      />
     </Card>
   )
 }

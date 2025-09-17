@@ -86,6 +86,8 @@ model User {
   locationChanges    ListingLocationChange[]
   paymentModificationRequests PaymentModification[] @relation("PaymentModificationRequestor")
   paymentModificationReceipts PaymentModification[] @relation("PaymentModificationRecipient")
+  bookingModificationRequests BookingModification[] @relation("BookingModificationRequestor")
+  bookingModificationReceipts BookingModification[] @relation("BookingModificationRecipient")
 
   // Hospitable integration
   hospitableAccessToken   String?   @db.VarChar(1500)
@@ -432,6 +434,7 @@ model Booking {
   match   Match   @relation(fields: [matchId], references: [id])
   trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: Cascade)
   paymentTransactions PaymentTransaction[]
+  bookingModifications BookingModification[]
 
   @@index([tripId])
 }
@@ -965,6 +968,45 @@ model PaymentModification {
   recipient             User        @relation("PaymentModificationRecipient", fields: [recipientId], references: [id])
   
   @@index([rentPaymentId])
+  @@index([requestorId])
+  @@index([recipientId])
+  @@index([status])
+}
+
+model BookingModification {
+  id                    String   @id @default(cuid())
+  bookingId             String
+  requestorId           String   // ID of the user who requested the modification
+  recipientId           String   // ID of the user who needs to approve the modification
+  
+  // Original booking details (for tracking)
+  originalStartDate     DateTime
+  originalEndDate       DateTime
+  
+  // Modified booking details
+  newStartDate          DateTime
+  newEndDate            DateTime
+  
+  // Modification metadata
+  reason                String?  // Reason for the modification
+  status                String   @default("pending") // "pending", "approved", "rejected"
+  
+  // Timestamps
+  requestedAt           DateTime @default(now())
+  viewedAt              DateTime? // When the recipient first viewed the modification
+  approvedAt            DateTime?
+  rejectedAt            DateTime?
+  rejectionReason       String?   // Optional reason for rejection
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relationships
+  booking               Booking @relation(fields: [bookingId], references: [id])
+  requestor             User    @relation("BookingModificationRequestor", fields: [requestorId], references: [id])
+  recipient             User    @relation("BookingModificationRecipient", fields: [recipientId], references: [id])
+  
+  @@index([bookingId])
   @@index([requestorId])
   @@index([recipientId])
   @@index([status])

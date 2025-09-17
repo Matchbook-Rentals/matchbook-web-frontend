@@ -827,6 +827,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
               }}
               onManageListing={() => router.push(`/app/host/${booking.listingId}/summary`)}
               className="border border-solid border-[#6e504933]"
+              // Pass booking data for date modification
+              bookingId={booking.id}
+              bookingStartDate={booking.startDate}
+              bookingEndDate={booking.endDate}
+              listingId={booking.listingId}
+              guestUserId={booking.userId}
             />
           </div>
         );

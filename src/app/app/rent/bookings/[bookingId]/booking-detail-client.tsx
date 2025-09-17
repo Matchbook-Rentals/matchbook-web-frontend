@@ -25,6 +25,9 @@ interface BookingDetailClientProps {
     petsAllowed: boolean;
     leaseDocumentId: string | null;
     matchId: string;
+    // Add booking data for date modification
+    startDate?: Date;
+    endDate?: Date;
   };
   paymentsData: {
     upcoming: Array<{
@@ -132,6 +135,10 @@ export default function BookingDetailClient({
           listingId={listingId}
           hostUserId={bookingData.hostUserId}
           className="w-full"
+          // Pass booking data for date modification
+          bookingId={bookingId}
+          bookingStartDate={bookingData.startDate}
+          bookingEndDate={bookingData.endDate}
         />
         
         <RentPaymentsTable
