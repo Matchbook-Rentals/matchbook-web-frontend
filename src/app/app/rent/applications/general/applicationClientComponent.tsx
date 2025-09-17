@@ -7,11 +7,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from '@/lib/utils';
 import { PAGE_MARGIN, ApplicationItemHeaderStyles } from '@/constants/styles';
-import { PersonalInfo } from '../searches/(trips-components)/application-personal-info';
+import { PersonalInfo } from '../../searches/(trips-components)/application-personal-info';
 import { logger } from '@/lib/logger';
-import { Identification } from '../searches/(trips-components)/application-identity';
-import { Income } from '../searches/(trips-components)/application-income';
-import Questionnaire from '../searches/(trips-components)/application-questionnaire';
+import { Identification } from '../../searches/(trips-components)/application-identity';
+import { Income } from '../../searches/(trips-components)/application-income';
+import Questionnaire from '../../searches/(trips-components)/application-questionnaire';
 import { upsertApplication, markComplete, updateApplicationCompletionStatus } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
@@ -22,7 +22,7 @@ import {
   validateQuestionnaire
 } from '@/utils/application-validation';
 import { useApplicationStore } from '@/stores/application-store';
-import { ResidentialLandlordInfo } from '../searches/(trips-components)/residential-landlord-info';
+import { ResidentialLandlordInfo } from '../../searches/(trips-components)/residential-landlord-info';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { checkApplicationCompletionClient } from '@/utils/application-completion';
 
