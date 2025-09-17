@@ -1,5 +1,12 @@
 # Changelog
 
+## Host Dashboard Payment Display Enhancement
+- Updated host dashboard booking cards to display largest rent payment amount instead of base monthly rent
+- Added rentPayments data fetching to getHostBookings and getAllListingBookings functions
+- Implemented currency formatting to properly display amounts as dollars (cents/100)
+- Added helper functions to calculate and format the largest payment from rentPayments array
+- Applied changes to both dashboard-wide and listing-specific booking pages
+
 ## Email Notification System Expansion
 - Implemented comprehensive email notification templates for payment failures, booking changes, and user onboarding
 - Added payment failure notifications for renters with retry information and dual CTAs for severe failures

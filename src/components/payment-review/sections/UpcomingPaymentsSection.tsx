@@ -208,13 +208,14 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
         const lastDay = lastDayOfMonth.getDate();
         
         if (endDay < lastDay) {
-          // Prorate the last month
+          // Use centralized proration calculation for last month
           console.log('🏠 Last month is PRORATED');
           console.log('  End date:', end.toISOString());
           console.log('  End day:', endDay, 'Last day of month:', lastDay);
           
-          const dailyRate = totalRentAmount / lastDay;
-          const proratedTotal = Math.round(dailyRate * endDay * 100) / 100;
+          // Use the same calculation as payment generation
+          const proratedDetails = calculateProratedRent(totalRentAmount, currentDate, end);
+          const proratedTotal = proratedDetails.amount;
           
           // Prorate base and pet rent proportionally
           baseRentAmount = monthlyPetRent > 0
@@ -224,17 +225,18 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
             ? Math.round((monthlyPetRent / totalRentAmount) * proratedTotal * 100) / 100
             : 0;
           
-          baseDescription = `Base rent - ${endDay} days (prorated)`;
-          petDescription = `Pet rent - ${endDay} days (prorated)`;
+          baseDescription = `Base rent - ${proratedDetails.daysToCharge} days (prorated)`;
+          petDescription = `Pet rent - ${proratedDetails.daysToCharge} days (prorated)`;
           totalRentAmount = proratedTotal;
           
-          console.log('💰 Last month proration:', {
+          console.log('💰 Last month proration using centralized calc:', {
             baseRentAmount,
             petRentAmount,
             totalRentAmount,
-            daysToCharge: endDay,
-            daysInMonth: lastDay,
-            dailyRate
+            daysToCharge: proratedDetails.daysToCharge,
+            daysInMonth: proratedDetails.daysInMonth,
+            dailyRate: proratedDetails.dailyRate,
+            isProrated: proratedDetails.isProrated
           });
         }
       }

@@ -150,8 +150,8 @@ export function calculateTotalMonthlyRent(
 /**
  * Calculate prorated rent for partial month
  * @param monthlyRent - Full monthly rent amount
- * @param startDate - Move-in date
- * @param endDate - Optional end date for the month
+ * @param startDate - Move-in date (or start of month for last month proration)
+ * @param endDate - Optional end date for the month (move-out date for last month)
  * @returns Prorated rent details
  */
 export function calculateProratedRent(
@@ -183,9 +183,16 @@ export function calculateProratedRent(
     daysInMonth
   });
   
-  // If starting on the 1st, no proration needed
-  if (startDay === 1) {
-    console.log('✅ Starting on 1st - NO PRORATION NEEDED');
+  // Determine the effective end date
+  const effectiveEndDate = endDate || lastDayOfMonth;
+  const effectiveEndDay = effectiveEndDate.getDate();
+  
+  // Check if this is a last month proration (starting on 1st with end date before month end)
+  const isLastMonthProration = startDay === 1 && endDate && effectiveEndDay < daysInMonth;
+  
+  // If starting on the 1st and no end date specified (or end date is last day), no proration needed
+  if (startDay === 1 && (!endDate || effectiveEndDay === daysInMonth)) {
+    console.log('✅ Full month - NO PRORATION NEEDED');
     return {
       amount: monthlyRent,
       daysInMonth,
@@ -195,22 +202,29 @@ export function calculateProratedRent(
     };
   }
   
-  // Calculate days to charge (from start date to end of month)
-  const effectiveEndDate = endDate || lastDayOfMonth;
-  const effectiveEndDay = effectiveEndDate.getDate();
+  // Calculate days to charge
+  let daysToCharge: number;
+  
+  if (isLastMonthProration) {
+    // For last month: charge from day 1 through the end day
+    daysToCharge = effectiveEndDay;
+    console.log('📅 Last month proration: charging for days 1 through', effectiveEndDay);
+  } else {
+    // For first month: charge from start day through end of month
+    daysToCharge = Math.min(
+      effectiveEndDay - startDay + 1,
+      daysInMonth - startDay + 1
+    );
+    console.log('📅 First month proration: charging from day', startDay, 'onwards');
+  }
   
   console.log('🎯 Effective end date:', effectiveEndDate.toISOString());
   console.log('🧑 Calculation:', {
     'effectiveEndDay': effectiveEndDay,
     'startDay': startDay,
-    'formula: effectiveEndDay - startDay + 1': effectiveEndDay - startDay + 1,
-    'daysInMonth - startDay + 1': daysInMonth - startDay + 1
+    'daysToCharge': daysToCharge,
+    'isLastMonthProration': isLastMonthProration
   });
-  
-  const daysToCharge = Math.min(
-    effectiveEndDay - startDay + 1,
-    daysInMonth - startDay + 1
-  );
   
   const dailyRate = monthlyRent / daysInMonth;
   const proratedAmount = Math.round(dailyRate * daysToCharge * 100) / 100;

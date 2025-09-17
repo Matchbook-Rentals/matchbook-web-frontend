@@ -280,6 +280,14 @@ export async function getHostBookings() {
             numPets: true,
             numChildren: true
           }
+        },
+        rentPayments: {
+          select: {
+            id: true,
+            amount: true,
+            dueDate: true,
+            isPaid: true
+          }
         }
       }
     });
@@ -645,6 +653,14 @@ export async function getAllHostBookings() {
             numPets: true,
             numChildren: true
           }
+        },
+        rentPayments: {
+          select: {
+            id: true,
+            amount: true,
+            dueDate: true,
+            isPaid: true
+          }
         }
       }
     });
@@ -759,6 +775,14 @@ export async function getAllListingBookings(listingId: string) {
             numAdults: true,
             numPets: true,
             numChildren: true
+          }
+        },
+        rentPayments: {
+          select: {
+            id: true,
+            amount: true,
+            dueDate: true,
+            isPaid: true
           }
         }
       }

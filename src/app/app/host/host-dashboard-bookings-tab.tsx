@@ -20,6 +20,14 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useUser } from "@clerk/nextjs";
 import { HostBookingCard } from "./components/host-booking-card";
 
+// RentPayment type
+type RentPayment = {
+  id: string;
+  amount: number;
+  dueDate: Date;
+  isPaid: boolean;
+};
+
 // Extended booking type with included relations
 type BookingWithRelations = {
   id: string;
@@ -62,6 +70,7 @@ type BookingWithRelations = {
     } | null;
     Lease?: any | null;
   };
+  rentPayments?: RentPayment[];
 };
 
 // Sample bookings data for hosts
@@ -253,6 +262,21 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
   }, [pathname]);
 
   const handleViewBookingDetails = (booking: BookingWithRelations) => {
+    // Debug log for payment calculations
+    console.log('🔍 Booking Details Click - Payment Calculation:', {
+      bookingId: booking.id,
+      monthlyRent: booking.monthlyRent,
+      rentPayments: booking.rentPayments,
+      rentPaymentAmounts: booking.rentPayments?.map(p => p.amount),
+      largestPayment: getLargestPayment(booking.rentPayments),
+      displayAmount: getLargestPayment(booking.rentPayments) > 0 ? getLargestPayment(booking.rentPayments) : booking.monthlyRent,
+      formattedPrice: getLargestPayment(booking.rentPayments) > 0 
+        ? `$${getLargestPayment(booking.rentPayments).toLocaleString()} / Month`
+        : booking.monthlyRent 
+          ? `$${booking.monthlyRent.toLocaleString()} / Month`
+          : "$0 / Month"
+    });
+    
     setLoadingBookingId(booking.id);
     
     // If this is a match awaiting signature (not a real booking yet), go to host match page
@@ -406,6 +430,21 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     return "Guest";
   };
 
+  // Helper function to get the largest payment from rentPayments
+  const getLargestPayment = (rentPayments?: RentPayment[]): number => {
+    if (!rentPayments || rentPayments.length === 0) return 0;
+    return Math.max(...rentPayments.map(payment => payment.amount));
+  };
+  
+  // Helper function to format amount as currency (amount is in cents)
+  const formatCurrency = (amountInCents: number): string => {
+    const amountInDollars = amountInCents / 100;
+    return amountInDollars.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    });
+  };
+
   // Helper function to transform booking data for the HostBookingCard component
   const transformBookingForCard = (booking: BookingWithRelations, isMobile: boolean) => {
     const listing = booking.listing;
@@ -421,8 +460,28 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     ];
 
     const statusInfo = getStatusInfo(booking);
-    const price = booking.monthlyRent 
-      ? `$${booking.monthlyRent.toLocaleString()} / Month`
+    
+    // Get the largest payment amount, fallback to monthlyRent if no payments
+    const largestPaymentAmount = getLargestPayment(booking.rentPayments);
+    const displayAmount = largestPaymentAmount > 0 ? largestPaymentAmount : booking.monthlyRent;
+    
+    // Log payment calculation for debugging
+    console.log('💰 Payment Calculation for booking:', {
+      bookingId: booking.id,
+      monthlyRent: booking.monthlyRent,
+      monthlyRentInDollars: booking.monthlyRent ? booking.monthlyRent / 100 : 0,
+      rentPayments: booking.rentPayments,
+      rentPaymentAmounts: booking.rentPayments?.map(p => p.amount),
+      rentPaymentAmountsInDollars: booking.rentPayments?.map(p => p.amount / 100),
+      largestPayment: largestPaymentAmount,
+      largestPaymentInDollars: largestPaymentAmount / 100,
+      displayAmount: displayAmount,
+      displayAmountInDollars: displayAmount ? displayAmount / 100 : 0,
+      formattedPrice: displayAmount ? `$${formatCurrency(displayAmount)} / Month` : "$0 / Month"
+    });
+    
+    const price = displayAmount 
+      ? `$${formatCurrency(displayAmount)} / Month`
       : "$0 / Month";
 
     return {

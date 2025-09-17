@@ -1,7 +1,7 @@
 'use client';
 import { Booking } from '@prisma/client';
 import React from 'react';
-import { MapPinIcon, MoreVertical, Trash } from 'lucide-react';
+import { MapPinIcon, MoreVertical, Trash, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BrandButton } from "@/components/ui/brandButton";
@@ -162,19 +162,18 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
               className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
               style={{ backgroundImage: `url(${listingImage})` }}
             />
-{/* Only show delete option in development */}
-            {process.env.NODE_ENV === 'development' && (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="p-2 rounded-lg border-[#3c8787] text-[#3c8787]"
-                  >
-                    <MoreVertical className="w-4 h-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-48 p-0" align="end">
+<Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="p-2 rounded-lg border-[#3c8787] text-[#3c8787]"
+                >
+                  <MoreVertical className="w-4 h-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0" align="end">
+                {process.env.NODE_ENV === 'development' ? (
                   <Button
                     variant="ghost"
                     className="w-full justify-start gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
@@ -183,9 +182,18 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                     <Trash className="w-4 h-4" />
                     Delete Booking (Dev)
                   </Button>
-                </PopoverContent>
-              </Popover>
-            )}
+                ) : (
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-2 text-gray-400 cursor-not-allowed"
+                    disabled
+                  >
+                    <X className="w-4 h-4" />
+                    Cancel Booking
+                  </Button>
+                )}
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Row 2: Title | Badge */}
@@ -314,14 +322,25 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-48 p-0" align="end">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start gap-2"
-                    onClick={() => onDelete(booking.id)}
-                  >
-                    <Trash className="w-4 h-4" />
-                    Delete Booking
-                  </Button>
+                  {process.env.NODE_ENV === 'development' ? (
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => onDelete(booking.id)}
+                    >
+                      <Trash className="w-4 h-4" />
+                      Delete Booking
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start gap-2 text-gray-400 cursor-not-allowed"
+                      disabled
+                    >
+                      <X className="w-4 h-4" />
+                      Cancel Booking
+                    </Button>
+                  )}
                 </PopoverContent>
               </Popover>
             </div>
