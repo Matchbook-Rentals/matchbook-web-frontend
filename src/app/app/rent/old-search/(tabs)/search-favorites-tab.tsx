@@ -196,9 +196,9 @@ export default function SearchFavoritesTab() {
     // Apply ref and minHeight style
     <div
       ref={containerRef}
-      className="flex flex-col max-h-[calc(100vh-180px)] md:flex-row justify-center mx-auto w-full"
+      className="flex flex-col  md:max-h-[calc(100vh-150px)] md:flex-row justify-center mx-auto w-full"
     >
-      <div className="w-full ">
+      <div className="w-full">
         <SearchFavoriteGrid
           listings={[...likedListings].sort((a, b) => {
             const aRequested = lookup.requestedIds.has(a.id);
