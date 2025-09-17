@@ -1,6 +1,5 @@
 import { getAllBookings, CombinedBookingData } from './_actions'
 import BookingManagementTable from './booking-management-table'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const PAGE_SIZE = 20;
 
@@ -31,27 +30,24 @@ export default async function BookingManagementPage({ searchParams }: BookingMan
   });
 
   return (
-    <div className="container mx-auto py-10">
-      <Card>
-        <CardHeader>
-          <CardTitle>Booking Management ({totalCount})</CardTitle>
-          <p className="text-muted-foreground">
-            Manage all bookings across the platform. Click "View Booking" to see detailed information, payment schedules, and modification history.
-          </p>
-        </CardHeader>
-        <CardContent>
-          <BookingManagementTable
-            bookings={bookings}
-            totalCount={totalCount}
-            currentPage={currentPage}
-            pageSize={PAGE_SIZE}
-            search={search}
-            status={status}
-            startDate={startDate}
-            endDate={endDate}
-          />
-        </CardContent>
-      </Card>
+    <div className="w-full">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">Booking Management ({totalCount})</h1>
+        <p className="text-muted-foreground mt-2">
+          Manage all bookings across the platform. Click "View Booking" to see detailed information, payment schedules, and modification history.
+        </p>
+      </div>
+
+      <BookingManagementTable
+        bookings={bookings}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        pageSize={PAGE_SIZE}
+        search={search}
+        status={status}
+        startDate={startDate}
+        endDate={endDate}
+      />
     </div>
   );
 }

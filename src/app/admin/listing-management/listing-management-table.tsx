@@ -227,12 +227,16 @@ export default function ListingManagementTable({
                 </TableCell>
                 <TableCell>
                   <div>
-                    <Link 
-                      href={`/admin/listing-management/${listing.id}`}
-                      className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
-                    >
-                      {listing.title}
-                    </Link>
+                    {listing.id ? (
+                      <Link
+                        href={`/admin/listing-management/${listing.id}`}
+                        className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                      >
+                        {listing.title}
+                      </Link>
+                    ) : (
+                      <span className="font-medium text-gray-500">{listing.title}</span>
+                    )}
                     <div className="text-sm text-gray-600">
                       {listing.category} • {listing.roomCount}BR/{listing.bathroomCount}BA
                     </div>
@@ -269,24 +273,43 @@ export default function ListingManagementTable({
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    <Link href={`/admin/listing-management/${listing.id}`}>
-                      <Button variant="outline" size="sm">
-                        <Eye className="h-4 w-4 mr-2" />
-                        View
-                      </Button>
-                    </Link>
-                    <Link href={`/admin/listing-management/${listing.id}/edit`}>
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit
-                      </Button>
-                    </Link>
-                    <CopyListingButton 
-                      listingId={listing.id} 
-                      listingTitle={listing.title}
-                      size="sm"
-                      showText={false}
-                    />
+                    {listing.id ? (
+                      <>
+                        <Link href={`/admin/listing-management/${listing.id}`}>
+                          <Button variant="outline" size="sm">
+                            <Eye className="h-4 w-4 mr-2" />
+                            View
+                          </Button>
+                        </Link>
+                        <Link href={`/admin/listing-management/${listing.id}/edit`}>
+                          <Button variant="outline" size="sm">
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                        </Link>
+                        <CopyListingButton
+                          listingId={listing.id}
+                          listingTitle={listing.title}
+                          size="sm"
+                          showText={false}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Button variant="outline" size="sm" disabled>
+                          <Eye className="h-4 w-4 mr-2" />
+                          View
+                        </Button>
+                        <Button variant="outline" size="sm" disabled>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit
+                        </Button>
+                        <Button variant="outline" size="sm" disabled>
+                          <Copy className="h-4 w-4 mr-2" />
+                          Copy
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>

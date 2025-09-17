@@ -390,6 +390,196 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // Use the filteredCount from context which includes all listings that pass filters
   const numFilteredOut = listings.length - filteredCount;
 
+  // Semantic helper functions for readable conditions
+  const hasListings = () => displayListings.length > 0;
+  const hasNoListingsAtAll = () => listings.length === 0;
+  const isSingleListingSelected = () => visibleListingIds && visibleListingIds.length === 1 && clickedMarkerId !== null;
+  const getSelectedListing = () => displayListings.find(listing => listing.id === visibleListingIds?.[0]);
+  const formatHeight = () => typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight;
+
+  // Rendering helper functions for different listing states
+  const renderSelectedListingDetails = () => {
+    const selectedListing = getSelectedListing();
+    if (!selectedListing) return null;
+    
+    return (
+      <SelectedListingDetails
+        listing={selectedListing}
+        customSnapshot={enhancedSnapshot}
+        height={formatHeight()}
+      />
+    );
+  };
+
+  const renderListingsGrid = () => (
+    <SearchListingsGrid
+      listings={displayListings}
+      height={formatHeight()}
+      customSnapshot={enhancedSnapshot}
+      selectedListingId={clickedMarkerId}
+    />
+  );
+
+  const renderNoListingsMessage = () => (
+    <div className="flex flex-col items-center justify-center h-[50vh]">
+      <img 
+        src="/search-flow/empty-states/empty-listings.png"
+        alt="No listings available" 
+        className="w-32 h-32 mb-4 opacity-60"
+      />
+      <p className="text-gray-600 text-center">
+        Sorry, we couldn&apos;t find any listings in this area right now.
+        <br />
+        Please check again later or try different dates.
+      </p>
+    </div>
+  );
+
+  const renderFilteredOutMessage = () => (
+    <div className="flex flex-col items-center justify-center h-[50vh]">
+      <img 
+        src="/search-flow/empty-states/empty-listings.png"
+        alt="No listings available" 
+        className="w-32 h-32 mb-4 opacity-60"
+      />
+      <p 
+        className="font-montserrat-regular text-2xl mb-5 cursor-pointer hover:text-blue-600"
+        onClick={() => {
+          console.log('=== DEBUG: No more listings to show ===');
+          console.log('Total listings from backend:', listings.length);
+          console.log('Display listings (after filtering):', displayListings.length);
+          console.log('Show listings (from context):', showListings.length);
+          console.log('Liked listings:', likedListings.length);
+          console.log('Filtered out count:', numFilteredOut);
+          
+          console.log('\n--- Trip Details ---');
+          console.table({
+            'Trip Start Date': trip?.startDate ? new Date(trip.startDate).toDateString() : 'Not set',
+            'Trip End Date': trip?.endDate ? new Date(trip.endDate).toDateString() : 'Not set',
+            'Flexible Start Days': trip?.flexibleStart || 0,
+            'Flexible End Days': trip?.flexibleEnd || 0,
+            'Stay Duration (days)': trip?.startDate && trip?.endDate ? 
+              Math.ceil((new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1 : 'Unknown'
+          });
+          
+          // Log individual listings and why they might be filtered
+          console.log('\n--- All listings from backend ---');
+          listings.forEach((listing, index) => {
+            const isInShowListings = showListings.some(sl => sl.id === listing.id);
+            const isLiked = lookup.favIds.has(listing.id);
+            const isDisliked = lookup.dislikedIds.has(listing.id);
+            const isRequested = lookup.requestedIds.has(listing.id);
+            
+            console.log(`${index + 1}. ${listing.title} (${listing.id})`);
+            console.log(`   - In showListings: ${isInShowListings}`);
+            console.log(`   - Liked: ${isLiked}`);
+            console.log(`   - Disliked: ${isDisliked}`);
+            console.log(`   - Requested: ${isRequested}`);
+            console.log(`   - Available: ${listing.isActuallyAvailable !== false}`);
+            console.log(`   - Approval Status: ${listing.approvalStatus}`);
+            console.log(`   - Marked Active: ${listing.markedActiveByUser}`);
+            console.log(`   - Latitude: ${listing.latitude}`);
+            console.log(`   - Longitude: ${listing.longitude}`);
+            console.log(`   - Category: ${listing.category}`);
+            console.log(`   - Furnished: ${listing.furnished}`);
+            console.log(`   - Bedrooms: ${listing.bedrooms?.length || 0}`);
+            console.log(`   - Bathroom Count: ${listing.bathroomCount}`);
+            console.log(`   - Distance: ${listing.distance}`);
+            console.log(`   - Price: ${listing.price}`);
+            console.log(`   - Calculated Price: ${listing.calculatedPrice}`);
+            
+            // Enhanced unavailable periods logging
+            console.log(`\n   📅 Unavailable Periods for "${listing.title}":`);
+            if (listing.unavailablePeriods && listing.unavailablePeriods.length > 0) {
+              console.table(listing.unavailablePeriods.map((period, idx) => ({
+                'Period #': idx + 1,
+                'Start Date': new Date(period.startDate).toDateString(),
+                'End Date': new Date(period.endDate).toDateString(),
+                'Reason': period.reason || 'Not specified'
+              })));
+            } else {
+              console.log('   ✅ No unavailable periods');
+            }
+            
+            console.log('   - Full listing object:', listing);
+            console.log('');
+          });
+          
+          console.log('\n--- Current filters ---');
+          console.log(filters);
+          console.log('=== END DEBUG ===');
+        }}
+      >
+        No more listings to show!
+      </p>
+      <p>
+        {numFilteredOut > 0 ? 'Try adjusting your filters to see more listings.' : 'Check back later for new listings.'}
+      </p>
+
+      {numFilteredOut > 0 && (
+        <p className="mt-3">
+          {`${numFilteredOut} listings are currently filtered out.`}
+        </p>
+      )}
+
+      <div className="flex justify-center gap-x-2 mt-2">
+        {numFilteredOut > 0 && (
+          <BrandButton
+            variant="outline"
+            onClick={() => setIsFilterDialogOpen(true)}
+          >
+            Adjust Filters
+          </BrandButton>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderSelectedListingFilterDisplay = () => (
+    <div className="w-full space-y-3 mb-4 hidden md:block">
+      {/* Results row */}
+      <div className="flex w-full items-center justify-start">
+        <div className="text-sm text-gray-600">
+          1 Result
+        </div>
+      </div>
+
+      {/* Selected listing card - styled like FilterDisplay */}
+      <div className="flex w-full items-center justify-between p-3 rounded-lg border border-gray-200 bg-white">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center justify-center px-3 py-1.5 bg-blue-50 rounded-full border border-blue-300 text-blue-700 text-sm">
+            <span className="font-medium text-blue-700 text-sm">
+              Showing selected listing
+            </span>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            setVisibleListingIds(null);
+            setClickedMarkerId(null);
+          }}
+          className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-medium"
+        >
+          Clear filter
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderListingsContent = () => {
+    if (!hasListings()) {
+      return hasNoListingsAtAll() ? renderNoListingsMessage() : renderFilteredOutMessage();
+    }
+    
+    if (isSingleListingSelected()) {
+      return renderSelectedListingDetails();
+    }
+    
+    return renderListingsGrid();
+  };
+
+
   return (
     <>
       <FilterOptionsDialog
@@ -398,163 +588,15 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         className="hidden"
       />
       <div ref={containerRef} className="flex flex-col mx-auto w-full sm:px-2">
-        <FilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
+        {isSingleListingSelected() ? 
+          renderSelectedListingFilterDisplay() : 
+          <FilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
+        }
         <div className="flex flex-col md:flex-row justify-start md:justify-center">
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (
             <div className="w-full md:w-3/5 md:pr-4">
-              {/* Show indicator when filtering to a single listing */}
-            {visibleListingIds && visibleListingIds.length === 1 && (
-              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
-                <span className="text-sm text-blue-800">
-                  Showing selected listing only
-                </span>
-                <button
-                  onClick={() => {
-                    setVisibleListingIds(null);
-                    // Also clear the clicked marker to remove the highlight
-                    setClickedMarkerId(null);
-                  }}
-                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-medium"
-                >
-                  Clear filter
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-            {displayListings.length > 0 ? (
-              // Check if we have exactly 1 selected listing and use SelectedListingDetails instead
-              visibleListingIds && visibleListingIds.length === 1 ? (
-                (() => {
-                  const selectedListing = displayListings.find(listing => listing.id === visibleListingIds[0]);
-                  return selectedListing ? (
-                    <SelectedListingDetails
-                      listing={selectedListing}
-                      customSnapshot={enhancedSnapshot}
-                      height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
-                    />
-                  ) : null;
-                })()
-              ) : (
-                // Pass calculatedHeight to the height prop
-                <SearchListingsGrid
-                  listings={displayListings}
-                  height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
-                  customSnapshot={enhancedSnapshot}
-                />
-              )
-            ) : listings.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-[50vh]">
-                <img 
-                  src="/search-flow/empty-states/empty-listings.png"
-                  alt="No listings available" 
-                  className="w-32 h-32 mb-4 opacity-60"
-                />
-                <p className="text-gray-600 text-center">
-                  Sorry, we couldn&apos;t find any listings in this area right now.
-                  <br />
-                  Please check again later or try different dates.
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-[50vh]">
-                <img 
-                  src="/search-flow/empty-states/empty-listings.png"
-                  alt="No listings available" 
-                  className="w-32 h-32 mb-4 opacity-60"
-                />
-                <p 
-                  className="font-montserrat-regular text-2xl mb-5 cursor-pointer hover:text-blue-600"
-                  onClick={() => {
-                    console.log('=== DEBUG: No more listings to show ===');
-                    console.log('Total listings from backend:', listings.length);
-                    console.log('Display listings (after filtering):', displayListings.length);
-                    console.log('Show listings (from context):', showListings.length);
-                    console.log('Liked listings:', likedListings.length);
-                    console.log('Filtered out count:', numFilteredOut);
-                    
-                    console.log('\n--- Trip Details ---');
-                    console.table({
-                      'Trip Start Date': trip?.startDate ? new Date(trip.startDate).toDateString() : 'Not set',
-                      'Trip End Date': trip?.endDate ? new Date(trip.endDate).toDateString() : 'Not set',
-                      'Flexible Start Days': trip?.flexibleStart || 0,
-                      'Flexible End Days': trip?.flexibleEnd || 0,
-                      'Stay Duration (days)': trip?.startDate && trip?.endDate ? 
-                        Math.ceil((new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1 : 'Unknown'
-                    });
-                    
-                    // Log individual listings and why they might be filtered
-                    console.log('\n--- All listings from backend ---');
-                    listings.forEach((listing, index) => {
-                      const isInShowListings = showListings.some(sl => sl.id === listing.id);
-                      const isLiked = lookup.favIds.has(listing.id);
-                      const isDisliked = lookup.dislikedIds.has(listing.id);
-                      const isRequested = lookup.requestedIds.has(listing.id);
-                      
-                      console.log(`${index + 1}. ${listing.title} (${listing.id})`);
-                      console.log(`   - In showListings: ${isInShowListings}`);
-                      console.log(`   - Liked: ${isLiked}`);
-                      console.log(`   - Disliked: ${isDisliked}`);
-                      console.log(`   - Requested: ${isRequested}`);
-                      console.log(`   - Available: ${listing.isActuallyAvailable !== false}`);
-                      console.log(`   - Approval Status: ${listing.approvalStatus}`);
-                      console.log(`   - Marked Active: ${listing.markedActiveByUser}`);
-                      console.log(`   - Latitude: ${listing.latitude}`);
-                      console.log(`   - Longitude: ${listing.longitude}`);
-                      console.log(`   - Category: ${listing.category}`);
-                      console.log(`   - Furnished: ${listing.furnished}`);
-                      console.log(`   - Bedrooms: ${listing.bedrooms?.length || 0}`);
-                      console.log(`   - Bathroom Count: ${listing.bathroomCount}`);
-                      console.log(`   - Distance: ${listing.distance}`);
-                      console.log(`   - Price: ${listing.price}`);
-                      console.log(`   - Calculated Price: ${listing.calculatedPrice}`);
-                      
-                      // Enhanced unavailable periods logging
-                      console.log(`\n   📅 Unavailable Periods for "${listing.title}":`);
-                      if (listing.unavailablePeriods && listing.unavailablePeriods.length > 0) {
-                        console.table(listing.unavailablePeriods.map((period, idx) => ({
-                          'Period #': idx + 1,
-                          'Start Date': new Date(period.startDate).toDateString(),
-                          'End Date': new Date(period.endDate).toDateString(),
-                          'Reason': period.reason || 'Not specified'
-                        })));
-                      } else {
-                        console.log('   ✅ No unavailable periods');
-                      }
-                      
-                      console.log('   - Full listing object:', listing);
-                      console.log('');
-                    });
-                    
-                    console.log('\n--- Current filters ---');
-                    console.log(filters);
-                    console.log('=== END DEBUG ===');
-                  }}
-                >
-                  No more listings to show!
-                </p>
-                <p>
-                  {numFilteredOut > 0 ? 'Try adjusting your filters to see more listings.' : 'Check back later for new listings.'}
-                </p>
-
-                {numFilteredOut > 0 && (
-                  <p className="mt-3">
-                    {`${numFilteredOut} listings are currently filtered out.`}
-                  </p>
-                )}
-
-                <div className="flex justify-center gap-x-2 mt-2">
-                  {numFilteredOut > 0 && (
-                    <BrandButton
-                      variant="outline"
-                      onClick={() => setIsFilterDialogOpen(true)}
-                    >
-                      Adjust Filters
-                    </BrandButton>
-                  )}
-                </div>
-              </div>
-            )}
+            {renderListingsContent()}
           </div>
         )}
 

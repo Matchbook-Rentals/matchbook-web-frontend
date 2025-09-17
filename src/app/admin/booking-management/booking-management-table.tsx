@@ -119,65 +119,69 @@ export default function BookingManagementTable({
 
 
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-6">
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search by guest, host, or listing..."
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        
-        <Select value={status} onValueChange={handleStatusFilter}>
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="awaiting_signature">Awaiting Signature</SelectItem>
-            <SelectItem value="reserved">Reserved</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="cancelled">Cancelled</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="w-full bg-gray-50 p-4 rounded-lg">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="relative flex-1 min-w-0">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search by guest, host, or listing..."
+              value={search}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="pl-10 w-full"
+            />
+          </div>
 
-        <div className="flex gap-2">
-          <Input
-            type="date"
-            placeholder="Start date"
-            value={startDate || ''}
-            onChange={(e) => handleStartDateFilter(e.target.value)}
-            className="w-40"
-          />
-          <Input
-            type="date"
-            placeholder="End date"
-            value={endDate || ''}
-            onChange={(e) => handleEndDateFilter(e.target.value)}
-            className="w-40"
-          />
+          <div className="flex flex-col sm:flex-row gap-4 lg:flex-shrink-0">
+            <Select value={status} onValueChange={handleStatusFilter}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="awaiting_signature">Awaiting Signature</SelectItem>
+                <SelectItem value="reserved">Reserved</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <div className="flex gap-2">
+              <Input
+                type="date"
+                placeholder="Start date"
+                value={startDate || ''}
+                onChange={(e) => handleStartDateFilter(e.target.value)}
+                className="w-full sm:w-40"
+              />
+              <Input
+                type="date"
+                placeholder="End date"
+                value={endDate || ''}
+                onChange={(e) => handleEndDateFilter(e.target.value)}
+                className="w-full sm:w-40"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
 
       {/* Table */}
-      <div className="rounded-md border">
-        <Table>
+      <div className="w-full rounded-md border overflow-auto">
+        <Table className="w-full">
           <TableHeader>
             <TableRow>
-              <TableHead>Guest</TableHead>
-              <TableHead>Host</TableHead>
-              <TableHead>Listing</TableHead>
-              <TableHead>Dates</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Monthly Rent</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="w-[180px]">Guest</TableHead>
+              <TableHead className="w-[180px]">Host</TableHead>
+              <TableHead className="min-w-[200px]">Listing</TableHead>
+              <TableHead className="w-[160px]">Dates</TableHead>
+              <TableHead className="w-[120px]">Status</TableHead>
+              <TableHead className="w-[140px]">Monthly Rent</TableHead>
+              <TableHead className="w-[120px]">Created</TableHead>
+              <TableHead className="w-[140px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -188,7 +192,8 @@ export default function BookingManagementTable({
                 </TableCell>
               </TableRow>
             ) : (
-              bookings.map((booking) => (
+              bookings.map((booking) => {
+                return (
                 <TableRow key={booking.id}>
                   <TableCell>
                     <div className="flex flex-col">
@@ -234,10 +239,20 @@ export default function BookingManagementTable({
                   <TableCell>
                     <span className="font-medium">
                       ${(() => {
+                        // Utility function to format currency properly (cents to dollars)
+                        const formatCurrency = (amountInCents: number | null) => {
+                          if (!amountInCents) return 'Not Set';
+                          const dollars = amountInCents / 100;
+                          // Only show decimals if they exist
+                          return dollars % 1 === 0
+                            ? dollars.toLocaleString()
+                            : dollars.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        };
+
                         // Get effective monthly rent using proper calculation
                         // First try stored monthlyRent if valid
                         if (booking.monthlyRent && booking.monthlyRent !== 77777) {
-                          return (booking.monthlyRent / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                          return formatCurrency(booking.monthlyRent);
                         }
 
                         // Calculate using the proper function
@@ -247,7 +262,7 @@ export default function BookingManagementTable({
                             trip: booking.trip
                           });
                           if (calculated !== 77777) {
-                            return (calculated / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            return formatCurrency(calculated);
                           }
                         }
 
@@ -255,7 +270,7 @@ export default function BookingManagementTable({
                         const allPayments = booking.rentPayments || [];
                         if (allPayments.length > 0) {
                           const largestPayment = Math.max(...allPayments.map(payment => payment.amount));
-                          return (largestPayment / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                          return formatCurrency(largestPayment);
                         }
 
                         return 'Not Set';
@@ -268,15 +283,23 @@ export default function BookingManagementTable({
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Button asChild size="sm">
-                      <Link href={`/admin/booking-management/${booking.id}`}>
+                    {booking.id ? (
+                      <Button asChild size="sm">
+                        <Link href={`/admin/booking-management/${booking.id}`}>
+                          <Eye className="w-4 h-4 mr-2" />
+                          View Booking
+                        </Link>
+                      </Button>
+                    ) : (
+                      <Button size="sm" disabled>
                         <Eye className="w-4 h-4 mr-2" />
-                        View Booking
-                      </Link>
-                    </Button>
+                        Invalid ID
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
-              ))
+                );
+              })
             )}
           </TableBody>
         </Table>

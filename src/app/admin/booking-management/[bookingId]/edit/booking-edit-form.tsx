@@ -36,6 +36,7 @@ interface BookingData {
     lastName: string | null;
   };
   listing: {
+    id: string;
     title: string;
     city: string | null;
     state: string | null;
@@ -448,10 +449,14 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
               <div>
                 <Label className="text-sm font-medium text-muted-foreground">Current Monthly Rent</Label>
                 <p className="text-lg font-semibold">
-                  ${effectiveMonthlyRent
-                    ? (effectiveMonthlyRent / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                    : 'Not Set'
-                  }
+                  ${(() => {
+                    if (!effectiveMonthlyRent) return 'Not Set';
+                    const dollars = effectiveMonthlyRent / 100;
+                    // Only show decimals if they exist
+                    return dollars % 1 === 0
+                      ? dollars.toLocaleString()
+                      : dollars.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                  })()}
                 </p>
               </div>
 
@@ -514,11 +519,17 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
                 </Link>
               </Button>
               
-              <Button asChild variant="outline" size="sm" className="w-full">
-                <Link href={`/admin/listing-management/${booking.listing}`}>
+              {booking.listing.id ? (
+                <Button asChild variant="outline" size="sm" className="w-full">
+                  <Link href={`/admin/listing-management/${booking.listing.id}`}>
+                    View Listing
+                  </Link>
+                </Button>
+              ) : (
+                <Button variant="outline" size="sm" className="w-full" disabled>
                   View Listing
-                </Link>
-              </Button>
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>

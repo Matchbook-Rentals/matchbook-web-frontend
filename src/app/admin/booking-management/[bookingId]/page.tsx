@@ -21,6 +21,9 @@ import { formatDate } from '@/lib/utils'
 import { getBookingDetails, getBookingModificationsForBooking } from '../_actions'
 import BookingActions from './booking-actions'
 import { calculateRent } from '@/lib/calculate-rent'
+import EditBookingTimelineDialog from '@/components/booking-edit-dialogs/EditBookingTimelineDialog'
+import EditGuestDetailsDialog from '@/components/booking-edit-dialogs/EditGuestDetailsDialog'
+import EditBookingSummaryDialog from '@/components/booking-edit-dialogs/EditBookingSummaryDialog'
 
 interface BookingDetailsPageProps {
   params: {
@@ -87,45 +90,75 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
   };
 
   const effectiveMonthlyRent = getEffectiveMonthlyRent();
-  
+
+  // Format monthly rent (always whole dollars, no decimals)
+  const formatMonthlyRent = (amountInCents: number | null) => {
+    if (!amountInCents) return 'Not Set';
+    const dollars = amountInCents / 100;
+    return dollars.toLocaleString();
+  };
+
+  // Format payment amounts (may include service charges with decimals)
+  const formatPaymentAmount = (amountInCents: number | null) => {
+    if (!amountInCents) return 'Not Set';
+    const dollars = amountInCents / 100;
+    // Only show decimals if they exist
+    return dollars % 1 === 0
+      ? dollars.toLocaleString()
+      : dollars.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
   // Check if this is a pending booking
   const isPendingBooking = 'type' in booking && booking.type === 'pending_signature';
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="w-full px-4 md:px-6 py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/admin/booking-management">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Bookings
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold">
-              {isPendingBooking ? 'Pending Booking Details' : 'Booking Details'}
-            </h1>
-            <p className="text-muted-foreground">ID: {booking.id}</p>
-            {isPendingBooking && (
-              <p className="text-sm text-orange-600 font-medium">
-                Awaiting landlord signature to complete booking
-              </p>
-            )}
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold">
+            {isPendingBooking ? 'Pending Booking Details' : 'Booking Details'}
+          </h1>
+          <p className="text-muted-foreground">ID: {booking.id}</p>
+          {isPendingBooking && (
+            <p className="text-sm text-orange-600 font-medium">
+              Awaiting landlord signature to complete booking
+            </p>
+          )}
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Badge className={getStatusBadgeColor(booking.status)}>
             {booking.status === 'awaiting_signature' ? 'Awaiting Signature' : booking.status}
           </Badge>
-          <BookingActions bookingId={booking.id} currentStatus={booking.status} isPending={isPendingBooking} />
+          <BookingActions
+            bookingId={booking.id}
+            currentStatus={booking.status}
+            isPending={isPendingBooking}
+            matchInfo={booking.match ? {
+              id: booking.match.id,
+              paymentStatus: booking.match.paymentStatus || undefined
+            } : undefined}
+            tripInfo={booking.trip ? {
+              id: booking.trip.id
+            } : undefined}
+          />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      {/* Back Button */}
+      <div>
+        <Button variant="outline" size="sm" asChild>
+          <Link href="/admin/booking-management">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Bookings
+          </Link>
+        </Button>
+      </div>
+
+      <div className="w-full">
         {/* Main Content */}
-        <div className="lg:col-span-3">
+        <div className="w-full">
           <Tabs defaultValue="overview" className="w-full">
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -138,7 +171,13 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
               {/* Booking Summary */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Booking Summary</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Booking Summary</CardTitle>
+                    <EditBookingSummaryDialog
+                      bookingId={booking.id}
+                      currentMonthlyRent={effectiveMonthlyRent}
+                    />
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -165,7 +204,7 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Monthly Rent</label>
-                      <p className="text-2xl font-bold">${effectiveMonthlyRent ? (effectiveMonthlyRent / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Not Set'}</p>
+                      <p className="text-2xl font-bold">${formatCurrency(effectiveMonthlyRent)}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -174,10 +213,18 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
               {/* Booking Timeline */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Calendar className="w-5 h-5" />
-                    Booking Timeline
-                  </CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <Calendar className="w-5 h-5" />
+                      Booking Timeline
+                    </CardTitle>
+                    <EditBookingTimelineDialog
+                      bookingId={booking.id}
+                      currentStartDate={booking.startDate}
+                      currentEndDate={booking.endDate}
+                      currentStatus={booking.status}
+                    />
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -210,10 +257,21 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
               {/* Guest Details */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    Guest Details
-                  </CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <Users className="w-5 h-5" />
+                      Guest Details
+                    </CardTitle>
+                    {booking.trip && (
+                      <EditGuestDetailsDialog
+                        bookingId={booking.id}
+                        tripId={booking.trip.id}
+                        currentNumAdults={booking.trip.numAdults}
+                        currentNumChildren={booking.trip.numChildren}
+                        currentNumPets={booking.trip.numPets}
+                      />
+                    )}
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -294,15 +352,15 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Monthly Rent</label>
-                      <p className="text-2xl font-bold">${effectiveMonthlyRent ? (effectiveMonthlyRent / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Not Set'}</p>
+                      <p className="text-2xl font-bold">${formatCurrency(effectiveMonthlyRent)}</p>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Total Paid</label>
-                      <p className="text-2xl font-bold text-green-600">${(totalPaidAmount / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                      <p className="text-2xl font-bold text-green-600">${formatCurrency(totalPaidAmount)}</p>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Outstanding</label>
-                      <p className="text-2xl font-bold text-orange-600">${(totalUnpaidAmount / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                      <p className="text-2xl font-bold text-orange-600">${formatCurrency(totalUnpaidAmount)}</p>
                     </div>
                   </div>
 
@@ -314,7 +372,7 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                         {booking.rentPayments.map((payment) => (
                           <div key={payment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                             <div>
-                              <p className="font-medium">${(payment.amount / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                              <p className="font-medium">${formatCurrency(payment.amount)}</p>
                               <p className="text-sm text-muted-foreground">Due: {formatDate(payment.dueDate)}</p>
                             </div>
                             <Badge variant={payment.isPaid ? "default" : "outline"}>
@@ -536,12 +594,18 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                       />
                     )}
                     <div className="flex-1">
-                      <Link
-                        href={`/admin/listing-management/${booking.listing.id}`}
-                        className="text-lg font-semibold hover:underline text-blue-600"
-                      >
-                        {booking.listing.title}
-                      </Link>
+                      {booking.listing.id ? (
+                        <Link
+                          href={`/admin/listing-management/${booking.listing.id}`}
+                          className="text-lg font-semibold hover:underline text-blue-600"
+                        >
+                          {booking.listing.title}
+                        </Link>
+                      ) : (
+                        <h3 className="text-lg font-semibold text-gray-700">
+                          {booking.listing.title}
+                        </h3>
+                      )}
                       <p className="text-muted-foreground">
                         {booking.listing.streetAddress1}, {booking.listing.city}, {booking.listing.state} {booking.listing.postalCode}
                       </p>
@@ -564,98 +628,6 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
-
-        {/* Sidebar */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {!isPendingBooking && (
-                <Button asChild className="w-full">
-                  <Link href={`/admin/booking-management/${booking.id}/edit`}>
-                    <Edit className="w-4 h-4 mr-2" />
-                    Edit Booking
-                  </Link>
-                </Button>
-              )}
-              
-              {booking.status !== 'cancelled' && (
-                <>
-                  <Button variant="outline" className="w-full text-red-600 hover:text-red-700">
-                    <XCircle className="w-4 h-4 mr-2" />
-                    {isPendingBooking ? 'Cancel Match' : 'Cancel Booking'}
-                  </Button>
-                  
-                  {!isPendingBooking && (
-                    <Button variant="outline" className="w-full text-orange-600 hover:text-orange-700">
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      Revert to Match
-                    </Button>
-                  )}
-                </>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Match Information */}
-          {booking.match && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Related Match</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Match ID</label>
-                  <p className="font-mono text-sm">{booking.match.id}</p>
-                </div>
-                
-                {booking.match.paymentStatus && (
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Payment Status</label>
-                    <Badge variant="outline">{booking.match.paymentStatus}</Badge>
-                  </div>
-                )}
-
-                {booking.match.paymentAuthorizedAt && (
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Payment Authorized</label>
-                    <p className="text-sm">{formatDate(booking.match.paymentAuthorizedAt)}</p>
-                  </div>
-                )}
-
-                <Button variant="outline" size="sm" asChild className="w-full">
-                  <Link href={`/admin/match-management/${booking.match.id}`}>
-                    View Match Details
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Trip Information */}
-          {booking.trip && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Trip Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Trip ID</label>
-                  <p className="font-mono text-sm">{booking.trip.id}</p>
-                </div>
-                
-                <Button variant="outline" size="sm" asChild className="w-full">
-                  <Link href={`/admin/trip-management/${booking.trip.id}`}>
-                    View Trip Details
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
     </div>

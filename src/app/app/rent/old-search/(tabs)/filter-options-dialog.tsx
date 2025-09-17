@@ -319,13 +319,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     return JSON.stringify(localFilters) !== JSON.stringify(contextFilters);
   }, [localFilters, contextFilters]);
 
-  // Debug log for dialog preview count
-  console.log('🎭 Dialog preview count (render #' + Math.random() + '):', {
-    filteredListingsCount,
-    localFilters: localFilters,
-    searchRadius: localFilters.searchRadius,
-    hasChanges
-  });
 
   const handleSave = () => {
     console.log('🔧 Dialog handleSave called with localFilters:', localFilters);

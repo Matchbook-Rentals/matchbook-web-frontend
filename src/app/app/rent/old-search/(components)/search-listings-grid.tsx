@@ -16,13 +16,15 @@ interface SearchListingsGridProps {
   withCallToAction?: boolean;
   height?: string;
   customSnapshot?: any; // Allow passing custom snapshot with overridden functions
+  selectedListingId?: string | null; // ID of listing selected via map marker click
 }
 
 const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   listings,
   withCallToAction = false,
   height,
-  customSnapshot
+  customSnapshot,
+  selectedListingId
 }) => {
   const ITEMS_PER_LOAD = 18; // Load 6 rows (18 items for 3 columns)
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
@@ -241,8 +243,11 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, [visibleListingIds, setVisibleListingIds]); // Keep dependencies for now as reset logic is tied to them
 
 
-  // When showing a single listing (filtered), use auto height instead of fixed height
-  const isSingleListing = filteredListings.length === 1;
+  // Only treat as selected if user explicitly clicked a marker AND we're showing one listing
+  const isSelectedListing = visibleListingIds?.length === 1 && selectedListingId !== null;
+  const isSingleListing = isSelectedListing; // Only treat as single when explicitly selected
+
+
 
   const getEffectiveHeight = () => {
     if (isSingleListing) return 'auto';
@@ -281,7 +286,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
             className={`${isSingleListing ? '' : 'flex-grow'} w-[103%] sm:w-full mx-auto rounded-md pb-16 md:pb-2 pr-3`}
             style={{ height: isSingleListing ? 'auto' : undefined }}
           >
-            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center ${isSingleListing ? 'sm:justify-items-center' : 'sm:grid-cols-2 sm:justify-items-start min-[1100px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-0' : 'pb-12'}`}>
+            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center ${isSelectedListing ? 'sm:justify-items-center' : 'sm:grid-cols-2 sm:justify-items-start min-[1100px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-0' : 'pb-12'}`}>
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
                 return (

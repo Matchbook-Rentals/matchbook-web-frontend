@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/carousel"
 import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus } from '@/constants/enums'
+import { calculateRent } from '@/lib/calculate-rent'
 
 const TITLE_MAX_LENGTH = 40
 
@@ -53,6 +54,22 @@ export default function SearchListingCard({ listing, status, className, style, d
   const { userId } = useAuth()
   const { state, actions } = useTripContext()
   let isFlexible = state.trip.flexibleStart || state.trip.flexibleEnd;
+  
+  // Calculate trip-specific price to match map markers
+  const { trip } = state;
+  const calculatedPrice = trip ? calculateRent({ listing, trip }) : listing.price;
+  
+  // Debug logging for price consistency
+  console.log('🏷️ Listing Card Price Debug:', {
+    listingId: listing.id,
+    title: listing.title,
+    originalPrice: listing.price,
+    calculatedPrice,
+    shortestLeasePrice: listing.shortestLeasePrice,
+    longestLeasePrice: listing.longestLeasePrice,
+    hasMonthlyPricing: listing.monthlyPricing?.length > 0,
+    tripLength: trip ? `${Math.ceil((new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) / (1000 * 60 * 60 * 24))} days` : 'No trip'
+  });
 
   // Create ref for the image container and state for dimensions
   const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -316,7 +333,7 @@ export default function SearchListingCard({ listing, status, className, style, d
       <CardFooter className="w-full p-4 border-t border-[#002c581a]">
         <div className="w-full">
           <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-xl">
-            ${listing.price?.toLocaleString() || 2350} / month
+            ${calculatedPrice?.toLocaleString() || 0} / month
           </h2>
         </div>
       </CardFooter>

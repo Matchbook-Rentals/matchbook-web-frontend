@@ -717,6 +717,101 @@ export async function cancelBooking(bookingId: string, reason: string) {
   return updatedBooking;
 }
 
+// Modular update functions for specific booking fields
+export async function updateBookingTimeline(bookingId: string, updates: {
+  startDate?: Date;
+  endDate?: Date;
+  status?: string;
+}) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      listing: {
+        select: {
+          title: true,
+          user: { select: { id: true } }
+        }
+      }
+    }
+  });
+
+  if (!booking) {
+    throw new Error('Booking not found')
+  }
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: updates
+  });
+
+  revalidatePath('/admin/booking-management')
+  revalidatePath('/admin/booking-management/' + bookingId)
+
+  return { success: true, message: 'Booking timeline updated successfully' }
+}
+
+export async function updateBookingRent(bookingId: string, monthlyRent: number) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId }
+  });
+
+  if (!booking) {
+    throw new Error('Booking not found')
+  }
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: { monthlyRent }
+  });
+
+  revalidatePath('/admin/booking-management')
+  revalidatePath('/admin/booking-management/' + bookingId)
+
+  return { success: true, message: 'Monthly rent updated successfully' }
+}
+
+export async function updateGuestDetails(bookingId: string, tripId: string, guestUpdates: {
+  numAdults?: number;
+  numChildren?: number;
+  numPets?: number;
+}) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { trip: true }
+  });
+
+  if (!booking) {
+    throw new Error('Booking not found')
+  }
+
+  if (!booking.trip || booking.trip.id !== tripId) {
+    throw new Error('Trip not found for this booking')
+  }
+
+  await prisma.trip.update({
+    where: { id: tripId },
+    data: guestUpdates
+  });
+
+  revalidatePath('/admin/booking-management')
+  revalidatePath('/admin/booking-management/' + bookingId)
+
+  return { success: true, message: 'Guest details updated successfully' }
+}
+
 export async function updateBookingDetails(bookingId: string, updates: {
   startDate?: Date;
   endDate?: Date;

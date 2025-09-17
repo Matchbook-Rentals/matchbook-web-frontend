@@ -169,13 +169,6 @@ export const useFilterPreview = (
   dislikedListings: ListingAndImages[] = []
 ): number => {
   return useMemo(() => {
-    // Preview debugging enabled for troubleshooting:
-    console.log('🔬 useFilterPreview useMemo recalculating with:', {
-      listingsCount: listings.length,
-      likedListingsCount: likedListings.length,
-      filters,
-      timestamp: new Date().toISOString()
-    });
 
     const tripDates: TripDates = {
       startDate: trip?.startDate ? new Date(trip.startDate) : null,
@@ -231,15 +224,6 @@ export const useFilterPreview = (
 
     const finalCount = filteredListings.length + likedNotInFiltered.length;
 
-    console.log('🔬 useFilterPreview results:', {
-      totalProcessed: processedListings.length,
-      filteredCount: filteredListings.length,
-      likedCount: likedListings.length,
-      filteredLikedCount: filteredLikedListings.length,
-      likedNotInFilteredCount: likedNotInFiltered.length,
-      finalCount,
-      searchRadius: filters.searchRadius
-    });
 
     return finalCount;
   }, [listings, filters, trip, likedListings, dislikedListings]);

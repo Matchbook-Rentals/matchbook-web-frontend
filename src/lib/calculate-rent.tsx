@@ -16,18 +16,42 @@ export function calculateRent({ listing, trip, }: RentParams): number {
   }
   
   const { startDate, endDate } = trip;
-  const lengthOfStay = calculateLengthOfStay(startDate, endDate).months;
-
-
-  // Find the monthly pricing for the exact number of months (using full months only)
-  const monthlyPricing = listing.monthlyPricing?.find(pricing => pricing.months === lengthOfStay);
   
-  if (monthlyPricing) {
-    return monthlyPricing.price;
+  // Calculate length in days first, then convert to months (minimum 1 month)
+  const days = Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24));
+  const lengthInMonths = Math.max(1, Math.round(days / 30));
+
+  // 1. Try exact match first
+  const exactMatch = listing.monthlyPricing?.find(pricing => pricing.months === lengthInMonths);
+  if (exactMatch) {
+    return exactMatch.price;
   }
 
-  // If no price exists for this duration, return the error code
-  return 77777;
+  // 2. Find closest match from available monthly pricing
+  if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
+    const closest = listing.monthlyPricing.reduce((prev, curr) => {
+      const prevDiff = Math.abs(prev.months - lengthInMonths);
+      const currDiff = Math.abs(curr.months - lengthInMonths);
+      
+      // If current is closer, use it
+      if (currDiff < prevDiff) return curr;
+      
+      // If equally close, prefer shorter lease (safer for hosts)
+      if (currDiff === prevDiff && curr.months < prev.months) return curr;
+      
+      return prev;
+    });
+    return closest.price;
+  }
+
+  // 3. Fallback to listing's lease prices
+  if (listing.shortestLeasePrice) return listing.shortestLeasePrice;
+  if (listing.longestLeasePrice) return listing.longestLeasePrice;
+  if (listing.price) return listing.price;
+
+  // 4. Last resort - return 0 instead of error code
+  console.warn('No pricing found for listing:', listing.id);
+  return 0;
 }
 
 
@@ -42,31 +66,16 @@ export const calculateLengthOfStay = (startDate: Date, endDate: Date) => {
     return { months: 0, days: 0 };
   }
 
-  let months = 0;
-  let days = 0;
-  const tempDate = new Date(start);
-  let safetyCounter = 0;
-  const MAX_ITERATIONS = 120; // 10 years worth of months as safety limit
-
-  while (tempDate < end && safetyCounter < MAX_ITERATIONS) {
-    const monthEnd = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 0);
-
-    if (monthEnd > end) {
-      const remainingDays = end.getDate() - tempDate.getDate() + 1;
-      days += remainingDays;
-      break;
-    } else {
-      months++;
-      tempDate.setMonth(tempDate.getMonth() + 1);
-      tempDate.setDate(1);
-    }
-
-    safetyCounter++;
-  }
-
-  if (safetyCounter >= MAX_ITERATIONS) {
-    console.error('Length of stay calculation reached maximum iterations - possible infinite loop prevented');
-  }
+  // Calculate total days first
+  const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Convert to months, ensuring minimum of 1 month for stays >= 28 days
+  const calculatedMonths = Math.round(totalDays / 30);
+  const months = Math.max(calculatedMonths >= 1 ? calculatedMonths : 0, totalDays >= 28 ? 1 : 0);
+  
+  // Calculate remaining days after accounting for full months
+  const remainingDays = totalDays - (months * 30);
+  const days = Math.max(0, remainingDays);
 
   return { months, days };
 }

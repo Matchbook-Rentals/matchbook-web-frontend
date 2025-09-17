@@ -256,8 +256,6 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "", on
   const totalListings = listings?.length || 0;
   const numFiltered = totalListings - totalResults;
   
-  // Debug log for filter state
-  console.log(`🔍 FilterDisplay: activeFilters.length=${activeFilters.length}, searchRadius=${filters.searchRadius}, totalResults=${totalResults}`);
 
   // Show results with "No filters" badge when no filters are active
   if (activeFilters.length === 0) {
