@@ -66,13 +66,22 @@ interface RentPaymentsTableProps {
   hostName: string;
   hostAvatar?: string;
   bookingId: string;
+  initialPaymentMethods?: Array<{
+    id: string;
+    type: 'card' | 'bank';
+    brand?: string;
+    lastFour: string;
+    expiry?: string;
+    bankName?: string;
+  }>;
 }
 
 export const RentPaymentsTable = ({ 
   paymentsData, 
   hostName, 
   hostAvatar,
-  bookingId
+  bookingId,
+  initialPaymentMethods
 }: RentPaymentsTableProps): JSX.Element => {
   const router = useRouter();
   const [selectedModification, setSelectedModification] = useState<RentPaymentData['modificationData'] | null>(null);
@@ -264,6 +273,10 @@ export const RentPaymentsTable = ({
                 onProceedToPayment={handleProceedToPayment}
                 isProcessing={false}
                 hidePaymentMethods={false}
+                initialPaymentMethods={initialPaymentMethods}
+                onPaymentMethodsRefresh={() => {
+                  // This callback enables the window.refreshPaymentMethods function
+                }}
               />
 
               {!showAddPaymentForm && (

@@ -126,3 +126,13 @@
 - Updated data fetching to include complete modification details for seamless user experience
 - Used BrandButton components throughout for consistent brand styling and loading states
 - All modifications require explicit approval/rejection - no automatic processing for security
+
+## Payment Methods Management Integration
+- Added "Manage Payment Methods" button to rent payments table using TabSelector secondaryButton prop
+- Integrated PaymentMethodsSection component for viewing and managing existing payment methods
+- Added "Add New Payment Method" functionality with teal-styled button and PlusIcon
+- Implemented AddPaymentMethodInline component with proper success/cancel callbacks
+- Fixed import issue for AddPaymentMethodInline component (named vs default export)
+- Added smooth scrolling to bottom when payment form opens for better UX
+- Set minimum height of 600px for payment form container to accommodate expanded Stripe PaymentElement
+- Updated payment status terminology from "Pending" to "Scheduled" with brand teal colors

@@ -54,6 +54,14 @@ interface BookingDetailClientProps {
   hostAvatar: string;
   listingId: string;
   bookingId: string;
+  paymentMethods?: Array<{
+    id: string;
+    type: 'card' | 'bank';
+    brand?: string;
+    lastFour: string;
+    expiry?: string;
+    bankName?: string;
+  }>;
 }
 
 export default function BookingDetailClient({
@@ -62,7 +70,8 @@ export default function BookingDetailClient({
   hostName,
   hostAvatar,
   listingId,
-  bookingId
+  bookingId,
+  paymentMethods
 }: BookingDetailClientProps) {
   const router = useRouter();
 
@@ -130,6 +139,7 @@ export default function BookingDetailClient({
           hostName={hostName}
           hostAvatar={hostAvatar}
           bookingId={bookingId}
+          initialPaymentMethods={paymentMethods}
         />
       </div>
     </div>
