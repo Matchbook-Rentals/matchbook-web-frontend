@@ -67,12 +67,12 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
 
   // Get effective monthly rent for the form
   const getEffectiveMonthlyRent = () => {
-    // First try stored monthlyRent if valid
+    // First try stored monthlyRent if valid (stored in dollars)
     if (booking.monthlyRent && booking.monthlyRent !== 77777) {
       return booking.monthlyRent;
     }
 
-    // Calculate using the proper function
+    // Calculate using the proper function (returns dollars)
     if (booking.trip && (booking as any).listing) {
       const calculated = calculateRent({
         listing: (booking as any).listing, // Will have monthlyPricing
@@ -83,13 +83,14 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
       }
     }
 
-    // Last fallback: use largest rent payment
+    // Last fallback: use largest rent payment (stored in cents)
     const allPayments = (booking as any).rentPayments || [];
     if (allPayments.length > 0) {
-      return Math.max(...allPayments.map((payment: any) => payment.amount));
+      const largestPayment = Math.max(...allPayments.map((payment: any) => payment.amount));
+      return largestPayment / 100; // Convert from cents to dollars
     }
 
-    return 0;
+    return null;
   };
 
   const effectiveMonthlyRent = getEffectiveMonthlyRent();
@@ -98,7 +99,7 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
   const [formData, setFormData] = useState({
     startDate: booking.startDate.toISOString().split('T')[0],
     endDate: booking.endDate.toISOString().split('T')[0],
-    monthlyRent: effectiveMonthlyRent ? (effectiveMonthlyRent / 100).toFixed(2) : '',
+    monthlyRent: effectiveMonthlyRent ? effectiveMonthlyRent.toString() : '',
     status: booking.status,
     numAdults: booking.trip?.numAdults?.toString() || '1',
     numChildren: booking.trip?.numChildren?.toString() || '0',
@@ -180,10 +181,10 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
         updates.endDate = new Date(formData.endDate);
       }
 
-      // Convert monthly rent from dollars to cents for storage
-      const monthlyRentCents = Math.round(Number(formData.monthlyRent) * 100);
-      if (monthlyRentCents !== booking.monthlyRent) {
-        updates.monthlyRent = monthlyRentCents;
+      // Monthly rent is stored in dollars
+      const monthlyRentDollars = Math.round(Number(formData.monthlyRent));
+      if (monthlyRentDollars !== booking.monthlyRent) {
+        updates.monthlyRent = monthlyRentDollars;
       }
 
       if (formData.status !== booking.status) {
@@ -451,11 +452,8 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
                 <p className="text-lg font-semibold">
                   ${(() => {
                     if (!effectiveMonthlyRent) return 'Not Set';
-                    const dollars = effectiveMonthlyRent / 100;
-                    // Only show decimals if they exist
-                    return dollars % 1 === 0
-                      ? dollars.toLocaleString()
-                      : dollars.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    // Monthly rent is already in dollars
+                    return effectiveMonthlyRent.toLocaleString();
                   })()}
                 </p>
               </div>

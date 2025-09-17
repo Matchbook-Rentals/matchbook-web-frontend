@@ -11,7 +11,7 @@ import { Pencil, DollarSign } from 'lucide-react'
 
 interface EditBookingSummaryDialogProps {
   bookingId: string
-  currentMonthlyRent: number | null
+  currentMonthlyRent: number | null // in dollars
   onUpdate?: () => void
 }
 
@@ -26,7 +26,7 @@ export default function EditBookingSummaryDialog({
   const [isLoading, setIsLoading] = useState(false)
 
   const [formData, setFormData] = useState({
-    monthlyRent: currentMonthlyRent ? (currentMonthlyRent / 100).toFixed(2) : ''
+    monthlyRent: currentMonthlyRent ? currentMonthlyRent.toString() : ''
   })
 
   const handleInputChange = (value: string) => {
@@ -65,10 +65,10 @@ export default function EditBookingSummaryDialog({
 
     setIsLoading(true)
     try {
-      // Convert monthly rent from dollars to cents for storage
-      const monthlyRentCents = Math.round(Number(formData.monthlyRent) * 100)
+      // Monthly rent is stored in dollars
+      const monthlyRentDollars = Math.round(Number(formData.monthlyRent))
 
-      if (monthlyRentCents === currentMonthlyRent) {
+      if (monthlyRentDollars === currentMonthlyRent) {
         toast({
           title: "No Changes",
           description: "No changes were made to update.",
@@ -79,7 +79,7 @@ export default function EditBookingSummaryDialog({
 
       // Use the specific server action
       const { updateBookingRent } = await import('@/app/admin/booking-management/_actions')
-      await updateBookingRent(bookingId, monthlyRentCents)
+      await updateBookingRent(bookingId, monthlyRentDollars)
 
       toast({
         title: "Monthly Rent Updated",
@@ -108,20 +108,16 @@ export default function EditBookingSummaryDialog({
     if (!newOpen) {
       // Reset form when closing
       setFormData({
-        monthlyRent: currentMonthlyRent ? (currentMonthlyRent / 100).toFixed(2) : ''
+        monthlyRent: currentMonthlyRent ? currentMonthlyRent.toString() : ''
       })
     }
     setOpen(newOpen)
   }
 
-  const formatCurrency = (amount: number | null) => {
+  const formatMonthlyRent = (amount: number | null) => {
     if (!amount) return 'Not Set'
-    const dollars = amount / 100
-    // Only show decimals if they exist
-    const formattedAmount = dollars % 1 === 0
-      ? dollars.toLocaleString()
-      : dollars.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    return `$${formattedAmount}`
+    // Monthly rent is already in dollars
+    return `$${amount.toLocaleString()}`
   }
 
   return (
@@ -159,24 +155,23 @@ export default function EditBookingSummaryDialog({
                   value={formData.monthlyRent}
                   onChange={(e) => handleInputChange(e.target.value)}
                   disabled={isLoading}
-                  placeholder="2500.00"
+                  placeholder="2500"
                   className="pl-8"
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Enter amount in dollars (e.g., 2500.00)
+                Enter amount in dollars (e.g., 2500)
               </p>
             </div>
 
             <div className="text-sm text-muted-foreground bg-gray-50 p-3 rounded space-y-1">
-              <div>Current: {formatCurrency(currentMonthlyRent)}</div>
+              <div>Current: {formatMonthlyRent(currentMonthlyRent)}</div>
               {formData.monthlyRent && !isNaN(Number(formData.monthlyRent)) && (
                 <div className="pt-2 border-t">
                   New: ${(() => {
                     const amount = Number(formData.monthlyRent)
-                    return amount % 1 === 0
-                      ? amount.toLocaleString()
-                      : amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    // Monthly rent should display as whole dollars
+                    return amount.toLocaleString()
                   })()}
                 </div>
               )}

@@ -46,6 +46,7 @@ export async function getHousingRequestById(housingRequestId: string) {
         listing: {
           include: {
             monthlyPricing: true,
+            listingImages: true,
             user: {
               select: {
                 id: true,

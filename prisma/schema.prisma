@@ -88,6 +88,7 @@ model User {
   paymentModificationReceipts PaymentModification[] @relation("PaymentModificationRecipient")
   bookingModificationRequests BookingModification[] @relation("BookingModificationRequestor")
   bookingModificationReceipts BookingModification[] @relation("BookingModificationRecipient")
+  cancelledPayments           RentPayment[]         @relation("PaymentCancelledBy")
 
   // Hospitable integration
   hospitableAccessToken   String?   @db.VarChar(1500)
@@ -923,15 +924,21 @@ model RentPayment {
   retryCount           Int                 @default(0)
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
-  
+
+  // Soft delete support for cancellations
+  cancelledAt           DateTime?
+  cancellationReason    String?
+  cancelledBy           String?             // Admin user ID who cancelled the payment
+
   // Receipt support
   transactionId         String?             @unique
   transaction           PaymentTransaction? @relation(fields: [transactionId], references: [id])
-  
+
   // Payment modifications
   paymentModifications  PaymentModification[]
 
   booking Booking @relation(fields: [bookingId], references: [id])
+  cancelledByUser User? @relation("PaymentCancelledBy", fields: [cancelledBy], references: [id])
 }
 
 model PaymentModification {

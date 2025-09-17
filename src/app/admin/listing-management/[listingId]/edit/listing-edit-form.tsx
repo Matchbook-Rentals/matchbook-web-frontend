@@ -283,15 +283,6 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
     }
   }
 
-  // Generate pricing tiers based on lease length range
-  const generatePricingTiers = () => {
-    const tiers = []
-    for (let i = formData.shortestLeaseLength; i <= formData.longestLeaseLength; i++) {
-      const existing = monthlyPricing.find(p => p.months === i)
-      tiers.push(existing || { months: i, price: 0, utilitiesIncluded: false })
-    }
-    setMonthlyPricing(tiers)
-  }
 
   const amenityCategories = {
     'General': ['kitchen', 'wifi', 'airConditioner', 'parking', 'balcony', 'cityView', 'pool', 'gym', 'elevator', 'doorman', 'security'],
@@ -627,13 +618,10 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
           <TabsContent value="pricing" className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Monthly Pricing Tiers</h3>
-              <Button variant="outline" onClick={generatePricingTiers}>
-                Generate Pricing Tiers
-              </Button>
             </div>
             
             <div className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="depositSize">Security Deposit ($)</Label>
                   <Input
@@ -646,17 +634,6 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                 </div>
                 
                 <div>
-                  <Label htmlFor="rentDueAtBooking">Rent Due at Booking ($)</Label>
-                  <Input
-                    id="rentDueAtBooking"
-                    type="number"
-                    min="0"
-                    value={formData.rentDueAtBooking}
-                    onChange={(e) => handleInputChange('rentDueAtBooking', parseInt(e.target.value) || 0)}
-                  />
-                </div>
-                
-                <div>
                   <Label htmlFor="petDeposit">Pet Deposit ($)</Label>
                   <Input
                     id="petDeposit"
@@ -664,7 +641,6 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                     min="0"
                     value={formData.petDeposit}
                     onChange={(e) => handleInputChange('petDeposit', parseInt(e.target.value) || 0)}
-                    disabled={!formData.petsAllowed}
                   />
                 </div>
                 
@@ -676,7 +652,6 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                     min="0"
                     value={formData.petRent}
                     onChange={(e) => handleInputChange('petRent', parseInt(e.target.value) || 0)}
-                    disabled={!formData.petsAllowed}
                   />
                 </div>
               </div>

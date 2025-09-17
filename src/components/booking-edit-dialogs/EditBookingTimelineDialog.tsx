@@ -29,7 +29,10 @@ const statusOptions = [
   { value: 'reserved', label: 'Reserved' },
   { value: 'active', label: 'Active' },
   { value: 'cancelled', label: 'Cancelled' },
-  { value: 'completed', label: 'Completed' }
+  { value: 'completed', label: 'Completed' },
+  { value: 'awaiting_signature', label: 'Awaiting Signature' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'confirmed', label: 'Confirmed' }
 ]
 
 export default function EditBookingTimelineDialog({
@@ -210,12 +213,18 @@ export default function EditBookingTimelineDialog({
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="z-[1100]">
                   {statusOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
                   ))}
+                  {/* Add current status if it's not in the predefined list */}
+                  {!statusOptions.find(opt => opt.value === currentStatus) && (
+                    <SelectItem key={currentStatus} value={currentStatus}>
+                      {currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1).replace(/_/g, ' ')}
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -223,7 +232,7 @@ export default function EditBookingTimelineDialog({
             <div className="text-sm text-muted-foreground bg-gray-50 p-3 rounded">
               <div className="space-y-1">
                 <div>Current: {formatDate(currentStartDate)} to {formatDate(currentEndDate)}</div>
-                <div>Status: {currentStatus}</div>
+                <div>Status: "{currentStatus}" (selected: "{formData.status}")</div>
               </div>
             </div>
           </div>

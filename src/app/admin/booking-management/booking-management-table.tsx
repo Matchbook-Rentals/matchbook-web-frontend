@@ -238,39 +238,44 @@ export default function BookingManagementTable({
                   </TableCell>
                   <TableCell>
                     <span className="font-medium">
-                      ${(() => {
-                        // Utility function to format currency properly (cents to dollars)
-                        const formatCurrency = (amountInCents: number | null) => {
+${(() => {
+                        // Format values that are already in dollars
+                        const formatDollars = (amount: number | null) => {
+                          if (!amount) return 'Not Set';
+                          return amount.toLocaleString();
+                        };
+
+                        // Format values that are in cents
+                        const formatCents = (amountInCents: number | null) => {
                           if (!amountInCents) return 'Not Set';
                           const dollars = amountInCents / 100;
-                          // Only show decimals if they exist
                           return dollars % 1 === 0
                             ? dollars.toLocaleString()
                             : dollars.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                         };
 
                         // Get effective monthly rent using proper calculation
-                        // First try stored monthlyRent if valid
+                        // First try stored monthlyRent if valid (stored in dollars)
                         if (booking.monthlyRent && booking.monthlyRent !== 77777) {
-                          return formatCurrency(booking.monthlyRent);
+                          return formatDollars(booking.monthlyRent);
                         }
 
-                        // Calculate using the proper function
+                        // Calculate using the proper function (returns dollars)
                         if (booking.trip && booking.listing) {
                           const calculated = calculateRent({
                             listing: booking.listing as any, // Will have monthlyPricing
                             trip: booking.trip
                           });
                           if (calculated !== 77777) {
-                            return formatCurrency(calculated);
+                            return formatDollars(calculated);
                           }
                         }
 
-                        // Last fallback: use largest rent payment
+                        // Last fallback: use largest rent payment (stored in cents)
                         const allPayments = booking.rentPayments || [];
                         if (allPayments.length > 0) {
                           const largestPayment = Math.max(...allPayments.map(payment => payment.amount));
-                          return formatCurrency(largestPayment);
+                          return formatCents(largestPayment);
                         }
 
                         return 'Not Set';

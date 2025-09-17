@@ -24,6 +24,7 @@ import { calculateRent } from '@/lib/calculate-rent'
 import EditBookingTimelineDialog from '@/components/booking-edit-dialogs/EditBookingTimelineDialog'
 import EditGuestDetailsDialog from '@/components/booking-edit-dialogs/EditGuestDetailsDialog'
 import EditBookingSummaryDialog from '@/components/booking-edit-dialogs/EditBookingSummaryDialog'
+import PaymentManagementRow from '@/components/payment-management/PaymentManagementRow'
 
 interface BookingDetailsPageProps {
   params: {
@@ -64,12 +65,12 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
 
   // Get effective monthly rent - use proper calculation logic
   const getEffectiveMonthlyRent = () => {
-    // First try stored monthlyRent if valid
+    // First try stored monthlyRent if valid (stored in dollars)
     if (booking.monthlyRent && booking.monthlyRent !== 77777) {
       return booking.monthlyRent;
     }
 
-    // Calculate using the proper function
+    // Calculate using the proper function (returns dollars)
     if (booking.trip && booking.listing) {
       const calculated = calculateRent({
         listing: booking.listing as any, // Will have monthlyPricing
@@ -80,10 +81,11 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
       }
     }
 
-    // Last fallback: use largest rent payment
+    // Last fallback: use largest rent payment (stored in cents)
     const allPayments = booking.rentPayments || [];
     if (allPayments.length > 0) {
-      return Math.max(...allPayments.map(payment => payment.amount));
+      const largestPayment = Math.max(...allPayments.map(payment => payment.amount));
+      return largestPayment / 100; // Convert from cents to dollars
     }
 
     return null;
@@ -91,11 +93,10 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
 
   const effectiveMonthlyRent = getEffectiveMonthlyRent();
 
-  // Format monthly rent (always whole dollars, no decimals)
-  const formatMonthlyRent = (amountInCents: number | null) => {
-    if (!amountInCents) return 'Not Set';
-    const dollars = amountInCents / 100;
-    return dollars.toLocaleString();
+  // Format monthly rent (always in dollars)
+  const formatMonthlyRent = (dollarAmount: number | null) => {
+    if (!dollarAmount) return 'Not Set';
+    return dollarAmount.toLocaleString();
   };
 
   // Format payment amounts (may include service charges with decimals)
@@ -204,7 +205,7 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Monthly Rent</label>
-                      <p className="text-2xl font-bold">${formatCurrency(effectiveMonthlyRent)}</p>
+                      <p className="text-2xl font-bold">${formatMonthlyRent(effectiveMonthlyRent)}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -352,15 +353,15 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Monthly Rent</label>
-                      <p className="text-2xl font-bold">${formatCurrency(effectiveMonthlyRent)}</p>
+                      <p className="text-2xl font-bold">${formatMonthlyRent(effectiveMonthlyRent)}</p>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Total Paid</label>
-                      <p className="text-2xl font-bold text-green-600">${formatCurrency(totalPaidAmount)}</p>
+                      <p className="text-2xl font-bold text-green-600">${formatPaymentAmount(totalPaidAmount)}</p>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Outstanding</label>
-                      <p className="text-2xl font-bold text-orange-600">${formatCurrency(totalUnpaidAmount)}</p>
+                      <p className="text-2xl font-bold text-orange-600">${formatPaymentAmount(totalUnpaidAmount)}</p>
                     </div>
                   </div>
 
@@ -370,15 +371,26 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                       <h4 className="font-medium mb-3">Rent Payment Schedule</h4>
                       <div className="space-y-2">
                         {booking.rentPayments.map((payment) => (
-                          <div key={payment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <div>
-                              <p className="font-medium">${formatCurrency(payment.amount)}</p>
-                              <p className="text-sm text-muted-foreground">Due: {formatDate(payment.dueDate)}</p>
-                            </div>
-                            <Badge variant={payment.isPaid ? "default" : "outline"}>
-                              {payment.isPaid ? "Paid" : "Pending"}
-                            </Badge>
-                          </div>
+                          <PaymentManagementRow
+                            key={payment.id}
+                            payment={{
+                              id: payment.id,
+                              amount: payment.amount,
+                              dueDate: payment.dueDate,
+                              isPaid: payment.isPaid,
+                              stripePaymentMethodId: payment.stripePaymentMethodId
+                            }}
+                            bookingData={{
+                              monthlyRent: booking.monthlyRent,
+                              startDate: booking.startDate,
+                              endDate: booking.endDate,
+                              trip: booking.trip,
+                              match: booking.match,
+                              listing: {
+                                petRent: booking.listing.petRent
+                              }
+                            }}
+                          />
                         ))}
                       </div>
                     </div>

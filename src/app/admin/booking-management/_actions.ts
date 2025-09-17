@@ -1453,3 +1453,347 @@ export async function getBookingModificationsForBooking(bookingId: string) {
     paymentModifications
   };
 }
+
+// ============================================================================
+// PAYMENT MANAGEMENT ACTIONS
+// ============================================================================
+
+/**
+ * Get payment breakdown for a rent payment
+ */
+export async function getRentPaymentBreakdown(paymentId: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const payment = await prisma.rentPayment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: {
+        include: {
+          trip: true,
+          match: true,
+          listing: {
+            include: {
+              monthlyPricing: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (!payment) {
+    throw new Error('Payment not found')
+  }
+
+  const { booking } = payment;
+  if (!booking.trip) {
+    throw new Error('Trip information not found for this payment')
+  }
+
+  // Calculate proper base rent using the calculate-rent utility
+  const { calculateRent } = await import('@/lib/calculate-rent');
+  let baseMonthlyRent = 0;
+
+  // First try stored monthly rent if valid (stored in dollars)
+  if (booking.monthlyRent && booking.monthlyRent !== 77777) {
+    baseMonthlyRent = booking.monthlyRent;
+  } else {
+    // Calculate using the proper function (returns dollars)
+    baseMonthlyRent = calculateRent({
+      listing: booking.listing as any,
+      trip: booking.trip
+    });
+  }
+
+  // Only include pet rent if there are pets AND a valid pet rent amount (not pet deposit)
+  let petRentPerPet = 0;
+  const numPets = booking.trip.numPets || 0;
+  if (numPets > 0) {
+    // Use match petRent first (preserved at lease time), then listing petRent
+    const availablePetRent = booking.match?.petRent || booking.listing.petRent;
+    if (availablePetRent && availablePetRent > 0) {
+      petRentPerPet = availablePetRent;
+    }
+  }
+
+  // Import the breakdown utility
+  const { calculatePaymentBreakdown } = await import('@/lib/payment-breakdown');
+
+  const breakdown = calculatePaymentBreakdown({
+    baseMonthlyRent,
+    petRentPerPet,
+    petCount: numPets,
+    tripStartDate: booking.startDate,
+    tripEndDate: booking.endDate,
+    isUsingCard: !!payment.stripePaymentMethodId // Assume card if stripe payment method exists
+  });
+
+  return breakdown;
+}
+
+/**
+ * Cancel a rent payment
+ */
+export async function cancelRentPayment(paymentId: string, reason: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const payment = await prisma.rentPayment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: {
+        include: {
+          user: { select: { id: true, firstName: true, lastName: true } },
+          listing: {
+            select: {
+              title: true,
+              user: { select: { id: true } }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (!payment) {
+    throw new Error('Payment not found')
+  }
+
+  if (payment.isPaid) {
+    throw new Error('Cannot cancel a payment that has already been paid')
+  }
+
+  // Delete the payment
+  await prisma.rentPayment.delete({
+    where: { id: paymentId }
+  });
+
+  // Create notifications
+  await Promise.all([
+    createNotification({
+      actionType: 'payment_cancelled',
+      actionId: paymentId,
+      content: `A rent payment of $${(payment.amount / 100).toFixed(2)} for ${payment.booking.listing.title} has been cancelled by staff. Reason: ${reason}`,
+      url: `/app/rent/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.user.id
+    }),
+    createNotification({
+      actionType: 'payment_cancelled',
+      actionId: paymentId,
+      content: `A rent payment of $${(payment.amount / 100).toFixed(2)} for ${payment.booking.listing.title} has been cancelled by staff. Reason: ${reason}`,
+      url: `/app/host/${payment.booking.listing.id}/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.listing.user.id
+    })
+  ]);
+
+  revalidatePath('/admin/booking-management')
+  revalidatePath('/admin/booking-management/' + payment.bookingId)
+
+  return { success: true, message: 'Payment cancelled successfully' }
+}
+
+/**
+ * Reschedule a rent payment
+ */
+export async function rescheduleRentPayment(paymentId: string, newDueDate: Date, reason: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const payment = await prisma.rentPayment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: {
+        include: {
+          user: { select: { id: true, firstName: true, lastName: true } },
+          listing: {
+            select: {
+              title: true,
+              user: { select: { id: true } }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (!payment) {
+    throw new Error('Payment not found')
+  }
+
+  if (payment.isPaid) {
+    throw new Error('Cannot reschedule a payment that has already been paid')
+  }
+
+  const originalDueDate = payment.dueDate;
+
+  // Update the payment due date
+  await prisma.rentPayment.update({
+    where: { id: paymentId },
+    data: { dueDate: newDueDate }
+  });
+
+  // Create notifications
+  await Promise.all([
+    createNotification({
+      actionType: 'payment_rescheduled',
+      actionId: paymentId,
+      content: `A rent payment of $${(payment.amount / 100).toFixed(2)} for ${payment.booking.listing.title} has been rescheduled from ${originalDueDate.toLocaleDateString()} to ${newDueDate.toLocaleDateString()}. Reason: ${reason}`,
+      url: `/app/rent/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.user.id
+    }),
+    createNotification({
+      actionType: 'payment_rescheduled',
+      actionId: paymentId,
+      content: `A rent payment of $${(payment.amount / 100).toFixed(2)} for ${payment.booking.listing.title} has been rescheduled from ${originalDueDate.toLocaleDateString()} to ${newDueDate.toLocaleDateString()}. Reason: ${reason}`,
+      url: `/app/host/${payment.booking.listing.id}/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.listing.user.id
+    })
+  ]);
+
+  revalidatePath('/admin/booking-management')
+  revalidatePath('/admin/booking-management/' + payment.bookingId)
+
+  return { success: true, message: 'Payment rescheduled successfully' }
+}
+
+/**
+ * Update rent payment amount
+ */
+export async function updateRentPaymentAmount(paymentId: string, newAmount: number, reason: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const payment = await prisma.rentPayment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: {
+        include: {
+          user: { select: { id: true, firstName: true, lastName: true } },
+          listing: {
+            select: {
+              title: true,
+              user: { select: { id: true } }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (!payment) {
+    throw new Error('Payment not found')
+  }
+
+  if (payment.isPaid) {
+    throw new Error('Cannot modify the amount of a payment that has already been paid')
+  }
+
+  const originalAmount = payment.amount;
+
+  // Update the payment amount
+  await prisma.rentPayment.update({
+    where: { id: paymentId },
+    data: { amount: newAmount }
+  });
+
+  // Create notifications
+  await Promise.all([
+    createNotification({
+      actionType: 'payment_amount_updated',
+      actionId: paymentId,
+      content: `A rent payment for ${payment.booking.listing.title} has been updated from $${(originalAmount / 100).toFixed(2)} to $${(newAmount / 100).toFixed(2)} by staff. Reason: ${reason}`,
+      url: `/app/rent/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.user.id
+    }),
+    createNotification({
+      actionType: 'payment_amount_updated',
+      actionId: paymentId,
+      content: `A rent payment for ${payment.booking.listing.title} has been updated from $${(originalAmount / 100).toFixed(2)} to $${(newAmount / 100).toFixed(2)} by staff. Reason: ${reason}`,
+      url: `/app/host/${payment.booking.listing.id}/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.listing.user.id
+    })
+  ]);
+
+  revalidatePath('/admin/booking-management')
+  revalidatePath('/admin/booking-management/' + payment.bookingId)
+
+  return { success: true, message: 'Payment amount updated successfully' }
+}
+
+/**
+ * Toggle payment paid status
+ */
+export async function toggleRentPaymentPaidStatus(paymentId: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const payment = await prisma.rentPayment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: {
+        include: {
+          user: { select: { id: true, firstName: true, lastName: true } },
+          listing: {
+            select: {
+              title: true,
+              user: { select: { id: true } }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (!payment) {
+    throw new Error('Payment not found')
+  }
+
+  const newPaidStatus = !payment.isPaid;
+
+  // Update the payment status
+  await prisma.rentPayment.update({
+    where: { id: paymentId },
+    data: {
+      isPaid: newPaidStatus,
+      paymentCapturedAt: newPaidStatus ? new Date() : null
+    }
+  });
+
+  // Create notifications
+  const statusText = newPaidStatus ? 'marked as paid' : 'marked as unpaid';
+  await Promise.all([
+    createNotification({
+      actionType: 'payment_status_updated',
+      actionId: paymentId,
+      content: `A rent payment of $${(payment.amount / 100).toFixed(2)} for ${payment.booking.listing.title} has been ${statusText} by staff.`,
+      url: `/app/rent/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.user.id
+    }),
+    createNotification({
+      actionType: 'payment_status_updated',
+      actionId: paymentId,
+      content: `A rent payment of $${(payment.amount / 100).toFixed(2)} for ${payment.booking.listing.title} has been ${statusText} by staff.`,
+      url: `/app/host/${payment.booking.listing.id}/bookings/${payment.booking.id}`,
+      unread: true,
+      userId: payment.booking.listing.user.id
+    })
+  ]);
+
+  revalidatePath('/admin/booking-management')
+  revalidatePath('/admin/booking-management/' + payment.bookingId)
+
+  return { success: true, message: `Payment ${statusText} successfully` }
+}
