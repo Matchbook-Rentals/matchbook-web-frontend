@@ -1,9 +1,256 @@
 'use server'
 
+/**
+ * BOOKING MODIFICATIONS FEATURE
+ * 
+ * This module handles modifications to existing bookings. Modifications can include changes to:
+ * - Guest count (adults, children, pets)
+ * - Booking dates (start/end dates)
+ * - Pricing (as a result of guest or date changes)
+ * 
+ * BUSINESS RULES:
+ * - All modifications must be approved by both parties (host and renter)
+ * - Guest changes affect pricing (e.g., pets may incur additional fees)
+ * - Date changes affect pro-rated pricing calculations
+ * - Any change to guests or dates MUST trigger price recalculation
+ * 
+ * NOTIFICATION SYSTEM:
+ * - Notifications are automatically sent to the other party when changes are requested
+ * - Both parties are kept informed of modification status (pending, approved, rejected)
+ * - Email notifications are sent based on user preferences
+ * 
+ * UI PAGES NEEDED:
+ * - Host modifications page: /app/host/[listingId]/bookings/[bookingId]/changes
+ * - Renter modifications page: /app/rent/bookings/[bookingId]/changes
+ * - These pages should display modification history and allow approval/rejection actions
+ * 
+ * CURRENT STATUS:
+ * - ✅ Basic date modification requests (implemented)
+ * - ✅ Approval/rejection workflow (implemented)
+ * - ✅ Notification system (implemented)
+ * - ❌ Guest count modifications (not yet implemented)
+ * - ❌ Price recalculation for changes (not yet implemented)
+ * - ❌ Dedicated modification management pages (not yet implemented)
+ */
+
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@clerk/nextjs/server'
 import { createNotification } from './notifications'
+import { approvePaymentModification, rejectPaymentModification } from './payment-modifications'
+
+// Unified modification type that can represent both booking and payment modifications
+export type UnifiedModification = {
+  id: string
+  type: 'booking' | 'payment'
+  requestorId: string
+  recipientId: string
+  reason?: string
+  status: string
+  requestedAt: Date
+  viewedAt?: Date | null
+  approvedAt?: Date | null
+  rejectedAt?: Date | null
+  rejectionReason?: string | null
+  createdAt: Date
+  requestor: {
+    fullName?: string
+    firstName?: string
+    lastName?: string
+    imageUrl?: string
+  }
+  recipient: {
+    fullName?: string
+    firstName?: string
+    lastName?: string
+    imageUrl?: string
+  }
+  // Booking modification specific fields
+  originalStartDate?: Date
+  originalEndDate?: Date
+  newStartDate?: Date
+  newEndDate?: Date
+  // Payment modification specific fields
+  originalAmount?: number
+  originalDueDate?: Date
+  newAmount?: number
+  newDueDate?: Date
+  rentPaymentId?: string
+}
+
+export async function getAllBookingModifications(bookingId: string): Promise<{
+  success: boolean
+  modifications?: UnifiedModification[]
+  error?: string
+}> {
+  const { userId } = auth()
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
+  try {
+    // Get the booking with both types of modifications
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        listing: { select: { userId: true } },
+        user: { select: { id: true } },
+        rentPayments: {
+          include: {
+            paymentModifications: {
+              include: {
+                requestor: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                },
+                recipient: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                }
+              },
+              orderBy: { createdAt: 'desc' }
+            }
+          }
+        },
+        bookingModifications: {
+          include: {
+            requestor: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            },
+            recipient: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
+        }
+      }
+    })
+
+    if (!booking) {
+      return { success: false, error: 'Booking not found' }
+    }
+
+    // Verify user has permission to view this booking
+    const isHost = booking.listing?.userId === userId
+    const isRenter = booking.user?.id === userId
+    
+    if (!isHost && !isRenter) {
+      return { success: false, error: 'Unauthorized to view this booking' }
+    }
+
+    // Convert booking modifications to unified format
+    const bookingMods: UnifiedModification[] = booking.bookingModifications.map(mod => ({
+      id: mod.id,
+      type: 'booking' as const,
+      requestorId: mod.requestorId,
+      recipientId: mod.recipientId,
+      reason: mod.reason,
+      status: mod.status,
+      requestedAt: mod.requestedAt,
+      viewedAt: mod.viewedAt,
+      approvedAt: mod.approvedAt,
+      rejectedAt: mod.rejectedAt,
+      rejectionReason: mod.rejectionReason,
+      createdAt: mod.createdAt,
+      requestor: mod.requestor,
+      recipient: mod.recipient,
+      originalStartDate: mod.originalStartDate,
+      originalEndDate: mod.originalEndDate,
+      newStartDate: mod.newStartDate,
+      newEndDate: mod.newEndDate
+    }))
+
+    // Convert payment modifications to unified format
+    const paymentMods: UnifiedModification[] = booking.rentPayments
+      .flatMap(payment => payment.paymentModifications)
+      .map(mod => ({
+        id: mod.id,
+        type: 'payment' as const,
+        requestorId: mod.requestorId,
+        recipientId: mod.recipientId,
+        reason: mod.reason,
+        status: mod.status,
+        requestedAt: mod.requestedAt,
+        viewedAt: mod.viewedAt,
+        approvedAt: mod.approvedAt,
+        rejectedAt: mod.rejectedAt,
+        rejectionReason: mod.rejectionReason,
+        createdAt: mod.createdAt,
+        requestor: mod.requestor,
+        recipient: mod.recipient,
+        originalAmount: mod.originalAmount,
+        originalDueDate: mod.originalDueDate,
+        newAmount: mod.newAmount,
+        newDueDate: mod.newDueDate,
+        rentPaymentId: mod.rentPaymentId
+      }))
+
+    // Combine and sort by creation date (newest first)
+    const allModifications = [...bookingMods, ...paymentMods]
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+
+    return { success: true, modifications: allModifications }
+  } catch (error) {
+    console.error('Error fetching all booking modifications:', error)
+    return { success: false, error: 'Failed to fetch modifications' }
+  }
+}
+
+export async function approveUnifiedModification(modificationId: string, modificationType: 'booking' | 'payment'): Promise<{
+  success: boolean
+  error?: string
+}> {
+  try {
+    if (modificationType === 'booking') {
+      await approveBookingModification(modificationId)
+    } else if (modificationType === 'payment') {
+      await approvePaymentModification(modificationId)
+    } else {
+      throw new Error('Invalid modification type')
+    }
+    return { success: true }
+  } catch (error) {
+    console.error('Error approving unified modification:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to approve modification' }
+  }
+}
+
+export async function rejectUnifiedModification(modificationId: string, modificationType: 'booking' | 'payment', rejectionReason?: string): Promise<{
+  success: boolean
+  error?: string
+}> {
+  try {
+    if (modificationType === 'booking') {
+      await rejectBookingModification(modificationId, rejectionReason)
+    } else if (modificationType === 'payment') {
+      await rejectPaymentModification(modificationId, rejectionReason)
+    } else {
+      throw new Error('Invalid modification type')
+    }
+    return { success: true }
+  } catch (error) {
+    console.error('Error rejecting unified modification:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to reject modification' }
+  }
+}
 
 export async function createBookingModification({
   bookingId,

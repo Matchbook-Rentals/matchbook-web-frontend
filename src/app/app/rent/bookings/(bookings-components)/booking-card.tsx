@@ -1,13 +1,14 @@
 'use client';
 import { Booking } from '@prisma/client';
 import React, { useState } from 'react';
-import { MapPinIcon, MoreVertical, Trash, X, Calendar } from 'lucide-react';
+import { MapPinIcon, MoreVertical, Trash, X, Calendar, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
 
 // Extended booking type with included relations
@@ -15,7 +16,6 @@ type BookingWithRelations = Booking & {
   listing?: {
     title: string;
     imageSrc?: string;
-    address?: string;
     userId?: string;
   };
   trip?: {
@@ -29,6 +29,32 @@ type BookingWithRelations = Booking & {
     dueDate: Date;
     paidAt?: Date | null;
   }[];
+  bookingModifications?: {
+    id: string;
+    originalStartDate: Date;
+    originalEndDate: Date;
+    newStartDate: Date;
+    newEndDate: Date;
+    reason?: string;
+    status: string;
+    requestedAt: Date;
+    viewedAt?: Date | null;
+    approvedAt?: Date | null;
+    rejectedAt?: Date | null;
+    rejectionReason?: string | null;
+    requestor: {
+      fullName?: string;
+      firstName?: string;
+      lastName?: string;
+      imageUrl?: string;
+    };
+    recipient: {
+      fullName?: string;
+      firstName?: string;
+      lastName?: string;
+      imageUrl?: string;
+    };
+  }[];
 };
 
 interface BookingCardProps {
@@ -38,10 +64,18 @@ interface BookingCardProps {
 
 const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   const router = useRouter();
+  const { user } = useUser();
   const [isDateModificationModalOpen, setIsDateModificationModalOpen] = useState(false);
   
   // Determine recipient ID (host in this case, since renter is requesting)
   const recipientId = booking.listing?.userId || ''; // This should come from the booking relations
+
+  // Check if there are booking modifications or payment modifications
+  const hasBookingModifications = booking.bookingModifications && booking.bookingModifications.length > 0;
+  const hasPaymentModifications = booking.rentPayments && booking.rentPayments.some(payment => 
+    payment.paymentModifications && payment.paymentModifications.length > 0
+  );
+  const hasModifications = hasBookingModifications || hasPaymentModifications;
 
   // Format date range for display
   const startDate = new Date(booking.startDate);
@@ -181,7 +215,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
               <PopoverContent className="w-48 p-0" align="end">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start gap-2 text-[#3c8787] hover:text-[#3c8787] hover:bg-[#3c8787]/10"
+                  className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsDateModificationModalOpen(true);
@@ -341,7 +375,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                 <PopoverContent className="w-48 p-0" align="end">
                   <Button
                     variant="ghost"
-                    className="w-full justify-start gap-2 text-[#3c8787] hover:text-[#3c8787] hover:bg-[#3c8787]/10"
+                    className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
                     onClick={(e) => {
                       e.stopPropagation();
                       setIsDateModificationModalOpen(true);
@@ -379,6 +413,16 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
               </div>
 
               <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 w-full">
+                {hasModifications && (
+                  <BrandButton
+                    variant="outline"
+                    onClick={() => router.push(`/app/rent/bookings/${booking.id}/changes`)}
+                    className="w-full md:w-auto whitespace-nowrap"
+                  >
+                    View Changes
+                  </BrandButton>
+                )}
+                
                 <BrandButton
                   variant="outline"
                   onClick={() => router.push(`/app/rent/bookings/${booking.id}`)}
@@ -412,6 +456,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
         }}
         recipientId={recipientId}
       />
+
     </Card>
   )
 }

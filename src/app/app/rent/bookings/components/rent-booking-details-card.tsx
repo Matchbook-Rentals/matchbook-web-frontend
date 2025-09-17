@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPinIcon, MoreVertical, Home, Loader2, MoreVerticalIcon, Calendar } from "lucide-react";
+import { MapPinIcon, MoreVertical, Home, Loader2, MoreVerticalIcon, Calendar, Clock } from "lucide-react";
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { findConversationBetweenUsers, createListingConversation } from "@/app/actions/conversations";
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
 
@@ -44,6 +45,33 @@ interface RentBookingDetailsCardProps {
   bookingId?: string;
   bookingStartDate?: Date;
   bookingEndDate?: Date;
+  // Props for booking modifications
+  bookingModifications?: {
+    id: string;
+    originalStartDate: Date;
+    originalEndDate: Date;
+    newStartDate: Date;
+    newEndDate: Date;
+    reason?: string;
+    status: string;
+    requestedAt: Date;
+    viewedAt?: Date | null;
+    approvedAt?: Date | null;
+    rejectedAt?: Date | null;
+    rejectionReason?: string | null;
+    requestor: {
+      fullName?: string;
+      firstName?: string;
+      lastName?: string;
+      imageUrl?: string;
+    };
+    recipient: {
+      fullName?: string;
+      firstName?: string;
+      lastName?: string;
+      imageUrl?: string;
+    };
+  }[];
 }
 
 const getStatusBadgeStyle = (status: string) => {
@@ -91,10 +119,18 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
   bookingId,
   bookingStartDate,
   bookingEndDate,
+  bookingModifications,
 }) => {
   const router = useRouter();
+  const { user } = useUser();
   const [messagingLoading, setMessagingLoading] = React.useState(false);
   const [isDateModificationModalOpen, setIsDateModificationModalOpen] = useState(false);
+
+  // Check if there are booking modifications or payment modifications  
+  const hasBookingModifications = bookingModifications && bookingModifications.length > 0;
+  // Note: This component receives bookingModifications as a separate prop, so we need to check 
+  // if payment modifications exist on the rentPayments if they're available
+  const hasModifications = hasBookingModifications; // For now, this component doesn't have access to rentPayments
 
   const handleMessageHost = async () => {
     if (!listingId || !hostUserId) {
@@ -234,7 +270,7 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
                     {bookingId && bookingStartDate && bookingEndDate && hostUserId && (
                       <Button
                         variant="ghost"
-                        className="w-full justify-start gap-2"
+                        className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
                         onClick={() => setIsDateModificationModalOpen(true)}
                       >
                         <Calendar className="w-4 h-4" />
@@ -243,7 +279,7 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
                     )}
                     <Button
                       variant="ghost"
-                      className="w-full justify-start gap-2"
+                      className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
                       onClick={onViewListing}
                     >
                       <Home className="w-4 h-4" />
@@ -260,6 +296,17 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
               </div>
 
               <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full">
+                {hasModifications && (
+                  <BrandButton
+                    variant="outline"
+                    onClick={() => router.push(`/app/rent/bookings/${bookingId}/changes`)}
+                    disabled={isLoading}
+                    className="w-full md:w-auto whitespace-nowrap"
+                  >
+                    View Changes
+                  </BrandButton>
+                )}
+
                 {primaryButtonText && (
                   <BrandButton
                     variant="outline"
@@ -319,6 +366,7 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
           recipientId={hostUserId}
         />
       )}
+
     </Card>
   );
 };

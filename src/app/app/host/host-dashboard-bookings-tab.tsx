@@ -833,6 +833,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
               bookingEndDate={booking.endDate}
               listingId={booking.listingId}
               guestUserId={booking.userId}
+              bookingModifications={booking.bookingModifications}
             />
           </div>
         );

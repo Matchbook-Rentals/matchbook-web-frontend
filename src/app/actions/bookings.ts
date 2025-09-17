@@ -6,6 +6,125 @@ import { auth } from '@clerk/nextjs/server'
 import { Booking, ListingUnavailability, Prisma, Notification  } from '@prisma/client'
 import { createNotification } from './notifications'
 
+export async function getBookingWithModifications(bookingId: string) {
+  const { userId } = auth()
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
+  try {
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        listing: { 
+          select: { 
+            title: true, 
+            userId: true 
+          } 
+        },
+        user: { 
+          select: { 
+            id: true 
+          } 
+        },
+        rentPayments: {
+          select: {
+            id: true,
+            paymentModifications: {
+              select: {
+                id: true,
+                requestorId: true,
+                recipientId: true,
+                originalAmount: true,
+                originalDueDate: true,
+                newAmount: true,
+                newDueDate: true,
+                reason: true,
+                status: true,
+                requestedAt: true,
+                viewedAt: true,
+                approvedAt: true,
+                rejectedAt: true,
+                rejectionReason: true,
+                createdAt: true,
+                requestor: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                },
+                recipient: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                }
+              },
+              orderBy: { createdAt: 'desc' }
+            }
+          }
+        },
+        bookingModifications: {
+          select: {
+            id: true,
+            requestorId: true,
+            recipientId: true,
+            originalStartDate: true,
+            originalEndDate: true,
+            newStartDate: true,
+            newEndDate: true,
+            reason: true,
+            status: true,
+            requestedAt: true,
+            viewedAt: true,
+            approvedAt: true,
+            rejectedAt: true,
+            rejectionReason: true,
+            requestor: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            },
+            recipient: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
+        }
+      }
+    })
+
+    if (!booking) {
+      return { success: false, error: 'Booking not found' }
+    }
+
+    // Verify user has permission to view this booking
+    const isHost = booking.listing?.userId === userId
+    const isRenter = booking.user?.id === userId
+    
+    if (!isHost && !isRenter) {
+      return { success: false, error: 'Unauthorized to view this booking' }
+    }
+
+    return { success: true, booking }
+  } catch (error) {
+    console.error('Error fetching booking with modifications:', error)
+    return { success: false, error: 'Failed to fetch booking' }
+  }
+}
+
 // Utility function to generate scheduled rent payments with pro-rating
 function generateRentPayments(
   bookingId: string,
@@ -164,7 +283,9 @@ export async function getUserBookings() {
     throw new Error('Unauthorized');
   }
 
-  return prisma.booking.findMany({
+  console.log('📚 getUserBookings: Fetching bookings for userId:', userId);
+
+  const bookings = await prisma.booking.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },
     include: {
@@ -182,10 +303,88 @@ export async function getUserBookings() {
         }
       },
       rentPayments: {
-        orderBy: { amount: 'desc' }
+        orderBy: { amount: 'desc' },
+        include: {
+          paymentModifications: {
+            select: {
+              id: true,
+              requestorId: true,
+              recipientId: true,
+              originalAmount: true,
+              originalDueDate: true,
+              newAmount: true,
+              newDueDate: true,
+              reason: true,
+              status: true,
+              requestedAt: true,
+              viewedAt: true,
+              approvedAt: true,
+              rejectedAt: true,
+              rejectionReason: true,
+              createdAt: true,
+              requestor: {
+                select: {
+                  fullName: true,
+                  firstName: true,
+                  lastName: true,
+                  imageUrl: true
+                }
+              },
+              recipient: {
+                select: {
+                  fullName: true,
+                  firstName: true,
+                  lastName: true,
+                  imageUrl: true
+                }
+              }
+            },
+            orderBy: { createdAt: 'desc' }
+          }
+        }
+      },
+      bookingModifications: {
+        select: {
+          id: true,
+          requestorId: true,
+          recipientId: true,
+          originalStartDate: true,
+          originalEndDate: true,
+          newStartDate: true,
+          newEndDate: true,
+          reason: true,
+          status: true,
+          requestedAt: true,
+          viewedAt: true,
+          approvedAt: true,
+          rejectedAt: true,
+          rejectionReason: true,
+          createdAt: true,
+          requestor: {
+            select: {
+              fullName: true,
+              firstName: true,
+              lastName: true,
+              imageUrl: true
+            }
+          },
+          recipient: {
+            select: {
+              fullName: true,
+              firstName: true,
+              lastName: true,
+              imageUrl: true
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' }
       }
     }
   });
+
+  console.log('📚 getUserBookings: Found', bookings.length, 'bookings');
+
+  return bookings;
 }
 
 // Update a booking
@@ -286,13 +485,86 @@ export async function getHostBookings() {
             id: true,
             amount: true,
             dueDate: true,
-            isPaid: true
+            isPaid: true,
+            paymentModifications: {
+              select: {
+                id: true,
+                requestorId: true,
+                recipientId: true,
+                originalAmount: true,
+                originalDueDate: true,
+                newAmount: true,
+                newDueDate: true,
+                reason: true,
+                status: true,
+                requestedAt: true,
+                viewedAt: true,
+                approvedAt: true,
+                rejectedAt: true,
+                rejectionReason: true,
+                createdAt: true,
+                requestor: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                },
+                recipient: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                }
+              },
+              orderBy: { createdAt: 'desc' }
+            }
           }
+        },
+        bookingModifications: {
+          select: {
+            id: true,
+            requestorId: true,
+            recipientId: true,
+            originalStartDate: true,
+            originalEndDate: true,
+            newStartDate: true,
+            newEndDate: true,
+            reason: true,
+            status: true,
+            requestedAt: true,
+            viewedAt: true,
+            approvedAt: true,
+            rejectedAt: true,
+            rejectionReason: true,
+            createdAt: true,
+            requestor: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            },
+            recipient: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
         }
       }
     });
 
-    console.log('Found bookings:', bookings.length);
+    console.log('🏠 getHostBookings: Found', bookings.length, 'bookings');
+    
     return bookings;
   } catch (error) {
     console.error('Error in getHostBookings:', error);
@@ -505,9 +777,91 @@ export async function getBookingsByListingId(listingId: string) {
             numPets: true,
             numChildren: true
           }
+        },
+        rentPayments: {
+          select: {
+            id: true,
+            amount: true,
+            dueDate: true,
+            isPaid: true,
+            paymentModifications: {
+              select: {
+                id: true,
+                requestorId: true,
+                recipientId: true,
+                originalAmount: true,
+                originalDueDate: true,
+                newAmount: true,
+                newDueDate: true,
+                reason: true,
+                status: true,
+                requestedAt: true,
+                viewedAt: true,
+                approvedAt: true,
+                rejectedAt: true,
+                rejectionReason: true,
+                createdAt: true,
+                requestor: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                },
+                recipient: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                }
+              },
+              orderBy: { createdAt: 'desc' }
+            }
+          }
+        },
+        bookingModifications: {
+          select: {
+            id: true,
+            requestorId: true,
+            recipientId: true,
+            originalStartDate: true,
+            originalEndDate: true,
+            newStartDate: true,
+            newEndDate: true,
+            reason: true,
+            status: true,
+            requestedAt: true,
+            viewedAt: true,
+            approvedAt: true,
+            rejectedAt: true,
+            rejectionReason: true,
+            createdAt: true,
+            requestor: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            },
+            recipient: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
         }
       }
     });
+
+    console.log('🏢 getBookingsByListingId: Found', bookings.length, 'bookings for listing', listingId);
 
     return bookings;
   } catch (error) {
