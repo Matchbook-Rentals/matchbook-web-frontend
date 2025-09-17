@@ -84,6 +84,8 @@ model User {
   paymentReceipts    PaymentReceipt[]
   paymentTransactions PaymentTransaction[]
   locationChanges    ListingLocationChange[]
+  paymentModificationRequests PaymentModification[] @relation("PaymentModificationRequestor")
+  paymentModificationReceipts PaymentModification[] @relation("PaymentModificationRecipient")
 
   // Hospitable integration
   hospitableAccessToken   String?   @db.VarChar(1500)
@@ -922,8 +924,50 @@ model RentPayment {
   // Receipt support
   transactionId         String?             @unique
   transaction           PaymentTransaction? @relation(fields: [transactionId], references: [id])
+  
+  // Payment modifications
+  paymentModifications  PaymentModification[]
 
   booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model PaymentModification {
+  id                    String   @id @default(cuid())
+  rentPaymentId         String
+  requestorId           String   // ID of the user who requested the modification
+  recipientId           String   // ID of the user who needs to approve the modification
+  
+  // Original payment details (for tracking)
+  originalAmount        Int
+  originalDueDate       DateTime
+  
+  // Modified payment details
+  newAmount             Int
+  newDueDate            DateTime
+  
+  // Modification metadata
+  reason                String?  // Reason for the modification
+  status                String   @default("pending") // "pending", "approved", "rejected"
+  
+  // Timestamps
+  requestedAt           DateTime @default(now())
+  viewedAt              DateTime? // When the recipient first viewed the modification
+  approvedAt            DateTime?
+  rejectedAt            DateTime?
+  rejectionReason       String?   // Optional reason for rejection
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relationships
+  rentPayment           RentPayment @relation(fields: [rentPaymentId], references: [id])
+  requestor             User        @relation("PaymentModificationRequestor", fields: [requestorId], references: [id])
+  recipient             User        @relation("PaymentModificationRecipient", fields: [recipientId], references: [id])
+  
+  @@index([rentPaymentId])
+  @@index([requestorId])
+  @@index([recipientId])
+  @@index([status])
 }
 
 model PaymentReceipt {

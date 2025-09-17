@@ -35,6 +35,8 @@ interface BookingDetailClientProps {
       dueDate: string;
       status: string;
       paymentId: string;
+      hasUnviewedModification?: boolean;
+      pendingModificationCount?: number;
     }>;
     past: Array<{
       amount: string;
@@ -44,6 +46,8 @@ interface BookingDetailClientProps {
       dueDate: string;
       status: string;
       paymentId: string;
+      hasUnviewedModification?: boolean;
+      pendingModificationCount?: number;
     }>;
   };
   hostName: string;
@@ -125,6 +129,7 @@ export default function BookingDetailClient({
           paymentsData={paymentsData}
           hostName={hostName}
           hostAvatar={hostAvatar}
+          bookingId={bookingId}
         />
       </div>
     </div>

@@ -108,6 +108,8 @@ export default function BookingDetailClient({
           paymentsData={paymentsData}
           renterName={renterName}
           renterAvatar={renterAvatar}
+          bookingId={bookingId}
+          renterId={bookingData.guestUserId}
         />
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { MoreVerticalIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -16,7 +16,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import TabSelector from "@/components/ui/tab-selector";
+import BrandModal from "@/components/BrandModal";
+import PaymentModificationModal from "./PaymentModificationModal";
 
 interface BookingPaymentData {
   tenant: string;
@@ -27,6 +35,9 @@ interface BookingPaymentData {
   dueDate: string;
   status: string;
   avatarUrl?: string;
+  paymentId?: string;
+  numericAmount?: number;
+  parsedDueDate?: Date;
 }
 
 interface BookingPaymentsData {
@@ -38,13 +49,18 @@ interface BookingPaymentsTableProps {
   paymentsData: BookingPaymentsData;
   renterName: string;
   renterAvatar?: string;
+  bookingId: string;
+  renterId?: string;
 }
 
 export const BookingPaymentsTable = ({ 
   paymentsData, 
   renterName, 
-  renterAvatar 
+  renterAvatar,
+  bookingId,
+  renterId
 }: BookingPaymentsTableProps): JSX.Element => {
+  const [selectedPayment, setSelectedPayment] = useState<BookingPaymentData | null>(null);
 
   // Column headers with responsive visibility classes
   const headers = [
@@ -130,9 +146,21 @@ export const BookingPaymentsTable = ({
               </TableCell>
               {/* Actions - Always visible */}
               <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 flex justify-center items-center">
-                <div className="inline-flex flex-col items-start">
-                  <MoreVerticalIcon className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="inline-flex flex-col items-start cursor-pointer">
+                      <MoreVerticalIcon className="w-5 h-5 hover:text-gray-600" />
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      onClick={() => setSelectedPayment(row)}
+                      className="cursor-pointer"
+                    >
+                      Modify Payment
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))
@@ -159,19 +187,31 @@ export const BookingPaymentsTable = ({
   ];
 
   return (
-    <div className="flex flex-col w-full rounded-[20px] overflow-hidden bg-white shadow-sm border border-gray-100">
-      <div className="p-6 border-b border-gray-100">
+    <>
+      <div className="flex flex-col w-full rounded-[20px] overflow-hidden bg-white shadow-sm border border-gray-100">
+        <div className="p-6 border-b border-gray-100">
+        </div>
+        <div className="p-0">
+          <TabSelector
+            tabs={tabs}
+            defaultTab="upcoming"
+            selectedTabColor="#0b6969"
+            className="justify-start py-0"
+            tabsListClassName="justify-between w-full md:justify-start pt-4 pb-4 px-6 "
+            tabsClassName="pt-0 px-0"
+          />
+        </div>
       </div>
-      <div className="p-0">
-        <TabSelector
-          tabs={tabs}
-          defaultTab="upcoming"
-          selectedTabColor="#0b6969"
-          className="justify-start py-0"
-          tabsListClassName="justify-between w-full md:justify-start pt-4 pb-4 px-6 "
-          tabsClassName="pt-0 px-0"
+
+      {selectedPayment && (
+        <PaymentModificationModal
+          isOpen={!!selectedPayment}
+          onOpenChange={(open) => !open && setSelectedPayment(null)}
+          payment={selectedPayment}
+          bookingId={bookingId}
+          recipientId={renterId || ''}
         />
-      </div>
-    </div>
+      )}
+    </>
   );
 };

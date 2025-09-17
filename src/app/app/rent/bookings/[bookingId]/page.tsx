@@ -70,7 +70,27 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     where: { id: params.bookingId },
     include: {
       rentPayments: {
-        orderBy: { dueDate: 'asc' }
+        orderBy: { dueDate: 'asc' },
+        include: {
+          paymentModifications: {
+            where: {
+              recipientId: userId,
+              status: 'pending'
+            },
+            include: {
+              requestor: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  fullName: true,
+                  email: true,
+                  imageUrl: true
+                }
+              }
+            }
+          }
+        }
       },
       listing: {
         include: {
@@ -138,29 +158,91 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   // Format payment data for the table
   const now = new Date();
   const upcomingPayments = booking.rentPayments
-    .filter((payment: RentPayment) => new Date(payment.dueDate) >= now)
-    .map((payment: RentPayment) => ({
-      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-      type: "Monthly Rent",
-      method: "ACH Transfer",
-      bank: "Bank Account",
-      dueDate: formatDate(new Date(payment.dueDate)),
-      status: getPaymentStatus(payment),
-      paymentId: payment.id
-    }));
+    .filter((payment: any) => new Date(payment.dueDate) >= now)
+    .map((payment: any) => {
+      const hasPendingModification = payment.paymentModifications.length > 0; // Show red dot for any pending modification
+      const modification = payment.paymentModifications[0]; // Get the first (and should be only) pending modification
+      
+      let modificationData = null;
+      if (modification) {
+        const requestorName = modification.requestor.fullName || 
+          `${modification.requestor.firstName || ''} ${modification.requestor.lastName || ''}`.trim() ||
+          modification.requestor.email || 'Unknown';
+        
+        modificationData = {
+          id: modification.id,
+          requestorName,
+          requestorImage: modification.requestor.imageUrl || '/image-35.png',
+          propertyTitle: booking.listing.title,
+          propertyAddress: formatAddress(booking.listing),
+          propertyImage: booking.listing.imageSrc || '/placeholder-property.jpg',
+          originalAmount: `$${(modification.originalAmount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          originalDueDate: formatDate(new Date(modification.originalDueDate)),
+          newAmount: `$${(modification.newAmount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          newDueDate: formatDate(new Date(modification.newDueDate)),
+          reason: modification.reason,
+          requestedAt: formatDate(new Date(modification.requestedAt)),
+          bookingId: params.bookingId
+        };
+      }
+
+      return {
+        amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        type: "Monthly Rent",
+        method: "ACH Transfer",
+        bank: "Bank Account",
+        dueDate: formatDate(new Date(payment.dueDate)),
+        status: getPaymentStatus(payment),
+        paymentId: payment.id,
+        hasPendingModification,
+        pendingModificationCount: payment.paymentModifications.length,
+        modificationData
+      };
+    });
 
   const pastPayments = booking.rentPayments
-    .filter((payment: RentPayment) => new Date(payment.dueDate) < now)
+    .filter((payment: any) => new Date(payment.dueDate) < now)
     .reverse()
-    .map((payment: RentPayment) => ({
-      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-      type: "Monthly Rent",
-      method: "ACH Transfer",
-      bank: "Bank Account",
-      dueDate: formatDate(new Date(payment.dueDate)),
-      status: getPaymentStatus(payment),
-      paymentId: payment.id
-    }));
+    .map((payment: any) => {
+      const hasPendingModification = payment.paymentModifications.length > 0; // Show red dot for any pending modification
+      const modification = payment.paymentModifications[0]; // Get the first (and should be only) pending modification
+      
+      let modificationData = null;
+      if (modification) {
+        const requestorName = modification.requestor.fullName || 
+          `${modification.requestor.firstName || ''} ${modification.requestor.lastName || ''}`.trim() ||
+          modification.requestor.email || 'Unknown';
+        
+        modificationData = {
+          id: modification.id,
+          requestorName,
+          requestorImage: modification.requestor.imageUrl || '/image-35.png',
+          propertyTitle: booking.listing.title,
+          propertyAddress: formatAddress(booking.listing),
+          propertyImage: booking.listing.imageSrc || '/placeholder-property.jpg',
+          originalAmount: `$${(modification.originalAmount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          originalDueDate: formatDate(new Date(modification.originalDueDate)),
+          newAmount: `$${(modification.newAmount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+          newDueDate: formatDate(new Date(modification.newDueDate)),
+          reason: modification.reason,
+          requestedAt: formatDate(new Date(modification.requestedAt)),
+          bookingId: params.bookingId
+        };
+      }
+
+      return {
+        amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        type: "Monthly Rent",
+        method: "ACH Transfer",
+        bank: "Bank Account",
+        dueDate: formatDate(new Date(payment.dueDate)),
+        status: getPaymentStatus(payment),
+        paymentId: payment.id,
+        hasPendingModification,
+        pendingModificationCount: payment.paymentModifications.length,
+        modificationData
+      };
+    });
 
   const paymentsData = {
     upcoming: upcomingPayments,

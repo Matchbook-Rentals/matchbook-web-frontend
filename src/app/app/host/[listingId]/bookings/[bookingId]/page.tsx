@@ -132,13 +132,16 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     .filter((payment: RentPayment) => new Date(payment.dueDate) >= now)
     .map((payment: RentPayment) => ({
       tenant: renterName,
-      amount: payment.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       type: "Monthly Rent",
       method: "ACH Transfer",
       bank: "Bank Account",
       dueDate: formatDate(new Date(payment.dueDate)),
       status: getPaymentStatus(payment),
-      avatarUrl: booking.user.imageUrl || "/image-35.png"
+      avatarUrl: booking.user.imageUrl || "/image-35.png",
+      paymentId: payment.id,
+      numericAmount: payment.amount,
+      parsedDueDate: new Date(payment.dueDate)
     }));
 
   const pastPayments = booking.rentPayments
@@ -146,13 +149,16 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     .reverse()
     .map((payment: RentPayment) => ({
       tenant: renterName,
-      amount: payment.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       type: "Monthly Rent",
       method: "ACH Transfer",
       bank: "Bank Account",
       dueDate: formatDate(new Date(payment.dueDate)),
       status: getPaymentStatus(payment),
-      avatarUrl: booking.user.imageUrl || "/image-35.png"
+      avatarUrl: booking.user.imageUrl || "/image-35.png",
+      paymentId: payment.id,
+      numericAmount: payment.amount,
+      parsedDueDate: new Date(payment.dueDate)
     }));
 
   const paymentsData = {

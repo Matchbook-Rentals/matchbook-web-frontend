@@ -1,7 +1,8 @@
 "use client";
 
 import { MoreVerticalIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Avatar,
   AvatarFallback,
@@ -16,7 +17,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import TabSelector from "@/components/ui/tab-selector";
+import PaymentModificationReviewModal from "@/components/PaymentModificationReviewModal";
 
 interface RentPaymentData {
   amount: string;
@@ -26,6 +34,23 @@ interface RentPaymentData {
   dueDate: string;
   status: string;
   paymentId: string;
+  hasPendingModification?: boolean;
+  pendingModificationCount?: number;
+  modificationData?: {
+    id: string;
+    requestorName: string;
+    requestorImage: string;
+    propertyTitle: string;
+    propertyAddress: string;
+    propertyImage: string;
+    originalAmount: string;
+    originalDueDate: string;
+    newAmount: string;
+    newDueDate: string;
+    reason: string | null;
+    requestedAt: string;
+    bookingId: string;
+  };
 }
 
 interface RentPaymentsData {
@@ -37,13 +62,19 @@ interface RentPaymentsTableProps {
   paymentsData: RentPaymentsData;
   hostName: string;
   hostAvatar?: string;
+  bookingId: string;
 }
 
 export const RentPaymentsTable = ({ 
   paymentsData, 
   hostName, 
-  hostAvatar 
+  hostAvatar,
+  bookingId
 }: RentPaymentsTableProps): JSX.Element => {
+  const router = useRouter();
+  const [selectedModification, setSelectedModification] = useState<RentPaymentData['modificationData'] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Column headers with responsive visibility classes
   const headers = [
@@ -129,9 +160,32 @@ export const RentPaymentsTable = ({
               </TableCell>
               {/* Actions - Always visible */}
               <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 flex justify-center items-center">
-                <div className="inline-flex flex-col items-start">
-                  <MoreVerticalIcon className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-                </div>
+                {row.hasPendingModification && row.modificationData ? (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <div className="inline-flex flex-col items-start relative cursor-pointer">
+                        <MoreVerticalIcon className="w-5 h-5 hover:text-gray-600" />
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-48 p-2" align="end">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm"
+                        onClick={() => {
+                          setSelectedModification(row.modificationData!);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        View Modification
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  <div className="inline-flex flex-col items-start relative">
+                    <MoreVerticalIcon className="w-5 h-5 text-gray-400" />
+                  </div>
+                )}
               </TableCell>
             </TableRow>
           ))
@@ -157,20 +211,39 @@ export const RentPaymentsTable = ({
     },
   ];
 
+  const handleModificationProcessed = () => {
+    setIsModalOpen(false);
+    setSelectedModification(null);
+    setRefreshKey(prev => prev + 1);
+    // Optionally trigger a page refresh or data refetch here
+    window.location.reload();
+  };
+
   return (
-    <div className="flex flex-col w-full rounded-[20px] overflow-hidden bg-white shadow-sm border border-gray-100">
-      <div className="p-6 border-b border-gray-100">
+    <>
+      <div className="flex flex-col w-full rounded-[20px] overflow-hidden bg-white shadow-sm border border-gray-100">
+        <div className="p-6 border-b border-gray-100">
+        </div>
+        <div className="p-0">
+          <TabSelector
+            tabs={tabs}
+            defaultTab="upcoming"
+            selectedTabColor="#0b6969"
+            className="justify-start py-0"
+            tabsListClassName="justify-between w-full md:justify-start pt-4 pb-4 px-6 "
+            tabsClassName="pt-0 px-0"
+          />
+        </div>
       </div>
-      <div className="p-0">
-        <TabSelector
-          tabs={tabs}
-          defaultTab="upcoming"
-          selectedTabColor="#0b6969"
-          className="justify-start py-0"
-          tabsListClassName="justify-between w-full md:justify-start pt-4 pb-4 px-6 "
-          tabsClassName="pt-0 px-0"
+
+      {selectedModification && (
+        <PaymentModificationReviewModal
+          data={selectedModification}
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          onModificationProcessed={handleModificationProcessed}
         />
-      </div>
-    </div>
+      )}
+    </>
   );
 };
