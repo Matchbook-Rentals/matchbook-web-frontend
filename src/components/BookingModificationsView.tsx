@@ -18,6 +18,8 @@ interface BookingModificationsViewProps {
   bookingId: string
   bookingTitle: string
   isMobile?: boolean
+  onClose?: () => void
+  cardClassName?: string
 }
 
 const getStatusBadgeStyle = (status: string) => {
@@ -79,7 +81,9 @@ const getModificationTitle = (modification: UnifiedModification) => {
 export default function BookingModificationsView({ 
   bookingId,
   bookingTitle,
-  isMobile = false
+  isMobile = false,
+  onClose,
+  cardClassName
 }: BookingModificationsViewProps) {
   const { user } = useUser()
   const [modifications, setModifications] = useState<UnifiedModification[]>([])
@@ -193,8 +197,22 @@ export default function BookingModificationsView({
   const completedModifications = modifications.filter(mod => mod.status !== 'pending')
 
   return (
-    <Card className="w-full bg-white rounded-xl">
-      <CardContent className={`flex flex-col items-center ${isMobile ? 'gap-3 p-3' : 'gap-6 p-6'}`}>
+    <Card className={cardClassName || "w-full bg-white rounded-xl"}>
+      <CardContent className={`flex flex-col ${isMobile ? 'gap-3 p-3' : 'gap-6 p-6'}`}>
+        {/* Header */}
+        <div className="flex items-center justify-between w-full">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Change Requests for this booking
+          </h2>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <XIcon className="w-6 h-6 text-black" />
+            </button>
+          )}
+        </div>
 
         <section className="flex flex-col items-start relative self-stretch w-full">
           {/* Pending Modifications */}
@@ -216,7 +234,7 @@ export default function BookingModificationsView({
                       className="flex items-center justify-between p-4 cursor-pointer"
                       onClick={() => toggleModification(modification.id)}
                     >
-                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 flex-1 min-w-0">
                         <div className="overflow-hidden text-[#281D1B] text-ellipsis [font-family:'Public_Sans',Helvetica] text-[15px] font-normal leading-5 tracking-[-0.075px] truncate">
                           {getModificationTitle(modification)}
                         </div>
@@ -225,7 +243,7 @@ export default function BookingModificationsView({
                           <Badge
                             className={`inline-flex items-center ${isMobile ? 'gap-1 px-1.5 py-0.5' : 'gap-1.5 px-2.5 py-1'} rounded-full border border-solid ${getStatusBadgeStyle(modification.status)}`}
                           >
-                            <span className={`relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium ${isMobile ? 'text-xs' : 'text-sm'} text-center tracking-[0] leading-5 whitespace-nowrap`}>
+                            <span className={`relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[10px] md:text-xs lg:text-sm text-center tracking-[0] leading-5 whitespace-nowrap`}>
                               {modification.status === 'pending' ? 'Change requested' : modification.status.charAt(0).toUpperCase() + modification.status.slice(1)}
                             </span>
                           </Badge>
@@ -245,7 +263,7 @@ export default function BookingModificationsView({
                             {modification.type === 'payment' ? (
                               <div className="space-y-6">
                                 {/* Current Values Row */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                                       Current Due Date
@@ -269,7 +287,7 @@ export default function BookingModificationsView({
                                 </div>
                                 
                                 {/* New Values Row */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-semibold text-[#344054] text-sm">
                                       New Due Date
@@ -295,7 +313,7 @@ export default function BookingModificationsView({
                             ) : (
                               <div className="space-y-6">
                                 {/* Current Date Range */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                                       Current Move-in Date
@@ -319,7 +337,7 @@ export default function BookingModificationsView({
                                 </div>
                                 
                                 {/* New Date Range */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-semibold text-[#344054] text-sm">
                                       New Move-in Date
@@ -346,27 +364,27 @@ export default function BookingModificationsView({
                           </div>
                           
                           {/* Right Column - Action Buttons (bottom aligned) */}
-                          <div className="flex items-end justify-end md:justify-start">
+                          <div className={isMobile ? "flex flex-col items-center justify-center w-full" : "flex items-end justify-end md:justify-start"}>
                             {user?.id === modification.recipientId ? (
-                              <div className={`flex ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                              <div className={isMobile ? 'flex flex-col gap-2 w-full' : 'flex gap-4'}>
                                 <Button
                                   variant="outline"
                                   onClick={() => handleReject(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className="h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold"
+                                  className={`h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : ''}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Decline Change'}
                                 </Button>
                                 <Button
                                   onClick={() => handleApprove(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className="h-12 w-[194px] bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold"
+                                  className={`h-12 bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-[194px]'}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Approve Change'}
                                 </Button>
                               </div>
                             ) : user?.id === modification.requestorId ? (
-                              <div className="flex">
+                              <div className={isMobile ? "flex w-full" : "flex"}>
                                 <p className="text-[#777b8b] [font-family:'Poppins',Helvetica] font-medium text-sm">
                                   Change is still pending
                                 </p>
@@ -401,7 +419,7 @@ export default function BookingModificationsView({
                       className="flex items-center justify-between p-4 cursor-pointer"
                       onClick={() => toggleModification(modification.id)}
                     >
-                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 flex-1 min-w-0">
                         <div className="overflow-hidden text-[#281D1B] text-ellipsis [font-family:'Public_Sans',Helvetica] text-[15px] font-normal leading-5 tracking-[-0.075px] truncate">
                           {getModificationTitle(modification)}
                         </div>
@@ -410,7 +428,7 @@ export default function BookingModificationsView({
                           <Badge
                             className={`inline-flex items-center ${isMobile ? 'gap-1 px-1.5 py-0.5' : 'gap-1.5 px-2.5 py-1'} rounded-full border border-solid ${getStatusBadgeStyle(modification.status)}`}
                           >
-                            <span className={`relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium ${isMobile ? 'text-xs' : 'text-sm'} text-center tracking-[0] leading-5 whitespace-nowrap`}>
+                            <span className={`relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[10px] md:text-xs lg:text-sm text-center tracking-[0] leading-5 whitespace-nowrap`}>
                               {modification.status === 'pending' ? 'Change requested' : modification.status.charAt(0).toUpperCase() + modification.status.slice(1)}
                             </span>
                           </Badge>
@@ -430,7 +448,7 @@ export default function BookingModificationsView({
                             {modification.type === 'payment' ? (
                               <div className="space-y-6">
                                 {/* Current Values Row */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                                       Current Due Date
@@ -454,7 +472,7 @@ export default function BookingModificationsView({
                                 </div>
                                 
                                 {/* New Values Row */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-semibold text-[#344054] text-sm">
                                       New Due Date
@@ -480,7 +498,7 @@ export default function BookingModificationsView({
                             ) : (
                               <div className="space-y-6">
                                 {/* Current Date Range */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                                       Current Move-in Date
@@ -504,7 +522,7 @@ export default function BookingModificationsView({
                                 </div>
                                 
                                 {/* New Date Range */}
-                                <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                                <div className={`flex items-end ${isMobile ? 'gap-2' : 'gap-4'}`}>
                                   <div className="flex-1">
                                     <Label className="[font-family:'Poppins',Helvetica] font-semibold text-[#344054] text-sm">
                                       New Move-in Date
@@ -531,27 +549,27 @@ export default function BookingModificationsView({
                           </div>
                           
                           {/* Right Column - Action Buttons (bottom aligned) */}
-                          <div className="flex items-end justify-end md:justify-start">
+                          <div className={isMobile ? "flex flex-col items-center justify-center w-full" : "flex items-end justify-end md:justify-start"}>
                             {modification.status === 'pending' && user?.id === modification.recipientId ? (
-                              <div className={`flex ${isMobile ? 'gap-2' : 'gap-4'}`}>
+                              <div className={isMobile ? 'flex flex-col gap-2 w-full' : 'flex gap-4'}>
                                 <Button
                                   variant="outline"
                                   onClick={() => handleReject(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className="h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold"
+                                  className={`h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : ''}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Decline Change'}
                                 </Button>
                                 <Button
                                   onClick={() => handleApprove(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className="h-12 w-[194px] bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold"
+                                  className={`h-12 bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-[194px]'}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Approve Change'}
                                 </Button>
                               </div>
                             ) : modification.status === 'pending' && user?.id === modification.requestorId ? (
-                              <div className="flex">
+                              <div className={isMobile ? "flex w-full" : "flex"}>
                                 <p className="text-[#777b8b] [font-family:'Poppins',Helvetica] font-medium text-sm">
                                   Change is still pending
                                 </p>

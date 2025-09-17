@@ -135,7 +135,7 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
 
   // Check if there are booking modifications or payment modifications
   const hasBookingModifications = bookingModifications && bookingModifications.length > 0;
-  const hasPaymentModifications = rentPayments && rentPayments.some(payment => 
+  const hasPaymentModifications = rentPayments && rentPayments.some(payment =>
     payment.paymentModifications && payment.paymentModifications.length > 0
   );
   const hasModifications = hasBookingModifications || hasPaymentModifications;
@@ -150,7 +150,7 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
     try {
       // First check if conversation exists
       const existing = await findConversationBetweenUsers(listingId, guestUserId);
-      
+
       if (existing.conversationId) {
         // Navigate to existing conversation
         router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
@@ -178,23 +178,23 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
             <Loader2 className="w-8 h-8 animate-spin text-[#3c8787]" />
           </div>
         )}
-        
+
         {/* Mobile Layout - Column with organized rows */}
         <div className="flex flex-col gap-4">
           {/* Row 1: Image | Menu Button */}
           <div className="flex flex-row items-start justify-between gap-4">
             {status.toLowerCase() === 'approved' ? (
-              <div 
-                className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+              <div
+                className="relative w-[90px] h-[90px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0"
                 style={{ backgroundImage: `url(${profileImage})` }}
               />
             ) : (
-              <div 
-                className="relative w-[105px] h-[70px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+              <div
+                className="relative w-[90px] h-[90px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0"
                 style={{ backgroundImage: `url(https://placehold.co/600x400/0B6E6E/FFF?text=${name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')})` }}
               />
             )}
-            
+
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -234,28 +234,27 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
             <div className="font-medium text-[#484a54] text-base flex-1 min-w-0 truncate">
               {name}
             </div>
-            <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${
-              status.toLowerCase() === 'approved' 
+            <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${status.toLowerCase() === 'approved'
                 ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]'
                 : status.toLowerCase() === 'pending'
-                ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'
-                : status.toLowerCase() === 'declined'
-                ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]'
-                : 'bg-gray-100 text-gray-600 border-gray-400'
-            }`}>
+                  ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'
+                  : status.toLowerCase() === 'declined'
+                    ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]'
+                    : 'bg-gray-100 text-gray-600 border-gray-400'
+              }`}>
               {status}
             </Badge>
           </div>
 
           {/* Row 3: Address | Dates */}
-          <div className="flex flex-row items-start justify-between gap-2">
-            <div className="flex items-start gap-1 flex-1 min-w-0">
+          <div className="flex flex-col xs:flex-row items-start justify-between gap-2">
+            <div className="flex items-start gap-1 flex-1 min-w-0 w-full xs:w-auto">
               <MapPinIcon className="w-4 h-4 text-[#777b8b] flex-shrink-0 mt-0.5" />
               <div className="text-xs text-[#777b8b] truncate">
                 {address}
               </div>
             </div>
-            <div className="text-xs text-[#777b8b] flex-shrink-0">
+            <div className="text-xs text-[#777b8b] flex-shrink-0 xs:text-right">
               {dates}
             </div>
           </div>
@@ -309,15 +308,18 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
                   </BrandButton>
                 }
               >
-                <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
+                <div className="min-w-full  sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
                   <BookingModificationsView
                     bookingId={bookingId!}
                     bookingTitle={description}
+                    isMobile={true}
+                    cardClassName="w-full border-none p-0"
+                    onClose={() => setIsModificationsModalOpen(false)}
                   />
                 </div>
               </BrandModal>
             )}
-            <BrandButton 
+            <BrandButton
               variant="default"
               onClick={listingId && guestUserId ? handleMessageRenter : onMessageGuest}
               disabled={isLoading || messagingLoading}
@@ -385,7 +387,7 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
 
   // Check if there are booking modifications or payment modifications
   const hasBookingModifications = bookingModifications && bookingModifications.length > 0;
-  const hasPaymentModifications = rentPayments && rentPayments.some(payment => 
+  const hasPaymentModifications = rentPayments && rentPayments.some(payment =>
     payment.paymentModifications && payment.paymentModifications.length > 0
   );
   const hasModifications = hasBookingModifications || hasPaymentModifications;
@@ -400,7 +402,7 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
     try {
       // First check if conversation exists
       const existing = await findConversationBetweenUsers(listingId, guestUserId);
-      
+
       if (existing.conversationId) {
         // Navigate to existing conversation
         router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
@@ -455,6 +457,8 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
         bookingId={bookingId}
         bookingStartDate={bookingStartDate}
         bookingEndDate={bookingEndDate}
+        bookingModifications={bookingModifications}
+        rentPayments={rentPayments}
       />
     );
   }
@@ -479,13 +483,13 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
           <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 flex-1 w-full min-w-0">
             {/* Profile Image */}
             {status.toLowerCase() === 'approved' ? (
-              <div 
-                className="relative w-16 h-16 sm:w-[81px] sm:h-[85px] lg:w-[81px] lg:h-[85px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+              <div
+                className="relative w-16 h-16 sm:w-[81px] sm:h-[85px] lg:w-[81px] lg:h-[85px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0"
                 style={{ backgroundImage: `url(${profileImage})` }}
               />
             ) : (
-              <div 
-                className="relative w-16 h-16 sm:w-[81px] sm:h-[85px] lg:w-[81px] lg:h-[85px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0" 
+              <div
+                className="relative w-16 h-16 sm:w-[81px] sm:h-[85px] lg:w-[81px] lg:h-[85px] rounded-xl bg-cover bg-[50%_50%] flex-shrink-0"
                 style={{ backgroundImage: `url(https://placehold.co/600x400/0B6E6E/FFF?text=${name.split(' ').map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')})` }}
               />
             )}
@@ -498,15 +502,14 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
                     {name}
                   </div>
 
-                  <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${
-                    status.toLowerCase() === 'approved' 
+                  <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${status.toLowerCase() === 'approved'
                       ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]'
                       : status.toLowerCase() === 'pending'
-                      ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'
-                      : status.toLowerCase() === 'declined'
-                      ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]'
-                      : 'bg-gray-100 text-gray-600 border-gray-400'
-                  }`}>
+                        ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'
+                        : status.toLowerCase() === 'declined'
+                          ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]'
+                          : 'bg-gray-100 text-gray-600 border-gray-400'
+                    }`}>
                     {status}
                   </Badge>
                 </div>
@@ -614,12 +617,14 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
                     <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
                       <BookingModificationsView
                         bookingId={bookingId!}
+                        cardClassName="w-full border-none p-0"
                         bookingTitle={description}
+                        onClose={() => setIsModificationsModalOpen(false)}
                       />
                     </div>
                   </BrandModal>
                 )}
-                
+
                 <BrandButton
                   variant="outline"
                   onClick={onBookingDetails}
@@ -636,7 +641,7 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
                   )}
                 </BrandButton>
 
-                <BrandButton 
+                <BrandButton
                   variant="default"
                   onClick={listingId && guestUserId ? handleMessageRenter : onMessageGuest}
                   disabled={isLoading || messagingLoading}
