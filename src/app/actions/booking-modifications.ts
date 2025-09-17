@@ -327,13 +327,10 @@ export async function createBookingModification({
     
     await createNotification({
       userId: recipientId,
-      title: 'Booking Date Modification Request',
-      message: `${requestorName} has requested to modify booking dates for ${bookingModification.booking.listing.title}`,
-      type: 'booking_modification_request',
-      metadata: {
-        bookingModificationId: bookingModification.id,
-        bookingId: bookingId
-      }
+      content: `${requestorName} has requested to modify booking dates for ${bookingModification.booking.listing.title}`,
+      url: `/app/host/${bookingModification.booking.listing.id}/bookings/${bookingId}/changes`,
+      actionType: 'view',
+      actionId: bookingModification.id
     })
 
     revalidatePath('/app/host')
@@ -407,13 +404,10 @@ export async function approveBookingModification(bookingModificationId: string) 
     
     await createNotification({
       userId: bookingModification.requestorId,
-      title: 'Booking Date Modification Approved',
-      message: `Your booking date modification request for ${bookingModification.booking.listing.title} has been approved`,
-      type: 'booking_modification_approved',
-      metadata: {
-        bookingModificationId: bookingModification.id,
-        bookingId: bookingModification.bookingId
-      }
+      content: `Your booking date modification request for ${bookingModification.booking.listing.title} has been approved`,
+      url: `/app/rent/bookings/${bookingModification.bookingId}`,
+      actionType: 'view',
+      actionId: bookingModification.id
     })
 
     revalidatePath('/app/host')
@@ -474,13 +468,10 @@ export async function rejectBookingModification(bookingModificationId: string, r
     // Notify the requestor of rejection
     await createNotification({
       userId: bookingModification.requestorId,
-      title: 'Booking Date Modification Rejected',
-      message: `Your booking date modification request for ${bookingModification.booking.listing.title} has been rejected${rejectionReason ? `: ${rejectionReason}` : ''}`,
-      type: 'booking_modification_rejected',
-      metadata: {
-        bookingModificationId: bookingModification.id,
-        bookingId: bookingModification.bookingId
-      }
+      content: `Your booking date modification request for ${bookingModification.booking.listing.title} has been rejected${rejectionReason ? `: ${rejectionReason}` : ''}`,
+      url: `/app/rent/bookings/${bookingModification.bookingId}`,
+      actionType: 'view',
+      actionId: bookingModification.id
     })
 
     revalidatePath('/app/host')

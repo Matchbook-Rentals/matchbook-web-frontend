@@ -1136,7 +1136,77 @@ export async function getAllListingBookings(listingId: string) {
             id: true,
             amount: true,
             dueDate: true,
-            isPaid: true
+            isPaid: true,
+            paymentModifications: {
+              select: {
+                id: true,
+                requestorId: true,
+                recipientId: true,
+                originalAmount: true,
+                originalDueDate: true,
+                newAmount: true,
+                newDueDate: true,
+                reason: true,
+                status: true,
+                requestedAt: true,
+                viewedAt: true,
+                approvedAt: true,
+                rejectedAt: true,
+                rejectionReason: true,
+                createdAt: true,
+                requestor: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                },
+                recipient: {
+                  select: {
+                    fullName: true,
+                    firstName: true,
+                    lastName: true,
+                    imageUrl: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        bookingModifications: {
+          select: {
+            id: true,
+            requestorId: true,
+            recipientId: true,
+            originalStartDate: true,
+            originalEndDate: true,
+            newStartDate: true,
+            newEndDate: true,
+            reason: true,
+            status: true,
+            requestedAt: true,
+            viewedAt: true,
+            approvedAt: true,
+            rejectedAt: true,
+            rejectionReason: true,
+            createdAt: true,
+            requestor: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            },
+            recipient: {
+              select: {
+                fullName: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true
+              }
+            }
           }
         }
       }

@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { findConversationBetweenUsers, createListingConversation } from "@/app/actions/conversations";
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
+import BrandModal from '@/components/BrandModal';
+import BookingModificationsView from '@/components/BookingModificationsView';
 
 interface Occupant {
   type: string;
@@ -66,6 +68,41 @@ interface HostBookingCardProps {
       imageUrl?: string;
     };
   }[];
+  // Props for rent payments with payment modifications
+  rentPayments?: {
+    id: string;
+    amount: number;
+    dueDate: Date;
+    isPaid: boolean;
+    paymentModifications: {
+      id: string;
+      requestorId: string;
+      recipientId: string;
+      originalAmount: number;
+      originalDueDate: Date;
+      newAmount: number;
+      newDueDate: Date;
+      reason?: string;
+      status: string;
+      requestedAt: Date;
+      viewedAt?: Date | null;
+      approvedAt?: Date | null;
+      rejectedAt?: Date | null;
+      rejectionReason?: string | null;
+      requestor: {
+        fullName?: string;
+        firstName?: string;
+        lastName?: string;
+        imageUrl?: string;
+      };
+      recipient: {
+        fullName?: string;
+        firstName?: string;
+        lastName?: string;
+        imageUrl?: string;
+      };
+    }[];
+  }[];
 }
 
 const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
@@ -88,17 +125,20 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
   bookingStartDate,
   bookingEndDate,
   bookingModifications,
+  rentPayments,
 }) => {
   const router = useRouter();
   const { user } = useUser();
   const [messagingLoading, setMessagingLoading] = React.useState(false);
   const [isDateModificationModalOpen, setIsDateModificationModalOpen] = React.useState(false);
+  const [isModificationsModalOpen, setIsModificationsModalOpen] = React.useState(false);
 
   // Check if there are booking modifications or payment modifications
   const hasBookingModifications = bookingModifications && bookingModifications.length > 0;
-  // Note: This component receives bookingModifications as a separate prop, so we need to check 
-  // if payment modifications exist - for now, only checking booking modifications
-  const hasModifications = hasBookingModifications; // For now, this component doesn't have access to rentPayments
+  const hasPaymentModifications = rentPayments && rentPayments.some(payment => 
+    payment.paymentModifications && payment.paymentModifications.length > 0
+  );
+  const hasModifications = hasBookingModifications || hasPaymentModifications;
 
   const handleMessageRenter = async () => {
     if (!listingId || !guestUserId) {
@@ -255,14 +295,27 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
         {/* Action Buttons */}
         <div className="flex items-center gap-3 w-full">
           {hasModifications && (
-            <Button
-              variant="outline"
-              className="flex-1 border-[#3c8787] text-[#3c8787] font-semibold hover:text-[#3c8787] hover:bg-transparent"
-              onClick={() => router.push(`/app/host/${listingId}/bookings/${bookingId}/changes`)}
-              disabled={isLoading}
+            <BrandModal
+              isOpen={isModificationsModalOpen}
+              onOpenChange={setIsModificationsModalOpen}
+              className="!max-w-[1050px] w-full max-h-[85vh] overflow-y-auto"
+              triggerButton={
+                <Button
+                  variant="outline"
+                  className="flex-1 border-[#3c8787] text-[#3c8787] font-semibold hover:text-[#3c8787] hover:bg-transparent"
+                  disabled={isLoading}
+                >
+                  View Changes
+                </Button>
+              }
             >
-              View Changes
-            </Button>
+              <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
+                <BookingModificationsView
+                  bookingId={bookingId!}
+                  bookingTitle={description}
+                />
+              </div>
+            </BrandModal>
           )}
           <Button
             variant="outline"
@@ -335,17 +388,20 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
   bookingStartDate,
   bookingEndDate,
   bookingModifications,
+  rentPayments,
 }) => {
   const router = useRouter();
   const { user } = useUser();
   const [messagingLoading, setMessagingLoading] = React.useState(false);
   const [isDateModificationModalOpen, setIsDateModificationModalOpen] = React.useState(false);
+  const [isModificationsModalOpen, setIsModificationsModalOpen] = React.useState(false);
 
   // Check if there are booking modifications or payment modifications
   const hasBookingModifications = bookingModifications && bookingModifications.length > 0;
-  // Note: This component receives bookingModifications as a separate prop, so we need to check 
-  // if payment modifications exist - for now, only checking booking modifications
-  const hasModifications = hasBookingModifications; // For now, this component doesn't have access to rentPayments
+  const hasPaymentModifications = rentPayments && rentPayments.some(payment => 
+    payment.paymentModifications && payment.paymentModifications.length > 0
+  );
+  const hasModifications = hasBookingModifications || hasPaymentModifications;
 
   const handleMessageRenter = async () => {
     if (!listingId || !guestUserId) {
@@ -554,14 +610,27 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
 
               <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 w-full">
                 {hasModifications && (
-                  <BrandButton
-                    variant="outline"
-                    onClick={() => router.push(`/app/host/${listingId}/bookings/${bookingId}/changes`)}
-                    disabled={isLoading}
-                    className="w-full md:w-auto whitespace-nowrap"
+                  <BrandModal
+                    isOpen={isModificationsModalOpen}
+                    onOpenChange={setIsModificationsModalOpen}
+                    className="!max-w-[1050px] w-full max-h-[85vh] overflow-y-auto"
+                    triggerButton={
+                      <BrandButton
+                        variant="outline"
+                        disabled={isLoading}
+                        className="w-full md:w-auto whitespace-nowrap"
+                      >
+                        View Changes
+                      </BrandButton>
+                    }
                   >
-                    View Changes
-                  </BrandButton>
+                    <div className="min-w-full sm:min-w-[600px] md:min-w-[700px] lg:min-w-[800px] w-full">
+                      <BookingModificationsView
+                        bookingId={bookingId!}
+                        bookingTitle={description}
+                      />
+                    </div>
+                  </BrandModal>
                 )}
                 
                 <BrandButton

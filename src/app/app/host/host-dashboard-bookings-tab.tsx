@@ -834,6 +834,7 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
               listingId={booking.listingId}
               guestUserId={booking.userId}
               bookingModifications={booking.bookingModifications}
+              rentPayments={booking.rentPayments}
             />
           </div>
         );

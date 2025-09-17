@@ -21,8 +21,8 @@ export default async function BookingManagementPage({ searchParams }: BookingMan
   const startDate = searchParams?.startDate;
   const endDate = searchParams?.endDate;
 
-  const { bookings, totalCount } = await getAllBookings({ 
-    page: currentPage, 
+  const { bookings, totalCount } = await getAllBookings({
+    page: currentPage,
     pageSize: PAGE_SIZE,
     search,
     status,
@@ -36,7 +36,7 @@ export default async function BookingManagementPage({ searchParams }: BookingMan
         <CardHeader>
           <CardTitle>Booking Management ({totalCount})</CardTitle>
           <p className="text-muted-foreground">
-            Manage all bookings across the platform. You can cancel, modify, or revert bookings back to matches.
+            Manage all bookings across the platform. Click "View Booking" to see detailed information, payment schedules, and modification history.
           </p>
         </CardHeader>
         <CardContent>
