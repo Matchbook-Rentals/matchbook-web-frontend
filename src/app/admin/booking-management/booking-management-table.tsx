@@ -20,28 +20,17 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select'
-import { 
-  Search, 
-  Eye, 
-  Edit,
-  XCircle,
-  RotateCcw,
+import {
+  Search,
+  Eye,
   Calendar,
   ChevronLeft,
-  ChevronRight,
-  MoreVertical
+  ChevronRight
 } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator
-} from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
-import { useToast } from '@/components/ui/use-toast'
 import { CombinedBookingData, BookingWithDetails, PendingBookingFromMatch } from './_actions'
+import { calculateRent } from '@/lib/calculate-rent'
 
 interface BookingManagementTableProps {
   bookings: CombinedBookingData[];
@@ -71,10 +60,6 @@ function getStatusBadgeColor(status: string) {
   }
 }
 
-// Type guard to check if booking is a pending booking
-function isPendingBooking(booking: CombinedBookingData): booking is PendingBookingFromMatch {
-  return 'type' in booking && booking.type === 'pending_signature';
-}
 
 export default function BookingManagementTable({
   bookings,
@@ -88,8 +73,6 @@ export default function BookingManagementTable({
 }: BookingManagementTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { toast } = useToast();
-  const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
 
   // Pagination
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -134,22 +117,6 @@ export default function BookingManagementTable({
     router.push(`?${params.toString()}`);
   };
 
-  // Handle checkbox selection
-  const toggleBookingSelection = (bookingId: string) => {
-    setSelectedBookings(prev => 
-      prev.includes(bookingId)
-        ? prev.filter(id => id !== bookingId)
-        : [...prev, bookingId]
-    );
-  };
-
-  const toggleSelectAll = () => {
-    if (selectedBookings.length === bookings.length) {
-      setSelectedBookings([]);
-    } else {
-      setSelectedBookings(bookings.map(booking => booking.id));
-    }
-  };
 
   return (
     <div className="space-y-4">
@@ -197,80 +164,32 @@ export default function BookingManagementTable({
         </div>
       </div>
 
-      {/* Bulk Actions */}
-      {selectedBookings.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-blue-700">
-              {selectedBookings.length} booking{selectedBookings.length > 1 ? 's' : ''} selected
-            </span>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  // For now, redirect to first selected booking's details page
-                  // In a full implementation, you'd want a bulk action modal
-                  if (selectedBookings.length === 1) {
-                    router.push(`/admin/booking-management/${selectedBookings[0]}#cancel`);
-                  } else {
-                    toast({
-                      title: "Bulk Operations",
-                      description: "For multiple selections, please cancel bookings individually for now",
-                    });
-                  }
-                }}
-              >
-                <XCircle className="w-4 h-4 mr-1" />
-                Cancel Selected
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Table */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-12">
-                <input
-                  type="checkbox"
-                  checked={selectedBookings.length === bookings.length && bookings.length > 0}
-                  onChange={toggleSelectAll}
-                  className="rounded"
-                />
-              </TableHead>
               <TableHead>Guest</TableHead>
               <TableHead>Host</TableHead>
               <TableHead>Listing</TableHead>
-              <TableHead>Check-in</TableHead>
-              <TableHead>Check-out</TableHead>
+              <TableHead>Dates</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Monthly Rent</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead className="w-12">Actions</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {bookings.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                   No bookings found matching your criteria.
                 </TableCell>
               </TableRow>
             ) : (
               bookings.map((booking) => (
                 <TableRow key={booking.id}>
-                  <TableCell>
-                    <input
-                      type="checkbox"
-                      checked={selectedBookings.includes(booking.id)}
-                      onChange={() => toggleBookingSelection(booking.id)}
-                      className="rounded"
-                    />
-                  </TableCell>
                   <TableCell>
                     <div className="flex flex-col">
                       <span className="font-medium">
@@ -289,27 +208,22 @@ export default function BookingManagementTable({
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col">
-                      <Link 
-                        href={`/admin/listing-management/${booking.listing.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {booking.listing.title}
-                      </Link>
+                      <span className="font-medium">{booking.listing.title}</span>
                       <span className="text-sm text-gray-500">
                         {booking.listing.city}, {booking.listing.state}
                       </span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm">{formatDate(booking.startDate)}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm">{formatDate(booking.endDate)}</span>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm">{formatDate(booking.startDate)}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm">{formatDate(booking.endDate)}</span>
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -319,7 +233,33 @@ export default function BookingManagementTable({
                   </TableCell>
                   <TableCell>
                     <span className="font-medium">
-                      ${booking.monthlyRent?.toLocaleString() || 'N/A'}
+                      ${(() => {
+                        // Get effective monthly rent using proper calculation
+                        // First try stored monthlyRent if valid
+                        if (booking.monthlyRent && booking.monthlyRent !== 77777) {
+                          return (booking.monthlyRent / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        }
+
+                        // Calculate using the proper function
+                        if (booking.trip && booking.listing) {
+                          const calculated = calculateRent({
+                            listing: booking.listing as any, // Will have monthlyPricing
+                            trip: booking.trip
+                          });
+                          if (calculated !== 77777) {
+                            return (calculated / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                          }
+                        }
+
+                        // Last fallback: use largest rent payment
+                        const allPayments = booking.rentPayments || [];
+                        if (allPayments.length > 0) {
+                          const largestPayment = Math.max(...allPayments.map(payment => payment.amount));
+                          return (largestPayment / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        }
+
+                        return 'Not Set';
+                      })()}
                     </span>
                   </TableCell>
                   <TableCell>
@@ -328,64 +268,12 @@ export default function BookingManagementTable({
                     </span>
                   </TableCell>
                   <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreVertical className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link href={`/admin/booking-management/${booking.id}`}>
-                            <Eye className="w-4 h-4 mr-2" />
-                            View Details
-                          </Link>
-                        </DropdownMenuItem>
-                        
-                        {/* Only show edit for actual bookings, not pending ones */}
-                        {!isPendingBooking(booking) && (
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/booking-management/${booking.id}/edit`}>
-                              <Edit className="w-4 h-4 mr-2" />
-                              Edit Booking
-                            </Link>
-                          </DropdownMenuItem>
-                        )}
-                        
-                        <DropdownMenuSeparator />
-                        
-                        {booking.status !== 'cancelled' && (
-                          <>
-                            {/* Cancel action - different behavior for pending vs actual bookings */}
-                            <DropdownMenuItem 
-                              className="text-red-600 focus:text-red-600"
-                              onClick={() => {
-                                if (isPendingBooking(booking)) {
-                                  // For pending bookings, we cancel the match
-                                  router.push(`/admin/match-management/${booking.matchId}#cancel`);
-                                } else {
-                                  router.push(`/admin/booking-management/${booking.id}#cancel`);
-                                }
-                              }}
-                            >
-                              <XCircle className="w-4 h-4 mr-2" />
-                              {isPendingBooking(booking) ? 'Cancel Match' : 'Cancel Booking'}
-                            </DropdownMenuItem>
-                            
-                            {/* Only show revert for actual bookings */}
-                            {!isPendingBooking(booking) && (
-                              <DropdownMenuItem 
-                                className="text-orange-600 focus:text-orange-600"
-                                onClick={() => router.push(`/admin/booking-management/${booking.id}#revert`)}
-                              >
-                                <RotateCcw className="w-4 h-4 mr-2" />
-                                Revert to Match
-                              </DropdownMenuItem>
-                            )}
-                          </>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Button asChild size="sm">
+                      <Link href={`/admin/booking-management/${booking.id}`}>
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Booking
+                      </Link>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))

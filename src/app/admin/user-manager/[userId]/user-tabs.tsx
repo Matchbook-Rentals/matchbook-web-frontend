@@ -445,6 +445,18 @@ export function UserTabs({ userInfo }: UserTabsProps) {
       <div className="min-h-[400px]">
         {renderTabContent()}
       </div>
+
+      {/* Quick Actions for Bookings */}
+      {(activeTab === 'renterBookings' || activeTab === 'hostBookings') && (
+        <div className="border-t pt-4">
+          <Button asChild variant="outline" className="w-full">
+            <Link href={`/admin/booking-management?search=${encodeURIComponent(userInfo.emailAddress)}`}>
+              <Search className="h-4 w-4 mr-2" />
+              View All Bookings for This User
+            </Link>
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

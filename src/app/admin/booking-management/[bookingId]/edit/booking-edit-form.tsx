@@ -15,13 +15,15 @@ import {
   SelectValue 
 } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
-import { 
-  ArrowLeft, 
+import {
+  ArrowLeft,
   Save,
   Calendar,
-  DollarSign
+  DollarSign,
+  Users
 } from 'lucide-react'
 import { updateBookingDetails } from '../../_actions'
+import { calculateRent } from '@/lib/calculate-rent'
 
 interface BookingData {
   id: string;
@@ -38,6 +40,12 @@ interface BookingData {
     city: string | null;
     state: string | null;
   };
+  trip?: {
+    id: string;
+    numAdults: number;
+    numChildren: number;
+    numPets: number;
+  } | null;
 }
 
 interface BookingEditFormProps {
@@ -56,12 +64,44 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
+  // Get effective monthly rent for the form
+  const getEffectiveMonthlyRent = () => {
+    // First try stored monthlyRent if valid
+    if (booking.monthlyRent && booking.monthlyRent !== 77777) {
+      return booking.monthlyRent;
+    }
+
+    // Calculate using the proper function
+    if (booking.trip && (booking as any).listing) {
+      const calculated = calculateRent({
+        listing: (booking as any).listing, // Will have monthlyPricing
+        trip: booking.trip
+      });
+      if (calculated !== 77777) {
+        return calculated;
+      }
+    }
+
+    // Last fallback: use largest rent payment
+    const allPayments = (booking as any).rentPayments || [];
+    if (allPayments.length > 0) {
+      return Math.max(...allPayments.map((payment: any) => payment.amount));
+    }
+
+    return 0;
+  };
+
+  const effectiveMonthlyRent = getEffectiveMonthlyRent();
+
   // Form state
   const [formData, setFormData] = useState({
     startDate: booking.startDate.toISOString().split('T')[0],
     endDate: booking.endDate.toISOString().split('T')[0],
-    monthlyRent: booking.monthlyRent?.toString() || '',
-    status: booking.status
+    monthlyRent: effectiveMonthlyRent ? (effectiveMonthlyRent / 100).toFixed(2) : '',
+    status: booking.status,
+    numAdults: booking.trip?.numAdults?.toString() || '1',
+    numChildren: booking.trip?.numChildren?.toString() || '0',
+    numPets: booking.trip?.numPets?.toString() || '0'
   });
 
   // Track changes
@@ -97,6 +137,18 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
       errors.push('Monthly rent must be greater than 0');
     }
 
+    if (!formData.numAdults || isNaN(Number(formData.numAdults)) || Number(formData.numAdults) < 1) {
+      errors.push('Number of adults must be at least 1');
+    }
+
+    if (isNaN(Number(formData.numChildren)) || Number(formData.numChildren) < 0) {
+      errors.push('Number of children must be 0 or greater');
+    }
+
+    if (isNaN(Number(formData.numPets)) || Number(formData.numPets) < 0) {
+      errors.push('Number of pets must be 0 or greater');
+    }
+
     return errors;
   };
 
@@ -116,22 +168,45 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
     setIsLoading(true);
     try {
       const updates: any = {};
-      
+      const tripUpdates: any = {};
+
       // Check what changed and only update those fields
       if (formData.startDate !== booking.startDate.toISOString().split('T')[0]) {
         updates.startDate = new Date(formData.startDate);
       }
-      
+
       if (formData.endDate !== booking.endDate.toISOString().split('T')[0]) {
         updates.endDate = new Date(formData.endDate);
       }
-      
-      if (Number(formData.monthlyRent) !== booking.monthlyRent) {
-        updates.monthlyRent = Number(formData.monthlyRent);
+
+      // Convert monthly rent from dollars to cents for storage
+      const monthlyRentCents = Math.round(Number(formData.monthlyRent) * 100);
+      if (monthlyRentCents !== booking.monthlyRent) {
+        updates.monthlyRent = monthlyRentCents;
       }
-      
+
       if (formData.status !== booking.status) {
         updates.status = formData.status;
+      }
+
+      // Check trip updates
+      if (booking.trip) {
+        if (Number(formData.numAdults) !== booking.trip.numAdults) {
+          tripUpdates.numAdults = Number(formData.numAdults);
+        }
+
+        if (Number(formData.numChildren) !== booking.trip.numChildren) {
+          tripUpdates.numChildren = Number(formData.numChildren);
+        }
+
+        if (Number(formData.numPets) !== booking.trip.numPets) {
+          tripUpdates.numPets = Number(formData.numPets);
+        }
+      }
+
+      // Add trip updates if there are any
+      if (Object.keys(tripUpdates).length > 0) {
+        updates.tripUpdates = tripUpdates;
       }
 
       if (Object.keys(updates).length === 0) {
@@ -254,6 +329,58 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
                   </div>
                 </div>
 
+                {/* Guest Details Section */}
+                {booking.trip && (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Users className="w-5 h-5" />
+                      <h3 className="text-lg font-medium">Guest Details</h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <Label htmlFor="num-adults">Number of Adults</Label>
+                        <Input
+                          id="num-adults"
+                          type="number"
+                          min="1"
+                          max="20"
+                          placeholder="1"
+                          value={formData.numAdults}
+                          onChange={(e) => handleInputChange('numAdults', e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="num-children">Number of Children</Label>
+                        <Input
+                          id="num-children"
+                          type="number"
+                          min="0"
+                          max="20"
+                          placeholder="0"
+                          value={formData.numChildren}
+                          onChange={(e) => handleInputChange('numChildren', e.target.value)}
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="num-pets">Number of Pets</Label>
+                        <Input
+                          id="num-pets"
+                          type="number"
+                          min="0"
+                          max="10"
+                          placeholder="0"
+                          value={formData.numPets}
+                          onChange={(e) => handleInputChange('numPets', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Status Section */}
                 <div className="space-y-4">
                   <div>
@@ -320,9 +447,25 @@ export default function BookingEditForm({ booking }: BookingEditFormProps) {
               
               <div>
                 <Label className="text-sm font-medium text-muted-foreground">Current Monthly Rent</Label>
-                <p className="text-lg font-semibold">${booking.monthlyRent?.toLocaleString()}</p>
+                <p className="text-lg font-semibold">
+                  ${effectiveMonthlyRent
+                    ? (effectiveMonthlyRent / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    : 'Not Set'
+                  }
+                </p>
               </div>
-              
+
+              {booking.trip && (
+                <div>
+                  <Label className="text-sm font-medium text-muted-foreground">Current Guests</Label>
+                  <p>
+                    {booking.trip.numAdults} adults
+                    {booking.trip.numChildren > 0 && `, ${booking.trip.numChildren} children`}
+                    {booking.trip.numPets > 0 && `, ${booking.trip.numPets} pets`}
+                  </p>
+                </div>
+              )}
+
               <div>
                 <Label className="text-sm font-medium text-muted-foreground">Current Status</Label>
                 <p className="capitalize">{booking.status}</p>

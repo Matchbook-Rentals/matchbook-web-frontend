@@ -3,7 +3,7 @@
 import prisma from '@/lib/prismadb'
 import { checkAdminAccess } from '@/utils/roles'
 import { revalidatePath } from 'next/cache'
-import { Booking, User, Listing, Trip, Match } from '@prisma/client'
+import { Booking, User, Listing, Trip, Match, BookingModification, PaymentModification, RentPayment } from '@prisma/client'
 import { createNotification } from '@/app/actions/notifications'
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -117,6 +117,83 @@ export interface PendingBookingFromMatch {
 }
 
 export type CombinedBookingData = BookingWithDetails | PendingBookingFromMatch;
+
+// Types for modification management
+export interface BookingModificationWithDetails extends BookingModification {
+  booking: {
+    id: string;
+    userId: string;
+    listingId: string;
+    user: {
+      id: string;
+      firstName: string | null;
+      lastName: string | null;
+      email: string | null;
+    };
+    listing: {
+      id: string;
+      title: string;
+      user: {
+        id: string;
+        firstName: string | null;
+        lastName: string | null;
+        email: string | null;
+      };
+    };
+  };
+  requestor: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+  };
+  recipient: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+  };
+}
+
+export interface PaymentModificationWithDetails extends PaymentModification {
+  rentPayment: {
+    id: string;
+    bookingId: string;
+    booking: {
+      id: string;
+      userId: string;
+      listingId: string;
+      user: {
+        id: string;
+        firstName: string | null;
+        lastName: string | null;
+        email: string | null;
+      };
+      listing: {
+        id: string;
+        title: string;
+        user: {
+          id: string;
+          firstName: string | null;
+          lastName: string | null;
+          email: string | null;
+        };
+      };
+    };
+  };
+  requestor: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+  };
+  recipient: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+  };
+}
 
 export async function getAllBookings({ 
   page = 1, 
@@ -245,6 +322,8 @@ export async function getAllBookings({
             city: true,
             state: true,
             postalCode: true,
+            monthlyPricing: true,
+            utilitiesIncluded: true,
             user: {
               select: {
                 id: true,
@@ -308,6 +387,8 @@ export async function getAllBookings({
             city: true,
             state: true,
             postalCode: true,
+            monthlyPricing: true,
+            utilitiesIncluded: true,
             user: {
               select: {
                 id: true,
@@ -409,6 +490,8 @@ export async function getBookingDetails(bookingId: string) {
           roomCount: true,
           bathroomCount: true,
           category: true,
+          monthlyPricing: true,
+          utilitiesIncluded: true,
           user: {
             select: {
               id: true,
@@ -496,6 +579,8 @@ export async function getBookingDetails(bookingId: string) {
           roomCount: true,
           bathroomCount: true,
           category: true,
+          monthlyPricing: true,
+          utilitiesIncluded: true,
           user: {
             select: {
               id: true,
@@ -637,6 +722,11 @@ export async function updateBookingDetails(bookingId: string, updates: {
   endDate?: Date;
   monthlyRent?: number;
   status?: string;
+  tripUpdates?: {
+    numAdults?: number;
+    numChildren?: number;
+    numPets?: number;
+  };
 }) {
   if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
@@ -646,12 +736,13 @@ export async function updateBookingDetails(bookingId: string, updates: {
     where: { id: bookingId },
     include: {
       match: true,
+      trip: true,
       user: { select: { firstName: true, lastName: true } },
-      listing: { 
-        select: { 
+      listing: {
+        select: {
           title: true,
           user: { select: { id: true } }
-        } 
+        }
       }
     }
   });
@@ -660,14 +751,25 @@ export async function updateBookingDetails(bookingId: string, updates: {
     throw new Error('Booking not found');
   }
 
+  // Separate trip updates from booking updates
+  const { tripUpdates, ...bookingUpdates } = updates;
+
   // Update booking
   const updatedBooking = await prisma.booking.update({
     where: { id: bookingId },
     data: {
-      ...updates,
+      ...bookingUpdates,
       updatedAt: new Date()
     }
   });
+
+  // Update trip if there are trip updates and the booking has a trip
+  if (tripUpdates && booking.trip) {
+    await prisma.trip.update({
+      where: { id: booking.trip.id },
+      data: tripUpdates
+    });
+  }
 
   // If monthly rent changed, update the match as well
   if (updates.monthlyRent && booking.match) {
@@ -681,8 +783,11 @@ export async function updateBookingDetails(bookingId: string, updates: {
   const changesList = [];
   if (updates.startDate) changesList.push(`start date to ${updates.startDate.toLocaleDateString()}`);
   if (updates.endDate) changesList.push(`end date to ${updates.endDate.toLocaleDateString()}`);
-  if (updates.monthlyRent) changesList.push(`monthly rent to $${updates.monthlyRent}`);
+  if (updates.monthlyRent) changesList.push(`monthly rent to $${(updates.monthlyRent / 100).toFixed(2)}`);
   if (updates.status) changesList.push(`status to ${updates.status}`);
+  if (tripUpdates?.numAdults) changesList.push(`number of adults to ${tripUpdates.numAdults}`);
+  if (tripUpdates?.numChildren) changesList.push(`number of children to ${tripUpdates.numChildren}`);
+  if (tripUpdates?.numPets) changesList.push(`number of pets to ${tripUpdates.numPets}`);
 
   if (changesList.length > 0) {
     await createNotification({
@@ -835,4 +940,421 @@ export async function bulkCancelBookings(bookingIds: string[], reason: string) {
   revalidatePath('/admin/booking-management');
 
   return results;
+}
+
+// ===== MODIFICATION MANAGEMENT ACTIONS =====
+
+export async function getAllBookingModifications({
+  page = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  search = '',
+  status = 'all'
+}: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: string;
+} = {}) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const skip = (page - 1) * pageSize;
+
+  // Build search conditions
+  const searchConditions = search ? {
+    OR: [
+      // Search by guest name
+      {
+        booking: {
+          user: {
+            OR: [
+              { email: { contains: search } },
+              { firstName: { contains: search } },
+              { lastName: { contains: search } }
+            ]
+          }
+        }
+      },
+      // Search by host name
+      {
+        booking: {
+          listing: {
+            user: {
+              OR: [
+                { email: { contains: search } },
+                { firstName: { contains: search } },
+                { lastName: { contains: search } }
+              ]
+            }
+          }
+        }
+      },
+      // Search by listing title
+      { booking: { listing: { title: { contains: search } } } },
+    ]
+  } : {};
+
+  // Status filter
+  const statusConditions = status !== 'all' ? { status } : {};
+
+  const [modifications, totalCount] = await Promise.all([
+    prisma.bookingModification.findMany({
+      where: {
+        ...searchConditions,
+        ...statusConditions
+      },
+      orderBy: { requestedAt: 'desc' },
+      skip,
+      take: pageSize,
+      include: {
+        booking: {
+          select: {
+            id: true,
+            userId: true,
+            listingId: true,
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+              }
+            },
+            listing: {
+              select: {
+                id: true,
+                title: true,
+                user: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        requestor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        recipient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    }),
+    prisma.bookingModification.count({
+      where: {
+        ...searchConditions,
+        ...statusConditions
+      }
+    })
+  ]);
+
+  return {
+    modifications: modifications as BookingModificationWithDetails[],
+    totalCount
+  };
+}
+
+export async function getAllPaymentModifications({
+  page = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  search = '',
+  status = 'all'
+}: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: string;
+} = {}) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const skip = (page - 1) * pageSize;
+
+  // Build search conditions
+  const searchConditions = search ? {
+    OR: [
+      // Search by guest name
+      {
+        rentPayment: {
+          booking: {
+            user: {
+              OR: [
+                { email: { contains: search } },
+                { firstName: { contains: search } },
+                { lastName: { contains: search } }
+              ]
+            }
+          }
+        }
+      },
+      // Search by host name
+      {
+        rentPayment: {
+          booking: {
+            listing: {
+              user: {
+                OR: [
+                  { email: { contains: search } },
+                  { firstName: { contains: search } },
+                  { lastName: { contains: search } }
+                ]
+              }
+            }
+          }
+        }
+      },
+      // Search by listing title
+      { rentPayment: { booking: { listing: { title: { contains: search } } } } },
+    ]
+  } : {};
+
+  // Status filter
+  const statusConditions = status !== 'all' ? { status } : {};
+
+  const [modifications, totalCount] = await Promise.all([
+    prisma.paymentModification.findMany({
+      where: {
+        ...searchConditions,
+        ...statusConditions
+      },
+      orderBy: { requestedAt: 'desc' },
+      skip,
+      take: pageSize,
+      include: {
+        rentPayment: {
+          select: {
+            id: true,
+            bookingId: true,
+            booking: {
+              select: {
+                id: true,
+                userId: true,
+                listingId: true,
+                user: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true
+                  }
+                },
+                listing: {
+                  select: {
+                    id: true,
+                    title: true,
+                    user: {
+                      select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        email: true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        requestor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        recipient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    }),
+    prisma.paymentModification.count({
+      where: {
+        ...searchConditions,
+        ...statusConditions
+      }
+    })
+  ]);
+
+  return {
+    modifications: modifications as PaymentModificationWithDetails[],
+    totalCount
+  };
+}
+
+export async function adminApproveBookingModification(modificationId: string, adminReason?: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const modification = await prisma.bookingModification.findUnique({
+    where: { id: modificationId },
+    include: {
+      booking: {
+        include: {
+          user: { select: { id: true, firstName: true, lastName: true } },
+          listing: {
+            select: {
+              id: true,
+              title: true,
+              user: { select: { id: true } }
+            }
+          }
+        }
+      },
+      requestor: { select: { id: true, firstName: true, lastName: true } },
+      recipient: { select: { id: true, firstName: true, lastName: true } }
+    }
+  });
+
+  if (!modification) {
+    throw new Error('Modification not found');
+  }
+
+  if (modification.status !== 'pending') {
+    throw new Error('Modification is not pending');
+  }
+
+  const now = new Date();
+
+  // Update the modification as approved
+  const updatedModification = await prisma.bookingModification.update({
+    where: { id: modificationId },
+    data: {
+      status: 'approved',
+      approvedAt: now,
+      updatedAt: now
+    }
+  });
+
+  // Update the actual booking with new dates
+  await prisma.booking.update({
+    where: { id: modification.bookingId },
+    data: {
+      startDate: modification.newStartDate,
+      endDate: modification.newEndDate,
+      updatedAt: now
+    }
+  });
+
+  // Create notifications
+  const reasonText = adminReason ? ` Reason: ${adminReason}` : '';
+  await Promise.all([
+    createNotification({
+      actionType: 'booking_modification_approved',
+      actionId: modification.bookingId,
+      content: `Your booking modification for ${modification.booking.listing.title} has been approved by an administrator.${reasonText}`,
+      url: `/app/renter/bookings/${modification.bookingId}`,
+      unread: true,
+      userId: modification.requestor.id,
+    }),
+    createNotification({
+      actionType: 'booking_modification_approved',
+      actionId: modification.bookingId,
+      content: `The booking modification for ${modification.booking.listing.title} has been approved by an administrator.${reasonText}`,
+      url: `/app/host-dashboard/${modification.booking.listing.id}?tab=bookings`,
+      unread: true,
+      userId: modification.recipient.id,
+    })
+  ]);
+
+  revalidatePath('/admin/booking-management');
+  return updatedModification;
+}
+
+// ===== BOOKING-SPECIFIC MODIFICATION ACTIONS =====
+
+export async function getBookingModificationsForBooking(bookingId: string) {
+  if (!(await checkAdminAccess())) {
+    throw new Error('Unauthorized')
+  }
+
+  const [bookingModifications, paymentModifications] = await Promise.all([
+    // Get booking date modifications for this booking
+    prisma.bookingModification.findMany({
+      where: { bookingId },
+      orderBy: { requestedAt: 'desc' },
+      include: {
+        requestor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        recipient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    }),
+
+    // Get payment modifications for rent payments of this booking
+    prisma.paymentModification.findMany({
+      where: {
+        rentPayment: {
+          bookingId
+        }
+      },
+      orderBy: { requestedAt: 'desc' },
+      include: {
+        rentPayment: {
+          select: {
+            id: true,
+            amount: true,
+            dueDate: true,
+            isPaid: true
+          }
+        },
+        requestor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        recipient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    })
+  ]);
+
+  return {
+    bookingModifications,
+    paymentModifications
+  };
 }
