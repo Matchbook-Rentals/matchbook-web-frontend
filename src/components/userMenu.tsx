@@ -157,7 +157,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     // Renter side menu items - temporarily admin-only during MX period
     { id: 'home', label: 'Home', href: '/', section: 1 },
     { id: 'searches', label: 'Searches', href: '/app/rent/searches', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
-    { id: 'application', label: 'Application', href: '/app/rent/application', requiresAdmin: true, section: 1 }, // TODO: Restore requiresAdmin + requiresPreview after MX
+    { id: 'application', label: 'Applications', href: '/app/rent/applications', requiresAdmin: true, section: 1 }, // TODO: Restore requiresAdmin + requiresPreview after MX
     { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', requiresAdmin: true, section: 2 }, // TODO: Restore requiresBeta after MX
     {

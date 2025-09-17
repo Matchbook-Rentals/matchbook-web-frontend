@@ -7,6 +7,7 @@ import { HousingRequest, Notification } from '@prisma/client'
 import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
 import { calculateRent } from '@/lib/calculate-rent'
+import { findConversationBetweenUsers, createListingConversation } from './conversations'
 
 type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -281,6 +282,188 @@ export async function optimisticRemoveApplyDb(tripId: string, listingId: string)
     return { success: false };
   }
 }
+
+// Get housing request statistics for the current user
+export async function getUserHousingRequestStats() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    const totalRequests = await getTotalUserHousingRequests(userId);
+    const openRequests = await getOpenUserHousingRequests(userId);
+
+    return {
+      open: openRequests,
+      total: totalRequests
+    };
+  } catch (error) {
+    console.error('Error fetching user housing request stats:', error);
+    throw new Error('Failed to fetch housing request stats');
+  }
+}
+
+const getTotalUserHousingRequests = async (userId: string) => {
+  return await prismadb.housingRequest.count({
+    where: {
+      trip: {
+        userId: userId
+      }
+    }
+  });
+};
+
+const getOpenUserHousingRequests = async (userId: string) => {
+  const housingRequestsWithoutMatches = await prismadb.housingRequest.findMany({
+    where: {
+      trip: {
+        userId: userId
+      }
+    },
+    include: {
+      trip: true,
+      listing: true
+    }
+  });
+
+  const openRequestsCount = await countRequestsWithoutMatches(housingRequestsWithoutMatches);
+  return openRequestsCount;
+};
+
+const countRequestsWithoutMatches = async (housingRequests: any[]) => {
+  let openCount = 0;
+  
+  for (const request of housingRequests) {
+    const hasMatch = await checkIfRequestHasMatch(request.tripId, request.listingId);
+    if (!hasMatch) {
+      openCount++;
+    }
+  }
+  
+  return openCount;
+};
+
+const checkIfRequestHasMatch = async (tripId: string, listingId: string) => {
+  const match = await prismadb.match.findFirst({
+    where: {
+      tripId: tripId,
+      listingId: listingId
+    }
+  });
+  
+  return !!match;
+};
+
+// Get all housing requests for the current user (renter perspective)
+export async function getUserHousingRequests() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    const housingRequests = await prismadb.housingRequest.findMany({
+      where: {
+        trip: {
+          userId: userId
+        }
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        listing: {
+          include: {
+            listingImages: true,
+            monthlyPricing: true,
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+              }
+            }
+          }
+        },
+        trip: {
+          include: {
+            bookings: true // Include bookings to check if trip has any bookings
+          }
+        },
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+            imageUrl: true
+          }
+        }
+      }
+    });
+
+    // Add match and booking information to each housing request
+    const requestsWithMatchAndBookingInfo = await Promise.all(
+      housingRequests.map(async (request) => {
+        const hasMatch = await checkIfRequestHasMatch(request.tripId, request.listingId);
+        const match = hasMatch ? await prismadb.match.findFirst({
+          where: {
+            tripId: request.tripId,
+            listingId: request.listingId
+          },
+          include: {
+            booking: true
+          }
+        }) : null;
+
+        // Check if the trip has any bookings (more direct approach)
+        const tripHasBooking = checkIfTripHasBooking(request.trip);
+
+        return {
+          ...request,
+          hasMatch,
+          match,
+          hasBooking: tripHasBooking,
+          tripBookings: request.trip.bookings,
+          // Get the first booking ID for direct navigation
+          bookingId: tripHasBooking ? request.trip.bookings[0].id : null
+        };
+      })
+    );
+
+    return requestsWithMatchAndBookingInfo;
+  } catch (error) {
+    console.error('Error fetching user housing requests:', error);
+    throw new Error('Failed to fetch housing requests');
+  }
+};
+
+// Check if a trip has any associated bookings
+const checkIfTripHasBooking = (trip: any) => {
+  return trip.bookings && trip.bookings.length > 0;
+};
+
+// Get or create conversation between current user and listing host
+export async function getOrCreateListingConversation(listingId: string, hostUserId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    // First try to find existing conversation
+    const existing = await findConversationBetweenUsers(listingId, hostUserId);
+    if (existing.conversationId) {
+      return { success: true, conversationId: existing.conversationId };
+    }
+
+    // If no conversation exists, create one
+    const result = await createListingConversation(listingId, hostUserId);
+    return result;
+  } catch (error) {
+    console.error('Error getting or creating listing conversation:', error);
+    return { success: false, error: 'Failed to create conversation' };
+  }
+};
 
 // Get all housing requests for the current host's listings
 export async function getHostHousingRequests() {
