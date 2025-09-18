@@ -6,7 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
-import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell } from 'lucide-react'
+import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell, Star } from 'lucide-react'
 import Link from 'next/link'
 
 export default function TestSuitesPage() {
@@ -114,6 +114,13 @@ export default function TestSuitesPage() {
       description: 'Send test notifications to verify email templates and delivery',
       icon: <Bell className="h-5 w-5" />,
       path: '/admin/test/notifications'
+    },
+    {
+      id: 'reviews',
+      name: 'Reviews Testing',
+      description: 'Create test scenarios to test review functionality for hosts and renters',
+      icon: <Star className="h-5 w-5" />,
+      path: '/admin/test/reviews'
     }
   ]
 
