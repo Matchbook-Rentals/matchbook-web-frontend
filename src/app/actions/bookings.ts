@@ -292,7 +292,8 @@ export async function getUserBookings() {
       listing: {
         select: {
           title: true,
-          imageSrc: true
+          imageSrc: true,
+          userId: true
         }
       },
       trip: {
