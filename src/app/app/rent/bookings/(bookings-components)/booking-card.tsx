@@ -12,6 +12,7 @@ import { useUser } from '@clerk/nextjs';
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
 import BrandModal from '@/components/BrandModal';
 import BookingModificationsView from '@/components/BookingModificationsView';
+import { getOrCreateListingConversation } from '@/app/actions/housing-requests';
 
 // Extended booking type with included relations
 type BookingWithRelations = Booking & {
@@ -191,6 +192,27 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
     console.log('===================================');
   };
 
+  // Handle messaging the host
+  const handleMessageHost = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!booking.listing?.userId) return;
+
+    try {
+      const result = await getOrCreateListingConversation(
+        booking.listingId,
+        booking.listing.userId
+      );
+
+      if (result.success && result.conversationId) {
+        router.push(`/app/rent/messages?convo=${result.conversationId}`);
+      } else {
+        console.error('Failed to create conversation:', result.error);
+      }
+    } catch (error) {
+      console.error('Error messaging host:', error);
+    }
+  };
+
   // Get listing details
   const listingTitle = booking.listing?.title || 'Unnamed Property';
   const listingAddress = booking.listing?.address || 'Address not available';
@@ -327,12 +349,12 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                 </div>
               </BrandModal>
             )}
-            <BrandButton 
+            <BrandButton
               variant="default"
-              onClick={() => router.push(`/app/rent/bookings/${booking.id}/payment`)}
+              onClick={handleMessageHost}
               className="w-full"
             >
-              Payment
+              Message Host
             </BrandButton>
           </div>
         </div>
@@ -477,12 +499,12 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                   </BrandModal>
                 )}
 
-                <BrandButton 
+                <BrandButton
                   variant="default"
-                  onClick={() => router.push(`/app/rent/bookings/${booking.id}/payment`)}
+                  onClick={handleMessageHost}
                   className="w-full md:w-auto whitespace-nowrap"
                 >
-                  Payment
+                  Message Host
                 </BrandButton>
               </div>
             </div>
