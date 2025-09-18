@@ -34,7 +34,7 @@ export default async function BookingManagementPage({ searchParams }: BookingMan
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Booking Management ({totalCount})</h1>
         <p className="text-muted-foreground mt-2">
-          Manage all bookings across the platform. Click "View Booking" to see detailed information, payment schedules, and modification history.
+          Manage all bookings across the platform. Click &quot;View Booking&quot; to see detailed information, payment schedules, and modification history.
         </p>
       </div>
 

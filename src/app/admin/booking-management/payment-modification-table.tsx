@@ -488,7 +488,7 @@ export default function PaymentModificationTable({
                 </p>
                 {selectedModification.reason && (
                   <p className="text-sm mt-2">
-                    <strong>Requestor's Reason:</strong> {selectedModification.reason}
+                    <strong>Requestor&apos;s Reason:</strong> {selectedModification.reason}
                   </p>
                 )}
               </div>

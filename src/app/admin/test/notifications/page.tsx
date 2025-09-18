@@ -609,7 +609,7 @@ export default function NotificationTestPage() {
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Notification Testing Suite</h1>
         <p className="text-muted-foreground">
-          Click "Send to Admin" to send test notifications to your email address: {user?.primaryEmailAddress?.emailAddress}
+          Click &quot;Send to Admin&quot; to send test notifications to your email address: {user?.primaryEmailAddress?.emailAddress}
         </p>
       </div>
 

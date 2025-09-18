@@ -232,7 +232,7 @@ export default function EditBookingTimelineDialog({
             <div className="text-sm text-muted-foreground bg-gray-50 p-3 rounded">
               <div className="space-y-1">
                 <div>Current: {formatDate(currentStartDate)} to {formatDate(currentEndDate)}</div>
-                <div>Status: "{currentStatus}" (selected: "{formData.status}")</div>
+                <div>Status: &quot;{currentStatus}&quot; (selected: &quot;{formData.status}&quot;)</div>
               </div>
             </div>
           </div>
