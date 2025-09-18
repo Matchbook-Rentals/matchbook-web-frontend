@@ -383,17 +383,27 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
 
   // Filter applications based on selected filter and search term
   const filteredApplications = useMemo(() => {
+    console.log('🔍 FILTERING DEBUG - Starting filter process');
+    console.log('🔍 - applications.length:', applications.length);
+    console.log('🔍 - selectedFilter:', selectedFilter);
+    console.log('🔍 - searchTerm:', searchTerm);
+    
     let filtered = applications;
     
     // Apply status filter (exclude "all" from filtering)
     if (selectedFilter !== 'all') {
+      console.log('🔍 - Applying status filter for:', selectedFilter);
+      const beforeFilter = filtered.length;
       filtered = filtered.filter(app => {
         return app.status.toLowerCase() === selectedFilter;
       });
+      console.log('🔍 - After status filter:', beforeFilter, '→', filtered.length);
     }
     
     // Apply search filter
     if (searchTerm.trim()) {
+      console.log('🔍 - Applying search filter for:', searchTerm);
+      const beforeSearch = filtered.length;
       const searchLower = searchTerm.toLowerCase();
       filtered = filtered.filter(app => {
         // Search in applicant name
@@ -413,7 +423,11 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
         
         return false;
       });
+      console.log('🔍 - After search filter:', beforeSearch, '→', filtered.length);
     }
+    
+    console.log('🔍 FILTERING DEBUG - Final filtered.length:', filtered.length);
+    console.log('🔍 FILTERING DEBUG - Will pass children to TabLayout:', filtered.length > 0);
     
     return filtered;
   }, [applications, selectedFilter, searchTerm]);
@@ -423,7 +437,10 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
     setSelectedFilter(filter);
   };
 
-  console.log('FA', filteredApplications)
+  console.log('🎯 RENDER DEBUG - About to render TabLayout');
+  console.log('🎯 - requestsToUse.length:', requestsToUse.length);
+  console.log('🎯 - filteredApplications.length:', filteredApplications.length);
+  console.log('🎯 - Will render children:', filteredApplications.length > 0);
 
   return (
     <TabLayout
@@ -436,16 +453,34 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
       onSearchChange={setSearchTerm}
       onFilterChange={handleFilterChange}
       noMargin={true}
-      emptyStateMessage={requestsToUse.length === 0 ? "No applications yet for your listings." : "No applications match the selected filters."}
+      emptyStateMessage={
+        (() => {
+          // If there's no raw data at all
+          if (requestsToUse.length === 0) {
+            console.log('📝 Empty state: No applications yet');
+            return "No applications yet for your listings.";
+          }
+          // If there's data but filtered results are empty
+          if (filteredApplications.length === 0) {
+            console.log('📝 Empty state: No applications match filters');
+            return "No applications match the selected filters.";
+          }
+          // This shouldn't happen since we only render this when no children
+          console.log('📝 Empty state: Fallback message');
+          return "No applications found.";
+        })()
+      }
       showMockDataToggle={true}
       useMockData={useMockData}
       onMockDataToggle={setUseMockData}
     >
-      <HostApplicationCards
-        applications={filteredApplications}
-        onViewApplicationDetails={handleViewApplicationDetails}
-        loadingApplicationId={loadingApplicationId}
-      />
+      {filteredApplications.length > 0 ? (
+        <HostApplicationCards
+          applications={filteredApplications}
+          onViewApplicationDetails={handleViewApplicationDetails}
+          loadingApplicationId={loadingApplicationId}
+        />
+      ) : null}
     </TabLayout>
   );
 }

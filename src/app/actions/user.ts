@@ -292,6 +292,85 @@ export async function agreeToTerms(formData: FormData) {
   }
 }
 
+export async function agreeToHostTerms(formData: FormData) {
+  try {
+    console.log(`[AGREE TO HOST TERMS] ========== STARTING AGREEMENT PROCESS ==========`);
+    console.log(`[AGREE TO HOST TERMS] FormData contents:`, Object.fromEntries(formData.entries()));
+    
+    const { userId } = auth();
+    const clerkUser = await currentUser();
+    
+    console.log(`[AGREE TO HOST TERMS] User ID: ${userId}`);
+    console.log(`[AGREE TO HOST TERMS] Clerk User exists: ${!!clerkUser}`);
+
+    if (!userId || !clerkUser) {
+      console.error(`[AGREE TO HOST TERMS] Authentication failed - userId: ${userId}, clerkUser: ${!!clerkUser}`);
+      throw new Error("Not authenticated");
+    }
+
+    console.log(`[AGREE TO HOST TERMS] Step 1: Checking if user exists in database...`);
+    // Check if user exists in our database
+    const dbUser = await prismadb.user.findUnique({
+      where: { id: userId }
+    });
+    
+    console.log(`[AGREE TO HOST TERMS] DB user exists: ${!!dbUser}`);
+
+    // If user doesn't exist, create them first
+    if (!dbUser) {
+      console.log(`[AGREE TO HOST TERMS] Step 2: Creating new user in database...`);
+      await createUser();
+      console.log(`[AGREE TO HOST TERMS] New user created successfully`);
+    }
+
+    console.log(`[AGREE TO HOST TERMS] Step 3: Updating database with host terms agreement...`);
+    // Update the user's agreedToHostTerms field with the current timestamp
+    const updateResult = await prismadb.user.update({
+      where: { id: userId },
+      data: { agreedToHostTerms: new Date() }
+    });
+    
+    console.log(`[AGREE TO HOST TERMS] Database updated successfully:`, updateResult.agreedToHostTerms);
+
+    console.log(`[AGREE TO HOST TERMS] Step 4: Updating Clerk metadata...`);
+    // Update user metadata to reflect host terms agreement in session
+    const metadataUpdate = await clerkClient.users.updateUserMetadata(userId, {
+      privateMetadata: {
+        ...clerkUser.privateMetadata,
+        agreedToHostTerms: true,
+      },
+      publicMetadata: {
+        ...clerkUser.publicMetadata,
+        agreedToHostTerms: true,
+      },
+    });
+    
+    console.log(`[AGREE TO HOST TERMS] Clerk metadata updated successfully`);
+
+    console.log(`[AGREE TO HOST TERMS] Step 5: Preparing redirect...`);
+    // Get redirect URL from form data, default to host overview page
+    const redirectUrl = formData.get("redirect_url") as string || "/app/host/dashboard/overview";
+    console.log(`[AGREE TO HOST TERMS] Redirect URL from form: ${redirectUrl}`);
+    
+    // Decode the URL in case it was URL encoded
+    const decodedRedirectUrl = decodeURIComponent(redirectUrl);
+    console.log(`[AGREE TO HOST TERMS] Decoded redirect URL: ${decodedRedirectUrl}`);
+    
+    console.log(`[AGREE TO HOST TERMS] Step 6: Returning redirect URL for client...`);
+    // Return the redirect URL - middleware will check database directly
+    console.log(`[AGREE TO HOST TERMS] ========== AGREEMENT PROCESS COMPLETE ==========`);
+    return { success: true, redirectUrl: decodedRedirectUrl };
+    
+  } catch (error) {
+    console.error(`[AGREE TO HOST TERMS] ========== ERROR IN AGREEMENT PROCESS ==========`);
+    console.error(`[AGREE TO HOST TERMS] Error type:`, error?.constructor?.name);
+    console.error(`[AGREE TO HOST TERMS] Error message:`, error?.message);
+    console.error(`[AGREE TO HOST TERMS] Full error:`, error);
+    console.error(`[AGREE TO HOST TERMS] Stack trace:`, error?.stack);
+    throw error; // Re-throw so the client can handle it
+  }
+}
+
 export async function getAgreedToTerms() {
   const { userId } = auth();
   

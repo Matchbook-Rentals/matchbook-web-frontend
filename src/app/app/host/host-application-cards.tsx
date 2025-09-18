@@ -48,6 +48,14 @@ export default function HostApplicationCards({
   const router = useRouter();
   const isMobile = useIsMobile();
 
+  console.log('📋 HostApplicationCards - Received applications:', applications.length);
+
+  // Return null if no applications to ensure TabLayout shows empty state
+  if (!applications || applications.length === 0) {
+    console.log('📋 HostApplicationCards - No applications, returning null');
+    return null;
+  }
+
   return (
     <>
       {applications.map((app) => {

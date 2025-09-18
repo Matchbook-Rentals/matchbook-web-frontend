@@ -149,6 +149,10 @@ export default function TabLayout({
   };
 
   const hasContent = React.Children.count(children) > 0;
+  
+  console.log('🏗️ TabLayout - hasContent:', hasContent);
+  console.log('🏗️ TabLayout - children count:', React.Children.count(children));
+  console.log('🏗️ TabLayout - emptyStateMessage:', emptyStateMessage);
 
   // Unified layout for both mobile and desktop
   return (
