@@ -33,6 +33,11 @@ enum ApprovalStatus {
   pendingReview
 }
 
+enum ReviewType {
+  HOST_TO_RENTER  // Host reviews renter
+  RENTER_TO_LISTING // Renter reviews listing (reflects on host in aggregate)
+}
+
 model User {
   id               String    @id @default(uuid())
   stripeAccountId  String?
@@ -89,6 +94,8 @@ model User {
   bookingModificationRequests BookingModification[] @relation("BookingModificationRequestor")
   bookingModificationReceipts BookingModification[] @relation("BookingModificationRecipient")
   cancelledPayments           RentPayment[]         @relation("PaymentCancelledBy")
+  reviewsWritten              Review[]              @relation("ReviewsWritten")
+  reviewsReceived             Review[]              @relation("ReviewsReceived")
 
   // Hospitable integration
   hospitableAccessToken   String?   @db.VarChar(1500)
@@ -339,6 +346,7 @@ model Listing {
   monthlyPricing     ListingMonthlyPricing[]
   locationChanges    ListingLocationChange[]
   pdfTemplates       PdfTemplate[] // Listing-specific PDF templates
+  reviews            Review[]
   @@index([state])
 }
 
@@ -436,6 +444,7 @@ model Booking {
   trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: Cascade)
   paymentTransactions PaymentTransaction[]
   bookingModifications BookingModification[]
+  reviews             Review[]
 
   @@index([tripId])
 }
@@ -1559,6 +1568,45 @@ model TestResult {
   @@index([testCaseId])
   @@index([runId])
   @@index([executedAt])
+}
+
+model Review {
+  id              String     @id @default(uuid())
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  // Review details
+  rating          Int        // 1-5 stars
+  comment         String?    @db.Text
+  reviewType      ReviewType
+  
+  // Associations
+  bookingId       String     // Each booking can have multiple reviews (one per type)
+  booking         Booking    @relation(fields: [bookingId], references: [id])
+  
+  // Reviewer and reviewed entities
+  reviewerId      String     // User who wrote the review
+  reviewer        User       @relation("ReviewsWritten", fields: [reviewerId], references: [id])
+  
+  // Polymorphic association based on reviewType
+  reviewedUserId  String?    // When reviewing a renter (HOST_TO_RENTER)
+  reviewedUser    User?      @relation("ReviewsReceived", fields: [reviewedUserId], references: [id])
+  
+  reviewedListingId String?  // When reviewing a listing (RENTER_TO_LISTING)
+  reviewedListing   Listing? @relation(fields: [reviewedListingId], references: [id])
+  
+  // Visibility control
+  isPublished     Boolean    @default(false) // Admin approval before publishing
+  publishedAt     DateTime?
+  
+  // Indexes
+  @@index([bookingId])
+  @@index([reviewerId])
+  @@index([reviewedUserId])
+  @@index([reviewedListingId])
+  @@index([reviewType])
+  @@index([isPublished])
+  @@unique([bookingId, reviewType]) // One review per type per booking
 }
 
 model ListingLocationChange {
