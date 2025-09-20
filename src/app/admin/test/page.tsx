@@ -6,7 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
-import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell, Star } from 'lucide-react'
+import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell, Star, Shield } from 'lucide-react'
 import Link from 'next/link'
 
 export default function TestSuitesPage() {
@@ -121,6 +121,13 @@ export default function TestSuitesPage() {
       description: 'Create test scenarios to test review functionality for hosts and renters',
       icon: <Star className="h-5 w-5" />,
       path: '/admin/test/reviews'
+    },
+    {
+      id: 'authenticate-integration',
+      name: 'Authenticate Integration',
+      description: 'Manage Medallion identity verification integration and reset test data',
+      icon: <Shield className="h-5 w-5" />,
+      path: '/admin/authenticate-integration'
     }
   ]
 

@@ -63,6 +63,13 @@ model User {
   agreedToTerms    DateTime? // Timestamp of when user last agreed to terms
   agreedToHostTerms DateTime? // Timestamp of when user agreed to host-specific terms
 
+  // Identity verification (Medallion/authenticate.com)
+  medallionIdentityVerified    Boolean?  @default(false) // Whether identity verification is complete
+  medallionUserId              String?   // Medallion user ID from verification
+  medallionVerificationStatus  String?   // "pending", "approved", "rejected", "expired"
+  medallionVerificationStartedAt DateTime? // When verification process started
+  medallionVerificationCompletedAt DateTime? // When verification was completed
+
   // Relationships trips          Trip[]
   accounts           Account[]
   listings           Listing[]

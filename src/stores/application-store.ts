@@ -287,7 +287,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     }
     set({ residentialHistory: [...currentHistory, newEntry] });
   },
-  setIncomes: (incomes) => set({ incomes }),
+  setIncomes: (incomes) => set({ incomes: incomes.length === 0 ? [{ source: '', monthlyAmount: '', imageUrl: '' }] : incomes }),
   setAnswers: (answers) => set({ answers }),
 
   resetStore: () => set(initialState),

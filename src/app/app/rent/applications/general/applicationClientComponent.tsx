@@ -76,6 +76,13 @@ export default function ApplicationClientComponent({
   }, [windowSize?.width]);
 
   const validateForm = () => {
+    console.log('=== VALIDATION START ===');
+    console.log('Personal Info:', personalInfo);
+    console.log('IDs:', ids);
+    console.log('Incomes:', incomes);
+    console.log('Residential History:', residentialHistory);
+    console.log('Answers:', answers);
+
     // Create a modified personalInfo object that considers noMiddleName checkbox
     const personalInfoForValidation = {
       ...personalInfo,
@@ -83,11 +90,20 @@ export default function ApplicationClientComponent({
       middleName: personalInfo.noMiddleName ? 'N/A' : personalInfo.middleName
     };
 
+    console.log('Personal Info for Validation:', personalInfoForValidation);
+
     const personalInfoError = validatePersonalInfo(personalInfoForValidation);
     const identificationError = validateIdentification(ids);
     const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
     const incomeErrors = validateIncome(incomes);
     const questionnaireErrors = validateQuestionnaire(answers);
+
+    console.log('=== VALIDATION ERRORS ===');
+    console.log('Personal Info Errors:', personalInfoError);
+    console.log('Identification Errors:', identificationError);
+    console.log('Residential History Errors:', residentialHistoryErrors);
+    console.log('Income Errors:', incomeErrors);
+    console.log('Questionnaire Errors:', questionnaireErrors);
 
     setErrors('basicInfo', {
       personalInfo: personalInfoError,
@@ -97,36 +113,252 @@ export default function ApplicationClientComponent({
     setErrors('income', incomeErrors);
     setErrors('questionnaire', questionnaireErrors);
 
-    return (
+    const isValid = (
       Object.keys(personalInfoError).length === 0 &&
       Object.keys(identificationError).length === 0 &&
       Object.keys(residentialHistoryErrors).length === 0 &&
       Object.keys(incomeErrors).length === 0 &&
       Object.keys(questionnaireErrors).length === 0
     );
+
+    console.log('=== VALIDATION RESULT ===');
+    console.log('Personal Info Valid:', Object.keys(personalInfoError).length === 0);
+    console.log('Identification Valid:', Object.keys(identificationError).length === 0);
+    console.log('Residential History Valid:', Object.keys(residentialHistoryErrors).length === 0);
+    console.log('Income Valid:', Object.keys(incomeErrors).length === 0);
+    console.log('Questionnaire Valid:', Object.keys(questionnaireErrors).length === 0);
+    console.log('Overall Is Valid:', isValid);
+    console.log('=========================');
+
+    return isValid;
+  };
+
+  const getFieldDisplayNames = () => {
+    return {
+      // Personal Information
+      firstName: "First Name",
+      lastName: "Last Name", 
+      middleName: "Middle Name",
+      dateOfBirth: "Date of Birth",
+      
+      // Identification
+      idType: "ID Type",
+      idNumber: "ID Number",
+      isPrimary: "Primary ID",
+      idPhotos: "ID Photos",
+      primaryPhoto: "Primary Photo",
+      
+      // Income
+      source: "Income Source",
+      monthlyAmount: "Monthly Amount",
+      imageUrl: "Income Proof",
+      
+      // Residential History
+      street: "Street Address",
+      apt: "Apartment",
+      city: "City", 
+      state: "State",
+      zipCode: "ZIP Code",
+      monthlyPayment: "Monthly Payment",
+      durationOfTenancy: "Length of Stay",
+      landlordFirstName: "Landlord First Name",
+      landlordLastName: "Landlord Last Name", 
+      landlordEmail: "Landlord Email",
+      landlordPhoneNumber: "Landlord Phone",
+      
+      // Questionnaire
+      felony: "Criminal History Question",
+      felonyExplanation: "Criminal History Explanation",
+      evicted: "Eviction History Question", 
+      evictedExplanation: "Eviction History Explanation"
+    };
+  };
+
+  const getErrorFieldsForSection = (sectionName: string) => {
+    console.log(`\n=== Getting error fields for section: ${sectionName} ===`);
+    const fieldNames = getFieldDisplayNames();
+    const errorFields: string[] = [];
+
+    switch (sectionName) {
+      case 'Personal Information':
+        const personalInfoError = validatePersonalInfo({
+          ...personalInfo,
+          middleName: personalInfo.noMiddleName ? 'N/A' : personalInfo.middleName
+        });
+        console.log(`Personal Info Error in getErrorFieldsForSection:`, personalInfoError);
+        console.log(`Personal Info data:`, personalInfo);
+        Object.keys(personalInfoError).forEach(key => {
+          console.log(`Checking error key: ${key}, error value:`, personalInfoError[key as keyof typeof personalInfoError]);
+          // Check that the error has a value and the field name exists
+          if (personalInfoError[key as keyof typeof personalInfoError] && fieldNames[key as keyof typeof fieldNames]) {
+            const fieldName = fieldNames[key as keyof typeof fieldNames];
+            console.log(`Adding error field: ${fieldName}`);
+            // Avoid duplicates
+            if (!errorFields.includes(fieldName)) {
+              errorFields.push(fieldName);
+            }
+          }
+        });
+        break;
+        
+      case 'Identification':
+        const identificationError = validateIdentification(ids);
+        Object.keys(identificationError).forEach(key => {
+          // Check that the error has a value and the field name exists
+          if (identificationError[key as keyof typeof identificationError] && fieldNames[key as keyof typeof fieldNames]) {
+            const fieldName = fieldNames[key as keyof typeof fieldNames];
+            // Avoid duplicates
+            if (!errorFields.includes(fieldName)) {
+              errorFields.push(fieldName);
+            }
+          }
+        });
+        break;
+        
+      case 'Income':
+        const incomeErrors = validateIncome(incomes);
+        // Handle array-based income errors
+        if (incomeErrors.source) {
+          incomeErrors.source.forEach((error, index) => {
+            if (error) errorFields.push(`Income Source ${index + 1}`);
+          });
+        }
+        if (incomeErrors.monthlyAmount) {
+          incomeErrors.monthlyAmount.forEach((error, index) => {
+            if (error) errorFields.push(`Monthly Amount ${index + 1}`);
+          });
+        }
+        if (incomeErrors.imageUrl) {
+          incomeErrors.imageUrl.forEach((error, index) => {
+            if (error) errorFields.push(`Income Proof ${index + 1}`);
+          });
+        }
+        break;
+        
+      case 'Residential History':
+        const residentialErrors = validateResidentialHistory(residentialHistory);
+        // Handle array-based residential history errors
+        Object.keys(residentialErrors).forEach(key => {
+          if (key === 'overall' && residentialErrors.overall) {
+            errorFields.push('Residential Duration');
+          } else if (Array.isArray(residentialErrors[key as keyof typeof residentialErrors])) {
+            const errorArray = residentialErrors[key as keyof typeof residentialErrors] as string[];
+            errorArray.forEach((error, index) => {
+              if (error) {
+                const displayName = fieldNames[key as keyof typeof fieldNames];
+                if (displayName) {
+                  errorFields.push(`${displayName} ${index + 1}`);
+                }
+              }
+            });
+          }
+        });
+        break;
+        
+      case 'Questionnaire':
+        const questionnaireErrors = validateQuestionnaire(answers);
+        Object.keys(questionnaireErrors).forEach(key => {
+          // Check that the error has a value and the field name exists
+          if (questionnaireErrors[key as keyof typeof questionnaireErrors] && fieldNames[key as keyof typeof fieldNames]) {
+            const fieldName = fieldNames[key as keyof typeof fieldNames];
+            // Avoid duplicates
+            if (!errorFields.includes(fieldName)) {
+              errorFields.push(fieldName);
+            }
+          }
+        });
+        break;
+    }
+
+    // Remove duplicates and filter out empty strings
+    const finalErrorFields = [...new Set(errorFields.filter(field => field && field.trim()))];
+    console.log(`Error fields found for ${sectionName}:`, finalErrorFields);
+    return finalErrorFields;
+  };
+
+  const findFirstErrorSection = () => {
+    console.log('\n=== FINDING FIRST ERROR SECTION ===');
+    const sectionMap = [
+      { name: 'Personal Information', selector: '[data-section="personal-info"]' },
+      { name: 'Identification', selector: '[data-section="identification"]' },
+      { name: 'Income', selector: '[data-section="income"]' },
+      { name: 'Residential History', selector: '[data-section="residential-history"]' },
+      { name: 'Questionnaire', selector: '[data-section="questionnaire"]' }
+    ];
+
+    for (const section of sectionMap) {
+      const sectionElement = document.querySelector(section.selector);
+      console.log(`Checking section: ${section.name}, found element:`, !!sectionElement);
+      
+      if (sectionElement) {
+        const errorElements = sectionElement.querySelectorAll('.border-red-500, .text-red-500');
+        console.log(`Error elements in ${section.name}:`, errorElements.length, errorElements);
+        
+        if (errorElements.length > 0) {
+          console.log(`Found errors in section: ${section.name}`);
+          const errorFields = getErrorFieldsForSection(section.name);
+          return { 
+            name: section.name, 
+            element: sectionElement,
+            errorFields: errorFields
+          };
+        }
+      }
+    }
+    console.log('No error sections found');
+    return null;
   };
 
   const handleSubmit = async () => {
+    console.log('\n=== SUBMIT ATTEMPT ===');
     const isValid = validateForm();
+    
     if (!isValid) {
-      // Scroll to first error field
+      console.log('❌ Validation failed, finding first error section...');
+      // Find the first error section and scroll to it
       setTimeout(() => {
-        const firstErrorElement = document.querySelector('.border-red-500, .text-red-500');
-        if (firstErrorElement) {
-          firstErrorElement.scrollIntoView({ 
+        const firstErrorInfo = findFirstErrorSection();
+        console.log('First error info:', firstErrorInfo);
+        if (firstErrorInfo) {
+          firstErrorInfo.element.scrollIntoView({ 
             behavior: 'smooth', 
-            block: 'center' 
+            block: 'start' 
+          });
+          
+          // Create detailed error message with field names
+          let errorMessage = `Please correct errors in ${firstErrorInfo.name}`;
+          if (firstErrorInfo.errorFields && firstErrorInfo.errorFields.length > 0) {
+            const fieldList = firstErrorInfo.errorFields.slice(0, 3).join(', ');
+            const moreFields = firstErrorInfo.errorFields.length > 3 ? ` and ${firstErrorInfo.errorFields.length - 3} more` : '';
+            errorMessage += `: ${fieldList}${moreFields}`;
+          }
+          
+          toast({
+            title: "Validation Error",
+            description: errorMessage,
+            variant: "destructive",
+          });
+        } else {
+          // Fallback to original behavior
+          const firstErrorElement = document.querySelector('.border-red-500, .text-red-500');
+          if (firstErrorElement) {
+            firstErrorElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' 
+            });
+          }
+          
+          toast({
+            title: "Validation Error",
+            description: "Please correct errors before submitting.",
+            variant: "destructive",
           });
         }
       }, 100);
-      
-      toast({
-        title: "Validation Error",
-        description: "Please correct errors before submitting.",
-        variant: "destructive",
-      });
       return;
     }
+
+    console.log('✅ Validation passed, proceeding with submission...');
 
     // Format the date if it exists
     const formattedDateOfBirth = personalInfo.dateOfBirth ?
@@ -211,7 +443,7 @@ export default function ApplicationClientComponent({
           )}
 
           {/* Personal Information Section */}
-          <section className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
+          <section data-section="personal-info" className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
             <header className="flex flex-col items-center justify-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
               <h1 className="relative self-stretch mt-[-1.00px] font-text-heading-medium-medium font-[number:var(--text-heading-medium-medium-font-weight)] text-[#373940] text-[length:var(--text-heading-medium-medium-font-size)] text-center tracking-[var(--text-heading-medium-medium-letter-spacing)] leading-[var(--text-heading-medium-medium-line-height)] [font-style:var(--text-heading-medium-medium-font-style)]">
                 MatchBook Universal Application
@@ -232,14 +464,14 @@ export default function ApplicationClientComponent({
           </section>
 
           {/* Identification Section */}
-          <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <section data-section="identification" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
             <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
               <Identification isMobile={isMobile} />
             </div>
           </section>
 
           {/* Income Section */}
-          <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <section data-section="income" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
             <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
               <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
                 Income
@@ -249,7 +481,7 @@ export default function ApplicationClientComponent({
           </section>
 
           {/* Residential History Section */}
-          <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <section data-section="residential-history" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
             <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
               <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
                 Residential History
@@ -262,7 +494,7 @@ export default function ApplicationClientComponent({
           </section>
 
           {/* Questionnaire Section */}
-          <section className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <section data-section="questionnaire" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
             <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
               <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
                 Questionnaire

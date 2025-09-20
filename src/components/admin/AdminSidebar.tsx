@@ -107,11 +107,18 @@ const adminNavItems = [
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
     </svg>
   },
-  { 
-    name: 'Clerk Integration', 
+  {
+    name: 'Clerk Integration',
     href: '/admin/clerk-integration',
     icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  },
+  {
+    name: 'Authenticate Integration',
+    href: '/admin/authenticate-integration',
+    icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
     </svg>
   },
 ]
@@ -124,19 +131,19 @@ export default function AdminSidebar() {
       <div className="p-4 border-b">
         <h2 className="font-bold text-xl">Admin Dashboard</h2>
       </div>
-      
+
       <nav className="flex-1 p-4 space-y-1">
         {adminNavItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
-          
+
           return (
-            <Link 
-              key={item.href} 
+            <Link
+              key={item.href}
               href={item.href}
               className={cn(
                 "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                isActive 
-                  ? "bg-gray-100 text-primary-700 font-semibold" 
+                isActive
+                  ? "bg-gray-100 text-primary-700 font-semibold"
                   : "text-gray-700 hover:bg-gray-50"
               )}
             >

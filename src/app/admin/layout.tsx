@@ -111,6 +111,11 @@ export default async function AdminLayout({
       icon: "Users",
     },
     {
+      title: "Authenticate Integration",
+      url: "/admin/authenticate-integration",
+      icon: "Shield",
+    },
+    {
       title: "Upload Article",
       url: "/admin/upload-article",
       icon: "Settings",

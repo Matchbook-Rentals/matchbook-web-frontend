@@ -13,6 +13,8 @@ export interface HostUserData {
   agreedToHostTerms: Date | null;
   stripeChargesEnabled: boolean | null;
   stripeDetailsSubmitted: boolean | null;
+  medallionIdentityVerified: boolean | null;
+  medallionVerificationStatus: string | null;
 }
 
 export interface OnboardingChecklistCardProps {
@@ -25,12 +27,13 @@ export interface OnboardingChecklistCardProps {
 // Utility function to check if host onboarding is complete
 export function isHostOnboardingComplete(hostUserData: HostUserData | null): boolean {
   if (!hostUserData) return false;
-  
+
   const hasStripeAccount = !!hostUserData.stripeAccountId;
   const stripeComplete = hostUserData.stripeChargesEnabled && hostUserData.stripeDetailsSubmitted;
   const hostTermsAgreed = !!hostUserData.agreedToHostTerms;
-  
-  return hasStripeAccount && stripeComplete && hostTermsAgreed;
+  const identityVerified = !!hostUserData.medallionIdentityVerified;
+
+  return hasStripeAccount && stripeComplete && hostTermsAgreed && identityVerified;
 }
 
 export const OnboardingChecklistCard = ({ 
@@ -67,7 +70,6 @@ export const OnboardingChecklistCard = ({
 
   // Real items with actual completion status
   // See host-onboarding-requirements.md for detailed requirements documentation
-  // Coming soon: authenticate.com integration for identity verification
   const requiredItems = [
     {
       id: 1,
@@ -76,6 +78,11 @@ export const OnboardingChecklistCard = ({
     },
     {
       id: 2,
+      text: "Complete Identity Verification",
+      completed: !!hostUserData?.medallionIdentityVerified,
+    },
+    {
+      id: 3,
       text: "Review Host Terms and Conditions",
       completed: !!hostUserData?.agreedToHostTerms,
     },
@@ -90,6 +97,11 @@ export const OnboardingChecklistCard = ({
     },
     {
       id: 2,
+      text: "Complete Identity Verification (test)",
+      completed: false,
+    },
+    {
+      id: 3,
       text: "Review Host Terms and Conditions (test)",
       completed: false,
     },
@@ -123,14 +135,23 @@ export const OnboardingChecklistCard = ({
             {items.map((item) => {
               const isStripeItem = item.text.includes("Stripe Account");
               const isHostTermsItem = item.text.includes("Host Terms and Conditions");
+              const isIdentityVerificationItem = item.text.includes("Identity Verification");
               const shouldBeStripeClickable = !item.completed && isStripeItem;
               const shouldBeHostTermsClickable = !item.completed && isHostTermsItem;
+              const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem;
               
               const handleHostTermsClick = () => {
                 // Get current page URL to use as redirect after terms agreement
                 const currentUrl = window.location.pathname + window.location.search;
                 const termsUrl = `/terms/hosts?redirect_url=${encodeURIComponent(currentUrl)}`;
                 window.location.href = termsUrl;
+              };
+
+              const handleIdentityVerificationClick = () => {
+                // Navigate to identity verification page
+                const currentUrl = window.location.pathname + window.location.search;
+                const verificationUrl = `/app/host/onboarding/identity-verification?redirect_url=${encodeURIComponent(currentUrl)}`;
+                window.location.href = verificationUrl;
               };
               
               return (
@@ -156,6 +177,13 @@ export const OnboardingChecklistCard = ({
                     ) : shouldBeHostTermsClickable ? (
                       <button
                         onClick={handleHostTermsClick}
+                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
+                      >
+                        {item.text}
+                      </button>
+                    ) : shouldBeIdentityVerificationClickable ? (
+                      <button
+                        onClick={handleIdentityVerificationClick}
                         className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
                       >
                         {item.text}

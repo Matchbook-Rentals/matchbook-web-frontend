@@ -160,13 +160,12 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
         errors.landlordLastName = errors.landlordLastName || [];
         errors.landlordLastName[i] = `Residence ${i + 1}: Landlord Last Name is required`;
       }
-      if (!landlordEmail.trim()) {
+      // Require at least one contact method: email OR phone
+      if (!landlordEmail.trim() && !landlordPhoneNumber.trim()) {
         errors.landlordEmail = errors.landlordEmail || [];
-        errors.landlordEmail[i] = `Residence ${i + 1}: Landlord Email is required`;
-      }
-      if (!landlordPhoneNumber.trim()) {
+        errors.landlordEmail[i] = `Residence ${i + 1}: Landlord email or phone number is required`;
         errors.landlordPhoneNumber = errors.landlordPhoneNumber || [];
-        errors.landlordPhoneNumber[i] = `Residence ${i + 1}: Landlord Phone Number is required`;
+        errors.landlordPhoneNumber[i] = `Residence ${i + 1}: Landlord email or phone number is required`;
       }
     }
   }

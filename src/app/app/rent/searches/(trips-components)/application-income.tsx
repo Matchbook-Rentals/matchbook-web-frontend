@@ -195,6 +195,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
   };
 
   const handleDelete = (index: number) => {
+    // Prevent deletion if this would leave no income sources
     if (incomes.length > 1) {
       setIncomeToDelete(index);
       setDeleteIncomeModalOpen(true);
@@ -341,14 +342,23 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                       <Label className="relative w-fit  [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         Income Source {index + 1}
                       </Label>
-                      {index > 0 && (
+                      {incomes.length > 1 && (
                         <button
                           onClick={() => handleDelete(index)}
                           className="ml-2 pt-[1px] px-4 text-[#404040] hover:text-red-500"
                           type="button"
+                          title="Remove this income source"
                         >
                           <Trash className="h-4 w-4" />
                         </button>
+                      )}
+                      {incomes.length === 1 && index === 0 && (
+                        <span 
+                          className="ml-2 pt-[1px] px-4 text-gray-300 cursor-not-allowed"
+                          title="At least one income source is required"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </span>
                       )}
                     </div>
 

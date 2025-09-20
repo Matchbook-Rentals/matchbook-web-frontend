@@ -173,13 +173,30 @@ interface ApplicationCardsProps {
   }>;
 }
 
-const ApplicationCards = ({ applications }: ApplicationCardsProps) => (
-  <div className="flex flex-col items-start gap-6 sm:gap-8 w-full">
-    {applications.map((application) => (
-      <ApplicationCard key={application.id} application={application} />
-    ))}
-  </div>
-);
+const ApplicationCards = ({ applications }: ApplicationCardsProps) => {
+  if (applications.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500 w-full">
+        <img
+          src="/host-dashboard/empty/applications.png"
+          alt="No applications"
+          className="w-full h-auto max-w-[260px] mb-0"
+        />
+        <div className="text-lg font-medium">
+          No applications yet
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-start gap-6 sm:gap-8 w-full">
+      {applications.map((application) => (
+        <ApplicationCard key={application.id} application={application} />
+      ))}
+    </div>
+  );
+};
 
 interface ApplicationCardProps {
   application: {

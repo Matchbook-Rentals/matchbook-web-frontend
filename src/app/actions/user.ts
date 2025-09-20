@@ -24,6 +24,8 @@ export async function getHostUserData() {
         agreedToHostTerms: true,
         stripeChargesEnabled: true,
         stripeDetailsSubmitted: true,
+        medallionIdentityVerified: true,
+        medallionVerificationStatus: true,
       }
     });
 
