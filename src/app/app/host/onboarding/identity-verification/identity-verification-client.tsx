@@ -153,8 +153,6 @@ export default function IdentityVerificationClient({
         <MedallionScriptLoader>
           <MedallionVerification
             userEmail={userData.email || ""}
-            firstName={userData.firstName || undefined}
-            lastName={userData.lastName || undefined}
             onVerificationComplete={handleVerificationComplete}
             onVerificationError={handleVerificationError}
           />

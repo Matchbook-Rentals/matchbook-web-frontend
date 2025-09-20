@@ -26,20 +26,12 @@ declare global {
 
 export interface MedallionVerificationProps {
   userEmail: string;
-  firstName?: string;
-  lastName?: string;
-  dob?: string; // Date of birth in MM-DD-YYYY format
-  preferredWorkflowID?: string;
   onVerificationComplete?: (result: any) => void;
   onVerificationError?: (error: any) => void;
 }
 
 export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
   userEmail,
-  firstName,
-  lastName,
-  dob,
-  preferredWorkflowID,
   onVerificationComplete,
   onVerificationError,
 }) => {
@@ -83,7 +75,6 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
 
     console.log('🚀 Starting Medallion verification with LOW_CODE_SDK');
     console.log('📧 Email:', userEmail);
-    console.log('👤 Name:', firstName, lastName);
     console.log('🔑 SDK Key present:', !!sdkKey);
 
     try {
@@ -92,7 +83,7 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
         await fetch('/api/medallion/initiate-verification', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userEmail, firstName, lastName }),
+          body: JSON.stringify({ userEmail }),
         });
       } catch (apiError) {
         console.warn('Failed to update verification status in database:', apiError);
@@ -101,10 +92,6 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
 
       const userConfig = {
         email: userEmail,
-        firstName: firstName || '',
-        lastName: lastName || '',
-        ...(dob && { dob }),
-        ...(preferredWorkflowID && { preferredWorkflowID }),
         redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/app/host/onboarding/identity-verification?completed=true`,
       };
 
