@@ -5,12 +5,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { MedallionVerification } from "@/components/medallion-verification";
 import { MedallionScriptLoader } from "@/components/medallion-script-loader";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowLeft, CheckCircle, Calendar } from "lucide-react";
 
 interface UserData {
   id: string;
   email: string | null;
   firstName: string | null;
+  middleName: string | null;
   lastName: string | null;
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
@@ -31,8 +36,19 @@ export default function IdentityVerificationClient({
   const [isUpdating, setIsUpdating] = useState(false);
   const [verificationCompleted, setVerificationCompleted] = useState(false);
 
-  // No longer needed with LOW_CODE_SDK approach
-  // const isTestMode = false;
+  // Pre-verification form state
+  const [showPreForm, setShowPreForm] = useState(false);
+  const [middleName, setMiddleName] = useState(userData.middleName || "");
+  const [hasNoMiddleName, setHasNoMiddleName] = useState(false);
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [preFormErrors, setPreFormErrors] = useState<{[key: string]: string}>({});
+
+  // Check if we need to collect additional information
+  useEffect(() => {
+    const needsMiddleName = !userData.middleName && !hasNoMiddleName;
+    const needsDOB = !dateOfBirth;
+    setShowPreForm(needsMiddleName || needsDOB);
+  }, [userData.middleName, hasNoMiddleName, dateOfBirth]);
 
   // Check if user was redirected back from Medallion
   useEffect(() => {
@@ -106,6 +122,39 @@ export default function IdentityVerificationClient({
     router.push(targetUrl);
   };
 
+  const validatePreForm = () => {
+    const errors: {[key: string]: string} = {};
+
+    if (!userData.middleName && !hasNoMiddleName && !middleName.trim()) {
+      errors.middleName = "Middle name is required or check 'No middle name'";
+    }
+
+    if (!dateOfBirth) {
+      errors.dateOfBirth = "Date of birth is required";
+    } else {
+      // Validate date format (YYYY-MM-DD from input, need to convert to MM-DD-YYYY for Medallion)
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!dateRegex.test(dateOfBirth)) {
+        errors.dateOfBirth = "Please enter a valid date";
+      }
+    }
+
+    setPreFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handlePreFormSubmit = () => {
+    if (validatePreForm()) {
+      setShowPreForm(false);
+    }
+  };
+
+  const formatDateForMedallion = (isoDate: string) => {
+    // Convert YYYY-MM-DD to MM-DD-YYYY as required by Medallion
+    const [year, month, day] = isoDate.split('-');
+    return `${month}-${day}-${year}`;
+  };
+
   // Show completion message if returning from Medallion
   if (verificationCompleted && isUpdating) {
     return (
@@ -123,6 +172,90 @@ export default function IdentityVerificationClient({
               Updating your account...
             </div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show pre-verification form if additional info is needed
+  if (showPreForm) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-2xl mx-auto py-8 px-4">
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              onClick={handleGoBack}
+              className="mb-4"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Additional Information Required
+            </h1>
+            <p className="text-gray-600">
+              Please provide the following information to complete your identity verification.
+            </p>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {!userData.middleName && (
+                <div className="space-y-2">
+                  <Label htmlFor="middleName">Middle Name</Label>
+                  <Input
+                    id="middleName"
+                    value={middleName}
+                    onChange={(e) => setMiddleName(e.target.value)}
+                    disabled={hasNoMiddleName}
+                    placeholder="Enter your middle name"
+                  />
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="noMiddleName"
+                      checked={hasNoMiddleName}
+                      onCheckedChange={(checked) => {
+                        setHasNoMiddleName(checked as boolean);
+                        if (checked) setMiddleName("");
+                      }}
+                    />
+                    <Label htmlFor="noMiddleName" className="text-sm">
+                      I don't have a middle name
+                    </Label>
+                  </div>
+                  {preFormErrors.middleName && (
+                    <p className="text-sm text-red-600">{preFormErrors.middleName}</p>
+                  )}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                <div className="relative">
+                  <Input
+                    id="dateOfBirth"
+                    type="date"
+                    value={dateOfBirth}
+                    onChange={(e) => setDateOfBirth(e.target.value)}
+                    className="pr-10"
+                  />
+                  <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                </div>
+                {preFormErrors.dateOfBirth && (
+                  <p className="text-sm text-red-600">{preFormErrors.dateOfBirth}</p>
+                )}
+              </div>
+
+              <Button onClick={handlePreFormSubmit} className="w-full">
+                Continue to Verification
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -153,6 +286,10 @@ export default function IdentityVerificationClient({
         <MedallionScriptLoader>
           <MedallionVerification
             userEmail={userData.email || ""}
+            firstName={userData.firstName || undefined}
+            middleName={userData.middleName || middleName || (hasNoMiddleName ? "" : undefined)}
+            lastName={userData.lastName || undefined}
+            dob={dateOfBirth ? formatDateForMedallion(dateOfBirth) : undefined}
             onVerificationComplete={handleVerificationComplete}
             onVerificationError={handleVerificationError}
           />
