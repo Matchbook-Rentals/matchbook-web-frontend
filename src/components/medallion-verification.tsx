@@ -179,9 +179,9 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
         )}
 
         <div className="space-y-2">
-          <h4 className="font-medium">What you'll need:</h4>
+          <h4 className="font-medium">What you&apos;ll need:</h4>
           <ul className="text-sm text-gray-600 space-y-1">
-            <li>• Government-issued photo ID (driver's license, passport, etc.)</li>
+            <li>• Government-issued photo ID (driver&apos;s license, passport, etc.)</li>
             <li>• Camera or smartphone for document capture</li>
             <li>• Good lighting for clear photos</li>
             <li>• A few minutes to complete the process</li>
@@ -209,8 +209,8 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
         <div className="text-xs text-blue-700 p-3 bg-blue-50 border border-blue-200 rounded">
           <strong>Real Medallion Integration:</strong>
           <div className="mt-1 space-y-1">
-            <div>• Using Medallion's LOW_CODE_SDK</div>
-            <div>• You'll be redirected to Medallion's secure verification platform</div>
+            <div>• Using Medallion&apos;s LOW_CODE_SDK</div>
+            <div>• You&apos;ll be redirected to Medallion&apos;s secure verification platform</div>
             <div>• Complete verification and return here automatically</div>
           </div>
         </div>

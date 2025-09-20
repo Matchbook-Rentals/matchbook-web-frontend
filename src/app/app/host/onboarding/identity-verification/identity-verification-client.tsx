@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MedallionVerification } from "@/components/medallion-verification";
 import { MedallionScriptLoader } from "@/components/medallion-script-loader";
@@ -42,9 +42,9 @@ export default function IdentityVerificationClient({
       // Check verification status and handle accordingly
       handleVerificationReturn();
     }
-  }, [searchParams]);
+  }, [searchParams, handleVerificationReturn]);
 
-  const handleVerificationReturn = async () => {
+  const handleVerificationReturn = useCallback(async () => {
     setIsUpdating(true);
     try {
       // Refresh user data to check if verification was completed
@@ -66,7 +66,7 @@ export default function IdentityVerificationClient({
       setVerificationCompleted(false);
       setIsUpdating(false);
     }
-  };
+  }, [router, redirectUrl]);
 
   const handleVerificationComplete = async (medallionUserId: string) => {
     setIsUpdating(true);
@@ -117,7 +117,7 @@ export default function IdentityVerificationClient({
               Verification Completed
             </h1>
             <p className="text-gray-600 mb-4">
-              Thank you for completing your identity verification. We're processing your information...
+              Thank you for completing your identity verification. We&apos;re processing your information...
             </p>
             <div className="animate-pulse text-blue-600">
               Updating your account...
@@ -183,8 +183,8 @@ export default function IdentityVerificationClient({
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <h3 className="font-medium text-blue-800 mb-2">Medallion Identity Verification</h3>
           <p className="text-sm text-blue-700">
-            You'll be redirected to Medallion's secure verification platform.
-            Complete your identity verification and you'll be brought back here automatically.
+            You&apos;ll be redirected to Medallion&apos;s secure verification platform.
+            Complete your identity verification and you&apos;ll be brought back here automatically.
           </p>
         </div>
       </div>

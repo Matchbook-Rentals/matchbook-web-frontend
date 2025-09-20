@@ -120,9 +120,9 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
         ) : null}
 
         <div className="space-y-2">
-          <h4 className="font-medium">What you'll need:</h4>
+          <h4 className="font-medium">What you&apos;ll need:</h4>
           <ul className="text-sm text-gray-600 space-y-1">
-            <li>• Government-issued photo ID (driver's license, passport, etc.)</li>
+            <li>• Government-issued photo ID (driver&apos;s license, passport, etc.)</li>
             <li>• Camera or smartphone for document capture</li>
             <li>• Good lighting for clear photos</li>
             <li>• A few minutes to complete the process</li>
