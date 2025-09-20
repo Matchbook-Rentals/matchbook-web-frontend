@@ -42,7 +42,7 @@ export default function IdentityVerificationClient({
       // Check verification status and handle accordingly
       handleVerificationReturn();
     }
-  }, [searchParams, handleVerificationReturn]);
+  }, [searchParams]);
 
   const handleVerificationReturn = useCallback(async () => {
     setIsUpdating(true);
