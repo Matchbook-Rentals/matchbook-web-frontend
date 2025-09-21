@@ -22,7 +22,6 @@ export default async function IdentityVerificationPage({
       id: true,
       email: true,
       firstName: true,
-      middleName: true,
       lastName: true,
       medallionIdentityVerified: true,
       medallionVerificationStatus: true,

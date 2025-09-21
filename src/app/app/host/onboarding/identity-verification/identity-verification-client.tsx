@@ -15,7 +15,6 @@ interface UserData {
   id: string;
   email: string | null;
   firstName: string | null;
-  middleName: string | null;
   lastName: string | null;
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
@@ -38,17 +37,17 @@ export default function IdentityVerificationClient({
 
   // Pre-verification form state
   const [showPreForm, setShowPreForm] = useState(false);
-  const [middleName, setMiddleName] = useState(userData.middleName || "");
+  const [middleName, setMiddleName] = useState("");
   const [hasNoMiddleName, setHasNoMiddleName] = useState(false);
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [preFormErrors, setPreFormErrors] = useState<{[key: string]: string}>({});
 
   // Check if we need to collect additional information
   useEffect(() => {
-    const needsMiddleName = !userData.middleName && !hasNoMiddleName;
+    const needsMiddleName = !hasNoMiddleName && !middleName;
     const needsDOB = !dateOfBirth;
     setShowPreForm(needsMiddleName || needsDOB);
-  }, [userData.middleName, hasNoMiddleName, dateOfBirth]);
+  }, [hasNoMiddleName, middleName, dateOfBirth]);
 
   // Check if user was redirected back from Medallion
   useEffect(() => {
@@ -125,7 +124,7 @@ export default function IdentityVerificationClient({
   const validatePreForm = () => {
     const errors: {[key: string]: string} = {};
 
-    if (!userData.middleName && !hasNoMiddleName && !middleName.trim()) {
+    if (!hasNoMiddleName && !middleName.trim()) {
       errors.middleName = "Middle name is required or check 'No middle name'";
     }
 
@@ -205,34 +204,32 @@ export default function IdentityVerificationClient({
               <CardTitle>Personal Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {!userData.middleName && (
-                <div className="space-y-2">
-                  <Label htmlFor="middleName">Middle Name</Label>
-                  <Input
-                    id="middleName"
-                    value={middleName}
-                    onChange={(e) => setMiddleName(e.target.value)}
-                    disabled={hasNoMiddleName}
-                    placeholder="Enter your middle name"
+              <div className="space-y-2">
+                <Label htmlFor="middleName">Middle Name</Label>
+                <Input
+                  id="middleName"
+                  value={middleName}
+                  onChange={(e) => setMiddleName(e.target.value)}
+                  disabled={hasNoMiddleName}
+                  placeholder="Enter your middle name"
+                />
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="noMiddleName"
+                    checked={hasNoMiddleName}
+                    onCheckedChange={(checked) => {
+                      setHasNoMiddleName(checked as boolean);
+                      if (checked) setMiddleName("");
+                    }}
                   />
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="noMiddleName"
-                      checked={hasNoMiddleName}
-                      onCheckedChange={(checked) => {
-                        setHasNoMiddleName(checked as boolean);
-                        if (checked) setMiddleName("");
-                      }}
-                    />
-                    <Label htmlFor="noMiddleName" className="text-sm">
-                      I don&apos;t have a middle name
-                    </Label>
-                  </div>
-                  {preFormErrors.middleName && (
-                    <p className="text-sm text-red-600">{preFormErrors.middleName}</p>
-                  )}
+                  <Label htmlFor="noMiddleName" className="text-sm">
+                    I don&apos;t have a middle name
+                  </Label>
                 </div>
-              )}
+                {preFormErrors.middleName && (
+                  <p className="text-sm text-red-600">{preFormErrors.middleName}</p>
+                )}
+              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="dateOfBirth">Date of Birth</Label>
@@ -287,7 +284,7 @@ export default function IdentityVerificationClient({
           <MedallionVerification
             userEmail={userData.email || ""}
             firstName={userData.firstName || undefined}
-            middleName={userData.middleName || middleName || (hasNoMiddleName ? "" : undefined)}
+            middleName={hasNoMiddleName ? "" : middleName}
             lastName={userData.lastName || undefined}
             dob={dateOfBirth ? formatDateForMedallion(dateOfBirth) : undefined}
             onVerificationComplete={handleVerificationComplete}
