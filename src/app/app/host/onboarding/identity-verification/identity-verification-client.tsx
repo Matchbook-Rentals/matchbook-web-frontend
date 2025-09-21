@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { MedallionVerification } from "@/components/medallion-verification";
 import { MedallionScriptLoader } from "@/components/medallion-script-loader";
 import { Button } from "@/components/ui/button";
@@ -24,64 +24,24 @@ interface UserData {
 interface IdentityVerificationClientProps {
   userData: UserData;
   redirectUrl?: string;
+  isReturningFromVerification?: boolean;
 }
 
 export default function IdentityVerificationClient({
   userData,
   redirectUrl,
+  isReturningFromVerification = false,
 }: IdentityVerificationClientProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isUpdating, setIsUpdating] = useState(false);
-  const [verificationCompleted, setVerificationCompleted] = useState(false);
 
   // Pre-verification form state
-  const [showPreForm, setShowPreForm] = useState(false);
+  const [showPreForm, setShowPreForm] = useState(true); // Always start with pre-form since we need DOB and middle name
   const [middleName, setMiddleName] = useState("");
   const [hasNoMiddleName, setHasNoMiddleName] = useState(false);
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [preFormErrors, setPreFormErrors] = useState<{[key: string]: string}>({});
 
-  // Check if we need to collect additional information
-  useEffect(() => {
-    const needsMiddleName = !hasNoMiddleName && !middleName;
-    const needsDOB = !dateOfBirth;
-    setShowPreForm(needsMiddleName || needsDOB);
-  }, [hasNoMiddleName, middleName, dateOfBirth]);
-
-  // Check if user was redirected back from Medallion
-  useEffect(() => {
-    const completed = searchParams.get('completed');
-    if (completed === 'true') {
-      setVerificationCompleted(true);
-      // Check verification status and handle accordingly
-      handleVerificationReturn();
-    }
-  }, [searchParams, handleVerificationReturn]);
-
-  const handleVerificationReturn = useCallback(async () => {
-    setIsUpdating(true);
-    try {
-      // Refresh user data to check if verification was completed
-      const response = await fetch('/api/user/verification-status');
-      if (response.ok) {
-        const result = await response.json();
-        if (result.verified) {
-          // Verification was successful, redirect to dashboard
-          const targetUrl = redirectUrl || "/app/host/dashboard/overview";
-          router.push(targetUrl);
-        } else {
-          // Verification might still be pending or failed
-          setVerificationCompleted(false);
-          setIsUpdating(false);
-        }
-      }
-    } catch (error) {
-      console.error('Error checking verification status:', error);
-      setVerificationCompleted(false);
-      setIsUpdating(false);
-    }
-  }, [router, redirectUrl]);
 
   const handleVerificationComplete = async (medallionUserId: string) => {
     setIsUpdating(true);
@@ -130,12 +90,6 @@ export default function IdentityVerificationClient({
 
     if (!dateOfBirth) {
       errors.dateOfBirth = "Date of birth is required";
-    } else {
-      // Validate date format (YYYY-MM-DD from input, need to convert to MM-DD-YYYY for Medallion)
-      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-      if (!dateRegex.test(dateOfBirth)) {
-        errors.dateOfBirth = "Please enter a valid date";
-      }
     }
 
     setPreFormErrors(errors);
@@ -154,22 +108,24 @@ export default function IdentityVerificationClient({
     return `${month}-${day}-${year}`;
   };
 
-  // Show completion message if returning from Medallion
-  if (verificationCompleted && isUpdating) {
+  // Show status message if returning from Medallion but not yet verified
+  if (isReturningFromVerification) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-2xl mx-auto py-8 px-4 text-center">
           <div className="bg-white p-8 rounded-lg shadow-sm">
-            <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
+            <div className="h-16 w-16 text-orange-500 mx-auto mb-4">
+              <CheckCircle className="h-full w-full" />
+            </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Verification Completed
+              Verification Processing
             </h1>
             <p className="text-gray-600 mb-4">
-              Thank you for completing your identity verification. We&apos;re processing your information...
+              Your identity verification is being processed. This may take a few moments.
             </p>
-            <div className="animate-pulse text-blue-600">
-              Updating your account...
-            </div>
+            <Button onClick={handleGoBack} variant="outline">
+              Return to Dashboard
+            </Button>
           </div>
         </div>
       </div>
@@ -292,7 +248,7 @@ export default function IdentityVerificationClient({
           />
         </MedallionScriptLoader>
 
-        {isUpdating && !verificationCompleted && (
+        {isUpdating && (
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-blue-800">
               Updating your verification status...

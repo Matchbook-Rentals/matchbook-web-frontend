@@ -6,7 +6,7 @@ import IdentityVerificationClient from "./identity-verification-client";
 export default async function IdentityVerificationPage({
   searchParams,
 }: {
-  searchParams: { redirect_url?: string };
+  searchParams: { redirect_url?: string; completed?: string };
 }) {
   const { userId } = auth();
   const user = await currentUser();
@@ -33,8 +33,27 @@ export default async function IdentityVerificationPage({
     redirect("/sign-in");
   }
 
-  // If already verified, redirect back
-  if (userData.medallionIdentityVerified) {
+  // Handle return from Medallion verification
+  if (searchParams.completed === 'true') {
+    // Re-fetch fresh verification status after Medallion redirect
+    const freshUserData = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        medallionIdentityVerified: true,
+        medallionVerificationStatus: true,
+      },
+    });
+
+    if (freshUserData?.medallionIdentityVerified) {
+      // Verification successful, redirect to target
+      const redirectUrl = searchParams.redirect_url || "/app/host/dashboard/overview";
+      redirect(redirectUrl);
+    }
+    // If not verified, fall through to show verification status/retry
+  }
+
+  // If already verified (not from Medallion redirect), redirect back
+  if (userData.medallionIdentityVerified && searchParams.completed !== 'true') {
     const redirectUrl = searchParams.redirect_url || "/app/host/dashboard/overview";
     redirect(redirectUrl);
   }
@@ -43,6 +62,7 @@ export default async function IdentityVerificationPage({
     <IdentityVerificationClient
       userData={userData}
       redirectUrl={searchParams.redirect_url}
+      isReturningFromVerification={searchParams.completed === 'true'}
     />
   );
 }
