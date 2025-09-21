@@ -33,19 +33,24 @@ export async function POST(request: NextRequest) {
     }
 
     if (!user.medallionUserAccessCode) {
-      console.error(`❌ User ${userId} missing medallionUserAccessCode:`, {
+      console.log(`⏳ User ${userId} missing medallionUserAccessCode - verification still initializing:`, {
         userId,
-        email: user.id, // Don't log email for privacy
         medallionUserId: user.medallionUserId,
         hasAccessCode: false,
         verificationStatus: user.medallionVerificationStatus,
         isVerified: user.medallionIdentityVerified
       });
 
-      return NextResponse.json(
-        { error: "No Medallion userAccessCode found. Please restart verification." },
-        { status: 400 }
-      );
+      // Instead of failing, return pending status - verification might still be initializing
+      return NextResponse.json({
+        success: true,
+        data: {
+          ...user,
+          medallionVerificationStatus: user.medallionVerificationStatus || 'pending',
+          medallionIdentityVerified: false,
+        },
+        message: "Verification still initializing - userAccessCode not yet available"
+      });
     }
 
     // Poll Medallion's API for verification status

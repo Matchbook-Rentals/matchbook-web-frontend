@@ -104,7 +104,7 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
         firstName: firstName || '',
         lastName: lastName || '',
         dob: dob || '',
-        redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/app/host/onboarding/identity-verification?completed=true`,
+        redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/app/host/onboarding/identity-verification?completed=true&email=${encodeURIComponent(userEmail)}`,
       };
 
       console.log('📤 Calling Medallion identify() with config:', userConfig);

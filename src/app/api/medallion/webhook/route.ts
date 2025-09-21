@@ -67,15 +67,43 @@ async function handleVerificationStatusUpdate(event: any) {
     const { order } = event;
     const { userAccessCode, status, verificationMethod } = order || {};
 
-    // Find user by userAccessCode
-    const user = await prisma.user.findFirst({
+    // First, try to find user by userAccessCode
+    let user = await prisma.user.findFirst({
       where: {
         medallionUserAccessCode: userAccessCode
       }
     });
 
+    // If user not found and we have email in the webhook payload, try email lookup
+    if (!user && event.email) {
+      console.log(`🔍 Webhook: userAccessCode lookup failed, trying email: ${event.email}`);
+      user = await prisma.user.findFirst({
+        where: {
+          email: event.email
+        }
+      });
+
+      // If found by email, store the userAccessCode for future lookups
+      if (user) {
+        console.log(`✅ Found user by email, storing userAccessCode: ${userAccessCode}`);
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { medallionUserAccessCode: userAccessCode }
+        });
+      }
+    }
+
+    // TODO: Check if webhook contains any other identifying information we can use
+    // For now, log the full payload structure to understand what's available
     if (!user) {
-      console.error(`User not found for userAccessCode: ${userAccessCode}`);
+      console.error(`❌ User not found for userAccessCode: ${userAccessCode}`);
+      console.log('🔍 Available webhook data:', {
+        event: event.event,
+        hasEmail: !!event.email,
+        hasOrder: !!event.order,
+        orderKeys: event.order ? Object.keys(event.order) : [],
+        fullEventKeys: Object.keys(event)
+      });
       return;
     }
 
