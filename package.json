@@ -117,6 +117,7 @@
     "sonner": "^1.7.0",
     "sqids": "^0.3.0",
     "stripe": "^18.2.0",
+    "svix": "^1.76.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "turndown": "^7.2.0",

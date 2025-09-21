@@ -49,6 +49,9 @@ model User {
   firstName        String?
   lastName         String?
   fullName         String?
+  // Legal names for identity verification (government ID names)
+  authenticatedFirstName  String?
+  authenticatedLastName   String?
   email            String?   @unique
   emailVerified    DateTime?
   imageUrl         String?

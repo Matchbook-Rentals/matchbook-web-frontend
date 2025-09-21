@@ -551,3 +551,83 @@ export async function getNotificationPreferences() {
   }
 }
 
+export async function confirmAuthenticatedName() {
+  'use server';
+
+  const clerkUser = await currentUser();
+
+  if (!clerkUser?.id) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    // Get current user data
+    const userData = await prismadb.user.findUnique({
+      where: { id: clerkUser.id },
+      select: { firstName: true, lastName: true },
+    });
+
+    if (!userData?.firstName || !userData?.lastName) {
+      return { success: false, error: 'No name on file to confirm' };
+    }
+
+    // Copy display names to authenticated names
+    await prismadb.user.update({
+      where: { id: clerkUser.id },
+      data: {
+        authenticatedFirstName: userData.firstName,
+        authenticatedLastName: userData.lastName,
+      },
+    });
+
+    logger.info('User authenticated name confirmed', {
+      userId: clerkUser.id,
+      authenticatedFirstName: userData.firstName,
+      authenticatedLastName: userData.lastName,
+    });
+
+    return { success: true };
+  } catch (error) {
+    logger.error('Error confirming authenticated name', {
+      userId: clerkUser.id,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+    return { success: false, error: 'Failed to confirm name' };
+  }
+}
+
+export async function updateAuthenticatedName(firstName: string, lastName: string) {
+  'use server';
+
+  const clerkUser = await currentUser();
+
+  if (!clerkUser?.id) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    // Update authenticated names only (not display names)
+    await prismadb.user.update({
+      where: { id: clerkUser.id },
+      data: {
+        authenticatedFirstName: firstName.trim(),
+        authenticatedLastName: lastName.trim(),
+      },
+    });
+
+    logger.info('User authenticated name updated', {
+      userId: clerkUser.id,
+      authenticatedFirstName: firstName.trim(),
+      authenticatedLastName: lastName.trim(),
+    });
+
+    return { success: true };
+  } catch (error) {
+    logger.error('Error updating authenticated name', {
+      userId: clerkUser.id,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+    return { success: false, error: 'Failed to update authenticated name' };
+  }
+}
+

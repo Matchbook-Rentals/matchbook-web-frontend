@@ -83,8 +83,7 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
 
     console.log('🚀 Starting Medallion verification with LOW_CODE_SDK');
     console.log('📧 Email:', userEmail);
-    console.log('👤 Name:', firstName, middleName, lastName);
-    console.log('📅 DOB:', dob);
+    console.log('👤 Name:', firstName, lastName);
     console.log('🔑 SDK Key present:', !!sdkKey);
 
     try {
@@ -93,7 +92,7 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
         await fetch('/api/medallion/initiate-verification', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userEmail, firstName, middleName, lastName, dob }),
+          body: JSON.stringify({ userEmail, firstName, lastName }),
         });
       } catch (apiError) {
         console.warn('Failed to update verification status in database:', apiError);
@@ -103,9 +102,7 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
       const userConfig = {
         email: userEmail,
         firstName: firstName || '',
-        middleName: middleName || '',
         lastName: lastName || '',
-        dob: dob || '',
         redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/app/host/onboarding/identity-verification?completed=true`,
       };
 

@@ -8,14 +8,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, CheckCircle, Calendar } from "lucide-react";
+import { ArrowLeft, CheckCircle, User, Edit, Save, X } from "lucide-react";
+import { confirmAuthenticatedName, updateAuthenticatedName } from "@/app/actions/user";
 
 interface UserData {
   id: string;
   email: string | null;
   firstName: string | null;
   lastName: string | null;
+  authenticatedFirstName: string | null;
+  authenticatedLastName: string | null;
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
   medallionUserId: string | null;
@@ -34,41 +36,25 @@ export default function IdentityVerificationClient({
 }: IdentityVerificationClientProps) {
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showNameConfirmation, setShowNameConfirmation] = useState(true);
 
-  // Pre-verification form state
-  const [showPreForm, setShowPreForm] = useState(true); // Always start with pre-form since we need DOB and middle name
-  const [middleName, setMiddleName] = useState("");
-  const [hasNoMiddleName, setHasNoMiddleName] = useState(false);
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [preFormErrors, setPreFormErrors] = useState<{[key: string]: string}>({});
+  // Edit form state
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editFirstName, setEditFirstName] = useState(userData.firstName || "");
+  const [editLastName, setEditLastName] = useState(userData.lastName || "");
+  const [isUpdatingName, setIsUpdatingName] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [localUserData, setLocalUserData] = useState(userData);
 
 
   const handleVerificationComplete = async (medallionUserId: string) => {
     setIsUpdating(true);
 
-    try {
-      const response = await fetch("/api/user/medallion-verification", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          medallionUserId,
-          verificationStatus: "approved",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update verification status");
-      }
-
-      // Redirect back to the original page or dashboard
-      const targetUrl = redirectUrl || "/app/host/dashboard/overview";
-      router.push(targetUrl);
-    } catch (error) {
-      console.error("Error updating verification status:", error);
-      setIsUpdating(false);
-    }
+    // Medallion webhook will update verification status in database
+    // Just redirect back with completion flag to check status
+    const targetUrl = redirectUrl || "/app/host/dashboard/overview";
+    const returnUrl = `/app/host/onboarding/identity-verification?completed=true${redirectUrl ? `&redirect_url=${encodeURIComponent(redirectUrl)}` : ''}`;
+    router.push(returnUrl);
   };
 
   const handleVerificationError = (error: any) => {
@@ -81,35 +67,155 @@ export default function IdentityVerificationClient({
     router.push(targetUrl);
   };
 
-  const validatePreForm = () => {
-    const errors: {[key: string]: string} = {};
+  const handleNameConfirmed = async () => {
+    setIsUpdating(true);
 
-    if (!hasNoMiddleName && !middleName.trim()) {
-      errors.middleName = "Middle name is required or check 'No middle name'";
+    try {
+      const result = await confirmAuthenticatedName();
+
+      if (result.success) {
+        // Update local state with confirmed names
+        const updatedUserData = {
+          ...localUserData,
+          authenticatedFirstName: localUserData.firstName,
+          authenticatedLastName: localUserData.lastName,
+        };
+        setLocalUserData(updatedUserData);
+        setShowNameConfirmation(false);
+        router.refresh();
+      } else {
+        setUpdateError(result.error || "Failed to confirm name");
+      }
+    } catch (error) {
+      setUpdateError("Failed to confirm name. Please try again.");
+      console.error("Error confirming name:", error);
+    } finally {
+      setIsUpdating(false);
     }
-
-    if (!dateOfBirth) {
-      errors.dateOfBirth = "Date of birth is required";
-    }
-
-    setPreFormErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
-  const handlePreFormSubmit = () => {
-    if (validatePreForm()) {
-      setShowPreForm(false);
+  const handleEditName = () => {
+    setShowEditForm(true);
+    setUpdateError(null);
+    // Pre-populate with authenticated names if available, otherwise display names
+    setEditFirstName(localUserData.authenticatedFirstName || localUserData.firstName || "");
+    setEditLastName(localUserData.authenticatedLastName || localUserData.lastName || "");
+  };
+
+  const handleCancelEdit = () => {
+    setShowEditForm(false);
+    setUpdateError(null);
+    // Reset form values to current authenticated or display names
+    setEditFirstName(localUserData.authenticatedFirstName || localUserData.firstName || "");
+    setEditLastName(localUserData.authenticatedLastName || localUserData.lastName || "");
+  };
+
+  const handleNameUpdate = async () => {
+    if (!editFirstName.trim() || !editLastName.trim()) {
+      setUpdateError("Both first name and last name are required");
+      return;
+    }
+
+    setIsUpdatingName(true);
+    setUpdateError(null);
+
+    try {
+      const result = await updateAuthenticatedName(editFirstName.trim(), editLastName.trim());
+
+      if (result.success) {
+        // Update local state with new authenticated values
+        const updatedUserData = {
+          ...localUserData,
+          authenticatedFirstName: editFirstName.trim(),
+          authenticatedLastName: editLastName.trim(),
+        };
+        setLocalUserData(updatedUserData);
+
+        // Hide edit form and show updated confirmation
+        setShowEditForm(false);
+
+        // Soft refresh to get latest server data
+        router.refresh();
+      } else {
+        setUpdateError(result.error || "Failed to update name");
+      }
+    } catch (error) {
+      setUpdateError("Failed to update name. Please try again.");
+      console.error("Error updating name:", error);
+    } finally {
+      setIsUpdatingName(false);
     }
   };
 
-  const formatDateForMedallion = (isoDate: string) => {
-    // Convert YYYY-MM-DD to MM-DD-YYYY as required by Medallion
-    const [year, month, day] = isoDate.split('-');
-    return `${month}-${day}-${year}`;
-  };
 
   // Show status message if returning from Medallion but not yet verified
   if (isReturningFromVerification) {
+    const { medallionVerificationStatus } = localUserData;
+
+    // Handle different verification statuses
+    if (medallionVerificationStatus === 'rejected' || medallionVerificationStatus === 'failed') {
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <div className="max-w-2xl mx-auto py-8 px-4 text-center">
+            <div className="bg-white p-8 rounded-lg shadow-sm">
+              <div className="h-16 w-16 text-red-500 mx-auto mb-4">
+                <X className="h-full w-full" />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Verification Failed
+              </h1>
+              <p className="text-gray-600 mb-4">
+                Your identity verification was not successful. You can try again or contact support if you need assistance.
+              </p>
+              <div className="space-y-3">
+                <Button
+                  onClick={() => window.location.reload()}
+                  className="w-full"
+                >
+                  Try Again
+                </Button>
+                <Button onClick={handleGoBack} variant="outline" className="w-full">
+                  Return to Dashboard
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (medallionVerificationStatus === 'expired') {
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <div className="max-w-2xl mx-auto py-8 px-4 text-center">
+            <div className="bg-white p-8 rounded-lg shadow-sm">
+              <div className="h-16 w-16 text-orange-500 mx-auto mb-4">
+                <CheckCircle className="h-full w-full" />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Verification Expired
+              </h1>
+              <p className="text-gray-600 mb-4">
+                Your verification session has expired. Please start a new verification.
+              </p>
+              <div className="space-y-3">
+                <Button
+                  onClick={() => window.location.reload()}
+                  className="w-full"
+                >
+                  Start New Verification
+                </Button>
+                <Button onClick={handleGoBack} variant="outline" className="w-full">
+                  Return to Dashboard
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Default: processing/pending status
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-2xl mx-auto py-8 px-4 text-center">
@@ -123,17 +229,35 @@ export default function IdentityVerificationClient({
             <p className="text-gray-600 mb-4">
               Your identity verification is being processed. This may take a few moments.
             </p>
-            <Button onClick={handleGoBack} variant="outline">
-              Return to Dashboard
-            </Button>
+            <div className="space-y-3">
+              <Button
+                onClick={() => window.location.reload()}
+                variant="outline"
+                className="w-full"
+              >
+                Check Status Again
+              </Button>
+              <Button onClick={handleGoBack} variant="outline" className="w-full">
+                Return to Dashboard
+              </Button>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  // Show pre-verification form if additional info is needed
-  if (showPreForm) {
+  // Show name confirmation before verification
+  if (showNameConfirmation) {
+    // Check if we already have authenticated names to pre-populate display
+    const hasAuthenticatedName = localUserData.authenticatedFirstName && localUserData.authenticatedLastName;
+
+    // Show authenticated names if available, otherwise display names
+    const displayName = hasAuthenticatedName
+      ? `${localUserData.authenticatedFirstName} ${localUserData.authenticatedLastName}`.trim()
+      : `${localUserData.firstName || ''} ${localUserData.lastName || ''}`.trim();
+    const hasDisplayName = hasAuthenticatedName || (localUserData.firstName && localUserData.lastName);
+
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-2xl mx-auto py-8 px-4">
@@ -148,65 +272,147 @@ export default function IdentityVerificationClient({
             </Button>
 
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Additional Information Required
+              Confirm Your Legal Name
             </h1>
             <p className="text-gray-600">
-              Please provide the following information to complete your identity verification.
+              Please confirm this is your legal name exactly as it appears on your government-issued ID.
             </p>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Personal Information</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Name Verification
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="middleName">Middle Name</Label>
-                <Input
-                  id="middleName"
-                  value={middleName}
-                  onChange={(e) => setMiddleName(e.target.value)}
-                  disabled={hasNoMiddleName}
-                  placeholder="Enter your middle name"
-                />
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="noMiddleName"
-                    checked={hasNoMiddleName}
-                    onCheckedChange={(checked) => {
-                      setHasNoMiddleName(checked as boolean);
-                      if (checked) setMiddleName("");
-                    }}
-                  />
-                  <Label htmlFor="noMiddleName" className="text-sm">
-                    I don&apos;t have a middle name
-                  </Label>
-                </div>
-                {preFormErrors.middleName && (
-                  <p className="text-sm text-red-600">{preFormErrors.middleName}</p>
-                )}
-              </div>
+            <CardContent className="space-y-6">
+              {showEditForm ? (
+                // Edit Form UI
+                <div className="space-y-4">
+                  <div className="text-center py-2">
+                    <h3 className="text-lg font-medium text-gray-900 mb-1">
+                      Update Your Legal Name
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Enter your name exactly as it appears on your government-issued ID
+                    </p>
+                  </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="dateOfBirth">Date of Birth</Label>
-                <div className="relative">
-                  <Input
-                    id="dateOfBirth"
-                    type="date"
-                    value={dateOfBirth}
-                    onChange={(e) => setDateOfBirth(e.target.value)}
-                    className="pr-10"
-                  />
-                  <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                </div>
-                {preFormErrors.dateOfBirth && (
-                  <p className="text-sm text-red-600">{preFormErrors.dateOfBirth}</p>
-                )}
-              </div>
+                  {updateError && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-red-800 text-sm">{updateError}</p>
+                    </div>
+                  )}
 
-              <Button onClick={handlePreFormSubmit} className="w-full">
-                Continue to Verification
-              </Button>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input
+                        id="firstName"
+                        value={editFirstName}
+                        onChange={(e) => setEditFirstName(e.target.value)}
+                        placeholder="Enter your first name"
+                        disabled={isUpdatingName}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input
+                        id="lastName"
+                        value={editLastName}
+                        onChange={(e) => setEditLastName(e.target.value)}
+                        placeholder="Enter your last name"
+                        disabled={isUpdatingName}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={handleNameUpdate}
+                      disabled={isUpdatingName || !editFirstName.trim() || !editLastName.trim()}
+                      className="flex-1"
+                    >
+                      {isUpdatingName ? (
+                        <>Saving...</>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Name
+                        </>
+                      )}
+                    </Button>
+
+                    <Button
+                      onClick={handleCancelEdit}
+                      variant="outline"
+                      disabled={isUpdatingName}
+                      className="flex-1"
+                    >
+                      <X className="h-4 w-4 mr-2" />
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                // Confirmation UI
+                <>
+                  <div className="text-center py-4">
+                    <div className="text-2xl font-semibold text-gray-900 mb-2">
+                      {hasDisplayName ? displayName : "No name on file"}
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      This name will be used for identity verification with Medallion
+                    </p>
+                  </div>
+
+                  {hasDisplayName ? (
+                    <div className="space-y-3">
+                      <Button
+                        onClick={handleNameConfirmed}
+                        className="w-full"
+                        size="lg"
+                      >
+                        Yes, this is correct - Continue to Verification
+                      </Button>
+
+                      <Button
+                        onClick={handleEditName}
+                        variant="outline"
+                        className="w-full"
+                        size="lg"
+                      >
+                        <Edit className="h-4 w-4 mr-2" />
+                        Update My Name
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <p className="text-amber-800 text-sm">
+                          Your name is required for identity verification. Please update your profile first.
+                        </p>
+                      </div>
+
+                      <Button
+                        onClick={handleEditName}
+                        className="w-full"
+                        size="lg"
+                      >
+                        <Edit className="h-4 w-4 mr-2" />
+                        Add Your Name
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+
+              <div className="text-xs text-gray-500 p-3 bg-gray-50 rounded">
+                <strong>Important:</strong> Your name must match your government-issued ID exactly.
+                This includes spelling, capitalization, and any hyphens or apostrophes.
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -238,11 +444,9 @@ export default function IdentityVerificationClient({
 
         <MedallionScriptLoader>
           <MedallionVerification
-            userEmail={userData.email || ""}
-            firstName={userData.firstName || undefined}
-            middleName={hasNoMiddleName ? "" : middleName}
-            lastName={userData.lastName || undefined}
-            dob={dateOfBirth ? formatDateForMedallion(dateOfBirth) : undefined}
+            userEmail={localUserData.email || ""}
+            firstName={localUserData.authenticatedFirstName || localUserData.firstName || undefined}
+            lastName={localUserData.authenticatedLastName || localUserData.lastName || undefined}
             onVerificationComplete={handleVerificationComplete}
             onVerificationError={handleVerificationError}
           />

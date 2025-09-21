@@ -144,3 +144,13 @@
 - Updated component interfaces to support initialPaymentMethods prop
 - Maintained existing authentication and authorization checks
 - Improved UX by providing instant payment method access without client-side delays
+
+## Identity Verification Flow Improvements
+- Fixed name confirmation screen to always show before verification instead of auto-skipping for users with authenticated names
+- Implemented authenticated name system separating display names (from Clerk) from legal verification names
+- Added inline name editing form without external redirects for smoother UX
+- Simplified verification completion handler to rely on Medallion webhook instead of client-side API calls
+- Enhanced verification status handling with specific UI for rejected, expired, and processing states
+- Added server actions for confirming existing names or updating authenticated names independently
+- Improved webhook-based verification status checking with fresh data fetching on return from Medallion
+- Added Clerk webhook integration for real-time user data synchronization
