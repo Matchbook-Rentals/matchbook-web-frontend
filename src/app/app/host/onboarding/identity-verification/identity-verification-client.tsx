@@ -58,7 +58,7 @@ export default function IdentityVerificationClient({
       // Check verification status and handle accordingly
       handleVerificationReturn();
     }
-  }, [searchParams]);
+  }, [searchParams, handleVerificationReturn]);
 
   const handleVerificationReturn = useCallback(async () => {
     setIsUpdating(true);
@@ -225,7 +225,7 @@ export default function IdentityVerificationClient({
                       }}
                     />
                     <Label htmlFor="noMiddleName" className="text-sm">
-                      I don't have a middle name
+                      I don&apos;t have a middle name
                     </Label>
                   </div>
                   {preFormErrors.middleName && (
