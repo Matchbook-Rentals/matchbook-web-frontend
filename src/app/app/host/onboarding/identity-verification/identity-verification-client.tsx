@@ -39,6 +39,11 @@ export default function IdentityVerificationClient({
   const [isUpdating, setIsUpdating] = useState(false);
   const [showNameConfirmation, setShowNameConfirmation] = useState(true);
 
+  // Main confirmation form state
+  const [confirmDateOfBirth, setConfirmDateOfBirth] = useState(
+    convertToHtmlDate(userData.authenticatedDateOfBirth || "")
+  );
+
   // Edit form state
   const [showEditForm, setShowEditForm] = useState(false);
   const [editFirstName, setEditFirstName] = useState(userData.firstName || "");
@@ -82,27 +87,35 @@ export default function IdentityVerificationClient({
   };
 
   const handleNameConfirmed = async () => {
+    if (!confirmDateOfBirth) {
+      setUpdateError("Date of birth is required for identity verification");
+      return;
+    }
+
     setIsUpdating(true);
+    setUpdateError(null);
 
     try {
-      const result = await confirmAuthenticatedName();
+      const dateOfBirthFormatted = convertToDDMMYYYY(confirmDateOfBirth);
+      const result = await confirmAuthenticatedName(dateOfBirthFormatted);
 
       if (result.success) {
-        // Update local state with confirmed names
+        // Update local state with confirmed names and DOB
         const updatedUserData = {
           ...localUserData,
           authenticatedFirstName: localUserData.firstName,
           authenticatedLastName: localUserData.lastName,
+          authenticatedDateOfBirth: dateOfBirthFormatted,
         };
         setLocalUserData(updatedUserData);
         setShowNameConfirmation(false);
         router.refresh();
       } else {
-        setUpdateError(result.error || "Failed to confirm name");
+        setUpdateError(result.error || "Failed to confirm information");
       }
     } catch (error) {
-      setUpdateError("Failed to confirm name. Please try again.");
-      console.error("Error confirming name:", error);
+      setUpdateError("Failed to confirm information. Please try again.");
+      console.error("Error confirming information:", error);
     } finally {
       setIsUpdating(false);
     }
@@ -406,14 +419,38 @@ export default function IdentityVerificationClient({
                     </p>
                   </div>
 
+                  {updateError && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-red-800 text-sm">{updateError}</p>
+                    </div>
+                  )}
+
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="confirmDateOfBirth">Date of Birth</Label>
+                      <Input
+                        id="confirmDateOfBirth"
+                        type="date"
+                        value={confirmDateOfBirth}
+                        onChange={(e) => setConfirmDateOfBirth(e.target.value)}
+                        disabled={isUpdating}
+                        required
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        This must match your government-issued ID exactly
+                      </p>
+                    </div>
+                  </div>
+
                   {hasDisplayName ? (
                     <div className="space-y-3">
                       <Button
                         onClick={handleNameConfirmed}
                         className="w-full"
                         size="lg"
+                        disabled={isUpdating || !confirmDateOfBirth}
                       >
-                        Yes, this is correct - Continue to Verification
+                        {isUpdating ? "Processing..." : "Yes, this is correct - Continue to Verification"}
                       </Button>
 
                       <Button

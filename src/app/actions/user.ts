@@ -551,7 +551,7 @@ export async function getNotificationPreferences() {
   }
 }
 
-export async function confirmAuthenticatedName() {
+export async function confirmAuthenticatedName(dateOfBirth: string) {
   'use server';
 
   const clerkUser = await currentUser();
@@ -571,28 +571,30 @@ export async function confirmAuthenticatedName() {
       return { success: false, error: 'No name on file to confirm' };
     }
 
-    // Copy display names to authenticated names
+    // Copy display names to authenticated names and save DOB
     await prismadb.user.update({
       where: { id: clerkUser.id },
       data: {
         authenticatedFirstName: userData.firstName,
         authenticatedLastName: userData.lastName,
+        authenticatedDateOfBirth: dateOfBirth.trim(),
       },
     });
 
-    logger.info('User authenticated name confirmed', {
+    logger.info('User authenticated information confirmed', {
       userId: clerkUser.id,
       authenticatedFirstName: userData.firstName,
       authenticatedLastName: userData.lastName,
+      authenticatedDateOfBirth: dateOfBirth.trim(),
     });
 
     return { success: true };
   } catch (error) {
-    logger.error('Error confirming authenticated name', {
+    logger.error('Error confirming authenticated information', {
       userId: clerkUser.id,
       error: error instanceof Error ? error.message : 'Unknown error',
     });
-    return { success: false, error: 'Failed to confirm name' };
+    return { success: false, error: 'Failed to confirm information' };
   }
 }
 
