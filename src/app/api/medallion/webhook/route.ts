@@ -26,6 +26,9 @@ export async function POST(request: NextRequest) {
 
     const event = JSON.parse(body);
 
+    // Debug: Log the full payload to understand the structure
+    console.log('Medallion webhook full payload:', JSON.stringify(event, null, 2));
+
     console.log('Medallion webhook received:', {
       type: event.type,
       userId: event.user_id,

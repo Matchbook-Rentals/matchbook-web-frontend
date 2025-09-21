@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { MedallionVerification } from "@/components/medallion-verification";
 import { MedallionScriptLoader } from "@/components/medallion-script-loader";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, User, Edit, Save, X } from "lucide-react";
+import { ArrowLeft, CheckCircle, User, Edit, Save, X, Loader2 } from "lucide-react";
 import { confirmAuthenticatedName, updateAuthenticatedName } from "@/app/actions/user";
 
 // Helper functions for date format conversion
@@ -57,6 +57,10 @@ export default function IdentityVerificationClient({
     convertToHtmlDate(userData.authenticatedDateOfBirth || "")
   );
 
+  // Polling state for verification status
+  const [isPolling, setIsPolling] = useState(false);
+  const [pollAttempts, setPollAttempts] = useState(0);
+
   // Edit form state
   const [showEditForm, setShowEditForm] = useState(false);
   const [editFirstName, setEditFirstName] = useState(userData.firstName || "");
@@ -65,6 +69,82 @@ export default function IdentityVerificationClient({
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [localUserData, setLocalUserData] = useState(userData);
+
+  // Function to check verification status via API
+  const checkVerificationStatus = useCallback(async () => {
+    try {
+      setIsPolling(true);
+      const response = await fetch("/api/user/medallion-verification");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch verification status");
+      }
+
+      const result = await response.json();
+      if (result.success && result.data) {
+        const { medallionIdentityVerified, medallionVerificationStatus } = result.data;
+
+        // Update local user data with latest status
+        setLocalUserData(prev => ({
+          ...prev,
+          medallionIdentityVerified,
+          medallionVerificationStatus,
+        }));
+
+        // If verified, redirect to dashboard
+        if (medallionIdentityVerified) {
+          const targetUrl = redirectUrl || "/app/host/dashboard/overview";
+          router.push(targetUrl);
+          return true; // Status changed
+        }
+
+        // If explicitly failed, stop polling
+        if (medallionVerificationStatus === 'rejected' ||
+            medallionVerificationStatus === 'expired' ||
+            medallionVerificationStatus === 'failed') {
+          return true; // Status changed
+        }
+      }
+
+      return false; // No status change
+    } catch (error) {
+      console.error("Error checking verification status:", error);
+      return false;
+    } finally {
+      setIsPolling(false);
+    }
+  }, [redirectUrl, router]);
+
+  // Auto-polling effect when returning from verification
+  useEffect(() => {
+    if (!isReturningFromVerification) return;
+
+    // Don't poll if already verified or explicitly failed
+    if (localUserData.medallionIdentityVerified ||
+        localUserData.medallionVerificationStatus === 'rejected' ||
+        localUserData.medallionVerificationStatus === 'expired' ||
+        localUserData.medallionVerificationStatus === 'failed') {
+      return;
+    }
+
+    // Start polling every 3 seconds, max 20 attempts (1 minute)
+    const maxAttempts = 20;
+    let attempts = 0;
+
+    const pollInterval = setInterval(async () => {
+      attempts++;
+      setPollAttempts(attempts);
+
+      const statusChanged = await checkVerificationStatus();
+
+      if (statusChanged || attempts >= maxAttempts) {
+        clearInterval(pollInterval);
+      }
+    }, 3000);
+
+    // Cleanup on unmount
+    return () => clearInterval(pollInterval);
+  }, [isReturningFromVerification, localUserData.medallionIdentityVerified, localUserData.medallionVerificationStatus, checkVerificationStatus]);
 
   const handleVerificationComplete = async (medallionUserId: string) => {
     setIsUpdating(true);
@@ -257,21 +337,31 @@ export default function IdentityVerificationClient({
         <div className="max-w-2xl mx-auto py-8 px-4 text-center">
           <div className="bg-white p-8 rounded-lg shadow-sm">
             <div className="h-16 w-16 text-orange-500 mx-auto mb-4">
-              <CheckCircle className="h-full w-full" />
+              {isPolling ? (
+                <Loader2 className="h-full w-full animate-spin" />
+              ) : (
+                <CheckCircle className="h-full w-full" />
+              )}
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               Verification Processing
             </h1>
             <p className="text-gray-600 mb-4">
-              Your identity verification is being processed. This may take a few moments.
+              Your identity verification is being processed. {isPolling ? "Checking status..." : "This may take a few moments."}
             </p>
+            {pollAttempts > 0 && (
+              <p className="text-sm text-gray-500 mb-4">
+                Status check attempt: {pollAttempts}/20
+              </p>
+            )}
             <div className="space-y-3">
               <Button
-                onClick={() => window.location.reload()}
+                onClick={checkVerificationStatus}
                 variant="outline"
                 className="w-full"
+                disabled={isPolling}
               >
-                Check Status Again
+                {isPolling ? "Checking..." : "Check Status Again"}
               </Button>
               <Button onClick={handleGoBack} variant="outline" className="w-full">
                 Return to Dashboard
