@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { MedallionVerification } from "@/components/medallion-verification";
-import { MedallionScriptLoader } from "@/components/medallion-script-loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -762,16 +761,14 @@ export default function IdentityVerificationClient({
           </p>
         </div>
 
-        <MedallionScriptLoader>
-          <MedallionVerification
-            userEmail={localUserData.email || ""}
-            firstName={localUserData.authenticatedFirstName || localUserData.firstName || undefined}
-            lastName={localUserData.authenticatedLastName || localUserData.lastName || undefined}
-            dob={localUserData.authenticatedDateOfBirth || undefined}
-            onVerificationComplete={handleVerificationComplete}
-            onVerificationError={handleVerificationError}
-          />
-        </MedallionScriptLoader>
+        <MedallionVerification
+          userEmail={localUserData.email || ""}
+          firstName={localUserData.authenticatedFirstName || localUserData.firstName || undefined}
+          lastName={localUserData.authenticatedLastName || localUserData.lastName || undefined}
+          dob={localUserData.authenticatedDateOfBirth || undefined}
+          onVerificationComplete={handleVerificationComplete}
+          onVerificationError={handleVerificationError}
+        />
 
         {isUpdating && (
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">

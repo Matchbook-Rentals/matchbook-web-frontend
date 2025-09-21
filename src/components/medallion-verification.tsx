@@ -1,28 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Shield, AlertCircle, Loader2 } from "lucide-react";
-
-// Extend the Window interface to include the identify function
-declare global {
-  interface Window {
-    identify?: (
-      sdkKey: string,
-      userConfig: {
-        email: string;
-        firstName?: string;
-        middleName?: string;
-        lastName?: string;
-        dob?: string;
-        preferredWorkflowID?: string;
-        redirectURL?: string;
-      },
-      errorHandler?: (error: { message: string }) => void
-    ) => void;
-  }
-}
+import { Check, Shield, AlertCircle, Loader2, ExternalLink } from "lucide-react";
 
 export interface MedallionVerificationProps {
   userEmail: string;
@@ -46,37 +27,8 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verifying' | 'completed' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isScriptReady, setIsScriptReady] = useState(false);
-
-  // Check if Medallion script is loaded and ready
-  useEffect(() => {
-    const checkScript = () => {
-      if (window.identify) {
-        setIsScriptReady(true);
-        console.log('✅ Medallion script is ready');
-      } else {
-        console.log('⏳ Waiting for Medallion script to load...');
-        setTimeout(checkScript, 100);
-      }
-    };
-
-    checkScript();
-  }, []);
 
   const handleVerification = async () => {
-    if (!window.identify) {
-      setErrorMessage('Medallion verification script not loaded. Please refresh and try again.');
-      setVerificationStatus('error');
-      return;
-    }
-
-    const sdkKey = process.env.NEXT_PUBLIC_MEDALLION_LOW_CODE_SDK_KEY;
-    if (!sdkKey) {
-      setErrorMessage('Medallion SDK key not configured. Please contact support.');
-      setVerificationStatus('error');
-      return;
-    }
-
     // Validate required fields
     if (!firstName || !lastName || !dob) {
       setErrorMessage('Missing required information: first name, last name, and date of birth are required.');
@@ -88,43 +40,31 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
     setVerificationStatus('verifying');
     setErrorMessage(null);
 
-    console.log('🚀 Starting Medallion verification (user already created during confirmation)');
+    console.log('🚀 Starting Medallion verification using JWT API approach');
     console.log('📧 Email:', userEmail);
     console.log('👤 Name:', firstName, lastName);
     console.log('📅 DOB:', dob);
-    console.log('🔑 SDK Key present:', !!sdkKey);
 
     try {
-      const userConfig = {
-        email: userEmail,
-        firstName: firstName || '',
-        lastName: lastName || '',
-        dob: dob || '',
-        redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/app/host/onboarding/identity-verification?completed=true`,
-      };
+      // Generate JWT token for Medallion verification
+      const jwtResponse = await fetch('/api/medallion/generate-jwt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-      console.log('📤 Calling Medallion identify() with config:', userConfig);
+      if (!jwtResponse.ok) {
+        const errorData = await jwtResponse.json();
+        throw new Error(errorData.error || 'Failed to generate verification link');
+      }
 
-      // Call Medallion's identify function with the LOW_CODE_SDK
-      // The user was already created in Medallion during the confirmation step
-      window.identify(
-        sdkKey,
-        userConfig,
-        (error: { message: string }) => {
-          console.error('❌ Medallion verification error:', error);
-          setIsLoading(false);
-          setVerificationStatus('error');
-          setErrorMessage(error.message || 'Verification failed');
-          onVerificationError?.(error);
-        }
-      );
+      const jwtData = await jwtResponse.json();
+      console.log('✅ JWT generated successfully, redirecting to Medallion');
 
-      // The identify function will redirect the user to Medallion's verification flow
-      // So we don't need to do anything else here - the user will be redirected
-      console.log('✅ Medallion identify() called successfully - user will be redirected');
+      // Redirect to Medallion verification page
+      window.location.href = jwtData.verificationUrl;
 
     } catch (error) {
-      console.error('❌ Error in Medallion verification flow:', error);
+      console.error('❌ Error generating verification link:', error);
       setIsLoading(false);
       setVerificationStatus('error');
       const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
@@ -164,16 +104,6 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
           </div>
         ) : null}
 
-        {!isScriptReady && (
-          <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
-            <div>
-              <p className="font-medium text-blue-800">Loading Verification System</p>
-              <p className="text-sm text-blue-600">Please wait while we prepare the verification interface...</p>
-            </div>
-          </div>
-        )}
-
         <div className="space-y-2">
           <h4 className="font-medium">What you&apos;ll need:</h4>
           <ul className="text-sm text-gray-600 space-y-1">
@@ -186,29 +116,30 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
 
         <Button
           onClick={handleVerification}
-          disabled={isLoading || verificationStatus === 'completed' || !isScriptReady || !firstName || !lastName || !dob}
+          disabled={isLoading || verificationStatus === 'completed' || !firstName || !lastName || !dob}
           className="w-full"
           size="lg"
         >
           {isLoading ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Setting up verification...
+              Generating verification link...
             </>
-          ) : !isScriptReady ? (
-            'Loading...'
           ) : !firstName || !lastName || !dob ? (
             'Missing required information'
           ) : (
-            'Begin Identity Verification'
+            <>
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Begin Identity Verification
+            </>
           )}
         </Button>
 
         <div className="text-xs text-blue-700 p-3 bg-blue-50 border border-blue-200 rounded">
-          <strong>Seamless Medallion Integration:</strong>
+          <strong>Enhanced Medallion Integration:</strong>
           <div className="mt-1 space-y-1">
             <div>• Your verification account is already set up</div>
-            <div>• Uses Medallion&apos;s LOW_CODE_SDK for secure verification</div>
+            <div>• Uses Medallion&apos;s secure JWT API for reliable verification</div>
             <div>• You&apos;ll be redirected to Medallion&apos;s verification platform</div>
             <div>• Complete verification and return here automatically</div>
           </div>
