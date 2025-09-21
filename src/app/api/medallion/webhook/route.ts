@@ -74,18 +74,52 @@ async function handleVerificationStatusUpdate(event: any) {
       }
     });
 
-    // If user not found and we have email in the webhook payload, try email lookup
-    if (!user && event.email) {
-      console.log(`🔍 Webhook: userAccessCode lookup failed, trying email: ${event.email}`);
-      user = await prisma.user.findFirst({
-        where: {
-          email: event.email
-        }
-      });
+    // If user not found, try multiple fallback strategies
+    if (!user) {
+      console.log(`🔍 Webhook: userAccessCode lookup failed for: ${userAccessCode}`);
 
-      // If found by email, store the userAccessCode for future lookups
+      // Strategy 1: If we have email in the webhook payload, try email lookup
+      if (event.email) {
+        console.log(`🔍 Trying email lookup: ${event.email}`);
+        user = await prisma.user.findFirst({
+          where: {
+            email: event.email
+          }
+        });
+
+        if (user) {
+          console.log(`✅ Found user by email, updating userAccessCode: ${userAccessCode}`);
+        }
+      }
+
+      // Strategy 2: Look for users with pending verification started recently (last 30 minutes)
+      // This handles the LOW_CODE_SDK creating a different userAccessCode than our API call
+      if (!user) {
+        const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
+
+        console.log(`🔍 Trying recent pending verification lookup (since ${thirtyMinutesAgo.toISOString()})`);
+        user = await prisma.user.findFirst({
+          where: {
+            medallionVerificationStatus: 'pending',
+            medallionVerificationStartedAt: {
+              gte: thirtyMinutesAgo
+            },
+            medallionIdentityVerified: {
+              not: true
+            }
+          },
+          orderBy: {
+            medallionVerificationStartedAt: 'desc'
+          }
+        });
+
+        if (user) {
+          console.log(`✅ Found user by recent pending verification (started ${user.medallionVerificationStartedAt}), updating userAccessCode: ${userAccessCode}`);
+        }
+      }
+
+      // If we found a user via fallback, update their userAccessCode
       if (user) {
-        console.log(`✅ Found user by email, storing userAccessCode: ${userAccessCode}`);
         user = await prisma.user.update({
           where: { id: user.id },
           data: { medallionUserAccessCode: userAccessCode }
@@ -93,10 +127,9 @@ async function handleVerificationStatusUpdate(event: any) {
       }
     }
 
-    // TODO: Check if webhook contains any other identifying information we can use
-    // For now, log the full payload structure to understand what's available
+    // Still no user found after all fallback strategies
     if (!user) {
-      console.error(`❌ User not found for userAccessCode: ${userAccessCode}`);
+      console.error(`❌ User not found after all lookup strategies for userAccessCode: ${userAccessCode}`);
       console.log('🔍 Available webhook data:', {
         event: event.event,
         hasEmail: !!event.email,
@@ -104,6 +137,27 @@ async function handleVerificationStatusUpdate(event: any) {
         orderKeys: event.order ? Object.keys(event.order) : [],
         fullEventKeys: Object.keys(event)
       });
+
+      // Log pending users for debugging
+      const recentPendingUsers = await prisma.user.findMany({
+        where: {
+          medallionVerificationStatus: 'pending',
+          medallionVerificationStartedAt: {
+            gte: new Date(Date.now() - 60 * 60 * 1000) // Last hour
+          }
+        },
+        select: {
+          id: true,
+          email: true,
+          medallionUserAccessCode: true,
+          medallionVerificationStartedAt: true
+        },
+        orderBy: {
+          medallionVerificationStartedAt: 'desc'
+        }
+      });
+
+      console.log('🔍 Recent pending users for comparison:', recentPendingUsers);
       return;
     }
 
