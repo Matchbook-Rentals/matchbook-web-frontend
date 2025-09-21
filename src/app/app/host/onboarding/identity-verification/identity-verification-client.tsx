@@ -60,6 +60,8 @@ export default function IdentityVerificationClient({
   // Polling state for verification status
   const [isPolling, setIsPolling] = useState(false);
   const [pollAttempts, setPollAttempts] = useState(0);
+  const [nextPollIn, setNextPollIn] = useState(0);
+  const [pollTimeoutId, setPollTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   // Edit form state
   const [showEditForm, setShowEditForm] = useState(false);
@@ -70,21 +72,42 @@ export default function IdentityVerificationClient({
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [localUserData, setLocalUserData] = useState(userData);
 
-  // Function to check verification status via API
+  // Linear backoff polling intervals
+  const getPollingInterval = useCallback((attempt: number): number => {
+    if (attempt <= 3) return 5000;    // 0-3: 5 seconds (quick initial checks)
+    if (attempt <= 6) return 10000;   // 4-6: 10 seconds
+    if (attempt <= 9) return 20000;   // 7-9: 20 seconds
+    return 30000;                     // 10+: 30 seconds (max backoff)
+  }, []);
+
+  // Function to check verification status via API (polls Medallion directly)
   const checkVerificationStatus = useCallback(async () => {
     try {
       setIsPolling(true);
-      const response = await fetch("/api/user/medallion-verification");
+      console.log("🔍 Polling Medallion API for verification status...");
+
+      const response = await fetch("/api/medallion/poll-status", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch verification status");
+        throw new Error(`Failed to poll verification status: ${response.status}`);
       }
 
       const result = await response.json();
       if (result.success && result.data) {
         const { medallionIdentityVerified, medallionVerificationStatus } = result.data;
 
-        // Update local user data with latest status
+        console.log("📊 Verification status from Medallion:", {
+          verified: medallionIdentityVerified,
+          status: medallionVerificationStatus,
+          medallionData: result.medallionData
+        });
+
+        // Update local user data with latest status from Medallion
         setLocalUserData(prev => ({
           ...prev,
           medallionIdentityVerified,
@@ -93,6 +116,7 @@ export default function IdentityVerificationClient({
 
         // If verified, redirect to dashboard
         if (medallionIdentityVerified) {
+          console.log("✅ Verification completed successfully - redirecting");
           const targetUrl = redirectUrl || "/app/host/dashboard/overview";
           router.push(targetUrl);
           return true; // Status changed
@@ -102,18 +126,76 @@ export default function IdentityVerificationClient({
         if (medallionVerificationStatus === 'rejected' ||
             medallionVerificationStatus === 'expired' ||
             medallionVerificationStatus === 'failed') {
+          console.log("❌ Verification failed - stopping polling");
           return true; // Status changed
         }
       }
 
       return false; // No status change
     } catch (error) {
-      console.error("Error checking verification status:", error);
+      console.error("Error polling Medallion verification status:", error);
       return false;
     } finally {
       setIsPolling(false);
     }
   }, [redirectUrl, router]);
+
+  // Countdown timer for next poll
+  useEffect(() => {
+    if (nextPollIn <= 0) return;
+
+    const countdown = setInterval(() => {
+      setNextPollIn(prev => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => clearInterval(countdown);
+  }, [nextPollIn]);
+
+  // Manual poll function
+  const triggerManualPoll = useCallback(async () => {
+    if (isPolling) return;
+
+    // Cancel any scheduled polls
+    if (pollTimeoutId) {
+      clearTimeout(pollTimeoutId);
+      setPollTimeoutId(null);
+    }
+
+    setNextPollIn(0);
+    const statusChanged = await checkVerificationStatus();
+
+    if (!statusChanged) {
+      // If status didn't change, continue with scheduled polling
+      scheduleNextPoll(pollAttempts + 1);
+    }
+  }, [isPolling, pollTimeoutId, pollAttempts, checkVerificationStatus, scheduleNextPoll]);
+
+  // Schedule the next poll with backoff
+  const scheduleNextPoll = useCallback((attempt: number) => {
+    const maxAttempts = 15; // Max 15 attempts over ~5 minutes
+    const maxDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+    if (attempt >= maxAttempts) {
+      console.log('📊 Max polling attempts reached, stopping');
+      return;
+    }
+
+    const interval = getPollingInterval(attempt);
+    setNextPollIn(Math.floor(interval / 1000));
+
+    const timeoutId = setTimeout(async () => {
+      const newAttempt = attempt + 1;
+      setPollAttempts(newAttempt);
+
+      const statusChanged = await checkVerificationStatus();
+
+      if (!statusChanged) {
+        scheduleNextPoll(newAttempt);
+      }
+    }, interval);
+
+    setPollTimeoutId(timeoutId);
+  }, [getPollingInterval, checkVerificationStatus]);
 
   // Auto-polling effect when returning from verification
   useEffect(() => {
@@ -127,24 +209,27 @@ export default function IdentityVerificationClient({
       return;
     }
 
-    // Start polling every 3 seconds, max 20 attempts (1 minute)
-    const maxAttempts = 20;
-    let attempts = 0;
+    console.log('🔄 Starting linear backoff polling strategy');
 
-    const pollInterval = setInterval(async () => {
-      attempts++;
-      setPollAttempts(attempts);
-
+    // Start with immediate first check
+    const startPolling = async () => {
+      setPollAttempts(1);
       const statusChanged = await checkVerificationStatus();
 
-      if (statusChanged || attempts >= maxAttempts) {
-        clearInterval(pollInterval);
+      if (!statusChanged) {
+        scheduleNextPoll(1);
       }
-    }, 3000);
+    };
+
+    startPolling();
 
     // Cleanup on unmount
-    return () => clearInterval(pollInterval);
-  }, [isReturningFromVerification, localUserData.medallionIdentityVerified, localUserData.medallionVerificationStatus, checkVerificationStatus]);
+    return () => {
+      if (pollTimeoutId) {
+        clearTimeout(pollTimeoutId);
+      }
+    };
+  }, [isReturningFromVerification, localUserData.medallionIdentityVerified, localUserData.medallionVerificationStatus, checkVerificationStatus, scheduleNextPoll, pollTimeoutId]);
 
   const handleVerificationComplete = async (medallionUserId: string) => {
     setIsUpdating(true);
@@ -350,18 +435,24 @@ export default function IdentityVerificationClient({
               Your identity verification is being processed. {isPolling ? "Checking status..." : "This may take a few moments."}
             </p>
             {pollAttempts > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                Status check attempt: {pollAttempts}/20
-              </p>
+              <div className="text-sm text-gray-500 mb-4 space-y-1">
+                <p>Status check attempt: {pollAttempts}/15</p>
+                {nextPollIn > 0 && (
+                  <p>Next automatic check in: {nextPollIn} seconds</p>
+                )}
+                {nextPollIn === 0 && pollAttempts < 15 && (
+                  <p>⏳ Checking status...</p>
+                )}
+              </div>
             )}
             <div className="space-y-3">
               <Button
-                onClick={checkVerificationStatus}
+                onClick={triggerManualPoll}
                 variant="outline"
                 className="w-full"
                 disabled={isPolling}
               >
-                {isPolling ? "Checking..." : "Check Status Again"}
+                {isPolling ? "Checking..." : "Check Status Now"}
               </Button>
               <Button onClick={handleGoBack} variant="outline" className="w-full">
                 Return to Dashboard

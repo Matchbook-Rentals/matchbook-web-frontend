@@ -69,7 +69,8 @@ model User {
 
   // Identity verification (Medallion/authenticate.com)
   medallionIdentityVerified    Boolean?  @default(false) // Whether identity verification is complete
-  medallionUserId              String?   // Medallion user ID from verification
+  medallionUserId              String?   // Medallion permanent user ID (from webhooks/user creation)
+  medallionUserAccessCode      String?   // Medallion access code for API polling (from getTestResult endpoint)
   medallionVerificationStatus  String?   // "pending", "approved", "rejected", "expired"
   medallionVerificationStartedAt DateTime? // When verification process started
   medallionVerificationCompletedAt DateTime? // When verification was completed

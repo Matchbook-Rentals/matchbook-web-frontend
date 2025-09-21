@@ -30,27 +30,26 @@ export async function POST(request: NextRequest) {
     console.log('Medallion webhook full payload:', JSON.stringify(event, null, 2));
 
     console.log('Medallion webhook received:', {
-      type: event.type,
-      userId: event.user_id,
-      externalId: event.external_id,
-      status: event.status,
+      event: event.event,
+      userAccessCode: event.order?.userAccessCode,
+      status: event.order?.status,
+      verificationMethod: event.order?.verificationMethod,
     });
 
     // Handle different event types
-    switch (event.type) {
-      case 'verification.completed':
-      case 'verification.approved':
-      case 'verification.rejected':
-      case 'verification.expired':
+    switch (event.event) {
+      case 'UPLOAD_ID_ENHANCED_REVIEW_STATUS':
+      case 'UPLOAD_PASSPORT_ENHANCED_REVIEW_STATUS':
+      case 'SELF_VERIFICATION_TRY_STATUS':
         await handleVerificationStatusUpdate(event);
         break;
 
-      case 'verification.started':
+      case 'USER_PII_UPDATE':
         await handleVerificationStarted(event);
         break;
 
       default:
-        console.log(`Unhandled webhook event type: ${event.type}`);
+        console.log(`Unhandled webhook event type: ${event.event}`);
     }
 
     return NextResponse.json({ success: true, message: 'Webhook processed' });
@@ -65,20 +64,18 @@ export async function POST(request: NextRequest) {
 
 async function handleVerificationStatusUpdate(event: any) {
   try {
-    const { user_id: medallionUserId, external_id: userId, status, verification_result } = event;
+    const { order } = event;
+    const { userAccessCode, status, verificationMethod } = order || {};
 
-    // Find user by either our user ID or Medallion user ID
+    // Find user by userAccessCode
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          { id: userId },
-          { medallionUserId: medallionUserId }
-        ]
+        medallionUserAccessCode: userAccessCode
       }
     });
 
     if (!user) {
-      console.error(`User not found for Medallion user ID: ${medallionUserId}, external ID: ${userId}`);
+      console.error(`User not found for userAccessCode: ${userAccessCode}`);
       return;
     }
 
@@ -113,8 +110,8 @@ async function handleVerificationStatusUpdate(event: any) {
         medallionIdentityVerified: isVerified,
         medallionVerificationStatus: verificationStatus,
         medallionVerificationCompletedAt: isVerified ? new Date() : null,
-        // Store the Medallion user ID if we don't have it
-        medallionUserId: user.medallionUserId || medallionUserId,
+        // Store verification method if available
+        ...(verificationMethod && { medallionVerificationMethod: verificationMethod }),
       },
     });
 
@@ -133,20 +130,18 @@ async function handleVerificationStatusUpdate(event: any) {
 
 async function handleVerificationStarted(event: any) {
   try {
-    const { user_id: medallionUserId, external_id: userId } = event;
+    const { order } = event;
+    const { userAccessCode } = order || {};
 
-    // Find user by either our user ID or Medallion user ID
+    // Find user by userAccessCode
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          { id: userId },
-          { medallionUserId: medallionUserId }
-        ]
+        medallionUserAccessCode: userAccessCode
       }
     });
 
     if (!user) {
-      console.error(`User not found for verification started webhook: ${medallionUserId}, external ID: ${userId}`);
+      console.error(`User not found for verification started webhook with userAccessCode: ${userAccessCode}`);
       return;
     }
 
@@ -157,7 +152,6 @@ async function handleVerificationStarted(event: any) {
         data: {
           medallionVerificationStartedAt: new Date(),
           medallionVerificationStatus: 'pending',
-          medallionUserId: user.medallionUserId || medallionUserId,
         },
       });
     }

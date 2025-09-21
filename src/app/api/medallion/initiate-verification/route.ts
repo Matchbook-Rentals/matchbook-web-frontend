@@ -17,15 +17,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('🚀 Medallion verification initiated for user:', userId);
+    const body = await request.json();
+    const { userAccessCode } = body;
 
-    // With LOW_CODE_SDK, we only need to mark verification as started
-    // The actual verification flow is handled client-side
+    console.log('🚀 Medallion verification initiated for user:', userId);
+    if (userAccessCode) {
+      console.log('📝 Storing userAccessCode:', userAccessCode);
+    }
+
+    // With LOW_CODE_SDK, we mark verification as started
+    // Also store userAccessCode if provided
     await prisma.user.update({
       where: { id: userId },
       data: {
         medallionVerificationStatus: "pending",
         medallionVerificationStartedAt: new Date(),
+        ...(userAccessCode && { medallionUserAccessCode: userAccessCode }),
       },
     });
 
@@ -34,7 +41,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "Verification can proceed with LOW_CODE_SDK",
-      note: "Actual verification is handled client-side with Medallion's SDK"
+      note: "Actual verification is handled client-side with Medallion's SDK",
+      userAccessCodeStored: !!userAccessCode
     });
 
   } catch (error) {
