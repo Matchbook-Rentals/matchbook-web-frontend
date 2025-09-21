@@ -151,25 +151,6 @@ export default function IdentityVerificationClient({
     return () => clearInterval(countdown);
   }, [nextPollIn]);
 
-  // Manual poll function
-  const triggerManualPoll = useCallback(async () => {
-    if (isPolling) return;
-
-    // Cancel any scheduled polls
-    if (pollTimeoutId) {
-      clearTimeout(pollTimeoutId);
-      setPollTimeoutId(null);
-    }
-
-    setNextPollIn(0);
-    const statusChanged = await checkVerificationStatus();
-
-    if (!statusChanged) {
-      // If status didn't change, continue with scheduled polling
-      scheduleNextPoll(pollAttempts + 1);
-    }
-  }, [isPolling, pollTimeoutId, pollAttempts, checkVerificationStatus, scheduleNextPoll]);
-
   // Schedule the next poll with backoff
   const scheduleNextPoll = useCallback((attempt: number) => {
     const maxAttempts = 15; // Max 15 attempts over ~5 minutes
@@ -196,6 +177,25 @@ export default function IdentityVerificationClient({
 
     setPollTimeoutId(timeoutId);
   }, [getPollingInterval, checkVerificationStatus]);
+
+  // Manual poll function
+  const triggerManualPoll = useCallback(async () => {
+    if (isPolling) return;
+
+    // Cancel any scheduled polls
+    if (pollTimeoutId) {
+      clearTimeout(pollTimeoutId);
+      setPollTimeoutId(null);
+    }
+
+    setNextPollIn(0);
+    const statusChanged = await checkVerificationStatus();
+
+    if (!statusChanged) {
+      // If status didn't change, continue with scheduled polling
+      scheduleNextPoll(pollAttempts + 1);
+    }
+  }, [isPolling, pollTimeoutId, pollAttempts, checkVerificationStatus, scheduleNextPoll]);
 
   // Auto-polling effect when returning from verification
   useEffect(() => {
