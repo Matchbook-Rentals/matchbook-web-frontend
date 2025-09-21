@@ -11,6 +11,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, CheckCircle, User, Edit, Save, X } from "lucide-react";
 import { confirmAuthenticatedName, updateAuthenticatedName } from "@/app/actions/user";
 
+// Helper functions for date format conversion
+const convertToHtmlDate = (ddmmyyyy: string): string => {
+  if (!ddmmyyyy) return "";
+  const [day, month, year] = ddmmyyyy.split('-');
+  return `${year}-${month}-${day}`;
+};
+
+const convertToDDMMYYYY = (htmlDate: string): string => {
+  if (!htmlDate) return "";
+  const [year, month, day] = htmlDate.split('-');
+  return `${day}-${month}-${year}`;
+};
+
 interface UserData {
   id: string;
   email: string | null;
@@ -52,19 +65,6 @@ export default function IdentityVerificationClient({
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [localUserData, setLocalUserData] = useState(userData);
-
-  // Helper functions for date format conversion
-  const convertToHtmlDate = (ddmmyyyy: string): string => {
-    if (!ddmmyyyy) return "";
-    const [day, month, year] = ddmmyyyy.split('-');
-    return `${year}-${month}-${day}`;
-  };
-
-  const convertToDDMMYYYY = (htmlDate: string): string => {
-    if (!htmlDate) return "";
-    const [year, month, day] = htmlDate.split('-');
-    return `${day}-${month}-${year}`;
-  };
 
   const handleVerificationComplete = async (medallionUserId: string) => {
     setIsUpdating(true);
