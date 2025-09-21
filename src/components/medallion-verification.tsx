@@ -29,7 +29,7 @@ export interface MedallionVerificationProps {
   firstName?: string;
   middleName?: string;
   lastName?: string;
-  dob?: string; // Date of birth in MM-DD-YYYY format
+  dob?: string; // Date of birth in DD-MM-YYYY format
   onVerificationComplete?: (result: any) => void;
   onVerificationError?: (error: any) => void;
 }

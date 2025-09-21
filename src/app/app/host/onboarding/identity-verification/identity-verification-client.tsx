@@ -18,6 +18,7 @@ interface UserData {
   lastName: string | null;
   authenticatedFirstName: string | null;
   authenticatedLastName: string | null;
+  authenticatedDateOfBirth: string | null;
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
   medallionUserId: string | null;
@@ -42,10 +43,23 @@ export default function IdentityVerificationClient({
   const [showEditForm, setShowEditForm] = useState(false);
   const [editFirstName, setEditFirstName] = useState(userData.firstName || "");
   const [editLastName, setEditLastName] = useState(userData.lastName || "");
+  const [editDateOfBirth, setEditDateOfBirth] = useState("");
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [localUserData, setLocalUserData] = useState(userData);
 
+  // Helper functions for date format conversion
+  const convertToHtmlDate = (ddmmyyyy: string): string => {
+    if (!ddmmyyyy) return "";
+    const [day, month, year] = ddmmyyyy.split('-');
+    return `${year}-${month}-${day}`;
+  };
+
+  const convertToDDMMYYYY = (htmlDate: string): string => {
+    if (!htmlDate) return "";
+    const [year, month, day] = htmlDate.split('-');
+    return `${day}-${month}-${year}`;
+  };
 
   const handleVerificationComplete = async (medallionUserId: string) => {
     setIsUpdating(true);
@@ -100,6 +114,7 @@ export default function IdentityVerificationClient({
     // Pre-populate with authenticated names if available, otherwise display names
     setEditFirstName(localUserData.authenticatedFirstName || localUserData.firstName || "");
     setEditLastName(localUserData.authenticatedLastName || localUserData.lastName || "");
+    setEditDateOfBirth(convertToHtmlDate(localUserData.authenticatedDateOfBirth || ""));
   };
 
   const handleCancelEdit = () => {
@@ -108,11 +123,17 @@ export default function IdentityVerificationClient({
     // Reset form values to current authenticated or display names
     setEditFirstName(localUserData.authenticatedFirstName || localUserData.firstName || "");
     setEditLastName(localUserData.authenticatedLastName || localUserData.lastName || "");
+    setEditDateOfBirth(convertToHtmlDate(localUserData.authenticatedDateOfBirth || ""));
   };
 
   const handleNameUpdate = async () => {
     if (!editFirstName.trim() || !editLastName.trim()) {
-      setUpdateError("Both first name and last name are required");
+      setUpdateError("First name and last name are required");
+      return;
+    }
+
+    if (!editDateOfBirth) {
+      setUpdateError("Date of birth is required for identity verification");
       return;
     }
 
@@ -120,7 +141,8 @@ export default function IdentityVerificationClient({
     setUpdateError(null);
 
     try {
-      const result = await updateAuthenticatedName(editFirstName.trim(), editLastName.trim());
+      const dateOfBirthFormatted = convertToDDMMYYYY(editDateOfBirth);
+      const result = await updateAuthenticatedName(editFirstName.trim(), editLastName.trim(), dateOfBirthFormatted);
 
       if (result.success) {
         // Update local state with new authenticated values
@@ -128,6 +150,7 @@ export default function IdentityVerificationClient({
           ...localUserData,
           authenticatedFirstName: editFirstName.trim(),
           authenticatedLastName: editLastName.trim(),
+          authenticatedDateOfBirth: dateOfBirthFormatted,
         };
         setLocalUserData(updatedUserData);
 
@@ -137,11 +160,11 @@ export default function IdentityVerificationClient({
         // Soft refresh to get latest server data
         router.refresh();
       } else {
-        setUpdateError(result.error || "Failed to update name");
+        setUpdateError(result.error || "Failed to update information");
       }
     } catch (error) {
-      setUpdateError("Failed to update name. Please try again.");
-      console.error("Error updating name:", error);
+      setUpdateError("Failed to update information. Please try again.");
+      console.error("Error updating authenticated information:", error);
     } finally {
       setIsUpdatingName(false);
     }
@@ -327,12 +350,27 @@ export default function IdentityVerificationClient({
                         disabled={isUpdatingName}
                       />
                     </div>
+
+                    <div>
+                      <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                      <Input
+                        id="dateOfBirth"
+                        type="date"
+                        value={editDateOfBirth}
+                        onChange={(e) => setEditDateOfBirth(e.target.value)}
+                        disabled={isUpdatingName}
+                        required
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        This must match your government-issued ID exactly
+                      </p>
+                    </div>
                   </div>
 
                   <div className="flex gap-3">
                     <Button
                       onClick={handleNameUpdate}
-                      disabled={isUpdatingName || !editFirstName.trim() || !editLastName.trim()}
+                      disabled={isUpdatingName || !editFirstName.trim() || !editLastName.trim() || !editDateOfBirth}
                       className="flex-1"
                     >
                       {isUpdatingName ? (
@@ -447,6 +485,7 @@ export default function IdentityVerificationClient({
             userEmail={localUserData.email || ""}
             firstName={localUserData.authenticatedFirstName || localUserData.firstName || undefined}
             lastName={localUserData.authenticatedLastName || localUserData.lastName || undefined}
+            dob={localUserData.authenticatedDateOfBirth || undefined}
             onVerificationComplete={handleVerificationComplete}
             onVerificationError={handleVerificationError}
           />

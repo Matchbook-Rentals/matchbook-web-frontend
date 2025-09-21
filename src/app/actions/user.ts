@@ -596,7 +596,7 @@ export async function confirmAuthenticatedName() {
   }
 }
 
-export async function updateAuthenticatedName(firstName: string, lastName: string) {
+export async function updateAuthenticatedName(firstName: string, lastName: string, dateOfBirth: string) {
   'use server';
 
   const clerkUser = await currentUser();
@@ -606,28 +606,30 @@ export async function updateAuthenticatedName(firstName: string, lastName: strin
   }
 
   try {
-    // Update authenticated names only (not display names)
+    // Update authenticated names and DOB (not display names)
     await prismadb.user.update({
       where: { id: clerkUser.id },
       data: {
         authenticatedFirstName: firstName.trim(),
         authenticatedLastName: lastName.trim(),
+        authenticatedDateOfBirth: dateOfBirth.trim(),
       },
     });
 
-    logger.info('User authenticated name updated', {
+    logger.info('User authenticated information updated', {
       userId: clerkUser.id,
       authenticatedFirstName: firstName.trim(),
       authenticatedLastName: lastName.trim(),
+      authenticatedDateOfBirth: dateOfBirth.trim(),
     });
 
     return { success: true };
   } catch (error) {
-    logger.error('Error updating authenticated name', {
+    logger.error('Error updating authenticated information', {
       userId: clerkUser.id,
       error: error instanceof Error ? error.message : 'Unknown error',
     });
-    return { success: false, error: 'Failed to update authenticated name' };
+    return { success: false, error: 'Failed to update authenticated information' };
   }
 }
 

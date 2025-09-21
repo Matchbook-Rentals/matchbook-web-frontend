@@ -25,6 +25,7 @@ export default async function IdentityVerificationPage({
       lastName: true,
       authenticatedFirstName: true,
       authenticatedLastName: true,
+      authenticatedDateOfBirth: true,
       medallionIdentityVerified: true,
       medallionVerificationStatus: true,
       medallionUserId: true,
@@ -45,6 +46,7 @@ export default async function IdentityVerificationPage({
         medallionIdentityVerified: true,
         medallionVerificationStatus: true,
         medallionVerificationCompletedAt: true,
+        authenticatedDateOfBirth: true,
       },
     });
 

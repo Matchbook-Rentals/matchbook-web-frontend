@@ -154,3 +154,11 @@
 - Added server actions for confirming existing names or updating authenticated names independently
 - Improved webhook-based verification status checking with fresh data fetching on return from Medallion
 - Added Clerk webhook integration for real-time user data synchronization
+
+## Add Date of Birth Collection for Medallion Verification
+- Added authenticatedDateOfBirth field to User model for storing DOB in DD-MM-YYYY format required by Medallion
+- Updated identity verification form to include date of birth input field with native browser date picker
+- Implemented date format conversion between HTML date input (YYYY-MM-DD) and Medallion format (DD-MM-YYYY)
+- Enhanced server actions to accept and validate date of birth parameter alongside name updates
+- Added DOB validation to ensure all required fields are provided before proceeding to verification
+- Updated Medallion verification component to receive and pass DOB data to resolve "dob is required" error
