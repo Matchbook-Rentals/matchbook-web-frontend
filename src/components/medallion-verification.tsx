@@ -77,39 +77,36 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
       return;
     }
 
+    // Validate required fields
+    if (!firstName || !lastName || !dob) {
+      setErrorMessage('Missing required information: first name, last name, and date of birth are required.');
+      setVerificationStatus('error');
+      return;
+    }
+
     setIsLoading(true);
     setVerificationStatus('verifying');
     setErrorMessage(null);
 
-    console.log('🚀 Starting Medallion verification with LOW_CODE_SDK');
+    console.log('🚀 Starting Medallion verification (user already created during confirmation)');
     console.log('📧 Email:', userEmail);
     console.log('👤 Name:', firstName, lastName);
+    console.log('📅 DOB:', dob);
     console.log('🔑 SDK Key present:', !!sdkKey);
 
     try {
-      // Optional: Call our API to mark verification as started (for database tracking)
-      try {
-        await fetch('/api/medallion/initiate-verification', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userEmail, firstName, lastName }),
-        });
-      } catch (apiError) {
-        console.warn('Failed to update verification status in database:', apiError);
-        // Continue with verification even if database update fails
-      }
-
       const userConfig = {
         email: userEmail,
         firstName: firstName || '',
         lastName: lastName || '',
         dob: dob || '',
-        redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/app/host/onboarding/identity-verification?completed=true&email=${encodeURIComponent(userEmail)}`,
+        redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/app/host/onboarding/identity-verification?completed=true`,
       };
 
       console.log('📤 Calling Medallion identify() with config:', userConfig);
 
-      // Call Medallion's identify function
+      // Call Medallion's identify function with the LOW_CODE_SDK
+      // The user was already created in Medallion during the confirmation step
       window.identify(
         sdkKey,
         userConfig,
@@ -127,7 +124,7 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
       console.log('✅ Medallion identify() called successfully - user will be redirected');
 
     } catch (error) {
-      console.error('❌ Error calling Medallion identify():', error);
+      console.error('❌ Error in Medallion verification flow:', error);
       setIsLoading(false);
       setVerificationStatus('error');
       const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
@@ -189,27 +186,30 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
 
         <Button
           onClick={handleVerification}
-          disabled={isLoading || verificationStatus === 'completed' || !isScriptReady}
+          disabled={isLoading || verificationStatus === 'completed' || !isScriptReady || !firstName || !lastName || !dob}
           className="w-full"
           size="lg"
         >
           {isLoading ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Redirecting to Verification...
+              Setting up verification...
             </>
           ) : !isScriptReady ? (
             'Loading...'
+          ) : !firstName || !lastName || !dob ? (
+            'Missing required information'
           ) : (
             'Begin Identity Verification'
           )}
         </Button>
 
         <div className="text-xs text-blue-700 p-3 bg-blue-50 border border-blue-200 rounded">
-          <strong>Real Medallion Integration:</strong>
+          <strong>Seamless Medallion Integration:</strong>
           <div className="mt-1 space-y-1">
-            <div>• Using Medallion&apos;s LOW_CODE_SDK</div>
-            <div>• You&apos;ll be redirected to Medallion&apos;s secure verification platform</div>
+            <div>• Your verification account is already set up</div>
+            <div>• Uses Medallion&apos;s LOW_CODE_SDK for secure verification</div>
+            <div>• You&apos;ll be redirected to Medallion&apos;s verification platform</div>
             <div>• Complete verification and return here automatically</div>
           </div>
         </div>

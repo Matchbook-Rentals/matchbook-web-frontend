@@ -6,7 +6,7 @@ import IdentityVerificationClient from "./identity-verification-client";
 export default async function IdentityVerificationPage({
   searchParams,
 }: {
-  searchParams: { redirect_url?: string; completed?: string; userAccessCode?: string; medallion_user_id?: string; [key: string]: string | undefined };
+  searchParams: { redirect_url?: string; completed?: string; medallion_user_id?: string; [key: string]: string | undefined };
 }) {
   const { userId } = auth();
   const user = await currentUser();
@@ -37,24 +37,8 @@ export default async function IdentityVerificationPage({
     redirect("/sign-in");
   }
 
-  // Capture userAccessCode if provided in URL (from Medallion redirect)
-  const userAccessCode = searchParams.userAccessCode;
+  // Capture medallionUserId if provided in URL (from Medallion redirect)
   const medallionUserId = searchParams.medallion_user_id || searchParams.user_id;
-
-  if (userAccessCode && !userData.medallionUserAccessCode) {
-    console.log(`🔗 Capturing userAccessCode from URL: ${userAccessCode}`);
-
-    // Store the userAccessCode in the database
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        medallionUserAccessCode: userAccessCode,
-      },
-    });
-
-    // Update local userData
-    userData.medallionUserAccessCode = userAccessCode;
-  }
 
   if (medallionUserId && !userData.medallionUserId) {
     console.log(`🆔 Capturing medallionUserId from URL: ${medallionUserId}`);

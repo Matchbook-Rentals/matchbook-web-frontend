@@ -564,20 +564,107 @@ export async function confirmAuthenticatedName(dateOfBirth: string) {
     // Get current user data
     const userData = await prismadb.user.findUnique({
       where: { id: clerkUser.id },
-      select: { firstName: true, lastName: true },
+      select: {
+        firstName: true,
+        lastName: true,
+        email: true,
+        medallionUserAccessCode: true
+      },
     });
 
     if (!userData?.firstName || !userData?.lastName) {
       return { success: false, error: 'No name on file to confirm' };
     }
 
-    // Copy display names to authenticated names and save DOB
+    if (!userData?.email) {
+      return { success: false, error: 'Email address is required for verification' };
+    }
+
+    // Create user in Medallion API first (if not already created)
+    let userAccessCode = userData.medallionUserAccessCode;
+    let medallionUserId = null;
+
+    if (!userAccessCode) {
+      try {
+        console.log('🚀 Creating Medallion user for:', {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email
+        });
+
+        const medallionApiKey = process.env.MEDALLION_API_KEY;
+        if (!medallionApiKey) {
+          return { success: false, error: 'Medallion API not configured. Please contact support.' };
+        }
+
+        const medallionResponse = await fetch('https://api-v3.authenticating.com/user/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${medallionApiKey}`,
+          },
+          body: JSON.stringify({
+            firstName: userData.firstName,
+            middleName: '',
+            lastName: userData.lastName,
+            dob: dateOfBirth.trim(), // DD-MM-YYYY format
+            email: userData.email,
+          }),
+        });
+
+        if (!medallionResponse.ok) {
+          const errorText = await medallionResponse.text();
+          logger.error('Medallion API error during user confirmation', {
+            status: medallionResponse.status,
+            statusText: medallionResponse.statusText,
+            error: errorText,
+            userId: clerkUser.id
+          });
+
+          return {
+            success: false,
+            error: `Failed to set up identity verification. Please try again or contact support. (Error: ${medallionResponse.status})`
+          };
+        }
+
+        const medallionData = await medallionResponse.json();
+        userAccessCode = medallionData.userAccessCode;
+        medallionUserId = medallionData.user_id || medallionData.userId;
+
+        if (!userAccessCode) {
+          logger.error('No userAccessCode returned from Medallion API', {
+            medallionData,
+            userId: clerkUser.id
+          });
+          return { success: false, error: 'Failed to set up identity verification. Please try again.' };
+        }
+
+        console.log('✅ Medallion user created:', { userAccessCode, medallionUserId });
+      } catch (medallionError) {
+        logger.error('Error creating Medallion user during confirmation', {
+          error: medallionError instanceof Error ? medallionError.message : 'Unknown error',
+          userId: clerkUser.id
+        });
+        return {
+          success: false,
+          error: 'Failed to set up identity verification. Please check your connection and try again.'
+        };
+      }
+    }
+
+    // Copy display names to authenticated names, save DOB, and store Medallion data
     await prismadb.user.update({
       where: { id: clerkUser.id },
       data: {
         authenticatedFirstName: userData.firstName,
         authenticatedLastName: userData.lastName,
         authenticatedDateOfBirth: dateOfBirth.trim(),
+        ...(userAccessCode && { medallionUserAccessCode: userAccessCode }),
+        ...(medallionUserId && { medallionUserId: medallionUserId }),
+        ...(userAccessCode && {
+          medallionVerificationStatus: "pending",
+          medallionVerificationStartedAt: new Date(),
+        }),
       },
     });
 
@@ -586,6 +673,8 @@ export async function confirmAuthenticatedName(dateOfBirth: string) {
       authenticatedFirstName: userData.firstName,
       authenticatedLastName: userData.lastName,
       authenticatedDateOfBirth: dateOfBirth.trim(),
+      medallionUserAccessCode: userAccessCode,
+      medallionUserId: medallionUserId,
     });
 
     return { success: true };
