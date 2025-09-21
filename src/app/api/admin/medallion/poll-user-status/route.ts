@@ -13,11 +13,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get user data including medallionUserAccessCode for API polling
+    const { targetUserId } = await request.json();
+
+    if (!targetUserId) {
+      return NextResponse.json(
+        { error: "targetUserId is required" },
+        { status: 400 }
+      );
+    }
+
+    // Get target user data including medallionUserAccessCode for API polling
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: targetUserId },
       select: {
         id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
         medallionUserId: true,
         medallionUserAccessCode: true,
         medallionIdentityVerified: true,
@@ -27,23 +39,14 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "User not found" },
+        { error: "Target user not found" },
         { status: 404 }
       );
     }
 
     if (!user.medallionUserAccessCode) {
-      console.error(`❌ User ${userId} missing medallionUserAccessCode:`, {
-        userId,
-        email: user.id, // Don't log email for privacy
-        medallionUserId: user.medallionUserId,
-        hasAccessCode: false,
-        verificationStatus: user.medallionVerificationStatus,
-        isVerified: user.medallionIdentityVerified
-      });
-
       return NextResponse.json(
-        { error: "No Medallion userAccessCode found. Please restart verification." },
+        { error: "No Medallion userAccessCode found for this user. Please set it first." },
         { status: 400 }
       );
     }
@@ -57,7 +60,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`🔍 Polling Medallion API for user ${userId}, userAccessCode: ${user.medallionUserAccessCode?.substring(0, 8)}...`);
+    console.log(`🔍 [ADMIN] Polling Medallion API for user ${targetUserId} (${user.firstName} ${user.lastName}), userAccessCode: ${user.medallionUserAccessCode}`);
 
     const medallionResponse = await fetch('https://api-v3.authenticating.com/user/getTestResult', {
       method: 'POST',
@@ -72,11 +75,10 @@ export async function POST(request: NextRequest) {
     });
 
     if (!medallionResponse.ok) {
-      console.error(`❌ Medallion API error: ${medallionResponse.status} ${medallionResponse.statusText}`);
+      console.error(`❌ [ADMIN] Medallion API error for user ${targetUserId}: ${medallionResponse.status} ${medallionResponse.statusText}`);
 
       // If user not found in Medallion, they might not have completed verification yet
       if (medallionResponse.status === 404) {
-        console.log(`📊 User ${userId} not found in Medallion API (404) - verification still pending`);
         return NextResponse.json({
           success: true,
           data: {
@@ -84,18 +86,22 @@ export async function POST(request: NextRequest) {
             medallionVerificationStatus: 'pending',
             medallionIdentityVerified: false,
           },
-          message: "Verification still in progress"
+          message: "Verification still in progress",
+          medallionApiResponse: {
+            status: medallionResponse.status,
+            statusText: medallionResponse.statusText
+          }
         });
       }
 
       return NextResponse.json(
-        { error: `Medallion API error: ${medallionResponse.status}` },
+        { error: `Medallion API error: ${medallionResponse.status} ${medallionResponse.statusText}` },
         { status: 500 }
       );
     }
 
     const medallionData = await medallionResponse.json();
-    console.log(`✅ Medallion API response received for user ${userId}`);
+    console.log(`✅ [ADMIN] Medallion API response received for user ${targetUserId}`);
 
     // Extract verification status from Medallion response
     const isVerificationPassed = checkVerificationStatus(medallionData);
@@ -103,7 +109,7 @@ export async function POST(request: NextRequest) {
 
     // Update user record with fresh data from Medallion
     const updatedUser = await prisma.user.update({
-      where: { id: userId },
+      where: { id: targetUserId },
       data: {
         medallionIdentityVerified: isVerificationPassed,
         medallionVerificationStatus: verificationStatus,
@@ -111,6 +117,9 @@ export async function POST(request: NextRequest) {
       },
       select: {
         id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
         medallionIdentityVerified: true,
         medallionVerificationStatus: true,
         medallionUserId: true,
@@ -120,7 +129,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log(`📝 Updated user ${userId} verification status: ${verificationStatus} (verified: ${isVerificationPassed})`);
+    console.log(`📝 [ADMIN] Updated user ${targetUserId} verification status: ${verificationStatus} (verified: ${isVerificationPassed})`);
 
     return NextResponse.json({
       success: true,
@@ -129,6 +138,7 @@ export async function POST(request: NextRequest) {
         idVerificationStatus: medallionData.idVerification?.status,
         isIdVerified: medallionData.scannedUser?.IsIDVerified,
         verifyResult: medallionData.verifyUI?.scannedUser?.result,
+        rawResponse: medallionData // Include full response for debugging
       }
     });
 
@@ -148,7 +158,7 @@ function checkVerificationStatus(medallionData: any): boolean {
   const verifyUIComplete = medallionData.verifyUI?.scannedUser?.result === 'complete';
 
   // Log the key verification indicators
-  console.log('📊 Medallion verification indicators:', {
+  console.log('📊 [ADMIN] Medallion verification indicators:', {
     idVerificationStatus: medallionData.idVerification?.status,
     isIdVerified: medallionData.scannedUser?.IsIDVerified,
     verifyUIResult: medallionData.verifyUI?.scannedUser?.result,

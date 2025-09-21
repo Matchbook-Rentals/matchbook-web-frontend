@@ -62,6 +62,9 @@ export default function IdentityVerificationClient({
   const [pollAttempts, setPollAttempts] = useState(0);
   const [nextPollIn, setNextPollIn] = useState(0);
   const [pollTimeoutId, setPollTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [consecutiveErrors, setConsecutiveErrors] = useState(0);
+  const [pollingStopped, setPollingStopped] = useState(false);
+  const [lastError, setLastError] = useState<string | null>(null);
 
   // Edit form state
   const [showEditForm, setShowEditForm] = useState(false);
@@ -93,12 +96,38 @@ export default function IdentityVerificationClient({
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`Failed to poll verification status: ${response.status}`);
+      const result = await response.json();
+
+      // Handle 400 errors specifically (missing access code)
+      if (response.status === 400) {
+        const errorMessage = result.error || "Missing verification data";
+        console.error("❌ 400 Error - stopping polling:", errorMessage);
+        setLastError(errorMessage);
+        setPollingStopped(true);
+        return true; // Stop polling
       }
 
-      const result = await response.json();
+      if (!response.ok) {
+        const errorMessage = `Failed to poll verification status: ${response.status}`;
+        console.error("❌ API Error:", errorMessage);
+        setLastError(errorMessage);
+        setConsecutiveErrors(prev => prev + 1);
+
+        // Stop polling after 3 consecutive errors
+        if (consecutiveErrors >= 2) {
+          console.error("❌ Too many consecutive errors - stopping polling");
+          setPollingStopped(true);
+          return true;
+        }
+
+        throw new Error(errorMessage);
+      }
+
       if (result.success && result.data) {
+        // Reset error count on successful response
+        setConsecutiveErrors(0);
+        setLastError(null);
+
         const { medallionIdentityVerified, medallionVerificationStatus } = result.data;
 
         console.log("📊 Verification status from Medallion:", {
@@ -134,11 +163,21 @@ export default function IdentityVerificationClient({
       return false; // No status change
     } catch (error) {
       console.error("Error polling Medallion verification status:", error);
+      setLastError(error instanceof Error ? error.message : "Unknown error");
+      setConsecutiveErrors(prev => prev + 1);
+
+      // Stop polling after 3 consecutive errors
+      if (consecutiveErrors >= 2) {
+        console.error("❌ Too many consecutive errors - stopping polling");
+        setPollingStopped(true);
+        return true;
+      }
+
       return false;
     } finally {
       setIsPolling(false);
     }
-  }, [redirectUrl, router]);
+  }, [redirectUrl, router, consecutiveErrors]);
 
   // Countdown timer for next poll
   useEffect(() => {
@@ -154,10 +193,10 @@ export default function IdentityVerificationClient({
   // Schedule the next poll with backoff
   const scheduleNextPoll = useCallback((attempt: number) => {
     const maxAttempts = 15; // Max 15 attempts over ~5 minutes
-    const maxDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
 
-    if (attempt >= maxAttempts) {
-      console.log('📊 Max polling attempts reached, stopping');
+    if (attempt >= maxAttempts || pollingStopped) {
+      console.log('📊 Max polling attempts reached or polling stopped');
+      setPollingStopped(true);
       return;
     }
 
@@ -165,22 +204,32 @@ export default function IdentityVerificationClient({
     setNextPollIn(Math.floor(interval / 1000));
 
     const timeoutId = setTimeout(async () => {
+      if (pollingStopped) {
+        console.log('📊 Polling was stopped, skipping scheduled check');
+        return;
+      }
+
       const newAttempt = attempt + 1;
       setPollAttempts(newAttempt);
 
       const statusChanged = await checkVerificationStatus();
 
-      if (!statusChanged) {
+      if (!statusChanged && !pollingStopped) {
         scheduleNextPoll(newAttempt);
       }
     }, interval);
 
     setPollTimeoutId(timeoutId);
-  }, [getPollingInterval, checkVerificationStatus]);
+  }, [getPollingInterval, checkVerificationStatus, pollingStopped]);
 
   // Manual poll function
   const triggerManualPoll = useCallback(async () => {
-    if (isPolling) return;
+    if (isPolling || pollingStopped) return;
+
+    // Reset error state when manually polling
+    setConsecutiveErrors(0);
+    setLastError(null);
+    setPollingStopped(false);
 
     // Cancel any scheduled polls
     if (pollTimeoutId) {
@@ -191,11 +240,11 @@ export default function IdentityVerificationClient({
     setNextPollIn(0);
     const statusChanged = await checkVerificationStatus();
 
-    if (!statusChanged) {
+    if (!statusChanged && !pollingStopped) {
       // If status didn't change, continue with scheduled polling
       scheduleNextPoll(pollAttempts + 1);
     }
-  }, [isPolling, pollTimeoutId, pollAttempts, checkVerificationStatus, scheduleNextPoll]);
+  }, [isPolling, pollingStopped, pollTimeoutId, pollAttempts, checkVerificationStatus, scheduleNextPoll]);
 
   // Auto-polling effect when returning from verification
   useEffect(() => {
@@ -429,12 +478,22 @@ export default function IdentityVerificationClient({
               )}
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Verification Processing
+              {pollingStopped ? "Verification Status Check" : "Verification Processing"}
             </h1>
             <p className="text-gray-600 mb-4">
-              Your identity verification is being processed. {isPolling ? "Checking status..." : "This may take a few moments."}
+              {pollingStopped
+                ? "There was an issue checking your verification status. Please try again or contact support if the problem persists."
+                : `Your identity verification is being processed. ${isPolling ? "Checking status..." : "This may take a few moments."}`
+              }
             </p>
-            {pollAttempts > 0 && (
+            {lastError && pollingStopped && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-800 text-sm">
+                  <strong>Error:</strong> {lastError}
+                </p>
+              </div>
+            )}
+            {pollAttempts > 0 && !pollingStopped && (
               <div className="text-sm text-gray-500 mb-4 space-y-1">
                 <p>Status check attempt: {pollAttempts}/15</p>
                 {nextPollIn > 0 && (
@@ -445,6 +504,11 @@ export default function IdentityVerificationClient({
                 )}
               </div>
             )}
+            {pollingStopped && (
+              <div className="text-sm text-gray-500 mb-4">
+                <p>Automatic status checking has been stopped due to errors.</p>
+              </div>
+            )}
             <div className="space-y-3">
               <Button
                 onClick={triggerManualPoll}
@@ -452,7 +516,7 @@ export default function IdentityVerificationClient({
                 className="w-full"
                 disabled={isPolling}
               >
-                {isPolling ? "Checking..." : "Check Status Now"}
+                {isPolling ? "Checking..." : pollingStopped ? "Retry Status Check" : "Check Status Now"}
               </Button>
               <Button onClick={handleGoBack} variant="outline" className="w-full">
                 Return to Dashboard

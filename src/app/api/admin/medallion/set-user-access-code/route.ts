@@ -16,13 +16,6 @@ export async function POST(request: NextRequest) {
 
     const { userAccessCode, medallionUserId, targetUserId } = await request.json();
 
-    if (!userAccessCode && !medallionUserId) {
-      return NextResponse.json(
-        { error: "userAccessCode or medallionUserId is required" },
-        { status: 400 }
-      );
-    }
-
     // For debugging, allow setting both fields for any user (admin endpoint)
     const userIdToUpdate = targetUserId || userId;
 
@@ -31,14 +24,17 @@ export async function POST(request: NextRequest) {
       medallionUserId
     });
 
-    // Update user with the userAccessCode and/or medallionUserId
+    // Update user with the userAccessCode and/or medallionUserId (allow null to clear)
     const updatedUser = await prisma.user.update({
       where: { id: userIdToUpdate },
       data: {
-        ...(userAccessCode && { medallionUserAccessCode: userAccessCode }),
-        ...(medallionUserId && { medallionUserId: medallionUserId }),
-        medallionVerificationStatus: "pending",
-        medallionVerificationStartedAt: new Date(),
+        medallionUserAccessCode: userAccessCode || null,
+        medallionUserId: medallionUserId || null,
+        // Only set verification started if we're actually setting data
+        ...(userAccessCode && {
+          medallionVerificationStatus: "pending",
+          medallionVerificationStartedAt: new Date(),
+        }),
       },
       select: {
         id: true,
