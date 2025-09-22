@@ -3,6 +3,47 @@ import { headers } from "next/headers";
 import prisma from "@/lib/prismadb";
 import crypto from "crypto";
 
+// Helper function to fetch user data from Medallion by userAccessCode
+async function fetchUserByAccessCode(userAccessCode: string) {
+  try {
+    const apiKey = process.env.MEDALLION_API_KEY;
+    if (!apiKey) {
+      console.error('❌ MEDALLION_API_KEY not configured');
+      return null;
+    }
+
+    console.log(`🔍 Fetching user data from Medallion for userAccessCode: ${userAccessCode.substring(0, 8)}...`);
+
+    const response = await fetch('https://api-v3.authenticating.com/user/summary', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ userAccessCode })
+    });
+
+    if (!response.ok) {
+      console.error(`❌ Failed to fetch user from Medallion: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    const userData = await response.json();
+    console.log(`✅ Retrieved user data from Medallion:`, {
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      userAccessCode: userData.userAccessCode?.substring(0, 8) + '...'
+    });
+
+    return userData;
+  } catch (error) {
+    console.error('❌ Error fetching user from Medallion:', error);
+    return null;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text();
@@ -72,6 +113,9 @@ export async function POST(request: NextRequest) {
       userAccessCode: event.order?.userAccessCode,
       status: event.order?.status,
       verificationMethod: event.order?.verificationMethod,
+      email: event.email || event.order?.email || event.user?.email,
+      hasUserData: !!event.user,
+      hasOrderData: !!event.order,
     });
 
     // Handle different event types
@@ -117,45 +161,152 @@ async function handleVerificationStatusUpdate(event: any) {
       }
     });
 
+    // If not found by userAccessCode, try to find by email using Medallion's API
     if (!user) {
-      console.error(`❌ User not found for userAccessCode: ${userAccessCode}`);
+      console.log(`🔍 User not found by userAccessCode: ${userAccessCode}, trying Medallion API lookup`);
 
-      // Log available data for debugging
-      console.log('🔍 Webhook debug info:', {
-        userAccessCode,
-        eventType: event.event,
-        hasEmail: !!event.email,
-        orderKeys: order ? Object.keys(order) : [],
-      });
+      // Fetch user data from Medallion by userAccessCode
+      const medallionUserData = await fetchUserByAccessCode(userAccessCode);
 
-      // Log recent pending users to help identify sync issues
-      const recentPendingUsers = await prisma.user.findMany({
-        where: {
-          medallionVerificationStatus: 'pending',
-          medallionVerificationStartedAt: {
-            gte: new Date(Date.now() - 2 * 60 * 60 * 1000) // Last 2 hours
+      if (medallionUserData && medallionUserData.email) {
+        console.log(`🔍 Found email from Medallion API: ${medallionUserData.email}, looking up user`);
+
+        // Find user by email with pending verification status
+        user = await prisma.user.findFirst({
+          where: {
+            email: medallionUserData.email,
+            medallionVerificationStatus: 'pending',
+            medallionVerificationStartedAt: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
+            }
           }
-        },
-        select: {
-          id: true,
-          email: true,
-          medallionUserAccessCode: true,
-          medallionVerificationStartedAt: true
-        },
-        orderBy: {
-          medallionVerificationStartedAt: 'desc'
-        },
-        take: 10
-      });
+        });
 
-      console.log('🔍 Recent pending users:', recentPendingUsers.map(u => ({
-        id: u.id.substring(0, 8),
-        email: u.email,
-        accessCode: u.medallionUserAccessCode?.substring(0, 8) + '...',
-        startedAt: u.medallionVerificationStartedAt
-      })));
+        if (user) {
+          console.log(`✅ Found user by email from Medallion API: ${user.id}, linking userAccessCode: ${userAccessCode}`);
 
-      return;
+          // Link the userAccessCode to our user record
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              medallionUserAccessCode: userAccessCode
+            }
+          });
+
+          // Update our local user object
+          user.medallionUserAccessCode = userAccessCode;
+        }
+      } else {
+        console.log(`❌ Failed to get user data from Medallion API for userAccessCode: ${userAccessCode}`);
+
+        // Fallback: Check if we have email data in the webhook event itself
+        const eventEmail = event.email || event.order?.email || event.user?.email;
+
+        if (eventEmail) {
+          console.log(`🔍 Found email in webhook: ${eventEmail}, looking up user`);
+
+          // Find user by email with pending verification status
+          user = await prisma.user.findFirst({
+            where: {
+              email: eventEmail,
+              medallionVerificationStatus: 'pending',
+              medallionVerificationStartedAt: {
+                gte: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
+              }
+            }
+          });
+
+          if (user) {
+            console.log(`✅ Found user by webhook email: ${user.id}, linking userAccessCode: ${userAccessCode}`);
+
+            // Link the userAccessCode to our user record
+            await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                medallionUserAccessCode: userAccessCode
+              }
+            });
+
+            // Update our local user object
+            user.medallionUserAccessCode = userAccessCode;
+          }
+        }
+
+        // If still no user found, try finding most recent pending user (final fallback)
+        if (!user) {
+          console.log('🔍 Trying to find most recent pending user as final fallback');
+
+          user = await prisma.user.findFirst({
+            where: {
+              medallionVerificationStatus: 'pending',
+              medallionVerificationStartedAt: {
+                gte: new Date(Date.now() - 30 * 60 * 1000) // Last 30 minutes
+              }
+            },
+            orderBy: {
+              medallionVerificationStartedAt: 'desc'
+            }
+          });
+
+          if (user) {
+            console.log(`✅ Found recent pending user: ${user.id}, linking userAccessCode: ${userAccessCode}`);
+
+            // Link the userAccessCode to our user record
+            await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                medallionUserAccessCode: userAccessCode
+              }
+            });
+
+            // Update our local user object
+            user.medallionUserAccessCode = userAccessCode;
+          }
+        }
+      }
+
+      if (!user) {
+        console.error(`❌ User not found for userAccessCode: ${userAccessCode}`);
+
+        // Log available data for debugging
+        console.log('🔍 Webhook debug info:', {
+          userAccessCode,
+          eventType: event.event,
+          hasEmail: !!eventEmail,
+          eventEmail,
+          orderKeys: order ? Object.keys(order) : [],
+          fullEventKeys: Object.keys(event),
+        });
+
+        // Log recent pending users to help identify sync issues
+        const recentPendingUsers = await prisma.user.findMany({
+          where: {
+            medallionVerificationStatus: 'pending',
+            medallionVerificationStartedAt: {
+              gte: new Date(Date.now() - 2 * 60 * 60 * 1000) // Last 2 hours
+            }
+          },
+          select: {
+            id: true,
+            email: true,
+            medallionUserAccessCode: true,
+            medallionVerificationStartedAt: true
+          },
+          orderBy: {
+            medallionVerificationStartedAt: 'desc'
+          },
+          take: 10
+        });
+
+        console.log('🔍 Recent pending users:', recentPendingUsers.map(u => ({
+          id: u.id.substring(0, 8),
+          email: u.email,
+          accessCode: u.medallionUserAccessCode?.substring(0, 8) + '...',
+          startedAt: u.medallionVerificationStartedAt
+        })));
+
+        return;
+      }
     }
 
     // Map Medallion status to our status
@@ -165,6 +316,7 @@ async function handleVerificationStatusUpdate(event: any) {
     switch (status) {
       case 'approved':
       case 'completed':
+      case 'success': // Handle success status from LOW_CODE_SDK
         verificationStatus = 'approved';
         isVerified = true;
         break;

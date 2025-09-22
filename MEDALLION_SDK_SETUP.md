@@ -13,6 +13,9 @@ NEXT_PUBLIC_BASE_URL="https://yourdomain.com"  # or http://localhost:3001 for de
 
 # Optional webhook secret for security
 MEDALLION_WEBHOOK_SECRET="your_webhook_secret_here"
+
+# API key for webhook user lookup (required for user matching)
+MEDALLION_API_KEY="your_medallion_api_key_here"
 ```
 
 ## How It Works
@@ -26,6 +29,10 @@ MEDALLION_WEBHOOK_SECRET="your_webhook_secret_here"
 6. User completes verification (ID scan, selfie, etc.)
 7. User is redirected back with session validation
 8. Webhook updates verification status in real-time
+   - When webhook receives unknown `userAccessCode`, calls `/user/summary` API
+   - Retrieves user email from Medallion's system
+   - Matches email to pending verification in our database
+   - Links `userAccessCode` for future webhooks
 9. User is redirected to dashboard upon completion
 
 ### 2. Key Components
