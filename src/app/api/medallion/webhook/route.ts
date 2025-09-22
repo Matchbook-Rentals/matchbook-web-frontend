@@ -341,8 +341,6 @@ async function handleVerificationStatusUpdate(event: any) {
         medallionIdentityVerified: isVerified,
         medallionVerificationStatus: verificationStatus,
         medallionVerificationCompletedAt: isVerified ? new Date() : null,
-        // Store verification method if available
-        ...(verificationMethod && { medallionVerificationMethod: verificationMethod }),
       },
     });
 
