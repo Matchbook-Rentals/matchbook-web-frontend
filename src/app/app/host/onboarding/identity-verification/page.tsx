@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
-import IdentityVerificationClient from "./identity-verification-client";
+import IdentityVerificationSDKClient from "./identity-verification-sdk-client";
 
 export default async function IdentityVerificationPage({
   searchParams,
@@ -63,22 +63,16 @@ export default async function IdentityVerificationPage({
     userData.medallionUserId = medallionUserId;
   }
 
-  // Validate CSRF protection when returning from verification
+  // Validate session for LOW_CODE_SDK redirect (simplified validation)
   if (searchParams.completed === 'true') {
-    console.log('🔍 Medallion redirect search params:', searchParams);
+    console.log('🔍 Medallion SDK redirect search params:', searchParams);
 
-    // Validate session_id and user_id for CSRF protection
+    // Validate session_id for CSRF protection
     const sessionId = searchParams.session_id;
-    const redirectUserId = searchParams.user_id;
 
-    if (!sessionId || !redirectUserId) {
-      console.error('❌ Missing security parameters in verification redirect');
+    if (!sessionId) {
+      console.error('❌ Missing session_id in verification redirect');
       redirect("/app/host/onboarding/identity-verification?error=invalid_redirect");
-    }
-
-    if (redirectUserId !== userId) {
-      console.error('❌ User ID mismatch in verification redirect');
-      redirect("/app/host/onboarding/identity-verification?error=invalid_user");
     }
 
     // Verify session token in database
@@ -98,7 +92,7 @@ export default async function IdentityVerificationPage({
       data: { medallionSessionToken: null },
     });
 
-    console.log('✅ CSRF validation passed for verification redirect');
+    console.log('✅ Session validation passed for LOW_CODE_SDK redirect');
   }
 
   // Get fresh verification status if returning from Medallion
@@ -136,7 +130,7 @@ export default async function IdentityVerificationPage({
   }
 
   return (
-    <IdentityVerificationClient
+    <IdentityVerificationSDKClient
       userData={finalUserData}
       redirectUrl={searchParams.redirect_url}
       isReturningFromVerification={searchParams.completed === 'true'}

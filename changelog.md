@@ -1,5 +1,17 @@
 # Changelog
 
+## Authenticate.com Integration Security & Reliability Improvements
+- Enhanced JWT generation with CSRF protection via session tokens in redirect URLs
+- Added comprehensive rate limiting (3 JWT requests/5min, 20 status polls/min per user)
+- Improved webhook signature verification supporting multiple formats with better error handling
+- Simplified userAccessCode management removing complex fallback logic for better reliability
+- Added proper error handling for verification failures (rejected, expired, timeout) with retry mechanisms
+- Implemented secure redirect validation preventing CSRF attacks with session token verification
+- Enhanced user experience with retry buttons, manual status checks, and clear error messaging
+- Updated environment configuration documentation reflecting API-based approach
+- Added database field for session token management and created session clearing endpoint
+- Improved debug logging with sensitive data masking for better troubleshooting
+
 ## Host Dashboard Payment Display Enhancement
 - Updated host dashboard booking cards to display largest rent payment amount instead of base monthly rent
 - Added rentPayments data fetching to getHostBookings and getAllListingBookings functions
