@@ -86,6 +86,7 @@ export const MedallionVerificationSDK: React.FC<MedallionVerificationSDKProps> =
         body: JSON.stringify({
           email: userEmail,
           firstName,
+          middleName,
           lastName,
           dob,
         }),

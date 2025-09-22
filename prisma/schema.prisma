@@ -51,6 +51,7 @@ model User {
   fullName         String?
   // Legal names for identity verification (government ID names)
   authenticatedFirstName  String?
+  authenticatedMiddleName String? // Middle name from government ID
   authenticatedLastName   String?
   authenticatedDateOfBirth String? // Date of birth in DD-MM-YYYY format for Medallion
   email            String?   @unique

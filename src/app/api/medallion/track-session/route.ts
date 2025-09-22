@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { email, firstName, lastName, dob } = body;
+    const { email, firstName, middleName, lastName, dob } = body;
 
     // Validate required fields
     if (!email || !firstName || !lastName || !dob) {
@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
       data: {
         // Store authenticated identity info (matching the user's legal documents)
         authenticatedFirstName: firstName.trim(),
+        authenticatedMiddleName: middleName?.trim() || null,
         authenticatedLastName: lastName.trim(),
         authenticatedDateOfBirth: dob.trim(),
         // Session tracking

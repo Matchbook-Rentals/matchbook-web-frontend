@@ -687,7 +687,7 @@ export async function confirmAuthenticatedName(dateOfBirth: string) {
   }
 }
 
-export async function updateAuthenticatedName(firstName: string, lastName: string, dateOfBirth: string) {
+export async function updateAuthenticatedName(firstName: string, middleName: string | null, lastName: string, dateOfBirth: string) {
   'use server';
 
   const clerkUser = await currentUser();
@@ -702,6 +702,7 @@ export async function updateAuthenticatedName(firstName: string, lastName: strin
       where: { id: clerkUser.id },
       data: {
         authenticatedFirstName: firstName.trim(),
+        authenticatedMiddleName: middleName?.trim() || null,
         authenticatedLastName: lastName.trim(),
         authenticatedDateOfBirth: dateOfBirth.trim(),
       },
@@ -710,6 +711,7 @@ export async function updateAuthenticatedName(firstName: string, lastName: strin
     logger.info('User authenticated information updated', {
       userId: clerkUser.id,
       authenticatedFirstName: firstName.trim(),
+      authenticatedMiddleName: middleName?.trim() || null,
       authenticatedLastName: lastName.trim(),
       authenticatedDateOfBirth: dateOfBirth.trim(),
     });

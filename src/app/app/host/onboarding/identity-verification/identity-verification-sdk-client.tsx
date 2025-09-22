@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, User, Edit, Save, X, Loader2 } from "lucide-react";
+import { ArrowLeft, CheckCircle, User, Edit, Save, X, Loader2, AlertTriangle, XCircle, Clock, RefreshCw } from "lucide-react";
 import { confirmAuthenticatedName, updateAuthenticatedName } from "@/app/actions/user";
 
 // Helper functions for date format conversion
@@ -29,6 +29,7 @@ interface UserData {
   firstName: string | null;
   lastName: string | null;
   authenticatedFirstName: string | null;
+  authenticatedMiddleName: string | null;
   authenticatedLastName: string | null;
   authenticatedDateOfBirth: string | null;
   medallionIdentityVerified: boolean | null;
@@ -61,12 +62,15 @@ export default function IdentityVerificationSDKClient({
   // Edit form state
   const [showEditForm, setShowEditForm] = useState(false);
   const [editFirstName, setEditFirstName] = useState(userData.firstName || "");
+  const [editMiddleName, setEditMiddleName] = useState(userData.authenticatedMiddleName || "");
   const [editLastName, setEditLastName] = useState(userData.lastName || "");
   const [editDateOfBirth, setEditDateOfBirth] = useState("");
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [localUserData, setLocalUserData] = useState(userData);
   const [redirectError, setRedirectError] = useState<string | null>(null);
+  const [isResetting, setIsResetting] = useState(false);
+  const [resetError, setResetError] = useState<string | null>(null);
 
   // Handle errors from URL parameters
   useEffect(() => {
@@ -134,7 +138,7 @@ export default function IdentityVerificationSDKClient({
 
   const handleUpdateName = async () => {
     if (!editFirstName.trim() || !editLastName.trim() || !editDateOfBirth) {
-      setUpdateError("All fields are required");
+      setUpdateError("First name, last name, and date of birth are required");
       return;
     }
 
@@ -144,6 +148,7 @@ export default function IdentityVerificationSDKClient({
     try {
       const result = await updateAuthenticatedName(
         editFirstName.trim(),
+        editMiddleName.trim() || null, // Allow empty middle name
         editLastName.trim(),
         convertToDDMMYYYY(editDateOfBirth)
       );
@@ -152,6 +157,7 @@ export default function IdentityVerificationSDKClient({
         setLocalUserData(prev => ({
           ...prev,
           authenticatedFirstName: editFirstName.trim(),
+          authenticatedMiddleName: editMiddleName.trim() || null,
           authenticatedLastName: editLastName.trim(),
           authenticatedDateOfBirth: convertToDDMMYYYY(editDateOfBirth),
         }));
@@ -165,6 +171,42 @@ export default function IdentityVerificationSDKClient({
       console.error('Error updating name:', error);
     } finally {
       setIsUpdatingName(false);
+    }
+  };
+
+  const handleRetryVerification = async () => {
+    setIsResetting(true);
+    setResetError(null);
+
+    try {
+      const response = await fetch('/api/medallion/reset-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to reset verification');
+      }
+
+      // Reset local state to allow retry
+      setLocalUserData(prev => ({
+        ...prev,
+        medallionVerificationStatus: null,
+        medallionIdentityVerified: false,
+      }));
+
+      // Clear any errors
+      setRedirectError(null);
+      setResetError(null);
+
+      console.log('✅ Verification reset successfully, ready to retry');
+    } catch (error) {
+      console.error('❌ Error resetting verification:', error);
+      const errorMsg = error instanceof Error ? error.message : 'Failed to reset verification';
+      setResetError(errorMsg);
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -189,6 +231,198 @@ export default function IdentityVerificationSDKClient({
             >
               Continue to Dashboard
             </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Handle verification failure states
+  if (localUserData.medallionVerificationStatus === 'rejected') {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-700">
+              <XCircle className="h-6 w-6" />
+              Verification Not Approved
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-red-800 font-medium mb-2">Your documents could not be verified.</p>
+              <p className="text-red-700 text-sm">This usually happens when:</p>
+              <ul className="text-red-700 text-sm mt-2 space-y-1 list-disc list-inside">
+                <li>Document images are blurry, have glare, or shadows</li>
+                <li>Name on ID doesn't exactly match your profile</li>
+                <li>Date of birth information is incorrect</li>
+                <li>Document is expired or damaged</li>
+              </ul>
+            </div>
+
+            {resetError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-red-800 text-sm">{resetError}</p>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <Button
+                onClick={handleRetryVerification}
+                disabled={isResetting}
+                className="w-full"
+                variant="default"
+              >
+                {isResetting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Resetting...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Try Verification Again
+                  </>
+                )}
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => router.back()}
+                className="w-full"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Go Back
+              </Button>
+            </div>
+
+            <div className="text-xs text-gray-600 p-3 bg-gray-50 rounded">
+              <strong>Tips for successful verification:</strong>
+              <ul className="mt-1 space-y-1 list-disc list-inside">
+                <li>Use good lighting with no glare or shadows</li>
+                <li>Ensure your full name matches exactly as on your ID</li>
+                <li>Double-check your date of birth is correct</li>
+                <li>Use a current, valid government-issued ID</li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (localUserData.medallionVerificationStatus === 'failed') {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-700">
+              <AlertTriangle className="h-6 w-6" />
+              Verification Failed
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-red-800 font-medium mb-2">Verification failed due to a technical issue.</p>
+              <p className="text-red-700 text-sm">
+                This could be due to system connectivity issues or processing errors. Please try again.
+              </p>
+            </div>
+
+            {resetError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-red-800 text-sm">{resetError}</p>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <Button
+                onClick={handleRetryVerification}
+                disabled={isResetting}
+                className="w-full"
+                variant="default"
+              >
+                {isResetting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Resetting...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Try Again
+                  </>
+                )}
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => router.back()}
+                className="w-full"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Go Back
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (localUserData.medallionVerificationStatus === 'expired') {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-orange-700">
+              <Clock className="h-6 w-6" />
+              Verification Session Expired
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <p className="text-orange-800 font-medium mb-2">Your verification session has expired.</p>
+              <p className="text-orange-700 text-sm">
+                Verification links expire after a certain time for security purposes. Please start a new verification.
+              </p>
+            </div>
+
+            {resetError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-red-800 text-sm">{resetError}</p>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <Button
+                onClick={handleRetryVerification}
+                disabled={isResetting}
+                className="w-full"
+                variant="default"
+              >
+                {isResetting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Starting New Session...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Start New Verification
+                  </>
+                )}
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => router.back()}
+                className="w-full"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Go Back
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -242,24 +476,39 @@ export default function IdentityVerificationSDKClient({
                   Please enter your information exactly as it appears on your government-issued ID:
                 </p>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="editFirstName">Legal First Name</Label>
-                    <Input
-                      id="editFirstName"
-                      value={editFirstName}
-                      onChange={(e) => setEditFirstName(e.target.value)}
-                      placeholder="First name"
-                    />
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="editFirstName">Legal First Name</Label>
+                      <Input
+                        id="editFirstName"
+                        value={editFirstName}
+                        onChange={(e) => setEditFirstName(e.target.value)}
+                        placeholder="First name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="editLastName">Legal Last Name</Label>
+                      <Input
+                        id="editLastName"
+                        value={editLastName}
+                        onChange={(e) => setEditLastName(e.target.value)}
+                        placeholder="Last name"
+                      />
+                    </div>
                   </div>
+
                   <div>
-                    <Label htmlFor="editLastName">Legal Last Name</Label>
+                    <Label htmlFor="editMiddleName">Middle Name (optional)</Label>
                     <Input
-                      id="editLastName"
-                      value={editLastName}
-                      onChange={(e) => setEditLastName(e.target.value)}
-                      placeholder="Last name"
+                      id="editMiddleName"
+                      value={editMiddleName}
+                      onChange={(e) => setEditMiddleName(e.target.value)}
+                      placeholder="Middle name (if shown on your ID)"
                     />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Include this if your government ID shows a middle name
+                    </p>
                   </div>
                 </div>
 
@@ -312,7 +561,7 @@ export default function IdentityVerificationSDKClient({
                 </p>
 
                 <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                  <div><strong>Name:</strong> {localUserData.firstName} {localUserData.lastName}</div>
+                  <div><strong>Name:</strong> {localUserData.firstName} {localUserData.authenticatedMiddleName || ""} {localUserData.lastName}</div>
                   <div><strong>Email:</strong> {localUserData.email}</div>
                 </div>
 
@@ -365,6 +614,7 @@ export default function IdentityVerificationSDKClient({
         <MedallionVerificationSDK
           userEmail={localUserData.email || ""}
           firstName={localUserData.authenticatedFirstName || localUserData.firstName || ""}
+          middleName={localUserData.authenticatedMiddleName || ""}
           lastName={localUserData.authenticatedLastName || localUserData.lastName || ""}
           dob={localUserData.authenticatedDateOfBirth || convertToDDMMYYYY(confirmDateOfBirth)}
           onVerificationComplete={(result) => {
