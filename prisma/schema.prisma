@@ -72,6 +72,7 @@ model User {
   medallionUserId              String?   // Medallion permanent user ID (from webhooks/user creation)
   medallionUserAccessCode      String?   // Medallion access code for API polling (from getTestResult endpoint)
   medallionVerificationToken   String?   // JWT token for Medallion verification redirect
+  medallionSessionToken        String?   // Session token for CSRF protection during verification
   medallionVerificationStatus  String?   // "pending", "approved", "rejected", "expired"
   medallionVerificationStartedAt DateTime? // When verification process started
   medallionVerificationCompletedAt DateTime? // When verification was completed

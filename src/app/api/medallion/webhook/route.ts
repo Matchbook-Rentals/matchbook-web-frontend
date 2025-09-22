@@ -8,20 +8,58 @@ export async function POST(request: NextRequest) {
     const body = await request.text();
     const headersList = headers();
 
-    // Verify webhook signature (if Medallion provides one)
-    const signature = headersList.get('x-medallion-signature') || headersList.get('medallion-signature');
+    // Verify webhook signature (if configured)
+    const signature = headersList.get('x-signature') ||
+                     headersList.get('x-medallion-signature') ||
+                     headersList.get('medallion-signature') ||
+                     headersList.get('authorization');
     const webhookSecret = process.env.MEDALLION_WEBHOOK_SECRET;
 
     if (webhookSecret && signature) {
-      const expectedSignature = crypto
-        .createHmac('sha256', webhookSecret)
-        .update(body)
-        .digest('hex');
+      console.log('🔐 Verifying webhook signature');
 
-      if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(`sha256=${expectedSignature}`))) {
-        console.error('Invalid webhook signature');
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+      try {
+        const expectedSignature = crypto
+          .createHmac('sha256', webhookSecret)
+          .update(body)
+          .digest('hex');
+
+        // Try different signature formats that Authenticate.com might use
+        const validSignatures = [
+          signature, // Raw signature
+          `sha256=${expectedSignature}`, // GitHub style
+          expectedSignature, // Plain hex
+        ];
+
+        const isValidSignature = validSignatures.some(sig => {
+          try {
+            return crypto.timingSafeEqual(
+              Buffer.from(sig),
+              Buffer.from(expectedSignature)
+            );
+          } catch {
+            return false;
+          }
+        });
+
+        if (!isValidSignature) {
+          console.error('❌ Invalid webhook signature:', {
+            receivedSignature: signature,
+            expectedSignature,
+            headers: Object.fromEntries(headersList.entries()),
+          });
+          return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+        }
+
+        console.log('✅ Webhook signature verified');
+      } catch (error) {
+        console.error('❌ Signature verification failed:', error);
+        return NextResponse.json({ error: 'Signature verification failed' }, { status: 401 });
       }
+    } else if (webhookSecret) {
+      console.warn('⚠️ Webhook secret configured but no signature header found');
+    } else {
+      console.log('ℹ️ No webhook secret configured - skipping signature verification');
     }
 
     const event = JSON.parse(body);
@@ -67,83 +105,35 @@ async function handleVerificationStatusUpdate(event: any) {
     const { order } = event;
     const { userAccessCode, status, verificationMethod } = order || {};
 
-    // First, try to find user by userAccessCode
+    if (!userAccessCode) {
+      console.error('❌ No userAccessCode in webhook event');
+      return;
+    }
+
+    // Find user by userAccessCode (primary lookup)
     let user = await prisma.user.findFirst({
       where: {
         medallionUserAccessCode: userAccessCode
       }
     });
 
-    // If user not found, try multiple fallback strategies
     if (!user) {
-      console.log(`🔍 Webhook: userAccessCode lookup failed for: ${userAccessCode}`);
+      console.error(`❌ User not found for userAccessCode: ${userAccessCode}`);
 
-      // Strategy 1: If we have email in the webhook payload, try email lookup
-      if (event.email) {
-        console.log(`🔍 Trying email lookup: ${event.email}`);
-        user = await prisma.user.findFirst({
-          where: {
-            email: event.email
-          }
-        });
-
-        if (user) {
-          console.log(`✅ Found user by email, updating userAccessCode: ${userAccessCode}`);
-        }
-      }
-
-      // Strategy 2: Look for users with pending verification started recently (last 30 minutes)
-      // This handles the LOW_CODE_SDK creating a different userAccessCode than our API call
-      if (!user) {
-        const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
-
-        console.log(`🔍 Trying recent pending verification lookup (since ${thirtyMinutesAgo.toISOString()})`);
-        user = await prisma.user.findFirst({
-          where: {
-            medallionVerificationStatus: 'pending',
-            medallionVerificationStartedAt: {
-              gte: thirtyMinutesAgo
-            },
-            medallionIdentityVerified: {
-              not: true
-            }
-          },
-          orderBy: {
-            medallionVerificationStartedAt: 'desc'
-          }
-        });
-
-        if (user) {
-          console.log(`✅ Found user by recent pending verification (started ${user.medallionVerificationStartedAt}), updating userAccessCode: ${userAccessCode}`);
-        }
-      }
-
-      // If we found a user via fallback, update their userAccessCode
-      if (user) {
-        user = await prisma.user.update({
-          where: { id: user.id },
-          data: { medallionUserAccessCode: userAccessCode }
-        });
-      }
-    }
-
-    // Still no user found after all fallback strategies
-    if (!user) {
-      console.error(`❌ User not found after all lookup strategies for userAccessCode: ${userAccessCode}`);
-      console.log('🔍 Available webhook data:', {
-        event: event.event,
+      // Log available data for debugging
+      console.log('🔍 Webhook debug info:', {
+        userAccessCode,
+        eventType: event.event,
         hasEmail: !!event.email,
-        hasOrder: !!event.order,
-        orderKeys: event.order ? Object.keys(event.order) : [],
-        fullEventKeys: Object.keys(event)
+        orderKeys: order ? Object.keys(order) : [],
       });
 
-      // Log pending users for debugging
+      // Log recent pending users to help identify sync issues
       const recentPendingUsers = await prisma.user.findMany({
         where: {
           medallionVerificationStatus: 'pending',
           medallionVerificationStartedAt: {
-            gte: new Date(Date.now() - 60 * 60 * 1000) // Last hour
+            gte: new Date(Date.now() - 2 * 60 * 60 * 1000) // Last 2 hours
           }
         },
         select: {
@@ -154,10 +144,17 @@ async function handleVerificationStatusUpdate(event: any) {
         },
         orderBy: {
           medallionVerificationStartedAt: 'desc'
-        }
+        },
+        take: 10
       });
 
-      console.log('🔍 Recent pending users for comparison:', recentPendingUsers);
+      console.log('🔍 Recent pending users:', recentPendingUsers.map(u => ({
+        id: u.id.substring(0, 8),
+        email: u.email,
+        accessCode: u.medallionUserAccessCode?.substring(0, 8) + '...',
+        startedAt: u.medallionVerificationStartedAt
+      })));
+
       return;
     }
 

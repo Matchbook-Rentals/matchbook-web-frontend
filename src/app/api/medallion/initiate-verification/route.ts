@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
 
-// NOTE: This API route is no longer needed with LOW_CODE_SDK approach
-// Verification is now handled entirely client-side with Medallion's SDK
-// Keeping this route for backward compatibility and potential future use
+// NOTE: This API route is for tracking verification initiation state
+// The actual verification is handled via JWT generation and Medallion's hosted UI
+// This endpoint updates the user's verification status to 'pending'
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Verification can proceed with LOW_CODE_SDK",
-      note: "Actual verification is handled client-side with Medallion's SDK",
+      message: "Verification status updated to pending",
+      note: "Actual verification is handled via JWT API and Medallion's hosted UI",
       userAccessCodeStored: !!userAccessCode
     });
 
@@ -54,20 +54,23 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Legacy code preserved for reference - can be removed later
 /*
-LEGACY MOCK API CODE - No longer needed with LOW_CODE_SDK:
+CURRENT API-BASED IMPLEMENTATION:
 
-The original implementation tried to use server-side API calls to:
-1. Create users via /v3/user endpoint (returned 404)
-2. Generate verification links via /v3/verification/create (incorrect approach)
+This codebase uses Authenticate.com's full API approach, not the LOW_CODE_SDK:
 
-With LOW_CODE_SDK, the correct implementation is:
-1. Load Medallion's client.js script
-2. Call window.identify() with SDK key and user data
-3. User is redirected to Medallion's hosted verification
-4. Medallion sends webhooks to our /api/medallion/webhook endpoint
-5. User is redirected back with completion status
+1. Server-side user creation via /user/create API endpoint
+2. JWT generation via /user/jwt API endpoint
+3. User redirect to Medallion's hosted verification with JWT token
+4. Webhook handling for real-time status updates
+5. API polling for verification status checking
+6. CSRF protection via session tokens in redirect URLs
 
-This approach is simpler, more secure, and follows Medallion's documented best practices.
+Key security features:
+- Rate limiting on API endpoints
+- CSRF token validation
+- Webhook signature verification
+- Session token management
+
+This approach provides full control over the verification flow while maintaining security.
 */

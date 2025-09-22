@@ -40,12 +40,14 @@ interface IdentityVerificationClientProps {
   userData: UserData;
   redirectUrl?: string;
   isReturningFromVerification?: boolean;
+  error?: string;
 }
 
 export default function IdentityVerificationClient({
   userData,
   redirectUrl,
   isReturningFromVerification = false,
+  error,
 }: IdentityVerificationClientProps) {
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -64,6 +66,7 @@ export default function IdentityVerificationClient({
   const [consecutiveErrors, setConsecutiveErrors] = useState(0);
   const [pollingStopped, setPollingStopped] = useState(false);
   const [lastError, setLastError] = useState<string | null>(null);
+  const [canRetry, setCanRetry] = useState(false);
 
   // Edit form state
   const [showEditForm, setShowEditForm] = useState(false);
@@ -73,6 +76,26 @@ export default function IdentityVerificationClient({
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [localUserData, setLocalUserData] = useState(userData);
+  const [redirectError, setRedirectError] = useState<string | null>(null);
+
+  // Handle errors from URL parameters
+  useEffect(() => {
+    if (error) {
+      switch (error) {
+        case 'invalid_redirect':
+          setRedirectError('Invalid verification redirect. Please try starting the verification process again.');
+          break;
+        case 'invalid_user':
+          setRedirectError('Security validation failed. Please log out and log back in, then try verification again.');
+          break;
+        case 'invalid_session':
+          setRedirectError('Verification session expired. Please start the verification process again.');
+          break;
+        default:
+          setRedirectError('An error occurred during verification. Please try again.');
+      }
+    }
+  }, [error]);
 
   // Linear backoff polling intervals
   const getPollingInterval = useCallback((attempt: number): number => {
@@ -150,6 +173,24 @@ export default function IdentityVerificationClient({
           return true; // Status changed
         }
 
+        // If verification was rejected, stop polling and allow retry
+        if (medallionVerificationStatus === 'rejected' || medallionVerificationStatus === 'failed') {
+          console.log("❌ Verification was rejected or failed");
+          setLastError("Identity verification was not successful. This could be due to document quality, mismatch, or other issues. Please try again with clear, valid documents.");
+          setPollingStopped(true);
+          setCanRetry(true);
+          return true; // Status changed
+        }
+
+        // If verification expired, stop polling and allow retry
+        if (medallionVerificationStatus === 'expired') {
+          console.log("⏰ Verification expired");
+          setLastError("Identity verification session expired. Please start the verification process again.");
+          setPollingStopped(true);
+          setCanRetry(true);
+          return true; // Status changed
+        }
+
         // If explicitly failed, stop polling
         if (medallionVerificationStatus === 'rejected' ||
             medallionVerificationStatus === 'expired' ||
@@ -168,7 +209,9 @@ export default function IdentityVerificationClient({
       // Stop polling after 3 consecutive errors
       if (consecutiveErrors >= 2) {
         console.error("❌ Too many consecutive errors - stopping polling");
+        setLastError("Multiple polling errors - verification may be incomplete. Please try starting verification again.");
         setPollingStopped(true);
+        setCanRetry(true);
         return true;
       }
 
@@ -195,7 +238,9 @@ export default function IdentityVerificationClient({
 
     if (attempt >= maxAttempts || pollingStopped) {
       console.log('📊 Max polling attempts reached or polling stopped');
+      setLastError("Verification is taking longer than expected. This might mean the verification was not completed or there was an issue. Please try starting verification again or contact support if the problem persists.");
       setPollingStopped(true);
+      setCanRetry(true);
       return;
     }
 
@@ -220,6 +265,28 @@ export default function IdentityVerificationClient({
 
     setPollTimeoutId(timeoutId);
   }, [getPollingInterval, checkVerificationStatus, pollingStopped]);
+
+  // Reset verification state and retry
+  const resetAndRetry = useCallback(() => {
+    // Reset all polling state
+    setPollAttempts(0);
+    setNextPollIn(0);
+    setConsecutiveErrors(0);
+    setPollingStopped(false);
+    setLastError(null);
+    setCanRetry(false);
+
+    if (pollTimeoutId) {
+      clearTimeout(pollTimeoutId);
+      setPollTimeoutId(null);
+    }
+
+    // Clear any database session token to prevent stale state
+    fetch('/api/medallion/clear-session', { method: 'POST' })
+      .catch(err => console.warn('Failed to clear session token:', err));
+
+    console.log('🔄 Resetting verification state for retry');
+  }, [pollTimeoutId]);
 
   // Manual poll function
   const triggerManualPoll = useCallback(async () => {
@@ -490,6 +557,36 @@ export default function IdentityVerificationClient({
                 <p className="text-red-800 text-sm">
                   <strong>Error:</strong> {lastError}
                 </p>
+                {canRetry && (
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      onClick={resetAndRetry}
+                      className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      Reset & Try Again
+                    </button>
+                    <button
+                      onClick={triggerManualPoll}
+                      className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                      Check Status Now
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {redirectError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-800 text-sm">
+                  <strong>Security Error:</strong> {redirectError}
+                </p>
+                <button
+                  onClick={() => setRedirectError(null)}
+                  className="mt-2 text-xs text-red-600 underline"
+                >
+                  Dismiss
+                </button>
               </div>
             )}
             {pollAttempts > 0 && !pollingStopped && (

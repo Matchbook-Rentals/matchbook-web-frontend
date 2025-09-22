@@ -136,12 +136,13 @@ export const MedallionVerification: React.FC<MedallionVerificationProps> = ({
         </Button>
 
         <div className="text-xs text-blue-700 p-3 bg-blue-50 border border-blue-200 rounded">
-          <strong>Enhanced Medallion Integration:</strong>
+          <strong>Secure API-Based Integration:</strong>
           <div className="mt-1 space-y-1">
-            <div>• Your verification account is already set up</div>
-            <div>• Uses Medallion&apos;s secure JWT API for reliable verification</div>
-            <div>• You&apos;ll be redirected to Medallion&apos;s verification platform</div>
+            <div>• Your verification account is created via Authenticate.com API</div>
+            <div>• Uses secure JWT tokens with CSRF protection</div>
+            <div>• Real-time status updates via webhooks and polling</div>
             <div>• Complete verification and return here automatically</div>
+            <div>• Retry mechanism for failed verifications</div>
           </div>
         </div>
       </CardContent>

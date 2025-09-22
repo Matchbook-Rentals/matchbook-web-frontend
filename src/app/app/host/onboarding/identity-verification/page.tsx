@@ -6,7 +6,15 @@ import IdentityVerificationClient from "./identity-verification-client";
 export default async function IdentityVerificationPage({
   searchParams,
 }: {
-  searchParams: { redirect_url?: string; completed?: string; medallion_user_id?: string; [key: string]: string | undefined };
+  searchParams: {
+    redirect_url?: string;
+    completed?: string;
+    medallion_user_id?: string;
+    session_id?: string;
+    user_id?: string;
+    error?: string;
+    [key: string]: string | undefined
+  };
 }) {
   const { userId } = auth();
   const user = await currentUser();
@@ -55,9 +63,42 @@ export default async function IdentityVerificationPage({
     userData.medallionUserId = medallionUserId;
   }
 
-  // Log all search params for debugging
+  // Validate CSRF protection when returning from verification
   if (searchParams.completed === 'true') {
     console.log('🔍 Medallion redirect search params:', searchParams);
+
+    // Validate session_id and user_id for CSRF protection
+    const sessionId = searchParams.session_id;
+    const redirectUserId = searchParams.user_id;
+
+    if (!sessionId || !redirectUserId) {
+      console.error('❌ Missing security parameters in verification redirect');
+      redirect("/app/host/onboarding/identity-verification?error=invalid_redirect");
+    }
+
+    if (redirectUserId !== userId) {
+      console.error('❌ User ID mismatch in verification redirect');
+      redirect("/app/host/onboarding/identity-verification?error=invalid_user");
+    }
+
+    // Verify session token in database
+    const sessionValidation = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { medallionSessionToken: true },
+    });
+
+    if (!sessionValidation?.medallionSessionToken || sessionValidation.medallionSessionToken !== sessionId) {
+      console.error('❌ Invalid session token in verification redirect');
+      redirect("/app/host/onboarding/identity-verification?error=invalid_session");
+    }
+
+    // Clear the session token after successful validation
+    await prisma.user.update({
+      where: { id: userId },
+      data: { medallionSessionToken: null },
+    });
+
+    console.log('✅ CSRF validation passed for verification redirect');
   }
 
   // Get fresh verification status if returning from Medallion
@@ -99,6 +140,7 @@ export default async function IdentityVerificationPage({
       userData={finalUserData}
       redirectUrl={searchParams.redirect_url}
       isReturningFromVerification={searchParams.completed === 'true'}
+      error={searchParams.error}
     />
   );
 }
