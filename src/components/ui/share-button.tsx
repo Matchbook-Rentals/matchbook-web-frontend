@@ -40,9 +40,29 @@ const ShareButton: React.FC<ShareButtonProps> = ({
       try {
         await navigator.share(shareData);
         toast({ title: "Shared successfully!" });
-      } catch (error) {
+      } catch (error: any) {
+        // User cancelled - this is normal behavior, don't show error
+        if (error?.name === 'AbortError') {
+          return; // Silent return, no error toast
+        }
+        
+        // Permission denied
+        if (error?.name === 'NotAllowedError') {
+          toast({ 
+            title: "Permission denied", 
+            description: "Please allow sharing permissions." 
+          });
+          return;
+        }
+        
+        // Actual error
         console.error("Error sharing:", error);
-        toast({ title: "Error sharing", description: "Could not share." });
+        toast({ 
+          title: "Error sharing", 
+          description: "Could not share. Please try copying the link instead." 
+        });
+        // Open the fallback dialog for non-cancellation errors
+        setOpen(true);
       }
     } else {
       setOpen(true);
