@@ -140,7 +140,7 @@ export default function AddPropertyclient({ draftData }: AddPropertyClientProps)
   
   // Check if user is admin
   const userRole = user?.publicMetadata?.role as string | undefined;
-  const isAdmin = userRole === 'admin';
+  const isAdmin = userRole === 'admin_dev';
   
   // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
