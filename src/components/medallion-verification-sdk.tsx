@@ -143,6 +143,13 @@ export const MedallionVerificationSDK: React.FC<MedallionVerificationSDKProps> =
     }
   };
 
+  const requirements = [
+    "Government-issued photo ID (driver's license, passport, etc.)",
+    "Camera or smartphone for document capture",
+    "Good lighting for clear photos",
+    "A few minutes to complete the process"
+  ];
+
   return (
     <>
       {/* Load Medallion SDK */}
@@ -159,84 +166,75 @@ export const MedallionVerificationSDK: React.FC<MedallionVerificationSDKProps> =
         }}
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Identity Verification
-          </CardTitle>
-          <CardDescription>
-            Complete your identity verification to continue with host onboarding.
-            This process includes photo ID verification and facial recognition.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {verificationStatus === 'completed' ? (
-            <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <Check className="h-5 w-5 text-green-600" />
-              <div>
-                <p className="font-medium text-green-800">Verification Complete</p>
-                <p className="text-sm text-green-600">Your identity has been successfully verified.</p>
+      <div className="flex flex-col max-w-6xl items-start justify-center gap-6 mx-auto p-6">
+        <div className="flex flex-col items-start justify-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
+
+          {/* Error Display */}
+          {verificationStatus === 'error' && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg max-w-full">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600" />
+                <div>
+                  <p className="font-medium text-red-800">Verification Failed</p>
+                  <p className="text-sm text-red-600">{errorMessage}</p>
+                </div>
               </div>
             </div>
-          ) : verificationStatus === 'error' ? (
-            <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <AlertCircle className="h-5 w-5 text-red-600" />
-              <div>
-                <p className="font-medium text-red-800">Verification Failed</p>
-                <p className="text-sm text-red-600">{errorMessage}</p>
+          )}
+
+          {/* Success Display */}
+          {verificationStatus === 'completed' && (
+            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg max-w-full">
+              <div className="flex items-center gap-3">
+                <Check className="h-5 w-5 text-green-600" />
+                <div>
+                  <p className="font-medium text-green-800">Verification Complete</p>
+                  <p className="text-sm text-green-600">Your identity has been successfully verified.</p>
+                </div>
               </div>
             </div>
-          ) : null}
+          )}
 
-          <div className="space-y-2">
-            <h4 className="font-medium">What you&apos;ll need:</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• Government-issued photo ID (driver&apos;s license, passport, etc.)</li>
-              <li>• Camera or smartphone for document capture</li>
-              <li>• Good lighting for clear photos</li>
-              <li>• A few minutes to complete the process</li>
-            </ul>
-          </div>
+          <Card className="relative self-stretch w-full min-h-[448px] rounded-2xl overflow-hidden border border-solid border-[#cfd4dc]">
+            <CardContent className="p-6">
+              <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-blackblack-500 text-xl tracking-[0] leading-[24.0px] mb-6">
+                What you&apos;ll need
+              </h2>
 
-          <Button
-            onClick={handleVerification}
-            disabled={isLoading || verificationStatus === 'completed' || !firstName || !lastName || !dob || !sdkLoaded}
-            className="w-full"
-            size="lg"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Starting verification...
-              </>
-            ) : !sdkLoaded ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Loading verification system...
-              </>
-            ) : !firstName || !lastName || !dob ? (
-              'Missing required information'
-            ) : (
-              <>
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Begin Identity Verification
-              </>
-            )}
-          </Button>
+              <div className="relative max-w-full mb-6 [font-family:'Poppins',Helvetica] font-medium text-[#333333] text-base tracking-[0] leading-[28.8px]">
+                {requirements.map((requirement, index) => (
+                  <div key={index}>
+                    {requirement}
+                    {index < requirements.length - 1 && <br />}
+                  </div>
+                ))}
+              </div>
 
-          <div className="text-xs text-blue-700 p-3 bg-blue-50 border border-blue-200 rounded">
-            <strong>LOW_CODE_SDK Integration:</strong>
-            <div className="mt-1 space-y-1">
-              <div>• Uses Medallion&apos;s simplified SDK for easy integration</div>
-              <div>• Automatic user creation and management</div>
-              <div>• Session tracking for security and state management</div>
-              <div>• Real-time status updates via webhooks</div>
-              <div>• Complete verification and return here automatically</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+              <Button
+                onClick={handleVerification}
+                disabled={isLoading || verificationStatus === 'completed' || !firstName || !lastName || !dob || !sdkLoaded}
+                className="w-full md:w-1/2 h-[60px] bg-[#3c8787] hover:bg-[#2d6666] text-white rounded-lg [font-family:'Poppins',Helvetica] font-semibold text-base"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Starting verification...
+                  </>
+                ) : !sdkLoaded ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Loading verification system...
+                  </>
+                ) : !firstName || !lastName || !dob ? (
+                  'Missing required information'
+                ) : (
+                  'Continue'
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </>
   );
 };
