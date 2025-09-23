@@ -12,7 +12,7 @@ import { logger } from '@/lib/logger';
 import { Identification } from '../../searches/(trips-components)/application-identity';
 import { Income } from '../../searches/(trips-components)/application-income';
 import Questionnaire from '../../searches/(trips-components)/application-questionnaire';
-import { upsertApplication, markComplete, updateApplicationCompletionStatus } from '@/app/actions/applications';
+import { upsertApplication, markComplete, updateApplicationCompletionStatus, deleteIDPhoto, deleteIncomeProof } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
   validatePersonalInfo,
@@ -50,18 +50,23 @@ export default function ApplicationClientComponent({
     checkCompletion,
     isApplicationComplete,
     serverIsComplete,
-    errors
+    errors,
+    resetStore
   } = useApplicationStore();
+
+  // Track if we've already initialized to prevent re-initialization
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   // Initialize store with application data received from the server component
   useEffect(() => {
-    // If application exists, pre-fill the form
-    if (application) {
+    // Only initialize once and only if we have application data
+    if (application && !hasInitialized) {
       logger.debug('Received user application from server', application);
       initializeFromApplication(application);
+      setHasInitialized(true);
     }
     // If no application, the form will show empty (default store state)
-  }, [application, initializeFromApplication]);
+  }, [application]); // Removed initializeFromApplication from dependencies
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -109,6 +114,17 @@ export default function ApplicationClientComponent({
     console.log('  Income Errors:', incomeErrors);
     console.log('  Questionnaire Errors:', questionnaireErrors);
 
+    // Create fresh errors object for immediate use
+    const freshErrors = {
+      basicInfo: {
+        personalInfo: personalInfoError,
+        identification: identificationError,
+      },
+      residentialHistory: residentialHistoryErrors,
+      income: incomeErrors,
+      questionnaire: questionnaireErrors,
+    };
+
     console.log('💾 Setting errors in store...');
     setErrors('basicInfo', {
       personalInfo: personalInfoError,
@@ -119,11 +135,6 @@ export default function ApplicationClientComponent({
     setErrors('questionnaire', questionnaireErrors);
     
     console.log('✅ Errors set in store at:', new Date().toISOString());
-
-    // Check store state after a brief delay to see if it was actually set
-    setTimeout(() => {
-      console.log('🔍 Store state after setting errors (50ms later):', errors);
-    }, 50);
 
     const isValid = (
       Object.keys(personalInfoError).length === 0 &&
@@ -143,7 +154,7 @@ export default function ApplicationClientComponent({
     console.log('⚡ Validation completed at:', new Date().toISOString());
     console.log('=========================');
 
-    return isValid;
+    return { isValid, errors: freshErrors };
   };
 
   const getFieldDisplayNames = () => {
@@ -187,40 +198,21 @@ export default function ApplicationClientComponent({
     };
   };
 
-  const getErrorFieldsForSection = (sectionName: string) => {
-    console.log(`\n=== Getting error fields for section: ${sectionName} ===`);
-    console.log('Store errors state:', errors);
+  const getErrorFieldsForSection = (sectionName: string, freshErrors?: any) => {
     const fieldNames = getFieldDisplayNames();
     const errorFields: string[] = [];
+    
+    // Use fresh errors if provided, otherwise fall back to store errors
+    const errorsToUse = freshErrors || errors;
 
     switch (sectionName) {
       case 'Personal Information':
-        // Compare store state with fresh validation
-        const storedPersonalInfoErrors = errors.basicInfo?.personalInfo || {};
-        const freshPersonalInfoValidation = validatePersonalInfo({
-          ...personalInfo,
-          middleName: personalInfo.noMiddleName ? 'N/A' : personalInfo.middleName
-        });
+        const personalInfoErrors = errorsToUse.basicInfo?.personalInfo || {};
         
-        console.log('🔍 VALIDATION STATE COMPARISON - Personal Info:');
-        console.log('  📦 Store errors:', storedPersonalInfoErrors);
-        console.log('  🔄 Fresh validation would produce:', freshPersonalInfoValidation);
-        console.log('  ⚠️  Mismatch?', JSON.stringify(storedPersonalInfoErrors) !== JSON.stringify(freshPersonalInfoValidation));
-        console.log('  📊 Personal Info data being validated:', {
-          firstName: personalInfo.firstName,
-          lastName: personalInfo.lastName,
-          middleName: personalInfo.middleName,
-          noMiddleName: personalInfo.noMiddleName,
-          dateOfBirth: personalInfo.dateOfBirth
-        });
-        
-        // Use store errors for consistency with UI
-        Object.keys(storedPersonalInfoErrors).forEach(key => {
-          console.log(`Checking store error key: ${key}, error value:`, storedPersonalInfoErrors[key as keyof typeof storedPersonalInfoErrors]);
+        Object.keys(personalInfoErrors).forEach(key => {
           // Check that the error has a value and the field name exists
-          if (storedPersonalInfoErrors[key as keyof typeof storedPersonalInfoErrors] && fieldNames[key as keyof typeof fieldNames]) {
+          if (personalInfoErrors[key as keyof typeof personalInfoErrors] && fieldNames[key as keyof typeof fieldNames]) {
             const fieldName = fieldNames[key as keyof typeof fieldNames];
-            console.log(`Adding error field from store: ${fieldName}`);
             // Avoid duplicates
             if (!errorFields.includes(fieldName)) {
               errorFields.push(fieldName);
@@ -230,13 +222,11 @@ export default function ApplicationClientComponent({
         break;
         
       case 'Identification':
-        // Use store errors instead of re-validating
-        const storedIdentificationErrors = errors.basicInfo?.identification || {};
-        console.log('Stored Identification Errors:', storedIdentificationErrors);
+        const identificationErrors = errorsToUse.basicInfo?.identification || {};
         
-        Object.keys(storedIdentificationErrors).forEach(key => {
+        Object.keys(identificationErrors).forEach(key => {
           // Check that the error has a value and the field name exists
-          if (storedIdentificationErrors[key as keyof typeof storedIdentificationErrors] && fieldNames[key as keyof typeof fieldNames]) {
+          if (identificationErrors[key as keyof typeof identificationErrors] && fieldNames[key as keyof typeof fieldNames]) {
             const fieldName = fieldNames[key as keyof typeof fieldNames];
             // Avoid duplicates
             if (!errorFields.includes(fieldName)) {
@@ -247,39 +237,35 @@ export default function ApplicationClientComponent({
         break;
         
       case 'Income':
-        // Use store errors instead of re-validating
-        const storedIncomeErrors = errors.income || {};
-        console.log('Stored Income Errors:', storedIncomeErrors);
+        const incomeErrors = errorsToUse.income || {};
         
         // Handle array-based income errors
-        if (storedIncomeErrors.source) {
-          storedIncomeErrors.source.forEach((error, index) => {
+        if (incomeErrors.source) {
+          incomeErrors.source.forEach((error, index) => {
             if (error) errorFields.push(`Income Source ${index + 1}`);
           });
         }
-        if (storedIncomeErrors.monthlyAmount) {
-          storedIncomeErrors.monthlyAmount.forEach((error, index) => {
+        if (incomeErrors.monthlyAmount) {
+          incomeErrors.monthlyAmount.forEach((error, index) => {
             if (error) errorFields.push(`Monthly Amount ${index + 1}`);
           });
         }
-        if (storedIncomeErrors.imageUrl) {
-          storedIncomeErrors.imageUrl.forEach((error, index) => {
+        if (incomeErrors.imageUrl) {
+          incomeErrors.imageUrl.forEach((error, index) => {
             if (error) errorFields.push(`Income Proof ${index + 1}`);
           });
         }
         break;
         
       case 'Residential History':
-        // Use store errors instead of re-validating
-        const storedResidentialErrors = errors.residentialHistory || {};
-        console.log('Stored Residential History Errors:', storedResidentialErrors);
+        const residentialErrors = errorsToUse.residentialHistory || {};
         
         // Handle array-based residential history errors
-        Object.keys(storedResidentialErrors).forEach(key => {
-          if (key === 'overall' && storedResidentialErrors.overall) {
+        Object.keys(residentialErrors).forEach(key => {
+          if (key === 'overall' && residentialErrors.overall) {
             errorFields.push('Residential Duration');
-          } else if (Array.isArray(storedResidentialErrors[key as keyof typeof storedResidentialErrors])) {
-            const errorArray = storedResidentialErrors[key as keyof typeof storedResidentialErrors] as string[];
+          } else if (Array.isArray(residentialErrors[key as keyof typeof residentialErrors])) {
+            const errorArray = residentialErrors[key as keyof typeof residentialErrors] as string[];
             errorArray.forEach((error, index) => {
               if (error) {
                 const displayName = fieldNames[key as keyof typeof fieldNames];
@@ -293,13 +279,11 @@ export default function ApplicationClientComponent({
         break;
         
       case 'Questionnaire':
-        // Use store errors instead of re-validating
-        const storedQuestionnaireErrors = errors.questionnaire || {};
-        console.log('Stored Questionnaire Errors:', storedQuestionnaireErrors);
+        const questionnaireErrors = errorsToUse.questionnaire || {};
         
-        Object.keys(storedQuestionnaireErrors).forEach(key => {
+        Object.keys(questionnaireErrors).forEach(key => {
           // Check that the error has a value and the field name exists
-          if (storedQuestionnaireErrors[key as keyof typeof storedQuestionnaireErrors] && fieldNames[key as keyof typeof fieldNames]) {
+          if (questionnaireErrors[key as keyof typeof questionnaireErrors] && fieldNames[key as keyof typeof fieldNames]) {
             const fieldName = fieldNames[key as keyof typeof fieldNames];
             // Avoid duplicates
             if (!errorFields.includes(fieldName)) {
@@ -312,15 +296,67 @@ export default function ApplicationClientComponent({
 
     // Remove duplicates and filter out empty strings
     const finalErrorFields = [...new Set(errorFields.filter(field => field && field.trim()))];
-    console.log(`Error fields found for ${sectionName}:`, finalErrorFields);
     return finalErrorFields;
   };
 
-  const findFirstErrorSection = () => {
-    console.log('\n=== FINDING FIRST ERROR SECTION ===');
-    console.log('⏰ Current time:', new Date().toISOString());
-    console.log('🏪 Current store errors when checking DOM:', errors);
-    
+  // Check if a section has errors using the same logic as UI components 
+  const hasErrorsInSection = (sectionName: string, errors: any): boolean => {
+    switch (sectionName) {
+      case 'Personal Information':
+        const personalErrors = errors.basicInfo?.personalInfo || {};
+        const hasPersonalErrors = Object.values(personalErrors).some((error: any) => error && error !== '');
+        return hasPersonalErrors;
+      
+      case 'Identification':
+        const identificationErrors = errors.basicInfo?.identification || {};
+        const hasIdentificationErrors = Object.values(identificationErrors).some((error: any) => error && error !== '');
+        return hasIdentificationErrors;
+      
+      case 'Residential History':
+        const residentialErrors = errors.residentialHistory || {};
+        let hasResidentialErrors = false;
+        
+        // Check main fields (excluding array fields)
+        Object.entries(residentialErrors).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            // Array field like street[], city[], etc.
+            if (value.some((error: any) => error && error !== '')) {
+              hasResidentialErrors = true;
+            }
+          } else if (value && value !== '') {
+            // Simple field like overall
+            hasResidentialErrors = true;
+          }
+        });
+        
+        return hasResidentialErrors;
+      
+      case 'Income':
+        const incomeErrors = errors.income || {};
+        let hasIncomeErrors = false;
+        
+        // Check array-based income errors
+        ['source', 'monthlyAmount', 'imageUrl'].forEach(field => {
+          if (incomeErrors[field] && Array.isArray(incomeErrors[field])) {
+            if (incomeErrors[field].some((error: any) => error && error !== '')) {
+              hasIncomeErrors = true;
+            }
+          }
+        });
+        
+        return hasIncomeErrors;
+      
+      case 'Questionnaire':
+        const questionnaireErrors = errors.questionnaire || {};
+        const hasQuestionnaireErrors = Object.values(questionnaireErrors).some((error: any) => error && error !== '');
+        return hasQuestionnaireErrors;
+      
+      default:
+        return false;
+    }
+  };
+
+  const findFirstErrorSection = (freshErrors: any) => {
     const sectionMap = [
       { name: 'Personal Information', selector: '[data-section="personal-info"]' },
       { name: 'Identification', selector: '[data-section="identification"]' },
@@ -328,111 +364,80 @@ export default function ApplicationClientComponent({
       { name: 'Residential History', selector: '[data-section="residential-history"]' },
       { name: 'Questionnaire', selector: '[data-section="questionnaire"]' }
     ];
-
+    
     for (const section of sectionMap) {
-      const sectionElement = document.querySelector(section.selector);
-      console.log(`Checking section: ${section.name}, found element:`, !!sectionElement);
-      
-      if (sectionElement) {
-        // Check multiple error selectors - be more specific about form validation errors
-        const redBorderInputs = sectionElement.querySelectorAll('input.border-red-500, textarea.border-red-500, select.border-red-500');
-        const redTextErrors = sectionElement.querySelectorAll('p.text-red-500, span.text-red-500, div.text-red-500');
-        const allRedElements = sectionElement.querySelectorAll('.border-red-500, .text-red-500');
+      // Use fresh errors instead of store errors
+      if (hasErrorsInSection(section.name, freshErrors)) {
+        const sectionElement = document.querySelector(section.selector);
+        const errorFields = getErrorFieldsForSection(section.name, freshErrors);
         
-        console.log(`🔍 Checking ${section.name}:`);
-        console.log(`  - Red border INPUTS: ${redBorderInputs.length}`);
-        console.log(`  - Red text ERROR MESSAGES: ${redTextErrors.length}`);
-        console.log(`  - ALL red elements (any): ${allRedElements.length}`);
-        
-        // Focus on form validation errors first (inputs with red borders or error messages)
-        const formValidationErrors = sectionElement.querySelectorAll('input.border-red-500, textarea.border-red-500, select.border-red-500, p.text-red-500, span.text-red-500');
-        console.log(`  - FORM VALIDATION ERRORS: ${formValidationErrors.length}`);
-        
-        // Decide which errors to act on - prioritize actual form validation errors
-        const errorsToCheck = formValidationErrors.length > 0 ? formValidationErrors : allRedElements;
-        
-        // Log ALL elements found, even if 0
-        if (errorsToCheck.length > 0) {
-          console.log(`🚨 FOUND ${errorsToCheck.length} RELEVANT ERROR ELEMENTS IN ${section.name.toUpperCase()}:`);
-          console.log(`   (Using ${formValidationErrors.length > 0 ? 'FORM VALIDATION' : 'ALL RED'} elements)`);
-          
-          // Convert NodeList to Array for better logging
-          Array.from(errorsToCheck).forEach((elem, idx) => {
-            const element = elem as HTMLElement;
-            const elementInfo = {
-              index: idx + 1,
-              tagName: element.tagName,
-              id: element.id || 'NO-ID',
-              name: element.getAttribute('name') || 'NO-NAME',
-              placeholder: element.getAttribute('placeholder') || 'NO-PLACEHOLDER',
-              type: element.getAttribute('type') || 'NO-TYPE',
-              className: element.className,
-              value: (element as HTMLInputElement).value || element.textContent?.substring(0, 50) || 'NO-VALUE',
-              parentClassName: element.parentElement?.className || 'NO-PARENT-CLASS',
-              parentTag: element.parentElement?.tagName || 'NO-PARENT-TAG',
-              hasRedBorder: element.classList.contains('border-red-500'),
-              hasRedText: element.classList.contains('text-red-500'),
-              isFormElement: ['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName),
-              isErrorMessage: ['P', 'SPAN', 'DIV'].includes(element.tagName) && element.classList.contains('text-red-500')
-            };
-            
-            console.log(`  🔴 Error Element ${idx + 1}:`, elementInfo);
-            
-            // Also log the actual element for inspection
-            console.log(`  🔍 Actual DOM Element ${idx + 1}:`, element);
-            
-            // If this is a non-form element with red styling, try to understand why
-            if (!elementInfo.isFormElement && !elementInfo.isErrorMessage) {
-              console.log(`  ⚠️  WARNING: Non-form element with red styling - may be false positive`);
-            }
-          });
-          
-          console.log(`📊 Now getting error fields for section: ${section.name}`);
-          const errorFields = getErrorFieldsForSection(section.name);
-          return { 
-            name: section.name, 
-            element: sectionElement,
-            errorFields: errorFields
-          };
-        } else {
-          console.log(`✅ No error elements found in ${section.name}`);
-        }
+        return { 
+          name: section.name, 
+          element: sectionElement,
+          errorFields: errorFields
+        };
       }
     }
-    console.log('No error sections found');
+    
     return null;
   };
 
   const handleSubmit = async () => {
-    console.log('\n=== SUBMIT ATTEMPT ===');
-    const isValid = validateForm();
+    const validationResult = validateForm();
     
-    if (!isValid) {
-      console.log('❌ Validation failed, finding first error section...');
+    if (!validationResult.isValid) {
       // Find the first error section and scroll to it
       setTimeout(() => {
-        const firstErrorInfo = findFirstErrorSection();
-        console.log('First error info:', firstErrorInfo);
+        const firstErrorInfo = findFirstErrorSection(validationResult.errors);
         if (firstErrorInfo) {
           firstErrorInfo.element.scrollIntoView({ 
             behavior: 'smooth', 
             block: 'start' 
           });
           
-          // Create detailed error message with field names
-          let errorMessage = `Please correct errors in ${firstErrorInfo.name}`;
+          // Create specific, actionable error message
+          let title = "Missing Required Information";
+          let errorMessage = `Please complete the ${firstErrorInfo.name} section.`;
+          
           if (firstErrorInfo.errorFields && firstErrorInfo.errorFields.length > 0) {
-            const fieldList = firstErrorInfo.errorFields.slice(0, 3).join(', ');
-            const moreFields = firstErrorInfo.errorFields.length > 3 ? ` and ${firstErrorInfo.errorFields.length - 3} more` : '';
-            errorMessage += `: ${fieldList}${moreFields}`;
+            const firstField = firstErrorInfo.errorFields[0];
+            const remainingCount = firstErrorInfo.errorFields.length - 1;
+            
+            // Create actionable message based on the first error field
+            if (firstField.includes("First Name")) {
+              errorMessage = "Please enter your first name to continue.";
+            } else if (firstField.includes("Last Name")) {
+              errorMessage = "Please enter your last name to continue.";
+            } else if (firstField.includes("Date of Birth")) {
+              errorMessage = "Please enter your date of birth to continue.";
+            } else if (firstField.includes("Income Source")) {
+              errorMessage = "Please enter your income source to continue.";
+            } else if (firstField.includes("Monthly Amount")) {
+              errorMessage = "Please enter your monthly income amount to continue.";
+            } else if (firstField.includes("Income Proof")) {
+              errorMessage = "Please upload proof of income to continue.";
+            } else if (firstField.includes("ID Type")) {
+              errorMessage = "Please select your ID type to continue.";
+            } else if (firstField.includes("ID Number")) {
+              errorMessage = "Please enter your ID number to continue.";
+            } else if (firstField.includes("Street Address")) {
+              errorMessage = "Please enter your street address to continue.";
+            } else {
+              errorMessage = `Please enter your ${firstField.toLowerCase()} to continue.`;
+            }
+            
           }
           
           toast({
-            title: "Validation Error",
+            title: title,
             description: errorMessage,
             variant: "destructive",
           });
         } else {
+          console.log('❌❌❌ VALIDATION FAILED BUT NO ERROR SECTION FOUND ❌❌❌');
+          console.log('❌❌❌ FRESH ERRORS:', validationResult.errors);
+          console.log('❌❌❌ VALIDATION RESULT:', validationResult);
+          
           // Fallback to original behavior
           const firstErrorElement = document.querySelector('.border-red-500, .text-red-500');
           if (firstErrorElement) {
@@ -452,7 +457,6 @@ export default function ApplicationClientComponent({
       return;
     }
 
-    console.log('✅ Validation passed, proceeding with submission...');
 
     // Format the date if it exists
     const formattedDateOfBirth = personalInfo.dateOfBirth ?
@@ -498,8 +502,6 @@ export default function ApplicationClientComponent({
           let completeResult = await markComplete(result.application?.id);
           logger.debug('Complete application result', completeResult);
 
-          // Redirect to searches page after successful submission
-          router.push('/app/rent/searches');
         }
       } else {
         toast({
@@ -614,25 +616,87 @@ export default function ApplicationClientComponent({
           <div className="">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-yellow-400 font-bold text-sm">🔧 DEV TROUBLESHOOTING - Completion Status</h3>
-              <button
-                onClick={async () => {
-                  if (application?.id) {
-                    const result = await updateApplicationCompletionStatus(application.id);
-                    if (result.success) {
+              <div className="flex gap-2">
+                <button
+                  onClick={async () => {
+                    // Clear temp data only (no photos)
+                    resetStore();
+                    toast({
+                      title: "Temp Data Cleared",
+                      description: "Form data reset (photos preserved)",
+                      duration: 3000,
+                    });
+                  }}
+                  className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded text-xs"
+                >
+                  Clear Temp Data
+                </button>
+                <button
+                  onClick={async () => {
+                    // Clear all data including photos
+                    const confirmClear = window.confirm("This will delete ALL data including uploaded photos. Are you sure?");
+                    if (!confirmClear) return;
+                    
+                    try {
+                      // Delete all ID photos
+                      for (const id of ids) {
+                        if (id.idPhotos) {
+                          for (const photo of id.idPhotos) {
+                            if (photo.id) {
+                              await deleteIDPhoto(photo.id);
+                            }
+                          }
+                        }
+                      }
+                      
+                      // Delete all income proofs
+                      for (const income of incomes) {
+                        if (income.id) {
+                          await deleteIncomeProof(income.id);
+                        }
+                      }
+                      
+                      // Reset the store
+                      resetStore();
+                      
                       toast({
-                        title: "Completion Status Updated",
-                        description: `Server now reports: ${result.isComplete ? 'Complete' : 'Incomplete'}`,
+                        title: "All Data Cleared",
+                        description: "All form data and photos deleted",
                         duration: 3000,
                       });
-                      // Refresh the page to get updated data
-                      window.location.reload();
+                    } catch (error) {
+                      toast({
+                        title: "Error",
+                        description: "Failed to delete some files",
+                        variant: "destructive",
+                        duration: 3000,
+                      });
                     }
-                  }
-                }}
-                className="px-3 py-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded text-xs"
-              >
-                Force Server Check
-              </button>
+                  }}
+                  className="px-3 py-1 bg-red-600 hover:bg-red-500 text-white font-bold rounded text-xs"
+                >
+                  Clear All
+                </button>
+                <button
+                  onClick={async () => {
+                    if (application?.id) {
+                      const result = await updateApplicationCompletionStatus(application.id);
+                      if (result.success) {
+                        toast({
+                          title: "Completion Status Updated",
+                          description: `Server now reports: ${result.isComplete ? 'Complete' : 'Incomplete'}`,
+                          duration: 3000,
+                        });
+                        // Refresh the page to get updated data
+                        window.location.reload();
+                      }
+                    }
+                  }}
+                  className="px-3 py-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded text-xs"
+                >
+                  Force Server Check
+                </button>
+              </div>
             </div>
             
             <div className="grid grid-cols-2 gap-4">

@@ -10,7 +10,6 @@ import { Upload, Loader2, Camera } from 'lucide-react';
 import { ImageCategory } from '@prisma/client';
 import { useApplicationStore } from '@/stores/application-store';
 import { useToast } from "@/components/ui/use-toast";
-import { debounce } from 'lodash';
 import BrandModal from '@/components/BrandModal';
 import { deleteIDPhoto } from '@/app/actions/applications';
 
@@ -103,56 +102,6 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
     currentId.isPrimary = true;
   }
 
-  // Create debounced save function with toast feedback and completion checking
-  const debouncedSave = useCallback(
-    debounce(async (fieldPath: string, value: any) => {
-      const result = await saveField(fieldPath, value, { checkCompletion: true });
-      
-      // Handle completion status changes
-      if (result.success && result.completionStatus) {
-        if (result.completionStatus.statusChanged) {
-          if (result.completionStatus.isComplete) {
-            toast({
-              title: "Application Complete! 🎉",
-              description: "All required information has been provided",
-              duration: 4000,
-            });
-          } else if (result.completionStatus.missingRequirements?.length > 0) {
-            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-            const more = result.completionStatus.missingRequirements.length > 3 
-              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
-              : '';
-            toast({
-              title: "Application Incomplete",
-              description: `Still need: ${missing}${more}`,
-              duration: 4000,
-            });
-          }
-        }
-      }
-      
-      // Only show save toasts in development
-      if (isDevelopment) {
-        if (result.success) {
-          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-          toast({
-            title: "Auto-Save",
-            description: `${fieldPath.split('.').pop()} saved`,
-            duration: 2000,
-          });
-        } else {
-          console.error(`[Auto-Save] Error:`, result.error);
-          toast({
-            title: "Save Failed",
-            description: result.error || `Failed to save ${fieldPath}`,
-            variant: "destructive",
-            duration: 4000,
-          });
-        }
-      }
-    }, 1000),
-    [isDevelopment, toast, saveField]
-  );
 
   const handleUploadFinish = async (res: UploadData[]) => {
     console.log('Upload complete, received data:', res);
@@ -369,14 +318,14 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
 
                   <Select
                     value={currentId.idType}
-                    onValueChange={async (value) => {
+                    onValueChange={(value) => {
                       const fieldPath = 'identifications.0.idType';
                       
                       // Update local state immediately
                       const updatedId = { ...currentId, idType: value };
                       setIds([updatedId, ...ids.slice(1)]);
                       
-                      // Validate
+                      // Validate only (no auto-save)
                       const validationError = validateField(fieldPath, value);
                       if (validationError) {
                         setFieldError(fieldPath, validationError);
@@ -385,53 +334,8 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                         }
                       } else {
                         clearFieldError(fieldPath);
-                        // Save immediately without debouncing for select fields
                         if (isDevelopment) {
-                          console.log(`[Identification] Saving idType immediately for ${fieldPath}`);
-                        }
-                        
-                        const result = await saveField(fieldPath, value, { checkCompletion: true });
-                        
-                        // Handle completion status changes
-                        if (result.success && result.completionStatus) {
-                          if (result.completionStatus.statusChanged) {
-                            if (result.completionStatus.isComplete) {
-                              toast({
-                                title: "Application Complete! 🎉",
-                                description: "All required information has been provided",
-                                duration: 4000,
-                              });
-                            } else if (result.completionStatus.missingRequirements?.length > 0) {
-                              const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-                              const more = result.completionStatus.missingRequirements.length > 3 
-                                ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
-                                : '';
-                              toast({
-                                title: "Application Incomplete",
-                                description: `Still need: ${missing}${more}`,
-                                duration: 4000,
-                              });
-                            }
-                          }
-                        }
-                        
-                        if (isDevelopment) {
-                          if (result.success) {
-                            console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-                            toast({
-                              title: "Auto-Save",
-                              description: `ID Type saved`,
-                              duration: 2000,
-                            });
-                          } else {
-                            console.error(`[Auto-Save] Error:`, result.error);
-                            toast({
-                              title: "Save Failed",
-                              description: result.error || 'Failed to save ID Type',
-                              variant: "destructive",
-                              duration: 4000,
-                            });
-                          }
+                          console.log(`[Identification] Field ${fieldPath} validated successfully (no auto-save)`);
                         }
                       }
                     }}
@@ -474,7 +378,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                     const updatedId = { ...currentId, idNumber: value };
                     setIds([updatedId, ...ids.slice(1)]);
                     
-                    // Validate
+                    // Validate only (no auto-save)
                     const validationError = validateField(fieldPath, value);
                     if (validationError) {
                       setFieldError(fieldPath, validationError);
@@ -483,11 +387,9 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                       }
                     } else {
                       clearFieldError(fieldPath);
-                      // Save if valid (debounced)
                       if (isDevelopment) {
-                        console.log(`[Identification] Calling debouncedSave for ${fieldPath}`);
+                        console.log(`[Identification] Field ${fieldPath} validated successfully (no auto-save)`);
                       }
-                      debouncedSave(fieldPath, value);
                     }
                   }}
                   placeholder="Enter ID Number"

@@ -154,11 +154,11 @@ export function SecureFileViewer({
 
   if (signedUrl && actualFileType === 'image') {
     return (
-      <div className={cn('relative group', className)}>
+      <div className={cn('relative group bg-gray-100 rounded-lg max-h-[300px] flex items-center justify-center', className)}>
         <img
           src={signedUrl}
           alt={alt || fileName}
-          className="w-full h-full object-cover rounded-lg"
+          className="w-full h-full  object-contain rounded-lg max-h-[280px] aspect-square"
           onError={() => {
             setError('Failed to load image');
             setSignedUrl(null);
@@ -206,33 +206,28 @@ export function SecureFileList({
   onRemove,
 }: SecureFileListProps) {
   return (
-    <div className={cn('grid grid-cols-1 gap-3', className)}>
+    <div className={cn(' flex flex-wrap justify-center gap-3', className)}>
       {files.map((file, index) => (
-        <div key={index} className="relative">
+        <div key={index} className="relative w-[280px] h-[280px]">
           <SecureFileViewer
             fileKey={file.fileKey}
             customId={file.customId}
             fileName={file.fileName}
             fileType={fileType}
-            className="w-full"
+            className="w-full h-full"
           />
-          {file.isPrimary && (
-            <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs">
-              Primary
-            </div>
-          )}
           {onRemove && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove(index);
               }}
-              className="absolute -top-1 -right-1 w-6 h-6 bg-black/30 hover:bg-black/80 text-white hover:text-red-500 rounded-full flex items-center justify-center z-10 shadow-md transition-colors duration-200"
+              className="absolute -top-1 -right-1 w-8 h-8 bg-black/30 hover:bg-black/80 text-white hover:text-red-500 rounded-full flex items-center justify-center z-10 shadow-md transition-colors duration-200 transform translate-y-5"
               aria-label="Delete file"
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                className="h-3 w-3" 
+                className="h-4 w-4" 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
