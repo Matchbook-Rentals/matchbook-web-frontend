@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ShareIcon, MailIcon, MessageSquareIcon, CopyIcon } from "lucide-react";
 import { useToast } from "./use-toast";
 import {
@@ -8,6 +8,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from "@/components/ui/drawer";
 import { BrandButton } from "@/components/ui/brandButton";
 import { usePathname } from 'next/navigation';
 
@@ -25,9 +32,19 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   className = ""
 }) => {
   const { toast } = useToast();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
   const currentUrl = url || `${window.location.origin}${pathname}`;
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleShare = async () => {
     const shareData = {
@@ -93,6 +110,35 @@ const ShareButton: React.FC<ShareButtonProps> = ({
     setOpen(false);
   };
 
+  const shareOptions = (
+    <div className="flex flex-col gap-3 my-4">
+      <button
+        onClick={handleCopyLink}
+        className="flex items-center gap-3 px-4 py-4 bg-gray-100 rounded-lg hover:bg-gray-200 
+                   min-h-[48px] touch-manipulation active:bg-gray-300 transition-colors"
+      >
+        <CopyIcon size={20} />
+        <span className="text-base">Copy Link</span>
+      </button>
+      <button
+        onClick={handleEmailShare}
+        className="flex items-center gap-3 px-4 py-4 bg-gray-100 rounded-lg hover:bg-gray-200 
+                   min-h-[48px] touch-manipulation active:bg-gray-300 transition-colors"
+      >
+        <MailIcon size={20} />
+        <span className="text-base">Email</span>
+      </button>
+      <button
+        onClick={handleMessageShare}
+        className="flex items-center gap-3 px-4 py-4 bg-gray-100 rounded-lg hover:bg-gray-200 
+                   min-h-[48px] touch-manipulation active:bg-gray-300 transition-colors"
+      >
+        <MessageSquareIcon size={20} />
+        <span className="text-base">Message</span>
+      </button>
+    </div>
+  );
+
   return (
     <>
       <BrandButton 
@@ -104,46 +150,54 @@ const ShareButton: React.FC<ShareButtonProps> = ({
         <span className="hidden sm:inline">Share</span>
       </BrandButton>
 
-      <Dialog open={open} onOpenChange={setOpen} >
-        <DialogContent hideCloseButton>
-          <DialogHeader>
-            <DialogTitle>Share</DialogTitle>
-            <DialogDescription>Select an option to share:</DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-col gap-4 my-4">
-            <button
-              onClick={handleCopyLink}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-md hover:bg-gray-200"
-            >
-              <CopyIcon size={18} />
-              Copy Link
-            </button>
-            <button
-              onClick={handleEmailShare}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-md hover:bg-gray-200"
-            >
-              <MailIcon size={18} />
-              Email
-            </button>
-            <button
-              onClick={handleMessageShare}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-md hover:bg-gray-200"
-            >
-              <MessageSquareIcon size={18} />
-              Message
-            </button>
-          </div>
-          <div className="flex justify-end">
-            <button
-              onClick={() => setOpen(false)}
-              className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300"
-            >
-              Cancel
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </ >
+      {/* Mobile Drawer */}
+      {isMobile ? (
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerContent 
+            className="pb-safe"
+            style={{
+              paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom))'
+            }}
+          >
+            <DrawerHeader>
+              <DrawerTitle>Share</DrawerTitle>
+              <DrawerDescription>Select an option to share:</DrawerDescription>
+            </DrawerHeader>
+            <div className="px-4 pb-4">
+              {shareOptions}
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 rounded-lg bg-gray-200 hover:bg-gray-300 
+                             min-h-[44px] touch-manipulation active:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        /* Desktop Dialog */
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent hideCloseButton>
+            <DialogHeader>
+              <DialogTitle>Share</DialogTitle>
+              <DialogDescription>Select an option to share:</DialogDescription>
+            </DialogHeader>
+            {shareOptions}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 };
 
