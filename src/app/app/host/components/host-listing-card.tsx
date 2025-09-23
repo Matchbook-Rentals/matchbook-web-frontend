@@ -287,15 +287,24 @@ export default function HostListingCard({
   // Render loading state
   const renderLoadingState = () => (
     <div className="w-full text-center py-8">
-      <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-        Checking Listing Status
-      </h3>
-      <p className="text-gray-600">
-        Please wait while we check if this listing can be deleted...
+      <p className="text-lg font-semibold text-gray-900">
+        Getting listing information
+        <span className="inline-block w-6 text-left">
+          <span className="animate-pulse-dots">...</span>
+        </span>
       </p>
+      <style jsx>{`
+        @keyframes dots {
+          0% { content: '.'; }
+          33% { content: '..'; }
+          66% { content: '...'; }
+          100% { content: '.'; }
+        }
+        .animate-pulse-dots::after {
+          content: '.';
+          animation: dots 1.5s infinite;
+        }
+      `}</style>
     </div>
   );
 
