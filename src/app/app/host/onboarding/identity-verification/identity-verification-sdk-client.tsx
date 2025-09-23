@@ -6,6 +6,7 @@ import Script from "next/script";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DateOfBirthPicker } from "@/components/ui/date-of-birth-picker";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, CheckCircle, User, Edit, Save, X, Loader2, AlertTriangle, XCircle, Clock, RefreshCw, Check, ExternalLink } from "lucide-react";
 import { confirmAuthenticatedName, updateAuthenticatedName } from "@/app/actions/user";
@@ -21,6 +22,21 @@ const convertToDDMMYYYY = (htmlDate: string): string => {
   if (!htmlDate) return "";
   const [year, month, day] = htmlDate.split('-');
   return `${day}-${month}-${year}`;
+};
+
+// Helper functions for DateOfBirthPicker
+const convertHtmlDateToDate = (htmlDate: string): Date | null => {
+  if (!htmlDate) return null;
+  const [year, month, day] = htmlDate.split('-');
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+};
+
+const convertDateToHtmlDate = (date: Date | null): string => {
+  if (!date) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 interface UserData {
@@ -674,12 +690,11 @@ export default function IdentityVerificationSDKClient({
                           Date of Birth
                         </Label>
                       </div>
-                      <Input
-                        id="editDateOfBirth"
-                        type="date"
-                        value={editDateOfBirth}
-                        onChange={(e) => setEditDateOfBirth(e.target.value)}
-                        className="h-12 items-center gap-2 px-3 py-2 self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                      <DateOfBirthPicker
+                        value={convertHtmlDateToDate(editDateOfBirth)}
+                        onChange={(date) => setEditDateOfBirth(convertDateToHtmlDate(date))}
+                        placeholder="Select your date of birth"
+                        className="h-12 border-[#d0d5dd] shadow-shadows-shadow-xs"
                       />
                     </div>
                   </div>
@@ -782,12 +797,11 @@ export default function IdentityVerificationSDKClient({
                           Date of Birth
                         </Label>
                       </div>
-                      <Input
-                        id="confirmDateOfBirth"
-                        type="date"
-                        value={confirmDateOfBirth}
-                        onChange={(e) => setConfirmDateOfBirth(e.target.value)}
-                        className="h-12 items-center gap-2 px-3 py-2 self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+                      <DateOfBirthPicker
+                        value={convertHtmlDateToDate(confirmDateOfBirth)}
+                        onChange={(date) => setConfirmDateOfBirth(convertDateToHtmlDate(date))}
+                        placeholder="Select your date of birth"
+                        className="h-12 border-[#d0d5dd] shadow-shadows-shadow-xs"
                       />
                     </div>
                   </div>

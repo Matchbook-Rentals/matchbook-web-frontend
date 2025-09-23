@@ -6,6 +6,7 @@ import { MedallionVerification } from "@/components/medallion-verification";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DateOfBirthPicker } from "@/components/ui/date-of-birth-picker";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, CheckCircle, User, Edit, Save, X, Loader2 } from "lucide-react";
 import { confirmAuthenticatedName, updateAuthenticatedName } from "@/app/actions/user";
@@ -21,6 +22,21 @@ const convertToDDMMYYYY = (htmlDate: string): string => {
   if (!htmlDate) return "";
   const [year, month, day] = htmlDate.split('-');
   return `${day}-${month}-${year}`;
+};
+
+// Helper functions for DateOfBirthPicker
+const convertHtmlDateToDate = (htmlDate: string): Date | null => {
+  if (!htmlDate) return null;
+  const [year, month, day] = htmlDate.split('-');
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+};
+
+const convertDateToHtmlDate = (date: Date | null): string => {
+  if (!date) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 interface UserData {
@@ -707,13 +723,11 @@ export default function IdentityVerificationClient({
 
                     <div>
                       <Label htmlFor="dateOfBirth">Date of Birth</Label>
-                      <Input
-                        id="dateOfBirth"
-                        type="date"
-                        value={editDateOfBirth}
-                        onChange={(e) => setEditDateOfBirth(e.target.value)}
+                      <DateOfBirthPicker
+                        value={convertHtmlDateToDate(editDateOfBirth)}
+                        onChange={(date) => setEditDateOfBirth(convertDateToHtmlDate(date))}
                         disabled={isUpdatingName}
-                        required
+                        placeholder="Select your date of birth"
                       />
                       <p className="text-xs text-gray-500 mt-1">
                         This must match your government-issued ID exactly
@@ -769,13 +783,11 @@ export default function IdentityVerificationClient({
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="confirmDateOfBirth">Date of Birth</Label>
-                      <Input
-                        id="confirmDateOfBirth"
-                        type="date"
-                        value={confirmDateOfBirth}
-                        onChange={(e) => setConfirmDateOfBirth(e.target.value)}
+                      <DateOfBirthPicker
+                        value={convertHtmlDateToDate(confirmDateOfBirth)}
+                        onChange={(date) => setConfirmDateOfBirth(convertDateToHtmlDate(date))}
                         disabled={isUpdating}
-                        required
+                        placeholder="Select your date of birth"
                       />
                       <p className="text-xs text-gray-500 mt-1">
                         This must match your government-issued ID exactly

@@ -5,19 +5,8 @@ import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles, Application
 import { useApplicationStore } from '@/stores/application-store';
 import { BrandCheckbox } from "@/app/brandCheckbox";
 import { format } from 'date-fns';
-import { CalendarIcon } from "@radix-ui/react-icons";
 import { useToast } from "@/components/ui/use-toast";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { DateOfBirthPicker } from "@/components/ui/date-of-birth-picker";
 
 interface PersonalInfoProps {
   inputClassName?: string;
@@ -40,34 +29,23 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
   const { toast } = useToast();
   const isDevelopment = process.env.NODE_ENV === 'development';
   
-  // State for calendar month/year navigation
-  const currentDate = personalInfo.dateOfBirth ? 
-    (() => {
-      if (typeof personalInfo.dateOfBirth === 'string') {
-        const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
-        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-      } else if (personalInfo.dateOfBirth instanceof Date) {
-        // Handle Date objects from database - use UTC components
-        const utcYear = personalInfo.dateOfBirth.getUTCFullYear();
-        const utcMonth = personalInfo.dateOfBirth.getUTCMonth();
-        const utcDay = personalInfo.dateOfBirth.getUTCDate();
-        return new Date(utcYear, utcMonth, utcDay);
-      }
-      return new Date(personalInfo.dateOfBirth);
-    })() : new Date();
-  
-  const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
-  const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
-  const [calendarOpen, setCalendarOpen] = useState(false);
-  
-  // Generate month names and year range
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-  
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 121 }, (_, i) => currentYear - 120 + i).reverse(); // 120 years back from current year
+  // Helper function to convert stored date to Date object
+  const convertStoredDateToDate = (dateValue: any): Date | null => {
+    if (!dateValue) return null;
+    
+    if (typeof dateValue === 'string') {
+      const [year, month, day] = dateValue.split('T')[0].split('-');
+      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    } else if (dateValue instanceof Date) {
+      // Handle Date objects from database - use UTC components
+      const utcYear = dateValue.getUTCFullYear();
+      const utcMonth = dateValue.getUTCMonth();
+      const utcDay = dateValue.getUTCDate();
+      return new Date(utcYear, utcMonth, utcDay);
+    }
+    
+    return new Date(dateValue);
+  };
   
   // Debug logging for date of birth value on load
   if (isDevelopment && personalInfo.dateOfBirth) {
@@ -119,7 +97,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
     });
   };
 
-  const handleDateSelect = async (date: Date | undefined) => {
+  const handleDateSelect = async (date: Date | null) => {
     if (date) {
       // Create a date at noon to avoid UTC offset issues
       const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
@@ -164,9 +142,16 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
         if (isDevelopment) {
           console.log(`[PersonalInfo] Date ${fieldPath} validated successfully (no auto-save)`);
         }
-        // Close calendar after successful validation
-        setCalendarOpen(false);
+        // No need to close calendar - DateOfBirthPicker handles this
       }
+    } else {
+      // Handle clearing the date
+      const fieldPath = 'personalInfo.dateOfBirth';
+      setPersonalInfo({
+        ...personalInfo,
+        dateOfBirth: null
+      });
+      clearFieldError(fieldPath);
     }
   };
 
@@ -268,126 +253,13 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
               </div>
               <span className="text-red-500 ml-1">*</span>
             </div>
-            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={`w-full ${isMobile ? 'py-3' : 'h-12 py-2'} justify-between bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs px-3 font-normal hover:bg-white`}
-                >
-                  <span className={personalInfo.dateOfBirth ? "text-gray-900" : "text-gray-400"}>
-                    {personalInfo.dateOfBirth ? 
-                      (() => {
-                        if (typeof personalInfo.dateOfBirth === 'string') {
-                          const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
-                          return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          });
-                        } else if (personalInfo.dateOfBirth instanceof Date) {
-                          // Handle Date objects from database - extract UTC date components
-                          const utcYear = personalInfo.dateOfBirth.getUTCFullYear();
-                          const utcMonth = personalInfo.dateOfBirth.getUTCMonth();
-                          const utcDay = personalInfo.dateOfBirth.getUTCDate();
-                          return new Date(utcYear, utcMonth, utcDay, 12, 0, 0).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          });
-                        } else {
-                          return format(personalInfo.dateOfBirth, 'MMMM d, yyyy');
-                        }
-                      })()
-                      : formFields[3].placeholder}
-                  </span>
-                  <CalendarIcon className="w-5 h-5 text-[#667085]" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[320px] p-3" align="start" sideOffset={5}>
-                <div className="space-y-3">
-                  {/* Month and Year Selectors */}
-                  <div className="flex gap-2">
-                    <Select 
-                      value={calendarMonth.toString()} 
-                      onValueChange={(value) => setCalendarMonth(parseInt(value))}
-                    >
-                      <SelectTrigger className="flex-1 h-8 text-sm font-medium text-secondaryBrand">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <ScrollArea className="h-[200px]">
-                          {months.map((monthName, index) => (
-                            <SelectItem key={index} value={index.toString()}>
-                              {monthName}
-                            </SelectItem>
-                          ))}
-                        </ScrollArea>
-                      </SelectContent>
-                    </Select>
-                    
-                    <Select 
-                      value={calendarYear.toString()} 
-                      onValueChange={(value) => setCalendarYear(parseInt(value))}
-                    >
-                      <SelectTrigger className="w-[100px] h-8 text-sm font-medium text-secondaryBrand">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <ScrollArea className="h-[200px]">
-                          {years.map((yearOption) => (
-                            <SelectItem key={yearOption} value={yearOption.toString()}>
-                              {yearOption}
-                            </SelectItem>
-                          ))}
-                        </ScrollArea>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  {/* Calendar */}
-                  <div className="w-full">
-                    <Calendar
-                      mode="single"
-                      month={new Date(calendarYear, calendarMonth)}
-                      onMonthChange={(date) => {
-                        setCalendarMonth(date.getMonth());
-                        setCalendarYear(date.getFullYear());
-                      }}
-                      selected={personalInfo.dateOfBirth ? 
-                        (() => {
-                          if (typeof personalInfo.dateOfBirth === 'string') {
-                            const [year, month, day] = personalInfo.dateOfBirth.split('T')[0].split('-');
-                            return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0);
-                          } else if (personalInfo.dateOfBirth instanceof Date) {
-                            // Handle Date objects from database - use UTC components
-                            const utcYear = personalInfo.dateOfBirth.getUTCFullYear();
-                            const utcMonth = personalInfo.dateOfBirth.getUTCMonth();
-                            const utcDay = personalInfo.dateOfBirth.getUTCDate();
-                            return new Date(utcYear, utcMonth, utcDay, 12, 0, 0);
-                          }
-                          return new Date(personalInfo.dateOfBirth);
-                        })()
-                        : undefined}
-                      onSelect={handleDateSelect}
-                      initialFocus
-                      classNames={{
-                        day_selected: "bg-secondaryBrand text-primary-foreground hover:bg-secondaryBrand hover:text-primary-foreground focus:bg-secondaryBrand focus:text-primary-foreground",
-                        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 w-full",
-                        month: "space-y-4 w-full",
-                        caption: "hidden", // Hide the default caption with month/year
-                        table: "w-full border-collapse space-y-1",
-                        head_row: "flex w-full justify-around",
-                        head_cell: "text-muted-foreground rounded-md w-9 text-center font-normal text-[0.8rem]",
-                        row: "flex w-full mt-2 justify-around",
-                        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                        day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
-                      }}
-                      className="rounded-md border w-full"
-                    />
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <DateOfBirthPicker
+              value={convertStoredDateToDate(personalInfo.dateOfBirth)}
+              onChange={handleDateSelect}
+              placeholder={formFields[3].placeholder}
+              isMobile={isMobile}
+              className={inputClassName || `border-[#d0d5dd] shadow-shadows-shadow-xs`}
+            />
             {(fieldErrors['personalInfo.dateOfBirth'] || error?.dateOfBirth) && 
               <p className="mt-1 text-red-500 text-sm">{fieldErrors['personalInfo.dateOfBirth'] || error.dateOfBirth}</p>}
           </div>

@@ -9,6 +9,61 @@ import { differenceInDays, isValid } from 'date-fns'; // Import date-fns for val
 import { capNumberValue } from '@/lib/number-validation';
 import { revalidatePath } from "next/cache";
 
+// Types for deletion checking
+interface BookingDetail {
+  id: string;
+  status: string;
+  startDate: Date;
+  endDate: Date;
+}
+
+interface MatchDetail {
+  id: string;
+  landlordSignedAt: Date | null;
+  tenantSignedAt: Date | null;
+  paymentStatus: string | null;
+}
+
+interface HousingRequestDetail {
+  id: string;
+  status: string;
+}
+
+interface BlockingReason {
+  type: 'activeStays' | 'futureBookings' | 'openMatches' | 'pendingHousingRequests';
+  count: number;
+  message: string;
+  details: (BookingDetail | MatchDetail | HousingRequestDetail)[];
+}
+
+interface EntityCounts {
+  unavailabilityPeriods: number;
+  images: number;
+  bedrooms: number;
+  monthlyPricing: number;
+  dislikes: number;
+  maybes: number;
+  favorites: number;
+  locationChanges: number;
+  pdfTemplates: number;
+  conversations: number;
+  total: number;
+}
+
+interface DeletionCheckResult {
+  canDelete: boolean;
+  blockingReasons: BlockingReason[];
+  entityCounts: EntityCounts;
+}
+
+interface DeletionResponse {
+  success: boolean;
+  canDelete: boolean;
+  message: string;
+  blockingReasons?: BlockingReason[];
+  entityCounts?: EntityCounts;
+}
+
 
 /**
  * Core listing search engine that implements comprehensive filtering requirements.
@@ -430,43 +485,291 @@ export const updateListingPhotos = async (listingId: string, photos: Array<{id: 
   }
 }
 
-export const deleteListing = async (listingId: string) => {
+/**
+ * TEMPORARY: Simulates listing deletion with comprehensive constraint checking
+ * Logs all checks and entities that would be deleted WITHOUT actually deleting
+ * Returns ALL blocking reasons for the delete confirmation modal
+ *
+ * For detailed deletion rules and constraints, see:
+ * docs/listing-deletion-constraints.md
+ */
+export const deleteListing = async (listingId: string): Promise<DeletionResponse> => {
   const userId = await checkAuth();
 
   try {
+    console.log(`🔍 SIMULATE DELETE: Starting deletion simulation for listing ${listingId}`);
+    console.log(`👤 User ID: ${userId}`);
+
     // Fetch the listing to ensure it belongs to the authenticated user
     const listing = await prisma.listing.findUnique({
       where: { id: listingId },
-      select: { userId: true }
+      select: { userId: true, title: true }
     });
 
     if (!listing) {
-      throw new Error('Listing not found');
+      console.log('❌ SIMULATE DELETE: Listing not found');
+      return {
+        success: false,
+        canDelete: false,
+        message: 'Listing not found'
+      };
     }
 
     if (listing.userId !== userId) {
-      throw new Error('Unauthorized to delete this listing');
+      console.log('❌ SIMULATE DELETE: Unauthorized access attempt');
+      return {
+        success: false,
+        canDelete: false,
+        message: 'Unauthorized to delete this listing'
+      };
     }
 
-    // Delete the listing
-    await prisma.listing.delete({
-      where: { id: listingId },
+    console.log(`✅ SIMULATE DELETE: Authorization passed for listing "${listing.title}"`);
+
+    // Check for blocking constraints and collect ALL issues
+    const deletionResult = await collectAllConstraintIssues(listingId);
+
+    if (deletionResult.canDelete) {
+      console.log('🎉 SIMULATE DELETE: All checks passed - listing would be deleted successfully');
+      console.log('📝 SIMULATE DELETE: Simulation complete - NO ACTUAL DELETION PERFORMED');
+
+      return {
+        success: true,
+        canDelete: true,
+        message: 'SIMULATION: Listing deletion would succeed',
+        entityCounts: deletionResult.entityCounts
+      };
+    } else {
+      console.log('❌ SIMULATE DELETE: Deletion blocked by constraints');
+      console.log(`📝 Found ${deletionResult.blockingReasons.length} blocking constraint(s)`);
+
+      return {
+        success: true,
+        canDelete: false,
+        message: 'Listing cannot be deleted due to active constraints',
+        blockingReasons: deletionResult.blockingReasons,
+        entityCounts: deletionResult.entityCounts
+      };
+    }
+  } catch (error) {
+    console.error('❌ SIMULATE DELETE Error:', error);
+    return {
+      success: false,
+      canDelete: false,
+      message: `Deletion check failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+    };
+  }
+}
+
+/**
+ * Collects ALL constraint issues without throwing early
+ * Returns comprehensive deletion check result
+ */
+const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCheckResult> => {
+  console.log('🔍 SIMULATE DELETE: Checking deletion constraints...');
+
+  const blockingReasons: BlockingReason[] = [];
+  const now = new Date();
+
+  // Check for active or future bookings
+  console.log('📋 SIMULATE DELETE: Checking bookings...');
+  const activeBookings = await prisma.booking.findMany({
+    where: {
+      listingId,
+      AND: [
+        {
+          status: {
+            notIn: ['completed', 'cancelled']
+          }
+        }
+      ]
+    },
+    select: {
+      id: true,
+      status: true,
+      startDate: true,
+      endDate: true
+    }
+  });
+
+  console.log(`📊 SIMULATE DELETE: Found ${activeBookings.length} active bookings`);
+
+  if (activeBookings.length > 0) {
+    const futureBookings = activeBookings.filter(b => b.startDate > now);
+    const currentBookings = activeBookings.filter(b => b.startDate <= now && b.endDate >= now);
+
+    console.log(`📅 SIMULATE DELETE: ${currentBookings.length} current bookings, ${futureBookings.length} future bookings`);
+
+    // Add current stays as blocking reason
+    if (currentBookings.length > 0) {
+      console.log('❌ SIMULATE DELETE: BLOCKED - Active stays found');
+      currentBookings.forEach(booking => {
+        console.log(`  📝 Current Booking ${booking.id}: ${booking.status}, ${booking.startDate.toISOString()} to ${booking.endDate.toISOString()}`);
+      });
+
+      blockingReasons.push({
+        type: 'activeStays',
+        count: currentBookings.length,
+        message: 'Cannot delete listing with active stays. Please wait for current bookings to complete.',
+        details: currentBookings
+      });
+    }
+
+    // Add future bookings as blocking reason
+    if (futureBookings.length > 0) {
+      console.log('❌ SIMULATE DELETE: BLOCKED - Future bookings found');
+      futureBookings.forEach(booking => {
+        console.log(`  📝 Future Booking ${booking.id}: ${booking.status}, ${booking.startDate.toISOString()} to ${booking.endDate.toISOString()}`);
+      });
+
+      blockingReasons.push({
+        type: 'futureBookings',
+        count: futureBookings.length,
+        message: 'Cannot delete listing with future bookings. Please cancel or complete all bookings first.',
+        details: futureBookings
+      });
+    }
+  } else {
+    console.log('✅ SIMULATE DELETE: No blocking bookings found');
+  }
+
+  // Check for open matches
+  console.log('🤝 SIMULATE DELETE: Checking matches...');
+  const openMatches = await prisma.match.findMany({
+    where: {
+      listingId,
+      OR: [
+        { landlordSignedAt: null },
+        { tenantSignedAt: null },
+        {
+          AND: [
+            { paymentAuthorizedAt: { not: null } },
+            { paymentCapturedAt: null }
+          ]
+        }
+      ]
+    },
+    select: {
+      id: true,
+      landlordSignedAt: true,
+      tenantSignedAt: true,
+      paymentStatus: true
+    }
+  });
+
+  console.log(`🤝 SIMULATE DELETE: Found ${openMatches.length} open matches`);
+  if (openMatches.length > 0) {
+    console.log('❌ SIMULATE DELETE: BLOCKED - Open matches found');
+    openMatches.forEach(match => {
+      console.log(`  📝 Match ${match.id}: landlord signed: ${!!match.landlordSignedAt}, tenant signed: ${!!match.tenantSignedAt}, payment: ${match.paymentStatus}`);
     });
 
-    // Revalidate cache after successful listing deletion
-    revalidatePath('/app/host/dashboard');
-    revalidatePath('/app/host/dashboard/overview');
-    revalidatePath('/app/host/dashboard/listings');
-    revalidatePath('/app/host/listings');
-    
-    // Invalidate the specific listing detail page
-    revalidatePath(`/app/host/${listingId}`);
-
-    return { success: true, message: 'Listing deleted successfully' };
-  } catch (error) {
-    console.error('Error in deleteListing:', error);
-    throw error;
+    blockingReasons.push({
+      type: 'openMatches',
+      count: openMatches.length,
+      message: 'Cannot delete listing with pending matches. Please complete or cancel all matches first.',
+      details: openMatches
+    });
+  } else {
+    console.log('✅ SIMULATE DELETE: No blocking matches found');
   }
+
+  // Check for pending housing requests
+  console.log('🏠 SIMULATE DELETE: Checking housing requests...');
+  const pendingRequests = await prisma.housingRequest.findMany({
+    where: {
+      listingId,
+      status: 'pending'
+    },
+    select: {
+      id: true,
+      status: true
+    }
+  });
+
+  console.log(`🏠 SIMULATE DELETE: Found ${pendingRequests.length} pending housing requests`);
+  if (pendingRequests.length > 0) {
+    console.log('❌ SIMULATE DELETE: BLOCKED - Pending housing requests found');
+    pendingRequests.forEach(request => {
+      console.log(`  📝 Request ${request.id}: ${request.status}`);
+    });
+
+    blockingReasons.push({
+      type: 'pendingHousingRequests',
+      count: pendingRequests.length,
+      message: 'Cannot delete listing with pending housing requests. Please approve or decline all requests first.',
+      details: pendingRequests
+    });
+  } else {
+    console.log('✅ SIMULATE DELETE: No blocking housing requests found');
+  }
+
+  // Get entity counts
+  const entityCounts = await getEntityCounts(listingId);
+
+  const canDelete = blockingReasons.length === 0;
+
+  if (canDelete) {
+    console.log('✅ SIMULATE DELETE: All constraint checks passed');
+  } else {
+    console.log(`❌ SIMULATE DELETE: Found ${blockingReasons.length} blocking constraint(s)`);
+  }
+
+  return {
+    canDelete,
+    blockingReasons,
+    entityCounts
+  };
+}
+
+/**
+ * Counts entities that would be deleted
+ */
+const getEntityCounts = async (listingId: string): Promise<EntityCounts> => {
+  console.log('🗑️ SIMULATE DELETE: Counting entities that would be deleted...');
+
+  // Count entities that would be deleted
+  const unavailabilityPeriods = await prisma.listingUnavailability.count({ where: { listingId } });
+  const images = await prisma.listingImage.count({ where: { listingId } });
+  const bedrooms = await prisma.bedroom.count({ where: { listingId } });
+  const monthlyPricing = await prisma.listingMonthlyPricing.count({ where: { listingId } });
+  const dislikes = await prisma.dislike.count({ where: { listingId } });
+  const maybes = await prisma.maybe.count({ where: { listingId } });
+  const favorites = await prisma.favorite.count({ where: { listingId } });
+  const locationChanges = await prisma.listingLocationChange.count({ where: { listingId } });
+  const pdfTemplates = await prisma.pdfTemplate.count({ where: { listingId } });
+  const conversations = await prisma.conversation.count({ where: { listingId } });
+
+  const total = unavailabilityPeriods + images + bedrooms + monthlyPricing +
+               dislikes + maybes + favorites + locationChanges +
+               pdfTemplates + conversations + 1; // +1 for the listing itself
+
+  console.log('📊 SIMULATE DELETE: Entity deletion summary:');
+  console.log(`  🚫 Unavailability periods: ${unavailabilityPeriods}`);
+  console.log(`  🖼️ Images: ${images}`);
+  console.log(`  🛏️ Bedrooms: ${bedrooms}`);
+  console.log(`  💰 Monthly pricing: ${monthlyPricing}`);
+  console.log(`  👎 Dislikes: ${dislikes}`);
+  console.log(`  🤔 Maybes: ${maybes}`);
+  console.log(`  ⭐ Favorites: ${favorites}`);
+  console.log(`  📍 Location changes: ${locationChanges}`);
+  console.log(`  📄 PDF templates: ${pdfTemplates}`);
+  console.log(`  💬 Conversations: ${conversations}`);
+  console.log(`🔢 SIMULATE DELETE: Total entities that would be deleted: ${total}`);
+
+  return {
+    unavailabilityPeriods,
+    images,
+    bedrooms,
+    monthlyPricing,
+    dislikes,
+    maybes,
+    favorites,
+    locationChanges,
+    pdfTemplates,
+    conversations,
+    total
+  };
 }
 
 export const addUnavailability = async (listingId: string, startDate: Date, endDate: Date, reason?: string): Promise<ListingUnavailability> => {

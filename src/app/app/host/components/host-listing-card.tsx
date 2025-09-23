@@ -20,12 +20,61 @@ import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+// Types for deletion response
+interface BookingDetail {
+  id: string;
+  status: string;
+  startDate: Date;
+  endDate: Date;
+}
+
+interface MatchDetail {
+  id: string;
+  landlordSignedAt: Date | null;
+  tenantSignedAt: Date | null;
+  paymentStatus: string | null;
+}
+
+interface HousingRequestDetail {
+  id: string;
+  status: string;
+}
+
+interface BlockingReason {
+  type: 'activeStays' | 'futureBookings' | 'openMatches' | 'pendingHousingRequests';
+  count: number;
+  message: string;
+  details: (BookingDetail | MatchDetail | HousingRequestDetail)[];
+}
+
+interface EntityCounts {
+  unavailabilityPeriods: number;
+  images: number;
+  bedrooms: number;
+  monthlyPricing: number;
+  dislikes: number;
+  maybes: number;
+  favorites: number;
+  locationChanges: number;
+  pdfTemplates: number;
+  conversations: number;
+  total: number;
+}
+
+interface DeletionResponse {
+  success: boolean;
+  canDelete: boolean;
+  message: string;
+  blockingReasons?: BlockingReason[];
+  entityCounts?: EntityCounts;
+}
+
 interface HostListingCardProps {
   listing: ListingAndImages;
   loadingListingId?: string | null;
   onViewDetails?: (listingId: string) => void;
   isDraft?: boolean;
-  deleteFunction?: (listingId: string) => Promise<any>;
+  deleteFunction?: (listingId: string) => Promise<DeletionResponse>;
 }
 
 export default function HostListingCard({ 
@@ -41,6 +90,9 @@ export default function HostListingCard({
   const [deleteConfirmationText, setDeleteConfirmationText] = React.useState("");
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
+  const [blockingReasons, setBlockingReasons] = React.useState<BlockingReason[]>([]);
+  const [entityCounts, setEntityCounts] = React.useState<EntityCounts | null>(null);
+  const [deletionBlocked, setDeletionBlocked] = React.useState(false);
 
   // Map listing status to display status and color
   const getStatusInfo = (listing: ListingAndImages) => {
@@ -159,14 +211,31 @@ export default function HostListingCard({
 
     setIsDeleting(true);
     try {
-      await deleteFunction(listing.id);
-      toast.success(isDraft ? "Draft deleted successfully" : "Listing deleted successfully");
-      setIsDeleteDialogOpen(false);
-      setDeleteConfirmationText("");
-      router.refresh(); // Refresh the page to update the listing display
+      const response = await deleteFunction(listing.id);
+
+      if (!response.success) {
+        // Handle basic failures (auth, not found, etc.)
+        toast.error(response.message);
+        setIsDeleting(false);
+        return;
+      }
+
+      if (response.canDelete) {
+        // Deletion would succeed (in simulation mode)
+        toast.success("SIMULATION: " + (isDraft ? "Draft deletion would succeed" : "Listing deletion would succeed"));
+        setIsDeleteDialogOpen(false);
+        setDeleteConfirmationText("");
+        // In real mode, this would be: router.refresh();
+      } else {
+        // Deletion is blocked - show blocking reasons
+        setBlockingReasons(response.blockingReasons || []);
+        setEntityCounts(response.entityCounts || null);
+        setDeletionBlocked(true);
+        // Keep dialog open to show blocking reasons
+      }
     } catch (error) {
-      console.error("Error deleting listing:", error);
-      toast.error(error instanceof Error ? error.message : `Failed to delete ${isDraft ? 'draft' : 'listing'}`);
+      console.error("Error checking deletion:", error);
+      toast.error(error instanceof Error ? error.message : `Failed to check deletion constraints`);
     } finally {
       setIsDeleting(false);
     }
@@ -175,11 +244,104 @@ export default function HostListingCard({
   const handleCancelDelete = () => {
     setIsDeleteDialogOpen(false);
     setDeleteConfirmationText("");
+    setDeletionBlocked(false);
+    setBlockingReasons([]);
+    setEntityCounts(null);
   };
 
   // For drafts without an address, use "Delete Draft" as confirmation text
   const confirmationText = (isDraft && !listing.streetAddress1) ? "Delete Draft" : listing.streetAddress1;
   const isDeleteButtonDisabled = deleteConfirmationText.toLowerCase() !== confirmationText?.toLowerCase();
+
+  // Format date for display
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  // Render blocking reasons display
+  const renderBlockingReasons = () => {
+    if (!deletionBlocked || blockingReasons.length === 0) return null;
+
+    return (
+      <div className="w-full space-y-4">
+        <div className="text-center">
+          <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+            <TrashIcon className="h-8 w-8 text-red-600" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Cannot Delete Listing
+          </h3>
+          <p className="text-gray-600 mb-4">
+            This listing cannot be deleted because it has active constraints. Please resolve the following issues first:
+          </p>
+        </div>
+
+        <div className="space-y-3 max-h-60 overflow-y-auto">
+          {blockingReasons.map((reason, index) => (
+            <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-3">
+              <div className="flex items-start gap-2">
+                <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-red-800 mb-2">
+                    {reason.message}
+                  </p>
+                  {reason.details && reason.details.length > 0 && (
+                    <div className="space-y-1">
+                      {reason.details.slice(0, 3).map((detail, detailIndex) => (
+                        <div key={detailIndex} className="text-xs text-red-700 bg-red-100 rounded px-2 py-1">
+                          {reason.type === 'activeStays' || reason.type === 'futureBookings' ? (
+                            <>
+                              Booking {detail.id.slice(0, 8)}... • {(detail as BookingDetail).status} •
+                              {formatDate((detail as BookingDetail).startDate)} - {formatDate((detail as BookingDetail).endDate)}
+                            </>
+                          ) : reason.type === 'openMatches' ? (
+                            <>
+                              Match {detail.id.slice(0, 8)}... •
+                              Landlord: {(detail as MatchDetail).landlordSignedAt ? '✓' : '✗'} •
+                              Tenant: {(detail as MatchDetail).tenantSignedAt ? '✓' : '✗'}
+                            </>
+                          ) : (
+                            <>
+                              Request {detail.id.slice(0, 8)}... • {(detail as HousingRequestDetail).status}
+                            </>
+                          )}
+                        </div>
+                      ))}
+                      {reason.details.length > 3 && (
+                        <p className="text-xs text-red-600 italic">
+                          ...and {reason.details.length - 3} more
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {entityCounts && (
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <p className="text-sm font-medium text-gray-700 mb-2">
+              Would also delete {entityCounts.total} related items:
+            </p>
+            <div className="text-xs text-gray-600 grid grid-cols-2 gap-1">
+              {entityCounts.images > 0 && <span>• {entityCounts.images} images</span>}
+              {entityCounts.bedrooms > 0 && <span>• {entityCounts.bedrooms} bedrooms</span>}
+              {entityCounts.monthlyPricing > 0 && <span>• {entityCounts.monthlyPricing} pricing tiers</span>}
+              {entityCounts.conversations > 0 && <span>• {entityCounts.conversations} conversations</span>}
+              {entityCounts.favorites > 0 && <span>• {entityCounts.favorites} favorites</span>}
+              {entityCounts.unavailabilityPeriods > 0 && <span>• {entityCounts.unavailabilityPeriods} blocked dates</span>}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Mobile Layout Component
   const MobileLayout = () => (

@@ -454,7 +454,7 @@ model Booking {
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id]) // No cascade - prevent accidental booking deletion
   match   Match   @relation(fields: [matchId], references: [id])
   trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: Cascade)
   paymentTransactions PaymentTransaction[]
