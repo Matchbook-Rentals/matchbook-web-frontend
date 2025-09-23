@@ -18,6 +18,10 @@ export async function GET(request: Request) {
 
   console.log('Cron job: Checking for unread messages...');
 
+  // TODO: Future improvements:
+  // 1. Add cleanup script to remove orphaned messages where conversationId references non-existent conversations
+  // 2. Update Prisma schema to add `onDelete: Cascade` to Message->Conversation relation to prevent future orphans
+
   try {
     // 2. Calculate timestamp for 2 minutes ago
     const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
@@ -79,8 +83,13 @@ export async function GET(request: Request) {
 
     // 4. & 5. Determine recipients and prepare notifications
     for (const message of messagesToNotify) {
-      if (!message.conversation || !message.sender) {
-        console.warn(`Skipping message ${message.id}: Missing conversation or sender data.`);
+      if (!message.conversation) {
+        console.warn(`Skipping orphaned message ${message.id}: Missing conversation (conversationId: ${message.conversationId})`);
+        // TODO: Add cleanup script to remove orphaned messages where conversationId references non-existent conversations
+        continue;
+      }
+      if (!message.sender) {
+        console.warn(`Skipping message ${message.id}: Missing sender data.`);
         continue;
       }
 
