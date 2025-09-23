@@ -174,7 +174,7 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
               </TableRow>
             </TableHeader>
             <TableBody>
-{/* Mobile: Single column layout */}
+              {/* Mobile: Single column layout */}
               {monthlyPricing.map((pricing) => (
                 <TableRow key={`pricing-mobile-${pricing.months}`} className="md:hidden">
                   <TableCell className="py-4 text-sm text-[#373940] whitespace-nowrap">
@@ -182,12 +182,13 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                   </TableCell>
                   <TableCell className="py-4">
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                      <span className="absolute inset-y-0 left-1 flex items-center text-gray-500">$</span>
+                      <span className="absolute inset-y-0 right-1 flex items-center text-gray-500">/mo</span>
                       <Input
                         type="text"
                         inputMode="numeric"
                         pattern="[0-9,]*"
-                        className="pl-7 text-base"
+                        className="pl-7 pr-8 text-base"
                         placeholder="0"
                         value={formatNumberWithCommas(pricing.price)}
                         tabIndex={2 + pricing.months}
@@ -222,12 +223,13 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                     </TableCell>
                     <TableCell className="py-4">
                       <div className="relative">
-                        <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                        <span className="absolute inset-y-0 left-1 flex items-center text-gray-500">$</span>
+                        <span className="absolute inset-y-0 right-1 flex items-center text-gray-500">/mo</span>
                         <Input
                           type="text"
                           inputMode="numeric"
                           pattern="[0-9,]*"
-                          className="pl-7 text-base"
+                          className="pl-6 pr-8 text-base"
                           placeholder="0"
                           value={formatNumberWithCommas(leftPricing.price)}
                           tabIndex={2 + leftPricing.months}
@@ -253,12 +255,13 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                         </TableCell>
                         <TableCell className="py-4">
                           <div className="relative">
-                            <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                            <span className="absolute inset-y-0 left-1 flex items-center text-gray-500">$</span>
+                            <span className="absolute inset-y-0 right-1 flex items-center text-gray-500">/mo</span>
                             <Input
                               type="text"
                               inputMode="numeric"
                               pattern="[0-9,]*"
-                              className="pl-7 text-base"
+                              className="pl-6 pr-8 text-base"
                               placeholder="0"
                               value={formatNumberWithCommas(rightPricing.price)}
                               tabIndex={2 + rightPricing.months}
