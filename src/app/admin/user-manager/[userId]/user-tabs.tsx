@@ -297,7 +297,7 @@ export function UserTabs({ userInfo }: UserTabsProps) {
                 </div>
               )}
               <div className="text-xs text-muted-foreground">
-                {item.tenantSignedAt ? '✅ Tenant signed' : '⏳ Awaiting tenant signature'}
+                {item.tenantSignedAt ? '✅ Renter signed' : '⏳ Awaiting renter signature'}
                 {' • '}
                 {item.landlordSignedAt ? '✅ Landlord signed' : '⏳ Awaiting landlord signature'}
               </div>

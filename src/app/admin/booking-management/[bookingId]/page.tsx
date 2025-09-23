@@ -303,7 +303,7 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">Tenant Signature</label>
+                        <label className="text-sm font-medium text-muted-foreground">Renter Signature</label>
                         <div className="flex items-center gap-2">
                           <Badge variant={booking.boldSignLease.tenantSigned ? "default" : "outline"}>
                             {booking.boldSignLease.tenantSigned ? "Signed" : "Pending"}

@@ -186,7 +186,7 @@ export const PDFViewerWithFields: React.FC<PDFViewerWithFieldsProps> = ({
       if (recipient?.role === 'HOST' || recipient?.role === 'landlord') {
         signerName = 'Landlord';
       } else if (recipient?.role === 'RENTER' || recipient?.role === 'tenant') {
-        signerName = 'Tenant';
+        signerName = 'Renter';
       } else {
         signerName = recipient?.name || `Signer ${recipientIndex + 1}`;
       }

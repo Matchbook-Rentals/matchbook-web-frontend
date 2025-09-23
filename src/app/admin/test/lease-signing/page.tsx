@@ -261,7 +261,7 @@ export default function LeaseSigningTestPage() {
                         size="sm"
                         onClick={() => handleHostSimulationStep('waiting-tenant-signature')}
                       >
-                        Wait Tenant
+                        Wait Renter
                       </Button>
                       <Button
                         variant={hostSimulationStep === 'sign-lease' ? 'default' : 'outline'}
@@ -591,8 +591,8 @@ export default function LeaseSigningTestPage() {
                   }}
                 >
                   <div>
-                    <div className="font-medium">Waiting for Tenant (Host)</div>
-                    <div className="text-sm text-muted-foreground">Waiting for tenant to sign lease</div>
+                    <div className="font-medium">Waiting for Renter (Host)</div>
+                    <div className="text-sm text-muted-foreground">Waiting for renter to sign lease</div>
                   </div>
                 </Button>
                 

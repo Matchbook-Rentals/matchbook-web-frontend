@@ -1,5 +1,14 @@
 # Changelog
 
+## Medallion Identity Verification Improvements
+- Enhanced verification flow with comprehensive failure handling for rejected, failed, and expired states
+- Added user-friendly error UI with specific guidance based on Medallion documentation (document quality, data mismatches, technical issues)
+- Implemented verification retry system with rate limiting (3 retries per 10 minutes) and proper state reset
+- Added middle name support throughout verification flow to improve ID matching accuracy
+- Enhanced webhook user matching via Medallion /user/summary API for better LOW_CODE_SDK integration
+- Updated database schema with authenticatedMiddleName field and proper middle name collection in forms
+- Improved user guidance with tips for successful verification and clear retry options
+
 ## Authenticate.com Integration Security & Reliability Improvements
 - Enhanced JWT generation with CSRF protection via session tokens in redirect URLs
 - Added comprehensive rate limiting (3 JWT requests/5min, 20 status polls/min per user)

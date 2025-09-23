@@ -33,14 +33,14 @@ export default function LeaseSuccessPage({ params }: LeaseSuccessPageProps) {
         })
         .catch(error => {
           console.error('Error fetching tenant name:', error);
-          setTenantName('the tenant');
+          setTenantName('the renter');
         });
     } else {
       setTenantName(tenantDisplayName);
     }
   }, [tenantDisplayName, params.housingRequestId]);
 
-  const displayTenantName = tenantName || 'the tenant';
+  const displayTenantName = tenantName || 'the renter';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">

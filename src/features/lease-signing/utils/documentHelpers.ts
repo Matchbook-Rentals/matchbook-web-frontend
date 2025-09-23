@@ -116,7 +116,7 @@ export function autoPopulateDocument(
       autoValue = metadata.propertyAddress;
     }
 
-    // Tenant-related auto-population
+    // Renter-related auto-population
     if (metadata?.tenantName && (
       label.includes('tenant name') || 
       label.includes('renter name') ||

@@ -28,7 +28,7 @@ const MOCK_TEMPLATES: Template[] = [
       {
         id: 'field-1',
         type: 'text',
-        label: 'Tenant Name',
+        label: 'Renter Name',
         required: true,
         recipientId: 'renter',
         page: 1,
@@ -40,7 +40,7 @@ const MOCK_TEMPLATES: Template[] = [
       {
         id: 'field-2',
         type: 'signature',
-        label: 'Tenant Signature',
+        label: 'Renter Signature',
         required: true,
         recipientId: 'renter',
         page: 1,
@@ -100,7 +100,7 @@ const MOCK_TEMPLATES: Template[] = [
       {
         id: 'field-4',
         type: 'text',
-        label: 'Tenant Name',
+        label: 'Renter Name',
         required: true,
         recipientId: 'renter',
         page: 1,

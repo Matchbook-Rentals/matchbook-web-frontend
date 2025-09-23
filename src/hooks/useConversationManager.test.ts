@@ -953,15 +953,15 @@ describe('useConversationManager', () => {
       expect(result.current.tabs).toBe('Host');
     });
 
-    test('should update the tabs state to "Tenant"', () => {
+    test('should update the tabs state to "Renting"', () => {
       const { result } = renderHook(() => useConversationManager(getDefaultProps()));
       expect(result.current.tabs).toBe('all'); // Initial state
 
       act(() => {
-        result.current.changeTab('Tenant');
+        result.current.changeTab('Renting');
       });
 
-      expect(result.current.tabs).toBe('Tenant');
+      expect(result.current.tabs).toBe('Renting');
     });
 
     test('should update the tabs state back to "all"', () => {

@@ -113,7 +113,7 @@ export default function DocumensoIntegrationTest() {
   const [documentTitle, setDocumentTitle] = useState('Lease Agreement');
   const [documentExternalId, setDocumentExternalId] = useState('');
   const [recipientEmail, setRecipientEmail] = useState('tenant@example.com');
-  const [recipientName, setRecipientName] = useState('John Tenant');
+  const [recipientName, setRecipientName] = useState('John Renter');
   const [useProxy, setUseProxy] = useState(true);
   
   
@@ -127,7 +127,7 @@ export default function DocumensoIntegrationTest() {
   const [newPropertyRequest, setNewPropertyRequest] = useState({
     propertyAddress: '123 Main St, Anytown, ST 12345',
     requesterEmail: 'tenant@example.com',
-    requesterName: 'John Tenant'
+    requesterName: 'John Renter'
   });
 
   // Landlord workflow data
@@ -152,7 +152,7 @@ export default function DocumensoIntegrationTest() {
     title: 'Lease Agreement',
     recipients: [
       {
-        name: 'John Tenant',
+        name: 'John Renter',
         email: 'tenant@example.com',
         role: 'SIGNER',
         signingOrder: 1
@@ -166,7 +166,7 @@ export default function DocumensoIntegrationTest() {
     ],
     leaseFields: {
       HOST_NAME: 'Jane Landlord',
-      RENTER_NAME: 'John Tenant',
+      RENTER_NAME: 'John Renter',
       START_DATE: new Date().toISOString().split('T')[0],
       END_DATE: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       MONTHLY_RENT: '$2,500.00'
@@ -235,7 +235,7 @@ export default function DocumensoIntegrationTest() {
         id: 'req-001',
         propertyAddress: '123 Main St, Anytown, ST 12345',
         requesterEmail: 'tenant1@example.com',
-        requesterName: 'John Tenant',
+        requesterName: 'John Renter',
         requestDate: new Date().toISOString(),
         status: 'PENDING'
       },
@@ -567,7 +567,7 @@ export default function DocumensoIntegrationTest() {
     setNewPropertyRequest({
       propertyAddress: '',
       requesterEmail: 'tenant@example.com',
-      requesterName: 'John Tenant'
+      requesterName: 'John Renter'
     });
   };
 
@@ -1240,7 +1240,7 @@ export default function DocumensoIntegrationTest() {
                 ) : (
                   <Alert>
                     <AlertDescription>
-                      No property requests yet. Tenants can submit requests in the Leaser Portal.
+                      No property requests yet. Renters can submit requests in the Leaser Portal.
                     </AlertDescription>
                   </Alert>
                 )}
