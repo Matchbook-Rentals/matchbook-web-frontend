@@ -19,7 +19,7 @@ export const SecurityDepositPolicySection: React.FC = () => {
           <span className="font-medium">
             Security Deposit (refundable)
             <br />
-            Guest Service Fee
+            Deposit Transfer Fee (non-refundable)
             <br />
           </span>
 

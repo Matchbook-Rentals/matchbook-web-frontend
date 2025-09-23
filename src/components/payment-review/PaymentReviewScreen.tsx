@@ -81,34 +81,34 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
 
   const handleProceedToPayment = async (includeCardFee: boolean) => {
     setIsProcessing(true);
-    
+
     // If a payment method is selected, process directly
     if (selectedPaymentMethod) {
       try {
         setShowProcessingDialog(true);
         setProcessingStatus('processing');
         setProcessingError(null);
-        
+
         console.log('💳 Processing direct payment with method:', selectedPaymentMethod);
-        
+
         const result = await processDirectPayment({
           matchId,
           paymentMethodId: selectedPaymentMethod,
           amount,
           includeCardFee
         });
-        
+
         if (result.success) {
           // Confirm payment and create booking
           console.log('💳 Payment successful, confirming booking...');
-          
+
           const bookingResponse = await fetch(`/api/matches/${matchId}/confirm-payment-and-book`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             }
           });
-          
+
           if (bookingResponse.ok) {
             const bookingData = await bookingResponse.json();
             console.log('✅ Booking confirmed:', bookingData.booking.id);
@@ -173,7 +173,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
   const handleCheckoutSuccess = async () => {
     // Confirm payment and create booking after Stripe Checkout success
     console.log('💳 Stripe Checkout successful, confirming booking...');
-    
+
     try {
       const bookingResponse = await fetch(`/api/matches/${matchId}/confirm-payment-and-book`, {
         method: 'POST',
@@ -181,7 +181,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
           'Content-Type': 'application/json',
         }
       });
-      
+
       if (bookingResponse.ok) {
         const bookingData = await bookingResponse.json();
         console.log('✅ Booking confirmed:', bookingData.booking.id);
@@ -191,7 +191,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
     } catch (error) {
       console.error('Error confirming booking:', error);
     }
-    
+
     setShowEmbeddedCheckout(false);
     setCheckoutClientSecret(null);
     onSuccess();
@@ -215,7 +215,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
 
   return (
     <>
-      <div className="flex flex-col w-full max-w-3xl items-start gap-6 md:gap-8 relative pb-24">
+      <div className="flex flex-col w-full max-w-3xl items-start gap-6 md:gap-8 relative pb-8">
         <header className="relative self-stretch mt-[-1.00px] font-poppins font-bold text-[#1a1a1a] text-2xl md:text-3xl tracking-[0] leading-tight">
           REVIEW PAYMENTS
         </header>
@@ -258,17 +258,19 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
           />
         )}
 
-        <TotalDueSection 
-          paymentBreakdown={paymentBreakdown} 
-          isUsingCard={selectedPaymentMethodType === 'card'}
-        />
-        <UpcomingPaymentsSection 
-          monthlyRent={paymentBreakdown.monthlyRent}
-          monthlyPetRent={paymentBreakdown.petRent}
-          tripStartDate={tripStartDate}
-          tripEndDate={tripEndDate}
-          isUsingCard={selectedPaymentMethodType === 'card'}
-        />
+        <div className='w-full'>
+          <TotalDueSection
+            paymentBreakdown={paymentBreakdown}
+            isUsingCard={selectedPaymentMethodType === 'card'}
+          />
+          <UpcomingPaymentsSection
+            monthlyRent={paymentBreakdown.monthlyRent}
+            monthlyPetRent={paymentBreakdown.petRent}
+            tripStartDate={tripStartDate}
+            tripEndDate={tripEndDate}
+            isUsingCard={selectedPaymentMethodType === 'card'}
+          />
+        </div>
         <SecurityDepositPolicySection />
         <CancellationPolicySection />
       </div>
@@ -317,7 +319,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
               className="bg-[#0a6060] hover:bg-[#063a3a] text-white px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               size="lg"
             >
-              {isProcessing ? 'Processing...' : 'Complete Booking'}
+              {isProcessing ? 'Processing...' : 'Pay and Book'}
             </Button>
           </div>
         </div>
@@ -348,7 +350,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
             {processingStatus === 'success' && 'Payment Successful!'}
             {processingStatus === 'error' && 'Payment Failed'}
           </h2>
-          
+
           <div className="flex flex-col items-center">
             {processingStatus === 'processing' && (
               <>
@@ -361,7 +363,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
                 </p>
               </>
             )}
-            
+
             {processingStatus === 'success' && (
               <>
                 <CheckCircle className="h-12 w-12 text-green-600 mb-4" />
@@ -373,7 +375,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
                 </p>
               </>
             )}
-            
+
             {processingStatus === 'error' && (
               <>
                 <AlertCircle className="h-12 w-12 text-red-600 mb-4" />
