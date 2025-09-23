@@ -114,7 +114,7 @@ export default function PaymentMethodDebugPage() {
     if (user) {
       loadPaymentMethods()
     }
-  }, [user])
+  }, [user, loadPaymentMethods])
 
   const getStatusBadge = (match: Match) => {
     if (match.paymentCaptured) {
@@ -187,7 +187,7 @@ export default function PaymentMethodDebugPage() {
             <CreditCard className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Payment Methods Found</h3>
             <p className="text-muted-foreground">
-              You don't have any payment methods associated with your account.
+              You don&apos;t have any payment methods associated with your account.
             </p>
           </CardContent>
         </Card>

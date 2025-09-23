@@ -126,7 +126,7 @@ export default function RestoreListingsPage() {
             <Home className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-medium mb-2">No soft-deleted listings found</h3>
             <p className="text-muted-foreground">
-              All your listings are currently active, or you haven't soft-deleted any listings yet.
+              All your listings are currently active, or you haven&apos;t soft-deleted any listings yet.
             </p>
           </CardContent>
         </Card>

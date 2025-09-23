@@ -428,7 +428,7 @@ export default function IdentityVerificationSDKClient({
               <p className="text-red-700 text-sm">This usually happens when:</p>
               <ul className="text-red-700 text-sm mt-2 space-y-1 list-disc list-inside">
                 <li>Document images are blurry, have glare, or shadows</li>
-                <li>Name on ID doesn't exactly match your profile</li>
+                <li>Name on ID doesn&apos;t exactly match your profile</li>
                 <li>Date of birth information is incorrect</li>
                 <li>Document is expired or damaged</li>
               </ul>
