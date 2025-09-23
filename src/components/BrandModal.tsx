@@ -14,6 +14,7 @@ interface BrandModalProps {
   onOpenChange?: (open: boolean) => void
   heightStyle?: string
   className?: string
+  onOpenAutoFocus?: (event: Event) => void
 }
 
 export default function BrandModal({ 
@@ -22,7 +23,8 @@ export default function BrandModal({
   isOpen: controlledIsOpen,
   onOpenChange,
   heightStyle = "!top-[10vh] md:!top-[25vh]",
-  className = "max-w-2xl"
+  className = "max-w-2xl",
+  onOpenAutoFocus
 }: BrandModalProps) {
   const [internalIsOpen, setInternalIsOpen] = useState(false)
   
@@ -46,7 +48,11 @@ export default function BrandModal({
       )}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className={`${className} ${heightStyle}`} showCloseButton={false}>
+        <DialogContent 
+          className={`${className} ${heightStyle}`} 
+          showCloseButton={false}
+          onOpenAutoFocus={onOpenAutoFocus}
+        >
           {children}
         </DialogContent>
       </Dialog>

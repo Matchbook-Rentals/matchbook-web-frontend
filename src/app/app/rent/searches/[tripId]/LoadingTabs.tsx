@@ -146,7 +146,7 @@ const LoadingTabs: React.FC = () => {
   ];
 
   return (
-    <div className={`flex flex-col items-center ${PAGE_MARGIN} ${publicSans.variable}`}>
+    <div className={`flex flex-col items-center ${APP_PAGE_MARGIN} ${publicSans.variable}`}>
 
       {/* Desktop TabSelector - Hidden on small screens, visible on md and up */}
       <div className="hidden md:block w-full">

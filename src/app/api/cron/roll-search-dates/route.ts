@@ -40,6 +40,8 @@ import prisma from '@/lib/prismadb';
 export async function GET(request: Request) {
   // Authorization check using cron secret
   const authHeader = request.headers.get('authorization');
+  console.log('Roll search dates - Received auth header:', authHeader);
+  console.log('Roll search dates - Expected auth header:', `Bearer ${process.env.CRON_SECRET}`);
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     console.warn('Unauthorized cron job access attempt - roll search dates');
     return new NextResponse('Unauthorized', { status: 401 });

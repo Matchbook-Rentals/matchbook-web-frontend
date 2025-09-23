@@ -10,11 +10,7 @@ import { ListingAndImages } from "@/types";
 import CalendarDialog from "@/components/ui/calendar-dialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { 
-  Dialog,
-  DialogContent,
-  DialogClose
-} from "@/components/brandDialog";
+import BrandModal from "@/components/BrandModal";
 import { Input } from "@/components/ui/input";
 import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -318,19 +314,6 @@ export default function HostListingCard({
         </p>
       </div>
 
-      {entityCounts && entityCounts.total > 1 && (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-          <p className="text-sm font-medium text-gray-700 mb-2">
-            This will also delete {entityCounts.total - 1} related items:
-          </p>
-          <div className="text-xs text-gray-600 grid grid-cols-2 gap-1">
-            {entityCounts.images > 0 && <span>• {entityCounts.images} photos</span>}
-            {entityCounts.conversations > 0 && <span>• {entityCounts.conversations} conversations</span>}
-            {entityCounts.favorites > 0 && <span>• {entityCounts.favorites} user favorites</span>}
-            {entityCounts.unavailabilityPeriods > 0 && <span>• {entityCounts.unavailabilityPeriods} blocked dates</span>}
-          </div>
-        </div>
-      )}
 
       <div className="space-y-2">
         <label htmlFor="confirmation-input" className="block text-sm font-medium text-gray-700">
@@ -351,41 +334,54 @@ export default function HostListingCard({
 
   // Render blocking reasons display
   const renderBlockingReasons = () => {
+    // Calculate counts from blocking reasons
+    const applicationsCount = blockingReasons
+      .filter(reason => reason.type === 'openMatches' || reason.type === 'pendingHousingRequests')
+      .reduce((sum, reason) => sum + reason.count, 0);
+    
+    const bookingsCount = blockingReasons
+      .filter(reason => reason.type === 'activeStays' || reason.type === 'futureBookings')
+      .reduce((sum, reason) => sum + reason.count, 0);
+
     return (
-      <div className="w-full space-y-4">
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
-            <TrashIcon className="h-8 w-8 text-red-600" />
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Cannot Delete Listing
-          </h3>
-          <p className="text-gray-600 mb-4">
-            This listing cannot be deleted because of the following:
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          {blockingReasons.map((reason, index) => (
-            <div key={index} className="flex items-center gap-2 text-gray-700">
-              <span className="text-gray-400">•</span>
-              <span className="text-sm">
-                {reason.count} {
-                  reason.type === 'openMatches' ? 'approved applications' :
-                  reason.type === 'pendingHousingRequests' ? 'open applications' :
-                  reason.type === 'activeStays' ? 'active stays' :
-                  reason.type === 'futureBookings' ? 'future bookings' :
-                  'active constraints'
-                }
-              </span>
+      <Card className="w-auto min-w-[280px] bg-white rounded-[20px] overflow-hidden">
+        <CardContent className="flex flex-col items-start gap-5 p-4">
+          <div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="flex items-center justify-between gap-8 relative self-stretch w-full flex-[0_0_auto]">
+              <div className="relative mt-[-1.00px] font-text-label-medium-semi-bold font-[number:var(--text-label-medium-semi-bold-font-weight)] text-[#484a54] text-[length:var(--text-label-medium-semi-bold-font-size)] tracking-[var(--text-label-medium-semi-bold-letter-spacing)] leading-[var(--text-label-medium-semi-bold-line-height)] [font-style:var(--text-label-medium-semi-bold-font-style)]">
+                You Cannot Delete This Listing
+              </div>
+              <XIcon className="w-5 h-5 text-gray-500 cursor-pointer" onClick={handleCancelDelete} />
             </div>
-          ))}
-        </div>
 
-        <p className="text-sm text-gray-600 text-center mt-4">
-          Please resolve these issues first, then try deleting again.
-        </p>
-      </div>
+            <div className="relative self-stretch font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-700 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+              Listings with open applications or active/upcoming bookings cannot
+              be deleted
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 relative self-stretch w-full flex-[0_0_auto]">
+            <Button
+              variant="outline"
+              className="flex-1 h-auto border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
+              onClick={() => router.push('/app/host/dashboard/bookings')}
+            >
+              <span className="[font-family:'Poppins',Helvetica] font-semibold text-sm">
+                Go to Bookings{bookingsCount > 0 ? ` (${bookingsCount})` : ''}
+              </span>
+            </Button>
+
+            <Button 
+              className="flex-1 h-auto bg-[#3c8787] hover:bg-[#2d6666] text-white"
+              onClick={() => router.push('/app/host/dashboard/applications')}
+            >
+              <span className="[font-family:'Poppins',Helvetica] font-semibold text-sm">
+                Go to Applications{applicationsCount > 0 ? ` (${applicationsCount})` : ''}
+              </span>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     );
   };
 
@@ -681,53 +677,57 @@ export default function HostListingCard({
     <>
       {isMobile ? <MobileLayout /> : <DesktopLayout />}
       
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] !top-[15vh] md:!top-[25vh] sm:max-w-md md:max-w-lg">
-          <div className="flex flex-col gap-4 w-full">
-            {modalState === 'checking' && renderLoadingState()}
-            {modalState === 'confirmation' && renderConfirmationState()}
-            {modalState === 'blocked' && renderBlockingReasons()}
-            {modalState === 'deleting' && (
-              <div className="w-full text-center py-8">
-                <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-500 border-t-transparent" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Deleting Listing
-                </h3>
-                <p className="text-gray-600">
-                  Please wait while we delete your listing...
-                </p>
+      {/* Delete Confirmation Modal */}
+      <BrandModal
+        isOpen={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        className={modalState === 'blocked' ? 'p-0 border-none shadow-none bg-transparent w-auto' : 'max-w-md'}
+        heightStyle="!top-[15vh] md:!top-[25vh]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        <div className={`flex flex-col ${modalState === 'blocked' ? 'gap-0 w-auto' : 'gap-4 w-full'}`}>
+          {modalState === 'checking' && renderLoadingState()}
+          {modalState === 'confirmation' && renderConfirmationState()}
+          {modalState === 'blocked' && renderBlockingReasons()}
+          {modalState === 'deleting' && (
+            <div className="w-full text-center py-8">
+              <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-500 border-t-transparent" />
               </div>
-            )}
-          </div>
-
-          {modalState !== 'checking' && modalState !== 'deleting' && (
-            <div className="flex gap-3 w-full pt-6 border-t border-gray-200">
-              <BrandButton
-                variant="outline"
-                onClick={handleCancelDelete}
-                className="flex-1"
-              >
-                {modalState === 'blocked' ? 'Close' : 'Cancel'}
-              </BrandButton>
-              {modalState === 'confirmation' && (
-                <BrandButton
-                  variant="destructive"
-                  onClick={handleConfirmDelete}
-                  disabled={isDeleteButtonDisabled}
-                  className="flex-1"
-                  spinOnClick={false}
-                >
-                  <TrashIcon className="h-4 w-4 mr-2" />
-                  {isDraft ? 'Delete Draft' : 'Delete Listing'}
-                </BrandButton>
-              )}
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Deleting Listing
+              </h3>
+              <p className="text-gray-600">
+                Please wait while we delete your listing...
+              </p>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </div>
+
+        {modalState !== 'checking' && modalState !== 'deleting' && modalState !== 'blocked' && (
+          <div className="flex gap-3 w-full pt-6 border-t border-gray-200">
+            <BrandButton
+              variant="outline"
+              onClick={handleCancelDelete}
+              className="flex-1"
+            >
+              Cancel
+            </BrandButton>
+            {modalState === 'confirmation' && (
+              <BrandButton
+                variant="destructive"
+                onClick={handleConfirmDelete}
+                disabled={isDeleteButtonDisabled}
+                className="flex-1"
+                spinOnClick={false}
+              >
+                <TrashIcon className="h-4 w-4 mr-2" />
+                {isDraft ? 'Delete Draft' : 'Delete Listing'}
+              </BrandButton>
+            )}
+          </div>
+        )}
+      </BrandModal>
     </>
   );
 }

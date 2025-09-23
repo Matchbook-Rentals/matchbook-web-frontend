@@ -9,6 +9,8 @@ import { createNotification } from '@/app/actions/notifications';
 export async function GET(request: Request) {
   // 1. Authorization Check
   const authHeader = request.headers.get('authorization');
+  console.log('Check unread messages - Received auth header:', authHeader);
+  console.log('Check unread messages - Expected auth header:', `Bearer ${process.env.CRON_SECRET}`);
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     console.warn('Unauthorized cron job access attempt');
     return new NextResponse('Unauthorized', { status: 401 });
