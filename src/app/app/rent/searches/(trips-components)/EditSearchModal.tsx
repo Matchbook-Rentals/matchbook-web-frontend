@@ -12,6 +12,7 @@ import { Trip } from '@prisma/client'
 import { XIcon, CalendarIcon, MinusIcon, PlusIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { InteractiveDatePicker } from "@/components/ui/custom-calendar/date-range-selector/interactive-date-picker"
+import { DateInput } from "@/components/ui/date-input"
 import { editTrip } from '@/app/actions/trips'
 import { SuggestedLocation } from '@/types'
 
@@ -31,6 +32,7 @@ export default function EditSearchModal({
   const [location, setLocation] = useState(trip.locationString)
   const [adults, setAdults] = useState(trip.numAdults)
   const [children, setChildren] = useState(trip.numChildren)
+  const [pets, setPets] = useState(trip.numPets)
   const [startDate, setStartDate] = useState<Date | undefined>(trip.startDate ? new Date(trip.startDate) : undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(trip.endDate ? new Date(trip.endDate) : undefined)
   const [startDateInput, setStartDateInput] = useState(trip.startDate ? format(new Date(trip.startDate), "MM/dd/yyyy") : "")
@@ -60,6 +62,8 @@ export default function EditSearchModal({
   const handleAdultsDecrease = () => setAdults(prev => Math.max(1, prev - 1))
   const handleChildrenIncrease = () => setChildren(prev => prev + 1)
   const handleChildrenDecrease = () => setChildren(prev => Math.max(0, prev - 1))
+  const handlePetsIncrease = () => setPets(prev => prev + 1)
+  const handlePetsDecrease = () => setPets(prev => Math.max(0, prev - 1))
 
   const handleLocationInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
@@ -192,59 +196,16 @@ export default function EditSearchModal({
               </div>
 
               <div className="relative w-full">
-                <div className="hidden md:block">
-                  <Input
-                    className="h-12 w-full pr-10 bg-white focus:outline-none focus:ring-2 focus:ring-black border border-gray-300 rounded-lg"
-                    placeholder="mm/dd/yyyy"
-                    value={startDateInput}
-                    onChange={(e) => setStartDateInput(e.target.value)}
-                  />
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
-                        <CalendarIcon className="h-5 w-5" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 z-[1001]" align="end">
-                      <InteractiveDatePicker
-                        selectedDate={startDate}
-                        onDateSelect={(date) => {
-                          setStartDate(date);
-                          setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
-                        }}
-                        minDate={new Date()}
-                        isRangeMode={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="md:hidden">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="h-12 w-full px-3 bg-white border border-gray-300 rounded-md flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-black">
-                        <span className={startDate ? "text-gray-700" : "text-gray-400"}>
-                          {startDate ? format(startDate, "MM/dd/yyyy") : "mm/dd/yyyy"}
-                        </span>
-                        <CalendarIcon className="h-5 w-5 text-gray-400" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 z-[1001]" align="start">
-                      <InteractiveDatePicker
-                        selectedDate={startDate}
-                        onDateSelect={(date) => {
-                          setStartDate(date);
-                          setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
-                        }}
-                        minDate={new Date()}
-                        isRangeMode={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                <DateInput
+                  value={startDate}
+                  onChange={(date) => {
+                    setStartDate(date);
+                    setStartDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                  }}
+                  minDate={new Date()}
+                  className="h-12 bg-white focus:outline-none focus:ring-2 focus:ring-black border border-gray-300 rounded-lg"
+                  placeholder="MM/DD/YYYY"
+                />
               </div>
             </div>
           </div>
@@ -258,59 +219,16 @@ export default function EditSearchModal({
               </div>
 
               <div className="relative w-full">
-                <div className="hidden md:block">
-                  <Input
-                    className="h-12 w-full pr-10 bg-white focus:outline-none focus:ring-2 focus:ring-black border border-gray-300 rounded-lg"
-                    placeholder="mm/dd/yyyy"
-                    value={endDateInput}
-                    onChange={(e) => setEndDateInput(e.target.value)}
-                  />
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 hover:text-gray-600">
-                        <CalendarIcon className="h-5 w-5" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 z-[1001]" align="end">
-                      <InteractiveDatePicker
-                        selectedDate={endDate}
-                        onDateSelect={(date) => {
-                          setEndDate(date);
-                          setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
-                        }}
-                        minDate={startDate || new Date()}
-                        isRangeMode={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="md:hidden">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="h-12 w-full px-3 bg-white border border-gray-300 rounded-md flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-black">
-                        <span className={endDate ? "text-gray-700" : "text-gray-400"}>
-                          {endDate ? format(endDate, "MM/dd/yyyy") : "mm/dd/yyyy"}
-                        </span>
-                        <CalendarIcon className="h-5 w-5 text-gray-400" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 z-[1001]" align="start">
-                      <InteractiveDatePicker
-                        selectedDate={endDate}
-                        onDateSelect={(date) => {
-                          setEndDate(date);
-                          setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
-                        }}
-                        minDate={startDate || new Date()}
-                        isRangeMode={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                <DateInput
+                  value={endDate}
+                  onChange={(date) => {
+                    setEndDate(date);
+                    setEndDateInput(date ? format(date, "MM/dd/yyyy") : "");
+                  }}
+                  minDate={startDate || new Date()}
+                  className="h-12 bg-white focus:outline-none focus:ring-2 focus:ring-black border border-gray-300 rounded-lg"
+                  placeholder="MM/DD/YYYY"
+                />
               </div>
             </div>
           </div>
@@ -328,7 +246,7 @@ export default function EditSearchModal({
                   Adults
                 </div>
 
-                <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
+                <div className="inline-flex items-center gap-[11px] relative flex-[0_0_auto]">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -338,7 +256,7 @@ export default function EditSearchModal({
                     <MinusIcon className="h-4 w-4" />
                   </Button>
 
-                  <div className="relative w-fit mt-[-1.00px] font-medium text-gray-700 text-base">
+                  <div className="relative w-fit mt-[-1.00px] font-medium text-gray-700 text-base min-w-[1.5rem] text-center">
                     {adults}
                   </div>
 
@@ -368,7 +286,7 @@ export default function EditSearchModal({
                     <MinusIcon className="h-4 w-4" />
                   </Button>
 
-                  <div className="relative w-fit mt-[-1.00px] font-medium text-gray-700 text-base">
+                  <div className="relative w-fit mt-[-1.00px] font-medium text-gray-700 text-base min-w-[1.5rem] text-center">
                     {children}
                   </div>
 
@@ -377,6 +295,36 @@ export default function EditSearchModal({
                     size="icon"
                     className="h-6 w-6 p-0"
                     onClick={handleChildrenIncrease}
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
+                <div className="relative flex-1 font-medium text-gray-600 text-sm">
+                  Pets
+                </div>
+
+                <div className="inline-flex items-center gap-[11px] relative flex-[0_0_auto]">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 p-0"
+                    onClick={handlePetsDecrease}
+                  >
+                    <MinusIcon className="h-4 w-4" />
+                  </Button>
+
+                  <div className="relative w-fit mt-[-1.00px] font-medium text-gray-700 text-base min-w-[1.5rem] text-center">
+                    {pets}
+                  </div>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 p-0"
+                    onClick={handlePetsIncrease}
                   >
                     <PlusIcon className="h-4 w-4" />
                   </Button>
@@ -418,6 +366,7 @@ export default function EditSearchModal({
                 endDate: endDate,
                 numAdults: adults,
                 numChildren: children,
+                numPets: pets,
               })
               
               if (result.success && result.trip) {
