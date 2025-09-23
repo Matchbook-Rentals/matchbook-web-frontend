@@ -15,7 +15,13 @@ interface DashboardLayoutProps {
 }
 
 export default async function DashboardLayout({ children }: DashboardLayoutProps) {
-  const user = await currentUser();
+  let user;
+  try {
+    user = await currentUser();
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    user = null;
+  }
 
   // Create a serializable user object
   const serializableUser = user ? {

@@ -22,6 +22,7 @@ export interface OnboardingChecklistCardProps {
   isAdminDev: boolean;
   title?: string;
   description?: string;
+  hideHeader?: boolean;
 }
 
 // Utility function to check if host onboarding is complete
@@ -36,11 +37,12 @@ export function isHostOnboardingComplete(hostUserData: HostUserData | null): boo
   return hasStripeAccount && stripeComplete && hostTermsAgreed && identityVerified;
 }
 
-export const OnboardingChecklistCard = ({ 
-  hostUserData, 
-  isAdminDev, 
+export const OnboardingChecklistCard = ({
+  hostUserData,
+  isAdminDev,
   title = "Onboarding Checklist",
-  description 
+  description,
+  hideHeader = false
 }: OnboardingChecklistCardProps): JSX.Element => {
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -107,21 +109,25 @@ export const OnboardingChecklistCard = ({
     },
   ];
 
-  const renderChecklist = (items: typeof requiredItems, checklistTitle: string) => (
+  const renderChecklist = (items: typeof requiredItems, checklistTitle: string, hideTitle: boolean = false) => (
     <Card className="flex flex-col items-end gap-[18px] p-6 relative bg-white rounded-xl">
       <CardContent className="p-0 w-full">
-        <div className="flex items-center justify-end gap-8 relative self-stretch w-full flex-[0_0_auto]">
-          <div className="relative flex-1 mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-neutralneutral-900 text-xl tracking-[0] leading-[normal]">
-            {checklistTitle}
-          </div>
-        </div>
+        {!hideTitle && (
+          <>
+            <div className="flex items-center justify-end gap-8 relative self-stretch w-full flex-[0_0_auto]">
+              <div className="relative flex-1 mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-neutralneutral-900 text-xl tracking-[0] leading-[normal]">
+                {checklistTitle}
+              </div>
+            </div>
 
-        {description && (
-          <div className="mt-3 mb-4">
-            <p className="text-sm text-gray-600 font-normal leading-[21px] font-['Poppins',Helvetica]">
-              {description}
-            </p>
-          </div>
+            {description && (
+              <div className="mt-3 mb-4">
+                <p className="text-sm text-gray-600 font-normal leading-[21px] font-['Poppins',Helvetica]">
+                  {description}
+                </p>
+              </div>
+            )}
+          </>
         )}
 
         <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto] mt-[18px]">
@@ -207,12 +213,12 @@ export const OnboardingChecklistCard = ({
   if (isAdminDev) {
     return (
       <div className="flex flex-col gap-4">
-        {renderChecklist(requiredItems, title)}
-        {renderChecklist(testRequiredItems, `${title} (Test)`)}
+        {renderChecklist(requiredItems, title, hideHeader)}
+        {renderChecklist(testRequiredItems, `${title} (Test)`, hideHeader)}
       </div>
     );
   }
 
   // For regular users, just show the real version
-  return renderChecklist(requiredItems, title);
+  return renderChecklist(requiredItems, title, hideHeader);
 };

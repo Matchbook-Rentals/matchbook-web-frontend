@@ -6,7 +6,6 @@ import { useApplicationStore } from '@/stores/application-store';
 import { BrandCheckbox } from "@/app/brandCheckbox";
 import { format } from 'date-fns';
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { debounce } from 'lodash';
 import { useToast } from "@/components/ui/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -82,50 +81,6 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
     });
   }
 
-  // Create debounced save function with toast feedback (increased to 1000ms for onChange)
-  const debouncedSave = useCallback(
-    debounce(async (fieldPath: string, value: any, checkCompletion?: boolean) => {
-      const result = await saveField(fieldPath, value, checkCompletion ? { checkCompletion } : undefined);
-      
-      // Only show toasts in development
-      if (isDevelopment) {
-        if (result.success) {
-          toast({
-            title: "Field Saved",
-            description: `${fieldPath} saved successfully`,
-            variant: "default",
-            duration: 2000,
-          });
-          
-          // Show completion status change if it occurred
-          if (result.completionStatus?.statusChanged) {
-            if (result.completionStatus.isComplete) {
-              toast({
-                title: "Application Complete! 🎉",
-                description: "Your application is now complete and ready for review.",
-                duration: 5000,
-              });
-            } else {
-              toast({
-                title: "Application Incomplete",
-                description: `Missing: ${result.completionStatus.missingRequirements?.join(', ')}`,
-                variant: "destructive",
-                duration: 5000,
-              });
-            }
-          }
-        } else {
-          toast({
-            title: "Save Failed",
-            description: `Failed to save ${fieldPath}: ${result.error}`,
-            variant: "destructive",
-            duration: 4000,
-          });
-        }
-      }
-    }, 1000), // Increased from 500ms to 1000ms for onChange
-    [isDevelopment, toast, saveField]
-  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -149,16 +104,9 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
       }
     } else {
       clearFieldError(fieldPath);
-      
-      // Check if completion status might change
-      const willBeComplete = isApplicationComplete();
-      const checkCompletion = wasComplete !== willBeComplete;
-      
-      // Save if valid (debounced)
       if (isDevelopment) {
-        console.log(`[PersonalInfo] Calling debouncedSave for ${fieldPath}, checkCompletion: ${checkCompletion}`);
+        console.log(`[PersonalInfo] Field ${fieldPath} validated successfully (no auto-save)`);
       }
-      debouncedSave(fieldPath, value, checkCompletion);
     }
   };
 
@@ -213,63 +161,11 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
         }
       } else {
         clearFieldError(fieldPath);
-        
-        // Check if completion status might change
-        const wasComplete = isApplicationComplete();
-        setPersonalInfo({
-          ...personalInfo,
-          dateOfBirth: formattedDate
-        });
-        const willBeComplete = isApplicationComplete();
-        const checkCompletion = wasComplete !== willBeComplete;
-        
-        // Save immediately without debouncing for date fields
         if (isDevelopment) {
-          console.log(`[PersonalInfo] Saving date immediately for ${fieldPath}, checkCompletion: ${checkCompletion}`);
+          console.log(`[PersonalInfo] Date ${fieldPath} validated successfully (no auto-save)`);
         }
-        
-        const result = await saveField(fieldPath, formattedDate, checkCompletion ? { checkCompletion } : undefined);
-        if (isDevelopment) {
-          if (result.success) {
-            console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-            toast({
-              title: "Auto-Save",
-              description: `Date of birth saved`,
-              duration: 2000,
-            });
-            
-            // Show completion status change if it occurred
-            if (result.completionStatus?.statusChanged) {
-              if (result.completionStatus.isComplete) {
-                toast({
-                  title: "Application Complete! 🎉",
-                  description: "Your application is now complete and ready for review.",
-                  duration: 5000,
-                });
-              } else {
-                toast({
-                  title: "Application Incomplete",
-                  description: `Missing: ${result.completionStatus.missingRequirements?.join(', ')}`,
-                  variant: "destructive",
-                  duration: 5000,
-                });
-              }
-            }
-          } else {
-            console.error(`[Auto-Save] Error:`, result.error);
-            toast({
-              title: "Save Failed",
-              description: result.error || 'Failed to save date of birth',
-              variant: "destructive",
-              duration: 4000,
-            });
-          }
-        }
-        
-        // Close calendar after successful validation and save
-        if (result.success) {
-          setCalendarOpen(false);
-        }
+        // Close calendar after successful validation
+        setCalendarOpen(false);
       }
     }
   };

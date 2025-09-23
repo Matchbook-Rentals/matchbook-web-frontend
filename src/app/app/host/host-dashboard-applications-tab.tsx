@@ -286,9 +286,15 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
 
 interface HostDashboardApplicationsTabProps {
   housingRequests?: RequestWithUser[];
+  hostUserData: any;
+  isAdminDev?: boolean;
 }
 
-export default function HostDashboardApplicationsTab({ housingRequests: propHousingRequests }: HostDashboardApplicationsTabProps) {
+export default function HostDashboardApplicationsTab({
+  housingRequests: propHousingRequests,
+  hostUserData,
+  isAdminDev = false
+}: HostDashboardApplicationsTabProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedFilter, setSelectedFilter] = useState<string>('pending');
@@ -479,6 +485,8 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
           applications={filteredApplications}
           onViewApplicationDetails={handleViewApplicationDetails}
           loadingApplicationId={loadingApplicationId}
+          hostUserData={hostUserData}
+          isAdminDev={isAdminDev}
         />
       ) : null}
     </TabLayout>

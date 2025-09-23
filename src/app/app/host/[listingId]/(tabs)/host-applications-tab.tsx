@@ -21,6 +21,7 @@ import { useUser } from "@clerk/nextjs";
 import { getListingDisplayName } from "@/utils/listing-helpers";
 import { HostApplicationCard } from "../../components/host-application-card";
 import { calculateRent } from "@/lib/calculate-rent";
+import { OnboardingModal } from "@/components/onboarding-modal";
 
 // Sample housing requests for when no real data exists
 const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => [
@@ -291,15 +292,23 @@ const transformApplicationForCard = (app: any, listing: ListingAndImages, isMobi
 interface ApplicationsTabProps {
   listing: ListingAndImages;
   housingRequests: RequestWithUser[];
+  hostUserData: any;
+  isAdminDev?: boolean;
 }
 
-const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingRequests }) => {
+const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
+  listing,
+  housingRequests,
+  hostUserData,
+  isAdminDev = false
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedFilter, setSelectedFilter] = useState<string>('pending');
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const [useMockData, setUseMockData] = useState(false);
+  const [showOnboardingModal, setShowOnboardingModal] = useState(false);
   const isMobile = useIsMobile();
   const { user } = useUser();
   const isAdmin = user?.publicMetadata?.role === 'admin';
@@ -321,17 +330,36 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
     setLoadingApplicationId(null);
   }, [pathname]);
 
+  // Check if host onboarding is complete
+  const isOnboardingComplete = (userData: any): boolean => {
+    if (!userData) return false;
+
+    const hasStripeAccount = !!userData.stripeAccountId;
+    const stripeComplete = userData.stripeChargesEnabled && userData.stripeDetailsSubmitted;
+    const hostTermsAgreed = !!userData.agreedToHostTerms;
+    const identityVerified = !!userData.medallionIdentityVerified;
+
+    return hasStripeAccount && stripeComplete && hostTermsAgreed && identityVerified;
+  };
+
+  const onboardingComplete = isOnboardingComplete(hostUserData);
+
   const handleViewApplicationDetails = async (applicationId: string) => {
+    if (!onboardingComplete) {
+      setShowOnboardingModal(true);
+      return;
+    }
+
     try {
       setLoadingApplicationId(applicationId);
-      
+
       // Set a timeout to clear loading state if navigation takes too long
       const timeoutId = setTimeout(() => {
         setLoadingApplicationId(null);
       }, 10000); // 10 second timeout
-      
+
       router.push(`/app/host/${listing.id}/applications/${applicationId}?from=listing`);
-      
+
       // Clear timeout if navigation is successful
       clearTimeout(timeoutId);
     } catch (error) {
@@ -449,6 +477,13 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
           </div>
         );
       })}
+
+      <OnboardingModal
+        isOpen={showOnboardingModal}
+        onClose={() => setShowOnboardingModal(false)}
+        hostUserData={hostUserData}
+        isAdminDev={isAdminDev}
+      />
     </TabLayout>
   );
 };

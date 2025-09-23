@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HostApplicationCard } from "./components/host-application-card";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { OnboardingModal } from "@/components/onboarding-modal";
+import { HostUserData } from "@/app/app/host/components/onboarding-checklist-card";
 
 // Helper function to transform application data for the HostApplicationCard component
 const transformApplicationForCard = (app: any, isMobile: boolean) => {
@@ -37,18 +39,45 @@ interface HostApplicationCardsProps {
   loadingApplicationId: string | null;
   onViewApplicationDetails: (listingId: string, applicationId: string) => void;
   onMessageGuest?: (appName: string) => void;
+  hostUserData: HostUserData | null;
+  isAdminDev?: boolean;
 }
 
-export default function HostApplicationCards({ 
-  applications, 
-  loadingApplicationId, 
+export default function HostApplicationCards({
+  applications,
+  loadingApplicationId,
   onViewApplicationDetails,
-  onMessageGuest 
+  onMessageGuest,
+  hostUserData,
+  isAdminDev = false
 }: HostApplicationCardsProps) {
   const router = useRouter();
   const isMobile = useIsMobile();
+  const [showOnboardingModal, setShowOnboardingModal] = useState(false);
 
   console.log('📋 HostApplicationCards - Received applications:', applications.length);
+
+  // Check if host onboarding is complete
+  const isOnboardingComplete = (userData: HostUserData | null): boolean => {
+    if (!userData) return false;
+
+    const hasStripeAccount = !!userData.stripeAccountId;
+    const stripeComplete = userData.stripeChargesEnabled && userData.stripeDetailsSubmitted;
+    const hostTermsAgreed = !!userData.agreedToHostTerms;
+    const identityVerified = !!userData.medallionIdentityVerified;
+
+    return hasStripeAccount && stripeComplete && hostTermsAgreed && identityVerified;
+  };
+
+  const onboardingComplete = isOnboardingComplete(hostUserData);
+
+  const handleApplicationDetailsClick = (listingId: string, applicationId: string) => {
+    if (!onboardingComplete) {
+      setShowOnboardingModal(true);
+      return;
+    }
+    onViewApplicationDetails(listingId, applicationId);
+  };
 
   // Return null if no applications to ensure TabLayout shows empty state
   if (!applications || applications.length === 0) {
@@ -60,12 +89,12 @@ export default function HostApplicationCards({
     <>
       {applications.map((app) => {
         const cardData = transformApplicationForCard(app, isMobile);
-        
+
         return (
           <div key={app.id} className="mb-8">
             <HostApplicationCard
               {...cardData}
-              onApplicationDetails={() => onViewApplicationDetails(app.listingId, app.id)}
+              onApplicationDetails={() => handleApplicationDetailsClick(app.listingId, app.id)}
               onMessageGuest={() => {
                 if (onMessageGuest) {
                   onMessageGuest(app.name);
@@ -80,6 +109,13 @@ export default function HostApplicationCards({
           </div>
         );
       })}
+
+      <OnboardingModal
+        isOpen={showOnboardingModal}
+        onClose={() => setShowOnboardingModal(false)}
+        hostUserData={hostUserData}
+        isAdminDev={isAdminDev}
+      />
     </>
   );
 }

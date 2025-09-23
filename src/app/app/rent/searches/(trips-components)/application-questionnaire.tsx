@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useApplicationStore } from '@/stores/application-store';
 import { ApplicationItemInputStyles, ApplicationItemLabelStyles } from '@/constants/styles';
 import { useToast } from "@/components/ui/use-toast";
-import { debounce } from 'lodash';
 
 interface QuestionnaireProps {
   isMobile?: boolean;
@@ -33,56 +32,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
   const [shouldFocusFelony, setShouldFocusFelony] = useState(false);
   const [shouldFocusEvicted, setShouldFocusEvicted] = useState(false);
   
-  // Create debounced save function with toast feedback and completion checking
-  const debouncedSave = useCallback(
-    debounce(async (fieldPath: string, value: any) => {
-      const result = await saveField(fieldPath, value, { checkCompletion: true });
-      
-      // Handle completion status changes
-      if (result.success && result.completionStatus) {
-        if (result.completionStatus.statusChanged) {
-          if (result.completionStatus.isComplete) {
-            toast({
-              title: "Application Complete! 🎉",
-              description: "All required information has been provided",
-              duration: 4000,
-            });
-          } else if (result.completionStatus.missingRequirements?.length > 0) {
-            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-            const more = result.completionStatus.missingRequirements.length > 3 
-              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
-              : '';
-            toast({
-              title: "Application Incomplete",
-              description: `Still need: ${missing}${more}`,
-              duration: 4000,
-            });
-          }
-        }
-      }
-      
-      // Only show save toasts in development
-      if (isDevelopment) {
-        if (result.success) {
-          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-          toast({
-            title: "Auto-Save",
-            description: `${fieldPath.split('.').pop()} saved`,
-            duration: 2000,
-          });
-        } else {
-          console.error(`[Auto-Save] Error:`, result.error);
-          toast({
-            title: "Save Failed",
-            description: result.error || `Failed to save ${fieldPath}`,
-            variant: "destructive",
-            duration: 4000,
-          });
-        }
-      }
-    }, 1000),
-    [isDevelopment, toast, saveField]
-  );
 
   const handleChange = async (question: string, value: string | boolean) => {
     const fieldPath = `questionnaire.${question}`;
@@ -102,7 +51,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
       }
     } else {
       clearFieldError(fieldPath);
-      // For boolean values (radio buttons), save immediately; for text areas, debounce
+      // Validate related explanation fields for boolean values
       if (typeof value === 'boolean') {
         // If setting to true (Yes), immediately validate the explanation field
         if (value === true) {
@@ -128,57 +77,13 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
         }
         
         if (isDevelopment) {
-          console.log(`[Questionnaire] Saving boolean field immediately for ${fieldPath}`);
-        }
-        const result = await saveField(fieldPath, value, { checkCompletion: true });
-        
-        // Handle completion status changes
-        if (result.success && result.completionStatus) {
-          if (result.completionStatus.statusChanged) {
-            if (result.completionStatus.isComplete) {
-              toast({
-                title: "Application Complete! 🎉",
-                description: "All required information has been provided",
-                duration: 4000,
-              });
-            } else if (result.completionStatus.missingRequirements?.length > 0) {
-              const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-              const more = result.completionStatus.missingRequirements.length > 3 
-                ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
-                : '';
-              toast({
-                title: "Application Incomplete",
-                description: `Still need: ${missing}${more}`,
-                duration: 4000,
-              });
-            }
-          }
-        }
-        
-        if (isDevelopment) {
-          if (result.success) {
-            console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-            toast({
-              title: "Auto-Save",
-              description: `${fieldPath.split('.').pop()} saved`,
-              duration: 2000,
-            });
-          } else {
-            console.error(`[Auto-Save] Error:`, result.error);
-            toast({
-              title: "Save Failed",
-              description: result.error || `Failed to save ${fieldPath}`,
-              variant: "destructive",
-              duration: 4000,
-            });
-          }
+          console.log(`[Questionnaire] Field ${fieldPath} validated successfully (no auto-save)`);
         }
       } else {
-        // For text fields, use debounced save
+        // For text fields, validate only (no auto-save)
         if (isDevelopment) {
-          console.log(`[Questionnaire] Calling debouncedSave for ${fieldPath}`);
+          console.log(`[Questionnaire] Field ${fieldPath} validated successfully (no auto-save)`);
         }
-        debouncedSave(fieldPath, value);
       }
     }
   };

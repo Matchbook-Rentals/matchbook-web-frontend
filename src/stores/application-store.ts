@@ -327,15 +327,17 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       })) || [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
       verificationImages: application.verificationImages || [] as VerificationImage[],
       residentialHistory: residences,
-      incomes: application.incomes?.map((income: any) => ({
-        id: income.id || null,
-        source: income.source || '',
-        monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0],
-        imageUrl: income.imageUrl || '', // Keep for backward compatibility
-        fileKey: income.fileKey || extractFileKeyFromUrl(income.imageUrl), // Extract key from URL if not stored
-        customId: income.customId,
-        fileName: income.fileName
-      })) || [{ source: '', monthlyAmount: '', imageUrl: '' }],
+      incomes: (application.incomes && application.incomes.length > 0) 
+        ? application.incomes.map((income: any) => ({
+            id: income.id || null,
+            source: income.source || '',
+            monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0],
+            imageUrl: income.imageUrl || '', // Keep for backward compatibility
+            fileKey: income.fileKey || extractFileKeyFromUrl(income.imageUrl), // Extract key from URL if not stored
+            customId: income.customId,
+            fileName: income.fileName
+          }))
+        : [{ source: '', monthlyAmount: '', imageUrl: '' }],
       answers: {
         evicted: application.evicted || false,
         felony: application.felony || false,

@@ -7,7 +7,6 @@ import MonthSelect from "@/components/ui/month-select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
 import { useToast } from "@/components/ui/use-toast";
-import { debounce } from 'lodash';
 
 const emptyResidentialHistory = {
   currentStreet: '',
@@ -37,55 +36,6 @@ export const ResidentialHistory: React.FC = () => {
   const isDevelopment = process.env.NODE_ENV === 'development';
   
   // Create debounced save function with toast feedback and completion checking
-  const debouncedSave = useCallback(
-    debounce(async (fieldPath: string, value: any) => {
-      const result = await saveField(fieldPath, value, { checkCompletion: true });
-      
-      // Handle completion status changes
-      if (result.success && result.completionStatus) {
-        if (result.completionStatus.statusChanged) {
-          if (result.completionStatus.isComplete) {
-            toast({
-              title: "Application Complete! 🎉",
-              description: "All required information has been provided",
-              duration: 4000,
-            });
-          } else if (result.completionStatus.missingRequirements?.length > 0) {
-            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-            const more = result.completionStatus.missingRequirements.length > 3 
-              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
-              : '';
-            toast({
-              title: "Application Incomplete",
-              description: `Still need: ${missing}${more}`,
-              duration: 4000,
-            });
-          }
-        }
-      }
-      
-      // Only show save toasts in development
-      if (isDevelopment) {
-        if (result.success) {
-          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-          toast({
-            title: "Auto-Save",
-            description: `${fieldPath.split('.').pop()} saved`,
-            duration: 2000,
-          });
-        } else {
-          console.error(`[Auto-Save] Error:`, result.error);
-          toast({
-            title: "Save Failed",
-            description: result.error || `Failed to save ${fieldPath}`,
-            variant: "destructive",
-            duration: 4000,
-          });
-        }
-      }
-    }, 1000),
-    [isDevelopment, toast, saveField]
-  );
 
   const normalizedResidentialHistory = {
     ...emptyResidentialHistory,
@@ -112,11 +62,9 @@ export const ResidentialHistory: React.FC = () => {
       }
     } else {
       clearFieldError(fieldPath);
-      // Save if valid (debounced)
       if (isDevelopment) {
-        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+        console.log(`[ResidentialHistory] Field ${fieldPath} validated successfully (no auto-save)`);
       }
-      debouncedSave(fieldPath, value);
     }
   };
 
@@ -129,53 +77,8 @@ export const ResidentialHistory: React.FC = () => {
       housingStatus: value
     });
     
-    // Save immediately for radio buttons
     if (isDevelopment) {
-      console.log(`[ResidentialHistory] Saving housingStatus immediately for ${fieldPath}`);
-    }
-    
-    const result = await saveField(fieldPath, value, { checkCompletion: true });
-    
-    // Handle completion status changes
-    if (result.success && result.completionStatus) {
-      if (result.completionStatus.statusChanged) {
-        if (result.completionStatus.isComplete) {
-          toast({
-            title: "Application Complete! 🎉",
-            description: "All required information has been provided",
-            duration: 4000,
-          });
-        } else if (result.completionStatus.missingRequirements?.length > 0) {
-          const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-          const more = result.completionStatus.missingRequirements.length > 3 
-            ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
-            : '';
-          toast({
-            title: "Application Incomplete",
-            description: `Still need: ${missing}${more}`,
-            duration: 4000,
-          });
-        }
-      }
-    }
-    
-    if (isDevelopment) {
-      if (result.success) {
-        console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-        toast({
-          title: "Auto-Save",
-          description: `Housing status saved`,
-          duration: 2000,
-        });
-      } else {
-        console.error(`[Auto-Save] Error:`, result.error);
-        toast({
-          title: "Save Failed",
-          description: result.error || 'Failed to save housing status',
-          variant: "destructive",
-          duration: 4000,
-        });
-      }
+      console.log(`[ResidentialHistory] Housing status updated (no auto-save)`);
     }
   };
 
@@ -203,7 +106,6 @@ export const ResidentialHistory: React.FC = () => {
       if (isDevelopment) {
         console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
       }
-      debouncedSave(fieldPath, strippedValue);
     }
   };
 
@@ -225,11 +127,9 @@ export const ResidentialHistory: React.FC = () => {
       }
     } else {
       clearFieldError(fieldPath);
-      // Save if valid (debounced)
       if (isDevelopment) {
-        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+        console.log(`[ResidentialHistory] Field ${fieldPath} validated successfully (no auto-save)`);
       }
-      debouncedSave(fieldPath, value);
     }
   };
 

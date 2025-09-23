@@ -9,7 +9,6 @@ import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/co
 import { useApplicationStore, defaultResidentialHistory } from '@/stores/application-store';
 import { ResidentialHistory } from '@prisma/client';
 import { validateResidentialHistory } from '@/utils/application-validation';
-import { debounce } from 'lodash';
 import { useToast } from "@/components/ui/use-toast";
 
 // New MonthlyPaymentInput component
@@ -72,31 +71,6 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
   const isDevelopment = process.env.NODE_ENV === 'development';
 
   // Create debounced save function with toast feedback (increased to 1000ms for onChange)
-  const debouncedSave = useCallback(
-    debounce(async (fieldPath: string, value: any) => {
-      const result = await saveField(fieldPath, value);
-      
-      // Only show toasts in development
-      if (isDevelopment) {
-        if (result.success) {
-          toast({
-            title: "Field Saved",
-            description: `${fieldPath} saved successfully`,
-            variant: "default",
-            duration: 2000,
-          });
-        } else {
-          toast({
-            title: "Save Failed",
-            description: `Failed to save ${fieldPath}: ${result.error}`,
-            variant: "destructive",
-            duration: 4000,
-          });
-        }
-      }
-    }, 1000), // Increased from 500ms to 1000ms for onChange
-    [isDevelopment, toast, saveField]
-  );
 
   const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -118,11 +92,9 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
       }
     } else {
       clearFieldError(fieldPath);
-      // Save if valid (debounced)
       if (isDevelopment) {
-        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+        console.log(`[ResidentialHistory] Field ${fieldPath} validated successfully (no auto-save)`);
       }
-      debouncedSave(fieldPath, value);
     }
   };
 
@@ -145,20 +117,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
       )
     );
     
-    // Save housing status immediately with completion check
-    const fieldPath = `residentialHistory.${index}.housingStatus`;
-    const result = await saveField(fieldPath, value, { checkCompletion: true });
-    
-    // If switching to "own", also clear landlord fields in database
-    if (value === 'own') {
-      await saveField(`residentialHistory.${index}.landlordFirstName`, '', { checkCompletion: false });
-      await saveField(`residentialHistory.${index}.landlordLastName`, '', { checkCompletion: false });
-      await saveField(`residentialHistory.${index}.landlordEmail`, '', { checkCompletion: false });
-      await saveField(`residentialHistory.${index}.landlordPhoneNumber`, '', { checkCompletion: false });
-    }
-    
-    if (isDevelopment && result.success) {
-      console.log(`[Residential] Housing status saved for index ${index}`);
+    if (isDevelopment) {
+      console.log(`[Residential] Housing status updated for index ${index} (no auto-save)`);
     }
   };
 
@@ -191,11 +151,9 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
       }
     } else {
       clearFieldError(fieldPath);
-      // Save if valid (debounced)
       if (isDevelopment) {
-        console.log(`[ResidentialHistory] Calling debouncedSave for ${fieldPath}`);
+        console.log(`[ResidentialHistory] Field ${fieldPath} validated successfully (no auto-save)`);
       }
-      debouncedSave(fieldPath, value);
     }
   };
 

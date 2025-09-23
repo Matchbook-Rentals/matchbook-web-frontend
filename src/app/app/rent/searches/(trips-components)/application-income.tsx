@@ -14,7 +14,6 @@ import { Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from "@/components/ui/use-toast";
 import { SecureFileViewer } from '@/components/secure-file-viewer';
-import { debounce } from 'lodash';
 import BrandModal from '@/components/BrandModal';
 
 interface UploadData {
@@ -67,56 +66,6 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
   const [incomeToDelete, setIncomeToDelete] = useState<number | null>(null);
   const [isDeletingIncome, setIsDeletingIncome] = useState(false);
 
-  // Create debounced save function with toast feedback and completion checking
-  const debouncedSave = useCallback(
-    debounce(async (fieldPath: string, value: any) => {
-      const result = await saveField(fieldPath, value, { checkCompletion: true });
-      
-      // Handle completion status changes
-      if (result.success && result.completionStatus) {
-        if (result.completionStatus.statusChanged) {
-          if (result.completionStatus.isComplete) {
-            toast({
-              title: "Application Complete! 🎉",
-              description: "All required information has been provided",
-              duration: 4000,
-            });
-          } else if (result.completionStatus.missingRequirements?.length > 0) {
-            const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-            const more = result.completionStatus.missingRequirements.length > 3 
-              ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
-              : '';
-            toast({
-              title: "Application Incomplete",
-              description: `Still need: ${missing}${more}`,
-              duration: 4000,
-            });
-          }
-        }
-      }
-      
-      // Only show save toasts in development
-      if (isDevelopment) {
-        if (result.success) {
-          console.log(`[Auto-Save] Field ${fieldPath} saved successfully`);
-          toast({
-            title: "Auto-Save",
-            description: `${fieldPath.split('.').pop()} saved`,
-            duration: 2000,
-          });
-        } else {
-          console.error(`[Auto-Save] Error:`, result.error);
-          toast({
-            title: "Save Failed",
-            description: result.error || `Failed to save ${fieldPath}`,
-            variant: "destructive",
-            duration: 4000,
-          });
-        }
-      }
-    }, 1000),
-    [isDevelopment, toast, saveField]
-  );
 
   const handleInputChange = (index: number, field: 'source' | 'monthlyAmount', value: string) => {
     const fieldPath = `incomes.${index}.${field}`;
@@ -131,7 +80,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
     });
     setIncomes(updatedIncomes);
     
-    // Validate and save
+    // Validate only (no auto-save)
     const validationError = validateField(fieldPath, value);
     if (validationError) {
       setFieldError(fieldPath, validationError);
@@ -140,11 +89,9 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
       }
     } else {
       clearFieldError(fieldPath);
-      // Save if valid (debounced)
       if (isDevelopment) {
-        console.log(`[Income] Calling debouncedSave for ${fieldPath}`);
+        console.log(`[Income] Field ${fieldPath} validated successfully (no auto-save)`);
       }
-      debouncedSave(fieldPath, value);
     }
   };
 
@@ -196,10 +143,11 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
 
   const handleDelete = (index: number) => {
     // Prevent deletion if this would leave no income sources
-    if (incomes.length > 1) {
-      setIncomeToDelete(index);
-      setDeleteIncomeModalOpen(true);
+    if (incomes.length <= 1) {
+      return; // Don't allow deletion of the last income source
     }
+    setIncomeToDelete(index);
+    setDeleteIncomeModalOpen(true);
   };
   
   // Handle income source deletion confirmation
@@ -342,7 +290,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                       <Label className="relative w-fit  [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         Income Source {index + 1}
                       </Label>
-                      {incomes.length > 1 && (
+                      {incomes.length > 1 ? (
                         <button
                           onClick={() => handleDelete(index)}
                           className="ml-2 pt-[1px] px-4 text-[#404040] hover:text-red-500"
@@ -351,8 +299,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                         >
                           <Trash className="h-4 w-4" />
                         </button>
-                      )}
-                      {incomes.length === 1 && index === 0 && (
+                      ) : (
                         <span 
                           className="ml-2 pt-[1px] px-4 text-gray-300 cursor-not-allowed"
                           title="At least one income source is required"

@@ -25,20 +25,28 @@ export const validatePersonalInfo = (personalInfo: {
   let errorObj: PersonalInfoErrors = {};
   
   if (!personalInfo.firstName.trim()) {
-    errorObj.firstName = 'First Name is required.';
+    const error = 'First Name is required.';
+    console.log(`❌ Validation failed: firstName - "${personalInfo.firstName}" - ${error}`);
+    errorObj.firstName = error;
   }
   
   if (!personalInfo.lastName.trim()) {
-    errorObj.lastName = 'Last Name is required.';
+    const error = 'Last Name is required.';
+    console.log(`❌ Validation failed: lastName - "${personalInfo.lastName}" - ${error}`);
+    errorObj.lastName = error;
   }
   
   // New validations
   if (!personalInfo.noMiddleName && (!personalInfo.middleName || !personalInfo.middleName.trim())) {
-    errorObj.middleName = 'Middle name is required unless "No Middle Name" is checked';
+    const error = 'Middle name is required unless "No Middle Name" is checked';
+    console.log(`❌ Validation failed: middleName - "${personalInfo.middleName}" (noMiddleName: ${personalInfo.noMiddleName}) - ${error}`);
+    errorObj.middleName = error;
   }
   
   if (!personalInfo.dateOfBirth) {
-    errorObj.dateOfBirth = 'Date of birth is required';
+    const error = 'Date of birth is required';
+    console.log(`❌ Validation failed: dateOfBirth - "${personalInfo.dateOfBirth}" - ${error}`);
+    errorObj.dateOfBirth = error;
   }
   
   return errorObj;
@@ -54,28 +62,40 @@ export const validateIdentification = (ids: {
   let errorObj: IdentificationErrors = {};
 
   if (!ids || ids.length === 0) {
-    errorObj.idType = 'Identification information is required';
+    const error = 'Identification information is required';
+    console.log(`❌ Validation failed: identification - "no IDs provided" - ${error}`);
+    errorObj.idType = error;
     return errorObj;
   }
 
   // Check if at least one ID is marked as primary
   if (!ids.some(id => id.isPrimary)) {
-    errorObj.isPrimary = 'At least one identification must be marked as primary';
+    const error = 'At least one identification must be marked as primary';
+    console.log(`❌ Validation failed: isPrimary - "no primary ID found" - ${error}`);
+    errorObj.isPrimary = error;
   }
 
   const id = ids[0];
   if (!id.idType.trim()) {
-    errorObj.idType = 'Identification Type is required';
+    const error = 'Identification Type is required';
+    console.log(`❌ Validation failed: idType - "${id.idType}" - ${error}`);
+    errorObj.idType = error;
   }
   if (!id.idNumber.trim()) {
-    errorObj.idNumber = 'Identification Number is required';
+    const error = 'Identification Number is required';
+    console.log(`❌ Validation failed: idNumber - "${id.idNumber}" - ${error}`);
+    errorObj.idNumber = error;
   }
 
   // New validations for photos
   if (!id.idPhotos || id.idPhotos.length === 0) {
-    errorObj.idPhotos = 'At least one photo is required for identification';
+    const error = 'At least one photo is required for identification';
+    console.log(`❌ Validation failed: idPhotos - "no photos provided" - ${error}`);
+    errorObj.idPhotos = error;
   } else if (!id.idPhotos.some(photo => photo.isPrimary)) {
-    errorObj.primaryPhoto = 'One photo must be marked as primary';
+    const error = 'One photo must be marked as primary';
+    console.log(`❌ Validation failed: primaryPhoto - "no primary photo found" - ${error}`);
+    errorObj.primaryPhoto = error;
   }
 
   return errorObj;
@@ -97,7 +117,9 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
   } = {};
 
   if (!residentialHistory || residentialHistory.length === 0) {
-    errors.overall = 'At least one residential history entry is required';
+    const error = 'At least one residential history entry is required';
+    console.log(`❌ Validation failed: residentialHistory - "no entries provided" - ${error}`);
+    errors.overall = error;
     return errors;
   }
 
@@ -121,31 +143,36 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
     const city = entry.city ? entry.city : '';
     const state = entry.state ? entry.state : '';
     const zipCode = entry.zipCode ? entry.zipCode : '';
-    const monthlyPayment = entry.monthlyPayment ? entry.monthlyPayment : '';
     const durationOfTenancy = entry.durationOfTenancy ? entry.durationOfTenancy : '';
     if (!street.trim()) {
+      const error = `Residence ${i + 1}: Street Address is required`;
+      console.log(`❌ Validation failed: street[${i}] - "${street}" - ${error}`);
       errors.street = errors.street || [];
-      errors.street[i] = `Residence ${i + 1}: Street Address is required`;
+      errors.street[i] = error;
     }
     if (!city.trim()) {
+      const error = `Residence ${i + 1}: City is required`;
+      console.log(`❌ Validation failed: city[${i}] - "${city}" - ${error}`);
       errors.city = errors.city || [];
-      errors.city[i] = `Residence ${i + 1}: City is required`;
+      errors.city[i] = error;
     }
     if (!state.trim()) {
+      const error = `Residence ${i + 1}: State is required`;
+      console.log(`❌ Validation failed: state[${i}] - "${state}" - ${error}`);
       errors.state = errors.state || [];
-      errors.state[i] = `Residence ${i + 1}: State is required`;
+      errors.state[i] = error;
     }
     if (!zipCode.trim()) {
+      const error = `Residence ${i + 1}: ZIP Code is required`;
+      console.log(`❌ Validation failed: zipCode[${i}] - "${zipCode}" - ${error}`);
       errors.zipCode = errors.zipCode || [];
-      errors.zipCode[i] = `Residence ${i + 1}: ZIP Code is required`;
-    }
-    if (!monthlyPayment.trim()) {
-      errors.monthlyPayment = errors.monthlyPayment || [];
-      errors.monthlyPayment[i] = `Residence ${i + 1}: Monthly Payment is required`;
+      errors.zipCode[i] = error;
     }
     if (!durationOfTenancy.trim()) {
+      const error = `Residence ${i + 1}: Length of Stay is required`;
+      console.log(`❌ Validation failed: durationOfTenancy[${i}] - "${durationOfTenancy}" - ${error}`);
       errors.durationOfTenancy = errors.durationOfTenancy || [];
-      errors.durationOfTenancy[i] = `Residence ${i + 1}: Length of Stay is required`;
+      errors.durationOfTenancy[i] = error;
     }
     if (entry.housingStatus === 'rent') {
       const landlordFirstName = entry.landlordFirstName ? entry.landlordFirstName : '';
@@ -191,25 +218,33 @@ export const validateIncome = (
   };
 
   if (!incomes || incomes.length === 0) {
-    errors.source = ['At least one income entry is required'];
-    errors.monthlyAmount = ['At least one income entry is required'];
-    errors.imageUrl = ['At least one income entry is required'];
+    const error = 'At least one income entry is required';
+    console.log(`❌ Validation failed: incomes - "no entries provided" - ${error}`);
+    errors.source = [error];
+    errors.monthlyAmount = [error];
+    errors.imageUrl = [error];
     return errors;
   }
 
   incomes.forEach((income, index) => {
     if (!income.source.trim()) {
+      const error = 'Income Source is required';
+      console.log(`❌ Validation failed: income[${index}].source - "${income.source}" - ${error}`);
       errors.source = errors.source || [];
-      errors.source[index] = 'Income Source is required';
+      errors.source[index] = error;
     }
     if (!income.monthlyAmount.trim()) {
+      const error = 'Monthly Amount is required';
+      console.log(`❌ Validation failed: income[${index}].monthlyAmount - "${income.monthlyAmount}" - ${error}`);
       errors.monthlyAmount = errors.monthlyAmount || [];
-      errors.monthlyAmount[index] = 'Monthly Amount is required';
+      errors.monthlyAmount[index] = error;
     }
     // Check for either imageUrl (backward compatibility) or fileKey (new secure uploads)
     if (!income.fileKey && (!income.imageUrl || !income.imageUrl.trim())) {
+      const error = 'Income Proof is required';
+      console.log(`❌ Validation failed: income[${index}].imageUrl/fileKey - "fileKey: ${income.fileKey}, imageUrl: ${income.imageUrl}" - ${error}`);
       errors.imageUrl = errors.imageUrl || [];
-      errors.imageUrl[index] = 'Income Proof is required';
+      errors.imageUrl[index] = error;
     }
   });
 
@@ -235,16 +270,24 @@ export const validateQuestionnaire = (answers: {
 
   // Validate felony question
   if (answers.felony === null || answers.felony === undefined) {
-    errors.felony = 'Please select either Yes or No';
+    const error = 'Please select either Yes or No';
+    console.log(`❌ Validation failed: felony - "${answers.felony}" - ${error}`);
+    errors.felony = error;
   } else if (answers.felony && !answers.felonyExplanation?.trim()) {
-    errors.felonyExplanation = 'Explanation is required when answering Yes';
+    const error = 'Explanation is required when answering Yes';
+    console.log(`❌ Validation failed: felonyExplanation - "${answers.felonyExplanation}" (felony: ${answers.felony}) - ${error}`);
+    errors.felonyExplanation = error;
   }
 
   // Validate eviction question
   if (answers.evicted === null || answers.evicted === undefined) {
-    errors.evicted = 'Please select either Yes or No';
+    const error = 'Please select either Yes or No';
+    console.log(`❌ Validation failed: evicted - "${answers.evicted}" - ${error}`);
+    errors.evicted = error;
   } else if (answers.evicted && !answers.evictedExplanation?.trim()) {
-    errors.evictedExplanation = 'Explanation is required when answering Yes';
+    const error = 'Explanation is required when answering Yes';
+    console.log(`❌ Validation failed: evictedExplanation - "${answers.evictedExplanation}" (evicted: ${answers.evicted}) - ${error}`);
+    errors.evictedExplanation = error;
   }
 
   return errors;
