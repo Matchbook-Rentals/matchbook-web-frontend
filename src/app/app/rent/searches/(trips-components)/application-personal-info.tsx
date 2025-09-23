@@ -256,8 +256,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
             <DateOfBirthPicker
               value={convertStoredDateToDate(personalInfo.dateOfBirth)}
               onChange={handleDateSelect}
-              placeholder={formFields[3].placeholder}
-              isMobile={isMobile}
+              placeholder="MM/DD/YYYY"
               className={inputClassName || `border-[#d0d5dd] shadow-shadows-shadow-xs`}
             />
             {(fieldErrors['personalInfo.dateOfBirth'] || error?.dateOfBirth) && 

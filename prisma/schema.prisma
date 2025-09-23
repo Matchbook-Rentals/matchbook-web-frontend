@@ -246,6 +246,10 @@ model Listing {
   petsAllowed            Boolean   @default(false)
   markedActiveByUser     Boolean   @default(true)
 
+  // Soft delete fields
+  deletedAt              DateTime?
+  deletedBy              String?
+
   // General Amenities
   airConditioner     Boolean @default(false)
   laundryFacilities  Boolean @default(false)

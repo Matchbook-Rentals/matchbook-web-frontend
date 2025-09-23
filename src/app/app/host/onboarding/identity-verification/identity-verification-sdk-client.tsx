@@ -693,7 +693,7 @@ export default function IdentityVerificationSDKClient({
                       <DateOfBirthPicker
                         value={convertHtmlDateToDate(editDateOfBirth)}
                         onChange={(date) => setEditDateOfBirth(convertDateToHtmlDate(date))}
-                        placeholder="Select your date of birth"
+                        placeholder="MM/DD/YYYY"
                         className="h-12 border-[#d0d5dd] shadow-shadows-shadow-xs"
                       />
                     </div>
@@ -800,7 +800,7 @@ export default function IdentityVerificationSDKClient({
                       <DateOfBirthPicker
                         value={convertHtmlDateToDate(confirmDateOfBirth)}
                         onChange={(date) => setConfirmDateOfBirth(convertDateToHtmlDate(date))}
-                        placeholder="Select your date of birth"
+                        placeholder="MM/DD/YYYY"
                         className="h-12 border-[#d0d5dd] shadow-shadows-shadow-xs"
                       />
                     </div>

@@ -139,6 +139,7 @@ export const pullListingsFromDb = async (
       WHERE l.state IN (${ Prisma.join(statesToSearch) }) -- Filter by states first
         AND l.approvalStatus = 'approved' -- Only include approved listings
         AND l.markedActiveByUser = true -- Only include listings marked active by host
+        AND l.deletedAt IS NULL -- Exclude soft-deleted listings
       HAVING distance <= ${radiusMiles} -- Then filter by distance
       ORDER BY distance
     `;
@@ -151,7 +152,10 @@ export const pullListingsFromDb = async (
     const listingIds = listingsWithDistance.map(l => l.id);
     const listings = await prisma.listing.findMany({
       where: {
-        AND: [ // Combine ID filter, unavailability filter, and monthly pricing filter
+        AND: [ // Combine ID filter, unavailability filter, monthly pricing filter, and soft delete filter
+          {
+            deletedAt: null // Exclude soft-deleted listings
+          },
           {
             id: {
               in: listingIds
@@ -493,11 +497,11 @@ export const updateListingPhotos = async (listingId: string, photos: Array<{id: 
  * For detailed deletion rules and constraints, see:
  * docs/listing-deletion-constraints.md
  */
-export const deleteListing = async (listingId: string): Promise<DeletionResponse> => {
+export const deleteListing = async (listingId: string, performDelete: boolean = false): Promise<DeletionResponse> => {
   const userId = await checkAuth();
 
   try {
-    console.log(`🔍 SIMULATE DELETE: Starting deletion simulation for listing ${listingId}`);
+    console.log(`🔍 DELETE: Starting deletion process for listing ${listingId}`);
     console.log(`👤 User ID: ${userId}`);
 
     // Fetch the listing to ensure it belongs to the authenticated user
@@ -507,7 +511,7 @@ export const deleteListing = async (listingId: string): Promise<DeletionResponse
     });
 
     if (!listing) {
-      console.log('❌ SIMULATE DELETE: Listing not found');
+      console.log('❌ DELETE: Listing not found');
       return {
         success: false,
         canDelete: false,
@@ -516,7 +520,7 @@ export const deleteListing = async (listingId: string): Promise<DeletionResponse
     }
 
     if (listing.userId !== userId) {
-      console.log('❌ SIMULATE DELETE: Unauthorized access attempt');
+      console.log('❌ DELETE: Unauthorized access attempt');
       return {
         success: false,
         canDelete: false,
@@ -524,23 +528,60 @@ export const deleteListing = async (listingId: string): Promise<DeletionResponse
       };
     }
 
-    console.log(`✅ SIMULATE DELETE: Authorization passed for listing "${listing.title}"`);
+    console.log(`✅ DELETE: Authorization passed for listing "${listing.title}"`);
 
     // Check for blocking constraints and collect ALL issues
     const deletionResult = await collectAllConstraintIssues(listingId);
 
     if (deletionResult.canDelete) {
-      console.log('🎉 SIMULATE DELETE: All checks passed - listing would be deleted successfully');
-      console.log('📝 SIMULATE DELETE: Simulation complete - NO ACTUAL DELETION PERFORMED');
+      if (performDelete) {
+        console.log('🎉 ACTUAL DELETE: All checks passed - proceeding with soft deletion');
 
-      return {
-        success: true,
-        canDelete: true,
-        message: 'SIMULATION: Listing deletion would succeed',
-        entityCounts: deletionResult.entityCounts
-      };
+        // Perform soft delete and clean up operational data in transaction
+        await prisma.$transaction(async (tx) => {
+          // Soft delete the listing (preserves consumer preference data)
+          await tx.listing.update({
+            where: { id: listingId },
+            data: {
+              deletedAt: new Date(),
+              deletedBy: userId
+            }
+          });
+
+          // Delete only operational data (preserve consumer behavior data)
+          //await tx.listingUnavailability.deleteMany({ where: { listingId } });
+          //await tx.listingImage.deleteMany({ where: { listingId } });
+          //await tx.listingLocationChange.deleteMany({ where: { listingId } });
+          //await tx.pdfTemplate.deleteMany({ where: { listingId } });
+          //await tx.conversation.deleteMany({ where: { listingId } });
+
+          // PRESERVE consumer preference data for analytics:
+          // - favorites, dislikes, maybes (user preferences)
+          // - listingMonthlyPricing (pricing insights)
+          // - bedroom configurations (space preferences)
+          // - listing amenities (feature preferences in main record)
+        });
+
+        console.log('✅ SOFT DELETE: Listing soft deleted successfully');
+
+        return {
+          success: true,
+          canDelete: true,
+          message: 'Listing deleted successfully',
+          entityCounts: deletionResult.entityCounts
+        };
+      } else {
+        console.log('✅ CHECK ONLY: Deletion constraints passed - ready for confirmation');
+
+        return {
+          success: true,
+          canDelete: true,
+          message: 'Ready for deletion confirmation',
+          entityCounts: deletionResult.entityCounts
+        };
+      }
     } else {
-      console.log('❌ SIMULATE DELETE: Deletion blocked by constraints');
+      console.log('❌ DELETE: Deletion blocked by constraints');
       console.log(`📝 Found ${deletionResult.blockingReasons.length} blocking constraint(s)`);
 
       return {
@@ -552,7 +593,7 @@ export const deleteListing = async (listingId: string): Promise<DeletionResponse
       };
     }
   } catch (error) {
-    console.error('❌ SIMULATE DELETE Error:', error);
+    console.error('❌ DELETE Error:', error);
     return {
       success: false,
       canDelete: false,
@@ -566,13 +607,13 @@ export const deleteListing = async (listingId: string): Promise<DeletionResponse
  * Returns comprehensive deletion check result
  */
 const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCheckResult> => {
-  console.log('🔍 SIMULATE DELETE: Checking deletion constraints...');
+  console.log('🔍 DELETE: Checking deletion constraints...');
 
   const blockingReasons: BlockingReason[] = [];
   const now = new Date();
 
   // Check for active or future bookings
-  console.log('📋 SIMULATE DELETE: Checking bookings...');
+  console.log('📋 DELETE: Checking bookings...');
   const activeBookings = await prisma.booking.findMany({
     where: {
       listingId,
@@ -592,17 +633,17 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
     }
   });
 
-  console.log(`📊 SIMULATE DELETE: Found ${activeBookings.length} active bookings`);
+  console.log(`📊 DELETE: Found ${activeBookings.length} active bookings`);
 
   if (activeBookings.length > 0) {
     const futureBookings = activeBookings.filter(b => b.startDate > now);
     const currentBookings = activeBookings.filter(b => b.startDate <= now && b.endDate >= now);
 
-    console.log(`📅 SIMULATE DELETE: ${currentBookings.length} current bookings, ${futureBookings.length} future bookings`);
+    console.log(`📅 DELETE: ${currentBookings.length} current bookings, ${futureBookings.length} future bookings`);
 
     // Add current stays as blocking reason
     if (currentBookings.length > 0) {
-      console.log('❌ SIMULATE DELETE: BLOCKED - Active stays found');
+      console.log('❌ DELETE: BLOCKED - Active stays found');
       currentBookings.forEach(booking => {
         console.log(`  📝 Current Booking ${booking.id}: ${booking.status}, ${booking.startDate.toISOString()} to ${booking.endDate.toISOString()}`);
       });
@@ -617,7 +658,7 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
 
     // Add future bookings as blocking reason
     if (futureBookings.length > 0) {
-      console.log('❌ SIMULATE DELETE: BLOCKED - Future bookings found');
+      console.log('❌ DELETE: BLOCKED - Future bookings found');
       futureBookings.forEach(booking => {
         console.log(`  📝 Future Booking ${booking.id}: ${booking.status}, ${booking.startDate.toISOString()} to ${booking.endDate.toISOString()}`);
       });
@@ -630,11 +671,11 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
       });
     }
   } else {
-    console.log('✅ SIMULATE DELETE: No blocking bookings found');
+    console.log('✅ DELETE: No blocking bookings found');
   }
 
   // Check for open matches
-  console.log('🤝 SIMULATE DELETE: Checking matches...');
+  console.log('🤝 DELETE: Checking matches...');
   const openMatches = await prisma.match.findMany({
     where: {
       listingId,
@@ -657,9 +698,9 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
     }
   });
 
-  console.log(`🤝 SIMULATE DELETE: Found ${openMatches.length} open matches`);
+  console.log(`🤝 DELETE: Found ${openMatches.length} open matches`);
   if (openMatches.length > 0) {
-    console.log('❌ SIMULATE DELETE: BLOCKED - Open matches found');
+    console.log('❌ DELETE: BLOCKED - Open matches found');
     openMatches.forEach(match => {
       console.log(`  📝 Match ${match.id}: landlord signed: ${!!match.landlordSignedAt}, tenant signed: ${!!match.tenantSignedAt}, payment: ${match.paymentStatus}`);
     });
@@ -667,15 +708,15 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
     blockingReasons.push({
       type: 'openMatches',
       count: openMatches.length,
-      message: 'Cannot delete listing with pending matches. Please complete or cancel all matches first.',
+      message: 'Cannot delete listing with approved applications. Please complete the lease signing process or cancel the applications first.',
       details: openMatches
     });
   } else {
-    console.log('✅ SIMULATE DELETE: No blocking matches found');
+    console.log('✅ DELETE: No blocking matches found');
   }
 
   // Check for pending housing requests
-  console.log('🏠 SIMULATE DELETE: Checking housing requests...');
+  console.log('🏠 DELETE: Checking housing requests...');
   const pendingRequests = await prisma.housingRequest.findMany({
     where: {
       listingId,
@@ -687,9 +728,9 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
     }
   });
 
-  console.log(`🏠 SIMULATE DELETE: Found ${pendingRequests.length} pending housing requests`);
+  console.log(`🏠 DELETE: Found ${pendingRequests.length} pending housing requests`);
   if (pendingRequests.length > 0) {
-    console.log('❌ SIMULATE DELETE: BLOCKED - Pending housing requests found');
+    console.log('❌ DELETE: BLOCKED - Pending housing requests found');
     pendingRequests.forEach(request => {
       console.log(`  📝 Request ${request.id}: ${request.status}`);
     });
@@ -701,7 +742,7 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
       details: pendingRequests
     });
   } else {
-    console.log('✅ SIMULATE DELETE: No blocking housing requests found');
+    console.log('✅ DELETE: No blocking housing requests found');
   }
 
   // Get entity counts
@@ -710,9 +751,9 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
   const canDelete = blockingReasons.length === 0;
 
   if (canDelete) {
-    console.log('✅ SIMULATE DELETE: All constraint checks passed');
+    console.log('✅ DELETE: All constraint checks passed');
   } else {
-    console.log(`❌ SIMULATE DELETE: Found ${blockingReasons.length} blocking constraint(s)`);
+    console.log(`❌ DELETE: Found ${blockingReasons.length} blocking constraint(s)`);
   }
 
   return {
@@ -726,7 +767,7 @@ const collectAllConstraintIssues = async (listingId: string): Promise<DeletionCh
  * Counts entities that would be deleted
  */
 const getEntityCounts = async (listingId: string): Promise<EntityCounts> => {
-  console.log('🗑️ SIMULATE DELETE: Counting entities that would be deleted...');
+  console.log('🗑️ DELETE: Counting entities that would be deleted...');
 
   // Count entities that would be deleted
   const unavailabilityPeriods = await prisma.listingUnavailability.count({ where: { listingId } });
@@ -744,7 +785,7 @@ const getEntityCounts = async (listingId: string): Promise<EntityCounts> => {
                dislikes + maybes + favorites + locationChanges +
                pdfTemplates + conversations + 1; // +1 for the listing itself
 
-  console.log('📊 SIMULATE DELETE: Entity deletion summary:');
+  console.log('📊 DELETE: Entity deletion summary:');
   console.log(`  🚫 Unavailability periods: ${unavailabilityPeriods}`);
   console.log(`  🖼️ Images: ${images}`);
   console.log(`  🛏️ Bedrooms: ${bedrooms}`);
@@ -755,7 +796,7 @@ const getEntityCounts = async (listingId: string): Promise<EntityCounts> => {
   console.log(`  📍 Location changes: ${locationChanges}`);
   console.log(`  📄 PDF templates: ${pdfTemplates}`);
   console.log(`  💬 Conversations: ${conversations}`);
-  console.log(`🔢 SIMULATE DELETE: Total entities that would be deleted: ${total}`);
+  console.log(`🔢 DELETE: Total entities that would be deleted: ${total}`);
 
   return {
     unavailabilityPeriods,
@@ -945,17 +986,19 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
     
     // Get total count
     const totalCount = await prisma.listing.count({
-      where: { 
+      where: {
         userId: userId,
-        status: { not: "draft" } // Exclude draft listings
+        status: { not: "draft" }, // Exclude draft listings
+        deletedAt: null // Exclude soft-deleted listings
       }
     });
     
     // Get paginated listings
     const hostListings = await prisma.listing.findMany({
-      where: { 
+      where: {
         userId: userId,
-        status: { not: "draft" } // Exclude draft listings
+        status: { not: "draft" }, // Exclude draft listings
+        deletedAt: null // Exclude soft-deleted listings
       },
       include: {
         listingImages: {
@@ -1021,8 +1064,9 @@ export const getHostListingsCount = async (): Promise<number> => {
     const userId = await checkAuth();
     
     const totalCount = await prisma.listing.count({
-      where: { 
+      where: {
         userId: userId,
+        deletedAt: null // Exclude soft-deleted listings
       }
     });
     
@@ -1177,11 +1221,67 @@ export async function saveLocationChangeHistory(
         changedFields: changedFields,
       },
     });
-    
+
     console.log('Location change history saved successfully');
   } catch (error) {
     console.error('Error saving location change history:', error);
     // Don't throw error here - we don't want to block the main update if history saving fails
   }
 }
+
+export const fetchSoftDeletedListings = async () => {
+  try {
+    const userId = await checkAuth();
+
+    const softDeletedListings = await prisma.listing.findMany({
+      where: {
+        userId: userId,
+        deletedAt: { not: null }
+      },
+      select: {
+        id: true,
+        title: true,
+        streetAddress1: true,
+        city: true,
+        state: true,
+        deletedAt: true,
+        deletedBy: true
+      },
+      orderBy: {
+        deletedAt: 'desc'
+      }
+    });
+
+    return { success: true, listings: softDeletedListings };
+  } catch (error) {
+    console.error("Error fetching soft-deleted listings:", error);
+    return { success: false, error: "Failed to fetch soft-deleted listings" };
+  }
+};
+
+export const restoreSoftDeletedListing = async (listingId: string) => {
+  try {
+    const userId = await checkAuth();
+
+    const updatedListing = await prisma.listing.update({
+      where: {
+        id: listingId,
+        userId: userId,
+        deletedAt: { not: null }
+      },
+      data: {
+        deletedAt: null,
+        deletedBy: null
+      }
+    });
+
+    revalidatePath("/app/host/dashboard");
+    revalidatePath("/admin/test/restore-listings");
+
+    return { success: true, listing: updatedListing };
+  } catch (error) {
+    console.error("Error restoring listing:", error);
+    return { success: false, error: "Failed to restore listing" };
+  }
+};
 

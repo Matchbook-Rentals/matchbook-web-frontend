@@ -14,6 +14,7 @@ export const fetchListingsFromDb = async () => {
     const listings = await prisma.listing.findMany({
       where: {
         userId: user.id,
+        deletedAt: null, // Exclude soft-deleted listings
       },
       include: {
         bedrooms: true,

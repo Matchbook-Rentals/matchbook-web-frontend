@@ -727,7 +727,7 @@ export default function IdentityVerificationClient({
                         value={convertHtmlDateToDate(editDateOfBirth)}
                         onChange={(date) => setEditDateOfBirth(convertDateToHtmlDate(date))}
                         disabled={isUpdatingName}
-                        placeholder="Select your date of birth"
+                        placeholder="MM/DD/YYYY"
                       />
                       <p className="text-xs text-gray-500 mt-1">
                         This must match your government-issued ID exactly
@@ -787,7 +787,7 @@ export default function IdentityVerificationClient({
                         value={convertHtmlDateToDate(confirmDateOfBirth)}
                         onChange={(date) => setConfirmDateOfBirth(convertDateToHtmlDate(date))}
                         disabled={isUpdating}
-                        placeholder="Select your date of birth"
+                        placeholder="MM/DD/YYYY"
                       />
                       <p className="text-xs text-gray-500 mt-1">
                         This must match your government-issued ID exactly

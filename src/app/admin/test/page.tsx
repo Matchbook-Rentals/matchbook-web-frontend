@@ -135,6 +135,13 @@ export default function TestSuitesPage() {
       description: 'Analyze payment method associations and clear stale references blocking deletion',
       icon: <FlaskConical className="h-5 w-5" />,
       path: '/admin/test/payment-methods'
+    },
+    {
+      id: 'restore-listings',
+      name: 'Restore Soft-Deleted Listings',
+      description: 'View and restore soft-deleted listings for testing purposes',
+      icon: <Home className="h-5 w-5" />,
+      path: '/admin/test/restore-listings'
     }
   ]
 

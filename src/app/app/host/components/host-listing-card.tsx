@@ -74,7 +74,7 @@ interface HostListingCardProps {
   loadingListingId?: string | null;
   onViewDetails?: (listingId: string) => void;
   isDraft?: boolean;
-  deleteFunction?: (listingId: string) => Promise<DeletionResponse>;
+  deleteFunction?: (listingId: string, performDelete?: boolean) => Promise<DeletionResponse>;
 }
 
 export default function HostListingCard({ 
@@ -93,6 +93,7 @@ export default function HostListingCard({
   const [blockingReasons, setBlockingReasons] = React.useState<BlockingReason[]>([]);
   const [entityCounts, setEntityCounts] = React.useState<EntityCounts | null>(null);
   const [deletionBlocked, setDeletionBlocked] = React.useState(false);
+  const [modalState, setModalState] = React.useState<'checking' | 'confirmation' | 'blocked' | 'deleting'>('checking');
 
   // Map listing status to display status and color
   const getStatusInfo = (listing: ListingAndImages) => {
@@ -198,46 +199,70 @@ export default function HostListingCard({
   
   const displayAddress = getDisplayAddress();
 
-  const handleDeleteListing = () => {
+  const handleDeleteListing = async () => {
     setIsPopoverOpen(false);
     setIsDeleteDialogOpen(true);
-  };
+    setModalState('checking');
 
-  const handleConfirmDelete = async () => {
     if (!deleteFunction) {
       toast.error("Delete function not provided");
+      setIsDeleteDialogOpen(false);
       return;
     }
 
-    setIsDeleting(true);
     try {
-      const response = await deleteFunction(listing.id);
+      const response = await deleteFunction(listing.id, false); // Check only, don't delete yet
 
       if (!response.success) {
         // Handle basic failures (auth, not found, etc.)
         toast.error(response.message);
-        setIsDeleting(false);
+        setIsDeleteDialogOpen(false);
         return;
       }
 
       if (response.canDelete) {
-        // Deletion would succeed (in simulation mode)
-        toast.success("SIMULATION: " + (isDraft ? "Draft deletion would succeed" : "Listing deletion would succeed"));
-        setIsDeleteDialogOpen(false);
-        setDeleteConfirmationText("");
-        // In real mode, this would be: router.refresh();
+        // Can delete - show confirmation input
+        setModalState('confirmation');
+        setEntityCounts(response.entityCounts || null);
       } else {
         // Deletion is blocked - show blocking reasons
         setBlockingReasons(response.blockingReasons || []);
         setEntityCounts(response.entityCounts || null);
-        setDeletionBlocked(true);
-        // Keep dialog open to show blocking reasons
+        setModalState('blocked');
       }
     } catch (error) {
       console.error("Error checking deletion:", error);
       toast.error(error instanceof Error ? error.message : `Failed to check deletion constraints`);
-    } finally {
-      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    // We already checked constraints, so proceed with deletion
+    setModalState('deleting');
+
+    if (!deleteFunction) {
+      toast.error("Delete function not provided");
+      setIsDeleteDialogOpen(false);
+      return;
+    }
+
+    try {
+      const response = await deleteFunction(listing.id, true); // Actually perform the deletion
+
+      if (response.success) {
+        toast.success(isDraft ? "Draft deleted successfully" : "Listing deleted successfully");
+        setIsDeleteDialogOpen(false);
+        setDeleteConfirmationText("");
+        router.refresh(); // Refresh to update the listing display
+      } else {
+        toast.error(response.message || `Failed to delete ${isDraft ? 'draft' : 'listing'}`);
+        setModalState('confirmation'); // Go back to confirmation state
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
+      toast.error(error instanceof Error ? error.message : `Failed to delete ${isDraft ? 'draft' : 'listing'}`);
+      setModalState('confirmation'); // Go back to confirmation state
     }
   };
 
@@ -247,6 +272,7 @@ export default function HostListingCard({
     setDeletionBlocked(false);
     setBlockingReasons([]);
     setEntityCounts(null);
+    setModalState('checking'); // Reset to initial state
   };
 
   // For drafts without an address, use "Delete Draft" as confirmation text
@@ -262,10 +288,69 @@ export default function HostListingCard({
     });
   };
 
+  // Render loading state
+  const renderLoadingState = () => (
+    <div className="w-full text-center py-8">
+      <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        Checking Listing Status
+      </h3>
+      <p className="text-gray-600">
+        Please wait while we check if this listing can be deleted...
+      </p>
+    </div>
+  );
+
+  // Render confirmation state
+  const renderConfirmationState = () => (
+    <div className="w-full space-y-4">
+      <div className="text-center">
+        <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+          <TrashIcon className="h-8 w-8 text-red-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          Are you sure you want to delete this listing?
+        </h3>
+        <p className="text-gray-600 mb-4">
+          This action cannot be undone. This will permanently delete the listing and remove all associated data.
+        </p>
+      </div>
+
+      {entityCounts && entityCounts.total > 1 && (
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
+          <p className="text-sm font-medium text-gray-700 mb-2">
+            This will also delete {entityCounts.total - 1} related items:
+          </p>
+          <div className="text-xs text-gray-600 grid grid-cols-2 gap-1">
+            {entityCounts.images > 0 && <span>• {entityCounts.images} photos</span>}
+            {entityCounts.conversations > 0 && <span>• {entityCounts.conversations} conversations</span>}
+            {entityCounts.favorites > 0 && <span>• {entityCounts.favorites} user favorites</span>}
+            {entityCounts.unavailabilityPeriods > 0 && <span>• {entityCounts.unavailabilityPeriods} blocked dates</span>}
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <label htmlFor="confirmation-input" className="block text-sm font-medium text-gray-700">
+          To confirm, type <strong>{confirmationText}</strong> below:
+        </label>
+        <Input
+          id="confirmation-input"
+          type="text"
+          value={deleteConfirmationText}
+          onChange={(e) => setDeleteConfirmationText(e.target.value)}
+          placeholder={confirmationText}
+          className="w-full"
+          autoComplete="off"
+        />
+      </div>
+    </div>
+  );
+
   // Render blocking reasons display
   const renderBlockingReasons = () => {
-    if (!deletionBlocked || blockingReasons.length === 0) return null;
-
     return (
       <div className="w-full space-y-4">
         <div className="text-center">
@@ -276,69 +361,30 @@ export default function HostListingCard({
             Cannot Delete Listing
           </h3>
           <p className="text-gray-600 mb-4">
-            This listing cannot be deleted because it has active constraints. Please resolve the following issues first:
+            This listing cannot be deleted because of the following:
           </p>
         </div>
 
-        <div className="space-y-3 max-h-60 overflow-y-auto">
+        <div className="space-y-2">
           {blockingReasons.map((reason, index) => (
-            <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-3">
-              <div className="flex items-start gap-2">
-                <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-red-800 mb-2">
-                    {reason.message}
-                  </p>
-                  {reason.details && reason.details.length > 0 && (
-                    <div className="space-y-1">
-                      {reason.details.slice(0, 3).map((detail, detailIndex) => (
-                        <div key={detailIndex} className="text-xs text-red-700 bg-red-100 rounded px-2 py-1">
-                          {reason.type === 'activeStays' || reason.type === 'futureBookings' ? (
-                            <>
-                              Booking {detail.id.slice(0, 8)}... • {(detail as BookingDetail).status} •
-                              {formatDate((detail as BookingDetail).startDate)} - {formatDate((detail as BookingDetail).endDate)}
-                            </>
-                          ) : reason.type === 'openMatches' ? (
-                            <>
-                              Match {detail.id.slice(0, 8)}... •
-                              Landlord: {(detail as MatchDetail).landlordSignedAt ? '✓' : '✗'} •
-                              Tenant: {(detail as MatchDetail).tenantSignedAt ? '✓' : '✗'}
-                            </>
-                          ) : (
-                            <>
-                              Request {detail.id.slice(0, 8)}... • {(detail as HousingRequestDetail).status}
-                            </>
-                          )}
-                        </div>
-                      ))}
-                      {reason.details.length > 3 && (
-                        <p className="text-xs text-red-600 italic">
-                          ...and {reason.details.length - 3} more
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
+            <div key={index} className="flex items-center gap-2 text-gray-700">
+              <span className="text-gray-400">•</span>
+              <span className="text-sm">
+                {reason.count} {
+                  reason.type === 'openMatches' ? 'approved applications' :
+                  reason.type === 'pendingHousingRequests' ? 'open applications' :
+                  reason.type === 'activeStays' ? 'active stays' :
+                  reason.type === 'futureBookings' ? 'future bookings' :
+                  'active constraints'
+                }
+              </span>
             </div>
           ))}
         </div>
 
-        {entityCounts && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-            <p className="text-sm font-medium text-gray-700 mb-2">
-              Would also delete {entityCounts.total} related items:
-            </p>
-            <div className="text-xs text-gray-600 grid grid-cols-2 gap-1">
-              {entityCounts.images > 0 && <span>• {entityCounts.images} images</span>}
-              {entityCounts.bedrooms > 0 && <span>• {entityCounts.bedrooms} bedrooms</span>}
-              {entityCounts.monthlyPricing > 0 && <span>• {entityCounts.monthlyPricing} pricing tiers</span>}
-              {entityCounts.conversations > 0 && <span>• {entityCounts.conversations} conversations</span>}
-              {entityCounts.favorites > 0 && <span>• {entityCounts.favorites} favorites</span>}
-              {entityCounts.unavailabilityPeriods > 0 && <span>• {entityCounts.unavailabilityPeriods} blocked dates</span>}
-            </div>
-          </div>
-        )}
+        <p className="text-sm text-gray-600 text-center mt-4">
+          Please resolve these issues first, then try deleting again.
+        </p>
       </div>
     );
   };
@@ -639,61 +685,47 @@ export default function HostListingCard({
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[calc(100%-2rem)] !top-[15vh] md:!top-[25vh] sm:max-w-md md:max-w-lg">
           <div className="flex flex-col gap-4 w-full">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
-                <TrashIcon className="h-8 w-8 text-red-600" />
+            {modalState === 'checking' && renderLoadingState()}
+            {modalState === 'confirmation' && renderConfirmationState()}
+            {modalState === 'blocked' && renderBlockingReasons()}
+            {modalState === 'deleting' && (
+              <div className="w-full text-center py-8">
+                <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-500 border-t-transparent" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Deleting Listing
+                </h3>
+                <p className="text-gray-600">
+                  Please wait while we delete your listing...
+                </p>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Are you sure you want to delete this listing?
-              </h3>
-              <p className="text-gray-600 mb-4">
-                This action cannot be undone. This will permanently delete the listing and remove all associated data.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="confirmation-input" className="block text-sm font-medium text-gray-700">
-                To confirm, type <strong>{confirmationText}</strong> below:
-              </label>
-              <Input
-                id="confirmation-input"
-                type="text"
-                value={deleteConfirmationText}
-                onChange={(e) => setDeleteConfirmationText(e.target.value)}
-                placeholder={confirmationText}
-                className="w-full"
-                autoComplete="off"
-              />
-            </div>
+            )}
           </div>
 
-          <div className="flex gap-3 w-full pt-6 border-t border-gray-200">
-            <BrandButton
-              variant="outline"
-              onClick={handleCancelDelete}
-              className="flex-1"
-            >
-              Cancel
-            </BrandButton>
-            <BrandButton
-              variant="destructive"
-              onClick={handleConfirmDelete}
-              disabled={isDeleteButtonDisabled || isDeleting}
-              className="flex-1"
-              spinOnClick={false}
-            >
-              {isDeleting ? (
-                <>
-                  <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  Deleting...
-                </>
-              ) : (
-                <>
+          {modalState !== 'checking' && modalState !== 'deleting' && (
+            <div className="flex gap-3 w-full pt-6 border-t border-gray-200">
+              <BrandButton
+                variant="outline"
+                onClick={handleCancelDelete}
+                className="flex-1"
+              >
+                {modalState === 'blocked' ? 'Close' : 'Cancel'}
+              </BrandButton>
+              {modalState === 'confirmation' && (
+                <BrandButton
+                  variant="destructive"
+                  onClick={handleConfirmDelete}
+                  disabled={isDeleteButtonDisabled}
+                  className="flex-1"
+                  spinOnClick={false}
+                >
                   <TrashIcon className="h-4 w-4 mr-2" />
                   {isDraft ? 'Delete Draft' : 'Delete Listing'}
-                </>
+                </BrandButton>
               )}
-            </BrandButton>
-          </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </>

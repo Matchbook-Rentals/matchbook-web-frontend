@@ -6,8 +6,8 @@ export const statesInRadiusData = [
     { state: "AR", statesInRadius: ["AR", "LA", "MS", "MO", "OK", "TN", "TX"] },
     { state: "CA", statesInRadius: ["CA", "AZ", "NV", "OR"] },
     { state: "CO", statesInRadius: ["CO", "AZ", "KS", "NE", "NM", "OK", "UT", "WY"] },
-    { state: "CT", statesInRadius: ["CT", "MA", "NY", "RI"] },
-    { state: "DE", statesInRadius: ["DE", "MD", "NJ", "PA"] },
+    { state: "CT", statesInRadius: ["CT", "MA", "NY", "RI", "DE", "PA"] },
+    { state: "DE", statesInRadius: ["DE", "MD", "NJ", "PA", "CT", "RI"] },
     { state: "FL", statesInRadius: ["FL", "AL", "GA"] },
     { state: "GA", statesInRadius: ["GA", "AL", "FL", "NC", "SC", "TN"] },
     { state: "HI", statesInRadius: ["HI"] }, // Hawaii is an island state
@@ -37,8 +37,8 @@ export const statesInRadiusData = [
     { state: "OH", statesInRadius: ["OH", "IN", "KY", "MI", "PA", "WV"] },
     { state: "OK", statesInRadius: ["OK", "AR", "CO", "KS", "MO", "NM", "TX"] },
     { state: "OR", statesInRadius: ["OR", "CA", "ID", "NV", "WA"] },
-    { state: "PA", statesInRadius: ["PA", "DE", "MD", "NJ", "NY", "OH", "WV"] },
-    { state: "RI", statesInRadius: ["RI", "CT", "MA", "NY"] }, // Added NY (water border)
+    { state: "PA", statesInRadius: ["PA", "DE", "MD", "NJ", "NY", "OH", "WV", "CT"] },
+    { state: "RI", statesInRadius: ["RI", "CT", "MA", "NY", "DE"] }, // Added NY (water border)
     { state: "SC", statesInRadius: ["SC", "GA", "NC"] },
     { state: "SD", statesInRadius: ["SD", "IA", "MN", "MT", "ND", "NE", "WY"] },
     { state: "TN", statesInRadius: ["TN", "AL", "AR", "GA", "KY", "MO", "MS", "NC", "VA"] },
