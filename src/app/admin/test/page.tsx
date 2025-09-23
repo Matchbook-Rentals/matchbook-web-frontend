@@ -128,6 +128,13 @@ export default function TestSuitesPage() {
       description: 'Manage Medallion identity verification integration and reset test data',
       icon: <Shield className="h-5 w-5" />,
       path: '/admin/authenticate-integration'
+    },
+    {
+      id: 'payment-methods',
+      name: 'Payment Method Debug',
+      description: 'Analyze payment method associations and clear stale references blocking deletion',
+      icon: <FlaskConical className="h-5 w-5" />,
+      path: '/admin/test/payment-methods'
     }
   ]
 

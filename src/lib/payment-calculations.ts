@@ -264,11 +264,11 @@ export function calculateTripMonths(startDate: Date, endDate: Date): number {
 // ============================================================================
 
 /**
- * Get transfer fee amount (flat fee for deposits)
+ * Get deposit transfer fee amount (flat fee for deposits)
  * @returns Transfer fee amount
  */
 export function getTransferFee(): number {
-  return FEES.TRANSFER_FEE;
+  return FEES.TRANSFER_FEE_DOLLARS;
 }
 
 /**
@@ -290,14 +290,13 @@ export function calculateServiceFee(
 
 /**
  * Calculate credit card processing fee
- * Uses Stripe's inclusive formula to ensure we receive the intended amount
- * @param baseAmount - Amount before credit card fee
+ * Uses 3% self-inclusive formula to ensure we receive the intended amount
+ * @param baseAmount - Amount we want to receive after fees
  * @returns Credit card fee amount
  */
 export function calculateCreditCardFee(baseAmount: number): number {
-  // Formula: totalAmount = (baseAmount + 0.30) / (1 - 0.029)
-  const totalWithFee = (baseAmount + FEES.CREDIT_CARD_FEE.FIXED) / 
-                       (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
+  // Formula: totalAmount = baseAmount / (1 - 0.03)
+  const totalWithFee = baseAmount / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
   // The fee is the difference
   return Math.round((totalWithFee - baseAmount) * 100) / 100;
 }
@@ -396,7 +395,7 @@ export function calculatePaymentBreakdown(
   const tripMonths = calculateTripMonths(trip.startDate, trip.endDate);
   const serviceFee = calculateServiceFee(totalMonthlyRent, tripMonths);
   
-  // Calculate subtotal (deposits + transfer fee)
+  // Calculate subtotal (deposits + deposit transfer fee)
   const subtotal = totalDeposits + transferFee;
   
   // Calculate credit card fee if applicable

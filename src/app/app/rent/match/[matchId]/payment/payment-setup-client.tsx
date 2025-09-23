@@ -14,7 +14,7 @@ import { BookingSummarySidebar } from '../booking-summary-sidebar';
 import { calculatePayments } from '@/lib/calculate-payments';
 import type { PaymentMethod } from '@/app/actions/payment-methods';
 import { processDirectPayment } from '@/app/actions/process-payment';
-import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
+import { calculateTotalWithStripeCardFee, FEES } from '@/lib/fee-constants';
 import BrandModal from '@/components/BrandModal';
 
 interface PaymentSetupClientProps {
@@ -44,8 +44,8 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
     petDepositOverride: match.petDeposit
   });
 
-  // Fixed transfer fee for deposits
-  const TRANSFER_FEE = 5;
+  // Fixed deposit transfer fee for deposits
+  const TRANSFER_FEE = FEES.TRANSFER_FEE_DOLLARS;
 
   // Get security deposit amount (NOT including pet deposit)
   const getSecurityDeposit = () => {
@@ -62,7 +62,7 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
     const securityDeposit = getSecurityDeposit();
     const petDeposit = getPetDeposit();
     
-    // Base amount is deposits + transfer fee
+    // Base amount is deposits + deposit transfer fee
     let subtotal = securityDeposit + petDeposit + TRANSFER_FEE;
     
     // Add Stripe's credit card processing fees (2.9% + $0.30) if using card
@@ -80,7 +80,7 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
     const securityDeposit = getSecurityDeposit();
     const petDeposit = getPetDeposit();
     
-    // Base amount is deposits + transfer fee
+    // Base amount is deposits + deposit transfer fee
     const subtotalBeforeFees = securityDeposit + petDeposit;
     
     let processingFee = 0;
@@ -278,10 +278,10 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
 
         <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
           {/* Property Summary Sidebar - Shows first on mobile, first on desktop (left) */}
-          <div className="w-full lg:col-span-1 order-1">
-            <BookingSummarySidebar 
-              match={match} 
-              paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} 
+          <div className="w-full lg:col-span-1 order-1 lg:sticky lg:top-4 lg:self-start">
+            <BookingSummarySidebar
+              match={match}
+              paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)}
               paymentDetails={paymentDetails}
               isUsingCard={selectedPaymentMethodType === 'card'}
             />
@@ -297,7 +297,7 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
                 petRent: paymentDetails.monthlyPetRent, // Pass pet rent separately
                 securityDeposit: getSecurityDeposit(),
                 petDeposit: getPetDeposit(),
-                transferFee: TRANSFER_FEE, // Flat $5 transfer fee for deposits
+                transferFee: TRANSFER_FEE, // Flat $7 deposit transfer fee for deposits
                 processingFee: selectedPaymentMethodType === 'card' 
                   ? calculatePaymentAmount('card') - calculatePaymentAmount() // Difference between card and non-card total
                   : undefined,

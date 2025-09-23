@@ -4,6 +4,7 @@ import { CheckIcon, PlusIcon, Trash2 } from 'lucide-react';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useToast } from '@/components/ui/use-toast';
 import BrandModal from '@/components/BrandModal';
 
 // Extend window interface for payment method refresh
@@ -41,6 +42,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
   onPaymentMethodsRefresh,
   initialPaymentMethods = [],
 }) => {
+  const { toast } = useToast();
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(initialPaymentMethods);
   const [isLoading, setIsLoading] = useState(false);
   const [deletingMethodId, setDeletingMethodId] = useState<string | null>(null);
@@ -153,11 +155,11 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
         console.error('❌ [PaymentMethods] Failed to delete:', error);
         
         // Show user-friendly error message
-        if (error.details) {
-          alert(error.details);
-        } else {
-          alert('Failed to delete payment method. Please try again.');
-        }
+        toast({
+          title: "Error",
+          description: error.details || 'Failed to delete payment method. Please try again.',
+          variant: "destructive",
+        });
         return;
       }
       
@@ -173,10 +175,21 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
       
       // Refresh payment methods
       fetchPaymentMethods();
+
+      // Show success toast
+      toast({
+        title: "Success",
+        description: 'Payment method deleted successfully.',
+        variant: "default",
+      });
       
     } catch (error) {
       console.error('💥 [PaymentMethods] Error deleting payment method:', error);
-      alert('An error occurred while deleting the payment method. Please try again.');
+      toast({
+        title: "Error",
+        description: 'An error occurred while deleting the payment method. Please try again.',
+        variant: "destructive",
+      });
     } finally {
       setIsDeleting(false);
       setMethodToDelete(null);
@@ -226,12 +239,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
           <div className="text-gray-500">Loading payment methods...</div>
         </div>
       ) : displayedPaymentMethods.length === 0 ? (
-        <div className="flex items-center justify-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-          <div className="text-center">
-            <p className="text-gray-500 mb-2">No payment methods found</p>
-            <p className="text-sm text-gray-400">Add a payment method to continue</p>
-          </div>
-        </div>
+        null
       ) : (
         displayedPaymentMethods.map((method) => {
         const isSelected = selectedMethod === method.id;

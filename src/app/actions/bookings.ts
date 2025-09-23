@@ -410,32 +410,62 @@ export async function updateBooking(id: string, data: Prisma.BookingUpdateInput)
   return booking;
 }
 
-// Delete a booking
+// Delete a booking (dev/admin only)
 export async function deleteBooking(id: string): Promise<void> {
-  const { userId } = auth();
+  const { userId, sessionClaims } = auth();
   if (!userId) {
     throw new Error('Unauthorized');
   }
 
-  // Delete in transaction to handle related records
+  // Check if user is admin OR in development environment
+  const userRole = sessionClaims?.metadata?.role;
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  if (!isDevelopment && userRole !== 'admin') {
+    throw new Error('Unauthorized - Admin access required or development environment');
+  }
+
+  // Delete in transaction to handle related records in correct order
   await prisma.$transaction(async (tx) => {
-    // First delete all related RentPayment records
+    // First get all rent payment IDs for this booking
+    const rentPayments = await tx.rentPayment.findMany({
+      where: { bookingId: id },
+      select: { id: true }
+    });
+
+    // Delete PaymentModifications first (they have FK to RentPayment)
+    if (rentPayments.length > 0) {
+      await tx.paymentModification.deleteMany({
+        where: {
+          rentPaymentId: {
+            in: rentPayments.map(rp => rp.id)
+          }
+        }
+      });
+    }
+
+    // Delete BookingModifications (they have FK to Booking)
+    await tx.bookingModification.deleteMany({
+      where: { bookingId: id }
+    });
+
+    // Delete Reviews related to this booking
+    await tx.review.deleteMany({
+      where: { bookingId: id }
+    });
+
+    // Then delete all related RentPayment records
     await tx.rentPayment.deleteMany({
       where: { bookingId: id }
     });
-    
-    // Then delete the booking
+
+    // Finally delete the booking
     await tx.booking.delete({
       where: { id, userId },
     });
   });
 
-  revalidatePath('/bookings');
-  await createNotification({
-    type: 'BOOKING_DELETED',
-    userId,
-    bookingId: id,
-  });
+  revalidatePath('/app/rent/bookings');
 }
 
 // Get all bookings for the current host's listings

@@ -16,7 +16,7 @@ import { AdminDebugPanel } from '@/components/admin/AdminDebugPanel';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
 import dynamic from 'next/dynamic';
 import { calculatePayments, PaymentDetails } from '@/lib/calculate-payments';
-import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
+import { calculateTotalWithStripeCardFee, FEES } from '@/lib/fee-constants';
 import { calculateCreditCardFee } from '@/lib/payment-calculations';
 
 // Define step types for cleaner state management
@@ -457,7 +457,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
   // Calculate total due today ONCE - this is the single source of truth
   const totalDeposits = paymentDetails.securityDeposit + (paymentDetails.petDeposit || 0);
-  const transferFee = 5; // Fixed $5 transfer fee
+  const transferFee = FEES.TRANSFER_FEE_DOLLARS; // Fixed $7 deposit transfer fee
   const baseAmountDue = totalDeposits + transferFee;
   
   // Calculate with/without card fee
@@ -711,10 +711,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
           <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
             {/* Sidebar - Shows first on mobile, first on desktop (left) */}
-            <div className="w-full lg:col-span-1 order-1">
-              <BookingSummarySidebar 
-                match={match} 
-                paymentBreakdown={getPaymentBreakdown()} 
+            <div className="w-full lg:col-span-1 order-1 lg:sticky lg:top-4 lg:self-start">
+              <BookingSummarySidebar
+                match={match}
+                paymentBreakdown={getPaymentBreakdown()}
                 paymentDetails={paymentDetails}
                 isUsingCard={false}
               />
@@ -806,10 +806,10 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
           <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
             {/* Property Summary Sidebar - Shows first on mobile, first on desktop (left) */}
-            <div className="w-full lg:col-span-1 order-1">
-              <BookingSummarySidebar 
-                match={match} 
-                paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)} 
+            <div className="w-full lg:col-span-1 order-1 lg:sticky lg:top-4 lg:self-start">
+              <BookingSummarySidebar
+                match={match}
+                paymentBreakdown={getPaymentBreakdown(selectedPaymentMethodType)}
                 paymentDetails={paymentDetails}
                 isUsingCard={selectedPaymentMethodType === 'card'}
               />
@@ -825,7 +825,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                   petRent: paymentDetails.monthlyPetRent, // Pass pet rent separately
                   securityDeposit: paymentDetails.securityDeposit, // Pass only security deposit, not total
                   petDeposit: paymentDetails.petDeposit || 0,
-                  transferFee: 5, // Fixed $5 transfer fee for deposits
+                  transferFee: FEES.TRANSFER_FEE_DOLLARS, // Fixed $7 deposit transfer fee for deposits
                   processingFee: selectedPaymentMethodType === 'card' 
                     ? getTotalDueToday('card') - getTotalDueToday() // Difference between card and non-card total
                     : undefined,
@@ -881,11 +881,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           <div className={`${currentStepState === 'sign-lease' ? 'w-full' : 'grid grid-cols-1 gap-6 lg:grid-cols-3'}`}>
             {/* Sidebar - shows different content based on step */}
             {currentStepState !== 'sign-lease' && (
-              <div className="lg:col-span-1">
+              <div className="lg:col-span-1 lg:sticky lg:top-4 lg:self-start">
                 {currentStepState === 'overview-lease' ? (
-                  <BookingSummarySidebar 
-                    match={match} 
-                    paymentBreakdown={getPaymentBreakdown()} 
+                  <BookingSummarySidebar
+                    match={match}
+                    paymentBreakdown={getPaymentBreakdown()}
                     paymentDetails={paymentDetails}
                     isUsingCard={false}
                   />

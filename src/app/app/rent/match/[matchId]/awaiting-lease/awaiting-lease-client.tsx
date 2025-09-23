@@ -123,10 +123,10 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: Awai
 
           <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
             {/* Sidebar - Shows first on mobile, first on desktop (left) */}
-            <div className="w-full lg:col-span-1 order-1">
-              <BookingSummarySidebar 
-                match={match} 
-                paymentBreakdown={getPaymentBreakdown()} 
+            <div className="w-full lg:col-span-1 order-1 lg:sticky lg:top-4 lg:self-start">
+              <BookingSummarySidebar
+                match={match}
+                paymentBreakdown={getPaymentBreakdown()}
                 paymentDetails={paymentDetails}
                 isUsingCard={false}
               />

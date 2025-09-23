@@ -35,7 +35,7 @@ interface TotalDueSectionProps {
  * Displays the total amount due today, which includes:
  * - Security Deposit
  * - Pet Deposit (if applicable)
- * - Transfer Fee (flat $5 for deposit transfers)
+ * - Deposit Transfer Fee (flat $7 for deposit transfers)
  * 
  * Note: Monthly rent is NOT included here - it's shown in the Upcoming Payments section
  */
@@ -52,7 +52,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
     paymentBreakdown.petDeposit || 0
   );
   
-  // Calculate base amount (deposits + transfer fee)
+  // Calculate base amount (deposits + deposit transfer fee)
   const baseAmount = totalDeposits + transferFee;
 
   // Calculate credit card fee if applicable
@@ -69,7 +69,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
       amount: paymentBreakdown.petDeposit,
     }] : []),
     {
-      label: 'Transfer Fee',
+      label: 'Deposit Transfer Fee',
       amount: transferFee,
     },
     ...(isUsingCard ? [{

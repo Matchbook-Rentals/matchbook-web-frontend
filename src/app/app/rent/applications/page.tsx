@@ -45,6 +45,7 @@ const transformForClient = (requests: any[]) => {
     },
     hasMatch: request.hasMatch,
     hasBooking: request.hasBooking,
-    bookingId: request.bookingId
+    bookingId: request.bookingId,
+    matchId: request.match?.id || null
   }));
 };

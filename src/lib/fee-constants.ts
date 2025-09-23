@@ -1,7 +1,7 @@
 /**
  * Fee structure for Matchbook platform
  * 
- * TRANSFER FEE: Flat $5 fee charged for deposit transfers
+ * TRANSFER FEE: Flat $7 fee charged for deposit transfers
  *   - Applied to security deposits and pet deposits
  *   - Always a flat rate regardless of deposit amount or trip duration
  * 
@@ -11,30 +11,28 @@
  *   - Applied to the monthly rent amount (base rent + pet rent)
  *   - NOT applied to deposits
  * 
- * CREDIT CARD FEE: Stripe's processing fee (2.9% + $0.30)
+ * CREDIT CARD FEE: 3% processing fee
  *   - Applied when using credit/debit cards
  *   - No fee for ACH bank transfers
- *   - Uses inclusive calculation to ensure we receive the intended amount
+ *   - Simple flat percentage rate
  * 
- * IMPORTANT: Stripe Fee Calculation
- * When charging via Stripe, they deduct their fee (2.9% + $0.30) from the total.
- * To ensure we receive the intended amount, we use an inclusive formula:
- *   totalToCharge = (desiredAmount + 0.30) / (1 - 0.029)
- * 
- * Example: If we need $100 after fees:
- *   totalToCharge = (100 + 0.30) / (1 - 0.029) = $103.30
- *   Stripe takes: $103.30 * 0.029 + $0.30 = $3.30
- *   We receive: $103.30 - $3.30 = $100.00 ✓
+ * IMPORTANT: Credit Card Fee Calculation
+ * We charge a simple 3% fee for credit card payments.
+ *
+ * Example: If base amount is $100:
+ *   creditCardFee = $100 * 0.03 = $3.00
+ *   totalToCharge = $100 + $3.00 = $103.00
  * 
  * @module fee-constants
  */
 
 export const FEES = {
   /**
-   * Flat transfer fee for all deposit transactions
-   * This is a fixed $5 fee regardless of deposit amount
+   * Flat deposit transfer fee for all deposit transactions
+   * This is a fixed $7 fee regardless of deposit amount
    */
-  TRANSFER_FEE: 5,
+  TRANSFER_FEE_DOLLARS: 7,
+  TRANSFER_FEE_CENTS: 700,
   
   /**
    * Service fee percentages based on trip duration
@@ -50,13 +48,12 @@ export const FEES = {
   },
   
   /**
-   * Credit card processing fee (Stripe's actual fees)
-   * 2.9% + $0.30 fee applied to ALL payments when using credit card
+   * Credit card processing fee
+   * 3% fee applied to ALL payments when using credit card
    * No fee for bank transfers (ACH)
    */
   CREDIT_CARD_FEE: {
-    PERCENTAGE: 0.029,  // 2.9%
-    FIXED: 0.30        // $0.30
+    PERCENTAGE: 0.03   // 3%
   }
 } as const;
 
@@ -83,11 +80,11 @@ export function calculateServiceFee(monthlyRent: number, tripMonths: number): nu
 }
 
 /**
- * Get the transfer fee amount
- * @returns The flat transfer fee amount ($5)
+ * Get the deposit transfer fee amount
+ * @returns The flat deposit transfer fee amount ($7)
  */
 export function getTransferFee(): number {
-  return FEES.TRANSFER_FEE;
+  return FEES.TRANSFER_FEE_DOLLARS;
 }
 
 /**
@@ -101,48 +98,44 @@ export function formatFeeRate(rate: number): string {
 
 /**
  * Calculate credit card processing fee for a given amount
- * Uses Stripe's fee structure: 2.9% + $0.30
- * Formula: totalAmount = (baseAmount + 0.30) / (1 - 0.029)
- * @param amount - The base payment amount
+ * Uses 3% self-inclusive rate
+ * @param amount - The amount we want to receive after fees
  * @returns The credit card processing fee
  */
 export function calculateCreditCardFee(amount: number): number {
-  // Calculate what the total needs to be so that after Stripe takes their cut,
-  // we receive the intended amount
-  const totalWithFee = (amount + FEES.CREDIT_CARD_FEE.FIXED) / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
-  // The fee is the difference between total and base
-  return totalWithFee - amount;
+  // Self-inclusive calculation: totalAmount = baseAmount / (1 - 0.03)
+  const totalWithFee = amount / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
+  return Math.round((totalWithFee - amount) * 100) / 100;
 }
 
 /**
- * Calculate the total amount to charge including Stripe's credit card fee
- * This ensures that after Stripe deducts their fee, we receive the desired amount
- * 
- * @param baseAmount - The amount we want to receive after fees
+ * Calculate the total amount to charge including credit card fee
+ *
+ * @param baseAmount - The base amount before fees
  * @returns The total amount to charge the customer
- * 
+ *
  * @example
- * // If we want to receive $227 (deposits + transfer fee)
- * const total = calculateTotalWithStripeCardFee(227); // Returns 234.11
- * // Stripe will deduct $7.11, leaving us with $227
+ * // If we want to receive $227 (deposits + deposit transfer fee)
+ * const total = calculateTotalWithStripeCardFee(227); // Returns 234.02
+ * // Fee is $7.02, total charged is $234.02, we receive $227
  */
 export function calculateTotalWithStripeCardFee(baseAmount: number): number {
-  return (baseAmount + FEES.CREDIT_CARD_FEE.FIXED) / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
+  return baseAmount + calculateCreditCardFee(baseAmount);
 }
 
 /**
- * Reverse calculate the base amount from a total that includes Stripe fees
+ * Reverse calculate the base amount from a total that includes credit card fees
  * Used when we receive a total amount and need to determine the base
- * 
- * @param totalWithFee - The total amount including Stripe fees
+ *
+ * @param totalWithFee - The total amount including credit card fees
  * @returns The base amount before fees
- * 
+ *
  * @example
- * // If customer was charged $234.11
- * const base = reverseCalculateBaseAmount(234.11); // Returns 227
+ * // If customer was charged $234.02
+ * const base = reverseCalculateBaseAmount(234.02); // Returns 227
  */
 export function reverseCalculateBaseAmount(totalWithFee: number): number {
-  return totalWithFee * (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE) - FEES.CREDIT_CARD_FEE.FIXED;
+  return Math.round(totalWithFee / (1 + FEES.CREDIT_CARD_FEE.PERCENTAGE) * 100) / 100;
 }
 
 /**

@@ -117,7 +117,7 @@ export async function createPaymentReceipt(params: {
       if (breakdown.processingFee > 0) {
         receiptItems.push({
           receiptId: receipt.id,
-          description: 'Processing Fee (2.9% + $0.30)',
+          description: 'Processing Fee (3%)',
           category: 'processing_fee',
           quantity: 1,
           unitPrice: toCents(breakdown.processingFee),

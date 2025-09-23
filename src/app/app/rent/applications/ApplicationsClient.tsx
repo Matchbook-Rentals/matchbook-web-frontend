@@ -55,6 +55,7 @@ interface HousingRequestWithDetails {
   hasMatch: boolean;
   hasBooking: boolean;
   bookingId: string | null;
+  matchId: string | null;
 }
 
 interface ApplicationsClientProps {
@@ -170,6 +171,7 @@ interface ApplicationCardsProps {
     bookingId: string | null;
     listingId: string;
     hostUserId: string | null;
+    matchId: string | null;
   }>;
 }
 
@@ -216,6 +218,7 @@ interface ApplicationCardProps {
     bookingId: string | null;
     listingId: string;
     hostUserId: string | null;
+    matchId: string | null;
   };
 }
 
@@ -442,10 +445,11 @@ const ApplicationButtons = ({ application }: ApplicationCardProps) => {
         </BrandButton>
       )}
 
-      {application.showBookNow && (
-        <BrandButton 
-          variant="default" 
+      {application.showBookNow && application.matchId && (
+        <BrandButton
+          variant="default"
           size="sm"
+          href={`/app/rent/match/${application.matchId}`}
           className="w-full md:w-auto whitespace-nowrap"
         >
           Book Now
@@ -508,9 +512,10 @@ const MobileApplicationButtons = ({ application }: ApplicationCardProps) => {
         </BrandButton>
       )}
 
-      {application.showBookNow && (
-        <BrandButton 
+      {application.showBookNow && application.matchId && (
+        <BrandButton
           variant="default"
+          href={`/app/rent/match/${application.matchId}`}
           className="w-full"
         >
           Book Now
@@ -567,6 +572,7 @@ const transformHousingRequestToApplication = (request: HousingRequestWithDetails
     bookingId: request.bookingId,
     listingId: request.listing.id,
     hostUserId: request.listing.user?.id || null,
+    matchId: request.matchId,
   };
 };
 

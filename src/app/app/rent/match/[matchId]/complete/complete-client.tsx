@@ -4,7 +4,7 @@ import { MatchWithRelations } from '@/types';
 import { CheckCircle, MapPin, Users, Home, PawPrint, ChevronDown, Download, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { calculatePayments } from '@/lib/calculate-payments';
-import { calculateTotalWithStripeCardFee } from '@/lib/fee-constants';
+import { calculateTotalWithStripeCardFee, FEES } from '@/lib/fee-constants';
 import { PAGE_MARGIN } from '@/constants/styles';
 import { AdminDebugPanel } from '@/components/admin/AdminDebugPanel';
 import { StepProgress } from '@/components/StepProgress';
@@ -121,13 +121,13 @@ const PaymentSummarySection = ({ match }: { match: MatchWithRelations }) => {
     petDepositOverride: match.petDeposit
   });
 
-  // Fixed transfer fee
-  const TRANSFER_FEE = 5;
+  // Fixed deposit transfer fee
+  const TRANSFER_FEE = FEES.TRANSFER_FEE_DOLLARS;
 
   // Determine if card was used (simplified check)
   const isCardPayment = !!match.stripePaymentMethodId;
   
-  // Calculate base amount (deposits + transfer fee)
+  // Calculate base amount (deposits + deposit transfer fee)
   const baseAmount = paymentDetails.totalDeposit + TRANSFER_FEE;
   
   // Calculate credit card fee if applicable
@@ -156,7 +156,7 @@ const PaymentSummarySection = ({ match }: { match: MatchWithRelations }) => {
       isMain: false
     }] : []),
     {
-      label: 'Transfer Fee',
+      label: 'Deposit Transfer Fee',
       amount: `$${TRANSFER_FEE.toFixed(2)}`,
       hasChevron: false,
       isIndented: false,

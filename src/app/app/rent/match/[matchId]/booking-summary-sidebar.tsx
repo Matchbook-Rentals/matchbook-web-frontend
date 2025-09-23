@@ -6,8 +6,8 @@
  *   • 3% for trips 6 months or shorter
  *   • 1.5% for trips longer than 6 months
  * 
- * - TRANSFER FEE: Applied to deposits (security + pet deposits)
- *   • Flat $5 fee regardless of deposit amount
+ * - DEPOSIT TRANSFER FEE: Applied to deposits (security + pet deposits)
+ *   • Flat $7 fee regardless of deposit amount
  *   • One-time fee for deposit transfers
  * 
  * @module booking-summary-sidebar
@@ -178,9 +178,9 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
       );
     }
     
-    const transferFee = FEES.TRANSFER_FEE;
+    const transferFee = FEES.TRANSFER_FEE_DOLLARS;
     items.push(
-      { label: 'Transfer fee', amount: formatCurrency(transferFee) }
+      { label: 'Deposit Transfer Fee', amount: formatCurrency(transferFee) }
     );
     
     // Add credit card processing fee if using card

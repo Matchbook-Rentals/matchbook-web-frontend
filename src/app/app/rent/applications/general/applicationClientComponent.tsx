@@ -49,7 +49,8 @@ export default function ApplicationClientComponent({
     markSynced,
     checkCompletion,
     isApplicationComplete,
-    serverIsComplete
+    serverIsComplete,
+    errors
   } = useApplicationStore();
 
   // Initialize store with application data received from the server component
@@ -76,12 +77,15 @@ export default function ApplicationClientComponent({
   }, [windowSize?.width]);
 
   const validateForm = () => {
-    console.log('=== VALIDATION START ===');
-    console.log('Personal Info:', personalInfo);
-    console.log('IDs:', ids);
-    console.log('Incomes:', incomes);
-    console.log('Residential History:', residentialHistory);
-    console.log('Answers:', answers);
+    console.log('⏰ === VALIDATION START ===', new Date().toISOString());
+    console.log('🏪 Current store errors BEFORE validation:', errors);
+    console.log('📊 Form data being validated:', {
+      personalInfo,
+      ids,
+      incomes,
+      residentialHistory,
+      answers
+    });
 
     // Create a modified personalInfo object that considers noMiddleName checkbox
     const personalInfoForValidation = {
@@ -90,7 +94,7 @@ export default function ApplicationClientComponent({
       middleName: personalInfo.noMiddleName ? 'N/A' : personalInfo.middleName
     };
 
-    console.log('Personal Info for Validation:', personalInfoForValidation);
+    console.log('🔄 Personal Info for Validation:', personalInfoForValidation);
 
     const personalInfoError = validatePersonalInfo(personalInfoForValidation);
     const identificationError = validateIdentification(ids);
@@ -98,13 +102,14 @@ export default function ApplicationClientComponent({
     const incomeErrors = validateIncome(incomes);
     const questionnaireErrors = validateQuestionnaire(answers);
 
-    console.log('=== VALIDATION ERRORS ===');
-    console.log('Personal Info Errors:', personalInfoError);
-    console.log('Identification Errors:', identificationError);
-    console.log('Residential History Errors:', residentialHistoryErrors);
-    console.log('Income Errors:', incomeErrors);
-    console.log('Questionnaire Errors:', questionnaireErrors);
+    console.log('🚨 === VALIDATION ERRORS FOUND ===');
+    console.log('  Personal Info Errors:', personalInfoError);
+    console.log('  Identification Errors:', identificationError);
+    console.log('  Residential History Errors:', residentialHistoryErrors);
+    console.log('  Income Errors:', incomeErrors);
+    console.log('  Questionnaire Errors:', questionnaireErrors);
 
+    console.log('💾 Setting errors in store...');
     setErrors('basicInfo', {
       personalInfo: personalInfoError,
       identification: identificationError,
@@ -112,6 +117,13 @@ export default function ApplicationClientComponent({
     setErrors('residentialHistory', residentialHistoryErrors as any);
     setErrors('income', incomeErrors);
     setErrors('questionnaire', questionnaireErrors);
+    
+    console.log('✅ Errors set in store at:', new Date().toISOString());
+
+    // Check store state after a brief delay to see if it was actually set
+    setTimeout(() => {
+      console.log('🔍 Store state after setting errors (50ms later):', errors);
+    }, 50);
 
     const isValid = (
       Object.keys(personalInfoError).length === 0 &&
@@ -121,13 +133,14 @@ export default function ApplicationClientComponent({
       Object.keys(questionnaireErrors).length === 0
     );
 
-    console.log('=== VALIDATION RESULT ===');
-    console.log('Personal Info Valid:', Object.keys(personalInfoError).length === 0);
-    console.log('Identification Valid:', Object.keys(identificationError).length === 0);
-    console.log('Residential History Valid:', Object.keys(residentialHistoryErrors).length === 0);
-    console.log('Income Valid:', Object.keys(incomeErrors).length === 0);
-    console.log('Questionnaire Valid:', Object.keys(questionnaireErrors).length === 0);
-    console.log('Overall Is Valid:', isValid);
+    console.log('📋 === VALIDATION RESULT ===');
+    console.log('  Personal Info Valid:', Object.keys(personalInfoError).length === 0);
+    console.log('  Identification Valid:', Object.keys(identificationError).length === 0);
+    console.log('  Residential History Valid:', Object.keys(residentialHistoryErrors).length === 0);
+    console.log('  Income Valid:', Object.keys(incomeErrors).length === 0);
+    console.log('  Questionnaire Valid:', Object.keys(questionnaireErrors).length === 0);
+    console.log('  Overall Is Valid:', isValid);
+    console.log('⚡ Validation completed at:', new Date().toISOString());
     console.log('=========================');
 
     return isValid;
@@ -176,23 +189,38 @@ export default function ApplicationClientComponent({
 
   const getErrorFieldsForSection = (sectionName: string) => {
     console.log(`\n=== Getting error fields for section: ${sectionName} ===`);
+    console.log('Store errors state:', errors);
     const fieldNames = getFieldDisplayNames();
     const errorFields: string[] = [];
 
     switch (sectionName) {
       case 'Personal Information':
-        const personalInfoError = validatePersonalInfo({
+        // Compare store state with fresh validation
+        const storedPersonalInfoErrors = errors.basicInfo?.personalInfo || {};
+        const freshPersonalInfoValidation = validatePersonalInfo({
           ...personalInfo,
           middleName: personalInfo.noMiddleName ? 'N/A' : personalInfo.middleName
         });
-        console.log(`Personal Info Error in getErrorFieldsForSection:`, personalInfoError);
-        console.log(`Personal Info data:`, personalInfo);
-        Object.keys(personalInfoError).forEach(key => {
-          console.log(`Checking error key: ${key}, error value:`, personalInfoError[key as keyof typeof personalInfoError]);
+        
+        console.log('🔍 VALIDATION STATE COMPARISON - Personal Info:');
+        console.log('  📦 Store errors:', storedPersonalInfoErrors);
+        console.log('  🔄 Fresh validation would produce:', freshPersonalInfoValidation);
+        console.log('  ⚠️  Mismatch?', JSON.stringify(storedPersonalInfoErrors) !== JSON.stringify(freshPersonalInfoValidation));
+        console.log('  📊 Personal Info data being validated:', {
+          firstName: personalInfo.firstName,
+          lastName: personalInfo.lastName,
+          middleName: personalInfo.middleName,
+          noMiddleName: personalInfo.noMiddleName,
+          dateOfBirth: personalInfo.dateOfBirth
+        });
+        
+        // Use store errors for consistency with UI
+        Object.keys(storedPersonalInfoErrors).forEach(key => {
+          console.log(`Checking store error key: ${key}, error value:`, storedPersonalInfoErrors[key as keyof typeof storedPersonalInfoErrors]);
           // Check that the error has a value and the field name exists
-          if (personalInfoError[key as keyof typeof personalInfoError] && fieldNames[key as keyof typeof fieldNames]) {
+          if (storedPersonalInfoErrors[key as keyof typeof storedPersonalInfoErrors] && fieldNames[key as keyof typeof fieldNames]) {
             const fieldName = fieldNames[key as keyof typeof fieldNames];
-            console.log(`Adding error field: ${fieldName}`);
+            console.log(`Adding error field from store: ${fieldName}`);
             // Avoid duplicates
             if (!errorFields.includes(fieldName)) {
               errorFields.push(fieldName);
@@ -202,10 +230,13 @@ export default function ApplicationClientComponent({
         break;
         
       case 'Identification':
-        const identificationError = validateIdentification(ids);
-        Object.keys(identificationError).forEach(key => {
+        // Use store errors instead of re-validating
+        const storedIdentificationErrors = errors.basicInfo?.identification || {};
+        console.log('Stored Identification Errors:', storedIdentificationErrors);
+        
+        Object.keys(storedIdentificationErrors).forEach(key => {
           // Check that the error has a value and the field name exists
-          if (identificationError[key as keyof typeof identificationError] && fieldNames[key as keyof typeof fieldNames]) {
+          if (storedIdentificationErrors[key as keyof typeof storedIdentificationErrors] && fieldNames[key as keyof typeof fieldNames]) {
             const fieldName = fieldNames[key as keyof typeof fieldNames];
             // Avoid duplicates
             if (!errorFields.includes(fieldName)) {
@@ -216,33 +247,39 @@ export default function ApplicationClientComponent({
         break;
         
       case 'Income':
-        const incomeErrors = validateIncome(incomes);
+        // Use store errors instead of re-validating
+        const storedIncomeErrors = errors.income || {};
+        console.log('Stored Income Errors:', storedIncomeErrors);
+        
         // Handle array-based income errors
-        if (incomeErrors.source) {
-          incomeErrors.source.forEach((error, index) => {
+        if (storedIncomeErrors.source) {
+          storedIncomeErrors.source.forEach((error, index) => {
             if (error) errorFields.push(`Income Source ${index + 1}`);
           });
         }
-        if (incomeErrors.monthlyAmount) {
-          incomeErrors.monthlyAmount.forEach((error, index) => {
+        if (storedIncomeErrors.monthlyAmount) {
+          storedIncomeErrors.monthlyAmount.forEach((error, index) => {
             if (error) errorFields.push(`Monthly Amount ${index + 1}`);
           });
         }
-        if (incomeErrors.imageUrl) {
-          incomeErrors.imageUrl.forEach((error, index) => {
+        if (storedIncomeErrors.imageUrl) {
+          storedIncomeErrors.imageUrl.forEach((error, index) => {
             if (error) errorFields.push(`Income Proof ${index + 1}`);
           });
         }
         break;
         
       case 'Residential History':
-        const residentialErrors = validateResidentialHistory(residentialHistory);
+        // Use store errors instead of re-validating
+        const storedResidentialErrors = errors.residentialHistory || {};
+        console.log('Stored Residential History Errors:', storedResidentialErrors);
+        
         // Handle array-based residential history errors
-        Object.keys(residentialErrors).forEach(key => {
-          if (key === 'overall' && residentialErrors.overall) {
+        Object.keys(storedResidentialErrors).forEach(key => {
+          if (key === 'overall' && storedResidentialErrors.overall) {
             errorFields.push('Residential Duration');
-          } else if (Array.isArray(residentialErrors[key as keyof typeof residentialErrors])) {
-            const errorArray = residentialErrors[key as keyof typeof residentialErrors] as string[];
+          } else if (Array.isArray(storedResidentialErrors[key as keyof typeof storedResidentialErrors])) {
+            const errorArray = storedResidentialErrors[key as keyof typeof storedResidentialErrors] as string[];
             errorArray.forEach((error, index) => {
               if (error) {
                 const displayName = fieldNames[key as keyof typeof fieldNames];
@@ -256,10 +293,13 @@ export default function ApplicationClientComponent({
         break;
         
       case 'Questionnaire':
-        const questionnaireErrors = validateQuestionnaire(answers);
-        Object.keys(questionnaireErrors).forEach(key => {
+        // Use store errors instead of re-validating
+        const storedQuestionnaireErrors = errors.questionnaire || {};
+        console.log('Stored Questionnaire Errors:', storedQuestionnaireErrors);
+        
+        Object.keys(storedQuestionnaireErrors).forEach(key => {
           // Check that the error has a value and the field name exists
-          if (questionnaireErrors[key as keyof typeof questionnaireErrors] && fieldNames[key as keyof typeof fieldNames]) {
+          if (storedQuestionnaireErrors[key as keyof typeof storedQuestionnaireErrors] && fieldNames[key as keyof typeof fieldNames]) {
             const fieldName = fieldNames[key as keyof typeof fieldNames];
             // Avoid duplicates
             if (!errorFields.includes(fieldName)) {
@@ -278,6 +318,9 @@ export default function ApplicationClientComponent({
 
   const findFirstErrorSection = () => {
     console.log('\n=== FINDING FIRST ERROR SECTION ===');
+    console.log('⏰ Current time:', new Date().toISOString());
+    console.log('🏪 Current store errors when checking DOM:', errors);
+    
     const sectionMap = [
       { name: 'Personal Information', selector: '[data-section="personal-info"]' },
       { name: 'Identification', selector: '[data-section="identification"]' },
@@ -291,17 +334,68 @@ export default function ApplicationClientComponent({
       console.log(`Checking section: ${section.name}, found element:`, !!sectionElement);
       
       if (sectionElement) {
-        const errorElements = sectionElement.querySelectorAll('.border-red-500, .text-red-500');
-        console.log(`Error elements in ${section.name}:`, errorElements.length, errorElements);
+        // Check multiple error selectors - be more specific about form validation errors
+        const redBorderInputs = sectionElement.querySelectorAll('input.border-red-500, textarea.border-red-500, select.border-red-500');
+        const redTextErrors = sectionElement.querySelectorAll('p.text-red-500, span.text-red-500, div.text-red-500');
+        const allRedElements = sectionElement.querySelectorAll('.border-red-500, .text-red-500');
         
-        if (errorElements.length > 0) {
-          console.log(`Found errors in section: ${section.name}`);
+        console.log(`🔍 Checking ${section.name}:`);
+        console.log(`  - Red border INPUTS: ${redBorderInputs.length}`);
+        console.log(`  - Red text ERROR MESSAGES: ${redTextErrors.length}`);
+        console.log(`  - ALL red elements (any): ${allRedElements.length}`);
+        
+        // Focus on form validation errors first (inputs with red borders or error messages)
+        const formValidationErrors = sectionElement.querySelectorAll('input.border-red-500, textarea.border-red-500, select.border-red-500, p.text-red-500, span.text-red-500');
+        console.log(`  - FORM VALIDATION ERRORS: ${formValidationErrors.length}`);
+        
+        // Decide which errors to act on - prioritize actual form validation errors
+        const errorsToCheck = formValidationErrors.length > 0 ? formValidationErrors : allRedElements;
+        
+        // Log ALL elements found, even if 0
+        if (errorsToCheck.length > 0) {
+          console.log(`🚨 FOUND ${errorsToCheck.length} RELEVANT ERROR ELEMENTS IN ${section.name.toUpperCase()}:`);
+          console.log(`   (Using ${formValidationErrors.length > 0 ? 'FORM VALIDATION' : 'ALL RED'} elements)`);
+          
+          // Convert NodeList to Array for better logging
+          Array.from(errorsToCheck).forEach((elem, idx) => {
+            const element = elem as HTMLElement;
+            const elementInfo = {
+              index: idx + 1,
+              tagName: element.tagName,
+              id: element.id || 'NO-ID',
+              name: element.getAttribute('name') || 'NO-NAME',
+              placeholder: element.getAttribute('placeholder') || 'NO-PLACEHOLDER',
+              type: element.getAttribute('type') || 'NO-TYPE',
+              className: element.className,
+              value: (element as HTMLInputElement).value || element.textContent?.substring(0, 50) || 'NO-VALUE',
+              parentClassName: element.parentElement?.className || 'NO-PARENT-CLASS',
+              parentTag: element.parentElement?.tagName || 'NO-PARENT-TAG',
+              hasRedBorder: element.classList.contains('border-red-500'),
+              hasRedText: element.classList.contains('text-red-500'),
+              isFormElement: ['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName),
+              isErrorMessage: ['P', 'SPAN', 'DIV'].includes(element.tagName) && element.classList.contains('text-red-500')
+            };
+            
+            console.log(`  🔴 Error Element ${idx + 1}:`, elementInfo);
+            
+            // Also log the actual element for inspection
+            console.log(`  🔍 Actual DOM Element ${idx + 1}:`, element);
+            
+            // If this is a non-form element with red styling, try to understand why
+            if (!elementInfo.isFormElement && !elementInfo.isErrorMessage) {
+              console.log(`  ⚠️  WARNING: Non-form element with red styling - may be false positive`);
+            }
+          });
+          
+          console.log(`📊 Now getting error fields for section: ${section.name}`);
           const errorFields = getErrorFieldsForSection(section.name);
           return { 
             name: section.name, 
             element: sectionElement,
             errorFields: errorFields
           };
+        } else {
+          console.log(`✅ No error elements found in ${section.name}`);
         }
       }
     }

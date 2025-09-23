@@ -3,7 +3,7 @@
 import { auth } from '@clerk/nextjs/server';
 import stripe from '@/lib/stripe';
 import prisma from '@/lib/prismadb';
-import { reverseCalculateBaseAmount } from '@/lib/fee-constants';
+import { reverseCalculateBaseAmount, FEES } from '@/lib/fee-constants';
 
 interface ProcessPaymentParams {
   matchId: string;
@@ -109,13 +109,13 @@ export async function processDirectPayment({
      *   totalAmount = (baseAmount + 0.30) / (1 - 0.029)
      * 
      * This ensures that after Stripe deducts their 2.9% + $0.30 fee,
-     * we receive the exact amount we intended (deposits + transfer fee).
+     * we receive the exact amount we intended (deposits + deposit transfer fee).
      * 
      * Example:
-     *   Base amount (deposits + $5 transfer): $227
-     *   Total charged to card: $234.11
-     *   Stripe fee (2.9% + $0.30): $7.11
-     *   Amount we receive: $227 ✓
+     *   Base amount (deposits + $7 deposit transfer): $229
+     *   Total charged to card: $236.14
+     *   Stripe fee (2.9% + $0.30): $7.14
+     *   Amount we receive: $229 ✓
      */
     const totalAmount = Math.round(amount * 100); // Convert to cents
     
@@ -132,9 +132,9 @@ export async function processDirectPayment({
     /**
      * Fee Structure:
      * 
-     * TRANSFER FEE: Fixed $5 for all deposit transactions
+     * TRANSFER FEE: Fixed $7 for all deposit transactions
      *   - MatchBook keeps this fee
-     *   - Landlord receives: deposits - $5
+     *   - Landlord receives: deposits - $7
      * 
      * CREDIT CARD FEE: Stripe's 2.9% + $0.30 (if using card)
      *   - Paid by the tenant on top of the base amount
@@ -144,9 +144,9 @@ export async function processDirectPayment({
      *   - Rent payments are scheduled separately
      *   - Service fees (3% or 1.5%) apply to rent, not deposits
      */
-    const TRANSFER_FEE_CENTS = 500; // $5 in cents
+    const TRANSFER_FEE_CENTS = FEES.TRANSFER_FEE_CENTS;
     
-    // Landlord receives the deposit amount minus our $5 transfer fee
+    // Landlord receives the deposit amount minus our $7 deposit transfer fee
     const landlordAmount = baseAmountBeforeCardFee - TRANSFER_FEE_CENTS;
 
     console.log('💰 Payment calculation:', {

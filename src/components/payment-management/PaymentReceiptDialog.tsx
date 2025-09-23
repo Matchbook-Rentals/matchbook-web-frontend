@@ -141,7 +141,7 @@ export default function PaymentReceiptDialog({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <CreditCard className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm">Credit Card Fee (2.9% + $0.30)</span>
+                        <span className="text-sm">Credit Card Processing Fee (3%)</span>
                       </div>
                       <span className="text-sm font-medium">{formattedBreakdown.creditCardFee}</span>
                     </div>

@@ -3,6 +3,7 @@ import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { calculateLengthOfStay } from '@/lib/calculate-rent';
+import { FEES } from '@/lib/fee-constants';
 
 export async function POST(
   request: NextRequest,
@@ -124,13 +125,13 @@ export async function POST(
       totalDeposits: securityDeposit + petDeposit
     });
     
-    // Fixed transfer fee for deposits ($5)
-    const TRANSFER_FEE = 500; // $5 in cents
+    // Fixed deposit transfer fee for deposits ($7)
+    const TRANSFER_FEE = FEES.TRANSFER_FEE_CENTS;
     
     // Calculate credit card processing fee (2.9% + 30¢ for cards)
     const cardProcessingFee = includeCardFee ? Math.round(amount * 0.029 * 100) + 30 : 0; // 2.9% + 30¢ in cents
     
-    // Landlord gets the deposits minus the transfer fee
+    // Landlord gets the deposits minus the deposit transfer fee
     const landlordAmount = (amount * 100) - TRANSFER_FEE - cardProcessingFee; // Amount after fees
 
     // Build line items dynamically
@@ -157,15 +158,15 @@ export async function POST(
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Transfer Fee',
+            name: 'Deposit Transfer Fee',
             description: 'Deposit transfer fee',
             metadata: {
               matchId: params.matchId,
               feeType: 'transfer_fee',
-              feeAmount: '$5',
+              feeAmount: '$7',
             }
           },
-          unit_amount: TRANSFER_FEE, // Fixed $5 transfer fee
+          unit_amount: TRANSFER_FEE, // Fixed $7 deposit transfer fee
         },
         quantity: 1,
       },
