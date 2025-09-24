@@ -323,7 +323,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
               <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
                 <div className={STYLES.labelText}>Renter Name</div>
                 <div 
-                  className={`${STYLES.valueText} truncate`}
+                  className={`${STYLES.valueText} truncate max-w-[200px]`}
                   title={user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email}
                 >
                   {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email}
