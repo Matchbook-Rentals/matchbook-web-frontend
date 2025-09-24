@@ -58,7 +58,7 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
             height: auto;
           }
           .message-wrapper {
-            background-color: #e7ebe2;
+            background-color: #0B6E6E66;
           }
           a.button {
             font-size: 16px;
@@ -66,7 +66,7 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
             color: #ffffff;
             text-decoration: none;
             display: inline-block;
-            background-color: #4c4c4c;
+            background-color: #0B6E6E;
             border-radius: 30px;
             padding: 14px 36px;
             max-width: 80%;
@@ -79,7 +79,7 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
               color: #ffffff !important;
             }
             .message-wrapper {
-              background-color: #ff0000 !important;
+              background-color: #000000 !important;
             }
             .inner-box {
               background-color: #2a2a2a !important;
@@ -119,12 +119,13 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                     <table width="100%" cellPadding="0" cellSpacing="0" border="0">
                       {tagLink && (
                         <tr>
-                          <td style={{ padding: '10px 20px 7px 20px', textAlign: 'left' }}>
-                            <a 
+                          <td style={{ padding: '0px 20px 10px 20px', textAlign: 'left' }}>
+                            <a
                               href={tagLink.url}
                               style={{
-                                color: '#666',
+                                color: '#000000',
                                 fontSize: '16px',
+                                fontWeight: '500',
                                 textDecoration: 'none'
                               }}
                             >

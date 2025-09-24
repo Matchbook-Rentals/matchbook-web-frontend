@@ -34,14 +34,14 @@ export function renderEmailToHtml(emailData: NotificationEmailData): string {
       color: #ffffff;
       text-decoration: none;
       display: inline-block;
-      background-color: #4c4c4c;
+      background-color: #0B6E6E;
       border-radius: 30px;
       padding: 14px 36px;
       max-width: 80%;
       text-align: center;
     }
     .message-wrapper {
-      background-color: #e7ebe2;
+      background-color: #0B6E6E66;
       border-radius: 20px;
       padding: 20px;
     }
@@ -58,7 +58,7 @@ export function renderEmailToHtml(emailData: NotificationEmailData): string {
         color: #ffffff !important;
       }
       .message-wrapper {
-        background-color: #1a1a1a !important;
+        background-color: #000000 !important;
       }
       .inner-box {
         background-color: #2a2a2a !important;
@@ -90,8 +90,8 @@ export function renderEmailToHtml(emailData: NotificationEmailData): string {
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 ${emailData.tagLink ? `
                 <tr>
-                  <td style="padding: 10px 20px 7px 20px; text-align: left;">
-                    <a href="${emailData.tagLink.url}" style="color: #666; font-size: 16px; text-decoration: none;">
+                  <td style="padding: 0px 20px 10px 20px; text-align: left;">
+                    <a href="${emailData.tagLink.url}" style="color: #000000; font-size: 16px; font-weight: 500; text-decoration: none;">
                       ${emailData.tagLink.text}
                     </a>
                   </td>
