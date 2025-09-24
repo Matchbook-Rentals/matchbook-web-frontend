@@ -243,9 +243,7 @@ export default async function PaymentsPage() {
         subtitle="Manage payments and financial data for your properties"
         rightContent={
           <BrandButton
-            //href="/app/stripe/onboarding"
-            disabled={true}
-            spinOnClick={true}
+            href="/app/host/dashboard/payments/stripe"
             size="sm"
           >
             Manage Settings
