@@ -89,7 +89,7 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
         {/* Property Description */}
         <div className="mb-4">
           <h2 className="text-2xl font-bold mb-2">Property Description</h2>
-          <div className="text-gray-700">{description}</div>
+          <div className="text-gray-700 break-all overflow-hidden">{description}</div>
         </div>
 
         {/* Other Amenities */}
