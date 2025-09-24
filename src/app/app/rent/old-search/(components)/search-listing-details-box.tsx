@@ -19,12 +19,12 @@ interface ListingDetailsBoxProps {
   setIsDetailsVisible: (isVisible: boolean) => void;
 }
 
-const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ 
-  listing, 
-  onReject, 
-  onReturn, 
-  onLike, 
-  setIsDetailsVisible 
+const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
+  listing,
+  onReject,
+  onReturn,
+  onLike,
+  setIsDetailsVisible
 }) => {
   const host = listing.user;
   const detailsBoxRef = useRef<HTMLDivElement>(null);
@@ -47,8 +47,8 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
       <CardContent className="flex flex-col items-start gap-5 p-4">
         {/* Header with buttons */}
         <div className="flex justify-between w-full mb-2">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="h-9 px-3.5 py-2.5 rounded-lg"
             onClick={onReturn}
           >
@@ -80,8 +80,8 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
         {/* Host information */}
         <div className="flex items-center gap-3 w-full">
           <Avatar className="w-[59px] h-[59px] rounded-xl">
-            <AvatarImage 
-              src={host?.imageUrl || ''} 
+            <AvatarImage
+              src={host?.imageUrl || ''}
               alt={`${host?.firstName || 'Host'} profile`}
             />
             <AvatarFallback className="rounded-xl bg-secondaryBrand text-white font-medium text-xl md:text-2xl lg:text-3xl">
@@ -97,8 +97,8 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
             <div className="flex items-center gap-1 h-8">
               <StarIcon className="h-5 w-5 text-yellow-400 fill-yellow-400" />
               <span className="font-normal text-[#717680] text-sm">
-                {listing?.averageRating || listing.uScore 
-                  ? (listing?.averageRating || listing.uScore?.toFixed(1)) 
+                {listing?.averageRating || listing.uScore
+                  ? (listing?.averageRating || listing.uScore?.toFixed(1))
                   : 'N/A'} ({listing?.numberOfStays || 0})
               </span>
             </div>
@@ -110,11 +110,11 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
           variant="outline"
           className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
         >
-          <Image 
-            src="/svg/verified-badge.svg" 
-            alt="Verified" 
-            width={16} 
-            height={16} 
+          <Image
+            src="/svg/verified-badge.svg"
+            alt="Verified"
+            width={16}
+            height={16}
           />
           <span className="font-normal text-xs text-greygrey-500 font-['Poppins',Helvetica]">
             Verified
@@ -140,13 +140,14 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
           </div>
         </div>
 
-        {/* Message button - Custom styled for the new design */}
+        {/* Message button - Custom styled for the new design 
         <div className="w-full">
           <SearchMessageHostDialog 
             listingId={listing.id} 
             hostName={host?.firstName || 'Host'} 
           />
         </div>
+*/}
       </CardContent>
     </Card>
   );

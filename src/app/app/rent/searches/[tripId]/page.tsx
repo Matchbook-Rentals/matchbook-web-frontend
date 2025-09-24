@@ -16,7 +16,7 @@ import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
-import { useState, useEffect } from 'react'; // Import useState and useEffect
+import { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, and useRef
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
@@ -86,7 +86,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'Recommended',
       value: 'recommended',
-      content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} /> : null,
+      content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} calculatedHeight={calculatedHeight} /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
       Icon: <RecommendedIcon className="mt-1" />,
@@ -95,7 +95,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'All Listings',
       value: 'allListings',
-      content: <MapView setIsFilterOpen={setIsFilterOpen} />,
+      content: <MapView setIsFilterOpen={setIsFilterOpen} calculatedHeight={calculatedHeight} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
       Icon: <ALlListingsIcon className='mt-1' />,
@@ -104,7 +104,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'Favorites',
       value: 'favorites',
-      content: <SearchFavoritesTab />,
+      content: <SearchFavoritesTab calculatedHeight={calculatedHeight} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
       Icon: <FavoritesIcon className='mt-1' />,
@@ -113,7 +113,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'Matches',
       value: 'matchbook',
-      content: <SearchMatchbookTab />,
+      content: <SearchMatchbookTab calculatedHeight={calculatedHeight} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
       Icon: <MatchesIcon className="mt-1" />,
@@ -123,6 +123,54 @@ const TripsPage: React.FC = () => {
 
   const marginClass = APP_PAGE_MARGIN;
   const isMobile = useIsMobile(768); // 768px is the 'md' breakpoint
+
+  // Height calculation logic for preventing double scrolls
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [startY, setStartY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState<string | number>('calc(100vh - 80px)');
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
+  const [isDesktopView, setIsDesktopView] = useState(false);
+
+  // Track screen size for desktop/mobile differences
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktopView(window.innerWidth >= 768); // Tailwind's 'md' breakpoint
+    };
+
+    checkScreenSize(); // Initial check
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, []);
+
+  // Height calculation effect
+  useEffect(() => {
+    const setHeight = () => {
+      if (containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newStartY = containerRect.top;
+        const newViewportHeight = window.innerHeight;
+        // Account for FilterDisplay height on desktop (approximately 115px)
+        const filterDisplayHeight = isDesktopView ? 115 : 0;
+        const newCalculatedHeight = newViewportHeight - newStartY - filterDisplayHeight;
+        setStartY(newStartY);
+        setViewportHeight(newViewportHeight);
+        setCalculatedHeight(newCalculatedHeight);
+        setCurrentComponentHeight(containerRef.current.offsetHeight);
+        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
+      }
+    };
+
+    setHeight();
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, [isDesktopView]);
 
 
   return (
@@ -148,7 +196,7 @@ const TripsPage: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="w-full mt-4">
+      <div ref={containerRef} className="w-full mt-4">
         {tabs.find(tab => tab.value === activeTab)?.content}
       </div>
     </div>

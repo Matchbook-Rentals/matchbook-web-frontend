@@ -187,18 +187,20 @@ export async function updateUserImage() {
 export async function updateUserLogin(timestamp: Date) {
   'use server'
 
-  const clerkUser = await currentUser();
-
   try {
+    const clerkUser = await currentUser();
+
     if (!clerkUser?.id) {
-      throw new Error('User ID is missing')
+      logger.warn('updateUserLogin: No Clerk user ID available');
+      return { success: false, error: 'User ID is missing' };
     }
 
     const dbUser = await prismadb.user.findUnique({
       where: { id: clerkUser.id }
-    })
+    });
 
     if (!dbUser) {
+      logger.info('updateUserLogin: User not found, creating user', { userId: clerkUser.id });
       await createUser();
     }
 
@@ -207,11 +209,20 @@ export async function updateUserLogin(timestamp: Date) {
       data: { lastLogin: timestamp }
     });
 
+    logger.info('updateUserLogin: Successfully updated login timestamp', { userId: clerkUser.id });
     return { success: true };
 
   } catch (error) {
-    logger.error('Error updating user login timestamp', error);
-    return { success: false, error: 'Failed to update login timestamp' }
+    logger.error('updateUserLogin: Error updating user login timestamp', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: timestamp?.toISOString()
+    });
+
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update login timestamp'
+    };
   }
 }
 

@@ -2,6 +2,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { Roles } from "@/types/globals";
+import { handleSessionTracking } from "@/lib/session-tracking";
 
 const isProtectedRoute = createRouteMatcher([
   "/app(.*)",
@@ -90,14 +91,21 @@ export default clerkMiddleware(async (auth, request) => {
     // Role-based access control check
     const { sessionClaims } = auth();
     const userRole = sessionClaims?.metadata?.role as Roles | undefined;
-    
+
     const hasRouteAccess = checkRouteAccess(request.nextUrl.pathname, userRole);
-    
+
     if (!hasRouteAccess) {
       // Redirect to unauthorized page
       const unauthorizedUrl = new URL("/unauthorized", request.url);
       return NextResponse.redirect(unauthorizedUrl);
     }
+
+    // Handle session tracking for authenticated users
+    // This will only update the database once per session (24 hours)
+    handleSessionTracking().catch((error) => {
+      // Log error but don't block the request
+      console.error('Session tracking error:', error);
+    });
   }
 });
 

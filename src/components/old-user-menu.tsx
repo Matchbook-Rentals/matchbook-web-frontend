@@ -52,9 +52,10 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const hasHostAccess = checkClientHostAccess(userRole);
   const isAdmin = userRole === 'admin'; // Use actual admin role check
 
-  useEffect(() => {
-    updateUserLogin(new Date());
-  }, []);
+  // TODO: Session tracking now handled in middleware
+  // useEffect(() => {
+  //   updateUserLogin(new Date());
+  // }, []);
 
   // Check if user is on host side - either by path or by view=host parameter
   const isHostSide = pathname?.startsWith('/app/host/') ||

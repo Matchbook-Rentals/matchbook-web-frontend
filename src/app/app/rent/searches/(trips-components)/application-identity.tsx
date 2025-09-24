@@ -298,7 +298,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
       }));
 
   return (
-    <Card className={`${isMobile ? '' : 'h-[534px]'} w-full p-6 bg-neutral-50 rounded-xl border-0`}>
+    <Card className={`${isMobile ? '' : 'h-[534px]'} w-full px-0 py-6 bg-neutral-50 rounded-xl border-0`}>
       <CardContent className="p-0 flex flex-col gap-8 h-full">
         <div className="flex flex-col items-start gap-5 w-full">
           <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-normal">

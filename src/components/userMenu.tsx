@@ -92,9 +92,10 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   const isPreview = userRole === 'preview'; // Preview role has access to everything except admin
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS
-  useEffect(() => {
-    updateUserLogin(new Date());
-  }, []);
+  // TODO: Session tracking now handled in middleware
+  // useEffect(() => {
+  //   updateUserLogin(new Date());
+  // }, []);
 
   const fetchNotifications = useCallback(async () => {
     if (user && checkClientBetaAccess(userRole)) {

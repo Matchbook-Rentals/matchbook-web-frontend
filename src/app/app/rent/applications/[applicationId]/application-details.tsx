@@ -1,7 +1,6 @@
 "use client";
 
 import { 
-  ChevronDownIcon, 
   BabyIcon,
   DogIcon,
   UsersIcon,
@@ -15,11 +14,6 @@ import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { APP_PAGE_MARGIN } from "@/constants/styles";
 import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
 import Link from "next/link";
@@ -29,11 +23,11 @@ import { SecureFileViewer } from "@/components/secure-file-viewer";
 import BrandModal from "@/components/BrandModal";
 import { getOrCreateListingConversation } from "@/app/actions/housing-requests";
 
-// Centralized styles for consistent text formatting
+// Centralized styles matching prototype design
 const STYLES = {
-  headerText: "[font-family:'Poppins',Helvetica] font-medium text-neutralneutral-900 text-xl tracking-[0] leading-[normal] text-left",
-  labelText: "font-['Poppins'] text-base font-normal leading-normal text-[#5D606D]",
-  valueText: "font-text-label-medium-medium font-[number:var(--text-label-medium-medium-font-weight)] text-neutralneutral-900 text-[length:var(--text-label-medium-medium-font-size)] tracking-[var(--text-label-medium-medium-letter-spacing)] leading-[var(--text-label-medium-medium-line-height)] [font-style:var(--text-label-medium-medium-font-style)]"
+  headerText: "[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-xl tracking-[0] leading-[normal]",
+  labelText: "[font-family:'Poppins',Helvetica] font-normal text-[#5D606D] text-base tracking-[0] leading-[normal]",
+  valueText: "[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-base tracking-[0] leading-[normal]"
 } as const;
 
 interface HousingRequestWithDetails extends HousingRequest {
@@ -83,6 +77,15 @@ interface ApplicationDetailsProps {
 export function ApplicationDetails({ applicationId, housingRequest, from }: ApplicationDetailsProps) {
   const router = useRouter();
   const [idModalOpen, setIdModalOpen] = useState(false);
+
+  // Handle back navigation
+  const handleBack = () => {
+    if (from) {
+      router.push(from);
+    } else {
+      router.back();
+    }
+  };
   
   const user = housingRequest.user;
   const listing = housingRequest.listing;
@@ -219,408 +222,311 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
   const monthlyRent = listing && trip ? calculateRent({ listing, trip }) : 0;
 
   return (
-    <div className={`flex flex-col items-start gap-6 px-6 py-8 ${APP_PAGE_MARGIN} max-w-6xl mx-auto`}>
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
-        <div className="flex flex-col gap-2">
+    <div className="flex w-full items-start bg-background">
+      <div className="flex flex-col w-full items-start px-6 py-8 gap-[18px] max-w-[1200px]  mx-auto">
+        {/* Header Section */}
+        <section className="flex items-end gap-6 w-full">
           <div className="flex items-center gap-3">
-            <Badge className={`${statusInfo.color} rounded-full px-2.5 py-1 text-sm font-medium`}>
-              {statusInfo.label}
-            </Badge>
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Your Application
-            </h1>
-          </div>
-          <p className="text-gray-600">
-            Applied on {formatDate(housingRequest.createdAt)}
-          </p>
-        </div>
-        
-        <div className="flex gap-3">
-          {from && (
             <BrandButton
               variant="outline"
-              href={from}
-              leftIcon={<ExternalLinkIcon className="w-4 h-4" />}
+              onClick={handleBack}
+              className="flex items-center justify-center w-[77px] h-[44px] border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white [font-family:'Poppins',Helvetica] font-semibold text-sm"
             >
-              Back to Applications
+              Back
             </BrandButton>
-          )}
-        </div>
-      </div>
+          </div>
+          
+          <div className="flex-1 flex items-end justify-between">
+            <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl leading-[28.8px]">
+              Your Application to {listing.title}
+            </h1>
+            
+            <Badge className={`${statusInfo.color} rounded-full px-2.5 py-1 [font-family:'Poppins',Helvetica] font-medium text-sm`}>
+              {statusInfo.label}
+            </Badge>
+          </div>
+        </section>
 
-      {/* Property Details Card */}
-      <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-        <CardContent className="p-6">
-          <div className="flex flex-col lg:flex-row gap-6">
-            <div className="lg:w-1/3">
-              <div className="aspect-[4/3] rounded-xl overflow-hidden">
-                <img
-                  src={getListingImage()}
-                  alt={listing.title}
-                  className="w-full h-full object-cover"
-                />
+
+        {/* Dates Section */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardContent className="flex flex-col gap-6 p-6">
+            <div className="flex items-center justify-between w-full">
+              <h2 className={STYLES.headerText}>Dates</h2>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row items-start gap-6 w-full">
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
+                <div className={STYLES.labelText}>Applied on</div>
+                <div className={STYLES.valueText}>
+                  {formatDate(housingRequest.createdAt)}
+                </div>
+              </div>
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
+                <div className={STYLES.labelText}>Move in</div>
+                <div className={STYLES.valueText}>
+                  {formatDate(housingRequest.startDate)}
+                </div>
+              </div>
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
+                <div className={STYLES.labelText}>Move Out</div>
+                <div className={STYLES.valueText}>
+                  {formatDate(housingRequest.endDate)}
+                </div>
+              </div>
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
+                <div className={STYLES.labelText}>Length of Stay</div>
+                <div className={STYLES.valueText}>
+                  {calculateLengthOfStay()}
+                </div>
               </div>
             </div>
-            <div className="lg:w-2/3 flex flex-col gap-4">
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                  {listing.title}
-                </h2>
-                <div className="flex items-center gap-2 text-gray-600 mb-4">
-                  <MapPinIcon className="w-4 h-4" />
-                  <span>{listing.city}, {listing.state}</span>
-                </div>
-                <div className="text-2xl font-bold text-gray-900">
-                  ${monthlyRent}/month
+          </CardContent>
+        </Card>
+
+        {/* Trip Summary Section */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardContent className="flex flex-col gap-6 p-6">
+            <div className="flex items-center justify-between w-full">
+              <h2 className={STYLES.headerText}>Summary</h2>
+            </div>
+            
+            <Separator className="w-full" />
+            
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-[86px] w-full flex-wrap">
+              {getTripSummary().map((item, index) => {
+                const IconComponent = item.icon;
+                return (
+                  <div
+                    key={index}
+                    className="inline-flex items-center justify-center gap-1.5 px-0 py-1.5 rounded-full"
+                  >
+                    <IconComponent className="w-5 h-5" />
+                    <div className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
+                      {item.text}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Personal Information Section */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardContent className="flex flex-col gap-6 p-6">
+            <div className="flex items-center justify-between w-full">
+              <h2 className={STYLES.headerText}>Renters</h2>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row items-start gap-6 w-full flex-wrap">
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
+                <div className={STYLES.labelText}>Renter Name</div>
+                <div 
+                  className={`${STYLES.valueText} truncate`}
+                  title={user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email}
+                >
+                  {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email}
                 </div>
               </div>
               
-              <div className="flex gap-3 mt-4">
-                <BrandButton
-                  variant="outline"
-                  href="/app/rent/applications/general"
-                >
-                  Edit General Application
-                </BrandButton>
-                
-                {housingRequest.status === "approved" && (
-                  <>
-                    <BrandButton
-                      variant="outline"
-                      onClick={handleMessageHost}
-                      leftIcon={<MessageSquareIcon className="w-4 h-4" />}
-                    >
-                      Message Host
-                    </BrandButton>
-                    
-                    {housingRequest.hasBooking && housingRequest.bookingId && (
-                      <BrandButton
-                        variant="default"
-                        href={`/app/rent/bookings/${housingRequest.bookingId}`}
-                      >
-                        Go to Booking
-                      </BrandButton>
-                    )}
-                  </>
-                )}
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
+                <div className={STYLES.labelText}>Rating</div>
+                <div className={STYLES.valueText}>4.0</div>
               </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Dates Section */}
-      <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-        <CardContent className="flex flex-col gap-6 p-6">
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger className="flex items-center justify-between w-full">
-              <h2 className={STYLES.headerText}>
-                <CalendarIcon className="w-5 h-5 inline mr-2" />
-                Dates
-              </h2>
-              <ChevronDownIcon className="w-5 h-5" />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="flex flex-col sm:flex-row items-start gap-6 mt-6 w-full">
-                <div className="flex flex-col items-start gap-1.5 min-w-0 flex-1">
-                  <div className={STYLES.labelText}>Move in</div>
-                  <div className={STYLES.valueText}>
-                    {formatDate(housingRequest.startDate)}
-                  </div>
-                </div>
-                <div className="flex flex-col items-start gap-1.5 min-w-0 flex-1">
-                  <div className={STYLES.labelText}>Move Out</div>
-                  <div className={STYLES.valueText}>
-                    {formatDate(housingRequest.endDate)}
-                  </div>
-                </div>
-                <div className="flex flex-col items-start gap-1.5 min-w-0 flex-1">
-                  <div className={STYLES.labelText}>Length of Stay</div>
-                  <div className={STYLES.valueText}>
-                    {calculateLengthOfStay()}
-                  </div>
-                </div>
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </CardContent>
-      </Card>
-
-      {/* Trip Summary Section */}
-      <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-        <CardContent className="flex flex-col gap-6 p-6">
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger className="flex items-center justify-between w-full">
-              <h2 className={STYLES.headerText}>Trip Details</h2>
-              <ChevronDownIcon className="w-5 h-5" />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="mt-6">
-                <Separator className="w-full mb-6" />
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 w-full">
-                  {getTripSummary().map((item, index) => {
-                    const IconComponent = item.icon;
-                    return (
-                      <div
-                        key={index}
-                        className="inline-flex items-center justify-center gap-1.5 px-0 py-1.5 rounded-full"
-                      >
-                        <IconComponent className="w-5 h-5" />
-                        <div className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
-                          {item.text}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </CardContent>
-      </Card>
-
-      {/* Personal Information Section */}
-      <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-        <CardContent className="flex flex-col gap-6 p-6">
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger className="flex items-center justify-between w-full">
-              <h2 className={STYLES.headerText}>Personal Information</h2>
-              <ChevronDownIcon className="w-5 h-5" />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="mt-6 flex flex-col gap-6 w-full">
-                <div className="flex flex-col sm:flex-row items-start gap-6 w-full">
-                  <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                    <div className={STYLES.labelText}>Name</div>
-                    <div className={STYLES.valueText}>
-                      {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email}
-                    </div>
-                  </div>
-                  
-                  <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                    <div className={STYLES.labelText}>Email</div>
-                    <div className={STYLES.valueText}>{user.email}</div>
-                  </div>
-                  
-                  <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                    <div className={STYLES.labelText}>Identification</div>
-                    {application?.identifications && application.identifications.length > 0 && application.identifications[0].idPhotos.length > 0 ? (
-                      <BrandModal
-                        className="max-w-3xl"
-                        isOpen={idModalOpen}
-                        onOpenChange={setIdModalOpen}
-                        triggerButton={
-                          <BrandButton
-                            variant="outline"
-                            size="sm"
-                          >
-                            View ID
-                          </BrandButton>
-                        }
-                      >
-                        <div className="flex flex-col gap-4">
-                          <h2 className="text-center text-xl font-semibold">
-                            Your ID Document
-                          </h2>
-                          <div className="flex justify-center">
-                            <SecureFileViewer
-                              fileKey={application.identifications[0].idPhotos[0].fileKey}
-                              customId={application.identifications[0].idPhotos[0].customId}
-                              fileName={application.identifications[0].idPhotos[0].fileName || 'ID Document'}
-                              fileType="image"
-                              className="max-w-full max-h-[70vh] object-contain"
-                              fallbackUrl={application.identifications[0].idPhotos[0].url}
-                            />
-                          </div>
-                          <div className="flex justify-end pt-4 border-t">
-                            <BrandButton
-                              onClick={() => setIdModalOpen(false)}
-                              variant="default"
-                              size="sm"
-                            >
-                              Close
-                            </BrandButton>
-                          </div>
-                        </div>
-                      </BrandModal>
-                    ) : (
-                      <div className={STYLES.valueText}>Not provided</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </CardContent>
-      </Card>
-
-      {/* Income Information Section */}
-      {getIncomeData().length > 0 && (
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-          <CardContent className="flex flex-col gap-6 p-6">
-            <Collapsible defaultOpen>
-              <CollapsibleTrigger className="flex items-center justify-between w-full">
-                <h2 className={STYLES.headerText}>Income Information</h2>
-                <ChevronDownIcon className="w-5 h-5" />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="mt-6 space-y-6">
-                  <div className="flex flex-col sm:flex-row items-start gap-6">
-                    <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                      <div className={STYLES.labelText}>Total Monthly Income</div>
-                      <div className={STYLES.valueText}>{getTotalMonthlyIncome()}</div>
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="space-y-4">
-                    {getIncomeData().map((income, index) => (
-                      <div key={index} className="flex flex-col sm:flex-row items-start gap-6 p-4 bg-gray-50 rounded-lg">
-                        <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                          <div className={STYLES.labelText}>{income.sourceLabel}</div>
-                          <div className={STYLES.valueText}>{income.sourceName}</div>
-                        </div>
-                        <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                          <div className={STYLES.labelText}>Monthly Amount</div>
-                          <div className={STYLES.valueText}>{income.formattedAmount}</div>
-                        </div>
-                        <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                          <div className={STYLES.labelText}>Employer</div>
-                          <div className={STYLES.valueText}>{income.employer || 'N/A'}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Residential History Section */}
-      {getResidentialHistory().length > 0 && (
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-          <CardContent className="flex flex-col gap-6 p-6">
-            <Collapsible defaultOpen>
-              <CollapsibleTrigger className="flex items-center justify-between w-full">
-                <h2 className={STYLES.headerText}>Residential History</h2>
-                <ChevronDownIcon className="w-5 h-5" />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="mt-6 space-y-4">
-                  {getResidentialHistory().map((residence, index) => (
-                    <div key={index} className="p-4 bg-gray-50 rounded-lg space-y-3">
-                      <div className="flex flex-col sm:flex-row items-start gap-6">
-                        <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                          <div className={STYLES.labelText}>Type</div>
-                          <div className={STYLES.valueText}>{residence.displayType}</div>
-                        </div>
-                        <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                          <div className={STYLES.labelText}>Monthly Payment</div>
-                          <div className={STYLES.valueText}>{residence.formattedPayment}</div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col sm:flex-row items-start gap-6">
-                        <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                          <div className={STYLES.labelText}>Address</div>
-                          <div className={STYLES.valueText}>{residence.fullAddress}</div>
-                        </div>
-                        {residence.housingStatus === 'rent' && (
-                          <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                            <div className={STYLES.labelText}>Landlord</div>
-                            <div className={STYLES.valueText}>{residence.landlordName}</div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Host Information Section */}
-      {listing.user && (
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-          <CardContent className="flex flex-col gap-6 p-6">
-            <Collapsible defaultOpen>
-              <CollapsibleTrigger className="flex items-center justify-between w-full">
-                <h2 className={STYLES.headerText}>Host Information</h2>
-                <ChevronDownIcon className="w-5 h-5" />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="mt-6 flex flex-col sm:flex-row items-start gap-6 w-full">
-                  <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                    <div className={STYLES.labelText}>Host Name</div>
-                    <div className={STYLES.valueText}>
-                      {listing.user.firstName && listing.user.lastName 
-                        ? `${listing.user.firstName} ${listing.user.lastName}` 
-                        : listing.user.email}
-                    </div>
-                  </div>
-                  <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                    <div className={STYLES.labelText}>Contact</div>
-                    <div className={STYLES.valueText}>{listing.user.email}</div>
-                  </div>
-                  {housingRequest.status === "approved" && (
-                    <div className="min-w-0 flex-1 gap-1.5 flex flex-col items-start">
-                      <div className={STYLES.labelText}>Actions</div>
+              
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[242px]">
+                <div className={STYLES.labelText}>Identification</div>
+                {application?.identifications && application.identifications.length > 0 && application.identifications[0].idPhotos.length > 0 ? (
+                  <BrandModal
+                    className="max-w-3xl"
+                    isOpen={idModalOpen}
+                    onOpenChange={setIdModalOpen}
+                    triggerButton={
                       <BrandButton
                         variant="outline"
                         size="sm"
-                        onClick={handleMessageHost}
-                        leftIcon={<MessageSquareIcon className="w-4 h-4" />}
+                        className="h-auto px-2 py-1 border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white [font-family:'Poppins',Helvetica] font-medium text-sm"
                       >
-                        Message Host
+                        View ID
                       </BrandButton>
+                    }
+                  >
+                    <div className="flex flex-col gap-4">
+                      <h2 className="text-center text-xl font-semibold">
+                        Your ID Document
+                      </h2>
+                      <div className="flex justify-center">
+                        <SecureFileViewer
+                          fileKey={application.identifications[0].idPhotos[0].fileKey}
+                          customId={application.identifications[0].idPhotos[0].customId}
+                          fileName={application.identifications[0].idPhotos[0].fileName || 'ID Document'}
+                          fileType="image"
+                          className="max-w-full max-h-[70vh] object-contain"
+                          fallbackUrl={application.identifications[0].idPhotos[0].url}
+                        />
+                      </div>
+                      <div className="flex justify-end pt-4 border-t">
+                        <BrandButton
+                          onClick={() => setIdModalOpen(false)}
+                          variant="default"
+                          size="sm"
+                        >
+                          Close
+                        </BrandButton>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
+                  </BrandModal>
+                ) : (
+                  <div className={STYLES.valueText}>Not provided</div>
+                )}
+              </div>
+              
+              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[235px]">
+                <div className={STYLES.labelText}>Renter Verification Report</div>
+                <BrandButton
+                  variant="outline"
+                  size="sm"
+                  className="h-auto px-2 py-1 border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white [font-family:'Poppins',Helvetica] font-medium text-sm"
+                >
+                  View Report
+                </BrandButton>
+              </div>
+            </div>
           </CardContent>
         </Card>
-      )}
 
-      {/* Application Status Timeline - Future Enhancement */}
-      <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
-        <CardContent className="flex flex-col gap-6 p-6">
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger className="flex items-center justify-between w-full">
-              <h2 className={STYLES.headerText}>Application Status</h2>
-              <ChevronDownIcon className="w-5 h-5" />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="mt-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge className={`${statusInfo.color} rounded-full px-3 py-1`}>
-                    {statusInfo.label}
-                  </Badge>
-                  <span className="text-gray-600">
-                    {housingRequest.status === "approved" && "Congratulations! Your application has been approved."}
-                    {housingRequest.status === "declined" && "Unfortunately, your application was not selected."}
-                    {housingRequest.status === "pending" && "Your application is being reviewed by the host."}
-                  </span>
+        {/* Income Information Section */}
+        {getIncomeData().length > 0 && (
+          <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+            <CardContent className="flex flex-col gap-6 p-6">
+              <div className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>Income</h2>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row items-start gap-6 w-full flex-wrap">
+                <div className="flex flex-col items-start gap-1.5 w-full sm:w-[300px]">
+                  <div className={STYLES.labelText}>Total Income</div>
+                  <div className={STYLES.valueText}>{getTotalMonthlyIncome()}</div>
                 </div>
                 
-                <div className="mt-4">
-                  <BrandButton
-                    variant="outline"
-                    href="/app/rent/applications/general"
-                  >
-                    Edit General Application
-                  </BrandButton>
+                <div className="flex items-start gap-1.5 w-full sm:w-[235px]">
+                  <div className="flex flex-col gap-1.5">
+                    <div className={STYLES.labelText}>Rent to Income Ratio</div>
+                    <div className="flex items-start gap-1.5">
+                      <div className={STYLES.valueText}>
+                        {(() => {
+                          const totalIncomeStr = getTotalMonthlyIncome();
+                          const totalIncomeNum = parseFloat(totalIncomeStr.replace(/[$\/month,]/g, '')) || 1;
+                          return Math.round((monthlyRent / totalIncomeNum) * 100);
+                        })()}%
+                      </div>
+                      <Badge className="flex w-[68px] px-2 py-0.5 items-center justify-center gap-1 rounded-md border-[#3c8787] text-[#3c8787] bg-transparent">
+                        <div className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          Great
+                        </div>
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </CardContent>
-      </Card>
+              
+              {getIncomeData().map((income, index) => (
+                <div key={index} className="flex flex-col sm:flex-row items-start gap-6 w-full flex-wrap">
+                  <div className="flex flex-col items-start gap-1.5 w-full sm:w-[300px]">
+                    <div className={STYLES.labelText}>{income.sourceLabel}</div>
+                    <div className={STYLES.valueText}>{income.sourceName}</div>
+                  </div>
+                  
+                  <div className="flex flex-col items-start gap-1.5 w-full sm:w-[389px]">
+                    <div className={STYLES.labelText}>Monthly Amount</div>
+                    <div className={STYLES.valueText}>{income.formattedAmount}</div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <BrandButton
+                      variant="outline"
+                      className="h-auto px-3.5 py-2.5 border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white [font-family:'Poppins',Helvetica] font-semibold text-sm"
+                    >
+                      View Proof of Income
+                    </BrandButton>
+                  </div>
+                </div>
+              ))}
+              
+              <Separator className="w-full" />
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Residential History Section */}
+        {getResidentialHistory().length > 0 && (
+          <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+            <CardContent className="flex flex-col gap-6 p-6">
+              <div className="flex items-center justify-between w-full">
+                <h2 className={STYLES.headerText}>Residential History</h2>
+              </div>
+              
+              {getResidentialHistory().map((residence, index) => (
+                <div key={index} className="flex flex-col gap-6">
+                  <div className="flex flex-col sm:flex-row items-start gap-6 w-full flex-wrap">
+                    <div className="flex flex-col items-start gap-1.5 w-full sm:w-[300px]">
+                      <div className={STYLES.labelText}>{index === 0 ? 'Current Residence' : `Past Residence ${index}`}</div>
+                      <div className={STYLES.valueText}>{residence.displayType}</div>
+                    </div>
+                    
+                    <div className="flex flex-col items-start gap-1.5 w-full sm:w-[389px]">
+                      <div className={STYLES.labelText}>Address</div>
+                      <div className={STYLES.valueText}>{residence.fullAddress}</div>
+                    </div>
+                    
+                    <div className="flex flex-col items-start gap-1.5 w-full sm:w-[235px]">
+                      <div className={STYLES.labelText}>Monthly Payment</div>
+                      <div className={STYLES.valueText}>{residence.formattedPayment}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row items-start gap-6 w-full flex-wrap">
+                    <div className="flex flex-col items-start gap-1.5 w-full sm:w-[300px]">
+                      <div className={STYLES.labelText}>Length of Residence</div>
+                      <div className={STYLES.valueText}>12 Months</div>
+                    </div>
+                    
+                    {residence.housingStatus === 'rent' && (
+                      <>
+                        <div className="flex flex-col items-start gap-1.5 w-full sm:w-[389px]">
+                          <div className={STYLES.labelText}>Property Manager Name</div>
+                          <div className={STYLES.valueText}>{residence.landlordName}</div>
+                        </div>
+                        
+                        <div className="flex flex-col items-start gap-1.5 w-full sm:w-[235px]">
+                          <div className={STYLES.labelText}>Phone Number</div>
+                          <div className={STYLES.valueText}>N/A</div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  
+                  {residence.housingStatus === 'rent' && (
+                    <div className="flex flex-col sm:flex-row items-start gap-6 w-full flex-wrap">
+                      <div className="flex flex-col items-start gap-1.5 w-full sm:w-[348px]">
+                        <div className={STYLES.labelText}>Email</div>
+                        <div className={STYLES.valueText}>N/A</div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {index < getResidentialHistory().length - 1 && (
+                    <Separator className="w-full" />
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+
+      </div>
     </div>
   );
 }

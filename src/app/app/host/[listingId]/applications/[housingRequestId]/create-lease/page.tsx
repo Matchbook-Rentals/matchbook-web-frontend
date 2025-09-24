@@ -362,7 +362,7 @@ function CreateLeasePageContent() {
       } else {
         console.log('🎯 Returning Save and Send button');
         return {
-          text: 'Save and Send', 
+          text: 'Save and Continue', 
           action: completeStepFunction
         };
       }

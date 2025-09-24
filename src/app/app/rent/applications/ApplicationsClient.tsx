@@ -391,7 +391,7 @@ const ApplicationActions = ({ application }: ApplicationCardProps) => (
       </BrandButton>
     </div>
 
-    <div className="flex flex-col md:items-end items-start justify-center gap-3 w-full">
+    <div className="flex flex-col md:items-end items-start justify-center gap-3 w-full md:flex-shrink-0">
       <div className="w-full [font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-base tracking-[0] leading-[normal] md:text-right text-left">
         {application.appliedDate}
       </div>
@@ -424,7 +424,7 @@ const ApplicationButtons = ({ application }: ApplicationCardProps) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 w-full">
+    <div className="flex flex-col md:flex-row items-start md:items-center md:justify-end gap-2 md:gap-3 w-full">
       <BrandButton 
         variant="outline" 
         size="sm"

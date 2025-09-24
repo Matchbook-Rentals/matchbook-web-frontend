@@ -5,6 +5,7 @@ import React, { useState, useCallback, useEffect, Suspense } from 'react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
+import { BrandButton } from "@/components/ui/brandButton";
 import { cn } from '@/lib/utils';
 import { PAGE_MARGIN, ApplicationItemHeaderStyles } from '@/constants/styles';
 import { PersonalInfo } from '../../searches/(trips-components)/application-personal-info';
@@ -26,15 +27,26 @@ import { ResidentialLandlordInfo } from '../../searches/(trips-components)/resid
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { checkApplicationCompletionClient } from '@/utils/application-completion';
 
-export default function ApplicationClientComponent({ 
-  application, 
-  isMobile: initialIsMobile = false 
-}: { 
+export default function ApplicationClientComponent({
+  application,
+  isMobile: initialIsMobile = false,
+  from
+}: {
   application: any | null;
   isMobile?: boolean;
+  from?: string;
 }) {
   const router = useRouter();
   const { toast } = useToast();
+
+  // Handle back navigation
+  const handleBack = () => {
+    if (from) {
+      router.push(from);
+    } else {
+      router.back();
+    }
+  };
 
   // Replace all individual state with store
   const {
@@ -133,7 +145,7 @@ export default function ApplicationClientComponent({
     setErrors('residentialHistory', residentialHistoryErrors as any);
     setErrors('income', incomeErrors);
     setErrors('questionnaire', questionnaireErrors);
-    
+
     console.log('✅ Errors set in store at:', new Date().toISOString());
 
     const isValid = (
@@ -161,39 +173,39 @@ export default function ApplicationClientComponent({
     return {
       // Personal Information
       firstName: "First Name",
-      lastName: "Last Name", 
+      lastName: "Last Name",
       middleName: "Middle Name",
       dateOfBirth: "Date of Birth",
-      
+
       // Identification
       idType: "ID Type",
       idNumber: "ID Number",
       isPrimary: "Primary ID",
       idPhotos: "ID Photos",
       primaryPhoto: "Primary Photo",
-      
+
       // Income
       source: "Income Source",
       monthlyAmount: "Monthly Amount",
       imageUrl: "Income Proof",
-      
+
       // Residential History
       street: "Street Address",
       apt: "Apartment",
-      city: "City", 
+      city: "City",
       state: "State",
       zipCode: "ZIP Code",
       monthlyPayment: "Monthly Payment",
       durationOfTenancy: "Length of Stay",
       landlordFirstName: "Landlord First Name",
-      landlordLastName: "Landlord Last Name", 
+      landlordLastName: "Landlord Last Name",
       landlordEmail: "Landlord Email",
       landlordPhoneNumber: "Landlord Phone",
-      
+
       // Questionnaire
       felony: "Criminal History Question",
       felonyExplanation: "Criminal History Explanation",
-      evicted: "Eviction History Question", 
+      evicted: "Eviction History Question",
       evictedExplanation: "Eviction History Explanation"
     };
   };
@@ -201,14 +213,14 @@ export default function ApplicationClientComponent({
   const getErrorFieldsForSection = (sectionName: string, freshErrors?: any) => {
     const fieldNames = getFieldDisplayNames();
     const errorFields: string[] = [];
-    
+
     // Use fresh errors if provided, otherwise fall back to store errors
     const errorsToUse = freshErrors || errors;
 
     switch (sectionName) {
       case 'Personal Information':
         const personalInfoErrors = errorsToUse.basicInfo?.personalInfo || {};
-        
+
         Object.keys(personalInfoErrors).forEach(key => {
           // Check that the error has a value and the field name exists
           if (personalInfoErrors[key as keyof typeof personalInfoErrors] && fieldNames[key as keyof typeof fieldNames]) {
@@ -220,10 +232,10 @@ export default function ApplicationClientComponent({
           }
         });
         break;
-        
+
       case 'Identification':
         const identificationErrors = errorsToUse.basicInfo?.identification || {};
-        
+
         Object.keys(identificationErrors).forEach(key => {
           // Check that the error has a value and the field name exists
           if (identificationErrors[key as keyof typeof identificationErrors] && fieldNames[key as keyof typeof fieldNames]) {
@@ -235,10 +247,10 @@ export default function ApplicationClientComponent({
           }
         });
         break;
-        
+
       case 'Income':
         const incomeErrors = errorsToUse.income || {};
-        
+
         // Handle array-based income errors
         if (incomeErrors.source) {
           incomeErrors.source.forEach((error, index) => {
@@ -256,10 +268,10 @@ export default function ApplicationClientComponent({
           });
         }
         break;
-        
+
       case 'Residential History':
         const residentialErrors = errorsToUse.residentialHistory || {};
-        
+
         // Handle array-based residential history errors
         Object.keys(residentialErrors).forEach(key => {
           if (key === 'overall' && residentialErrors.overall) {
@@ -277,10 +289,10 @@ export default function ApplicationClientComponent({
           }
         });
         break;
-        
+
       case 'Questionnaire':
         const questionnaireErrors = errorsToUse.questionnaire || {};
-        
+
         Object.keys(questionnaireErrors).forEach(key => {
           // Check that the error has a value and the field name exists
           if (questionnaireErrors[key as keyof typeof questionnaireErrors] && fieldNames[key as keyof typeof fieldNames]) {
@@ -306,16 +318,16 @@ export default function ApplicationClientComponent({
         const personalErrors = errors.basicInfo?.personalInfo || {};
         const hasPersonalErrors = Object.values(personalErrors).some((error: any) => error && error !== '');
         return hasPersonalErrors;
-      
+
       case 'Identification':
         const identificationErrors = errors.basicInfo?.identification || {};
         const hasIdentificationErrors = Object.values(identificationErrors).some((error: any) => error && error !== '');
         return hasIdentificationErrors;
-      
+
       case 'Residential History':
         const residentialErrors = errors.residentialHistory || {};
         let hasResidentialErrors = false;
-        
+
         // Check main fields (excluding array fields)
         Object.entries(residentialErrors).forEach(([key, value]) => {
           if (Array.isArray(value)) {
@@ -328,13 +340,13 @@ export default function ApplicationClientComponent({
             hasResidentialErrors = true;
           }
         });
-        
+
         return hasResidentialErrors;
-      
+
       case 'Income':
         const incomeErrors = errors.income || {};
         let hasIncomeErrors = false;
-        
+
         // Check array-based income errors
         ['source', 'monthlyAmount', 'imageUrl'].forEach(field => {
           if (incomeErrors[field] && Array.isArray(incomeErrors[field])) {
@@ -343,14 +355,14 @@ export default function ApplicationClientComponent({
             }
           }
         });
-        
+
         return hasIncomeErrors;
-      
+
       case 'Questionnaire':
         const questionnaireErrors = errors.questionnaire || {};
         const hasQuestionnaireErrors = Object.values(questionnaireErrors).some((error: any) => error && error !== '');
         return hasQuestionnaireErrors;
-      
+
       default:
         return false;
     }
@@ -364,45 +376,45 @@ export default function ApplicationClientComponent({
       { name: 'Residential History', selector: '[data-section="residential-history"]' },
       { name: 'Questionnaire', selector: '[data-section="questionnaire"]' }
     ];
-    
+
     for (const section of sectionMap) {
       // Use fresh errors instead of store errors
       if (hasErrorsInSection(section.name, freshErrors)) {
         const sectionElement = document.querySelector(section.selector);
         const errorFields = getErrorFieldsForSection(section.name, freshErrors);
-        
-        return { 
-          name: section.name, 
+
+        return {
+          name: section.name,
           element: sectionElement,
           errorFields: errorFields
         };
       }
     }
-    
+
     return null;
   };
 
   const handleSubmit = async () => {
     const validationResult = validateForm();
-    
+
     if (!validationResult.isValid) {
       // Find the first error section and scroll to it
       setTimeout(() => {
         const firstErrorInfo = findFirstErrorSection(validationResult.errors);
         if (firstErrorInfo) {
-          firstErrorInfo.element.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
+          firstErrorInfo.element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
           });
-          
+
           // Create specific, actionable error message
           let title = "Missing Required Information";
           let errorMessage = `Please complete the ${firstErrorInfo.name} section.`;
-          
+
           if (firstErrorInfo.errorFields && firstErrorInfo.errorFields.length > 0) {
             const firstField = firstErrorInfo.errorFields[0];
             const remainingCount = firstErrorInfo.errorFields.length - 1;
-            
+
             // Create actionable message based on the first error field
             if (firstField.includes("First Name")) {
               errorMessage = "Please enter your first name to continue.";
@@ -425,9 +437,9 @@ export default function ApplicationClientComponent({
             } else {
               errorMessage = `Please enter your ${firstField.toLowerCase()} to continue.`;
             }
-            
+
           }
-          
+
           toast({
             title: title,
             description: errorMessage,
@@ -437,16 +449,16 @@ export default function ApplicationClientComponent({
           console.log('❌❌❌ VALIDATION FAILED BUT NO ERROR SECTION FOUND ❌❌❌');
           console.log('❌❌❌ FRESH ERRORS:', validationResult.errors);
           console.log('❌❌❌ VALIDATION RESULT:', validationResult);
-          
+
           // Fallback to original behavior
           const firstErrorElement = document.querySelector('.border-red-500, .text-red-500');
           if (firstErrorElement) {
-            firstErrorElement.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'center' 
+            firstErrorElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
             });
           }
-          
+
           toast({
             title: "Validation Error",
             description: "Please correct errors before submitting.",
@@ -522,277 +534,293 @@ export default function ApplicationClientComponent({
 
 
   return (
-    <div className="flex flex-col w-full max-w-[1140px] mx-auto items-start justify-center gap-4 p-4">
-      {/* Page Title */}
-      <h1 className="w-full text-center text-[#373940] font-['Poppins'] text-[28px] md:text-[24px] sm:text-[20px] font-medium leading-normal">
-        Review Your Application
-      </h1>
-
-          {/* Loading Overlay */}
-          {isLoading && (
-            <div className="fixed inset-0 bg-gray-300 bg-opacity-50 flex items-center justify-center z-50">
-              <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-              </svg>
-            </div>
-          )}
-
-          {/* Personal Information Section */}
-          <section data-section="personal-info" className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
-            <header className="flex flex-col items-center justify-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
-              <h1 className="relative self-stretch mt-[-1.00px] font-text-heading-medium-medium font-[number:var(--text-heading-medium-medium-font-weight)] text-[#373940] text-[length:var(--text-heading-medium-medium-font-size)] text-center tracking-[var(--text-heading-medium-medium-letter-spacing)] leading-[var(--text-heading-medium-medium-line-height)] [font-style:var(--text-heading-medium-medium-font-style)]">
-                MatchBook Universal Application
-              </h1>
-
-            </header>
-
-            <Card className="flex flex-col items-center justify-center gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] rounded-2xl overflow-hidden border border-solid border-[#cfd4dc]">
-              <CardContent className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
-                <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                  <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
-                    Personal Information
-                  </h2>
-                  <PersonalInfo isMobile={isMobile} />
-                </div>
-              </CardContent>
-            </Card>
-          </section>
-
-          {/* Identification Section */}
-          <section data-section="identification" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
-            <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-              <Identification isMobile={isMobile} />
-            </div>
-          </section>
-
-          {/* Income Section */}
-          <section data-section="income" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
-            <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-              <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
-                Income
-              </h2>
-              <Income isMobile={isMobile} />
-            </div>
-          </section>
-
-          {/* Residential History Section */}
-          <section data-section="residential-history" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
-            <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-              <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
-                Residential History
-              </h2>
-              <p className="text-sm text-gray-500 mb-4">
-                Please add 24 months of residential history or three previous addresses.
-              </p>
-              <ResidentialLandlordInfo isMobile={isMobile} />
-            </div>
-          </section>
-
-          {/* Questionnaire Section */}
-          <section data-section="questionnaire" className="flex flex-col items-start gap-8 p-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
-            <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-              <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
-                Questionnaire
-              </h2>
-              <Questionnaire isMobile={isMobile} />
-            </div>
-          </section>
-
-          {/* Submit Button */}
-          <div className="w-full flex justify-center mt-6">
-            <Button
-              onClick={handleSubmit}
-              className="w-full px-8 py-3 bg-[#0b6969] hover:bg-[#085454] text-white font-medium rounded-lg"
-              disabled={isLoading}
+    <div className='bg-gray-50'>
+      <div className="flex flex-col w-full max-w-[1200px] mx-auto items-start justify-center gap-4 p-4">
+        {/* Header Section */}
+        <div className="flex items-start gap-6 py-0 w-full">
+          <div className="flex items-center justify-start gap-3 w-full">
+            <BrandButton
+              variant="outline"
+              onClick={handleBack}
+              className="flex items-center justify-center w-[77px] h-[44px] rounded-lg border border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
             >
-              {isLoading ? 'Submitting...' : 'Save Application'}
-            </Button>
-          </div>
-
-      {/* Development Troubleshooting Section */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mt-8 bg-gray-900 text-white p-4 border-4 border-yellow-500 font-mono text-xs rounded-lg">
-          <div className="">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-yellow-400 font-bold text-sm">🔧 DEV TROUBLESHOOTING - Completion Status</h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={async () => {
-                    // Clear temp data only (no photos)
-                    resetStore();
-                    toast({
-                      title: "Temp Data Cleared",
-                      description: "Form data reset (photos preserved)",
-                      duration: 3000,
-                    });
-                  }}
-                  className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded text-xs"
-                >
-                  Clear Temp Data
-                </button>
-                <button
-                  onClick={async () => {
-                    // Clear all data including photos
-                    const confirmClear = window.confirm("This will delete ALL data including uploaded photos. Are you sure?");
-                    if (!confirmClear) return;
-                    
-                    try {
-                      // Delete all ID photos
-                      for (const id of ids) {
-                        if (id.idPhotos) {
-                          for (const photo of id.idPhotos) {
-                            if (photo.id) {
-                              await deleteIDPhoto(photo.id);
-                            }
-                          }
-                        }
-                      }
-                      
-                      // Delete all income proofs
-                      for (const income of incomes) {
-                        if (income.id) {
-                          await deleteIncomeProof(income.id);
-                        }
-                      }
-                      
-                      // Reset the store
-                      resetStore();
-                      
-                      toast({
-                        title: "All Data Cleared",
-                        description: "All form data and photos deleted",
-                        duration: 3000,
-                      });
-                    } catch (error) {
-                      toast({
-                        title: "Error",
-                        description: "Failed to delete some files",
-                        variant: "destructive",
-                        duration: 3000,
-                      });
-                    }
-                  }}
-                  className="px-3 py-1 bg-red-600 hover:bg-red-500 text-white font-bold rounded text-xs"
-                >
-                  Clear All
-                </button>
-                <button
-                  onClick={async () => {
-                    if (application?.id) {
-                      const result = await updateApplicationCompletionStatus(application.id);
-                      if (result.success) {
-                        toast({
-                          title: "Completion Status Updated",
-                          description: `Server now reports: ${result.isComplete ? 'Complete' : 'Incomplete'}`,
-                          duration: 3000,
-                        });
-                        // Refresh the page to get updated data
-                        window.location.reload();
-                      }
-                    }
-                  }}
-                  className="px-3 py-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded text-xs"
-                >
-                  Force Server Check
-                </button>
+              <div className="[font-family:'Poppins',Helvetica] font-semibold text-base tracking-[0] leading-6 whitespace-nowrap">
+                Back
               </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              {/* Server Status */}
-              <div className="bg-gray-800 p-3 rounded">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="font-bold">Server Status (Live):</span>
-                  <span className={serverIsComplete ? "text-green-400" : "text-red-400"}>
-                    {serverIsComplete ? "✅ Complete" : "❌ Incomplete"}
-                  </span>
-                </div>
-                <div className="text-gray-400 text-xs">
-                  Initial DB value: {application?.isComplete !== undefined ? application.isComplete.toString() : 'undefined'}
-                </div>
-                <div className="text-gray-400 text-xs">
-                  Live store value: {serverIsComplete.toString()}
-                </div>
-                <div className="text-gray-400 text-xs mt-1">
-                  Application ID: {application?.id || 'No application'}
-                </div>
-              </div>
+            </BrandButton>
 
-              {/* Client Status */}
-              <div className="bg-gray-800 p-3 rounded">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="font-bold">Client Status (Store):</span>
-                  <span className={isApplicationComplete() ? "text-green-400" : "text-red-400"}>
-                    {isApplicationComplete() ? "✅ Complete" : "❌ Incomplete"}
-                  </span>
-                </div>
-                {(() => {
-                  const result = checkApplicationCompletionClient({
-                    personalInfo,
-                    ids,
-                    incomes,
-                    answers,
-                    residentialHistory
-                  });
-                  return (
-                    <>
-                      <div className="text-gray-400 text-xs">
-                        Missing ({result.missingRequirements.length}):
-                      </div>
-                      <div className="text-yellow-300 text-xs mt-1">
-                        {result.missingRequirements.length > 0 
-                          ? result.missingRequirements.join(", ")
-                          : "None"}
-                      </div>
-                    </>
-                  );
-                })()}
+            <div className="flex-1">
+              <div className="flex flex-col items-start gap-2">
+                <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
+                  General Application
+                </h1>
+                <p className="[font-family:'Poppins',Helvetica] font-normal text-[#727A90] text-base tracking-[0] leading-6">
+                  This application will be used when you apply to new listings
+                </p>
               </div>
-            </div>
-
-            {/* Status Mismatch Warning */}
-            {serverIsComplete !== isApplicationComplete() && (
-              <div className="mt-2 p-2 bg-yellow-900 border border-yellow-600 rounded">
-                <span className="text-yellow-300">⚠️ Status Mismatch: </span>
-                <span className="text-white">
-                  Server says {serverIsComplete ? "complete" : "incomplete"}, 
-                  Client says {isApplicationComplete() ? "complete" : "incomplete"}
-                </span>
-              </div>
-            )}
-
-            {/* Debug Info */}
-            <div className="mt-2 text-gray-500 text-xs">
-              <details>
-                <summary className="cursor-pointer hover:text-gray-300">Debug Info (click to expand)</summary>
-                <div className="mt-2 grid grid-cols-3 gap-2">
-                  <div>
-                    <strong>Personal Info:</strong>
-                    <div>First: {personalInfo.firstName ? "✓" : "✗"}</div>
-                    <div>Last: {personalInfo.lastName ? "✓" : "✗"}</div>
-                    <div>DOB: {personalInfo.dateOfBirth ? "✓" : "✗"}</div>
-                  </div>
-                  <div>
-                    <strong>IDs:</strong> {ids.length} total
-                    <div>Valid: {ids.filter(id => id.idType && id.idNumber && id.idPhotos?.length).length}</div>
-                    <strong>Income:</strong> {incomes.length} total
-                    <div>Valid: {incomes.filter(i => i.source && i.monthlyAmount).length}</div>
-                  </div>
-                  <div>
-                    <strong>Residential:</strong> {residentialHistory.length} total
-                    <div>First has address: {residentialHistory[0]?.street ? "✓" : "✗"}</div>
-                    <div>Housing: {residentialHistory[0]?.housingStatus || "not set"}</div>
-                    {residentialHistory[0]?.housingStatus === 'rent' && (
-                      <div>Landlord: {residentialHistory[0]?.landlordFirstName ? "✓" : "✗"}</div>
-                    )}
-                  </div>
-                </div>
-              </details>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Loading Overlay */}
+        {isLoading && (
+          <div className="fixed inset-0 bg-gray-300 bg-opacity-50 flex items-center justify-center z-50">
+            <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          </div>
+        )}
+
+        {/* Personal Information Section */}
+        <section data-section="personal-info" className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
+          <Card className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto] rounded-2xl overflow-hidden border-none shadow-none">
+            <CardContent className="flex flex-col items-start gap-8 px-0 py-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+              <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
+                  Personal Information
+                </h2>
+                <PersonalInfo isMobile={isMobile} />
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Identification Section */}
+        <section data-section="identification" className="flex flex-col items-start gap-8 p-0 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <div className="flex flex-col items-start gap-5 relative self-stretch w-full  flex-[0_0_auto]">
+            <Identification isMobile={isMobile} />
+          </div>
+        </section>
+
+        {/* Income Section */}
+        <section data-section="income" className="flex flex-col items-start gap-8 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+            <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
+              Income
+            </h2>
+            <Income isMobile={isMobile} />
+          </div>
+        </section>
+
+        {/* Residential History Section */}
+        <section data-section="residential-history" className="flex flex-col items-start gap-8  relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+            <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
+              Residential History
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Please add 24 months of residential history or three previous addresses.
+            </p>
+            <ResidentialLandlordInfo isMobile={isMobile} />
+          </div>
+        </section>
+
+        {/* Questionnaire Section */}
+        <section data-section="questionnaire" className="flex flex-col items-start gap-8  relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+          <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+            <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
+              Questionnaire
+            </h2>
+            <Questionnaire isMobile={isMobile} />
+          </div>
+        </section>
+
+        {/* Submit Button */}
+        <div className="w-full flex justify-center mt-6">
+          <Button
+            onClick={handleSubmit}
+            className="w-full max-w-[400px] px-8 py-3 bg-[#0b6969] hover:bg-[#085454] text-white font-medium rounded-lg"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Submitting...' : 'Save Application'}
+          </Button>
+        </div>
+
+        {/* Development Troubleshooting Section */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mt-8 bg-gray-900 text-white p-4 border-4 border-yellow-500 font-mono text-xs rounded-lg">
+            <div className="">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-yellow-400 font-bold text-sm">🔧 DEV TROUBLESHOOTING - Completion Status</h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={async () => {
+                      // Clear temp data only (no photos)
+                      resetStore();
+                      toast({
+                        title: "Temp Data Cleared",
+                        description: "Form data reset (photos preserved)",
+                        duration: 3000,
+                      });
+                    }}
+                    className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded text-xs"
+                  >
+                    Clear Temp Data
+                  </button>
+                  <button
+                    onClick={async () => {
+                      // Clear all data including photos
+                      const confirmClear = window.confirm("This will delete ALL data including uploaded photos. Are you sure?");
+                      if (!confirmClear) return;
+
+                      try {
+                        // Delete all ID photos
+                        for (const id of ids) {
+                          if (id.idPhotos) {
+                            for (const photo of id.idPhotos) {
+                              if (photo.id) {
+                                await deleteIDPhoto(photo.id);
+                              }
+                            }
+                          }
+                        }
+
+                        // Delete all income proofs
+                        for (const income of incomes) {
+                          if (income.id) {
+                            await deleteIncomeProof(income.id);
+                          }
+                        }
+
+                        // Reset the store
+                        resetStore();
+
+                        toast({
+                          title: "All Data Cleared",
+                          description: "All form data and photos deleted",
+                          duration: 3000,
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Error",
+                          description: "Failed to delete some files",
+                          variant: "destructive",
+                          duration: 3000,
+                        });
+                      }
+                    }}
+                    className="px-3 py-1 bg-red-600 hover:bg-red-500 text-white font-bold rounded text-xs"
+                  >
+                    Clear All
+                  </button>
+                  <button
+                    onClick={async () => {
+                      if (application?.id) {
+                        const result = await updateApplicationCompletionStatus(application.id);
+                        if (result.success) {
+                          toast({
+                            title: "Completion Status Updated",
+                            description: `Server now reports: ${result.isComplete ? 'Complete' : 'Incomplete'}`,
+                            duration: 3000,
+                          });
+                          // Refresh the page to get updated data
+                          window.location.reload();
+                        }
+                      }
+                    }}
+                    className="px-3 py-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded text-xs"
+                  >
+                    Force Server Check
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {/* Server Status */}
+                <div className="bg-gray-800 p-3 rounded">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-bold">Server Status (Live):</span>
+                    <span className={serverIsComplete ? "text-green-400" : "text-red-400"}>
+                      {serverIsComplete ? "✅ Complete" : "❌ Incomplete"}
+                    </span>
+                  </div>
+                  <div className="text-gray-400 text-xs">
+                    Initial DB value: {application?.isComplete !== undefined ? application.isComplete.toString() : 'undefined'}
+                  </div>
+                  <div className="text-gray-400 text-xs">
+                    Live store value: {serverIsComplete.toString()}
+                  </div>
+                  <div className="text-gray-400 text-xs mt-1">
+                    Application ID: {application?.id || 'No application'}
+                  </div>
+                </div>
+
+                {/* Client Status */}
+                <div className="bg-gray-800 p-3 rounded">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-bold">Client Status (Store):</span>
+                    <span className={isApplicationComplete() ? "text-green-400" : "text-red-400"}>
+                      {isApplicationComplete() ? "✅ Complete" : "❌ Incomplete"}
+                    </span>
+                  </div>
+                  {(() => {
+                    const result = checkApplicationCompletionClient({
+                      personalInfo,
+                      ids,
+                      incomes,
+                      answers,
+                      residentialHistory
+                    });
+                    return (
+                      <>
+                        <div className="text-gray-400 text-xs">
+                          Missing ({result.missingRequirements.length}):
+                        </div>
+                        <div className="text-yellow-300 text-xs mt-1">
+                          {result.missingRequirements.length > 0
+                            ? result.missingRequirements.join(", ")
+                            : "None"}
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Status Mismatch Warning */}
+              {serverIsComplete !== isApplicationComplete() && (
+                <div className="mt-2 p-2 bg-yellow-900 border border-yellow-600 rounded">
+                  <span className="text-yellow-300">⚠️ Status Mismatch: </span>
+                  <span className="text-white">
+                    Server says {serverIsComplete ? "complete" : "incomplete"},
+                    Client says {isApplicationComplete() ? "complete" : "incomplete"}
+                  </span>
+                </div>
+              )}
+
+              {/* Debug Info */}
+              <div className="mt-2 text-gray-500 text-xs">
+                <details>
+                  <summary className="cursor-pointer hover:text-gray-300">Debug Info (click to expand)</summary>
+                  <div className="mt-2 grid grid-cols-3 gap-2">
+                    <div>
+                      <strong>Personal Info:</strong>
+                      <div>First: {personalInfo.firstName ? "✓" : "✗"}</div>
+                      <div>Last: {personalInfo.lastName ? "✓" : "✗"}</div>
+                      <div>DOB: {personalInfo.dateOfBirth ? "✓" : "✗"}</div>
+                    </div>
+                    <div>
+                      <strong>IDs:</strong> {ids.length} total
+                      <div>Valid: {ids.filter(id => id.idType && id.idNumber && id.idPhotos?.length).length}</div>
+                      <strong>Income:</strong> {incomes.length} total
+                      <div>Valid: {incomes.filter(i => i.source && i.monthlyAmount).length}</div>
+                    </div>
+                    <div>
+                      <strong>Residential:</strong> {residentialHistory.length} total
+                      <div>First has address: {residentialHistory[0]?.street ? "✓" : "✗"}</div>
+                      <div>Housing: {residentialHistory[0]?.housingStatus || "not set"}</div>
+                      {residentialHistory[0]?.housingStatus === 'rent' && (
+                        <div>Landlord: {residentialHistory[0]?.landlordFirstName ? "✓" : "✗"}</div>
+                      )}
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

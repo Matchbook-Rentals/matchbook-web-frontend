@@ -27,6 +27,7 @@ interface MapMarker {
 
 interface MapViewProps {
   setIsFilterOpen: Dispatch<SetStateAction<boolean>>;
+  calculatedHeight: string | number;
 }
 
 const slideUpVariants = {
@@ -127,18 +128,13 @@ const getZoomLevel = (radius: number | undefined): number => {
   return 8; // Default for anything less than 20
 };
 
-const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
+const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, calculatedHeight }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
   const { showListings, likedListings, trip, filters, lookup, filteredCount } = state; // Destructure filters & lookup
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [startY, setStartY] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
-  const [calculatedHeight, setCalculatedHeight] = useState<string | number>('calc(100vh - 80px)');
-  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
   // Use the new snapshot hook for stable listings data
   const listingsSnapshot = useListingsSnapshot();
