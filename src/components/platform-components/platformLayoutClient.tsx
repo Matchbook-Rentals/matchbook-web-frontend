@@ -2,6 +2,7 @@
 import RenterNavbar from './renterNavbar'
 import React from 'react'
 import { usePathname } from 'next/navigation'
+import SessionTracker from '../SessionTracker'
 
 interface UserObject {
   id: string;
@@ -26,6 +27,7 @@ export default function PlatformLayoutClient({ children, userId, user, isSignedI
   
   return (
     <>
+      <SessionTracker />
       {!shouldHideNavbar && <RenterNavbar userId={userId} user={user} isSignedIn={isSignedIn} />}
       <div style={{ fontFamily: 'Poppins' }}>{children}</div>
     </>

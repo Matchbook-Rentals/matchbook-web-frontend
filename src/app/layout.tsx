@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, Poppins, Cutive, Dancing_Script, Caveat, Kalam, Great_Vibes, Pacifico } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import AppSessionTracker from "@/components/AppSessionTracker";
 
 const inter = Inter({ subsets: ["latin"] });
 const cutive = Cutive({ 
@@ -135,6 +136,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               />
             </noscript>
           )}
+          <AppSessionTracker />
           <main>
             {children}
           </main>

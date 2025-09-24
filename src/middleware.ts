@@ -2,7 +2,6 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { Roles } from "@/types/globals";
-import { handleSessionTracking } from "@/lib/session-tracking";
 
 const isProtectedRoute = createRouteMatcher([
   "/app(.*)",
@@ -100,12 +99,8 @@ export default clerkMiddleware(async (auth, request) => {
       return NextResponse.redirect(unauthorizedUrl);
     }
 
-    // Handle session tracking for authenticated users
-    // This will only update the database once per session (24 hours)
-    handleSessionTracking().catch((error) => {
-      // Log error but don't block the request
-      console.error('Session tracking error:', error);
-    });
+    // Session tracking is now handled by Server Actions
+    // See /src/app/actions/session-tracking.ts
   }
 });
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { OnboardingPopup } from "./onboarding-popup";
 import { useRouter } from "next/navigation";
+import SessionTracker from "./SessionTracker";
 
 interface HomePageWrapperProps {
   children: React.ReactNode;
@@ -63,6 +64,7 @@ export const HomePageWrapper: React.FC<HomePageWrapperProps> = ({ children }) =>
 
   return (
     <>
+      <SessionTracker />
       {children}
       <OnboardingPopup
         isOpen={showPopup}
