@@ -222,9 +222,7 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
         subtitle={`Manage payments for ${getListingDisplayName(listing)}`}
         rightContent={
           <BrandButton
-            //href="/app/stripe/onboarding"
-            disabled={true}
-            spinOnClick={true}
+            href={`/app/host/${listingId}/payments/stripe`}
             size="sm"
           >
             Manage Settings

@@ -1,9 +1,9 @@
 import React from "react";
 import { HOST_PAGE_STYLE } from "@/constants/styles";
-import { HostPageTitle } from "../../../[listingId]/(components)/host-page-title";
+import { HostPageTitle } from "../../(components)/host-page-title";
 import StripeDashboardRedirect from "@/components/stripe/stripe-dashboard-redirect";
 
-export default function StripeSettingsPage() {
+export default function ListingStripeSettingsPage() {
   return (
     <div className={HOST_PAGE_STYLE}>
       <HostPageTitle
