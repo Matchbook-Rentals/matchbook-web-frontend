@@ -179,7 +179,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
   // Helper function to calculate total monthly income
   const getTotalMonthlyIncome = () => {
     const incomes = application?.incomes || [];
-    const total = incomes.reduce((sum, income) => sum + (income.monthlyAmount || 0), 0);
+    const total = incomes.reduce((sum, income) => sum + Number(income.monthlyAmount || 0), 0);
     return total > 0 ? `$${total}/month` : 'N/A';
   };
 

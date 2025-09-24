@@ -20,7 +20,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
   const { currListing, setCurrApplication, setTrip, currHousingRequest  } = useHostProperties();
   const router = useRouter();
   const { userId } = useAuth();
-  const totalMonthlyIncome = application?.incomes?.length > 0 && application.incomes.reduce((acc, income) => acc + income.monthlyAmount, '');
+  const totalMonthlyIncome = application?.incomes?.length > 0 && application.incomes.reduce((acc, income) => acc + Number(income.monthlyAmount || 0), 0);
 
   // Calculate length of stay in days and months
   const lengthOfStayDays = trip?.startDate && trip?.endDate
