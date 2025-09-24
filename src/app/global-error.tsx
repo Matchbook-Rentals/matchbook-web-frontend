@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { BrandButton } from '@/components/ui/brandButton';
 import { RefreshCw } from 'lucide-react';
+import { logApplicationErrorWithContext } from '@/app/actions/application-errors';
 
 export default function GlobalError({
   error,
@@ -12,16 +13,26 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const [countdown, setCountdown] = useState(5);
-
+  // Log error to database silently when component mounts
   useEffect(() => {
-    if (countdown <= 0) {
-      window.location.reload();
-      return;
-    }
-    const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [countdown]);
+    const logError = async () => {
+      try {
+        await logApplicationErrorWithContext(error, {
+          pathname: typeof window !== 'undefined' ? window.location.pathname : undefined,
+          errorBoundary: 'GlobalError',
+          timestamp: new Date().toISOString(),
+          userActions: typeof window !== 'undefined' && window.sessionStorage
+            ? JSON.parse(window.sessionStorage.getItem('recentUserActions') || '[]')
+            : undefined,
+        });
+      } catch (logError) {
+        // Silently fail - don't impact user experience
+        console.error('Failed to log global error:', logError);
+      }
+    };
+
+    logError();
+  }, [error]);
 
   return (
     <html>
@@ -38,7 +49,7 @@ export default function GlobalError({
           
           <CardContent className="space-y-4 text-center">
             <div className="text-sm text-muted-foreground">
-              Auto-refreshing in <span className="font-medium text-foreground">{countdown}</span> seconds
+              Please use the buttons below to retry or return to the homepage.
             </div>
           </CardContent>
           

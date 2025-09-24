@@ -26,8 +26,8 @@ export default function StripeDashboardRedirect() {
       window.open(data.url, '_blank');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
-      setIsLoading(false);
     }
+      setIsLoading(false);
   };
 
   return (
