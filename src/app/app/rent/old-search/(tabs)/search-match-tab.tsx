@@ -22,10 +22,11 @@ import { Card, CardContent } from '@/components/ui/card';
 // Add prop interface
 interface MatchViewTabProps {
   setIsFilterOpen: Dispatch<SetStateAction<boolean>>;
+  calculatedHeight: string | number;
 }
 
 // Update component definition to receive props
-const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
+const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen, calculatedHeight }) => {
   const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
@@ -46,37 +47,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [startY, setStartY] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
-  const [calculatedHeight, setCalculatedHeight] = useState(0);
-  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
-
 
 
   let isFlexible = state.trip.flexibleStart || state.trip.flexibleEnd;
 
-  useEffect(() => {
-    const setHeight = () => {
-      if (containerRef.current) {
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const newStartY = containerRect.top;
-        const newViewportHeight = window.innerHeight;
-        const newCalculatedHeight = newViewportHeight - newStartY;
-        setStartY(newStartY);
-        setViewportHeight(newViewportHeight);
-        setCalculatedHeight(newCalculatedHeight);
-        setCurrentComponentHeight(containerRef.current.offsetHeight);
-        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
-      }
-    };
-
-    setHeight();
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

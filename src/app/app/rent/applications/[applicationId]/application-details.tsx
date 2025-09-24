@@ -223,7 +223,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
 
   return (
     <div className="flex w-full items-start bg-background">
-      <div className="flex flex-col w-full items-start px-6 py-8 gap-[18px] max-w-[1200px]  mx-auto">
+      <div className="flex flex-col w-full items-start px-6 py-8 gap-[18px]  mx-auto">
         {/* Header Section */}
         <section className="flex items-end gap-6 w-full">
           <div className="flex items-center gap-3">

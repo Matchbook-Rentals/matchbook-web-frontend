@@ -16,7 +16,7 @@ import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
-import { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, and useRef
+import { useState, useEffect, useRef, useMemo } from 'react'; // Import useState, useEffect, useRef, and useMemo
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
@@ -81,45 +81,6 @@ const TripsPage: React.FC = () => {
 
   const tabTriggerTextStyles = 'text-[9px] px-0 md:px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
   const tabTriggerStyles = 'pt-1 sm:p-0 '
-  const tabs: Tab[] = [
-    //{
-    {
-      label: 'Recommended',
-      value: 'recommended',
-      content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} calculatedHeight={calculatedHeight} /> : null,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-      Icon: <RecommendedIcon className="mt-1" />,
-      iconClassName: ""
-    },
-    {
-      label: 'All Listings',
-      value: 'allListings',
-      content: <MapView setIsFilterOpen={setIsFilterOpen} calculatedHeight={calculatedHeight} />,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-      Icon: <ALlListingsIcon className='mt-1' />,
-      iconClassName: ""
-    },
-    {
-      label: 'Favorites',
-      value: 'favorites',
-      content: <SearchFavoritesTab calculatedHeight={calculatedHeight} />,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-      Icon: <FavoritesIcon className='mt-1' />,
-      iconClassName: ""
-    },
-    {
-      label: 'Matches',
-      value: 'matchbook',
-      content: <SearchMatchbookTab calculatedHeight={calculatedHeight} />,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-      Icon: <MatchesIcon className="mt-1" />,
-      iconClassName: ""
-    },
-  ];
 
   const marginClass = APP_PAGE_MARGIN;
   const isMobile = useIsMobile(768); // 768px is the 'md' breakpoint
@@ -172,6 +133,45 @@ const TripsPage: React.FC = () => {
     };
   }, [isDesktopView]);
 
+  // Define tabs after calculatedHeight is available
+  const tabs: Tab[] = useMemo(() => [
+    {
+      label: 'Recommended',
+      value: 'recommended',
+      content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} calculatedHeight={calculatedHeight} /> : null,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+      Icon: <RecommendedIcon className="mt-1" />,
+      iconClassName: ""
+    },
+    {
+      label: 'All Listings',
+      value: 'allListings',
+      content: <MapView setIsFilterOpen={setIsFilterOpen} calculatedHeight={calculatedHeight} />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+      Icon: <ALlListingsIcon className='mt-1' />,
+      iconClassName: ""
+    },
+    {
+      label: 'Favorites',
+      value: 'favorites',
+      content: <SearchFavoritesTab calculatedHeight={calculatedHeight} />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+      Icon: <FavoritesIcon className='mt-1' />,
+      iconClassName: ""
+    },
+    {
+      label: 'Matches',
+      value: 'matchbook',
+      content: <SearchMatchbookTab calculatedHeight={calculatedHeight} />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+      Icon: <MatchesIcon className="mt-1" />,
+      iconClassName: ""
+    },
+  ], [state.trip, setIsFilterOpen, calculatedHeight, tabTriggerTextStyles, tabTriggerStyles]);
 
   return (
     <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable}`}>

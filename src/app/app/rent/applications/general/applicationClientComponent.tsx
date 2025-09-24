@@ -535,7 +535,7 @@ export default function ApplicationClientComponent({
 
   return (
     <div className='bg-gray-50'>
-      <div className="flex flex-col w-full max-w-[1200px] mx-auto items-start justify-center gap-4 p-4">
+      <div className="flex flex-col w-full mx-auto items-start justify-center gap-4 p-4">
         {/* Header Section */}
         <div className="flex items-start gap-6 py-0 w-full">
           <div className="flex items-center justify-start gap-3 w-full">
