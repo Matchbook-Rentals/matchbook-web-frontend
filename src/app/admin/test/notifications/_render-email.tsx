@@ -67,6 +67,9 @@ export function renderEmailToHtml(emailData: NotificationEmailData): string {
         background-color: #ffffff !important;
         color: #000000 !important;
       }
+      .tag-link {
+        color: #ffffff !important;
+      }
     }
   </style>
 </head>
@@ -90,8 +93,8 @@ export function renderEmailToHtml(emailData: NotificationEmailData): string {
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 ${emailData.tagLink ? `
                 <tr>
-                  <td style="padding: 0px 20px 10px 20px; text-align: left;">
-                    <a href="${emailData.tagLink.url}" style="color: #000000; font-size: 16px; font-weight: 500; text-decoration: none;">
+                  <td style="padding: 0px 10px 10px 10px; text-align: left;">
+                    <a href="${emailData.tagLink.url}" class="tag-link" style="color: #000000; font-size: 16px; font-weight: 500; text-decoration: none;">
                       ${emailData.tagLink.text}
                     </a>
                   </td>

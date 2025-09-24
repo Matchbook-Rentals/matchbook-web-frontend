@@ -96,6 +96,9 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
               color: #ffffff !important;
               text-decoration: none;
             }
+            .tag-link {
+              color: #ffffff !important;
+            }
           }
         `}</style>
       </head>
@@ -119,9 +122,10 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                     <table width="100%" cellPadding="0" cellSpacing="0" border="0">
                       {tagLink && (
                         <tr>
-                          <td style={{ padding: '0px 20px 10px 20px', textAlign: 'left' }}>
+                          <td style={{ padding: '0px 10px 10px 10px', textAlign: 'left' }}>
                             <a
                               href={tagLink.url}
+                              className="tag-link"
                               style={{
                                 color: '#000000',
                                 fontSize: '16px',
