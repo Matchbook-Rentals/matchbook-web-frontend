@@ -12,11 +12,7 @@ import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 
-interface SearchFavoritesTabProps {
-  calculatedHeight: string | number;
-}
-
-export default function SearchFavoritesTab({ calculatedHeight }: SearchFavoritesTabProps) {
+export default function SearchFavoritesTab() {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
@@ -26,6 +22,10 @@ export default function SearchFavoritesTab({ calculatedHeight }: SearchFavorites
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [startY, setStartY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
   const [filters, setFilters] = useState<FilterOptions>({
     ...DEFAULT_FILTER_OPTIONS,

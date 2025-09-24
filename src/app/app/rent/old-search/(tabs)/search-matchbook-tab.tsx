@@ -12,11 +12,7 @@ enum Status {
   None = 'none'
 }
 
-interface SearchMatchbookTabProps {
-  calculatedHeight: string | number;
-}
-
-export function SearchMatchbookTab({ calculatedHeight }: SearchMatchbookTabProps) {
+export function SearchMatchbookTab() {
   const { state } = useTripContext();
   const { matchedListings, trip, lookup } = state;
   const router = useRouter(); // Added hook

@@ -27,7 +27,6 @@ interface MapMarker {
 
 interface MapViewProps {
   setIsFilterOpen: Dispatch<SetStateAction<boolean>>;
-  calculatedHeight: string | number;
 }
 
 const slideUpVariants = {
@@ -128,7 +127,7 @@ const getZoomLevel = (radius: number | undefined): number => {
   return 8; // Default for anything less than 20
 };
 
-const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, calculatedHeight }) => {
+const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -163,6 +162,13 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, calculatedHeight }) 
 
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
+
+  // Height calculation state variables
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [startY, setStartY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
   useEffect(() => {
     setIsClient(true);

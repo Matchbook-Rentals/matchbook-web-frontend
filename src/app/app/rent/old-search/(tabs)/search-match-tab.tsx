@@ -22,11 +22,10 @@ import { Card, CardContent } from '@/components/ui/card';
 // Add prop interface
 interface MatchViewTabProps {
   setIsFilterOpen: Dispatch<SetStateAction<boolean>>;
-  calculatedHeight: string | number;
 }
 
 // Update component definition to receive props
-const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen, calculatedHeight }) => {
+const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
@@ -47,9 +46,35 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen, calculated
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const [startY, setStartY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
   let isFlexible = state.trip.flexibleStart || state.trip.flexibleEnd;
+
+  useEffect(() => {
+    const setHeight = () => {
+      if (containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newStartY = containerRect.top;
+        const newViewportHeight = window.innerHeight;
+        const newCalculatedHeight = newViewportHeight - newStartY;
+        setStartY(newStartY);
+        setViewportHeight(newViewportHeight);
+        setCalculatedHeight(newCalculatedHeight);
+        setCurrentComponentHeight(containerRef.current.offsetHeight);
+        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
+      }
+    };
+
+    setHeight();
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
 
 
   useEffect(() => {
@@ -283,7 +308,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen, calculated
       {/* Below paddings are to accomdate control buttons */}
       {/* first for buttons with mobile navigation selector */}
       {/* second is for 'tablet' view with larger button controls */}
-      <div className={`w-full mx-auto pb-[80px] md:pb-[100px] lg:pb-[0px]`}>
+      <div className={`w-full mx-auto pb-[80px] md:pb-[100px]`}>
         <ListingImageCarousel
           listingImages={showListings[0]?.listingImages || []}
         />
