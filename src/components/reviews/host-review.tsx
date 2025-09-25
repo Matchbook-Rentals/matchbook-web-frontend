@@ -31,10 +31,22 @@ interface ReviewData {
 }
 
 interface UserRatingProps {
-  data: ReviewData;
+  data?: ReviewData;
+  avatarImgUrl?: string;
 }
 
-export const UserRating = ({ data }: UserRatingProps): JSX.Element => {
+export const UserRating = ({ data, avatarImgUrl }: UserRatingProps): JSX.Element => {
+  if (!data) {
+    return (
+      <Card className="flex flex-col w-full max-w-[1347px] items-center justify-center border-none p-8">
+        <div className="text-gray-500 text-center">
+          <p className="text-lg font-medium mb-2">No reviews available</p>
+          <p className="text-sm">Reviews will appear here once they are available.</p>
+        </div>
+      </Card>
+    );
+  }
+
   const { overallRating, totalReviews, ratingDistribution, reviews } = data;
   const [selectedRating, setSelectedRating] = React.useState<number | null>(null);
   const [searchTerm, setSearchTerm] = React.useState<string>("");

@@ -60,7 +60,8 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
           </div>
           </div>
 
-          <Dialog>
+{/* TODO: Re-enable when review data is properly provided to UserRating component */}
+          {/* <Dialog>
             <DialogTrigger>
               <Button>
                 Show Review
@@ -74,7 +75,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
               </DialogHeader>
               <UserRating avatarImgUrl={participantInfo.imageUrl} />
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
         </div>
       ) : (
         <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">
