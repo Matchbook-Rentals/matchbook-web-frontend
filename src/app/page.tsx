@@ -26,8 +26,8 @@ const WebHomePage = async () => {
     publicMetadata: user.publicMetadata
   } : null;
 
-  // Derive hasAccess from server-side user data
-  const hasAccess = user ? checkClientBetaAccess(user.publicMetadata.role as string) : false;
+  // Search is open to all signed-in users (no role restrictions)
+  const hasAccess = !!user;
   
   // Get trip count if user has access
   const tripCount = hasAccess && user?.id ? await getUserTripsCount() : 0;
