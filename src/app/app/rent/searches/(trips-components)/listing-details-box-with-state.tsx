@@ -175,9 +175,9 @@ const ListingDetailsBoxWithState: React.FC<ListingDetailsBoxWithStateProps> = ({
             <div className="flex items-center gap-1 h-8">
               <StarIcon className="h-5 w-5 text-yellow-400 fill-yellow-400" />
               <span className="font-normal text-[#717680] text-sm">
-                {listing?.averageRating || listing.uScore 
-                  ? (listing?.averageRating || listing.uScore?.toFixed(1)) 
-                  : 'N/A'} ({listing?.numberOfStays || 0})
+                {listing?.averageRating
+                  ? `${listing.averageRating.toFixed(1)} (${listing?.numberOfStays || 0})`
+                  : <span className="italic">No reviews yet</span>}
               </span>
             </div>
           </div>
