@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
-import { TermsContent } from "../terms-of-service/terms-content";
+import { PrivacyPolicyContent } from "./privacy-policy-content";
 
 export default async function PrivacyPolicyPage() {
   const user = await currentUser();
@@ -25,7 +25,7 @@ export default async function PrivacyPolicyPage() {
       isSignedIn={isSignedIn}
       pageTitle="Privacy Policy"
     >
-      <TermsContent />
+      <PrivacyPolicyContent />
     </LegalPageTemplate>
   );
 }
