@@ -6,6 +6,7 @@ import { HostApplicationCard } from "./components/host-application-card";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import { HostUserData } from "@/app/app/host/components/onboarding-checklist-card";
+import { findConversationBetweenUsers, createListingConversation } from "@/app/actions/conversations";
 
 // Helper function to transform application data for the HostApplicationCard component
 const transformApplicationForCard = (app: any, isMobile: boolean) => {
@@ -79,6 +80,30 @@ export default function HostApplicationCards({
     onViewApplicationDetails(listingId, applicationId);
   };
 
+  const handleMessageGuest = async (listingId: string, guestUserId: string) => {
+    try {
+      // First, check if conversation exists
+      const result = await findConversationBetweenUsers(listingId, guestUserId);
+      let conversationId = result.conversationId;
+
+      // If no conversation exists, create one
+      if (!conversationId) {
+        const createResult = await createListingConversation(listingId, guestUserId);
+        if (createResult.success && createResult.conversationId) {
+          conversationId = createResult.conversationId;
+        } else {
+          console.error('Failed to create conversation:', createResult.error);
+          return;
+        }
+      }
+
+      // Navigate to rent messages page with conversation ID
+      router.push(`/app/rent/messages?convo=${conversationId}`);
+    } catch (error) {
+      console.error('Error handling message guest:', error);
+    }
+  };
+
   // Return null if no applications to ensure TabLayout shows empty state
   if (!applications || applications.length === 0) {
     console.log('📋 HostApplicationCards - No applications, returning null');
@@ -95,13 +120,7 @@ export default function HostApplicationCards({
             <HostApplicationCard
               {...cardData}
               onApplicationDetails={() => handleApplicationDetailsClick(app.listingId, app.id)}
-              onMessageGuest={() => {
-                if (onMessageGuest) {
-                  onMessageGuest(app.name);
-                } else {
-                  console.log('Message guest:', app.name);
-                }
-              }}
+              onMessageGuest={() => handleMessageGuest(app.listingId, app.userId)}
               onManageListing={() => router.push(`/app/host/${app.listingId}/summary`)}
               className="border border-solid border-[#6e504933]"
               isLoading={loadingApplicationId === app.id}

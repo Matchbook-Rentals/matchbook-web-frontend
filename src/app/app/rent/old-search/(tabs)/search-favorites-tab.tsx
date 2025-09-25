@@ -79,6 +79,20 @@ export default function SearchFavoritesTab() {
       return;
     }
 
+    if (state.hasApplication && !state.application?.isComplete) {
+      toast({
+        title: "Application Incomplete",
+        description: "Please complete your application before applying to properties.",
+        variant: "destructive",
+        action: (
+          <ToastAction altText="Complete Application" onClick={() => router.push('/app/rent/application/general')}>
+            Complete Application
+          </ToastAction>
+        ),
+      });
+      return;
+    }
+
     setLookup(prev => {
       const newReqs = new Set(prev.requestedIds)
       newReqs.add(listing.id)
