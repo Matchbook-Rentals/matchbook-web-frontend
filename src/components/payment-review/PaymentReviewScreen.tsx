@@ -279,7 +279,10 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
 
           {/* Left side - Back button and payment method info */}
           <div className="flex items-center gap-4">
+
+            {/*  
             {onBack && (
+
               <Button
                 onClick={onBack}
                 variant="outline"
@@ -290,6 +293,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
                 Back
               </Button>
             )}
+            */}
             <div className="text-sm text-gray-600 hidden md:block">
               {selectedPaymentMethodType === 'card' ? (
                 <>
