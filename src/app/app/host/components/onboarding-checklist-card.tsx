@@ -45,6 +45,7 @@ export const OnboardingChecklistCard = ({
   hideHeader = false
 }: OnboardingChecklistCardProps): JSX.Element => {
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isCompletingAuth, setIsCompletingAuth] = useState(false);
 
   const handleStripeSetup = async () => {
     setIsRedirecting(true);
@@ -62,6 +63,30 @@ export const OnboardingChecklistCard = ({
     } catch (error) {
       console.error('Error setting up Stripe:', error);
       setIsRedirecting(false);
+    }
+  };
+
+  const handleTestAuthComplete = async () => {
+    setIsCompletingAuth(true);
+    try {
+      const response = await fetch('/api/admin/medallion/complete-test-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      const data = await response.json();
+      if (data.success) {
+        // Reload page to show updated status
+        window.location.reload();
+      } else {
+        console.error('Error completing test authentication:', data.error);
+        setIsCompletingAuth(false);
+      }
+    } catch (error) {
+      console.error('Error completing test authentication:', error);
+      setIsCompletingAuth(false);
     }
   };
 
@@ -107,6 +132,11 @@ export const OnboardingChecklistCard = ({
       text: "Review Host Terms and Conditions (test)",
       completed: false,
     },
+    {
+      id: 4,
+      text: "Complete Authentication (test)",
+      completed: false,
+    },
   ];
 
   const renderChecklist = (items: typeof requiredItems, checklistTitle: string, hideTitle: boolean = false) => (
@@ -142,9 +172,11 @@ export const OnboardingChecklistCard = ({
               const isStripeItem = item.text.includes("Stripe Account");
               const isHostTermsItem = item.text.includes("Host Terms and Conditions");
               const isIdentityVerificationItem = item.text.includes("Identity Verification");
+              const isTestAuthItem = item.text.includes("Complete Authentication (test)");
               const shouldBeStripeClickable = !item.completed && isStripeItem;
               const shouldBeHostTermsClickable = !item.completed && isHostTermsItem;
               const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem;
+              const shouldBeTestAuthClickable = !item.completed && isTestAuthItem;
               
               const handleHostTermsClick = () => {
                 // Get current page URL to use as redirect after terms agreement
@@ -193,6 +225,14 @@ export const OnboardingChecklistCard = ({
                         className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
                       >
                         {item.text}
+                      </button>
+                    ) : shouldBeTestAuthClickable ? (
+                      <button
+                        onClick={handleTestAuthComplete}
+                        disabled={isCompletingAuth}
+                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
+                      >
+                        {isCompletingAuth ? 'Completing Authentication...' : item.text}
                       </button>
                     ) : (
                       <span className={`${item.completed ? '' : 'hover:underline cursor-pointer'} font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]`}>
