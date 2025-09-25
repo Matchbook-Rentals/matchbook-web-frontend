@@ -157,74 +157,6 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
     }
   };
 
-  // Function to add a new residence with a cap of 3
-  const addResidence = () => {
-    if (residentialHistory.length < 3) {
-      // Directly update the store
-      setResidentialHistory([...residentialHistory, { ...defaultResidentialHistory, id: crypto.randomUUID() }]);
-    }
-  };
-
-    // New useEffect to adjust the number of residences based on the total months entered.
-  // It ensures that if the cumulative months across residences reaches or exceeds 24,
-  // any extra (unneeded) residences are removed.
-  useEffect(() => {
-    let cumulativeMonths = 0;
-    let neededProperties = residentialHistory.length;
-    // Loop over residences in order, accumulating duration until we reach 24.
-    for (let i = 0; i < residentialHistory.length; i++) {
-      const duration = parseInt(residentialHistory[i].durationOfTenancy || "") || 0; // Corrected parseInt usage
-      cumulativeMonths += duration;
-      if (cumulativeMonths >= 24) {
-        // Only the first (i + 1) residences are needed.
-        neededProperties = i + 1;
-        break;
-      }
-    }
-    // If we've reached (or exceeded) 24 and have extra residences, preserve then trim them.
-    if (cumulativeMonths >= 24 && residentialHistory.length > neededProperties) {
-      // Preserve the full history before trimming (only if we have more data than preserved)
-      if (residentialHistory.length > preservedResidentialHistory.length) {
-        setPreservedResidentialHistory([...residentialHistory]);
-      }
-      setResidentialHistory(residentialHistory.slice(0, neededProperties));
-    }
-    // If we're below 24 months and have preserved data, restore it
-    else if (cumulativeMonths < 24 && preservedResidentialHistory.length > residentialHistory.length) {
-      // Check if we should restore from preserved history
-      // Only restore if the preserved history has more entries and is relevant
-      const shouldRestore = preservedResidentialHistory.some((preserved, index) => {
-        // Check if there's data in preserved history that's not in current
-        return index >= residentialHistory.length && 
-               (preserved.street || preserved.city || preserved.state || 
-                preserved.landlordFirstName || preserved.landlordLastName);
-      });
-      
-      if (shouldRestore) {
-        // Restore up to 3 addresses from preserved history
-        const restoredCount = Math.min(3, preservedResidentialHistory.length);
-        setResidentialHistory(preservedResidentialHistory.slice(0, restoredCount));
-      } else if (cumulativeMonths < 24) {
-        // Auto-add a new residence if needed and we haven't reached the maximum of 3
-        const lastResidence = residentialHistory[residentialHistory.length - 1];
-        if (lastResidence && lastResidence.durationOfTenancy !== "" && residentialHistory.length < 3) {
-          addResidence();
-        }
-      }
-    }
-    // Otherwise, if we're below 24 and the last residence's duration is filled,
-    // auto-add a new residence (if we haven't reached the maximum of 3).
-    else if (cumulativeMonths < 24) {
-      const lastResidence = residentialHistory[residentialHistory.length - 1];
-      if (lastResidence && lastResidence.durationOfTenancy !== "" && residentialHistory.length < 3) {
-        addResidence();
-      }
-    }
-  }, [residentialHistory, setResidentialHistory, preservedResidentialHistory, setPreservedResidentialHistory]); // Include dependencies
-
-
-  // Calculate total months from all residences (if needed elsewhere)
-  const totalMonths = residentialHistory.reduce((acc, curr) => acc + (parseInt(curr.durationOfTenancy || "") || 0), 0);
 
 
   return (
@@ -381,7 +313,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           }}
                           min="1"
                           placeholder="Enter months"
-                          className={`w-[120px] ${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}`}
+                          className={`w-[160px] ${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}`}
                         />
                         {fieldErrors[`residentialHistory.${index}.durationOfTenancy`] && 
                           <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.durationOfTenancy`]}</p>}

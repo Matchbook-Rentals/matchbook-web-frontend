@@ -117,88 +117,86 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
   } = {};
 
   if (!residentialHistory || residentialHistory.length === 0) {
-    const error = 'At least one residential history entry is required';
+    const error = 'Current residence is required';
     console.log(`❌ Validation failed: residentialHistory - "no entries provided" - ${error}`);
     errors.overall = error;
     return errors;
   }
 
-  // Determine how many residences are required to meet 24 months
-  let cumulativeMonths = 0;
-  let requiredCount = 0;
+  // Only validate current residence (first entry) as required
+  // Validate additional residences only if they have partial data
   for (let i = 0; i < residentialHistory.length; i++) {
-    const duration = parseInt(residentialHistory[i].durationOfTenancy || '0') || 0;
-    if (cumulativeMonths < 24) {
-      cumulativeMonths += duration;
-      requiredCount++;
-    } else {
-      break;
-    }
-  }
-
-  // Validate required fields for each required residence
-  for (let i = 0; i < requiredCount; i++) {
     const entry = residentialHistory[i];
     const street = entry.street ? entry.street : '';
     const city = entry.city ? entry.city : '';
     const state = entry.state ? entry.state : '';
     const zipCode = entry.zipCode ? entry.zipCode : '';
     const durationOfTenancy = entry.durationOfTenancy ? entry.durationOfTenancy : '';
-    if (!street.trim()) {
-      const error = `Residence ${i + 1}: Street Address is required`;
-      console.log(`❌ Validation failed: street[${i}] - "${street}" - ${error}`);
-      errors.street = errors.street || [];
-      errors.street[i] = error;
-    }
-    if (!city.trim()) {
-      const error = `Residence ${i + 1}: City is required`;
-      console.log(`❌ Validation failed: city[${i}] - "${city}" - ${error}`);
-      errors.city = errors.city || [];
-      errors.city[i] = error;
-    }
-    if (!state.trim()) {
-      const error = `Residence ${i + 1}: State is required`;
-      console.log(`❌ Validation failed: state[${i}] - "${state}" - ${error}`);
-      errors.state = errors.state || [];
-      errors.state[i] = error;
-    }
-    if (!zipCode.trim()) {
-      const error = `Residence ${i + 1}: ZIP Code is required`;
-      console.log(`❌ Validation failed: zipCode[${i}] - "${zipCode}" - ${error}`);
-      errors.zipCode = errors.zipCode || [];
-      errors.zipCode[i] = error;
-    }
-    if (!durationOfTenancy.trim()) {
-      const error = `Residence ${i + 1}: Length of Stay is required`;
-      console.log(`❌ Validation failed: durationOfTenancy[${i}] - "${durationOfTenancy}" - ${error}`);
-      errors.durationOfTenancy = errors.durationOfTenancy || [];
-      errors.durationOfTenancy[i] = error;
-    }
-    if (entry.housingStatus === 'rent') {
-      const landlordFirstName = entry.landlordFirstName ? entry.landlordFirstName : '';
-      const landlordLastName = entry.landlordLastName ? entry.landlordLastName : '';
-      const landlordEmail = entry.landlordEmail ? entry.landlordEmail : '';
-      const landlordPhoneNumber = entry.landlordPhoneNumber ? entry.landlordPhoneNumber : '';
-      if (!landlordFirstName.trim()) {
-        errors.landlordFirstName = errors.landlordFirstName || [];
-        errors.landlordFirstName[i] = `Residence ${i + 1}: Landlord First Name is required`;
-      }
-      if (!landlordLastName.trim()) {
-        errors.landlordLastName = errors.landlordLastName || [];
-        errors.landlordLastName[i] = `Residence ${i + 1}: Landlord Last Name is required`;
-      }
-      // Require at least one contact method: email OR phone
-      if (!landlordEmail.trim() && !landlordPhoneNumber.trim()) {
-        errors.landlordEmail = errors.landlordEmail || [];
-        errors.landlordEmail[i] = `Residence ${i + 1}: Landlord email or phone number is required`;
-        errors.landlordPhoneNumber = errors.landlordPhoneNumber || [];
-        errors.landlordPhoneNumber[i] = `Residence ${i + 1}: Landlord email or phone number is required`;
-      }
-    }
-  }
 
-  if (cumulativeMonths < 24) {
-    errors.overall = `Total residential duration is ${cumulativeMonths} months; at least 24 months required.`;
+    // For first residence (current), all fields are required
+    // For additional residences, only validate if any field is filled
+    const isCurrentResidence = i === 0;
+    const hasPartialData = street || city || state || zipCode || durationOfTenancy ||
+                          entry.landlordFirstName || entry.landlordLastName;
+
+    if (isCurrentResidence || hasPartialData) {
+      if (!street.trim()) {
+        const error = isCurrentResidence ? 'Current Residence: Street Address is required' : 'Previous Residence: Street Address is required';
+        console.log(`❌ Validation failed: street[${i}] - "${street}" - ${error}`);
+        errors.street = errors.street || [];
+        errors.street[i] = error;
+      }
+      if (!city.trim()) {
+        const error = isCurrentResidence ? 'Current Residence: City is required' : 'Previous Residence: City is required';
+        console.log(`❌ Validation failed: city[${i}] - "${city}" - ${error}`);
+        errors.city = errors.city || [];
+        errors.city[i] = error;
+      }
+      if (!state.trim()) {
+        const error = isCurrentResidence ? 'Current Residence: State is required' : 'Previous Residence: State is required';
+        console.log(`❌ Validation failed: state[${i}] - "${state}" - ${error}`);
+        errors.state = errors.state || [];
+        errors.state[i] = error;
+      }
+      if (!zipCode.trim()) {
+        const error = isCurrentResidence ? 'Current Residence: ZIP Code is required' : 'Previous Residence: ZIP Code is required';
+        console.log(`❌ Validation failed: zipCode[${i}] - "${zipCode}" - ${error}`);
+        errors.zipCode = errors.zipCode || [];
+        errors.zipCode[i] = error;
+      }
+      if (!durationOfTenancy.trim()) {
+        const error = isCurrentResidence ? 'Current Residence: Length of Stay is required' : 'Previous Residence: Length of Stay is required';
+        console.log(`❌ Validation failed: durationOfTenancy[${i}] - "${durationOfTenancy}" - ${error}`);
+        errors.durationOfTenancy = errors.durationOfTenancy || [];
+        errors.durationOfTenancy[i] = error;
+      }
+
+      if (entry.housingStatus === 'rent') {
+        const landlordFirstName = entry.landlordFirstName ? entry.landlordFirstName : '';
+        const landlordLastName = entry.landlordLastName ? entry.landlordLastName : '';
+        const landlordEmail = entry.landlordEmail ? entry.landlordEmail : '';
+        const landlordPhoneNumber = entry.landlordPhoneNumber ? entry.landlordPhoneNumber : '';
+
+        if (!landlordFirstName.trim()) {
+          const error = isCurrentResidence ? 'Current Landlord: First Name is required' : 'Previous Landlord: First Name is required';
+          errors.landlordFirstName = errors.landlordFirstName || [];
+          errors.landlordFirstName[i] = error;
+        }
+        if (!landlordLastName.trim()) {
+          const error = isCurrentResidence ? 'Current Landlord: Last Name is required' : 'Previous Landlord: Last Name is required';
+          errors.landlordLastName = errors.landlordLastName || [];
+          errors.landlordLastName[i] = error;
+        }
+        // Require at least one contact method: email OR phone
+        if (!landlordEmail.trim() && !landlordPhoneNumber.trim()) {
+          const error = isCurrentResidence ? 'Current Landlord: Email or Phone Number is required' : 'Previous Landlord: Email or Phone Number is required';
+          errors.landlordEmail = errors.landlordEmail || [];
+          errors.landlordEmail[i] = error;
+          errors.landlordPhoneNumber = errors.landlordPhoneNumber || [];
+          errors.landlordPhoneNumber[i] = error;
+        }
+      }
+    }
   }
 
   return errors;

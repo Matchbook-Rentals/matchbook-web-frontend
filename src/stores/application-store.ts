@@ -150,7 +150,10 @@ export const initialState = {
   },
   ids: [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
   verificationImages: [] as VerificationImage[],
-  residentialHistory: [defaultResidentialHistory],
+  residentialHistory: [
+    { ...defaultResidentialHistory, id: 'current' },
+    { ...defaultResidentialHistory, id: 'previous' }
+  ],
   preservedResidentialHistory: [] as ResidentialHistory[], // Store for preserving data when trimming
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
   answers: {
@@ -298,7 +301,10 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     let residences;
     console.log('application.residentialHistories', application.residentialHistories);
     if (application.residentialHistories.length === 0) {
-      residences = [defaultResidentialHistory];
+      residences = [
+        { ...defaultResidentialHistory, id: 'current' },
+        { ...defaultResidentialHistory, id: 'previous' }
+      ];
     } else {
       residences = application.residentialHistories.sort((a: any, b: any) => a.index - b.index);
     }

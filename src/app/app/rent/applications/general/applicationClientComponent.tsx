@@ -282,7 +282,8 @@ export default function ApplicationClientComponent({
               if (error) {
                 const displayName = fieldNames[key as keyof typeof fieldNames];
                 if (displayName) {
-                  errorFields.push(`${displayName} ${index + 1}`);
+                  const residenceType = index === 0 ? "Current Residence" : "Previous Residence";
+                  errorFields.push(`${residenceType}: ${displayName}`);
                 }
               }
             });
@@ -434,6 +435,22 @@ export default function ApplicationClientComponent({
               errorMessage = "Please enter your ID number to continue.";
             } else if (firstField.includes("Street Address")) {
               errorMessage = "Please enter your street address to continue.";
+            } else if (firstField.includes("Landlord Email") || firstField.includes("Landlord Phone")) {
+              // Determine if it's current (index 1) or previous (index 2)
+              const isCurrentLandlord = firstField.includes("1");
+              const landlordType = isCurrentLandlord ? "Current" : "Previous";
+              errorMessage = `Please enter ${landlordType} Landlord Contact Information to continue.`;
+            } else if (firstField.includes("Landlord First Name") || firstField.includes("Landlord Last Name")) {
+              // Determine if it's current (index 1) or previous (index 2)
+              const isCurrentLandlord = firstField.includes("1");
+              const landlordType = isCurrentLandlord ? "Current" : "Previous";
+              errorMessage = `Please enter ${landlordType} Landlord Information to continue.`;
+            } else if (firstField.includes("Current Residence:")) {
+              const fieldName = firstField.replace("Current Residence: ", "");
+              errorMessage = `Please enter Current Residence ${fieldName} to continue.`;
+            } else if (firstField.includes("Previous Residence:")) {
+              const fieldName = firstField.replace("Previous Residence: ", "");
+              errorMessage = `Please enter Previous Residence ${fieldName} to continue.`;
             } else {
               errorMessage = `Please enter your ${firstField.toLowerCase()} to continue.`;
             }
@@ -607,9 +624,6 @@ export default function ApplicationClientComponent({
             <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
               Residential History
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
-              Please add 24 months of residential history or three previous addresses.
-            </p>
             <ResidentialLandlordInfo isMobile={isMobile} />
           </div>
         </section>
@@ -623,17 +637,6 @@ export default function ApplicationClientComponent({
             <Questionnaire isMobile={isMobile} />
           </div>
         </section>
-
-        {/* Submit Button */}
-        <div className="w-full flex justify-center mt-6">
-          <Button
-            onClick={handleSubmit}
-            className="w-full max-w-[400px] px-8 py-3 bg-[#0b6969] hover:bg-[#085454] text-white font-medium rounded-lg"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Submitting...' : 'Save Application'}
-          </Button>
-        </div>
 
         {/* Development Troubleshooting Section */}
         {process.env.NODE_ENV === 'development' && (
@@ -818,6 +821,21 @@ export default function ApplicationClientComponent({
             </div>
           </div>
         )}
+      </div>
+
+      {/* Footer Controls */}
+      <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 shadow-lg">
+        <div className="max-w-[1200px] mx-auto px-4 py-4">
+          <div className="flex justify-end">
+            <BrandButton
+              onClick={handleSubmit}
+              className="px-8 py-3 font-medium rounded-lg"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Submitting...' : 'Save Application'}
+            </BrandButton>
+          </div>
+        </div>
       </div>
     </div>
   );

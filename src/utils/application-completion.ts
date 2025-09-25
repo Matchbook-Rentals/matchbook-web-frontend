@@ -25,14 +25,17 @@
  *    - If evicted = true: eviction explanation required
  * 
  * 5. RESIDENTIAL HISTORY
- *    - At least one residence (current) with:
+ *    - Current residence (required) with:
  *      - Street address (required)
  *      - City (required)
  *      - State (required)
  *      - ZIP code (required)
+ *      - Length of stay (required)
  *      - If housingStatus = 'rent':
  *        - Landlord first name (required)
  *        - Landlord last name (required)
+ *        - Landlord email or phone (at least one required)
+ *    - Previous residence (optional, but validated if provided)
  */
 
 export interface CompletionResult {
