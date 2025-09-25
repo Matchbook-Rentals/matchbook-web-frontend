@@ -98,7 +98,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   // }, []);
 
   const fetchNotifications = useCallback(async () => {
-    if (user && checkClientBetaAccess(userRole)) {
+    if (user) {
       try {
         const result = await getNotifications();
         if (result.success && Array.isArray(result.notifications)) {
@@ -148,18 +148,17 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       id: 'switch-mode',
       label: 'Switch to Renting',
       href: '/app/rent/searches',
-      requiresAdmin: true, // Still admin-only since it goes to rent section
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ] : [
-    // Renter side menu items - temporarily admin-only during MX period
+    // Renter side menu items - open to all users
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'searches', label: 'Searches', href: '/app/rent/searches', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
-    { id: 'application', label: 'Applications', href: '/app/rent/applications', requiresAdmin: true, section: 1 }, // TODO: Restore requiresAdmin + requiresPreview after MX
-    { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
+    { id: 'searches', label: 'Searches', href: '/app/rent/searches', section: 1 },
+    { id: 'application', label: 'Applications', href: '/app/rent/applications', section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', section: 2 },
     {
       id: 'switch-mode',
@@ -268,8 +267,8 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
 
   return (
     <div className="flex items-center space-x-2 md:space-x-4">
-      {/* Notifications Icon - Requires beta access */}
-      {currentIsSignedIn && hasBetaAccess && (
+      {/* Notifications Icon - Available to all users */}
+      {currentIsSignedIn && (
         <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
           <PopoverTrigger className="relative flex items-center justify-center">
             <Bell className="h-5 w-5 text-charcoal transition-transform duration-300 ease-out " />
