@@ -382,16 +382,6 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
                 )}
               </div>
               
-              <div className="flex flex-col items-start gap-1.5 w-full sm:w-[235px]">
-                <div className={STYLES.labelText}>Renter Verification Report</div>
-                <BrandButton
-                  variant="outline"
-                  size="sm"
-                  className="h-auto px-2 py-1 border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white [font-family:'Poppins',Helvetica] font-medium text-sm"
-                >
-                  View Report
-                </BrandButton>
-              </div>
             </div>
           </CardContent>
         </Card>
