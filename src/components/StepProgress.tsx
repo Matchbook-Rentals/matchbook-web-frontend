@@ -10,14 +10,16 @@ interface StepProgressProps {
   totalSteps: number;
   labels?: string[];
   textPosition?: 'left' | 'right';
+  mobileTextBelow?: boolean;
   className?: string;
 }
 
-export const StepProgress: React.FC<StepProgressProps> = ({ 
-  currentStep, 
-  totalSteps, 
-  labels = [], 
+export const StepProgress: React.FC<StepProgressProps> = ({
+  currentStep,
+  totalSteps,
+  labels = [],
   textPosition = 'right',
+  mobileTextBelow = false,
   className
 }) => {
   const steps = Array.from({ length: totalSteps }, (_, index) => {
@@ -50,7 +52,7 @@ export const StepProgress: React.FC<StepProgressProps> = ({
         {steps.map((step, index) => (
           <React.Fragment key={index}>
             {/* Step group (circle + optional text) */}
-            <div className={`flex items-center ${textPosition === 'left' ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex ${mobileTextBelow ? 'flex-col items-center sm:flex-row sm:items-center' : 'items-center'} ${textPosition === 'left' && !mobileTextBelow ? 'flex-row-reverse' : ''}`}>
               <div className="inline-flex items-start relative">
                 <motion.div
                   className={`relative w-6 h-6 rounded-full overflow-hidden`}
@@ -96,7 +98,11 @@ export const StepProgress: React.FC<StepProgressProps> = ({
                 </motion.div>
               </div>
               {labels[index] && (
-                <span className={`text-xs font-medium ${getTextColor(step.status)} ${textPosition === 'left' ? 'mr-2' : 'ml-2'}`}>
+                <span className={`text-xs font-medium ${getTextColor(step.status)} ${
+                  mobileTextBelow
+                    ? 'mt-1 text-center sm:mt-0 sm:ml-2'
+                    : textPosition === 'left' ? 'mr-2' : 'ml-2'
+                }`}>
                   {labels[index]}
                 </span>
               )}
