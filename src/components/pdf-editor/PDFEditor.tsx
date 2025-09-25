@@ -18,6 +18,7 @@ import { TemplateBrowser } from './TemplateBrowser';
 import { DocumentTemplateSelector } from './DocumentTemplateSelector';
 import { DocumentSelector } from './DocumentSelector';
 import { TripConfiguration } from './TripConfiguration';
+import { MobilePDFWrapper } from './MobilePDFWrapper';
 import { CustomFieldDialog } from './CustomFieldDialog';
 import { TextFieldConfigModal } from './TextFieldConfigModal';
 import { FieldValidationModal } from './FieldValidationModal';
@@ -92,6 +93,9 @@ interface PDFEditorProps {
   // signedFields is now provided by context
   currentUserInitials?: string; // User's saved initials passed from parent
   currentUserName?: string; // User's name for generating initials
+  pageWidth?: number; // Custom page width for responsive design
+  isMobile?: boolean; // Whether to use mobile-optimized layout
+  hideDefaultSidebar?: boolean; // Whether to hide the internal sidebar
 }
 
 export const PDFEditor: React.FC<PDFEditorProps> = ({
@@ -124,7 +128,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   onWorkflowStateChange,
   onSigningActionReady,
   currentUserInitials: initialUserInitials,
-  currentUserName
+  currentUserName,
+  pageWidth: customPageWidth = 800,
+  isMobile = false,
+  hideDefaultSidebar = false
 }) => {
   const router = useRouter();
   const { showAlert, showConfirm } = useBrandAlert();
@@ -139,7 +146,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [pendingFieldLabel, setPendingFieldLabel] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showFieldLabels, setShowFieldLabels] = useState(true);
-  const [pageWidth, setPageWidth] = useState(800);
+  const [pageWidth, setPageWidth] = useState(customPageWidth);
   const [workflowState, setWorkflowStateInternal] = useState<WorkflowState>(initialWorkflowState);
 
   // Wrapper function to handle workflow state changes and notify parent
@@ -3521,18 +3528,24 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       )}
 
       {/* Main content area with sidebar and editor */}
-      <div className="flex flex-1 min-h-0">
-        {/* Sidebar */}
-        <div className="w-96 bg-[#e7f0f0] border-r border-gray-200 overflow-y-auto overflow-x-hidden max-h-screen">
-          <div className="p-4">
-            {/* Use custom sidebar content if provided, otherwise use default */}
-            {customSidebarContent ? (
-              customSidebarContent(workflowState, renderDefaultSidebarContent())
-            ) : (
-              renderDefaultSidebarContent()
-            )}
+      <div className={`flex flex-1 min-h-0 ${isMobile ? 'flex-col' : 'flex-row'}`}>
+        {/* Sidebar - responsive layout - conditionally rendered */}
+        {!hideDefaultSidebar && (
+          <div className={`${
+            isMobile
+              ? 'w-full bg-[#e7f0f0] border-b border-gray-200 overflow-y-visible'
+              : 'w-96 bg-[#e7f0f0] border-r border-gray-200 overflow-y-auto overflow-x-hidden max-h-screen'
+          }`}>
+            <div className="p-4">
+              {/* Use custom sidebar content if provided, otherwise use default */}
+              {customSidebarContent ? (
+                customSidebarContent(workflowState, renderDefaultSidebarContent())
+              ) : (
+                renderDefaultSidebarContent()
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Main Editor */}
         <div className="flex-1 flex flex-col min-h-0">
@@ -3551,14 +3564,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               </div>
             )}
 
-            <PDFViewer
-              file={pdfFile}
-              onPageClick={handlePageClick}
-              pageWidth={pageWidth}
-              isFieldPlacementMode={!!selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place')}
-            >
-              {/* Helper function to determine if a field should be shown for renter (signer2) */}
-              {fields.filter((field) => {
+            {isMobile ? (
+              <MobilePDFWrapper isMobile={isMobile}>
+                <PDFViewer
+                  file={pdfFile}
+                  onPageClick={handlePageClick}
+                  pageWidth={pageWidth}
+                  isFieldPlacementMode={!!selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place')}
+                >
+                  {/* Helper function to determine if a field should be shown for renter (signer2) */}
+                  {fields.filter((field) => {
                 // For signer2 (renter), filter fields to show only what's needed
                 if (workflowState === 'signer2') {
                   const signedFields = useSignedFieldsStore.getState().signedFields;
@@ -3654,7 +3669,63 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   />
                 );
               })}
-            </PDFViewer>
+                </PDFViewer>
+              </MobilePDFWrapper>
+            ) : (
+              <PDFViewer
+                file={pdfFile}
+                onPageClick={handlePageClick}
+                pageWidth={pageWidth}
+                isFieldPlacementMode={!!selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place')}
+              >
+                {/* Helper function to determine if a field should be shown for renter (signer2) */}
+                {fields.filter((field) => {
+                  // For signer2 (renter), filter fields to show only what's needed
+                  if (workflowState === 'signer2') {
+                    const signedFields = useSignedFieldsStore.getState().signedFields;
+
+                    // If it's the host's field (index 0), only show if it's already signed
+                    if (field.recipientIndex === 0) {
+                      return !!signedFields[field.formId];
+                    }
+                    // If it's the renter's field (index 1), only show signature/initial fields
+                    if (field.recipientIndex === 1) {
+                      const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+                      return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
+                    }
+                    // Don't show fields for other recipients
+                    return false;
+                  }
+                  // For all other workflow states, show all fields
+                  return true;
+                }).map((field) => {
+                  const pageElement = pageElements.get(field.pageNumber);
+
+                  // For signed values, check both the signed fields store and the initial field values
+                  const signedValue = useSignedFieldsStore.getState().signedFields[field.formId] || field.value;
+
+                  return (
+                    <SignableField
+                      key={field.formId}
+                      field={field}
+                      signedValue={signedValue}
+                      isForCurrentSigner={
+                        workflowState === 'signer1'
+                          ? field.recipientIndex === 0
+                          : field.recipientIndex === 1
+                      }
+                      pageElement={pageElement}
+                      savedSignatures={savedSignatures}
+                      onSaveSignature={saveSignature}
+                      onDeleteSignature={deleteSignature}
+                      onSetDefaultSignature={setDefaultSignature}
+                      currentInitials={currentUserInitials}
+                      onSaveInitials={saveUserInitials}
+                    />
+                  );
+                })}
+              </PDFViewer>
+            )}
           </div>
         </div>
       </div>
@@ -3665,10 +3736,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           <div className="flex items-center justify-between">
             {/* Left side - Status info */}
             <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-600">
-                <span className="font-medium">{fields.length}</span> fields •
-                <span className="font-medium"> {recipients.length}</span> recipients
-              </div>
+              {!isMobile && (
+                <div className="text-sm text-gray-600">
+                  <span className="font-medium">{fields.length}</span> fields •
+                  <span className="font-medium"> {recipients.length}</span> recipients
+                </div>
+              )}
               {/* Step indicators removed since components are isolated */}
             </div>
 

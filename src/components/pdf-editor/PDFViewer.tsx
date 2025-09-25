@@ -52,6 +52,11 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     setNumPages(numPages);
   };
 
+  const onDocumentLoadError = (error: Error) => {
+    console.error('PDF load error:', error);
+    // You could set an error state here if needed
+  };
+
   const onDocumentPageClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>, pageNumber: number) => {
       const $page = event.target as Element;
@@ -98,9 +103,10 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
   return (
     <div ref={containerRef} className="pdf-viewer-container">
-      <Document 
-        file={file} 
-        onLoadSuccess={onDocumentLoadSuccess} 
+      <Document
+        file={file}
+        onLoadSuccess={onDocumentLoadSuccess}
+        onLoadError={onDocumentLoadError}
         className="pdf-document"
         loading={
           <div className="flex items-center justify-center h-96">
@@ -111,7 +117,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           <div className="flex items-center justify-center h-96 text-red-600">
             <div className="text-center">
               <p className="text-lg font-semibold">Failed to load PDF</p>
-              <p className="text-sm">Please try uploading a different file</p>
+              <p className="text-sm">Please try uploading a different file or refresh the page</p>
             </div>
           </div>
         }

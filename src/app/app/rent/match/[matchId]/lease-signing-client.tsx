@@ -18,6 +18,8 @@ import dynamic from 'next/dynamic';
 import { calculatePayments, PaymentDetails } from '@/lib/calculate-payments';
 import { calculateTotalWithStripeCardFee, FEES } from '@/lib/fee-constants';
 import { calculateCreditCardFee } from '@/lib/payment-calculations';
+import { useResponsivePDFWidth } from '@/hooks/useResponsivePDFWidth';
+import { MobilePDFWrapper } from '@/components/pdf-editor/MobilePDFWrapper';
 
 // Define step types for cleaner state management
 type LeaseSigningStep = 
@@ -36,6 +38,7 @@ const PDFViewer = dynamic(() => import('@/components/pdf-editor/PDFViewer').then
 
 import { RenterSidebarFrame } from './renter-sidebar-frame';
 import { BookingSummarySidebar } from './booking-summary-sidebar';
+import { SigningSidebar } from './signing-sidebar';
 import { StepProgress } from '@/components/StepProgress';
 import { BrandAlertProvider } from '@/hooks/useBrandAlert';
 
@@ -68,6 +71,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const [previewPaymentMethod, setPreviewPaymentMethod] = useState<'card' | 'ach'>(testPaymentMethodPreview || 'card');
   const [hidePaymentMethods, setHidePaymentMethods] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
+
+  // Responsive PDF width
+  const { pdfWidth, isMobile } = useResponsivePDFWidth();
   
   // Track server-provided initial step (clear after first render to allow client transitions)
   const [serverInitialStep, setServerInitialStep] = useState(initialStep);
@@ -690,7 +696,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     return (
       <BrandAlertProvider>
         <div className="min-h-screen bg-gray-50">
-          <div className="container mx-auto p-4 pb-24">
+          <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8">
             <StepProgress 
@@ -722,16 +728,19 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
             {/* PDF Viewer with Fields - Shows second on mobile, second on desktop (right) */}
             <div className="w-full lg:col-span-2 order-2">
-              <div className="w-full">
-                <PDFEditor
-                  initialWorkflowState="completion"
-                  initialPdfFile={documentPdfFile}
-                  initialFields={documentFields}
-                  initialRecipients={documentRecipients}
-                  onSave={() => {}} // No saving in review mode
-                  onCancel={() => {}} // No cancel needed
-                  onFinish={() => {}} // No finish action
-                />
+              <div className={`w-full ${isMobile ? 'overflow-x-auto' : ''}`}>
+                <MobilePDFWrapper isMobile={isMobile}>
+                  <PDFEditor
+                    initialWorkflowState="completion"
+                    initialPdfFile={documentPdfFile}
+                    initialFields={documentFields}
+                    initialRecipients={documentRecipients}
+                    onSave={() => {}} // No saving in review mode
+                    onCancel={() => {}} // No cancel needed
+                    onFinish={() => {}} // No finish action
+                    pageWidth={pdfWidth}
+                  />
+                </MobilePDFWrapper>
               </div>
             </div>
           </div>
@@ -770,7 +779,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   if (currentStep === 'payment' || (leaseCompleted && currentStepState === 'complete-payment')) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto p-4 pb-24">
+        <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8">
             <StepProgress 
@@ -855,7 +864,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   return (
     <BrandAlertProvider>
       <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto p-4 pb-24">
+        <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8 ">
             <StepProgress 
@@ -878,18 +887,28 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
             </div>
           )}
 
-          <div className={`${currentStepState === 'sign-lease' ? 'w-full' : 'grid grid-cols-1 gap-6 lg:grid-cols-3'}`}>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             {/* Sidebar - shows different content based on step */}
-            {currentStepState !== 'sign-lease' && (
-              <div className="lg:col-span-1 lg:sticky lg:top-4 lg:self-start">
-                {currentStepState === 'overview-lease' ? (
-                  <BookingSummarySidebar
-                    match={match}
-                    paymentBreakdown={getPaymentBreakdown()}
-                    paymentDetails={paymentDetails}
-                    isUsingCard={false}
-                  />
-                ) : (
+            <div className="lg:col-span-1 lg:sticky lg:top-4 lg:self-start">
+              {currentStepState === 'overview-lease' ? (
+                <BookingSummarySidebar
+                  match={match}
+                  paymentBreakdown={getPaymentBreakdown()}
+                  paymentDetails={paymentDetails}
+                  isUsingCard={false}
+                />
+              ) : currentStepState === 'sign-lease' ? (
+                <SigningSidebar
+                  fields={documentFields}
+                  recipients={documentRecipients}
+                  currentSignerIndex={1} // Renter is index 1
+                  signedFields={fieldsStatus}
+                  onNavigateToField={(fieldId) => {
+                    // Navigate to field functionality can be added here
+                    console.log('Navigate to field:', fieldId);
+                  }}
+                />
+              ) : (
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
@@ -956,11 +975,12 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                       )}
                     </CardContent>
                   </Card>
-                )}
-              </div>
-            )}
+                )
+              }
+            </div>
+
             {/* Main Content */}
-            <div className={currentStepState === 'sign-lease' ? '' : 'lg:col-span-2'}>
+            <div className="lg:col-span-2">
               <Card className='bg-inherit border-none'>
                 <CardContent>
                   {currentStepState === 'no-lease-document' ? (
@@ -999,48 +1019,36 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                   ) : currentStepState === 'overview-lease' && !isLoading && documentInstance && documentPdfFile ? (
                     <div className="space-y-4">
                       {/* PDF Preview */}
-                      <div className="border rounded-lg overflow-hidden bg-gray-50">
-                        <PDFViewer
-                          file={documentPdfFile}
-                          pageWidth={800}
-                        />
-                      </div>
-                      
-                      {/* Action Buttons */}
-                      <div className="flex justify-end gap-3 pt-4">
-                        <Button
-                          onClick={() => {
-                            setPreviousStep('overview');
-                            setCurrentStep('signing');
-                          }}
-                          size="lg"
-                          className="bg-[#0A6060] hover:bg-[#085050]"
-                        >
-                          Proceed to Sign Lease
-                        </Button>
+                      <div className={`border rounded-lg overflow-hidden bg-gray-50 ${isMobile ? 'overflow-x-auto' : ''}`}>
+                        <MobilePDFWrapper isMobile={isMobile}>
+                          <PDFViewer
+                            file={documentPdfFile}
+                            pageWidth={pdfWidth}
+                          />
+                        </MobilePDFWrapper>
                       </div>
                     </div>
                   ) : currentStepState === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
-                    <div className="w-full">
-                      {/* PDFEditorDocument - no header needed for renter interface */}
-                      <div className="w-full min-h-[600px]">
-                        <PDFEditorSigner
-                          initialPdfFile={documentPdfFile}
-                          initialFields={documentFields}
-                          initialRecipients={documentRecipients}
-                          signerStep="signer2"
-                          onSave={(data) => {
-                          }}
-                          onCancel={() => {
-                            setCurrentStep('overview');
-                            toast({
-                              title: "Returned to lease review",
-                              description: "You can proceed to sign when ready.",
-                            });
-                          }}
-                          onFinish={handleDocumentSigningComplete}
-                        />
-                      </div>
+                    <div className={`border rounded-lg bg-gray-50 ${isMobile ? 'overflow-x-auto' : ''}`}>
+                      <PDFEditorSigner
+                        initialPdfFile={documentPdfFile}
+                        initialFields={documentFields}
+                        initialRecipients={documentRecipients}
+                        signerStep="signer2"
+                        isMobile={isMobile}
+                        hideDefaultSidebar={true}
+                        showFooter={true}
+                        onSave={(data) => {
+                        }}
+                        onCancel={() => {
+                          setCurrentStep('overview');
+                          toast({
+                            title: "Returned to lease review",
+                            description: "You can proceed to sign when ready.",
+                          });
+                        }}
+                        onFinish={handleDocumentSigningComplete}
+                      />
                     </div>
                   ) : currentStepState === 'sign-lease' && isLoading ? (
                     <div className="text-center py-12">
@@ -1313,15 +1321,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                       className="bg-[#0a6060] hover:bg-[#0a6060]/90"
                     >
                       Proceed to Sign
-                    </Button>
-                  )}
-                  {currentStepState === 'sign-lease' && (
-                    <Button 
-                      size="sm"
-                      className="bg-[#0a6060] hover:bg-[#0a6060]/90"
-                      disabled
-                    >
-                      Next Action
                     </Button>
                   )}
                   {currentStepState === 'completed' && (

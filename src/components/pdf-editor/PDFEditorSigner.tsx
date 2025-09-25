@@ -13,16 +13,22 @@ interface PDFEditorSignerProps {
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
+  isMobile?: boolean;
+  hideDefaultSidebar?: boolean;
+  showFooter?: boolean;
 }
 
-export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({ 
+export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({
   initialPdfFile,
   initialFields,
-  initialRecipients, 
+  initialRecipients,
   signerStep = 'signer1',
-  onSave, 
+  onSave,
   onCancel,
-  onFinish 
+  onFinish,
+  isMobile = false,
+  hideDefaultSidebar = false,
+  showFooter = true
 }) => {
   return (
     <PDFEditor
@@ -33,6 +39,9 @@ export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({
       onSave={onSave}
       onCancel={onCancel}
       onFinish={onFinish}
+      isMobile={isMobile}
+      hideDefaultSidebar={hideDefaultSidebar}
+      showFooter={showFooter}
     />
   );
 };

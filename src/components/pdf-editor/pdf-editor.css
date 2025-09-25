@@ -265,26 +265,185 @@
   }
 }
 
+/* Mobile PDF Zoom Container */
+.pdf-zoom-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: fit-content;
+}
+
+/* Mobile-specific zoom container */
+.pdf-zoom-container-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-width: fit-content;
+}
+
+/* Zoom Controls Styles */
+.zoom-controls {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 50;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e5e5;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.zoom-indicator {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Touch-optimized controls */
+.zoom-control-btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: white;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+}
+
+.zoom-control-btn:hover:not(:disabled) {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-control-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-control-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+  .pdf-viewer-container {
+    margin: 0;
+    border-radius: 4px;
+    /* Remove vertical overflow to prevent nested scrolling */
+    overflow: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .pdf-document {
+    min-width: 320px; /* Ensure minimum width for readability */
+    /* Stack pages vertically with no internal height constraint */
+    height: auto;
+    overflow: visible;
+  }
+
+  .pdf-page-wrapper {
+    margin-bottom: 1rem; /* Reduce margin on mobile */
+    /* Ensure pages don't create scrolling issues */
+    overflow: visible;
+    width: 100%;
+  }
+
   .field-item {
     min-width: 60px;
     min-height: 30px;
+    /* Ensure fields scale properly with zoom */
+    pointer-events: auto;
   }
-  
+
   .field-label {
     font-size: 9px;
   }
-  
+
   .field-icon {
     font-size: 12px;
   }
-  
+
   .remove-btn {
     width: 20px;
     height: 20px;
     top: -10px;
     right: -10px;
+  }
+
+  /* Mobile zoom container adjustments */
+  .pdf-zoom-container-mobile .pdf-viewer-container {
+    width: 100%;
+    transform-origin: top left;
+    overflow: visible;
+    height: auto;
+  }
+
+  .pdf-zoom-container-mobile .pdf-document {
+    overflow: visible;
+    height: auto;
+  }
+
+  /* Ensure touch targets remain accessible during zoom */
+  .pdf-zoom-container-mobile .field-item {
+    touch-action: manipulation;
+  }
+
+  .pdf-zoom-container-mobile .pdf-page {
+    touch-action: pan-x pan-y;
+  }
+
+  /* PDF Page styling for mobile */
+  .pdf-zoom-container-mobile .pdf-page-wrapper {
+    width: 100%;
+    display: block;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Additional mobile optimizations for very small screens */
+@media (max-width: 480px) {
+  .pdf-viewer-container {
+    box-shadow: none;
+    border: 1px solid #e5e5e5;
+  }
+
+  .pdf-page {
+    border-radius: 2px;
+  }
+
+  .pdf-page-wrapper {
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .pdf-viewer-container {
+    max-width: 100%;
+  }
+
+  .pdf-document {
+    align-items: center;
   }
 }
 
