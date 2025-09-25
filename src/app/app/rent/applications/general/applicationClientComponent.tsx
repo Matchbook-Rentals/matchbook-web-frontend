@@ -535,29 +535,27 @@ export default function ApplicationClientComponent({
 
   return (
     <div className='bg-gray-50'>
-      <div className="flex flex-col w-full mx-auto items-start justify-center gap-4 p-4">
+      <div className="flex flex-col w-full mx-auto max-w-[1200px] items-start justify-center gap-4 p-4">
         {/* Header Section */}
-        <div className="flex items-start gap-6 py-0 w-full">
-          <div className="flex items-center justify-start gap-3 w-full">
-            <BrandButton
-              variant="outline"
-              onClick={handleBack}
-              className="flex items-center justify-center w-[77px] h-[44px] rounded-lg border border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
-            >
-              <div className="[font-family:'Poppins',Helvetica] font-semibold text-base tracking-[0] leading-6 whitespace-nowrap">
-                Back
-              </div>
-            </BrandButton>
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 py-0 w-full">
+          <BrandButton
+            variant="outline"
+            onClick={handleBack}
+            className="flex items-center justify-center w-[77px] h-[44px] rounded-lg border border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
+          >
+            <div className="[font-family:'Poppins',Helvetica] font-semibold text-base tracking-[0] leading-6 whitespace-nowrap">
+              Back
+            </div>
+          </BrandButton>
 
-            <div className="flex-1">
-              <div className="flex flex-col items-start gap-2">
-                <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
-                  General Application
-                </h1>
-                <p className="[font-family:'Poppins',Helvetica] font-normal text-[#727A90] text-base tracking-[0] leading-6">
-                  This application will be used when you apply to new listings
-                </p>
-              </div>
+          <div className="flex-1">
+            <div className="flex flex-col items-start gap-2">
+              <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
+                General Application
+              </h1>
+              <p className="[font-family:'Poppins',Helvetica] font-normal text-[#727A90] text-base tracking-[0] leading-6">
+                This application will be used when you apply to new listings
+              </p>
             </div>
           </div>
         </div>
@@ -574,7 +572,7 @@ export default function ApplicationClientComponent({
 
         {/* Personal Information Section */}
         <section data-section="personal-info" className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
-          <Card className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto] rounded-2xl overflow-hidden border-none shadow-none">
+          <Card className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto] rounded-2xl  border-none shadow-none">
             <CardContent className="flex flex-col items-start gap-8 px-0 py-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
               <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                 <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
