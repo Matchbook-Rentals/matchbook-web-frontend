@@ -699,10 +699,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8">
-            <StepProgress 
+            <StepProgress
               currentStep={1}
               totalSteps={3}
-              labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+              labels={["Review and sign", "Review and pay", "Confirmation"]}
+              mobileTextBelow={true}
               className='w-full max-w-2xl'
             />
           </div>
@@ -782,16 +783,17 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
         <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8">
-            <StepProgress 
+            <StepProgress
               currentStep={2}
               totalSteps={3}
-              labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+              labels={["Review and sign", "Review and pay", "Confirmation"]}
+              mobileTextBelow={true}
               className='w-full max-w-2xl'
             />
           </div>
           
           {/* Header */}
-          <div className="mb-6">
+          <div className="hidden md:block mb-6">
             <div className="flex items-center gap-2 mb-4">
               <CheckCircle className="w-6 h-6 text-green-600" />
               <h1 className="text-3xl font-bold text-gray-900">Lease Signed Successfully!</h1>
@@ -867,10 +869,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
         <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8 ">
-            <StepProgress 
+            <StepProgress
               currentStep={progressCurrentStep}
               totalSteps={3}
-              labels={["Review and sign lease agreement", "Review and pay", "Confirmation"]}
+              labels={["Review and sign", "Review and pay", "Confirmation"]}
+              mobileTextBelow={true}
               className='w-full max-w-2xl'
             />
           </div>
