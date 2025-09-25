@@ -589,7 +589,7 @@ export default function ApplicationClientComponent({
 
         {/* Personal Information Section */}
         <section data-section="personal-info" className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
-          <Card className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto] rounded-2xl  border-none shadow-none">
+          <Card className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto] rounded-2xl border-none shadow-none">
             <CardContent className="flex flex-col items-start gap-8 px-0 py-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
               <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                 <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">

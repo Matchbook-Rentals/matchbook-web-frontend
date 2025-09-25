@@ -143,7 +143,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'home', label: 'Home', href: '/', section: 1 },
     { id: 'overview', label: 'Overview', href: '/app/host/dashboard/overview', section: 1 },
     { id: 'all-listings', label: 'All Listings', href: '/app/host/dashboard/listings', section: 1 },
-    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', requiresAdmin: true, section: 2 }, // TODO: Was requiresBeta, but messages are admin-only during MX
+    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages?view=host', section: 2 },
     {
       id: 'switch-mode',
       label: 'Switch to Renting',
@@ -160,7 +160,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'searches', label: 'Searches', href: '/app/rent/searches', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
     { id: 'application', label: 'Applications', href: '/app/rent/applications', requiresAdmin: true, section: 1 }, // TODO: Restore requiresAdmin + requiresPreview after MX
     { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', requiresAdmin: true, section: 1 }, // TODO: Restore requiresBeta after MX
-    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', requiresAdmin: true, section: 2 }, // TODO: Restore requiresBeta after MX
+    { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', section: 2 },
     {
       id: 'switch-mode',
       label: hasListings === false ? 'List your property' : 'Switch to Hosting',

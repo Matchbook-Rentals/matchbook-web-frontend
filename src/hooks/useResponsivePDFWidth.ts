@@ -24,14 +24,19 @@ export const useResponsivePDFWidth = (config: Partial<ResponsivePDFConfig> = {})
   const finalConfig = { ...defaultConfig, ...config };
   const [pdfWidth, setPdfWidth] = useState(finalConfig.maxWidth);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
+    // Check if window is available (client-side only)
+    if (typeof window === 'undefined') return;
+
     const calculateWidth = () => {
       const windowWidth = window.innerWidth;
       const isMobileDevice = windowWidth <= finalConfig.mobileBreakpoint;
-      const isTablet = windowWidth <= finalConfig.tabletBreakpoint && windowWidth > finalConfig.mobileBreakpoint;
+      const isTabletDevice = windowWidth <= finalConfig.tabletBreakpoint && windowWidth > finalConfig.mobileBreakpoint;
 
       setIsMobile(isMobileDevice);
+      setIsTablet(isTabletDevice);
 
       let calculatedWidth: number;
 
@@ -41,7 +46,7 @@ export const useResponsivePDFWidth = (config: Partial<ResponsivePDFConfig> = {})
           windowWidth - finalConfig.mobilePadding,
           finalConfig.minWidth
         );
-      } else if (isTablet) {
+      } else if (isTabletDevice) {
         // On tablet, use a percentage of screen width
         calculatedWidth = Math.min(
           windowWidth * 0.85, // 85% of screen width on tablet
@@ -79,6 +84,6 @@ export const useResponsivePDFWidth = (config: Partial<ResponsivePDFConfig> = {})
   return {
     pdfWidth,
     isMobile,
-    isTablet: window.innerWidth <= finalConfig.tabletBreakpoint && window.innerWidth > finalConfig.mobileBreakpoint,
+    isTablet,
   };
 };
