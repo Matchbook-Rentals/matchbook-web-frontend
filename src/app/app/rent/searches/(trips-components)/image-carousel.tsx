@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import React, { useState, useEffect, useCallback, useMemo } from 'react'; // Import useEffect
+import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
 import { ListingImage } from '@prisma/client';
 import { Button } from '@/components/ui/button';
@@ -8,23 +9,130 @@ import { RejectIcon } from '@/components/icons';
 
 interface ListingImageCarouselProps {
   listingImages: ListingImage[]
+  nextListingImages?: ListingImage[]
 }
 
-const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages }) => {
+// Helper functions for image optimization
+
+// Keep track of preload links for cleanup
+const preloadLinksRef = new Set<HTMLLinkElement>();
+
+const preloadImage = (url: string) => {
+  // Check if already preloaded
+  const existingLink = Array.from(document.head.querySelectorAll('link[rel="preload"]')).find(
+    (link) => link.getAttribute('href') === url
+  );
+  if (existingLink) return existingLink as HTMLLinkElement;
+
+  const link = document.createElement('link');
+  link.rel = 'preload';
+  link.as = 'image';
+  link.href = url;
+  document.head.appendChild(link);
+  preloadLinksRef.add(link);
+  return link;
+};
+
+const cleanupPreloadLinks = () => {
+  preloadLinksRef.forEach(link => {
+    if (link.parentNode) {
+      link.parentNode.removeChild(link);
+    }
+  });
+  preloadLinksRef.clear();
+};
+
+const generateBlurDataURL = (width: number = 4, height: number = 3) => {
+  const svg = `
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#f3f4f6"/>
+    </svg>
+  `;
+  return `data:image/svg+xml;base64,${btoa(svg)}`;
+};
+
+const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages, nextListingImages = [] }) => {
   const [activeImage, setActiveImage] = useState(0); // Index for desktop main image
   const [api, setApi] = useState<CarouselApi>();
   const [dialogApi, setDialogApi] = useState<CarouselApi>(); // API for dialog carousel
   const [thumbnailApi, setThumbnailApi] = useState<CarouselApi>(); // API for thumbnail carousel
   const [dialogActiveImage, setDialogActiveImage] = useState(0); // Active image in dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isMainImageLoaded, setIsMainImageLoaded] = useState(false); // Loading state for active image
 
-  // Effect to reset loading state when active image or image list changes
+  // Memoize unique images to prevent unnecessary recalculations
+  const uniqueImages = useMemo(() =>
+    Array.from(new Map(listingImages.map(img => [img.id, img])).values()),
+    [listingImages]
+  );
+
+  // Preload adjacent images
+  const preloadAdjacentImages = useCallback((currentIndex: number) => {
+    const preloadIndices = [
+      currentIndex - 1,
+      currentIndex + 1,
+      currentIndex - 2,
+      currentIndex + 2
+    ].filter(idx => idx >= 0 && idx < uniqueImages.length);
+
+    preloadIndices.forEach(idx => {
+      if (uniqueImages[idx]) {
+        preloadImage(uniqueImages[idx].url);
+      }
+    });
+  }, [uniqueImages]);
+
+  // Preload next listing images (first 4 images for better UX)
+  const preloadNextListingImages = useCallback(() => {
+    if (nextListingImages.length > 0) {
+      const nextUniqueImages = Array.from(new Map(nextListingImages.map(img => [img.id, img])).values());
+      // Preload first 4 images of next listing
+      [0, 1, 2, 3].forEach(idx => {
+        if (nextUniqueImages[idx]) {
+          preloadImage(nextUniqueImages[idx].url);
+        }
+      });
+    }
+  }, [nextListingImages]);
+
+  // Effect to preload adjacent images when active image changes
   useEffect(() => {
-    setIsMainImageLoaded(false);
-    // Potentially sync mobile carousel's active slide if api is available
-    // api?.scrollTo(activeImage); // Example, might need adjustment based on CarouselApi
-  }, [activeImage, listingImages]); // Watch both activeImage index and the image array
+    preloadAdjacentImages(activeImage);
+  }, [activeImage, preloadAdjacentImages]);
+
+  // Preload initial images on component mount
+  useEffect(() => {
+    if (uniqueImages.length > 0) {
+      // Preload first few images of current listing immediately
+      [0, 1, 2].forEach(idx => {
+        if (uniqueImages[idx]) {
+          preloadImage(uniqueImages[idx].url);
+        }
+      });
+    }
+
+    // Preload next listing images after a short delay to prioritize current content
+    const nextListingTimer = setTimeout(() => {
+      preloadNextListingImages();
+    }, 500);
+
+    return () => clearTimeout(nextListingTimer);
+  }, [uniqueImages, preloadNextListingImages]);
+
+  // Cleanup effect to prevent memory leaks
+  useEffect(() => {
+    // This effect runs when listingImages change, indicating a new listing is loaded
+    // We should limit the total number of preload links to avoid memory issues
+    const currentPreloadLinks = document.head.querySelectorAll('link[rel="preload"][as="image"]');
+    if (currentPreloadLinks.length > 50) {
+      // Remove oldest preload links if we have too many
+      Array.from(currentPreloadLinks).slice(0, 20).forEach(link => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+          preloadLinksRef.delete(link as HTMLLinkElement);
+        }
+      });
+    }
+  }, [listingImages]);
 
   // Effect to update activeImage based on mobile carousel scroll
   useEffect(() => {
@@ -33,13 +141,9 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     }
     const handleSelect = () => {
       const currentSlide = api.selectedScrollSnap();
-      // Update activeImage state based on mobile carousel, but only if it differs
-      // This helps keep the loading state somewhat in sync
       if (currentSlide !== activeImage) {
          setActiveImage(currentSlide);
       }
-       // Always reset loading state on mobile scroll snap
-       setIsMainImageLoaded(false);
     };
 
     api.on("select", handleSelect);
@@ -47,7 +151,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     return () => {
       api.off("select", handleSelect);
     };
-  }, [api, activeImage]); // Rerun when api is available or activeImage changes externally
+  }, [api, activeImage]);
 
   // Effect to sync dialog carousel with thumbnail selection
   useEffect(() => {
@@ -103,16 +207,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     }
   }, [isDialogOpen, activeImage, dialogApi, thumbnailApi]);
 
-  if (listingImages.length === 0) {
-    // Still show pulse if listingImages is empty initially before this check
+  if (uniqueImages.length === 0) {
     return (
       <div className="w-full h-[50vh] bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
         Loading Images...
       </div>
     );
   }
-
-  const uniqueImages = Array.from(new Map(listingImages.map(img => [img.id, img])).values());
 
   const handleImageClick = (index: number) => {
     setActiveImage(index);
@@ -162,28 +263,21 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       {/* Desktop Layout - Side by side */}
       <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
         {/* Main image */}
-        <div className="w-1/2 h-full relative">
-          {/* Placeholder */}
-          {!isMainImageLoaded && (
-            <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg" />
-          )}
-          {/* Actual Image */}
-          {uniqueImages.length > 0 && uniqueImages[activeImage] && ( // Check if image exists at index
-            <img
-              key={uniqueImages[activeImage].id} // Add key to help React detect changes
+        <div className="w-1/2 h-full relative overflow-hidden rounded-lg">
+          {uniqueImages[activeImage] && (
+            <Image
+              key={uniqueImages[activeImage].id}
               src={uniqueImages[activeImage].url}
               alt={`${uniqueImages[activeImage]?.category} image ${uniqueImages[activeImage]?.rank}`}
-              className={`w-full h-full object-cover rounded-lg ${isMainImageLoaded ? 'block' : 'hidden'}`} // Hide until loaded
-              onLoad={() => setIsMainImageLoaded(true)}
-              onError={() => setIsMainImageLoaded(true)} // Stop pulse on error too
+              fill
+              className="object-cover"
+              priority={activeImage === 0}
+              placeholder="blur"
+              blurDataURL={generateBlurDataURL()}
+              sizes="(max-width: 1024px) 100vw, 50vw"
               draggable={false}
-              style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
             />
           )}
-           {/* Fallback pulse if array has items but index is somehow invalid */}
-           {(uniqueImages.length === 0 || !uniqueImages[activeImage]) && !isMainImageLoaded && (
-             <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg" />
-           )}
         </div>
 
         {/* Desktop grid carousel */}
@@ -195,18 +289,22 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                   <div className="grid grid-cols-2 grid-rows-2 gap-3 lg:gap-4">
                     {chunk.map((image, idx) => {
                       const isBottomRight = idx === 3 || (idx === chunk.length - 1 && chunk.length < 4);
+                      const imageIndex = uniqueImages.indexOf(image);
                       return (
                         <div
                           key={`image-${image.id}-${idx}`}
                           className="relative cursor-pointer h-[24vh] overflow-hidden rounded-lg"
-                          onClick={() => handleImageClick(uniqueImages.indexOf(image))}
+                          onClick={() => handleImageClick(imageIndex)}
                         >
-                          <img
+                          <Image
                             src={image.url}
                             alt={`${image.category} image ${image.rank}`}
-                            className="object-cover w-full h-full rounded-lg"
+                            fill
+                            className="object-cover"
+                            placeholder="blur"
+                            blurDataURL={generateBlurDataURL()}
+                            sizes="(max-width: 1024px) 50vw, 25vw"
                             draggable={false}
-                            style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                           />
                           {isBottomRight && (
                             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -239,33 +337,23 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
         <div className="w-full h-[30vh] relative">
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
-              {uniqueImages.map((image, index) => {
-                 // Determine if this specific item should show loading state
-                 // This relies on activeImage state being updated by the carousel's 'select' event
-                 const isCurrentItemLoading = index === activeImage && !isMainImageLoaded;
-
-                 return (
+              {uniqueImages.map((image, index) => (
                   <CarouselItem key={image.id} className="w-full h-[30vh]">
-                    <div className="relative w-full h-full">
-                      {/* Placeholder for the current item if loading */}
-                      {isCurrentItemLoading && (
-                        <div className="absolute inset-0 w-full h-full bg-gray-200 animate-pulse rounded-[5px]" />
-                      )}
-                      <img
-                        key={image.id + '-mobile'} // Unique key for mobile image
+                    <div className="relative w-full h-full overflow-hidden rounded-[5px]">
+                      <Image
                         src={image.url}
                         alt={`${image.category} image ${image.rank}`}
-                        className={`w-full h-full object-cover rounded-[5px] ${isCurrentItemLoading ? 'invisible' : 'visible'}`} // Use visibility to prevent layout shift
-                        // onLoad/onError only relevant for the active image to update the state
-                        onLoad={() => { if (index === activeImage) setIsMainImageLoaded(true); }}
-                        onError={() => { if (index === activeImage) setIsMainImageLoaded(true); }} // Stop pulse on error
+                        fill
+                        className="object-cover"
+                        priority={index === 0}
+                        placeholder="blur"
+                        blurDataURL={generateBlurDataURL()}
+                        sizes="100vw"
                         draggable={false}
-                        style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                       />
                     </div>
                   </CarouselItem>
-                 );
-              })}
+              ))}
             </CarouselContent>
             {/* Removed duplicate/stray elements below */}
             <CarouselPrevious className="hidden sm:flex absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
@@ -290,12 +378,15 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pr-4">
                     {uniqueImages.map((image, index) => (
                       <div key={image.id} className="relative w-full bg-gray-100 rounded-[20px] overflow-hidden" style={{ aspectRatio: '3.6/2.2' }}>
-                        <img
+                        <Image
                           src={image.url}
                           alt={`${image.category} image ${image.rank}`}
-                          className="object-cover w-full h-full"
+                          fill
+                          className="object-cover"
+                          placeholder="blur"
+                          blurDataURL={generateBlurDataURL()}
+                          sizes="(max-width: 640px) 100vw, 50vw"
                           draggable={false}
-                          style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                         />
                       </div>
                     ))}
@@ -312,12 +403,15 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                       {uniqueImages.map((image, index) => (
                         <CarouselItem key={image.id} className="flex items-center justify-center">
                           <div className="relative w-full h-full flex items-center justify-center">
-                            <img
+                            <Image
                               src={image.url}
                               alt={`${image.category} image ${image.rank}`}
-                              className="max-w-full max-h-full object-contain rounded-lg"
+                              fill
+                              className="object-contain rounded-lg"
+                              placeholder="blur"
+                              blurDataURL={generateBlurDataURL()}
+                              sizes="90vw"
                               draggable={false}
-                              style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                             />
                           </div>
                         </CarouselItem>
@@ -334,20 +428,23 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                     <CarouselContent className="-ml-2 pt-1">
                       {uniqueImages.map((image, index) => (
                         <CarouselItem key={`thumb-${image.id}`} className="pl-2 basis-auto">
-                          <div 
+                          <div
                             className={`relative cursor-pointer h-20 w-28 overflow-hidden rounded-lg border-2 transition-all duration-200 ${
-                              index === dialogActiveImage 
-                                ? 'border-yellow-500 shadow-lg -translate-y-1' 
+                              index === dialogActiveImage
+                                ? 'border-yellow-500 shadow-lg -translate-y-1'
                                 : 'border-transparent hover:border-gray-300'
                             }`}
                             onClick={() => handleThumbnailClick(index)}
                           >
-                            <img
+                            <Image
                               src={image.url}
                               alt={`${image.category} thumbnail ${image.rank}`}
-                              className="object-cover w-full h-full"
+                              fill
+                              className="object-cover"
+                              placeholder="blur"
+                              blurDataURL={generateBlurDataURL()}
+                              sizes="112px"
                               draggable={false}
-                              style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                             />
                           </div>
                         </CarouselItem>

@@ -311,6 +311,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
       <div className={`w-full mx-auto pb-[80px] md:pb-[100px]`}>
         <ListingImageCarousel
           listingImages={showListings[0]?.listingImages || []}
+          nextListingImages={showListings[1]?.listingImages || []}
         />
         <div className='flex justify-between gap-x-8 lg:gap-x-16 relative'>
           <div className='w-full lg:w-full'>
