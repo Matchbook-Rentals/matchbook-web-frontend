@@ -38,6 +38,10 @@ interface HousingRequestWithDetails extends HousingRequest {
       identifications: (Identification & {
         idPhotos: IDPhoto[];
       })[];
+      felony?: boolean | null;
+      felonyExplanation?: string | null;
+      evicted?: boolean | null;
+      evictedExplanation?: string | null;
     })[];
   };
   listing: Listing & {
@@ -216,6 +220,39 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
     } catch (error) {
       console.error('Error messaging host:', error);
     }
+  };
+
+  // Helper function to get questionnaire data
+  const getQuestionnaireData = () => {
+    const questionsData = [
+      {
+        title: "Criminal Record",
+        questions: [
+          {
+            question: "Have you been convicted of a felony or misdemeanor offense in the past 7 years?",
+            answer: application?.felony === null ? "Not answered" : application?.felony ? "Yes" : "No",
+          },
+          {
+            question: "Please provide the date and nature of the conviction.",
+            answer: application?.felony && application?.felonyExplanation ? application.felonyExplanation : "N/A",
+          },
+        ],
+      },
+      {
+        title: "Eviction History",
+        questions: [
+          {
+            question: "Have you been evicted from a rental property in the past 7 years?",
+            answer: application?.evicted === null ? "Not answered" : application?.evicted ? "Yes" : "No",
+          },
+          {
+            question: "Please explain the circumstances surrounding the eviction, including the reason for the eviction and the outcome.",
+            answer: application?.evicted && application?.evictedExplanation ? application.evictedExplanation : "N/A",
+          },
+        ],
+      },
+    ];
+    return questionsData;
   };
 
   const statusInfo = getStatusInfo(housingRequest.status);
@@ -514,6 +551,43 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
             </CardContent>
           </Card>
         )}
+
+        {/* Self-Reporting Questionnaire Section */}
+        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <CardContent className="flex flex-col gap-6 p-6">
+            <div className="flex items-center justify-between w-full">
+              <h2 className={STYLES.headerText}>Self-Reporting Questionnaire</h2>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {getQuestionnaireData().map((section, sectionIndex) => (
+                <Card
+                  key={sectionIndex}
+                  className="bg-[#fcfcfd] border border-[#0000001a]"
+                >
+                  <CardContent className="p-4">
+                    <h3 className={`${STYLES.labelText} mb-4 font-medium`}>
+                      {section.title}
+                    </h3>
+
+                    <div className="flex flex-col gap-4">
+                      {section.questions.map((item, questionIndex) => (
+                        <div key={questionIndex} className="flex flex-col gap-1.5">
+                          <div className={STYLES.labelText}>
+                            {item.question}
+                          </div>
+                          <div className={STYLES.valueText}>
+                            {item.answer}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
 
       </div>
