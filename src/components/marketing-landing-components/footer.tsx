@@ -66,6 +66,48 @@ export default function Footer() {
             </nav>
           </div>
 
+          {/* Legal Links */}
+          <div className="text-lg mx-auto">
+            <h3 className="text-xl font-semibold">Legal</h3>
+            <nav className="flex flex-col">
+              <Link
+                href="/terms-of-service"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/privacy-policy"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/acceptable-use-policy"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Acceptable Use
+              </Link>
+              <Link
+                href="/california-privacy-notice"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                CA Privacy Notice
+              </Link>
+              <Link
+                href="/cookie-notice"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Cookie Notice
+              </Link>
+            </nav>
+          </div>
+
           {/* Social Media Links */}
           <div className="text-lg mx-auto">
             <h3 className="text-xl font-semibold">Follow Us</h3>
