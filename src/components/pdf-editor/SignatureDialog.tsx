@@ -145,29 +145,30 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[85dvh] sm:max-h-[90vh] overflow-y-auto p-3 sm:p-6">
         <DialogHeader>
-          <DialogTitle className='text-center'>Add Your Signature</DialogTitle>
+          <DialogTitle className='text-center text-base sm:text-lg'>Add Your Signature</DialogTitle>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="draw">Draw</TabsTrigger>
-            <TabsTrigger value="type">Type</TabsTrigger>
-            <TabsTrigger value="saved" disabled={savedSignatures.length === 0}>
-              Saved ({savedSignatures.length})
+          <TabsList className="grid w-full grid-cols-3 text-xs sm:text-sm">
+            <TabsTrigger value="draw" className="px-2 sm:px-4">Draw</TabsTrigger>
+            <TabsTrigger value="type" className="px-2 sm:px-4">Type</TabsTrigger>
+            <TabsTrigger value="saved" disabled={savedSignatures.length === 0} className="px-1 sm:px-4">
+              <span className="hidden sm:inline">Saved ({savedSignatures.length})</span>
+              <span className="sm:hidden">Saved</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="draw" className="space-y-4">
-            <div className="text-sm text-gray-600">
+          <TabsContent value="draw" className="space-y-3 sm:space-y-4">
+            <div className="text-xs sm:text-sm text-gray-600">
               Draw your signature in the area below using your mouse or finger.
             </div>
-            
+
             <SignatureCanvas
               onSignatureComplete={handleDrawnSignature}
               width={500}
-              height={200}
+              height={150}
             />
 
             {onSaveSignature && (
@@ -179,47 +180,48 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
                   onChange={(e) => setSaveAsDefault(e.target.checked)}
                   className="rounded"
                 />
-                <Label htmlFor="save-drawn" className="text-sm">
+                <Label htmlFor="save-drawn" className="text-xs sm:text-sm">
                   Save this signature for future use
                 </Label>
               </div>
             )}
 
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={onClose}>
+            <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end">
+              <Button variant="outline" onClick={onClose} className="min-h-[44px] touch-manipulation">
                 Cancel
               </Button>
               <BrandButton
                 onClick={handleUseDrawnSignature}
                 disabled={!drawnSignature || isLoading}
                 loading={isLoading}
+                className="min-h-[44px] touch-manipulation"
               >
                 Use Signature
               </BrandButton>
             </div>
           </TabsContent>
 
-          <TabsContent value="type" className="space-y-4">
-            <div className="text-sm text-gray-600">
+          <TabsContent value="type" className="space-y-3 sm:space-y-4">
+            <div className="text-xs sm:text-sm text-gray-600">
               Type your signature and choose a font style.
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
-                <Label htmlFor="signature-text">Signature Text</Label>
+                <Label htmlFor="signature-text" className="text-sm">Signature Text</Label>
                 <Input
                   id="signature-text"
                   value={typedText}
                   onChange={(e) => setTypedText(e.target.value)}
                   placeholder="Enter your name"
-                  className="mt-1"
+                  className="mt-1 min-h-[44px] touch-manipulation"
                 />
               </div>
 
               <div>
-                <Label htmlFor="font-select">Font Style</Label>
+                <Label htmlFor="font-select" className="text-sm">Font Style</Label>
                 <Select value={selectedFont} onValueChange={setSelectedFont}>
-                  <SelectTrigger className="mt-1">
+                  <SelectTrigger className="mt-1 min-h-[44px] touch-manipulation">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -232,8 +234,8 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
                 </Select>
               </div>
 
-              <div className="border rounded-lg p-4 bg-gray-50 min-h-[100px] flex items-center justify-center">
-                <div className={`text-2xl ${selectedFontClass}`}>
+              <div className="border rounded-lg p-3 sm:p-4 bg-gray-50 min-h-[80px] sm:min-h-[100px] flex items-center justify-center">
+                <div className={`text-xl sm:text-2xl ${selectedFontClass}`}>
                   {typedText || 'Preview will appear here'}
                 </div>
               </div>
@@ -247,48 +249,49 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
                     onChange={(e) => setSaveAsDefault(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="save-typed" className="text-sm">
+                  <Label htmlFor="save-typed" className="text-xs sm:text-sm">
                     Save this signature for future use
                   </Label>
                 </div>
               )}
             </div>
 
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={onClose}>
+            <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end">
+              <Button variant="outline" onClick={onClose} className="min-h-[44px] touch-manipulation">
                 Cancel
               </Button>
               <BrandButton
                 onClick={handleUseTypedSignature}
                 disabled={!typedText.trim() || isLoading}
                 loading={isLoading}
+                className="min-h-[44px] touch-manipulation"
               >
                 Use Signature
               </BrandButton>
             </div>
           </TabsContent>
 
-          <TabsContent value="saved" className="space-y-4">
-            <div className="text-sm text-gray-600">
+          <TabsContent value="saved" className="space-y-3 sm:space-y-4">
+            <div className="text-xs sm:text-sm text-gray-600">
               Choose from your saved signatures or manage your signature library.
             </div>
 
-            <div className="space-y-3 max-h-[400px] overflow-y-auto">
+            <div className="space-y-3 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
               {savedSignatures.map((signature) => (
                 <div
                   key={signature.id}
-                  className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                  className="border rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div className="flex-1">
                       {signature.type === 'drawn' ? (
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                           <img
                             src={signature.data}
                             alt="Saved signature"
-                            className="h-16 max-w-[200px] object-contain border rounded"
+                            className="h-12 sm:h-16 max-w-[160px] sm:max-w-[200px] object-contain border rounded mx-auto sm:mx-0"
                           />
-                          <div className="text-sm text-gray-600">
+                          <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
                             Drawn signature
                             {signature.isDefault && (
                               <span className="ml-2 text-yellow-600">(Default)</span>
@@ -296,27 +299,29 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
                           </div>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-4">
-                          <div className={`text-xl ${SIGNATURE_FONTS.find(f => f.value === signature.fontFamily)?.className || 'font-signature-dancing'} border rounded px-4 py-2 bg-white min-w-[200px] text-center`}>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                          <div className={`text-lg sm:text-xl ${SIGNATURE_FONTS.find(f => f.value === signature.fontFamily)?.className || 'font-signature-dancing'} border rounded px-3 sm:px-4 py-2 bg-white min-w-[160px] sm:min-w-[200px] text-center`}>
                             {signature.data}
                           </div>
-                          <div className="text-sm text-gray-600">
-                            Typed signature ({SIGNATURE_FONTS.find(f => f.value === signature.fontFamily)?.label || 'Dancing Script'})
+                          <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
+                            <div>Typed signature</div>
+                            <div className="hidden sm:block">({SIGNATURE_FONTS.find(f => f.value === signature.fontFamily)?.label || 'Dancing Script'})</div>
                             {signature.isDefault && (
-                              <span className="ml-2 text-yellow-600">(Default)</span>
+                              <span className="text-yellow-600">(Default)</span>
                             )}
                           </div>
                         </div>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 justify-center sm:justify-start">
                       {onSetDefaultSignature && (
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleSetDefault(signature.id)}
                           title={signature.isDefault ? "Remove default" : "Set as default"}
+                          className="min-h-[44px] min-w-[44px] touch-manipulation"
                         >
                           {signature.isDefault ? (
                             <Star className="h-4 w-4 text-yellow-500 fill-current" />
@@ -325,21 +330,22 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
                           )}
                         </Button>
                       )}
-                      
+
                       {onDeleteSignature && (
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteSignature(signature.id)}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 hover:text-red-700 min-h-[44px] min-w-[44px] touch-manipulation"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       )}
-                      
+
                       <BrandButton
                         size="sm"
                         onClick={() => handleUseSavedSignature(signature)}
+                        className="min-h-[44px] touch-manipulation"
                       >
                         Use
                       </BrandButton>
@@ -349,8 +355,8 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
               ))}
             </div>
 
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={onClose}>
+            <div className="flex justify-end">
+              <Button variant="outline" onClick={onClose} className="min-h-[44px] touch-manipulation">
                 Cancel
               </Button>
             </div>

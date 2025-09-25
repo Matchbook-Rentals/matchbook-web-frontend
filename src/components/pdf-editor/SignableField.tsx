@@ -375,28 +375,28 @@ export const SignableField: React.FC<SignableFieldProps> = ({
 
       {/* Signing Dialog - Only for current signer's unsigned fields */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-[90vw] sm:max-w-lg max-h-[85dvh] sm:max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle className='text-center'>
+            <DialogTitle className='text-center text-base sm:text-lg'>
               {isForCurrentSigner && !isSigned ? `Sign ${FRIENDLY_FIELD_TYPE[field.type]} Field` : `View ${FRIENDLY_FIELD_TYPE[field.type]} Field`}
             </DialogTitle>
           </DialogHeader>
-          
-          <div className="space-y-4">
+
+          <div className="space-y-3 sm:space-y-4">
             {isForCurrentSigner && !isSigned ? (
               <>
                 <div>
-                  <label className="text-sm font-medium">Enter your {FRIENDLY_FIELD_TYPE[field.type].toLowerCase()}:</label>
+                  <label className="text-xs sm:text-sm font-medium">Enter your {FRIENDLY_FIELD_TYPE[field.type].toLowerCase()}:</label>
                   {field.type === FieldType.CHECKBOX ? (
                     <div className="mt-2">
-                      <label className="flex items-center space-x-2">
+                      <label className="flex items-center space-x-2 touch-manipulation">
                         <input
                           type="checkbox"
                           checked={inputValue === true}
                           onChange={(e) => setInputValue(e.target.checked)}
-                          className="w-4 h-4"
+                          className="w-5 h-5 sm:w-4 sm:h-4"
                         />
-                        <span className="text-sm">Check this box</span>
+                        <span className="text-xs sm:text-sm">Check this box</span>
                       </label>
                     </div>
                   ) : (
@@ -405,35 +405,36 @@ export const SignableField: React.FC<SignableFieldProps> = ({
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       placeholder={`Enter ${FRIENDLY_FIELD_TYPE[field.type].toLowerCase()}...`}
-                      className="mt-2"
+                      className="mt-2 min-h-[44px] touch-manipulation"
                     />
                   )}
                 </div>
-                
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+
+                <div className="flex flex-col-reverse sm:flex-row justify-end space-y-reverse space-y-2 sm:space-y-0 sm:space-x-2 pt-2">
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="min-h-[44px] touch-manipulation">
                     Cancel
                   </Button>
-                  <Button onClick={handleSign}>
+                  <Button onClick={handleSign} className="min-h-[44px] touch-manipulation">
                     Sign Field
                   </Button>
                 </div>
               </>
             ) : (
               <>
-                <div className="border rounded-lg p-4 bg-gray-50">
-                  <div className="text-sm text-gray-600 mb-1">{FRIENDLY_FIELD_TYPE[field.type]}:</div>
-                  <div className="text-lg font-medium">{signedValue || 'Not filled'}</div>
+                <div className="border rounded-lg p-3 sm:p-4 bg-gray-50">
+                  <div className="text-xs sm:text-sm text-gray-600 mb-1">{FRIENDLY_FIELD_TYPE[field.type]}:</div>
+                  <div className="text-base sm:text-lg font-medium break-words">{signedValue || 'Not filled'}</div>
                 </div>
-                
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+
+                <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="min-h-[44px] touch-manipulation">
                     Close
                   </Button>
                   {isForCurrentSigner && (
-                    <Button 
-                      variant="destructive" 
+                    <Button
+                      variant="destructive"
                       onClick={handleClearSignature}
+                      className="min-h-[44px] touch-manipulation"
                     >
                       Clear {FRIENDLY_FIELD_TYPE[field.type]}
                     </Button>
@@ -469,50 +470,51 @@ export const SignableField: React.FC<SignableFieldProps> = ({
 
       {/* Signature Viewing Dialog */}
       <Dialog open={isViewingSignature} onOpenChange={setIsViewingSignature}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-[90vw] sm:max-w-lg max-h-[85dvh] sm:max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-base sm:text-lg">
               {field.type === FieldType.SIGNATURE ? 'Signature' : FRIENDLY_FIELD_TYPE[field.type]}
               {recipient?.title && ` - ${recipient.title}`}
             </DialogTitle>
           </DialogHeader>
-          
-          <div className="space-y-4">
-            <div className="border rounded-lg p-6 bg-gray-50 min-h-[150px] flex items-center justify-center">
+
+          <div className="space-y-3 sm:space-y-4">
+            <div className="border rounded-lg p-4 sm:p-6 bg-gray-50 min-h-[120px] sm:min-h-[150px] flex items-center justify-center">
               {(field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) && signedValue ? (
                 typeof signedValue === 'object' && signedValue?.type ? (
                   signedValue.type === 'drawn' ? (
-                    <img 
-                      src={signedValue.value} 
-                      alt={field.type === FieldType.SIGNATURE ? 'Signature' : 'Initials'} 
-                      className="max-h-[120px] max-w-full object-contain"
+                    <img
+                      src={signedValue.value}
+                      alt={field.type === FieldType.SIGNATURE ? 'Signature' : 'Initials'}
+                      className="max-h-[100px] sm:max-h-[120px] max-w-full object-contain"
                     />
                   ) : (
-                    <div className={`text-2xl ${signedValue.fontFamily ? `font-signature-${signedValue.fontFamily}` : 'font-signature-dancing'}`}>
+                    <div className={`text-xl sm:text-2xl ${signedValue.fontFamily ? `font-signature-${signedValue.fontFamily}` : 'font-signature-dancing'}`}>
                       {signedValue.value}
                     </div>
                   )
                 ) : (
-                  <div className="font-signature-dancing text-2xl">
+                  <div className="font-signature-dancing text-xl sm:text-2xl">
                     {signedValue}
                   </div>
                 )
               ) : (
-                <div className="text-lg">
+                <div className="text-base sm:text-lg">
                   {signedValue || 'No content'}
                 </div>
               )}
             </div>
-            
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setIsViewingSignature(false)}>
+
+            <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end pt-2">
+              <Button variant="outline" onClick={() => setIsViewingSignature(false)} className="min-h-[44px] touch-manipulation">
                 Close
               </Button>
-              
+
               {isForCurrentSigner && (
-                <Button 
-                  variant="destructive" 
+                <Button
+                  variant="destructive"
                   onClick={handleClearSignature}
+                  className="min-h-[44px] touch-manipulation"
                 >
                   Clear {field.type === FieldType.SIGNATURE ? 'Signature' : field.type === FieldType.INITIALS ? 'Initials' : FRIENDLY_FIELD_TYPE[field.type]}
                 </Button>

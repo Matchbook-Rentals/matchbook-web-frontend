@@ -234,7 +234,7 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
               </div>
             </div>
 
-            <div className="flex flex-row items-center justify-between pl-0 pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
+            <div className="flex flex-row items-center flex-wrap xs:flex-no-wrap gap-y-2 justify-between pl-0 pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
               <p className="relative w-fit [font-family:'Poppins',Helvetica] font-normal text-[#e6e6e6] text-xs tracking-[0] leading-[14.4px] whitespace-nowrap">
                 Move-In: <span className="ml-1 [font-family:'Poppins',Helvetica] font-medium text-white text-sm tracking-[0] leading-[16.8px]">{formatDate(match.trip.startDate)}</span>
               </p>

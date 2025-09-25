@@ -271,8 +271,6 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
             isUsingCard={selectedPaymentMethodType === 'card'}
           />
         </div>
-        <SecurityDepositPolicySection />
-        <CancellationPolicySection />
       </div>
 
       {/* Footer Controls - Fixed at bottom */}

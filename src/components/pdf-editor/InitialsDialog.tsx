@@ -80,48 +80,49 @@ export const InitialsDialog: React.FC<InitialsDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-[90vw] sm:max-w-lg max-h-[85dvh] sm:max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className='text-center'>Add Your Initials</DialogTitle>
+          <DialogTitle className='text-center text-base sm:text-lg'>Add Your Initials</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-            <div className="text-sm text-gray-600">
+        <div className="space-y-3 sm:space-y-4">
+            <div className="text-xs sm:text-sm text-gray-600">
               Enter your initials below. They will be styled with a signature font.
             </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div>
-              <Label htmlFor="initials-text">Your Initials</Label>
+              <Label htmlFor="initials-text" className="text-sm">Your Initials</Label>
               <Input
                 id="initials-text"
                 value={typedText}
                 onChange={(e) => setTypedText(e.target.value.toUpperCase().substring(0, 3))}
                 placeholder="Enter initials"
-                className="mt-1 text-center font-mono text-lg"
+                className="mt-1 text-center font-mono text-lg min-h-[44px] touch-manipulation"
                 maxLength={3}
               />
             </div>
 
-            <div className="border rounded-lg p-4 bg-gray-50 min-h-[80px] flex items-center justify-center">
-              <div className="text-3xl font-signature-dancing">
+            <div className="border rounded-lg p-3 sm:p-4 bg-gray-50 min-h-[60px] sm:min-h-[80px] flex items-center justify-center">
+              <div className="text-2xl sm:text-3xl font-signature-dancing">
                 {typedText || 'AB'}
               </div>
             </div>
 
-            <div className="text-sm text-gray-600 text-center">
+            <div className="text-xs sm:text-sm text-gray-600 text-center">
               These initials will be saved to your profile for future use.
             </div>
           </div>
 
-          <div className="flex gap-2 justify-end">
-            <Button variant="outline" onClick={onClose}>
+          <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-2 sm:justify-end pt-2">
+            <Button variant="outline" onClick={onClose} className="min-h-[44px] touch-manipulation">
               Cancel
             </Button>
             <BrandButton
               onClick={handleUseTypedInitials}
               disabled={!typedText.trim() || isLoading}
               loading={isLoading}
+              className="min-h-[44px] touch-manipulation"
             >
               Use Initials
             </BrandButton>
