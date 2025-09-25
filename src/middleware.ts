@@ -50,9 +50,10 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
   // }
 
   // Admin-only routes during MX period - entire rent section temporarily restricted
-  if (pathname.startsWith('/app/rent')) {
-    return checkAdminAccess(userRole);
-  }
+  // REMOVED: Opening up rent section to all authenticated users
+  // if (pathname.startsWith('/app/rent')) {
+  //   return checkAdminAccess(userRole);
+  // }
 
   // TODO: Restore these beta access routes after MX period
   // Routes requiring admin OR preview access
