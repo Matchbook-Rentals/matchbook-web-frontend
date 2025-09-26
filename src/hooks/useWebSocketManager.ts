@@ -53,10 +53,20 @@ export interface UseWebSocketManagerProps {
   SOCKET_TIMEOUT?: number;
 }
 
+// Error log entry interface
+export interface ErrorLogEntry {
+  timestamp: string;
+  type: 'error' | 'warning' | 'info' | 'event';
+  message: string;
+  details?: any;
+}
+
 // Return type of the hook
 export interface WebSocketManager {
   isConnected: boolean;
   circuitOpen: boolean;
+  errorLogs: ErrorLogEntry[];
+  clearErrorLogs: () => void;
   sendMessage: (messageData: MessageData, ackTimeout?: number) => Promise<any>; // Send message with ack
   sendTyping: (typingData: any) => void; // Send typing status
   sendReadReceipt: (receiptData: any) => void; // Send read receipt
@@ -94,6 +104,26 @@ export const useWebSocketManager = ({
   const circuitResetTimeoutRef = useRef<number | null>(null);
   const reconnectTimeoutRef = useRef<number | null>(null);
   const currentRetryCount = useRef(0);
+  const [errorLogs, setErrorLogs] = useState<ErrorLogEntry[]>([]);
+
+  const addErrorLog = useCallback((type: ErrorLogEntry['type'], message: string, details?: any) => {
+    const entry: ErrorLogEntry = {
+      timestamp: new Date().toISOString(),
+      type,
+      message,
+      details
+    };
+
+    setErrorLogs(prev => {
+      const newLogs = [...prev, entry];
+      // Keep only last 50 entries to prevent memory issues
+      return newLogs.slice(-50);
+    });
+  }, []);
+
+  const clearErrorLogs = useCallback(() => {
+    setErrorLogs([]);
+  }, []);
 
   const updateStatus = useCallback((connected: boolean, circuitOpen: boolean) => {
     setIsConnected(connected);
@@ -138,6 +168,7 @@ export const useWebSocketManager = ({
       setIsCircuitOpenState(true);
       updateStatus(false, true); // When circuit opens, connection is effectively lost
       logger.warn(`[WebSocket] Circuit breaker opened`, { failures: failureCountRef.current, delaySeconds: CIRCUIT_RESET_DELAY / 1000 });
+      addErrorLog('warning', `Circuit breaker opened - too many failures (${failureCountRef.current})`, { delaySeconds: CIRCUIT_RESET_DELAY / 1000 });
 
       if (circuitResetTimeoutRef.current) clearTimeout(circuitResetTimeoutRef.current);
       circuitResetTimeoutRef.current = setTimeout(() => {
@@ -153,7 +184,7 @@ export const useWebSocketManager = ({
         }
       }, CIRCUIT_RESET_DELAY);
     }
-  }, [MAX_FAILURES, CIRCUIT_RESET_DELAY, updateStatus, userId, resetCircuitBreaker]);
+  }, [MAX_FAILURES, CIRCUIT_RESET_DELAY, updateStatus, userId, resetCircuitBreaker, addErrorLog]);
 
 
   const connectWithBackoff = useCallback((retryCount: number) => {
@@ -209,6 +240,7 @@ export const useWebSocketManager = ({
 
             socket.on('connect', () => {
                 logger.ws('Connected successfully', { socketId: socket.id, transport: socket.io.engine.transport.name });
+                addErrorLog('info', `Connected successfully to ${socketUrl}`, { socketId: socket.id });
                 currentRetryCount.current = 0; // Reset our manual retry counter
                 resetCircuitBreaker();
                 updateStatus(true, false);
@@ -216,6 +248,7 @@ export const useWebSocketManager = ({
 
             socket.on('disconnect', (reason, description) => {
                 logger.warn('[WebSocket] Disconnected', { reason, description: description || '(none)' });
+                addErrorLog('warning', `Disconnected: ${reason}`, { description: description || '(none)' });
                 updateStatus(false, circuitOpenRef.current); // Keep circuit status as is
 
                 const retryableReasons = ['ping timeout', 'transport close', 'transport error', 'io server disconnect'];
@@ -232,6 +265,7 @@ export const useWebSocketManager = ({
 
             socket.on('connect_error', (error) => {
                 logger.error('[WebSocket] Connection error', { message: error.message, error });
+                addErrorLog('error', `Connection error: ${error.message}`, { url: socketUrl });
                 updateStatus(false, circuitOpenRef.current);
                 checkCircuitBreaker(); // Increment failure, potentially open circuit
 
@@ -293,6 +327,7 @@ export const useWebSocketManager = ({
 
         } catch (error) {
             logger.error('[WebSocket] Failed to create Socket.IO instance', error);
+            addErrorLog('error', `Failed to create Socket.IO instance: ${error instanceof Error ? error.message : 'Unknown error'}`, { url: socketUrl });
             checkCircuitBreaker();
             if (!circuitOpenRef.current) {
                 currentRetryCount.current = retryCount + 1;
@@ -303,7 +338,7 @@ export const useWebSocketManager = ({
   }, [
     socketUrl, userId, MAX_RETRIES, INITIAL_DELAY, MAX_DELAY,
     onMessageReceived, onTypingReceived, onReadReceiptReceived,
-    updateStatus, checkCircuitBreaker, resetCircuitBreaker
+    updateStatus, checkCircuitBreaker, resetCircuitBreaker, addErrorLog
   ]);
 
 
@@ -416,6 +451,8 @@ export const useWebSocketManager = ({
   return {
     isConnected,
     circuitOpen: isCircuitOpenState,
+    errorLogs,
+    clearErrorLogs,
     sendMessage,
     sendTyping,
     sendReadReceipt,

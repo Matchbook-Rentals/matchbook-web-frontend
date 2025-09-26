@@ -7,7 +7,6 @@ import MessageArea from './components/MessageArea';
 import {
   getAllConversations,
   createConversation,
-  deleteConversation,
   createMessage,
 } from '@/app/actions/conversations';
 import { markMessagesAsReadByTimestamp } from '@/app/actions/messages';
@@ -758,13 +757,6 @@ const MessageInterface = ({
     setAllConversations((prev) => [...prev, newConv]);
   };
 
-  const handleDeleteAllConversations = async () => {
-    if (!confirm('Are you sure you want to delete all conversations?')) return;
-    await Promise.all(allConversations.map((c) => deleteConversation(c.id)));
-    setAllConversations([]);
-    setSelectedConversationId(null);
-    selectedConversationIdRef.current = null; // Update ref
-  };
 
   const toggleSidebar = () => setSidebarVisible((prev) => !prev);
 
@@ -841,21 +833,9 @@ const MessageInterface = ({
         )}
       </div>
       */}
-      {isAdmin && <AdminTools onDeleteAll={handleDeleteAllConversations} />}
     </div>
   );
 };
 
-// Minimal AdminTools component (expand as needed)
-const AdminTools = ({ onDeleteAll }: { onDeleteAll: () => void }) => (
-  <div className="mt-4 px-4 border-t border-gray-200 py-2">
-    <button
-      className="px-4 py-2 bg-red-500 rounded-md text-white"
-      onClick={onDeleteAll}
-    >
-      Delete All Conversations
-    </button>
-  </div>
-);
 
 export default MessageInterface;

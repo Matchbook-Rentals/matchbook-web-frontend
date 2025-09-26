@@ -7,7 +7,6 @@ import MessageArea from './components/MessageArea';
 import {
   getAllConversations,
   createConversation,
-  deleteConversation,
   createMessage,
 } from '@/app/actions/conversations';
 import { markMessagesAsReadByTimestamp } from '@/app/actions/messages';
@@ -410,7 +409,6 @@ const MessageInterface = ({
     Record<string, { isTyping: boolean; timestamp: string }>
   >({});
   const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
-  const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useMobileDetect(initialIsMobile);
   const selectedConversationIdRef = useRef<string | null>(null); // Ref for selected ID
   const searchParams = useSearchParams(); // Get search params
@@ -528,7 +526,6 @@ const MessageInterface = ({
   useEffect(() => {
     if (user) {
       setAllConversations(initialConversations);
-      setIsAdmin(user.publicMetadata?.role === 'admin');
 
       const convoIdFromQuery = searchParams.get('convo');
       if (convoIdFromQuery) {
@@ -758,13 +755,6 @@ const MessageInterface = ({
     setAllConversations((prev) => [...prev, newConv]);
   };
 
-  const handleDeleteAllConversations = async () => {
-    if (!confirm('Are you sure you want to delete all conversations?')) return;
-    await Promise.all(allConversations.map((c) => deleteConversation(c.id)));
-    setAllConversations([]);
-    setSelectedConversationId(null);
-    selectedConversationIdRef.current = null; // Update ref
-  };
 
   const toggleSidebar = () => setSidebarVisible((prev) => !prev);
 
@@ -819,43 +809,9 @@ const MessageInterface = ({
           />
         </div>
       </div>
-      {/*
-      <div
-        className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${webSocketManager.isConnected ? 'bg-green-500'
-            : webSocketManager.circuitOpen ? 'bg-orange-500' // Circuit open, might be retrying later
-              : 'bg-red-500' // Disconnected, not circuit open
-          } text-white`}
-      >
-        {webSocketManager.isConnected ? (
-          'Connected'
-        ) : webSocketManager.circuitOpen ? (
-          'Connection issues (retrying...)'
-        ) : (
-          <button
-            onClick={webSocketManager.retryConnection}
-            className="flex items-center"
-          >
-            <span>Disconnected</span>
-            <span className="ml-2 text-xs">(Click to retry)</span>
-          </button>
-        )}
-      </div>
-      */}
-      {isAdmin && <AdminTools onDeleteAll={handleDeleteAllConversations} />}
     </div>
   );
 };
 
-// Minimal AdminTools component (expand as needed)
-const AdminTools = ({ onDeleteAll }: { onDeleteAll: () => void }) => (
-  <div className="mt-4 px-4 border-t border-gray-200 py-2">
-    <button
-      className="px-4 py-2 bg-red-500 rounded-md text-white"
-      onClick={onDeleteAll}
-    >
-      Delete All Conversations
-    </button>
-  </div>
-);
 
 export default MessageInterface;
