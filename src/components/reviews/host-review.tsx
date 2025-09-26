@@ -36,6 +36,9 @@ interface UserRatingProps {
 }
 
 export const UserRating = ({ data, avatarImgUrl }: UserRatingProps): JSX.Element => {
+  const [selectedRating, setSelectedRating] = React.useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = React.useState<string>("");
+
   if (!data) {
     return (
       <Card className="flex flex-col w-full max-w-[1347px] items-center justify-center border-none p-8">
@@ -48,8 +51,6 @@ export const UserRating = ({ data, avatarImgUrl }: UserRatingProps): JSX.Element
   }
 
   const { overallRating, totalReviews, ratingDistribution, reviews } = data;
-  const [selectedRating, setSelectedRating] = React.useState<number | null>(null);
-  const [searchTerm, setSearchTerm] = React.useState<string>("");
 
   // Filter reviews based on selected rating and search term
   const filteredReviews = reviews.filter(review => {

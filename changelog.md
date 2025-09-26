@@ -1,5 +1,14 @@
 # Changelog
 
+## WebSocket Debug Interface for Admin Users
+- Added WebSocket status indicator component for admin_dev users to monitor real-time connection status
+- Implemented comprehensive error logging with expandable log viewer showing connection events, errors, and circuit breaker status
+- Enhanced useWebSocketManager hook with error log tracking (up to 50 entries) and log clearing functionality
+- Refactored admin role checking to server-side computation in RSC for better security and performance
+- Created proper component separation with messages-page-client wrapper for clean architecture
+- Removed testing-only AdminTools component and bulk conversation deletion functionality
+- Added dismissible UI with hide-until-refresh functionality for non-intrusive debugging
+
 ## Medallion Identity Verification Improvements
 - Enhanced verification flow with comprehensive failure handling for rejected, failed, and expired states
 - Added user-friendly error UI with specific guidance based on Medallion documentation (document quality, data mismatches, technical issues)
