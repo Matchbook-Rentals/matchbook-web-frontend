@@ -466,9 +466,17 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
           <PopoverContent className="p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
-                <Link href="/sign-in" data-testid="sign-in-button" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
+                <button
+                  onClick={() => {
+                    const currentPath = window.location.pathname;
+                    const redirectUrl = encodeURIComponent(currentPath);
+                    window.location.href = `/sign-in?redirect_url=${redirectUrl}`;
+                  }}
+                  data-testid="sign-in-button"
+                  className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset"
+                >
                   Sign In
-                </Link>
+                </button>
                 <button onClick={() => setIsSupportOpen(true)} className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
                   Get help
                 </button>

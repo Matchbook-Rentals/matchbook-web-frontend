@@ -1,4 +1,7 @@
-export interface FilterOptions {
+import { FilterOptions } from '@/lib/listing-filters';
+
+// Legacy interface for backward compatibility
+export interface LegacyFilterOptions {
   minPrice: number;
   maxPrice: number;
   bedrooms: string;
@@ -18,23 +21,24 @@ export interface FilterOptions {
   utilities: string[];
 }
 
-// You might want to add default values or other filter-related constants here
+// Complete default filter options matching the FilterOptions interface
 export const DEFAULT_FILTER_OPTIONS: FilterOptions = {
-  minPrice: 0,
-  maxPrice: 10000,
-  bedrooms: 'Any',
-  beds: 'Any',
-  baths: 'Any',
+  propertyTypes: [],
+  minPrice: null,
+  maxPrice: null,
+  minBedrooms: 0,
+  minBeds: null,
+  minBathrooms: 0,
   furnished: false,
   unfurnished: false,
-  moveInDate: new Date(),
-  moveOutDate: new Date(),
-  flexibleMoveIn: false,
-  flexibleMoveOut: false,
-  flexibleMoveInStart: new Date(),
-  flexibleMoveInEnd: new Date(),
-  flexibleMoveOutStart: new Date(),
-  flexibleMoveOutEnd: new Date(),
-  propertyTypes: [],
   utilities: [],
+  pets: [],
+  searchRadius: 100,
+  accessibility: [],
+  location: [],
+  parking: [],
+  kitchen: [],
+  basics: [],
+  luxury: [],
+  laundry: [],
 };

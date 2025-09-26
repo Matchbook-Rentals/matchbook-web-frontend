@@ -26,11 +26,11 @@ const WebHomePage = async () => {
     publicMetadata: user.publicMetadata
   } : null;
 
-  // Search is open to all signed-in users (no role restrictions)
-  const hasAccess = !!user;
+  // Search is now open to all users (authenticated and unauthenticated)
+  const hasAccess = true;
   
-  // Get trip count if user has access
-  const tripCount = hasAccess && user?.id ? await getUserTripsCount() : 0;
+  // Get trip count if user is authenticated
+  const tripCount = user?.id ? await getUserTripsCount() : 0;
 
   return (
     <HomePageWrapper>

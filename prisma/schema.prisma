@@ -739,30 +739,34 @@ model Match {
 }
 
 model Favorite {
-  id        String   @id @default(uuid())
-  tripId    String
-  listingId String?
-  rank      Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  tripId          String?  // Optional - for authenticated users
+  guestSessionId  String?  // Optional - for guest users
+  listingId       String?
+  rank            Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  trip Trip? @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
   @@unique([tripId, rank])
   @@unique([tripId, listingId])
+  @@unique([guestSessionId, listingId])
 }
 
 model Dislike {
-  id        String   @id @default(uuid())
-  tripId    String
-  listingId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  tripId          String?  // Optional - for authenticated users
+  guestSessionId  String?  // Optional - for guest users
+  listingId       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  trip    Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id])
 
   @@unique([tripId, listingId])
+  @@unique([guestSessionId, listingId])
 }
 
 model Maybe {

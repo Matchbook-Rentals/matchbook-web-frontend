@@ -236,22 +236,6 @@ interface GuestTripResponse {
    - No real host contact information shown to guests
    - Watermark or badge guest view listings
 
-## Performance Optimizations
-
-1. **Bundle Optimization**
-   - Lazy load guest-specific components
-   - Separate bundle for guest routes
-   - Minimize dependencies for guest pages
-
-2. **Caching Strategy**
-   - Cache sample listings in CDN
-   - Use static data for guest preview
-   - Implement service worker for offline capability
-
-3. **Loading Performance**
-   - Server-side render guest pages where possible
-   - Implement progressive enhancement
-   - Optimize images for guest views
 
 ## Success Metrics
 
@@ -279,21 +263,6 @@ Track the following events:
 7. `guest_like_attempted`
 8. `guest_apply_attempted`
 
-## Future Enhancements
-
-1. **Smart Auth Prompts**
-   - ML-based timing for auth prompts
-   - Personalized messaging based on behavior
-
-2. **Enhanced Guest Features**
-   - Virtual tours without auth
-   - Neighborhood exploration mode
-   - Saved searches via email (no account)
-
-3. **Social Proof Integration**
-   - Show "X users viewing this listing"
-   - Display recent sign-ups from area
-   - Highlight popular searches
 
 ## Conclusion
 

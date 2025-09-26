@@ -422,3 +422,67 @@ export const updateTripFilters = async (tripId: string, filters: Object): Promis
     throw new Error('Failed to update trip filters');
   }
 }
+
+interface CreateTripFromGuestSessionResponse {
+  success: boolean;
+  tripId?: string;
+  error?: string;
+}
+
+export async function createTripFromGuestSession(guestSessionData: {
+  id: string;
+  searchParams: {
+    location: string;
+    lat: number;
+    lng: number;
+    startDate?: Date;
+    endDate?: Date;
+    guests: {
+      adults: number;
+      children: number;
+      pets: number;
+    };
+  };
+}): Promise<CreateTripFromGuestSessionResponse> {
+  const { userId } = auth();
+  if (!userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    const { searchParams } = guestSessionData;
+
+    // Create trip with the same data as guest session
+    const newTrip = await prisma.trip.create({
+      data: {
+        userId: userId,
+        locationString: searchParams.location,
+        latitude: searchParams.lat,
+        longitude: searchParams.lng,
+        startDate: searchParams.startDate,
+        endDate: searchParams.endDate,
+        numAdults: searchParams.guests.adults,
+        numChildren: searchParams.guests.children,
+        numPets: searchParams.guests.pets,
+        tripStatus: 'searching',
+        searchRadius: 100, // Default search radius
+        flexibleStart: 0,
+        flexibleEnd: 0,
+      },
+    });
+
+    // Revalidate user trips cache
+    revalidateTag(`user-trips-${userId}`);
+
+    return {
+      success: true,
+      tripId: newTrip.id,
+    };
+  } catch (error) {
+    console.error('Error creating trip from guest session:', error);
+    return {
+      success: false,
+      error: 'Failed to create trip from guest session',
+    };
+  }
+}

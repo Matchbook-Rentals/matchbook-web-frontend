@@ -13,8 +13,11 @@ import MobileLocationSuggest from "./MobileLocationSuggest";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { createTrip } from "@/app/actions/trips";
+import { createGuestTrip } from "@/app/actions/guest-trips";
+import { GuestSessionService } from "@/utils/guest-session";
 import { useRouter } from "next/navigation";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { useAuth } from "@clerk/nextjs";
 
 interface SearchDialogProps {
   isOpen: boolean;
@@ -50,6 +53,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
   const { toast } = useToast();
   const router = useRouter();
   const { width } = useWindowSize();
+  const { isSignedIn } = useAuth();
 
   // Check if we're on mobile
   const isMobile = width ? width < 640 : false;
@@ -97,27 +101,62 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
     }
 
     setIsSubmitting(true);
-    try {
-      const response = await createTrip({
-        locationString: selectedLocation?.description || '',
-        latitude: selectedLocation?.lat || 0,
-        longitude: selectedLocation?.lng || 0,
-        startDate: dateRange.start,
-        endDate: dateRange.end,
-      });
 
-      if (response.success && response.trip) {
-        router.push(`/app/rent/searches/${response.trip.id}`);
+    const tripData = {
+      locationString: selectedLocation?.description || '',
+      latitude: selectedLocation?.lat || 0,
+      longitude: selectedLocation?.lng || 0,
+      startDate: dateRange.start,
+      endDate: dateRange.end,
+      numAdults: guests.adults,
+      numChildren: guests.children,
+      numPets: guests.pets,
+    };
+
+    try {
+      if (isSignedIn) {
+        // Authenticated user - use existing flow
+        const response = await createTrip(tripData);
+
+        if (response.success && response.trip) {
+          router.push(`/app/rent/searches/${response.trip.id}`);
+        } else {
+          toast({
+            variant: "destructive",
+            description: response.success === false ? response.error : "Failed to create trip",
+          });
+        }
       } else {
-        toast({
-          variant: "destructive",
-          description: response.success === false ? response.error : "Failed to create trip",
-        });
+        // Unauthenticated user - use guest flow
+        const response = await createGuestTrip(tripData);
+
+        if (response.success && response.sessionId) {
+          // Store session data client-side
+          const sessionData = GuestSessionService.createGuestSessionData(tripData, response.sessionId);
+          const stored = GuestSessionService.storeSession(sessionData);
+
+          if (!stored) {
+            toast({
+              variant: "destructive",
+              description: "Failed to store search data. Please try again.",
+            });
+            return;
+          }
+
+          // Close dialog and redirect to guest search page
+          onOpenChange(false);
+          router.push(response.redirectUrl!);
+        } else {
+          toast({
+            variant: "destructive",
+            description: response.error || "Failed to create search",
+          });
+        }
       }
     } catch (error) {
       toast({
         variant: "destructive",
-        description: "An unexpected error occurred while creating the trip.",
+        description: "An unexpected error occurred while creating the search.",
       });
     } finally {
       setIsSubmitting(false);
