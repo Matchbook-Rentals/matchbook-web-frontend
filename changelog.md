@@ -1,5 +1,23 @@
 # Changelog
 
+## Auto-enable pets filter when trips include pets
+- Automatically set petsAllowed filter to true when creating trips with numPets > 0
+- Applied to both authenticated and guest trip creation flows
+- Updated editTrip to auto-enable petsAllowed when numPets is changed to > 0
+- Ensures users with pets automatically see pet-friendly properties without manual filter selection
+
+## Complete Guest Search Experience Implementation
+- Added full guest (unauthenticated) search experience with feature parity to authenticated users
+- Implemented guest session system with 24-hour persistence using sessionStorage and cookies for RSC compatibility
+- Created complete guest UI replica including interactive map, property filters, and like/dislike functionality
+- Added database persistence for guest actions with seamless migration to authenticated accounts upon sign-up
+- Updated Prisma schema with optional foreign keys to support both guest and authenticated users
+- Built server-side conversion system for instant guest-to-auth transition without loading spinners
+- Implemented proper context isolation between guest and authenticated components to prevent conflicts
+- Added comprehensive filtering system with real-time updates and map viewport synchronization
+- Created guest-specific navbar with proper redirect URL handling for consistent sign-in flow
+- Fixed all map interactions including mobile overlay, pin details, and listing cards for guest users
+
 ## WebSocket Debug Interface for Admin Users
 - Added WebSocket status indicator component for admin_dev users to monitor real-time connection status
 - Implemented comprehensive error logging with expandable log viewer showing connection events, errors, and circuit breaker status

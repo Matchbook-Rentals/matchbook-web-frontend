@@ -119,6 +119,7 @@ export const GuestTripContextProvider: React.FC<GuestTripContextProviderProps> =
           ...prev,
           moveInDate: guestSession.searchParams.startDate || new Date(),
           moveOutDate: guestSession.searchParams.endDate || new Date(),
+          pets: guestSession.searchParams.guests.pets > 0 ? ['petsAllowed'] : [],
         }));
 
         // Load favorites and dislikes from database

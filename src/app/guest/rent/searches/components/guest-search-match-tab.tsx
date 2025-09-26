@@ -251,7 +251,7 @@ const GuestSearchMatchTab: React.FC<GuestMatchViewTabProps> = ({ setIsFilterOpen
           className="w-32 h-32 mb-4 opacity-60"
         />
         <p className="text-gray-600 text-center">
-          Sorry, we couldn't find any listings in {session?.searchParams.location || 'this area'} right now.
+          Sorry, we couldn&apos;t find any listings in {session?.searchParams.location || 'this area'} right now.
           <br />
           Please try different dates or a different location.
         </p>

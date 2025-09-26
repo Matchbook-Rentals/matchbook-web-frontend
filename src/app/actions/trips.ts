@@ -304,6 +304,7 @@ export async function createTrip(tripData: {
         numAdults,
         numChildren,
         numPets,
+        petsAllowed: numPets > 0,
       },
     });
 
@@ -359,9 +360,15 @@ export async function editTrip(tripId: string, tripData: {
       return { success: false, error: 'Unauthorized to edit this trip' };
     }
 
+    // Auto-enable petsAllowed if numPets > 0
+    const dataToUpdate = {
+      ...tripData,
+      ...(tripData.numPets !== undefined && { petsAllowed: tripData.numPets > 0 })
+    };
+
     const updatedTrip = await prisma.trip.update({
       where: { id: tripId },
-      data: tripData,
+      data: dataToUpdate,
     });
 
 
@@ -468,6 +475,7 @@ export async function createTripFromGuestSession(guestSessionData: {
         searchRadius: 100, // Default search radius
         flexibleStart: 0,
         flexibleEnd: 0,
+        petsAllowed: searchParams.guests.pets > 0,
       },
     });
 
