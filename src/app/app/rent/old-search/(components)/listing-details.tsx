@@ -78,22 +78,29 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
             23 stays
           </p>
 
-          <Popover>
-            <PopoverTrigger>
-              <div className="flex items-center gap-2 cursor-pointer">
-                <Star className="fill-current text-gray-700" size={28} />
-                <span className="text-[24px]">
-                  {(listing?.uScore / 10).toFixed(1)}
-                  <span className="sm:hidden md:inline lg:hidden text-sm">
-                    (23)
+          {listing?.averageRating ? (
+            <Popover>
+              <PopoverTrigger>
+                <div className="flex items-center gap-2 cursor-pointer">
+                  <Star className="fill-current text-yellow-400" size={28} />
+                  <span className="text-[24px]">
+                    {listing.averageRating.toFixed(1)}
+                    <span className="sm:hidden md:inline lg:hidden text-sm">
+                      ({listing?.numberOfStays || 0})
+                    </span>
                   </span>
-                </span>
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto">
-              <p className="text-sm">Raw Score: {listing?.uScore?.toFixed(3)}</p>
-            </PopoverContent>
-          </Popover>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto">
+                <p className="text-sm">Average rating from {listing?.numberOfStays || 0} stays</p>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Star className="fill-current text-gray-300" size={28} />
+              <span className="text-[24px] italic text-gray-500">No reviews yet</span>
+            </div>
+          )}
         </div>
       </div>
 

@@ -262,15 +262,23 @@ export default function SearchListingCard({ listing, status, className, style, d
             </div>
 
             <div className="flex items-center gap-0.5">
-              <div className="flex items-center">
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
-                <span className={bodyTextStyle}>
-                  {(listing as any).rating ?? 4.9}
+              {listing.averageRating ? (
+                <>
+                  <div className="flex items-center">
+                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
+                    <span className={bodyTextStyle}>
+                      {listing.averageRating.toFixed(1)}
+                    </span>
+                  </div>
+                  <span className={bodyTextStyle}>
+                    ({listing.numberOfStays || 0})
+                  </span>
+                </>
+              ) : (
+                <span className={`${bodyTextStyle} italic`}>
+                  No reviews yet
                 </span>
-              </div>
-              <span className={bodyTextStyle}>
-                ({(listing as any).reviews ?? 127})
-              </span>
+              )}
             </div>
           </div>
         </div>

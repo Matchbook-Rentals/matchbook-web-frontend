@@ -49,7 +49,8 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, calculat
             Hosted by {host?.firstName || 'Unknown'}
           </p>
           <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center">
-            <StarIcon className="w-4 h-4" /> {listing.uScore ? listing.uScore.toFixed(1) : 'N/A'} <span className=''> (23) </span>
+            <StarIcon className="w-4 h-4" /> {listing.averageRating ? listing.averageRating.toFixed(1) : <span className="italic">No reviews yet</span>}
+            {listing.averageRating && <span className=''> ({listing.numberOfStays || 0}) </span>}
           </p>
         </div>
         <div className="flex items-center justify-between">

@@ -85,8 +85,8 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({ listi
         <div className='flex items-center justify-between'>
           <p className={mediumText}>Hosted by {host?.firstName || 'Host'}</p>
           <p className={`${normalText} flex gap-x-2 items-center`}>
-            <StarIcon /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}
-            <span className='text-sm pt-2 pl-0 -translate-x-1'>({listing?.numberOfStays || 23})</span>
+            <StarIcon /> {listing?.averageRating ? listing.averageRating.toFixed(1) : <span className="italic">No reviews yet</span>}
+            {listing?.averageRating && <span className='text-sm pt-2 pl-0 -translate-x-1'>({listing?.numberOfStays || 0})</span>}
           </p>
         </div>
         <div>
