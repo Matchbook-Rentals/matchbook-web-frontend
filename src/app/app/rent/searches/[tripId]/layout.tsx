@@ -39,7 +39,16 @@ async function TripDataWrapper({ children, params }: {
 
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100, state, latestStart, earliestEnd);
   const application = await getUserApplication();
-  const hasApplicationData = !!application;
+
+  console.log('🔍 [TripLayout] Application data debug:', {
+    exists: !!application,
+    isComplete: application?.isComplete,
+    applicationId: application?.id,
+    userId: trip.userId,
+    firstName: application?.firstName,
+    lastName: application?.lastName,
+    createdAt: application?.createdAt
+  });
 
   //UnComment this line to force permanent render of Suspense
   //await new Promise(() => { });
@@ -48,7 +57,6 @@ async function TripDataWrapper({ children, params }: {
     <TripContextProvider
       tripData={trip}
       listingData={listings}
-      hasApplicationData={hasApplicationData}
       application={application || null}
     >
       {children}

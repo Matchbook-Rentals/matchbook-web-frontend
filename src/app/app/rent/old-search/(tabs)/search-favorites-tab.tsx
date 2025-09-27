@@ -5,7 +5,6 @@ import SearchMap from '../(components)/search-map';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { toast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
 import SearchFavoriteGrid from '../(components)/search-favorite-grid';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
@@ -65,29 +64,14 @@ export default function SearchFavoritesTab() {
       return;
     }
 
-    if (!state.hasApplication) {
-      toast({
-        title: "No Application Found",
-        description: "You need to complete your application before applying to properties. (Coming soon!)",
-        variant: "destructive",
-        //action: (
-        //  <ToastAction altText="Go to Application" >
-        //    Go to Application
-        //  </ToastAction>
-        //),
-      });
-      return;
-    }
-
-    if (state.hasApplication && !state.application?.isComplete) {
+    if (!state.application?.isComplete) {
       toast({
         title: "Application Incomplete",
         description: "Please complete your application before applying to properties.",
-        variant: "destructive",
         action: (
-          <ToastAction altText="Complete Application" onClick={() => router.push('/app/rent/application/general')}>
+          <BrandButton size="sm" onClick={() => router.push('/app/rent/applications/general')}>
             Complete Application
-          </ToastAction>
+          </BrandButton>
         ),
       });
       return;

@@ -22,7 +22,6 @@ interface SearchContextType {
     requestedListings: ListingAndImages[];
     matchedListings: ListingAndImages[];
     isLoading: boolean;
-    hasApplication: boolean;
     application: ApplicationWithArrays | null;
     lookup: {
       favIds: Set<string>;
@@ -36,14 +35,12 @@ interface SearchContextType {
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
     fetchListings: (lat: number, lng: number, radius: number) => Promise<void>;
     setLookup: React.Dispatch<React.SetStateAction<SearchContextType['state']['lookup']>>;
-    setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 interface SearchContextProviderProps {
   children: ReactNode;
   activeSearches: TripAndMatches[];
-  hasApplicationData: boolean;
   application: ApplicationWithArrays | null;
 }
 
@@ -57,12 +54,11 @@ export const useSearchContext = () => {
   return context;
 };
 
-export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches, hasApplicationData, application }) => {
+export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches, application }) => {
   const [currentSearch, setCurrentSearch] = useState<TripAndMatches | null>(null);
   const [listings, setListings] = useState<ListingAndImages[]>([]);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasApplication, setHasApplication] = useState(hasApplicationData);
   const [lookup, setLookup] = useState<SearchContextType['state']['lookup']>({
     favIds: new Set(),
     dislikedIds: new Set(),
@@ -256,7 +252,6 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       viewedListings,
       isLoading,
       lookup,
-      hasApplication,
       application,
       matchedListings // Add this line
     },
@@ -268,7 +263,6 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       setViewedListings,
       fetchListings,
       setLookup,
-      setHasApplication,
     }
   };
 

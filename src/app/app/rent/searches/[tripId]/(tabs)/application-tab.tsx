@@ -75,10 +75,8 @@ interface QuestionnaireAnswers {
 }
 
 const ApplicationForm: React.FC = () => {
-  // const { hasApplication, trip, setHasApplication, application } = useTripContext();
-  const { state, actions } = useTripContext();
-  const { hasApplication, trip, application } = state;
-  const { setHasApplication } = actions;
+  const { state } = useTripContext();
+  const { trip, application } = state;
 
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({
     firstName: application?.firstName || '',
@@ -136,7 +134,7 @@ const ApplicationForm: React.FC = () => {
           title: "Success",
           description: "Application updated successfully",
         });
-        setHasApplication(true);
+        // Application completion is now tracked via application.isComplete
       }
     } catch (error) {
       console.error('Error creating application', error)

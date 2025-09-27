@@ -7,11 +7,11 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { Toast, ToastAction } from "@/components/ui/toast";
+import { BrandButton } from "@/components/ui/brandButton";
 
 export default function PropertiesYouLoveTab() {
   const [isOpen, setIsOpen] = useState(true);
-  const { hasApplication, setHasApplication, likedListings, requestedListings, setLookup, actions, trip } = useTripContext();
+  const { likedListings, requestedListings, setLookup, actions, trip, application } = useTripContext();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -26,15 +26,14 @@ export default function PropertiesYouLoveTab() {
       return;
     }
 
-    if (!hasApplication) {
+    if (!application?.isComplete) {
       toast({
-        title: "No Application Found",
+        title: "Application Incomplete",
         description: "You need to complete your application before applying to properties.",
-        variant: "destructive",
         action: (
-          <ToastAction altText="Go to Application" onClick={() => router.push(`${pathname}?tab=applications`, { scroll: true })}>
-            Go to Application
-          </ToastAction>
+          <BrandButton size="sm" onClick={() => router.push(`${pathname}?tab=applications`, { scroll: true })}>
+            Complete Application
+          </BrandButton>
         ),
       });
       return;
@@ -85,8 +84,7 @@ export default function PropertiesYouLoveTab() {
 
   return (
     <>
-      <button onClick={() => setHasApplication(false)}>SET NO APP</button>
-      {hasApplication.toString()}
+      {/* Debug: Application Complete Status: {application?.isComplete?.toString()} */}
       {requestedListings.length > 0 &&
         <CustomAccordion
           title="Submitted Applications"

@@ -159,7 +159,7 @@ export default function ApplicationPage() {
   const params = useParams();
   const tripId = params.tripId as string;
   const router = useRouter();
-  const { state: { trip, application, hasApplication }, actions: { setHasApplication } } = useTripContext();
+  const { state: { trip, application } } = useTripContext();
   const { toast } = useToast();
 
   // Replace all individual state with store
@@ -472,7 +472,7 @@ export default function ApplicationPage() {
           title: "Success",
           description: "Application submitted successfully",
         });
-        setHasApplication(true);
+        // Application completion is now tracked via application.isComplete
         if (result.application?.id) {
           let completeResult = await markComplete(result.application?.id);
           console.log('completeResult', completeResult);

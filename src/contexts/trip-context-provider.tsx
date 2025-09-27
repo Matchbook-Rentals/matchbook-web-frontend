@@ -38,7 +38,6 @@ interface TripContextType {
     requestedListings: ListingAndImages[];
     matchedListings: ListingAndImages[];
     isLoading: boolean;
-    hasApplication: boolean;
     application: ApplicationWithArrays | null;
     lookup: {
       favIds: Set<string>;
@@ -53,7 +52,6 @@ interface TripContextType {
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
     setTrip: React.Dispatch<React.SetStateAction<TripAndMatches[]>>;
     setLookup: React.Dispatch<React.SetStateAction<TripContextType['state']['lookup']>>;
-    setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
     optimisticLike: (listingId: string, withPopup: Boolean) => Promise<void>;
     optimisticDislike: (listingId: string) => Promise<void>;
     optimisticRemoveLike: (listingId: string) => Promise<void>;
@@ -69,7 +67,6 @@ interface TripContextProviderProps {
   children: ReactNode;
   tripData: TripAndMatches;
   listingData: ListingAndImages[];
-  hasApplicationData?: boolean;
   application?: ApplicationWithArrays | null;
 }
 
@@ -83,12 +80,11 @@ export const useTripContext = () => {
   return context;
 };
 
-export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children, listingData, tripData, application, hasApplicationData }) => {
+export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children, listingData, tripData, application }) => {
   const [listings, setListings] = useState(listingData);
   const [trip, setTrip] = useState(tripData);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasApplication, setHasApplication] = useState(hasApplicationData);
   const [lookup, setLookup] = useState<TripContextType['state']['lookup']>({
     favIds: new Set(),
     dislikedIds: new Set(),
@@ -485,7 +481,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       viewedListings,
       isLoading,
       lookup,
-      hasApplication,
       application,
       matchedListings,
       filters,
@@ -495,7 +490,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       setViewedListings,
       setTrip,
       setLookup,
-      setHasApplication,
       optimisticLike,
       optimisticDislike,
       optimisticRemoveLike,

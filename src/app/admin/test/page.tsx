@@ -6,7 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
-import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell, Star, Shield } from 'lucide-react'
+import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell, Star, Shield, Download, Upload, RotateCcw } from 'lucide-react'
 import Link from 'next/link'
 
 export default function TestSuitesPage() {
@@ -142,6 +142,27 @@ export default function TestSuitesPage() {
       description: 'View and restore soft-deleted listings for testing purposes',
       icon: <Home className="h-5 w-5" />,
       path: '/admin/test/restore-listings'
+    },
+    {
+      id: 'listing-export',
+      name: 'Listing Export',
+      description: 'Export all production listings with complete relations for staging migration',
+      icon: <Download className="h-5 w-5" />,
+      path: '/admin/test/export'
+    },
+    {
+      id: 'listing-import',
+      name: 'Listing Import',
+      description: 'Import listings from JSON export file and assign to current user',
+      icon: <Upload className="h-5 w-5" />,
+      path: '/admin/test/import'
+    },
+    {
+      id: 'application-reset',
+      name: 'Application Reset',
+      description: 'Reset a user\'s application state to make them appear as fresh users',
+      icon: <RotateCcw className="h-5 w-5" />,
+      path: '/admin/test/app/reset'
     }
   ]
 

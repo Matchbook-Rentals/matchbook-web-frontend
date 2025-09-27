@@ -11,17 +11,15 @@ export default async function SearchesLayout({
 }) {
   const searches = await getTripsInSearchStatus();
   const response = await getTripApplication()
-  let hasApplication = false
   let application: ApplicationWithArrays | null = null
   if (response.success && response.application) {
-    hasApplication = true
     application = response.application as ApplicationWithArrays
   }
 
   return (
     <SearchContextProvider activeSearches={searches.sort((a, b) => {
       return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-    })} hasApplicationData={hasApplication} application={application}>
+    })} application={application}>
       <div className="searches-layout">
         {children}
       </div>

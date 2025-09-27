@@ -251,11 +251,21 @@ export async function getUserApplication() {
   if (!userId) return null;
 
   try {
-    // First try to find existing application
-    let application = await prisma.application.findFirst({
+    // Use upsert to handle race conditions when multiple requests try to create simultaneously
+    const application = await prisma.application.upsert({
       where: {
+        userId_isDefault: {
+          userId,
+          isDefault: true,
+        },
+      },
+      update: {
+        // Don't update if application already exists
+      },
+      create: {
         userId,
         isDefault: true,
+        // All other fields are nullable and will be filled in later
       },
       include: {
         incomes: true,
@@ -273,37 +283,11 @@ export async function getUserApplication() {
       },
     });
     
-    // If no application exists, create an empty one
-    if (!application) {
-      console.log('[getUserApplication] No default application found, creating empty one for user:', userId);
-      application = await prisma.application.create({
-        data: {
-          userId,
-          isDefault: true,
-          // All other fields are nullable and will be filled in later
-        },
-        include: {
-          incomes: true,
-          verificationImages: true,
-          identifications: {
-            include: {
-              idPhotos: true
-            }
-          },
-          residentialHistories: {
-            orderBy: {
-              index: 'asc',
-            },
-          },
-        },
-      });
-    }
-    
     // Debug data if needed
 
     // Decrypt SSN if it exists
     let applicationWithDecryptedSSN = application;
-    if (application?.ssn) {
+    if (application.ssn) {
       try {
         const { decryptData } = await import('@/utils/encryption');
         const decryptedSsn = await decryptData(application.ssn);
@@ -319,7 +303,7 @@ export async function getUserApplication() {
       }
     }
 
-    return applicationWithDecryptedSSN; // This will be null if no application is found
+    return applicationWithDecryptedSSN;
   } catch (error) {
     console.error('Failed to get user application:', error);
     return null;
