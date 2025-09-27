@@ -113,7 +113,7 @@ export default function GuestSearchClient({
   ];
 
   return (
-    <GuestTripContextProvider sessionId={sessionId} listingData={listings}>
+    <GuestTripContextProvider sessionId={sessionId} sessionData={sessionData} listingData={listings}>
       <div className="min-h-screen bg-background">
         {/* Header */}
         <GuestSearchNavbar

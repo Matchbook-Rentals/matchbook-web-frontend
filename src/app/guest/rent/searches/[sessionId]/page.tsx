@@ -2,6 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { GuestSessionService } from '@/utils/guest-session';
+import { getGuestSession } from '@/app/actions/guest-session-db';
 import { pullGuestListingsFromDb } from '@/app/actions/guest-listings';
 import { createTripFromGuestSession } from '@/app/actions/trips';
 import { convertGuestSessionToTrip } from '@/app/actions/guest-to-trip';
@@ -20,11 +21,17 @@ export default async function GuestSearchPage({
   const cookieStore = cookies();
   const cookieHeader = cookieStore.toString();
 
-  // Get session data from cookies (server-side accessible)
-  const sessionData = GuestSessionService.getSessionByIdFromCookies(sessionId, cookieHeader);
+  // Get session data from database using sessionId
+  const sessionData = await getGuestSession(sessionId);
 
-  // If no session data found, redirect to home
+  // If no session data found, check cookie as fallback
   if (!sessionData) {
+    // Try to get session ID from cookie to verify it exists
+    const cookieSessionId = GuestSessionService.getSessionIdFromCookies(cookieHeader);
+    if (!cookieSessionId || cookieSessionId !== sessionId) {
+      redirect('/');
+    }
+    // If cookie exists but DB session doesn't, session might be expired or corrupted
     redirect('/');
   }
 

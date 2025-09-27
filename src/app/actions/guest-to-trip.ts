@@ -1,6 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prismadb';
+import { markSessionAsConverted } from './guest-session-db';
 
 /**
  * Migration function to convert guest session data to a Trip
@@ -26,6 +27,15 @@ export async function convertGuestSessionToTrip(guestSessionId: string, newTripI
         data: {
           tripId: newTripId,
           guestSessionId: null
+        }
+      });
+
+      // Mark the guest session as converted
+      await tx.guestSession.update({
+        where: { id: guestSessionId },
+        data: {
+          convertedAt: new Date(),
+          tripId: newTripId
         }
       });
 
@@ -58,20 +68,39 @@ export async function convertGuestSessionToTrip(guestSessionId: string, newTripI
  */
 export async function getGuestDataCounts(guestSessionId: string) {
   try {
-    const [favoritesCount, dislikesCount] = await Promise.all([
-      prisma.favorite.count({
-        where: { guestSessionId }
-      }),
-      prisma.dislike.count({
-        where: { guestSessionId }
-      })
-    ]);
+    // Get session with counts using the new database structure
+    const guestSession = await prisma.guestSession.findUnique({
+      where: { id: guestSessionId },
+      include: {
+        _count: {
+          select: {
+            favorites: true,
+            dislikes: true
+          }
+        }
+      }
+    });
+
+    if (!guestSession) {
+      return {
+        success: false,
+        favoritesCount: 0,
+        dislikesCount: 0,
+        totalCount: 0,
+        error: 'Guest session not found'
+      };
+    }
+
+    const favoritesCount = guestSession._count.favorites;
+    const dislikesCount = guestSession._count.dislikes;
 
     return {
       success: true,
       favoritesCount,
       dislikesCount,
-      totalCount: favoritesCount + dislikesCount
+      totalCount: favoritesCount + dislikesCount,
+      isConverted: !!guestSession.convertedAt,
+      isExpired: Date.now() > guestSession.expiresAt.getTime()
     };
   } catch (error) {
     console.error('Error in getGuestDataCounts:', error);

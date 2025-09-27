@@ -66,6 +66,7 @@ interface GuestTripContextType {
 interface GuestTripContextProviderProps {
   children: ReactNode;
   sessionId: string;
+  sessionData: GuestSession; // Now passed from server
   listingData: ListingAndImages[]; // Required - real listing data from database
 }
 
@@ -82,9 +83,10 @@ export const useGuestTripContext = () => {
 export const GuestTripContextProvider: React.FC<GuestTripContextProviderProps> = ({
   children,
   sessionId,
+  sessionData,
   listingData
 }) => {
-  const [session, setSession] = useState<GuestSession | null>(null);
+  const [session, setSession] = useState<GuestSession | null>(sessionData);
   const [listings, setListings] = useState<ListingAndImages[]>(listingData);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -104,38 +106,41 @@ export const GuestTripContextProvider: React.FC<GuestTripContextProviderProps> =
   // Initialize filters from session data
   const [filters, setFilters] = useState<FilterOptions>({
     ...DEFAULT_FILTER_OPTIONS,
-    // Will be updated when session loads
+    // Initialize immediately with server data
+    moveInDate: sessionData.searchParams.startDate || new Date(),
+    moveOutDate: sessionData.searchParams.endDate || new Date(),
+    pets: sessionData.searchParams.guests.pets > 0 ? ['petsAllowed'] : [],
   });
 
-  // Load session data and favorites/dislikes on mount
+  // Load favorites/dislikes from database on mount
   useEffect(() => {
-    const loadGuestData = async () => {
-      const guestSession = GuestSessionService.getSessionById(sessionId);
-      if (guestSession) {
-        setSession(guestSession);
-
-        // Update filters with session data
-        setFilters(prev => ({
+    const loadGuestFavorites = async () => {
+      // Load favorites and dislikes from database
+      const favoritesResult = await pullGuestFavoritesFromDb(sessionId);
+      if (favoritesResult.success) {
+        setLookup(prev => ({
           ...prev,
-          moveInDate: guestSession.searchParams.startDate || new Date(),
-          moveOutDate: guestSession.searchParams.endDate || new Date(),
-          pets: guestSession.searchParams.guests.pets > 0 ? ['petsAllowed'] : [],
+          favIds: new Set(favoritesResult.favoriteIds),
+          dislikedIds: new Set(favoritesResult.dislikeIds)
         }));
-
-        // Load favorites and dislikes from database
-        const favoritesResult = await pullGuestFavoritesFromDb(sessionId);
-        if (favoritesResult.success) {
-          setLookup(prev => ({
-            ...prev,
-            favIds: new Set(favoritesResult.favoriteIds),
-            dislikedIds: new Set(favoritesResult.dislikeIds)
-          }));
-        }
       }
     };
 
-    loadGuestData();
+    loadGuestFavorites();
   }, [sessionId]);
+
+  // Update session state when sessionData prop changes (if needed)
+  useEffect(() => {
+    setSession(sessionData);
+
+    // Update filters when session data changes
+    setFilters(prev => ({
+      ...prev,
+      moveInDate: sessionData.searchParams.startDate || new Date(),
+      moveOutDate: sessionData.searchParams.endDate || new Date(),
+      pets: sessionData.searchParams.guests.pets > 0 ? ['petsAllowed'] : [],
+    }));
+  }, [sessionData]);
 
   // All listings for map tab (includes liked/disliked)
   const allListings: ListingWithAvailability[] = useMemo(() => {

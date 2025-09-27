@@ -1,4 +1,7 @@
 // Guest session storage utilities
+// Now uses database storage with lightweight cookie fallback
+
+import { getGuestSession } from '@/app/actions/guest-session-db';
 
 export interface GuestSession {
   id: string;
@@ -24,14 +27,23 @@ export interface GuestSession {
   tripId?: string; // Set when guest session is converted to authenticated trip
 }
 
-const GUEST_SESSION_KEY = 'matchbook_guest_session';
+const GUEST_SESSION_ID_KEY = 'matchbook_guest_session_id'; // Now just stores the ID
+const GUEST_SESSION_CACHE_KEY = 'matchbook_guest_session_cache'; // Temporary cache
 
 export class GuestSessionService {
+  /**
+   * Store session ID in lightweight cookie and cache session data locally
+   * The actual session data is stored in the database
+   */
   static storeSession(session: GuestSession): boolean {
     try {
       if (typeof window === 'undefined') return false;
 
-      // Convert dates to ISO strings for storage
+      // Store only session ID in cookie (much smaller than full JSON)
+      const maxAge = 24 * 60 * 60; // 24 hours in seconds
+      document.cookie = `${GUEST_SESSION_ID_KEY}=${session.id}; path=/; max-age=${maxAge}; SameSite=Lax; Secure`;
+
+      // Cache full session data in localStorage for better performance
       const sessionForStorage = {
         ...session,
         searchParams: {
@@ -40,15 +52,7 @@ export class GuestSessionService {
           endDate: session.searchParams.endDate?.toISOString(),
         },
       };
-
-      const sessionJson = JSON.stringify(sessionForStorage);
-
-      // Store in sessionStorage for client-side persistence
-      sessionStorage.setItem(GUEST_SESSION_KEY, sessionJson);
-
-      // ALSO store in cookie for server-side access
-      const maxAge = 24 * 60 * 60; // 24 hours in seconds
-      document.cookie = `${GUEST_SESSION_KEY}=${encodeURIComponent(sessionJson)}; path=/; max-age=${maxAge}; SameSite=Lax`;
+      localStorage.setItem(GUEST_SESSION_CACHE_KEY, JSON.stringify(sessionForStorage));
 
       return true;
     } catch (error) {
@@ -57,33 +61,69 @@ export class GuestSessionService {
     }
   }
 
+  /**
+   * Get session from cache first, then fall back to cookie ID lookup
+   * This is a client-side method - server-side should use getGuestSession action directly
+   */
   static getSession(): GuestSession | null {
     try {
       if (typeof window === 'undefined') return null;
 
-      const stored = sessionStorage.getItem(GUEST_SESSION_KEY);
-      if (!stored) return null;
+      // Try to get from localStorage cache first
+      const cached = localStorage.getItem(GUEST_SESSION_CACHE_KEY);
+      if (cached) {
+        const session = JSON.parse(cached);
 
-      const session = JSON.parse(stored);
+        // Check if cached session is expired
+        if (Date.now() <= session.expiresAt) {
+          // Convert date strings back to Date objects
+          return {
+            ...session,
+            searchParams: {
+              ...session.searchParams,
+              startDate: session.searchParams.startDate ? new Date(session.searchParams.startDate) : undefined,
+              endDate: session.searchParams.endDate ? new Date(session.searchParams.endDate) : undefined,
+            },
+          };
+        } else {
+          // Clear expired cache
+          this.clearSession();
+        }
+      }
 
-      // Check if session is expired
-      if (Date.now() > session.expiresAt) {
-        this.clearSession();
+      // If no cache, try to get session ID from cookie for server fetch
+      // This is a fallback - components should use server actions for fresh data
+      const sessionId = this.getSessionIdFromCookie();
+      if (sessionId) {
+        // Note: This requires a server action call, which should be done in components
+        console.warn('GuestSessionService.getSession(): Session ID found but no cache. Use getGuestSession server action instead.');
         return null;
       }
 
-      // Convert date strings back to Date objects
-      return {
-        ...session,
-        searchParams: {
-          ...session.searchParams,
-          startDate: session.searchParams.startDate ? new Date(session.searchParams.startDate) : undefined,
-          endDate: session.searchParams.endDate ? new Date(session.searchParams.endDate) : undefined,
-        },
-      };
+      return null;
     } catch (error) {
       console.error('Failed to get guest session:', error);
-      this.clearSession(); // Clear corrupted session
+      this.clearSession();
+      return null;
+    }
+  }
+
+  /**
+   * Get session ID from cookie (lightweight)
+   */
+  static getSessionIdFromCookie(): string | null {
+    try {
+      if (typeof window === 'undefined') return null;
+
+      const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split('=');
+        acc[key] = value;
+        return acc;
+      }, {} as Record<string, string>);
+
+      return cookies[GUEST_SESSION_ID_KEY] || null;
+    } catch (error) {
+      console.error('Failed to get session ID from cookie:', error);
       return null;
     }
   }
@@ -96,7 +136,9 @@ export class GuestSessionService {
   static clearSession(): void {
     try {
       if (typeof window !== 'undefined') {
-        sessionStorage.removeItem(GUEST_SESSION_KEY);
+        localStorage.removeItem(GUEST_SESSION_CACHE_KEY);
+        // Clear the cookie
+        document.cookie = `${GUEST_SESSION_ID_KEY}=; path=/; max-age=0`;
       }
     } catch (error) {
       console.error('Failed to clear guest session:', error);
@@ -208,8 +250,11 @@ export class GuestSessionService {
     return this.getConvertedTripId(sessionId) !== null;
   }
 
-  // Server-side method to read session from cookies
-  static getSessionFromCookies(cookieHeader?: string): GuestSession | null {
+  /**
+   * Server-side method to get session ID from cookies
+   * Use this with getGuestSession server action to fetch full session data
+   */
+  static getSessionIdFromCookies(cookieHeader?: string): string | null {
     try {
       if (!cookieHeader) return null;
 
@@ -220,34 +265,26 @@ export class GuestSessionService {
         return acc;
       }, {} as Record<string, string>);
 
-      const sessionCookie = cookies[GUEST_SESSION_KEY];
-      if (!sessionCookie) return null;
-
-      const sessionJson = decodeURIComponent(sessionCookie);
-      const session = JSON.parse(sessionJson);
-
-      // Check if session is expired
-      if (Date.now() > session.expiresAt) {
-        return null;
-      }
-
-      // Convert date strings back to Date objects
-      return {
-        ...session,
-        searchParams: {
-          ...session.searchParams,
-          startDate: session.searchParams.startDate ? new Date(session.searchParams.startDate) : undefined,
-          endDate: session.searchParams.endDate ? new Date(session.searchParams.endDate) : undefined,
-        },
-      };
+      return cookies[GUEST_SESSION_ID_KEY] || null;
     } catch (error) {
-      console.error('Failed to get guest session from cookies:', error);
+      console.error('Failed to get session ID from cookies:', error);
       return null;
     }
   }
 
+  /**
+   * @deprecated Use getSessionIdFromCookies + getGuestSession server action instead
+   */
+  static getSessionFromCookies(cookieHeader?: string): GuestSession | null {
+    console.warn('getSessionFromCookies is deprecated. Use getSessionIdFromCookies + getGuestSession server action.');
+    return null;
+  }
+
+  /**
+   * @deprecated Use getSessionIdFromCookies + getGuestSession server action instead
+   */
   static getSessionByIdFromCookies(sessionId: string, cookieHeader?: string): GuestSession | null {
-    const session = this.getSessionFromCookies(cookieHeader);
-    return session?.id === sessionId ? session : null;
+    console.warn('getSessionByIdFromCookies is deprecated. Use getSessionIdFromCookies + getGuestSession server action.');
+    return null;
   }
 }

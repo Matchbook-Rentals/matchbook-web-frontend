@@ -609,6 +609,7 @@ model Trip {
   maybes          Maybe[]
   applications    Application[]
   bookings        Booking[]
+  guestSessions   GuestSession[]   // Converted guest sessions
 }
 
 model Notification {
@@ -738,6 +739,39 @@ model Match {
   @@index([stripePaymentIntentId])
 }
 
+model GuestSession {
+  id             String    @id @default(uuid())
+
+  // Search parameters
+  locationString String
+  latitude       Float
+  longitude      Float
+  city           String?
+  state          String?
+  startDate      DateTime?
+  endDate        DateTime?
+
+  // Guest counts
+  numAdults      Int       @default(1)
+  numChildren    Int       @default(0)
+  numPets        Int       @default(0)
+
+  // Session metadata
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  expiresAt      DateTime  // 24 hours from creation
+  convertedAt    DateTime? // When converted to Trip
+  tripId         String?   // Reference to Trip if converted
+
+  // Relations
+  trip           Trip?     @relation(fields: [tripId], references: [id], onDelete: SetNull)
+  favorites      Favorite[]
+  dislikes       Dislike[]
+
+  @@index([expiresAt]) // For cleanup queries
+  @@index([tripId])
+}
+
 model Favorite {
   id              String   @id @default(uuid())
   tripId          String?  // Optional - for authenticated users
@@ -747,7 +781,8 @@ model Favorite {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  trip Trip? @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  trip         Trip?         @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  guestSession GuestSession? @relation(fields: [guestSessionId], references: [id], onDelete: Cascade)
 
   @@unique([tripId, rank])
   @@unique([tripId, listingId])
@@ -762,8 +797,9 @@ model Dislike {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  listing Listing @relation(fields: [listingId], references: [id])
+  trip         Trip?         @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  guestSession GuestSession? @relation(fields: [guestSessionId], references: [id], onDelete: Cascade)
+  listing      Listing       @relation(fields: [listingId], references: [id])
 
   @@unique([tripId, listingId])
   @@unique([guestSessionId, listingId])

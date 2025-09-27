@@ -1,5 +1,13 @@
 # Changelog
 
+## Migrate guest sessions to database storage
+- Replace client-side localStorage/cookie storage with database-backed GuestSession model
+- Add GuestSession table with search parameters, guest counts, and expiration tracking
+- Update guest session creation to use database with lightweight cookie ID storage
+- Implement session conversion tracking when users sign up
+- Add automatic session cleanup and expiration handling
+- Fixes mobile production issues with cookie size limits and browser storage restrictions
+
 ## Auto-enable pets filter when trips include pets
 - Automatically set petsAllowed filter to true when creating trips with numPets > 0
 - Applied to both authenticated and guest trip creation flows
