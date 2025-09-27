@@ -114,7 +114,7 @@ export default function GuestSearchClient({
 
   return (
     <GuestTripContextProvider sessionId={sessionId} sessionData={sessionData} listingData={listings}>
-      <div className="min-h-screen bg-background">
+      <div className=" bg-background">
         {/* Header */}
         <GuestSearchNavbar
           userId={null}

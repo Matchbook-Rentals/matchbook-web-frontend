@@ -65,6 +65,16 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     [listingImages]
   );
 
+  // Cap mobile carousel at 20 images to prevent horizontal overflow issue
+  const mobileImages = uniqueImages.slice(0, 20);
+
+  // Reset activeImage if it exceeds mobile carousel length
+  useEffect(() => {
+    if (activeImage >= mobileImages.length) {
+      setActiveImage(0);
+    }
+  }, [mobileImages.length, activeImage]);
+
   // Preload adjacent images
   const preloadAdjacentImages = useCallback((currentIndex: number) => {
     const preloadIndices = [
@@ -337,7 +347,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
         <div className="w-full h-[30vh] relative">
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
-              {uniqueImages.map((image, index) => (
+              {mobileImages.map((image, index) => (
                   <CarouselItem key={image.id} className="w-full h-[30vh]">
                     <div className="relative w-full h-full overflow-hidden rounded-[5px]">
                       <Image
