@@ -47,7 +47,7 @@ const GuestSearchMatchTab: React.FC<GuestMatchViewTabProps> = ({ setIsFilterOpen
   const [calculatedHeight, setCalculatedHeight] = useState(0);
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
-  let isFlexible = session?.searchParams.startDate && session?.searchParams.endDate;
+  let isFlexible = (session?.searchParams.flexibleStart && session.searchParams.flexibleStart > 0) || (session?.searchParams.flexibleEnd && session.searchParams.flexibleEnd > 0);
 
   // Create mock trip object from guest session for price calculation
   const mockTrip = useMemo(() => session ? {
@@ -277,7 +277,7 @@ const GuestSearchMatchTab: React.FC<GuestMatchViewTabProps> = ({ setIsFilterOpen
         />
         <div className='flex justify-between gap-x-8 lg:gap-x-16 relative'>
           <div className='w-full lg:w-full'>
-            <ListingDescription listing={displayListings[0]} isFlexible={!!isFlexible}/>
+            <ListingDescription listing={displayListings[0]} isFlexible={!!isFlexible} trip={mockTrip}/>
 
             <Card className="border-none shadow-none rounded-xl mt-5">
               <CardContent className="flex flex-col items-start gap-[18px] p-5">

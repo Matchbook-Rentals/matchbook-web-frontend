@@ -1,5 +1,14 @@
 # Changelog
 
+## Align guest navbar styles with platform navbar
+- Update guest search navbar to match platform navbar structure and animations
+- Replace header element with motion.nav for consistent framer-motion animations
+- Use APP_PAGE_MARGIN constant instead of hardcoded px-6 for responsive margins
+- Restructure layout from 2-column to 3-column design (logo, center empty, user menu)
+- Remove duplicate py-1 padding causing excessive vertical spacing
+- Reduce content gap from pt-4 to pt-0 to match authenticated layout spacing
+- Ensure consistent mobile and desktop visual density across guest and authenticated flows
+
 ## Replace uScore with real review data across listing components
 - Remove algorithmic uScore displays and replace with actual user review data (averageRating/numberOfStays)
 - Fix hardcoded review values (4.9 rating, 127 reviews) in all listing card components with dynamic data
