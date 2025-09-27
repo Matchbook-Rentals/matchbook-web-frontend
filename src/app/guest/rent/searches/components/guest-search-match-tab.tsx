@@ -312,6 +312,28 @@ const GuestSearchMatchTab: React.FC<GuestMatchViewTabProps> = ({ setIsFilterOpen
             {/* Map container */}
           </div>
         </div>
+
+        <div className="lg:hidden fixed sm:bottom-[15px] bottom-[50px] left-0 right-0 z-50">
+          {/* Action Buttons Section - Reject, Like */}
+          <div className="flex justify-center items-center gap-3 my-4">
+            <Button
+              variant="outline"
+              className="rounded-lg w-[100px] h-[56px] flex items-center justify-center border-none"
+              style={{ backgroundColor: '#F65C6D' }}
+              onClick={() => handleReject(displayListings[0])}
+            >
+              <X className="h-5 w-5 text-white" />
+            </Button>
+
+            <BrandButton
+              variant="default"
+              className="rounded-lg w-[100px] h-[56px] min-w-0 flex items-center justify-center"
+              onClick={() => handleLike(displayListings[0])}
+            >
+              <Heart className="h-5 w-5 text-white" />
+            </BrandButton>
+          </div>
+        </div>
       </div>
     </ScrollArea>
   );

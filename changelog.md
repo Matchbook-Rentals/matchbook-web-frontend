@@ -1,5 +1,11 @@
 # Changelog
 
+## Add mobile like/dislike buttons to guest search
+- Add fixed bottom action bar for mobile users in guest match tab
+- Include reject (X) and like (heart) buttons matching authenticated experience
+- Buttons only show on mobile/tablet screens, hidden on desktop
+- Provides essential interaction functionality missing on mobile guest searches
+
 ## Migrate guest sessions to database storage
 - Replace client-side localStorage/cookie storage with database-backed GuestSession model
 - Add GuestSession table with search parameters, guest counts, and expiration tracking
