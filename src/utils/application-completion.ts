@@ -146,13 +146,13 @@ export function checkApplicationCompletionClient(data: ClientApplicationData): C
   }
 
   // 2. Check Identification
-  const hasValidId = data.ids.some(id => 
-    id.idType && 
-    id.idNumber && 
-    id.idPhotos && 
+  const hasValidId = data.ids.some(id =>
+    id.idType &&
+    id.idNumber &&
+    id.idPhotos &&
     id.idPhotos.length > 0
   );
-  
+
   if (!hasValidId) {
     if (data.ids.length === 0) {
       missingRequirements.push('Identification');
@@ -164,11 +164,11 @@ export function checkApplicationCompletionClient(data: ClientApplicationData): C
   }
 
   // 3. Check Income
-  const hasValidIncome = data.incomes.some(income => 
-    income.source?.trim() && 
+  const hasValidIncome = data.incomes.some(income =>
+    income.source?.trim() &&
     income.monthlyAmount?.trim()
   );
-  
+
   if (!hasValidIncome) {
     missingRequirements.push('Income information');
   }
@@ -207,6 +207,10 @@ export function checkApplicationCompletionClient(data: ClientApplicationData): C
       }
       if (!firstResidence.landlordLastName?.trim()) {
         missingRequirements.push('Landlord last name');
+      }
+      // Require at least one contact method (email OR phone)
+      if (!firstResidence.landlordEmail?.trim() && !firstResidence.landlordPhone?.trim()) {
+        missingRequirements.push('Landlord contact (email or phone)');
       }
     }
   }
@@ -304,6 +308,10 @@ export function checkApplicationCompletionServer(application: ServerApplicationD
       }
       if (!firstResidence.landlordLastName?.trim()) {
         missingRequirements.push('Landlord last name');
+      }
+      // Require at least one contact method (email OR phone)
+      if (!firstResidence.landlordEmail?.trim() && !firstResidence.landlordPhone?.trim()) {
+        missingRequirements.push('Landlord contact (email or phone)');
       }
     }
   }

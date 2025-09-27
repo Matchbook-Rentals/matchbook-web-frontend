@@ -1139,11 +1139,43 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
 
 export async function markComplete(applicationId: string) {
   try {
-    const application = await prisma.application.update({
+    // Get the application with all related data to check if it's actually complete
+    const application = await prisma.application.findUnique({
       where: { id: applicationId },
-      data: { isComplete: true },
+      include: {
+        identifications: {
+          include: {
+            idPhotos: true
+          }
+        },
+        incomes: true,
+        residentialHistories: true,
+      }
     });
-    return { success: true, application };
+
+    if (!application) {
+      return { success: false, error: 'Application not found' };
+    }
+
+    // Use the centralized completion check to verify requirements are met
+    const completionResult = checkApplicationCompletionServer(application);
+
+    if (completionResult.isComplete) {
+      // Only mark complete if requirements are actually met
+      const updatedApplication = await prisma.application.update({
+        where: { id: applicationId },
+        data: { isComplete: true },
+      });
+      return { success: true, application: updatedApplication };
+    } else {
+      // Don't mark as complete if requirements aren't met
+      console.log(`Application ${applicationId} not marked complete - missing: ${completionResult.missingRequirements.join(', ')}`);
+      return {
+        success: false,
+        error: 'Application does not meet completion requirements',
+        missingRequirements: completionResult.missingRequirements
+      };
+    }
   } catch (error) {
     console.error("Failed to mark application as complete:", error);
     return { success: false, error: 'Failed to mark application as complete.' };
