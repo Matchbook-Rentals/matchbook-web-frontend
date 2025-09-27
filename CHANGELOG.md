@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+- Fixed application completion status mismatch between client and server
+- Enhanced landlord contact validation to require email or phone
 
 ### Security
 

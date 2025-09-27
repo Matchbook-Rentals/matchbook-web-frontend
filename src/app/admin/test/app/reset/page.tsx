@@ -191,7 +191,7 @@ export default function ApplicationResetPage() {
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Application Reset</h1>
         <p className="text-muted-foreground">
-          Reset a user's application state to make them appear as if they've never filled out an application.
+          Reset a user&apos;s application state to make them appear as if they&apos;ve never filled out an application.
           This will permanently delete all application data including identifications, income proofs, and residential history.
         </p>
       </div>
