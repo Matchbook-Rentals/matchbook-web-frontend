@@ -124,7 +124,7 @@ export default function GuestSearchClient({
         />
 
         {/* Main Content */}
-        <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable} pt-4`}>
+        <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable} pt-0`}>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between w-full gap-2 md:gap-4">
             <SearchTabSelector
               activeValue={activeTab}

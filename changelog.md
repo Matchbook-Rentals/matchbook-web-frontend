@@ -1,5 +1,12 @@
 # Changelog
 
+## Replace uScore with real review data across listing components
+- Remove algorithmic uScore displays and replace with actual user review data (averageRating/numberOfStays)
+- Fix hardcoded review values (4.9 rating, 127 reviews) in all listing card components with dynamic data
+- Add proper "No reviews yet" fallback messaging for listings without reviews
+- Update 8 components across authenticated and guest flows for consistent review display
+- Enhance mobile review display with conditional rendering based on review availability
+
 ## Remove message host buttons from mobile search views
 - Remove "Message Host" button from mobile host information component
 - Clean up commented-out message host button code from authenticated and guest detail boxes
