@@ -48,13 +48,6 @@ const HostInformation: React.FC<HostInformationProps> = ({ listing }) => {
           </div>
         )}
 
-        {/* Message button */}
-        <div className="w-full">
-          <SearchMessageHostDialog 
-            listingId={listing.id} 
-            hostName={listing.user?.firstName || 'Host'} 
-          />
-        </div>
       </CardContent>
     </Card>
   );

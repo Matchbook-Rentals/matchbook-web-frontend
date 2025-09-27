@@ -1,5 +1,10 @@
 # Changelog
 
+## Remove message host buttons from mobile search views
+- Remove "Message Host" button from mobile host information component
+- Clean up commented-out message host button code from authenticated and guest detail boxes
+- Streamlines mobile search experience by focusing on core like/dislike actions only
+
 ## Add mobile like/dislike buttons to guest search
 - Add fixed bottom action bar for mobile users in guest match tab
 - Include reject (X) and like (heart) buttons matching authenticated experience

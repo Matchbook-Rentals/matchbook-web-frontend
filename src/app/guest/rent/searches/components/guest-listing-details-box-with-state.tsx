@@ -224,14 +224,6 @@ const ListingDetailsBoxWithState: React.FC<ListingDetailsBoxWithStateProps> = ({
           </div>
         </div>
 
-        {/* Message button - Commented out for guests, they need to sign in first
-        <div className="w-full">
-          <SearchMessageHostDialog
-            listingId={listing.id}
-            hostName={host?.firstName || 'Host'}
-          />
-        </div>
-        */}
       </CardContent>
     </Card>
   );

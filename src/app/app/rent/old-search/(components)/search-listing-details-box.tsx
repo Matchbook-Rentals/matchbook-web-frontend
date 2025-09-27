@@ -140,14 +140,6 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
           </div>
         </div>
 
-        {/* Message button - Custom styled for the new design 
-        <div className="w-full">
-          <SearchMessageHostDialog 
-            listingId={listing.id} 
-            hostName={host?.firstName || 'Host'} 
-          />
-        </div>
-*/}
       </CardContent>
     </Card>
   );
