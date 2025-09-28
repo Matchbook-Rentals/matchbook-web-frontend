@@ -212,6 +212,7 @@ export async function deleteTrip(tripId: string): Promise<DeleteTripResponse> {
   }
 }
 
+
 export async function getTripById(tripId: string, options?: { next?: { tags?: string[] } }): Promise<TripAndMatches | null> {
   const { userId } = auth();
   if (!userId) {

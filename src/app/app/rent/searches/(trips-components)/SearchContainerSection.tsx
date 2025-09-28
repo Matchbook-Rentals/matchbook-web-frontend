@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Trip } from "@prisma/client";
 import { SearchCard } from "./SearchCard";
 import { deleteTrip } from "@/app/actions/trips";
@@ -8,51 +8,10 @@ interface SearchContainerSectionProps {
 }
 
 export const SearchContainerSection = ({ trips }: SearchContainerSectionProps): JSX.Element => {
-  const [localTrips, setLocalTrips] = useState(trips);
-  
-  // Mock data if no trips are available
-  const searchData = localTrips.length > 0 ? localTrips : [
-    {
-      id: "1",
-      locationString: "Ogden, UT", 
-      startDate: new Date("2024-08-03"),
-      endDate: new Date("2024-09-08"),
-      numAdults: 1,
-      numChildren: 0,
-      numPets: 0,
-      minPrice: null,
-      maxPrice: null,
-    } as Trip,
-    {
-      id: "2", 
-      locationString: "Ogden, UT",
-      startDate: new Date("2024-08-03"),
-      endDate: new Date("2024-09-08"), 
-      numAdults: 1,
-      numChildren: 0,
-      numPets: 0,
-      minPrice: null,
-      maxPrice: null,
-    } as Trip,
-    {
-      id: "3",
-      locationString: "Ogden, UT",
-      startDate: new Date("2024-08-03"), 
-      endDate: new Date("2024-09-08"),
-      numAdults: 1,
-      numChildren: 0,
-      numPets: 0,
-      minPrice: null,
-      maxPrice: null,
-    } as Trip,
-  ];
-
   const handleTripUpdate = (updatedTrip: Trip) => {
-    setLocalTrips(prevTrips => 
-      prevTrips.map(trip => 
-        trip.id === updatedTrip.id ? updatedTrip : trip
-      )
-    );
+    // This function is no longer needed since we don't manage local state
+    // The parent component (TripsContent) should handle updates
+    console.log("Trip update:", updatedTrip);
   };
 
   const handleContinueSearch = (trip: Trip) => {
@@ -72,30 +31,40 @@ export const SearchContainerSection = ({ trips }: SearchContainerSectionProps): 
 
   const handleDelete = async (trip: Trip) => {
     console.log("Delete search:", trip);
-    // Optimistically remove from UI
-    setLocalTrips(prevTrips => 
-      prevTrips.filter(t => t.id !== trip.id)
-    );
-    
+
     try {
       const result = await deleteTrip(trip.id);
       if (!result.success) {
         console.error('Failed to delete trip:', result.message);
-        // Restore the trip if deletion failed
-        setLocalTrips(prevTrips => [...prevTrips, trip]);
         // TODO: Show error message to user
+      } else {
+        // Refresh the page or notify parent to refresh data
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error deleting trip:', error);
-      // Restore the trip if deletion failed
-      setLocalTrips(prevTrips => [...prevTrips, trip]);
       // TODO: Show error message to user
     }
   };
 
+  if (trips.length === 0) {
+    return (
+      <section className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500 w-full">
+        <img
+          src="/host-dashboard/empty/applications.png"
+          alt="No searches"
+          className="w-full h-auto max-w-[260px] mb-0"
+        />
+        <div className="text-lg font-medium text-center">
+          No searches yet. Start by creating your first search!
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="flex flex-col items-start gap-6 w-full">
-      {searchData.map((trip, index) => (
+      {trips.map((trip, index) => (
         <SearchCard
           key={trip.id || index}
           trip={trip}
