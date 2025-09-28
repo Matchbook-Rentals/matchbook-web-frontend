@@ -21,7 +21,7 @@ export async function sendNotificationEmail({
 
     // Send the email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'notifications <info@matchbookrentals.com>',
+      from: 'MatchBook Rentals <no-reply@matchbookrentals.com>',
       to: [to],
       subject: subject,
       react: NotificationEmailTemplate(emailData),
