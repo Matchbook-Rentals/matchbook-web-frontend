@@ -205,12 +205,6 @@ export default function ListingManagementTable({
           Orphaned listings are marked with a red indicator.
         </div>
       )}
-      {!showOrphaned && listings.length !== filteredListings.length && (
-        <div className="text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-md p-3">
-          <strong>Note:</strong> {listings.length - filteredListings.length} orphaned listing(s) hidden on this page.
-          Select &quot;Show Orphaned&quot; to view them.
-        </div>
-      )}
 
       {/* Table */}
       <div className="border rounded-lg">
