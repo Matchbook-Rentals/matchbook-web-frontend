@@ -780,7 +780,7 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
 
                   {monthlyPricing.length === 0 && (
                     <div className="text-center py-4 text-gray-500">
-                      No pricing tiers configured. Click "Add Pricing Tier" to get started.
+                      No pricing tiers configured. Click &quot;Add Pricing Tier&quot; to get started.
                     </div>
                   )}
                 </div>
