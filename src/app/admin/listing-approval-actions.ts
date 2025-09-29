@@ -18,33 +18,27 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
 
   const skip = (page - 1) * pageSize;
 
-  const [pendingListings, totalCount] = await prisma.$transaction([
+  // Fetch listings without user relation to avoid orphaned listing errors
+  const [rawListings, baseTotalCount] = await prisma.$transaction([
     prisma.listing.findMany({
       where: {
         approvalStatus: 'pendingReview'
       },
       skip: skip,
       take: pageSize,
-    select: {
-      id: true,
-      title: true,
-      createdAt: true,
-      locationString: true,
-      userId: true,
-      user: {
-        select: {
-          firstName: true,
-          lastName: true,
-          email: true
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        locationString: true,
+        userId: true,
+        listingImages: {
+          take: 1,
+          select: {
+            url: true
+          }
         }
       },
-      listingImages: {
-        take: 1,
-        select: {
-          url: true
-        }
-      }
-    },
       orderBy: {
         createdAt: 'desc'
       }
@@ -56,7 +50,41 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
     })
   ]);
 
-  return { listings: pendingListings, totalCount };
+  // Fetch user data separately to avoid orphaned listing errors
+  const userIds = [...new Set(rawListings.map(l => l.userId))];
+  const users = await prisma.user.findMany({
+    where: {
+      id: { in: userIds }
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true
+    }
+  });
+
+  // Create user lookup map
+  const userMap = new Map(users.map(user => [user.id, user]));
+
+  // Filter out orphaned listings and add user data
+  const listingsWithUsers = rawListings
+    .map(listing => {
+      const userData = userMap.get(listing.userId);
+      return {
+        ...listing,
+        user: userData ? {
+          ...userData,
+          fullName: userData.firstName && userData.lastName
+            ? `${userData.firstName} ${userData.lastName}`
+            : userData.firstName || userData.lastName || null
+        } : null
+      };
+    })
+    .filter(listing => listing.user !== null); // Filter out orphaned listings
+
+  // Return the results (pagination already applied at database level)
+  return { listings: listingsWithUsers, totalCount: baseTotalCount };
 }
 
 export async function getListingDetails(listingId: string) {
@@ -64,19 +92,12 @@ export async function getListingDetails(listingId: string) {
     throw new Error('Unauthorized')
   }
 
+  // Fetch listing without user relation to avoid orphaned listing errors
   const listing = await prisma.listing.findUnique({
     where: {
       id: listingId
     },
     include: {
-      user: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true
-        }
-      },
       listingImages: {
         orderBy: {
           rank: 'asc'
@@ -91,7 +112,28 @@ export async function getListingDetails(listingId: string) {
     }
   })
 
-  return listing
+  if (!listing) {
+    return null
+  }
+
+  // Fetch user data separately if listing exists
+  const user = await prisma.user.findUnique({
+    where: {
+      id: listing.userId
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true
+    }
+  })
+
+  // Return listing with user data (or null if orphaned)
+  return {
+    ...listing,
+    user
+  }
 }
 
 export async function approveRejectListing(
