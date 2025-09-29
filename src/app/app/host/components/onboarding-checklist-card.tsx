@@ -31,10 +31,9 @@ export function isHostOnboardingComplete(hostUserData: HostUserData | null): boo
 
   const hasStripeAccount = !!hostUserData.stripeAccountId;
   const stripeComplete = hostUserData.stripeChargesEnabled && hostUserData.stripeDetailsSubmitted;
-  const hostTermsAgreed = !!hostUserData.agreedToHostTerms;
   const identityVerified = !!hostUserData.medallionIdentityVerified;
 
-  return hasStripeAccount && stripeComplete && hostTermsAgreed && identityVerified;
+  return hasStripeAccount && stripeComplete && identityVerified;
 }
 
 export const OnboardingChecklistCard = ({
@@ -108,11 +107,6 @@ export const OnboardingChecklistCard = ({
       text: "Complete Identity Verification",
       completed: !!hostUserData?.medallionIdentityVerified,
     },
-    {
-      id: 3,
-      text: "Review Host Terms and Conditions",
-      completed: !!hostUserData?.agreedToHostTerms,
-    },
   ];
 
   // Test items for admin_dev - always incomplete
@@ -129,11 +123,6 @@ export const OnboardingChecklistCard = ({
     },
     {
       id: 3,
-      text: "Review Host Terms and Conditions (test)",
-      completed: false,
-    },
-    {
-      id: 4,
       text: "Complete Authentication (test)",
       completed: false,
     },
@@ -170,20 +159,11 @@ export const OnboardingChecklistCard = ({
 
             {items.map((item) => {
               const isStripeItem = item.text.includes("Stripe Account");
-              const isHostTermsItem = item.text.includes("Host Terms and Conditions");
               const isIdentityVerificationItem = item.text.includes("Identity Verification");
               const isTestAuthItem = item.text.includes("Complete Authentication (test)");
               const shouldBeStripeClickable = !item.completed && isStripeItem;
-              const shouldBeHostTermsClickable = !item.completed && isHostTermsItem;
               const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem;
               const shouldBeTestAuthClickable = !item.completed && isTestAuthItem;
-              
-              const handleHostTermsClick = () => {
-                // Get current page URL to use as redirect after terms agreement
-                const currentUrl = window.location.pathname + window.location.search;
-                const termsUrl = `/terms/hosts?redirect_url=${encodeURIComponent(currentUrl)}`;
-                window.location.href = termsUrl;
-              };
 
               const handleIdentityVerificationClick = () => {
                 // Navigate to identity verification page
@@ -211,13 +191,6 @@ export const OnboardingChecklistCard = ({
                         className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
                       >
                         {isRedirecting ? 'Redirecting to Stripe...' : item.text}
-                      </button>
-                    ) : shouldBeHostTermsClickable ? (
-                      <button
-                        onClick={handleHostTermsClick}
-                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
-                      >
-                        {item.text}
                       </button>
                     ) : shouldBeIdentityVerificationClickable ? (
                       <button
