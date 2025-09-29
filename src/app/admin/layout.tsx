@@ -142,7 +142,7 @@ export default async function AdminLayout({
     },
     {
       title: "Orphaned Listings",
-      url: "/admin/listing-management?orphaned=true",
+      url: "/admin/orphaned-listings",
       icon: "Unlink",
     },
   ];

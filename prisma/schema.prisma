@@ -122,6 +122,10 @@ model User {
   documents               DocumentInstance[]
   signatures              UserSignature[]
   signingInitials         String?   // User's preferred initials for document signing
+
+  // Soft delete fields
+  deletedAt               DateTime? // When the user was soft deleted
+  deletedBy               String?   // Who/what deleted the user (e.g., "clerk_webhook", admin ID, etc.)
 }
 
 model UserPreferences {

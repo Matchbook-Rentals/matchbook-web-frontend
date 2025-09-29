@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useToast } from '@/components/ui/use-toast'
-import { Save, ArrowLeft, Loader2, MapPin, AlertCircle } from 'lucide-react'
+import { Save, ArrowLeft, Loader2, MapPin, AlertCircle, Plus, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { updateListing, updateListingPricing } from '../../../listing-management-actions'
@@ -97,10 +97,40 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
     }, {} as Record<string, boolean>)
   })
 
-  // Monthly pricing state
-  const [monthlyPricing, setMonthlyPricing] = useState(
-    listing.monthlyPricing || []
-  )
+  // Monthly pricing state - initialize with default tiers if empty
+  const [monthlyPricing, setMonthlyPricing] = useState(() => {
+    if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
+      return listing.monthlyPricing;
+    }
+
+    // Create default pricing tiers based on lease length range
+    const shortestLease = listing.shortestLeaseLength || 1;
+    const longestLease = listing.longestLeaseLength || 12;
+    const defaultTiers = [];
+
+    // Add common lease lengths within the range
+    const commonLengths = [1, 3, 6, 9, 12, 18, 24];
+    for (const months of commonLengths) {
+      if (months >= shortestLease && months <= longestLease) {
+        defaultTiers.push({
+          months: months,
+          price: 0,
+          utilitiesIncluded: false
+        });
+      }
+    }
+
+    // Ensure we have at least the shortest lease length
+    if (defaultTiers.length === 0 || !defaultTiers.find(t => t.months === shortestLease)) {
+      defaultTiers.unshift({
+        months: shortestLease,
+        price: 0,
+        utilitiesIncluded: false
+      });
+    }
+
+    return defaultTiers.sort((a, b) => a.months - b.months);
+  })
 
   // Comments for approval changes
   const [comment, setComment] = useState('')
@@ -194,14 +224,47 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
     }))
   }
 
-  const handlePricingChange = (index: number, field: 'price' | 'utilitiesIncluded', value: any) => {
-    setMonthlyPricing(prev => 
-      prev.map((pricing, i) => 
-        i === index 
-          ? { ...pricing, [field]: field === 'price' ? parseFloat(value) || 0 : value }
+  const handlePricingChange = (index: number, field: 'price' | 'utilitiesIncluded' | 'months', value: any) => {
+    setMonthlyPricing(prev =>
+      prev.map((pricing, i) =>
+        i === index
+          ? {
+              ...pricing,
+              [field]: field === 'price' ? parseFloat(value) || 0
+                      : field === 'months' ? parseInt(value) || 1
+                      : value
+            }
           : pricing
       )
     )
+  }
+
+  const addPricingTier = () => {
+    // Find the next logical lease length
+    const existingMonths = monthlyPricing.map(p => p.months).sort((a, b) => a - b);
+    let nextMonths = 1;
+
+    // Find a gap or increment from the highest
+    for (let i = 1; i <= 24; i++) {
+      if (!existingMonths.includes(i)) {
+        nextMonths = i;
+        break;
+      }
+    }
+
+    const newTier = {
+      months: nextMonths,
+      price: 0,
+      utilitiesIncluded: false
+    };
+
+    setMonthlyPricing(prev => [...prev, newTier].sort((a, b) => a.months - b.months));
+  }
+
+  const removePricingTier = (index: number) => {
+    if (monthlyPricing.length > 1) {
+      setMonthlyPricing(prev => prev.filter((_, i) => i !== index));
+    }
   }
 
   const validateForm = () => {
@@ -618,8 +681,18 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
           <TabsContent value="pricing" className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Monthly Pricing Tiers</h3>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addPricingTier}
+                className="gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Pricing Tier
+              </Button>
             </div>
-            
+
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
@@ -632,7 +705,7 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                     onChange={(e) => handleInputChange('depositSize', parseInt(e.target.value) || 0)}
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="petDeposit">Pet Deposit ($)</Label>
                   <Input
@@ -643,7 +716,7 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                     onChange={(e) => handleInputChange('petDeposit', parseInt(e.target.value) || 0)}
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="petRent">Monthly Pet Rent ($)</Label>
                   <Input
@@ -655,16 +728,24 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                   />
                 </div>
               </div>
-              
+
               <div className="border rounded-lg p-4">
                 <h4 className="font-medium mb-3">Monthly Rent by Lease Length</h4>
                 <div className="space-y-3">
                   {monthlyPricing.map((pricing, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
-                      <div className="font-medium">
-                        {pricing.months} month{pricing.months > 1 ? 's' : ''}
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                      <div>
+                        <Label className="text-sm">Lease Length (months)</Label>
+                        <Input
+                          type="number"
+                          min="1"
+                          max="24"
+                          value={pricing.months}
+                          onChange={(e) => handlePricingChange(index, 'months', e.target.value)}
+                        />
                       </div>
                       <div>
+                        <Label className="text-sm">Monthly Rent ($)</Label>
                         <Input
                           type="number"
                           min="0"
@@ -673,14 +754,35 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                           onChange={(e) => handlePricingChange(index, 'price', e.target.value)}
                         />
                       </div>
-                      <BrandCheckbox
-                        name={`utilities-${index}`}
-                        label="Utilities included"
-                        checked={pricing.utilitiesIncluded}
-                        onChange={(e) => handlePricingChange(index, 'utilitiesIncluded', e.target.checked)}
-                      />
+                      <div className="flex items-end">
+                        <BrandCheckbox
+                          name={`utilities-${index}`}
+                          label="Utilities included"
+                          checked={pricing.utilitiesIncluded}
+                          onChange={(e) => handlePricingChange(index, 'utilitiesIncluded', e.target.checked)}
+                        />
+                      </div>
+                      <div className="flex items-end">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => removePricingTier(index)}
+                          disabled={monthlyPricing.length === 1}
+                          className="gap-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Remove
+                        </Button>
+                      </div>
                     </div>
                   ))}
+
+                  {monthlyPricing.length === 0 && (
+                    <div className="text-center py-4 text-gray-500">
+                      No pricing tiers configured. Click "Add Pricing Tier" to get started.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

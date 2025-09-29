@@ -108,15 +108,35 @@ export async function POST(req: Request) {
     const { id } = evt.data;
 
     try {
-      await prisma.user.delete({
+      await prisma.user.update({
         where: { id: id },
+        data: {
+          deletedAt: new Date(),
+          deletedBy: 'clerk_webhook',
+          // Clear PII for privacy while maintaining referential integrity
+          email: null,
+          firstName: 'Deleted',
+          lastName: 'User',
+          fullName: 'Deleted User',
+          imageUrl: null,
+          // Clear sensitive data
+          authenticatedFirstName: null,
+          authenticatedMiddleName: null,
+          authenticatedLastName: null,
+          authenticatedDateOfBirth: null,
+          stripeAccountId: null,
+          stripeCustomerId: null,
+          hospitableAccessToken: null,
+          hospitableRefreshToken: null,
+          hospitableAccountId: null,
+        },
       });
 
-      logger.info('User deleted via webhook', {
+      logger.info('User soft deleted via webhook', {
         userId: id,
       });
     } catch (error) {
-      logger.error('Error deleting user via webhook', {
+      logger.error('Error soft deleting user via webhook', {
         userId: id,
         error: error instanceof Error ? error.message : 'Unknown error',
       });

@@ -76,8 +76,17 @@ export default async function ListingDetailPage({
             <h2 className="text-lg font-semibold mb-2">Host Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p><span className="font-medium">Name:</span> {listing.user.firstName} {listing.user.lastName}</p>
-                <p><span className="font-medium">Email:</span> {listing.user.email}</p>
+                {listing.user ? (
+                  <>
+                    <p><span className="font-medium">Name:</span> {listing.user.firstName} {listing.user.lastName}</p>
+                    <p><span className="font-medium">Email:</span> {listing.user.email}</p>
+                  </>
+                ) : (
+                  <div className="text-red-600 font-medium flex items-center gap-1">
+                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                    Orphaned Listing (No Valid User)
+                  </div>
+                )}
               </div>
               <div>
                 <p><span className="font-medium">Created:</span> {formatDate(listing.createdAt)}</p>

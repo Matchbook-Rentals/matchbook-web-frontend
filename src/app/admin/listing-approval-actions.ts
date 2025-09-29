@@ -54,7 +54,8 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
   const userIds = [...new Set(rawListings.map(l => l.userId))];
   const users = await prisma.user.findMany({
     where: {
-      id: { in: userIds }
+      id: { in: userIds },
+      deletedAt: null // Exclude soft-deleted users
     },
     select: {
       id: true,
@@ -119,7 +120,8 @@ export async function getListingDetails(listingId: string) {
   // Fetch user data separately if listing exists
   const user = await prisma.user.findUnique({
     where: {
-      id: listing.userId
+      id: listing.userId,
+      deletedAt: null // Exclude soft-deleted users
     },
     select: {
       id: true,

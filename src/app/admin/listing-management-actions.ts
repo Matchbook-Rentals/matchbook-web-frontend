@@ -129,7 +129,8 @@ export async function getAllListings({
   const userIds = [...new Set(rawListings.map(l => l.userId))]; // Get unique userIds
   const users = await prisma.user.findMany({
     where: {
-      id: { in: userIds }
+      id: { in: userIds },
+      deletedAt: null // Exclude soft-deleted users
     },
     select: {
       id: true,
@@ -156,17 +157,10 @@ export async function getListingDetailsForEdit(listingId: string): Promise<Listi
     throw new Error('Unauthorized')
   }
 
+  // Fetch listing without user relation to avoid orphaned listing errors
   const listing = await prisma.listing.findUnique({
     where: { id: listingId },
     include: {
-      user: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true
-        }
-      },
       listingImages: {
         orderBy: { rank: 'asc' }
       },
@@ -177,7 +171,29 @@ export async function getListingDetailsForEdit(listingId: string): Promise<Listi
     }
   });
 
-  return listing as ListingWithDetails | null;
+  if (!listing) {
+    return null;
+  }
+
+  // Fetch user data separately if listing exists
+  const user = await prisma.user.findUnique({
+    where: {
+      id: listing.userId,
+      deletedAt: null // Exclude soft-deleted users
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true
+    }
+  });
+
+  // Return listing with user data (or null if orphaned)
+  return {
+    ...listing,
+    user
+  } as ListingWithDetails;
 }
 
 interface UpdateListingData {
