@@ -317,7 +317,7 @@ export default function IdentityVerificationSDKClient({
       const redirectURL = `${window.location.origin}/app/host/onboarding/identity-verification?completed=true&redirect_url=${encodeURIComponent(redirectUrl || "/app/host/dashboard/overview")}`;
 
       window.identify(
-        process.env.NEXT_PUBLIC_MEDALLION_SDK_KEY!,
+        process.env.NEXT_PUBLIC_MEDALLION_LOW_CODE_SDK_KEY!,
         {
           email: localUserData.email || "",
           firstName: localUserData.authenticatedFirstName || "",
