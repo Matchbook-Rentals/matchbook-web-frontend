@@ -28,6 +28,20 @@ const CRON_JOBS: CronJob[] = [
     description: 'Creates notifications for unread messages older than 2 minutes',
     endpoint: '/api/cron/check-unread-messages',
     status: 'idle'
+  },
+  {
+    id: 'process-rent-payments',
+    name: 'Process Rent Payments',
+    description: 'Processes all rent payments due today (runs at 1am Pacific)',
+    endpoint: '/api/cron/process-rent-payments',
+    status: 'idle'
+  },
+  {
+    id: 'preview-rent-payments',
+    name: 'Preview Rent Payments',
+    description: 'Emails preview of tomorrow\'s rent payments to tyler.bennett52@gmail.com',
+    endpoint: '/api/cron/preview-rent-payments',
+    status: 'idle'
   }
 ]
 

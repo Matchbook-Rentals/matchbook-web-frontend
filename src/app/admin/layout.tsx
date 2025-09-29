@@ -140,6 +140,11 @@ export default async function AdminLayout({
       url: "/admin/test",
       icon: "FlaskConical",
     },
+    {
+      title: "Orphaned Listings",
+      url: "/admin/listing-management?orphaned=true",
+      icon: "Unlink",
+    },
   ];
 
   // Build sidebar groups - only include dev tools for devs

@@ -27,12 +27,20 @@ export async function GET(request: Request) {
     const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
 
     // 3. Find messages older than 2 mins, unread, notification not sent
+    // Use a safer query that only includes messages with existing conversations
     const messagesToNotify = await prisma.message.findMany({
       where: {
         isRead: false,
         notificationSentAt: null,
         createdAt: {
           lte: twoMinutesAgo,
+        },
+        conversationId: {
+          in: (
+            await prisma.conversation.findMany({
+              select: { id: true }
+            })
+          ).map(c => c.id)
         },
       },
       include: {

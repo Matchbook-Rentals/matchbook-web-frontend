@@ -20,9 +20,9 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select'
-import { 
-  Search, 
-  Eye, 
+import {
+  Search,
+  Eye,
   Edit,
   Copy
 } from 'lucide-react'
@@ -53,7 +53,7 @@ interface ListingData {
     firstName: string | null;
     lastName: string | null;
     email: string | null;
-  };
+  } | null;
   listingImages: Array<{
     url: string;
   }>;
@@ -72,6 +72,7 @@ interface ListingManagementTableProps {
   search: string;
   status: string;
   active: string;
+  showOrphaned: boolean;
 }
 
 export default function ListingManagementTable({
@@ -81,7 +82,8 @@ export default function ListingManagementTable({
   pageSize,
   search,
   status,
-  active
+  active,
+  showOrphaned
 }: ListingManagementTableProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -147,6 +149,11 @@ export default function ListingManagementTable({
     return min === max ? `$${min.toLocaleString()}` : `$${min.toLocaleString()} - $${max.toLocaleString()}`
   }
 
+  // Client-side filtering for orphaned listings
+  const filteredListings = showOrphaned
+    ? listings.filter(listing => listing.user === null)  // Show ONLY orphaned listings
+    : listings.filter(listing => listing.user !== null)  // Show listings WITH users
+
   return (
     <div className="space-y-4">
       {/* Filters */}
@@ -191,6 +198,20 @@ export default function ListingManagementTable({
       </div>
 
 
+      {/* Information note for orphaned filtering */}
+      {showOrphaned && (
+        <div className="text-sm text-blue-600 bg-blue-50 border border-blue-200 rounded-md p-3">
+          <strong>Note:</strong> Showing all listings including orphaned ones (listings without valid users).
+          Orphaned listings are marked with a red indicator.
+        </div>
+      )}
+      {!showOrphaned && listings.length !== filteredListings.length && (
+        <div className="text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-md p-3">
+          <strong>Note:</strong> {listings.length - filteredListings.length} orphaned listing(s) hidden on this page.
+          Select "Show Orphaned" to view them.
+        </div>
+      )}
+
       {/* Table */}
       <div className="border rounded-lg">
         <Table>
@@ -207,7 +228,7 @@ export default function ListingManagementTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listings.map((listing) => (
+            {filteredListings.map((listing) => (
               <TableRow key={listing.id}>
                 <TableCell>
                   {listing.listingImages[0] ? (
@@ -249,10 +270,19 @@ export default function ListingManagementTable({
                 </TableCell>
                 <TableCell>
                   <div className="text-sm">
-                    <div className="font-medium">
-                      {listing.user.firstName} {listing.user.lastName}
-                    </div>
-                    <div className="text-gray-600">{listing.user.email}</div>
+                    {listing.user ? (
+                      <>
+                        <div className="font-medium">
+                          {listing.user.firstName} {listing.user.lastName}
+                        </div>
+                        <div className="text-gray-600">{listing.user.email}</div>
+                      </>
+                    ) : (
+                      <div className="text-red-600 font-medium flex items-center gap-1">
+                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                        No User (Orphaned)
+                      </div>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>
@@ -363,10 +393,10 @@ export default function ListingManagementTable({
         </div>
       )}
 
-      {listings.length === 0 && (
+      {filteredListings.length === 0 && (
         <div className="text-center py-12">
           <div className="text-gray-500">No listings found</div>
-          {(search || status !== 'all' || active !== 'all') && (
+          {(search || status !== 'all' || active !== 'all' || showOrphaned) && (
             <Button 
               variant="link" 
               onClick={() => router.push('/admin/listing-management')}

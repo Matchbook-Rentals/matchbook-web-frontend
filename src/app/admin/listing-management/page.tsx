@@ -10,6 +10,7 @@ interface ListingManagementPageProps {
     search?: string;
     status?: string;
     active?: string;
+    orphaned?: string;
   };
 }
 
@@ -18,13 +19,15 @@ export default async function ListingManagementPage({ searchParams }: ListingMan
   const search = searchParams?.search || '';
   const status = searchParams?.status || 'all';
   const active = searchParams?.active || 'all';
+  const showOrphaned = searchParams?.orphaned === 'true';
 
-  const { listings, totalCount } = await getAllListings({ 
-    page: currentPage, 
+  const { listings, totalCount } = await getAllListings({
+    page: currentPage,
     pageSize: PAGE_SIZE,
     search,
     status,
-    active
+    active,
+    showOrphaned
   });
 
   return (
@@ -45,6 +48,7 @@ export default async function ListingManagementPage({ searchParams }: ListingMan
             search={search}
             status={status}
             active={active}
+            showOrphaned={showOrphaned}
           />
         </CardContent>
       </Card>

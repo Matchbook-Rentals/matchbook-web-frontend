@@ -14,6 +14,7 @@ interface GetAllListingsParams {
   search?: string;
   status?: string; // all, approved, pendingReview, rejected
   active?: string; // all, active, inactive
+  showOrphaned?: boolean; // whether to include orphaned listings (listings without users)
 }
 
 export interface ListingWithDetails extends Listing {
@@ -22,17 +23,18 @@ export interface ListingWithDetails extends Listing {
     firstName: string | null;
     lastName: string | null;
     email: string | null;
-  };
+  } | null;
   listingImages: ListingImage[];
   monthlyPricing: ListingMonthlyPricing[];
 }
 
-export async function getAllListings({ 
-  page = 1, 
+export async function getAllListings({
+  page = 1,
   pageSize = DEFAULT_PAGE_SIZE,
   search = '',
   status = 'all',
-  active = 'all'
+  active = 'all',
+  showOrphaned = false
 }: GetAllListingsParams = {}) {
   if (!(await checkAdminAccess())) {
     throw new Error('Unauthorized')
@@ -75,7 +77,7 @@ export async function getAllListings({
     where.markedActiveByUser = false;
   }
 
-  const [listings, totalCount] = await prisma.$transaction([
+  const [rawListings, totalCount] = await prisma.$transaction([
     prisma.listing.findMany({
       where,
       skip: skip,
@@ -96,14 +98,6 @@ export async function getAllListings({
         bathroomCount: true,
         category: true,
         userId: true,
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true
-          }
-        },
         listingImages: {
           take: 1,
           orderBy: {
@@ -130,6 +124,29 @@ export async function getAllListings({
     }),
     prisma.listing.count({ where })
   ]);
+
+  // Fetch user data separately to avoid the orphaned listing error
+  const userIds = [...new Set(rawListings.map(l => l.userId))]; // Get unique userIds
+  const users = await prisma.user.findMany({
+    where: {
+      id: { in: userIds }
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true
+    }
+  });
+
+  // Create a user lookup map
+  const userMap = new Map(users.map(user => [user.id, user]));
+
+  // Combine listings with user data
+  const listings = rawListings.map(listing => ({
+    ...listing,
+    user: userMap.get(listing.userId) || null
+  }));
 
   return { listings, totalCount };
 }
