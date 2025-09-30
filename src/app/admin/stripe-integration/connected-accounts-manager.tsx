@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, AlertTriangle, CheckCircle, XCircle, RefreshCw, Database, User } from 'lucide-react'
-import { getConnectedAccounts, deleteConnectedAccount } from './_actions'
+import { Trash2, AlertTriangle, CheckCircle, XCircle, RefreshCw, Database, User, RotateCw } from 'lucide-react'
+import { getConnectedAccounts, deleteConnectedAccount, updateAccountStatus } from './_actions'
 import { toast } from 'sonner'
 import {
   AlertDialog,
@@ -49,6 +49,7 @@ export function ConnectedAccountsManager() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
 
   const fetchAccounts = async () => {
     try {
@@ -70,6 +71,22 @@ export function ConnectedAccountsManager() {
   const handleRefresh = async () => {
     setRefreshing(true)
     await fetchAccounts()
+  }
+
+  const handleUpdateStatus = async (userId: string, stripeAccountId: string) => {
+    setUpdatingId(userId)
+    try {
+      const result = await updateAccountStatus(userId, stripeAccountId)
+      toast.success(
+        `Status updated: Charges ${result.charges_enabled ? 'enabled' : 'disabled'}, Payouts ${result.payouts_enabled ? 'enabled' : 'disabled'}`
+      )
+      await fetchAccounts()
+    } catch (error) {
+      toast.error('Failed to update account status from Stripe')
+      console.error('Error updating account status:', error)
+    } finally {
+      setUpdatingId(null)
+    }
   }
 
   const handleDelete = async (userId: string, stripeAccountId: string) => {
@@ -248,8 +265,21 @@ export function ConnectedAccountsManager() {
                     </div>
                   )}
                 </div>
-                
-                <div className="ml-4">
+
+                <div className="ml-4 flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleUpdateStatus(account.id, account.stripeAccountId!)}
+                    disabled={updatingId === account.id || !account.stripeAccountId}
+                    title="Sync account status from Stripe"
+                  >
+                    {updatingId === account.id ? (
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <RotateCw className="h-4 w-4" />
+                    )}
+                  </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button

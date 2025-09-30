@@ -128,6 +128,58 @@ export async function getConnectedAccounts() {
   }
 }
 
+export async function updateAccountStatus(userId: string, stripeAccountId: string) {
+  if (!checkRole('admin_dev')) {
+    throw new Error('Unauthorized')
+  }
+
+  try {
+    // Fetch latest account details from Stripe
+    const account = await stripe.accounts.retrieve(stripeAccountId)
+
+    // Only update database if this isn't a Stripe-only account
+    if (!userId.startsWith('stripe-')) {
+      // Determine account status (same logic as webhook handler)
+      let accountStatus = 'enabled'
+      if (account.requirements?.disabled_reason) {
+        accountStatus = 'disabled'
+      } else if (account.requirements?.past_due && account.requirements.past_due.length > 0) {
+        accountStatus = 'restricted'
+      } else if (account.requirements?.currently_due && account.requirements.currently_due.length > 0) {
+        accountStatus = 'pending'
+      }
+
+      // Update user with latest account information
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          stripeChargesEnabled: account.charges_enabled,
+          stripePayoutsEnabled: account.payouts_enabled,
+          stripeDetailsSubmitted: account.details_submitted,
+          stripeAccountStatus: accountStatus,
+          stripeRequirementsDue: JSON.stringify({
+            currently_due: account.requirements?.currently_due || [],
+            past_due: account.requirements?.past_due || [],
+            eventually_due: account.requirements?.eventually_due || [],
+            disabled_reason: account.requirements?.disabled_reason || null
+          }),
+          stripeAccountLastChecked: new Date(),
+        },
+      })
+    }
+
+    revalidatePath('/admin/stripe-integration')
+    return {
+      success: true,
+      charges_enabled: account.charges_enabled,
+      payouts_enabled: account.payouts_enabled
+    }
+  } catch (error) {
+    console.error('Error updating account status:', error)
+    throw new Error('Failed to update account status from Stripe')
+  }
+}
+
 export async function deleteConnectedAccount(userId: string, stripeAccountId: string) {
   if (!checkRole('admin_dev')) {
     throw new Error('Unauthorized')
@@ -136,7 +188,7 @@ export async function deleteConnectedAccount(userId: string, stripeAccountId: st
   try {
     // Delete from Stripe first
     await stripe.accounts.del(stripeAccountId)
-    
+
     // Only update database if this isn't a Stripe-only account
     if (!userId.startsWith('stripe-')) {
       await prisma.user.update({
