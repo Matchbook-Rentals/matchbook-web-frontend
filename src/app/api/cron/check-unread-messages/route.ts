@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 import { createNotification } from '@/app/actions/notifications';
+import { buildNotificationEmailData } from '@/lib/notification-builders';
 
 /**
  * Truncate text to a maximum length
@@ -264,12 +265,12 @@ export async function GET(request: Request) {
             url: notificationData.url,
             actionType: notificationData.actionType,
             actionId: notificationData.actionId,
-            emailData: {
+            emailData: buildNotificationEmailData(notificationData.actionType, {
               senderName: notificationData.senderName,
               conversationId: notificationData.conversationId,
               listingTitle: notificationData.listingTitle,
               messagePreview: notificationData.messagePreview
-            }
+            })
           });
 
           if (result.success) {

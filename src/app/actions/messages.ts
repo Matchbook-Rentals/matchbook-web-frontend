@@ -97,11 +97,16 @@ export async function sendInitialMessage(listingId: string, content: string) {
       },
     });
 
-    // 4. If this is a new conversation, create a notification for the host
+    // 4. New conversation notifications are now handled by check-unread-messages cron
+    // This ensures consistent notification timing and prevents duplicates
+    // The cron detects first messages and sends new_conversation notifications after 2 minutes
+    /*
+    // DISABLED: Immediate notification creation
+    // Let check-unread-messages cron handle ALL message notifications
     if (isNewConversation) {
       const { createNotification } = await import('@/app/actions/notifications');
       const senderName = sender?.firstName || 'A user';
-      
+
       try {
         await createNotification({
           userId: receiverId,
@@ -121,6 +126,7 @@ export async function sendInitialMessage(listingId: string, content: string) {
         // Don't fail the message send if notification fails
       }
     }
+    */
 
     // TODO: Optionally trigger WebSocket event here to notify receiver
 
