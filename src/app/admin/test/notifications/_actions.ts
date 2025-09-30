@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { clerkClient } from '@clerk/nextjs/server'
 import { createNotification } from '@/app/actions/notifications'
 import { checkAdminAccess } from '@/utils/roles'
+import { buildNotificationEmailData } from '@/lib/notification-builders'
 
 interface SendTestNotificationParams {
   type: string
@@ -56,149 +57,158 @@ export async function sendTestNotification({
       case 'message':
         notificationContent = `You have a new message from ${senderName}.`
         notificationUrl = '/app/messages?convo=test-' + Date.now()
-        emailData = {
+        emailData = buildNotificationEmailData('message', {
           senderName,
           conversationId: 'test-' + Date.now(),
           listingTitle,
-          messageContent
-        }
+          messagePreview: messageContent
+        })
         break
-        
+
       case 'new_conversation':
         notificationContent = `You have a new conversation with ${senderName}`
         notificationUrl = '/app/messages'
-        emailData = {
+        emailData = buildNotificationEmailData('new_conversation', {
           senderName,
           messagePreview: 'Hi! I\'m interested in your property and would love to learn more about the availability and amenities.',
           conversationId: 'test-conversation-id',
           listingTitle
-        }
+        })
         break
         
       case 'view': // Application received
         notificationContent = `New application to ${listingTitle} for ${messageContent || 'Jan 1 - Jan 31'}`
         notificationUrl = '/app/host/listings/applications'
-        emailData = {
+        emailData = buildNotificationEmailData('view', {
           listingTitle,
           renterName: senderName,
           dateRange: messageContent || 'Jan 1 - Jan 31'
-        }
+        })
         break
-        
+
       case 'application_approved':
         notificationContent = `You have a Match!`
         notificationUrl = '/app/rent/match/test-match-id/lease-signing'
-        emailData = {
+        emailData = buildNotificationEmailData('application_approved', {
           listingTitle,
           hostName: senderName || 'Sarah Johnson'
-        }
+        })
         break
-        
+
       case 'application_declined':
         notificationContent = `Your application for ${listingTitle} has been declined.`
         notificationUrl = '/app/rent/searches'
-        emailData = {
+        emailData = buildNotificationEmailData('application_declined', {
           listingTitle
-        }
+        })
         break
         
       case 'application_approved_lease_ready':
         notificationContent = `Congratulations! Your application for ${listingTitle} has been approved and your lease is ready for signature.`
         notificationUrl = '/app/match/test'
-        emailData = {
+        emailData = buildNotificationEmailData('application_approved_lease_ready', {
           listingTitle
-        }
+        })
         break
         
       case 'booking':
         notificationContent = `You have a new booking for ${listingTitle} from ${senderName}`
         notificationUrl = '/app/host-dashboard?tab=bookings'
-        emailData = {
+        emailData = buildNotificationEmailData('booking', {
           listingTitle,
           senderName
-        }
+        })
         break
         
       case 'booking_change_request':
         notificationContent = `A change has been requested for your booking at ${listingTitle}.`
         notificationUrl = '/app/renter/bookings'
-        emailData = {
+        emailData = buildNotificationEmailData('booking_change_request', {
           listingTitle
-        }
+        })
         break
-        
+
       case 'booking_change_declined':
         notificationContent = `Your requested change has been declined by ${senderName}`
         notificationUrl = '/app/renter/bookings'
-        emailData = {
-          senderName
-        }
+        emailData = buildNotificationEmailData('booking_change_declined', {
+          renterName: senderName
+        })
         break
-        
+
       case 'booking_change_approved':
         notificationContent = `Your requested change has been approved by ${senderName}`
         notificationUrl = '/app/renter/bookings'
-        emailData = {
-          senderName
-        }
+        emailData = buildNotificationEmailData('booking_change_approved', {
+          renterName: senderName
+        })
         break
-        
+
       case 'move_in_upcoming':
         notificationContent = `Move-in reminder: Your stay at ${listingTitle} begins soon!`
         notificationUrl = '/app/renter/bookings'
-        emailData = {
+        emailData = buildNotificationEmailData('move_in_upcoming', {
           listingTitle
-        }
+        })
         break
-        
+
       case 'move_out_upcoming':
         notificationContent = `Move-out reminder: Your stay at ${listingTitle} ends soon.`
         notificationUrl = '/app/renter/bookings'
-        emailData = {
+        emailData = buildNotificationEmailData('move_out_upcoming', {
           listingTitle
-        }
+        })
         break
-        
+
       case 'payment_success':
         notificationContent = `Payment of $${amount} for ${listingTitle} was successful.`
         notificationUrl = '/app/renter/payments'
-        emailData = {
+        emailData = buildNotificationEmailData('payment_success', {
           amount,
           listingTitle
-        }
+        })
         break
-        
+
       case 'payment_failed':
         notificationContent = `Payment of $${amount} for ${listingTitle} failed. Please update your payment method.`
         notificationUrl = '/app/renter/payments'
-        emailData = {
+        emailData = buildNotificationEmailData('payment_failed', {
           amount,
           listingTitle
-        }
+        })
         break
-        
+
       case 'payment_authorization_required':
         notificationContent = `Your move-in has been confirmed! Please authorize your first month's rent payment of $${amount}.`
         notificationUrl = '/app/renter/bookings/authorize-payment'
-        emailData = {
+        emailData = buildNotificationEmailData('payment_authorization_required', {
           amount,
           listingTitle
-        }
+        })
         break
         
       case 'ADMIN_INFO':
         notificationContent = messageContent || 'Important information from MatchBook'
         notificationUrl = '/app/dashboard'
+        emailData = buildNotificationEmailData('ADMIN_INFO', {
+          messageContent
+        })
         break
-        
+
       case 'ADMIN_WARNING':
         notificationContent = messageContent || 'Important warning from MatchBook'
         notificationUrl = '/app/dashboard'
+        emailData = buildNotificationEmailData('ADMIN_WARNING', {
+          messageContent
+        })
         break
-        
+
       case 'ADMIN_SUCCESS':
         notificationContent = messageContent || 'Success notification from MatchBook'
         notificationUrl = '/app/dashboard'
+        emailData = buildNotificationEmailData('ADMIN_SUCCESS', {
+          messageContent
+        })
         break
         
       default:
