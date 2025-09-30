@@ -89,7 +89,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const completionRoutes = [
     '/lease-success',
     '/stripe-callback',
-    '/onboarding-incomplete',
     '/unauthorized',
   ]
 

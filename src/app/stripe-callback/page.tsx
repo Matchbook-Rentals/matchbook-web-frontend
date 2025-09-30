@@ -67,26 +67,11 @@ export default function StripeCallbackPage() {
           }
         }
 
-        // If onboarding is not complete, redirect to a completion page instead
-        if (userAccountId && (!chargesEnabled || !detailsSubmitted)) {
-          const incompleteUrl = new URL('/onboarding-incomplete', window.location.origin)
-          incompleteUrl.searchParams.set('redirect_to', redirectTo || '/dashboard')
-          incompleteUrl.searchParams.set('account_id', userAccountId)
-          incompleteUrl.searchParams.set('charges_enabled', chargesEnabled.toString())
-          incompleteUrl.searchParams.set('details_submitted', detailsSubmitted.toString())
-          router.replace(incompleteUrl.toString())
-          return
-        }
-
-        // Determine where to redirect for completed onboarding
+        // Determine where to redirect
         let finalRedirectUrl = redirectTo || '/dashboard'
-        
-        // Add onboarding status to URL
-        const redirectUrl = new URL(finalRedirectUrl, window.location.origin)
-        redirectUrl.searchParams.set('onboarding_complete', onboardingComplete.toString())
-        
+
         // Use replace to avoid back button issues
-        router.replace(redirectUrl.toString())
+        router.replace(finalRedirectUrl)
 
       } catch (error) {
         console.error('Error in Stripe callback:', error)
