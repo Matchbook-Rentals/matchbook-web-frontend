@@ -133,6 +133,7 @@ interface ServerApplicationData {
 
 /**
  * Check application completion for client-side data (used in store)
+ * Implements all requirements defined in the documentation block at the top of this file.
  */
 export function checkApplicationCompletionClient(data: ClientApplicationData): CompletionResult {
   const missingRequirements: string[] = [];
@@ -229,6 +230,7 @@ export function checkApplicationCompletionClient(data: ClientApplicationData): C
 
 /**
  * Check application completion for server-side data (used in server actions)
+ * Implements all requirements defined in the documentation block at the top of this file.
  */
 export function checkApplicationCompletionServer(application: ServerApplicationData): CompletionResult {
   const missingRequirements: string[] = [];

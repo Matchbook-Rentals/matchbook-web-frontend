@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger';
 import { Identification } from '../../searches/(trips-components)/application-identity';
 import { Income } from '../../searches/(trips-components)/application-income';
 import Questionnaire from '../../searches/(trips-components)/application-questionnaire';
-import { upsertApplication, markComplete, updateApplicationCompletionStatus, deleteIDPhoto, deleteIncomeProof } from '@/app/actions/applications';
+import { upsertApplication, updateApplicationCompletionStatus, deleteIDPhoto, deleteIncomeProof } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
   validatePersonalInfo,
@@ -523,15 +523,18 @@ export default function ApplicationClientComponent({
       setIsLoading(false);
       if (result.success) {
         markSynced();
+
+        // Update store with server completion status
+        if (result.application) {
+          useApplicationStore.setState({
+            serverIsComplete: result.application.isComplete || false
+          });
+        }
+
         toast({
           title: "Success",
           description: "Application submitted successfully",
         });
-        if (result.application?.id) {
-          let completeResult = await markComplete(result.application?.id);
-          logger.debug('Complete application result', completeResult);
-
-        }
       } else {
         toast({
           title: "Error",

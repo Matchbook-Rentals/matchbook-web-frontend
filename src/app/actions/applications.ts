@@ -466,122 +466,144 @@ export async function upsertApplication(data: any) {
     if (existingApp) {
       console.log('DEBUG - Updating existing application');
 
-      // Update the base record first
-      await prisma.application.update({
-        where: { id: existingApp.id },
-        data: filteredData
-      });
-
-      // Handle relationships separately using connect/disconnect pattern
-      if (identifications && identifications.length > 0) {
-        // Delete all existing identifications for this application
-        await prisma.identification.deleteMany({
-          where: { applicationId: existingApp.id }
+      // Wrap all update operations in a transaction for atomicity
+      const application = await prisma.$transaction(async (tx) => {
+        // Update the base record first
+        await tx.application.update({
+          where: { id: existingApp.id },
+          data: filteredData
         });
 
-        // Create new identifications
-        for (const id of identifications) {
-          // Create the identification
-          const newId = await prisma.identification.create({
-            data: {
-              idType: id.idType,
-              idNumber: id.idNumber,
-              isPrimary: !!id.isPrimary,
-              application: { connect: { id: existingApp.id } }
-            }
+        // Handle relationships separately using connect/disconnect pattern
+        if (identifications && identifications.length > 0) {
+          // Delete all existing identifications for this application
+          await tx.identification.deleteMany({
+            where: { applicationId: existingApp.id }
           });
 
-          // Create photos if they exist
-          if (id.idPhotos && Array.isArray(id.idPhotos) && id.idPhotos.length > 0) {
-            await Promise.all(id.idPhotos.map((photo: any) =>
-              prisma.iDPhoto.create({
-                data: {
-                  url: photo.url || '',
-                  fileKey: photo.fileKey,
-                  customId: photo.customId,
-                  fileName: photo.fileName,
-                  isPrimary: !!photo.isPrimary,
-                  identification: { connect: { id: newId.id } }
-                }
-              })
-            ));
+          // Create new identifications
+          for (const id of identifications) {
+            // Create the identification
+            const newId = await tx.identification.create({
+              data: {
+                idType: id.idType,
+                idNumber: id.idNumber,
+                isPrimary: !!id.isPrimary,
+                application: { connect: { id: existingApp.id } }
+              }
+            });
+
+            // Create photos if they exist
+            if (id.idPhotos && Array.isArray(id.idPhotos) && id.idPhotos.length > 0) {
+              await Promise.all(id.idPhotos.map((photo: any) =>
+                tx.iDPhoto.create({
+                  data: {
+                    url: photo.url || '',
+                    fileKey: photo.fileKey,
+                    customId: photo.customId,
+                    fileName: photo.fileName,
+                    isPrimary: !!photo.isPrimary,
+                    identification: { connect: { id: newId.id } }
+                  }
+                })
+              ));
+            }
           }
         }
-      }
 
-      // Handle other relationships similarly
-      if (incomes && incomes.length > 0) {
-        await prisma.income.deleteMany({
-          where: { applicationId: existingApp.id }
-        });
-
-        await Promise.all(incomes.map((income: any) => {
-          const { id, ...incomeData } = income;
-          return prisma.income.create({
-            data: {
-              source: incomeData.source,
-              monthlyAmount: incomeData.monthlyAmount,
-              imageUrl: incomeData.imageUrl,
-              fileKey: incomeData.fileKey,
-              customId: incomeData.customId,
-              fileName: incomeData.fileName,
-              application: { connect: { id: existingApp.id } }
-            }
+        // Handle other relationships similarly
+        if (incomes && incomes.length > 0) {
+          await tx.income.deleteMany({
+            where: { applicationId: existingApp.id }
           });
-        }));
-      }
 
-      if (verificationImages && verificationImages.length > 0) {
-        await prisma.verificationImage.deleteMany({
-          where: { applicationId: existingApp.id }
-        });
+          await Promise.all(incomes.map((income: any) => {
+            const { id, ...incomeData } = income;
+            return tx.income.create({
+              data: {
+                source: incomeData.source,
+                monthlyAmount: incomeData.monthlyAmount,
+                imageUrl: incomeData.imageUrl,
+                fileKey: incomeData.fileKey,
+                customId: incomeData.customId,
+                fileName: incomeData.fileName,
+                application: { connect: { id: existingApp.id } }
+              }
+            });
+          }));
+        }
 
-        await Promise.all(verificationImages.map((img: any) => {
-          const { id, ...imgData } = img;
-          return prisma.verificationImage.create({
-            data: {
-              ...imgData,
-              application: { connect: { id: existingApp.id } }
-            }
+        if (verificationImages && verificationImages.length > 0) {
+          await tx.verificationImage.deleteMany({
+            where: { applicationId: existingApp.id }
           });
-        }));
-      }
 
-      if (residentialHistories && residentialHistories.length > 0) {
-        await prisma.residentialHistory.deleteMany({
-          where: { applicationId: existingApp.id }
-        });
+          await Promise.all(verificationImages.map((img: any) => {
+            const { id, ...imgData } = img;
+            return tx.verificationImage.create({
+              data: {
+                ...imgData,
+                application: { connect: { id: existingApp.id } }
+              }
+            });
+          }));
+        }
 
-        await Promise.all(residentialHistories.map((rh: any, idx: number) => {
-          const { id, applicationId, ...rhData } = rh;
-          return prisma.residentialHistory.create({
-            data: {
-              ...rhData,
-              index: idx,
-              application: { connect: { id: existingApp.id } }
-            }
+        if (residentialHistories && residentialHistories.length > 0) {
+          await tx.residentialHistory.deleteMany({
+            where: { applicationId: existingApp.id }
           });
-        }));
-      }
 
-      // Fetch and return the updated application with all relationships
-      const application = await prisma.application.findUnique({
-        where: { id: existingApp.id },
-        include: {
-          identifications: {
-            include: {
-              idPhotos: true
-            }
-          },
-          incomes: true,
-          verificationImages: true,
-          residentialHistories: {
-            orderBy: {
-              index: 'asc',
+          await Promise.all(residentialHistories.map((rh: any, idx: number) => {
+            const { id, applicationId, ...rhData } = rh;
+            return tx.residentialHistory.create({
+              data: {
+                ...rhData,
+                index: idx,
+                application: { connect: { id: existingApp.id } }
+              }
+            });
+          }));
+        }
+
+        // Fetch and return the updated application with all relationships
+        return await tx.application.findUnique({
+          where: { id: existingApp.id },
+          include: {
+            identifications: {
+              include: {
+                idPhotos: true
+              }
             },
+            incomes: true,
+            verificationImages: true,
+            residentialHistories: {
+              orderBy: {
+                index: 'asc',
+              },
+            }
           }
-        }
+        });
       });
+
+      // Transaction is committed - check completion on the saved data
+      const completionResult = checkApplicationCompletionServer(application);
+
+      // Update isComplete if requirements are met
+      if (completionResult.isComplete && !application.isComplete) {
+        await prisma.application.update({
+          where: { id: application.id },
+          data: { isComplete: true }
+        });
+        application.isComplete = true;
+      } else if (!completionResult.isComplete && application.isComplete) {
+        // Application was previously complete but no longer is
+        await prisma.application.update({
+          where: { id: application.id },
+          data: { isComplete: false }
+        });
+        application.isComplete = false;
+      }
 
       // Revalidate paths to clear cached application data
       revalidatePath('/app/rent/old-search');
@@ -654,7 +676,7 @@ export async function upsertApplication(data: any) {
         };
       }
 
-      // Create the application with all relationships
+      // Create the application with all relationships (atomic operation)
       const application = await prisma.application.create({
         data: {
           ...filteredData,
@@ -676,6 +698,18 @@ export async function upsertApplication(data: any) {
           }
         }
       });
+
+      // Check completion on the created data
+      const completionResult = checkApplicationCompletionServer(application);
+
+      // Update isComplete if requirements are met
+      if (completionResult.isComplete) {
+        await prisma.application.update({
+          where: { id: application.id },
+          data: { isComplete: true }
+        });
+        application.isComplete = true;
+      }
 
       // Revalidate paths to clear cached application data
       revalidatePath('/app/rent/old-search');
