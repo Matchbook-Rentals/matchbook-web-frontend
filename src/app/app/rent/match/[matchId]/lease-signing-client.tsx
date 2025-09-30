@@ -1,3 +1,9 @@
+/**
+ * Lease Signing Client Component
+ *
+ * Handles the complete lease signing and payment flow for renters.
+ * For payment logic details, see /docs/payment-spec.md
+ */
 'use client';
 
 import { useEffect, useRef, useState } from 'react';

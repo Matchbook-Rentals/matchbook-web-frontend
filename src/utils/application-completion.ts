@@ -1,29 +1,32 @@
 /**
  * Application Completion Requirements
- * 
+ *
  * An application is considered complete when ALL of the following are met:
- * 
+ *
  * 1. PERSONAL INFORMATION
  *    - First name (required)
  *    - Last name (required)
  *    - Middle name (required unless "No Middle Name" is checked)
  *    - Date of birth (required)
- * 
+ *
  * 2. IDENTIFICATION
  *    - At least one ID with:
  *      - ID type (required)
  *      - ID number (required)
  *      - At least one ID photo (required)
- * 
+ *
  * 3. INCOME
  *    - At least one income source with:
  *      - Source/employer name (required)
  *      - Monthly amount (required)
- * 
+ *      - Income proof upload - imageUrl OR fileKey (required)
+ *
  * 4. QUESTIONNAIRE
+ *    - Felony question must be answered (not null)
+ *    - Eviction question must be answered (not null)
  *    - If felony = true: felony explanation required
  *    - If evicted = true: eviction explanation required
- * 
+ *
  * 5. RESIDENTIAL HISTORY
  *    - Current residence (required) with:
  *      - Street address (required)
@@ -96,6 +99,8 @@ interface ServerIdentification {
 interface ServerIncome {
   source: string | null;
   monthlyAmount: string | null;
+  imageUrl?: string | null;
+  fileKey?: string | null;
 }
 
 interface ServerResidentialHistory {
@@ -103,6 +108,7 @@ interface ServerResidentialHistory {
   city: string | null;
   state: string | null;
   zipCode: string | null;
+  durationOfTenancy: string | null;
   housingStatus: string | null;
   landlordFirstName: string | null;
   landlordLastName: string | null;
@@ -260,30 +266,43 @@ export function checkApplicationCompletionServer(application: ServerApplicationD
   }
 
   // 3. Check Income
-  const hasValidIncome = application.incomes?.some(income => 
-    income.source?.trim() && 
-    income.monthlyAmount?.trim()
+  const hasValidIncome = application.incomes?.some(income =>
+    income.source?.trim() &&
+    income.monthlyAmount?.trim() &&
+    (income.imageUrl?.trim() || income.fileKey?.trim())
   ) || false;
-  
+
   if (!hasValidIncome) {
-    missingRequirements.push('Income information');
+    if (!application.incomes || application.incomes.length === 0) {
+      missingRequirements.push('Income information');
+    } else if (!application.incomes.some(income => income.imageUrl?.trim() || income.fileKey?.trim())) {
+      missingRequirements.push('Income proof');
+    } else {
+      missingRequirements.push('Income information');
+    }
   }
 
   // 4. Check Questionnaire
-  if (application.felony && !application.felonyExplanation?.trim()) {
+  // Questionnaire must be answered (not null)
+  if (application.felony === null || application.felony === undefined) {
+    missingRequirements.push('Felony question must be answered');
+  } else if (application.felony && !application.felonyExplanation?.trim()) {
     missingRequirements.push('Felony explanation');
   }
-  if (application.evicted && !application.evictedExplanation?.trim()) {
+
+  if (application.evicted === null || application.evicted === undefined) {
+    missingRequirements.push('Eviction question must be answered');
+  } else if (application.evicted && !application.evictedExplanation?.trim()) {
     missingRequirements.push('Eviction explanation');
   }
 
   // 5. Check Residential History
   // Sort by index to ensure we're checking the first/current residence
-  const sortedResidences = application.residentialHistories?.sort((a: any, b: any) => 
+  const sortedResidences = application.residentialHistories?.sort((a: any, b: any) =>
     (a.index || 0) - (b.index || 0)
   );
   const firstResidence = sortedResidences?.[0];
-  
+
   if (!firstResidence) {
     missingRequirements.push('Current address');
   } else {
@@ -299,6 +318,9 @@ export function checkApplicationCompletionServer(application: ServerApplicationD
     }
     if (!firstResidence.zipCode?.trim()) {
       missingRequirements.push('ZIP code');
+    }
+    if (!firstResidence.durationOfTenancy?.trim()) {
+      missingRequirements.push('Length of stay');
     }
 
     // Check landlord info if renting

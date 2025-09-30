@@ -4,6 +4,7 @@ import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
 import { UTApi } from 'uploadthing/server'
 import { checkApplicationCompletionServer } from '@/utils/application-completion'
+import { revalidatePath } from 'next/cache'
 
 export async function createApplication(data: any) {
   try {
@@ -582,6 +583,10 @@ export async function upsertApplication(data: any) {
         }
       });
 
+      // Revalidate paths to clear cached application data
+      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/applications/general');
+
       return { success: true, application };
     } else {
       // Create new application with all relationships in one go
@@ -671,6 +676,10 @@ export async function upsertApplication(data: any) {
           }
         }
       });
+
+      // Revalidate paths to clear cached application data
+      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/applications/general');
 
       return { success: true, application };
     }
@@ -1166,6 +1175,11 @@ export async function markComplete(applicationId: string) {
         where: { id: applicationId },
         data: { isComplete: true },
       });
+
+      // Revalidate paths to clear cached application data
+      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/applications/general');
+
       return { success: true, application: updatedApplication };
     } else {
       // Don't mark as complete if requirements aren't met
