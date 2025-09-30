@@ -18,7 +18,7 @@ import {
 interface ListingData {
   id: string
   title: string
-  createdAt: Date
+  createdAt: string
   locationString: string | null
   userId: string
   user: {
