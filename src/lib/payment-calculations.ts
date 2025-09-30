@@ -1,14 +1,16 @@
 /**
  * Payment Calculations Module
- * 
+ *
  * Centralized, clean functions for all payment-related calculations.
  * All functions are pure and easily testable.
- * 
+ *
  * Categories:
  * - Deposits (security, pet)
  * - Rent (monthly, pet rent, proration)
  * - Fees (service, transfer, credit card)
  * - Totals and schedules
+ *
+ * For complete payment specification, see /docs/payment-spec.md
  */
 
 import { FEES } from './fee-constants';

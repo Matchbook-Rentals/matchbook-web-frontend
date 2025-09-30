@@ -18,9 +18,11 @@ export function calculatePaymentBreakdown(
   let total = rentDueAtBooking + applicationFee;
   
   if (paymentMethodType === 'card') {
-    // Stripe processing fee: 2.9% + $0.30
+    // Credit card processing fee: 3% self-inclusive
+    // Formula: totalAmount = baseAmount / (1 - 0.03)
+    // See /docs/payment-spec.md for details
     const subtotalWithAppFee = rentDueAtBooking + applicationFee;
-    const totalWithCardFee = (subtotalWithAppFee + 0.30) / (1 - 0.029);
+    const totalWithCardFee = subtotalWithAppFee / (1 - 0.03);
     processingFee = Math.round((totalWithCardFee - subtotalWithAppFee) * 100) / 100;
     total = Math.round(totalWithCardFee * 100) / 100;
   }

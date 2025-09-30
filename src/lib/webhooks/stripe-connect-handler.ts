@@ -5,8 +5,17 @@
  * For documentation, see /docs/webhooks/stripe.md
  */
 import prismadb from '@/lib/prismadb';
+import {
+  AccountUpdatedEvent,
+  AccountApplicationDeauthorizedEvent,
+  PersonUpdatedEvent,
+  CapabilityUpdatedEvent,
+  ExternalAccountCreatedEvent,
+  ExternalAccountUpdatedEvent,
+  ExternalAccountDeletedEvent
+} from './stripe-event-types';
 
-export async function handleAccountUpdated(event: any): Promise<void> {
+export async function handleAccountUpdated(event: AccountUpdatedEvent): Promise<void> {
   const account = event.data.object;
   const accountId = account.id;
 
@@ -81,7 +90,7 @@ export async function handleAccountUpdated(event: any): Promise<void> {
   }
 }
 
-export async function handleAccountDeauthorized(event: any): Promise<void> {
+export async function handleAccountDeauthorized(event: AccountApplicationDeauthorizedEvent): Promise<void> {
   const account = event.data.object;
   const accountId = account.id;
 
@@ -134,7 +143,7 @@ export async function handleAccountDeauthorized(event: any): Promise<void> {
   }
 }
 
-export async function handlePersonUpdated(event: any): Promise<void> {
+export async function handlePersonUpdated(event: PersonUpdatedEvent): Promise<void> {
   const person = event.data.object;
   const accountId = person.account;
 
@@ -167,7 +176,7 @@ export async function handlePersonUpdated(event: any): Promise<void> {
   }
 }
 
-export async function handleExternalAccountUpdated(event: any): Promise<void> {
+export async function handleExternalAccountUpdated(event: ExternalAccountUpdatedEvent): Promise<void> {
   const externalAccount = event.data.object;
   const accountId = externalAccount.account;
 
@@ -196,5 +205,120 @@ export async function handleExternalAccountUpdated(event: any): Promise<void> {
 
   } else {
     console.warn(`⚠️ Received external_account.updated for unknown account: ${accountId}`);
+  }
+}
+
+export async function handleCapabilityUpdated(event: CapabilityUpdatedEvent): Promise<void> {
+  const capability = event.data.object;
+  const accountId = capability.account;
+
+  console.log(`🔧 Capability updated for account: ${accountId}`);
+  console.log(`   Capability ID: ${capability.id}`);
+  console.log(`   Status: ${capability.status}`);
+  console.log(`   Currently due: ${JSON.stringify(capability.requirements?.currently_due || [])}`);
+
+  // Find the user with this Stripe account
+  const user = await prismadb.user.findFirst({
+    where: { stripeAccountId: accountId }
+  });
+
+  if (user) {
+    // Check capability status
+    if (capability.status === 'inactive') {
+      console.warn(`⚠️ Capability ${capability.id} is INACTIVE for user ${user.id}`);
+
+      if (capability.requirements?.disabled_reason) {
+        console.error(`   Disabled reason: ${capability.requirements.disabled_reason}`);
+      }
+
+      // TODO: Notify host about disabled capability
+      // TODO: If this affects payment acceptance, pause listings
+    } else if (capability.status === 'active') {
+      console.log(`✅ Capability ${capability.id} is ACTIVE for user ${user.id}`);
+
+      // TODO: Send success notification if this was previously disabled
+    } else if (capability.status === 'pending') {
+      console.log(`⏳ Capability ${capability.id} is PENDING for user ${user.id}`);
+
+      if (capability.requirements?.currently_due && capability.requirements.currently_due.length > 0) {
+        console.log(`   Requirements: ${capability.requirements.currently_due.join(', ')}`);
+
+        // TODO: Send email with list of required documents
+      }
+    }
+
+    // Update account last checked timestamp
+    await prismadb.user.update({
+      where: { id: user.id },
+      data: {
+        stripeAccountLastChecked: new Date()
+      }
+    });
+
+  } else {
+    console.warn(`⚠️ Received capability.updated for unknown account: ${accountId}`);
+  }
+}
+
+export async function handleExternalAccountCreated(event: ExternalAccountCreatedEvent): Promise<void> {
+  const externalAccount = event.data.object;
+  const accountId = externalAccount.account;
+
+  console.log(`🏦 NEW external account added for: ${accountId}`);
+  console.log(`   Last4: ${externalAccount.last4}`);
+  console.log(`   Status: ${externalAccount.status}`);
+  console.log(`   Bank: ${externalAccount.bank_name || 'Unknown'}`);
+
+  // Find the user with this Stripe account
+  const user = await prismadb.user.findFirst({
+    where: { stripeAccountId: accountId }
+  });
+
+  if (user) {
+    console.log(`✅ User ${user.id} added new bank account ending in ${externalAccount.last4}`);
+
+    // TODO: Send confirmation email to host
+    // TODO: If this is their first bank account, update onboarding status
+    // TODO: If they had payout issues before, this might resolve them
+
+    if (externalAccount.status === 'new') {
+      console.log(`   ⏳ Bank account needs verification (microdeposits or instant verification)`);
+
+      // TODO: Send email with verification instructions
+    } else if (externalAccount.status === 'verified') {
+      console.log(`   ✅ Bank account already verified`);
+
+      // TODO: Enable payouts if this was blocking them
+    }
+
+  } else {
+    console.warn(`⚠️ Received external_account.created for unknown account: ${accountId}`);
+  }
+}
+
+export async function handleExternalAccountDeleted(event: ExternalAccountDeletedEvent): Promise<void> {
+  const externalAccount = event.data.object;
+  const accountId = externalAccount.account;
+
+  console.log(`🗑️ External account DELETED for: ${accountId}`);
+  console.log(`   Last4: ${externalAccount.last4}`);
+
+  // Find the user with this Stripe account
+  const user = await prismadb.user.findFirst({
+    where: { stripeAccountId: accountId }
+  });
+
+  if (user) {
+    console.warn(`⚠️ User ${user.id} removed bank account ending in ${externalAccount.last4}`);
+
+    // Check if they have any other payout methods
+    // TODO: Query Stripe API to check if they have other external accounts
+    // If this was their only payout method, they can't receive funds
+
+    // TODO: Send notification about payout account removal
+    // TODO: If no other payout methods exist, notify urgently
+
+  } else {
+    console.warn(`⚠️ Received external_account.deleted for unknown account: ${accountId}`);
   }
 }

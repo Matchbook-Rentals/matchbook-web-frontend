@@ -1,28 +1,32 @@
 /**
  * Fee structure for Matchbook platform
- * 
+ *
  * TRANSFER FEE: Flat $7 fee charged for deposit transfers
  *   - Applied to security deposits and pet deposits
  *   - Always a flat rate regardless of deposit amount or trip duration
- * 
+ *
  * SERVICE FEE: Percentage-based fee charged on monthly rent
  *   - 3% for trips 6 months or shorter
  *   - 1.5% for trips longer than 6 months
  *   - Applied to the monthly rent amount (base rent + pet rent)
  *   - NOT applied to deposits
- * 
- * CREDIT CARD FEE: 3% processing fee
+ *
+ * CREDIT CARD FEE: 3% self-inclusive processing fee
  *   - Applied when using credit/debit cards
  *   - No fee for ACH bank transfers
- *   - Simple flat percentage rate
- * 
- * IMPORTANT: Credit Card Fee Calculation
- * We charge a simple 3% fee for credit card payments.
+ *   - Self-inclusive calculation ensures we receive the intended amount
  *
- * Example: If base amount is $100:
- *   creditCardFee = $100 * 0.03 = $3.00
- *   totalToCharge = $100 + $3.00 = $103.00
- * 
+ * IMPORTANT: Credit Card Fee Calculation
+ * We use a self-inclusive 3% formula:
+ *   totalToCharge = baseAmount / (1 - 0.03)
+ *
+ * Example: If base amount is $227:
+ *   totalToCharge = $227 / 0.97 = $234.02
+ *   creditCardFee = $234.02 - $227 = $7.02
+ *   We receive: $227 ✓
+ *
+ * For complete payment specification, see /docs/payment-spec.md
+ *
  * @module fee-constants
  */
 

@@ -1,3 +1,9 @@
+/**
+ * Payment Review Screen
+ *
+ * Displays payment methods, amount breakdown, and processes payments.
+ * For complete payment specification, see /docs/payment-spec.md
+ */
 'use client';
 
 import { PlusIcon, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
