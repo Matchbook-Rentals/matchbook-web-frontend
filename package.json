@@ -121,6 +121,7 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "turndown": "^7.2.0",
+    "twilio": "^5.10.2",
     "uploadthing": "^6.10.0",
     "use-debounce": "^10.0.4",
     "use-places-autocomplete": "^4.0.1",

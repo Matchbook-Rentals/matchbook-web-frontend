@@ -57,10 +57,24 @@ export const OnboardingChecklistCard = ({
         window.location.href = data.url;
       } else {
         console.error('Error getting Stripe URL:', data.error);
+
+        // Show user-friendly error message
+        let errorMessage = 'Failed to set up Stripe account. ';
+
+        if (data.errorCode === 'USER_NOT_FOUND') {
+          errorMessage += 'Your user account was not found. Please contact support.';
+        } else if (data.errorCode === 'EMAIL_REQUIRED') {
+          errorMessage += 'An email address is required. Please update your profile.';
+        } else {
+          errorMessage += data.error || 'Please try again or contact support.';
+        }
+
+        alert(errorMessage);
         setIsRedirecting(false);
       }
     } catch (error) {
       console.error('Error setting up Stripe:', error);
+      alert('An unexpected error occurred while setting up your Stripe account. Please try again or contact support.');
       setIsRedirecting(false);
     }
   };
