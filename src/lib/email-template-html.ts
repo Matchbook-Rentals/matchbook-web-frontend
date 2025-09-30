@@ -87,7 +87,7 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
       font-weight: 500;
       text-decoration: none;
       padding: 0px 10px 10px 10px;
-      text-align: left;
+      text-align: center;
       display: block;
     }
     .content-title {

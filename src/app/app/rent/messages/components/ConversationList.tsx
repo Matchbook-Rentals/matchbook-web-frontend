@@ -319,7 +319,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   <div className="flex flex-col justify-between min-w-0 flex-1 h-full py-1">
                     <div className="flex justify-between items-start w-full">
                       <div className="flex flex-col min-w-0 flex-1 mr-2">
-                        <span className="font-normal text-sm text-gray-600 truncate">
+                        <span className="font-normal text-sm text-gray-600 truncate max-w-[180px]">
                           {displayName}
                         </span>
                       </div>
@@ -344,7 +344,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         'Start a conversation'
                       )}
                     </span>
-                    <span className="text-xs text-gray-600 truncate">
+                    <span className="text-xs text-gray-600 truncate max-w-[180px]">
                       {(() => {
                         // Check if this is a support conversation
                         if (conv.name && conv.name.startsWith('Ticket:')) {
