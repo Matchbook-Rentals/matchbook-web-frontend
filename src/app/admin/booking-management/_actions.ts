@@ -213,7 +213,7 @@ export async function getAllBookings({
   const searchConditions = search ? {
     OR: [
       // Search by guest name
-      { 
+      {
         user: {
           OR: [
             { email: { contains: search } },
@@ -225,6 +225,7 @@ export async function getAllBookings({
       // Search by host name
       {
         listing: {
+          deletedAt: null,
           user: {
             OR: [
               { email: { contains: search } },
@@ -235,11 +236,11 @@ export async function getAllBookings({
         }
       },
       // Search by listing title
-      { listing: { title: { contains: search } } },
+      { listing: { title: { contains: search }, deletedAt: null } },
       // Search by listing address
-      { listing: { streetAddress1: { contains: search } } },
-      { listing: { city: { contains: search } } },
-      { listing: { state: { contains: search } } }
+      { listing: { streetAddress1: { contains: search }, deletedAt: null } },
+      { listing: { city: { contains: search }, deletedAt: null } },
+      { listing: { state: { contains: search }, deletedAt: null } }
     ]
   } : {};
 
@@ -272,7 +273,10 @@ export async function getAllBookings({
   // Fetch actual bookings
   const bookingWhere: any = {
     ...searchConditions,
-    ...dateConditions
+    ...dateConditions,
+    listing: {
+      deletedAt: null // Exclude bookings with soft-deleted listings
+    }
   };
 
   // Status filter for actual bookings
@@ -284,6 +288,9 @@ export async function getAllBookings({
   const matchWhere: any = {
     ...searchConditions,
     ...tripDateConditions,
+    listing: {
+      deletedAt: null // Exclude matches with soft-deleted listings
+    },
     AND: [
       { paymentAuthorizedAt: { not: null } }, // Payment is authorized
       { booking: null }, // No booking exists yet
