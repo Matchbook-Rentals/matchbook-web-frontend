@@ -1,3 +1,9 @@
+/**
+ * Payment Processing Server Action
+ *
+ * Handles direct payment processing via Stripe for deposit payments.
+ * For complete payment flow and fee structure, see /docs/payment-spec.md
+ */
 'use server';
 
 import { auth } from '@clerk/nextjs/server';
@@ -49,6 +55,20 @@ export async function processDirectPayment({
     // Verify the host has a Stripe Connect account
     if (!match.listing.user?.stripeAccountId) {
       return { success: false, error: 'Host must setup Stripe Connect account first' };
+    }
+
+    // Verify the host's account can accept charges
+    // See /docs/stripe-webhooks.md for account status details
+    if (!match.listing.user?.stripeChargesEnabled) {
+      console.error(`❌ Host ${match.listing.userId} cannot accept charges`, {
+        stripeChargesEnabled: match.listing.user?.stripeChargesEnabled,
+        stripeAccountStatus: match.listing.user?.stripeAccountStatus,
+        stripeRequirementsDue: match.listing.user?.stripeRequirementsDue
+      });
+      return {
+        success: false,
+        error: 'This host cannot accept payments at this time. Please contact support.'
+      };
     }
 
     // Check if already authorized
@@ -103,19 +123,21 @@ export async function processDirectPayment({
 
     /**
      * Payment Amount Calculation:
-     * 
-     * The 'amount' parameter already includes Stripe's credit card fee if applicable.
-     * This is calculated on the client using the inclusive formula:
-     *   totalAmount = (baseAmount + 0.30) / (1 - 0.029)
-     * 
-     * This ensures that after Stripe deducts their 2.9% + $0.30 fee,
+     *
+     * The 'amount' parameter already includes the credit card fee if applicable.
+     * This is calculated on the client using the self-inclusive 3% formula:
+     *   totalAmount = baseAmount / (1 - 0.03)
+     *
+     * This ensures that after the 3% fee is deducted,
      * we receive the exact amount we intended (deposits + deposit transfer fee).
-     * 
+     *
      * Example:
-     *   Base amount (deposits + $7 deposit transfer): $229
-     *   Total charged to card: $236.14
-     *   Stripe fee (2.9% + $0.30): $7.14
-     *   Amount we receive: $229 ✓
+     *   Base amount (deposits + $7 deposit transfer): $227
+     *   Total charged to card: $234.02
+     *   Credit card fee (3%): $7.02
+     *   Amount we receive: $227 ✓
+     *
+     * See /docs/payment-spec.md for complete payment specification
      */
     const totalAmount = Math.round(amount * 100); // Convert to cents
     
@@ -131,18 +153,20 @@ export async function processDirectPayment({
     
     /**
      * Fee Structure:
-     * 
+     *
      * TRANSFER FEE: Fixed $7 for all deposit transactions
      *   - MatchBook keeps this fee
      *   - Landlord receives: deposits - $7
-     * 
-     * CREDIT CARD FEE: Stripe's 2.9% + $0.30 (if using card)
+     *
+     * CREDIT CARD FEE: 3% self-inclusive (if using card)
      *   - Paid by the tenant on top of the base amount
-     *   - Goes directly to Stripe for processing
-     * 
+     *   - Covers payment processing costs
+     *
      * NO RENT COLLECTED: This transaction is for deposits only
      *   - Rent payments are scheduled separately
      *   - Service fees (3% or 1.5%) apply to rent, not deposits
+     *
+     * See /docs/payment-spec.md for complete fee structure details
      */
     const TRANSFER_FEE_CENTS = FEES.TRANSFER_FEE_CENTS;
     
@@ -195,22 +219,34 @@ export async function processDirectPayment({
       paymentAmount: totalAmount / 100, // Store in dollars
     };
 
-    // Since we're using automatic capture for all payment types, mark as captured if succeeded
+    // Determine booking status based on payment intent status
+    // See /docs/payment-spec.md for ACH recovery flow details
+    let bookingStatus: string;
+    let bookingPaymentStatus: string;
+
     console.log('💳 Payment Intent Status:', paymentIntent.status);
-    
+
     if (paymentIntent.status === 'succeeded') {
+      // Card payment - immediate success
       updateData.paymentCapturedAt = new Date();
       updateData.paymentStatus = 'captured';
-      console.log('✅ Payment succeeded - marking as captured');
+      bookingStatus = 'confirmed';
+      bookingPaymentStatus = 'settled';
+      console.log('✅ Card payment succeeded - booking confirmed immediately');
+
     } else if (paymentIntent.status === 'processing') {
-      // Payment is still processing (common for bank transfers)
-      // For ACH payments, we consider them "captured" even while processing
-      updateData.paymentCapturedAt = new Date(); // Set this for ACH payments too!
+      // ACH payment - still processing (3-5 business days)
+      // Do NOT set paymentCapturedAt yet - wait for webhook confirmation
       updateData.paymentStatus = 'processing';
-      console.log('⏳ Payment processing (ACH) - marking capture time for booking creation');
+      bookingStatus = 'pending_payment';  // Booking exists but payment not settled
+      bookingPaymentStatus = 'processing';
+      console.log('⏳ ACH payment processing - booking pending settlement (3-5 days)');
+
     } else {
-      // In case of any other status
+      // Other statuses (requires_action, etc)
       updateData.paymentStatus = 'authorized';
+      bookingStatus = 'reserved';
+      bookingPaymentStatus = 'pending';
       console.log('⚠️ Payment status:', paymentIntent.status, '- marked as authorized only');
     }
 
@@ -249,8 +285,8 @@ export async function processDirectPayment({
     // Original condition was: if (matchWithLease?.landlordSignedAt && matchWithLease?.tenantSignedAt && !matchWithLease.booking)
     if (!matchWithLease.booking) {
       
-      console.log('✅ Payment successful and no existing booking - creating booking now!');
-      
+      console.log('✅ Payment initiated and no existing booking - creating booking now!');
+
       try {
         const booking = await prisma.booking.create({
           data: {
@@ -261,11 +297,12 @@ export async function processDirectPayment({
             startDate: match.trip.startDate!,
             endDate: match.trip.endDate!,
             monthlyRent: match.monthlyRent,
-            status: 'confirmed'
+            status: bookingStatus,  // Use calculated status based on payment type
+            paymentStatus: bookingPaymentStatus,  // Track payment settlement status
           }
         });
 
-        console.log('✅ Booking created successfully:', booking.id);
+        console.log('✅ Booking created successfully:', booking.id, 'with status:', bookingStatus);
       } catch (bookingError) {
         console.error('❌ Failed to create booking:', bookingError);
         // Don't fail the payment if booking creation fails

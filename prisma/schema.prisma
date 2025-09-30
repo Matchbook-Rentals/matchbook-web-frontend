@@ -46,6 +46,10 @@ model User {
   stripeChargesEnabled    Boolean?  @default(false)  // Can accept payments
   stripePayoutsEnabled    Boolean?  @default(false)  // Can receive payouts
   stripeDetailsSubmitted  Boolean?  @default(false)  // Completed onboarding form
+  // Stripe Connect account health tracking (from connect webhooks)
+  stripeAccountStatus     String?   // "enabled", "pending", "restricted", "disabled"
+  stripeRequirementsDue   String?   @db.Text // JSON array of missing verification requirements
+  stripeAccountLastChecked DateTime? // Last time we checked account status via webhook
   firstName        String?
   lastName         String?
   fullName         String?
@@ -457,8 +461,14 @@ model Booking {
   rentPayments RentPayment[]
 
   createdAt DateTime @default(now())
-  status    String   @default("reserved")
+  status    String   @default("reserved")  // "reserved", "pending_payment", "confirmed", "payment_failed", "cancelled"
   moveInCompletedAt DateTime?
+
+  // Payment tracking fields for ACH recovery flow
+  paymentStatus         String?   // "pending", "processing", "settled", "failed"
+  paymentFailureCode    String?   // Stripe failure code (R01, R02, R07, etc)
+  paymentFailureMessage String?   @db.Text // Human-readable failure reason
+  paymentSettledAt      DateTime? // When ACH payment actually cleared (vs authorized)
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -729,9 +739,13 @@ model Match {
   paymentAuthorizedAt   DateTime?
   paymentAmount         Int?
   paymentCapturedAt     DateTime?
-  paymentStatus         String?
+  paymentStatus         String?   // "authorized", "processing", "captured", "failed"
   tenantSignedAt        DateTime?
   landlordSignedAt      DateTime?
+
+  // Payment failure tracking for ACH recovery flow
+  paymentFailureCode    String?   // Stripe error code (R01, R02, R07, etc)
+  paymentFailureMessage String?   @db.Text // Human-readable failure reason
 
   trip          Trip           @relation(fields: [tripId], references: [id])
   listing       Listing        @relation(fields: [listingId], references: [id])
