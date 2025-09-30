@@ -76,7 +76,8 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
       text-align: center;
     }
     .message-wrapper {
-      background-color: #f5f5f5;
+      background-color: rgba(11, 110, 110, 0.2);
+      background-color: #e0f2f2; /* Gmail fallback - converts rgba to solid color */
       border-radius: 20px;
       padding: 20px;
     }
@@ -157,6 +158,8 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
     .social-icon img {
       display: block;
       margin: 0 auto;
+      filter: none !important;
+      mix-blend-mode: normal !important;
     }
     .footer {
       font-size: 14px;
@@ -177,7 +180,7 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
         color: #ffffff !important;
       }
       .message-wrapper {
-        background-color: #1a1a1a !important;
+        background-color: #000000 !important;
       }
       .inner-box {
         background-color: #2a2a2a !important;
@@ -195,26 +198,78 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
       .footer {
         color: #ffffff !important;
       }
+      /* Gmail-specific dark mode text fixes */
+      .header, .header span {
+        color: #ffffff !important;
+      }
+      .title, .title span {
+        color: #ffffff !important;
+      }
+      .content-title, .content-title span {
+        color: #ffffff !important;
+      }
+      .sender-line, .sender-line span {
+        color: #ffffff !important;
+      }
+      .content-paragraph, .content-paragraph span {
+        color: #ffffff !important;
+      }
+    }
+
+    /* Gmail-specific targeting - only affects Gmail */
+    u + .body .gmail-text {
+      color: #000000 !important;
+    }
+
+    /* Gmail footer text - needs different handling */
+    u + .body .gmail-footer-text {
+      color: #1c1c1c !important;
+    }
+
+    /* Gmail dark mode: force text to be white in Gmail's dark mode */
+    @media (prefers-color-scheme: dark) {
+      u + .body .gmail-text {
+        color: #ffffff !important;
+      }
+      u + .body .gmail-footer-text {
+        color: #ffffff !important;
+      }
+      /* Gmail dark mode backgrounds */
+      u + .body .message-wrapper[bgcolor] {
+        background-color: #1a1a1a !important;
+      }
+      u + .body .inner-box[bgcolor] {
+        background-color: #2a2a2a !important;
+      }
+    }
+
+    /* Gmail-specific image protection */
+    [data-ogsc] img {
+      filter: none !important;
     }
   </style>
 </head>
-<body>
+<body class="body">
+  <!-- Gmail detection hack -->
+  <div style="display: none; max-height: 0; overflow: hidden;">
+    <u></u>
+  </div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
     <tr>
       <td align="center">
         <table role="presentation" class="container" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td class="header">
-              ${companyName}
+              <span class="gmail-text" style="color: #000000;">${companyName}</span>
             </td>
           </tr>
           <tr>
             <td class="title">
-              ${headerText}
+              <span class="gmail-text" style="color: #000000;">${headerText}</span>
             </td>
           </tr>
           <tr>
-            <td class="message-wrapper">
+            <td class="message-wrapper" bgcolor="#e0f2f2">
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 ${tagLink ? `
                 <tr>
@@ -228,19 +283,19 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
                 ${contentTitle ? `
                 <tr>
                   <td class="content-title">
-                    ${contentTitle}
+                    <span class="gmail-text" style="color: #000000;">${contentTitle}</span>
                   </td>
                 </tr>
                 ` : ''}
                 <tr>
-                  <td class="inner-box">
+                  <td class="inner-box" bgcolor="#ffffff">
                     ${senderLine ? `
                     <p class="sender-line">
-                      ${senderLine}
+                      <span class="gmail-text" style="color: #000000;">${senderLine}</span>
                     </p>
                     ` : ''}
                     ${contentText.split('\n\n').map((paragraph, index) =>
-                      `<p class="content-paragraph ${index === 0 ? 'first' : ''}">${paragraph}</p>`
+                      `<p class="content-paragraph ${index === 0 ? 'first' : ''}"><span class="gmail-text" style="color: #000000;">${paragraph}</span></p>`
                     ).join('')}
                     ${footerText ? `
                     <p class="footer-text">
@@ -276,6 +331,7 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
                   alt="Facebook"
                   width="24"
                   height="24"
+                  style="filter: none !important; mix-blend-mode: normal !important; color-scheme: light !important;"
                 />
               </a>
               <a href="https://www.instagram.com/matchbookrentals" class="social-icon">
@@ -284,6 +340,7 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
                   alt="Instagram"
                   width="24"
                   height="24"
+                  style="filter: none !important; mix-blend-mode: normal !important; color-scheme: light !important;"
                 />
               </a>
               <a href="https://twitter.com/matchbookrent" class="social-icon">
@@ -292,6 +349,7 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
                   alt="X (Twitter)"
                   width="24"
                   height="24"
+                  style="filter: none !important; mix-blend-mode: normal !important; color-scheme: light !important;"
                 />
               </a>
               <a href="https://www.tiktok.com/@matchbookrentals" class="social-icon">
@@ -300,15 +358,16 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
                   alt="TikTok"
                   width="24"
                   height="24"
+                  style="filter: none !important; mix-blend-mode: normal !important; color-scheme: light !important;"
                 />
               </a>
             </td>
           </tr>
           <tr>
             <td class="footer">
-              <strong>${companyName}</strong><br />
-              ${companyAddress}<br />
-              ${companyCity}<br />
+              <strong><span class="gmail-footer-text">${companyName}</span></strong><br />
+              <span class="gmail-footer-text">${companyAddress}</span><br />
+              <span class="gmail-footer-text">${companyCity}</span><br />
               <a href="https://${companyWebsite}" class="footer-link">
                 ${companyWebsite}
               </a>
