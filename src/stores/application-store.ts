@@ -91,8 +91,8 @@ interface Income {
 }
 
 interface QuestionnaireAnswers {
-  evicted: boolean;
-  felony: boolean;
+  evicted: boolean | null;
+  felony: boolean | null;
   felonyExplanation: string;
   evictedExplanation: string;
 }
@@ -157,8 +157,8 @@ export const initialState = {
   preservedResidentialHistory: [] as ResidentialHistory[], // Store for preserving data when trimming
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
   answers: {
-    evicted: false,
-    felony: false,
+    evicted: null,
+    felony: null,
     felonyExplanation: '',
     evictedExplanation: ''
   },
@@ -345,8 +345,8 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
           }))
         : [{ source: '', monthlyAmount: '', imageUrl: '' }],
       answers: {
-        evicted: application.evicted || false,
-        felony: application.felony || false,
+        evicted: application.evicted ?? null,
+        felony: application.felony ?? null,
         felonyExplanation: application.felonyExplanation || '',
         evictedExplanation: application.evictedExplanation || ''
       }

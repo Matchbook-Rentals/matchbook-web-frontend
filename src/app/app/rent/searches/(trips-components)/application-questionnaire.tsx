@@ -126,7 +126,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
                     setShouldFocusFelony(true);
                   }
                 }}
-                value={answers.felony?.toString()}
+                value={answers.felony === null ? undefined : answers.felony.toString()}
                 className={`flex items-center ${isMobile ? 'gap-4' : 'gap-6'} relative self-stretch w-full flex-[0_0_auto]`}
               >
                 <div className="flex items-center gap-2 relative">
@@ -206,7 +206,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
                     setShouldFocusEvicted(true);
                   }
                 }}
-                value={answers.evicted?.toString()}
+                value={answers.evicted === null ? undefined : answers.evicted.toString()}
                 className={`flex items-center ${isMobile ? 'gap-4' : 'gap-6'} relative self-stretch w-full flex-[0_0_auto]`}
               >
                 <div className="flex items-center gap-2 relative">
