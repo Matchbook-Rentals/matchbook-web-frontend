@@ -47,7 +47,7 @@ const guestFaqData = [
   },
   {
     "question": "What happens if I need to cancel a booking?",
-    "answer": "We offer a 24-hour, no-questions-asked cancellation policy. If you cancel within 24 hours of booking, you'll be refunded all of the rent due at booking. After 24 hours but before move-in day that money is nonrefundable. The amount due at booking is set by the hosts. If you need to modify your booking after moving in, reach out to your host."
+    "answer": "If you need to cancel a booking, please contact your Host directly. Cancellations and refunds are initiated by Hosts and are governed by your Rental Agreement and applicable law."
   },
   {
     "question": "Can I apply to multiple properties at once?",
