@@ -4,7 +4,7 @@ import prisma from '@/lib/prismadb'
 import { checkAdminAccess } from '@/utils/roles'
 import { revalidatePath } from 'next/cache'
 
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 9;
 
 interface GetPendingListingsParams {
   page?: number;
@@ -74,6 +74,7 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
       const userData = userMap.get(listing.userId);
       return {
         ...listing,
+        createdAt: listing.createdAt.toISOString(), // Serialize Date to string
         user: userData ? {
           ...userData,
           fullName: userData.firstName && userData.lastName

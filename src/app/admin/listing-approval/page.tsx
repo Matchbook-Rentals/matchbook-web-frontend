@@ -2,7 +2,7 @@ import { getPendingListings } from '../listing-approval-actions'
 import ListingApproval from '../listing-approval'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-const PAGE_SIZE = 10; // Or fetch from config/constants
+const PAGE_SIZE = 9; // Or fetch from config/constants
 
 interface ListingApprovalPageProps {
   searchParams?: {
