@@ -1,7 +1,9 @@
 /**
  * Stripe Connect Webhook Handler
  *
- * Processes webhook events for connected accounts (hosts).
+ * ⚠️ DEPRECATED: This endpoint is deprecated. Please use /api/webhooks/stripe instead.
+ * This unified endpoint handles both payment and Connect events with a single webhook secret.
+ *
  * For complete event details and business logic, see:
  * - /docs/webhooks/stripe.md - Stripe webhook documentation
  * - /docs/webhooks/master.md - All webhook endpoints

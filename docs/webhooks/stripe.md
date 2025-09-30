@@ -6,10 +6,19 @@ This document describes all Stripe webhook events that Matchbook monitors, the b
 
 ## Overview
 
-Matchbook uses two separate webhook endpoints to monitor different aspects of Stripe integration:
+Matchbook uses a **unified webhook endpoint** to monitor all Stripe events:
 
-1. **Payment Webhooks** (`/api/payment-webhook`) - Monitors payment lifecycle events
-2. **Connect Webhooks** (`/api/connect-webhook`) - Monitors connected account (host) status
+**Endpoint**: `/api/webhooks/stripe`
+
+This single endpoint handles:
+1. **Payment Events** - Payment lifecycle (processing, succeeded, failed)
+2. **Connect Events** - Connected account (host) status and health
+
+### Benefits of Unified Approach
+- ✅ **One webhook secret** (`STRIPE_WEBHOOK_SECRET`) instead of two
+- ✅ **One Stripe Dashboard configuration** instead of two endpoints
+- ✅ **Simplified deployment** and maintenance
+- ✅ **Business logic still separated** by concern in handler modules
 
 ## Architecture: Destination Charges
 
@@ -23,7 +32,8 @@ Matchbook uses **Destination Charges** for payment processing:
 
 ## 1. Payment Webhook Events
 
-**Endpoint**: `/api/payment-webhook/route.ts`
+**Endpoint**: `/api/webhooks/stripe/route.ts`
+**Handler Module**: `/src/lib/webhooks/stripe-payment-handler.ts`
 **Stripe Dashboard**: Developers → Webhooks → Add endpoint (standard webhook)
 
 ### Events We Monitor
@@ -156,8 +166,9 @@ Matchbook uses **Destination Charges** for payment processing:
 
 ## 2. Connect Webhook Events
 
-**Endpoint**: `/api/connect-webhook/route.ts`
-**Stripe Dashboard**: Developers → Webhooks → Add endpoint → Select "Connect" type
+**Endpoint**: `/api/webhooks/stripe/route.ts` (same unified endpoint)
+**Handler Module**: `/src/lib/webhooks/stripe-connect-handler.ts`
+**Stripe Dashboard**: Same endpoint as payment events
 
 These events monitor the health and status of connected accounts (hosts on your platform).
 
@@ -446,8 +457,9 @@ Pause bookings
 ## Implementation Files
 
 ### Webhook Handlers
-- `/src/app/api/payment-webhook/route.ts` - Payment lifecycle events
-- `/src/app/api/connect-webhook/route.ts` - Connected account events
+- `/src/app/api/webhooks/stripe/route.ts` - Unified webhook endpoint
+- `/src/lib/webhooks/stripe-payment-handler.ts` - Payment event handlers
+- `/src/lib/webhooks/stripe-connect-handler.ts` - Connect event handlers
 
 ### Email Notifications
 - `/src/lib/emails.ts`:
@@ -472,11 +484,8 @@ Pause bookings
 ### Local Testing with Stripe CLI
 
 ```bash
-# Listen for payment webhooks
-stripe listen --forward-to localhost:3000/api/payment-webhook
-
-# Listen for Connect webhooks
-stripe listen --forward-connect-to localhost:3000/api/connect-webhook
+# Listen for ALL Stripe webhooks (unified endpoint)
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 # Trigger test events
 stripe trigger payment_intent.succeeded

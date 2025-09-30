@@ -12,16 +12,27 @@ Webhooks allow external services to notify Matchbook of events in real-time. Eac
 
 ### Payment & Financial Webhooks
 
-#### 1. Stripe Payment Webhooks
-**Endpoint**: `/api/payment-webhook`
+#### 1. Stripe Webhooks (Unified) ⭐ NEW
+**Endpoint**: `/api/webhooks/stripe`
 **Service**: Stripe
-**Purpose**: Payment lifecycle events (success, failure, processing)
+**Purpose**: ALL Stripe events (payment + Connect account monitoring)
 **Documentation**: [`/docs/webhooks/stripe.md`](./stripe.md)
 
 **Events Handled**:
-- `payment_intent.processing` - ACH payment initiated
-- `payment_intent.succeeded` - Payment completed
-- `payment_intent.payment_failed` - Payment failed
+- **Payment Events**:
+  - `payment_intent.processing` - ACH payment initiated
+  - `payment_intent.succeeded` - Payment completed
+  - `payment_intent.payment_failed` - Payment failed
+- **Connect Account Events**:
+  - `account.updated` - Account status/capability changes
+  - `account.application.deauthorized` - Host disconnects
+  - `person.updated` - Identity verification updates
+  - `account.external_account.updated` - Bank account changes
+
+**Benefits**:
+- ✅ Single webhook secret to manage
+- ✅ One Stripe Dashboard configuration
+- ✅ Simplified deployment
 
 **Related Documentation**:
 - [Payment Specification](/docs/payment-spec.md)
@@ -29,20 +40,19 @@ Webhooks allow external services to notify Matchbook of events in real-time. Eac
 
 ---
 
-#### 2. Stripe Connect Webhooks
+#### 2. Stripe Payment Webhooks (DEPRECATED)
+**Endpoint**: `/api/payment-webhook`
+**Service**: Stripe
+**Status**: ⚠️ **DEPRECATED** - Use `/api/webhooks/stripe` instead
+**Purpose**: Legacy payment webhook endpoint
+
+---
+
+#### 3. Stripe Connect Webhooks (DEPRECATED)
 **Endpoint**: `/api/connect-webhook`
 **Service**: Stripe Connect
-**Purpose**: Monitor connected account (host) health and status
-**Documentation**: [`/docs/webhooks/stripe.md`](./stripe.md)
-
-**Events Handled**:
-- `account.updated` - Account status/capability changes
-- `account.application.deauthorized` - Host disconnects
-- `person.updated` - Identity verification updates
-- `account.external_account.updated` - Bank account changes
-
-**Related Documentation**:
-- [Stripe Webhooks](/docs/webhooks/stripe.md)
+**Status**: ⚠️ **DEPRECATED** - Use `/api/webhooks/stripe` instead
+**Purpose**: Legacy Connect webhook endpoint
 
 ---
 

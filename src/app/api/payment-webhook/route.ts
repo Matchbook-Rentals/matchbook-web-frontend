@@ -1,11 +1,13 @@
 /**
  * Stripe Payment Webhook Handler
  *
- * Processes async webhook events from Stripe (payment success/failure).
+ * ⚠️ DEPRECATED: This endpoint is deprecated. Please use /api/webhooks/stripe instead.
+ * This unified endpoint handles both payment and Connect events with a single webhook secret.
+ *
  * For webhook event details and flow, see:
- * - /docs/payment-spec.md - Payment flow and specification
  * - /docs/webhooks/stripe.md - Complete webhook event documentation
  * - /docs/webhooks/master.md - All webhook endpoints
+ * - /docs/payment-spec.md - Payment flow and specification
  */
 import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
