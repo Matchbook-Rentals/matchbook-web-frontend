@@ -89,8 +89,8 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   </p>
                 </div>
                 <div className="relative w-full max-w-[173px]">
-                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg border border-red-500">$</span>
-                  <span className="absolute inset-y-0 right-3 flex items-center text-gray-500 text-lg border border-red-500">/mo</span>
+                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
+                  <span className="absolute inset-y-0 right-3 flex items-center text-gray-500 text-lg">/mo</span>
                   <Input
                     className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 pr-12 text-lg"
                     value={formatNumberWithCommas(petRent)}
