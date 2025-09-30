@@ -490,9 +490,11 @@ model Match {
 
 ## Webhook Events
 
-> **📚 For comprehensive webhook documentation**, see [`/docs/stripe-webhooks.md`](./stripe-webhooks.md)
+> **📚 For comprehensive webhook documentation**, see:
+> - [`/docs/webhooks/stripe.md`](./webhooks/stripe.md) - Stripe webhook events
+> - [`/docs/webhooks/master.md`](./webhooks/master.md) - All webhook endpoints
 >
-> That document covers ALL webhook events (payment + Connect account monitoring), business logic, status flows, and testing details.
+> These documents cover ALL webhook events (payment + Connect account monitoring), business logic, status flows, and testing details.
 
 ### Webhook Endpoint
 **File**: `src/app/api/payment-webhook/route.ts`

@@ -712,6 +712,7 @@ src/
 
 ## See Also
 
-- `/docs/stripe-webhooks.md` - Webhook event documentation
+- `/docs/webhooks/stripe.md` - Stripe webhook event documentation
+- `/docs/webhooks/master.md` - All webhook endpoints
 - `/docs/payment-spec.md` - Payment flow specification
 - `/src/app/app/rent/match/[matchId]/retry-payment/README.md` - Retry payment UI spec

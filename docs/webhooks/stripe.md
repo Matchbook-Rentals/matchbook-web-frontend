@@ -2,6 +2,8 @@
 
 This document describes all Stripe webhook events that Matchbook monitors, the business logic that executes for each event, and crucial events we currently don't handle.
 
+> **📚 For a complete list of all webhook endpoints** (not just Stripe), see [`/docs/webhooks/master.md`](./master.md)
+
 ## Overview
 
 Matchbook uses two separate webhook endpoints to monitor different aspects of Stripe integration:
@@ -114,10 +116,12 @@ Matchbook uses **Destination Charges** for payment processing:
    - `status = 'payment_failed'`
    - `paymentStatus = 'failed'`
    - Store failure code and message
-4. Send failure emails to BOTH parties:
-   - **Renter**: Urgent action required, retry link, 48-hour countdown
-   - **Host**: Informational notification about payment issue
-5. Start 48-hour cancellation timer (future: cron job)
+4. Create in-app notifications for both parties:
+   - **Renter**: Links to `/app/rent/booking/[bookingId]/payment-failure`
+   - **Host**: Links to `/app/host/booking/[bookingId]/payment-failure`
+5. Send failure emails to BOTH parties:
+   - **Renter**: Urgent action required, link to payment failure page, 48-hour countdown
+   - **Host**: Informational notification with link to monitor status
 
 **Why this matters**: ACH failures can happen days after the initial authorization. The renter thought everything was fine, but their bank rejected it. We need to notify both parties immediately and provide a recovery path.
 

@@ -463,7 +463,8 @@ pending → processing → settled   (Happy path)
 
 ## Related Documentation
 
-- **Complete webhook events**: `/docs/stripe-webhooks.md`
+- **Complete webhook events**: `/docs/webhooks/stripe.md`
+- **All webhook endpoints**: `/docs/webhooks/master.md`
 - **Payment specification**: `/docs/payment-spec.md`
 - **Failure page implementation**: `/docs/ach-payment-failure-pages.md`
 - **Retry payment UI**: `/src/app/app/rent/match/[matchId]/retry-payment/README.md`

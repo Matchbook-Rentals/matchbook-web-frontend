@@ -58,7 +58,7 @@ export async function processDirectPayment({
     }
 
     // Verify the host's account can accept charges
-    // See /docs/stripe-webhooks.md for account status details
+    // See /docs/webhooks/stripe.md for account status details
     if (!match.listing.user?.stripeChargesEnabled) {
       console.error(`❌ Host ${match.listing.userId} cannot accept charges`, {
         stripeChargesEnabled: match.listing.user?.stripeChargesEnabled,

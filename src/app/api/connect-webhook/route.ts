@@ -2,7 +2,9 @@
  * Stripe Connect Webhook Handler
  *
  * Processes webhook events for connected accounts (hosts).
- * For complete event details and business logic, see /docs/stripe-webhooks.md
+ * For complete event details and business logic, see:
+ * - /docs/webhooks/stripe.md - Stripe webhook documentation
+ * - /docs/webhooks/master.md - All webhook endpoints
  */
 import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';

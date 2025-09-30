@@ -4,7 +4,8 @@
  * Processes async webhook events from Stripe (payment success/failure).
  * For webhook event details and flow, see:
  * - /docs/payment-spec.md - Payment flow and specification
- * - /docs/stripe-webhooks.md - Complete webhook event documentation
+ * - /docs/webhooks/stripe.md - Complete webhook event documentation
+ * - /docs/webhooks/master.md - All webhook endpoints
  */
 import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
