@@ -358,11 +358,10 @@ export function buildNotificationEmailData(
   // Add special formatting for message notifications
   if (actionType === 'message' && additionalData?.senderName) {
     emailData.senderLine = `From ${additionalData.senderName},`;
-    emailData.footerText = `You have a new message from ${additionalData.senderName}`;
-    
+
     // Add tagLink for conversation with listing title
     if (additionalData.conversationId) {
-      const linkText = additionalData.listingTitle 
+      const linkText = additionalData.listingTitle
         ? `RE: ${additionalData.listingTitle}`
         : 'RE: Listing you liked';
       emailData.tagLink = {
@@ -370,27 +369,31 @@ export function buildNotificationEmailData(
         url: `${process.env.NEXT_PUBLIC_URL}/app/messages?convo=${additionalData.conversationId}`
       };
     }
-    
-    // Truncate message preview if too long
-    if (additionalData.messageContent) {
-      const preview = additionalData.messageContent.length > 200 
-        ? additionalData.messageContent.substring(0, 197) + '...'
-        : additionalData.messageContent;
-      emailData.contentText = preview;
+
+    // Display message preview (already truncated to 1000 chars in cron job)
+    if (additionalData.messagePreview) {
+      emailData.contentText = additionalData.messagePreview;
     }
   }
 
   // Add special formatting for new conversation notifications
   if (actionType === 'new_conversation' && additionalData?.senderName) {
     emailData.senderLine = `From ${additionalData.senderName},`;
-    emailData.footerText = `You have a new conversation with ${additionalData.senderName}`;
-    
-    // Truncate message preview if too long
+
+    // Add tagLink for conversation with listing title (same as message type)
+    if (additionalData.conversationId) {
+      const linkText = additionalData.listingTitle
+        ? `RE: ${additionalData.listingTitle}`
+        : 'RE: Listing you liked';
+      emailData.tagLink = {
+        text: linkText,
+        url: `${process.env.NEXT_PUBLIC_URL}/app/messages?convo=${additionalData.conversationId}`
+      };
+    }
+
+    // Display message preview (already truncated to 1000 chars in cron job)
     if (additionalData.messagePreview) {
-      const preview = additionalData.messagePreview.length > 200 
-        ? additionalData.messagePreview.substring(0, 197) + '...'
-        : additionalData.messagePreview;
-      emailData.contentText = preview;
+      emailData.contentText = additionalData.messagePreview;
     }
   }
 
@@ -409,7 +412,6 @@ export function buildNotificationEmailData(
     
     // Format the email body
     emailData.contentText = `Hi ${hostName},\n\nYou've received a new application from ${renterName} for your listing${dateRange ? `: ${dateRange}` : ''}.`;
-    emailData.footerText = `New application to ${listingTitle}${dateRange ? ` for ${dateRange}` : ''}`;
   }
 
   // Add special formatting for application approved notifications
@@ -420,7 +422,6 @@ export function buildNotificationEmailData(
     
     // Format the email body
     emailData.contentText = `Hi ${renterFirstName},\n\nGreat news, your application for "${listingTitle}" has been approved by ${hostName}.`;
-    emailData.footerText = `You have a Match!`;
   }
 
   // Add special formatting for application declined notifications

@@ -6,11 +6,13 @@ import { useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { toast } from '@/hooks/use-toast'
-import { Bell, Send, CheckCircle, XCircle, Loader2, Mail, Home, Check, UserPlus, Info, DollarSign, AlertTriangle, FileText, MessageSquare, Calendar, Eye, Code, Maximize2, Star, Users } from 'lucide-react'
+import { Bell, Send, CheckCircle, XCircle, Loader2, Mail, Home, Check, UserPlus, Info, DollarSign, AlertTriangle, FileText, MessageSquare, Calendar, Eye, Code, Maximize2, Star, Users, PlayCircle } from 'lucide-react'
 import { sendTestNotification } from './_actions'
 import { previewNotificationEmail } from './_preview-actions'
+import { runCheckUnreadMessagesCron } from './_run-cron-actions'
 import {
   Table,
   TableBody,
@@ -66,6 +68,11 @@ export default function NotificationTestPage() {
   const [isLoadingPreview, setIsLoadingPreview] = useState(false)
   const [showFullScreenPreview, setShowFullScreenPreview] = useState(false)
   const [activeTab, setActiveTab] = useState<'visual' | 'html'>('visual')
+  const [previewMode, setPreviewMode] = useState<'both' | 'light' | 'dark'>('both')
+  const [recipientEmail, setRecipientEmail] = useState<string>('')
+  const [initiatingNotificationId, setInitiatingNotificationId] = useState<string | null>(null)
+  const [runningCronNotificationId, setRunningCronNotificationId] = useState<string | null>(null)
+  const [initiatingMultipleNotificationId, setInitiatingMultipleNotificationId] = useState<string | null>(null)
 
   const notificationTypes: NotificationTypeConfig[] = [
     // Messages & Communication
@@ -393,26 +400,32 @@ export default function NotificationTestPage() {
         router.push('/unauthorized')
         return
       }
+      // Initialize recipient email with current user's email
+      if (user.primaryEmailAddress?.emailAddress) {
+        setRecipientEmail(user.primaryEmailAddress.emailAddress)
+      }
     }
     setIsLoading(false)
   }, [user, router])
 
   const handleSendNotification = async (notificationType: NotificationTypeConfig) => {
-    if (!user?.primaryEmailAddress?.emailAddress) {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!recipientEmail || !emailRegex.test(recipientEmail)) {
       toast({
         title: "Error",
-        description: "No email address found for current user",
+        description: "Please enter a valid email address",
         variant: "destructive"
       })
       return
     }
 
     setSendingNotificationId(notificationType.id)
-    
+
     try {
       const result = await sendTestNotification({
         type: notificationType.id,
-        recipientEmail: user.primaryEmailAddress.emailAddress,
+        recipientEmail: recipientEmail,
         ...notificationType.sampleData
       })
 
@@ -481,7 +494,7 @@ export default function NotificationTestPage() {
       if (result.success) {
         toast({
           title: "Success",
-          description: `Test "${notificationType.name}" notification sent to ${user.primaryEmailAddress.emailAddress}`,
+          description: `Test "${notificationType.name}" notification sent to ${recipientEmail}`,
         })
       } else {
         toast({
@@ -569,10 +582,137 @@ export default function NotificationTestPage() {
     admin: 'Admin'
   }
 
+  // Helper functions to inject color-scheme CSS
+  const getLightModeHtml = (html: string) => {
+    return html.replace('<html>', '<html style="color-scheme: light;">');
+  };
+
+  const getDarkModeHtml = (html: string) => {
+    return html.replace('<html>', '<html style="color-scheme: dark;">');
+  };
+
+  const handleInitiateNotification = async (notificationType: NotificationTypeConfig) => {
+    if (notificationType.id !== 'new_conversation') {
+      toast({
+        title: "Not Implemented",
+        description: "Initiate button only works for new_conversation currently",
+        variant: "destructive"
+      })
+      return
+    }
+
+    setInitiatingNotificationId(notificationType.id)
+
+    try {
+      const { initiateNewConversation } = await import('./_initiate-actions')
+      const result = await initiateNewConversation()
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: result.message || "Test event initiated successfully",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to initiate test event",
+          variant: "destructive"
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      })
+    } finally {
+      setInitiatingNotificationId(null)
+    }
+  }
+
+  const handleInitiateMultipleMessages = async (notificationType: NotificationTypeConfig) => {
+    // Only allow for message and new_conversation types
+    if (notificationType.id !== 'message' && notificationType.id !== 'new_conversation') {
+      toast({
+        title: "Not Applicable",
+        description: "Initiate Multiple only works for message and new_conversation types",
+        variant: "destructive"
+      })
+      return
+    }
+
+    setInitiatingMultipleNotificationId(notificationType.id)
+
+    try {
+      const { initiateMultipleMessages } = await import('./_initiate-actions')
+      const result = await initiateMultipleMessages()
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: result.message || "Multiple test messages initiated successfully",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to initiate multiple messages",
+          variant: "destructive"
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      })
+    } finally {
+      setInitiatingMultipleNotificationId(null)
+    }
+  }
+
+  const handleRunCronJob = async (notificationType: NotificationTypeConfig) => {
+    // Only allow for message and new_conversation types
+    if (notificationType.id !== 'message' && notificationType.id !== 'new_conversation') {
+      toast({
+        title: "Not Applicable",
+        description: "Run Cron Job only works for message and new_conversation types",
+        variant: "destructive"
+      })
+      return
+    }
+
+    setRunningCronNotificationId(notificationType.id)
+
+    try {
+      const result = await runCheckUnreadMessagesCron()
+
+      if (result.success) {
+        toast({
+          title: "Cron Job Completed",
+          description: result.message || "Check unread messages cron job completed successfully",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to run cron job",
+          variant: "destructive"
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred while running cron job",
+        variant: "destructive"
+      })
+    } finally {
+      setRunningCronNotificationId(null)
+    }
+  }
+
   const handlePreviewNotification = async (notification: NotificationTypeConfig) => {
     setPreviewingNotification(notification)
     setIsLoadingPreview(true)
-    
+
     try {
       const result = await previewNotificationEmail({
         type: notification.id,
@@ -609,9 +749,37 @@ export default function NotificationTestPage() {
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Notification Testing Suite</h1>
         <p className="text-muted-foreground">
-          Click &quot;Send to Admin&quot; to send test notifications to your email address: {user?.primaryEmailAddress?.emailAddress}
+          Send test notifications to any email address - perfect for sharing with design team and QA
         </p>
       </div>
+
+      {/* Recipient Email Input */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Send Notifications To</CardTitle>
+          <CardDescription>
+            Enter the email address where test notifications should be sent
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-2 items-center">
+            <Input
+              type="email"
+              value={recipientEmail}
+              onChange={(e) => setRecipientEmail(e.target.value)}
+              placeholder="recipient@example.com"
+              className="max-w-md"
+            />
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setRecipientEmail(user?.primaryEmailAddress?.emailAddress || '')}
+            >
+              Reset to My Email
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -683,6 +851,66 @@ export default function NotificationTestPage() {
                             </TableCell>
                             <TableCell className="text-right">
                               <div className="flex gap-2 justify-end">
+                                {/* Only show Initiate for new_conversation */}
+                                {notification.id === 'new_conversation' && (
+                                  <Button
+                                    size="sm"
+                                    variant="secondary"
+                                    onClick={() => handleInitiateNotification(notification)}
+                                    disabled={initiatingNotificationId === notification.id}
+                                  >
+                                    {initiatingNotificationId === notification.id ? (
+                                      <>
+                                        <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                        Initiating...
+                                      </>
+                                    ) : (
+                                      'Initiate'
+                                    )}
+                                  </Button>
+                                )}
+                                {/* Show Initiate Multiple for message and new_conversation */}
+                                {(notification.id === 'message' || notification.id === 'new_conversation') && (
+                                  <Button
+                                    size="sm"
+                                    variant="secondary"
+                                    onClick={() => handleInitiateMultipleMessages(notification)}
+                                    disabled={initiatingMultipleNotificationId === notification.id}
+                                  >
+                                    {initiatingMultipleNotificationId === notification.id ? (
+                                      <>
+                                        <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                        Initiating...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <MessageSquare className="mr-2 h-3 w-3" />
+                                        Initiate Multiple
+                                      </>
+                                    )}
+                                  </Button>
+                                )}
+                                {/* Show Run Cron Job for message and new_conversation */}
+                                {(notification.id === 'message' || notification.id === 'new_conversation') && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleRunCronJob(notification)}
+                                    disabled={runningCronNotificationId === notification.id}
+                                  >
+                                    {runningCronNotificationId === notification.id ? (
+                                      <>
+                                        <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                        Running...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <PlayCircle className="mr-2 h-3 w-3" />
+                                        Run Cron
+                                      </>
+                                    )}
+                                  </Button>
+                                )}
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -756,13 +984,61 @@ export default function NotificationTestPage() {
                   <TabsTrigger value="html">HTML Code</TabsTrigger>
                 </TabsList>
                 <TabsContent value="visual" className="mt-4">
-                  <div className="border rounded-lg bg-white overflow-hidden">
-                    <iframe
-                      srcDoc={previewHtml}
-                      className="w-full h-[600px]"
-                      title="Email Preview"
-                      sandbox="allow-same-origin"
-                    />
+                  {/* Theme Mode Toggle */}
+                  <div className="flex justify-center gap-2 mb-4">
+                    <Button
+                      size="sm"
+                      variant={previewMode === 'light' ? 'default' : 'outline'}
+                      onClick={() => setPreviewMode('light')}
+                    >
+                      Light Only
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={previewMode === 'both' ? 'default' : 'outline'}
+                      onClick={() => setPreviewMode('both')}
+                    >
+                      Both
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={previewMode === 'dark' ? 'default' : 'outline'}
+                      onClick={() => setPreviewMode('dark')}
+                    >
+                      Dark Only
+                    </Button>
+                  </div>
+
+                  {/* Preview Iframes */}
+                  <div className={`grid gap-4 ${previewMode === 'both' ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+                    {(previewMode === 'light' || previewMode === 'both') && (
+                      <div className="flex flex-col">
+                        <div className="text-sm font-medium mb-2 text-center">Light Mode</div>
+                        <div className="border rounded-lg bg-white overflow-hidden" style={{ colorScheme: 'light' }}>
+                          <iframe
+                            srcDoc={getLightModeHtml(previewHtml)}
+                            className="w-full h-[600px]"
+                            title="Email Preview Light"
+                            sandbox="allow-same-origin"
+                            style={{ colorScheme: 'light' }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {(previewMode === 'dark' || previewMode === 'both') && (
+                      <div className="flex flex-col">
+                        <div className="text-sm font-medium mb-2 text-center">Dark Mode</div>
+                        <div className="border rounded-lg overflow-hidden" style={{ backgroundColor: '#1a1a1a', colorScheme: 'dark' }}>
+                          <iframe
+                            srcDoc={getDarkModeHtml(previewHtml)}
+                            className="w-full h-[600px]"
+                            title="Email Preview Dark"
+                            sandbox="allow-same-origin"
+                            style={{ colorScheme: 'dark' }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </TabsContent>
                 <TabsContent value="html" className="mt-4">
@@ -795,19 +1071,65 @@ export default function NotificationTestPage() {
 
       {/* Fullscreen Preview Dialog */}
       <Dialog open={showFullScreenPreview} onOpenChange={setShowFullScreenPreview}>
-        <DialogContent className="max-w-4xl w-full h-[90vh]">
+        <DialogContent className="max-w-7xl w-full h-[90vh]">
           <DialogHeader>
-            <DialogTitle>
-              {previewingNotification?.name} - Email Preview
+            <DialogTitle className="flex items-center justify-between">
+              <span>{previewingNotification?.name} - Email Preview</span>
+              {/* Theme Mode Toggle in Fullscreen */}
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant={previewMode === 'light' ? 'default' : 'outline'}
+                  onClick={() => setPreviewMode('light')}
+                >
+                  Light
+                </Button>
+                <Button
+                  size="sm"
+                  variant={previewMode === 'both' ? 'default' : 'outline'}
+                  onClick={() => setPreviewMode('both')}
+                >
+                  Both
+                </Button>
+                <Button
+                  size="sm"
+                  variant={previewMode === 'dark' ? 'default' : 'outline'}
+                  onClick={() => setPreviewMode('dark')}
+                >
+                  Dark
+                </Button>
+              </div>
             </DialogTitle>
           </DialogHeader>
-          <div className="flex-1 overflow-hidden">
-            <iframe
-              srcDoc={previewHtml}
-              className="w-full h-full"
-              title="Email Preview Fullscreen"
-              sandbox="allow-same-origin"
-            />
+          <div className={`flex-1 overflow-hidden grid gap-4 ${previewMode === 'both' ? 'grid-cols-2' : 'grid-cols-1'}`}>
+            {(previewMode === 'light' || previewMode === 'both') && (
+              <div className="flex flex-col h-full">
+                <div className="text-sm font-medium mb-2 text-center">Light Mode</div>
+                <div className="border rounded-lg bg-white overflow-hidden flex-1" style={{ colorScheme: 'light' }}>
+                  <iframe
+                    srcDoc={getLightModeHtml(previewHtml)}
+                    className="w-full h-full"
+                    title="Email Preview Fullscreen Light"
+                    sandbox="allow-same-origin"
+                    style={{ colorScheme: 'light' }}
+                  />
+                </div>
+              </div>
+            )}
+            {(previewMode === 'dark' || previewMode === 'both') && (
+              <div className="flex flex-col h-full">
+                <div className="text-sm font-medium mb-2 text-center">Dark Mode</div>
+                <div className="border rounded-lg overflow-hidden flex-1" style={{ backgroundColor: '#1a1a1a', colorScheme: 'dark' }}>
+                  <iframe
+                    srcDoc={getDarkModeHtml(previewHtml)}
+                    className="w-full h-full"
+                    title="Email Preview Fullscreen Dark"
+                    sandbox="allow-same-origin"
+                    style={{ colorScheme: 'dark' }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
