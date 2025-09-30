@@ -115,6 +115,9 @@ model User {
   cancelledPayments           RentPayment[]         @relation("PaymentCancelledBy")
   reviewsWritten              Review[]              @relation("ReviewsWritten")
   reviewsReceived             Review[]              @relation("ReviewsReceived")
+  stripeDisputes              StripeDispute[]
+  refunds                     Refund[]
+  alertSubscription           AdminAlertSubscription?
 
   // Hospitable integration
   hospitableAccessToken   String?   @db.VarChar(1500)
@@ -478,6 +481,8 @@ model Booking {
   paymentTransactions PaymentTransaction[]
   bookingModifications BookingModification[]
   reviews             Review[]
+  stripeDisputes      StripeDispute[]
+  refunds             Refund[]
 
   @@index([tripId])
 }
@@ -752,6 +757,8 @@ model Match {
   BoldSignLease BoldSignLease?
   Lease         Lease?
   paymentTransactions PaymentTransaction[]
+  stripeDisputes      StripeDispute[]
+  refunds             Refund[]
 
   @@index([tripId])
   @@index([stripePaymentIntentId])
@@ -1211,6 +1218,131 @@ model PaymentTransaction {
   @@index([processedAt])
   @@index([matchId])
   @@index([bookingId])
+}
+
+model StripeDispute {
+  id                    String   @id @default(uuid())
+
+  // Stripe IDs
+  stripeDisputeId       String   @unique
+  stripeChargeId        String
+  stripePaymentIntentId String?
+
+  // Dispute details
+  amount                Int      // Amount disputed in cents
+  currency              String   @default("usd")
+  reason                String   // Stripe dispute reason
+  status                String   // "warning_needs_response", "needs_response", "under_review", "charge_refunded", "won", "lost"
+
+  // Evidence
+  evidenceDetails       String?  @db.Text // JSON of evidence requirements
+  evidenceSubmittedAt   DateTime?
+
+  // Timestamps
+  createdAt             DateTime @default(now())
+  dueBy                 DateTime? // When response is due
+  resolvedAt            DateTime?
+
+  // Relationships
+  matchId               String?
+  match                 Match?   @relation(fields: [matchId], references: [id])
+  bookingId             String?
+  booking               Booking? @relation(fields: [bookingId], references: [id])
+  userId                String   // Renter who initiated dispute
+  user                  User     @relation(fields: [userId], references: [id])
+
+  // Admin tracking
+  adminNotifiedAt       DateTime?
+  adminAssignedTo       String?  // Admin user ID handling this
+  adminNotes            String?  @db.Text
+
+  @@index([stripeDisputeId])
+  @@index([status])
+  @@index([bookingId])
+  @@index([createdAt])
+}
+
+model Refund {
+  id                    String   @id @default(uuid())
+
+  // Stripe IDs
+  stripeRefundId        String   @unique
+  stripeChargeId        String
+  stripePaymentIntentId String
+
+  // Refund details
+  amount                Int      // Amount refunded in cents
+  currency              String   @default("usd")
+  reason                String?  // "duplicate", "fraudulent", "requested_by_customer"
+  status                String   // "pending", "succeeded", "failed", "canceled"
+
+  // Type
+  refundType            String   // "full", "partial"
+
+  // Timestamps
+  createdAt             DateTime @default(now())
+  processedAt           DateTime?
+
+  // Relationships
+  matchId               String?
+  match                 Match?   @relation(fields: [matchId], references: [id])
+  bookingId             String?
+  booking               Booking? @relation(fields: [bookingId], references: [id])
+  userId                String   // User receiving refund
+  user                  User     @relation(fields: [userId], references: [id])
+
+  // Initiated by
+  initiatedBy           String   // "admin", "stripe", "host", "system"
+  initiatorId           String?  // Admin user ID if manually initiated
+
+  @@index([stripeRefundId])
+  @@index([bookingId])
+  @@index([createdAt])
+}
+
+model AdminAlertSubscription {
+  id                    String   @id @default(uuid())
+
+  // User/Admin info
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id])
+
+  // Phone verification
+  phoneNumber           String   // E.164 format: +1234567890
+  phoneVerified         Boolean  @default(false)
+  phoneVerifiedAt       DateTime?
+  verificationCode      String?  // Temporary code for verification
+  verificationSentAt    DateTime?
+  verificationAttempts  Int      @default(0)
+
+  // Alert preferences
+  alertsEnabled         Boolean  @default(true)
+
+  // Alert types (granular control)
+  alertOnDispute        Boolean  @default(true)
+  alertOnRefund         Boolean  @default(true)
+  alertOnPaymentFailure Boolean  @default(true)
+  alertOnTransferFailure Boolean @default(false)
+  alertOnMatchCreated   Boolean  @default(false)
+  alertOnBookingCreated Boolean  @default(false)
+  alertOnPaymentSuccess Boolean  @default(false)
+
+  // Quiet hours (optional)
+  quietHoursStart       String?  // HH:MM format, e.g., "22:00"
+  quietHoursEnd         String?  // HH:MM format, e.g., "08:00"
+  quietHoursTimezone    String?  // e.g., "America/New_York"
+
+  // Rate limiting
+  lastAlertSentAt       DateTime?
+  alertsSentToday       Int      @default(0)
+  dailyAlertLimit       Int      @default(50)
+
+  // Timestamps
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+  @@index([phoneNumber])
 }
 
 model BoldSignTemplate {

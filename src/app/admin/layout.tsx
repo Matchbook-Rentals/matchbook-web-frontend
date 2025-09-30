@@ -96,6 +96,16 @@ export default async function AdminLayout({
 
   const devToolsItems = [
     {
+      title: "SMS Alerts",
+      url: "/admin/sms-alerts",
+      icon: "Bell",
+    },
+    {
+      title: "Payment Issues",
+      url: "/admin/payment-issues",
+      icon: "AlertTriangle",
+    },
+    {
       title: "Stripe Integration",
       url: "/admin/stripe-integration",
       icon: "CreditCard",

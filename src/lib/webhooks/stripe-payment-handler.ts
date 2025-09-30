@@ -6,8 +6,22 @@
  */
 import prismadb from '@/lib/prismadb';
 import { sendPaymentSuccessEmail, sendPaymentFailureEmails, getHumanReadableFailureReason } from '@/lib/emails';
+import { sendDisputeAlert, sendRefundAlert, sendPaymentFailureAlert, sendBookingCreatedAlert, sendPaymentSuccessAlert } from '@/lib/sms-alerts';
+import {
+  PaymentIntentProcessingEvent,
+  PaymentIntentSucceededEvent,
+  PaymentIntentFailedEvent,
+  PaymentIntentCreatedEvent,
+  PaymentIntentCanceledEvent,
+  PaymentIntentAmountCapturableUpdatedEvent,
+  PaymentIntentRequiresActionEvent,
+  ChargeRefundedEvent,
+  ChargeDisputeCreatedEvent,
+  ChargeDisputeUpdatedEvent,
+  ChargeDisputeClosedEvent
+} from './stripe-event-types';
 
-export async function handlePaymentIntentProcessing(event: any): Promise<void> {
+export async function handlePaymentIntentProcessing(event: PaymentIntentProcessingEvent): Promise<void> {
   const paymentIntent = event.data.object;
   const { type, matchId } = paymentIntent.metadata;
 
@@ -46,7 +60,7 @@ export async function handlePaymentIntentProcessing(event: any): Promise<void> {
   }
 }
 
-export async function handlePaymentIntentSucceeded(event: any): Promise<void> {
+export async function handlePaymentIntentSucceeded(event: PaymentIntentSucceededEvent): Promise<void> {
   const paymentIntent = event.data.object;
   const { userId, type, matchId, hostUserId } = paymentIntent.metadata;
 
@@ -140,6 +154,17 @@ export async function handlePaymentIntentSucceeded(event: any): Promise<void> {
         }
 
         console.log(`Created booking ${booking.id} for match ${matchId}`);
+
+        // Send SMS alert for new booking
+        await sendBookingCreatedAlert({
+          bookingId: booking.id,
+          matchId: matchId,
+          listingAddress: match.listing.locationString || 'Unknown location',
+          renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim() || 'Unknown renter',
+          totalAmount: paymentIntent.amount,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+        });
       } else {
         // Update existing booking to confirmed status (for ACH payments)
         console.log(`Updating existing booking ${booking.id} to confirmed status`);
@@ -168,12 +193,21 @@ export async function handlePaymentIntentSucceeded(event: any): Promise<void> {
         // Don't fail the webhook if email fails
       }
 
+      // Send SMS alert for payment success
+      await sendPaymentSuccessAlert({
+        matchId,
+        bookingId: booking.id,
+        amount: paymentIntent.amount,
+        paymentMethod: paymentIntent.payment_method_types?.[0] || 'unknown',
+        renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim() || 'Unknown renter',
+      });
+
       console.log(`Match ${matchId} payment settled successfully`);
     }
   }
 }
 
-export async function handlePaymentIntentFailed(event: any): Promise<void> {
+export async function handlePaymentIntentFailed(event: PaymentIntentFailedEvent): Promise<void> {
   const paymentIntent = event.data.object;
   const { type, matchId } = paymentIntent.metadata;
 
@@ -244,7 +278,388 @@ export async function handlePaymentIntentFailed(event: any): Promise<void> {
         // Don't fail the webhook if email fails
       }
 
+      // Send SMS alert to subscribed admins
+      await sendPaymentFailureAlert({
+        matchId,
+        amount: paymentIntent.amount,
+        failureCode: failureCode,
+        paymentMethod: paymentIntent.payment_method_types?.[0],
+      });
+
       console.log(`Match ${matchId} payment marked as failed`);
     }
+  }
+}
+
+/**
+ * Handle payment_intent.created events
+ * Useful for audit trail and tracking all payment attempts
+ */
+export async function handlePaymentIntentCreated(event: PaymentIntentCreatedEvent): Promise<void> {
+  const paymentIntent = event.data.object;
+  const { type, matchId } = paymentIntent.metadata;
+
+  console.log(`💰 Payment intent created: ${paymentIntent.id}`);
+  console.log(`   Amount: $${(paymentIntent.amount / 100).toFixed(2)}`);
+  console.log(`   Type: ${type || 'unknown'}`);
+  console.log(`   Match ID: ${matchId || 'none'}`);
+
+  // TODO: Log to audit trail database table
+  // This helps track all payment attempts, including abandoned ones
+}
+
+/**
+ * Handle payment_intent.canceled events
+ * Occurs when a payment is explicitly canceled
+ */
+export async function handlePaymentIntentCanceled(event: PaymentIntentCanceledEvent): Promise<void> {
+  const paymentIntent = event.data.object;
+  const { type, matchId } = paymentIntent.metadata;
+
+  console.log(`❌ Payment intent canceled: ${paymentIntent.id}`);
+  console.log(`   Cancellation reason: ${paymentIntent.cancellation_reason || 'not provided'}`);
+  console.log(`   Match ID: ${matchId || 'none'}`);
+
+  if ((type === 'security_deposit_direct' || type === 'lease_deposit_and_rent') && matchId) {
+    // Update match and booking status
+    const match = await prismadb.match.findUnique({
+      where: { id: matchId },
+      include: { booking: true }
+    });
+
+    if (match) {
+      await prismadb.match.update({
+        where: { id: matchId },
+        data: {
+          paymentStatus: 'failed',
+          paymentFailureMessage: `Payment canceled: ${paymentIntent.cancellation_reason || 'user_canceled'}`
+        }
+      });
+
+      if (match.booking) {
+        await prismadb.booking.update({
+          where: { id: match.booking.id },
+          data: {
+            status: 'cancelled',
+            paymentStatus: 'failed'
+          }
+        });
+      }
+
+      console.log(`✓ Match ${matchId} marked as canceled`);
+    }
+  }
+
+  // TODO: Notify user about cancellation if needed
+}
+
+/**
+ * Handle payment_intent.amount_capturable_updated events
+ * Occurs when funds become available to capture (for manual capture flow)
+ */
+export async function handlePaymentIntentAmountCapturableUpdated(event: PaymentIntentAmountCapturableUpdatedEvent): Promise<void> {
+  const paymentIntent = event.data.object;
+  const { matchId } = paymentIntent.metadata;
+
+  console.log(`💵 Amount capturable updated for payment intent: ${paymentIntent.id}`);
+  console.log(`   Amount capturable: $${(paymentIntent.amount_capturable || 0) / 100}`);
+  console.log(`   Match ID: ${matchId || 'none'}`);
+
+  // Note: We use automatic capture, so this should rarely fire
+  // If we implement manual capture in the future, handle it here
+}
+
+/**
+ * Handle payment_intent.requires_action events
+ * Occurs when additional authentication is required (e.g., 3D Secure)
+ */
+export async function handlePaymentIntentRequiresAction(event: PaymentIntentRequiresActionEvent): Promise<void> {
+  const paymentIntent = event.data.object;
+  const { matchId } = paymentIntent.metadata;
+
+  console.log(`🔐 Payment requires action: ${paymentIntent.id}`);
+  console.log(`   Next action: ${paymentIntent.next_action ? JSON.stringify(paymentIntent.next_action) : 'none'}`);
+  console.log(`   Match ID: ${matchId || 'none'}`);
+
+  // Client-side Stripe Elements handles 3DS automatically
+  // This is logged for monitoring purposes
+  // TODO: If action not completed within X minutes, send reminder email
+}
+
+/**
+ * Handle charge.refunded events
+ * Occurs when a charge is refunded (full or partial)
+ */
+export async function handleChargeRefunded(event: ChargeRefundedEvent): Promise<void> {
+  const charge = event.data.object;
+  const paymentIntentId = charge.payment_intent;
+
+  console.log(`💸 Charge refunded: ${charge.id}`);
+  console.log(`   Payment intent: ${paymentIntentId}`);
+  console.log(`   Amount refunded: $${(charge.amount_refunded / 100).toFixed(2)}`);
+  console.log(`   Fully refunded: ${charge.refunded}`);
+
+  if (paymentIntentId) {
+    // Find match by payment intent ID
+    const match = await prismadb.match.findFirst({
+      where: { stripePaymentIntentId: paymentIntentId as string },
+      include: {
+        booking: true,
+        trip: { include: { user: true } }
+      }
+    });
+
+    if (match && match.booking) {
+      const refundType = charge.refunded ? 'full' : 'partial';
+
+      // Create refund record
+      try {
+        await prismadb.refund.create({
+          data: {
+            stripeRefundId: charge.id, // Using charge ID as unique identifier
+            stripeChargeId: charge.id,
+            stripePaymentIntentId: paymentIntentId as string,
+            amount: charge.amount_refunded,
+            currency: charge.currency,
+            reason: charge.refunded ? 'requested_by_customer' : undefined,
+            status: 'succeeded',
+            refundType: refundType,
+            processedAt: new Date(),
+            matchId: match.id,
+            bookingId: match.booking.id,
+            userId: match.trip.userId,
+            initiatedBy: 'stripe', // Refund initiated via Stripe Dashboard or API
+          }
+        });
+
+        console.log(`✓ Refund record created for booking ${match.booking.id}`);
+      } catch (refundError) {
+        console.error('Failed to create refund record:', refundError);
+        // Continue with booking update even if refund record fails
+      }
+
+      // Update booking status
+      await prismadb.booking.update({
+        where: { id: match.booking.id },
+        data: {
+          status: 'cancelled',
+        }
+      });
+
+      // Update payment transaction status if exists
+      const paymentTransaction = await prismadb.paymentTransaction.findFirst({
+        where: { stripePaymentIntentId: paymentIntentId as string }
+      });
+
+      if (paymentTransaction) {
+        await prismadb.paymentTransaction.update({
+          where: { id: paymentTransaction.id },
+          data: {
+            status: 'refunded',
+            refundedAt: new Date()
+          }
+        });
+        console.log(`✓ Payment transaction marked as refunded`);
+      }
+
+      console.log(`✓ Booking ${match.booking.id} marked as cancelled due to refund`);
+
+      // Send SMS alert to subscribed admins
+      await sendRefundAlert({
+        refundId: charge.id,
+        amount: charge.amount_refunded,
+        bookingId: match.booking.id,
+        refundType: refundType,
+      });
+
+      // TODO: Send refund confirmation email to renter
+      // TODO: Notify host about refund
+      // TODO: Make listing dates available again (remove ListingUnavailability)
+    }
+  }
+}
+
+/**
+ * Handle charge.dispute.created events
+ * Occurs when a customer disputes a charge (chargeback)
+ */
+export async function handleChargeDisputeCreated(event: ChargeDisputeCreatedEvent): Promise<void> {
+  const dispute = event.data.object;
+  const chargeId = dispute.charge;
+  const paymentIntentId = dispute.payment_intent;
+
+  console.log(`⚠️ DISPUTE CREATED: ${dispute.id}`);
+  console.log(`   Charge: ${chargeId}`);
+  console.log(`   Amount: $${(dispute.amount / 100).toFixed(2)}`);
+  console.log(`   Reason: ${dispute.reason}`);
+  console.log(`   Status: ${dispute.status}`);
+
+  // Find match and booking by payment intent ID
+  let match = null;
+  if (paymentIntentId) {
+    match = await prismadb.match.findFirst({
+      where: { stripePaymentIntentId: paymentIntentId as string },
+      include: {
+        booking: true,
+        trip: { include: { user: true } },
+        listing: { include: { user: true } }
+      }
+    });
+  }
+
+  // Create dispute record in database
+  try {
+    const disputeRecord = await prismadb.stripeDispute.create({
+      data: {
+        stripeDisputeId: dispute.id,
+        stripeChargeId: chargeId,
+        stripePaymentIntentId: paymentIntentId as string || null,
+        amount: dispute.amount,
+        currency: dispute.currency,
+        reason: dispute.reason,
+        status: dispute.status,
+        evidenceDetails: JSON.stringify(dispute.evidence_details),
+        dueBy: dispute.evidence_details?.due_by ? new Date(dispute.evidence_details.due_by * 1000) : null,
+        matchId: match?.id || null,
+        bookingId: match?.booking?.id || null,
+        userId: match?.trip?.userId || 'unknown',
+        adminNotifiedAt: new Date(), // Mark as notified since we'll send email
+      }
+    });
+
+    console.log(`✓ Dispute record created: ${disputeRecord.id}`);
+
+    // Update booking status if exists
+    if (match?.booking) {
+      await prismadb.booking.update({
+        where: { id: match.booking.id },
+        data: {
+          status: 'disputed', // Mark booking as disputed
+        }
+      });
+      console.log(`✓ Booking ${match.booking.id} marked as disputed`);
+    }
+
+    // Send SMS alert to subscribed admins
+    await sendDisputeAlert({
+      disputeId: dispute.id,
+      amount: dispute.amount,
+      bookingId: match?.booking?.id || null,
+      dueBy: dispute.evidence_details?.due_by || null,
+    });
+
+    // TODO: Send urgent notification email to admin
+    // TODO: Email host about dispute
+    // TODO: Pause host payouts if needed
+
+    console.error(`🚨 URGENT: Charge dispute created - manual review required!`);
+    console.error(`   Dispute ID: ${dispute.id}`);
+    console.error(`   Due by: ${dispute.evidence_details?.due_by ? new Date(dispute.evidence_details.due_by * 1000).toISOString() : 'Unknown'}`);
+    console.error(`   View in Stripe: https://dashboard.stripe.com${event.livemode ? '' : '/test'}/disputes/${dispute.id}`);
+
+  } catch (error) {
+    console.error('❌ Failed to create dispute record:', error);
+    console.error(`   Dispute ID: ${dispute.id} - Please handle manually!`);
+  }
+}
+
+/**
+ * Handle charge.dispute.updated events
+ * Occurs when dispute status changes
+ */
+export async function handleChargeDisputeUpdated(event: ChargeDisputeUpdatedEvent): Promise<void> {
+  const dispute = event.data.object;
+
+  console.log(`🔄 DISPUTE UPDATED: ${dispute.id}`);
+  console.log(`   New status: ${dispute.status}`);
+  console.log(`   Reason: ${dispute.reason}`);
+
+  // Update dispute record in database
+  try {
+    const existingDispute = await prismadb.stripeDispute.findUnique({
+      where: { stripeDisputeId: dispute.id }
+    });
+
+    if (existingDispute) {
+      await prismadb.stripeDispute.update({
+        where: { stripeDisputeId: dispute.id },
+        data: {
+          status: dispute.status,
+          evidenceDetails: JSON.stringify(dispute.evidence_details),
+          evidenceSubmittedAt: dispute.evidence_details?.submission_count && dispute.evidence_details.submission_count > 0
+            ? new Date()
+            : existingDispute.evidenceSubmittedAt,
+        }
+      });
+
+      console.log(`✓ Dispute record updated: ${existingDispute.id}`);
+
+      // TODO: Send status update notification to admin
+    } else {
+      console.warn(`⚠️ Dispute record not found for ${dispute.id} - may have been created before tracking`);
+    }
+  } catch (error) {
+    console.error('❌ Failed to update dispute record:', error);
+  }
+}
+
+/**
+ * Handle charge.dispute.closed events
+ * Occurs when dispute is resolved (won or lost)
+ */
+export async function handleChargeDisputeClosed(event: ChargeDisputeClosedEvent): Promise<void> {
+  const dispute = event.data.object;
+
+  console.log(`✅ DISPUTE CLOSED: ${dispute.id}`);
+  console.log(`   Final status: ${dispute.status}`);
+  console.log(`   Outcome: ${dispute.status === 'won' ? 'WON - Funds retained' : dispute.status === 'lost' ? 'LOST - Funds refunded to customer' : 'OTHER'}`);
+
+  // Update dispute record in database
+  try {
+    const existingDispute = await prismadb.stripeDispute.findUnique({
+      where: { stripeDisputeId: dispute.id },
+      include: { booking: true }
+    });
+
+    if (existingDispute) {
+      await prismadb.stripeDispute.update({
+        where: { stripeDisputeId: dispute.id },
+        data: {
+          status: dispute.status,
+          resolvedAt: new Date(),
+          evidenceDetails: JSON.stringify(dispute.evidence_details),
+        }
+      });
+
+      console.log(`✓ Dispute marked as resolved: ${existingDispute.id}`);
+
+      // Update booking status based on outcome
+      if (existingDispute.bookingId) {
+        let newBookingStatus = existingDispute.booking?.status || 'confirmed';
+
+        if (dispute.status === 'lost' || dispute.status === 'charge_refunded') {
+          newBookingStatus = 'cancelled'; // Lost dispute = refunded
+        } else if (dispute.status === 'won') {
+          newBookingStatus = 'confirmed'; // Won dispute = booking stands
+        }
+
+        await prismadb.booking.update({
+          where: { id: existingDispute.bookingId },
+          data: { status: newBookingStatus }
+        });
+
+        console.log(`✓ Booking ${existingDispute.bookingId} status updated to: ${newBookingStatus}`);
+      }
+
+      // TODO: Send resolution notification to admin
+      // TODO: Notify host about outcome
+      // TODO: If won, release any paused payouts
+      // TODO: If lost, ensure refund is tracked
+
+    } else {
+      console.warn(`⚠️ Dispute record not found for ${dispute.id}`);
+    }
+  } catch (error) {
+    console.error('❌ Failed to update dispute closure:', error);
   }
 }

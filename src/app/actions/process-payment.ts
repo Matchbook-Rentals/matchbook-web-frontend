@@ -10,6 +10,7 @@ import { auth } from '@clerk/nextjs/server';
 import stripe from '@/lib/stripe';
 import prisma from '@/lib/prismadb';
 import { reverseCalculateBaseAmount, FEES } from '@/lib/fee-constants';
+import { sendBookingCreatedAlert } from '@/lib/sms-alerts';
 
 interface ProcessPaymentParams {
   matchId: string;
@@ -303,6 +304,17 @@ export async function processDirectPayment({
         });
 
         console.log('✅ Booking created successfully:', booking.id, 'with status:', bookingStatus);
+
+        // Send SMS alert for new booking
+        await sendBookingCreatedAlert({
+          bookingId: booking.id,
+          matchId: matchId,
+          listingAddress: match.listing.locationString || 'Unknown location',
+          renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim() || 'Unknown renter',
+          totalAmount: amount,
+          startDate: match.trip.startDate!,
+          endDate: match.trip.endDate!,
+        });
       } catch (bookingError) {
         console.error('❌ Failed to create booking:', bookingError);
         // Don't fail the payment if booking creation fails

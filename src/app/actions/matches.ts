@@ -5,6 +5,7 @@ import { auth } from '@clerk/nextjs/server'
 import { calculateRent } from '@/lib/calculate-rent'
 import { Trip, Listing, Notification } from '@prisma/client'
 import { createNotification } from './notifications'
+import { sendMatchCreatedAlert } from '@/lib/sms-alerts'
 
 type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -43,8 +44,16 @@ export async function createMatch(trip: Trip, listing: Listing) {
         listingId: listing.id,
         monthlyRent: monthlyRent,
       },
+      include: {
+        trip: {
+          include: {
+            user: true,
+          },
+        },
+        listing: true,
+      },
     });
-    
+
     console.log('Created new match:', match.id);
 
     const notificationData: CreateNotificationInput = {
@@ -55,6 +64,15 @@ export async function createMatch(trip: Trip, listing: Listing) {
       actionId: trip.id,
     }
     createNotification(notificationData)
+
+    // Send SMS alert to subscribed admins
+    await sendMatchCreatedAlert({
+      matchId: match.id,
+      listingAddress: listing.locationString || 'Unknown location',
+      renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim() || 'Unknown renter',
+      monthlyRent: monthlyRent,
+    });
+
     return { success: true, match }
   } catch (error) {
     console.error('Error creating match:', error)
