@@ -12,10 +12,10 @@ export async function getConnectedAccounts() {
 
   try {
     console.log('Starting to fetch Stripe accounts...')
-    
-    // First, try a simple accounts.list() call
+
+    // Fetch all accounts from Stripe
     const accounts = await stripe.accounts.list({
-      limit: 10
+      limit: 100
     })
 
     console.log('Stripe accounts response:', accounts)
@@ -48,11 +48,14 @@ export async function getConnectedAccounts() {
       usersWithStripeAccounts.map(user => [user.stripeAccountId, user])
     )
 
-    // Combine Stripe accounts with user data
-    const accountsWithDetails = accounts.data.map(stripeAccount => {
+    // Separate matched and orphaned accounts
+    const matchedAccounts: any[] = []
+    const orphanedAccounts: any[] = []
+
+    accounts.data.forEach(stripeAccount => {
       const user = usersByStripeAccount.get(stripeAccount.id)
-      
-      return {
+
+      const accountData = {
         id: user?.id || `stripe-${stripeAccount.id}`,
         email: user?.email || stripeAccount.email || 'No email',
         firstName: user?.firstName || null,
@@ -75,16 +78,26 @@ export async function getConnectedAccounts() {
           company: stripeAccount.company
         }
       }
+
+      if (user) {
+        matchedAccounts.push(accountData)
+      } else {
+        orphanedAccounts.push(accountData)
+      }
     })
 
-    // Sort by creation date (newest first)
-    accountsWithDetails.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    // Sort both arrays by creation date (newest first)
+    matchedAccounts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    orphanedAccounts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
-    console.log('Returning accounts:', accountsWithDetails.length)
-    return accountsWithDetails
+    console.log('Returning matched accounts:', matchedAccounts.length, 'orphaned accounts:', orphanedAccounts.length)
+    return {
+      matchedAccounts,
+      orphanedAccounts
+    }
   } catch (error) {
     console.error('Error fetching connected accounts:', error)
-    
+
     // Fallback: return database accounts only if Stripe fails
     try {
       console.log('Falling back to database-only results...')
@@ -120,7 +133,10 @@ export async function getConnectedAccounts() {
         }
       }))
 
-      return fallbackAccounts
+      return {
+        matchedAccounts: fallbackAccounts,
+        orphanedAccounts: []
+      }
     } catch (dbError) {
       console.error('Database fallback also failed:', dbError)
       throw new Error('Failed to fetch connected accounts from both Stripe and database')
