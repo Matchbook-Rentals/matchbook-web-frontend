@@ -40,6 +40,7 @@ type ConnectedAccount = {
     business_profile?: any
     individual?: any
     company?: any
+    capabilities?: any
     error?: string
   } | null
 }
@@ -197,7 +198,7 @@ export function ConnectedAccountsManager() {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-3 gap-4 text-sm">
               <div>
                 <span className="text-muted-foreground">Charges:</span>
                 <div className="flex items-center gap-1">
@@ -218,6 +219,21 @@ export function ConnectedAccountsManager() {
                     <XCircle className="h-4 w-4 text-red-600" />
                   )}
                   <span>{account.stripeAccount.payouts_enabled ? 'Enabled' : 'Disabled'}</span>
+                </div>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Transfers:</span>
+                <div className="flex items-center gap-1">
+                  {account.stripeAccount.capabilities?.transfers === 'active' ? (
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                  ) : account.stripeAccount.capabilities?.transfers === 'pending' ? (
+                    <AlertCircle className="h-4 w-4 text-yellow-600" />
+                  ) : (
+                    <XCircle className="h-4 w-4 text-red-600" />
+                  )}
+                  <span className="capitalize">
+                    {account.stripeAccount.capabilities?.transfers || 'Inactive'}
+                  </span>
                 </div>
               </div>
             </div>

@@ -13,6 +13,7 @@ interface CompleteClientProps {
   match: MatchWithRelations;
   matchId: string;
   isAdminDev?: boolean;
+  paymentMethodType?: string | null;
 }
 
 const DownloadableDocumentsSection = ({ match }: { match: MatchWithRelations }) => {
@@ -111,7 +112,10 @@ const ConfirmationMessageSection = () => {
   );
 };
 
-const PaymentSummarySection = ({ match }: { match: MatchWithRelations }) => {
+const PaymentSummarySection = ({ match, paymentMethodType }: { match: MatchWithRelations; paymentMethodType?: string | null }) => {
+  // TODO: Refactor this to use an itemized receipt based on actual charges stored in the database.
+  // This will require storing payment items and sub-items in the DB, but provides accurate historical records.
+
   // Calculate payment details
   const paymentDetails = calculatePayments({
     listing: match.listing,
@@ -124,8 +128,8 @@ const PaymentSummarySection = ({ match }: { match: MatchWithRelations }) => {
   // Fixed deposit transfer fee
   const TRANSFER_FEE = FEES.TRANSFER_FEE_DOLLARS;
 
-  // Determine if card was used (simplified check)
-  const isCardPayment = !!match.stripePaymentMethodId;
+  // Determine if card was used - check payment method type, not just existence of payment method ID
+  const isCardPayment = paymentMethodType === 'card';
   
   // Calculate base amount (deposits + deposit transfer fee)
   const baseAmount = paymentDetails.totalDeposit + TRANSFER_FEE;
@@ -306,7 +310,7 @@ const LeaseBookingSummarySection = ({ match }: { match: MatchWithRelations }) =>
   );
 };
 
-export function CompleteClient({ match, matchId, isAdminDev = false }: CompleteClientProps) {
+export function CompleteClient({ match, matchId, isAdminDev = false, paymentMethodType }: CompleteClientProps) {
   return (
     <main className={`${PAGE_MARGIN}`}>
       {/* Step Progress Bar */}
@@ -332,7 +336,7 @@ export function CompleteClient({ match, matchId, isAdminDev = false }: CompleteC
         <section className="flex flex-col items-start gap-8 relative self-stretch w-full flex-[0_0_auto]">
           <ConfirmationMessageSection />
           <LeaseBookingSummarySection match={match} />
-          <PaymentSummarySection match={match} />
+          <PaymentSummarySection match={match} paymentMethodType={paymentMethodType} />
           <DownloadableDocumentsSection match={match} />
         </section>
       </div>

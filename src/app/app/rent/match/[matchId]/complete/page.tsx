@@ -2,6 +2,7 @@ import { getMatchById } from '@/app/actions/matches';
 import { notFound, redirect } from 'next/navigation';
 import { checkRole } from '@/utils/roles';
 import { CompleteClient } from './complete-client';
+import stripe from '@/lib/stripe';
 
 interface CompletePageProps {
   params: { matchId: string };
@@ -41,14 +42,27 @@ export default async function CompletePage({ params }: CompletePageProps) {
     console.log('⚠️ [Complete Page] Redirecting to payment: payment not authorized');
     redirect(`/app/rent/match/${params.matchId}/payment`);
   }
-  
+
   const isAdminDev = await checkRole('admin_dev');
-  
+
+  // Fetch payment method type from Stripe if available
+  let paymentMethodType: string | null = null;
+  if (match.stripePaymentMethodId) {
+    try {
+      const paymentMethod = await stripe.paymentMethods.retrieve(match.stripePaymentMethodId);
+      paymentMethodType = paymentMethod.type;
+    } catch (error) {
+      console.error('Failed to fetch payment method type:', error);
+      // Continue without payment method type - fee won't show
+    }
+  }
+
   return (
-    <CompleteClient 
+    <CompleteClient
       match={match}
       matchId={params.matchId}
       isAdminDev={isAdminDev}
+      paymentMethodType={paymentMethodType}
     />
   );
 }

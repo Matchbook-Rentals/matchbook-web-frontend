@@ -1,5 +1,11 @@
 # Changelog
 
+## Fix Stripe Connect transfers capability and payment receipt display
+- Added transfers capability request to both Stripe Connect account creation endpoints to enable ACH transfers
+- Updated admin Stripe integration page to display transfers capability status (active/pending/inactive)
+- Fixed payment receipt to show correct processing fee by fetching actual payment method type from Stripe
+- Resolved "destination account needs transfers capability" error for ACH payments
+
 ## Align guest navbar styles with platform navbar
 - Update guest search navbar to match platform navbar structure and animations
 - Replace header element with motion.nav for consistent framer-motion animations

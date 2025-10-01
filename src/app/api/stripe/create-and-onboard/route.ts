@@ -83,6 +83,9 @@ export async function POST(request: NextRequest) {
           business_profile: {
             mcc: '6513', // Real Estate Agents and Managers - Rentals
             product_description: 'Property rental and management services',
+          },
+          capabilities: {
+            transfers: { requested: true },
           }
         };
 

@@ -40,6 +40,9 @@ export async function POST(req: NextRequest) {
         mcc: '6513', // Real Estate Agents and Managers - Rentals
       },
       country: "US",
+      capabilities: {
+        transfers: { requested: true },
+      }
     };
 
     // Only set business_type and related fields if accountType is explicitly provided

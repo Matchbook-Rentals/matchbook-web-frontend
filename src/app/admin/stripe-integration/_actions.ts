@@ -75,7 +75,8 @@ export async function getConnectedAccounts() {
           type: stripeAccount.type,
           business_profile: stripeAccount.business_profile,
           individual: stripeAccount.individual,
-          company: stripeAccount.company
+          company: stripeAccount.company,
+          capabilities: stripeAccount.capabilities
         }
       }
 
