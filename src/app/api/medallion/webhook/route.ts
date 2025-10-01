@@ -45,9 +45,18 @@ async function fetchUserByAccessCode(userAccessCode: string) {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+
+  console.log('🔔 [Medallion Webhook] Received webhook request');
+
   try {
     const body = await request.text();
     const headersList = headers();
+
+    console.log('📋 [Medallion Webhook] Request info:', {
+      contentLength: body.length,
+      hasBody: !!body
+    });
 
     // Verify webhook signature (if configured)
     const signature = headersList.get('x-signature') ||
@@ -57,7 +66,7 @@ export async function POST(request: NextRequest) {
     const webhookSecret = process.env.MEDALLION_WEBHOOK_SECRET;
 
     if (webhookSecret && signature) {
-      console.log('🔐 Verifying webhook signature');
+      console.log('🔐 [Medallion Webhook] Verifying webhook signature');
 
       try {
         const expectedSignature = crypto
@@ -92,23 +101,21 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
         }
 
-        console.log('✅ Webhook signature verified');
+        console.log('✅ [Medallion Webhook] Signature verified');
       } catch (error) {
-        console.error('❌ Signature verification failed:', error);
+        console.error('❌ [Medallion Webhook] Signature verification failed:', error);
         return NextResponse.json({ error: 'Signature verification failed' }, { status: 401 });
       }
     } else if (webhookSecret) {
-      console.warn('⚠️ Webhook secret configured but no signature header found');
+      console.warn('⚠️ [Medallion Webhook] Secret configured but no signature header found');
     } else {
-      console.log('ℹ️ No webhook secret configured - skipping signature verification');
+      console.log('ℹ️ [Medallion Webhook] No secret configured - skipping signature verification');
     }
 
     const event = JSON.parse(body);
 
-    // Debug: Log the full payload to understand the structure
-    console.log('Medallion webhook full payload:', JSON.stringify(event, null, 2));
-
-    console.log('Medallion webhook received:', {
+    console.log('📦 [Medallion Webhook] Full payload:', JSON.stringify(event, null, 2));
+    console.log('🏷️ [Medallion Webhook] Event summary:', {
       event: event.event,
       userAccessCode: event.order?.userAccessCode,
       status: event.order?.status,
@@ -119,6 +126,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Handle different event types
+    console.log('🔄 [Medallion Webhook] Processing event type:', event.event);
     switch (event.event) {
       case 'UPLOAD_ID_ENHANCED_REVIEW_STATUS':
       case 'UPLOAD_PASSPORT_ENHANCED_REVIEW_STATUS':
@@ -131,12 +139,21 @@ export async function POST(request: NextRequest) {
         break;
 
       default:
-        console.log(`Unhandled webhook event type: ${event.event}`);
+        console.log(`⚠️ [Medallion Webhook] Unhandled event type: ${event.event}`);
     }
+
+    const processingTime = Date.now() - startTime;
+    console.log('✅ [Medallion Webhook] Webhook processed successfully');
+    console.log('⏱️ [Medallion Webhook] Processing time:', processingTime, 'ms');
 
     return NextResponse.json({ success: true, message: 'Webhook processed' });
   } catch (error) {
-    console.error('Medallion webhook error:', error);
+    const processingTime = Date.now() - startTime;
+    console.error('❌ [Medallion Webhook] Error:', error);
+    console.error('   Error type:', error instanceof Error ? error.name : typeof error);
+    console.error('   Error message:', error instanceof Error ? error.message : String(error));
+    console.error('   Stack:', error instanceof Error ? error.stack : 'N/A');
+    console.error('⏱️ [Medallion Webhook] Failed after:', processingTime, 'ms');
     return NextResponse.json(
       { error: 'Webhook processing failed' },
       { status: 500 }

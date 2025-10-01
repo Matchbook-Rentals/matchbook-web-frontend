@@ -1,5 +1,17 @@
 # Changelog
 
+## Add extensive logging to all active webhooks
+- Enhanced logging for all 7 active webhooks with entry/exit timestamps and detailed status tracking
+- Added comprehensive logging to Stripe webhook with signature verification and event payload details
+- Enhanced Clerk webhook with detailed user data logging for create/update/delete events
+- Improved Medallion webhook with full payload logging and processing step tracking
+- Added extensive XML parsing and database operation logging to background check webhook
+- Enhanced BoldSign webhook with detailed signer status tracking and notification result logging
+- Improved lease template webhook with full event data and processing status logging
+- Added comprehensive logging to Hospitable webhook with signature verification details
+- All webhooks now log processing time, error types, and full error context for debugging
+- Temporary verbose logging to ensure webhooks are properly configured and functioning
+
 ## Fix Stripe Connect transfers capability and payment receipt display
 - Added transfers capability request to both Stripe Connect account creation endpoints to enable ACH transfers
 - Updated admin Stripe integration page to display transfers capability status (active/pending/inactive)

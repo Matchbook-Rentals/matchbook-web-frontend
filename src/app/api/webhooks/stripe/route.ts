@@ -118,6 +118,10 @@ const verifyStripeSignature = (req: Request, body: string, signature: string): b
 };
 
 export async function POST(req: Request) {
+  const startTime = Date.now();
+
+  console.log('🔔 [Stripe Webhook] Received webhook request');
+
   try {
     // Get the request body as text
     const body = await req.text();
@@ -125,19 +129,30 @@ export async function POST(req: Request) {
     // Get the signature from the request header
     const signature = req.headers.get('stripe-signature');
 
+    console.log('📋 [Stripe Webhook] Request headers:', {
+      signature: signature ? `${signature.substring(0, 30)}...` : 'MISSING',
+      contentLength: body.length
+    });
+
     if (!signature) {
+      console.error('❌ [Stripe Webhook] Missing Stripe signature');
       return NextResponse.json({ error: 'Missing Stripe signature' }, { status: 400 });
     }
 
     // Verify the signature
+    console.log('🔐 [Stripe Webhook] Verifying signature...');
     if (!verifyStripeSignature(req, body, signature)) {
+      console.error('❌ [Stripe Webhook] Invalid Stripe signature');
       return NextResponse.json({ error: 'Invalid Stripe signature' }, { status: 400 });
     }
+
+    console.log('✅ [Stripe Webhook] Signature verified');
 
     // Parse the webhook event
     const event = JSON.parse(body);
 
-    console.log(`[Stripe Webhook] ${event.type} - ${event.id}`);
+    console.log(`🏷️ [Stripe Webhook] Event: ${event.type} - ${event.id}`);
+    console.log('📦 [Stripe Webhook] Event payload preview:', JSON.stringify(event, null, 2).substring(0, 500));
 
     // Route events to appropriate handlers
     switch (event.type) {
@@ -240,11 +255,20 @@ export async function POST(req: Request) {
         break;
     }
 
+    const processingTime = Date.now() - startTime;
+    console.log('✅ [Stripe Webhook] Webhook processed successfully');
+    console.log('⏱️ [Stripe Webhook] Processing time:', processingTime, 'ms');
+
     // Always return success to Stripe
     return NextResponse.json({ received: true, type: event.type });
 
   } catch (error: any) {
-    console.error('[Stripe Webhook] Error:', error);
+    const processingTime = Date.now() - startTime;
+    console.error('❌ [Stripe Webhook] Error:', error);
+    console.error('   Error type:', error instanceof Error ? error.name : typeof error);
+    console.error('   Error message:', error instanceof Error ? error.message : String(error));
+    console.error('   Stack:', error instanceof Error ? error.stack : 'N/A');
+    console.error('⏱️ [Stripe Webhook] Failed after:', processingTime, 'ms');
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
