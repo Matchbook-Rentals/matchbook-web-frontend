@@ -6,11 +6,170 @@ import { currentUser, auth } from '@clerk/nextjs/server'
 import { clerkClient } from '@clerk/nextjs/server'
 import { logger } from '@/lib/logger';
 import { unstable_noStore as noStore } from 'next/cache';
+import stripe from '@/lib/stripe';
+
+// ============================================================================
+// Helper Functions for Stripe Sync Logic
+// ============================================================================
+
+/**
+ * Checks if user has created a Stripe Connect account
+ */
+const hasStripeHostAccount = (user: { stripeAccountId: string | null }) =>
+  !!user.stripeAccountId;
+
+/**
+ * Checks if Stripe status fields are missing (null) in database
+ * This indicates data was never synced from Stripe after account creation
+ */
+const hasIncompleteStripeSync = (user: {
+  stripeChargesEnabled: boolean | null,
+  stripeDetailsSubmitted: boolean | null
+}) =>
+  user.stripeChargesEnabled === null ||
+  user.stripeDetailsSubmitted === null;
+
+/**
+ * Determines if we need to check Stripe API for current status
+ * True when: user has Stripe account BUT status fields are null (race condition)
+ */
+const needsStripeSyncCheck = (user: {
+  stripeAccountId: string | null,
+  stripeChargesEnabled: boolean | null,
+  stripeDetailsSubmitted: boolean | null
+}) =>
+  hasStripeHostAccount(user) && hasIncompleteStripeSync(user);
+
+/**
+ * Checks if Stripe API returned valid onboarding status data
+ */
+const stripeHasOnboardingData = (stripeAccount: {
+  charges_enabled?: boolean,
+  details_submitted?: boolean
+}) =>
+  stripeAccount.charges_enabled !== undefined &&
+  stripeAccount.details_submitted !== undefined;
+
+/**
+ * Fetches current Stripe account status from Stripe API
+ */
+async function fetchStripeAccountStatus(stripeAccountId: string) {
+  try {
+    const account = await stripe.accounts.retrieve(stripeAccountId);
+    return account;
+  } catch (error) {
+    logger.error('Failed to fetch Stripe account status', {
+      stripeAccountId,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    return null;
+  }
+}
+
+/**
+ * Updates user record with fresh Stripe onboarding status
+ */
+async function updateUserWithStripeStatus(
+  userId: string,
+  stripeAccount: {
+    charges_enabled: boolean,
+    payouts_enabled: boolean,
+    details_submitted: boolean
+  }
+) {
+  try {
+    await prismadb.user.update({
+      where: { id: userId },
+      data: {
+        stripeChargesEnabled: stripeAccount.charges_enabled,
+        stripePayoutsEnabled: stripeAccount.payouts_enabled,
+        stripeDetailsSubmitted: stripeAccount.details_submitted,
+        stripeAccountLastChecked: new Date()
+      }
+    });
+
+    logger.info('Successfully synced Stripe status to database', {
+      userId,
+      chargesEnabled: stripeAccount.charges_enabled,
+      payoutsEnabled: stripeAccount.payouts_enabled,
+      detailsSubmitted: stripeAccount.details_submitted
+    });
+
+    return {
+      stripeChargesEnabled: stripeAccount.charges_enabled,
+      stripePayoutsEnabled: stripeAccount.payouts_enabled,
+      stripeDetailsSubmitted: stripeAccount.details_submitted
+    };
+  } catch (error) {
+    logger.error('Failed to update user with Stripe status', {
+      userId,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    return null;
+  }
+}
+
+/**
+ * Just-in-time sync: checks Stripe API if database status appears stale
+ * Only triggers when user has Stripe account but status fields are null
+ */
+async function syncStripeStatusIfNeeded(user: {
+  id: string,
+  stripeAccountId: string | null,
+  stripeChargesEnabled: boolean | null,
+  stripePayoutsEnabled: boolean | null,
+  stripeDetailsSubmitted: boolean | null,
+  agreedToHostTerms: Date | null,
+  medallionIdentityVerified: boolean | null,
+  medallionVerificationStatus: string | null
+}) {
+  // No sync needed if account doesn't exist or data is already present
+  if (!needsStripeSyncCheck(user)) {
+    return user;
+  }
+
+  logger.info('Detected stale Stripe status, checking Stripe API', {
+    userId: user.id,
+    stripeAccountId: user.stripeAccountId
+  });
+
+  // Fetch current status from Stripe
+  const stripeAccount = await fetchStripeAccountStatus(user.stripeAccountId!);
+
+  // If Stripe fetch failed, return user as-is
+  if (!stripeAccount) {
+    return user;
+  }
+
+  // If Stripe has onboarding data, sync it to database
+  if (stripeHasOnboardingData(stripeAccount)) {
+    const updatedFields = await updateUserWithStripeStatus(user.id, {
+      charges_enabled: stripeAccount.charges_enabled,
+      payouts_enabled: stripeAccount.payouts_enabled,
+      details_submitted: stripeAccount.details_submitted
+    });
+
+    // Return user with updated fields if sync succeeded
+    if (updatedFields) {
+      return {
+        ...user,
+        ...updatedFields
+      };
+    }
+  }
+
+  // Stripe also incomplete or update failed - return original user data
+  return user;
+}
+
+// ============================================================================
+// Public API
+// ============================================================================
 
 export async function getHostUserData() {
   noStore(); // Prevent caching to always get fresh data
   const clerkUser = await currentUser();
-  
+
   if (!clerkUser) {
     return null;
   }
@@ -23,13 +182,21 @@ export async function getHostUserData() {
         stripeAccountId: true,
         agreedToHostTerms: true,
         stripeChargesEnabled: true,
+        stripePayoutsEnabled: true,
         stripeDetailsSubmitted: true,
         medallionIdentityVerified: true,
         medallionVerificationStatus: true,
       }
     });
 
-    return user;
+    if (!user) {
+      return null;
+    }
+
+    // Just-in-time sync: check Stripe if data appears stale
+    const syncedUser = await syncStripeStatusIfNeeded(user);
+
+    return syncedUser;
   } catch (error) {
     logger.error('Failed to fetch host user data', {
       userId: clerkUser.id,

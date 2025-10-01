@@ -12,6 +12,7 @@ export interface HostUserData {
   stripeAccountId: string | null;
   agreedToHostTerms: Date | null;
   stripeChargesEnabled: boolean | null;
+  stripePayoutsEnabled: boolean | null;
   stripeDetailsSubmitted: boolean | null;
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
