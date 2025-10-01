@@ -75,6 +75,95 @@ async function checkAuth() {
 // Email sending has been moved to a secure utility function
 // This prevents it from being exposed as a public server action
 
+async function sendNotificationEmailAsync(notification: Notification, customEmailData?: any) {
+  const preferenceField = getNotificationPreferenceField(notification.actionType);
+
+  if (preferenceField) {
+    try {
+      // Get user email and all preferences
+      const user = await prisma.user.findUnique({
+        where: { id: notification.userId },
+        select: {
+          email: true,
+          firstName: true,
+          preferences: true
+        }
+      });
+
+      // Check if user has enabled this notification type
+      const isNotificationEnabled = user?.preferences?.[preferenceField as keyof typeof user.preferences] === true;
+
+      if (user?.email && isNotificationEnabled) {
+        // Build notification-specific email content
+        const emailDataBuilt = buildNotificationEmailData(
+          notification.actionType,
+          {
+            content: notification.content,
+            url: notification.url
+          },
+          user,
+          customEmailData
+        );
+
+        const subject = getNotificationEmailSubject(notification.actionType, customEmailData);
+
+        const emailResult = await sendNotificationEmail({
+          to: user.email,
+          subject,
+          emailData: emailDataBuilt
+        });
+
+        if (!emailResult.success) {
+          console.error('Failed to send notification email:', emailResult.error);
+        }
+      }
+    } catch (emailError) {
+      // Log email error but don't fail notification creation
+      console.error('Error sending notification email:', emailError);
+    }
+  } else {
+    // For notification types without preference mapping (like admin notifications),
+    // still send email but log that no preference check was done
+    console.log(`No preference mapping found for notification type: ${notification.actionType}. Email will be sent by default.`);
+
+    try {
+      // Get user email for unmapped notification types
+      const user = await prisma.user.findUnique({
+        where: { id: notification.userId },
+        select: { email: true, firstName: true }
+      });
+
+      if (user?.email) {
+        // Build notification-specific email content
+        const emailDataBuilt = buildNotificationEmailData(
+          notification.actionType,
+          {
+            content: notification.content,
+            url: notification.url
+          },
+          user,
+          customEmailData
+        );
+
+        const subject = getNotificationEmailSubject(notification.actionType, customEmailData);
+
+        const emailResult = await sendNotificationEmail({
+          to: user.email,
+          subject,
+          emailData: emailDataBuilt
+        });
+
+        if (!emailResult.success) {
+          console.error('Failed to send notification email:', emailResult.error);
+        }
+      }
+    } catch (emailError) {
+      // Log email error but don't fail notification creation
+      console.error('Error sending notification email for unmapped type:', emailError);
+    }
+  }
+}
+
 export async function createNotification(notificationData: CreateNotificationInput): Promise<CreateNotificationResponse>;
 export async function createNotification(notificationData: CreateNotificationWithEmailInput): Promise<CreateNotificationResponse>;
 export async function createNotification(notificationData: CreateNotificationInput | CreateNotificationWithEmailInput): Promise<CreateNotificationResponse> {
@@ -87,109 +176,21 @@ export async function createNotification(notificationData: CreateNotificationInp
         })()
       : notificationData;
 
+    // Create notification in database first (fast operation)
     const notification = await prisma.notification.create({
       data: dbData,
-    })
+    });
 
-    // Send notification email if user has enabled this notification type
-    const preferenceField = getNotificationPreferenceField(notification.actionType);
-    
-    if (preferenceField) {
-      try {
-        // Get user email and all preferences
-        const user = await prisma.user.findUnique({
-          where: { id: notificationData.userId },
-          select: { 
-            email: true, 
-            firstName: true,
-            preferences: true
-          }
-        });
+    // Send email - await it to ensure delivery in serverless environment
+    // This keeps emails reliable but means the operation takes longer
+    const customEmailData = 'emailData' in notificationData ? notificationData.emailData : undefined;
+    await sendNotificationEmailAsync(notification, customEmailData);
 
-        // Check if user has enabled this notification type
-        const isNotificationEnabled = user?.preferences?.[preferenceField as keyof typeof user.preferences] === true;
-
-        if (user?.email && isNotificationEnabled) {
-          // Extract emailData for customization
-          const customEmailData = 'emailData' in notificationData ? notificationData.emailData : undefined;
-          
-          // Build notification-specific email content
-          const emailData = buildNotificationEmailData(
-            notification.actionType,
-            {
-              content: notification.content,
-              url: notification.url
-            },
-            user,
-            customEmailData
-          );
-
-          const subject = getNotificationEmailSubject(notification.actionType, customEmailData);
-
-          const emailResult = await sendNotificationEmail({
-            to: user.email,
-            subject,
-            emailData
-          });
-
-          if (!emailResult.success) {
-            console.error('Failed to send notification email:', emailResult.error);
-          }
-        }
-      } catch (emailError) {
-        // Log email error but don't fail notification creation
-        console.error('Error sending notification email:', emailError);
-      }
-    } else {
-      // For notification types without preference mapping (like admin notifications), 
-      // still send email but log that no preference check was done
-      console.log(`No preference mapping found for notification type: ${notification.actionType}. Email will be sent by default.`);
-      
-      try {
-        // Get user email for unmapped notification types
-        const user = await prisma.user.findUnique({
-          where: { id: notificationData.userId },
-          select: { email: true, firstName: true }
-        });
-
-        if (user?.email) {
-          // Extract emailData for customization
-          const customEmailData = 'emailData' in notificationData ? notificationData.emailData : undefined;
-          
-          // Build notification-specific email content
-          const emailData = buildNotificationEmailData(
-            notification.actionType,
-            {
-              content: notification.content,
-              url: notification.url
-            },
-            user,
-            customEmailData
-          );
-
-          const subject = getNotificationEmailSubject(notification.actionType, customEmailData);
-
-          const emailResult = await sendNotificationEmail({
-            to: user.email,
-            subject,
-            emailData
-          });
-
-          if (!emailResult.success) {
-            console.error('Failed to send notification email:', emailResult.error);
-          }
-        }
-      } catch (emailError) {
-        // Log email error but don't fail notification creation
-        console.error('Error sending notification email for unmapped type:', emailError);
-      }
-    }
-
-    revalidatePath('/notifications')
-    return { success: true, notification }
+    revalidatePath('/notifications');
+    return { success: true, notification };
   } catch (error) {
-    console.error('Failed to create notification:', error)
-    return { success: false, error: 'Failed to create notification' }
+    console.error('Failed to create notification:', error);
+    return { success: false, error: 'Failed to create notification' };
   }
 }
 

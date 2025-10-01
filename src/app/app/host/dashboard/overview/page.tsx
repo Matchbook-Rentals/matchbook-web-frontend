@@ -1,6 +1,6 @@
 import React from "react";
 import OverviewClient from "./overview-client";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import type { StatisticsCardData } from "./overview-client";
 import { getHostListingsCount } from "@/app/actions/listings";
 import { getAllUserDrafts } from "@/app/actions/listings-in-creation";
@@ -303,12 +303,11 @@ function buildZeroStatisticsCards() {
 
 export default async function OverviewPage() {
   const data = await fetchOverviewData();
-  
+
   // Get user data and check admin role
   const user = await currentUser();
-  const { sessionClaims } = await auth();
-  const isAdmin = sessionClaims?.metadata?.role === 'admin';
-  const isAdminDev = sessionClaims?.metadata?.role === 'admin_dev';
+  const isAdmin = user?.publicMetadata?.role === 'admin';
+  const isAdminDev = user?.publicMetadata?.role === 'admin_dev';
   
   // Get host user data for onboarding checklist
   const hostUserData = await getHostUserData();

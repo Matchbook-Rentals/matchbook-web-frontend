@@ -255,35 +255,38 @@ export async function GET(request: Request) {
     if (notificationsToCreate.length > 0 && messageIdsToUpdate.length > 0) {
       console.log(`Cron job: Creating ${notificationsToCreate.length} notifications and updating ${messageIdsToUpdate.length} messages.`);
 
-      // Create notifications one by one using our enhanced createNotification function
-      // This ensures emails are sent and proper validation is done
-      for (const notificationData of notificationsToCreate) {
-        try {
-          const result = await createNotification({
-            userId: notificationData.userId,
-            content: notificationData.content,
-            url: notificationData.url,
-            actionType: notificationData.actionType,
-            actionId: notificationData.actionId,
-            emailData: buildNotificationEmailData(notificationData.actionType, {
-              senderName: notificationData.senderName,
-              conversationId: notificationData.conversationId,
-              listingTitle: notificationData.listingTitle,
-              messagePreview: notificationData.messagePreview
-            })
-          });
+      // Create notifications in parallel for better performance
+      // This prevents timeout issues when processing many notifications
+      // NOTE: At scale (>100 notifications/run), migrate to dedicated queue service
+      // (e.g., Trigger.dev, Inngest, or BullMQ with separate worker process)
+      const notificationPromises = notificationsToCreate.map(notificationData =>
+        createNotification({
+          userId: notificationData.userId,
+          content: notificationData.content,
+          url: notificationData.url,
+          actionType: notificationData.actionType,
+          actionId: notificationData.actionId,
+          emailData: buildNotificationEmailData(notificationData.actionType, {
+            senderName: notificationData.senderName,
+            conversationId: notificationData.conversationId,
+            listingTitle: notificationData.listingTitle,
+            messagePreview: notificationData.messagePreview
+          })
+        })
+          .then(result => ({ success: true, result }))
+          .catch(error => ({ success: false, error }))
+      );
 
-          if (result.success) {
-            notificationResults++;
-          } else {
-            notificationErrors++;
-            console.error('Cron job: Failed to create notification:', result.error);
-          }
-        } catch (error) {
+      const results = await Promise.all(notificationPromises);
+
+      results.forEach(({ success, result, error }) => {
+        if (success && result?.success) {
+          notificationResults++;
+        } else {
           notificationErrors++;
-          console.error('Cron job: Error creating notification:', error);
+          console.error('Cron job: Failed to create notification:', error || result?.error);
         }
-      }
+      });
 
       // Update messages to mark notifications as sent (separate transaction)
       try {
