@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, AlertTriangle, CheckCircle, XCircle, RefreshCw, Database, User, RotateCw } from 'lucide-react'
+import { Trash2, AlertTriangle, CheckCircle, XCircle, RefreshCw, Database, User, RotateCw, AlertCircle } from 'lucide-react'
 import { getConnectedAccounts, deleteConnectedAccount, updateAccountStatus } from './_actions'
 import { toast } from 'sonner'
 import {
