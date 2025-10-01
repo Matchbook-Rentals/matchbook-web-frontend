@@ -64,9 +64,18 @@ export async function updateUserLoginTimestamp(): Promise<void> {
     });
 
     if (!dbUser) {
-      // User should be created via Clerk webhook, but if not found, just log and return
-      logger.warn('Session tracking: User not found in database', { userId: clerkUser.id });
-      return;
+      // User should be created via Clerk webhook, but if not found, create them (fallback)
+      logger.warn('Session tracking: User not found in database, creating via fallback', { userId: clerkUser.id });
+      await prismadb.user.create({
+        data: {
+          id: clerkUser.id,
+          email: clerkUser.emailAddresses[0]?.emailAddress || null,
+          firstName: clerkUser.firstName || null,
+          lastName: clerkUser.lastName || null,
+          imageUrl: clerkUser.imageUrl || null,
+        },
+      });
+      logger.info('Session tracking: Created user via fallback', { userId: clerkUser.id });
     }
 
     // Update the lastLogin timestamp
