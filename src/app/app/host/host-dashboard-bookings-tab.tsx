@@ -317,8 +317,8 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     }
 
     // Check if awaiting signature (match has BoldSignLease but not fully signed or no payment authorized)
-    if (booking.match?.BoldSignLease && 
-        ((!booking.match.BoldSignLease.tenantSigned || !booking.match.BoldSignLease.landlordSigned) || 
+    if (booking.match?.BoldSignLease &&
+        ((!booking.match.BoldSignLease.tenantSigned || !booking.match.BoldSignLease.landlordSigned) ||
          !booking.match.paymentAuthorizedAt)) {
       return {
         label: "Awaiting Your Signature",
@@ -346,6 +346,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
           label: "Upcoming",
           icon: <Calendar className="h-4 w-4" />,
           className: "text-blue-600"
+        };
+      case "pending_payment":
+        return {
+          label: "Processing",
+          icon: <Clock className="h-4 w-4" />,
+          className: "text-[#d97706]"
         };
       case "completed":
         return {

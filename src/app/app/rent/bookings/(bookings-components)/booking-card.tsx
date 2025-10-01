@@ -101,6 +101,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
         return 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]';
       case 'upcoming':
       case 'pending':
+      case 'pending_payment':
         return 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]';
       case 'completed':
         return 'bg-gray-100 text-gray-600 border-gray-400';
@@ -117,6 +118,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
     switch (booking.status) {
       case 'active': return 'Active';
       case 'upcoming': return 'Upcoming';
+      case 'pending_payment': return 'Processing';
       case 'completed': return 'Completed';
       case 'cancelled': return 'Cancelled';
       default: return booking.status || 'Pending';
