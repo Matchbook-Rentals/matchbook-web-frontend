@@ -8,6 +8,9 @@ import { getHostHousingRequests } from "@/app/actions/housing-requests";
 import { getAllHostBookings } from "@/app/actions/bookings";
 import { getHostUserData } from "@/app/actions/user";
 
+// Force dynamic rendering to ensure fresh Stripe status on every page load
+export const dynamic = 'force-dynamic';
+
 async function fetchOverviewData() {
   try {
     const [listingsCount, userDrafts, housingRequests, hostBookings] = await Promise.all([

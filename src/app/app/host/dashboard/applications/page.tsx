@@ -7,6 +7,9 @@ import { HOST_PAGE_STYLE } from "@/constants/styles";
 import { HostPageTitle } from "../../[listingId]/(components)/host-page-title";
 import { OnboardingChecklistCard } from "../../components/onboarding-checklist-card";
 
+// Force dynamic rendering to ensure fresh Stripe status on every page load
+export const dynamic = 'force-dynamic';
+
 export default async function HostDashboardApplicationsPage() {
   console.log('HostDashboardApplicationsPage: Starting data fetch...');
 

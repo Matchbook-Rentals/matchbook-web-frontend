@@ -10,6 +10,9 @@ import { HOST_PAGE_STYLE } from '@/constants/styles';
 import { getListingDisplayName } from '@/utils/listing-helpers';
 import { OnboardingChecklistCard } from '../../components/onboarding-checklist-card';
 
+// Force dynamic rendering to ensure fresh Stripe status on every page load
+export const dynamic = 'force-dynamic';
+
 interface ApplicationsPageProps {
   params: { listingId: string };
 }
