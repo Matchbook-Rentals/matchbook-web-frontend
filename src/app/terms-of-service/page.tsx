@@ -1,6 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
-import { TermsContent } from "./terms-content";
+import { TermsHtmlContent } from "./terms-html-content";
+import fs from "fs";
+import path from "path";
 
 export default async function TermsOfServicePage() {
   const user = await currentUser();
@@ -18,6 +20,15 @@ export default async function TermsOfServicePage() {
   const userId = user?.id || null;
   const isSignedIn = !!user;
 
+  // Read the HTML file on the server
+  const htmlFilePath = path.join(
+    process.cwd(),
+    "src",
+    "legal",
+    "terms-of-service-09-24-25.html"
+  );
+  const htmlContent = fs.readFileSync(htmlFilePath, "utf-8");
+
   return (
     <LegalPageTemplate
       userId={userId}
@@ -25,7 +36,7 @@ export default async function TermsOfServicePage() {
       isSignedIn={isSignedIn}
       pageTitle="Terms of Service"
     >
-      <TermsContent />
+      <TermsHtmlContent htmlContent={htmlContent} />
     </LegalPageTemplate>
   );
 }

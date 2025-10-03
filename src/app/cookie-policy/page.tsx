@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
-import { TermsContent } from "../terms-of-service/terms-content";
+import { CookieNoticeContent } from "../cookie-notice/cookie-notice-content";
 
 export default async function CookiePolicyPage() {
   const user = await currentUser();
@@ -25,7 +25,7 @@ export default async function CookiePolicyPage() {
       isSignedIn={isSignedIn}
       pageTitle="Cookie Policy"
     >
-      <TermsContent />
+      <CookieNoticeContent />
     </LegalPageTemplate>
   );
 }

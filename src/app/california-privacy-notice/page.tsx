@@ -1,9 +1,20 @@
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
-import { CaliforniaPrivacyContent } from "./california-privacy-content";
+import { CaliforniaPrivacyHtmlContent } from "./california-privacy-html-content";
+import fs from "fs";
+import path from "path";
 
 export default async function CaliforniaPrivacyNoticePage() {
   const user = await currentUser();
+
+  // Read HTML file on the server
+  const htmlFilePath = path.join(
+    process.cwd(),
+    "src",
+    "legal",
+    "california-privacy-notice.html"
+  );
+  const htmlContent = fs.readFileSync(htmlFilePath, "utf-8");
 
   // Serialize user data to plain object
   const userObject = user ? {
@@ -25,7 +36,7 @@ export default async function CaliforniaPrivacyNoticePage() {
       isSignedIn={isSignedIn}
       pageTitle="Privacy Notice for California Residents and Other States"
     >
-      <CaliforniaPrivacyContent />
+      <CaliforniaPrivacyHtmlContent htmlContent={htmlContent} />
     </LegalPageTemplate>
   );
 }

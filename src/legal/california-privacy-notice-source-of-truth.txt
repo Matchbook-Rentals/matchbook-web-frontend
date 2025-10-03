@@ -1,0 +1,183 @@
+Privacy Notice for California Residents and Other States 
+
+This Privacy Policy supplements our general Privacy Policy and applies to residents of California as well as individuals in other states that provide comparable privacy rights (including, for example, Colorado, Connecticut, Utah, Virginia, and additional states as their laws take effect). We adopt this Privacy Policy to comply with the California Consumer Privacy Act of 2018 (CCPA), as amended by the California Privacy Rights Act (CPRA), as well as other state consumer privacy laws that impose similar obligations. Unless otherwise noted, terms defined under the CCPA/CPRA (and comparable state laws) carry the same meaning when used in this Privacy Policy. 
+
+This Privacy Policy provides additional information regarding the categories of personal information we collect, how we use and retain it, whether we sell or share it, and the rights available to residents of these states. We also explain later in this Privacy Policy the choices available to you in exercising your privacy rights. 
+
+Notice of Collection 
+
+We collect the categories of personal data described below in order to operate our business and provide services, including processing rental applications, facilitating tenant screening, hosting property listings, enabling communication between tenants and landlords, processing payments, maintaining security, complying with legal obligations, and for the other uses described in our Privacy Policy. 
+
+We collect these categories of personal data from the following sources: directly from you; automatically when you use our Website; from landlords, property managers, and tenants; from third-party service providers such as payment processors, background check providers, and credit bureaus; and from public sources. 
+
+We may disclose these categories of personal data to the categories of recipients identified in the table below. 
+
+The table below is provided to meet California disclosure requirements (CCPA/CPRA). While based on California law, it also reflects our broader data practices and may be relevant to residents of other states with similar privacy rights. 
+
+Categories of Personal Data We Collect, Use, and Disclose 
+
+Category of Personal Data (CCPA) 
+
+Examples of Data Collected 
+
+Sources of Data 
+
+Purposes of Use 
+
+Disclosures to Third Parties 
+
+Identifiers 
+
+Name, email address, postal address, telephone number, account login credentials, IP address, photo of tenant 
+
+Directly from you; automatically from your use of the Website 
+
+Provide and manage accounts; communicate with you; process tenant applications 
+
+Service providers (e.g., IT, hosting, support); hosts (in connection with rental applications) 
+
+Customer Records Information 
+
+Payment information, billing address 
+
+Directly from you 
+
+Facilitate payments 
+
+Payment processors (we do not store full payment card data) 
+
+Protected Classification Information 
+
+Date of birth, gender (if provided in applications) 
+
+Directly from you 
+
+Verify identity; tenant screening 
+
+Service providers; not disclosed to hosts directly 
+
+Commercial Information 
+
+Rental application details, rental payment history, transaction history with MatchBook 
+
+Directly from you; from hosts 
+
+Facilitate rental application processing; provide tenant services 
+
+Hosts (as part of application process); service providers 
+
+Biometric Information 
+
+Not collected 
+
+N/A 
+
+N/A 
+
+N/A 
+
+Internet or Network Activity 
+
+Browsing history, device information, usage data, geolocation 
+
+Automatically from your device or browser 
+
+Operate and secure the Website; personalize services 
+
+Service providers (analytics, security, advertising partners) 
+
+Geolocation Data 
+
+Approximate location (from IP address) 
+
+Automatically from your device 
+
+Personalize content; security and fraud prevention 
+
+Service providers 
+
+Professional or Employment Information 
+
+Employer, employment history, income information (as part of tenant applications) 
+
+Directly from you 
+
+Tenant screening; verify eligibility for rentals 
+
+Service providers; hosts (limited to screening results) 
+
+Education Information 
+
+Education history (if included in tenant applications) 
+
+Directly from you 
+
+Tenant screening 
+
+Service providers; hosts (limited to screening results) 
+
+Sensitive Personal Information 
+
+Social Security number, driver’s license, state ID, bank account number, criminal history (for background checks) 
+
+Directly from you; background/credit reporting agencies 
+
+Tenant screening; verify identity 
+
+Service providers (background check providers); hosts (limited to derived screening outputs, not raw reports) 
+
+Inferences Drawn from Other Personal Data 
+
+Derived classifications of tenant creditworthiness (e.g., 'Excellent,' 'Good,' 'Fair,' 'Poor'), tenant screening outcomes, payment reliability assessments 
+
+Generated internally from credit, background, and application data 
+
+Assess applications; assist hosts in rental decisions 
+
+Hosts (derived outputs only); service providers 
+
+Data Retention 
+
+We retain personal data only for as long as reasonably necessary to fulfill the purposes for which it was collected, including to provide services, comply with legal and regulatory obligations, resolve disputes, enforce agreements, and for security and fraud prevention. 
+
+Tenant application data is generally retained for 2 years after submission, unless a longer retention period is required by law. 
+
+Credit and background information is retained only for as long as required under applicable federal, state, or local laws and securely deleted or de-identified when no longer legally required. 
+
+Property listing information remains publicly available on the Website until removed by the host or otherwise deleted in accordance with our policies. 
+
+Payment transaction data is retained only as long as necessary to process the transaction and maintain financial records required by law. 
+
+Website and technical usage data may be retained for shorter periods, typically 24 months to support analytics, security, and service improvements. 
+
+When personal data is no longer required for these purposes, we will securely delete, de-identify, or anonymize it, in accordance with applicable laws and our data retention policies. 
+
+Notice of No Sale or Sharing of Personal Data 
+
+We do not sell your personal data for monetary consideration. We also do not “share” personal data for cross-context behavioral advertising as those terms are defined under the California Consumer Privacy Act (CCPA), as amended by the California Privacy Rights Act (CPRA). 
+
+We may disclose personal data to service providers and other third parties as described in our Privacy Policy, but such disclosures are made only for business purposes permitted by law, under contracts that limit how the personal data may be used and require the data to be kept confidential. 
+
+Your Privacy Rights 
+
+If you are a resident of California, Colorado, Connecticut, Utah, Virginia, or other states with similar laws, you may have certain rights regarding your personal data. These rights are subject to exceptions and limitations under applicable law. Depending on your state of residence, you may have the right to: 
+
+Right to know and access. Request that we disclose the categories and specific pieces of personal data we have collected about you, as well as the categories of sources, purposes for collection, and categories of third parties with whom we disclose that data. 
+
+Right to delete. Request that we delete personal data we have collected from you, subject to legal exceptions (for example, where we must retain data for legal compliance, security, fraud prevention, or tenant screening obligations). 
+
+Right to correct. Request that we correct inaccurate personal data we maintain about you.  
+
+Right to opt out of sale or sharing. Request that we do not “sell” or “share” your personal data, as those terms are defined by law. We do not sell your personal data for monetary consideration, but we may share limited information with service providers or hosts as described in our Privacy Policy. You may opt out of any such sharing at any time.  
+
+Right to limit use of sensitive personal information. In California, you may request that we limit our use of sensitive personal information (such as Social Security numbers, government IDs, or financial account numbers) to only those uses necessary to provide services, as permitted by law.  
+
+Right to non-discrimination. You have the right not to receive discriminatory treatment from us for exercising your privacy rights. 
+
+How to Exercise Your Rights 
+
+To exercise your rights described above, you may submit a request to us by emailing us at Support@matchbookrentals.com  
+
+To protect your privacy and security, we may need to verify your identity before fulfilling your request. We will respond to verified requests within the time period required by applicable law (generally 45 days, with a possible extension if reasonably necessary). 
+
+You may also authorize an agent to make a request on your behalf. If you use an agent, we may require proof of your written authorization and verification of the agent’s identity. 

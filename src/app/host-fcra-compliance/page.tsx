@@ -1,6 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
-import { HostFCRAContent } from "./host-fcra-content";
+import { FcraHtmlContent } from "./fcra-html-content";
+import fs from "fs";
+import path from "path";
 
 export default async function HostFCRACompliancePage() {
   const user = await currentUser();
@@ -18,14 +20,23 @@ export default async function HostFCRACompliancePage() {
   const userId = user?.id || null;
   const isSignedIn = !!user;
 
+  // Read the HTML file on the server
+  const htmlFilePath = path.join(
+    process.cwd(),
+    "src",
+    "legal",
+    "fcra-09-23-25.html"
+  );
+  const htmlContent = fs.readFileSync(htmlFilePath, "utf-8");
+
   return (
     <LegalPageTemplate
       userId={userId}
       user={userObject}
       isSignedIn={isSignedIn}
-      pageTitle="Host Fair Credit Reporting Act Compliance"
+      pageTitle="Host Fair Credit Reporting Act Compliance Addendum"
     >
-      <HostFCRAContent />
+      <FcraHtmlContent htmlContent={htmlContent} />
     </LegalPageTemplate>
   );
 }

@@ -1,0 +1,97 @@
+Host Fair Credit Reporting Act Compliance Addendum 
+
+This Host Fair Credit Reporting Act Compliance Addendum (“Addendum”) supplements the MatchBook Terms and Conditions (“Agreement”) between MatchBook, LLC (“MatchBook”)and the undersigned landlord or property owner (“Host”). 
+
+By checking the acknowledgment box below, Host agrees to comply with the Fair Credit Reporting Act (15 U.S.C. § 1681 et seq.) (“FCRA”), applicable state “Mini-FCRAs,” and all related consumer protection, fair housing, and privacy laws when using consumer reports and renter screening information through the MatchBook platform. 
+
+Purpose and Permissible Use 
+
+Host certifies that consumer reports, credit reports, criminal background checks, eviction history, and other renter screening data (“Consumer Reports”) will be used solely to evaluate rental applications initiated by the applicant (“Applicant”). 
+
+Host shall not obtain, request, or attempt to access a Consumer Report without Applicant’s express authorization through the MatchBook platform. 
+
+Host shall not use Consumer Reports for marketing, solicitation, resale, or any other unrelated purpose. 
+
+Information Received 
+
+Host understands that Consumer Reports may include, but are not limited to: credit history; outstanding debts, collections, and charge-offs; loan and credit card applications and inquiries; public records related to financial judgments; and information from lenders, creditors, or financial institutions. 
+
+Derived Rental Applicant Information.  
+
+Host acknowledges that MatchBook may analyze Credit Reports to create Derived Rental Applicant Information. “Derived Rental Applicant Information” means information created by MatchBook from a Credit Report for rental applicant screening purposes. This may include risk assessments, eligibility indicators, or screening scores generated through proprietary models, but does not include disclosure of an applicant’s full Credit Report or raw credit score.  
+
+Authorization and Disclosure. 
+
+Host acknowledges that Applicants provide their own disclosure and authorization through the MatchBook platform. 
+
+Host shall retain records of Applicant authorizations and may not combine FCRA disclosure/authorization forms with unrelated notices or documents. 
+
+If Host ever seeks an investigative consumer report (involving interviews with neighbors, associates, or others), Host must provide additional disclosures and notices as required under the FCRA and applicable Mini-FCRAs. 
+
+Adverse Action Procedures. 
+
+If Host takes an Adverse Action (denying an application, requiring higher rent or deposits, requiring a guarantor, or other unfavorable terms) based in whole or in part on a Consumer Report: 
+
+Host shall provide the Applicant with an Adverse Action Notice that includes: 
+
+The name, address, and telephone number of the consumer reporting agency (CRA); 
+
+A statement that the CRA did not make the decision and cannot explain the reasons; 
+
+Notice of the Applicant’s right to a free copy of the Report within 60 days; 
+
+Notice of the Applicant’s right to dispute inaccuracies with the CRA; and 
+
+A copy of the CFPB’s “Summary of Your Rights Under the Fair Credit Reporting Act,” attached as Appendix A. 
+
+Timing: The notice must be provided at the time of the adverse action or within three (3) business days of the decision if delivered by mail or electronically. 
+
+Risk-Based Pricing Notice. 
+
+If Host uses a Consumer Report to offer tenancy on terms less favorable than those offered to other Applicants (e.g., higher rent or deposit based on credit risk), Host must provide a Risk-Based Pricing Notice unless an Adverse Action Notice is already provided. 
+
+Information Security and Disposal. 
+
+Host shall implement administrative, technical, and physical safeguards to protect Consumer Reports and Derived Renter Information. 
+
+Access must be restricted to those with a legitimate business need. 
+
+Reports and related information must be securely destroyed when no longer needed, including shredding paper records and securely deleting electronic files. 
+
+In the event of an actual or suspected data breach, Host must promptly investigate, mitigate, notify affected Applicants and regulators as required, and cooperate with MatchBook, CRAs, and law enforcement. 
+
+Record Retention. 
+
+Host shall retain: 
+
+Consumer Reports and Derived Renter Information only as long as necessary for the rental application or tenancy; 
+
+Applicant authorizations and disclosures for at least five (5) years or the duration of tenancy plus seven (7) years, whichever is longer; 
+
+Copies of all Adverse Action or Risk-Based Pricing Notices for at least five (5) years. 
+
+All retained records must be stored securely and disposed of consistent with Section 7. 
+
+Compliance with Related Laws. 
+
+Host shall comply with all applicable federal, state, and local fair housing and anti-discrimination laws, including the Fair Housing Act (42 U.S.C. § 3601 et seq.). 
+
+Host shall comply with the Equal Credit Opportunity Act (ECOA), including providing specific reasons for denial when required. 
+
+Host shall comply with applicable privacy laws and landlord-tenant laws that affect the use of Consumer Reports. 
+
+Certification and Liability. 
+
+Host certifies that: 
+
+Reports will be used only for permissible purposes. 
+
+Reports will not be used in violation of equal opportunity laws. 
+
+Applicant authorization has been obtained before any Report is accessed. 
+
+Host acknowledges that non-compliance may result in civil liability (including actual damages, statutory damages, punitive damages, attorney’s fees), and criminal penalties for willful violations. 
+
+Host agrees to indemnify, defend, and hold harmless MatchBook from any claims, damages, or liabilities arising from Host’s failure to comply with the FCRA, state consumer reporting laws, fair housing laws, this Addendum, or the Agreement. 
+
+ 
