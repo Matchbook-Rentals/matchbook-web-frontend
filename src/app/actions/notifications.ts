@@ -17,6 +17,7 @@ function getNotificationPreferenceField(actionType: string): string | null {
     'view': 'emailApplicationReceivedNotifications', // Application received (for hosts)
     'application_approved': 'emailApplicationApprovedNotifications',
     'application_declined': 'emailApplicationDeclinedNotifications',
+    'application_updated': 'emailApplicationReceivedNotifications', // Use same preference as application received
     
     // Reviews & Verification  
     'submit_host_review': 'emailSubmitHostReviewNotifications',
@@ -26,6 +27,8 @@ function getNotificationPreferenceField(actionType: string): string | null {
     
     // Bookings & Stays
     'booking': 'emailBookingCompletedNotifications', // Booking completed
+    'booking_host': 'emailBookingCompletedNotifications', // Host receives booking
+    'booking_confirmed': 'emailBookingCompletedNotifications', // Renter booking confirmed
     'booking_canceled': 'emailBookingCanceledNotifications',
     'move_out_upcoming': 'emailMoveOutUpcomingNotifications',
     'move_in_upcoming': 'emailMoveInUpcomingNotifications',
@@ -86,7 +89,8 @@ async function sendNotificationEmailAsync(notification: Notification, customEmai
         select: {
           email: true,
           firstName: true,
-          preferences: true
+          preferences: true,
+          verifiedAt: true  // Matchbook Verification (background check + credit report) - needed for FCRA compliance
         }
       });
 
@@ -130,7 +134,11 @@ async function sendNotificationEmailAsync(notification: Notification, customEmai
       // Get user email for unmapped notification types
       const user = await prisma.user.findUnique({
         where: { id: notification.userId },
-        select: { email: true, firstName: true }
+        select: {
+          email: true,
+          firstName: true,
+          verifiedAt: true  // Matchbook Verification (background check + credit report) - needed for FCRA compliance
+        }
       });
 
       if (user?.email) {
