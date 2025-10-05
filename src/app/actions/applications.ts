@@ -609,6 +609,96 @@ export async function upsertApplication(data: any) {
       revalidatePath('/app/rent/old-search');
       revalidatePath('/app/rent/applications/general');
 
+      // Send notifications to listing owners with pending housing requests
+      try {
+        // Only send notifications for general (default) applications, not trip-specific ones
+        if (!tripId && application.isDefault) {
+          // First check if there are any pending housing requests
+          const housingRequests = await prisma.housingRequest.findMany({
+            where: {
+              userId: userId,
+              status: 'pending'
+            },
+            include: {
+              listing: {
+                select: {
+                  id: true,
+                  userId: true,
+                  title: true
+                }
+              }
+            }
+          });
+
+          // Only proceed if there are open housing requests
+          if (housingRequests.length > 0) {
+            // Check if application actually changed by comparing with previous version
+            const hasChanges = (() => {
+              if (!existingApp) return false; // New application, no changes to notify about
+
+              // Compare relevant fields that hosts care about
+              const fieldsToCompare = [
+                'firstName', 'middleName', 'lastName', 'dateOfBirth',
+                'evicted', 'brokenLease', 'felony', 'landlordDispute',
+                'evictedExplanation', 'felonyExplanation'
+              ];
+
+              for (const field of fieldsToCompare) {
+                if (filteredData[field] !== undefined && existingApp[field] !== filteredData[field]) {
+                  return true;
+                }
+              }
+
+              // Check if identifications, incomes, or residential histories changed
+              if (identifications || incomes || residentialHistories) {
+                return true;
+              }
+
+              return false;
+            })();
+
+            // Only send notifications if there were actual changes
+            if (hasChanges) {
+              // Get user's name for notification
+              const user = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { firstName: true, lastName: true, email: true }
+              });
+
+              const renterName = user
+                ? (`${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'A renter')
+                : 'A renter';
+
+              // Send notification to each unique listing owner
+              const notifiedOwners = new Set<string>();
+              const { createNotification } = await import('./notifications');
+              const { buildNotificationEmailData } = await import('@/lib/notification-builders');
+
+              for (const hr of housingRequests) {
+                const ownerId = hr.listing.userId;
+                if (!notifiedOwners.has(ownerId) && ownerId !== userId) {
+                  await createNotification({
+                    userId: ownerId,
+                    content: `${renterName} has updated their application`,
+                    url: `/app/host/${hr.listing.id}/applications/${hr.id}`,
+                    actionType: 'application_updated',
+                    actionId: hr.id,
+                    emailData: buildNotificationEmailData('application_updated', {
+                      renterName: renterName,
+                      listingTitle: hr.listing.title || 'your listing'
+                    })
+                  });
+                  notifiedOwners.add(ownerId);
+                }
+              }
+            }
+          }
+        }
+      } catch (notificationError) {
+        // Log error but don't fail the application update
+        console.error('Failed to send application update notifications:', notificationError);
+      }
+
       return { success: true, application };
     } else {
       // Create new application with all relationships in one go
