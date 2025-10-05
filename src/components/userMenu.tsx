@@ -193,6 +193,8 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   }
 
   const handleSettings = () => {
+    const isAdminDev = userRole?.includes('admin');
+
     openUserProfile({
       customPages: [
         {
@@ -201,27 +203,74 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
           mount: async (el) => {
             const content = document.createElement('div');
             content.className = 'p-4';
-            
+
+            const toggleHTML = (id: string, label: string, description: string) => `
+              <div class="flex items-center justify-between py-2">
+                <div>
+                  <label class="text-sm font-medium text-gray-900">${label}</label>
+                  <p class="text-xs text-gray-500">${description}</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer notification-toggle" id="${id}" data-pref="${id}">
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            `;
+
             content.innerHTML = `
               <h2 class="text-xl font-bold mb-4">Email Notification Settings</h2>
+              ${!isAdminDev ? '<p class="text-sm text-gray-600 mb-4">Notification preferences will be available soon.</p>' : ''}
               <div id="loading-state" class="text-center py-4">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto" />
+                <div class="flex justify-center">
+                  <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                </div>
                 <p class="text-sm text-gray-500 mt-2">Loading preferences...</p>
               </div>
               <div id="notification-settings" class="space-y-6 hidden">
-                <div class="space-y-3">
-                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Messages & Communication</h3>
-                  <div class="flex items-center justify-between">
-                    <div>
-                      <label class="text-sm font-medium text-gray-900">New Message</label>
-                      <p class="text-xs text-gray-500">Get notified when you receive new messages</p>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" id="new-message-toggle">
-                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
+                ${isAdminDev ? `
+                  <div class="space-y-3">
+                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Messages & Communication</h3>
+                    ${toggleHTML('emailNewMessageNotifications', 'New Message', 'Get notified when you receive new messages')}
+                    ${toggleHTML('emailNewConversationNotifications', 'New Conversation', 'Get notified when someone starts a conversation with you')}
                   </div>
-                </div>
+
+                  <div class="space-y-3">
+                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Applications & Matching</h3>
+                    ${toggleHTML('emailApplicationReceivedNotifications', 'Application Received', 'Get notified when you receive a new application (hosts)')}
+                    ${toggleHTML('emailApplicationApprovedNotifications', 'Application Approved', 'Get notified when your application is approved')}
+                    ${toggleHTML('emailApplicationDeclinedNotifications', 'Application Declined', 'Get notified when your application is declined')}
+                  </div>
+
+                  <div class="space-y-3">
+                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Bookings & Stays</h3>
+                    ${toggleHTML('emailBookingCompletedNotifications', 'Booking Completed', 'Get notified when a booking is completed')}
+                    ${toggleHTML('emailBookingCanceledNotifications', 'Booking Canceled', 'Get notified when a booking is canceled')}
+                    ${toggleHTML('emailMoveInUpcomingNotifications', 'Move-In Upcoming', 'Get notified about upcoming move-in dates')}
+                    ${toggleHTML('emailMoveOutUpcomingNotifications', 'Move-Out Upcoming', 'Get notified about upcoming move-out dates')}
+                  </div>
+
+                  <div class="space-y-3">
+                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Payments</h3>
+                    ${toggleHTML('emailPaymentSuccessNotifications', 'Payment Success', 'Get notified when payments are successful')}
+                    ${toggleHTML('emailPaymentFailedNotifications', 'Payment Failed', 'Get notified when payments fail')}
+                  </div>
+
+                  <div class="space-y-3">
+                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Reviews & Verification</h3>
+                    ${toggleHTML('emailSubmitHostReviewNotifications', 'Host Review Prompt', 'Get reminded to review your guests')}
+                    ${toggleHTML('emailSubmitRenterReviewNotifications', 'Renter Review Prompt', 'Get reminded to review your host')}
+                    ${toggleHTML('emailLandlordInfoRequestNotifications', 'Landlord Info Request', 'Get notified about landlord info requests')}
+                    ${toggleHTML('emailVerificationCompletedNotifications', 'Verification Completed', 'Get notified when verification is complete')}
+                  </div>
+
+                  <div class="space-y-3">
+                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">External Communications</h3>
+                    ${toggleHTML('emailOffPlatformHostNotifications', 'Off Platform Host', 'Get notified about off-platform host communications')}
+                  </div>
+                ` : ''}
               </div>
               <div id="error-state" class="text-center py-4 hidden">
                 <p class="text-sm text-red-500">Failed to load notification preferences. Please try again.</p>
@@ -229,11 +278,51 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
             `;
             el.appendChild(content);
 
+            if (!isAdminDev) {
+              content.querySelector('#loading-state')?.classList.add('hidden');
+              return;
+            }
+
             try {
               const response = await fetch('/api/user/notification-preferences');
               const data = await response.json();
-              
-              if (data.success) {
+
+              if (data.success && data.preferences) {
+                // Set all toggle states based on preferences
+                Object.keys(data.preferences).forEach((key) => {
+                  const toggle = content.querySelector(`#${key}`) as HTMLInputElement;
+                  if (toggle) {
+                    toggle.checked = data.preferences[key] === true;
+                  }
+                });
+
+                // Add change listeners to all toggles
+                content.querySelectorAll('.notification-toggle').forEach((toggle) => {
+                  toggle.addEventListener('change', async (e) => {
+                    const target = e.target as HTMLInputElement;
+                    const prefKey = target.getAttribute('data-pref');
+                    if (!prefKey) return;
+
+                    try {
+                      const updateResponse = await fetch('/api/user/notification-preferences', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ [prefKey]: target.checked })
+                      });
+
+                      if (!updateResponse.ok) {
+                        console.error('Failed to update preference');
+                        // Revert the toggle
+                        target.checked = !target.checked;
+                      }
+                    } catch (error) {
+                      console.error('Error updating preference:', error);
+                      // Revert the toggle
+                      target.checked = !target.checked;
+                    }
+                  });
+                });
+
                 content.querySelector('#loading-state')?.classList.add('hidden');
                 content.querySelector('#notification-settings')?.classList.remove('hidden');
               } else {
