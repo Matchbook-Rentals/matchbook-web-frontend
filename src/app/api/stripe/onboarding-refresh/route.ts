@@ -32,17 +32,17 @@ export async function GET(request: NextRequest) {
     }
     
     if (!accountId) {
-      return NextResponse.redirect(new URL('/dashboard?error=missing-account', request.url));
+      return NextResponse.redirect(new URL('/app/host/dashboard/overview?error=missing-account', request.url));
     }
-    
+
     // Create new account link with same parameters
     const callbackUrl = new URL('/api/stripe/onboarding-callback', request.url.origin);
-    callbackUrl.searchParams.set('redirect_to', redirectTo || '/dashboard');
+    callbackUrl.searchParams.set('redirect_to', redirectTo || '/app/host/dashboard/overview');
     callbackUrl.searchParams.set('account_id', accountId);
-    
+
     const refreshUrl = new URL('/api/stripe/onboarding-refresh', request.url.origin);
     refreshUrl.searchParams.set('account_id', accountId);
-    refreshUrl.searchParams.set('redirect_to', redirectTo || '/dashboard');
+    refreshUrl.searchParams.set('redirect_to', redirectTo || '/app/host/dashboard/overview');
     
     const linkResponse = await fetch(`${request.url.origin}/api/payment/account-link`, {
       method: 'POST',
@@ -63,11 +63,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(linkData.url);
     } else {
       console.error('Error creating new account link:', linkData.error);
-      return NextResponse.redirect(new URL('/dashboard?error=refresh-failed', request.url));
+      return NextResponse.redirect(new URL('/app/host/dashboard/overview?error=refresh-failed', request.url));
     }
-    
+
   } catch (error) {
     console.error('Error in Stripe onboarding refresh:', error);
-    return NextResponse.redirect(new URL('/dashboard?error=refresh-failed', request.url));
+    return NextResponse.redirect(new URL('/app/host/dashboard/overview?error=refresh-failed', request.url));
   }
 }

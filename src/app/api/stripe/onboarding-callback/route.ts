@@ -61,14 +61,14 @@ export async function GET(request: NextRequest) {
     }
     
     // Default fallback to dashboard with onboarding status
-    const dashboardUrl = new URL('/dashboard', request.url);
+    const dashboardUrl = new URL('/app/host/dashboard/overview', request.url);
     dashboardUrl.searchParams.set('onboarding_complete', onboardingComplete.toString());
     return NextResponse.redirect(dashboardUrl);
-    
+
   } catch (error) {
     console.error('Error in Stripe onboarding callback:', error);
     // Redirect to an error page or dashboard
-    return NextResponse.redirect(new URL('/dashboard?error=onboarding-failed', request.url));
+    return NextResponse.redirect(new URL('/app/host/dashboard/overview?error=onboarding-failed', request.url));
   }
 }
 

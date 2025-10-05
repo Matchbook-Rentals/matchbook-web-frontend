@@ -3,6 +3,7 @@
 import { useAuth } from '@clerk/nextjs'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { Loader2 } from 'lucide-react'
 
 export default function StripeCallbackPage() {
   const { isLoaded, isSignedIn, userId } = useAuth()
@@ -68,14 +69,14 @@ export default function StripeCallbackPage() {
         }
 
         // Determine where to redirect
-        let finalRedirectUrl = redirectTo || '/dashboard'
+        let finalRedirectUrl = redirectTo || '/app/host/dashboard/overview'
 
         // Use replace to avoid back button issues
         router.replace(finalRedirectUrl)
 
       } catch (error) {
         console.error('Error in Stripe callback:', error)
-        router.replace('/dashboard?error=callback-failed')
+        router.replace('/app/host/dashboard/overview?error=callback-failed')
       } finally {
         setIsChecking(false)
       }
@@ -89,7 +90,7 @@ export default function StripeCallbackPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#3c8787]" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Completing Setup...
           </h2>

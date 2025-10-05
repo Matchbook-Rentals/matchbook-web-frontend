@@ -30,13 +30,19 @@ export async function GET(
 
     if (!match) {
       console.error('❌ Match not found:', params.matchId);
-      return NextResponse.redirect(new URL('/app/dashboard', request.url));
+      return NextResponse.json(
+        { error: 'Match not found' },
+        { status: 404 }
+      );
     }
 
     // Verify the user is the renter
     if (match.trip.user?.id !== userId) {
       console.error('❌ Unauthorized - not renter');
-      return NextResponse.redirect(new URL('/app/dashboard', request.url));
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 403 }
+      );
     }
 
     // Check if lease is signed by tenant
@@ -84,6 +90,9 @@ export async function GET(
 
   } catch (error) {
     console.error('❌ Error in callback verification:', error);
-    return NextResponse.redirect(new URL('/app/dashboard', request.url));
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
