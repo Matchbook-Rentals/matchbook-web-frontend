@@ -285,8 +285,22 @@ export async function processDirectPayment({
     // TODO: We might bring back the lease signing requirement later
     // Original condition was: if (matchWithLease?.landlordSignedAt && matchWithLease?.tenantSignedAt && !matchWithLease.booking)
     if (!matchWithLease.booking) {
-      
+
       console.log('✅ Payment initiated and no existing booking - creating booking now!');
+
+      // Get the housing request to use confirmed dates (not flexible trip dates)
+      const housingRequest = await prisma.housingRequest.findUnique({
+        where: {
+          listingId_tripId: {
+            listingId: match.listingId,
+            tripId: match.tripId
+          }
+        }
+      });
+
+      if (!housingRequest) {
+        console.warn('⚠️ Housing request not found for match:', matchId, '- falling back to trip dates');
+      }
 
       try {
         const booking = await prisma.booking.create({
@@ -295,8 +309,8 @@ export async function processDirectPayment({
             listingId: match.listingId,
             tripId: match.tripId,
             matchId,
-            startDate: match.trip.startDate!,
-            endDate: match.trip.endDate!,
+            startDate: housingRequest?.startDate || match.trip.startDate!,
+            endDate: housingRequest?.endDate || match.trip.endDate!,
             monthlyRent: match.monthlyRent,
             status: bookingStatus,  // Use calculated status based on payment type
             paymentStatus: bookingPaymentStatus,  // Track payment settlement status
@@ -305,6 +319,10 @@ export async function processDirectPayment({
 
         console.log('✅ Booking created successfully:', booking.id, 'with status:', bookingStatus);
 
+        // Use housing request dates for SMS and notifications (confirmed dates, not flexible trip dates)
+        const confirmedStartDate = housingRequest?.startDate || match.trip.startDate!;
+        const confirmedEndDate = housingRequest?.endDate || match.trip.endDate!;
+
         // Send SMS alert for new booking
         await sendBookingCreatedAlert({
           bookingId: booking.id,
@@ -312,8 +330,8 @@ export async function processDirectPayment({
           listingAddress: match.listing.locationString || 'Unknown location',
           renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim() || 'Unknown renter',
           totalAmount: amount,
-          startDate: match.trip.startDate!,
-          endDate: match.trip.endDate!,
+          startDate: confirmedStartDate,
+          endDate: confirmedEndDate,
         });
 
         // Send in-app and email notifications to both host and renter
@@ -325,14 +343,14 @@ export async function processDirectPayment({
             || match.trip.user.email
             || 'A renter';
           const listingTitle = match.listing.title || 'a listing';
-          const moveInDate = match.trip.startDate!.toLocaleDateString();
-          const dateRange = `${match.trip.startDate!.toLocaleDateString()} - ${match.trip.endDate!.toLocaleDateString()}`;
+          const moveInDate = confirmedStartDate.toLocaleDateString();
+          const dateRange = `${confirmedStartDate.toLocaleDateString()} - ${confirmedEndDate.toLocaleDateString()}`;
 
           // Notify HOST
           await createNotification({
             userId: match.listing.userId,
             content: `New booking: ${renterName} is moving in on ${moveInDate}`,
-            url: `/app/host-dashboard?tab=bookings&id=${booking.id}`,
+            url: `/app/host/${match.listingId}/bookings/${booking.id}`,
             actionType: 'booking_host',
             actionId: booking.id,
             emailData: buildNotificationEmailData('booking_host', {
