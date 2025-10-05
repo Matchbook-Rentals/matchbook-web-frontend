@@ -13,6 +13,7 @@ import { Bell, Send, CheckCircle, XCircle, Loader2, Mail, Home, Check, UserPlus,
 import { sendTestNotification } from './_actions'
 import { previewNotificationEmail } from './_preview-actions'
 import { runCheckUnreadMessagesCron } from './_run-cron-actions'
+import { enableNotificationForAllUsers } from './_enable-notification'
 import {
   Table,
   TableBody,
@@ -73,6 +74,7 @@ export default function NotificationTestPage() {
   const [initiatingNotificationId, setInitiatingNotificationId] = useState<string | null>(null)
   const [runningCronNotificationId, setRunningCronNotificationId] = useState<string | null>(null)
   const [initiatingMultipleNotificationId, setInitiatingMultipleNotificationId] = useState<string | null>(null)
+  const [enablingNotificationId, setEnablingNotificationId] = useState<string | null>(null)
 
   const notificationTypes: NotificationTypeConfig[] = [
     // Messages & Communication
@@ -100,6 +102,17 @@ export default function NotificationTestPage() {
       }
     },
     // Applications & Matching
+    {
+      id: 'application_submitted',
+      name: 'Application Submitted',
+      description: 'When a renter submits an application',
+      icon: <FileText className="h-4 w-4" />,
+      category: 'application',
+      sampleData: {
+        listingTitle: 'Spacious 3BR House',
+        senderName: 'Emily Rodriguez'
+      }
+    },
     {
       id: 'view',
       name: 'Application Received',
@@ -531,6 +544,7 @@ export default function NotificationTestPage() {
   const configuredNotificationTypes = [
     'message',
     'new_conversation',
+    'application_submitted',
     'view', // Application received
     'application_approved',
     'application_declined',
@@ -560,6 +574,50 @@ export default function NotificationTestPage() {
   const isNotificationConfigured = (notificationId: string) => {
     return configuredNotificationTypes.includes(notificationId)
   }
+
+  // List of notifications that need testing (orange border)
+  const needsTestingNotificationTypes = [
+    'message',
+    'new_conversation',
+    'application_submitted',
+    'view',  // Application received
+    'application_approved',
+    'application_declined',
+    'application_updated'
+  ];
+
+  // List of tested and working notifications (green border)
+  const testedNotificationTypes: string[] = [
+    // Move notifications here as they get tested
+  ];
+
+  const getNotificationStatus = (notificationId: string): 'tested' | 'needs-testing' | 'broken' | 'unconfigured' => {
+    if (!isNotificationConfigured(notificationId)) {
+      return 'unconfigured'; // Red - no email template
+    }
+    if (testedNotificationTypes.includes(notificationId)) {
+      return 'tested'; // Green - tested and working
+    }
+    if (needsTestingNotificationTypes.includes(notificationId)) {
+      return 'needs-testing'; // Orange - needs testing
+    }
+    return 'broken'; // Red - configured but untested/broken
+  };
+
+  const getNotificationBorderClass = (status: string): string => {
+    switch (status) {
+      case 'tested':
+        return 'border-l-4 border-l-green-500 bg-green-50/30';
+      case 'needs-testing':
+        return 'border-l-4 border-l-orange-500 bg-orange-50/30';
+      case 'broken':
+        return 'border-l-4 border-l-red-600 bg-red-50/30';
+      case 'unconfigured':
+        return 'border-l-4 border-l-red-500 bg-red-50/30';
+      default:
+        return '';
+    }
+  };
 
   // Group notifications by category
   const groupedNotifications = notificationTypes.reduce((acc, notification) => {
@@ -667,6 +725,35 @@ export default function NotificationTestPage() {
       })
     } finally {
       setInitiatingMultipleNotificationId(null)
+    }
+  }
+
+  const handleEnableNotification = async (notificationId: string) => {
+    setEnablingNotificationId(notificationId)
+
+    try {
+      const result = await enableNotificationForAllUsers(notificationId)
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: result.message || "Enabled notification for all users",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to enable notification",
+          variant: "destructive"
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      })
+    } finally {
+      setEnablingNotificationId(null)
     }
   }
 
@@ -790,14 +877,18 @@ export default function NotificationTestPage() {
           <CardDescription>
             All notifications will be sent to your admin email with sample data
           </CardDescription>
-          <div className="mt-3 flex items-center gap-4 text-sm">
+          <div className="mt-3 flex items-center gap-4 text-sm flex-wrap">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 border-l-4 border-l-red-500 bg-red-50/30"></div>
-              <span className="text-muted-foreground">Missing email template (uses default)</span>
+              <span className="text-muted-foreground">Untested/broken or missing template</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-green-50 border border-green-200"></div>
-              <span className="text-muted-foreground">Custom email template configured</span>
+              <div className="w-4 h-4 border-l-4 border-l-orange-500 bg-orange-50/30"></div>
+              <span className="text-muted-foreground">Needs testing</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 border-l-4 border-l-green-500 bg-green-50/30"></div>
+              <span className="text-muted-foreground">Tested and working</span>
             </div>
           </div>
         </CardHeader>
@@ -829,11 +920,12 @@ export default function NotificationTestPage() {
                     </TableHeader>
                     <TableBody>
                       {notifications.map((notification) => {
-                        const isConfigured = isNotificationConfigured(notification.id)
+                        const status = getNotificationStatus(notification.id)
+                        const borderClass = getNotificationBorderClass(status)
                         return (
-                          <TableRow 
-                            key={notification.id} 
-                            className={!isConfigured ? 'border-l-4 border-l-red-500 bg-red-50/30' : ''}
+                          <TableRow
+                            key={notification.id}
+                            className={borderClass}
                           >
                             <TableCell>
                               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted">
@@ -842,8 +934,17 @@ export default function NotificationTestPage() {
                             </TableCell>
                             <TableCell className="font-medium">
                               {notification.name}
-                              {!isConfigured && (
+                              {status === 'unconfigured' && (
                                 <span className="ml-2 text-xs text-red-600 font-normal">(uses default template)</span>
+                              )}
+                              {status === 'needs-testing' && (
+                                <span className="ml-2 text-xs text-orange-600 font-normal">(needs testing)</span>
+                              )}
+                              {status === 'broken' && (
+                                <span className="ml-2 text-xs text-red-600 font-normal">(broken/untested)</span>
+                              )}
+                              {status === 'tested' && (
+                                <span className="ml-2 text-xs text-green-600 font-normal">(tested ✓)</span>
                               )}
                             </TableCell>
                             <TableCell className="text-sm text-muted-foreground">
@@ -911,6 +1012,25 @@ export default function NotificationTestPage() {
                                     )}
                                   </Button>
                                 )}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleEnableNotification(notification.id)}
+                                  disabled={enablingNotificationId === notification.id}
+                                  title="Enable this notification for all users"
+                                >
+                                  {enablingNotificationId === notification.id ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                      Enabling...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Users className="mr-2 h-3 w-3" />
+                                      Enable for All
+                                    </>
+                                  )}
+                                </Button>
                                 <Button
                                   size="sm"
                                   variant="outline"
