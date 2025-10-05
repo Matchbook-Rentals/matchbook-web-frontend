@@ -5,12 +5,15 @@ import { Booking } from "@prisma/client";
 import BookingCard from "./booking-card";
 import { deleteBooking } from "@/app/actions/bookings";
 import { useToast } from "@/components/ui/use-toast";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface BookingsContainerSectionProps {
   bookings: Booking[];
+  hasListings: boolean;
 }
 
-export const BookingsContainerSection = ({ bookings }: BookingsContainerSectionProps): JSX.Element => {
+export const BookingsContainerSection = ({ bookings, hasListings }: BookingsContainerSectionProps): JSX.Element => {
   const [localBookings, setLocalBookings] = useState(bookings);
   const { toast } = useToast();
 
@@ -43,9 +46,26 @@ export const BookingsContainerSection = ({ bookings }: BookingsContainerSectionP
 
   if (localBookings.length === 0) {
     return (
-      <div className="text-center py-10 border border-dashed border-gray-300 rounded-lg bg-white w-full">
-        <p className="text-lg text-gray-600">You currently don&apos;t have any bookings.</p>
-      </div>
+      <section className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500 w-full">
+        <img
+          src="/host-dashboard/empty/applications.png"
+          alt="No bookings"
+          className="w-full h-auto max-w-[260px] mb-0"
+        />
+        <div className="flex flex-col items-center gap-4">
+          <div className="text-lg font-medium text-center">
+            You currently don&apos;t have any bookings.
+          </div>
+          {hasListings && (
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-sm text-gray-600">Looking for your Host bookings?</p>
+              <Link href="/app/host/dashboard">
+                <Button variant="brandButton">View Host Bookings</Button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
     );
   }
 
