@@ -3708,6 +3708,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     <SignableField
                       key={field.formId}
                       field={field}
+                      recipient={recipients.find(r => r.index === field.recipientIndex)}
+                      onSign={signField}
+                      isSigned={!!signedValue}
                       signedValue={signedValue}
                       isForCurrentSigner={
                         workflowState === 'signer1'
