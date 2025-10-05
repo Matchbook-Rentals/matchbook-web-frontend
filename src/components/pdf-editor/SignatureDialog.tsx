@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SignatureCanvas } from './SignatureCanvas';
 import { Trash2, Star, StarOff } from 'lucide-react';
+import { SIGNATURE_FONTS } from './signature-fonts';
 
 interface UserSignature {
   id: string;
@@ -31,14 +32,6 @@ interface SignatureDialogProps {
   onDeleteSignature?: (id: string) => Promise<void>;
   onSetDefaultSignature?: (id: string) => Promise<void>;
 }
-
-const SIGNATURE_FONTS = [
-  { value: 'dancing-script', label: 'Dancing Script', className: 'font-signature-dancing' },
-  { value: 'caveat', label: 'Caveat', className: 'font-signature-caveat' },
-  { value: 'kalam', label: 'Kalam', className: 'font-signature-kalam' },
-  { value: 'great-vibes', label: 'Great Vibes', className: 'font-signature-vibes' },
-  { value: 'pacifico', label: 'Pacifico', className: 'font-signature-pacifico' },
-];
 
 export const SignatureDialog: React.FC<SignatureDialogProps> = ({
   isOpen,

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Trash2, Star, StarOff } from 'lucide-react';
+import { SIGNATURE_FONTS } from './signature-fonts';
 
 interface InitialsDialogProps {
   isOpen: boolean;
@@ -28,6 +29,7 @@ export const InitialsDialog: React.FC<InitialsDialogProps> = ({
 }) => {
   const [typedText, setTypedText] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const selectedFont = 'dancing-script'; // Default font only
 
   // Generate initials from recipient name
   const generateInitials = (name: string): string => {
@@ -47,15 +49,17 @@ export const InitialsDialog: React.FC<InitialsDialogProps> = ({
     }
   }, [isOpen, recipientName]);
 
+  const selectedFontClass = SIGNATURE_FONTS.find(f => f.value === selectedFont)?.className || 'font-signature-dancing';
+
   const handleUseTypedInitials = async () => {
     if (!typedText.trim()) return;
-    
+
     console.log('🔤 InitialsDialog - Starting to save initials:', {
       initials: typedText.trim(),
       hasOnSaveInitials: !!onSaveInitials,
       recipientName: recipientName
     });
-    
+
     setIsLoading(true);
     try {
       // ALWAYS save initials - no choice for first-time users
@@ -66,9 +70,9 @@ export const InitialsDialog: React.FC<InitialsDialogProps> = ({
       } else {
         console.log('🔤 InitialsDialog - No onSaveInitials function provided');
       }
-      
+
       console.log('🔤 InitialsDialog - Calling onSign with initials');
-      onSign(typedText.trim(), 'typed', 'dancing-script');
+      onSign(typedText.trim(), 'typed', selectedFont);
       onClose();
     } catch (error) {
       console.error('🔤 InitialsDialog - Error saving typed initials:', error);
@@ -86,9 +90,9 @@ export const InitialsDialog: React.FC<InitialsDialogProps> = ({
         </DialogHeader>
 
         <div className="space-y-3 sm:space-y-4">
-            <div className="text-xs sm:text-sm text-gray-600">
-              Enter your initials below. They will be styled with a signature font.
-            </div>
+          <div className="text-xs sm:text-sm text-gray-600">
+            Enter your initials below. They will be styled with a signature font.
+          </div>
 
           <div className="space-y-3 sm:space-y-4">
             <div>
@@ -98,13 +102,14 @@ export const InitialsDialog: React.FC<InitialsDialogProps> = ({
                 value={typedText}
                 onChange={(e) => setTypedText(e.target.value.toUpperCase().substring(0, 3))}
                 placeholder="Enter initials"
-                className="mt-1 text-center font-mono text-lg min-h-[44px] touch-manipulation"
+                className={`mt-1 text-center text-2xl min-h-[44px] touch-manipulation ${selectedFontClass}`}
                 maxLength={3}
               />
             </div>
 
-            <div className="border rounded-lg p-3 sm:p-4 bg-gray-50 min-h-[60px] sm:min-h-[80px] flex items-center justify-center">
-              <div className="text-2xl sm:text-3xl font-signature-dancing">
+            {/* Preview */}
+            <div className="border-2 border-brand-teal rounded-lg p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-white min-h-[100px] sm:min-h-[120px] flex items-center justify-center">
+              <div className={`text-4xl sm:text-5xl ${selectedFontClass}`}>
                 {typedText || 'AB'}
               </div>
             </div>
