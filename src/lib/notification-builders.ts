@@ -53,6 +53,13 @@ export function buildNotificationEmailData(
         messagePreview: data.messagePreview || data.messageContent
       };
 
+    case 'application_submitted':
+      return {
+        listingTitle: data.listingTitle,
+        renterName: data.renterName || data.senderName,
+        hostFirstName: data.hostFirstName
+      };
+
     case 'view': // Application received
       return {
         listingTitle: data.listingTitle,
@@ -86,14 +93,14 @@ export function buildNotificationEmailData(
       return {
         listingTitle: data.listingTitle,
         renterName: data.renterName || data.senderName,
-        moveInDate: data.amount // Using amount field for move-in date in tests
+        moveInDate: data.moveInDate || data.amount // Support both production and tests
       };
 
     case 'booking_confirmed':
       return {
         listingTitle: data.listingTitle,
-        city: data.messageContent, // Using messageContent for city in tests
-        dateRange: data.amount // Using amount for date range in tests
+        city: data.city || data.messageContent, // Support both production and tests
+        dateRange: data.dateRange || data.amount // Support both production and tests
       };
 
     case 'booking_change_request':
