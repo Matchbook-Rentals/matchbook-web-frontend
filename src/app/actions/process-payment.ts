@@ -315,6 +315,52 @@ export async function processDirectPayment({
           startDate: match.trip.startDate!,
           endDate: match.trip.endDate!,
         });
+
+        // Send in-app and email notifications to both host and renter
+        try {
+          const { createNotification } = await import('./notifications');
+          const { buildNotificationEmailData } = await import('@/lib/notification-builders');
+
+          const renterName = `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim()
+            || match.trip.user.email
+            || 'A renter';
+          const listingTitle = match.listing.title || 'a listing';
+          const moveInDate = match.trip.startDate!.toLocaleDateString();
+          const dateRange = `${match.trip.startDate!.toLocaleDateString()} - ${match.trip.endDate!.toLocaleDateString()}`;
+
+          // Notify HOST
+          await createNotification({
+            userId: match.listing.userId,
+            content: `New booking: ${renterName} is moving in on ${moveInDate}`,
+            url: `/app/host-dashboard?tab=bookings&id=${booking.id}`,
+            actionType: 'booking_host',
+            actionId: booking.id,
+            emailData: buildNotificationEmailData('booking_host', {
+              listingTitle,
+              renterName,
+              moveInDate
+            })
+          });
+
+          // Notify RENTER
+          await createNotification({
+            userId: match.trip.userId,
+            content: `Your booking for ${listingTitle} is confirmed!`,
+            url: `/app/rent/bookings/${booking.id}`,
+            actionType: 'booking_confirmed',
+            actionId: booking.id,
+            emailData: buildNotificationEmailData('booking_confirmed', {
+              listingTitle,
+              city: match.listing.city || '',
+              dateRange
+            })
+          });
+
+          console.log('✅ Booking notifications sent to host and renter');
+        } catch (notificationError) {
+          console.error('❌ Failed to send booking notifications:', notificationError);
+          // Don't fail booking creation if notifications fail
+        }
       } catch (bookingError) {
         console.error('❌ Failed to create booking:', bookingError);
         // Don't fail the payment if booking creation fails
