@@ -407,7 +407,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
                       ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon
                       : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon
                   }
-                  label={listing.utilitiesIncluded ? 'Utilities Included' : 'No Utilities'}
+                  label={listing.utilitiesIncluded ? 'Utilities Included' : 'Utilities Not Included'}
                   labelClassNames={amenityTextStyle}
                   iconClassNames="h-[22px] w-[22px]"
                 />

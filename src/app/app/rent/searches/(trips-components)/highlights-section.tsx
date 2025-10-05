@@ -82,7 +82,7 @@ const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing }) => {
               )}
             </div>
             <span className="font-['Poppins'] text-[16px] font-medium text-[#484A54]">
-              {listing.utilitiesIncluded ? "Utilities Included" : "No Utilities"}
+              {listing.utilitiesIncluded ? "Utilities Included" : "Utilities Not Included"}
             </span>
           </div>
 

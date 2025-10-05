@@ -166,7 +166,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           {/* Utilities */}
           <AmenityListItem
             icon={listing.utilitiesIncluded ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon}
-            label={listing.utilitiesIncluded ? "Utilities Included" : "No Utilities"}
+            label={listing.utilitiesIncluded ? "Utilities Included" : "Utilities Not Included"}
           />
 
           {/* Pets */}
