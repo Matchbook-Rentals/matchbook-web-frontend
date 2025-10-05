@@ -136,6 +136,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [isUndoing, setIsUndoing] = useState(false);
   const [idModalOpen, setIdModalOpen] = useState(false);
   const [incomeModalOpen, setIncomeModalOpen] = useState<{[key: string]: boolean}>({});
+  const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const [isUndoingDecline, setIsUndoingDecline] = useState(false);
   const [isUnapproving, setIsUnapproving] = useState(false);
   const [isUploadingLease, setIsUploadingLease] = useState(false);
@@ -421,6 +422,24 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
     }
   };
 
+  // Handler for undoing decline
+  const handleUndoDecline = async () => {
+    setIsUndoingDecline(true);
+    try {
+      const result = await undoDeclineHousingRequest(housingRequestId);
+      if (result.success) {
+        setCurrentStatus('pending');
+        setIsDeclineModalOpen(false);
+        toast.success('Application returned to undecided status.');
+      }
+    } catch (error) {
+      console.error('Error undoing decline:', error);
+      toast.error('Failed to undo decline. Please try again.');
+    } finally {
+      setIsUndoingDecline(false);
+    }
+  };
+
   // Open lease selection dialog instead of direct approval
   const handleUploadLease = () => {
     setIsLeaseSelectionOpen(true);
@@ -541,14 +560,49 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           )}
 
           {currentStatus === 'declined' && (
-            <Button
-              variant="outline"
-              className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#e62e2e] h-auto hover:bg-transparent"
+            <BrandModal
+              isOpen={isDeclineModalOpen}
+              onOpenChange={setIsDeclineModalOpen}
+              triggerButton={
+                <Button
+                  variant="outline"
+                  className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#e62e2e] h-auto hover:bg-[#e62e2e] transition-colors cursor-pointer"
+                >
+                  <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] hover:text-white text-sm tracking-[0] leading-5 whitespace-nowrap">
+                    ✗ Declined
+                  </span>
+                </Button>
+              }
+              className="max-w-md"
             >
-              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                ✗ Declined
-              </span>
-            </Button>
+              <div className="flex flex-col gap-4 p-4">
+                <h2 className="text-center text-xl font-semibold font-['Poppins',Helvetica] text-neutralneutral-900">
+                  Undo Decline?
+                </h2>
+                <p className="text-center text-base font-normal font-['Poppins'] text-[#5D606D]">
+                  This application will return to your pending list for review.
+                </p>
+                <div className="flex gap-3 justify-center pt-2">
+                  <BrandButton
+                    onClick={() => setIsDeclineModalOpen(false)}
+                    variant="outline"
+                    size="sm"
+                    disabled={isUndoingDecline}
+                  >
+                    Cancel
+                  </BrandButton>
+                  <BrandButton
+                    onClick={handleUndoDecline}
+                    variant="default"
+                    size="sm"
+                    disabled={isUndoingDecline}
+                    isLoading={isUndoingDecline}
+                  >
+                    {isUndoingDecline ? 'Undoing...' : 'Undo Decline'}
+                  </BrandButton>
+                </div>
+              </div>
+            </BrandModal>
           )}
 
         </div>

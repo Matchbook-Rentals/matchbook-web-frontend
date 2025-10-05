@@ -8,6 +8,9 @@ import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
 import { calculateRent } from '@/lib/calculate-rent'
 import { findConversationBetweenUsers, createListingConversation } from './conversations'
+import { sendNotificationEmail } from '@/lib/send-notification-email'
+import { buildNotificationEmailData as buildEmailConfig, getNotificationEmailSubject } from '@/lib/notification-email-config'
+import { buildNotificationEmailData } from '@/lib/notification-builders'
 
 type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -148,12 +151,52 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
       },
     });
 
+    // Get host information for the renter's email
+    const host = await prismadb.user.findUnique({
+      where: { id: listing.userId },
+      select: { firstName: true }
+    });
+    const hostFirstName = host?.firstName || 'the host';
 
+    // Get requester info for email
     const requester = await prismadb.user.findUnique({
       where: {
         id: trip.userId
+      },
+      select: {
+        email: true,
+        firstName: true,
+        lastName: true
       }
     });
+
+    // Send email-only notification to renter (no platform notification)
+    if (requester?.email) {
+      const emailData = buildEmailConfig(
+        'application_submitted',
+        {
+          content: `Your application for ${listing.title} has been submitted.`,
+          url: `/app/rent/applications/${newHousingRequest.id}`
+        },
+        requester,
+        {
+          renterName: requester.firstName || 'there',
+          listingTitle: listing.title,
+          hostFirstName: hostFirstName
+        }
+      );
+
+      const subject = getNotificationEmailSubject('application_submitted', {
+        listingTitle: listing.title,
+        hostFirstName: hostFirstName
+      });
+
+      await sendNotificationEmail({
+        to: requester.email,
+        subject,
+        emailData
+      });
+    }
 
     let requesterName = ''
 
@@ -626,10 +669,10 @@ export async function approveHousingRequest(housingRequestId: string) {
       url: `/app/rent/match/${result.match.id}/lease-signing`,
       actionType: 'application_approved',
       actionId: housingRequestId,
-      emailData: {
+      emailData: buildNotificationEmailData('application_approved', {
         listingTitle: housingRequest.listing.title,
         hostName: hostName
-      }
+      })
     } as CreateNotificationInput;
     
     console.log('📋 Notification data:', notificationData);
@@ -688,9 +731,9 @@ export async function declineHousingRequest(housingRequestId: string) {
       url: `/app/rent/searches/${housingRequest.tripId}`,
       actionType: 'application_declined',
       actionId: housingRequestId,
-      emailData: {
+      emailData: buildNotificationEmailData('application_declined', {
         listingTitle: housingRequest.listing.title
-      }
+      })
     };
     
     await createNotification(notificationData);
@@ -868,15 +911,15 @@ export async function undoDeclineHousingRequest(housingRequestId: string) {
     });
 
     // Create a notification for the applicant
-    const notificationData = {
-      userId: housingRequest.userId,
-      content: `Your application for ${housingRequest.listing.title} is being reconsidered.`,
-      url: `/app/rent/searches/${housingRequest.tripId}`,
-      actionType: 'application_reconsidered',
-      actionId: housingRequestId,
-    };
-    
-    await createNotification(notificationData);
+    // const notificationData = {
+    //   userId: housingRequest.userId,
+    //   content: `Your application for ${housingRequest.listing.title} is being reconsidered.`,
+    //   url: `/app/rent/searches/${housingRequest.tripId}`,
+    //   actionType: 'application_reconsidered',
+    //   actionId: housingRequestId,
+    // };
+
+    // await createNotification(notificationData);
 
     // Revalidate relevant paths
     revalidatePath(`/app/host/${housingRequest.listingId}/applications`);

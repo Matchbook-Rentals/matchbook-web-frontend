@@ -176,9 +176,11 @@ export const OnboardingChecklistCard = ({
               const isStripeItem = item.text.includes("Stripe Account");
               const isIdentityVerificationItem = item.text.includes("Identity Verification");
               const isTestAuthItem = item.text.includes("Complete Authentication (test)");
+              const isTestIdentityItem = item.text.includes("Identity Verification (test)");
               const shouldBeStripeClickable = !item.completed && isStripeItem;
-              const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem;
+              const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem && !isTestIdentityItem;
               const shouldBeTestAuthClickable = !item.completed && isTestAuthItem;
+              const shouldBeTestIdentityClickable = !item.completed && isTestIdentityItem;
 
               const handleIdentityVerificationClick = () => {
                 // Navigate to identity verification page
@@ -221,6 +223,14 @@ export const OnboardingChecklistCard = ({
                         className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
                       >
                         {isCompletingAuth ? 'Completing Authentication...' : item.text}
+                      </button>
+                    ) : shouldBeTestIdentityClickable ? (
+                      <button
+                        onClick={handleTestAuthComplete}
+                        disabled={isCompletingAuth}
+                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
+                      >
+                        {isCompletingAuth ? 'Setting Identity Verified...' : item.text}
                       </button>
                     ) : (
                       <span className={`${item.completed ? '' : 'hover:underline cursor-pointer'} font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]`}>
