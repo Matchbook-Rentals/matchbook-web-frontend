@@ -583,7 +583,9 @@ export default function NotificationTestPage() {
     'view',  // Application received
     'application_approved',
     'application_declined',
-    'application_updated'
+    'application_updated',
+    'booking_host',
+    'booking_confirmed'
   ];
 
   // List of tested and working notifications (green border)
