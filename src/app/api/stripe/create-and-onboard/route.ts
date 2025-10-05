@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
       return_url: callbackUrl.toString(),
       type: "account_onboarding",
       collection_options: {
-        fields: 'currently_due', // Minimum required fields for faster onboarding
+        fields: 'eventually_due', // Collect all verification info including SSN last 4 and DOB upfront
       },
     });
 
