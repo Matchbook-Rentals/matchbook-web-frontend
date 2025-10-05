@@ -95,9 +95,21 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
     }
   },
 
+  // Application submitted (renter-side)
+  application_submitted: {
+    subject: 'A New Application Has Been Submitted',
+    headerText: 'Your Application is Submitted',
+    contentTitle: '',
+    buttonText: 'View Application',
+    getContentText: (content, notification) => {
+      // Content will be formatted in the buildNotificationEmailData function
+      return content;
+    }
+  },
+
   // Application/Housing Request notifications
   view: {
-    subject: 'A New Application Has Been Submitted', 
+    subject: 'A New Application Has Been Submitted',
     headerText: 'New application received',
     contentTitle: '',
     buttonText: 'Review Application',
@@ -330,6 +342,7 @@ export function buildNotificationEmailData(
   },
   user?: {
     firstName?: string | null;
+    verifiedAt?: Date | null;  // Matchbook Verification timestamp (background check + credit report)
   },
   additionalData?: {
     senderName?: string;
@@ -397,19 +410,29 @@ export function buildNotificationEmailData(
     }
   }
 
+  // Add special formatting for application submitted notifications (renter-side)
+  if (actionType === 'application_submitted' && additionalData) {
+    const renterName = user?.firstName || 'there';
+    const listingTitle = additionalData.listingTitle || 'the listing';
+    const hostFirstName = additionalData.hostFirstName || 'the host';
+
+    // Format the email body
+    emailData.contentText = `Hi ${renterName},\nYour application for "${listingTitle}" has been submitted to ${hostFirstName}.`;
+  }
+
   // Add special formatting for application notifications
   if (actionType === 'view' && additionalData) {
     const hostName = user?.firstName || 'there';
     const renterName = additionalData.renterName || 'A renter';
     const listingTitle = additionalData.listingTitle || 'your listing';
     const dateRange = additionalData.dateRange || '';
-    
+
     // Update subject with listing name
     const config = getNotificationEmailConfig(actionType);
     if (additionalData.listingTitle) {
       // Note: We can't modify the subject here, but we format the body
     }
-    
+
     // Format the email body
     emailData.contentText = `Hi ${hostName},\n\nYou've received a new application from ${renterName} for your listing${dateRange ? `: ${dateRange}` : ''}.`;
   }
@@ -428,10 +451,20 @@ export function buildNotificationEmailData(
   if (actionType === 'application_declined' && additionalData) {
     const renterFirstName = user?.firstName || 'there';
     const listingTitle = additionalData.listingTitle || 'your listing';
-    
-    // Format the email body with FCRA rights
-    emailData.contentText = `Hi ${renterFirstName},\n\nWe appreciate your interest in "${listingTitle}," but unfortunately, the host has decided not to move forward.\n\nYour Rights Under FCRA\n • Free Report: You have the right to obtain a free copy of your consumer report from the reporting agency within 60 days of this notice.\n • Dispute Inaccuracies: You have the right to dispute any information in the report that you believe is incomplete or inaccurate\n\nThere are many great options still available — keep browsing:`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/rent`;
+
+    // Only include FCRA language if user has completed Matchbook Verification
+    // verifiedAt indicates user has been run through criminal background check and credit report
+    // FCRA (Fair Credit Reporting Act) only applies when credit/background checks have been performed
+    // This is different from medallionIdentityVerified (which is just identity verification, not background/credit)
+    if (user?.verifiedAt) {
+      // Format the email body with FCRA rights for verified users
+      emailData.contentText = `Hi ${renterFirstName},\n\nWe appreciate your interest in "${listingTitle}," but unfortunately, the host has decided not to move forward.\n\nYour Rights Under FCRA\n • Free Report: You have the right to obtain a free copy of your consumer report from the reporting agency within 60 days of this notice.\n • Dispute Inaccuracies: You have the right to dispute any information in the report that you believe is incomplete or inaccurate\n\nThere are many great options still available — keep browsing:`;
+    } else {
+      // No FCRA language for non-verified users (no background/credit check has been run)
+      emailData.contentText = `Hi ${renterFirstName},\n\nWe appreciate your interest in "${listingTitle}," but unfortunately, the host has decided not to move forward.\n\nThere are many great options still available — keep browsing:`;
+    }
+    // Don't override buttonUrl - it's already set correctly from notification.url
+    // notification.url is `/app/rent/searches/${tripId}` from housing-requests.ts
   }
 
   // Add special formatting for application revoked/withdrawn notifications
