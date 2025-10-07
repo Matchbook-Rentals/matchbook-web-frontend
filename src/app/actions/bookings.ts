@@ -411,6 +411,9 @@ export async function updateBooking(id: string, data: Prisma.BookingUpdateInput)
 }
 
 // Delete a booking (dev/admin only)
+// NOTE: When a booking is deleted, the associated Match.booking relationship is automatically
+// nulled by Prisma's relation system (relationMode = "prisma"). However, we explicitly handle
+// this below for clarity and to ensure proper logging and validation.
 export async function deleteBooking(id: string): Promise<void> {
   const { userId, sessionClaims } = auth();
   if (!userId) {
@@ -425,6 +428,33 @@ export async function deleteBooking(id: string): Promise<void> {
     throw new Error('Unauthorized - Admin access required or development environment');
   }
 
+  console.log(`🗑️ Starting deletion process for booking: ${id}`);
+
+  // First, validate the booking exists and get the associated match
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+    include: {
+      match: {
+        select: {
+          id: true,
+          listingId: true,
+          tripId: true
+        }
+      }
+    }
+  });
+
+  if (!booking) {
+    throw new Error(`Booking ${id} not found`);
+  }
+
+  if (!booking.match) {
+    console.warn(`⚠️ Warning: Booking ${id} has no associated match. This is unusual but proceeding with deletion.`);
+  } else {
+    console.log(`📊 Found associated match ${booking.match.id} for booking ${id}`);
+    console.log(`   Match details: listingId=${booking.match.listingId}, tripId=${booking.match.tripId}`);
+  }
+
   // Delete in transaction to handle related records in correct order
   await prisma.$transaction(async (tx) => {
     // First get all rent payment IDs for this booking
@@ -433,39 +463,73 @@ export async function deleteBooking(id: string): Promise<void> {
       select: { id: true }
     });
 
+    console.log(`📋 Found ${rentPayments.length} rent payment(s) to delete`);
+
     // Delete PaymentModifications first (they have FK to RentPayment)
     if (rentPayments.length > 0) {
-      await tx.paymentModification.deleteMany({
+      const deletedPaymentMods = await tx.paymentModification.deleteMany({
         where: {
           rentPaymentId: {
             in: rentPayments.map(rp => rp.id)
           }
         }
       });
+      console.log(`🗑️ Deleted ${deletedPaymentMods.count} payment modification(s)`);
     }
 
     // Delete BookingModifications (they have FK to Booking)
-    await tx.bookingModification.deleteMany({
+    const deletedBookingMods = await tx.bookingModification.deleteMany({
       where: { bookingId: id }
     });
+    console.log(`🗑️ Deleted ${deletedBookingMods.count} booking modification(s)`);
 
     // Delete Reviews related to this booking
-    await tx.review.deleteMany({
+    const deletedReviews = await tx.review.deleteMany({
       where: { bookingId: id }
     });
+    console.log(`🗑️ Deleted ${deletedReviews.count} review(s)`);
 
     // Then delete all related RentPayment records
-    await tx.rentPayment.deleteMany({
+    const deletedRentPayments = await tx.rentPayment.deleteMany({
       where: { bookingId: id }
     });
+    console.log(`🗑️ Deleted ${deletedRentPayments.count} rent payment(s)`);
+
+    // Explicitly log the Match state before deletion
+    // Note: The Match.booking relation will be automatically nulled when the booking is deleted
+    // due to Prisma's relationMode = "prisma" which emulates foreign key constraints
+    if (booking.match) {
+      console.log(`🔗 Match ${booking.match.id} will have its booking reference nulled`);
+      console.log(`   Match will remain in database but booking field will be null`);
+    }
 
     // Finally delete the booking
+    // This will automatically null the Match.booking relation
     await tx.booking.delete({
       where: { id, userId },
     });
+    console.log(`✅ Successfully deleted booking ${id}`);
   });
 
+  // Verify the match state after deletion
+  if (booking.match) {
+    const updatedMatch = await prisma.match.findUnique({
+      where: { id: booking.match.id },
+      include: { booking: true }
+    });
+
+    if (updatedMatch) {
+      console.log(`✅ Verified: Match ${updatedMatch.id} now has booking = ${updatedMatch.booking ? 'NOT NULL (ERROR!)' : 'null (correct)'}`);
+      if (updatedMatch.booking) {
+        console.error(`❌ ERROR: Match ${updatedMatch.id} still has a booking reference after deletion!`);
+      }
+    } else {
+      console.warn(`⚠️ Warning: Match ${booking.match.id} was not found after booking deletion`);
+    }
+  }
+
   revalidatePath('/app/rent/bookings');
+  console.log(`🏁 Booking deletion complete for ${id}`);
 }
 
 // Get all bookings for the current host's listings
