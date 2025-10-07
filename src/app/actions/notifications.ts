@@ -30,6 +30,9 @@ function getNotificationPreferenceField(actionType: string): string | null {
     'booking_host': 'emailBookingCompletedNotifications', // Host receives booking
     'booking_confirmed': 'emailBookingCompletedNotifications', // Renter booking confirmed
     'booking_canceled': 'emailBookingCanceledNotifications',
+    'booking_change_request': 'emailBookingCompletedNotifications', // Booking change requested
+    'booking_change_approved': 'emailBookingCompletedNotifications', // Booking change approved
+    'booking_change_declined': 'emailBookingCompletedNotifications', // Booking change declined
     'move_out_upcoming': 'emailMoveOutUpcomingNotifications',
     'move_in_upcoming': 'emailMoveInUpcomingNotifications',
     

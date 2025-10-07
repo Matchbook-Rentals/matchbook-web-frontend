@@ -170,7 +170,7 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
   // Application revoked/withdrawn notifications
   application_revoked: {
     subject: 'Your approval was withdrawn',
-    headerText: 'Approval Update',
+    headerText: 'Approval Withdrawn',
     contentTitle: '',
     buttonText: 'View Trip',
     getContentText: (content, notification) => {
@@ -528,31 +528,34 @@ export function buildNotificationEmailData(
   // Add special formatting for booking change request notifications
   if (actionType === 'booking_change_request' && additionalData) {
     const firstName = user?.firstName || 'there';
+    const senderName = additionalData.senderName || 'the other party';
     const listingTitle = additionalData.listingTitle || 'your booking';
-    
+
     // Format the email body
-    emailData.contentText = `Hi ${firstName},\n\nA change has been requested to your booking for "${listingTitle}."\n\nPlease review and approve/decline the request:`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host-dashboard?tab=bookings`;
+    emailData.contentText = `Hi ${firstName},\n\n${senderName} has requested a change to your booking for "${listingTitle}."\n\nPlease review and approve/decline the request:`;
+    // Keep the buttonUrl from the notification.url which is already set correctly
   }
 
   // Add special formatting for booking change declined notifications
   if (actionType === 'booking_change_declined' && additionalData) {
     const firstName = user?.firstName || 'there';
-    const declinerName = additionalData.declinerName || additionalData.senderName || 'the other party';
-    
+    const declinerName = additionalData.senderName || 'the other party';
+    const listingTitle = additionalData.listingTitle || 'your booking';
+
     // Format the email body
-    emailData.contentText = `Hi ${firstName},\n\nYour requested change has been declined by ${declinerName}.`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/renter/bookings`;
+    emailData.contentText = `Hi ${firstName},\n\nYour requested change for "${listingTitle}" has been declined by ${declinerName}.`;
+    // Keep the buttonUrl from the notification.url which is already set correctly
   }
 
   // Add special formatting for booking change approved notifications
   if (actionType === 'booking_change_approved' && additionalData) {
     const firstName = user?.firstName || 'there';
-    const approverName = additionalData.approverName || additionalData.senderName || 'the other party';
-    
+    const approverName = additionalData.senderName || 'the other party';
+    const listingTitle = additionalData.listingTitle || 'your booking';
+
     // Format the email body
-    emailData.contentText = `Hi ${firstName},\n\nYour requested change has been approved by ${approverName}.`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/renter/bookings`;
+    emailData.contentText = `Hi ${firstName},\n\nGood news! Your requested change for "${listingTitle}" has been approved by ${approverName}.`;
+    // Keep the buttonUrl from the notification.url which is already set correctly
   }
 
   // Add special formatting for listing approved notifications

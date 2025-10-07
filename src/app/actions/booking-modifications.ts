@@ -322,18 +322,18 @@ export async function createBookingModification({
     })
 
     // Create notification for the recipient
-    const requestorName = bookingModification.requestor.fullName || 
+    const requestorName = bookingModification.requestor.fullName ||
       `${bookingModification.requestor.firstName || ''} ${bookingModification.requestor.lastName || ''}`.trim()
-    
+
     // Determine correct URL based on who the recipient is
     const isRecipientHost = booking.listing.userId === recipientId
-    const notificationUrl = isRecipientHost 
-      ? `/app/host/${booking.listing.id}/bookings/${bookingId}/changes`
+    const notificationUrl = isRecipientHost
+      ? `/app/host/${booking.listingId}/bookings/${bookingId}/changes`
       : `/app/rent/bookings/${bookingId}/changes`
-    
+
     await createNotification({
       userId: recipientId,
-      content: `A change has been requested for your booking at ${bookingModification.booking.listing.title}.`,
+      content: `${requestorName} has requested a change to your booking for "${bookingModification.booking.listing.title}."`,
       url: notificationUrl,
       actionType: 'booking_change_request',
       actionId: bookingModification.id,
@@ -409,32 +409,33 @@ export async function approveBookingModification(bookingModificationId: string) 
     ])
 
     // Notify the requestor of approval
-    const requestorName = bookingModification.requestor.fullName || 
+    const requestorName = bookingModification.requestor.fullName ||
       `${bookingModification.requestor.firstName || ''} ${bookingModification.requestor.lastName || ''}`.trim()
-    
+
     // Get the approver's name from the current user
     const approver = await prisma.user.findUnique({
       where: { id: userId },
       select: { fullName: true, firstName: true, lastName: true }
     })
-    
-    const approverName = approver?.fullName || 
+
+    const approverName = approver?.fullName ||
       `${approver?.firstName || ''} ${approver?.lastName || ''}`.trim() || 'the other party'
-    
+
     // Determine correct URL based on who the requestor is
     const isRequestorHost = bookingModification.booking.listing.userId === bookingModification.requestorId
-    const notificationUrl = isRequestorHost 
-      ? `/app/host/${bookingModification.booking.listing.id}/bookings/${bookingModification.bookingId}/changes`
+    const notificationUrl = isRequestorHost
+      ? `/app/host/${bookingModification.booking.listingId}/bookings/${bookingModification.bookingId}/changes`
       : `/app/rent/bookings/${bookingModification.bookingId}/changes`
-    
+
     await createNotification({
       userId: bookingModification.requestorId,
-      content: `Your requested change has been approved by ${approverName}`,
+      content: `Good news! Your requested change for "${bookingModification.booking.listing.title}" has been approved by ${approverName}.`,
       url: notificationUrl,
       actionType: 'booking_change_approved',
       actionId: bookingModification.id,
       emailData: {
-        senderName: approverName
+        senderName: approverName,
+        listingTitle: bookingModification.booking.listing.title
       }
     })
 
@@ -499,24 +500,25 @@ export async function rejectBookingModification(bookingModificationId: string, r
       where: { id: userId },
       select: { fullName: true, firstName: true, lastName: true }
     })
-    
-    const rejecterName = rejecter?.fullName || 
+
+    const rejecterName = rejecter?.fullName ||
       `${rejecter?.firstName || ''} ${rejecter?.lastName || ''}`.trim() || 'the other party'
-    
+
     // Determine correct URL based on who the requestor is
     const isRequestorHost = bookingModification.booking.listing.userId === bookingModification.requestorId
-    const notificationUrl = isRequestorHost 
-      ? `/app/host/${bookingModification.booking.listing.id}/bookings/${bookingModification.bookingId}/changes`
+    const notificationUrl = isRequestorHost
+      ? `/app/host/${bookingModification.booking.listingId}/bookings/${bookingModification.bookingId}/changes`
       : `/app/rent/bookings/${bookingModification.bookingId}/changes`
-    
+
     await createNotification({
       userId: bookingModification.requestorId,
-      content: `Your requested change has been declined by ${rejecterName}`,
+      content: `Your requested change for "${bookingModification.booking.listing.title}" has been declined by ${rejecterName}.`,
       url: notificationUrl,
       actionType: 'booking_change_declined',
       actionId: bookingModification.id,
       emailData: {
-        senderName: rejecterName
+        senderName: rejecterName,
+        listingTitle: bookingModification.booking.listing.title
       }
     })
 

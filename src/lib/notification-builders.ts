@@ -105,17 +105,20 @@ export function buildNotificationEmailData(
 
     case 'booking_change_request':
       return {
-        listingTitle: data.listingTitle
+        listingTitle: data.listingTitle,
+        senderName: data.senderName
       };
 
     case 'booking_change_declined':
       return {
-        renterName: data.renterName || data.senderName
+        senderName: data.senderName, // declinerName passed as senderName
+        listingTitle: data.listingTitle
       };
 
     case 'booking_change_approved':
       return {
-        renterName: data.renterName || data.senderName
+        senderName: data.senderName, // approverName passed as senderName
+        listingTitle: data.listingTitle
       };
 
     case 'move_in_upcoming':
