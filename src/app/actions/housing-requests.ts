@@ -63,7 +63,19 @@ export async function getHousingRequestById(housingRequestId: string) {
           }
         },
         boldSignLease: true,
-        trip: true, // Include trip data directly in the join
+        trip: {
+          include: {
+            allParticipants: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                signingInitials: true
+              }
+            }
+          }
+        }
       },
     });
 

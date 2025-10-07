@@ -5,8 +5,7 @@ import { Booking } from "@prisma/client";
 import BookingCard from "./booking-card";
 import { deleteBooking } from "@/app/actions/bookings";
 import { useToast } from "@/components/ui/use-toast";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 
 interface BookingsContainerSectionProps {
   bookings: Booking[];
@@ -59,9 +58,7 @@ export const BookingsContainerSection = ({ bookings, hasListings }: BookingsCont
           {hasListings && (
             <div className="flex flex-col items-center gap-2">
               <p className="text-sm text-gray-600">Looking for your Host bookings?</p>
-              <Link href="/app/host/dashboard">
-                <Button variant="brandButton">View Host Bookings</Button>
-              </Link>
+              <BrandButton href="/app/host/dashboard">View Host Bookings</BrandButton>
             </div>
           )}
         </div>

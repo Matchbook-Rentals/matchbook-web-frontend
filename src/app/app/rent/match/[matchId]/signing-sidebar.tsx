@@ -12,6 +12,7 @@ interface SigningSidebarProps {
   currentSignerIndex: number;
   signedFields: Record<string, any>;
   onNavigateToField: (fieldId: string) => void;
+  currentRenterEmail?: string;
 }
 
 export function SigningSidebar({
@@ -19,7 +20,8 @@ export function SigningSidebar({
   recipients,
   currentSignerIndex,
   signedFields,
-  onNavigateToField
+  onNavigateToField,
+  currentRenterEmail
 }: SigningSidebarProps) {
   const currentSigner = recipients[currentSignerIndex];
 
@@ -40,6 +42,99 @@ export function SigningSidebar({
   return (
     <div className="flex items-start gap-2.5 p-4 md:p-6 relative bg-[#e7f0f0] rounded-lg overflow-hidden">
       <div className="flex flex-col items-start gap-4 relative flex-1 min-w-0">
+        {/* TEMPORARY DEBUG: Recipient Matching Info - Remove after testing */}
+        {currentRenterEmail && (
+          <Card className="relative w-full bg-yellow-50 rounded-lg border-2 border-yellow-400">
+            <CardContent className="p-3">
+              <div className="text-xs font-mono space-y-1">
+                <div className="font-bold text-yellow-900 mb-2">🔍 DEBUG: Recipient Matching</div>
+                <div><span className="font-semibold">Your Email:</span> {currentRenterEmail}</div>
+                <div><span className="font-semibold">Matched Index:</span> {currentSignerIndex}</div>
+                <div><span className="font-semibold">Total Recipients:</span> {recipients.length}</div>
+
+                <div className="pt-2 border-t border-yellow-300 mt-2">
+                  <div className="font-semibold mb-1">All Recipients:</div>
+                  {recipients.map((r, i) => (
+                    <div key={i} className={`ml-2 ${i === currentSignerIndex ? 'bg-yellow-200 px-1' : ''}`}>
+                      [{i}] {r.email} - {r.role}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-2 border-t border-yellow-300 mt-2">
+                  <div className="font-semibold mb-1">Matched Recipient:</div>
+                  <div>Name: {currentSigner.name}</div>
+                  <div>Email: {currentSigner.email}</div>
+                  <div>Role: {currentSigner.role}</div>
+                </div>
+
+                <div className="pt-2 border-t border-yellow-300 mt-2">
+                  <div className="font-semibold mb-1">Your Fields ({signerFields.length}):</div>
+                  {signerFields.length === 0 ? (
+                    <div className="text-red-600 ml-2">⚠️ NO FIELDS FOUND FOR YOUR INDEX!</div>
+                  ) : (
+                    <div className="ml-2 space-y-2 max-h-64 overflow-y-auto">
+                      {signerFields.map((f, i) => {
+                        const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                        const isSigned = !!signedFields[f.formId];
+                        const signedValue = signedFields[f.formId];
+                        return (
+                          <div key={f.formId} className={`border-2 ${isSigned ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'} p-2 rounded text-[10px]`}>
+                            <div className="font-bold">{isSigned ? '✓ SIGNED' : '✗ UNSIGNED'} - {fieldType}</div>
+                            <div className="mt-1 space-y-0.5">
+                              <div><span className="font-semibold">Full ID:</span> {f.formId}</div>
+                              <div><span className="font-semibold">recipientIndex:</span> {f.recipientIndex}</div>
+                              <div><span className="font-semibold">Position:</span> Page {f.pageNumber} @ ({f.pageX.toFixed(1)}, {f.pageY.toFixed(1)})</div>
+                              <div><span className="font-semibold">Size:</span> {f.pageWidth}x{f.pageHeight}</div>
+                              <div><span className="font-semibold">Signed Value:</span> {signedValue ? JSON.stringify(signedValue).slice(0, 50) : 'null'}</div>
+                              <div><span className="font-semibold">In signedFields:</span> {f.formId in signedFields ? 'YES' : 'NO'}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-2 border-t border-yellow-300 mt-2">
+                  <div className="font-semibold mb-1">All Signature Fields (Total {fields.filter(f => {
+                    const ft = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                    return ft === 'SIGNATURE' || ft === 'INITIALS';
+                  }).length}):</div>
+                  <div className="ml-2 text-[9px] max-h-96 overflow-y-auto space-y-1">
+                    {fields.filter(f => {
+                      const ft = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                      return ft === 'SIGNATURE' || ft === 'INITIALS';
+                    }).map((f, i) => {
+                      const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
+                      const isSigned = !!signedFields[f.formId];
+                      const signedValue = signedFields[f.formId];
+                      const assignedRecipient = recipients[f.recipientIndex];
+                      const isYours = f.recipientIndex === currentSignerIndex;
+
+                      return (
+                        <div key={f.formId} className={`${isYours ? 'border-2 border-yellow-500 bg-yellow-100' : 'bg-gray-100'} p-1.5 rounded`}>
+                          <div className="font-bold">
+                            {isYours ? '👉 YOUR FIELD' : `[${f.recipientIndex}]`} - {fieldType} - {isSigned ? '✓ SIGNED' : '✗ UNSIGNED'}
+                          </div>
+                          <div className="mt-0.5 space-y-0.5 ml-1">
+                            <div><span className="font-semibold">ID:</span> {f.formId}</div>
+                            <div><span className="font-semibold">recipientIndex:</span> {f.recipientIndex}</div>
+                            <div><span className="font-semibold">Assigned to:</span> {assignedRecipient?.name || 'Unknown'} ({assignedRecipient?.email || 'N/A'})</div>
+                            <div><span className="font-semibold">Page:</span> {f.pageNumber} @ Y:{f.pageY.toFixed(1)}</div>
+                            <div><span className="font-semibold">Signed:</span> {isSigned ? 'YES' : 'NO'}</div>
+                            <div><span className="font-semibold">Value:</span> {signedValue ? (typeof signedValue === 'object' ? JSON.stringify(signedValue).slice(0, 40) : String(signedValue).slice(0, 40)) : 'null'}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Signer Information Card */}
         <Card className="relative w-full bg-white rounded-lg border border-solid border-[#e6e6e6]">
           <CardContent className="flex flex-col items-start gap-3 p-4">

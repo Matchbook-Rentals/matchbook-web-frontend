@@ -43,22 +43,36 @@ export function getUnsignedFields(params: GetUnsignedFieldsParams): FieldFormTyp
     return !isSigned;
   });
 
+  // Sort fields by visual position: page number, then Y (top to bottom), then X (left to right)
+  const sortedUnsignedFields = unsignedFields.sort((a, b) => {
+    if (a.pageNumber !== b.pageNumber) {
+      return a.pageNumber - b.pageNumber;
+    }
+    if (a.pageY !== b.pageY) {
+      return a.pageY - b.pageY;
+    }
+    return a.pageX - b.pageX;
+  });
+
   // Focus on first unsigned field for debugging
-  const firstUnsignedField = unsignedFields[0];
+  const firstUnsignedField = sortedUnsignedFields[0];
   if (firstUnsignedField) {
     const value = currentSignedFields[firstUnsignedField.formId];
-    console.log('🔍 FIRST UNSIGNED FIELD:', {
+    console.log('🔍 FIRST UNSIGNED FIELD (sorted by position):', {
       formId: firstUnsignedField.formId,
       type: firstUnsignedField.type,
+      pageNumber: firstUnsignedField.pageNumber,
+      pageY: firstUnsignedField.pageY,
+      pageX: firstUnsignedField.pageX,
       isInSignedFields: firstUnsignedField.formId in currentSignedFields,
       signedFieldValue: value,
       signedFieldType: typeof value,
       signedFieldKeys: typeof value === 'object' && value ? Object.keys(value) : null,
-      totalUnsignedCount: unsignedFields.length
+      totalUnsignedCount: sortedUnsignedFields.length
     });
   } else {
     console.log('🔍 NO UNSIGNED FIELDS - All signature fields are signed');
   }
 
-  return unsignedFields;
+  return sortedUnsignedFields;
 }

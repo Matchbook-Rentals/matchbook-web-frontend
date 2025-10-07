@@ -76,6 +76,16 @@ export async function sendTestNotification({
         })
         break
         
+      case 'application_submitted':
+        notificationContent = `Your application for ${listingTitle} has been submitted.`
+        notificationUrl = '/app/rent/applications/test-housing-request-' + Date.now()
+        emailData = buildNotificationEmailData('application_submitted', {
+          listingTitle,
+          renterName: senderName,
+          hostFirstName: 'John'
+        })
+        break
+
       case 'view': // Application received
         notificationContent = `New application to ${listingTitle} for ${messageContent || 'Jan 1 - Jan 31'}`
         notificationUrl = '/app/host/listings/applications'

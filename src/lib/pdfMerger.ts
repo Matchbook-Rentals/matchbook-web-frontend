@@ -46,10 +46,13 @@ export async function mergePDFTemplates(
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const pageCount = pdfDoc.getPageCount();
 
+    const recipients = convertTemplateRecipients(templateData?.recipients || []);
+    const fields = convertTemplateFields(templateData?.fields || [], 0, templateData?.recipients);
+
     return {
       file,
-      fields: convertTemplateFields(templateData?.fields || [], 0),
-      recipients: convertTemplateRecipients(templateData?.recipients || []),
+      fields,
+      recipients,
       pageCount,
       templateCount: 1
     };
@@ -159,8 +162,9 @@ export async function mergePDFTemplates(
 
       // Convert and adjust fields for this template
       const templateFields = convertTemplateFields(
-        templateData?.fields || [], 
-        currentPageOffset
+        templateData?.fields || [],
+        currentPageOffset,
+        templateData?.recipients
       );
       
       console.log(`Template "${template.title}":`, {
@@ -233,26 +237,57 @@ export async function mergePDFTemplates(
 /**
  * Converts template field data to FieldFormType format with page offset
  */
-function convertTemplateFields(templateFields: any[], pageOffset: number): FieldFormType[] {
-  return templateFields.map((field: any, index: number) => ({
-    nativeId: field.nativeId || index,
-    formId: field.id || field.formId || `field_${index}_${Date.now()}`,
-    pageNumber: (field.page || field.pageNumber || 1) + pageOffset,
-    type: field.type || 'TEXT',
-    pageX: field.x || field.pageX || 0,
-    pageY: field.y || field.pageY || 0,
-    pageWidth: field.width || field.pageWidth || 100,
-    pageHeight: field.height || field.pageHeight || 20,
-    signerEmail: field.recipientId || field.signerEmail || '',
-    fieldMeta: {
-      label: field.label || field.name || 'Field',
-      placeholder: field.placeholder || '',
-      required: field.required || false,
-      readOnly: field.readOnly || false,
-      ...field.fieldMeta
-    },
-    recipientIndex: field.recipientIndex || 0
-  }));
+function convertTemplateFields(templateFields: any[], pageOffset: number, templateRecipients?: any[]): FieldFormType[] {
+  return templateFields.map((field: any, index: number) => {
+    // Get the original recipientIndex from the field
+    let recipientIndex = field.recipientIndex || 0;
+
+    // FIX: Remap recipientIndex based on recipient roles to ensure correct mapping
+    // Convention: HOST = 0, RENTER = 1, additional renters = 2+
+    if (templateRecipients && templateRecipients.length > 0) {
+      // Find the recipient this field is assigned to
+      const fieldRecipient = templateRecipients[recipientIndex];
+
+      if (fieldRecipient) {
+        const role = (fieldRecipient.role || '').toUpperCase();
+
+        // If field is assigned to HOST but recipientIndex isn't 0, fix it
+        if (role.includes('HOST') || role.includes('LANDLORD') || role === 'LANDLORD') {
+          if (recipientIndex !== 0) {
+            console.log(`🔧 Remapping HOST field from index ${recipientIndex} to 0:`, field.formId);
+            recipientIndex = 0;
+          }
+        }
+        // If field is assigned to RENTER/TENANT but recipientIndex is 0, fix it
+        else if (role.includes('RENTER') || role.includes('TENANT') || role === 'TENANT') {
+          if (recipientIndex === 0) {
+            console.log(`🔧 Remapping RENTER field from index ${recipientIndex} to 1:`, field.formId);
+            recipientIndex = 1;
+          }
+        }
+      }
+    }
+
+    return {
+      nativeId: field.nativeId || index,
+      formId: field.id || field.formId || `field_${index}_${Date.now()}`,
+      pageNumber: (field.page || field.pageNumber || 1) + pageOffset,
+      type: field.type || 'TEXT',
+      pageX: field.x || field.pageX || 0,
+      pageY: field.y || field.pageY || 0,
+      pageWidth: field.width || field.pageWidth || 100,
+      pageHeight: field.height || field.pageHeight || 20,
+      signerEmail: field.recipientId || field.signerEmail || '',
+      fieldMeta: {
+        label: field.label || field.name || 'Field',
+        placeholder: field.placeholder || '',
+        required: field.required || false,
+        readOnly: field.readOnly || false,
+        ...field.fieldMeta
+      },
+      recipientIndex
+    };
+  });
 }
 
 /**

@@ -174,6 +174,21 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
               
               setDocumentRecipients(recipients);
 
+              // Find current renter's recipient index by matching email
+              const currentRenterEmail = match.trip.user?.email;
+              const currentRenterRecipientIndex = recipients.findIndex(
+                (recipient: any) => recipient.email === currentRenterEmail
+              );
+
+              console.log('🔍 Current renter identification:', {
+                currentRenterEmail,
+                currentRenterRecipientIndex,
+                recipients: recipients.map((r: any) => ({ email: r.email, role: r.role }))
+              });
+
+              // Store for later use in signerStep calculation
+              sessionStorage.setItem('currentRenterRecipientIndex', currentRenterRecipientIndex.toString());
+
               // Initialize field status based on current field values
               const initialFieldsStatus: Record<string, 'signed' | 'pending'> = {};
               const signedFieldsMap: Record<string, any> = {};
@@ -355,7 +370,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
   const handleDocumentSigningComplete = async () => {
     setIsTransitioning(true);
-    
+
     try {
       // Update match record with tenant signature timestamp
       const response = await fetch(`/api/matches/${matchId}/tenant-signed`, {
@@ -368,14 +383,14 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
       if (response.ok) {
         // Save current step before transitioning
         setPreviousStep('signing');
-        
+
         // Transition to payment step (stay on same route)
         setLeaseCompleted(true);
         setCurrentStep('payment');
-        
+
         // Clear server initial step so client-side logic takes over for transitions
         setServerInitialStep(undefined);
-        
+
       } else {
         throw new Error('Failed to update match record');
       }
@@ -910,12 +925,13 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 <SigningSidebar
                   fields={documentFields}
                   recipients={documentRecipients}
-                  currentSignerIndex={1} // Renter is index 1
+                  currentSignerIndex={parseInt(sessionStorage.getItem('currentRenterRecipientIndex') || '1')}
                   signedFields={fieldsStatus}
                   onNavigateToField={(fieldId) => {
                     // Navigate to field functionality can be added here
                     console.log('Navigate to field:', fieldId);
                   }}
+                  currentRenterEmail={match.trip.user?.email}
                 />
               ) : (
                   <Card>
@@ -1037,13 +1053,23 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                         </MobilePDFWrapper>
                       </div>
                     </div>
-                  ) : currentStepState === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (
+                  ) : currentStepState === 'sign-lease' && !isLoading && documentInstance && documentPdfFile ? (() => {
+                    // Calculate correct signerStep based on current renter's recipientIndex
+                    const currentRenterRecipientIndex = parseInt(sessionStorage.getItem('currentRenterRecipientIndex') || '-1');
+                    const signerStep = currentRenterRecipientIndex === 0 ? 'signer1' : 'signer2';
+
+                    console.log('🔍 Calculating signerStep:', {
+                      currentRenterRecipientIndex,
+                      signerStep
+                    });
+
+                    return (
                     <div className={`border rounded-lg bg-gray-50 ${isMobile ? 'overflow-x-auto' : ''}`}>
                       <PDFEditorSigner
                         initialPdfFile={documentPdfFile}
                         initialFields={documentFields}
                         initialRecipients={documentRecipients}
-                        signerStep="signer2"
+                        signerStep={signerStep as 'signer1' | 'signer2'}
                         isMobile={isMobile}
                         hideDefaultSidebar={true}
                         showFooter={true}
@@ -1059,7 +1085,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                         onFinish={handleDocumentSigningComplete}
                       />
                     </div>
-                  ) : currentStepState === 'sign-lease' && isLoading ? (
+                    );
+                  })() : currentStepState === 'sign-lease' && isLoading ? (
                     <div className="text-center py-12">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787] mx-auto mb-4"></div>
                       <p className="text-[#777b8b]">Loading lease document...</p>
@@ -1292,13 +1319,16 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                     {currentStepState === 'sign-lease' && (
                       <>
                         {(() => {
+                          // Get current renter's recipientIndex dynamically
+                          const currentRenterRecipientIndex = parseInt(sessionStorage.getItem('currentRenterRecipientIndex') || '-1');
+
                           // Only count renter's signature/initial fields
                           const renterSignatureFields = documentFields.filter((field: any) => {
-                            if (field.recipientIndex !== 1) return false;
+                            if (field.recipientIndex !== currentRenterRecipientIndex) return false;
                             const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
                             return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
                           });
-                          const completedRenterFields = renterSignatureFields.filter((field: any) => 
+                          const completedRenterFields = renterSignatureFields.filter((field: any) =>
                             fieldsStatus[field.formId] === 'signed'
                           );
                           return renterSignatureFields.length === 0 ? (
