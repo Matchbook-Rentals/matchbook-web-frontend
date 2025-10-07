@@ -50,7 +50,7 @@ import { navigateToField as navigateToFieldUtil, navigateToNextField as navigate
 // New workflow system
 import { useWorkflowStateMachine } from '@/features/lease-signing/hooks/useWorkflowStateMachine';
 import { WorkflowPhase, WorkflowState as NewWorkflowState } from '@/features/lease-signing/types/workflow.types';
-import { legacyStateToPhase, phaseToLegacyState } from '@/features/lease-signing/adapters/workflowAdapter';
+import { legacyStateToPhase, phaseToLegacyState, createWorkflowStateFromLegacy, getSignerIndexFromLegacy } from '@/features/lease-signing/adapters/workflowAdapter';
 import {
   isEditablePhase,
   shouldShowFieldBorders,
@@ -188,18 +188,48 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const initialPhase = legacyStateToPhase(initialWorkflowState);
   const workflow = useWorkflowStateMachine(initialPhase);
 
+  // Fix: Initialize signer index when starting from legacy signer states
+  useEffect(() => {
+    const signerIndex = getSignerIndexFromLegacy(initialWorkflowState);
+
+    // If we're starting in a signing state (signer1 or signer2), we need to properly initialize the workflow
+    if (signerIndex !== null && initialPhase === 'signing') {
+      console.log('🔧 PDFEditor - Initializing workflow for legacy signer state:', {
+        initialWorkflowState,
+        signerIndex,
+        recipientCount: recipients.length
+      });
+
+      // Dispatch START_SIGNING to properly set up signer state with correct currentSignerIndex
+      workflow.dispatch({
+        type: 'START_SIGNING',
+        signerCount: recipients.length || 2,
+        documentId: sessionStorage.getItem('currentDocumentId') || undefined,
+        signingOrder: recipients.map((r, i) => `signer-${i}`)
+      });
+
+      // If we're starting at signer2 (index 1), we need to advance past signer1
+      if (signerIndex > 0) {
+        // Mark signer1 as completed and advance
+        workflow.dispatch({ type: 'COMPLETE_SIGNER', signerId: 'signer-0' });
+        workflow.dispatch({ type: 'ADVANCE_TO_NEXT_SIGNER' });
+      }
+    }
+  }, []); // Only run once on mount
+
   // Debug: Log workflow initialization
   useEffect(() => {
     console.error('🔧 PDFEditor - Workflow initialized:', {
       initialWorkflowState,
       initialPhase,
       currentPhase: workflow.state.phase,
+      currentSignerIndex: workflow.getCurrentSignerIndex(),
       isTemplatePhase: workflow.isTemplatePhase(),
       isDocumentPhase: workflow.isDocumentPhase(),
       isSigningPhase: workflow.isSigningPhase(),
       hasInitialTemplate: !!initialTemplate
     });
-  }, []);
+  }, [workflow.state.phase, workflow.getCurrentSignerIndex()]);
 
   // Legacy state management for backward compatibility
   const [legacyWorkflowState, setLegacyWorkflowStateInternal] = useState<LegacyWorkflowState>(initialWorkflowState);
