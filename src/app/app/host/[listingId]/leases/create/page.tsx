@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { TemplateCreationStep } from "@/features/lease-signing/steps";
 import { PdfTemplate } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
+import { Dialog, DialogContent, DialogOverlay } from "@/components/brandDialog";
 import { BrandAlertProvider } from "@/hooks/useBrandAlert";
 
 interface ListingData {
@@ -25,10 +26,12 @@ export default function CreateLeasePage() {
   const { user } = useUser();
   const listingId = params.listingId as string;
   const templateId = searchParams.get('templateId');
-  
+
   const [existingTemplate, setExistingTemplate] = useState<PdfTemplate | null>(null);
   const [listing, setListing] = useState<ListingData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -102,9 +105,12 @@ export default function CreateLeasePage() {
   };
 
   const handleTemplateCreated = async (templateData: any) => {
+    setShowUploadModal(true);
+    setUploadSuccess(false);
+
     try {
       let response;
-      
+
       if (existingTemplate) {
         // Update existing template
         response = await fetch(`/api/pdf-templates/${existingTemplate.id}`, {
@@ -125,18 +131,18 @@ export default function CreateLeasePage() {
         // First, upload the PDF file
         const formData = new FormData();
         formData.append('file', templateData.file);
-        
+
         const uploadResponse = await fetch('/api/pdf-templates/upload', {
           method: 'POST',
           body: formData,
         });
-        
+
         if (!uploadResponse.ok) {
           throw new Error('Failed to upload PDF');
         }
-        
+
         const { fileUrl, fileName, fileSize, fileKey } = await uploadResponse.json();
-        
+
         // Then create the template with the uploaded file info
         response = await fetch('/api/pdf-templates', {
           method: 'POST',
@@ -161,19 +167,20 @@ export default function CreateLeasePage() {
       if (response.ok) {
         const result = await response.json();
         console.log('Template saved successfully:', result);
-        
-        toast({
-          title: existingTemplate ? "Template updated" : "Template created",
-          description: existingTemplate 
-            ? `"${templateData.name}" has been successfully updated.`
-            : `"${templateData.name}" has been successfully created.`,
-        });
-        
-        router.push(`/app/host/${listingId}/leases`);
+
+        // Show success state
+        setUploadSuccess(true);
+
+        // Wait 1000ms then redirect
+        setTimeout(() => {
+          router.push(`/app/host/${listingId}/leases`);
+        }, 1000);
       } else {
         const error = await response.json();
         console.error('Failed to save template:', error);
-        
+
+        setShowUploadModal(false);
+
         toast({
           title: "Save failed",
           description: error.error || "Failed to save template. Please try again.",
@@ -182,7 +189,9 @@ export default function CreateLeasePage() {
       }
     } catch (error) {
       console.error('Error saving template:', error);
-      
+
+      setShowUploadModal(false);
+
       toast({
         title: "Error",
         description: "Error saving template. Please check your connection and try again.",
@@ -209,6 +218,29 @@ export default function CreateLeasePage() {
   return (
     <BrandAlertProvider>
       <div className="min-h-screen bg-[#f9f9f9] p-6">
+        {/* Upload modal with custom z-index */}
+        <Dialog open={showUploadModal} onOpenChange={() => {}}>
+          <DialogContent
+            className="!z-[9999] max-w-md !top-[30vh]"
+            showCloseButton={false}
+          >
+            <div className="p-6 text-center">
+              {!uploadSuccess ? (
+                <>
+                  <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#3c8787] mx-auto mb-6"></div>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">Uploading Template</h2>
+                  <p className="text-gray-600">Please wait while we save your template...</p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">Upload Successful!</h2>
+                  <p className="text-gray-600">Taking you back to your leases page...</p>
+                </>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+
         <TemplateCreationStep
           existingTemplate={existingTemplate}
           onTemplateCreated={handleTemplateCreated}

@@ -266,7 +266,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // signedFields now comes from context
   const [isSavingTemplate, setIsSavingTemplate] = useState(false);
 
-
   // Debug log for signedFields changes
   // Removed verbose logging - keeping only essential debug logs
   const [stepCompleted, setStepCompleted] = useState(false);
@@ -1190,7 +1189,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             fields={fields}
             signedFieldsStore={useSignedFieldsStore}
             navigateToField={navigateToField}
-            getFieldLabel={getFieldLabel}
           />
         )}
 
@@ -1781,44 +1779,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   const selectedRecipientData = recipients.find(r => r.id === selectedRecipient);
 
-  // Show success screen if step completed and no onFinish callback
-  if (stepCompleted && !onFinish) {
-    const stepNames: Record<LegacyWorkflowState, string> = {
-      'selection': 'Selection',
-      'template': 'Template Creation',
-      'document': 'Document Creation',
-      'signer1': 'Signer 1',
-      'signer2': 'Signer 2',
-      'completed': 'Document Completion'
-    };
-    const stepName = stepNames[legacyWorkflowState] || legacyWorkflowState;
-
-    return (
-      <div className="h-screen flex flex-col bg-gray-50">
-        <div className="flex flex-1 items-center justify-center">
-          <div className="max-w-md mx-auto p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">{stepName} Finished</h2>
-            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-              ✓ Success
-            </div>
-            {onCancel && (
-              <button
-                onClick={onCancel}
-                className="mt-6 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
-              >
-                Close
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Success screen removed - now handled by toast + redirect in useStepCompletion
 
   return (
     <div ref={pdfEditorContainerRef} className="flex flex-col bg-gray-50" style={{ height: contentHeight }}>

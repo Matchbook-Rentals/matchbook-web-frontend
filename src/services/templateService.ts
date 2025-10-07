@@ -17,6 +17,7 @@ export async function saveTemplateAndCreateDocument(params: {
   sessionStorage: Storage;
   brandAlert: (message: string, type: 'success' | 'error' | 'warning', title: string, callback?: () => void) => void;
   onSaveCallback?: () => void;
+  onUploadSuccess?: () => void;
 }): Promise<{ success: boolean; templateId?: string; error?: string }> {
   const {
     pdfFile,
@@ -28,7 +29,8 @@ export async function saveTemplateAndCreateDocument(params: {
     router,
     sessionStorage,
     brandAlert,
-    onSaveCallback
+    onSaveCallback,
+    onUploadSuccess
   } = params;
 
   if (!pdfFile) {
@@ -122,19 +124,20 @@ export async function saveTemplateAndCreateDocument(params: {
     sessionStorage.setItem('currentTemplateId', template.id);
     console.log('✅ Template ID stored in sessionStorage:', template.id);
 
-    // Navigate to success page instead of showing alert
-    if (listingId) {
-      const successUrl = `/app/host/${listingId}/leases/create/success?templateId=${template.id}&templateName=${encodeURIComponent(template.title)}&templateType=${templateType}&fieldsCount=${fields.length}&recipientsCount=${recipients.length}&pdfFileName=${encodeURIComponent(uploadResult.fileName)}`;
-      router.push(successUrl);
-    } else {
-      // Fallback if no listingId provided
-      brandAlert(
-        `Template saved successfully!\n\n📄 PDF: ${uploadResult.fileName}\n🎯 Fields: ${fields.length}\n👥 Recipients: ${recipients.length}\n🆔 Template ID: ${template.id}`,
-        'success',
-        'Template Saved',
-        onSaveCallback
-      );
+    // Trigger success state
+    if (onUploadSuccess) {
+      onUploadSuccess();
     }
+
+    // Wait 1000ms then redirect
+    setTimeout(() => {
+      if (listingId) {
+        router.push(`/app/host/${listingId}/leases`);
+      }
+      if (onSaveCallback) {
+        onSaveCallback();
+      }
+    }, 1000);
 
     console.log('🏁 Template save process completed successfully!');
     return { success: true, templateId: template.id };
