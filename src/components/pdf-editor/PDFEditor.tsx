@@ -25,6 +25,9 @@ import { FieldValidationModal } from './FieldValidationModal';
 import { FieldValueEditModal } from './FieldValueEditModal';
 import { FrequentlyUsedFields } from './FrequentlyUsedFields';
 import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES_WITH_OPTIONAL_SETTING, FRIENDLY_FIELD_TYPE } from './types';
+import { TemplateSidebar } from './sidebars/TemplateSidebar';
+import { DocumentSidebar } from './sidebars/DocumentSidebar';
+import { SigningSidebar } from './sidebars/SigningSidebar';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
@@ -32,6 +35,39 @@ import { updateUserInitials } from '@/app/actions/user';
 import BrandModal from '@/components/BrandModal';
 import { useBrandAlert, createBrandAlert, createBrandConfirm } from '@/hooks/useBrandAlert';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
+import { useStepCompletion } from '@/hooks/useStepCompletion';
+
+// Service layer functions
+import { saveTemplateAndCreateDocument as saveTemplateService, loadTemplate as loadTemplateService } from '@/services/templateService';
+import { saveDocumentAndStartSigning as saveDocumentAndStartSigningService, loadDocumentForSigning as loadDocumentForSigningService, createDocumentAndStartSigning as createDocumentAndStartSigningService, saveDocument as saveDocumentService } from '@/services/documentService';
+import { saveSignerProgressAsync as saveSignerProgressAsyncService, saveSignerProgressAndContinue as saveSignerProgressAndContinueService } from '@/services/signingService';
+
+// Utility functions
+import { getFieldLabel } from '@/utils/fieldLabelUtils';
+import { getUnsignedFields as getUnsignedFieldsUtil } from '@/utils/fieldFilterUtils';
+import { navigateToField as navigateToFieldUtil, navigateToNextField as navigateToNextFieldUtil } from '@/utils/fieldNavigationUtils';
+
+// New workflow system
+import { useWorkflowStateMachine } from '@/features/lease-signing/hooks/useWorkflowStateMachine';
+import { WorkflowPhase, WorkflowState as NewWorkflowState } from '@/features/lease-signing/types/workflow.types';
+import { legacyStateToPhase, phaseToLegacyState } from '@/features/lease-signing/adapters/workflowAdapter';
+import {
+  isEditablePhase,
+  shouldShowFieldBorders,
+  shouldShowRecipientSelector,
+  shouldShowSignatureTools,
+  shouldAllowFieldEditing,
+  getFieldsForCurrentSigner,
+  areAllRequiredFieldsSigned,
+  canTransitionFromDocument,
+  getSignerLabel
+} from '@/features/lease-signing/utils/workflowHelpers';
+import {
+  calculateFieldProgress,
+  getIncompleteFields,
+  areAllSignerFieldsComplete,
+  isSigningField
+} from '@/features/lease-signing/utils/fieldDecomposition';
 
 // Template data interface for the editor
 interface LoadedTemplate {
@@ -58,11 +94,11 @@ interface UserSignature {
   updatedAt: string;
 }
 
-// Workflow states for the signing process
-type WorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer2' | 'completed';
+// Legacy workflow states for backward compatibility
+type LegacyWorkflowState = 'selection' | 'template' | 'document' | 'signer1' | 'signer2' | 'completed';
 
 interface PDFEditorProps {
-  initialWorkflowState?: WorkflowState;
+  initialWorkflowState?: LegacyWorkflowState;
   initialPdfFile?: File;
   initialFields?: FieldFormType[];
   initialRecipients?: Recipient[];
@@ -82,13 +118,13 @@ interface PDFEditorProps {
   onFinish?: (stepName: string) => void;
   onFieldSign?: (fieldId: string, value: any) => void;
   onDocumentCreated?: (documentId: string) => void;
-  customSidebarContent?: (workflowState: WorkflowState, defaultContent: JSX.Element) => JSX.Element;
+  customSidebarContent?: (workflowState: LegacyWorkflowState, defaultContent: JSX.Element) => JSX.Element;
   showFooter?: boolean;
   hideFooterControls?: boolean;
   onCompleteStepReady?: (completeStepFn: () => Promise<void>) => void;
   contentHeight?: string;
   signerRole?: 'host' | 'renter';
-  onWorkflowStateChange?: (newState: WorkflowState) => void;
+  onWorkflowStateChange?: (newState: LegacyWorkflowState) => void;
   onSigningActionReady?: (signingActionFn: () => Promise<void>) => void;
   // signedFields is now provided by context
   currentUserInitials?: string; // User's saved initials passed from parent
@@ -137,7 +173,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const { showAlert, showConfirm } = useBrandAlert();
   const brandAlert = createBrandAlert(showAlert);
   const brandConfirm = createBrandConfirm(showConfirm);
-  const { setSignedField } = useSignedFieldsStore();
+  const { signedFields, setSignedField } = useSignedFieldsStore();
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
   const [recipients, setRecipients] = useState<Recipient[]>(initialRecipients || []);
   const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null);
@@ -147,15 +183,86 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [showFieldLabels, setShowFieldLabels] = useState(true);
   const [pageWidth, setPageWidth] = useState(customPageWidth);
-  const [workflowState, setWorkflowStateInternal] = useState<WorkflowState>(initialWorkflowState);
 
-  // Wrapper function to handle workflow state changes and notify parent
-  const setWorkflowState = (newState: WorkflowState) => {
-    setWorkflowStateInternal(newState);
-    if (onWorkflowStateChange) {
-      onWorkflowStateChange(newState);
+  // Initialize new workflow system
+  const initialPhase = legacyStateToPhase(initialWorkflowState);
+  const workflow = useWorkflowStateMachine(initialPhase);
+
+  // Debug: Log workflow initialization
+  useEffect(() => {
+    console.error('🔧 PDFEditor - Workflow initialized:', {
+      initialWorkflowState,
+      initialPhase,
+      currentPhase: workflow.state.phase,
+      isTemplatePhase: workflow.isTemplatePhase(),
+      isDocumentPhase: workflow.isDocumentPhase(),
+      isSigningPhase: workflow.isSigningPhase(),
+      hasInitialTemplate: !!initialTemplate
+    });
+  }, []);
+
+  // Legacy state management for backward compatibility
+  const [legacyWorkflowState, setLegacyWorkflowStateInternal] = useState<LegacyWorkflowState>(initialWorkflowState);
+
+  // Keep legacy state in sync with new workflow and notify parent of changes
+  useEffect(() => {
+    const newLegacyState = phaseToLegacyState(workflow.state.phase, workflow.getCurrentSignerIndex());
+    if (newLegacyState !== legacyWorkflowState) {
+      setLegacyWorkflowStateInternal(newLegacyState);
+      if (onWorkflowStateChange) {
+        onWorkflowStateChange(newLegacyState);
+      }
     }
+  }, [workflow.state.phase, workflow.getCurrentSignerIndex()]);
+
+  // Wrapper function for legacy code that still uses setWorkflowState
+  const setWorkflowState = (newState: LegacyWorkflowState) => {
+    const newPhase = legacyStateToPhase(newState);
+    workflow.transitionToPhase(newPhase);
   };
+
+  // Load initialTemplate if provided (for editing existing templates)
+  useEffect(() => {
+    if (!initialTemplate) return;
+
+    const loadInitialTemplate = async () => {
+      try {
+        console.error('🔧 PDFEditor - Loading initialTemplate:', {
+          templateId: initialTemplate.id,
+          hasPdfUrl: !!initialTemplate.pdfFileUrl,
+          hasFields: !!initialTemplate.fields,
+          hasRecipients: !!initialTemplate.recipients
+        });
+
+        // Load PDF file from URL
+        if (initialTemplate.pdfFileUrl) {
+          const response = await fetch(initialTemplate.pdfFileUrl);
+          const blob = await response.blob();
+          const file = new File([blob], initialTemplate.pdfFileName || 'template.pdf', {
+            type: 'application/pdf'
+          });
+          setPdfFile(file);
+        }
+
+        // Load fields
+        if (initialTemplate.fields && Array.isArray(initialTemplate.fields)) {
+          setFields(initialTemplate.fields as FieldFormType[]);
+        }
+
+        // Load recipients
+        if (initialTemplate.recipients && Array.isArray(initialTemplate.recipients)) {
+          setRecipients(initialTemplate.recipients as Recipient[]);
+        }
+
+        console.error('✅ PDFEditor - initialTemplate loaded successfully');
+      } catch (error) {
+        console.error('❌ PDFEditor - Failed to load initialTemplate:', error);
+      }
+    };
+
+    loadInitialTemplate();
+  }, [initialTemplate]);
+
   // signedFields now comes from context
   const [isSavingTemplate, setIsSavingTemplate] = useState(false);
 
@@ -182,7 +289,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Trip configuration state
   const [tripMatchDetails, setTripMatchDetails] = useState<MatchDetails | null>(matchDetails || null);
-  const [showTripConfiguration, setShowTripConfiguration] = useState(!matchDetails && workflowState === 'document');
+  const [showTripConfiguration, setShowTripConfiguration] = useState(!matchDetails && workflow.isDocumentPhase());
 
   // Document creation loading state
   const [isCreatingDocument, setIsCreatingDocument] = useState(false);
@@ -221,13 +328,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       initialFields.forEach(field => {
         if (field.value !== undefined && field.value !== null && field.value !== '') {
           preFilledValues[field.formId] = field.value;
-          console.log(`📝 Pre-filled field ${field.formId} (${field.type}) with value: "${field.value}" (signer ${field.signerIndex})`);
         }
       });
-
-      if (Object.keys(preFilledValues).length > 0) {
-        console.log('📝 Pre-filled values found (should be handled by parent):', preFilledValues);
-      }
     }
   }, [initialFields]);
 
@@ -263,10 +365,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Debug: Monitor fields state changes
   useEffect(() => {
-    console.log('🔄 Fields state changed:', {
-      count: fields.length,
-      fields: fields.map(f => ({ id: f.formId, type: f.type, page: f.pageNumber }))
-    });
   }, [fields]);
 
 
@@ -299,10 +397,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     };
 
     logFieldPopulation();
-    console.log('🔍 PDFEditor - Pre-populating fields with matchDetails:', {
-      monthlyPrice: matchDetails.monthlyPrice,
-      fieldsToProcess: fields.length
-    });
 
     // Update recipients with match details using functional update
     setRecipients(currentRecipients =>
@@ -358,10 +452,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Pre-populate fields with match details when available
   useEffect(() => {
-    if (tripMatchDetails && fields.length > 0 && workflowState === 'document' && pdfPagesReady) {
+    if (tripMatchDetails && fields.length > 0 && workflow.isDocumentPhase() && pdfPagesReady) {
       prePopulateFieldsWithMatchDetails(tripMatchDetails);
     }
-  }, [tripMatchDetails, fields.length, workflowState, pdfPagesReady, prePopulateFieldsWithMatchDetails]);
+  }, [tripMatchDetails, fields.length, legacyWorkflowState, pdfPagesReady, prePopulateFieldsWithMatchDetails]);
 
   // Wait for PDF pages to be rendered in DOM and store their references
   useEffect(() => {
@@ -398,7 +492,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       });
 
       if (allPagesHaveContent && newPageElements.size > 0) {
-        console.log('📄 PDF pages ready:', newPageElements.size, 'pages found');
         setPageElements(newPageElements);
         setPdfPagesReady(true);
         return true;
@@ -422,7 +515,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Cleanup after 10 seconds
     const timeout = setTimeout(() => {
       clearInterval(pollInterval);
-      console.warn('⚠️ PDF pages failed to load within timeout');
       // Set pages as ready anyway since fields are rendering successfully
       setPdfPagesReady(true);
     }, 10000);
@@ -438,8 +530,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     if (!selectedField || !isDragging || !pdfEditorContainerRef.current) {
       return;
     }
-
-    console.log('PDF Editor: Attaching field placement event listeners');
 
     const container = pdfEditorContainerRef.current;
 
@@ -469,7 +559,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       // Check if click is over a PDF page - if not, cancel field placement
       const pdfArea = (event.target as Element).closest('[data-pdf-viewer-page]');
       if (!pdfArea) {
-        console.log('PDF Editor: Canceling field placement due to outside click');
         cancelFieldPlacement();
       }
     };
@@ -488,19 +577,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       container.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('keydown', onKeyDown);
       container.removeEventListener('mousedown', onMouseDown);
-      console.log('PDF Editor: Removed field placement event listeners');
     };
   }, [selectedField, isDragging]);
 
   // Dual interaction mode detection
   useEffect(() => {
     if (interactionMode === 'idle' || !pdfEditorContainerRef.current) {
-      console.log('PDF Editor: Dual interaction mode is idle, no event listeners');
       return;
     }
 
     const container = pdfEditorContainerRef.current;
-    console.log('🎯 Dual interaction effect active:', { interactionMode, isMouseDown, mouseDownPosition });
 
     const handleGlobalMouseMove = (event: MouseEvent) => {
       if (interactionMode === 'detecting' && isMouseDown) {
@@ -510,7 +596,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         );
 
         if (distance > MOVEMENT_THRESHOLD) {
-          console.log('🚀 Movement threshold exceeded, entering drag mode');
           setInteractionMode('dragging');
           setIsDragging(true);
         }
@@ -535,10 +620,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     };
 
     const handleGlobalMouseUp = (event: MouseEvent) => {
-      console.log('🖱️ Global mouse up:', { interactionMode, isMouseDown });
-
       if (interactionMode === 'detecting') {
-        console.log('🔄 Transitioning from detecting to click-to-place');
         setInteractionMode('click-to-place');
         setIsDragging(true);
         setIsMouseDown(false);
@@ -546,7 +628,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         // Find the actual page element under the mouse (works for any page, not just page 1)
         const pdfPageElement = (event.target as Element).closest('[data-pdf-viewer-page]');
         if (pdfPageElement) {
-          console.log('✅ MouseUp over PDF page - placing field');
           const rect = pdfPageElement.getBoundingClientRect();
           const pageNumber = parseInt(pdfPageElement.getAttribute('data-page-number') || '1');
           const syntheticEvent = {
@@ -560,7 +641,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           };
           handlePageClick(syntheticEvent);
         } else {
-          console.log('❌ MouseUp outside PDF - canceling placement');
           cancelFieldPlacement();
         }
         setIsMouseDown(false);
@@ -573,7 +653,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       }
     };
 
-    console.log('PDF Editor: Attaching dual interaction event listeners');
     container.addEventListener('mousemove', handleGlobalMouseMove);
     container.addEventListener('mouseup', handleGlobalMouseUp);
     document.addEventListener('keydown', handleGlobalKeyDown); // Keep keyboard on document for global escape
@@ -582,7 +661,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       container.removeEventListener('mousemove', handleGlobalMouseMove);
       container.removeEventListener('mouseup', handleGlobalMouseUp);
       document.removeEventListener('keydown', handleGlobalKeyDown);
-      console.log('PDF Editor: Removed dual interaction event listeners');
     };
   }, [interactionMode, isMouseDown, mouseDownPosition, MOVEMENT_THRESHOLD, handlePageClick]);
 
@@ -606,28 +684,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Handle clicking on PDF to add field (supports both click-to-place and drag modes)
   function handlePageClick(event: Parameters<OnPDFViewerPageClick>[0]) {
-    console.log('🎯 handlePageClick called:', {
-      selectedField,
-      selectedRecipient,
-      interactionMode,
-      eventPageX: event.pageX,
-      eventPageY: event.pageY,
-      pageNumber: event.pageNumber
-    });
-
     if (!selectedField || !selectedRecipient || (interactionMode !== 'click-to-place' && interactionMode !== 'dragging' && interactionMode !== 'detecting')) {
-      console.log('❌ handlePageClick early return:', {
-        hasSelectedField: !!selectedField,
-        hasSelectedRecipient: !!selectedRecipient,
-        interactionMode,
-        validModes: ['click-to-place', 'dragging', 'detecting']
-      });
       return;
     }
 
     // Get field dimensions
     const fieldDimensions = getFieldBounds(selectedField);
-    console.log('📏 Field dimensions:', fieldDimensions);
 
     // Check if field would fit within page bounds (using centered positioning like ghost cursor)
     const fieldLeftEdge = event.pageX - fieldDimensions.width / 2;
@@ -643,12 +705,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     let adjustedPageY = event.pageY;
 
     if (!wouldFitX || !wouldFitY) {
-      console.log('⚠️ Field would not fit, applying best-fit adjustment:', {
-        original: { x: event.pageX, y: event.pageY },
-        fieldDimensions,
-        pageSize: { width: event.pageWidth, height: event.pageHeight }
-      });
-
       // Adjust X position if needed
       if (fieldLeftEdge < 0) {
         adjustedPageX = fieldDimensions.width / 2; // Move right to fit left edge
@@ -662,12 +718,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       } else if (fieldBottomEdge > event.pageHeight) {
         adjustedPageY = event.pageHeight - fieldDimensions.height / 2; // Move up to fit bottom edge
       }
-
-      console.log('✅ Best-fit adjustment applied:', {
-        adjusted: { x: adjustedPageX, y: adjustedPageY },
-        adjustedX: adjustedPageX !== event.pageX,
-        adjustedY: adjustedPageY !== event.pageY
-      });
     }
 
     // Calculate percentage-based coordinates using adjusted positions
@@ -676,31 +726,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     const fieldPageWidth = (fieldDimensions.width / event.pageWidth) * 100;
     const fieldPageHeight = (fieldDimensions.height / event.pageHeight) * 100;
 
-    console.log('🧮 Calculated coordinates:', {
-      rawPageX: pageX,
-      rawPageY: pageY,
-      fieldPageWidth,
-      fieldPageHeight
-    });
-
     // Ensure field stays within bounds
     const clampedPageX = Math.max(0, Math.min(pageX, 100 - fieldPageWidth));
     const clampedPageY = Math.max(0, Math.min(pageY, 100 - fieldPageHeight));
 
-    console.log('🗜️ Clamped coordinates:', {
-      clampedPageX,
-      clampedPageY,
-      wasClampedX: clampedPageX !== pageX,
-      wasClampedY: clampedPageY !== pageY
-    });
-
     const recipientIndex = recipients.findIndex(r => r.id === selectedRecipient);
-    console.log('👤 Recipient info:', {
-      selectedRecipient,
-      recipientIndex,
-      totalRecipients: recipients.length,
-      recipients: recipients.map(r => ({ id: r.id, name: r.name }))
-    });
 
     // Create new field
     const newField: FieldFormType = {
@@ -722,19 +752,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           : undefined,
     };
 
-    console.log('✨ Creating new field:', newField);
-    console.log('📝 Current fields before add:', fields.length, fields.map(f => ({ formId: f.formId, type: f.type })));
-
     // Field types that should trigger the custom field dialog
     const customFieldTypes = [FieldType.NAME, FieldType.CHECKBOX, FieldType.DROPDOWN];
-
-    console.log('🧹 Cleaning up states:', {
-      selectedField: selectedField + ' → null',
-      pendingFieldLabel: pendingFieldLabel + ' → null',
-      isDragging: 'false',
-      interactionMode: interactionMode + ' → idle',
-      isMouseDown: 'false'
-    });
 
     // Clean up states first to prevent re-renders
     setSelectedField(null);
@@ -746,7 +765,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     if (customFieldTypes.includes(selectedField) && !pendingFieldLabel) {
       // Only open dialog if NOT from required fields (no pendingFieldLabel)
       setCustomFieldDialog({ isOpen: true, field: newField });
-      console.log('⚙️ Opening custom field dialog for:', newField);
     } else {
       // For required fields or non-custom fields, add directly
       if (pendingFieldLabel) {
@@ -788,16 +806,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         };
         setFields([...fields, fieldWithMetadata]);
         setActiveFieldId(fieldWithMetadata.formId);
-        console.log('✅ Required field added directly with metadata:', fieldWithMetadata);
       } else {
         // Non-custom fields (signatures, initials, etc.)
         setFields([...fields, newField]);
         setActiveFieldId(newField.formId);
-        console.log('✅ Field creation completed, setting states to cleanup');
       }
     }
-
-    console.log('🏁 handlePageClick completed');
   }
 
   // Update field position/size
@@ -841,7 +855,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const handleAddSignDate = (signatureFieldId: string) => {
     const signatureField = fields.find(f => f.formId === signatureFieldId);
     if (!signatureField || signatureField.type !== FieldType.SIGNATURE) {
-      console.warn('Cannot add sign date: signature field not found');
       return;
     }
 
@@ -852,7 +865,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     );
 
     if (existingSignDate) {
-      console.warn('Sign date field already exists for this recipient');
       return;
     }
 
@@ -862,7 +874,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     ) as HTMLElement;
 
     if (!pageElement) {
-      console.warn('Cannot find page element for positioning');
       return;
     }
 
@@ -886,15 +897,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add the field to the array
     setFields([...fields, signDateField]);
     setActiveFieldId(signDateField.formId);
-
-    console.log('✅ Sign date field added:', signDateField);
   };
 
   // Add initial date field next to initials field
   const handleAddInitialDate = (initialsFieldId: string) => {
     const initialsField = fields.find(f => f.formId === initialsFieldId);
     if (!initialsField || initialsField.type !== FieldType.INITIALS) {
-      console.warn('Cannot add initial date: initials field not found');
       return;
     }
 
@@ -905,7 +913,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     );
 
     if (existingInitialDate) {
-      console.warn('Initial date field already exists for this recipient');
       return;
     }
 
@@ -915,7 +922,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     ) as HTMLElement;
 
     if (!pageElement) {
-      console.warn('Cannot find page element for positioning');
       return;
     }
 
@@ -939,8 +945,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Add the field to the array
     setFields([...fields, initialDateField]);
     setActiveFieldId(initialDateField.formId);
-
-    console.log('✅ Initial date field added:', initialDateField);
   };
 
   // Add recipient
@@ -978,14 +982,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         recipients,
         signedFields, // Pass the signed values
         {
-          showFieldBorders: workflowState === 'template' || workflowState === 'document', // Show borders during editing
+          showFieldBorders: workflow.isTemplatePhase() || workflow.isDocumentPhase(), // Show borders during editing
           includeLabels: true,
-          fieldOpacity: (workflowState === 'template' || workflowState === 'document') ? 0.3 : 1.0, // Show fields during editing
+          fieldOpacity: (workflow.isTemplatePhase() || workflow.isDocumentPhase()) ? 0.3 : 1.0, // Show fields during editing
         }
       );
 
       const blob = new Blob([exportedPdfBytes], { type: 'application/pdf' });
-      const suffix = workflowState === 'completed' ? '_SIGNED' : '_with_fields';
+      const suffix = legacyWorkflowState === 'completed' ? '_SIGNED' : '_with_fields';
       const filename = `${pdfFile.name.replace('.pdf', '')}${suffix}.pdf`;
       downloadBlob(blob, filename);
     } catch (error) {
@@ -995,243 +999,44 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Step 1 → Step 2: Save template and create document
   const saveTemplateAndCreateDocument = async (onSaveCallback?: () => void) => {
-    if (!pdfFile) {
-      brandAlert('Please upload a PDF file first.', 'warning', 'File Required');
-      return;
-    }
+    const result = await saveTemplateService({
+      pdfFile: pdfFile!,
+      fields,
+      recipients,
+      templateName,
+      templateType,
+      listingId,
+      router,
+      sessionStorage,
+      brandAlert,
+      onSaveCallback
+    });
 
-    try {
-      console.log('🚀 Starting template save process...');
-      console.log('📄 PDF File:', {
-        name: pdfFile.name,
-        size: pdfFile.size,
-        type: pdfFile.type
-      });
-      console.log('🎯 Fields to save:', {
-        count: fields.length,
-        fields: fields.map(f => ({ id: f.formId, type: f.type, recipientIndex: f.recipientIndex }))
-      });
-      console.log('👥 Recipients to save:', {
-        count: recipients.length,
-        recipients: recipients.map(r => ({ id: r.id, name: r.name, email: r.email }))
-      });
-
-      // Step 1: Upload PDF file to UploadThing
-      console.log('📤 STEP 1: Uploading PDF to UploadThing...');
-      const formData = new FormData();
-      formData.append('file', pdfFile);
-
-      const uploadResponse = await fetch('/api/pdf-templates/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      console.log('📤 Upload response status:', uploadResponse.status);
-
-      if (!uploadResponse.ok) {
-        const errorText = await uploadResponse.text();
-        console.error('❌ Upload failed:', errorText);
-        throw new Error(`Upload failed: ${errorText}`);
-      }
-
-      const uploadResult = await uploadResponse.json();
-
-      // Step 2: Save template with annotations
-      const templateData = {
-        title: templateName || pdfFile.name.replace('.pdf', ' Template') || 'PDF Template',
-        description: `Template created from ${pdfFile.name}`,
-        type: templateType,
-        listingId,
-        fields,
-        recipients,
-        pdfFileUrl: uploadResult.fileUrl,
-        pdfFileName: uploadResult.fileName,
-        pdfFileSize: uploadResult.fileSize,
-        pdfFileKey: uploadResult.fileKey,
-        author: 'PDF Editor User',
-        subject: 'PDF Template'
-      };
-
-      console.log('💾 Template data being sent:', {
-        title: templateData.title,
-        fieldsCount: templateData.fields.length,
-        recipientsCount: templateData.recipients.length,
-        pdfFileUrl: templateData.pdfFileUrl ? 'Present' : 'Missing',
-        pdfFileKey: templateData.pdfFileKey ? 'Present' : 'Missing'
-      });
-
-      const templateResponse = await fetch('/api/pdf-templates', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(templateData),
-      });
-
-      console.log('💾 Template save response status:', templateResponse.status);
-
-      if (!templateResponse.ok) {
-        const errorText = await templateResponse.text();
-        console.error('❌ Template save failed:', errorText);
-        throw new Error(`Template save failed: ${errorText}`);
-      }
-
-      const { template } = await templateResponse.json();
-      console.log('✅ Template saved successfully:', {
-        id: template.id,
-        title: template.title,
-        createdAt: template.createdAt
-      });
-
-      // Step 3: Complete and navigate
-      console.log('🎉 STEP 3: Finalizing...');
-      sessionStorage.setItem('currentTemplateId', template.id);
-      console.log('✅ Template ID stored in sessionStorage:', template.id);
-
-      // Navigate to success page instead of showing alert
-      if (listingId) {
-        const successUrl = `/app/host/${listingId}/leases/create/success?templateId=${template.id}&templateName=${encodeURIComponent(template.title)}&templateType=${templateType}&fieldsCount=${fields.length}&recipientsCount=${recipients.length}&pdfFileName=${encodeURIComponent(uploadResult.fileName)}`;
-        router.push(successUrl);
-      } else {
-        // Fallback if no listingId provided
-        brandAlert(
-          `Template saved successfully!\n\n📄 PDF: ${uploadResult.fileName}\n🎯 Fields: ${fields.length}\n👥 Recipients: ${recipients.length}\n🆔 Template ID: ${template.id}`,
-          'success',
-          'Template Saved',
-          onSaveCallback
-        );
-      }
-
+    if (result.success) {
       setWorkflowState('selection');
       setSelectedField(null);
       setActiveFieldId(null);
-
-      console.log('🏁 Template save process completed successfully!');
-
-    } catch (error) {
-      console.error('❌ SAVE TEMPLATE FAILED:', error);
-      console.error('❌ Full error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      });
-
-      let errorMessage = '❌ Failed to save template!\n\n';
-      if (error.message.includes('Upload failed')) {
-        errorMessage += '📤 PDF Upload Error: ' + error.message;
-      } else if (error.message.includes('Template save failed')) {
-        errorMessage += '💾 Database Save Error: ' + error.message;
-      } else {
-        errorMessage += '🔧 Unknown Error: ' + error.message;
-      }
-
-      errorMessage += '\n\n🔍 Check console for detailed logs.';
-      brandAlert(errorMessage, 'error', 'Save Failed');
     }
   };
 
-  // Step 2 → Step 3: Save document and start signing workflow  
+  // Step 2 → Step 3: Save document and start signing workflow
   const saveDocumentAndStartSigning = async () => {
-    try {
-      console.log('🚀 Starting saveDocumentAndStartSigning workflow');
+    const result = await saveDocumentAndStartSigningService({
+      isMergedDocument,
+      mergedTemplateIds,
+      fields,
+      recipients,
+      signedFields,
+      pageWidth,
+      sessionStorage,
+      brandAlert,
+      workflowDispatch: workflow.dispatch
+    });
 
-      let documentId = sessionStorage.getItem('currentDocumentId');
-      let templateId = sessionStorage.getItem('currentTemplateId');
-
-      // Handle merged document case
-      if (isMergedDocument && mergedTemplateIds && !documentId) {
-        console.log('📄 Creating new merged document from templates:', mergedTemplateIds);
-
-        const createResponse = await fetch('/api/documents/merged', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            templateIds: mergedTemplateIds,
-            documentData: {
-              fields,
-              recipients,
-              metadata: { pageWidth },
-              signedFields // Include any pre-filled values
-            },
-            status: 'IN_PROGRESS', // Start in signing mode
-            currentStep: 'signer1'
-          }),
-        });
-
-        if (!createResponse.ok) {
-          throw new Error('Failed to create merged document');
-        }
-
-        const { document } = await createResponse.json();
-        documentId = document.id;
-        sessionStorage.setItem('currentDocumentId', documentId);
-
-        console.log('✅ Merged document created for signing:', documentId);
-      }
-      // If no document exists yet, create one from the current template
-      else if (!documentId && templateId) {
-        console.log('📄 No document exists, creating new document from template:', templateId);
-
-        const createResponse = await fetch('/api/documents', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            templateId,
-            documentData: {
-              fields,
-              recipients,
-              metadata: { pageWidth },
-              signedFields // Include any pre-filled values
-            },
-            status: 'IN_PROGRESS', // Set status at creation time
-            currentStep: 'signer1'
-          }),
-        });
-
-        if (!createResponse.ok) {
-          throw new Error('Failed to create document');
-        }
-
-        const { document } = await createResponse.json();
-        documentId = document.id;
-        sessionStorage.setItem('currentDocumentId', documentId);
-        console.log('✅ Document created:', documentId);
-      }
-
-      if (!documentId) {
-        brandAlert('Unable to create document. Please start over from template selection.', 'error', 'Document Creation Failed');
-        return;
-      }
-
-      // Document was created with IN_PROGRESS status, no need to update
-      console.log('📝 Document already created with IN_PROGRESS status:', documentId);
-
-      // Create signing sessions for each recipient
-      console.log('👥 Creating signing sessions for', recipients.length, 'recipients');
-      for (let i = 0; i < recipients.length; i++) {
-        const recipient = recipients[i];
-        await fetch('/api/signing-sessions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            documentId,
-            signerIndex: i,
-            signerEmail: recipient.email || `${recipient.id}@example.com`,
-            signerName: recipient.name
-          }),
-        });
-      }
-
-      // Move to first signer
-      setWorkflowState('signer1');
-
+    if (result.success) {
       // Clear any selection states
       setSelectedField(null);
       setActiveFieldId(null);
-
-      console.log('✅ Document saved and signing workflow started');
-
-    } catch (error) {
-      console.error('❌ Error in saveDocumentAndStartSigning:', error);
-      brandAlert('Failed to start signing workflow: ' + error.message, 'error', 'Signing Failed');
     }
   };
 
@@ -1243,188 +1048,26 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       return;
     }
 
-    console.log(`📋 Saving progress for signer ${signerIndex + 1}, document: ${documentId}`);
+    const result = await saveSignerProgressAsyncService({
+      signerIndex,
+      documentId,
+      fields,
+      recipients,
+      signedFields,
+      pageWidth,
+      brandAlert,
+      useSignedFieldsStore
+    });
 
-    try {
-      // Save all signed fields for this signer
-      const signerFields = fields.filter(f => f.recipientIndex === signerIndex);
-      console.log(`💾 Saving ${signerFields.length} field values for signer ${signerIndex + 1}`);
-
-      for (const field of signerFields) {
-        const fieldValue = useSignedFieldsStore.getState().signedFields[field.formId];
-        if (fieldValue) {
-          const requestBody = {
-            documentId,
-            fieldId: field.formId,
-            fieldType: field.type,
-            signerIndex,
-            signerEmail: recipients[signerIndex]?.email || `signer${signerIndex}@example.com`,
-            value: fieldValue
-          };
-
-          console.log(`📤 Saving field ${field.formId} to /api/field-values:`, requestBody);
-
-          const response = await fetch('/api/field-values', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody),
-          });
-
-          if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`❌ FIELD SAVE FAILED - /api/field-values`, {
-              request: {
-                url: '/api/field-values',
-                method: 'POST',
-                body: requestBody
-              },
-              response: {
-                status: response.status,
-                statusText: response.statusText,
-                body: errorText
-              },
-              field: {
-                formId: field.formId,
-                type: field.type,
-                recipientIndex: field.recipientIndex,
-                value: fieldValue
-              }
-            });
-            throw new Error(`API /api/field-values returned ${response.status}: ${errorText || response.statusText}`);
-          }
-          console.log(`✅ Field ${field.formId} saved successfully`);
-        }
-      }
-
-      // Update signing session status (optional - don't fail the entire process if this fails)
-      try {
-        const sessionBody = {
-          documentId,
-          signerIndex
-        };
-
-        console.log('📤 Updating signing session at /api/signing-sessions/complete:', sessionBody);
-
-        const sessionResponse = await fetch('/api/signing-sessions/complete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(sessionBody),
-        });
-
-        if (!sessionResponse.ok) {
-          const errorText = await sessionResponse.text();
-          console.error('❌ SESSION UPDATE FAILED - /api/signing-sessions/complete', {
-            request: {
-              url: '/api/signing-sessions/complete',
-              method: 'POST',
-              body: sessionBody
-            },
-            response: {
-              status: sessionResponse.status,
-              statusText: sessionResponse.statusText,
-              body: errorText
-            }
-          });
-          console.warn('⚠️ Signing session update failed, but continuing with document completion');
-        } else {
-          console.log('✅ Signing session updated successfully');
-        }
-      } catch (sessionError) {
-        console.error('❌ Error updating signing session (non-critical):', sessionError);
-        console.warn('⚠️ Signing session update failed, but continuing with document completion');
-      }
-
-      // Update document with current progress and signed fields (optional - don't fail if this fails)
-      try {
-        const docUpdateBody = {
-          documentData: {
-            fields,
-            recipients,
-            metadata: { pageWidth },
-            signedFields // Save current signed state
-          },
-          currentStep: signerIndex === 0 ? 'signer2' : 'completed',
-          status: signerIndex === 0 ? 'IN_PROGRESS' : 'COMPLETED',
-          [`signer${signerIndex + 1}CompletedAt`]: new Date().toISOString()
-        };
-
-        console.log(`📤 Updating document at /api/documents/${documentId}:`, {
-          status: docUpdateBody.status,
-          currentStep: docUpdateBody.currentStep,
-          fieldsCount: fields.length,
-          recipientsCount: recipients.length
-        });
-
-        const docUpdateResponse = await fetch(`/api/documents/${documentId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(docUpdateBody),
-        });
-
-        if (!docUpdateResponse.ok) {
-          const errorText = await docUpdateResponse.text();
-          console.error(`❌ DOCUMENT UPDATE FAILED - /api/documents/${documentId}`, {
-            request: {
-              url: `/api/documents/${documentId}`,
-              method: 'PATCH',
-              bodyPreview: {
-                status: docUpdateBody.status,
-                currentStep: docUpdateBody.currentStep,
-                fieldsCount: fields.length,
-                signedFieldsCount: Object.keys(signedFields || {}).length
-              }
-            },
-            response: {
-              status: docUpdateResponse.status,
-              statusText: docUpdateResponse.statusText,
-              body: errorText
-            }
-          });
-          console.warn('⚠️ Document status update failed, but field values were saved successfully');
-        } else {
-          console.log('✅ Document updated successfully');
-        }
-      } catch (docError) {
-        console.error('❌ Error updating document (non-critical):', docError);
-        console.warn('⚠️ Document status update failed, but field values were saved successfully');
-      }
-
-      // Show success and return to selection
-      const signerName = recipients[signerIndex]?.name || `Signer ${signerIndex + 1}`;
-      if (signerIndex === 0) {
-        brandAlert(`${signerName} has completed signing!\n\n${signerIndex === 0 ? 'Document is now ready for the Renter.' : 'Document is fully signed and complete.'}`, 'success', 'Signing Complete');
-      }
-
+    if (result.success) {
       // Return to selection screen for async workflow
       setWorkflowState('selection');
 
       // Reset validation state
       setFieldsRendered(false);
       setRenderingStatus('pending');
-
-      console.log(`Signer ${signerIndex + 1} completed signing asynchronously`);
-
-    } catch (error) {
-      console.error('❌ SAVE SIGNER PROGRESS FAILED:', error);
-
-      // Show the ACTUAL error to the user
-      const errorMessage = `SIGNING SAVE FAILED:\n\n${error.message}\n\nDocument ID: ${sessionStorage.getItem('currentDocumentId')}\nSigner: ${signerIndex + 1}\n\nCheck console for full details.`;
-
-      // Log everything for debugging
-      console.error('❌ COMPLETE ERROR DUMP:', {
-        error: error,
-        errorMessage: error.message,
-        errorStack: error.stack,
-        documentId: sessionStorage.getItem('currentDocumentId'),
-        signerIndex: signerIndex,
-        signerFields: fields.filter(f => f.recipientIndex === signerIndex),
-        signedFieldsStore: useSignedFieldsStore.getState().signedFields,
-        recipients: recipients,
-        timestamp: new Date().toISOString()
-      });
-
-      brandAlert(errorMessage, 'error', 'Save Failed - Check Console');
-      throw error; // Re-throw to stop the flow
+    } else {
+      throw new Error(result.error || 'Failed to save signer progress');
     }
   };
 
@@ -1436,86 +1079,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       return;
     }
 
-    try {
-      // Save all signed fields for this signer
-      const signerFields = fields.filter(f => f.recipientIndex === signerIndex);
-
-      for (const field of signerFields) {
-        const fieldValue = useSignedFieldsStore.getState().signedFields[field.formId];
-        if (fieldValue) {
-          const requestBody = {
-            documentId,
-            fieldId: field.formId,
-            fieldType: field.type,
-            signerIndex,
-            signerEmail: recipients[signerIndex]?.email || `signer${signerIndex}@example.com`,
-            value: fieldValue
-          };
-
-          console.log(`📤 Saving field ${field.formId} to /api/field-values:`, requestBody);
-
-          const response = await fetch('/api/field-values', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody),
-          });
-
-          if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`❌ FIELD SAVE FAILED - /api/field-values`, {
-              request: {
-                url: '/api/field-values',
-                method: 'POST',
-                body: requestBody
-              },
-              response: {
-                status: response.status,
-                statusText: response.statusText,
-                body: errorText
-              },
-              field: {
-                formId: field.formId,
-                type: field.type,
-                recipientIndex: field.recipientIndex,
-                value: fieldValue
-              }
-            });
-            throw new Error(`API /api/field-values returned ${response.status}: ${errorText || response.statusText}`);
-          }
-          console.log(`✅ Field ${field.formId} saved successfully`);
-        }
-      }
-
-      // Update signing session status
-      await fetch('/api/signing-sessions/complete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          documentId,
-          signerIndex
-        }),
-      });
-
-      // Move to next step
-      if (signerIndex === 0) {
-        // Moving from signer1 (recipientIndex 0) to signer2
-        await fetch(`/api/documents/${documentId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            currentStep: 'signer2'
-          }),
-        });
-        setWorkflowState('signer2');
-      } else {
-        // All signers complete
-        await completeSigning();
-      }
-
-    } catch (error) {
-      console.error('Error in saveSignerProgressAndContinue:', error);
-      brandAlert('Failed to save signer progress. Please try again.', 'error', 'Save Failed');
-    }
+    await saveSignerProgressAndContinueService({
+      signerIndex,
+      documentId,
+      fields,
+      recipients,
+      brandAlert,
+      useSignedFieldsStore,
+      completeSigning,
+      setWorkflowState
+    });
   };
 
   // Complete signing workflow
@@ -1540,8 +1113,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
       setWorkflowState('selection');
 
-      console.log('Document signing completed');
-
     } catch (error) {
       console.error('Error in completeSigning:', error);
       brandAlert('Failed to complete signing. Please try again.', 'error', 'Signing Failed');
@@ -1555,97 +1126,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Save document functionality (manual save without starting signing)
   const saveDocument = async () => {
-    try {
-      console.log('🚀 Starting saveDocument workflow');
-
-      let documentId = sessionStorage.getItem('currentDocumentId');
-      let templateId = sessionStorage.getItem('currentTemplateId');
-
-      // Handle merged document case
-      if (isMergedDocument && mergedTemplateIds && !documentId) {
-        console.log('📄 Creating new merged document from templates:', mergedTemplateIds);
-
-        const createResponse = await fetch('/api/documents/merged', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            templateIds: mergedTemplateIds,
-            documentData: {
-              fields,
-              recipients,
-              metadata: { pageWidth },
-              signedFields // Include any pre-filled values
-            },
-            status: 'DRAFT',
-            currentStep: 'document'
-          }),
-        });
-
-        if (!createResponse.ok) {
-          throw new Error('Failed to create merged document');
-        }
-
-        const { document } = await createResponse.json();
-        documentId = document.id;
-        sessionStorage.setItem('currentDocumentId', documentId);
-
-        console.log('✅ Merged document created:', documentId);
-      }
-      // If no document exists yet, create one from the current template
-      else if (!documentId && templateId) {
-        console.log('📄 No document exists, creating new document from template:', templateId);
-
-        const createResponse = await fetch('/api/documents', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            templateId,
-            documentData: {
-              fields,
-              recipients,
-              metadata: { pageWidth },
-              signedFields // Include any pre-filled values
-            },
-            status: 'DRAFT', // Keep as draft, don't start signing yet
-            currentStep: 'document'
-          }),
-        });
-
-        if (!createResponse.ok) {
-          throw new Error('Failed to create document');
-        }
-
-        const { document } = await createResponse.json();
-        documentId = document.id;
-        sessionStorage.setItem('currentDocumentId', documentId);
-        console.log('✅ Document created as draft:', documentId);
-        brandAlert('Document saved as draft successfully!', 'success', 'Draft Saved');
-      } else if (documentId) {
-        // Update existing document
-        await fetch(`/api/documents/${documentId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            documentData: {
-              fields,
-              recipients,
-              metadata: { pageWidth },
-              signedFields
-            },
-            status: 'DRAFT',
-            currentStep: 'document'
-          }),
-        });
-        console.log('✅ Document updated:', documentId);
-        brandAlert('Document updated successfully!', 'success', 'Document Updated');
-      } else {
-        throw new Error('No template or document ID found. Please start from template creation.');
-      }
-
-    } catch (error) {
-      console.error('❌ Error in saveDocument:', error);
-      brandAlert('Failed to save document: ' + error.message, 'error', 'Save Failed');
-    }
+    await saveDocumentService({
+      isMergedDocument,
+      mergedTemplateIds,
+      fields,
+      recipients,
+      signedFields,
+      pageWidth,
+      sessionStorage,
+      brandAlert
+    });
   };
 
   // Trip configuration handlers
@@ -1656,7 +1146,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   };
 
   const goBackToTemplate = () => {
-    if (workflowState === 'document') {
+    if (workflow.isDocumentPhase()) {
       setShowTripConfiguration(true);
       setPdfFile(null);
       setFields([]);
@@ -1676,343 +1166,41 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const renderDefaultSidebarContent = () => {
     return (
       <>
-
         {/* Template editing interface */}
-        {workflowState === 'template' && (
-          <>
-            <RecipientManager
-              recipients={recipients}
-              onRecipientsChange={setRecipients}
-              selectedRecipient={selectedRecipient}
-              onSelectRecipient={setSelectedRecipient}
-              accordionState={accordionStates.recipients}
-              onToggleAccordion={() => toggleAccordion('recipients')}
-            />
-
-            {/* Removed RequiredLeaseFields and FrequentlyUsedFields components */}
-            {/* Files: RequiredLeaseFields.tsx and FrequentlyUsedFields.tsx */}
-            {/* Can be restored if needed for template-specific field sections */}
-
-            <FieldSelector
-              selectedField={selectedField}
-              onSelectedFieldChange={(field) => {
-                setSelectedField(field);
-                setInteractionMode('click-to-place');
-              }}
-              selectedRecipient={selectedRecipient}
-              recipients={recipients}
-              onStartDrag={(fieldType, mouseEvent, fieldLabel) => {
-                // For FieldSelector, we'll use the selected recipient or default to host
-                const recipientId = selectedRecipient || 'host-recipient';
-
-                // Use the label passed from FieldSelector which now includes recipient-specific labels
-                const label = fieldLabel || '';
-
-                startFieldDetection(fieldType, recipientId, mouseEvent, label);
-              }}
-              accordionState={accordionStates.allFieldTypes}
-              onToggleAccordion={() => toggleAccordion('allFieldTypes')}
-            />
-          </>
+        {workflow.isTemplatePhase() && (
+          <TemplateSidebar
+            recipients={recipients}
+            setRecipients={setRecipients}
+            selectedRecipient={selectedRecipient}
+            setSelectedRecipient={setSelectedRecipient}
+            selectedField={selectedField}
+            setSelectedField={setSelectedField}
+            setInteractionMode={setInteractionMode}
+            startFieldDetection={startFieldDetection}
+            accordionStates={accordionStates}
+            toggleAccordion={toggleAccordion}
+          />
         )}
 
         {/* Document creation interface */}
-        {workflowState === 'document' && (
-          <>
-            {/* Document Information Card */}
-            <Card className="mb-6">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <FileText className="w-5 h-5 text-[#3c8787]" />
-                  <h3 className="font-medium text-gray-900">Document Information</h3>
-                </div>
-
-                {tripMatchDetails && (
-                  <div className="space-y-3 text-sm">
-                    <div>
-                      <div className="text-gray-600">Property Address</div>
-                      <div className="font-medium">{tripMatchDetails.propertyAddress}</div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <div className="text-gray-600">Monthly Rent</div>
-                        <div className="font-medium">{tripMatchDetails.monthlyPrice}</div>
-                      </div>
-                      <div>
-                        <div className="text-gray-600">Lease Term</div>
-                        <div className="font-medium">{tripMatchDetails.startDate && tripMatchDetails.endDate ? `${new Date(tripMatchDetails.startDate).toLocaleDateString()} - ${new Date(tripMatchDetails.endDate).toLocaleDateString()}` : 'Not set'}</div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Recipients Summary */}
-            <Card className="mb-6">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <User className="w-5 h-5 text-[#3c8787]" />
-                  <h3 className="font-medium text-gray-900">Recipients</h3>
-                </div>
-
-                <div className="space-y-3">
-                  {recipients.map((recipient, index) => (
-                    <div key={recipient.id} className="flex items-center gap-3 p-2 bg-gray-50 rounded">
-                      <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                        style={{ backgroundColor: recipient.color || '#3c8787' }}
-                      >
-                        {recipient.name.charAt(0) || recipient.role.charAt(0)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm truncate">{recipient.name || `${recipient.role} User`}</div>
-                        <div className="text-xs text-gray-500 truncate">{recipient.email}</div>
-                      </div>
-                      <Badge variant="outline" className="text-xs">
-                        {recipient.role}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Field Summary */}
-            <Card className="mb-6">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-[#3c8787]" />
-                    <h3 className="font-medium text-gray-900">Field Summary</h3>
-                  </div>
-                  <Badge variant="outline" className="text-xs">
-                    {(() => {
-                      // Count fields using same logic as the display filter
-                      const filteredFieldCount = fields.filter(field => {
-                        const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
-
-                        if (fieldType === 'SIGN_DATE' || fieldType === 'INITIAL_DATE') {
-                          // Check if there's a corresponding signature/initial field for the same recipient
-                          const targetSignatureType = fieldType === 'SIGN_DATE' ? 'SIGNATURE' : 'INITIALS';
-                          const hasCorrespondingSignature = fields.some(f => {
-                            const fType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
-                            return fType === targetSignatureType && f.signerEmail === field.signerEmail;
-                          });
-
-                          // Count date field only if it doesn't have a corresponding signature/initial field
-                          return !hasCorrespondingSignature;
-                        }
-
-                        return true; // Count all non-date fields
-                      }).length;
-                      return filteredFieldCount;
-                    })()} fields
-                  </Badge>
-                </div>
-
-                {fields.length > 0 ? (
-                  <div className="space-y-2">
-                    {(() => {
-                      // Check which signature/initial fields have corresponding date fields for the same recipient
-                      const getCorrespondingDateField = (signatureField: any) => {
-                        const fieldType = typeof signatureField.type === 'string' ? signatureField.type : (signatureField.type?.type || signatureField.type?.value || '');
-                        const targetDateType = fieldType === 'SIGNATURE' ? 'SIGN_DATE' : fieldType === 'INITIALS' ? 'INITIAL_DATE' : null;
-
-                        if (!targetDateType) return null;
-
-                        return fields.find(field => {
-                          const fType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
-                          return fType === targetDateType && field.signerEmail === signatureField.signerEmail;
-                        });
-                      };
-
-                      // Filter out date fields that have corresponding signature/initial fields
-                      const filteredFields = fields.filter(field => {
-                        const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
-
-                        if (fieldType === 'SIGN_DATE' || fieldType === 'INITIAL_DATE') {
-                          // Check if there's a corresponding signature/initial field for the same recipient
-                          const targetSignatureType = fieldType === 'SIGN_DATE' ? 'SIGNATURE' : 'INITIALS';
-                          const hasCorrespondingSignature = fields.some(f => {
-                            const fType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
-                            return fType === targetSignatureType && f.signerEmail === field.signerEmail;
-                          });
-
-                          // Hide date field only if it has a corresponding signature/initial field
-                          return !hasCorrespondingSignature;
-                        }
-
-                        return true; // Show all non-date fields
-                      });
-
-                      return filteredFields.map((field, index) => {
-                        const fieldValue = useSignedFieldsStore.getState().signedFields[field.formId];
-                        const hasValue = fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
-                        // Try to find recipient by ID first, then by email, then by role mapping
-                        let recipient = recipients.find(r => r.id === field.signerEmail);
-                        if (!recipient) {
-                          recipient = recipients.find(r => r.email === field.signerEmail);
-                        }
-
-                        // Handle different recipient ID patterns by mapping to roles
-                        if (!recipient) {
-                          const signerEmail = field.signerEmail.toLowerCase();
-                          if (signerEmail.includes('host')) {
-                            recipient = recipients.find(r => r.role === 'HOST');
-                          } else if (signerEmail.includes('renter') || signerEmail.includes('tenant')) {
-                            recipient = recipients.find(r => r.role === 'RENTER');
-                          }
-                        }
-
-                        // Debug logging to understand signerEmail values
-                        if (!recipient) {
-                          console.log(`🔍 Field ${field.formId} signerEmail: "${field.signerEmail}", Available recipient IDs:`, recipients.map(r => r.id), 'Available emails:', recipients.map(r => r.email), 'Available roles:', recipients.map(r => r.role));
-                        }
-
-                        // Get field label with combined signature+date labeling only when both fields exist
-                        const getDisplayLabel = (field: any) => {
-                          const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
-                          const recipientRole = recipient?.role || 'Unknown';
-
-                          if (fieldType === 'SIGNATURE' || fieldType === 'INITIALS') {
-                            const correspondingDateField = getCorrespondingDateField(field);
-                            if (correspondingDateField) {
-                              // Both signature/initial and date field exist
-                              return `${recipientRole === 'HOST' ? 'Host' : 'Renter'} ${fieldType === 'SIGNATURE' ? 'Signature' : 'Initial'} and Date`;
-                            } else {
-                              // Only signature/initial field exists
-                              return `${recipientRole === 'HOST' ? 'Host' : 'Renter'} ${fieldType === 'SIGNATURE' ? 'Signature' : 'Initial'}`;
-                            }
-                          }
-
-                          // For other fields, use the original logic
-                          return (field.fieldMeta?.label && field.fieldMeta.label !== 'Field') ? field.fieldMeta.label : getFieldLabel(field);
-                        };
-
-                        return (
-                          <div
-                            key={field.formId}
-                            className="flex items-center gap-2 p-2 bg-gray-50 hover:bg-gray-100 rounded text-sm cursor-pointer transition-colors duration-150"
-                            onClick={() => navigateToField(field.formId)}
-                            title="Click to navigate to this field in the PDF"
-                          >
-                            <div className="flex-1 min-w-0">
-                              <div className="font-medium truncate">
-                                {getDisplayLabel(field)}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                Page {field.pageNumber} • {recipient?.name || 'Unassigned'}
-                              </div>
-                            </div>
-                            <div className="text-right min-w-0 flex-shrink-0">
-                              {hasValue ? (
-                                <div className="text-xs text-green-600 font-medium truncate max-w-24" title={String(fieldValue)}>
-                                  {String(fieldValue).length > 20 ? `${String(fieldValue).substring(0, 20)}...` : String(fieldValue)}
-                                </div>
-                              ) : (
-                                <Badge variant="outline" className="text-xs">
-                                  Empty
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      });
-                    })()}
-                  </div>
-                ) : (
-                  <div className="text-center py-4 text-gray-500 text-sm">
-                    No fields available
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-
-          </>
+        {workflow.isDocumentPhase() && (
+          <DocumentSidebar
+            tripMatchDetails={tripMatchDetails}
+            recipients={recipients}
+            fields={fields}
+            signedFieldsStore={useSignedFieldsStore}
+            navigateToField={navigateToField}
+            getFieldLabel={getFieldLabel}
+          />
         )}
 
         {/* Default signing interface for signer2 */}
-        {workflowState === 'signer2' && (
-          <>
-            <Card className="mb-6">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3 mb-4">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
-                    style={{ backgroundColor: getCurrentSigner()?.color }}
-                  >
-                    {getCurrentSigner()?.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-medium">{getCurrentSigner()?.name}</div>
-                    <div className="text-sm text-gray-500">{getCurrentSigner()?.email}</div>
-                  </div>
-                </div>
-
-
-                <p className="text-sm text-gray-600">
-                  Click on the fields assigned to you to fill them out and sign the document.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Fields to sign */}
-            <Card className="mb-6">
-              <CardContent className="p-4">
-                <h3 className="font-medium mb-3">Your Fields to Complete</h3>
-                {(() => {
-                  const renterFields = fields
-                    .filter(f => f.recipientIndex === 1)
-                    .filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type));
-
-                  console.log('🎯 PDFEditor Sidebar - Renter fields:', {
-                    totalFields: fields.length,
-                    renterFieldsAll: fields.filter(f => f.recipientIndex === 1).length,
-                    renterSignatureFields: renterFields.length,
-                    fields: renterFields.map(f => ({ formId: f.formId, type: f.type, page: f.pageNumber }))
-                  });
-
-                  if (renterFields.length === 0) {
-                    return (
-                      <div className="text-center py-6">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-3">
-                          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </div>
-                        <p className="text-gray-600 font-medium mb-1">No signature required</p>
-                        <p className="text-sm text-gray-500">
-                          This document does not require any signatures from you. You may review the document and proceed when ready.
-                        </p>
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <div className="space-y-2">
-                      {renterFields.map(field => (
-                        <div key={field.formId} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm">{FRIENDLY_FIELD_TYPE[field.type]}</span>
-                            <span className="text-xs text-gray-500">Page {field.pageNumber}</span>
-                          </div>
-                          <div className="text-xs">
-                            {useSignedFieldsStore.getState().signedFields[field.formId] ? (
-                              <Badge variant="default" className="bg-green-500">✓ Signed</Badge>
-                            ) : (
-                              <Badge variant="outline">Pending</Badge>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  );
-                })()}
-              </CardContent>
-            </Card>
-          </>
+        {(workflow.isSigningPhase() && !workflow.isFirstSigner()) && (
+          <SigningSidebar
+            getCurrentSigner={getCurrentSigner}
+            fields={fields}
+            signedFieldsStore={useSignedFieldsStore}
+          />
         )}
       </>
     );
@@ -2020,252 +1208,47 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Load template functionality
   const loadTemplate = async (template: PdfTemplate) => {
-    try {
-      console.log('📄 Loading template for document creation:', template.id);
+    const result = await loadTemplateService({
+      template,
+      hostName,
+      hostEmail,
+      sessionStorage,
+      brandAlert
+    });
 
-      console.log('🔍 Raw template data received:', template);
-
-      // Parse template data from database
-      const templateData = template.templateData as any;
-      const templateFields = templateData.fields || [];
-      const templateRecipients = templateData.recipients || [];
-
-      console.log('📋 Parsed template data:', {
-        fields: templateFields.length,
-        recipients: templateRecipients.length,
-        fieldsData: templateFields,
-        recipientsData: templateRecipients
-      });
-
-      // Set the template fields and recipients
-      setFields(templateFields);
-
-      // Auto-populate default recipients with real names
-      const defaultRecipients = templateRecipients.map(r => {
-        if (r.role === 'HOST') {
-          return { ...r, name: hostName || 'John Smith', email: hostEmail || 'host@host.com' };
-        }
-        if (r.role === 'RENTER') {
-          return { ...r, name: 'Jane Doe', email: 'renter@renter.com' };
-        }
-        return r;
-      });
-      setRecipients(defaultRecipients);
-
-      // Load the PDF file from the template
-      if (template.pdfFileUrl) {
-        console.log('📄 Fetching PDF from:', template.pdfFileUrl);
-        const pdfResponse = await fetch(template.pdfFileUrl);
-        const pdfBlob = await pdfResponse.blob();
-        const pdfFile = new File([pdfBlob], template.pdfFileName, { type: 'application/pdf' });
-        console.log('📄 PDF file created:', pdfFile);
-        setPdfFile(pdfFile);
+    if (result.success && result.fields && result.recipients) {
+      setFields(result.fields);
+      setRecipients(result.recipients);
+      if (result.pdfFile) {
+        setPdfFile(result.pdfFile);
       }
-
-      // Pre-fill fields based on tags and predefined values
-      setTimeout(() => {
-        const preFilledFields = {};
-        const documentValues = {
-          monthlyRent: '2,500.00',
-          startDate: new Date().toISOString().split('T')[0], // Today's date
-          endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // One year from now
-        };
-
-        console.log('🔍 Available recipients for pre-fill:', defaultRecipients);
-        console.log('📝 Document values for pre-fill:', documentValues);
-        console.log('🔍 Available fields for pre-fill:', templateFields);
-
-        templateFields.forEach((field, index) => {
-          console.log(`🔍 Processing field ${index + 1}/${templateFields.length}: ${field.formId} (${field.type})`);
-
-          // Pre-fill NAME fields based on recipient roles
-          if (field.type === 'NAME') {
-            console.log(`📝 Processing NAME field: ${field.formId}, signerEmail: ${field.signerEmail}, recipientIndex: ${field.recipientIndex}`);
-
-            // Simplified matching logic - just alternate between HOST and RENTER
-            const nameFields = templateFields.filter(f => f.type === 'NAME');
-            const nameFieldIndex = nameFields.findIndex(f => f.formId === field.formId);
-
-            console.log(`🎯 NEW ALTERNATING LOGIC: Field ${field.formId} is NAME field #${nameFieldIndex} of ${nameFields.length} total NAME fields`);
-
-            let recipient;
-            if (nameFieldIndex % 2 === 0) {
-              // Even index (0, 2, 4...) = HOST
-              recipient = defaultRecipients.find(r => r.role === 'HOST');
-              console.log(`🎯 Even index ${nameFieldIndex} -> Using HOST:`, recipient);
-            } else {
-              // Odd index (1, 3, 5...) = RENTER  
-              recipient = defaultRecipients.find(r => r.role === 'RENTER');
-              console.log(`🎯 Odd index ${nameFieldIndex} -> Using RENTER:`, recipient);
-            }
-
-            console.log(`🔍 Final recipient for field ${field.formId} (index ${nameFieldIndex}):`, recipient);
-
-            // Pre-fill with actual names from default recipients
-            if (recipient && recipient.name) {
-              preFilledFields[field.formId] = recipient.name;
-              console.log(`📝 Pre-filling NAME field ${field.formId} with "${recipient.name}"`);
-            } else {
-              console.log(`⏭️ No recipient found for NAME field ${field.formId}`);
-            }
-          }
-
-          // Pre-fill common document fields by field type or position
-          if (field.type === 'TEXT' || field.type === 'NUMBER') {
-            // Pre-fill all TEXT/NUMBER fields with rent for demo purposes
-            preFilledFields[field.formId] = documentValues.monthlyRent;
-            console.log(`📝 Pre-filling TEXT/NUMBER field ${field.formId} with monthly rent: ${documentValues.monthlyRent}`);
-          }
-
-          if (field.type === 'DATE') {
-            // Alternate between start and end dates based on field index
-            const dateFields = templateFields.filter(f => f.type === 'DATE');
-            const dateFieldIndex = dateFields.findIndex(f => f.formId === field.formId);
-
-            if (dateFieldIndex % 2 === 0) {
-              // Even index (0, 2, 4...) = start date
-              preFilledFields[field.formId] = documentValues.startDate;
-              console.log(`📝 Pre-filling DATE field ${field.formId} with start date: ${documentValues.startDate}`);
-            } else {
-              // Odd index (1, 3, 5...) = end date
-              preFilledFields[field.formId] = documentValues.endDate;
-              console.log(`📝 Pre-filling DATE field ${field.formId} with end date: ${documentValues.endDate}`);
-            }
-          }
-        });
-
-        console.log('✅ Pre-filled fields (should be handled by parent):', preFilledFields);
-      }, 100);
-
-      // Store current template ID for document creation
-      sessionStorage.setItem('currentTemplateId', template.id);
 
       // Set to document mode instead of template mode for editing with real data
       setWorkflowState('document');
 
-      console.log('✅ Template loaded into document editor:', {
-        templateId: template.id,
-        fields: templateFields.length,
-        recipients: templateRecipients.length,
-        fieldsData: templateFields,
-        recipientsData: templateRecipients
-      });
-    } catch (error) {
-      console.error('❌ Error loading template:', error);
-      brandAlert('Failed to load template: ' + error.message, 'error', 'Load Failed');
+      // Pre-fill fields based on the result (handle asynchronously)
+      if (result.preFilledFields) {
+        setTimeout(() => {
+          // Parent component should handle this via props or store
+        }, 100);
+      }
     }
   };
 
   // Load document functionality for signing
   const loadDocumentForSigning = async (document: any) => {
-    try {
-      // Reset validation state
+    const result = await loadDocumentForSigningService({
+      document,
+      sessionStorage,
+      brandAlert
+    });
 
-      console.log('📄 Loading document for signing:', document.id);
-      console.log('📄 Full document object:', document);
-      console.log('📄 Available document properties:', Object.keys(document));
-
-      // Parse document data - check multiple possible locations
-      let documentData = document.templateData || document.documentData || document.data;
-
-      console.log('📄 Document data found:', documentData);
-      console.log('📄 Document data type:', typeof documentData);
-      console.log('📄 Document data keys:', documentData ? Object.keys(documentData) : 'null');
-
-      if (!documentData) {
-        throw new Error('No document data found. Expected templateData, documentData, or data property.');
+    if (result.success && result.fields && result.recipients) {
+      setFields(result.fields);
+      setRecipients(result.recipients);
+      if (result.pdfFile) {
+        setPdfFile(result.pdfFile);
       }
-
-      const documentFields = documentData.fields || [];
-      const documentRecipients = documentData.recipients || [];
-
-      console.log('📋 Parsed document data:', {
-        fields: documentFields.length,
-        recipients: documentRecipients.length,
-        fieldsData: documentFields,
-        recipientsData: documentRecipients
-      });
-
-      // Validate that we have the essential data
-      if (documentFields.length === 0) {
-        throw new Error('No fields found in document. Document may be corrupted or incomplete.');
-      }
-
-      if (documentRecipients.length === 0) {
-        throw new Error('No recipients found in document. Document may be corrupted or incomplete.');
-      }
-
-      // Validate field structure
-      const invalidFields = documentFields.filter(field =>
-        !field.formId ||
-        !field.type ||
-        field.pageX === undefined ||
-        field.pageY === undefined ||
-        field.pageWidth === undefined ||
-        field.pageHeight === undefined
-      );
-
-      if (invalidFields.length > 0) {
-        console.error('❌ Invalid fields found:', invalidFields);
-        throw new Error(`${invalidFields.length} fields have missing required properties (formId, type, positioning). Document may be corrupted.`);
-      }
-
-      // Validate recipient structure
-      const invalidRecipients = documentRecipients.filter(recipient =>
-        !recipient.id ||
-        !recipient.name ||
-        !recipient.color
-      );
-
-      if (invalidRecipients.length > 0) {
-        console.error('❌ Invalid recipients found:', invalidRecipients);
-        throw new Error(`${invalidRecipients.length} recipients have missing required properties (id, name, color). Document may be corrupted.`);
-      }
-
-      console.log('✅ Field and recipient validation passed');
-
-      // Set the document fields and recipients
-      setFields(documentFields);
-      setRecipients(documentRecipients);
-
-      // Mark validation as successful
-
-      // Load the PDF file from the document
-      if (document.pdfFileUrl) {
-        console.log('📄 Fetching PDF from:', document.pdfFileUrl);
-        const pdfResponse = await fetch(document.pdfFileUrl);
-        const pdfBlob = await pdfResponse.blob();
-        const pdfFile = new File([pdfBlob], document.pdfFileName, { type: 'application/pdf' });
-        console.log('📄 PDF file created:', pdfFile);
-        setPdfFile(pdfFile);
-      }
-
-      // Load any existing signed fields from the document response (already includes fieldValues)
-      console.log('📝 Loading existing signed fields from document...');
-      const existingSignedFields = {};
-
-      if (document.fieldValues && document.fieldValues.length > 0) {
-        // Convert the field values array to an object keyed by fieldId
-        document.fieldValues.forEach(fieldValue => {
-          // Check if the value is a signature object and handle it safely
-          let displayValue = fieldValue.value;
-          if (typeof fieldValue.value === 'object' && fieldValue.value !== null && 'type' in fieldValue.value) {
-            console.log(`🔍 Found signature object for ${fieldValue.fieldId}:`, fieldValue.value);
-            // For signature objects, just store a boolean to indicate it's signed
-            displayValue = true;
-          }
-
-          existingSignedFields[fieldValue.fieldId] = displayValue;
-          console.log(`📝 Loaded signed value for ${fieldValue.fieldId}: "${displayValue}" (signer: ${fieldValue.signerIndex})`);
-        });
-
-        console.log('📝 All existing signed fields loaded (should be handled by parent):', existingSignedFields);
-      } else {
-        console.log('📝 No existing signed fields found, starting fresh (should be handled by parent)');
-      }
-
-      // Store current document ID for signing session
-      sessionStorage.setItem('currentDocumentId', document.id);
 
       // Set to the appropriate signer state
       if (pendingSignerType) {
@@ -2276,92 +1259,28 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       // Close the document selector
       setShowDocumentSelector(false);
 
-      console.log('✅ Document loaded for signing:', {
-        documentId: document.id,
-        fields: documentFields.length,
-        recipients: documentRecipients.length,
-        signerType: pendingSignerType
-      });
-    } catch (error) {
-      console.error('❌ Error loading document for signing:', error);
-      brandAlert('Failed to load document: ' + error.message, 'error', 'Load Failed');
+      // Handle existing signed fields if needed
+      if (result.existingSignedFields) {
+      }
     }
   };
 
   // Create document and transition to signing
   const createDocumentAndStartSigning = async () => {
-    if (!pdfFile) {
-      throw new Error('No PDF file available');
-    }
+    const result = await createDocumentAndStartSigningService({
+      pdfFile,
+      isMergedDocument,
+      fields,
+      recipients,
+      signedFields,
+      pageWidth,
+      sessionStorage,
+      workflowDispatch: workflow.dispatch
+    });
 
-    // First save the document (similar to saveDocument but with signing transition)
-    let documentId = sessionStorage.getItem('currentDocumentId');
-    let templateId = sessionStorage.getItem('currentTemplateId');
-
-    // For merged documents, we should already have a document ID
-    if (isMergedDocument && documentId) {
-      // Document already exists and is ready for signing
-      setWorkflowState('signer1');
+    if (result.success) {
       setIsCreatingDocument(false);
-      return;
     }
-
-    // If no document exists yet, create one from the current template
-    if (!documentId && templateId) {
-
-      const createResponse = await fetch('/api/documents', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          templateId,
-          documentData: {
-            fields,
-            recipients,
-            metadata: { pageWidth },
-            signedFields // Include any pre-filled values
-          },
-          status: 'IN_PROGRESS', // Document is now ready for signing
-          currentStep: 'signer1' // Start with first signer
-        }),
-      });
-
-      if (!createResponse.ok) {
-        throw new Error('Failed to create document');
-      }
-
-      const { document } = await createResponse.json();
-      documentId = document.id;
-      sessionStorage.setItem('currentDocumentId', documentId);
-
-    } else if (documentId) {
-      // Update existing document to ready for signing
-      const updateResponse = await fetch(`/api/documents/${documentId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          documentData: {
-            fields,
-            recipients,
-            metadata: { pageWidth },
-            signedFields
-          },
-          status: 'IN_PROGRESS',
-          currentStep: 'signer1'
-        }),
-      });
-
-      if (!updateResponse.ok) {
-        const errorText = await updateResponse.text();
-        console.error('Failed to update document:', updateResponse.status, errorText);
-        throw new Error(`Failed to update document: ${updateResponse.status} ${errorText}`);
-      }
-    } else {
-      throw new Error('No template or document ID found. Please start from template creation.');
-    }
-
-    // Transition to signing mode
-    setWorkflowState('signer1');
-    setIsCreatingDocument(false);
   };
 
   // Validate signature fields
@@ -2409,542 +1328,81 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   };
 
-  // Step completion handler
-  const completeCurrentStep = async () => {
-    console.log('🎯🎯🎯 COMPLETE CURRENT STEP CALLED! 🎯🎯🎯');
-    console.log('📋 PDFEditor completeCurrentStep context:', {
-      workflowState,
-      housingRequestId: housingRequestId || 'UNDEFINED!',
-      hasHousingRequestId: !!housingRequestId,
-      recipientsCount: recipients.length
-    });
-
-    const stepNames = {
-      'template': 'Template Creation',
-      'document': 'Document Creation',
-      'signer1': 'Signer 1',
-      'signer2': 'Signer 2',
-      'completed': 'Document Completion'
-    };
-
-    const stepName = stepNames[workflowState] || workflowState;
-
-    switch (workflowState) {
-      case 'template':
-        // Start loading for template workflow
-        setIsSavingTemplate(true);
-
-        if (!pdfFile) {
-          brandAlert('Please upload a PDF file first.', 'warning', 'File Required');
-          setIsSavingTemplate(false);
-          return;
-        }
-
-
-        if (!templateType || templateType === '') {
-
-          brandAlert('Please select a template type (lease or addendum).', 'warning', 'Template Type Required');
-          setIsSavingTemplate(false);
-          return;
-        }
-
-        // Check for signature fields validation
-        const validation = validateSignatureFields();
-        if (!validation.isValid && templateType === 'lease') {
-          setIsSavingTemplate(false);
-          setShowFieldValidationModal(true);
-          return;
-        }
-
-        if (fields.length === 0) {
-          brandAlert('Please add some fields to your template first!', 'warning', 'Fields Required');
-          setIsSavingTemplate(false);
-          return;
-        }
-
-        // If onSave callback is provided (editing existing template), use it
-        if (onSave && pdfFile) {
-          try {
-            await onSave({ fields, recipients, pdfFile });
-            setIsSavingTemplate(false);
-            // onSave should handle navigation/completion
-          } catch (error) {
-            console.error('Error in onSave callback:', error);
-            brandAlert('Failed to save template. Please try again.', 'error', 'Save Failed');
-            setIsSavingTemplate(false);
-          }
-        } else {
-          // Creating new template - use the original flow
-          await proceedWithTemplateCompletion();
-        }
-        break;
-
-      case 'document':
-        if (fields.length === 0) {
-          brandAlert('Please add some fields before finishing!', 'warning', 'Fields Required');
-          return;
-        }
-
-        // If onSave callback is provided, use it instead of internal API calls
-        if (onSave && pdfFile) {
-          setIsCreatingDocument(true);
-          try {
-            await onSave({ fields, recipients, pdfFile });
-
-            // Check if we have a document ID to transition to signing
-            const documentId = sessionStorage.getItem('currentDocumentId');
-            if (documentId && onDocumentCreated) {
-              onDocumentCreated(documentId);
-
-              // Update document status to IN_PROGRESS for signing
-              try {
-                await fetch(`/api/documents/${documentId}`, {
-                  method: 'PATCH',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    status: 'IN_PROGRESS',
-                    currentStep: 'signer1'
-                  }),
-                });
-              } catch (error) {
-                console.error('Failed to update document status:', error);
-              }
-
-              // Transition to signing workflow for the host
-              // The approval will happen AFTER the host completes signing in signer1 state
-              console.log('📝 Document created, transitioning to signer1 for host signature');
-              setWorkflowState('signer1');
-            }
-          } catch (error) {
-            console.error('Error in onSave callback:', error);
-            brandAlert('Failed to save document: ' + error.message, 'error', 'Save Failed');
-          } finally {
-            setIsCreatingDocument(false);
-          }
-          return;
-        }
-
-        // Set loading state for document creation
-        setIsCreatingDocument(true);
-
-        try {
-          // Create the document and transition to signing
-          await createDocumentAndStartSigning();
-          return; // Don't continue to the normal completion flow
-        } catch (error) {
-          console.error('❌ Error creating document:', error);
-          brandAlert('Failed to create document: ' + error.message, 'error', 'Creation Failed');
-          setIsCreatingDocument(false);
-          return;
-        }
-        break;
-
-      case 'signer1':
-      case 'signer2':
-        // Get signer info without validation
-        const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-
-        let signingProgressSuccess = false;
-        let serverActionSuccess = false;
-
-        try {
-          // Save signing progress to the backend (always use proper signing workflow)
-          console.log(`🖊️ Saving signing progress for signer ${currentSignerIndex + 1}...`);
-          await saveSignerProgressAsync(currentSignerIndex);
-          signingProgressSuccess = true;
-          console.log('✅ Signing progress saved successfully');
-        } catch (error) {
-          console.error('❌ Error saving signing progress:', error);
-          // Continue processing even if signing progress fails - the field values were saved
-          signingProgressSuccess = false;
-        }
-
-        try {
-          // Call server action to handle notifications and booking creation
-          const documentId = sessionStorage.getItem('currentDocumentId');
-          console.log(`🔍 Debug - Complete step called with:`, {
-            currentSignerIndex,
-            documentId,
-            housingRequestId,
-            hasHousingRequestId: !!housingRequestId,
-            recipientsCount: recipients.length,
-            workflowState
-          });
-
-          if (documentId) {
-            console.log(`📤 Calling server action for signer completion...`);
-            console.log(`📋 handleSignerCompletion params:`, {
-              documentId,
-              currentSignerIndex,
-              recipientsLength: recipients.length,
-              housingRequestId: housingRequestId || 'MISSING!',
-              isHost: currentSignerIndex === 0
-            });
-
-            const result = await handleSignerCompletion(documentId, currentSignerIndex, recipients, housingRequestId);
-            if (!result.success) {
-              console.error('❌ Server action failed:', result.error);
-              serverActionSuccess = false;
-              // Don't return early - continue with workflow completion
-            } else {
-              console.log('✅ handleSignerCompletion succeeded');
-              serverActionSuccess = true;
-            }
-          } else {
-            console.error('❌ No document ID found in session storage!');
-            serverActionSuccess = false;
-          }
-        } catch (error) {
-          console.error('❌ Error in server action:', error);
-          serverActionSuccess = false;
-          // Continue processing even if server action fails
-        }
-
-        // Always proceed with workflow state changes and onFinish call
-        // The essential data (field values) has been saved even if other APIs failed
-        console.log('📊 Signing completion status:', {
-          signingProgressSuccess,
-          serverActionSuccess,
-          proceedingWithCompletion: true
-        });
-
-        // Transition workflow state
-        if (workflowState === 'signer1') {
-          // Check if host should be redirected after signing
-          const hostRedirectUrl = sessionStorage.getItem('hostSigningRedirectUrl');
-          if (hostRedirectUrl) {
-            console.log('✅ Host completed signing, redirecting to:', hostRedirectUrl);
-            sessionStorage.removeItem('hostSigningRedirectUrl'); // Clean up
-            router.push(hostRedirectUrl);
-            return; // Exit early to avoid further state changes
-          }
-
-          // Move to signer2 if there's a second recipient
-          if (recipients.length > 1 && recipients[1]) {
-            console.log('✅ Signer 1 completed, transitioning to signer 2');
-            setWorkflowState('signer2');
-          } else {
-            // Complete the document if only one signer
-            console.log('✅ Single signer completed, document finished');
-            setWorkflowState('completed');
-          }
-        } else if (workflowState === 'signer2') {
-          // Complete the document
-          console.log('✅ Signer 2 completed, document finished');
-          setWorkflowState('completed');
-        }
-
-        // Reset validation states for the next step
-        break;
-    }
-
-    // Set completion state
-    setStepCompleted(true);
-
-    // Call onFinish if provided, otherwise show default success
-    if (onFinish) {
-      onFinish(stepName);
-    }
-  };
+  // Step completion handler using custom hook
+  const { completeCurrentStep } = useStepCompletion({
+    workflow,
+    legacyWorkflowState,
+    pdfFile,
+    fields,
+    recipients,
+    templateType,
+    housingRequestId,
+    signedFields,
+    setIsSavingTemplate,
+    setIsCreatingDocument,
+    setStepCompleted,
+    setShowFieldValidationModal,
+    brandAlert,
+    validateSignatureFields,
+    proceedWithTemplateCompletion,
+    onSave,
+    onDocumentCreated,
+    createDocumentAndStartSigning,
+    saveSignerProgressAsync,
+    onFinish
+  });
 
   // Expose complete step function to parent component using ref approach to avoid loops
   const onCompleteStepReadyRef = useRef(onCompleteStepReady);
   onCompleteStepReadyRef.current = onCompleteStepReady;
 
   useEffect(() => {
-    if (onCompleteStepReadyRef.current && (workflowState === 'document' || workflowState === 'signer1')) {
+    if (onCompleteStepReadyRef.current && (workflow.isDocumentPhase() || (workflow.isSigningPhase() && workflow.isFirstSigner()))) {
       onCompleteStepReadyRef.current(completeCurrentStep);
     }
-  }, [workflowState]);
+  }, [legacyWorkflowState]);
 
   // Expose signing action function to parent component during signing states
   const onSigningActionReadyRef = useRef(onSigningActionReady);
   onSigningActionReadyRef.current = onSigningActionReady;
 
   useEffect(() => {
-    if (onSigningActionReadyRef.current && (workflowState === 'signer1' || workflowState === 'signer2')) {
+    if (onSigningActionReadyRef.current && workflow.isSigningPhase()) {
       onSigningActionReadyRef.current(handleSigningAction);
     }
-  }, [workflowState]);
+  }, [legacyWorkflowState]);
 
   // Navigation functions removed - components are now isolated
 
   // Get current signer for signing workflow
   const getCurrentSigner = () => {
-    if (workflowState === 'signer1') return recipients[0];
-    if (workflowState === 'signer2') return recipients[1];
-    return null;
+    if (!workflow.isSigningPhase()) return null;
+    return recipients[workflow.getCurrentSignerIndex()];
   };
 
-  // Get appropriate field label based on type and recipient
-  const getFieldLabel = (field: FieldFormType) => {
-    // Add debug logging for field type issues
-    if (!field.type) {
-      console.warn('Field has no type:', field);
-      return 'Unknown Field';
-    }
+  // Note: getFieldLabel is now imported from @/utils/fieldLabelUtils
 
-    // Better recipient determination with proper undefined handling
-    let recipientPrefix = 'Unassigned';
-    if (field.recipientIndex === 0) {
-      recipientPrefix = 'Host';
-    } else if (field.recipientIndex === 1) {
-      recipientPrefix = 'Primary Renter';
-    } else if (field.signerEmail) {
-      // Fallback to signerEmail analysis
-      if (field.signerEmail.includes('host')) {
-        recipientPrefix = 'Host';
-      } else if (field.signerEmail.includes('renter')) {
-        recipientPrefix = 'Primary Renter';
-      }
-    }
-
-    switch (field.type) {
-      case 'SIGNATURE':
-      case FieldType.SIGNATURE:
-        return `${recipientPrefix} Signature`;
-      case 'INITIALS':
-      case FieldType.INITIALS:
-        return `${recipientPrefix} Initials`;
-      case 'NAME':
-      case FieldType.NAME:
-        return `${recipientPrefix} Name`;
-      case 'EMAIL':
-      case FieldType.EMAIL:
-        return `${recipientPrefix} Email`;
-      case 'SIGN_DATE':
-      case FieldType.SIGN_DATE:
-        return `${recipientPrefix} Sign Date`;
-      case 'INITIAL_DATE':
-      case FieldType.INITIAL_DATE:
-        return `${recipientPrefix} Initial Date`;
-      case 'DATE':
-      case FieldType.DATE:
-        // Try to identify date purpose from context
-        const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-        if (fieldLabel.includes('move') || fieldLabel.includes('start') || fieldLabel.includes('begin')) {
-          return 'Move-in Date';
-        } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate')) {
-          return 'Move-out Date';
-        } else if (fieldLabel.includes('sign')) {
-          return 'Signing Date';
-        } else {
-          return `Date (Page ${field.pageNumber})`;
-        }
-      case 'NUMBER':
-      case FieldType.NUMBER:
-        // Try to identify number field purpose
-        const numberLabel = field.fieldMeta?.label?.toLowerCase() || '';
-        if (numberLabel.includes('rent') || numberLabel.includes('price')) {
-          return 'Monthly Rent';
-        } else if (numberLabel.includes('deposit')) {
-          return 'Security Deposit';
-        } else {
-          return `Amount (Page ${field.pageNumber})`;
-        }
-      case 'TEXT':
-      case FieldType.TEXT:
-        // Try to identify text field purpose
-        const textLabel = field.fieldMeta?.label?.toLowerCase() || '';
-        if (textLabel.includes('address') || textLabel.includes('property')) {
-          return 'Property Address';
-        } else if (textLabel.includes('rent')) {
-          return 'Rent Amount';
-        } else {
-          return `Text (Page ${field.pageNumber})`;
-        }
-      case 'RADIO':
-      case FieldType.RADIO:
-        return `Radio Options (Page ${field.pageNumber})`;
-      case 'CHECKBOX':
-      case FieldType.CHECKBOX:
-        return `Checkbox (Page ${field.pageNumber})`;
-      case 'DROPDOWN':
-      case FieldType.DROPDOWN:
-        return `Dropdown (Page ${field.pageNumber})`;
-      default:
-        console.warn('Unknown field type in getFieldLabel:', {
-          type: field.type,
-          recipientIndex: field.recipientIndex,
-          signerEmail: field.signerEmail,
-          formId: field.formId,
-          fieldMeta: field.fieldMeta
-        });
-        const friendlyName = FRIENDLY_FIELD_TYPE[field.type] || field.type;
-        return recipientPrefix !== 'Unassigned' ? `${recipientPrefix} ${friendlyName}` : friendlyName;
-    }
-  };
-
-  // Get unsigned fields for current signer - requires explicit signedFields parameter
+  // Get unsigned fields for current signer - wrapper around utility function
   const getUnsignedFields = (currentSignedFields: Record<string, any>) => {
-    const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-    const allSignatureFields = fields.filter(f => {
-      if (f.recipientIndex !== currentSignerIndex) return false;
-
-      // Use same field type extraction logic as HostSidebarFrame
-      const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
-      return ['SIGNATURE', 'INITIALS'].includes(fieldType);
+    return getUnsignedFieldsUtil({
+      fields,
+      currentSignerIndex: workflow.getCurrentSignerIndex(),
+      currentSignedFields
     });
-
-    // Use same simple truthy check as sidebar (which works correctly)
-    const unsignedFields = allSignatureFields.filter(f => {
-      const value = currentSignedFields[f.formId];
-
-      // Use simple truthy check like sidebar instead of complex check
-      const isSigned = !!value; // Same as sidebar: value ? 'signed' : 'pending'
-
-      // Log for debugging
-      if (f.formId === 'LxS-E2U7k7Z7' || f.formId === 'LgqJ5yFm37Ic') {
-        console.log(`🔍 Field ${f.formId} signed status:`, {
-          value: value,
-          isSigned: isSigned,
-          signedFieldsKeys: Object.keys(currentSignedFields),
-          hasTargetField: f.formId in currentSignedFields
-        });
-      }
-
-      return !isSigned;
-    });
-
-    // Focus on first unsigned field for debugging
-    const firstUnsignedField = unsignedFields[0];
-    if (firstUnsignedField) {
-      const value = currentSignedFields[firstUnsignedField.formId];
-      console.log('🔍 FIRST UNSIGNED FIELD:', {
-        formId: firstUnsignedField.formId,
-        type: firstUnsignedField.type,
-        isInSignedFields: firstUnsignedField.formId in currentSignedFields,
-        signedFieldValue: value,
-        signedFieldType: typeof value,
-        signedFieldKeys: typeof value === 'object' && value ? Object.keys(value) : null,
-        totalUnsignedCount: unsignedFields.length
-      });
-    } else {
-      console.log('🔍 NO UNSIGNED FIELDS - All signature fields are signed');
-    }
-
-    return unsignedFields;
   };
 
-  // Navigate to specific field and flash it
+  // Navigate to specific field and flash it - wrapper around utility function
   const navigateToField = (fieldId: string) => {
-    console.log('🎯 navigateToField: Starting navigation to field:', fieldId);
-
-    const targetField = fields.find(f => f.formId === fieldId);
-    if (!targetField) {
-      console.warn('🎯 navigateToField: Field not found:', fieldId);
-      return;
-    }
-
-    // Log field information to API for troubleshooting
-    const logFieldClick = async () => {
-      try {
-        const recipient = recipients.find(r => r.id === targetField.signerEmail);
-        const fieldValue = useSignedFieldsStore.getState().signedFields[targetField.formId];
-
-        await fetch('/api/log', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            level: 'info',
-            message: 'Field Click Debug Information',
-            data: {
-              fieldId: fieldId,
-              field: {
-                formId: targetField.formId,
-                type: targetField.type,
-                recipientIndex: targetField.recipientIndex,
-                signerEmail: targetField.signerEmail,
-                pageNumber: targetField.pageNumber,
-                fieldMeta: targetField.fieldMeta,
-                pageX: targetField.pageX,
-                pageY: targetField.pageY,
-                pageWidth: targetField.pageWidth,
-                pageHeight: targetField.pageHeight
-              },
-              recipient: recipient ? {
-                id: recipient.id,
-                name: recipient.name,
-                email: recipient.email,
-                role: recipient.role,
-                color: recipient.color
-              } : null,
-              fieldValue: fieldValue,
-              hasValue: fieldValue !== undefined && fieldValue !== null && fieldValue !== '',
-              generatedLabel: getFieldLabel(targetField),
-              workflowState: workflowState,
-              totalFields: fields.length,
-              timestamp: new Date().toISOString()
-            }
-          }),
-        });
-        console.log('✅ Field click logged to API');
-      } catch (error) {
-        console.error('❌ Failed to log field click:', error);
-      }
-    };
-
-    // Log field information asynchronously
-    logFieldClick();
-
-    // Find the field element first
-    const fieldElement = document.querySelector(`[data-field-id="${fieldId}"]`) as HTMLElement;
-    console.log('🎯 navigateToField: Field element found:', !!fieldElement);
-
-    if (fieldElement) {
-      // Scroll directly to the field and center it in the viewport
-      fieldElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      });
-      console.log('🎯 navigateToField: Scrolled to field');
-
-      // Apply flash effect after scroll completes
-      setTimeout(() => {
-        // Store original styles
-        const originalBg = fieldElement.style.backgroundColor;
-        const originalTransition = fieldElement.style.transition;
-        const originalBoxShadow = fieldElement.style.boxShadow;
-
-        // Apply flash effect using inline styles
-        fieldElement.style.transition = 'all 0.3s ease';
-        fieldElement.style.backgroundColor = '#3c8787'; // brand color
-        fieldElement.style.boxShadow = '0 0 20px rgba(60, 135, 135, 0.5)'; // Add glow effect
-        console.log('🎯 navigateToField: Applied first flash');
-
-        setTimeout(() => {
-          fieldElement.style.backgroundColor = originalBg || '';
-          fieldElement.style.boxShadow = originalBoxShadow || '';
-          console.log('🎯 navigateToField: Removed first flash');
-
-          setTimeout(() => {
-            fieldElement.style.backgroundColor = '#3c8787';
-            fieldElement.style.boxShadow = '0 0 20px rgba(60, 135, 135, 0.5)';
-            console.log('🎯 navigateToField: Applied second flash');
-
-            setTimeout(() => {
-              fieldElement.style.backgroundColor = originalBg || '';
-              fieldElement.style.boxShadow = originalBoxShadow || '';
-              fieldElement.style.transition = originalTransition || '';
-              console.log('🎯 navigateToField: Completed flashing');
-            }, 300);
-          }, 300);
-        }, 300);
-      }, 600); // Wait for scroll to complete
-    } else {
-      console.warn('🎯 navigateToField: Could not find field element, trying page fallback');
-
-      // Fallback: scroll to page if field element not found
-      const pageElement = document.querySelector(`[data-pdf-viewer-page][data-page-number="${targetField.pageNumber}"]`);
-      if (pageElement) {
-        pageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        console.log('🎯 navigateToField: Scrolled to page as fallback');
-      }
-    }
+    navigateToFieldUtil({
+      fieldId,
+      fields,
+      recipients,
+      signedFields: useSignedFieldsStore.getState().signedFields,
+      legacyWorkflowState
+    });
   };
 
-  // Navigate to next unsigned field and flash it
+  // Navigate to next unsigned field and flash it - wrapper around utility function
   const navigateToNextField = () => {
     const currentSignedFields = useSignedFieldsStore.getState().signedFields;
     const unsignedFields = getUnsignedFields(currentSignedFields);
@@ -2954,121 +1412,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
 
     const nextField = unsignedFields[0];
-
-    // Find the field element first
-    const fieldElement = document.querySelector(`[data-field-id="${nextField.formId}"]`) as HTMLElement;
-
-    if (fieldElement) {
-      // Scroll directly to the field and center it in the viewport
-      fieldElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      });
-
-      // Apply flash effect after scroll completes
-      setTimeout(() => {
-        // Store original styles
-        const originalBg = fieldElement.style.backgroundColor;
-        const originalTransition = fieldElement.style.transition;
-        const originalBoxShadow = fieldElement.style.boxShadow;
-
-        // Apply flash effect using inline styles
-        fieldElement.style.transition = 'all 0.3s ease';
-        fieldElement.style.backgroundColor = '#0B6E6E'; // secondaryBrand color
-        fieldElement.style.boxShadow = '0 0 20px rgba(11, 110, 110, 0.5)'; // Add glow effect
-
-        setTimeout(() => {
-          fieldElement.style.backgroundColor = originalBg || '';
-          fieldElement.style.boxShadow = originalBoxShadow || '';
-
-          setTimeout(() => {
-            fieldElement.style.backgroundColor = '#0B6E6E';
-            fieldElement.style.boxShadow = '0 0 20px rgba(11, 110, 110, 0.5)';
-
-            setTimeout(() => {
-              fieldElement.style.backgroundColor = originalBg || '';
-              fieldElement.style.boxShadow = originalBoxShadow || '';
-              fieldElement.style.transition = originalTransition || '';
-            }, 300);
-          }, 300);
-        }, 300);
-      }, 600); // Wait for scroll to complete
-    } else {
-      console.warn('🎯 navigateToNextField: Could not find field element, trying page fallback');
-
-      // Fallback: scroll to page if field element not found
-      const pageElement = document.querySelector(`[data-pdf-viewer-page][data-page-number="${nextField.pageNumber}"]`);
-      if (pageElement) {
-        pageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        console.log('🎯 navigateToNextField: Scrolled to page as fallback');
-      }
-    }
+    navigateToNextFieldUtil({ nextField });
   };
 
   // Handle signing button click - using Zustand store directly
   const handleSigningAction = async () => {
-    console.log('🚨🚨🚨 YOU CLICKED THE SAVE AND SEND BUTTON (PDFEditor)! 🚨🚨🚨');
     const currentSignedFields = useSignedFieldsStore.getState().signedFields;
-
-    // COMPREHENSIVE DEBUG LOGGING
-    console.group('🔍 DEBUG: Footer Field Analysis for Next Action Button');
-    console.log('Workflow State:', workflowState);
-    console.log('Total fields in document:', fields.length);
-    console.log('All fields with details:', fields.map(f => ({
-      id: f.formId,
-      type: typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || 'unknown'),
-      recipientIndex: f.recipientIndex,
-      isSigned: !!currentSignedFields[f.formId],
-      signedValue: currentSignedFields[f.formId]
-    })));
-
-    // Show filtering for signer2 (renter)
-    if (workflowState === 'signer2') {
-      console.log('--- RENTER FIELD FILTERING ANALYSIS ---');
-
-      // Show what the display filter would show
-      const displayFilteredFields = fields.filter((field) => {
-        const signedFields = useSignedFieldsStore.getState().signedFields;
-
-        // If it's the host's field (index 0), only show if it's already signed
-        if (field.recipientIndex === 0) {
-          return !!signedFields[field.formId];
-        }
-        // If it's the renter's field (index 1), only show signature/initial fields
-        if (field.recipientIndex === 1) {
-          const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
-          return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
-        }
-        return false;
-      });
-      console.log('Display filtered fields (what renter should see):', displayFilteredFields.length, displayFilteredFields);
-
-      // Show what the footer counter should count
-      const footerCountedFields = fields.filter(f => {
-        // For renter, only count their signature/initial fields
-        if (f.recipientIndex === 1) {
-          const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
-          return fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
-        }
-        return false;
-      });
-      console.log('Footer should count these fields:', footerCountedFields.length, footerCountedFields);
-
-      // Show what getUnsignedFields returns
-      const unsignedFromFunction = getUnsignedFields(currentSignedFields);
-      console.log('getUnsignedFields returns:', unsignedFromFunction.length, unsignedFromFunction);
-
-      console.log('--- FIELD COUNT MISMATCH CHECK ---');
-      console.log('Expected: Display=', displayFilteredFields.length, ', Footer=', footerCountedFields.length, ', Unsigned=', unsignedFromFunction.length);
-      console.log('If footer shows 18 instead of', footerCountedFields.length, ', the footer counting logic is not working');
-    }
-
-    console.log('Signed fields state:', Object.keys(currentSignedFields).length, 'signed fields:', currentSignedFields);
-    console.groupEnd();
-
-    console.log('🎬 handleSigningAction - signedFields keys:', Object.keys(currentSignedFields));
-    console.log('🎬 handleSigningAction - LxS-E2U7k7Z7 value:', currentSignedFields['LxS-E2U7k7Z7']);
     const unsignedFields = getUnsignedFields(currentSignedFields);
 
     if (unsignedFields.length > 0) {
@@ -3124,19 +1473,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // User initials save handler
   const saveUserInitials = async (initials: string) => {
-    console.log('💾 PDFEditor - saveUserInitials called with:', {
-      initials: initials,
-      currentUserInitials: currentUserInitials
-    });
-
     try {
-      console.log('💾 PDFEditor - Calling updateUserInitials server action');
       await updateUserInitials(initials);
-      console.log('💾 PDFEditor - Server action completed successfully');
 
       // Update client-side state immediately so dialog won't show again this session
       setCurrentUserInitials(initials);
-      console.log('💾 PDFEditor - Updated client-side currentUserInitials to:', initials);
     } catch (error) {
       console.error('💾 PDFEditor - Error saving user initials:', error);
       throw error;
@@ -3209,10 +1550,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Fetch saved signatures when component mounts or when transitioning to signing
   useEffect(() => {
-    if (workflowState === 'signer1' || workflowState === 'signer2') {
+    if (workflow.isSigningPhase()) {
       fetchSavedSignatures();
     }
-  }, [workflowState]);
+  }, [legacyWorkflowState]);
 
   // Handle field signing/filling
   const signField = (fieldId: string, value: any) => {
@@ -3220,13 +1561,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
     // Check if this is a signature/initial field being signed
     if (field && ['SIGNATURE', 'INITIALS'].includes(field.type)) {
-      console.log('🖋️ SIGNING FIELD:', {
-        fieldId,
-        fieldType: field.type,
-        wasAlreadySigned: !!useSignedFieldsStore.getState().signedFields[fieldId],
-        signedValue: value
-      });
-
       // Log to server with field and all fields array
       fetch('/api/log', {
         method: 'POST',
@@ -3265,21 +1599,12 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Start field placement with movement detection
   const startFieldDetection = (fieldType: FieldType, recipientId: string, mouseEvent: MouseEvent, label?: string) => {
-    console.log('🔍 startFieldDetection called:', { fieldType, recipientId, label, mouseX: mouseEvent.clientX, mouseY: mouseEvent.clientY });
-    console.log('🔍 Setting states:', {
-      selectedField: `${selectedField} → ${fieldType}`,
-      selectedRecipient: `${selectedRecipient} → ${recipientId}`,
-      pendingFieldLabel: `${pendingFieldLabel} → ${label || 'undefined'}`,
-      interactionMode: `${interactionMode} → detecting`
-    });
-
     setSelectedField(fieldType);
     setSelectedRecipient(recipientId);
     if (label) setPendingFieldLabel(label);
     setInteractionMode('detecting');
     setIsMouseDown(true);
     setMouseDownPosition({ x: mouseEvent.clientX, y: mouseEvent.clientY });
-    console.log('🔍 Detection mode state set');
   };
 
   // Legacy function for backward compatibility
@@ -3317,19 +1642,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
     // Close dialog
     setCustomFieldDialog({ isOpen: false, field: null });
-
-    console.log('✅ Custom field saved with metadata:', updatedField);
   };
 
   const handleCustomFieldCancel = () => {
     setCustomFieldDialog({ isOpen: false, field: null });
-    console.log('❌ Custom field creation cancelled');
   };
 
   // Handle clicking on a field to configure it or edit its value
   const handleFieldClick = (field: FieldFormType) => {
     // In template mode, configure field settings
-    if (workflowState === 'template') {
+    if (workflow.isTemplatePhase()) {
       // Only open modal for configurable field types
       const configurableTypes = [FieldType.TEXT, FieldType.NUMBER, FieldType.EMAIL, FieldType.NAME, FieldType.DATE];
       if (!configurableTypes.includes(field.type as FieldType)) return;
@@ -3338,7 +1660,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       setActiveFieldId(field.formId);
     }
     // In document mode, edit field values
-    else if (workflowState === 'document') {
+    else if (workflow.isDocumentPhase()) {
       // Don't allow editing signature/initials fields - those are handled during signing
       if (field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) return;
 
@@ -3355,7 +1677,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         : f
     ));
     setTextFieldConfigModal({ isOpen: false, field: null });
-    console.log('✅ Field configuration saved:', fieldId, fieldMeta);
   };
 
   // Handle saving field value in document mode
@@ -3378,7 +1699,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
 
     setRenderingStatus('checking');
-    console.log('🎨 Starting field rendering validation...');
 
     // Wait a short time for React to finish rendering
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -3397,27 +1717,18 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
         if (isVisible) {
           renderedCount++;
-          console.log(`✅ Field ${field.formId} (${field.type}) rendered and visible`);
-        } else {
-          console.warn(`⚠️ Field ${field.formId} (${field.type}) exists in DOM but not visible:`, rect);
         }
-      } else {
-        console.warn(`⚠️ Field ${field.formId} (${field.type}) not found in DOM yet`);
       }
     }
 
     const allRendered = renderedCount === totalFields;
 
-    console.log(`🎨 Rendering check: ${renderedCount}/${totalFields} fields rendered`);
-
     if (allRendered) {
       setRenderingStatus('rendered');
       setFieldsRendered(true);
-      console.log('✅ All fields successfully rendered and visible');
     } else {
       setRenderingStatus('failed');
       setFieldsRendered(false);
-      console.log('⚠️ Some fields are not yet visible');
     }
 
     return allRendered;
@@ -3425,7 +1736,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Auto-validate rendering when fields change
   useEffect(() => {
-    if (fields.length > 0 && (workflowState === 'signer1' || workflowState === 'signer2')) {
+    if (fields.length > 0 && workflow.isSigningPhase()) {
       // Delay validation to allow PDF and fields to fully load
       const timeoutId = setTimeout(() => {
         validateFieldRendering();
@@ -3433,10 +1744,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
       return () => clearTimeout(timeoutId);
     }
-  }, [fields, workflowState, validateFieldRendering]);
+  }, [fields, legacyWorkflowState, validateFieldRendering]);
 
 
-  if (!pdfFile && workflowState === 'template') {
+  if (!pdfFile && workflow.isTemplatePhase()) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
         <Card className="w-full max-w-md">
@@ -3472,14 +1783,15 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Show success screen if step completed and no onFinish callback
   if (stepCompleted && !onFinish) {
-    const stepNames = {
+    const stepNames: Record<LegacyWorkflowState, string> = {
+      'selection': 'Selection',
       'template': 'Template Creation',
       'document': 'Document Creation',
       'signer1': 'Signer 1',
       'signer2': 'Signer 2',
       'completed': 'Document Completion'
     };
-    const stepName = stepNames[workflowState] || workflowState;
+    const stepName = stepNames[legacyWorkflowState] || legacyWorkflowState;
 
     return (
       <div className="h-screen flex flex-col bg-gray-50">
@@ -3539,7 +1851,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             <div className="p-4">
               {/* Use custom sidebar content if provided, otherwise use default */}
               {customSidebarContent ? (
-                customSidebarContent(workflowState, renderDefaultSidebarContent())
+                customSidebarContent(legacyWorkflowState, renderDefaultSidebarContent())
               ) : (
                 renderDefaultSidebarContent()
               )}
@@ -3553,7 +1865,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           {/* PDF Viewer */}
           <div className="flex-1 overflow-auto px-6 pb-6 max-h-screen">
             {/* Header for template creation */}
-            {workflowState === 'template' && listingAddress && (
+            {workflow.isTemplatePhase() && listingAddress && (
               <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
                 <h2 className="text-lg font-medium text-gray-900">
                   Create {templateType === 'lease' ? 'Lease' : 'Addendum'} Template for {listingAddress}
@@ -3575,7 +1887,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   {/* Helper function to determine if a field should be shown for renter (signer2) */}
                   {fields.filter((field) => {
                 // For signer2 (renter), filter fields to show only what's needed
-                if (workflowState === 'signer2') {
+                if (workflow.isSigningPhase() && !workflow.isFirstSigner()) {
                   const signedFields = useSignedFieldsStore.getState().signedFields;
 
                   // If it's the host's field (index 0), only show if it's already signed
@@ -3606,7 +1918,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 }
 
                 // During template or document editing, show draggable fields
-                if (workflowState === 'template' || workflowState === 'document') {
+                if (workflow.isTemplatePhase() || workflow.isDocumentPhase()) {
                   return (
                     <FieldItem
                       key={field.formId}
@@ -3621,14 +1933,14 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                       active={field.formId === activeFieldId}
                       pageElement={pageElement}
                       signedValue={useSignedFieldsStore.getState().signedFields[field.formId]}
-                      showValues={workflowState === 'document'} // Show values in document mode
+                      showValues={workflow.isDocumentPhase()} // Show values in document mode
                     />
                   );
                 }
 
                 // During signing, show signable fields
-                if (workflowState === 'signer1' || workflowState === 'signer2') {
-                  const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
+                if (workflow.isSigningPhase()) {
+                  const currentSignerIndex = workflow.getCurrentSignerIndex();
                   return (
                     <SignableField
                       key={field.formId}
@@ -3649,25 +1961,38 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   );
                 }
 
-                // During completion, show read-only signed fields
-                return (
-                  <SignableField
-                    key={field.formId}
-                    field={field}
-                    recipient={recipient}
-                    onSign={() => { }} // No signing allowed
-                    isSigned={!!useSignedFieldsStore.getState().signedFields[field.formId]}
-                    signedValue={useSignedFieldsStore.getState().signedFields[field.formId]}
-                    isForCurrentSigner={false}
-                    pageElement={pageElement}
-                    savedSignatures={savedSignatures}
-                    onSaveSignature={saveSignature}
-                    onDeleteSignature={deleteSignature}
-                    onSetDefaultSignature={setDefaultSignature}
-                    currentInitials={currentUserInitials}
-                    onSaveInitials={saveUserInitials}
-                  />
-                );
+                // During completion, show read-only signed fields (success phase only)
+                if (workflow.isSuccessPhase()) {
+                  return (
+                    <SignableField
+                      key={field.formId}
+                      field={field}
+                      recipient={recipient}
+                      onSign={() => { }} // No signing allowed
+                      isSigned={!!useSignedFieldsStore.getState().signedFields[field.formId]}
+                      signedValue={useSignedFieldsStore.getState().signedFields[field.formId]}
+                      isForCurrentSigner={false}
+                      pageElement={pageElement}
+                      savedSignatures={savedSignatures}
+                      onSaveSignature={saveSignature}
+                      onDeleteSignature={deleteSignature}
+                      onSetDefaultSignature={setDefaultSignature}
+                      currentInitials={currentUserInitials}
+                      onSaveInitials={saveUserInitials}
+                    />
+                  );
+                }
+
+                // Unexpected phase - log error and return null
+                console.error('⚠️ PDFEditor - Unexpected workflow phase for field rendering:', {
+                  fieldId: field.formId,
+                  currentPhase: workflow.state.phase,
+                  isTemplatePhase: workflow.isTemplatePhase(),
+                  isDocumentPhase: workflow.isDocumentPhase(),
+                  isSigningPhase: workflow.isSigningPhase(),
+                  isSuccessPhase: workflow.isSuccessPhase()
+                });
+                return null;
               })}
                 </PDFViewer>
               </MobilePDFWrapper>
@@ -3681,7 +2006,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 {/* Helper function to determine if a field should be shown for renter (signer2) */}
                 {fields.filter((field) => {
                   // For signer2 (renter), filter fields to show only what's needed
-                  if (workflowState === 'signer2') {
+                  if (workflow.isSigningPhase() && !workflow.isFirstSigner()) {
                     const signedFields = useSignedFieldsStore.getState().signedFields;
 
                     // If it's the host's field (index 0), only show if it's already signed
@@ -3700,32 +2025,96 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   return true;
                 }).map((field) => {
                   const pageElement = pageElements.get(field.pageNumber);
+                  // Find recipient by signerEmail first, then fall back to recipientIndex
+                  let recipient = recipients.find(r => r.id === field.signerEmail);
+                  if (!recipient && field.recipientIndex !== undefined) {
+                    recipient = recipients.find(r => r.id === `recipient_${field.recipientIndex}`) || recipients[field.recipientIndex];
+                  }
+
+                  // Skip rendering if pages aren't ready yet
+                  if (!pdfPagesReady || !pageElement) {
+                    return null;
+                  }
 
                   // For signed values, check both the signed fields store and the initial field values
                   const signedValue = useSignedFieldsStore.getState().signedFields[field.formId] || field.value;
 
-                  return (
-                    <SignableField
-                      key={field.formId}
-                      field={field}
-                      recipient={recipients.find(r => r.index === field.recipientIndex)}
-                      onSign={signField}
-                      isSigned={!!signedValue}
-                      signedValue={signedValue}
-                      isForCurrentSigner={
-                        workflowState === 'signer1'
-                          ? field.recipientIndex === 0
-                          : field.recipientIndex === 1
-                      }
-                      pageElement={pageElement}
-                      savedSignatures={savedSignatures}
-                      onSaveSignature={saveSignature}
-                      onDeleteSignature={deleteSignature}
-                      onSetDefaultSignature={setDefaultSignature}
-                      currentInitials={currentUserInitials}
-                      onSaveInitials={saveUserInitials}
-                    />
-                  );
+                  // During template or document editing, show draggable fields
+                  if (workflow.isTemplatePhase() || workflow.isDocumentPhase()) {
+                    return (
+                      <FieldItem
+                        key={field.formId}
+                        field={field}
+                        recipient={recipient}
+                        onMove={updateField}
+                        onResize={updateField}
+                        onRemove={removeField}
+                        onAddSignDate={handleAddSignDate}
+                        onAddInitialDate={handleAddInitialDate}
+                        onFieldClick={handleFieldClick}
+                        active={field.formId === activeFieldId}
+                        pageElement={pageElement}
+                        signedValue={signedValue}
+                        showValues={workflow.isDocumentPhase()} // Show values in document mode
+                      />
+                    );
+                  }
+
+                  // During signing, show signable fields
+                  if (workflow.isSigningPhase()) {
+                    const currentSignerIndex = workflow.getCurrentSignerIndex();
+                    return (
+                      <SignableField
+                        key={field.formId}
+                        field={field}
+                        recipient={recipient}
+                        onSign={signField}
+                        isSigned={!!signedValue}
+                        signedValue={signedValue}
+                        isForCurrentSigner={field.recipientIndex === currentSignerIndex}
+                        pageElement={pageElement}
+                        savedSignatures={savedSignatures}
+                        onSaveSignature={saveSignature}
+                        onDeleteSignature={deleteSignature}
+                        onSetDefaultSignature={setDefaultSignature}
+                        currentInitials={currentUserInitials}
+                        onSaveInitials={saveUserInitials}
+                      />
+                    );
+                  }
+
+                  // During completion, show read-only signed fields (success phase only)
+                  if (workflow.isSuccessPhase()) {
+                    return (
+                      <SignableField
+                        key={field.formId}
+                        field={field}
+                        recipient={recipient}
+                        onSign={() => { }} // No signing allowed
+                        isSigned={!!signedValue}
+                        signedValue={signedValue}
+                        isForCurrentSigner={false}
+                        pageElement={pageElement}
+                        savedSignatures={savedSignatures}
+                        onSaveSignature={saveSignature}
+                        onDeleteSignature={deleteSignature}
+                        onSetDefaultSignature={setDefaultSignature}
+                        currentInitials={currentUserInitials}
+                        onSaveInitials={saveUserInitials}
+                      />
+                    );
+                  }
+
+                  // Unexpected phase - log error and return null
+                  console.error('⚠️ PDFEditor - Unexpected workflow phase for field rendering:', {
+                    fieldId: field.formId,
+                    currentPhase: workflow.state.phase,
+                    isTemplatePhase: workflow.isTemplatePhase(),
+                    isDocumentPhase: workflow.isDocumentPhase(),
+                    isSigningPhase: workflow.isSigningPhase(),
+                    isSuccessPhase: workflow.isSuccessPhase()
+                  });
+                  return null;
                 })}
               </PDFViewer>
             )}
@@ -3752,7 +2141,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             {!hideFooterControls && (
               <div className="flex items-center gap-3">
                 {/* Template state controls */}
-                {workflowState === 'template' && (
+                {workflow.isTemplatePhase() && (
                   <>
                     <BrandButton
                       onClick={completeCurrentStep}
@@ -3766,7 +2155,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 )}
 
                 {/* Document setup state controls */}
-                {workflowState === 'document' && (
+                {workflow.isDocumentPhase() && (
                   <>
                     <BrandButton
                       onClick={completeCurrentStep}
@@ -3786,40 +2175,26 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 )}
 
                 {/* Signing state controls */}
-                {(workflowState === 'signer1' || workflowState === 'signer2') && (
+                {workflow.isSigningPhase() && (
                   <>
                     <div className="text-xs text-gray-500">
                       {(() => {
-                        const currentSignerIndex = workflowState === 'signer1' ? 0 : 1;
-
-                        console.group('🏷️ DEBUG: Footer Field Count Calculation');
-                        console.log('Workflow state:', workflowState, 'Current signer index:', currentSignerIndex);
-                        console.log('Total fields in document:', fields.length);
+                        const currentSignerIndex = workflow.getCurrentSignerIndex();
 
                         // For signer2 (renter), only count SIGNATURE/INITIALS fields (consistent with display filtering)
-                        const signerFields = workflowState === 'signer2'
+                        const signerFields = (workflow.isSigningPhase() && !workflow.isFirstSigner())
                           ? fields.filter(f => {
-                            console.log(`Field ${f.formId}: recipientIndex=${f.recipientIndex}, type=${typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || 'unknown')}`);
                             // For renter, only count their signature/initial fields
                             if (f.recipientIndex === 1) {
                               const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
                               const isSignatureOrInitial = fieldType === 'SIGNATURE' || fieldType === 'INITIALS';
-                              console.log(`  -> Renter field, isSignatureOrInitial=${isSignatureOrInitial}`);
                               return isSignatureOrInitial;
                             }
-                            console.log(`  -> Not renter field (recipientIndex ${f.recipientIndex})`);
                             return false;
                           })
                           : fields.filter(f => {
-                            console.log(`Field ${f.formId}: recipientIndex=${f.recipientIndex}, matches currentSigner=${f.recipientIndex === currentSignerIndex}`);
                             return f.recipientIndex === currentSignerIndex;
                           });
-
-                        console.log('Filtered signer fields:', signerFields.length, signerFields.map(f => ({
-                          id: f.formId,
-                          type: typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || 'unknown'),
-                          recipientIndex: f.recipientIndex
-                        })));
 
                         const signatures = signerFields.filter(f => {
                           const fieldType = typeof f.type === 'string' ? f.type : (f.type?.type || f.type?.value || '');
@@ -3830,23 +2205,15 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                           return fieldType === 'INITIALS';
                         });
 
-                        console.log('Signatures found:', signatures.length, signatures.map(f => f.formId));
-                        console.log('Initials found:', initials.length, initials.map(f => f.formId));
-
                         const currentSignedFields = useSignedFieldsStore.getState().signedFields;
                         const pendingSignatures = signatures.filter(f => {
                           const isSigned = !!currentSignedFields[f.formId];
-                          console.log(`Signature ${f.formId}: signed=${isSigned}, value=${currentSignedFields[f.formId]}`);
                           return !isSigned;
                         }).length;
                         const pendingInitials = initials.filter(f => {
                           const isSigned = !!currentSignedFields[f.formId];
-                          console.log(`Initial ${f.formId}: signed=${isSigned}, value=${currentSignedFields[f.formId]}`);
                           return !isSigned;
                         }).length;
-
-                        console.log('Final counts: pendingSignatures=', pendingSignatures, ', pendingInitials=', pendingInitials);
-                        console.groupEnd();
 
                         const parts = [];
                         if (pendingSignatures > 0) {
@@ -3857,8 +2224,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         }
 
                         const finalText = parts.length > 0 ? parts.join(' • ') : 'All fields completed';
-                        console.log('🏷️ Final footer text should be:', finalText);
-                        console.log('🏷️ If you see "0 of 18" instead, something else is overriding this text');
 
                         return finalText;
                       })()}
@@ -3874,7 +2239,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 )}
 
                 {/* Completion state controls */}
-                {workflowState === 'completed' && (
+                {legacyWorkflowState === 'completed' && (
                   <>
                     <Button onClick={exportPDF} size="sm" className="bg-green-600 hover:bg-green-700">
                       <Download className="w-4 h-4 mr-2" />
