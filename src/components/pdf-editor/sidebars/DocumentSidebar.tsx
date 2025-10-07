@@ -172,11 +172,6 @@ export const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
                     }
                   }
 
-                  // Debug logging to understand signerEmail values
-                  if (!recipient) {
-                    console.log(`🔍 Field ${field.formId} signerEmail: "${field.signerEmail}", Available recipient IDs:`, recipients.map(r => r.id), 'Available emails:', recipients.map(r => r.email), 'Available roles:', recipients.map(r => r.role));
-                  }
-
                   // Get field label with combined signature+date labeling only when both fields exist
                   const getDisplayLabel = (field: any) => {
                     const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');

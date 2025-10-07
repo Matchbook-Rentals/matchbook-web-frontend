@@ -33,6 +33,46 @@ const getRecipientColor = (index: number) => {
   return colorMap[index as keyof typeof colorMap] || '#6B7280'; // fallback to gray
 };
 
+// Helper to build dynamic recipients list based on trip participants
+const buildRecipientsList = (housingRequest: HousingRequestWithDetails, hostUser: any, user: any): Recipient[] => {
+  const recipients: Recipient[] = [
+    {
+      id: 'signer1',
+      role: 'HOST' as const,
+      name: `${hostUser.firstName || ''} ${hostUser.lastName || ''}`.trim() || hostUser.email,
+      email: hostUser.email,
+      color: getRecipientColor(0)
+    },
+    {
+      id: 'signer2',
+      role: 'RENTER' as const,
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
+      email: user.email,
+      color: getRecipientColor(1)
+    }
+  ];
+
+  // Add additional renters from trip.allParticipants
+  const additionalParticipants = housingRequest.trip?.allParticipants || [];
+  additionalParticipants.forEach((participant, index) => {
+    recipients.push({
+      id: `signer${index + 3}`,
+      role: 'RENTER' as const,
+      name: `${participant.firstName || ''} ${participant.lastName || ''}`.trim() || participant.email,
+      email: participant.email,
+      color: getRecipientColor(index + 2)
+    });
+  });
+
+  return recipients;
+};
+
+// Helper to filter out fields for recipients that don't exist
+const filterFieldsForAvailableRecipients = (fields: FieldFormType[], recipientCount: number): FieldFormType[] => {
+  const filteredFields = fields.filter(field => field.recipientIndex < recipientCount);
+  return filteredFields;
+};
+
 interface HousingRequestWithDetails extends HousingRequest {
   user: User & {
     applications: Application[];
@@ -101,15 +141,6 @@ function CreateLeasePageContent() {
         return "$0.00";
       };
       
-      // Debug logging for housing request dates
-      console.log('📅 Housing Request Date Debug:', {
-        rawStartDate: housingRequest.startDate,
-        rawEndDate: housingRequest.endDate,
-        moveInDate: housingRequest.moveInDate, // Check if this exists too
-        moveOutDate: housingRequest.moveOutDate, // Check if this exists too
-        hasStartDate: !!housingRequest.startDate,
-        hasEndDate: !!housingRequest.endDate
-      });
 
       const matchDetailsForPopulation = {
         propertyAddress: `${housingRequest.listing.streetAddress1 || ''}${housingRequest.listing.streetAddress2 ? ' ' + housingRequest.listing.streetAddress2 : ''}, ${housingRequest.listing.city || ''}, ${housingRequest.listing.state || ''} ${housingRequest.listing.postalCode || ''}`.replace(/^,\s*|,\s*$/, '').replace(/,\s*,/g, ','),
@@ -122,7 +153,6 @@ function CreateLeasePageContent() {
         endDate: housingRequest.endDate ? new Date(housingRequest.endDate).toISOString().split('T')[0] : ''
       };
 
-      console.log('📅 Match Details for Population:', matchDetailsForPopulation);
 
       const preFilledValues: Record<string, any> = {};
 
@@ -166,35 +196,19 @@ function CreateLeasePageContent() {
           }
         } else if (field.type === 'DATE') {
           const fieldLabel = field.fieldMeta?.label?.toLowerCase() || '';
-          console.log('📅 Processing DATE field:', {
-            fieldId: field.formId,
-            originalLabel: field.fieldMeta?.label,
-            lowercaseLabel: fieldLabel,
-            fieldType: field.type
-          });
 
           if (fieldLabel.includes('start') || fieldLabel.includes('begin') || (fieldLabel.includes('move') && fieldLabel.includes('in'))) {
-            console.log('📅 Matched START DATE pattern, setting to:', matchDetailsForPopulation.startDate);
             preFilledValues[field.formId] = matchDetailsForPopulation.startDate;
           } else if (fieldLabel.includes('end') || fieldLabel.includes('expire') || fieldLabel.includes('terminate') || (fieldLabel.includes('move') && fieldLabel.includes('out'))) {
-            console.log('📅 Matched END DATE pattern, setting to:', matchDetailsForPopulation.endDate);
             preFilledValues[field.formId] = matchDetailsForPopulation.endDate;
           } else {
             // For unlabeled DATE fields, alternate between start and end dates
             const dateFields = mergedPDF.fields.filter(f => f.type === 'DATE');
             const dateFieldIndex = dateFields.findIndex(f => f.formId === field.formId);
-            console.log('📅 Unlabeled DATE field - using fallback logic:', {
-              dateFieldIndex,
-              totalDateFields: dateFields.length,
-              willUseStartDate: dateFieldIndex === 0,
-              willUseEndDate: dateFieldIndex === 1
-            });
-            
+
             if (dateFieldIndex === 0) {
-              console.log('📅 Setting first unlabeled DATE to start date:', matchDetailsForPopulation.startDate);
               preFilledValues[field.formId] = matchDetailsForPopulation.startDate;
             } else if (dateFieldIndex === 1) {
-              console.log('📅 Setting second unlabeled DATE to end date:', matchDetailsForPopulation.endDate);
               preFilledValues[field.formId] = matchDetailsForPopulation.endDate;
             }
           }
@@ -202,7 +216,6 @@ function CreateLeasePageContent() {
         // Note: SIGNATURE, INITIALS, SIGN_DATE, and INITIAL_DATE fields are not pre-filled
       });
 
-      console.log('📅 Final preFilledValues being sent to store:', preFilledValues);
       initializeSignedFields(preFilledValues);
     }
   }, [mergedPDF, housingRequest, templates]);
@@ -246,7 +259,6 @@ function CreateLeasePageContent() {
       }
 
     } catch (err) {
-      console.error('Error loading data:', err);
       setError("Error loading page data");
     } finally {
       setLoading(false);
@@ -257,24 +269,79 @@ function CreateLeasePageContent() {
     try {
       setIsMerging(true);
       setError(null);
-      
-      
+
       const result = await mergePDFTemplates(templates, {
         fileName: `lease_package_${templates.length}_documents.pdf`,
         includeMetadata: true
       });
-      
-      
+
       setMergedPDF(result);
-      
+
     } catch (err) {
-      console.error('Error merging PDFs:', err);
       setError(`Failed to merge documents: ${err instanceof Error ? err.message : 'Unknown error'}`);
       toast.error('Failed to merge documents');
     } finally {
       setIsMerging(false);
     }
   };
+
+  // Filter fields whenever mergedPDF changes (works for both single and merged templates)
+  useEffect(() => {
+    if (!mergedPDF || !housingRequest) return;
+
+    const user = housingRequest.user;
+    const hostUser = housingRequest.listing.user;
+
+    console.log('👥 Trip participant data:', {
+      primaryRenter: {
+        name: `${user.firstName} ${user.lastName}`,
+        email: user.email
+      },
+      additionalParticipants: housingRequest.trip?.allParticipants?.map(p => ({
+        name: `${p.firstName} ${p.lastName}`,
+        email: p.email
+      })) || []
+    });
+
+    // Build dynamic recipients list based on trip participants
+    const dynamicRecipients = buildRecipientsList(housingRequest, hostUser, user);
+
+    console.log('🎯 Checking if fields need filtering:', {
+      currentFieldCount: mergedPDF.fields.length,
+      recipientCount: dynamicRecipients.length,
+      fieldsByRecipientIndex: mergedPDF.fields.reduce((acc, field) => {
+        acc[field.recipientIndex] = (acc[field.recipientIndex] || 0) + 1;
+        return acc;
+      }, {} as Record<number, number>)
+    });
+
+    // Check if any fields need to be filtered
+    const fieldsToRemove = mergedPDF.fields.filter(f => f.recipientIndex >= dynamicRecipients.length);
+
+    if (fieldsToRemove.length > 0) {
+      console.log('🗑️ Found fields to remove:', {
+        count: fieldsToRemove.length,
+        fields: fieldsToRemove.map(f => ({
+          id: f.formId,
+          recipientIndex: f.recipientIndex,
+          type: f.type
+        }))
+      });
+
+      // Filter out fields for recipients that don't exist
+      const filteredFields = filterFieldsForAvailableRecipients(mergedPDF.fields, dynamicRecipients.length);
+
+      // Update mergedPDF with filtered fields
+      setMergedPDF(prev => prev ? {
+        ...prev,
+        fields: filteredFields
+      } : null);
+
+      console.log('✅ Fields filtered and state updated');
+    } else {
+      console.log('✅ No filtering needed - all fields have valid recipients');
+    }
+  }, [mergedPDF?.fields.length, housingRequest]);
 
   const handleDocumentCreated = async (documentData: any) => {
     try {
@@ -312,7 +379,6 @@ function CreateLeasePageContent() {
       toast.success("Lease package created! Ready for signing.");
       
     } catch (error) {
-      console.error('Error creating document:', error);
       toast.error("Failed to create document");
     }
   };
@@ -343,31 +409,21 @@ function CreateLeasePageContent() {
 
   // Get the appropriate button function and text
   const getButtonProps = () => {
-    console.log('🔍 getButtonProps called with:', {
-      currentWorkflowState,
-      hasCompleteStepFunction: !!completeStepFunction,
-      hasSigningActionFunction: !!signingActionFunction
-    });
-
     if (currentWorkflowState === 'signer1') {
       const unsignedFields = getUnsignedHostFields();
-      console.log('📋 In signer1 state, unsigned fields:', unsignedFields.length);
       
       if (unsignedFields.length > 0) {
-        console.log('🎯 Returning Next Action button');
         return {
           text: 'Next Action',
           action: signingActionFunction
         };
       } else {
-        console.log('🎯 Returning Save and Send button');
         return {
           text: 'Save and Continue', 
           action: completeStepFunction
         };
       }
     }
-    console.log('🎯 Returning Create & Sign Document button');
     return {
       text: 'Create & Sign Document',
       action: completeStepFunction
@@ -477,34 +533,14 @@ function CreateLeasePageContent() {
           {mergedPDF && (() => {
             const buttonProps = getButtonProps();
             const isDisabled = !buttonProps.action || isCreatingDocument;
-            console.log('🔧 Button render state:', {
-              isDisabled,
-              hasAction: !!buttonProps.action,
-              isCreatingDocument,
-              buttonText: buttonProps.text
-            });
             return (
               <Button
                 onClick={(e) => {
-                  console.log('CLICK REGISTERED!');
-                  console.log('Event:', e);
                   try {
-                    console.log('🔴🔴🔴 HEADER BUTTON CLICKED ON CREATE-LEASE PAGE! 🔴🔴🔴');
-                    console.log('📋 Header button details:', {
-                      buttonText: buttonProps.text,
-                      hasAction: !!buttonProps.action,
-                      currentWorkflowState,
-                      housingRequestId,
-                      listingId
-                    });
                     if (buttonProps.action) {
-                      console.log('Calling buttonProps.action...');
                       buttonProps.action();
-                    } else {
-                      console.error('❌ No action function found for header button!');
                     }
                   } catch (error) {
-                    console.error('ERROR IN CLICK HANDLER:', error);
                   }
                 }}
                 disabled={!buttonProps.action || isCreatingDocument}
@@ -532,29 +568,17 @@ function CreateLeasePageContent() {
       </header>
 
       {/* PDF Editor Document */}
-      {mergedPDF ? (
+      {mergedPDF && housingRequest ? (
         // Merged PDF is ready - show PDFEditorDocument
         <div className="w-full ">
           <PDFEditorDocument
             initialPdfFile={mergedPDF.file}
             initialFields={mergedPDF.fields}
-            initialRecipients={[
-              // Override merged recipients with actual tenant and host data
-              {
-                id: 'signer1',
-                role: 'HOST' as const,
-                name: matchDetails.hostName,
-                email: matchDetails.hostEmail,
-                color: getRecipientColor(0)
-              },
-              {
-                id: 'signer2', 
-                role: 'RENTER' as const,
-                name: matchDetails.primaryRenterName,
-                email: matchDetails.primaryRenterEmail,
-                color: getRecipientColor(1)
-              }
-            ]}
+            initialRecipients={buildRecipientsList(
+              housingRequest,
+              housingRequest.listing.user,
+              housingRequest.user
+            )}
             isMergedDocument={true}
             mergedTemplateIds={templates.map(t => t.id)}
             matchDetails={matchDetails}
@@ -576,14 +600,6 @@ function CreateLeasePageContent() {
             onCompleteStepReady={(completeStepFn) => {
               completeStepFunctionRef.current = completeStepFn;
               setCompleteStepFunction(() => async () => {
-                console.log('🚨🚨🚨 YOU CLICKED THE SAVE AND SEND BUTTON! 🚨🚨🚨');
-                console.log('📋 Button click context:', {
-                  housingRequestId,
-                  listingId,
-                  currentWorkflowState,
-                  hasCompleteStepFunctionRef: !!completeStepFunctionRef.current
-                });
-                
                 setIsCreatingDocument(true);
                 try {
                   await completeStepFunctionRef.current?.();

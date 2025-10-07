@@ -36,12 +36,10 @@ export const useSignedFieldsStore = create<SignedFieldsState>((set, get) => ({
   },
 
   initializeSignedFields: (initialFields: Record<string, any>) => {
-    console.log('📝 Zustand - Initializing with', Object.keys(initialFields).length, 'fields');
     set({ signedFields: initialFields });
   },
 
   clearSignedFields: () => {
-    console.log('🧹 Zustand - Clearing all signed fields');
     set({ signedFields: {} });
   },
 

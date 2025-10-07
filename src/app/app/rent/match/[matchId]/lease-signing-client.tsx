@@ -54,9 +54,10 @@ interface LeaseSigningClientProps {
   testPaymentMethodPreview?: 'card' | 'ach';
   isAdminDev?: boolean;
   initialStep?: string;
+  currentUserEmail: string;
 }
 
-export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, isAdminDev = false, initialStep }: LeaseSigningClientProps) {
+export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, isAdminDev = false, initialStep, currentUserEmail }: LeaseSigningClientProps) {
   const router = useRouter();
   const { toast } = useToast();
   const { initializeSignedFields } = useSignedFieldsStore();
@@ -1070,6 +1071,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                         initialFields={documentFields}
                         initialRecipients={documentRecipients}
                         signerStep={signerStep as 'signer1' | 'signer2'}
+                        currentUserEmail={currentUserEmail}
                         isMobile={isMobile}
                         hideDefaultSidebar={true}
                         showFooter={true}

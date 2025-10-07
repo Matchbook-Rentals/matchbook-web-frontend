@@ -127,12 +127,6 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
     const recipientRole = recipient?.role || (field.recipientIndex === 0 ? 'HOST' : 'RENTER');
     const fieldLabel = field.type === FieldType.INITIALS ? 'Initials' : 'Initial Date';
     textToDisplay = `${recipientRole === 'HOST' ? 'Host' : 'Renter'} ${fieldLabel}`;
-    
-    console.log('🔧 INITIALS/INITIAL_DATE Field Debug:', {
-      fieldType: field.type,
-      recipientRole,
-      finalTextToDisplay: textToDisplay
-    });
   }
   
   // For signature, name, and sign date fields, show recipient-specific labels

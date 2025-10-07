@@ -1,6 +1,8 @@
 import { getMatchById } from '@/app/actions/matches';
 import { notFound, redirect } from 'next/navigation';
 import { checkRole } from '@/utils/roles';
+import { auth } from '@clerk/nextjs/server';
+import prisma from '@/lib/prismadb';
 import { LeaseSigningClient } from '../lease-signing-client';
 
 interface LeaseSigningPageProps {
@@ -8,12 +10,29 @@ interface LeaseSigningPageProps {
 }
 
 export default async function LeaseSigningPage({ params }: LeaseSigningPageProps) {
+  // Get current user's email from Clerk auth
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect('/sign-in');
+  }
+
+  // Fetch user email from database
+  const currentUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true }
+  });
+
+  if (!currentUser?.email) {
+    throw new Error('User email not found');
+  }
+
   const result = await getMatchById(params.matchId);
-  
+
   if (!result.success || !result.match) {
     notFound();
   }
-  
+
   const match = result.match;
   
   console.log('🔍 [Lease Signing Page] Match state:', {
@@ -45,11 +64,12 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
   }
   
   return (
-    <LeaseSigningClient 
+    <LeaseSigningClient
       match={match}
       matchId={params.matchId}
       isAdminDev={isAdminDev}
       initialStep={serverInitialStep}
+      currentUserEmail={currentUser.email}
     />
   );
 }

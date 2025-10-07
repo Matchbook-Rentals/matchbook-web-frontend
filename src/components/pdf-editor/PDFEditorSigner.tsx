@@ -10,6 +10,7 @@ interface PDFEditorSignerProps {
   initialFields?: FieldFormType[];
   initialRecipients?: Recipient[];
   signerStep?: 'signer1' | 'signer2';
+  currentUserEmail?: string;
   onSave?: (data: { fields: FieldFormType[], recipients: Recipient[], pdfFile: File }) => void;
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
@@ -23,6 +24,7 @@ export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({
   initialFields,
   initialRecipients,
   signerStep = 'signer1',
+  currentUserEmail,
   onSave,
   onCancel,
   onFinish,
@@ -36,6 +38,7 @@ export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({
       initialPdfFile={initialPdfFile}
       initialFields={initialFields}
       initialRecipients={initialRecipients}
+      currentUserEmail={currentUserEmail}
       onSave={onSave}
       onCancel={onCancel}
       onFinish={onFinish}

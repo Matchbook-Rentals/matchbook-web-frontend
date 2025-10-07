@@ -109,6 +109,7 @@ interface PDFEditorProps {
   mergedTemplateIds?: string[];
   matchDetails?: MatchDetails;
   housingRequestId?: string;
+  currentUserEmail?: string;
   hostName?: string;
   hostEmail?: string;
   listingAddress?: string;
@@ -146,6 +147,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   mergedTemplateIds,
   matchDetails,
   housingRequestId,
+  currentUserEmail,
   hostName,
   hostEmail,
   listingAddress,
@@ -188,30 +190,58 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const initialPhase = legacyStateToPhase(initialWorkflowState);
   const workflow = useWorkflowStateMachine(initialPhase);
 
-  // Fix: Initialize signer index when starting from legacy signer states
+  // Fix: Initialize signer index by matching current user email to recipients
   useEffect(() => {
-    const signerIndex = getSignerIndexFromLegacy(initialWorkflowState);
+    // Only initialize if we're in a signing phase
+    if (initialPhase !== 'signing') return;
 
-    // If we're starting in a signing state (signer1 or signer2), we need to properly initialize the workflow
-    if (signerIndex !== null && initialPhase === 'signing') {
-      console.log('🔧 PDFEditor - Initializing workflow for legacy signer state:', {
-        initialWorkflowState,
-        signerIndex,
-        recipientCount: recipients.length
-      });
+    // Find current signer index by matching email
+    let currentSignerIndex = 0;
 
-      // Dispatch START_SIGNING to properly set up signer state with correct currentSignerIndex
-      workflow.dispatch({
-        type: 'START_SIGNING',
-        signerCount: recipients.length || 2,
-        documentId: sessionStorage.getItem('currentDocumentId') || undefined,
-        signingOrder: recipients.map((r, i) => `signer-${i}`)
-      });
+    if (currentUserEmail && recipients.length > 0) {
+      const matchedIndex = recipients.findIndex(r => r.email === currentUserEmail);
+      if (matchedIndex !== -1) {
+        currentSignerIndex = matchedIndex;
+        console.log('✅ PDFEditor - Matched current user email to recipient:', {
+          currentUserEmail,
+          matchedIndex,
+          recipient: recipients[matchedIndex]
+        });
+      } else {
+        console.warn('⚠️ PDFEditor - Could not match current user email to any recipient:', {
+          currentUserEmail,
+          recipients: recipients.map(r => r.email)
+        });
+        // Fallback to legacy logic
+        const legacyIndex = getSignerIndexFromLegacy(initialWorkflowState);
+        currentSignerIndex = legacyIndex ?? 0;
+      }
+    } else if (initialWorkflowState) {
+      // Fallback to legacy signer index if no email provided
+      const legacyIndex = getSignerIndexFromLegacy(initialWorkflowState);
+      currentSignerIndex = legacyIndex ?? 0;
+      console.log('⚠️ PDFEditor - Using legacy signer index (no email):', currentSignerIndex);
+    }
 
-      // If we're starting at signer2 (index 1), we need to advance past signer1
-      if (signerIndex > 0) {
-        // Mark signer1 as completed and advance
-        workflow.dispatch({ type: 'COMPLETE_SIGNER', signerId: 'signer-0' });
+    console.log('🔧 PDFEditor - Initializing workflow with signer index:', {
+      currentSignerIndex,
+      recipientCount: recipients.length,
+      currentUserEmail
+    });
+
+    // Dispatch START_SIGNING to properly set up signer state
+    workflow.dispatch({
+      type: 'START_SIGNING',
+      signerCount: recipients.length || 2,
+      documentId: sessionStorage.getItem('currentDocumentId') || undefined,
+      signingOrder: recipients.map((r, i) => `signer-${i}`)
+    });
+
+    // Advance workflow to the matched signer index
+    if (currentSignerIndex > 0) {
+      // Mark all previous signers as completed and advance
+      for (let i = 0; i < currentSignerIndex; i++) {
+        workflow.dispatch({ type: 'COMPLETE_SIGNER', signerId: `signer-${i}` });
         workflow.dispatch({ type: 'ADVANCE_TO_NEXT_SIGNER' });
       }
     }
@@ -348,6 +378,17 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Fields state
   const [fields, setFields] = useState<FieldFormType[]>(initialFields || []);
 
+  // Sync fields state when initialFields prop changes (e.g., after filtering)
+  useEffect(() => {
+    if (initialFields && initialFields.length > 0) {
+      console.log('🔄 PDFEditor - Syncing fields from initialFields prop:', {
+        currentFieldCount: fields.length,
+        newFieldCount: initialFields.length,
+        fieldsChanged: fields.length !== initialFields.length
+      });
+      setFields(initialFields);
+    }
+  }, [initialFields?.length]);
 
   // Initialize signedFields with pre-filled values from initialFields
   useEffect(() => {
