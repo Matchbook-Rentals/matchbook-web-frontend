@@ -200,6 +200,9 @@ export function useWorkflowStateMachine(
 
         case 'START_SIGNING':
           recordPhaseTransition(currentPhase, 'signing');
+          // Generate default signing order if not provided
+          const signingOrder = transition.signingOrder ||
+            Array.from({ length: transition.signerCount }, (_, i) => `signer-${i}`);
           return {
             ...prevState,
             phase: 'signing',
@@ -208,7 +211,7 @@ export function useWorkflowStateMachine(
               currentSignerIndex: 0,
               totalSigners: transition.signerCount,
               signersCompleted: [],
-              signingOrder: [] // Should be populated with actual signer IDs
+              signingOrder
             },
             isTransitioning: false
           };

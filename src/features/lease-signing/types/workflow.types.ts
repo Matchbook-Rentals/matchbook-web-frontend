@@ -35,7 +35,7 @@ export type WorkflowTransition =
   | { type: 'START_DOCUMENT_CREATION'; templateId: string }
   | { type: 'COMPLETE_TEMPLATE'; templateId: string }
   | { type: 'COMPLETE_DOCUMENT'; documentId: string }
-  | { type: 'START_SIGNING'; documentId: string; signerCount: number }
+  | { type: 'START_SIGNING'; documentId: string; signerCount: number; signingOrder?: string[] }
   | { type: 'COMPLETE_SIGNER'; signerId: string }
   | { type: 'ADVANCE_TO_NEXT_SIGNER' }
   | { type: 'COMPLETE_ALL_SIGNING' }
