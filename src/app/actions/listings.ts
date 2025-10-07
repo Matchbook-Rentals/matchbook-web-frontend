@@ -5,6 +5,7 @@ import { checkAuth } from '@/lib/auth-utils';
 import { ListingAndImages } from "@/types/";
 import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
 import { statesInRadiusData } from "@/constants/state-radius-data";
+import { STATE_CODE_MAPPING } from "@/constants/state-code-mapping";
 import { differenceInDays, isValid } from 'date-fns'; // Import date-fns for validation
 import { capNumberValue } from '@/lib/number-validation';
 import { revalidatePath } from "next/cache";
@@ -115,34 +116,80 @@ export const pullListingsFromDb = async (
 
     const trimmedState = state.trim().toUpperCase(); // Trim and ensure uppercase for lookup
 
+    // Resolve state to abbreviation with multiple fallback strategies
+    const resolveStateAbbreviation = (stateInput: string): string | null => {
+      // 1. Try direct lookup (already a valid state abbreviation like "NY")
+      const directMatch = statesInRadiusData.find(item => item.state === stateInput);
+      if (directMatch) return stateInput;
+
+      // 2. Try mapping full state name to abbreviation (e.g., "NEW YORK" → "NY")
+      const abbreviation = STATE_CODE_MAPPING[stateInput];
+      if (abbreviation) {
+        const abbreviationMatch = statesInRadiusData.find(item => item.state === abbreviation);
+        if (abbreviationMatch) return abbreviation;
+      }
+
+      // 3. No valid state found - return null to skip state filtering
+      return null;
+    };
+
+    const resolvedState = resolveStateAbbreviation(trimmedState);
+
     // Find the states to include in the search
-    const stateRadiusInfo = statesInRadiusData.find(item => item.state === trimmedState);
-    const statesToSearch = stateRadiusInfo ? stateRadiusInfo.statesInRadius : [trimmedState]; // Fallback to only the input state if not found
+    let statesToSearch: string[] | null = null;
+    if (resolvedState) {
+      const stateRadiusInfo = statesInRadiusData.find(item => item.state === resolvedState);
+      statesToSearch = stateRadiusInfo ? stateRadiusInfo.statesInRadius : [resolvedState];
+    }
+    // If resolvedState is null, statesToSearch remains null and we skip state filtering
 
     // Log the states being used for filtering
 
     // Calculate trip length in days and months
     const tripLengthDays: number = Math.max(1, differenceInDays(endDate, startDate)); // Accurate days, min 1 to handle short trips
     // Floor months for inclusive min matching (e.g., 1.99 months floors to 1 to match 1-month listings)
-    const tripLengthMonths: number = Math.max(1, Math.floor(tripLengthDays / 30.44)); 
+    const tripLengthMonths: number = Math.max(1, Math.floor(tripLengthDays / 30.44));
 
-    // First, filter by states (indexed) and then get listing IDs and distances within the radius
-    // Use the raw query for combined state, distance filtering.
-    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
-      SELECT l.id,
-      (${earthRadiusMiles} * acos(
-        cos(radians(${lat})) * cos(radians(l.latitude)) *
-        cos(radians(l.longitude) - radians(${lng})) +
-        sin(radians(${lat})) * sin(radians(l.latitude))
-      )) AS distance
-      FROM Listing l
-      WHERE l.state IN (${ Prisma.join(statesToSearch) }) -- Filter by states first
-        AND l.approvalStatus = 'approved' -- Only include approved listings
-        AND l.markedActiveByUser = true -- Only include listings marked active by host
-        AND l.deletedAt IS NULL -- Exclude soft-deleted listings
-      HAVING distance <= ${radiusMiles} -- Then filter by distance
-      ORDER BY distance
-    `;
+    // Query functions for getting listings with distance calculations
+    const queryWithStateInfo = async (states: string[]) => {
+      return await prisma.$queryRaw<{ id: string, distance: number }[]>`
+        SELECT l.id,
+        (${earthRadiusMiles} * acos(
+          cos(radians(${lat})) * cos(radians(l.latitude)) *
+          cos(radians(l.longitude) - radians(${lng})) +
+          sin(radians(${lat})) * sin(radians(l.latitude))
+        )) AS distance
+        FROM Listing l
+        WHERE l.state IN (${ Prisma.join(states) }) -- Filter by states first
+          AND l.approvalStatus = 'approved' -- Only include approved listings
+          AND l.markedActiveByUser = true -- Only include listings marked active by host
+          AND l.deletedAt IS NULL -- Exclude soft-deleted listings
+        HAVING distance <= ${radiusMiles} -- Then filter by distance
+        ORDER BY distance
+      `;
+    };
+
+    const queryNoStateInfo = async () => {
+      return await prisma.$queryRaw<{ id: string, distance: number }[]>`
+        SELECT l.id,
+        (${earthRadiusMiles} * acos(
+          cos(radians(${lat})) * cos(radians(l.latitude)) *
+          cos(radians(l.longitude) - radians(${lng})) +
+          sin(radians(${lat})) * sin(radians(l.latitude))
+        )) AS distance
+        FROM Listing l
+        WHERE l.approvalStatus = 'approved' -- Only include approved listings
+          AND l.markedActiveByUser = true -- Only include listings marked active by host
+          AND l.deletedAt IS NULL -- Exclude soft-deleted listings
+        HAVING distance <= ${radiusMiles} -- Then filter by distance
+        ORDER BY distance
+      `;
+    };
+
+    // Execute the appropriate query based on whether we have valid state information
+    const listingsWithDistance = statesToSearch
+      ? await queryWithStateInfo(statesToSearch)
+      : await queryNoStateInfo();
 
     if (!listingsWithDistance || listingsWithDistance.length === 0) {
       return [];
