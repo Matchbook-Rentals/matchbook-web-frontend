@@ -149,24 +149,20 @@ export const FieldContent: React.FC<FieldContentProps> = ({ field, recipient, si
       }
     };
 
-    const getRecipientLabel = (title?: string, recipientIndex?: number) => {
+    const getRecipientLabel = (title?: string, recipientIndex?: number, recipientName?: string) => {
       // Handle Host and Primary Renter
       if (title === 'Host') return 'Host';
       if (title === 'Primary Renter') return 'Primary Renter';
-      
-      // Handle additional recipients by position (3rd, 4th, etc.)
+
+      // Use actual recipient name for indices 2+
       if (typeof recipientIndex === 'number' && recipientIndex >= 2) {
-        const position = recipientIndex + 1;
-        const suffix = position === 3 ? 'rd' : position === 4 ? 'th' : position === 5 ? 'th' : 
-                     position === 6 ? 'th' : position === 7 ? 'th' : position === 8 ? 'th' : 
-                     position === 9 ? 'th' : position === 10 ? 'th' : 'th';
-        return `${position}${suffix} Rec.`;
+        return recipientName || `Recipient ${recipientIndex + 1}`;
       }
-      
+
       return title || 'Recipient';
     };
 
-    const recipientLabel = getRecipientLabel(recipient.title, field.recipientIndex);
+    const recipientLabel = getRecipientLabel(recipient.title, field.recipientIndex, recipient.name);
     const fieldLabel = getFieldTypeLabel(field.type);
     
     textToDisplay = `${recipientLabel} ${fieldLabel}`;

@@ -7,6 +7,7 @@ import { FileText, User } from 'lucide-react';
 import { type Recipient } from '../RecipientManager';
 import { FieldFormType, MatchDetails } from '../types';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store';
+import { getFieldLabel as getFieldLabelUtil } from '@/utils/fieldLabelUtils';
 
 interface DocumentSidebarProps {
   tripMatchDetails: MatchDetails | null;
@@ -14,7 +15,6 @@ interface DocumentSidebarProps {
   fields: FieldFormType[];
   signedFieldsStore: typeof useSignedFieldsStore;
   navigateToField: (fieldId: string) => void;
-  getFieldLabel: (field: FieldFormType) => string;
 }
 
 export const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
@@ -23,7 +23,6 @@ export const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
   fields,
   signedFieldsStore,
   navigateToField,
-  getFieldLabel,
 }) => {
   return (
     <>
@@ -195,7 +194,7 @@ export const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
                     }
 
                     // For other fields, use the original logic
-                    return (field.fieldMeta?.label && field.fieldMeta.label !== 'Field') ? field.fieldMeta.label : getFieldLabel(field);
+                    return (field.fieldMeta?.label && field.fieldMeta.label !== 'Field') ? field.fieldMeta.label : getFieldLabelUtil(field, recipients);
                   };
 
                   return (

@@ -254,10 +254,11 @@ export const SignableField: React.FC<SignableFieldProps> = ({
     let signerName = '';
     if (recipient?.role === 'HOST') {
       signerName = 'Host';
-    } else if (recipient?.role === 'RENTER') {
-      signerName = 'Renter';
-    } else if (recipient?.title) {
-      signerName = recipient.title;
+    } else if (recipient?.role === 'RENTER' && recipientIndex === 1) {
+      signerName = 'Primary Renter';
+    } else if (recipient?.name) {
+      // Use actual recipient name (e.g., "2nd Renter", "3rd Renter")
+      signerName = recipient.name;
     } else {
       signerName = `Signer ${recipientIndex + 1}`;
     }

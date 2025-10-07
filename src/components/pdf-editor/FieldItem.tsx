@@ -50,9 +50,26 @@ export const FieldItem: React.FC<FieldItemProps> = ({
   const recipientIndex = field.recipientIndex ?? 0;
   // For invalid recipient indices, use default styles
   const recipientColors = useRecipientColors(recipientIndex);
-  const signerStyles = (recipientIndex < 0) ? 
-    { base: 'ring-gray-400', fieldItem: 'hover:ring-gray-500' } : 
+  const signerStyles = (recipientIndex < 0) ?
+    { base: 'ring-gray-400', fieldItem: 'hover:ring-gray-500' } :
     recipientColors;
+
+  // Helper function to get the border color for the recipient
+  const getRecipientBorderColor = () => {
+    const colorMap: Record<number, string> = {
+      0: '#0B6E6E', // host
+      1: '#fb8c00', // primaryRenter
+      2: 'rgb(59, 130, 246)', // blue
+      3: 'rgb(168, 85, 247)', // purple
+      4: 'rgb(34, 197, 94)', // green
+      5: 'rgb(239, 68, 68)', // red
+      6: 'rgb(236, 72, 153)', // pink
+      7: 'rgb(99, 102, 241)', // indigo
+      8: 'rgb(234, 179, 8)', // yellow
+      9: 'rgb(16, 185, 129)', // emerald
+    };
+    return colorMap[recipientIndex] || '#6B7280';
+  };
 
   // Calculate pixel positions from percentages
   const calculateDimensions = useCallback(() => {
@@ -166,13 +183,26 @@ export const FieldItem: React.FC<FieldItemProps> = ({
         )}
         onClick={handleFieldClick}
       >
-        <FieldContent 
-          field={field} 
+        <FieldContent
+          field={field}
           recipient={recipient}
           signedValue={signedValue}
           showValues={showValues}
         />
-        
+
+        {/* Field label in top-left corner - show when field has default value */}
+        {field.fieldMeta?.defaultValue && field.fieldMeta?.label && (
+          <div
+            className="absolute -top-2 -left-2 px-1.5 py-0.5 text-[10px] font-semibold text-white rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            style={{
+              backgroundColor: getRecipientBorderColor(),
+              zIndex: 201,
+            }}
+          >
+            {field.fieldMeta.label}
+          </div>
+        )}
+
         {/* Add sign date button - only show for signature fields */}
         {field.type === FieldType.SIGNATURE && onAddSignDate && (
           <button 
@@ -187,8 +217,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
 
         {/* Add initial date button - only show for initials fields */}
         {field.type === FieldType.INITIALS && onAddInitialDate && (
-          <button 
-            className="absolute -top-2 -left-2 h-5 bg-green-500 text-white rounded text-xs hover:bg-green-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200] px-2 gap-1"
+          <button
+            className="absolute -top-2 -left-2 h-5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200] px-2 gap-1"
             onClick={handleAddInitialDate}
             title="Add initial date field"
           >

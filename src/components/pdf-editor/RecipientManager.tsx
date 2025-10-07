@@ -1,9 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
   DropdownMenu, 
@@ -60,30 +58,32 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
   accordionState = true,
   onToggleAccordion,
 }) => {
-  const [isAdding, setIsAdding] = useState(false);
-  const [newRecipient, setNewRecipient] = useState({ name: '', email: '' });
+  // Helper to generate ordinal names (2nd, 3rd, 4th, etc.)
+  const getOrdinalName = (index: number): string => {
+    // First two are locked (Host, Primary Renter)
+    // Start counting from index 2
+    if (index < 2) return '';
 
-  const handleAddRecipient = () => {
-    if (newRecipient.name && newRecipient.email) {
-      const recipient: Recipient = {
-        id: `recipient-${Date.now()}`,
-        name: newRecipient.name,
-        email: newRecipient.email,
-        color: getRecipientColor(recipients.length),
-      };
-      
-      onRecipientsChange([...recipients, recipient]);
-      setNewRecipient({ name: '', email: '' });
-      setIsAdding(false);
-      
-      // Auto-select the newly added recipient
-      onSelectRecipient?.(recipient.id);
-    }
+    const ordinalNum = index; // 2 becomes "2nd", 3 becomes "3rd", etc.
+    const suffix = ['th', 'st', 'nd', 'rd'];
+    const v = ordinalNum % 100;
+    return ordinalNum + (suffix[(v - 20) % 10] || suffix[v] || suffix[0]) + ' Renter';
   };
 
-  const handleCancel = () => {
-    setNewRecipient({ name: '', email: '' });
-    setIsAdding(false);
+  const handleAddRecipient = () => {
+    const newIndex = recipients.length;
+    const recipient: Recipient = {
+      id: `recipient-${Date.now()}`,
+      name: getOrdinalName(newIndex),
+      email: `renter-${newIndex}@template.placeholder`,
+      color: getRecipientColor(newIndex),
+      role: 'RENTER'
+    };
+
+    onRecipientsChange([...recipients, recipient]);
+
+    // Auto-select the newly added recipient
+    onSelectRecipient?.(recipient.id);
   };
 
   const handleRemoveRecipient = (id: string) => {
@@ -100,54 +100,6 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
   const selectedRecipientData = getSelectedRecipient();
 
   const renderContent = () => {
-    if (isAdding) {
-      return (
-        <div className="mb-4">
-          <div className="space-y-3 p-3 border-2 border-dashed border-gray-300 rounded-lg">
-          <div>
-            <Label htmlFor="recipient-name" className="text-sm">Name</Label>
-            <Input
-              id="recipient-name"
-              value={newRecipient.name}
-              onChange={(e) => setNewRecipient({ ...newRecipient, name: e.target.value })}
-              placeholder="Enter recipient name"
-              className="mt-1"
-            />
-          </div>
-          <div>
-            <Label htmlFor="recipient-email" className="text-sm">Email</Label>
-            <Input
-              id="recipient-email"
-              type="email"
-              value={newRecipient.email}
-              onChange={(e) => setNewRecipient({ ...newRecipient, email: e.target.value })}
-              placeholder="Enter recipient email"
-              className="mt-1"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button 
-              size="sm" 
-              onClick={handleAddRecipient}
-              disabled={!newRecipient.name || !newRecipient.email}
-              className="flex-1"
-            >
-              Add
-            </Button>
-            <Button 
-              size="sm" 
-              variant="outline" 
-              onClick={handleCancel}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </div>
-      );
-    }
-
     return (
       <div className="mb-4">
       <DropdownMenu>
@@ -226,9 +178,9 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
           )}
           
           <DropdownMenuSeparator />
-          
+
           <DropdownMenuItem
-            onClick={() => setIsAdding(true)}
+            onClick={handleAddRecipient}
             className="flex items-center gap-2 p-3"
           >
             <Plus className="w-4 h-4" />

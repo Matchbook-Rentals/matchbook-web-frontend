@@ -46,9 +46,9 @@ const getFieldLabel = (fieldType: FieldType, recipients?: Recipient[], selectedR
 
   const selectedRecipient = recipients.find(r => r.id === selectedRecipientId);
   const recipientIndex = recipients.findIndex(r => r.id === selectedRecipientId);
-  
-  // Determine if this is Host (index 0) or Renter (index 1)
-  const recipientLabel = recipientIndex === 0 ? 'Host' : recipientIndex === 1 ? 'Renter' : selectedRecipient?.name || 'Signer';
+
+  // Determine if this is Host (index 0), Primary Renter (index 1), or use recipient name for 2+
+  const recipientLabel = recipientIndex === 0 ? 'Host' : recipientIndex === 1 ? 'Primary Renter' : selectedRecipient?.name || 'Signer';
   
   switch (fieldType) {
     case FieldType.SIGNATURE:

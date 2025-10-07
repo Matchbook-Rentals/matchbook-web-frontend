@@ -1,12 +1,23 @@
 import { FieldFormType, FieldType, FRIENDLY_FIELD_TYPE } from '@/components/pdf-editor/types';
 
+export interface Recipient {
+  id: string;
+  name: string;
+  email: string;
+  color: string;
+  title?: string;
+  role?: 'HOST' | 'RENTER' | 'OTHER';
+  isLocked?: boolean;
+}
+
 /**
  * Generates a human-readable label for a PDF field based on its type and recipient.
  *
  * @param field - The field to generate a label for
+ * @param recipients - Optional array of recipients to get actual names
  * @returns A descriptive label string for the field
  */
-export function getFieldLabel(field: FieldFormType): string {
+export function getFieldLabel(field: FieldFormType, recipients?: Recipient[]): string {
   // Add debug logging for field type issues
   if (!field.type) {
     console.warn('Field has no type:', field);
@@ -19,6 +30,9 @@ export function getFieldLabel(field: FieldFormType): string {
     recipientPrefix = 'Host';
   } else if (field.recipientIndex === 1) {
     recipientPrefix = 'Primary Renter';
+  } else if (field.recipientIndex !== undefined && recipients && recipients[field.recipientIndex]) {
+    // Use actual recipient name for indices 2+
+    recipientPrefix = recipients[field.recipientIndex].name;
   } else if (field.signerEmail) {
     // Fallback to signerEmail analysis
     if (field.signerEmail.includes('host')) {

@@ -299,6 +299,19 @@ export const useStepCompletion = (params: UseStepCompletionParams) => {
           const currentSignerId = recipients[currentSignerIndex]?.id || `signer-${currentSignerIndex}`;
           workflow.completeCurrentSigner(currentSignerId);
           console.log('✅ All signers completed, document finished');
+
+          // Show success toast and redirect to leases list
+          brandAlert(
+            'Template created successfully!',
+            'success',
+            'Success'
+          );
+
+          // Redirect to leases list
+          const redirectUrl = `/app/host/${listingId}/leases`;
+          console.log('🔄 Redirecting to:', redirectUrl);
+          router.push(redirectUrl);
+          return; // Exit early to prevent success phase rendering
         }
 
         // Reset validation states for the next step
