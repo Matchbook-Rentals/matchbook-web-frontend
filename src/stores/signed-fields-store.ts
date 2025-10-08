@@ -20,14 +20,23 @@ export const useSignedFieldsStore = create<SignedFieldsState>((set, get) => ({
       fieldId,
       value: value ? 'SIGNED' : 'CLEARED'
     });
-    
-    set((state) => ({
-      signedFields: {
-        ...state.signedFields,
-        [fieldId]: value
+
+    set((state) => {
+      // If value is null or undefined, remove the field entirely
+      if (value === null || value === undefined) {
+        const { [fieldId]: _, ...rest } = state.signedFields;
+        return { signedFields: rest };
       }
-    }));
-    
+
+      // Otherwise, set the field value
+      return {
+        signedFields: {
+          ...state.signedFields,
+          [fieldId]: value
+        }
+      };
+    });
+
     console.log('🏪 Zustand - Field updated:', fieldId in get().signedFields);
   },
 

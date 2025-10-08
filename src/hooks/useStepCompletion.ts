@@ -295,21 +295,27 @@ export const useStepCompletion = (params: UseStepCompletionParams) => {
           workflow.completeCurrentSigner(currentSignerId);
           console.log(`✅ Signer ${currentSignerIndex + 1} completed, workflow advancing`);
         } else if (workflow.isSigningPhase() && !workflow.isFirstSigner()) {
-          // Complete final signer and transition to success
+          // Complete final signer
           const currentSignerId = recipients[currentSignerIndex]?.id || `signer-${currentSignerIndex}`;
           workflow.completeCurrentSigner(currentSignerId);
           console.log('✅ All signers completed, document finished');
 
-          // Show success toast and redirect to leases list
+          // Check if we're in renter mode (onFinish callback provided)
+          if (onFinish) {
+            console.log('✅ Renter mode: calling onFinish callback');
+            onFinish('Document Completion');
+            return; // Let parent handle next steps (e.g., payment screen)
+          }
+
+          // Host mode: Show success toast and redirect to leases list
           brandAlert(
             'Template created successfully!',
             'success',
             'Success'
           );
 
-          // Redirect to leases list
           const redirectUrl = `/app/host/${listingId}/leases`;
-          console.log('🔄 Redirecting to:', redirectUrl);
+          console.log('🔄 Host mode: Redirecting to:', redirectUrl);
           router.push(redirectUrl);
           return; // Exit early to prevent success phase rendering
         }

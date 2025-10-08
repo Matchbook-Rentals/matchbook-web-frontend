@@ -926,7 +926,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                 <SigningSidebar
                   fields={documentFields}
                   recipients={documentRecipients}
-                  currentSignerIndex={parseInt(sessionStorage.getItem('currentRenterRecipientIndex') || '1')}
                   signedFields={fieldsStatus}
                   onNavigateToField={(fieldId) => {
                     // Navigate to field functionality can be added here
@@ -1085,6 +1084,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                           });
                         }}
                         onFinish={handleDocumentSigningComplete}
+                        onFieldSign={handleFieldSign}
                       />
                     </div>
                     );
