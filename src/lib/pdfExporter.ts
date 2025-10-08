@@ -44,12 +44,25 @@ export async function exportPDFWithFields(
 
       // Get the signed value for this field
       const signedValue = signedValues[field.formId];
-      const displayText = signedValue || '';
+
+      // Extract the actual value - handle both string and object formats
+      let displayText = '';
+      if (signedValue) {
+        if (typeof signedValue === 'string') {
+          displayText = signedValue;
+        } else if (typeof signedValue === 'object' && signedValue !== null) {
+          // Handle object format (e.g., {type: 'drawn', data: 'base64...'} or {data: '...'})
+          displayText = (signedValue as any).data || (signedValue as any).value || String(signedValue);
+        } else {
+          // Convert other types to string
+          displayText = String(signedValue);
+        }
+      }
 
       // Draw field border if requested
       if (showFieldBorders) {
         const recipient = recipients.find(r => r.id === field.signerEmail);
-        const borderColor = recipient?.color ? 
+        const borderColor = recipient?.color ?
           rgb(
             parseInt(recipient.color.slice(1, 3), 16) / 255,
             parseInt(recipient.color.slice(3, 5), 16) / 255,
@@ -69,25 +82,64 @@ export async function exportPDFWithFields(
 
       // Draw the field content
       if (displayText && includeLabels) {
-        // Calculate appropriate font size
-        const maxFontSize = Math.min(height * 0.6, 12);
-        const fontSize = Math.max(8, maxFontSize);
-        
-        // Choose font based on field type
-        const fieldFont = field.type === 'SIGNATURE' ? boldFont : font;
-        
-        // Calculate text positioning (centered)
-        const textWidth = fieldFont.widthOfTextAtSize(displayText, fontSize);
-        const textX = x + Math.max(0, (width - textWidth) / 2);
-        const textY = y + (height - fontSize) / 2;
+        // Check if this is a base64 image (drawn signature)
+        const isBase64Image = typeof displayText === 'string' &&
+          displayText.startsWith('data:image/png;base64,');
 
-        page.drawText(displayText, {
-          x: textX,
-          y: textY,
-          size: fontSize,
-          font: fieldFont,
-          color: rgb(0, 0, 0),
-        });
+        if (isBase64Image) {
+          try {
+            // Extract base64 data (remove the data URL prefix)
+            const base64Data = displayText.replace(/^data:image\/png;base64,/, '');
+            const imageBytes = Buffer.from(base64Data, 'base64');
+
+            // Embed the signature image
+            const signatureImage = await pdfDoc.embedPng(imageBytes);
+            const imageDims = signatureImage.scale(1);
+
+            // Calculate scaling to fit within field bounds while maintaining aspect ratio
+            const scaleX = width / imageDims.width;
+            const scaleY = height / imageDims.height;
+            const scale = Math.min(scaleX, scaleY, 1); // Don't upscale
+
+            const scaledWidth = imageDims.width * scale;
+            const scaledHeight = imageDims.height * scale;
+
+            // Center the image within the field
+            const imageX = x + (width - scaledWidth) / 2;
+            const imageY = y + (height - scaledHeight) / 2;
+
+            page.drawImage(signatureImage, {
+              x: imageX,
+              y: imageY,
+              width: scaledWidth,
+              height: scaledHeight,
+            });
+          } catch (error) {
+            console.error('Error embedding signature image:', error);
+            // Fall back to text rendering if image embedding fails
+          }
+        } else {
+          // Render as text (typed signatures or regular text fields)
+          // Calculate appropriate font size
+          const maxFontSize = Math.min(height * 0.6, 12);
+          const fontSize = Math.max(8, maxFontSize);
+
+          // Choose font based on field type
+          const fieldFont = field.type === 'SIGNATURE' ? boldFont : font;
+
+          // Calculate text positioning (centered)
+          const textWidth = fieldFont.widthOfTextAtSize(displayText, fontSize);
+          const textX = x + Math.max(0, (width - textWidth) / 2);
+          const textY = y + (height - fontSize) / 2;
+
+          page.drawText(displayText, {
+            x: textX,
+            y: textY,
+            size: fontSize,
+            font: fieldFont,
+            color: rgb(0, 0, 0),
+          });
+        }
       }
     }
 
