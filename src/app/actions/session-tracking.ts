@@ -4,6 +4,8 @@ import { cookies } from 'next/headers';
 import { currentUser } from '@clerk/nextjs/server';
 import prismadb from '@/lib/prismadb';
 import { logger } from '@/lib/logger';
+import { createNotification } from '@/app/actions/notifications';
+import { buildNotificationEmailData } from '@/lib/notification-builders';
 
 const SESSION_COOKIE_NAME = 'session-tracked';
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -76,6 +78,25 @@ export async function updateUserLoginTimestamp(): Promise<void> {
         },
       });
       logger.info('Session tracking: Created user via fallback', { userId: clerkUser.id });
+
+      // Send welcome notification
+      try {
+        const emailData = buildNotificationEmailData('welcome_renter', {});
+        await createNotification({
+          userId: clerkUser.id,
+          content: 'Welcome to MatchBook!',
+          actionType: 'welcome_renter',
+          url: '/app/rent/searches',
+          read: false,
+          emailData
+        });
+        logger.info('Session tracking: Welcome notification sent to fallback user', { userId: clerkUser.id });
+      } catch (emailError) {
+        logger.error('Session tracking: Failed to send welcome notification', {
+          userId: clerkUser.id,
+          error: emailError instanceof Error ? emailError.message : 'Unknown error'
+        });
+      }
     }
 
     // Update the lastLogin timestamp

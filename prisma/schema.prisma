@@ -164,32 +164,32 @@ model UserPreferences {
 
   // Email notification preferences
   // Messages & Communication
-  emailNewMessageNotifications      Boolean @default(false)
-  emailNewConversationNotifications Boolean @default(false)
-  
-  // Applications & Matching  
-  emailApplicationReceivedNotifications Boolean @default(false)
-  emailApplicationApprovedNotifications Boolean @default(false)
-  emailApplicationDeclinedNotifications Boolean @default(false)
-  
+  emailNewMessageNotifications      Boolean @default(true)
+  emailNewConversationNotifications Boolean @default(true)
+
+  // Applications & Matching
+  emailApplicationReceivedNotifications Boolean @default(true)
+  emailApplicationApprovedNotifications Boolean @default(true)
+  emailApplicationDeclinedNotifications Boolean @default(true)
+
   // Reviews & Verification
-  emailSubmitHostReviewNotifications    Boolean @default(false)
-  emailSubmitRenterReviewNotifications  Boolean @default(false)
-  emailLandlordInfoRequestNotifications Boolean @default(false)
-  emailVerificationCompletedNotifications Boolean @default(false)
-  
+  emailSubmitHostReviewNotifications    Boolean @default(true)
+  emailSubmitRenterReviewNotifications  Boolean @default(true)
+  emailLandlordInfoRequestNotifications Boolean @default(true)
+  emailVerificationCompletedNotifications Boolean @default(true)
+
   // Bookings & Stays
-  emailBookingCompletedNotifications  Boolean @default(false)
-  emailBookingCanceledNotifications   Boolean @default(false)
-  emailMoveOutUpcomingNotifications   Boolean @default(false)
-  emailMoveInUpcomingNotifications    Boolean @default(false)
-  
+  emailBookingCompletedNotifications  Boolean @default(true)
+  emailBookingCanceledNotifications   Boolean @default(true)
+  emailMoveOutUpcomingNotifications   Boolean @default(true)
+  emailMoveInUpcomingNotifications    Boolean @default(true)
+
   // Payments
-  emailPaymentSuccessNotifications Boolean @default(false)
-  emailPaymentFailedNotifications  Boolean @default(false)
-  
+  emailPaymentSuccessNotifications Boolean @default(true)
+  emailPaymentFailedNotifications  Boolean @default(true)
+
   // External Communications
-  emailOffPlatformHostNotifications Boolean @default(false)
+  emailOffPlatformHostNotifications Boolean @default(true)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

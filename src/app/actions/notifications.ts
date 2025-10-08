@@ -42,7 +42,7 @@ function getNotificationPreferenceField(actionType: string): string | null {
     
     // External Communications
     'off_platform_host': 'emailOffPlatformHostNotifications',
-    
+
     // Lease Signing
     'lease_signature_required': 'emailApplicationApprovedNotifications', // Reuse existing preference
     'lease_fully_executed': 'emailBookingCompletedNotifications', // Reuse existing preference
@@ -82,6 +82,47 @@ async function checkAuth() {
 // This prevents it from being exposed as a public server action
 
 async function sendNotificationEmailAsync(notification: Notification, customEmailData?: any) {
+  // Welcome emails always send (one-time onboarding, no preference needed)
+  if (notification.actionType === 'welcome_renter') {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: notification.userId },
+        select: {
+          email: true,
+          firstName: true,
+          verifiedAt: true
+        }
+      });
+
+      if (user?.email) {
+        const emailDataBuilt = buildNotificationEmailData(
+          notification.actionType,
+          {
+            content: notification.content,
+            url: notification.url
+          },
+          user,
+          customEmailData
+        );
+
+        const subject = getNotificationEmailSubject(notification.actionType, customEmailData);
+
+        const emailResult = await sendNotificationEmail({
+          to: user.email,
+          subject,
+          emailData: emailDataBuilt
+        });
+
+        if (!emailResult.success) {
+          console.error('Failed to send welcome notification email:', emailResult.error);
+        }
+      }
+    } catch (emailError) {
+      console.error('Error sending welcome notification email:', emailError);
+    }
+    return;
+  }
+
   const preferenceField = getNotificationPreferenceField(notification.actionType);
 
   if (preferenceField) {

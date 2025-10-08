@@ -3,6 +3,8 @@ import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { logger } from '@/lib/logger';
+import { createNotification } from '@/app/actions/notifications';
+import { buildNotificationEmailData } from '@/lib/notification-builders';
 
 export async function POST(req: Request) {
   const startTime = Date.now();
@@ -98,6 +100,29 @@ export async function POST(req: Request) {
         userId: id,
         email: email_addresses[0]?.email_address,
       });
+
+      // Send welcome notification
+      console.log('📧 [Clerk Webhook] Sending welcome notification...');
+      try {
+        const emailData = buildNotificationEmailData('welcome_renter', {});
+        await createNotification({
+          userId: id,
+          content: 'Welcome to MatchBook!',
+          actionType: 'welcome_renter',
+          url: '/app/rent/searches',
+          read: false,
+          emailData
+        });
+        console.log('✅ [Clerk Webhook] Welcome notification sent successfully');
+        logger.info('Welcome notification sent to new user', { userId: id });
+      } catch (emailError) {
+        // Don't fail webhook if email fails
+        console.error('❌ [Clerk Webhook] Error sending welcome notification:', emailError);
+        logger.error('Failed to send welcome notification', {
+          userId: id,
+          error: emailError instanceof Error ? emailError.message : 'Unknown error'
+        });
+      }
     } catch (error) {
       console.error('❌ [Clerk Webhook] Error creating user:', error);
       console.error('   Error type:', error instanceof Error ? error.name : typeof error);
