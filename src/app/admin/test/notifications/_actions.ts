@@ -196,7 +196,15 @@ export async function sendTestNotification({
           listingTitle
         })
         break
-        
+
+      case 'listing_approved':
+        notificationContent = `Your listing "${listingTitle}" is now live on MatchBook!`
+        notificationUrl = '/app/host-dashboard?tab=calendar'
+        emailData = buildNotificationEmailData('listing_approved', {
+          listingTitle
+        })
+        break
+
       case 'ADMIN_INFO':
         notificationContent = messageContent || 'Important information from MatchBook'
         notificationUrl = '/app/dashboard'

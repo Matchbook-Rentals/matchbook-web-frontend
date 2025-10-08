@@ -3,6 +3,7 @@
 import prisma from '@/lib/prismadb'
 import { checkAdminAccess } from '@/utils/roles'
 import { revalidatePath } from 'next/cache'
+import { createNotification } from '@/app/actions/notifications'
 
 const DEFAULT_PAGE_SIZE = 9;
 
@@ -174,12 +175,36 @@ export async function approveRejectListing(
     where: {
       id: listingId
     },
-    data: updateData
+    data: updateData,
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true
+        }
+      }
+    }
   })
+
+  // Send notification to host when listing is approved
+  if (action === 'approve' && listing.user) {
+    await createNotification({
+      userId: listing.userId,
+      content: `Your listing "${listing.title}" is now live on MatchBook!`,
+      url: '/app/host-dashboard?tab=calendar',
+      actionType: 'listing_approved',
+      actionId: listingId,
+      emailData: {
+        listingTitle: listing.title
+      }
+    })
+  }
 
   revalidatePath('/admin/listing-approval')
   revalidatePath(`/admin/listing-approval/${listingId}`)
-  
+
   return listing
 }
 
