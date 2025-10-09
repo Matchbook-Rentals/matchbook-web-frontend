@@ -477,12 +477,6 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                           onClientUploadComplete={(res) => {
                             console.log('✅ Income upload complete:', res);
                             handleIncomeUploadFinish(index)(res);
-                            
-                            toast({
-                              title: "Upload Successful",
-                              description: "Income document uploaded successfully.",
-                              variant: "default"
-                            });
                           }}
                           onUploadError={(error) => {
                             console.error("💥 Income upload error:", error);

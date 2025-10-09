@@ -153,16 +153,10 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
     // Handle completion status changes
     if (result.success && result.completionStatus) {
       if (result.completionStatus.statusChanged) {
-        if (result.completionStatus.isComplete) {
-          toast({
-            title: "Application Complete! 🎉",
-            description: "All required information has been provided",
-            duration: 4000,
-          });
-        } else if (result.completionStatus.missingRequirements?.length > 0) {
+        if (!result.completionStatus.isComplete && result.completionStatus.missingRequirements?.length > 0) {
           const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-          const more = result.completionStatus.missingRequirements.length > 3 
-            ? ` and ${result.completionStatus.missingRequirements.length - 3} more` 
+          const more = result.completionStatus.missingRequirements.length > 3
+            ? ` and ${result.completionStatus.missingRequirements.length - 3} more`
             : '';
           toast({
             title: "Application Incomplete",
@@ -206,7 +200,13 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
         idPhotos: updatedPhotos
       };
       setIds([updatedId, ...ids.slice(1)]);
-      
+
+      // Also clean up verificationImages for backward compatibility
+      const updatedVerificationImages = verificationImages.filter(
+        img => img.category !== 'Identification' || img.id !== photo.customId
+      );
+      setVerificationImages(updatedVerificationImages);
+
       // If photo exists in database, delete it
       if (photo.id) {
         const result = await deleteIDPhoto(photo.id);
@@ -514,12 +514,6 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                         onClientUploadComplete={async (res) => {
                           console.log('✅ ID upload complete:', res);
                           handleUploadFinish(res);
-                          
-                          toast({
-                            title: "Upload Successful",
-                            description: `Successfully uploaded ${res.length} ID photo${res.length !== 1 ? 's' : ''}.`,
-                            variant: "default"
-                          });
                         }}
                         onUploadError={(error) => {
                           console.error("💥 ID upload error:", error);
