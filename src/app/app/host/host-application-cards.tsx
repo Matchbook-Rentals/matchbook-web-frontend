@@ -64,10 +64,9 @@ export default function HostApplicationCards({
 
     const hasStripeAccount = !!userData.stripeAccountId;
     const stripeComplete = userData.stripeChargesEnabled && userData.stripeDetailsSubmitted;
-    const hostTermsAgreed = !!userData.agreedToHostTerms;
     const identityVerified = !!userData.medallionIdentityVerified;
 
-    return hasStripeAccount && stripeComplete && hostTermsAgreed && identityVerified;
+    return hasStripeAccount && stripeComplete && identityVerified;
   };
 
   const onboardingComplete = isOnboardingComplete(hostUserData);
