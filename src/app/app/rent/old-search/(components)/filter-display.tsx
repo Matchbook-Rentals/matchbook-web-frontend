@@ -257,33 +257,9 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "", on
   const numFiltered = totalListings - totalResults;
   
 
-  // Show results with "No filters" badge when no filters are active
+  // Hide component entirely when no filters are active
   if (activeFilters.length === 0) {
-    return (
-      <div className={`w-full space-y-3 mb-4 ${className}`}>
-        {/* Results row */}
-        <div className="flex w-full items-center justify-start">
-          <div className="text-sm text-gray-600">
-            {totalResults.toLocaleString()} Results
-          </div>
-        </div>
-
-        {/* No filters card - styled like active filters */}
-        <Card className="flex w-full items-center justify-between p-3 rounded-lg border border-gray-200">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge
-              variant="outline"
-              className="inline-flex items-center justify-center px-3 py-1.5 bg-gray-50 rounded-full border border-gray-300 hover:bg-gray-100 cursor-pointer text-gray-700 text-sm"
-              onClick={onOpenFilter}
-            >
-              <span className="font-medium text-gray-700 text-sm">
-                No Filters
-              </span>
-            </Badge>
-          </div>
-        </Card>
-      </div>
-    );
+    return null;
   }
   
   return (
@@ -297,7 +273,7 @@ export const FilterDisplay: React.FC<FilterDisplayProps> = ({ className = "", on
           )}
         </div>
       </div>
-      
+
       {/* Filter tags row */}
       <Card className="flex w-full items-center justify-between p-3 rounded-lg border border-gray-200">
         <div className="flex flex-wrap items-center gap-2">

@@ -16,7 +16,7 @@ import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
-import { useState, useEffect } from 'react'; // Import useState and useEffect
+import { useState, useEffect, useCallback, useRef } from 'react'; // Import useState and useEffect
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
@@ -82,6 +82,40 @@ const TripsPage: React.FC = () => {
   const tabTriggerTextStyles = 'text-[9px] px-0 md:px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
   const tabTriggerStyles = 'pt-1 sm:p-0 '
 
+  const tabContentRef = useRef<HTMLDivElement>(null);
+  const [tabContentHeight, setTabContentHeight] = useState<number | null>(null);
+
+  const updateTabContentHeight = useCallback(() => {
+    if (typeof window === 'undefined' || !tabContentRef.current) {
+      return;
+    }
+
+    const rect = tabContentRef.current.getBoundingClientRect();
+    const nextHeight = Math.max(window.innerHeight - rect.top, 0);
+
+    setTabContentHeight(prev => {
+      if (prev === null || Math.abs(prev - nextHeight) > 1) {
+        return nextHeight;
+      }
+      return prev;
+    });
+  }, []);
+
+  useEffect(() => {
+    updateTabContentHeight();
+    window.addEventListener('resize', updateTabContentHeight);
+    return () => {
+      window.removeEventListener('resize', updateTabContentHeight);
+    };
+  }, [updateTabContentHeight]);
+
+  useEffect(() => {
+    updateTabContentHeight();
+  }, [activeTab, isFilterOpen, updateTabContentHeight]);
+
+  const resolvedTabHeight =
+    tabContentHeight !== null ? `${Math.floor(tabContentHeight)}px` : undefined;
+
   const tabs: Tab[] = [
     //{
     {
@@ -96,7 +130,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'All Listings',
       value: 'allListings',
-      content: <MapView setIsFilterOpen={setIsFilterOpen} />,
+      content: <MapView setIsFilterOpen={setIsFilterOpen} contentHeight={tabContentHeight} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
       Icon: <ALlListingsIcon className='mt-1' />,
@@ -148,8 +182,18 @@ const TripsPage: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="w-full mt-4">
-        {tabs.find(tab => tab.value === activeTab)?.content}
+      <div
+        ref={tabContentRef}
+        className="mt-4 w-full flex-1"
+        style={
+          resolvedTabHeight
+            ? { minHeight: resolvedTabHeight, height: resolvedTabHeight, maxHeight: resolvedTabHeight }
+            : undefined
+        }
+      >
+        <div className="flex h-full min-h-0 flex-1 flex-col">
+          {tabs.find(tab => tab.value === activeTab)?.content}
+        </div>
       </div>
     </div>
   );

@@ -221,9 +221,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   useEffect(() => {
     const updateGridColumns = () => {
       const width = window.innerWidth;
-      if (width >= 1100) {
+      if (width >= 1400) {
         setGridColumns(3);
-      } else if (width >= 640) {
+      } else if (width >= 1000) {
         setGridColumns(2);
       } else {
         setGridColumns(1);
@@ -284,9 +284,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
           <ScrollArea
             ref={scrollAreaRef}
             className={`${isSingleListing ? '' : 'flex-grow'} w-[103%] sm:w-full mx-auto rounded-md pb-16 md:pb-2 pr-3`}
-            style={{ height: isSingleListing ? 'auto' : undefined }}
+            style={{ height: isSingleListing ? 'auto' : '100%' }}
           >
-            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center ${isSelectedListing ? 'sm:justify-items-center' : 'sm:grid-cols-2 sm:justify-items-start min-[1100px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-0' : 'pb-12'}`}>
+            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center ${isSelectedListing ? 'sm:justify-items-center' : 'min-[1000px]:grid-cols-2 min-[1000px]:justify-items-start min-[1400px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-0' : 'pb-12'}`}>
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
                 return (

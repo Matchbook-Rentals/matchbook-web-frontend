@@ -113,6 +113,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const isExternalUpdate = useRef<boolean>(false);
   const [retryCount, setRetryCount] = useState(0);
   const [mapInitFailed, setMapInitFailed] = useState(false);
+  const [containerHeight, setContainerHeight] = useState<string>(height);
 
   const { hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
@@ -153,6 +154,30 @@ const SearchMap: React.FC<SearchMapProps> = ({
   useEffect(() => {
     isFullscreenRef.current = isFullscreen;
   }, [isFullscreen]);
+
+  // ResizeObserver to handle dynamic height (e.g., when height="100%")
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { height: observedHeight } = entry.contentRect;
+        if (observedHeight > 0) {
+          setContainerHeight(`${observedHeight}px`);
+          // Trigger map resize to fit new container dimensions
+          if (mapRef.current) {
+            mapRef.current.resize();
+          }
+        }
+      }
+    });
+
+    resizeObserver.observe(mapContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   /** Update visible listings based on current map bounds */
   const updateVisibleMarkers = () => {
@@ -481,7 +506,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   // **Render**
   return (
-    <div style={{ height }} ref={mapContainerRef}>
+    <div style={{ height: height === '100%' ? '100%' : containerHeight }} ref={mapContainerRef}>
       {mapLoaded === true && mapRef.current && (
         <>
           <div className="absolute top-2 right-2 z-10 flex flex-col">

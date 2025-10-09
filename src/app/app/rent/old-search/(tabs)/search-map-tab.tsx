@@ -27,6 +27,7 @@ interface MapMarker {
 
 interface MapViewProps {
   setIsFilterOpen: Dispatch<SetStateAction<boolean>>;
+  contentHeight?: number | null;
 }
 
 const slideUpVariants = {
@@ -127,7 +128,7 @@ const getZoomLevel = (radius: number | undefined): number => {
   return 8; // Default for anything less than 20
 };
 
-const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
+const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, contentHeight = null }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -163,13 +164,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
 
-  // Height calculation state variables
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [startY, setStartY] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
-  const [calculatedHeight, setCalculatedHeight] = useState(0);
-  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
-
   useEffect(() => {
     setIsClient(true);
     const checkScreenSize = () => {
@@ -184,32 +178,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       window.removeEventListener('resize', checkScreenSize);
     };
   }, []);
-
-
-  useEffect(() => {
-    const setHeight = () => {
-      if (containerRef.current) {
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const newStartY = containerRect.top;
-        const newViewportHeight = window.innerHeight;
-        // Account for FilterDisplay height on desktop (approximately 100px)
-        const filterDisplayHeight = isDesktopView ? 115 : 0;
-        const newCalculatedHeight = newViewportHeight - newStartY - filterDisplayHeight;
-        setStartY(newStartY);
-        setViewportHeight(newViewportHeight);
-        setCalculatedHeight(newCalculatedHeight);
-        setCurrentComponentHeight(containerRef.current.offsetHeight);
-        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
-      }
-    };
-
-    setHeight();
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, [isDesktopView]);
 
   // Handle map mounting/unmounting with delay
   useEffect(() => {
@@ -397,18 +365,16 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const hasNoListingsAtAll = () => listings.length === 0;
   const isSingleListingSelected = () => visibleListingIds && visibleListingIds.length === 1 && clickedMarkerId !== null;
   const getSelectedListing = () => displayListings.find(listing => listing.id === visibleListingIds?.[0]);
-  const formatHeight = () => typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight;
-
   // Rendering helper functions for different listing states
   const renderSelectedListingDetails = () => {
     const selectedListing = getSelectedListing();
     if (!selectedListing) return null;
-    
+
     return (
       <SelectedListingDetails
         listing={selectedListing}
         customSnapshot={enhancedSnapshot}
-        height={formatHeight()}
+        height="100%"
       />
     );
   };
@@ -416,7 +382,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const renderListingsGrid = () => (
     <SearchListingsGrid
       listings={displayListings}
-      height={formatHeight()}
+      height={calculatedHeight ?? '100%'}
       customSnapshot={enhancedSnapshot}
       selectedListingId={clickedMarkerId}
     />
@@ -581,6 +547,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     return renderListingsGrid();
   };
 
+  const calculatedHeight =
+    contentHeight !== null && contentHeight > 0
+      ? `${Math.floor(contentHeight)}px`
+      : undefined;
 
   return (
     <>
@@ -589,15 +559,22 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         onOpenChange={setIsFilterDialogOpen}
         className="hidden"
       />
-      <div ref={containerRef} className="flex flex-col mx-auto w-full sm:px-2">
-        {isSingleListingSelected() ? 
-          renderSelectedListingFilterDisplay() : 
+      <div
+        className="flex flex-col mx-auto w-full sm:px-2 flex-1 min-h-0"
+        style={
+          calculatedHeight
+            ? { height: calculatedHeight, minHeight: calculatedHeight, maxHeight: calculatedHeight }
+            : undefined
+        }
+      >
+        {isSingleListingSelected() ?
+          renderSelectedListingFilterDisplay() :
           <FilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
         }
-        <div className="flex flex-col md:flex-row justify-start md:justify-center">
+        <div className="flex-1 flex flex-col md:flex-row justify-start md:justify-center overflow-hidden">
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (
-            <div className="w-full md:w-3/5 md:pr-4">
+            <div className="w-full md:w-3/5 md:pr-4 h-full">
             {renderListingsContent()}
           </div>
         )}
@@ -607,7 +584,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           <Button
             onClick={() => setIsSlideMapOpen(true)}
             className="fixed w-16 h-16 p-0 rounded-full bg-secondaryBrand text-background z-50 flex items-center justify-center overflow-visible"
-            style={{ 
+            style={{
               bottom: '4dvh',
               right: '1rem'
             }}
@@ -618,11 +595,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
           {/* Map container for Desktop - adjust width based on fullscreen state */}
           {isClient && isDesktopView && (
-            <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
+            <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0 h-full`}>
             <SearchMap
               center={[trip?.longitude || mapCenter.lng, trip?.latitude || mapCenter.lat]}
             zoom={zoomLevel}
-            height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
+            height={calculatedHeight ?? '100%'}
             markers={markers}
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}

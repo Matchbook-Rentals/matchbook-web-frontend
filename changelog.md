@@ -1,5 +1,17 @@
 # Changelog
 
+## Improve search UI responsive layout and viewport handling
+- Hide filter display completely when no filters are active to save screen space
+- Show filter badges at all screen sizes when filters are active for better mobile UX
+- Fix listings grid scrolling by providing explicit height to ScrollArea component
+- Implement dynamic height calculation system using ResizeObserver for map and grid synchronization
+- Pass viewport-calculated height from parent page to search components for consistent sizing
+- Add responsive card wrapping with flex-wrap for property features on small screens
+- Hide property feature dividers on very small screens (< 360px) to prevent layout breaking
+- Adjust grid breakpoints from 640px/1100px to 1000px/1400px for better spacing
+- Remove manual height calculation in favor of flex-based layout with proper overflow handling
+- Ensure map and listings grid resize together on window/zoom changes with shared height value
+
 ## Add extensive logging to all active webhooks
 - Enhanced logging for all 7 active webhooks with entry/exit timestamps and detailed status tracking
 - Added comprehensive logging to Stripe webhook with signature verification and event payload details

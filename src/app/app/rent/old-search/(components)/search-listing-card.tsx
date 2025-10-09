@@ -215,7 +215,7 @@ export default function SearchListingCard({ listing, status, className, style, d
 
         {/* Row 2: Location and Rating */}
         <div className="flex flex-col gap-0 pb-6">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between flex-wrap gap-x-2 gap-y-1 w-full">
             <div className={bodyTextStyle}>
               {(() => {
                 switch (listing.category) {
@@ -257,7 +257,7 @@ export default function SearchListingCard({ listing, status, className, style, d
 
         {/* Row 3: Property Features */}
         <div className="flex flex-col gap-3 pb-3">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between flex-wrap gap-x-3 gap-y-2 w-full">
             <Badge
               variant="outline"
               className="bg-transparent border-none p-0 flex items-center gap-1.5"
@@ -269,7 +269,7 @@ export default function SearchListingCard({ listing, status, className, style, d
                 {listing.roomCount || 4} bds
               </span>
             </Badge>
-            <div className="h-4 border-l-2 border-gray-200"></div>
+            <div className="h-4 border-l-2 border-gray-200 hidden min-[360px]:block"></div>
             <Badge
               variant="outline"
               className="bg-transparent border-none p-0 flex items-center gap-1.5"
@@ -281,7 +281,7 @@ export default function SearchListingCard({ listing, status, className, style, d
                 {listing.bathroomCount || 2} ba
               </span>
             </Badge>
-            <div className="h-4 border-l-2 border-gray-200"></div>
+            <div className="h-4 border-l-2 border-gray-200 hidden min-[360px]:block"></div>
             <Badge
               variant="outline"
               className="bg-transparent border-none p-0 flex items-center gap-1.5"
