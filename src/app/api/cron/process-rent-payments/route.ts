@@ -14,16 +14,21 @@ import { buildNotificationEmailData, getNotificationEmailSubject } from '@/lib/n
  * Business Logic:
  * 1. FIND DUE PAYMENTS: Identifies rent payments where dueDate is today (UTC calendar date)
  * 2. PAYMENT PROCESSING: Creates Stripe PaymentIntents with automatic capture
- * 3. FUND TRANSFER: Transfers full amount to host's Stripe Connect account
- * 4. RECORD KEEPING: Updates payment status and creates transaction records
- * 5. NOTIFICATIONS: Sends email notifications for success/failure
- * 6. ERROR HANDLING: Implements retry logic and comprehensive error tracking
+ * 3. PLATFORM FEE: Calculates and sets aside platform fee via application_fee_amount
+ * 4. FUND TRANSFER: Transfers net amount (total - platform fee) to host's Stripe Connect account
+ * 5. RECORD KEEPING: Updates payment status and creates transaction records
+ * 6. NOTIFICATIONS: Sends email notifications for success/failure
+ * 7. ERROR HANDLING: Implements retry logic and comprehensive error tracking
  *
  * Fee Structure:
- * - Service fees (3% or 1.5%) are already included in the payment amount
- * - Full amount including service fee is transferred to host
+ * - Platform fees are already included in the rent payment amount when created
+ * - Platform fee rate is determined by booking duration:
+ *   * Bookings >= 6 months: 1.5% platform fee
+ *   * Bookings < 6 months: 3% platform fee
+ * - Platform fee is set aside using Stripe's application_fee_amount
+ * - Host receives: Total amount - Platform fee
  * - Stripe processing fees are automatically deducted by Stripe
- * - Platform revenue comes from the $7 deposit transfer fee collected at booking time
+ * - Additional platform revenue: $7 deposit transfer fee collected at booking time
  *
  * Safety Features:
  * - Idempotency checks to prevent duplicate processing
@@ -146,18 +151,25 @@ const findDuePayments = async (todayMidnight: Date) => {
     },
     include: {
       booking: {
-        include: {
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          listingId: true,
           user: {
             select: {
               id: true,
               firstName: true,
               lastName: true,
               email: true,
-              stripeCustomerId: true
+              stripeCustomerId: true,
+              verifiedAt: true
             }
           },
           listing: {
-            include: {
+            select: {
+              id: true,
+              title: true,
               user: {
                 select: {
                   id: true,
@@ -165,7 +177,8 @@ const findDuePayments = async (todayMidnight: Date) => {
                   lastName: true,
                   email: true,
                   stripeAccountId: true,
-                  stripeChargesEnabled: true
+                  stripeChargesEnabled: true,
+                  verifiedAt: true
                 }
               }
             }
@@ -226,27 +239,43 @@ const processIndividualPayment = async (payment: any) => {
 
     // Amount is already stored in cents in the database (Decimal type)
     // NOTE: The service fee is already included in the amount when the payment was created
-    const baseAmount = Number(payment.amount);
+    const totalAmount = Number(payment.amount);
+
+    // Calculate booking duration in months to determine platform fee rate
+    const startDate = new Date(booking.startDate);
+    const endDate = new Date(booking.endDate);
+    const durationInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
+
+    // Determine platform fee rate based on booking duration
+    // >= 6 months: 1.5% platform fee
+    // < 6 months: 3% platform fee
+    const platformFeeRate = durationInMonths >= 6 ? 0.015 : 0.03;
+    const platformFeeAmount = Math.round(totalAmount * platformFeeRate);
+    const hostAmount = totalAmount - platformFeeAmount;
 
     console.log(`Payment calculation for ${payment.id}:`, {
-      baseAmount: baseAmount / 100,
+      totalAmount: totalAmount / 100,
+      bookingDurationMonths: durationInMonths,
+      platformFeeRate: platformFeeRate * 100 + '%',
+      platformFeeAmount: platformFeeAmount / 100,
+      hostAmount: hostAmount / 100,
       paymentMethodType: paymentMethod.type,
-      note: 'Service fee already included in amount'
+      note: 'Platform fee deducted via application_fee_amount'
     });
 
     // Create payment intent with automatic capture
-    // NOTE: Full amount is transferred to host (service fee already included in amount)
+    // NOTE: Platform fee is set aside using application_fee_amount
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: baseAmount,
+      amount: totalAmount,
       currency: 'usd',
       customer: renter.stripeCustomerId,
       payment_method: payment.stripePaymentMethodId,
       payment_method_types: isCard ? ['card'] : isACH ? ['us_bank_account'] : ['card', 'us_bank_account'],
       capture_method: 'automatic',
       confirm: true,
+      application_fee_amount: platformFeeAmount, // Platform fee kept by MatchBook
       transfer_data: {
         destination: host.stripeAccountId,
-        amount: baseAmount, // Transfer full amount to host
       },
       metadata: {
         rentPaymentId: payment.id,
@@ -255,7 +284,11 @@ const processIndividualPayment = async (payment: any) => {
         hostId: host.id,
         type: 'monthly_rent',
         paymentMethodType: paymentMethod.type,
-        totalAmount: (baseAmount / 100).toString(),
+        totalAmount: (totalAmount / 100).toString(),
+        platformFeeRate: (platformFeeRate * 100).toString() + '%',
+        platformFeeAmount: (platformFeeAmount / 100).toString(),
+        hostAmount: (hostAmount / 100).toString(),
+        bookingDurationMonths: durationInMonths.toString(),
       },
       receipt_email: renter.email,
     }, {
@@ -271,13 +304,13 @@ const processIndividualPayment = async (payment: any) => {
 
     // Update payment record based on status
     if (paymentIntent.status === 'succeeded') {
-      await updatePaymentSuccess(payment, paymentIntent);
+      await updatePaymentSuccess(payment, paymentIntent, platformFeeAmount);
       await sendPaymentSuccessNotifications(payment, paymentIntent, paymentMethod);
       console.log(`✅ Payment ${payment.id} processed successfully`);
       return { success: true };
     } else if (paymentIntent.status === 'processing') {
       // ACH payments often go to processing state
-      await updatePaymentProcessing(payment, paymentIntent);
+      await updatePaymentProcessing(payment, paymentIntent, platformFeeAmount);
       await sendPaymentProcessingNotifications(payment, paymentIntent, paymentMethod);
       console.log(`⏳ Payment ${payment.id} is processing (ACH)`);
       return { success: true };
@@ -312,7 +345,7 @@ const processIndividualPayment = async (payment: any) => {
 /**
  * Update payment record on successful processing
  */
-const updatePaymentSuccess = async (payment: any, paymentIntent: any) => {
+const updatePaymentSuccess = async (payment: any, paymentIntent: any, platformFeeAmount: number) => {
   // Update rent payment
   await prisma.rentPayment.update({
     where: { id: payment.id },
@@ -324,6 +357,9 @@ const updatePaymentSuccess = async (payment: any, paymentIntent: any) => {
     },
   });
 
+  // Calculate net amount (total - platform fee)
+  const netAmount = paymentIntent.amount - platformFeeAmount;
+
   // Create payment transaction record
   await prisma.paymentTransaction.create({
     data: {
@@ -333,9 +369,9 @@ const updatePaymentSuccess = async (payment: any, paymentIntent: any) => {
       currency: 'usd',
       status: 'succeeded',
       paymentMethod: paymentIntent.payment_method_types?.[0] || 'card',
-      platformFeeAmount: 0, // No platform fee deducted (service fee goes to host)
+      platformFeeAmount: platformFeeAmount, // Platform fee kept by MatchBook (1.5% or 3%)
       stripeFeeAmount: 0, // Stripe fees are automatically deducted
-      netAmount: paymentIntent.amount,
+      netAmount: netAmount, // Amount transferred to host (total - platform fee)
       processedAt: new Date(),
       userId: payment.booking.user.id,
       bookingId: payment.bookingId,
@@ -346,7 +382,7 @@ const updatePaymentSuccess = async (payment: any, paymentIntent: any) => {
 /**
  * Update payment record for processing status (ACH)
  */
-const updatePaymentProcessing = async (payment: any, paymentIntent: any) => {
+const updatePaymentProcessing = async (payment: any, paymentIntent: any, platformFeeAmount: number) => {
   // Update rent payment - mark as processing
   await prisma.rentPayment.update({
     where: { id: payment.id },
@@ -358,6 +394,9 @@ const updatePaymentProcessing = async (payment: any, paymentIntent: any) => {
     },
   });
 
+  // Calculate net amount (total - platform fee)
+  const netAmount = paymentIntent.amount - platformFeeAmount;
+
   // Create payment transaction record with processing status
   await prisma.paymentTransaction.create({
     data: {
@@ -367,9 +406,9 @@ const updatePaymentProcessing = async (payment: any, paymentIntent: any) => {
       currency: 'usd',
       status: 'pending',
       paymentMethod: paymentIntent.payment_method_types?.[0] || 'us_bank_account',
-      platformFeeAmount: 0, // No platform fee deducted (service fee goes to host)
+      platformFeeAmount: platformFeeAmount, // Platform fee kept by MatchBook (1.5% or 3%)
       stripeFeeAmount: 0,
-      netAmount: paymentIntent.amount,
+      netAmount: netAmount, // Amount transferred to host (total - platform fee)
       userId: payment.booking.user.id,
       bookingId: payment.bookingId,
     },
