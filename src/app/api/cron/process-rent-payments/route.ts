@@ -1,29 +1,29 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 import stripe from '@/lib/stripe';
-import { FEES } from '@/lib/fee-constants';
 import { sendNotificationEmail } from '@/lib/send-notification-email';
+import { buildNotificationEmailData, getNotificationEmailSubject } from '@/lib/notification-email-config';
 
 /**
  * CRON JOB: Process Rent Payments
  *
  * Purpose:
- * This cron job automatically processes rent payments that are due today (Pacific time).
+ * This cron job automatically processes rent payments that are due today (UTC calendar date).
  * It runs at 1am Pacific time (8am UTC) to charge renters and transfer funds to hosts.
  *
  * Business Logic:
- * 1. FIND DUE PAYMENTS: Identifies rent payments where dueDate is today (Pacific time)
+ * 1. FIND DUE PAYMENTS: Identifies rent payments where dueDate is today (UTC calendar date)
  * 2. PAYMENT PROCESSING: Creates Stripe PaymentIntents with automatic capture
- * 3. FEE CALCULATION: Applies appropriate platform fees (1.5% ACH, 3% cards)
- * 4. FUND TRANSFER: Transfers net amount to host's Stripe Connect account
- * 5. RECORD KEEPING: Updates payment status and creates transaction records
- * 6. NOTIFICATIONS: Sends email notifications for success/failure
- * 7. ERROR HANDLING: Implements retry logic and comprehensive error tracking
+ * 3. FUND TRANSFER: Transfers full amount to host's Stripe Connect account
+ * 4. RECORD KEEPING: Updates payment status and creates transaction records
+ * 5. NOTIFICATIONS: Sends email notifications for success/failure
+ * 6. ERROR HANDLING: Implements retry logic and comprehensive error tracking
  *
  * Fee Structure:
- * - ACH/Bank Transfer: 1.5% platform fee
- * - Credit/Debit Cards: 3% platform fee
+ * - Service fees (3% or 1.5%) are already included in the payment amount
+ * - Full amount including service fee is transferred to host
  * - Stripe processing fees are automatically deducted by Stripe
+ * - Platform revenue comes from the $7 deposit transfer fee collected at booking time
  *
  * Safety Features:
  * - Idempotency checks to prevent duplicate processing
@@ -45,10 +45,17 @@ export async function GET(request: Request) {
   console.log('Cron job: Starting rent payment processing...');
 
   try {
-    const todayPacific = getTodayInPacific();
+    const todayMidnight = getTodayAtMidnight();
+    const tomorrowMidnight = new Date(todayMidnight);
+    tomorrowMidnight.setDate(tomorrowMidnight.getDate() + 1);
+
+    console.log('📅 Cron job date range:');
+    console.log(`  - Today (midnight UTC): ${todayMidnight.toISOString()}`);
+    console.log(`  - Tomorrow (midnight UTC): ${tomorrowMidnight.toISOString()}`);
+    console.log(`  - Looking for payments with dueDate >= ${todayMidnight.toISOString()} AND < ${tomorrowMidnight.toISOString()}`);
 
     // Find all rent payments due today that haven't been paid or cancelled
-    const duePayments = await findDuePayments(todayPacific);
+    const duePayments = await findDuePayments(todayMidnight);
 
     if (duePayments.length === 0) {
       console.log('Cron job: No rent payments due today.');
@@ -84,28 +91,52 @@ export async function GET(request: Request) {
 }
 
 /**
- * Get today's date in Pacific timezone
+ * Get today's date at midnight UTC
+ * We compare calendar dates, not times with timezone offsets
  */
-const getTodayInPacific = (): Date => {
+const getTodayAtMidnight = (): Date => {
   const now = new Date();
-  // Convert to Pacific time and get start of day
-  const pacificTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
-  pacificTime.setHours(0, 0, 0, 0);
-  return pacificTime;
+  // Get current date in Pacific timezone to determine which calendar day it is
+  const pacificDateString = now.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles" });
+  const [month, day, year] = pacificDateString.split('/').map(Number);
+
+  // Create midnight UTC for that calendar date
+  const todayMidnight = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+  return todayMidnight;
 };
 
 /**
  * Find all rent payments due today that need processing
  */
-const findDuePayments = async (todayPacific: Date) => {
-  const tomorrowPacific = new Date(todayPacific);
-  tomorrowPacific.setDate(tomorrowPacific.getDate() + 1);
+const findDuePayments = async (todayMidnight: Date) => {
+  const tomorrowMidnight = new Date(todayMidnight);
+  tomorrowMidnight.setDate(tomorrowMidnight.getDate() + 1);
+
+  // First, let's see ALL unpaid payments to debug
+  const allUnpaidPayments = await prisma.rentPayment.findMany({
+    where: {
+      isPaid: false,
+      cancelledAt: null,
+    },
+    select: {
+      id: true,
+      dueDate: true,
+      amount: true,
+      stripePaymentMethodId: true,
+      retryCount: true,
+    }
+  });
+
+  console.log('🔍 All unpaid payments in database:');
+  allUnpaidPayments.forEach(p => {
+    console.log(`  - ${p.id}: dueDate=${p.dueDate.toISOString()}, amount=${p.amount}, hasPaymentMethod=${!!p.stripePaymentMethodId}, retryCount=${p.retryCount}`);
+  });
 
   return await prisma.rentPayment.findMany({
     where: {
       dueDate: {
-        gte: todayPacific,
-        lt: tomorrowPacific
+        gte: todayMidnight,
+        lt: tomorrowMidnight
       },
       isPaid: false,
       cancelledAt: null,
@@ -180,7 +211,7 @@ const processIndividualPayment = async (payment: any) => {
   const renter = booking.user;
   const host = booking.listing.user;
 
-  console.log(`Processing payment ${payment.id} for $${payment.amount} from ${renter.firstName} to ${host.firstName}`);
+  console.log(`Processing payment ${payment.id} for $${(Number(payment.amount) / 100).toFixed(2)} from ${renter.firstName} to ${host.firstName}`);
 
   try {
     // Verify host can receive payments
@@ -193,21 +224,18 @@ const processIndividualPayment = async (payment: any) => {
     const isCard = paymentMethod.type === 'card';
     const isACH = paymentMethod.type === 'us_bank_account';
 
-    // Calculate fees
-    const baseAmount = payment.amount * 100; // Convert to cents
-    const platformFeeRate = isACH ? FEES.ACH_RATE : FEES.CARD_RATE;
-    const platformFee = Math.round(baseAmount * platformFeeRate);
-    const hostAmount = baseAmount - platformFee;
+    // Amount is already stored in cents in the database (Decimal type)
+    // NOTE: The service fee is already included in the amount when the payment was created
+    const baseAmount = Number(payment.amount);
 
     console.log(`Payment calculation for ${payment.id}:`, {
       baseAmount: baseAmount / 100,
-      platformFeeRate,
-      platformFee: platformFee / 100,
-      hostAmount: hostAmount / 100,
-      paymentMethodType: paymentMethod.type
+      paymentMethodType: paymentMethod.type,
+      note: 'Service fee already included in amount'
     });
 
     // Create payment intent with automatic capture
+    // NOTE: Full amount is transferred to host (service fee already included in amount)
     const paymentIntent = await stripe.paymentIntents.create({
       amount: baseAmount,
       currency: 'usd',
@@ -218,7 +246,7 @@ const processIndividualPayment = async (payment: any) => {
       confirm: true,
       transfer_data: {
         destination: host.stripeAccountId,
-        amount: hostAmount,
+        amount: baseAmount, // Transfer full amount to host
       },
       metadata: {
         rentPaymentId: payment.id,
@@ -227,12 +255,12 @@ const processIndividualPayment = async (payment: any) => {
         hostId: host.id,
         type: 'monthly_rent',
         paymentMethodType: paymentMethod.type,
-        platformFee: (platformFee / 100).toString(),
-        hostAmount: (hostAmount / 100).toString(),
+        totalAmount: (baseAmount / 100).toString(),
       },
       receipt_email: renter.email,
     }, {
-      idempotencyKey: `rent-payment-${payment.id}-${payment.retryCount || 0}`,
+      // Add timestamp to idempotency key to allow multiple test runs
+      idempotencyKey: `rent-payment-${payment.id}-${payment.retryCount || 0}-${Date.now()}`,
     });
 
     console.log(`PaymentIntent created for payment ${payment.id}:`, {
@@ -243,14 +271,14 @@ const processIndividualPayment = async (payment: any) => {
 
     // Update payment record based on status
     if (paymentIntent.status === 'succeeded') {
-      await updatePaymentSuccess(payment, paymentIntent, platformFee);
-      await sendPaymentSuccessNotifications(payment, paymentIntent);
+      await updatePaymentSuccess(payment, paymentIntent);
+      await sendPaymentSuccessNotifications(payment, paymentIntent, paymentMethod);
       console.log(`✅ Payment ${payment.id} processed successfully`);
       return { success: true };
     } else if (paymentIntent.status === 'processing') {
       // ACH payments often go to processing state
-      await updatePaymentProcessing(payment, paymentIntent, platformFee);
-      await sendPaymentProcessingNotifications(payment, paymentIntent);
+      await updatePaymentProcessing(payment, paymentIntent);
+      await sendPaymentProcessingNotifications(payment, paymentIntent, paymentMethod);
       console.log(`⏳ Payment ${payment.id} is processing (ACH)`);
       return { success: true };
     } else {
@@ -284,7 +312,7 @@ const processIndividualPayment = async (payment: any) => {
 /**
  * Update payment record on successful processing
  */
-const updatePaymentSuccess = async (payment: any, paymentIntent: any, platformFee: number) => {
+const updatePaymentSuccess = async (payment: any, paymentIntent: any) => {
   // Update rent payment
   await prisma.rentPayment.update({
     where: { id: payment.id },
@@ -305,9 +333,9 @@ const updatePaymentSuccess = async (payment: any, paymentIntent: any, platformFe
       currency: 'usd',
       status: 'succeeded',
       paymentMethod: paymentIntent.payment_method_types?.[0] || 'card',
-      platformFeeAmount: platformFee,
+      platformFeeAmount: 0, // No platform fee deducted (service fee goes to host)
       stripeFeeAmount: 0, // Stripe fees are automatically deducted
-      netAmount: paymentIntent.amount - platformFee,
+      netAmount: paymentIntent.amount,
       processedAt: new Date(),
       userId: payment.booking.user.id,
       bookingId: payment.bookingId,
@@ -318,7 +346,7 @@ const updatePaymentSuccess = async (payment: any, paymentIntent: any, platformFe
 /**
  * Update payment record for processing status (ACH)
  */
-const updatePaymentProcessing = async (payment: any, paymentIntent: any, platformFee: number) => {
+const updatePaymentProcessing = async (payment: any, paymentIntent: any) => {
   // Update rent payment - mark as processing
   await prisma.rentPayment.update({
     where: { id: payment.id },
@@ -339,9 +367,9 @@ const updatePaymentProcessing = async (payment: any, paymentIntent: any, platfor
       currency: 'usd',
       status: 'pending',
       paymentMethod: paymentIntent.payment_method_types?.[0] || 'us_bank_account',
-      platformFeeAmount: platformFee,
+      platformFeeAmount: 0, // No platform fee deducted (service fee goes to host)
       stripeFeeAmount: 0,
-      netAmount: paymentIntent.amount - platformFee,
+      netAmount: paymentIntent.amount,
       userId: payment.booking.user.id,
       bookingId: payment.bookingId,
     },
@@ -365,59 +393,119 @@ const updatePaymentFailure = async (paymentId: string, errorMessage: string) => 
 /**
  * Send notifications for successful payments
  */
-const sendPaymentSuccessNotifications = async (payment: any, paymentIntent: any) => {
+const sendPaymentSuccessNotifications = async (payment: any, paymentIntent: any, paymentMethod: any) => {
   const { booking } = payment;
   const renter = booking.user;
   const host = booking.listing.user;
 
+  const amount = (paymentIntent.amount / 100).toFixed(2);
+  const listingTitle = booking.listing.title;
+  const paymentDate = new Date().toLocaleDateString();
+
+  // Extract payment method details
+  const paymentMethodType = paymentMethod.type;
+  const last4 = paymentMethodType === 'card'
+    ? paymentMethod.card?.last4
+    : paymentMethod.us_bank_account?.last4;
+
   // Notify renter
+  const renterEmailData = buildNotificationEmailData(
+    'rent_payment_success',
+    {
+      content: `Your rent payment of $${amount} for ${listingTitle} was processed successfully.`,
+      url: `/app/rent/bookings/${payment.bookingId}`
+    },
+    {
+      firstName: renter.firstName,
+      verifiedAt: renter.verifiedAt
+    },
+    {
+      amount,
+      listingTitle,
+      paymentDate,
+      paymentMethodType,
+      paymentMethodLast4: last4,
+      actionUrl: `${process.env.NEXT_PUBLIC_URL}/app/rent/bookings/${payment.bookingId}`
+    }
+  );
+
   await sendNotificationEmail({
     to: renter.email,
-    subject: 'Rent Payment Processed Successfully',
-    emailData: {
-      type: 'payment_success',
-      recipientName: renter.firstName || renter.email,
-      paymentAmount: (paymentIntent.amount / 100).toFixed(2),
-      paymentDate: new Date().toLocaleDateString(),
-      propertyName: booking.listing.title,
-      paymentMethod: paymentIntent.payment_method_types?.[0] || 'card',
-    },
+    subject: getNotificationEmailSubject('rent_payment_success'),
+    emailData: renterEmailData,
   });
 
   // Notify host
+  const hostEmailData = buildNotificationEmailData(
+    'rent_payment_success',
+    {
+      content: `Rent payment of $${amount} from ${renter.firstName} ${renter.lastName} for ${listingTitle} was processed successfully.`,
+      url: `/app/host/${booking.listingId}/bookings/${booking.id}`
+    },
+    {
+      firstName: host.firstName,
+      verifiedAt: host.verifiedAt
+    },
+    {
+      amount,
+      listingTitle,
+      paymentDate,
+      paymentMethodType,
+      paymentMethodLast4: last4,
+      renterName: `${renter.firstName} ${renter.lastName}`.trim() || renter.email,
+      actionUrl: `${process.env.NEXT_PUBLIC_URL}/app/host/${booking.listingId}/bookings/${booking.id}`
+    }
+  );
+
   await sendNotificationEmail({
     to: host.email,
-    subject: 'Rent Payment Received',
-    emailData: {
-      type: 'payment_received',
-      recipientName: host.firstName || host.email,
-      paymentAmount: (paymentIntent.amount / 100).toFixed(2),
-      paymentDate: new Date().toLocaleDateString(),
-      propertyName: booking.listing.title,
-      renterName: `${renter.firstName} ${renter.lastName}`.trim() || renter.email,
-    },
+    subject: getNotificationEmailSubject('rent_payment_success'),
+    emailData: hostEmailData,
   });
 };
 
 /**
  * Send notifications for processing payments (ACH)
  */
-const sendPaymentProcessingNotifications = async (payment: any, paymentIntent: any) => {
+const sendPaymentProcessingNotifications = async (payment: any, paymentIntent: any, paymentMethod: any) => {
   const { booking } = payment;
   const renter = booking.user;
 
+  const amount = (paymentIntent.amount / 100).toFixed(2);
+  const listingTitle = booking.listing.title;
+  const paymentDate = new Date().toLocaleDateString();
+
+  // Extract payment method details
+  const paymentMethodType = paymentMethod.type;
+  const last4 = paymentMethodType === 'card'
+    ? paymentMethod.card?.last4
+    : paymentMethod.us_bank_account?.last4;
+
   // Notify renter that ACH payment is processing
+  const emailData = buildNotificationEmailData(
+    'rent_payment_processing',
+    {
+      content: `Your rent payment of $${amount} for ${listingTitle} is being processed.`,
+      url: `/app/rent/bookings/${payment.bookingId}`
+    },
+    {
+      firstName: renter.firstName,
+      verifiedAt: renter.verifiedAt
+    },
+    {
+      amount,
+      listingTitle,
+      paymentDate,
+      paymentMethodType,
+      paymentMethodLast4: last4,
+      actionUrl: `${process.env.NEXT_PUBLIC_URL}/app/rent/bookings/${payment.bookingId}`
+    }
+  );
+
   await sendNotificationEmail({
     to: renter.email,
-    subject: 'Rent Payment Processing',
-    emailData: {
-      type: 'payment_processing',
-      recipientName: renter.firstName || renter.email,
-      paymentAmount: (paymentIntent.amount / 100).toFixed(2),
-      paymentDate: new Date().toLocaleDateString(),
-      propertyName: booking.listing.title,
-      expectedCompletionDays: '3-5 business days',
-    },
+    subject: getNotificationEmailSubject('rent_payment_processing'),
+    emailData,
   });
 };
 
@@ -429,38 +517,61 @@ const sendPaymentFailureNotifications = async (payment: any, errorMessage: strin
   const renter = booking.user;
   const host = booking.listing.user;
 
+  const amount = (Number(payment.amount) / 100).toFixed(2);
+  const listingTitle = booking.listing.title;
+  const paymentDate = new Date().toLocaleDateString();
+
   // Notify renter of failure
-  await sendNotificationEmail({
-    to: renter.email,
-    subject: 'Rent Payment Failed - Action Required',
-    emailData: {
-      type: 'payment_failed',
-      recipientName: renter.firstName || renter.email,
-      paymentAmount: payment.amount.toFixed(2),
-      paymentDate: new Date().toLocaleDateString(),
-      propertyName: booking.listing.title,
+  const renterEmailData = buildNotificationEmailData(
+    'rent_payment_failed',
+    {
+      content: `Your rent payment of $${amount} for ${listingTitle} failed.`,
+      url: `/app/rent/bookings/${payment.bookingId}`
+    },
+    {
+      firstName: renter.firstName,
+      verifiedAt: renter.verifiedAt
+    },
+    {
+      amount,
+      listingTitle,
+      paymentDate,
       failureReason: errorMessage,
       actionUrl: `${process.env.NEXT_PUBLIC_URL}/app/rent/bookings/${payment.bookingId}`,
-    },
+    }
+  );
+
+  await sendNotificationEmail({
+    to: renter.email,
+    subject: getNotificationEmailSubject('rent_payment_failed'),
+    emailData: renterEmailData,
   });
 
   // Notify admin (tyler.bennett52@gmail.com) of failure
-  await sendNotificationEmail({
-    to: 'tyler.bennett52@gmail.com',
-    subject: `Rent Payment Failed - ${booking.listing.title}`,
-    emailData: {
-      type: 'admin_payment_failed',
-      recipientName: 'Tyler',
-      paymentAmount: payment.amount.toFixed(2),
-      paymentDate: new Date().toLocaleDateString(),
-      propertyName: booking.listing.title,
+  const adminEmailData = buildNotificationEmailData(
+    'rent_payment_failed',
+    {
+      content: `Rent payment failed for ${listingTitle}`,
+      url: '/admin'
+    },
+    undefined, // No user context for admin email
+    {
+      amount,
+      listingTitle,
+      paymentDate,
+      failureReason: errorMessage,
       renterName: `${renter.firstName} ${renter.lastName}`.trim() || renter.email,
       renterEmail: renter.email,
       hostName: `${host.firstName} ${host.lastName}`.trim() || host.email,
       hostEmail: host.email,
-      failureReason: errorMessage,
       paymentId: payment.id,
       retryCount: (payment.retryCount || 0) + 1,
-    },
+    }
+  );
+
+  await sendNotificationEmail({
+    to: 'tyler.bennett52@gmail.com',
+    subject: `Rent Payment Failed - ${booking.listing.title}`,
+    emailData: adminEmailData,
   });
 };

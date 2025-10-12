@@ -35,18 +35,18 @@ This job finds messages that are unread and haven't had notifications sent yet. 
 Automatically charges renters and transfers funds to hosts for rent payments due today. This is the core payment processing system for recurring rent payments.
 
 #### Business Logic
-1. **Find Due Payments**: Identifies rent payments where `dueDate` is today (Pacific time)
+1. **Find Due Payments**: Identifies rent payments where `dueDate` is today (UTC calendar date)
 2. **Payment Processing**: Creates Stripe PaymentIntents with automatic capture
-3. **Fee Calculation**: Applies platform fees (1.5% ACH, 3% cards)
-4. **Fund Transfer**: Transfers net amount to host's Stripe Connect account
-5. **Record Keeping**: Updates payment status and creates transaction records
-6. **Notifications**: Sends email notifications for success/failure
-7. **Error Handling**: Implements retry logic (max 3 attempts)
+3. **Fund Transfer**: Transfers full amount to host's Stripe Connect account
+4. **Record Keeping**: Updates payment status and creates transaction records
+5. **Notifications**: Sends email notifications for success/failure
+6. **Error Handling**: Implements retry logic (max 3 attempts)
 
 #### Fee Structure
-- **ACH/Bank Transfer**: 1.5% platform fee
-- **Credit/Debit Cards**: 3% platform fee
+- **Service fees** (3% for trips ≤6 months, 1.5% for trips >6 months) are already included in the payment amount
+- **Full amount** including service fee is transferred to host
 - Stripe processing fees are automatically deducted by Stripe
+- Platform revenue comes from the $7 deposit transfer fee collected at booking time
 
 #### Safety Features
 - Idempotency checks to prevent duplicate processing

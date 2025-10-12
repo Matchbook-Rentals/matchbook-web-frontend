@@ -287,6 +287,40 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
     }
   },
 
+  // Rent payment notifications (processed by cron job)
+  rent_payment_success: {
+    subject: 'Rent Payment Processed Successfully',
+    headerText: 'Rent Payment Processed',
+    contentTitle: '',
+    buttonText: 'View booking',
+    getContentText: (content, notification) => {
+      // Content will be formatted in the buildNotificationEmailData function
+      return content;
+    }
+  },
+
+  rent_payment_processing: {
+    subject: 'Rent Payment Processing',
+    headerText: 'Rent Payment Processing',
+    contentTitle: '',
+    buttonText: 'View booking',
+    getContentText: (content, notification) => {
+      // Content will be formatted in the buildNotificationEmailData function
+      return content;
+    }
+  },
+
+  rent_payment_failed: {
+    subject: 'Rent Payment Failed - Action Required',
+    headerText: 'Rent Payment Failed',
+    contentTitle: '',
+    buttonText: 'Update payment method',
+    getContentText: (content, notification) => {
+      // Content will be formatted in the buildNotificationEmailData function
+      return content;
+    }
+  },
+
   // Admin notifications
   ADMIN_INFO: {
     subject: 'Information - MatchBook Rentals',
@@ -643,12 +677,93 @@ export function buildNotificationEmailData(
     const firstName = user?.firstName || 'there';
     const renterName = additionalData.renterName || additionalData.senderName || 'Your guest';
     const moveInDate = additionalData.moveInDate || additionalData.date || 'the scheduled date';
-    
+
     // Format the email body
     emailData.contentText = `Hi ${firstName}, ${renterName} is scheduled to move-in in 3 days.\n\nMove-in is on ${moveInDate}.`;
     emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host-dashboard?tab=bookings`;
   }
-  
+
+  // Add special formatting for rent payment success notifications
+  if (actionType === 'rent_payment_success' && additionalData) {
+    const firstName = user?.firstName || 'there';
+    const amount = additionalData.amount || 'your rent payment';
+    const listingTitle = additionalData.listingTitle || 'your property';
+    const paymentDate = additionalData.paymentDate || 'today';
+    const isHost = additionalData.renterName; // If renterName is provided, this is a host notification
+
+    // Format payment method with last 4 digits
+    let paymentMethodDisplay = 'your payment method';
+    if (additionalData.paymentMethodType && additionalData.paymentMethodLast4) {
+      const methodName = additionalData.paymentMethodType === 'card' ? 'card' : 'bank account';
+      paymentMethodDisplay = `${methodName} ending in ${additionalData.paymentMethodLast4}`;
+    }
+
+    if (isHost) {
+      // Host notification
+      const renterName = additionalData.renterName;
+      emailData.contentText = `Hi ${firstName},\n\nRent payment of $${amount} from ${renterName} for ${listingTitle} was completed on ${paymentDate} via ${paymentMethodDisplay}.`;
+    } else {
+      // Renter notification
+      emailData.contentText = `Hi ${firstName},\n\nYour rent payment of $${amount} for ${listingTitle} was completed on ${paymentDate} via ${paymentMethodDisplay}.`;
+    }
+
+    if (additionalData.actionUrl) {
+      emailData.buttonUrl = additionalData.actionUrl;
+    }
+  }
+
+  // Add special formatting for rent payment processing notifications (ACH)
+  if (actionType === 'rent_payment_processing' && additionalData) {
+    const firstName = user?.firstName || 'there';
+    const amount = additionalData.amount || 'your rent payment';
+    const listingTitle = additionalData.listingTitle || 'your property';
+
+    // Format payment method with last 4 digits
+    let paymentMethodDisplay = 'ACH transfer';
+    if (additionalData.paymentMethodType === 'us_bank_account' && additionalData.paymentMethodLast4) {
+      paymentMethodDisplay = `ACH transfer from account ending in ${additionalData.paymentMethodLast4}`;
+    }
+
+    // Only sent to renters (ACH processing notification)
+    emailData.contentText = `Hi ${firstName},\n\nYour rent payment of $${amount} for ${listingTitle} is being processed via ${paymentMethodDisplay}.`;
+
+    if (additionalData.actionUrl) {
+      emailData.buttonUrl = additionalData.actionUrl;
+    }
+  }
+
+  // Add special formatting for rent payment failed notifications
+  if (actionType === 'rent_payment_failed' && additionalData) {
+    const firstName = user?.firstName || 'there';
+    const amount = additionalData.amount || 'your rent payment';
+    const listingTitle = additionalData.listingTitle || 'your property';
+    const paymentDate = additionalData.paymentDate || 'today';
+    const failureReason = additionalData.failureReason || 'payment processing error';
+    const isAdmin = !user?.firstName && firstName === 'Tyler'; // Admin notifications don't have user context
+
+    if (isAdmin) {
+      // Admin notification with full details
+      const renterName = additionalData.renterName || 'The renter';
+      const renterEmail = additionalData.renterEmail || 'N/A';
+      const hostName = additionalData.hostName || 'The host';
+      const hostEmail = additionalData.hostEmail || 'N/A';
+      const paymentId = additionalData.paymentId || 'N/A';
+      const retryCount = additionalData.retryCount || 0;
+
+      emailData.contentText = `Rent payment failed:\n\nProperty: ${listingTitle}\nAmount: $${amount}\nDate: ${paymentDate}\nReason: ${failureReason}\n\nRenter: ${renterName} (${renterEmail})\nHost: ${hostName} (${hostEmail})\n\nPayment ID: ${paymentId}\nRetry Count: ${retryCount}`;
+      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/admin`;
+    } else {
+      // Renter notification
+      emailData.contentText = `Hi ${firstName},\n\nYour rent payment of $${amount} for ${listingTitle} failed on ${paymentDate}.\n\nReason: ${failureReason}\n\nPlease update your payment method to avoid disruptions. We'll automatically retry the payment once you update your payment method.`;
+
+      if (additionalData.actionUrl) {
+        emailData.buttonUrl = additionalData.actionUrl;
+      } else {
+        emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/payment-methods`;
+      }
+    }
+  }
+
   return emailData;
 }
 
