@@ -51,13 +51,21 @@ type RentPayment = {
 
 function getPaymentStatus(rentPayment: RentPayment): string {
   if (rentPayment.isPaid) return "Paid";
-  
+
   const now = new Date();
   const dueDate = new Date(rentPayment.dueDate);
-  
+
   if (dueDate < now) return "Overdue";
   if (dueDate.getTime() - now.getTime() <= 7 * 24 * 60 * 60 * 1000) return "Due";
   return "Scheduled";
+}
+
+function getPaymentType(payment: any): string {
+  // Check if payment has charges and includes SECURITY_DEPOSIT
+  if (payment.charges?.some((c: any) => c.category === 'SECURITY_DEPOSIT')) {
+    return 'Security Deposit';
+  }
+  return 'Monthly Rent';
 }
 
 export default async function BookingDetailPage({ params }: BookingDetailPageProps) {
@@ -73,6 +81,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
       rentPayments: {
         orderBy: { dueDate: 'asc' },
         include: {
+          charges: true,
           paymentModifications: {
             where: {
               recipientId: userId,
@@ -238,7 +247,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
 
       return {
         amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        type: "Monthly Rent",
+        type: getPaymentType(payment),
         method: "ACH Transfer",
         bank: "Bank Account",
         dueDate: formatDate(new Date(payment.dueDate)),
@@ -282,7 +291,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
 
       return {
         amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        type: "Monthly Rent",
+        type: getPaymentType(payment),
         method: "ACH Transfer",
         bank: "Bank Account",
         dueDate: formatDate(new Date(payment.dueDate)),

@@ -1,5 +1,11 @@
 # Changelog
 
+## Add payment type detection for security deposits
+- Added getPaymentType helper function to distinguish security deposit payments from monthly rent
+- Updated host and renter booking detail pages to display correct payment type based on charge category
+- Query now includes charges relation to enable security deposit detection
+- Security deposits now properly labeled instead of incorrectly showing "Monthly Rent"
+
 ## Implement itemized payment charge system with deposit tracking
 - Added RentPaymentCharge model for itemized breakdown of all payment components (rent, deposits, fees)
 - Created charge builder utilities for BASE_RENT, SECURITY_DEPOSIT, PET_RENT, PET_DEPOSIT, PLATFORM_FEE, CREDIT_CARD_FEE, TRANSFER_FEE
