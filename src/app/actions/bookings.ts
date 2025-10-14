@@ -153,6 +153,7 @@ function generateRentPayments(
       dueDate: start,
       stripePaymentMethodId,
       paymentAuthorizedAt: new Date(),
+      type: 'MONTHLY_RENT',
     });
     
     // Move to next month for regular payments
@@ -175,6 +176,7 @@ function generateRentPayments(
         dueDate: currentDate,
         stripePaymentMethodId,
         paymentAuthorizedAt: null,
+        type: 'MONTHLY_RENT',
       });
     } else {
       // Full month payment
@@ -184,6 +186,7 @@ function generateRentPayments(
         dueDate: currentDate,
         stripePaymentMethodId,
         paymentAuthorizedAt: null,
+        type: 'MONTHLY_RENT',
       });
     }
     

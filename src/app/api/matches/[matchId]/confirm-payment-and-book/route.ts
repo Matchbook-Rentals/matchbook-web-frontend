@@ -182,7 +182,8 @@ export async function POST(
               isPaid: true,
               paymentCapturedAt: match.paymentCapturedAt || new Date(),
               stripePaymentIntentId: match.stripePaymentIntentId,
-              stripePaymentMethodId: match.stripePaymentMethodId
+              stripePaymentMethodId: match.stripePaymentMethodId,
+              type: 'SECURITY_DEPOSIT'
             }
           });
 
@@ -216,7 +217,8 @@ export async function POST(
                 baseAmount: payment.baseAmount || dollarsToCents(payment.amount), // New: base amount before fees
                 dueDate: payment.dueDate,
                 isPaid: false,
-                stripePaymentMethodId: match.stripePaymentMethodId // Attach payment method for auto-charging
+                stripePaymentMethodId: match.stripePaymentMethodId, // Attach payment method for auto-charging
+                type: 'MONTHLY_RENT'
               }
             });
 
@@ -364,7 +366,8 @@ export async function POST(
           isPaid: true,
           paymentCapturedAt: match.paymentCapturedAt || new Date(),
           stripePaymentIntentId: match.stripePaymentIntentId,
-          stripePaymentMethodId: match.stripePaymentMethodId
+          stripePaymentMethodId: match.stripePaymentMethodId,
+          type: 'SECURITY_DEPOSIT'
         }
       });
 
@@ -422,7 +425,8 @@ export async function POST(
               baseAmount: payment.baseAmount || dollarsToCents(payment.amount), // New: base amount before fees
               dueDate: payment.dueDate,
               isPaid: false,
-              stripePaymentMethodId: match.stripePaymentMethodId // Attach payment method for auto-charging
+              stripePaymentMethodId: match.stripePaymentMethodId, // Attach payment method for auto-charging
+              type: 'MONTHLY_RENT'
             }
           });
 

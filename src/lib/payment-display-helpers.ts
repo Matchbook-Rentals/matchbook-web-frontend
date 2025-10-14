@@ -8,7 +8,7 @@
  * of whether a payment has been migrated to the new charge-based system.
  */
 
-import { RentPaymentChargeCategory } from '@prisma/client';
+import { RentPaymentChargeCategory, RentPaymentType } from '@prisma/client';
 import {
   centsToDollars,
   formatCentsAsCurrency,
@@ -268,6 +268,28 @@ export function formatChargeCategory(category: RentPaymentChargeCategory): strin
   };
 
   return labels[category] || category;
+}
+
+/**
+ * Format payment type for display
+ *
+ * @param type - Payment type
+ * @returns Human-readable label
+ */
+export function getPaymentTypeLabel(type: RentPaymentType): string {
+  const labels: Record<RentPaymentType, string> = {
+    MONTHLY_RENT: 'Monthly Rent',
+    SECURITY_DEPOSIT: 'Security Deposit',
+    PET_DEPOSIT: 'Pet Deposit',
+    LATE_FEE: 'Late Fee',
+    PRORATED_RENT: 'Prorated Rent',
+    FIRST_MONTH_RENT: 'First Month Rent',
+    LAST_MONTH_RENT: 'Last Month Rent',
+    ADJUSTMENT: 'Adjustment',
+    OTHER: 'Other'
+  };
+
+  return labels[type] || type;
 }
 
 /**

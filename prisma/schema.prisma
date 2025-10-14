@@ -50,6 +50,18 @@ enum RentPaymentChargeCategory {
   OTHER
 }
 
+enum RentPaymentType {
+  MONTHLY_RENT         // Regular recurring monthly rent payment
+  SECURITY_DEPOSIT     // Security deposit paid at booking creation
+  PET_DEPOSIT          // Pet deposit (if different from security)
+  LATE_FEE            // Late payment penalty
+  PRORATED_RENT       // First/last month prorated rent
+  FIRST_MONTH_RENT    // Full first month paid upfront
+  LAST_MONTH_RENT     // Last month paid upfront
+  ADJUSTMENT          // Manual adjustment (credit/debit)
+  OTHER               // Catch-all for edge cases
+}
+
 model User {
   id               String    @id @default(uuid())
   stripeAccountId  String?
@@ -1031,6 +1043,9 @@ model RentPayment {
   retryCount           Int                 @default(0)
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
+
+  // Payment type (indicates purpose of the payment)
+  type                  RentPaymentType     @default(MONTHLY_RENT)
 
   // Soft delete support for cancellations
   cancelledAt           DateTime?

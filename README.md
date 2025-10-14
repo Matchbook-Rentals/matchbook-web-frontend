@@ -12,3 +12,9 @@ From our homepage our the /app/rent/searches users may begin a trip by setting d
 
 #### Not Logged in
 Users will see a mimic of our app/rent/searches route but instead at guest/rent/searches. They will not be able to apply to listings without signing in. Upon sign in they will be redirected to app/rent/searches/[tripId] using a Server side check against the guest session database oject we use to track behavior in /guest/rent/searches
+
+
+#### Search Views
+The views we maintain are 'All Listings' A view with a grid of search cards and a map. 'Recommended' which is a one at at time detailed view. 'Favorites' which is a grid of listing cards the user has liked, which prompt them to apply. 'Match' is a tab of applied to listing cards in a agrid from which the user can sign a lease and apply.
+
+####

@@ -121,6 +121,7 @@ export async function attachPaymentMethodToPayments(bookingId: string) {
       },
       data: {
         stripePaymentMethodId: paymentMethodId,
+        type: 'MONTHLY_RENT',
       },
     });
 
@@ -229,6 +230,7 @@ export async function createSecurityDepositRecord(bookingId: string) {
         stripePaymentMethodId: booking.match.stripePaymentMethodId,
         stripePaymentIntentId: booking.match.stripePaymentIntentId,
         paymentCapturedAt: new Date(),
+        type: 'SECURITY_DEPOSIT',
         charges: {
           create: [
             {

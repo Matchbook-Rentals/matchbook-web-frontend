@@ -2,6 +2,7 @@ import React from "react";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prismadb";
+import { getPaymentTypeLabel } from "@/lib/payment-display-helpers";
 import BookingDetailClient from "./booking-detail-client";
 
 interface BookingDetailPageProps {
@@ -55,13 +56,6 @@ function getPaymentStatus(rentPayment: RentPayment): string {
   return "Scheduled";
 }
 
-function getPaymentType(payment: any): string {
-  // Check if payment has charges and includes SECURITY_DEPOSIT
-  if (payment.charges?.some((c: any) => c.category === 'SECURITY_DEPOSIT')) {
-    return 'Security Deposit';
-  }
-  return 'Monthly Rent';
-}
 
 export default async function BookingDetailPage({ params }: BookingDetailPageProps) {
   const { userId } = auth();
@@ -74,10 +68,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     where: { id: params.bookingId },
     include: {
       rentPayments: {
-        orderBy: { dueDate: 'asc' },
-        include: {
-          charges: true
-        }
+        orderBy: { dueDate: 'asc' }
       },
       listing: {
         select: {
@@ -144,7 +135,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     .map((payment: any) => ({
       tenant: renterName,
       amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-      type: getPaymentType(payment),
+      type: getPaymentTypeLabel(payment.type),
       method: "ACH Transfer",
       bank: "Bank Account",
       dueDate: formatDate(new Date(payment.dueDate)),
@@ -161,7 +152,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     .map((payment: any) => ({
       tenant: renterName,
       amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-      type: getPaymentType(payment),
+      type: getPaymentTypeLabel(payment.type),
       method: "ACH Transfer",
       bank: "Bank Account",
       dueDate: formatDate(new Date(payment.dueDate)),
