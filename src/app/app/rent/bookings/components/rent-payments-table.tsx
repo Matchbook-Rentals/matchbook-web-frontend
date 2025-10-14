@@ -177,15 +177,22 @@ export const RentPaymentsTable = ({
               </TableCell>
               {/* Actions - Always visible */}
               <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 flex justify-center items-center">
-                {row.hasPendingModification && row.modificationData ? (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <div className="inline-flex flex-col items-start relative cursor-pointer">
-                        <MoreVerticalIcon className="w-5 h-5 hover:text-gray-600" />
-                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
-                      </div>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-48 p-2" align="end">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="relative h-8 w-8"
+                      aria-label="Payment actions"
+                    >
+                      <MoreVerticalIcon className="w-5 h-5" />
+                      {row.hasPendingModification && (
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white" aria-hidden="true"></div>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-56 p-2" align="end">
+                    {row.hasPendingModification && row.modificationData && (
                       <Button
                         variant="ghost"
                         className="w-full justify-start text-sm"
@@ -196,13 +203,18 @@ export const RentPaymentsTable = ({
                       >
                         View Modification
                       </Button>
-                    </PopoverContent>
-                  </Popover>
-                ) : (
-                  <div className="inline-flex flex-col items-start relative">
-                    <MoreVerticalIcon className="w-5 h-5 text-gray-400" />
-                  </div>
-                )}
+                    )}
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-sm"
+                      onClick={() => {
+                        router.push(`/app/rent/bookings/${bookingId}/payments/${row.paymentId}/change-method`);
+                      }}
+                    >
+                      Change Payment Method
+                    </Button>
+                  </PopoverContent>
+                </Popover>
               </TableCell>
             </TableRow>
           ))

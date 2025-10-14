@@ -4,16 +4,12 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prismadb";
 import stripe from "@/lib/stripe";
 import { getPaymentTypeLabel } from "@/lib/payment-display-helpers";
-import BookingDetailClient from "./booking-detail-client";
+import { RentPaymentsTable } from "../components/rent-payments-table";
 
 interface BookingDetailPageProps {
   params: {
     bookingId: string;
   };
-}
-
-function formatPrice(amount: number): string {
-  return `$${amount.toLocaleString()}`;
 }
 
 function formatDate(date: Date): string {
@@ -24,10 +20,6 @@ function formatDate(date: Date): string {
   });
 }
 
-function formatDateRange(startDate: Date, endDate: Date): string {
-  return `${formatDate(startDate)} - ${formatDate(endDate)}`;
-}
-
 function formatAddress(listing: any): string {
   const parts = [
     listing.streetAddress1,
@@ -36,11 +28,6 @@ function formatAddress(listing: any): string {
     listing.postalCode
   ].filter(Boolean);
   return parts.join(', ');
-}
-
-function getLargestRentPayment(rentPayments: RentPayment[]): number {
-  if (rentPayments.length === 0) return 0;
-  return Math.max(...rentPayments.map(payment => payment.amount));
 }
 
 type RentPayment = {
@@ -68,7 +55,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     redirect("/sign-in");
   }
 
-  // Fetch booking with all necessary relationships
+  // Fetch booking with payment-related data only
   const booking = await prisma.booking.findUnique({
     where: { id: params.bookingId },
     include: {
@@ -96,7 +83,13 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
         }
       },
       listing: {
-        include: {
+        select: {
+          title: true,
+          streetAddress1: true,
+          city: true,
+          state: true,
+          postalCode: true,
+          imageSrc: true,
           user: {
             select: {
               id: true,
@@ -107,19 +100,6 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
               imageUrl: true
             }
           }
-        }
-      },
-      trip: {
-        select: {
-          numAdults: true,
-          numChildren: true,
-          numPets: true
-        }
-      },
-      match: {
-        select: {
-          id: true,
-          leaseDocumentId: true
         }
       }
     }
@@ -179,32 +159,31 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   // Format host data
   const host = booking.listing.user;
   const hostName = host.fullName || `${host.firstName || ''} ${host.lastName || ''}`.trim() || host.email || 'Unknown Host';
-  
-  // Get the largest rent payment amount (convert from cents to dollars)
-  const largestPaymentAmount = getLargestRentPayment(booking.rentPayments) / 100;
-  
-  const bookingData = {
-    name: hostName,
-    status: booking.status === 'active' ? 'Active' : booking.status.charAt(0).toUpperCase() + booking.status.slice(1),
-    dates: formatDateRange(booking.startDate, booking.endDate),
-    address: formatAddress(booking.listing),
-    description: booking.listing.title,
-    price: largestPaymentAmount > 0 ? `${formatPrice(largestPaymentAmount)} / Month` : 'Price TBD',
-    occupants: [
-      { type: "Adult", count: booking.trip?.numAdults || 1, icon: "/host-dashboard/svg/adult.svg" },
-      { type: "Children", count: booking.trip?.numChildren || 0, icon: "/host-dashboard/svg/kid.svg" },
-      { type: "pet", count: booking.trip?.numPets || 0, icon: "/host-dashboard/svg/pet.svg" },
-    ],
-    profileImage: host.imageUrl || "/image-35.png",
-    hostUserId: host.id,
-    roomCount: booking.listing.roomCount,
-    bathroomCount: booking.listing.bathroomCount,
-    petsAllowed: booking.listing.petsAllowed,
-    leaseDocumentId: booking.match?.leaseDocumentId || null,
-    matchId: booking.match?.id || booking.matchId,
-    // Add booking dates for date modification
-    startDate: booking.startDate,
-    endDate: booking.endDate
+
+  // Helper function to get payment method details
+  const getPaymentMethodDisplay = (payment: any) => {
+    // Find the payment method in the fetched list
+    const paymentMethod = paymentMethods.find(pm => pm.id === payment.stripePaymentMethodId);
+
+    if (!paymentMethod) {
+      return {
+        method: "Not Set",
+        bank: "No Payment Method"
+      };
+    }
+
+    if (paymentMethod.type === 'card') {
+      const brand = paymentMethod.brand?.charAt(0).toUpperCase() + paymentMethod.brand?.slice(1);
+      return {
+        method: "Card",
+        bank: `${brand} ••••${paymentMethod.lastFour}`
+      };
+    } else {
+      return {
+        method: "ACH Transfer",
+        bank: paymentMethod.bankName || `Bank ••••${paymentMethod.lastFour}`
+      };
+    }
   };
 
   // Format payment data for the table
@@ -214,13 +193,13 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     .map((payment: any) => {
       const hasPendingModification = payment.paymentModifications.length > 0; // Show red dot for any pending modification
       const modification = payment.paymentModifications[0]; // Get the first (and should be only) pending modification
-      
+
       let modificationData = null;
       if (modification) {
-        const requestorName = modification.requestor.fullName || 
+        const requestorName = modification.requestor.fullName ||
           `${modification.requestor.firstName || ''} ${modification.requestor.lastName || ''}`.trim() ||
           modification.requestor.email || 'Unknown';
-        
+
         modificationData = {
           id: modification.id,
           requestorName,
@@ -238,11 +217,13 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
         };
       }
 
+      const paymentMethodDisplay = getPaymentMethodDisplay(payment);
+
       return {
         amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         type: getPaymentTypeLabel(payment.type),
-        method: "ACH Transfer",
-        bank: "Bank Account",
+        method: paymentMethodDisplay.method,
+        bank: paymentMethodDisplay.bank,
         dueDate: formatDate(new Date(payment.dueDate)),
         status: getPaymentStatus(payment),
         paymentId: payment.id,
@@ -258,13 +239,13 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     .map((payment: any) => {
       const hasPendingModification = payment.paymentModifications.length > 0; // Show red dot for any pending modification
       const modification = payment.paymentModifications[0]; // Get the first (and should be only) pending modification
-      
+
       let modificationData = null;
       if (modification) {
-        const requestorName = modification.requestor.fullName || 
+        const requestorName = modification.requestor.fullName ||
           `${modification.requestor.firstName || ''} ${modification.requestor.lastName || ''}`.trim() ||
           modification.requestor.email || 'Unknown';
-        
+
         modificationData = {
           id: modification.id,
           requestorName,
@@ -282,11 +263,13 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
         };
       }
 
+      const paymentMethodDisplay = getPaymentMethodDisplay(payment);
+
       return {
         amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         type: getPaymentTypeLabel(payment.type),
-        method: "ACH Transfer",
-        bank: "Bank Account",
+        method: paymentMethodDisplay.method,
+        bank: paymentMethodDisplay.bank,
         dueDate: formatDate(new Date(payment.dueDate)),
         status: getPaymentStatus(payment),
         paymentId: payment.id,
@@ -302,14 +285,12 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   };
 
   return (
-    <BookingDetailClient
-      bookingData={bookingData}
+    <RentPaymentsTable
       paymentsData={paymentsData}
       hostName={hostName}
       hostAvatar={host.imageUrl || "/image-35.png"}
-      listingId={booking.listingId}
       bookingId={params.bookingId}
-      paymentMethods={paymentMethods}
+      initialPaymentMethods={paymentMethods}
     />
   );
 }
