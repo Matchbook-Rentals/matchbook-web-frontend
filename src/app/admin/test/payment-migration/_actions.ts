@@ -227,6 +227,7 @@ export async function createSecurityDepositRecord(bookingId: string) {
         baseAmount: securityDepositAmount + transferFee,
         dueDate: booking.createdAt,
         isPaid: true,
+        status: 'PROCESSING', // ACH payments are still settling
         stripePaymentMethodId: booking.match.stripePaymentMethodId,
         stripePaymentIntentId: booking.match.stripePaymentIntentId,
         paymentCapturedAt: new Date(),
