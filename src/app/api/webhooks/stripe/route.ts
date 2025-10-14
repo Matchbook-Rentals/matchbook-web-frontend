@@ -98,23 +98,35 @@ async function handleUnhandledEvent(event: any): Promise<void> {
 
 /**
  * Verify Stripe webhook signature
+ * Tries STRIPE_WEBHOOK_SECRET (Connect webhook) first, then STRIPE_PAYMENT_WEBHOOK_SECRET
  */
-const verifyStripeSignature = (req: Request, body: string, signature: string): boolean => {
-  try {
-    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-    if (!endpointSecret) {
-      console.error('Missing STRIPE_WEBHOOK_SECRET');
-      return false;
+const verifyStripeSignature = (body: string, signature: string): boolean => {
+  // Try Connect webhook secret first
+  const connectSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (connectSecret) {
+    try {
+      stripe.webhooks.constructEvent(body, signature, connectSecret);
+      console.log('✅ Verified with STRIPE_WEBHOOK_SECRET (Connect webhook)');
+      return true;
+    } catch (err) {
+      console.log('⚠️ STRIPE_WEBHOOK_SECRET verification failed, trying payment webhook...');
     }
-
-    // Verify the signature
-    stripe.webhooks.constructEvent(body, signature, endpointSecret);
-    return true;
-  } catch (err) {
-    console.error(`Webhook signature verification failed: ${err}`);
-    return false;
   }
+
+  // Try payment webhook secret
+  const paymentSecret = process.env.STRIPE_PAYMENT_WEBHOOK_SECRET;
+  if (paymentSecret) {
+    try {
+      stripe.webhooks.constructEvent(body, signature, paymentSecret);
+      console.log('✅ Verified with STRIPE_PAYMENT_WEBHOOK_SECRET');
+      return true;
+    } catch (err) {
+      console.log('⚠️ STRIPE_PAYMENT_WEBHOOK_SECRET verification failed');
+    }
+  }
+
+  console.error('❌ Webhook signature verification failed with both secrets');
+  return false;
 };
 
 export async function POST(req: Request) {
@@ -141,7 +153,7 @@ export async function POST(req: Request) {
 
     // Verify the signature
     console.log('🔐 [Stripe Webhook] Verifying signature...');
-    if (!verifyStripeSignature(req, body, signature)) {
+    if (!verifyStripeSignature(body, signature)) {
       console.error('❌ [Stripe Webhook] Invalid Stripe signature');
       return NextResponse.json({ error: 'Invalid Stripe signature' }, { status: 400 });
     }
