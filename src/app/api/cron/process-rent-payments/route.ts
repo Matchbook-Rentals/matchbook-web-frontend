@@ -8,7 +8,7 @@ import {
   centsToDollars,
   PERCENT_MULTIPLIER,
   MS_PER_DAY,
-  DAYS_PER_MONTH
+  DAYS_PER_MONTH_PRECISE
 } from '@/lib/payment-constants';
 import { FEES } from '@/lib/fee-constants';
 
@@ -276,7 +276,7 @@ const processIndividualPayment = async (payment: any) => {
       // Calculate booking duration in months to determine platform fee rate
       const startDate = new Date(booking.startDate);
       const endDate = new Date(booking.endDate);
-      const durationInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (MS_PER_DAY * DAYS_PER_MONTH));
+      const durationInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (MS_PER_DAY * DAYS_PER_MONTH_PRECISE));
 
       // Determine platform fee rate based on booking duration
       // >= 6 months: 1.5% platform fee

@@ -2,8 +2,6 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import type { FieldFormType } from '@/components/pdf-editor/types';
 import type { Recipient } from '@/components/pdf-editor/RecipientManager';
-import fs from 'fs';
-import path from 'path';
 
 export interface ExportOptions {
   showFieldBorders?: boolean;
@@ -26,21 +24,38 @@ const SIGNATURE_FONT_FILES: Record<string, string> = {
 // Helper function to load signature fonts
 async function loadSignatureFonts(pdfDoc: PDFDocument) {
   const fonts: Record<string, any> = {};
+  const isServer = typeof window === 'undefined';
 
   for (const [fontKey, fileName] of Object.entries(SIGNATURE_FONT_FILES)) {
     try {
-      // In Next.js, public files are served from the root, but on the server we need to read from the file system
-      const fontPath = path.join(process.cwd(), 'public', 'fonts', fileName);
-      console.log(`Loading font from: ${fontPath}`);
+      let fontBytes: ArrayBuffer;
 
-      // Check if file exists
-      if (!fs.existsSync(fontPath)) {
-        console.error(`Font file not found: ${fontPath}`);
-        continue;
+      if (isServer) {
+        // Server-side: use fs to read from file system
+        const fs = await import('fs');
+        const path = await import('path');
+        const fontPath = path.join(process.cwd(), 'public', 'fonts', fileName);
+        console.log(`Loading font from: ${fontPath}`);
+
+        // Check if file exists
+        if (!fs.existsSync(fontPath)) {
+          console.error(`Font file not found: ${fontPath}`);
+          continue;
+        }
+
+        fontBytes = fs.readFileSync(fontPath);
+        console.log(`Font ${fileName} loaded, size: ${fontBytes.length} bytes`);
+      } else {
+        // Client-side: fetch from public directory
+        const response = await fetch(`/fonts/${fileName}`);
+        if (!response.ok) {
+          console.error(`Font file not found: /fonts/${fileName}`);
+          continue;
+        }
+        fontBytes = await response.arrayBuffer();
+        console.log(`Font ${fileName} fetched, size: ${fontBytes.byteLength} bytes`);
       }
 
-      const fontBytes = fs.readFileSync(fontPath);
-      console.log(`Font ${fileName} loaded, size: ${fontBytes.length} bytes`);
       fonts[fontKey] = await pdfDoc.embedFont(fontBytes);
       console.log(`Font ${fontKey} embedded successfully`);
     } catch (error) {

@@ -54,7 +54,18 @@ const nextConfig = {
   env: {
     // WebSocket server URL
     NEXT_PUBLIC_GO_SERVER_URL: process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080'
-  }
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Don't bundle Node.js modules on the client side
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      };
+    }
+    return config;
+  },
 }
 
 module.exports = nextConfig
