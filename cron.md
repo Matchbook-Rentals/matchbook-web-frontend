@@ -1,107 +1,39 @@
-# Matchbook Cron Jobs Documentation
+# Matchbook Cron Jobs
 
-This document outlines all cron jobs available in the Matchbook system. These jobs are designed to run at specific intervals to automate various platform operations.
+This document provides an index of all cron jobs in the Matchbook system. For detailed documentation on each job, follow the links below.
 
 ## Overview
 
-All cron jobs are implemented as API routes under `/api/cron/` and require authorization using the `CRON_SECRET` environment variable. Jobs can be triggered manually through the admin interface or via external scheduling services.
+All cron jobs are implemented as API routes under `/api/cron/` and require authorization using the `CRON_SECRET` environment variable. Jobs can be triggered manually through the admin interface at `/app/admin/cron-jobs` or via external scheduling services.
 
 ## Available Cron Jobs
 
-### 1. Check Unread Messages
+| Job | Schedule | Purpose | Documentation |
+|-----|----------|---------|---------------|
+| **Check Unread Messages** | Daily at midnight UTC | Creates notifications for unread messages older than 2 minutes | [Details](./docs/cron/check-unread-messages.md) |
+| **Process Rent Payments** | Daily at 1:00 AM PT (8:00 AM UTC) | Processes all rent payments due today and transfers funds to hosts | [Details](./docs/cron/process-rent-payments.md) |
+| **Preview Rent Payments** | Daily at 1:00 AM PT (8:00 AM UTC) | Emails preview of tomorrow's rent payments to admin | [Details](./docs/cron/preview-rent-payments.md) |
+| **Roll Search Dates** | Daily (recommended early morning) | Expires outdated items and rolls search dates forward | [Details](./docs/cron/roll-search-dates.md) |
 
-**Endpoint:** `/api/cron/check-unread-messages`
-**Schedule:** Daily at midnight UTC
-**Purpose:** Creates notifications for unread messages older than 2 minutes
+## Quick Start
 
-#### Description
-This job finds messages that are unread and haven't had notifications sent yet. It creates both in-app notifications and sends email alerts to recipients.
+### Manual Triggering via Admin Interface
 
-#### Business Logic
-- Finds messages older than 2 minutes that are unread
-- Creates notifications for each recipient (excluding the sender)
-- Sends email notifications using the configured email service
-- Marks messages as having notifications sent
+1. Navigate to `/app/admin/cron-jobs`
+2. Select the job to trigger
+3. Click "Trigger Now"
+4. Monitor execution results
 
----
+### Manual Triggering via API
 
-### 2. Process Rent Payments
-
-**Endpoint:** `/api/cron/process-rent-payments`
-**Schedule:** Daily at 1:00 AM Pacific Time (8:00 AM UTC)
-**Purpose:** Processes all rent payments due today
-
-#### Description
-Automatically charges renters and transfers funds to hosts for rent payments due today. This is the core payment processing system for recurring rent payments.
-
-#### Business Logic
-1. **Find Due Payments**: Identifies rent payments where `dueDate` is today (UTC calendar date)
-2. **Payment Processing**: Creates Stripe PaymentIntents with automatic capture
-3. **Fund Transfer**: Transfers full amount to host's Stripe Connect account
-4. **Record Keeping**: Updates payment status and creates transaction records
-5. **Notifications**: Sends email notifications for success/failure
-6. **Error Handling**: Implements retry logic (max 3 attempts)
-
-#### Fee Structure
-- **Service fees** (3% for trips ≤6 months, 1.5% for trips >6 months) are already included in the payment amount
-- **Full amount** including service fee is transferred to host
-- Stripe processing fees are automatically deducted by Stripe
-- Platform revenue comes from the $7 deposit transfer fee collected at booking time
-
-#### Safety Features
-- Idempotency checks to prevent duplicate processing
-- Maximum retry attempts to handle temporary failures
-- Comprehensive logging for audit and debugging
-- Graceful handling of invalid payment methods
-
----
-
-### 3. Preview Rent Payments
-
-**Endpoint:** `/api/cron/preview-rent-payments`
-**Schedule:** Daily at 1:00 AM Pacific Time (8:00 AM UTC)
-**Purpose:** Emails preview of tomorrow's rent payments to tyler.bennett52@gmail.com
-
-#### Description
-Sends a detailed preview email showing all rent payments that will be processed the next day. Provides advance visibility for cash flow planning and issue identification.
-
-#### Report Contents
-- Count of payments to be processed
-- Total dollar amount across all payments
-- Breakdown by payment method type (ACH vs Card)
-- Individual payment details (renter, host, property, amount)
-- Fee calculations and net proceeds
-- Potential issues (missing payment methods, disabled accounts)
-
-#### Email Format
-- Rich HTML formatting with tables and summaries
-- Color-coded status indicators
-- Actionable insights and next steps
-- Issue highlighting for items requiring attention
-
----
-
-## Authorization
-
-All cron jobs require proper authorization using the `CRON_SECRET` environment variable:
+All cron jobs use GET requests with bearer token authentication:
 
 ```bash
 curl -H "Authorization: Bearer ${CRON_SECRET}" \
-  https://your-domain.com/api/cron/job-name
+  https://your-domain.com/api/cron/[job-name]
 ```
 
-## Manual Triggering
-
-### Admin Interface
-Navigate to `/app/admin/cron-jobs` to manually trigger any cron job. This interface is restricted to admin users and provides:
-- List of all available cron jobs
-- Manual trigger buttons
-- Execution status and results
-- Execution time tracking
-
-### Direct API Calls
-You can trigger cron jobs directly via HTTP GET requests:
-
+**Examples:**
 ```bash
 # Check unread messages
 curl -H "Authorization: Bearer ${CRON_SECRET}" \
@@ -114,23 +46,27 @@ curl -H "Authorization: Bearer ${CRON_SECRET}" \
 # Preview rent payments
 curl -H "Authorization: Bearer ${CRON_SECRET}" \
   https://your-domain.com/api/cron/preview-rent-payments
+
+# Roll search dates
+curl -H "Authorization: Bearer ${CRON_SECRET}" \
+  https://your-domain.com/api/cron/roll-search-dates
 ```
 
-## External Scheduling Options
+## External Scheduling
 
-Since Vercel cron scheduling is not used, you can set up external scheduling services:
+Since Vercel cron scheduling is not used, set up external scheduling:
 
-### 1. GitHub Actions
-Create a workflow file (`.github/workflows/cron.yml`):
+### Option 1: GitHub Actions
+
+Create `.github/workflows/cron.yml`:
 
 ```yaml
 name: Cron Jobs
 on:
   schedule:
-    # Run payment jobs at 1 AM Pacific (8 AM UTC)
-    - cron: '0 8 * * *'
-    # Run message check at midnight UTC
-    - cron: '0 0 * * *'
+    - cron: '0 8 * * *'  # Payment jobs at 1 AM PT
+    - cron: '0 0 * * *'  # Message checks at midnight UTC
+    - cron: '0 2 * * *'  # Search date rolling at 2 AM UTC
 
 jobs:
   run-crons:
@@ -144,28 +80,35 @@ jobs:
             https://your-domain.com/api/cron/process-rent-payments
           curl -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             https://your-domain.com/api/cron/preview-rent-payments
+          curl -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://your-domain.com/api/cron/roll-search-dates
 ```
 
-### 2. External Cron Services
+### Option 2: External Cron Services
+
 - **cron-job.org**: Free web-based cron service
 - **EasyCron**: Paid service with advanced features
 - **Cronhooks**: Simple webhook-based cron service
 
-### 3. Server-Side Cron
-If you have your own server, add to crontab:
+### Option 3: Server-Side Cron
+
+Add to your server's crontab:
 
 ```bash
-# Process rent payments daily at 1 AM Pacific
+# Process rent payments daily at 1 AM Pacific (8 AM UTC)
 0 8 * * * curl -H "Authorization: Bearer ${CRON_SECRET}" https://your-domain.com/api/cron/process-rent-payments
 
-# Preview rent payments daily at 1 AM Pacific
+# Preview rent payments daily at 1 AM Pacific (8 AM UTC)
 0 8 * * * curl -H "Authorization: Bearer ${CRON_SECRET}" https://your-domain.com/api/cron/preview-rent-payments
 
 # Check unread messages daily at midnight UTC
 0 0 * * * curl -H "Authorization: Bearer ${CRON_SECRET}" https://your-domain.com/api/cron/check-unread-messages
+
+# Roll search dates daily at 2 AM UTC
+0 2 * * * curl -H "Authorization: Bearer ${CRON_SECRET}" https://your-domain.com/api/cron/roll-search-dates
 ```
 
-## Monitoring and Logging
+## Monitoring & Logging
 
 All cron jobs include comprehensive logging:
 - Execution start/end times
@@ -174,16 +117,16 @@ All cron jobs include comprehensive logging:
 - Error messages and stack traces
 - Performance metrics
 
-Monitor execution through:
+**Monitor through:**
 - Application logs
-- Admin cron jobs interface
+- Admin cron jobs interface (`/app/admin/cron-jobs`)
 - Email notifications (for payment jobs)
 - Stripe dashboard (for payment processing)
 
 ## Error Handling
 
 Each cron job implements robust error handling:
-- **Graceful degradation**: Partial failures don't stop entire job execution
+- **Graceful degradation**: Partial failures don't stop entire job
 - **Retry logic**: Automatic retries for transient failures
 - **Error notifications**: Admin alerts for critical failures
 - **Detailed logging**: Full context for debugging
@@ -196,9 +139,9 @@ Required environment variables:
 - `STRIPE_SECRET_KEY`: Stripe API key for payment processing
 - `DATABASE_URL`: Database connection string
 
-## Security Considerations
+## Security
 
-- All endpoints require proper authorization
+- All endpoints require bearer token authorization
 - Secrets are never logged or exposed
 - Payment processing uses Stripe's secure APIs
 - Idempotency keys prevent duplicate operations
@@ -206,11 +149,19 @@ Required environment variables:
 
 ## Testing
 
-Test cron jobs safely using the admin interface:
+**Always test in development environment first!**
+
 1. Navigate to `/app/admin/cron-jobs`
 2. Select the job to test
 3. Click "Trigger Now"
 4. Monitor execution results
 5. Check logs for detailed output
 
-Always test in a development environment before deploying to production.
+**For payment jobs**: Only use test Stripe keys and test payment methods.
+
+## Related Documentation
+
+- [Payment System Overview](./docs/payment-spec.md)
+- [Stripe Webhooks](./docs/webhooks/stripe.md)
+- [Notification System](./docs/notifications.md)
+- [Admin Interface](./docs/admin.md)

@@ -311,10 +311,10 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
   },
 
   rent_payment_failed: {
-    subject: 'Rent Payment Failed - Action Required',
-    headerText: 'Rent Payment Failed',
+    subject: 'Payment Issue. Action Required',
+    headerText: 'Payment Issue',
     contentTitle: '',
-    buttonText: 'Update payment method',
+    buttonText: 'Update Payment',
     getContentText: (content, notification) => {
       // Content will be formatted in the buildNotificationEmailData function
       return content;
@@ -737,30 +737,15 @@ export function buildNotificationEmailData(
     const firstName = user?.firstName || 'there';
     const amount = additionalData.amount || 'your rent payment';
     const listingTitle = additionalData.listingTitle || 'your property';
-    const paymentDate = additionalData.paymentDate || 'today';
-    const failureReason = additionalData.failureReason || 'payment processing error';
-    const isAdmin = !user?.firstName && firstName === 'Tyler'; // Admin notifications don't have user context
+    const nextRetryDate = additionalData.nextRetryDate || 'the next business day';
 
-    if (isAdmin) {
-      // Admin notification with full details
-      const renterName = additionalData.renterName || 'The renter';
-      const renterEmail = additionalData.renterEmail || 'N/A';
-      const hostName = additionalData.hostName || 'The host';
-      const hostEmail = additionalData.hostEmail || 'N/A';
-      const paymentId = additionalData.paymentId || 'N/A';
-      const retryCount = additionalData.retryCount || 0;
+    // Format the email body to match spec
+    emailData.contentText = `Hi ${firstName},\n\nYour recent payment of $${amount} for ${listingTitle} could not be processed.\n\nWe will attempt to process this payment again on ${nextRetryDate}.\n\nNeed to change your form of payment? Please update your payment method here to avoid disruptions.`;
 
-      emailData.contentText = `Rent payment failed:\n\nProperty: ${listingTitle}\nAmount: $${amount}\nDate: ${paymentDate}\nReason: ${failureReason}\n\nRenter: ${renterName} (${renterEmail})\nHost: ${hostName} (${hostEmail})\n\nPayment ID: ${paymentId}\nRetry Count: ${retryCount}`;
-      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/admin`;
+    if (additionalData.actionUrl) {
+      emailData.buttonUrl = additionalData.actionUrl;
     } else {
-      // Renter notification
-      emailData.contentText = `Hi ${firstName},\n\nYour rent payment of $${amount} for ${listingTitle} failed on ${paymentDate}.\n\nReason: ${failureReason}\n\nPlease update your payment method to avoid disruptions. We'll automatically retry the payment once you update your payment method.`;
-
-      if (additionalData.actionUrl) {
-        emailData.buttonUrl = additionalData.actionUrl;
-      } else {
-        emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/payment-methods`;
-      }
+      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/payment-methods`;
     }
   }
 
