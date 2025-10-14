@@ -6,7 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
-import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell, Star, Shield, Download, Upload, RotateCcw } from 'lucide-react'
+import { PlayIcon, FlaskConical, Globe, Component, Server, FileText, Home, AlertTriangle, Bell, Star, Shield, Download, Upload, RotateCcw, Database } from 'lucide-react'
 import Link from 'next/link'
 
 export default function TestSuitesPage() {
@@ -170,6 +170,13 @@ export default function TestSuitesPage() {
       description: 'Test and debug Stripe webhook handling and events',
       icon: <Server className="h-5 w-5" />,
       path: '/admin/test/webhooks/stripe'
+    },
+    {
+      id: 'payment-migration',
+      name: 'Payment Migration',
+      description: 'Migrate existing bookings to itemized payment charge system with security deposit records',
+      icon: <Database className="h-5 w-5" />,
+      path: '/admin/test/payment-migration'
     }
   ]
 
