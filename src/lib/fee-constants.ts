@@ -30,6 +30,8 @@
  * @module fee-constants
  */
 
+import { PERCENT_MULTIPLIER, roundToCents, CENTS_PER_DOLLAR } from './payment-constants';
+
 export const FEES = {
   /**
    * Flat deposit transfer fee for all deposit transactions
@@ -97,7 +99,7 @@ export function getTransferFee(): number {
  * @returns Formatted percentage string (e.g., "3%")
  */
 export function formatFeeRate(rate: number): string {
-  return `${(rate * 100).toFixed(1).replace(/\.0$/, '')}%`;
+  return `${(rate * PERCENT_MULTIPLIER).toFixed(1).replace(/\.0$/, '')}%`;
 }
 
 /**
@@ -109,7 +111,7 @@ export function formatFeeRate(rate: number): string {
 export function calculateCreditCardFee(amount: number): number {
   // Self-inclusive calculation: totalAmount = baseAmount / (1 - 0.03)
   const totalWithFee = amount / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
-  return Math.round((totalWithFee - amount) * 100) / 100;
+  return roundToCents(totalWithFee - amount);
 }
 
 /**
@@ -139,7 +141,7 @@ export function calculateTotalWithStripeCardFee(baseAmount: number): number {
  * const base = reverseCalculateBaseAmount(234.02); // Returns 227
  */
 export function reverseCalculateBaseAmount(totalWithFee: number): number {
-  return Math.round(totalWithFee / (1 + FEES.CREDIT_CARD_FEE.PERCENTAGE) * 100) / 100;
+  return roundToCents(totalWithFee / (1 + FEES.CREDIT_CARD_FEE.PERCENTAGE));
 }
 
 /**

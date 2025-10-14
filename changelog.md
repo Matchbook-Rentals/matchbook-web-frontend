@@ -1,5 +1,18 @@
 # Changelog
 
+## Implement itemized payment charge system with deposit tracking
+- Added RentPaymentCharge model for itemized breakdown of all payment components (rent, deposits, fees)
+- Created charge builder utilities for BASE_RENT, SECURITY_DEPOSIT, PET_RENT, PET_DEPOSIT, PLATFORM_FEE, CREDIT_CARD_FEE, TRANSFER_FEE
+- Implemented dual-write pattern storing both legacy amount field and new totalAmount/baseAmount with charges for backward compatibility
+- Added deposit payment tracking as RentPayment record (isPaid=true) with itemized charges for security deposits, transfer fees, and card fees
+- Created payment constants library eliminating all magic numbers (CENTS_PER_DOLLAR, MAX_PAYMENT_RETRIES, MS_PER_DAY, etc.)
+- Updated payment-calculations to generate payment schedules with itemized charge arrays
+- Enhanced payment display helpers for backward-compatible reading of both legacy and new payment models
+- Updated confirm-payment-and-book route to create deposit payment with charges before monthly rent schedule
+- Modified cron jobs (process-rent-payments, preview-rent-payments) to read from charges with fallback to legacy fields
+- Removed unused admin test routes (documenso-integration, rent-payments) and added Stripe webhooks link
+- All monetary amounts now stored in cents as integers to avoid floating-point errors
+
 ## Improve search UI responsive layout and viewport handling
 - Hide filter display completely when no filters are active to save screen space
 - Show filter badges at all screen sizes when filters are active for better mobile UX

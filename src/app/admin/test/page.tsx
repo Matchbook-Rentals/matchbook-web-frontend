@@ -163,6 +163,13 @@ export default function TestSuitesPage() {
       description: 'Reset a user\'s application state to make them appear as fresh users',
       icon: <RotateCcw className="h-5 w-5" />,
       path: '/admin/test/app/reset'
+    },
+    {
+      id: 'stripe-webhooks',
+      name: 'Stripe Webhooks',
+      description: 'Test and debug Stripe webhook handling and events',
+      icon: <Server className="h-5 w-5" />,
+      path: '/admin/test/webhooks/stripe'
     }
   ]
 

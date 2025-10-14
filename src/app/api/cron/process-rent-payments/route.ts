@@ -3,6 +3,14 @@ import prisma from '@/lib/prismadb';
 import stripe from '@/lib/stripe';
 import { sendNotificationEmail } from '@/lib/send-notification-email';
 import { buildNotificationEmailData, getNotificationEmailSubject } from '@/lib/notification-email-config';
+import {
+  MAX_PAYMENT_RETRIES,
+  centsToDollars,
+  PERCENT_MULTIPLIER,
+  MS_PER_DAY,
+  DAYS_PER_MONTH
+} from '@/lib/payment-constants';
+import { FEES } from '@/lib/fee-constants';
 
 /**
  * CRON JOB: Process Rent Payments
@@ -147,7 +155,7 @@ const findDuePayments = async (todayMidnight: Date) => {
       cancelledAt: null,
       stripePaymentMethodId: { not: null },
       // Only process payments that haven't exceeded retry limit
-      retryCount: { lt: 3 }
+      retryCount: { lt: MAX_PAYMENT_RETRIES }
     },
     include: {
       booking: {
@@ -184,7 +192,8 @@ const findDuePayments = async (todayMidnight: Date) => {
             }
           }
         }
-      }
+      },
+      charges: true // Include itemized charges for new payment model
     }
   });
 };
@@ -224,7 +233,7 @@ const processIndividualPayment = async (payment: any) => {
   const renter = booking.user;
   const host = booking.listing.user;
 
-  console.log(`Processing payment ${payment.id} for $${(Number(payment.amount) / 100).toFixed(2)} from ${renter.firstName} to ${host.firstName}`);
+  console.log(`Processing payment ${payment.id} for $${centsToDollars(Number(payment.amount)).toFixed(2)} from ${renter.firstName} to ${host.firstName}`);
 
   try {
     // Verify host can receive payments
@@ -237,29 +246,56 @@ const processIndividualPayment = async (payment: any) => {
     const isCard = paymentMethod.type === 'card';
     const isACH = paymentMethod.type === 'us_bank_account';
 
-    // Amount is already stored in cents in the database (Decimal type)
+    // Read amount - prefer totalAmount (new) over amount (legacy)
     // NOTE: The service fee is already included in the amount when the payment was created
-    const totalAmount = Number(payment.amount);
+    const totalAmount = payment.totalAmount !== null && payment.totalAmount !== undefined
+      ? Number(payment.totalAmount)
+      : Number(payment.amount);
 
-    // Calculate booking duration in months to determine platform fee rate
-    const startDate = new Date(booking.startDate);
-    const endDate = new Date(booking.endDate);
-    const durationInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
+    // Try to get platform fee from charges (new system)
+    let platformFeeAmount = 0;
+    let platformFeeRate = 0;
 
-    // Determine platform fee rate based on booking duration
-    // >= 6 months: 1.5% platform fee
-    // < 6 months: 3% platform fee
-    const platformFeeRate = durationInMonths >= 6 ? 0.015 : 0.03;
-    const platformFeeAmount = Math.round(totalAmount * platformFeeRate);
+    if (payment.charges && payment.charges.length > 0) {
+      // New system: Read platform fee from charges
+      const platformFeeCharge = payment.charges.find(
+        (c: any) => c.category === 'PLATFORM_FEE' && c.isApplied
+      );
+
+      if (platformFeeCharge) {
+        platformFeeAmount = Number(platformFeeCharge.amount);
+        // Calculate rate from metadata if available
+        if (platformFeeCharge.metadata && typeof platformFeeCharge.metadata === 'object' && 'rate' in platformFeeCharge.metadata) {
+          platformFeeRate = Number(platformFeeCharge.metadata.rate) / PERCENT_MULTIPLIER; // Convert from percentage
+        }
+      }
+    }
+
+    // Fallback to legacy calculation if no charges
+    if (platformFeeAmount === 0) {
+      // Calculate booking duration in months to determine platform fee rate
+      const startDate = new Date(booking.startDate);
+      const endDate = new Date(booking.endDate);
+      const durationInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (MS_PER_DAY * DAYS_PER_MONTH));
+
+      // Determine platform fee rate based on booking duration
+      // >= 6 months: 1.5% platform fee
+      // < 6 months: 3% platform fee
+      platformFeeRate = durationInMonths >= FEES.SERVICE_FEE.THRESHOLD_MONTHS
+        ? FEES.SERVICE_FEE.LONG_TERM_RATE
+        : FEES.SERVICE_FEE.SHORT_TERM_RATE;
+      platformFeeAmount = Math.round(totalAmount * platformFeeRate);
+    }
+
     const hostAmount = totalAmount - platformFeeAmount;
 
     console.log(`Payment calculation for ${payment.id}:`, {
-      totalAmount: totalAmount / 100,
-      bookingDurationMonths: durationInMonths,
-      platformFeeRate: platformFeeRate * 100 + '%',
-      platformFeeAmount: platformFeeAmount / 100,
-      hostAmount: hostAmount / 100,
+      totalAmount: centsToDollars(totalAmount),
+      platformFeeRate: (platformFeeRate * PERCENT_MULTIPLIER) + '%',
+      platformFeeAmount: centsToDollars(platformFeeAmount),
+      hostAmount: centsToDollars(hostAmount),
       paymentMethodType: paymentMethod.type,
+      hasCharges: payment.charges && payment.charges.length > 0,
       note: 'Platform fee deducted via application_fee_amount'
     });
 
@@ -284,10 +320,10 @@ const processIndividualPayment = async (payment: any) => {
         hostId: host.id,
         type: 'monthly_rent',
         paymentMethodType: paymentMethod.type,
-        totalAmount: (totalAmount / 100).toString(),
-        platformFeeRate: (platformFeeRate * 100).toString() + '%',
-        platformFeeAmount: (platformFeeAmount / 100).toString(),
-        hostAmount: (hostAmount / 100).toString(),
+        totalAmount: centsToDollars(totalAmount).toString(),
+        platformFeeRate: (platformFeeRate * PERCENT_MULTIPLIER).toString() + '%',
+        platformFeeAmount: centsToDollars(platformFeeAmount).toString(),
+        hostAmount: centsToDollars(hostAmount).toString(),
         bookingDurationMonths: durationInMonths.toString(),
       },
       receipt_email: renter.email,
@@ -299,7 +335,7 @@ const processIndividualPayment = async (payment: any) => {
     console.log(`PaymentIntent created for payment ${payment.id}:`, {
       paymentIntentId: paymentIntent.id,
       status: paymentIntent.status,
-      amount: paymentIntent.amount / 100
+      amount: centsToDollars(paymentIntent.amount)
     });
 
     // Update payment record based on status
@@ -437,7 +473,7 @@ const sendPaymentSuccessNotifications = async (payment: any, paymentIntent: any,
   const renter = booking.user;
   const host = booking.listing.user;
 
-  const amount = (paymentIntent.amount / 100).toFixed(2);
+  const amount = centsToDollars(paymentIntent.amount).toFixed(2);
   const listingTitle = booking.listing.title;
   const paymentDate = new Date().toLocaleDateString();
 
@@ -510,7 +546,7 @@ const sendPaymentProcessingNotifications = async (payment: any, paymentIntent: a
   const { booking } = payment;
   const renter = booking.user;
 
-  const amount = (paymentIntent.amount / 100).toFixed(2);
+  const amount = centsToDollars(paymentIntent.amount).toFixed(2);
   const listingTitle = booking.listing.title;
   const paymentDate = new Date().toLocaleDateString();
 
@@ -556,7 +592,7 @@ const sendPaymentFailureNotifications = async (payment: any, errorMessage: strin
   const renter = booking.user;
   const host = booking.listing.user;
 
-  const amount = (Number(payment.amount) / 100).toFixed(2);
+  const amount = centsToDollars(Number(payment.amount)).toFixed(2);
   const listingTitle = booking.listing.title;
   const paymentDate = new Date().toLocaleDateString();
 

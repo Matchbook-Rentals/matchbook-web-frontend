@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 import { sendNotificationEmail } from '@/lib/send-notification-email';
+import { centsToDollars } from '@/lib/payment-constants';
+import { FEES } from '@/lib/fee-constants';
 
 /**
  * CRON JOB: Preview Rent Payments
@@ -132,7 +134,8 @@ const findTomorrowPayments = async (tomorrowPacific: Date) => {
             }
           }
         }
-      }
+      },
+      charges: true // Include itemized charges for new payment model
     },
     orderBy: [
       { amount: 'desc' },
@@ -183,15 +186,39 @@ const generateReportData = (payments: any[], previewDate: Date) => {
     const renter = booking.user;
     const host = booking.listing.user;
 
-    // Calculate fees (estimates based on payment method)
-    const baseAmount = payment.amount;
+    // Read amount - prefer totalAmount (new) over amount (legacy)
+    const baseAmount = payment.totalAmount !== null && payment.totalAmount !== undefined
+      ? Number(payment.totalAmount)
+      : Number(payment.amount);
+
+    // Try to get platform fee from charges (new system)
     let platformFee = 0;
     let paymentMethodType = 'Unknown';
 
-    if (payment.stripePaymentMethodId) {
+    if (payment.charges && payment.charges.length > 0) {
+      // New system: Read platform fee from charges
+      const platformFeeCharge = payment.charges.find(
+        (c: any) => c.category === 'PLATFORM_FEE' && c.isApplied
+      );
+      if (platformFeeCharge) {
+        platformFee = Number(platformFeeCharge.amount);
+      }
+
+      // Check if card fee is applied to determine payment method type
+      const cardFeeCharge = payment.charges.find(
+        (c: any) => c.category === 'CREDIT_CARD_FEE' && c.isApplied
+      );
+      paymentMethodType = cardFeeCharge ? 'Card (from charges)' : 'ACH (from charges)';
+      if (cardFeeCharge) {
+        cardPayments++;
+      } else {
+        achPayments++;
+      }
+    } else if (payment.stripePaymentMethodId) {
+      // Legacy system: Estimate fees
       // We can't easily determine the payment method type without a Stripe API call
       // For the preview, we'll estimate based on common patterns or default to card fees
-      platformFee = baseAmount * 0.03; // Assume 3% for preview (worst case)
+      platformFee = Math.round(baseAmount * FEES.SERVICE_FEE.SHORT_TERM_RATE); // Assume 3% for preview (worst case)
       paymentMethodType = 'Card (estimated)';
       cardPayments++;
     } else {
@@ -250,7 +277,7 @@ const generateReportData = (payments: any[], previewDate: Date) => {
  * Generate HTML email content
  */
 const generateEmailContent = (data: any) => {
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+  const formatCurrency = (amountInCents: number) => `$${centsToDollars(amountInCents).toFixed(2)}`;
   const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',

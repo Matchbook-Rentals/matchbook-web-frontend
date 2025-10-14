@@ -38,6 +38,18 @@ enum ReviewType {
   RENTER_TO_LISTING // Renter reviews listing (reflects on host in aggregate)
 }
 
+enum RentPaymentChargeCategory {
+  BASE_RENT
+  SECURITY_DEPOSIT
+  PET_RENT
+  PET_DEPOSIT
+  PLATFORM_FEE
+  CREDIT_CARD_FEE
+  TRANSFER_FEE
+  DISCOUNT
+  OTHER
+}
+
 model User {
   id               String    @id @default(uuid())
   stripeAccountId  String?
@@ -1006,7 +1018,9 @@ model CreditReport {
 model RentPayment {
   id                    String              @id @default(cuid())
   bookingId             String
-  amount                Int
+  amount                Int                 // DEPRECATED: Use totalAmount instead. Kept for backward compatibility during migration.
+  totalAmount           Int?                // Authoritative total Stripe should collect (sum of applied charges)
+  baseAmount            Int?                // Sum of non-fee charges (base rent, deposits) before surcharges
   dueDate               DateTime
   isPaid                Boolean             @default(false)
   stripePaymentMethodId String?
@@ -1030,8 +1044,31 @@ model RentPayment {
   // Payment modifications
   paymentModifications  PaymentModification[]
 
+  // Itemized charges (new payment model)
+  charges               RentPaymentCharge[]
+
   booking Booking @relation(fields: [bookingId], references: [id])
   cancelledByUser User? @relation("PaymentCancelledBy", fields: [cancelledBy], references: [id])
+}
+
+model RentPaymentCharge {
+  id              String                     @id @default(cuid())
+  rentPaymentId   String
+  category        RentPaymentChargeCategory
+  amount          Int                        // Always in cents; positive for charges/fees, negative for discounts
+  isApplied       Boolean                    @default(true) // Whether this charge is currently applied to the payment
+  appliedAt       DateTime                   @default(now()) // When this charge was first applied
+  removedAt       DateTime?                  // When this charge was removed (if isApplied = false)
+  metadata        Json?                      // Additional context: Stripe fee IDs, justification, workflow reference, etc.
+
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+
+  rentPayment     RentPayment                @relation(fields: [rentPaymentId], references: [id], onDelete: Cascade)
+
+  @@index([rentPaymentId])
+  @@index([category])
+  @@index([isApplied])
 }
 
 model PaymentModification {

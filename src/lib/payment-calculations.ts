@@ -14,6 +14,20 @@
  */
 
 import { FEES } from './fee-constants';
+import {
+  createBaseRentCharge,
+  createPlatformFeeCharge,
+  createCreditCardFeeCharge,
+  calculateTotalFromCharges,
+  calculateBaseFromCharges,
+  type ChargeDefinition
+} from './charge-builders';
+import {
+  CENTS_PER_DOLLAR,
+  dollarsToCents,
+  roundToCents,
+  MS_PER_DAY
+} from './payment-constants';
 
 // ============================================================================
 // TYPES
@@ -58,6 +72,15 @@ export interface PaymentScheduleItem {
     petRent: number;
     serviceFee: number;
   };
+  // New: itemized charges for new payment model
+  charges?: Array<{
+    category: string;
+    amount: number;
+    isApplied: boolean;
+    metadata?: Record<string, any>;
+  }>;
+  baseAmount?: number;
+  totalAmount?: number;
 }
 
 export interface TripDetails {
@@ -229,7 +252,7 @@ export function calculateProratedRent(
   });
   
   const dailyRate = monthlyRent / daysInMonth;
-  const proratedAmount = Math.round(dailyRate * daysToCharge * 100) / 100;
+  const proratedAmount = roundToCents(dailyRate * daysToCharge);
   
   console.log('💵 PRORATION RESULT:', {
     daysToCharge,
@@ -257,7 +280,7 @@ export function calculateTripMonths(startDate: Date, endDate: Date): number {
   const start = new Date(startDate);
   const end = new Date(endDate);
   const diffTime = Math.abs(end.getTime() - start.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = Math.ceil(diffTime / MS_PER_DAY);
   return Math.ceil(diffDays / 30);
 }
 
@@ -286,8 +309,8 @@ export function calculateServiceFee(
   const rate = tripMonths > FEES.SERVICE_FEE.THRESHOLD_MONTHS
     ? FEES.SERVICE_FEE.LONG_TERM_RATE
     : FEES.SERVICE_FEE.SHORT_TERM_RATE;
-  
-  return Math.round(rentAmount * rate * 100) / 100;
+
+  return roundToCents(rentAmount * rate);
 }
 
 /**
@@ -300,7 +323,7 @@ export function calculateCreditCardFee(baseAmount: number): number {
   // Formula: totalAmount = baseAmount / (1 - 0.03)
   const totalWithFee = baseAmount / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
   // The fee is the difference
-  return Math.round((totalWithFee - baseAmount) * 100) / 100;
+  return roundToCents(totalWithFee - baseAmount);
 }
 
 /**
@@ -319,7 +342,7 @@ export function calculateTotalWithCreditCardFee(baseAmount: number): number {
  * @returns Amount in cents
  */
 export function dollarsToStripeAmount(dollars: number): number {
-  return Math.round(dollars * 100);
+  return dollarsToCents(dollars);
 }
 
 /**
@@ -328,7 +351,7 @@ export function dollarsToStripeAmount(dollars: number): number {
  * @returns Amount in dollars
  */
 export function stripAmountToDollars(cents: number): number {
-  return cents / 100;
+  return cents / CENTS_PER_DOLLAR;
 }
 
 // ============================================================================
@@ -460,8 +483,43 @@ export function generatePaymentSchedule(
   
   // First month (potentially prorated)
   const firstMonthProration = calculateProratedRent(totalMonthlyRent, start);
-  const firstMonthServiceFee = Math.round(firstMonthProration.amount * serviceFeeRate * 100) / 100;
-  
+  const firstMonthServiceFee = roundToCents(firstMonthProration.amount * serviceFeeRate);
+
+  // Build charges for first month
+  const firstMonthCharges: ChargeDefinition[] = [];
+
+  // Base rent charge (convert to cents)
+  const firstMonthRentCents = dollarsToCents(monthlyRent * (firstMonthProration.daysToCharge / firstMonthProration.daysInMonth));
+  firstMonthCharges.push(createBaseRentCharge(
+    firstMonthRentCents,
+    firstMonthProration.isProrated ? {
+      daysInMonth: firstMonthProration.daysInMonth,
+      daysToCharge: firstMonthProration.daysToCharge,
+      dailyRate: firstMonthProration.dailyRate
+    } : undefined
+  ));
+
+  // Pet rent charge if applicable (convert to cents)
+  if (monthlyPetRent > 0) {
+    const firstMonthPetRentCents = dollarsToCents(monthlyPetRent * (firstMonthProration.daysToCharge / firstMonthProration.daysInMonth));
+    firstMonthCharges.push({
+      category: 'PET_RENT',
+      amount: firstMonthPetRentCents,
+      isApplied: true,
+      metadata: firstMonthProration.isProrated ? {
+        daysInMonth: firstMonthProration.daysInMonth,
+        daysToCharge: firstMonthProration.daysToCharge
+      } : undefined
+    });
+  }
+
+  // Platform fee charge (convert to cents)
+  const firstMonthBaseAmountCents = dollarsToCents(firstMonthProration.amount);
+  firstMonthCharges.push(createPlatformFeeCharge(firstMonthBaseAmountCents, tripMonths));
+
+  const firstMonthBaseAmount = calculateBaseFromCharges(firstMonthCharges);
+  const firstMonthTotal = calculateTotalFromCharges(firstMonthCharges);
+
   payments.push({
     amount: firstMonthProration.amount + firstMonthServiceFee,
     dueDate: start,
@@ -473,7 +531,10 @@ export function generatePaymentSchedule(
       rent: monthlyRent * (firstMonthProration.daysToCharge / firstMonthProration.daysInMonth),
       petRent: monthlyPetRent * (firstMonthProration.daysToCharge / firstMonthProration.daysInMonth),
       serviceFee: firstMonthServiceFee
-    }
+    },
+    charges: firstMonthCharges,
+    baseAmount: firstMonthBaseAmount,
+    totalAmount: firstMonthTotal
   });
   
   // Subsequent months
@@ -505,8 +566,36 @@ export function generatePaymentSchedule(
       isProrated = true;
     }
     
-    const monthServiceFee = Math.round(rentAmount * serviceFeeRate * 100) / 100;
-    
+    const monthServiceFee = roundToCents(rentAmount * serviceFeeRate);
+
+    // Build charges for this month
+    const monthCharges: ChargeDefinition[] = [];
+
+    // Base rent charge (convert to cents)
+    const monthRentCents = dollarsToCents(monthlyRent * (rentAmount / totalMonthlyRent));
+    monthCharges.push(createBaseRentCharge(
+      monthRentCents,
+      isProrated ? { description } : undefined
+    ));
+
+    // Pet rent charge if applicable (convert to cents)
+    if (monthlyPetRent > 0) {
+      const monthPetRentCents = dollarsToCents(monthlyPetRent * (rentAmount / totalMonthlyRent));
+      monthCharges.push({
+        category: 'PET_RENT',
+        amount: monthPetRentCents,
+        isApplied: true,
+        metadata: isProrated ? { description } : undefined
+      });
+    }
+
+    // Platform fee charge (convert to cents)
+    const monthBaseAmountCents = dollarsToCents(rentAmount);
+    monthCharges.push(createPlatformFeeCharge(monthBaseAmountCents, tripMonths));
+
+    const monthBaseAmount = calculateBaseFromCharges(monthCharges);
+    const monthTotal = calculateTotalFromCharges(monthCharges);
+
     payments.push({
       amount: rentAmount + monthServiceFee,
       dueDate: currentDate,
@@ -516,7 +605,10 @@ export function generatePaymentSchedule(
         rent: monthlyRent * (rentAmount / totalMonthlyRent),
         petRent: monthlyPetRent * (rentAmount / totalMonthlyRent),
         serviceFee: monthServiceFee
-      }
+      },
+      charges: monthCharges,
+      baseAmount: monthBaseAmount,
+      totalAmount: monthTotal
     });
     
     // Move to next month
