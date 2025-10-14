@@ -1,11 +1,56 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import fontkit from '@pdf-lib/fontkit';
 import type { FieldFormType } from '@/components/pdf-editor/types';
 import type { Recipient } from '@/components/pdf-editor/RecipientManager';
+import fs from 'fs';
+import path from 'path';
 
 export interface ExportOptions {
   showFieldBorders?: boolean;
   includeLabels?: boolean;
   fieldOpacity?: number;
+}
+
+// Map of font family names to font file names
+const SIGNATURE_FONT_FILES: Record<string, string> = {
+  'dancing-script': 'DancingScript-Regular.ttf',
+  'caveat': 'Caveat-Regular.ttf',
+  'kalam': 'Kalam-Bold.ttf',
+  'great-vibes': 'GreatVibes-Regular.ttf',
+  'pacifico': 'Pacifico-Regular.ttf',
+  'sacramento': 'Sacramento-Regular.ttf',
+  'allura': 'Allura-Regular.ttf',
+  'satisfy': 'Satisfy-Regular.ttf',
+};
+
+// Helper function to load signature fonts
+async function loadSignatureFonts(pdfDoc: PDFDocument) {
+  const fonts: Record<string, any> = {};
+
+  for (const [fontKey, fileName] of Object.entries(SIGNATURE_FONT_FILES)) {
+    try {
+      // In Next.js, public files are served from the root, but on the server we need to read from the file system
+      const fontPath = path.join(process.cwd(), 'public', 'fonts', fileName);
+      console.log(`Loading font from: ${fontPath}`);
+
+      // Check if file exists
+      if (!fs.existsSync(fontPath)) {
+        console.error(`Font file not found: ${fontPath}`);
+        continue;
+      }
+
+      const fontBytes = fs.readFileSync(fontPath);
+      console.log(`Font ${fileName} loaded, size: ${fontBytes.length} bytes`);
+      fonts[fontKey] = await pdfDoc.embedFont(fontBytes);
+      console.log(`Font ${fontKey} embedded successfully`);
+    } catch (error) {
+      console.error(`Error loading font ${fileName}:`, error);
+      // Font will be undefined if it fails to load, will fall back to default
+    }
+  }
+
+  console.log(`Loaded signature fonts:`, Object.keys(fonts));
+  return fonts;
 }
 
 export async function exportPDFWithFields(
@@ -24,9 +69,16 @@ export async function exportPDFWithFields(
   try {
     // Load the original PDF
     const pdfDoc = await PDFDocument.load(originalPdfBytes);
+
+    // Register fontkit to enable custom font embedding
+    pdfDoc.registerFontkit(fontkit);
+
     const pages = pdfDoc.getPages();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+    // Load signature fonts
+    const signatureFonts = await loadSignatureFonts(pdfDoc);
 
     // Process each field
     for (const field of fields) {
@@ -45,14 +97,30 @@ export async function exportPDFWithFields(
       // Get the signed value for this field
       const signedValue = signedValues[field.formId];
 
-      // Extract the actual value - handle both string and object formats
+      // Extract the actual value and font info - handle both string and object formats
       let displayText = '';
+      let fontFamily: string | undefined;
+      let signatureType: 'drawn' | 'typed' | undefined;
+
       if (signedValue) {
         if (typeof signedValue === 'string') {
           displayText = signedValue;
         } else if (typeof signedValue === 'object' && signedValue !== null) {
-          // Handle object format (e.g., {type: 'drawn', data: 'base64...'} or {data: '...'})
-          displayText = (signedValue as any).data || (signedValue as any).value || String(signedValue);
+          // Handle object format with metadata (e.g., {type: 'typed', value: 'John Doe', fontFamily: 'dancing-script'})
+          signatureType = (signedValue as any).type;
+          fontFamily = (signedValue as any).fontFamily;
+          displayText = (signedValue as any).value || (signedValue as any).data || String(signedValue);
+
+          // Log signature field info for debugging
+          if (field.type === 'SIGNATURE' || field.type === 'INITIALS') {
+            console.log(`Processing ${field.type} field:`, {
+              fieldId: field.formId,
+              signatureType,
+              fontFamily,
+              displayText: displayText.substring(0, 50),
+              hasFontInMap: fontFamily ? !!signatureFonts[fontFamily] : false
+            });
+          }
         } else {
           // Convert other types to string
           displayText = String(signedValue);
@@ -124,8 +192,19 @@ export async function exportPDFWithFields(
           const maxFontSize = Math.min(height * 0.6, 12);
           const fontSize = Math.max(8, maxFontSize);
 
-          // Choose font based on field type
-          const fieldFont = field.type === 'SIGNATURE' ? boldFont : font;
+          // Choose font based on field type and signature metadata
+          let fieldFont;
+
+          // For typed signatures/initials with a fontFamily, use the signature font
+          if (signatureType === 'typed' && fontFamily && signatureFonts[fontFamily]) {
+            fieldFont = signatureFonts[fontFamily];
+          } else if (field.type === 'SIGNATURE' || field.type === 'INITIALS') {
+            // Fallback for signatures without font metadata - use bold or default signature font
+            fieldFont = signatureFonts['dancing-script'] || boldFont;
+          } else {
+            // Regular fields use standard font
+            fieldFont = font;
+          }
 
           // Calculate text positioning (centered)
           const textWidth = fieldFont.widthOfTextAtSize(displayText, fontSize);

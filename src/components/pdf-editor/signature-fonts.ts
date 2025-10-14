@@ -4,4 +4,6 @@ export const SIGNATURE_FONTS = [
   { value: 'kalam', label: 'Kalam', className: 'font-signature-kalam' },
   { value: 'great-vibes', label: 'Great Vibes', className: 'font-signature-vibes' },
   { value: 'pacifico', label: 'Pacifico', className: 'font-signature-pacifico' },
+  { value: 'sacramento', label: 'Sacramento', className: 'font-signature-sacramento' },
+  { value: 'allura', label: 'Allura', className: 'font-signature-allura' },
 ];

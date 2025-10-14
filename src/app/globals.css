@@ -267,3 +267,13 @@
   font-weight: 400;
 }
 
+.font-signature-sacramento {
+  font-family: var(--font-sacramento), cursive;
+  font-weight: 400;
+}
+
+.font-signature-allura {
+  font-family: var(--font-allura), cursive;
+  font-weight: 400;
+}
+

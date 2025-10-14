@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Inter, Poppins, Cutive, Dancing_Script, Caveat, Kalam, Great_Vibes, Pacifico } from "next/font/google";
+import { Inter, Poppins, Cutive, Dancing_Script, Caveat, Kalam, Great_Vibes, Pacifico, Sacramento, Allura } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AppSessionTracker from "@/components/AppSessionTracker";
@@ -40,6 +40,16 @@ const pacifico = Pacifico({
   weight: ['400'],
   subsets: ["latin"],
   variable: '--font-pacifico'
+});
+const sacramento = Sacramento({
+  weight: ['400'],
+  subsets: ["latin"],
+  variable: '--font-sacramento'
+});
+const allura = Allura({
+  weight: ['400'],
+  subsets: ["latin"],
+  variable: '--font-allura'
 });
 
 export const metadata: Metadata = {
@@ -125,7 +135,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           )}
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         </head>
-        <body className={`${poppins.className} ${dancingScript.variable} ${caveat.variable} ${kalam.variable} ${greatVibes.variable} ${pacifico.variable}`}>
+        <body className={`${poppins.className} ${dancingScript.variable} ${caveat.variable} ${kalam.variable} ${greatVibes.variable} ${pacifico.variable} ${sacramento.variable} ${allura.variable}`}>
           {process.env.NODE_ENV === 'production' && (
             <noscript>
               <iframe
