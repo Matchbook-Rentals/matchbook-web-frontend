@@ -124,12 +124,12 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className="flex flex-col items-center gap-6 p-6 bg-white w-full max-w-[98%] md:w-[95%] md:max-w-[1000px] mx-auto border-0 shadow-lg top-[5vh] sm:top-[10vh] md:top-[15vh] lg:top-[25vh] translate-y-0"
+      <DialogContent
+        className="flex flex-col items-center gap-3 md:gap-6 p-4 md:p-6 bg-white w-full max-w-[98%] md:w-[95%] md:max-w-[1000px] mx-auto border-0 shadow-lg top-[5vh] sm:top-[10vh] md:top-[15vh] lg:top-[20vh] translate-y-0 max-h-[95vh]"
         showCloseButton={false}
       >
         {titleComponent && (
-          <div className="flex items-center justify-between relative self-stretch w-full">
+          <div className="flex items-center justify-between relative self-stretch w-full flex-shrink-0">
             <DialogClose asChild>
               <button className="p-1 hover:bg-gray-100 rounded-sm transition-colors">
                 <XIcon className="w-6 h-6 text-gray-500" />
@@ -141,22 +141,24 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
           </div>
         )}
 
-        <StepProgress currentStep={currentStep} totalSteps={totalSteps} />
+        <div className="flex-shrink-0 block sm:hidden xl:block">
+          <StepProgress currentStep={currentStep} totalSteps={totalSteps} />
+        </div>
 
-        <div className="flex flex-col gap-6 relative self-stretch w-full min-w-0 max-h-[70vh] lg:max-h-[85vh] overflow-hidden">
-          <div className="min-w-0 overflow-y-auto overflow-x-hidden flex-1">
+        <div className="flex flex-col relative self-stretch w-full min-w-0 flex-1 min-h-0 overflow-hidden">
+          <div className="min-w-0 overflow-y-auto overflow-x-hidden flex-1 pb-4">
             {carouselContent ? (
               <div className="relative overflow-x-hidden">
-                <div 
+                <div
                   className="flex transition-transform duration-300 ease-in-out"
                   style={{ transform: `translateX(-${(currentStep - 1) * 100}%)` }}
                 >
                   {carouselContent.map((content, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       ref={(el) => (contentRefs.current[index] = el)}
                       className="w-full flex-shrink-0 transition-all duration-300 ease-in-out"
-                      style={{ 
+                      style={{
                         height: index === currentStep - 1 ? 'auto' : '0px',
                         overflow: index === currentStep - 1 ? 'visible' : 'hidden'
                       }}
@@ -171,7 +173,7 @@ export const BrandDialog: React.FC<BrandDialogProps> = ({
             )}
           </div>
           {footerComponent && (
-            <div className="pt-6 border-t border-gray-200">
+            <div className="pt-1 md:pt-4 border-t border-gray-200 flex-shrink-0 bg-white">
               {footerComponent}
             </div>
           )}

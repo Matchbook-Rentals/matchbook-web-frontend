@@ -500,10 +500,10 @@ export function DesktopDateRange({
   };
 
   return (
-    <div className="bg-background rounded-xl p-6">
+    <div className="bg-background rounded-xl p-6 md:pt-1 md:px-20 xl:p-6">
       <div className="flex flex-wrap gap-8 justify-center">
         <div className="flex-1 flex flex-col max-w-[500px]">
-          <div className="flex-1">
+          <div className="flex-1 overflow-hidden">
             <CalendarMonth
               year={leftYear}
               month={leftMonth}
@@ -530,7 +530,7 @@ export function DesktopDateRange({
           </div>
         </div>
         <div className="flex-1 flex flex-col max-w-[500px]">
-          <div className="flex-1">
+          <div className="flex-1 overflow-hidden">
             <CalendarMonth
               year={rightYear}
               month={rightMonth}

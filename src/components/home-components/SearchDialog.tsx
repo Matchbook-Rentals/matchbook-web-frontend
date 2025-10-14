@@ -55,8 +55,9 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
   const { width } = useWindowSize();
   const { isSignedIn } = useAuth();
 
-  // Check if we're on mobile
+  // Check if we're on mobile or tablet
   const isMobile = width ? width < 640 : false;
+  const isTablet = width ? width >= 640 && width < 1200 : false;
 
   // Update totalGuests whenever guests state changes
   useEffect(() => {
@@ -211,37 +212,38 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
           "flex gap-4 w-full",
           isMobile ? "flex-col items-start p-4 border-t border-[#eaecf0]" : "justify-between flex-wrap"
         )}>
-          {/* Date boxes */}
+          {/* Date boxes - only show on desktop (not mobile or tablet) */}
+          {!isMobile && !isTablet && (
+            <div className={cn(
+              "flex items-center gap-3"
+            )}>
+              <div
+                className={cn(
+                  "w-[136px] bg-background border border-input rounded-md px-3 py-2 text-sm h-10"
+                )}
+              >
+                {formatFooterDate(dateRange.start) || "Start Date"}
+              </div>
+              <span className={cn(
+                "text-gray-600"
+              )}>
+                –
+              </span>
+              <div
+                className={cn(
+                  "w-[136px] bg-background border border-input rounded-md px-3 py-2 text-sm h-10"
+                )}
+              >
+                {formatFooterDate(dateRange.end) || "End Date"}
+              </div>
+            </div>
+          )}
+
+          {/* Controls */}
           <div className={cn(
             "flex items-center gap-3",
-            isMobile ? "justify-between w-full max-w-80" : ""
+            isMobile || isTablet ? "w-full justify-between" : ""
           )}>
-            <div
-              className={cn(
-                "w-[136px] bg-background border border-input rounded-md px-3 py-2 text-sm",
-                isMobile ? "h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5" : "h-10"
-              )}
-            >
-              {formatFooterDate(dateRange.start) || "Start Date"}
-            </div>
-            <span className={cn(
-              "text-gray-600",
-              isMobile ? "font-text-md-regular text-[#667085] whitespace-nowrap" : ""
-            )}>
-              –
-            </span>
-            <div
-              className={cn(
-                "w-[136px] bg-background border border-input rounded-md px-3 py-2 text-sm",
-                isMobile ? "h-10 border border-solid border-[#d0d5dd] rounded-md px-3 py-2.5" : "h-10"
-              )}
-            >
-              {formatFooterDate(dateRange.end) || "End Date"}
-            </div>
-          </div>
-          
-          {/* Controls */}
-          <div className="flex items-center gap-3 w-full justify-between">
             <BrandButton
               variant="outline"
               className={isMobile ? "px-4 py-2.5 h-10 rounded-md border border-solid border-[#d0d5dd] text-[#384250]" : ""}

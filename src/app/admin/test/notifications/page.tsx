@@ -330,6 +330,18 @@ export default function NotificationTestPage() {
         listingTitle: 'Penthouse Suite'
       }
     },
+    {
+      id: 'rent_payment_failed',
+      name: 'Rent Payment Failed',
+      description: 'When a recurring rent payment fails',
+      icon: <AlertTriangle className="h-4 w-4" />,
+      category: 'payment',
+      sampleData: {
+        amount: '2,800',
+        listingTitle: 'Downtown Apartment',
+        nextRetryDate: 'Monday, January 15'
+      }
+    },
     // Reviews
     {
       id: 'review_prompt',
@@ -563,6 +575,7 @@ export default function NotificationTestPage() {
     'payment_failed_severe',
     'payment_failed_host',
     'payment_failed_host_severe',
+    'rent_payment_failed',
     'listing_approved',
     'welcome_renter',
     'ADMIN_INFO',
