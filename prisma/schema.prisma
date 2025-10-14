@@ -62,6 +62,16 @@ enum RentPaymentType {
   OTHER               // Catch-all for edge cases
 }
 
+enum RentPaymentStatus {
+  PENDING           // Not yet attempted
+  PROCESSING        // ACH in progress (3-5 days)
+  AUTHORIZED        // Card authorized but not captured
+  SUCCEEDED         // Payment captured successfully
+  FAILED            // Payment failed (can retry)
+  CANCELLED         // Payment cancelled by admin/system
+  REFUNDED          // Payment was refunded
+}
+
 model User {
   id               String    @id @default(uuid())
   stripeAccountId  String?
@@ -1034,12 +1044,21 @@ model RentPayment {
   totalAmount           Int?                // Authoritative total Stripe should collect (sum of applied charges)
   baseAmount            Int?                // Sum of non-fee charges (base rent, deposits) before surcharges
   dueDate               DateTime
+
+  // Payment status (replaces isPaid)
+  status                RentPaymentStatus   @default(PENDING)
+
+  // DEPRECATED: Use status field instead. Kept for backward compatibility during migration.
   isPaid                Boolean             @default(false)
+
   stripePaymentMethodId String?
   paymentAuthorizedAt   DateTime?
   paymentCapturedAt     DateTime?
   stripePaymentIntentId String?
+
+  // DEPRECATED: Use failures relation instead. Kept for backward compatibility during migration.
   failureReason         String?
+
   retryCount           Int                 @default(0)
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
@@ -1064,6 +1083,37 @@ model RentPayment {
 
   booking Booking @relation(fields: [bookingId], references: [id])
   cancelledByUser User? @relation("PaymentCancelledBy", fields: [cancelledBy], references: [id])
+
+  // Payment failures (audit trail)
+  failures RentPaymentFailure[]
+}
+
+model RentPaymentFailure {
+  id                    String   @id @default(cuid())
+  rentPaymentId         String
+
+  // Failure details
+  failureCode           String   // "R01", "insufficient_funds", "card_declined"
+  failureMessage        String   // Full error message from Stripe
+  failureType           String   // "ach_return", "card_decline", "processing_error"
+
+  // Stripe context
+  stripePaymentIntentId String?
+  stripeErrorType       String?  // Stripe's error.type field
+
+  // Metadata
+  attemptNumber         Int      // Which retry attempt was this?
+
+  // Timestamps
+  failedAt              DateTime @default(now())
+  createdAt             DateTime @default(now())
+
+  // Relationships
+  rentPayment           RentPayment @relation(fields: [rentPaymentId], references: [id], onDelete: Cascade)
+
+  @@index([rentPaymentId])
+  @@index([failureCode])
+  @@index([failedAt])
 }
 
 model RentPaymentCharge {

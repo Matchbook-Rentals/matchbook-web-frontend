@@ -8,6 +8,12 @@ import prismadb from '@/lib/prismadb';
 import { sendPaymentSuccessEmail, sendPaymentFailureEmails, getHumanReadableFailureReason } from '@/lib/emails';
 import { sendDisputeAlert, sendRefundAlert, sendPaymentFailureAlert, sendBookingCreatedAlert, sendPaymentSuccessAlert } from '@/lib/sms-alerts';
 import {
+  sendRentPaymentFailureNotification,
+  sendRentPaymentFailureNotificationToHost,
+  sendRentPaymentSuccessNotification,
+  sendRentPaymentProcessingNotification
+} from '@/lib/notifications/rent-payment-notifications';
+import {
   PaymentIntentProcessingEvent,
   PaymentIntentSucceededEvent,
   PaymentIntentFailedEvent,
@@ -23,7 +29,29 @@ import {
 
 export async function handlePaymentIntentProcessing(event: PaymentIntentProcessingEvent): Promise<void> {
   const paymentIntent = event.data.object;
-  const { type, matchId } = paymentIntent.metadata;
+  const { type, matchId, rentPaymentId } = paymentIntent.metadata;
+
+  // Handle recurring rent payment processing (ACH)
+  if (type === 'monthly_rent' && rentPaymentId) {
+    console.log(`⏳ Rent payment processing for rent payment ${rentPaymentId}`);
+
+    await prismadb.rentPayment.update({
+      where: { id: rentPaymentId },
+      data: {
+        status: 'PROCESSING',
+      },
+    });
+
+    // Send processing notification (for ACH payments)
+    try {
+      await sendRentPaymentProcessingNotification(rentPaymentId);
+      console.log(`✉️ Rent payment processing notification sent for ${rentPaymentId}`);
+    } catch (notificationError) {
+      console.error('Failed to send rent payment processing notification:', notificationError);
+    }
+
+    console.log(`✓ Rent payment ${rentPaymentId} marked as PROCESSING`);
+  }
 
   if (type === 'security_deposit_direct' && matchId) {
     console.log(`⏳ ACH payment processing for match ${matchId}`);
@@ -62,7 +90,31 @@ export async function handlePaymentIntentProcessing(event: PaymentIntentProcessi
 
 export async function handlePaymentIntentSucceeded(event: PaymentIntentSucceededEvent): Promise<void> {
   const paymentIntent = event.data.object;
-  const { userId, type, matchId, hostUserId } = paymentIntent.metadata;
+  const { userId, type, matchId, hostUserId, rentPaymentId } = paymentIntent.metadata;
+
+  // Handle recurring rent payment success
+  if (type === 'monthly_rent' && rentPaymentId) {
+    console.log(`✅ Rent payment succeeded for rent payment ${rentPaymentId}`);
+
+    await prismadb.rentPayment.update({
+      where: { id: rentPaymentId },
+      data: {
+        status: 'SUCCEEDED',
+        isPaid: true, // Keep for backward compatibility
+        paymentCapturedAt: new Date(),
+      },
+    });
+
+    // Send success notification
+    try {
+      await sendRentPaymentSuccessNotification(rentPaymentId);
+      console.log(`✉️ Rent payment success notification sent for ${rentPaymentId}`);
+    } catch (notificationError) {
+      console.error('Failed to send rent payment success notification:', notificationError);
+    }
+
+    console.log(`✓ Rent payment ${rentPaymentId} marked as SUCCEEDED`);
+  }
 
   if (type === 'matchbookVerification') {
     // Extract the session ID
@@ -209,8 +261,125 @@ export async function handlePaymentIntentSucceeded(event: PaymentIntentSucceeded
 
 export async function handlePaymentIntentFailed(event: PaymentIntentFailedEvent): Promise<void> {
   const paymentIntent = event.data.object;
-  const { type, matchId } = paymentIntent.metadata;
+  const { type, matchId, rentPaymentId } = paymentIntent.metadata;
 
+  // Handle recurring rent payment failures
+  if (type === 'monthly_rent' && rentPaymentId) {
+    console.log(`❌ Rent payment failed for rent payment ${rentPaymentId}`);
+
+    // Extract failure details
+    const failureCode = paymentIntent.last_payment_error?.code || 'unknown';
+    const failureMessage = paymentIntent.last_payment_error?.message || 'Payment failed';
+
+    console.log(`Failure reason: ${failureCode} - ${failureMessage}`);
+
+    // Get the rent payment with relations
+    const rentPayment = await prismadb.rentPayment.findUnique({
+      where: { id: rentPaymentId },
+      include: {
+        booking: {
+          include: {
+            listing: true,
+            user: true, // renter
+          }
+        }
+      }
+    });
+
+    if (rentPayment && rentPayment.booking) {
+      // Determine failure type based on payment method
+      const paymentMethod = paymentIntent.payment_method_types?.[0];
+      const failureType = paymentMethod === 'us_bank_account' ? 'ach_return' :
+                          paymentMethod === 'card' ? 'card_decline' : 'processing_error';
+
+      // Create failure record for audit trail
+      await prismadb.rentPaymentFailure.create({
+        data: {
+          rentPaymentId: rentPaymentId,
+          failureCode: failureCode,
+          failureMessage: failureMessage,
+          failureType: failureType,
+          stripePaymentIntentId: paymentIntent.id,
+          stripeErrorType: paymentIntent.last_payment_error?.type,
+          attemptNumber: rentPayment.retryCount + 1,
+        },
+      });
+
+      console.log(`✓ Created failure record for rent payment ${rentPaymentId} (attempt #${rentPayment.retryCount + 1})`);
+
+      // Build failure reason entry for backward compatibility
+      const newFailureEntry = `[${failureCode}] ${failureMessage}`;
+      const updatedFailureReason = rentPayment.failureReason
+        ? `${rentPayment.failureReason} | ${newFailureEntry}`
+        : newFailureEntry;
+
+      // Update rent payment with failure status
+      await prismadb.rentPayment.update({
+        where: { id: rentPaymentId },
+        data: {
+          status: 'FAILED',
+          isPaid: false, // Keep for backward compatibility
+          failureReason: updatedFailureReason, // Keep for backward compatibility
+          retryCount: { increment: 1 },
+        },
+      });
+
+      console.log(`Rent payment ${rentPaymentId} marked as FAILED (retry count: ${rentPayment.retryCount + 1})`);
+
+      // Send failure notifications to renter and host
+      try {
+        const listing = rentPayment.booking.listing;
+        const renter = rentPayment.booking.user;
+
+        // Get host from listing
+        const host = await prismadb.user.findUnique({
+          where: { id: listing.userId },
+          select: { id: true, email: true, firstName: true, lastName: true }
+        });
+
+        if (!host) {
+          console.error(`Host not found for listing ${listing.id}`);
+        }
+
+        // Send notification to renter
+        await sendRentPaymentFailureNotification({
+          paymentTransactionId: rentPayment.transactionId || '',
+          bookingId: rentPayment.bookingId,
+          renterId: renter.id,
+          hostId: host?.id || '',
+          amount: rentPayment.totalAmount || rentPayment.amount,
+          listingTitle: listing.title || listing.locationString || 'your property',
+          failureCode,
+          failureMessage,
+          retryCount: rentPayment.retryCount + 1,
+        });
+
+        // Send notification to host (if host exists)
+        if (host) {
+          await sendRentPaymentFailureNotificationToHost({
+            paymentTransactionId: rentPayment.transactionId || '',
+            bookingId: rentPayment.bookingId,
+            renterId: renter.id,
+            hostId: host.id,
+            amount: rentPayment.totalAmount || rentPayment.amount,
+            listingTitle: listing.title || listing.locationString || 'your property',
+            failureCode,
+            failureMessage,
+            retryCount: rentPayment.retryCount + 1,
+          });
+        }
+
+        console.log(`✉️ Rent payment failure notifications sent to renter and host`);
+      } catch (notificationError) {
+        console.error('Failed to send rent payment failure notifications:', notificationError);
+        // Don't fail the webhook if notification fails
+      }
+
+      console.log(`Rent payment ${rentPaymentId} failure handling completed`);
+    }
+  }
+
+  // Handle initial booking payment failures
   if ((type === 'security_deposit_direct' || type === 'lease_deposit_and_rent') && matchId) {
     // Handle payment failure (ACH rejection, card decline, etc)
     console.log(`❌ Payment failed for match ${matchId}`);

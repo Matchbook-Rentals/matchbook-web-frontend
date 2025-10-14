@@ -1,5 +1,15 @@
 # Changelog
 
+## Implement payment failure tracking with status enum and audit trail
+- Added RentPaymentStatus enum (PENDING, PROCESSING, AUTHORIZED, SUCCEEDED, FAILED, CANCELLED, REFUNDED)
+- Created RentPaymentFailure model to track all failure attempts with structured data (code, message, type, attempt number)
+- Enhanced RentPayment model with status field replacing boolean isPaid while maintaining backward compatibility
+- Updated Stripe webhook handlers to create failure records and set proper payment status for processing/succeeded/failed events
+- Implemented notification builders for rent payment failures, successes, and processing states
+- Added failure type detection based on payment method (ACH return, card decline, processing error)
+- Deprecated isPaid and failureReason fields with clear migration comments while keeping them functional
+- Added database indexes on failure code, rentPaymentId, and failedAt for efficient querying
+
 ## Add payment type detection for security deposits
 - Added getPaymentType helper function to distinguish security deposit payments from monthly rent
 - Updated host and renter booking detail pages to display correct payment type based on charge category
