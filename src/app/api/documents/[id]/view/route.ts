@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
-import { exportPDFWithFields } from '@/lib/pdfExporter';
+import { exportPDFWithFields, sanitizePDF } from '@/lib/pdfExporter';
 
 // GET /api/documents/[id]/view - View/download document PDF with annotations
 export async function GET(
@@ -117,7 +117,7 @@ export async function GET(
             signedValues[fieldValue.fieldId] = fieldValue.value;
           }
           
-          // Apply annotations using pdf-lib
+          // Apply annotations using pdf-lib with security options
           const annotatedPdf = await exportPDFWithFields(
             basePdfBuffer,
             templateData.fields,
@@ -126,7 +126,9 @@ export async function GET(
             {
               showFieldBorders: false, // Don't show borders in final PDF
               includeLabels: true,     // Include the field values
-              fieldOpacity: 1.0        // Full opacity
+              fieldOpacity: 1.0,       // Full opacity
+              flatten: true,           // Flatten form fields (make non-editable)
+              removeLinks: true        // Remove all hyperlinks and external references
             }
           );
           
@@ -139,10 +141,15 @@ export async function GET(
             }
           });
         } else {
-          // No annotations to apply, return the base PDF
-          console.log('No annotations to apply, returning base PDF');
-          
-          return new NextResponse(basePdfBuffer, {
+          // No annotations to apply, but still sanitize the PDF
+          console.log('No annotations to apply, sanitizing base PDF');
+
+          const sanitizedPdf = await sanitizePDF(basePdfBuffer, {
+            flatten: true,
+            removeLinks: true
+          });
+
+          return new NextResponse(sanitizedPdf, {
             status: 200,
             headers: {
               'Content-Type': 'application/pdf',
@@ -153,15 +160,33 @@ export async function GET(
         }
       } catch (error) {
         console.error('Error applying annotations:', error);
-        // If annotation fails, return the base PDF
-        return new NextResponse(basePdfBuffer, {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': `${isDownload ? 'attachment' : 'inline'}; filename="lease-agreement-${params.id}.pdf"`,
-            'Cache-Control': 'private, max-age=3600'
-          }
-        });
+        // If annotation fails, still try to sanitize before returning
+        try {
+          const sanitizedPdf = await sanitizePDF(basePdfBuffer, {
+            flatten: true,
+            removeLinks: true
+          });
+
+          return new NextResponse(sanitizedPdf, {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/pdf',
+              'Content-Disposition': `${isDownload ? 'attachment' : 'inline'}; filename="lease-agreement-${params.id}.pdf"`,
+              'Cache-Control': 'private, max-age=3600'
+            }
+          });
+        } catch (sanitizeError) {
+          console.error('Error sanitizing PDF:', sanitizeError);
+          // Last resort: return unsanitized PDF
+          return new NextResponse(basePdfBuffer, {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/pdf',
+              'Content-Disposition': `${isDownload ? 'attachment' : 'inline'}; filename="lease-agreement-${params.id}.pdf"`,
+              'Cache-Control': 'private, max-age=3600'
+            }
+          });
+        }
       }
     }
 

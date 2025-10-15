@@ -7,6 +7,8 @@ export interface ExportOptions {
   showFieldBorders?: boolean;
   includeLabels?: boolean;
   fieldOpacity?: number;
+  flatten?: boolean; // Flatten form fields to make them non-editable
+  removeLinks?: boolean; // Remove all hyperlinks and external references
 }
 
 // Map of font family names to font file names
@@ -78,7 +80,9 @@ export async function exportPDFWithFields(
   const {
     showFieldBorders = false, // Don't show borders in final export
     includeLabels = true,
-    fieldOpacity = 1.0 // Full opacity for final values
+    fieldOpacity = 1.0, // Full opacity for final values
+    flatten = true, // Flatten by default to make read-only
+    removeLinks = true // Remove links by default
   } = options;
 
   try {
@@ -94,6 +98,41 @@ export async function exportPDFWithFields(
 
     // Load signature fonts
     const signatureFonts = await loadSignatureFonts(pdfDoc);
+
+    // Flatten form fields to make them non-editable
+    if (flatten) {
+      try {
+        const form = pdfDoc.getForm();
+        const formFields = form.getFields();
+
+        if (formFields.length > 0) {
+          console.log(`Flattening ${formFields.length} form fields`);
+          form.flatten();
+        }
+      } catch (error) {
+        // If there's no form or flattening fails, continue
+        console.log('No form fields to flatten or flattening not needed');
+      }
+    }
+
+    // Remove hyperlinks and annotations to prevent external references
+    if (removeLinks) {
+      const pages = pdfDoc.getPages();
+      for (const page of pages) {
+        try {
+          // Get the page's annotations dictionary
+          const annots = page.node.Annots();
+          if (annots) {
+            // Remove all annotations (which includes links)
+            page.node.delete('Annots');
+            console.log('Removed annotations from page');
+          }
+        } catch (error) {
+          // Continue if annotation removal fails for a page
+          console.log('No annotations to remove from page');
+        }
+      }
+    }
 
     // Process each field
     for (const field of fields) {
@@ -241,6 +280,57 @@ export async function exportPDFWithFields(
     return await pdfDoc.save();
   } catch (error) {
     console.error('Error exporting PDF:', error);
+    throw error;
+  }
+}
+
+/**
+ * Sanitize and flatten a PDF to make it read-only
+ * Removes form fields, hyperlinks, and interactive elements
+ */
+export async function sanitizePDF(
+  pdfBytes: ArrayBuffer,
+  options: { flatten?: boolean; removeLinks?: boolean } = {}
+): Promise<Uint8Array> {
+  const { flatten = true, removeLinks = true } = options;
+
+  try {
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+
+    // Flatten form fields to make them non-editable
+    if (flatten) {
+      try {
+        const form = pdfDoc.getForm();
+        const formFields = form.getFields();
+
+        if (formFields.length > 0) {
+          console.log(`Flattening ${formFields.length} form fields`);
+          form.flatten();
+        }
+      } catch (error) {
+        console.log('No form fields to flatten or flattening not needed');
+      }
+    }
+
+    // Remove hyperlinks and annotations to prevent external references
+    if (removeLinks) {
+      const pages = pdfDoc.getPages();
+      for (const page of pages) {
+        try {
+          const annots = page.node.Annots();
+          if (annots) {
+            page.node.delete('Annots');
+            console.log('Removed annotations from page');
+          }
+        } catch (error) {
+          console.log('No annotations to remove from page');
+        }
+      }
+    }
+
+    return await pdfDoc.save();
+  } catch (error) {
+    console.error('Error sanitizing PDF:', error);
     throw error;
   }
 }
