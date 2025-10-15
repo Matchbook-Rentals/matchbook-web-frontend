@@ -116,6 +116,13 @@ model User {
   medallionVerificationStartedAt DateTime? // When verification process started
   medallionVerificationCompletedAt DateTime? // When verification was completed
 
+  // Stripe Identity Verification (separate from Stripe Connect KYC)
+  stripeVerificationSessionId String?   // Stripe Identity verification session ID
+  stripeVerificationStatus    String?   // 'requires_input' | 'processing' | 'verified' | 'canceled'
+  stripeVerificationLastCheck DateTime? // Last time we checked verification status
+  stripeVerificationReportId  String?   // Verification report ID from Stripe
+  stripeIdentityPayload       Json?     // Full verification session data from Stripe
+
   // Relationships trips          Trip[]
   accounts           Account[]
   listings           Listing[]

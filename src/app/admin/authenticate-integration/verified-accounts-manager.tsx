@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { CheckCircle, XCircle, RefreshCw, Shield, Trash2, TestTube, User, Database, ExternalLink, RotateCcw } from 'lucide-react'
 import { getVerifiedAccounts, getMedallionData, resetUserVerification, testVerification } from './_actions'
 import { toast } from 'sonner'
+import { isIdentityVerified, getVerificationSource } from '@/lib/verification-utils'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,11 +33,15 @@ type VerifiedAccount = {
   medallionVerificationStatus: string | null
   medallionVerificationStartedAt: Date | null
   medallionVerificationCompletedAt: Date | null
+  stripeVerificationStatus: string | null
+  stripeVerificationSessionId: string | null
+  stripeVerificationReportId: string | null
+  stripeVerificationLastCheck: Date | null
   createdAt: Date
   updatedAt: Date
 }
 
-type MedallionData = {
+type VerificationData = {
   id: string
   email: string | null
   firstName: string | null
@@ -46,7 +51,14 @@ type MedallionData = {
   medallionVerificationStatus: string | null
   medallionVerificationStartedAt: Date | null
   medallionVerificationCompletedAt: Date | null
+  stripeVerificationStatus: string | null
+  stripeVerificationSessionId: string | null
+  stripeVerificationReportId: string | null
+  stripeVerificationLastCheck: Date | null
 }
+
+// Legacy type alias
+type MedallionData = VerificationData
 
 export function VerifiedAccountsManager() {
   const [accounts, setAccounts] = useState<VerifiedAccount[]>([])
@@ -218,12 +230,21 @@ export function VerifiedAccountsManager() {
                   </div>
                   <div>
                     <Label className="text-sm font-medium">Verification Status</Label>
-                    <div className="mt-1">
+                    <div className="mt-1 flex gap-2">
                       {getVerificationStatusBadge(
                         medallionData.medallionVerificationStatus,
                         medallionData.medallionIdentityVerified
                       )}
+                      {medallionData.stripeVerificationStatus === 'verified' && (
+                        <Badge className="bg-blue-100 text-blue-800">Stripe Verified</Badge>
+                      )}
                     </div>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium">Verification Source</Label>
+                    <p className="text-sm text-muted-foreground capitalize">
+                      {getVerificationSource(medallionData)}
+                    </p>
                   </div>
                 </div>
 
@@ -250,10 +271,10 @@ export function VerifiedAccountsManager() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Reset Authentication Details</AlertDialogTitle>
+                        <AlertDialogTitle>Reset Identity Verification</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This will clear all Medallion verification data for {medallionData.firstName} {medallionData.lastName} ({medallionData.email}).
-                          The user account will remain intact, but they will need to verify their identity again if they want to become a host.
+                          This will clear ALL identity verification data (both Medallion and Stripe) for {medallionData.firstName} {medallionData.lastName} ({medallionData.email}).
+                          The user account will remain intact, but they will need to verify their identity again through Stripe if they want to become a host.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -290,7 +311,7 @@ export function VerifiedAccountsManager() {
         <CardContent>
           {accounts.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-muted-foreground">No users have completed Medallion verification yet.</p>
+              <p className="text-muted-foreground">No users have completed identity verification yet.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -313,6 +334,13 @@ export function VerifiedAccountsManager() {
                             <Database className="h-3 w-3 mr-1" />
                             Verified
                           </Badge>
+                          {/* Show verification source badge */}
+                          {getVerificationSource(account) === 'stripe' && (
+                            <Badge className="bg-blue-100 text-blue-800">Stripe</Badge>
+                          )}
+                          {getVerificationSource(account) === 'medallion' && (
+                            <Badge className="bg-purple-100 text-purple-800">Medallion</Badge>
+                          )}
                         </div>
                         <p className="text-sm text-muted-foreground">{account.email}</p>
                       </div>
@@ -363,10 +391,10 @@ export function VerifiedAccountsManager() {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Reset Authentication Details</AlertDialogTitle>
+                          <AlertDialogTitle>Reset Identity Verification</AlertDialogTitle>
                           <AlertDialogDescription>
-                            This will clear all Medallion verification data for {account.email}.
-                            The user account will remain intact, but they will need to verify their identity again if they want to become a host.
+                            This will clear ALL identity verification data (both Medallion and Stripe) for {account.email}.
+                            The user account will remain intact, but they will need to verify their identity again through Stripe if they want to become a host.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

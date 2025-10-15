@@ -7,6 +7,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import { HostUserData } from "@/app/app/host/components/onboarding-checklist-card";
 import { findConversationBetweenUsers, createListingConversation } from "@/app/actions/conversations";
+import { isIdentityVerified } from "@/lib/verification-utils";
 
 // Helper function to transform application data for the HostApplicationCard component
 const transformApplicationForCard = (app: any, isMobile: boolean) => {
@@ -64,7 +65,7 @@ export default function HostApplicationCards({
 
     const hasStripeAccount = !!userData.stripeAccountId;
     const stripeComplete = userData.stripeChargesEnabled && userData.stripeDetailsSubmitted;
-    const identityVerified = !!userData.medallionIdentityVerified;
+    const identityVerified = isIdentityVerified(userData);
 
     return hasStripeAccount && stripeComplete && identityVerified;
   };

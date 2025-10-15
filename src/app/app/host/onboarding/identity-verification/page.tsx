@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
-import IdentityVerificationSDKClient from "./identity-verification-sdk-client";
+import IdentityVerificationRouter from "./identity-verification-router";
+import { isIdentityVerified } from "@/lib/verification-utils";
 
 export default async function IdentityVerificationPage({
   searchParams,
@@ -23,7 +24,7 @@ export default async function IdentityVerificationPage({
     redirect("/sign-in");
   }
 
-  // Get user data including verification status
+  // Get user data including verification status (both Medallion and Stripe)
   const userData = await prisma.user.findUnique({
     where: { id: userId },
     select: {
@@ -39,6 +40,8 @@ export default async function IdentityVerificationPage({
       medallionVerificationStatus: true,
       medallionUserId: true,
       medallionUserAccessCode: true,
+      stripeVerificationStatus: true,
+      stripeVerificationSessionId: true,
     },
   });
 
@@ -127,14 +130,14 @@ export default async function IdentityVerificationPage({
     }
   }
 
-  // If already verified (not from Medallion redirect), redirect back
-  if (userData.medallionIdentityVerified && searchParams.completed !== 'true') {
+  // If already verified by EITHER system (not from redirect), redirect back
+  if (isIdentityVerified(userData) && searchParams.completed !== 'true') {
     const redirectUrl = searchParams.redirect_url || "/app/host/dashboard/overview";
     redirect(redirectUrl);
   }
 
   return (
-    <IdentityVerificationSDKClient
+    <IdentityVerificationRouter
       userData={finalUserData}
       redirectUrl={searchParams.redirect_url}
       isReturningFromVerification={searchParams.completed === 'true'}

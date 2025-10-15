@@ -10,9 +10,13 @@ export async function getVerifiedAccounts() {
   }
 
   try {
+    // Get users verified by EITHER Medallion OR Stripe Identity
     const verifiedUsers = await prisma.user.findMany({
       where: {
-        medallionIdentityVerified: true,
+        OR: [
+          { medallionIdentityVerified: true },
+          { stripeVerificationStatus: 'verified' },
+        ],
       },
       select: {
         id: true,
@@ -24,22 +28,26 @@ export async function getVerifiedAccounts() {
         medallionVerificationStatus: true,
         medallionVerificationStartedAt: true,
         medallionVerificationCompletedAt: true,
+        stripeVerificationStatus: true,
+        stripeVerificationSessionId: true,
+        stripeVerificationReportId: true,
+        stripeVerificationLastCheck: true,
         createdAt: true,
         updatedAt: true,
       },
       orderBy: {
-        medallionVerificationCompletedAt: 'desc',
+        updatedAt: 'desc',
       },
     })
 
     return verifiedUsers
   } catch (error) {
-    console.error('Error fetching verified Medallion users:', error)
+    console.error('Error fetching verified users:', error)
     throw new Error('Failed to fetch verified accounts')
   }
 }
 
-export async function getMedallionData(userId: string) {
+export async function getVerificationData(userId: string) {
   if (!checkRole('admin_dev')) {
     throw new Error('Unauthorized')
   }
@@ -57,6 +65,10 @@ export async function getMedallionData(userId: string) {
         medallionVerificationStatus: true,
         medallionVerificationStartedAt: true,
         medallionVerificationCompletedAt: true,
+        stripeVerificationStatus: true,
+        stripeVerificationSessionId: true,
+        stripeVerificationReportId: true,
+        stripeVerificationLastCheck: true,
       },
     })
 
@@ -66,9 +78,14 @@ export async function getMedallionData(userId: string) {
 
     return user
   } catch (error) {
-    console.error('Error fetching Medallion data:', error)
+    console.error('Error fetching verification data:', error)
     throw new Error('Failed to fetch user data')
   }
+}
+
+// Legacy function name for backward compatibility
+export async function getMedallionData(userId: string) {
+  return getVerificationData(userId)
 }
 
 export async function resetUserVerification(userId: string) {
@@ -77,14 +94,22 @@ export async function resetUserVerification(userId: string) {
   }
 
   try {
+    // Reset BOTH Medallion AND Stripe Identity verification
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
+        // Reset Medallion fields
         medallionIdentityVerified: false,
         medallionUserId: null,
         medallionVerificationStatus: null,
         medallionVerificationStartedAt: null,
         medallionVerificationCompletedAt: null,
+        // Reset Stripe Identity fields
+        stripeVerificationStatus: null,
+        stripeVerificationSessionId: null,
+        stripeVerificationReportId: null,
+        stripeVerificationLastCheck: null,
+        stripeIdentityPayload: null,
       },
       select: {
         id: true,
@@ -96,13 +121,17 @@ export async function resetUserVerification(userId: string) {
         medallionVerificationStatus: true,
         medallionVerificationStartedAt: true,
         medallionVerificationCompletedAt: true,
+        stripeVerificationStatus: true,
+        stripeVerificationSessionId: true,
+        stripeVerificationReportId: true,
+        stripeVerificationLastCheck: true,
       },
     })
 
     revalidatePath('/admin/authenticate-integration')
     return updatedUser
   } catch (error) {
-    console.error('Error resetting Medallion verification:', error)
+    console.error('Error resetting verification:', error)
     throw new Error('Failed to reset verification')
   }
 }

@@ -137,18 +137,19 @@ export async function POST(request: NextRequest) {
     const callbackUrl = new URL('/stripe-callback', request.nextUrl.origin);
     callbackUrl.searchParams.set('redirect_to', '/app/host/dashboard/overview');
     callbackUrl.searchParams.set('account_id', accountId);
-    
+
     const refreshUrl = new URL('/stripe-callback', request.nextUrl.origin);
     refreshUrl.searchParams.set('redirect_to', '/app/host/dashboard/overview');
     refreshUrl.searchParams.set('account_id', accountId);
-    
+
     const accountLink = await stripe.accountLinks.create({
       account: accountId,
       refresh_url: refreshUrl.toString(),
       return_url: callbackUrl.toString(),
       type: "account_onboarding",
       collection_options: {
-        fields: 'eventually_due', // Collect all verification info including SSN last 4 and DOB upfront
+        fields: 'currently_due', // Requires identity verification documents upfront
+        future_requirements: 'include', // Also show future requirements for transparency
       },
     });
 

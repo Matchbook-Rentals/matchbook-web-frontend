@@ -6,6 +6,9 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
+import { isIdentityVerified } from "@/lib/verification-utils";
+import { loadStripe } from '@stripe/stripe-js';
+import { createStripeVerificationSession } from '@/app/actions/stripe-identity';
 
 export interface HostUserData {
   id: string;
@@ -16,6 +19,7 @@ export interface HostUserData {
   stripeDetailsSubmitted: boolean | null;
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
+  stripeVerificationStatus: string | null;
 }
 
 export interface OnboardingChecklistCardProps {
@@ -32,7 +36,7 @@ export function isHostOnboardingComplete(hostUserData: HostUserData | null): boo
 
   const hasStripeAccount = !!hostUserData.stripeAccountId;
   const stripeComplete = hostUserData.stripeChargesEnabled && hostUserData.stripeDetailsSubmitted;
-  const identityVerified = !!hostUserData.medallionIdentityVerified;
+  const identityVerified = isIdentityVerified(hostUserData);
 
   return hasStripeAccount && stripeComplete && identityVerified;
 }
@@ -46,6 +50,8 @@ export const OnboardingChecklistCard = ({
 }: OnboardingChecklistCardProps): JSX.Element => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [isCompletingAuth, setIsCompletingAuth] = useState(false);
+  const [isCompletingStripeAuth, setIsCompletingStripeAuth] = useState(false);
+  const [isVerifyingIdentity, setIsVerifyingIdentity] = useState(false);
 
   const handleStripeSetup = async () => {
     setIsRedirecting(true);
@@ -80,7 +86,7 @@ export const OnboardingChecklistCard = ({
     }
   };
 
-  const handleTestAuthComplete = async () => {
+  const handleTestMedallionAuthComplete = async () => {
     setIsCompletingAuth(true);
     try {
       const response = await fetch('/api/admin/medallion/complete-test-verification', {
@@ -95,12 +101,90 @@ export const OnboardingChecklistCard = ({
         // Reload page to show updated status
         window.location.reload();
       } else {
-        console.error('Error completing test authentication:', data.error);
+        console.error('Error completing test Medallion authentication:', data.error);
         setIsCompletingAuth(false);
       }
     } catch (error) {
-      console.error('Error completing test authentication:', error);
+      console.error('Error completing test Medallion authentication:', error);
       setIsCompletingAuth(false);
+    }
+  };
+
+  const handleTestStripeAuthComplete = async () => {
+    setIsCompletingStripeAuth(true);
+    try {
+      const response = await fetch('/api/admin/stripe-identity/complete-test-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      const data = await response.json();
+      if (data.success) {
+        // Reload page to show updated status
+        window.location.reload();
+      } else {
+        console.error('Error completing test Stripe authentication:', data.error);
+        setIsCompletingStripeAuth(false);
+      }
+    } catch (error) {
+      console.error('Error completing test Stripe authentication:', error);
+      setIsCompletingStripeAuth(false);
+    }
+  };
+
+  const handleIdentityVerificationClick = async () => {
+    setIsVerifyingIdentity(true);
+
+    try {
+      console.log('🔐 Starting Stripe Identity verification...');
+
+      // Get the verification session from our backend
+      const result = await createStripeVerificationSession();
+
+      if (!result.success || !result.clientSecret) {
+        const errorMsg = result.error || 'Failed to create verification session';
+        console.error('Error creating verification session:', errorMsg);
+        alert(errorMsg);
+        setIsVerifyingIdentity(false);
+        return;
+      }
+
+      console.log('✅ Verification session created:', result.sessionId);
+
+      // Load Stripe.js
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
+      if (!stripe) {
+        const errorMsg = 'Failed to load Stripe';
+        console.error(errorMsg);
+        alert(errorMsg);
+        setIsVerifyingIdentity(false);
+        return;
+      }
+
+      console.log('🎨 Opening Stripe Identity verification modal...');
+
+      // Open the verification modal
+      const { error: verifyError } = await stripe.verifyIdentity(result.clientSecret);
+
+      if (verifyError) {
+        console.error('❌ Verification error:', verifyError);
+        alert(verifyError.message || 'Verification failed');
+        setIsVerifyingIdentity(false);
+        return;
+      }
+
+      console.log('✅ Verification completed successfully!');
+
+      // Reload the page to show updated verification status
+      window.location.reload();
+    } catch (err) {
+      console.error('❌ Error during verification:', err);
+      const errorMsg = err instanceof Error ? err.message : 'An unexpected error occurred';
+      alert(errorMsg);
+      setIsVerifyingIdentity(false);
     }
   };
 
@@ -120,7 +204,7 @@ export const OnboardingChecklistCard = ({
     {
       id: 2,
       text: "Complete Identity Verification",
-      completed: !!hostUserData?.medallionIdentityVerified,
+      completed: isIdentityVerified(hostUserData),
     },
   ];
 
@@ -133,12 +217,12 @@ export const OnboardingChecklistCard = ({
     },
     {
       id: 2,
-      text: "Complete Identity Verification (test)",
+      text: "Force Medallion Verification (test)",
       completed: false,
     },
     {
       id: 3,
-      text: "Complete Authentication (test)",
+      text: "Force Stripe Verification (test)",
       completed: false,
     },
   ];
@@ -175,20 +259,13 @@ export const OnboardingChecklistCard = ({
             {items.map((item) => {
               const isStripeItem = item.text.includes("Stripe Account");
               const isIdentityVerificationItem = item.text.includes("Identity Verification");
-              const isTestAuthItem = item.text.includes("Complete Authentication (test)");
-              const isTestIdentityItem = item.text.includes("Identity Verification (test)");
-              const shouldBeStripeClickable = !item.completed && isStripeItem;
-              const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem && !isTestIdentityItem;
-              const shouldBeTestAuthClickable = !item.completed && isTestAuthItem;
-              const shouldBeTestIdentityClickable = !item.completed && isTestIdentityItem;
+              const isTestMedallionItem = item.text.includes("Force Medallion Verification");
+              const isTestStripeItem = item.text.includes("Force Stripe Verification");
+              const shouldBeStripeClickable = !item.completed && isStripeItem && !isTestMedallionItem && !isTestStripeItem;
+              const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem && !isTestMedallionItem && !isTestStripeItem;
+              const shouldBeTestMedallionClickable = !item.completed && isTestMedallionItem;
+              const shouldBeTestStripeClickable = !item.completed && isTestStripeItem;
 
-              const handleIdentityVerificationClick = () => {
-                // Navigate to identity verification page
-                const currentUrl = window.location.pathname + window.location.search;
-                const verificationUrl = `/app/host/onboarding/identity-verification?redirect_url=${encodeURIComponent(currentUrl)}`;
-                window.location.href = verificationUrl;
-              };
-              
               return (
                 <div
                   key={item.id}
@@ -212,25 +289,26 @@ export const OnboardingChecklistCard = ({
                     ) : shouldBeIdentityVerificationClickable ? (
                       <button
                         onClick={handleIdentityVerificationClick}
-                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
+                        disabled={isVerifyingIdentity}
+                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
                       >
-                        {item.text}
+                        {isVerifyingIdentity ? 'Opening verification...' : item.text}
                       </button>
-                    ) : shouldBeTestAuthClickable ? (
+                    ) : shouldBeTestMedallionClickable ? (
                       <button
-                        onClick={handleTestAuthComplete}
+                        onClick={handleTestMedallionAuthComplete}
                         disabled={isCompletingAuth}
                         className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
                       >
-                        {isCompletingAuth ? 'Completing Authentication...' : item.text}
+                        {isCompletingAuth ? 'Setting Medallion Verified...' : item.text}
                       </button>
-                    ) : shouldBeTestIdentityClickable ? (
+                    ) : shouldBeTestStripeClickable ? (
                       <button
-                        onClick={handleTestAuthComplete}
-                        disabled={isCompletingAuth}
+                        onClick={handleTestStripeAuthComplete}
+                        disabled={isCompletingStripeAuth}
                         className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
                       >
-                        {isCompletingAuth ? 'Setting Identity Verified...' : item.text}
+                        {isCompletingStripeAuth ? 'Setting Stripe Verified...' : item.text}
                       </button>
                     ) : (
                       <span className={`${item.completed ? '' : 'hover:underline cursor-pointer'} font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]`}>

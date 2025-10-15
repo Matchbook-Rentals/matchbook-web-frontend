@@ -301,6 +301,108 @@ export async function POST(req: Request) {
       }
     }
 
+    // ============================================================================
+    // Stripe Identity Verification Webhooks
+    // ============================================================================
+    // Note: These are separate from Stripe Connect identity verification
+    // Stripe Identity is used for fraud prevention/trust & safety verification
+
+    else if (event.type === 'identity.verification_session.created') {
+      const session = event.data.object;
+      const userId = session.metadata?.user_id;
+
+      if (userId) {
+        console.log(`🆔 Identity verification session created for user ${userId}`);
+
+        await prismadb.user.update({
+          where: { id: userId },
+          data: {
+            stripeVerificationStatus: session.status,
+            stripeVerificationLastCheck: new Date(),
+          },
+        });
+      }
+    }
+
+    else if (event.type === 'identity.verification_session.processing') {
+      const session = event.data.object;
+      const userId = session.metadata?.user_id;
+
+      if (userId) {
+        console.log(`⏳ Identity verification processing for user ${userId}`);
+
+        await prismadb.user.update({
+          where: { id: userId },
+          data: {
+            stripeVerificationStatus: 'processing',
+            stripeVerificationLastCheck: new Date(),
+          },
+        });
+      }
+    }
+
+    else if (event.type === 'identity.verification_session.verified') {
+      const session = event.data.object;
+      const userId = session.metadata?.user_id;
+
+      if (userId) {
+        console.log(`✅ Identity verified for user ${userId}`);
+
+        await prismadb.user.update({
+          where: { id: userId },
+          data: {
+            stripeVerificationStatus: 'verified',
+            stripeVerificationReportId: session.last_verification_report,
+            stripeVerificationLastCheck: new Date(),
+            stripeIdentityPayload: session as any,
+          },
+        });
+
+        console.log(`User ${userId} identity verification complete`);
+      }
+    }
+
+    else if (event.type === 'identity.verification_session.requires_input') {
+      const session = event.data.object;
+      const userId = session.metadata?.user_id;
+
+      if (userId) {
+        console.log(`⚠️ Identity verification requires input for user ${userId}`);
+
+        await prismadb.user.update({
+          where: { id: userId },
+          data: {
+            stripeVerificationStatus: 'requires_input',
+            stripeVerificationLastCheck: new Date(),
+            stripeIdentityPayload: session as any,
+          },
+        });
+
+        // Log the specific error for debugging
+        if (session.last_error) {
+          console.log(`Verification error code: ${session.last_error.code}`);
+          console.log(`Verification error reason: ${session.last_error.reason}`);
+        }
+      }
+    }
+
+    else if (event.type === 'identity.verification_session.canceled') {
+      const session = event.data.object;
+      const userId = session.metadata?.user_id;
+
+      if (userId) {
+        console.log(`❌ Identity verification canceled for user ${userId}`);
+
+        await prismadb.user.update({
+          where: { id: userId },
+          data: {
+            stripeVerificationStatus: 'canceled',
+            stripeVerificationLastCheck: new Date(),
+          },
+        });
+      }
+    }
+
     // Return a success response
     return NextResponse.json({ received: true, type: event.type });
   } catch (error: any) {
