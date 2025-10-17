@@ -198,8 +198,7 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
           >
             <div
               ref={gridRef}
-              // Match grid classes from SearchListingsGrid for consistency if desired, or keep specific ones
-              className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-8 pb-12"
+              className="flex flex-wrap justify-around gap-8 pb-12"
             >
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
