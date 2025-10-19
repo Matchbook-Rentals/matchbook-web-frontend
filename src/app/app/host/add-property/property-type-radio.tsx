@@ -11,10 +11,10 @@ interface PropertyTypeRadioProps {
 }
 
 const housingOptions = [
-  { id: 'single_family', label: 'Single Family', src: '/img/listing-type/Single Family.png' },
+  { id: 'singleFamily', label: 'Single Family', src: '/img/listing-type/Single Family.png' },
   { id: 'townhouse', label: 'Townhouse', src: '/img/listing-type/Townhouse.png' },
   { id: 'apartment', label: 'Apartment', src: '/img/listing-type/Apartment.png' },
-  { id: 'single_room', label: 'Single Room', src: '/img/listing-type/Single Room.png' },
+  { id: 'privateRoom', label: 'Private Room', src: '/img/listing-type/Single Room.png' },
 ];
 
 const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({

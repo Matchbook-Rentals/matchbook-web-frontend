@@ -21,14 +21,30 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
   setListingHighlights,
   questionTextStyles,
 }) => {
+  // Helper function to convert camelCase to display name
+  const categoryToDisplay = (category: string | null): string => {
+    switch (category) {
+      case 'singleFamily':
+        return 'Single Family';
+      case 'privateRoom':
+        return 'Private Room';
+      case 'apartment':
+        return 'Apartment';
+      case 'townhouse':
+        return 'Townhouse';
+      default:
+        return 'Single Family';
+    }
+  };
+
   // Local state for tracking selections
-  const [selectedType, setSelectedType] = useState<string>(listingHighlights.category || "Single Family");
+  const [selectedType, setSelectedType] = useState<string>(categoryToDisplay(listingHighlights.category));
   const [selectedFurnishing, setSelectedFurnishing] = useState<string>(listingHighlights.furnished ? "Furnished" : "Unfurnished");
   const [selectedPets, setSelectedPets] = useState<string>(listingHighlights.petsAllowed ? "Pets Welcome" : "No Pets");
 
   // Update local state when props change
   useEffect(() => {
-    setSelectedType(listingHighlights.category || "Single Family");
+    setSelectedType(categoryToDisplay(listingHighlights.category));
     setSelectedFurnishing(listingHighlights.furnished ? "Furnished" : "Unfurnished");
     setSelectedPets(listingHighlights.petsAllowed ? "Pets Welcome" : "No Pets");
   }, [listingHighlights]);
@@ -38,21 +54,25 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "single-family",
       name: "Single Family",
+      value: "singleFamily",
       icon: <Image src="/host-dashboard/svg/single-family.svg" alt="Single Family" width={24} height={24} />
     },
     {
       id: "apartment",
       name: "Apartment",
+      value: "apartment",
       icon: <Image src="/host-dashboard/svg/apartment.svg" alt="Apartment" width={24} height={24} />
     },
     {
       id: "townhouse",
       name: "Townhouse",
+      value: "townhouse",
       icon: <Image src="/host-dashboard/svg/townhouse-2.svg" alt="Townhouse" width={28} height={28} />
     },
     {
       id: "private-room",
       name: "Private Room",
+      value: "privateRoom",
       icon: <Image src="/host-dashboard/svg/private-room.svg" alt="Private Room" width={28} height={28} />
     },
   ];
@@ -120,7 +140,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
                   setSelectedType(type.name);
                   setListingHighlights({
                     ...listingHighlights,
-                    category: type.name
+                    category: type.value
                   });
                 }}
               />

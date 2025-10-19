@@ -152,29 +152,39 @@ interface ListingReviewProps {
   showPricingStructureTitle?: boolean;
 }
 
-// Property type options
+// Property type options (with camelCase values)
 const propertyTypes = [
   {
     id: "single-family",
+    value: "singleFamily",
     name: "Single Family",
     icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" />
   },
   {
     id: "apartment",
+    value: "apartment",
     name: "Apartment",
     icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-full h-full" />
   },
   {
     id: "townhouse",
+    value: "townhouse",
     name: "Townhouse",
     icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-full h-full" />
   },
   {
     id: "private-room",
+    value: "privateRoom",
     name: "Private Room",
     icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-full h-full" />
   },
 ];
+
+// Helper function to convert camelCase category to display name
+const categoryToDisplay = (category: string | null): string => {
+  const propertyType = propertyTypes.find(type => type.value === category);
+  return propertyType ? propertyType.name : "Single Family";
+};
 
 // Furnishing options
 const furnishingOptions = [
@@ -238,13 +248,13 @@ export const Box = ({
   // Property feature data for mapping
   const propertyFeatures = [
     {
-      icon: propertyTypes.find(type => type.name === listingHighlights?.category)?.icon 
+      icon: propertyTypes.find(type => type.value === listingHighlights?.category)?.icon
         ? React.cloneElement(
-            propertyTypes.find(type => type.name === listingHighlights?.category)?.icon as React.ReactElement,
+            propertyTypes.find(type => type.value === listingHighlights?.category)?.icon as React.ReactElement,
             { className: "w-4 h-4" }
           )
         : React.cloneElement(propertyTypes[0].icon as React.ReactElement, { className: "w-4 h-4" }),
-      label: listingHighlights?.category || "Single Family",
+      label: categoryToDisplay(listingHighlights?.category),
     },
     {
       icon: React.cloneElement(
