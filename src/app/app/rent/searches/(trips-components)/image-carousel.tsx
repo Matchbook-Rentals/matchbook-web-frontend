@@ -170,12 +170,12 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     const handleDialogSelect = () => {
       const currentSlide = dialogApi.selectedScrollSnap();
       setDialogActiveImage(currentSlide);
-      
+
       // Scroll thumbnail carousel to keep active image visible
       if (thumbnailApi) {
         // Get the scroll info from the thumbnail carousel
         const slidesInView = thumbnailApi.slidesInView();
-        
+
         // Check if current slide is visible
         if (!slidesInView.includes(currentSlide)) {
           // If not visible, scroll to show it
@@ -183,7 +183,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           // or last visible slide if scrolling forward
           const firstVisible = slidesInView[0];
           const lastVisible = slidesInView[slidesInView.length - 1];
-          
+
           if (currentSlide < firstVisible) {
             // Need to scroll backward - make it the first visible
             thumbnailApi.scrollTo(currentSlide);
@@ -200,22 +200,6 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     dialogApi.on("select", handleDialogSelect);
     return () => dialogApi.off("select", handleDialogSelect);
   }, [dialogApi, thumbnailApi]);
-
-  // Reset dialog active image when dialog opens
-  useEffect(() => {
-    if (isDialogOpen) {
-      setDialogActiveImage(activeImage);
-      if (dialogApi) {
-        dialogApi.scrollTo(activeImage);
-      }
-      if (thumbnailApi) {
-        // Calculate position to center or show the active image optimally
-        const visibleCount = 5; // Approximate visible thumbnails
-        const targetPosition = Math.max(0, activeImage - Math.floor(visibleCount / 2));
-        thumbnailApi.scrollTo(targetPosition);
-      }
-    }
-  }, [isDialogOpen, activeImage, dialogApi, thumbnailApi]);
 
   if (uniqueImages.length === 0) {
     return (
@@ -460,8 +444,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                         </CarouselItem>
                       ))}
                     </CarouselContent>
-                    <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-white hover:text-white bg-black/80 hover:bg-black hover:scale-110 border border-gray-700 transition-all duration-200" />
-                    <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 text-white hover:text-white bg-black/80 hover:bg-black hover:scale-110 border border-gray-700 transition-all duration-200" />
+                    <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2 h-10 w-10 text-white hover:text-white bg-black/40 hover:bg-black/80 hover:scale-110 border border-gray-700 transition-all duration-200 disabled:hidden" />
+                    <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2 h-10 w-10 text-white hover:text-white bg-black/40 hover:bg-black/80 hover:scale-110 border border-gray-700 transition-all duration-200 disabled:hidden" />
                   </Carousel>
                 </div>
               </div>
