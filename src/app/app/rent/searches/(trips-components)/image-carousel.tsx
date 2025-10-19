@@ -17,20 +17,36 @@ interface ListingImageCarouselProps {
 // Keep track of preload links for cleanup
 const preloadLinksRef = new Set<HTMLLinkElement>();
 
-const preloadImage = (url: string) => {
+const preloadImage = (url: string, sizeHint?: 'main' | 'thumbnail') => {
+  // For Next.js optimized images, we can add size parameters to the URL
+  // The Next.js image optimizer will use these to generate appropriate sizes
+  let optimizedUrl = url;
+
+  if (sizeHint === 'main') {
+    // Add URL parameters to hint at larger size for main display
+    // This helps Next.js Image optimizer prepare the right size
+    const separator = url.includes('?') ? '&' : '?';
+    optimizedUrl = `${url}${separator}w=1200&q=85`;
+  }
+
   // Check if already preloaded
   const existingLink = Array.from(document.head.querySelectorAll('link[rel="preload"]')).find(
-    (link) => link.getAttribute('href') === url
+    (link) => link.getAttribute('href') === optimizedUrl
   );
   if (existingLink) return existingLink as HTMLLinkElement;
 
   const link = document.createElement('link');
   link.rel = 'preload';
   link.as = 'image';
-  link.href = url;
+  link.href = optimizedUrl;
   document.head.appendChild(link);
   preloadLinksRef.add(link);
   return link;
+};
+
+// Preload an image specifically for main display (full size)
+const preloadMainImage = (url: string) => {
+  preloadImage(url, 'main');
 };
 
 const cleanupPreloadLinks = () => {
@@ -67,6 +83,19 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
 
   // Cap mobile carousel at 20 images to prevent horizontal overflow issue
   const mobileImages = uniqueImages.slice(0, 20);
+
+  // Chunk images into groups of 4 for the desktop grid carousel
+  const chunkedImages = useMemo(() =>
+    uniqueImages.reduce((resultArray, item, index) => {
+      const chunkIndex = Math.floor(index / 4);
+      if (!resultArray[chunkIndex]) {
+        resultArray[chunkIndex] = [];
+      }
+      resultArray[chunkIndex].push(item);
+      return resultArray;
+    }, [] as ListingImage[][]),
+    [uniqueImages]
+  );
 
   // Reset activeImage if it exceeds mobile carousel length
   useEffect(() => {
@@ -112,8 +141,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   // Preload initial images on component mount
   useEffect(() => {
     if (uniqueImages.length > 0) {
-      // Preload first few images of current listing immediately
-      [0, 1, 2].forEach(idx => {
+      // Preload first image at main size (it's displayed in the left pane)
+      if (uniqueImages[0]) {
+        preloadMainImage(uniqueImages[0].url);
+      }
+
+      // Preload next few images as thumbnails
+      [1, 2, 3].forEach(idx => {
         if (uniqueImages[idx]) {
           preloadImage(uniqueImages[idx].url);
         }
@@ -127,6 +161,25 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
 
     return () => clearTimeout(nextListingTimer);
   }, [uniqueImages, preloadNextListingImages]);
+
+  // Preload main-size versions of visible grid images for smooth transitions
+  useEffect(() => {
+    if (!api || chunkedImages.length === 0) return;
+
+    const currentChunkIndex = api.selectedScrollSnap();
+    const currentChunk = chunkedImages[currentChunkIndex];
+
+    if (currentChunk) {
+      // Preload main-size versions of all images in the current visible grid
+      currentChunk.forEach(image => {
+        const imageIndex = uniqueImages.indexOf(image);
+        // Don't preload the currently active image (already displayed at main size)
+        if (imageIndex !== activeImage) {
+          preloadMainImage(image.url);
+        }
+      });
+    }
+  }, [api, chunkedImages, uniqueImages, activeImage]);
 
   // Cleanup effect to prevent memory leaks
   useEffect(() => {
@@ -243,21 +296,17 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     }
   };
 
-  const chunkedImages = uniqueImages.reduce((resultArray, item, index) => {
-    const chunkIndex = Math.floor(index / 4);
-    if (!resultArray[chunkIndex]) {
-      resultArray[chunkIndex] = [];
-    }
-    resultArray[chunkIndex].push(item);
-    return resultArray;
-  }, [] as ListingImage[][]);
-
   return (
     <>
       {/* Desktop Layout - Side by side */}
       <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
         {/* Main image */}
-        <div className="w-1/2 h-full relative overflow-hidden rounded-lg">
+        <div
+          className="w-1/2 h-full relative overflow-hidden rounded-lg bg-cover bg-center"
+          style={{
+            backgroundImage: uniqueImages[activeImage] ? `url(${uniqueImages[activeImage].url})` : 'none'
+          }}
+        >
           {uniqueImages[activeImage] && (
             <Image
               key={uniqueImages[activeImage].id}
