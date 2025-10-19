@@ -12,7 +12,12 @@
 import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import prismadb from '@/lib/prismadb';
-import { sendPaymentSuccessEmail, sendPaymentFailureEmails, getHumanReadableFailureReason } from '@/lib/emails';
+import { getHumanReadableFailureReason } from '@/lib/utils/payment-error-codes';
+import {
+  sendPaymentSuccessNotification,
+  sendPaymentFailureNotificationToRenter,
+  sendPaymentFailureNotificationToHost
+} from '@/lib/notifications/payment-notifications';
 
 // Function to verify Stripe webhook signature
 const verifyStripeSignature = (req: Request, body: string, signature: string): boolean => {
@@ -207,19 +212,20 @@ export async function POST(req: Request) {
             });
           }
 
-          // Send success email notification
+          // Send success notification
           try {
-            await sendPaymentSuccessEmail({
+            await sendPaymentSuccessNotification({
               renterEmail: match.trip.user.email || '',
               renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim(),
+              renterId: match.trip.userId,
               bookingId: booking.id,
               listingAddress: match.listing.locationString || 'your property',
               amount: (paymentIntent.amount || 0) / 100, // Convert from cents
             });
-            console.log(`✉️ Success email sent to ${match.trip.user.email}`);
-          } catch (emailError) {
-            console.error('Failed to send success email:', emailError);
-            // Don't fail the webhook if email fails
+            console.log(`✉️ Success notification sent to ${match.trip.user.email}`);
+          } catch (notificationError) {
+            console.error('Failed to send success notification:', notificationError);
+            // Don't fail the webhook if notification fails
           }
 
           console.log(`Match ${matchId} payment settled successfully`);
@@ -279,21 +285,38 @@ export async function POST(req: Request) {
           try {
             const humanReadableReason = getHumanReadableFailureReason(failureCode);
 
-            await sendPaymentFailureEmails({
+            // Send notification to renter
+            await sendPaymentFailureNotificationToRenter({
               renterEmail: match.trip.user.email || '',
               renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim(),
+              renterId: match.trip.userId,
               hostEmail: match.listing.user.email || '',
               hostName: `${match.listing.user.firstName || ''} ${match.listing.user.lastName || ''}`.trim(),
+              hostId: match.listing.userId,
               matchId,
               bookingId: match.booking.id,
               failureReason: humanReadableReason,
               amount: (paymentIntent.amount || 0) / 100, // Convert from cents
             });
 
-            console.log(`✉️ Failure emails sent to renter and host`);
-          } catch (emailError) {
-            console.error('Failed to send failure emails:', emailError);
-            // Don't fail the webhook if email fails
+            // Send notification to host
+            await sendPaymentFailureNotificationToHost({
+              renterEmail: match.trip.user.email || '',
+              renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim(),
+              renterId: match.trip.userId,
+              hostEmail: match.listing.user.email || '',
+              hostName: `${match.listing.user.firstName || ''} ${match.listing.user.lastName || ''}`.trim(),
+              hostId: match.listing.userId,
+              matchId,
+              bookingId: match.booking.id,
+              failureReason: humanReadableReason,
+              amount: (paymentIntent.amount || 0) / 100, // Convert from cents
+            });
+
+            console.log(`✉️ Failure notifications sent to renter and host`);
+          } catch (notificationError) {
+            console.error('Failed to send failure notifications:', notificationError);
+            // Don't fail the webhook if notification fails
           }
 
           console.log(`Match ${matchId} payment marked as failed`);
