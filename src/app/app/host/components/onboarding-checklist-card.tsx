@@ -146,9 +146,9 @@ export const OnboardingChecklistCard = ({
       const result = await createStripeVerificationSession();
 
       if (!result.success || !result.clientSecret) {
-        const errorMsg = result.error || 'Failed to create verification session';
-        console.error('Error creating verification session:', errorMsg);
-        alert(errorMsg);
+        console.error('❌ Failed to create verification session:', result.error);
+        // Don't show alert - session creation is a technical error we can't recover from
+        // User will just see loading state stop
         setIsVerifyingIdentity(false);
         return;
       }
@@ -159,9 +159,7 @@ export const OnboardingChecklistCard = ({
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
       if (!stripe) {
-        const errorMsg = 'Failed to load Stripe';
-        console.error(errorMsg);
-        alert(errorMsg);
+        console.error('❌ Failed to load Stripe.js');
         setIsVerifyingIdentity(false);
         return;
       }
@@ -169,24 +167,42 @@ export const OnboardingChecklistCard = ({
       console.log('🎨 Opening Stripe Identity verification modal...');
 
       // Open the verification modal
-      const { error: verifyError } = await stripe.verifyIdentity(result.clientSecret);
+      // Note: Stripe handles all verification UI/UX internally (errors, retries, etc.)
+      // The modal will show appropriate messages for:
+      // - Document upload failures
+      // - Expired documents
+      // - Selfie mismatches
+      // - Any other verification issues
+      const { error: sdkError } = await stripe.verifyIdentity(result.clientSecret);
 
-      if (verifyError) {
-        console.error('❌ Verification error:', verifyError);
-        alert(verifyError.message || 'Verification failed');
+      // Only SDK/technical errors are returned here, not verification failures
+      // Verification results come via webhooks and polling
+      if (sdkError) {
+        console.error('❌ Stripe SDK error:', sdkError);
         setIsVerifyingIdentity(false);
         return;
       }
 
-      console.log('✅ Verification modal completed!');
+      console.log('✅ Verification modal closed');
 
-      // Refresh the page data - RSC will poll Stripe and update status
-      console.log('🔄 Refreshing page to check verification status...');
+      // Modal closed - user either completed, failed, or cancelled
+      // We don't know which yet - that info comes from Stripe via webhooks/polling
+
+      // Give webhooks a brief moment to fire (they're usually instant but can be delayed)
+      // Then refresh to fetch latest verification status from Stripe
+      console.log('🔄 Waiting briefly for webhook, then refreshing...');
+
+      // Wait 1 second to give webhook time to process
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Refresh the RSC - this will trigger polling if status hasn't updated yet
       router.refresh();
+
+      // Reset loading state after refresh
+      setIsVerifyingIdentity(false);
     } catch (err) {
-      console.error('❌ Error during verification:', err);
-      const errorMsg = err instanceof Error ? err.message : 'An unexpected error occurred';
-      alert(errorMsg);
+      console.error('❌ Unexpected error during verification:', err);
+      // Even on unexpected errors, don't show alert - just reset state
       setIsVerifyingIdentity(false);
     }
   };

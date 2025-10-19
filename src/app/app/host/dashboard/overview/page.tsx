@@ -320,17 +320,37 @@ export default async function OverviewPage() {
   // This ensures we catch verification completion even if webhooks are delayed
   if (hostUserData?.stripeVerificationSessionId &&
       hostUserData?.stripeVerificationStatus !== 'verified') {
+    console.log('🔍 RSC polling triggered:', {
+      sessionId: hostUserData.stripeVerificationSessionId,
+      currentStatus: hostUserData.stripeVerificationStatus,
+    });
+
     try {
-      const refreshResult = await refreshStripeVerificationStatus();
-      if (refreshResult.success && refreshResult.statusChanged) {
-        console.log('🔄 Verification status updated from Stripe poll:', refreshResult.status);
+      const stripeUpdateResult = await refreshStripeVerificationStatus();
+      console.log('📊 RSC polling result:', stripeUpdateResult);
+
+      if (stripeUpdateResult.success && stripeUpdateResult.statusChanged) {
+        console.log('🔄 Verification status updated from Stripe poll:', stripeUpdateResult.status);
         // Re-fetch host user data to get updated status
         hostUserData = await getHostUserData();
+        console.log('✅ Re-fetched host user data, new status:', hostUserData?.stripeVerificationStatus);
+      } else if (stripeUpdateResult.success && !stripeUpdateResult.statusChanged) {
+        console.log('ℹ️ Verification status unchanged from Stripe poll:', stripeUpdateResult.status);
       }
     } catch (error) {
       console.warn('⚠️ Could not poll Stripe for verification status:', error);
       // Don't block page load if polling fails
     }
+  } else {
+    console.log('⏭️ RSC polling skipped:', {
+      hasSessionId: !!hostUserData?.stripeVerificationSessionId,
+      currentStatus: hostUserData?.stripeVerificationStatus,
+      reason: !hostUserData?.stripeVerificationSessionId
+        ? 'No verification session exists'
+        : hostUserData?.stripeVerificationStatus === 'verified'
+        ? 'Already verified'
+        : 'Unknown'
+    });
   }
   
   // Build mock cards with sample data

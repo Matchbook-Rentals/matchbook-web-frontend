@@ -187,6 +187,7 @@ export async function getHostUserData() {
         medallionIdentityVerified: true,
         medallionVerificationStatus: true,
         stripeVerificationStatus: true,
+        stripeVerificationSessionId: true,
       }
     });
 
