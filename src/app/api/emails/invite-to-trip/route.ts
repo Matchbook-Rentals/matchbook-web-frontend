@@ -1,5 +1,9 @@
+import { Resend } from 'resend';
+import JoinTripEmailTemplate from '@/components/email-templates/join-trip';
 import { NextRequest, NextResponse } from 'next/server';
-import { inviteToTrip } from '@/lib/emails';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,11 +16,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-
     console.log('Inviting user to trip', tripId, recipientEmail);
-    console.log('EMAIL_USER', process.env.EMAIL_USER);
-    console.log('EMAIL_PASS', process.env.EMAIL_PASS);
-    inviteToTrip(tripId, recipientEmail);
+
+    // Send the email using Resend
+    const { data, error } = await resend.emails.send({
+      from: 'MatchBook Rentals <no-reply@matchbookrentals.com>',
+      to: [recipientEmail],
+      subject: 'You are Invited to Join a Trip!',
+      react: JoinTripEmailTemplate({ tripLink: `${baseUrl}/guest/trips/${tripId}&invited=${recipientEmail}` }),
+    });
+
+    if (error) {
+      console.error('Error sending invitation email:', error);
+      return NextResponse.json(
+        { error: 'Failed to send invitation.' },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ message: 'Invitation sent successfully.' });
   } catch (error) {
