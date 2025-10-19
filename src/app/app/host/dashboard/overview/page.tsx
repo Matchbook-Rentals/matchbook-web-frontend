@@ -7,6 +7,7 @@ import { getAllUserDrafts } from "@/app/actions/listings-in-creation";
 import { getHostHousingRequests } from "@/app/actions/housing-requests";
 import { getAllHostBookings } from "@/app/actions/bookings";
 import { getHostUserData } from "@/app/actions/user";
+import { refreshStripeVerificationStatus } from "@/app/actions/stripe-identity";
 
 // Force dynamic rendering to ensure fresh Stripe status on every page load
 export const dynamic = 'force-dynamic';
@@ -311,9 +312,26 @@ export default async function OverviewPage() {
   const user = await currentUser();
   const isAdmin = user?.publicMetadata?.role === 'admin';
   const isAdminDev = user?.publicMetadata?.role === 'admin_dev';
-  
+
   // Get host user data for onboarding checklist
-  const hostUserData = await getHostUserData();
+  let hostUserData = await getHostUserData();
+
+  // Poll Stripe for fresh verification status if user has a pending session
+  // This ensures we catch verification completion even if webhooks are delayed
+  if (hostUserData?.stripeVerificationSessionId &&
+      hostUserData?.stripeVerificationStatus !== 'verified') {
+    try {
+      const refreshResult = await refreshStripeVerificationStatus();
+      if (refreshResult.success && refreshResult.statusChanged) {
+        console.log('🔄 Verification status updated from Stripe poll:', refreshResult.status);
+        // Re-fetch host user data to get updated status
+        hostUserData = await getHostUserData();
+      }
+    } catch (error) {
+      console.warn('⚠️ Could not poll Stripe for verification status:', error);
+      // Don't block page load if polling fails
+    }
+  }
   
   // Build mock cards with sample data
   const mockCards = buildStatisticsCards(sampleData);

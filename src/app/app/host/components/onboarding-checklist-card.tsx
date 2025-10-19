@@ -9,6 +9,7 @@ import {
 import { isIdentityVerified } from "@/lib/verification-utils";
 import { loadStripe } from '@stripe/stripe-js';
 import { createStripeVerificationSession } from '@/app/actions/stripe-identity';
+import { useRouter } from "next/navigation";
 
 export interface HostUserData {
   id: string;
@@ -48,6 +49,7 @@ export const OnboardingChecklistCard = ({
   description,
   hideHeader = false
 }: OnboardingChecklistCardProps): JSX.Element => {
+  const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [isCompletingAuth, setIsCompletingAuth] = useState(false);
   const [isCompletingStripeAuth, setIsCompletingStripeAuth] = useState(false);
@@ -176,10 +178,11 @@ export const OnboardingChecklistCard = ({
         return;
       }
 
-      console.log('✅ Verification completed successfully!');
+      console.log('✅ Verification modal completed!');
 
-      // Reload the page to show updated verification status
-      window.location.reload();
+      // Refresh the page data - RSC will poll Stripe and update status
+      console.log('🔄 Refreshing page to check verification status...');
+      router.refresh();
     } catch (err) {
       console.error('❌ Error during verification:', err);
       const errorMsg = err instanceof Error ? err.message : 'An unexpected error occurred';

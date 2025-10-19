@@ -49,6 +49,23 @@ export async function createStripeVerificationSession() {
     }
 
     // Check if there's an existing session that can be reused
+    // IMPORTANT: Session reuse is REQUIRED by Stripe for retry attempts
+    // Reference: https://docs.stripe.com/identity/how-sessions-work
+    //
+    // From Stripe docs:
+    // "If the verification process is interrupted and resumes later, attempt to reuse
+    // the same VerificationSession instead of creating a new one. Each VerificationSession
+    // tracks failed verification attempts, so reusing the same session can help maintain
+    // a history of verification attempts."
+    //
+    // Status flow for retries:
+    // 1. User starts verification → status: 'requires_input'
+    // 2. Verification fails (e.g., expired ID) → status: 'requires_input' with last_error
+    // 3. User clicks "Try Again" → REUSE same session with same client_secret
+    // 4. Stripe tracks retry history within the session
+    //
+    // Future enhancement: Parse session.last_error and display user-friendly message
+    // Error codes: document_expired, document_unreadable, selfie_document_face_mismatch, etc.
     if (user.stripeVerificationSessionId) {
       try {
         const existingSession = await stripe.identity.verificationSessions.retrieve(
@@ -61,6 +78,8 @@ export async function createStripeVerificationSession() {
             userId: user.id,
             sessionId: existingSession.id,
             status: existingSession.status,
+            hasError: !!existingSession.last_error,
+            errorCode: existingSession.last_error?.code,
           });
 
           return {
@@ -133,6 +152,7 @@ export async function createStripeVerificationSession() {
 
 /**
  * Retrieves the current verification status for the logged-in user
+ * Returns cached status from database (does not poll Stripe)
  *
  * @returns Object containing verification status and related data
  */
@@ -174,6 +194,151 @@ export async function getStripeVerificationStatus() {
     return {
       success: false,
       error: 'Failed to get verification status',
+    };
+  }
+}
+
+/**
+ * Polls Stripe directly for fresh verification status and updates database
+ * Use this as a fallback when webhooks fail or are delayed
+ *
+ * Called automatically by RSC on page load when user has pending verification session
+ * This ensures UI is always up-to-date even if webhooks are delayed
+ *
+ * @returns Object containing fresh verification status from Stripe
+ */
+export async function refreshStripeVerificationStatus() {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser?.id) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    const user = await prismadb.user.findUnique({
+      where: { id: clerkUser.id },
+      select: {
+        id: true,
+        stripeVerificationSessionId: true,
+        stripeVerificationStatus: true,
+      },
+    });
+
+    if (!user) {
+      return { success: false, error: 'User not found' };
+    }
+
+    if (!user.stripeVerificationSessionId) {
+      return {
+        success: false,
+        error: 'No verification session found',
+      };
+    }
+
+    logger.info('Polling Stripe for fresh verification status', {
+      userId: user.id,
+      sessionId: user.stripeVerificationSessionId,
+      currentStatus: user.stripeVerificationStatus,
+    });
+
+    // Fetch fresh status from Stripe
+    const session = await stripe.identity.verificationSessions.retrieve(
+      user.stripeVerificationSessionId
+    );
+
+    logger.info('Received fresh status from Stripe', {
+      userId: user.id,
+      sessionId: session.id,
+      oldStatus: user.stripeVerificationStatus,
+      newStatus: session.status,
+    });
+
+    // Update database with fresh data
+    const updatedUser = await prismadb.user.update({
+      where: { id: user.id },
+      data: {
+        stripeVerificationStatus: session.status,
+        stripeVerificationLastCheck: new Date(),
+        stripeVerificationReportId: session.last_verification_report?.id || null,
+        stripeIdentityPayload: session as any, // Store full session data
+      },
+      select: {
+        stripeVerificationStatus: true,
+        stripeVerificationSessionId: true,
+        stripeVerificationReportId: true,
+        stripeVerificationLastCheck: true,
+      },
+    });
+
+    // If newly verified, extract authenticated name and DOB from verification report
+    if (session.status === 'verified' && session.last_verification_report) {
+      try {
+        const report = await stripe.identity.verificationReports.retrieve(
+          session.last_verification_report.id
+        );
+
+        // Extract verified data from the document
+        const verifiedData = report.document;
+        if (verifiedData) {
+          const updateData: any = {};
+
+          // Update authenticated name if available
+          if (verifiedData.first_name) {
+            updateData.authenticatedFirstName = verifiedData.first_name;
+          }
+          if (verifiedData.last_name) {
+            updateData.authenticatedLastName = verifiedData.last_name;
+          }
+
+          // Update DOB if available (convert from YYYY-MM-DD to DD-MM-YYYY for consistency)
+          if (verifiedData.dob) {
+            const dobParts = verifiedData.dob.split('-'); // [YYYY, MM, DD]
+            if (dobParts.length === 3) {
+              updateData.authenticatedDateOfBirth = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
+            }
+          }
+
+          if (Object.keys(updateData).length > 0) {
+            await prismadb.user.update({
+              where: { id: user.id },
+              data: updateData,
+            });
+
+            logger.info('Updated authenticated user data from verification report', {
+              userId: user.id,
+              reportId: report.id,
+              updatedFields: Object.keys(updateData),
+            });
+          }
+        }
+      } catch (reportError) {
+        logger.warn('Could not fetch verification report details', {
+          userId: user.id,
+          reportId: session.last_verification_report.id,
+          error: reportError instanceof Error ? reportError.message : 'Unknown error',
+        });
+        // Don't fail the whole operation if report fetch fails
+      }
+    }
+
+    return {
+      success: true,
+      status: updatedUser.stripeVerificationStatus,
+      sessionId: updatedUser.stripeVerificationSessionId,
+      reportId: updatedUser.stripeVerificationReportId,
+      lastCheck: updatedUser.stripeVerificationLastCheck,
+      statusChanged: user.stripeVerificationStatus !== session.status,
+    };
+  } catch (error) {
+    logger.error('Error refreshing Stripe verification status', {
+      userId: clerkUser.id,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
+    return {
+      success: false,
+      error: 'Failed to refresh verification status',
     };
   }
 }
