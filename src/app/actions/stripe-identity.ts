@@ -32,6 +32,7 @@ export async function createStripeVerificationSession() {
         lastName: true,
         stripeVerificationSessionId: true,
         stripeVerificationStatus: true,
+        stripeAccountId: true,
       },
     });
 
@@ -102,9 +103,67 @@ export async function createStripeVerificationSession() {
       email: user.email,
     });
 
+    // Check if we can link this verification to their Connect account
+    // This allows Identity verification to automatically fulfill Connect ID requirements
+    let relatedPerson = undefined;
+
+    if (user.stripeAccountId) {
+      try {
+        // Fetch account to check business_type
+        const account = await stripe.accounts.retrieve(user.stripeAccountId);
+
+        // Only attach to related_person if account is individual
+        // Per Stripe docs: "You can't collect person.verification.additional_document
+        // and company.verification.document with Stripe Identity"
+        if (account.business_type === 'individual') {
+          // List persons on the account (for individual accounts, there's typically one)
+          const persons = await stripe.accounts.listPersons(user.stripeAccountId, { limit: 1 });
+          const personId = persons.data[0]?.id;
+
+          if (personId) {
+            relatedPerson = {
+              account: user.stripeAccountId,
+              person: personId,
+            };
+
+            logger.info('Linking Identity verification to Connect account', {
+              userId: user.id,
+              accountId: user.stripeAccountId,
+              personId: personId,
+              businessType: 'individual',
+            });
+          } else {
+            logger.warn('No Person found on Connect account, creating standalone session', {
+              userId: user.id,
+              accountId: user.stripeAccountId,
+            });
+          }
+        } else {
+          logger.info('Skipping related_person attachment - account is not individual', {
+            userId: user.id,
+            accountId: user.stripeAccountId,
+            businessType: account.business_type,
+          });
+        }
+      } catch (error) {
+        logger.warn('Could not link verification to Connect account, creating standalone session', {
+          userId: user.id,
+          accountId: user.stripeAccountId,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+        // Fall back to standalone verification
+      }
+    } else {
+      logger.info('No Connect account yet, creating standalone Identity verification', {
+        userId: user.id,
+      });
+    }
+
     // Create a new verification session (modal-based flow)
+    // If relatedPerson is defined, this will automatically attach to Connect account
     const verificationSession = await stripe.identity.verificationSessions.create({
       type: 'document',
+      ...(relatedPerson && { related_person: relatedPerson }),
       provided_details: {
         email: user.email || undefined,
       },
@@ -129,6 +188,8 @@ export async function createStripeVerificationSession() {
       userId: user.id,
       sessionId: verificationSession.id,
       status: verificationSession.status,
+      linkedToConnectAccount: !!relatedPerson,
+      connectAccountId: relatedPerson ? user.stripeAccountId : undefined,
     });
 
     return {
