@@ -1,5 +1,19 @@
 # Changelog
 
+## Implement Stripe Identity verification with inline modal flow
+- Added Stripe Identity verification as alternative to Medallion for identity verification
+- Implemented dual verification system accepting both Medallion (legacy) and Stripe Identity (new) as valid
+- Created inline modal-based verification flow opening directly from onboarding checklist without separate page
+- Added database fields for Stripe verification tracking (sessionId, status, reportId, lastCheck, payload)
+- Built server actions for creating, checking, and canceling Stripe Identity verification sessions
+- Extended webhook handler to process 5 Stripe Identity events (created, processing, verified, requires_input, canceled)
+- Created verification utility functions to check identity status across both systems
+- Updated admin panel to display verification source badges (Stripe blue, Medallion purple)
+- Added admin test endpoint to force Stripe verification status for development testing
+- Updated onboarding checklist to trigger modal inline with loading states and error handling
+- All new verifications use Stripe Identity while maintaining backward compatibility with Medallion
+- Updated Stripe Connect onboarding to require identity documents upfront using currently_due collection option
+
 ## Implement payment failure tracking with status enum and audit trail
 - Added RentPaymentStatus enum (PENDING, PROCESSING, AUTHORIZED, SUCCEEDED, FAILED, CANCELLED, REFUNDED)
 - Created RentPaymentFailure model to track all failure attempts with structured data (code, message, type, attempt number)

@@ -17,4 +17,3 @@ Users will see a mimic of our app/rent/searches route but instead at guest/rent/
 #### Search Views
 The views we maintain are 'All Listings' A view with a grid of search cards and a map. 'Recommended' which is a one at at time detailed view. 'Favorites' which is a grid of listing cards the user has liked, which prompt them to apply. 'Match' is a tab of applied to listing cards in a agrid from which the user can sign a lease and apply.
 
-####
