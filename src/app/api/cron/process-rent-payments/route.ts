@@ -460,6 +460,7 @@ const updatePaymentFailure = async (paymentId: string, errorMessage: string) => 
     data: {
       failureReason: errorMessage,
       retryCount: { increment: 1 },
+      lastRetryAttempt: new Date(), // Track when we last attempted this payment
       updatedAt: new Date(),
     },
   });
