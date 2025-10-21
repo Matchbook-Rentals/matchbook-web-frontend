@@ -1,5 +1,11 @@
 # Changelog
 
+## Replace message host button with apply now in listing detail view
+- Replaced SearchMessageHostDialog component with Apply Now button in listing-details-box-with-state component
+- Added optimisticApply action from trip context to enable direct applications from listing detail page
+- Apply Now button uses consistent teal styling matching other search views
+- Enforces same server-side validation as all other application flows (limits, completion check, own listing check)
+
 ## Enforce application limits with server-side validation
 - Added server-side application limit validation in checkApplicationLimits function (5 per trip, 10 total)
 - Created search-constants.ts with MAX_APPLICATIONS_PER_TRIP and MAX_APPLICATIONS_TOTAL constants

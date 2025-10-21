@@ -28,10 +28,11 @@ const ListingDetailsBoxWithState: React.FC<ListingDetailsBoxWithStateProps> = ({
   onLike, 
   setIsDetailsVisible 
 }) => {
-  const { state } = useTripContext();
+  const { state, actions } = useTripContext();
+  const { optimisticApply } = actions;
   const host = listing.user;
   const detailsBoxRef = useRef<HTMLDivElement>(null);
-  
+
   // Check current like/dislike state
   const isLiked = state.lookup.favIds.has(listing.id);
   const isDisliked = state.lookup.dislikedIds.has(listing.id);
@@ -218,13 +219,14 @@ const ListingDetailsBoxWithState: React.FC<ListingDetailsBoxWithStateProps> = ({
           </div>
         </div>
 
-        {/* Message button - Custom styled for the new design */}
-        <div className="w-full">
-          <SearchMessageHostDialog 
-            listingId={listing.id} 
-            hostName={host?.firstName || 'Host'} 
-          />
-        </div>
+        {/* Apply Now Button */}
+        <BrandButton
+          variant="outline"
+          className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
+          onClick={() => optimisticApply(listing)}
+        >
+          Apply Now
+        </BrandButton>
       </CardContent>
     </Card>
   );
