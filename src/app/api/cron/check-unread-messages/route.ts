@@ -236,7 +236,7 @@ export async function GET(request: Request) {
         actionType: actionType,
         actionId: isNewConversation ? group.conversationId : group.messages[0].id,
         content: content,
-        url: `/app/messages?convo=${group.conversationId}`,
+        url: `/app/rent/messages?convo=${group.conversationId}`,
         senderName: group.senderName,
         conversationId: group.conversationId,
         listingTitle: group.listingTitle,
