@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { StatisticsCard } from "../../dashboard/overview/statistics-card";
-import { DollarSign, AlertTriangle, CreditCard, Shield, Eye } from "lucide-react";
+import { DollarSign, AlertTriangle, CreditCard, Shield } from "lucide-react";
 import { PaymentsTable } from "../../dashboard/payments/payments-table";
 
 const iconMap = {
@@ -10,7 +10,6 @@ const iconMap = {
   AlertTriangle,
   CreditCard,
   Shield,
-  Eye,
 };
 
 interface PaymentCardData {
@@ -41,35 +40,20 @@ interface PaymentsData {
 }
 
 interface ListingPaymentsClientProps {
-  mockCards: PaymentCardData[];
-  emptyCards: PaymentCardData[];
-  mockData: PaymentsData;
-  emptyData: PaymentsData;
-  isAdmin: boolean;
-  listingAddress: string;
+  cards: PaymentCardData[];
+  paymentsData: PaymentsData;
 }
 
-export default function ListingPaymentsClient({ 
-  mockCards, 
-  emptyCards, 
-  mockData, 
-  emptyData, 
-  isAdmin,
-  listingAddress
+export default function ListingPaymentsClient({
+  cards,
+  paymentsData
 }: ListingPaymentsClientProps) {
-  const [useMockData, setUseMockData] = useState(false);
-  
-  const cards = useMockData ? mockCards : emptyCards;
-  const currentPaymentsData = useMockData ? mockData : emptyData;
-  
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 grid-cols-2 gap-x-1 gap-y-4 sm:gap-6 lg:flex lg:justify-between">
         {cards.map((card, index) => {
           const IconComponent = iconMap[card.iconName as keyof typeof iconMap];
-          const isViewMockDataCard = card.id === "view-mock-data";
-          const isClickable = !useMockData && isAdmin && isViewMockDataCard;
-          
+
           return (
             <div key={index} className="min-w-0 lg:flex-1">
               <StatisticsCard
@@ -81,15 +65,14 @@ export default function ListingPaymentsClient({
                 iconColor={card.iconColor}
                 subtitle={card.subtitle}
                 asLink={false}
-                className={`h-full ${isClickable ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''}`}
-                onClick={isClickable ? () => setUseMockData(true) : undefined}
+                className="h-full"
               />
             </div>
           );
         })}
       </div>
-      
-      <PaymentsTable paymentsData={currentPaymentsData} />
+
+      <PaymentsTable paymentsData={paymentsData} />
     </div>
   );
 }
