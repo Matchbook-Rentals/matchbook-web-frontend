@@ -308,18 +308,33 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           }}
         >
           {uniqueImages[activeImage] && (
-            <Image
-              key={uniqueImages[activeImage].id}
-              src={uniqueImages[activeImage].url}
-              alt={`${uniqueImages[activeImage]?.category} image ${uniqueImages[activeImage]?.rank}`}
-              fill
-              className="object-cover"
-              priority={activeImage === 0}
-              placeholder="blur"
-              blurDataURL={generateBlurDataURL()}
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              draggable={false}
-            />
+            <>
+              {/* Thumbnail - loads fast, stretched */}
+              <Image
+                key={`${uniqueImages[activeImage].id}-thumb`}
+                src={uniqueImages[activeImage].url}
+                alt={`${uniqueImages[activeImage]?.category} image ${uniqueImages[activeImage]?.rank}`}
+                fill
+                className="object-cover"
+                priority={activeImage === 0}
+                placeholder="blur"
+                blurDataURL={generateBlurDataURL()}
+                sizes="300px"
+                draggable={false}
+              />
+              {/* Full-size - loads on top, fades in when ready */}
+              <Image
+                key={`${uniqueImages[activeImage].id}-full`}
+                src={uniqueImages[activeImage].url}
+                alt={`${uniqueImages[activeImage]?.category} image ${uniqueImages[activeImage]?.rank}`}
+                fill
+                className="object-cover transition-opacity duration-500"
+                priority={activeImage === 0}
+                placeholder="empty"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                draggable={false}
+              />
+            </>
           )}
         </div>
 
@@ -383,6 +398,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
               {mobileImages.map((image, index) => (
                   <CarouselItem key={image.id} className="w-full h-[30vh]">
                     <div className="relative w-full h-full overflow-hidden rounded-[5px]">
+                      {/* Thumbnail - loads fast, stretched */}
                       <Image
                         src={image.url}
                         alt={`${image.category} image ${image.rank}`}
@@ -391,6 +407,17 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                         priority={index === 0}
                         placeholder="blur"
                         blurDataURL={generateBlurDataURL()}
+                        sizes="300px"
+                        draggable={false}
+                      />
+                      {/* Full-size - loads on top, fades in when ready */}
+                      <Image
+                        src={image.url}
+                        alt={`${image.category} image ${image.rank}`}
+                        fill
+                        className="object-cover transition-opacity duration-500"
+                        priority={index === 0}
+                        placeholder="empty"
                         sizes="100vw"
                         draggable={false}
                       />
