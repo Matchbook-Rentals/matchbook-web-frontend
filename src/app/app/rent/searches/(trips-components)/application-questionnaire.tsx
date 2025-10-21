@@ -237,7 +237,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
                 </div>
               </RadioGroup>
               {(fieldErrors['questionnaire.evicted'] || error?.evicted) && (
-                <p className="mt-1 text-red-500 text-md text-center">{fieldErrors['questionnaire.evicted'] || error.evicted}</p>
+                <p className="mt-1 text-red-500 text-sm text-center">{fieldErrors['questionnaire.evicted'] || error.evicted}</p>
               )}
             </div>
           </div>
