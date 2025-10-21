@@ -47,5 +47,7 @@ export const revalidateListingCache = async (listingId: string) => {
   revalidatePath(`/app/host/${listingId}`);
   revalidatePath(`/app/host/${listingId}/applications`);
   revalidatePath(`/app/host/${listingId}/bookings`);
+  revalidatePath("/admin/listing-management");
+  revalidatePath("/admin/listing-approval");
   return { revalidated: true };
 };
