@@ -116,21 +116,18 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
     );
   };
 
-  // Define heights for collapsed and expanded states
-  const collapsedHeight = '400px'; // Total height when collapsed (increased for taller image and new layout)
-  const expandedHeight = '88%'; // Total height when expanded (viewport units for consistency)
-  const topSectionHeight = 400; // Fixed height of top section in pixels (carousel + basic info)
-  const buttonSectionHeight = 70; // Approximate height of the button section (padding + button)
+  const cardHeight = expanded ? '88vh' : '400px';
 
   return (
     <div
-      className="absolute z-20 bg-white shadow-lg border border-gray-200 rounded-lg transition-all duration-300 ease-in-out top-14 left-2 w-96 overflow-hidden flex flex-col"
-      style={{ height: expanded ? expandedHeight : collapsedHeight }}
+      className="absolute z-20 bg-white shadow-lg border border-gray-200 rounded-lg transition-all duration-300 ease-in-out top-14 left-2 w-96 flex flex-col"
+      style={{ height: cardHeight }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <ScrollArea className="w-full" style={{ height: cardHeight }}>
       {/* Fixed Top Section (Carousel and Basic Info) */}
-      <div className="relative flex-shrink-0" style={{ height: `${topSectionHeight}px` }}>
+      <div className="relative">
         {/* Carousel Image Container */}
         <div className="relative h-[175px] w-full">
           <Carousel keyboardControls={false} opts={{ loop: true }}>
@@ -313,15 +310,11 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
 
       {/* Collapsible Bottom Section */}
       <div
-        className={`transition-all duration-300 ease-in-out bg-white flex-grow ${
+        className={`transition-all duration-300 ease-in-out bg-white ${
           expanded ? 'opacity-100' : 'opacity-0 max-h-0 overflow-hidden'
         }`}
       >
-        <ScrollArea
-          className="w-full px-4"
-          style={{ height: expanded ? `calc(88vh - ${topSectionHeight}px - ${buttonSectionHeight}px)` : '0px' }}
-        >
-          <div className="flex flex-col pb-20"> {/* Extra padding to ensure button visibility */}
+          <div className="flex flex-col pb-20 px-4"> {/* Extra padding to ensure button visibility */}
             {/* Highlights Section */}
             <div className={sectionStyles}>
               <h3 className={sectionHeaderStyles}>Highlights</h3>
@@ -416,8 +409,8 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
             )}
 
           </div>
-        </ScrollArea>
       </div>
+      </ScrollArea>
     </div>
   );
 };

@@ -146,25 +146,23 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
     );
   };
 
-  // Define heights for collapsed and expanded states
-  const collapsedHeight = '400px'; // Total height when collapsed (increased for taller image and new layout)
-  const expandedHeight = isMediumOrAbove ? '80%' : 'calc(87vh - 20px)'; // Total height when expanded (87% of viewport on mobile)
-  const topSectionHeight = 400; // Fixed height of top section in pixels (carousel + basic info)
-  const buttonSectionHeight = 70; // Approximate height of the button section
+  const expandedHeight = isMediumOrAbove ? '80vh' : 'calc(87vh - 20px)';
+  const cardHeight = expanded ? expandedHeight : '400px';
 
   return (
     <div
-      className={`absolute ${expanded ? 'z-[60]' : 'z-40'} bg-white shadow-lg border border-gray-200 rounded-lg transition-all duration-300 ease-in-out overflow-hidden flex flex-col ${className || defaultPositionClass}`}
-      style={{ 
-        height: expanded ? expandedHeight : collapsedHeight,
+      className={`absolute ${expanded ? 'z-[60]' : 'z-40'} bg-white shadow-lg border border-gray-200 rounded-lg transition-all duration-300 ease-in-out flex flex-col ${className || defaultPositionClass}`}
+      style={{
+        height: cardHeight,
         width: expanded ? '95%' : (isMediumOrAbove ? '320px' : '95%'),
         maxWidth: isMediumOrAbove ? '360px' : '95%'
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <ScrollArea className="w-full" style={{ height: cardHeight }}>
       {/* Fixed Top Section (Carousel and Basic Info) */}
-      <div className="relative flex-shrink-0" style={{ height: `${topSectionHeight}px` }}>
+      <div className="relative">
         {/* Carousel Image Container */}
         <div className="relative h-[175px] w-full">
           <Carousel keyboardControls={false} opts={{ loop: true }}>
@@ -347,21 +345,11 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
 
       {/* Collapsible Bottom Section */}
       <div
-        className={`transition-all duration-300 ease-in-out bg-white flex-grow ${
+        className={`transition-all duration-300 ease-in-out bg-white ${
           expanded ? 'opacity-100' : 'opacity-0 max-h-0 overflow-hidden'
         }`}
       >
-        <ScrollArea
-          className="w-full px-4"
-          style={{ 
-            height: expanded 
-              ? isMediumOrAbove 
-                ? `calc(80vh - ${topSectionHeight}px - ${buttonSectionHeight}px)` 
-                : `calc(87vh - ${topSectionHeight}px - ${buttonSectionHeight}px - 20px)`
-              : '0px' 
-          }}
-        >
-          <div className="flex flex-col pb-20"> {/* Extra padding to ensure button visibility */}
+          <div className="flex flex-col pb-20 px-4"> {/* Extra padding to ensure button visibility */}
             {/* Highlights Section */}
             <div className={sectionStyles}>
               <h3 className={sectionHeaderStyles}>Highlights</h3>
@@ -468,8 +456,8 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
               </Link>
             </div>
           </div>
-        </ScrollArea>
       </div>
+      </ScrollArea>
     </div>
   );
 };
