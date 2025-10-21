@@ -53,14 +53,24 @@ interface BookingPaymentsTableProps {
   renterId?: string;
 }
 
-export const BookingPaymentsTable = ({ 
-  paymentsData, 
-  renterName, 
+export const BookingPaymentsTable = ({
+  paymentsData,
+  renterName,
   renterAvatar,
   bookingId,
   renterId
 }: BookingPaymentsTableProps): JSX.Element => {
   const [selectedPayment, setSelectedPayment] = useState<BookingPaymentData | null>(null);
+
+  const isPaymentModifiable = (payment: BookingPaymentData): boolean => {
+    // Allow modification if due date is in the future
+    if (payment.parsedDueDate && payment.parsedDueDate >= new Date()) {
+      return true;
+    }
+
+    // Also allow modification for overdue or failed payments
+    return payment.status === 'Overdue' || payment.status === 'Failed';
+  };
 
   // Column headers with responsive visibility classes
   const headers = [
@@ -146,21 +156,27 @@ export const BookingPaymentsTable = ({
               </TableCell>
               {/* Actions - Always visible */}
               <TableCell className="w-fit h-[72px] px-2 sm:px-6 py-4 flex justify-center items-center">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <div className="inline-flex flex-col items-start cursor-pointer">
-                      <MoreVerticalIcon className="w-5 h-5 hover:text-gray-600" />
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => setSelectedPayment(row)}
-                      className="cursor-pointer"
-                    >
-                      Modify Payment
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {isPaymentModifiable(row) ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <div className="inline-flex flex-col items-start cursor-pointer">
+                        <MoreVerticalIcon className="w-5 h-5 hover:text-gray-600" />
+                      </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => setSelectedPayment(row)}
+                        className="cursor-pointer"
+                      >
+                        Modify Payment
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <div className="inline-flex flex-col items-start cursor-not-allowed">
+                    <MoreVerticalIcon className="w-5 h-5 text-gray-300" />
+                  </div>
+                )}
               </TableCell>
             </TableRow>
           ))
