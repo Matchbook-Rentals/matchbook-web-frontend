@@ -14,12 +14,6 @@ export default async function ApplicationPage({ searchParams }: ApplicationPageP
   // Load the user's default application from the server
   const application = await getUserApplication();
 
-  // Get user agent to determine if mobile on server side
-
-  // For testing: Add artificial delay to simulate loading state
-  // Use reasonable timeout value in production
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
   // Pass the application data and mobile state to the client component
   // The form will show empty if no application exists
   return <ApplicationClientComponent application={application} isMobile={isMobile} from={searchParams.from} />;
