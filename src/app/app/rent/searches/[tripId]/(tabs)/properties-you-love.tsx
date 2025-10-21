@@ -5,72 +5,22 @@ import { ListingAndImages } from '@/types';
 import CustomAccordion from '@/components/ui/custom-accordion';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { BrandButton } from "@/components/ui/brandButton";
 
 export default function PropertiesYouLoveTab() {
   const [isOpen, setIsOpen] = useState(true);
-  const { likedListings, requestedListings, setLookup, actions, trip, application } = useTripContext();
+  const { state, actions } = useTripContext();
+  const { likedListings, requestedListings } = state;
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleApply = async (listing: ListingAndImages) => {
-    // Check if user is trying to apply to their own listing
-    if (trip?.userId && listing.userId === trip.userId) {
-      toast({
-        title: "Cannot Apply to Own Listing",
-        description: "You cannot apply to your own property listing.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!application?.isComplete) {
-      toast({
-        title: "Application Incomplete",
-        description: "You need to complete your application before applying to properties.",
-        action: (
-          <BrandButton size="sm" onClick={() => router.push(`${pathname}?tab=applications`, { scroll: true })}>
-            Complete Application
-          </BrandButton>
-        ),
-      });
-      return;
-    }
-
-    setLookup(prev => {
-      const newReqs = new Set(prev.requestedIds)
-      newReqs.add(listing.id)
-      return { ...prev, requestedIds: newReqs }
-    })
-    try {
-      let response = await actions.createDbHousingRequest(trip, listing)
-      toast({
-        title: "Application Sent",
-        description: "Your application has been sent to the host.",
-      });
-    } catch (error) {
-      console.error("Error sending application:", error);
-      toast({
-        title: "Error",
-        description: "There was an error sending your application. Please try again.",
-        variant: "destructive",
-      });
-    }
-  }
 
   const handleUnapply = async (listing: ListingAndImages) => {
-    setLookup(prev => {
-      const newReqs = new Set(prev.requestedIds)
-      newReqs.delete(listing.id)
-      return { ...prev, requestedIds: newReqs }
-    })
-    await actions.deleteDbHousingRequest(trip.id, listing.id);
+    await actions.optimisticRemoveApply(listing.id);
   }
 
   const generateLikedCardActions = (listing: ListingAndImages) => {
-    return [{ label: 'Apply Now', action: () => handleApply(listing) }];
+    return [{ label: 'Apply Now', action: () => actions.optimisticApply(listing) }];
   }
 
   const generateRequestedCardActions = (listing: ListingAndImages) => {

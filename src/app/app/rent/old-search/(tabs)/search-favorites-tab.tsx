@@ -4,8 +4,6 @@ import { ListingAndImages } from '@/types';
 import SearchMap from '../(components)/search-map';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import { toast } from "@/components/ui/use-toast";
-import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
 import SearchFavoriteGrid from '../(components)/search-favorite-grid';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Button } from '@/components/ui/button';
@@ -16,7 +14,6 @@ export default function SearchFavoritesTab() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
   const { likedListings, requestedListings, lookup } = state;
-  const { setLookup } = actions;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -53,50 +50,6 @@ export default function SearchFavoritesTab() {
     router[action](url);
   };
 
-  const handleApply = async (listing: ListingAndImages) => {
-    // Check if user is trying to apply to their own listing
-    if (state.trip?.userId && listing.userId === state.trip.userId) {
-      toast({
-        title: "Cannot Apply to Own Listing",
-        description: "You cannot apply to your own property listing.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!state.application?.isComplete) {
-      toast({
-        title: "Application Incomplete",
-        description: "Please complete your application before applying to properties.",
-        action: (
-          <BrandButton size="sm" onClick={() => router.push('/app/rent/applications/general')}>
-            Complete Application
-          </BrandButton>
-        ),
-      });
-      return;
-    }
-
-    setLookup(prev => {
-      const newReqs = new Set(prev.requestedIds)
-      newReqs.add(listing.id)
-      return { ...prev, requestedIds: newReqs }
-    })
-    try {
-      let response = await createDbHousingRequest(state.trip, listing)
-      toast({
-        title: "Application Sent",
-        description: "Your application has been sent to the host.",
-      });
-    } catch (error) {
-      console.error("Error sending application:", error);
-      toast({
-        title: "Error",
-        description: "There was an error sending your application. Please try again.",
-        variant: "destructive",
-      });
-    }
-  }
 
 
   const logState = () => {
@@ -110,16 +63,11 @@ export default function SearchFavoritesTab() {
   }
 
   const handleUnapply = async (listing: ListingAndImages) => {
-    setLookup(prev => {
-      const newReqs = new Set(prev.requestedIds)
-      newReqs.delete(listing.id)
-      return { ...prev, requestedIds: newReqs }
-    })
-    await deleteDbHousingRequest(state.trip?.id, listing.id)
+    await actions.optimisticRemoveApply(listing.id);
   }
 
   const generateLikedCardActions = (listing: ListingAndImages) => {
-    return [{ label: 'Apply Now', action: () => handleApply(listing) }];
+    return [{ label: 'Apply Now', action: () => actions.optimisticApply(listing) }];
   }
 
   const generateRequestedCardActions = (listing: ListingAndImages) => {

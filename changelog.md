@@ -1,5 +1,15 @@
 # Changelog
 
+## Enforce application limits with server-side validation
+- Added server-side application limit validation in checkApplicationLimits function (5 per trip, 10 total)
+- Created search-constants.ts with MAX_APPLICATIONS_PER_TRIP and MAX_APPLICATIONS_TOTAL constants
+- Centralized all application submissions through optimisticApply context function to enforce consistent validation
+- Removed duplicate handleApply functions bypassing limits in search-favorites-tab and properties-you-love tabs
+- Added success toast notification when applications are successfully sent to hosts for review
+- Added error toast notifications for limit exceeded, application incomplete, and own listing scenarios
+- Fixed limit bypass bug where favorite grid cards called createDbHousingRequest directly
+- All application flows now validate: completion status, own listing check, trip limits, and total limits
+
 ## Implement Stripe Identity verification with inline modal flow
 - Added Stripe Identity verification as alternative to Medallion for identity verification
 - Implemented dual verification system accepting both Medallion (legacy) and Stripe Identity (new) as valid

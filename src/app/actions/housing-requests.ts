@@ -11,6 +11,7 @@ import { findConversationBetweenUsers, createListingConversation } from './conve
 import { sendNotificationEmail } from '@/lib/send-notification-email'
 import { buildNotificationEmailData as buildEmailConfig, getNotificationEmailSubject } from '@/lib/notification-email-config'
 import { buildNotificationEmailData } from '@/lib/notification-builders'
+import { MAX_APPLICATIONS_PER_TRIP, MAX_APPLICATIONS_TOTAL } from '@/constants/search-constants'
 
 type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -294,6 +295,154 @@ export const deleteDbHousingRequest = async (tripId: string, listingId: string) 
   }
 }
 
+// Check if user has reached application limits
+export async function checkApplicationLimits(tripId: string, userId: string) {
+  try {
+    console.log('🔍 checkApplicationLimits called with:', { tripId, userId });
+
+    // Check if user has completed their application for this trip
+    let application = await prismadb.application.findUnique({
+      where: {
+        userId_tripId: {
+          userId: userId,
+          tripId: tripId
+        }
+      },
+      select: {
+        id: true,
+        isComplete: true,
+        tripId: true
+      }
+    });
+
+    console.log('📋 Trip-specific application found:', application);
+
+    // If no trip-specific application, check for default application
+    if (!application) {
+      console.log('🔍 No trip-specific application, checking for default application...');
+      application = await prismadb.application.findFirst({
+        where: {
+          userId: userId,
+          isDefault: true
+        },
+        select: {
+          id: true,
+          isComplete: true,
+          tripId: true
+        }
+      });
+      console.log('📋 Default application found:', application);
+    }
+
+    if (application) {
+      console.log('📋 Application ID:', application.id);
+      console.log('📋 Application.tripId:', application.tripId);
+      console.log('📋 Application.isComplete field value:', application.isComplete);
+      console.log('📋 Type of isComplete:', typeof application.isComplete);
+    } else {
+      console.log('❌ No application found (neither trip-specific nor default)');
+    }
+
+    if (!application?.isComplete) {
+      console.log('❌ Application check failed - application is incomplete or not found');
+      return {
+        canApply: false,
+        reason: "Please complete your application before applying to listings",
+        tripCount: 0,
+        totalCount: 0
+      };
+    }
+
+    console.log('✅ Application is complete, proceeding with limit checks');
+
+    // Count open applications for this specific trip (excluding those with matches)
+    const tripApplications = await prismadb.housingRequest.findMany({
+      where: {
+        tripId: tripId,
+        trip: {
+          userId: userId
+        }
+      },
+      select: {
+        id: true,
+        tripId: true,
+        listingId: true
+      }
+    });
+
+    console.log('📊 Found', tripApplications.length, 'total housing requests for this trip');
+
+    // Check which applications have matches
+    let tripOpenCount = 0;
+    for (const app of tripApplications) {
+      const hasMatch = await checkIfRequestHasMatch(app.tripId, app.listingId);
+      console.log(`  - Housing request ${app.id.substring(0, 8)}... hasMatch:`, hasMatch);
+      if (!hasMatch) {
+        tripOpenCount++;
+      }
+    }
+
+    console.log('📊 Trip open count (without matches):', tripOpenCount, '/', MAX_APPLICATIONS_PER_TRIP);
+
+    // Count total open applications across all trips
+    const allApplications = await prismadb.housingRequest.findMany({
+      where: {
+        trip: {
+          userId: userId
+        }
+      },
+      select: {
+        id: true,
+        tripId: true,
+        listingId: true
+      }
+    });
+
+    console.log('📊 Found', allApplications.length, 'total housing requests across ALL trips');
+
+    let totalOpenCount = 0;
+    for (const app of allApplications) {
+      const hasMatch = await checkIfRequestHasMatch(app.tripId, app.listingId);
+      if (!hasMatch) {
+        totalOpenCount++;
+      }
+    }
+
+    console.log('📊 Total open count across all trips (without matches):', totalOpenCount, '/', MAX_APPLICATIONS_TOTAL);
+
+    // Check limits
+    if (tripOpenCount >= MAX_APPLICATIONS_PER_TRIP) {
+      console.log('❌ LIMIT EXCEEDED: Trip limit reached', tripOpenCount, '>=', MAX_APPLICATIONS_PER_TRIP);
+      return {
+        canApply: false,
+        reason: `You've reached the maximum of ${MAX_APPLICATIONS_PER_TRIP} open applications for this trip`,
+        tripCount: tripOpenCount,
+        totalCount: totalOpenCount
+      };
+    }
+
+    if (totalOpenCount >= MAX_APPLICATIONS_TOTAL) {
+      console.log('❌ LIMIT EXCEEDED: Total limit reached', totalOpenCount, '>=', MAX_APPLICATIONS_TOTAL);
+      return {
+        canApply: false,
+        reason: `You've reached the maximum of ${MAX_APPLICATIONS_TOTAL} total open applications across all trips`,
+        tripCount: tripOpenCount,
+        totalCount: totalOpenCount
+      };
+    }
+
+    console.log('✅ All limits passed! User can apply.');
+    return {
+      canApply: true,
+      tripCount: tripOpenCount,
+      totalCount: totalOpenCount
+    };
+  } catch (error) {
+    console.error('Error checking application limits:', error);
+    throw error;
+  }
+}
+
 export async function optimisticApplyDb(tripId: string, listing: ListingAndImages) {
   try {
     const { userId } = auth();
@@ -314,6 +463,16 @@ export async function optimisticApplyDb(tripId: string, listing: ListingAndImage
     // Prevent users from applying to their own listings
     if (trip.userId === listing.userId) {
       throw new Error('You cannot apply to your own listing');
+    }
+
+    // Check application limits
+    const limitsCheck = await checkApplicationLimits(tripId, userId);
+    if (!limitsCheck.canApply) {
+      return {
+        success: false,
+        error: 'LIMIT_EXCEEDED',
+        message: limitsCheck.reason
+      };
     }
 
     const housingRequest = await createDbHousingRequest(trip, listing);

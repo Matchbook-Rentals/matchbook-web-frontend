@@ -6,10 +6,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
 import { X, Heart, CheckCircle, Check } from 'lucide-react';
 import { BrandButton } from '@/components/ui/brandButton';
 import Image from 'next/image';
+import { useTripContext } from '@/contexts/trip-context-provider';
 
 interface ListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -26,6 +26,8 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
   onLike,
   setIsDetailsVisible
 }) => {
+  const { actions } = useTripContext();
+  const { optimisticApply } = actions;
   const host = listing.user;
   const detailsBoxRef = useRef<HTMLDivElement>(null);
 
@@ -139,6 +141,15 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
             <div className="font-normal text-[#5d606d] text-base">Deposit</div>
           </div>
         </div>
+
+        {/* Apply Now Button */}
+        <BrandButton
+          variant="outline"
+          className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
+          onClick={() => optimisticApply(listing)}
+        >
+          Apply Now
+        </BrandButton>
 
       </CardContent>
     </Card>

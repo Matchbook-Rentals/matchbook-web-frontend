@@ -12,6 +12,7 @@ import { CategoryType, getBooleanFilters } from '@/constants/filters';
 import { FilterOptions, initializeFiltersFromTrip, convertFiltersToDbFormat } from '@/lib/listing-filters';
 import { useFilteredListings } from '@/hooks/useFilteredListings';
 import { logger } from '@/lib/logger';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ListingWithAvailability extends ListingAndImages {
   availableStart?: Date;
@@ -81,6 +82,7 @@ export const useTripContext = () => {
 };
 
 export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children, listingData, tripData, application }) => {
+  const { toast } = useToast();
   const [listings, setListings] = useState(listingData);
   const [trip, setTrip] = useState(tripData);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
@@ -91,7 +93,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     requestedIds: new Set(),
     matchIds: new Set()
   });
-  
+
   // Track operations in progress to prevent duplicates
   const [processingOperations, setProcessingOperations] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<FilterOptions>(
@@ -423,6 +425,11 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       // Prevent users from applying to their own listings
       if (trip?.userId && listing.userId === trip.userId) {
         logger.error('Cannot apply to own listing');
+        toast({
+          variant: "destructive",
+          title: "Cannot Apply",
+          description: "You cannot apply to your own listing",
+        });
         return;
       }
 
@@ -434,7 +441,24 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
       const result = await optimisticApplyDb(trip.id, listing);
 
+      // Show success toast
+      if (result.success) {
+        toast({
+          title: "Application Sent",
+          description: "Your application has been sent to the host for review.",
+        });
+      }
+
       if (!result.success) {
+        // Check if it's a limit error
+        if (result.error === 'LIMIT_EXCEEDED') {
+          toast({
+            variant: "destructive",
+            title: "Application Limit Reached",
+            description: result.message,
+          });
+        }
+
         // Rollback on failure
         setLookup(prev => ({
           ...prev,
@@ -449,7 +473,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         requestedIds: new Set([...prev.requestedIds].filter(id => id !== listing.id))
       }));
     }
-  }, [trip, lookup]);
+  }, [trip, lookup, toast]);
 
   const updateFilter = useCallback((key: keyof FilterOptions, value: any) => {
     setFilters(prev => ({

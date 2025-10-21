@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
 import { X, Heart } from 'lucide-react';
 import { BrandButton } from '@/components/ui/brandButton';
 import Image from 'next/image';
@@ -223,6 +222,15 @@ const ListingDetailsBoxWithState: React.FC<ListingDetailsBoxWithStateProps> = ({
             <div className="font-normal text-[#5d606d] text-base">Deposit</div>
           </div>
         </div>
+
+        {/* Apply Now Button */}
+        <BrandButton
+          variant="outline"
+          className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
+          onClick={() => showAuthPrompt('apply')}
+        >
+          Apply Now
+        </BrandButton>
 
       </CardContent>
     </Card>
