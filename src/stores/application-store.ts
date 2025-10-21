@@ -456,28 +456,55 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       });
     }
 
-    // Check Residential History total duration
-    const totalDuration = state.residentialHistory.reduce((sum, entry) => sum + ((parseInt(entry.durationOfTenancy || '0')) || 0), 0);
-    if (totalDuration < 24) {
-      missingFields.push('residentialHistory total duration less than 24');
-    }
-    // New check: ensure each residential history entry has all required fields (except apt) and landlord info if needed
-    state.residentialHistory.forEach((entry, index) => {
-      if (!entry.street) missingFields.push(`residentialHistory[${index}].street`);
-      if (!entry.city) missingFields.push(`residentialHistory[${index}].city`);
-      if (!entry.state) missingFields.push(`residentialHistory[${index}].state`);
-      if (!entry.zipCode) missingFields.push(`residentialHistory[${index}].zipCode`);
-      if (!entry.monthlyPayment) missingFields.push(`residentialHistory[${index}].monthlyPayment`);
-      if (!entry.durationOfTenancy) missingFields.push(`residentialHistory[${index}].durationOfTenancy`);
-      if (!entry.housingStatus) {
-        missingFields.push(`residentialHistory[${index}].housingStatus`);
-      } else if (entry.housingStatus !== 'own') {
-        if (!entry.landlordFirstName) missingFields.push(`residentialHistory[${index}].landlordFirstName`);
-        if (!entry.landlordLastName) missingFields.push(`residentialHistory[${index}].landlordLastName`);
-        if (!entry.landlordEmail) missingFields.push(`residentialHistory[${index}].landlordEmail`);
-        if (!entry.landlordPhoneNumber) missingFields.push(`residentialHistory[${index}].landlordPhoneNumber`);
+    // Check Residential History - NEW REQUIREMENT
+    // Current residence (index 0) is always required
+    // Previous residence (index 1) is required only if current duration < 24 months
+    const currentResidence = state.residentialHistory[0];
+    const currentDuration = parseInt(currentResidence?.durationOfTenancy || '0');
+    const isPreviousResidenceRequired = currentDuration > 0 && currentDuration < 24;
+
+    // Validate current residence (always required)
+    if (currentResidence) {
+      if (!currentResidence.street) missingFields.push('residentialHistory[0].street');
+      if (!currentResidence.city) missingFields.push('residentialHistory[0].city');
+      if (!currentResidence.state) missingFields.push('residentialHistory[0].state');
+      if (!currentResidence.zipCode) missingFields.push('residentialHistory[0].zipCode');
+      if (!currentResidence.monthlyPayment) missingFields.push('residentialHistory[0].monthlyPayment');
+      if (!currentResidence.durationOfTenancy) missingFields.push('residentialHistory[0].durationOfTenancy');
+      if (!currentResidence.housingStatus) {
+        missingFields.push('residentialHistory[0].housingStatus');
+      } else if (currentResidence.housingStatus === 'rent') {
+        if (!currentResidence.landlordFirstName) missingFields.push('residentialHistory[0].landlordFirstName');
+        if (!currentResidence.landlordLastName) missingFields.push('residentialHistory[0].landlordLastName');
+        if (!currentResidence.landlordEmail) missingFields.push('residentialHistory[0].landlordEmail');
+        if (!currentResidence.landlordPhoneNumber) missingFields.push('residentialHistory[0].landlordPhoneNumber');
       }
-    });
+    } else {
+      missingFields.push('residentialHistory[0] (current residence missing)');
+    }
+
+    // Validate previous residence only if required (duration < 24 months)
+    if (isPreviousResidenceRequired) {
+      const previousResidence = state.residentialHistory[1];
+      if (!previousResidence) {
+        missingFields.push('residentialHistory[1] (previous residence required - current stay < 24 months)');
+      } else {
+        if (!previousResidence.street) missingFields.push('residentialHistory[1].street');
+        if (!previousResidence.city) missingFields.push('residentialHistory[1].city');
+        if (!previousResidence.state) missingFields.push('residentialHistory[1].state');
+        if (!previousResidence.zipCode) missingFields.push('residentialHistory[1].zipCode');
+        if (!previousResidence.monthlyPayment) missingFields.push('residentialHistory[1].monthlyPayment');
+        if (!previousResidence.durationOfTenancy) missingFields.push('residentialHistory[1].durationOfTenancy');
+        if (!previousResidence.housingStatus) {
+          missingFields.push('residentialHistory[1].housingStatus');
+        } else if (previousResidence.housingStatus === 'rent') {
+          if (!previousResidence.landlordFirstName) missingFields.push('residentialHistory[1].landlordFirstName');
+          if (!previousResidence.landlordLastName) missingFields.push('residentialHistory[1].landlordLastName');
+          if (!previousResidence.landlordEmail) missingFields.push('residentialHistory[1].landlordEmail');
+          if (!previousResidence.landlordPhoneNumber) missingFields.push('residentialHistory[1].landlordPhoneNumber');
+        }
+      }
+    }
 
     // Check Incomes
     if (!state.incomes || state.incomes.length === 0) {

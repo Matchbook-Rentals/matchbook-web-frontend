@@ -159,17 +159,28 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
 
 
 
+  // Determine if previous residence should be shown
+  const currentDuration = parseInt(residentialHistory[0]?.durationOfTenancy || '0');
+  const showPreviousResidence = currentDuration > 0 && currentDuration < 24;
+
   return (
     <div className="space-y-8 w-full">
       {residentialHistoryErrors.overall && (
         <p onClick={() => console.log(residentialHistory)} className="text-red-500 text-sm mt-1">{residentialHistoryErrors.overall}</p>
       )}
       {residentialHistory.map((residence, index) => {
+        // Skip previous residence (index 1) if not needed
+        if (index === 1 && !showPreviousResidence) {
+          return null;
+        }
+
         let headerText;
+        let showInfoMessage = false;
         if (index === 0) {
           headerText = "Current Residence";
         } else if (index === 1) {
           headerText = "Previous Residence";
+          showInfoMessage = true;
         } else {
           headerText = `Residence ${index + 1}`;
         }
@@ -177,9 +188,16 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
           <Card key={index} className="py-6 px-0 bg-neutral-50 rounded-xl border-none shadow-none">
             <CardContent className="p-0 flex flex-col gap-8">
               <div className="flex flex-col items-start gap-5 w-full">
-                <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-lg tracking-[-0.40px] leading-normal">
-                  {headerText}
-                </h2>
+                <div className="flex flex-col gap-2 w-full">
+                  <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-lg tracking-[-0.40px] leading-normal">
+                    {headerText}
+                  </h2>
+                  {showInfoMessage && (
+                    <p className="text-sm text-gray-600">
+                      Previous residence is required because your current residence is less than 24 months.
+                    </p>
+                  )}
+                </div>
 
                 {/* Row 1: Street Address + Apt */}
                 <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>

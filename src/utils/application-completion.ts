@@ -28,7 +28,7 @@
  *    - If evicted = true: eviction explanation required
  *
  * 5. RESIDENTIAL HISTORY
- *    - Current residence (required) with:
+ *    - Current residence (always required) with:
  *      - Street address (required)
  *      - City (required)
  *      - State (required)
@@ -38,7 +38,10 @@
  *        - Landlord first name (required)
  *        - Landlord last name (required)
  *        - Landlord email or phone (at least one required)
- *    - Previous residence (optional, but validated if provided)
+ *    - Previous residence (conditionally required):
+ *      - REQUIRED if current residence duration < 24 months
+ *      - NOT required if current residence duration >= 24 months
+ *      - When required, all fields must be completed (same as current residence)
  */
 
 export interface CompletionResult {
@@ -193,7 +196,7 @@ export function checkApplicationCompletionClient(data: ClientApplicationData): C
   if (!firstResidence) {
     missingRequirements.push('Current address');
   } else {
-    // Check basic address fields
+    // Check basic address fields for current residence
     if (!firstResidence.street?.trim()) {
       missingRequirements.push('Street address');
     }
@@ -207,7 +210,7 @@ export function checkApplicationCompletionClient(data: ClientApplicationData): C
       missingRequirements.push('ZIP code');
     }
 
-    // Check landlord info if renting
+    // Check landlord info if renting current residence
     if (firstResidence.housingStatus === 'rent') {
       if (!firstResidence.landlordFirstName?.trim()) {
         missingRequirements.push('Landlord first name');
@@ -218,6 +221,43 @@ export function checkApplicationCompletionClient(data: ClientApplicationData): C
       // Require at least one contact method (email OR phone)
       if (!firstResidence.landlordEmail?.trim() && !firstResidence.landlordPhone?.trim()) {
         missingRequirements.push('Landlord contact (email or phone)');
+      }
+    }
+
+    // NEW REQUIREMENT: Check if previous residence is needed
+    // Previous residence is required if current residence duration < 24 months
+    const currentDuration = parseInt((firstResidence as any).durationOfTenancy || '0');
+    if (currentDuration > 0 && currentDuration < 24) {
+      const secondResidence = data.residentialHistory?.[1];
+      if (!secondResidence) {
+        missingRequirements.push('Previous residence (current stay is less than 24 months)');
+      } else {
+        // Validate previous residence fields
+        if (!secondResidence.street?.trim()) {
+          missingRequirements.push('Previous residence street address');
+        }
+        if (!secondResidence.city?.trim()) {
+          missingRequirements.push('Previous residence city');
+        }
+        if (!secondResidence.state?.trim()) {
+          missingRequirements.push('Previous residence state');
+        }
+        if (!secondResidence.zipCode?.trim()) {
+          missingRequirements.push('Previous residence ZIP code');
+        }
+
+        // Check landlord info if renting previous residence
+        if (secondResidence.housingStatus === 'rent') {
+          if (!secondResidence.landlordFirstName?.trim()) {
+            missingRequirements.push('Previous landlord first name');
+          }
+          if (!secondResidence.landlordLastName?.trim()) {
+            missingRequirements.push('Previous landlord last name');
+          }
+          if (!secondResidence.landlordEmail?.trim() && !secondResidence.landlordPhone?.trim()) {
+            missingRequirements.push('Previous landlord contact (email or phone)');
+          }
+        }
       }
     }
   }
@@ -308,7 +348,7 @@ export function checkApplicationCompletionServer(application: ServerApplicationD
   if (!firstResidence) {
     missingRequirements.push('Current address');
   } else {
-    // Check basic address fields
+    // Check basic address fields for current residence
     if (!firstResidence.street?.trim()) {
       missingRequirements.push('Street address');
     }
@@ -325,7 +365,7 @@ export function checkApplicationCompletionServer(application: ServerApplicationD
       missingRequirements.push('Length of stay');
     }
 
-    // Check landlord info if renting
+    // Check landlord info if renting current residence
     if (firstResidence.housingStatus === 'rent') {
       if (!firstResidence.landlordFirstName?.trim()) {
         missingRequirements.push('Landlord first name');
@@ -336,6 +376,46 @@ export function checkApplicationCompletionServer(application: ServerApplicationD
       // Require at least one contact method (email OR phone)
       if (!firstResidence.landlordEmail?.trim() && !firstResidence.landlordPhone?.trim()) {
         missingRequirements.push('Landlord contact (email or phone)');
+      }
+    }
+
+    // NEW REQUIREMENT: Check if previous residence is needed
+    // Previous residence is required if current residence duration < 24 months
+    const currentDuration = parseInt(firstResidence.durationOfTenancy || '0');
+    if (currentDuration > 0 && currentDuration < 24) {
+      const secondResidence = sortedResidences?.[1];
+      if (!secondResidence) {
+        missingRequirements.push('Previous residence (current stay is less than 24 months)');
+      } else {
+        // Validate previous residence fields
+        if (!secondResidence.street?.trim()) {
+          missingRequirements.push('Previous residence street address');
+        }
+        if (!secondResidence.city?.trim()) {
+          missingRequirements.push('Previous residence city');
+        }
+        if (!secondResidence.state?.trim()) {
+          missingRequirements.push('Previous residence state');
+        }
+        if (!secondResidence.zipCode?.trim()) {
+          missingRequirements.push('Previous residence ZIP code');
+        }
+        if (!secondResidence.durationOfTenancy?.trim()) {
+          missingRequirements.push('Previous residence length of stay');
+        }
+
+        // Check landlord info if renting previous residence
+        if (secondResidence.housingStatus === 'rent') {
+          if (!secondResidence.landlordFirstName?.trim()) {
+            missingRequirements.push('Previous landlord first name');
+          }
+          if (!secondResidence.landlordLastName?.trim()) {
+            missingRequirements.push('Previous landlord last name');
+          }
+          if (!secondResidence.landlordEmail?.trim() && !secondResidence.landlordPhone?.trim()) {
+            missingRequirements.push('Previous landlord contact (email or phone)');
+          }
+        }
       }
     }
   }

@@ -123,8 +123,12 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
     return errors;
   }
 
-  // Only validate current residence (first entry) as required
-  // Validate additional residences only if they have partial data
+  // Get current residence duration to determine if previous residence is required
+  const currentResidence = residentialHistory[0];
+  const currentDuration = parseInt(currentResidence?.durationOfTenancy || '0');
+  const isPreviousResidenceRequired = currentDuration > 0 && currentDuration < 24;
+
+  // Validate current residence (always required) and previous residence (conditionally required)
   for (let i = 0; i < residentialHistory.length; i++) {
     const entry = residentialHistory[i];
     const street = entry.street ? entry.street : '';
@@ -133,13 +137,19 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
     const zipCode = entry.zipCode ? entry.zipCode : '';
     const durationOfTenancy = entry.durationOfTenancy ? entry.durationOfTenancy : '';
 
-    // For first residence (current), all fields are required
-    // For additional residences, only validate if any field is filled
     const isCurrentResidence = i === 0;
+    const isPreviousResidence = i === 1;
     const hasPartialData = street || city || state || zipCode || durationOfTenancy ||
                           entry.landlordFirstName || entry.landlordLastName;
 
-    if (isCurrentResidence || hasPartialData) {
+    // Current residence is always required
+    // Previous residence is required if current duration < 24 months
+    // Other residences only validated if they have partial data
+    const shouldValidate = isCurrentResidence ||
+                          (isPreviousResidence && isPreviousResidenceRequired) ||
+                          hasPartialData;
+
+    if (shouldValidate) {
       if (!street.trim()) {
         const error = isCurrentResidence ? 'Current Residence: Street Address is required' : 'Previous Residence: Street Address is required';
         console.log(`❌ Validation failed: street[${i}] - "${street}" - ${error}`);
