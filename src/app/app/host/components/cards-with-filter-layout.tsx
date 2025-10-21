@@ -83,7 +83,7 @@ export default function TabLayout({
       if (!headerRef.current) return;
 
       const headerHeight = headerRef.current.offsetHeight;
-      const paginationHeight = paginationRef.current ? paginationRef.current.offsetHeight : 80; // Default height for pagination
+      const paginationHeight = paginationRef.current ? paginationRef.current.offsetHeight : 0; // No default height if pagination not shown
       const topOffset = headerRef.current.offsetTop;
       const bottomPadding = 32; // Some padding at the bottom
 
@@ -313,7 +313,7 @@ export default function TabLayout({
 
                 {/* Desktop Pagination - Fixed at bottom */}
                 {pagination && pagination.totalItems > pagination.itemsPerPage && (
-                  <div ref={paginationRef} className="mt-4 pt-4 border-t border-gray-200 bg-background">
+                  <div ref={paginationRef} className=" mt-2 border-gray-200 bg-inherit">
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-gray-600">
                         Showing {pagination.startIndex + 1}-{Math.min(pagination.endIndex, pagination.totalItems)} of {pagination.totalItems} {pagination.itemLabel || 'items'}
