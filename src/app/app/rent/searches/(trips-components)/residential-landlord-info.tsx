@@ -366,7 +366,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           />
                           <Label
                             htmlFor={`rent-${index}`}
-                            className="relative w-fit  [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                            className="relative w-fit  [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-none whitespace-nowrap cursor-pointer mt-[8px]"
                           >
                             I rent this property
                           </Label>
@@ -379,7 +379,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           />
                           <Label
                             htmlFor={`own-${index}`}
-                            className="relative w-fit  [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                            className="relative w-fit  [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-none whitespace-nowrap cursor-pointer mt-[8px]"
                           >
                             I own this property
                           </Label>

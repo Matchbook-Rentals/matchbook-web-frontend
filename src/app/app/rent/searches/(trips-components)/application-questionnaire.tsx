@@ -137,7 +137,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
                   />
                   <Label
                     htmlFor="felony-yes"
-                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-none whitespace-nowrap cursor-pointer mt-[8px]"
                   >
                     Yes
                   </Label>
@@ -150,7 +150,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
                   />
                   <Label
                     htmlFor="felony-no"
-                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-none whitespace-nowrap cursor-pointer mt-[8px]"
                   >
                     No
                   </Label>
@@ -217,7 +217,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
                   />
                   <Label
                     htmlFor="evicted-yes"
-                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-none whitespace-nowrap cursor-pointer mt-[8px]"
                   >
                     Yes
                   </Label>
@@ -230,7 +230,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ isMobile = false }) => {
                   />
                   <Label
                     htmlFor="evicted-no"
-                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap cursor-pointer"
+                    className="relative w-fit [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-none whitespace-nowrap cursor-pointer mt-[8px]"
                   >
                     No
                   </Label>
