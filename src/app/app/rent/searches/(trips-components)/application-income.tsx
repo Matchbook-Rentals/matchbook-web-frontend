@@ -368,7 +368,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                             customId={item.customId}
                             fileName={item.fileName || 'Income Document'}
                             fileType="auto"
-                            className="h-12 w-36"
+                            className="min-h-[80px] w-36"
                             // Support backward compatibility with direct URLs
                             fallbackUrl={item.imageUrl}
                           />
@@ -390,7 +390,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                           }}
                           className="uploadthing-custom w-full"
                           appearance={{
-                            button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col h-[140px] gap-[35px] px-[100px] py-[21px]'} items-center justify-center relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
+                            button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col min-h-[200px] gap-[35px] px-[100px] py-[21px]'} items-center justify-center relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
                             allowedContent: "hidden",
                           }}
                           onUploadBegin={(name) => {

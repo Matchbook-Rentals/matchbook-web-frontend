@@ -200,7 +200,7 @@ export const IncomePrivate: React.FC = () => {
                             customId={(item as any).customId}
                             fileName={(item as any).fileName || 'Income Proof'}
                             fileType="document"
-                            className="flex-1"
+                            className="min-h-[80px] flex-1"
                           />
                           <button type="button" onClick={() => clearIncomeImage(index)} className="p-1">
                             <Trash className="h-5 w-5 text-[#404040]" />
@@ -214,7 +214,7 @@ export const IncomePrivate: React.FC = () => {
                           }}
                           className="uploadthing-custom w-full"
                           appearance={{
-                            button: "flex flex-col h-[140px] items-center justify-center gap-[35px] px-[100px] py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit",
+                            button: "flex flex-col min-h-[200px] items-center justify-center gap-[35px] px-[100px] py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit",
                             allowedContent: "hidden",
                           }}
                           content={{
