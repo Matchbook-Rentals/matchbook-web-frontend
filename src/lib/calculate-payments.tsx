@@ -46,9 +46,7 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
     if (listing?.monthlyPricing) {
       const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
       const monthlyPricing = listing.monthlyPricing.find(pricing => pricing.months === lengthOfStay.months);
-      utilitiesIncluded = monthlyPricing?.utilitiesIncluded ?? listing?.utilitiesIncluded ?? false;
-    } else {
-      utilitiesIncluded = listing?.utilitiesIncluded ?? false;
+      utilitiesIncluded = monthlyPricing?.utilitiesIncluded ?? false;
     }
   } else if (listing) {
     console.log('🔍 [calculatePayments] monthlyRentOverride invalid (77777), trying calculateRent with listing');
@@ -59,7 +57,7 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
       // Check if there's a matching monthly pricing for utilities info
       const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
       const monthlyPricing = listing.monthlyPricing?.find(pricing => pricing.months === lengthOfStay.months);
-      utilitiesIncluded = monthlyPricing?.utilitiesIncluded ?? listing.utilitiesIncluded ?? false;
+      utilitiesIncluded = monthlyPricing?.utilitiesIncluded ?? false;
     } else {
       console.log('🔍 [calculatePayments] calculateRent returned 77777, using ListingMonthlyPricing fallback');
       // If we get the fallback value, try to find a suitable price from monthlyPricing
@@ -97,7 +95,7 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
       } else {
         console.log('❌ [calculatePayments] No monthly pricing available - rent will be 0');
         monthlyRent = 0;
-        utilitiesIncluded = listing.utilitiesIncluded ?? false;
+        utilitiesIncluded = false;
       }
     }
   }

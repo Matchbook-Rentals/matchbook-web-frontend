@@ -68,14 +68,34 @@ export const calculateLengthOfStay = (startDate: Date, endDate: Date) => {
 
   // Calculate total days first
   const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  
+
   // Convert to months, ensuring minimum of 1 month for stays >= 28 days
   const calculatedMonths = Math.round(totalDays / 30);
   const months = Math.max(calculatedMonths >= 1 ? calculatedMonths : 0, totalDays >= 28 ? 1 : 0);
-  
+
   // Calculate remaining days after accounting for full months
   const remainingDays = totalDays - (months * 30);
   const days = Math.max(0, remainingDays);
 
   return { months, days };
+}
+
+export const getUtilitiesIncluded = (
+  listing: ListingWithPricing | null,
+  trip: Trip
+): boolean => {
+  if (!listing) {
+    return false;
+  }
+
+  // Calculate length of stay in months
+  const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
+
+  // Find matching monthly pricing for this duration
+  const monthlyPricing = listing.monthlyPricing?.find(
+    pricing => pricing.months === lengthOfStay.months
+  );
+
+  // Use duration-specific utilities value (no fallback - utilitiesIncluded field is deprecated)
+  return monthlyPricing?.utilitiesIncluded ?? false;
 }

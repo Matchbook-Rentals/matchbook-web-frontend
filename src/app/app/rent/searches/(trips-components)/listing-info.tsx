@@ -63,7 +63,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
       )}
 
       <div className="lg:mt-8 mt-5">
-        <HighlightsSection listing={listing} />
+        <HighlightsSection listing={listing} trip={trip} />
       </div>
 
       <div className="mt-5">

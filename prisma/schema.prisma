@@ -291,9 +291,12 @@ model Listing {
   requireBackgroundCheck Boolean   @default(false)
   shortestLeaseLength    Int       @default(1)
   longestLeaseLength     Int       @default(12)
+  /// @deprecated as of 2025-10-28 - Use ListingMonthlyPricing.price instead
   shortestLeasePrice     Int       @default(4000)
+  /// @deprecated as of 2025-10-28 - Use ListingMonthlyPricing.price instead
   longestLeasePrice      Int       @default(3500)
   furnished              Boolean   @default(false)
+  /// @deprecated as of 2025-10-28 - Use ListingMonthlyPricing.utilitiesIncluded instead
   utilitiesIncluded      Boolean   @default(false)
   petsAllowed            Boolean   @default(false)
   markedActiveByUser     Boolean   @default(true)

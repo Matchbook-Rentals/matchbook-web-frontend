@@ -2,12 +2,16 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { ListingAndImages } from '@/types';
+import { Trip } from '@prisma/client';
+import { getUtilitiesIncluded } from '@/lib/calculate-rent';
 
 interface HighlightsSectionProps {
   listing: ListingAndImages;
+  trip: Trip;
 }
 
-const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing }) => {
+const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing, trip }) => {
+  const utilitiesIncluded = getUtilitiesIncluded(listing, trip);
   return (
     <Card className="bg-[#FAFAFA] border-none rounded-xl mt-5">
       <CardContent className="flex flex-col items-start gap-[18px] p-5">
@@ -75,14 +79,14 @@ const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing }) => {
           {/* Utilities */}
           <div className="flex items-start gap-1.5">
             <div className="relative w-5 h-5">
-              {listing.utilitiesIncluded ? (
+              {utilitiesIncluded ? (
                 <AmenitiesIcons.UpdatedUtilitiesIncludedIcon className="absolute w-4 h-4 top-0.5 left-0.5" />
               ) : (
                 <AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon className="absolute w-4 h-4 top-0.5 left-0.5" />
               )}
             </div>
             <span className="font-['Poppins'] text-[16px] font-medium text-[#484A54]">
-              {listing.utilitiesIncluded ? "Utilities Included" : "Utilities Not Included"}
+              {utilitiesIncluded ? "Utilities Included" : "Utilities Not Included"}
             </span>
           </div>
 
