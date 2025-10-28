@@ -245,6 +245,7 @@ New User model fields:
 - [`/docs/payment-spec.md`](./payment-spec.md) - Payment flow specification
 - [`/docs/ach-flow-summary.md`](./ach-flow-summary.md) - ACH happy/sad paths
 - [`/docs/ach-payment-failure-pages.md`](./ach-payment-failure-pages.md) - Failure page implementation
+- [`/docs/lease-signing/`](./lease-signing/) - Lease signing feature documentation
 
 ---
 

@@ -802,6 +802,25 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
     const recipientIndex = recipients.findIndex(r => r.id === selectedRecipient);
 
+    // Validate host-only field types
+    const isHostOnlyField = selectedField === FieldType.TEXT || selectedField === FieldType.NUMBER;
+    const isHostSelected = recipientIndex === 0; // Host is always index 0
+
+    if (isHostOnlyField && !isHostSelected) {
+      toast({
+        title: "Field type restricted",
+        description: "Text and Number fields can only be assigned to the host.",
+        variant: "destructive",
+      });
+      // Clean up states
+      setSelectedField(null);
+      setPendingFieldLabel(null);
+      setIsDragging(false);
+      setInteractionMode('idle');
+      setIsMouseDown(false);
+      return;
+    }
+
     // Create new field
     const newField: FieldFormType = {
       formId: nanoid(12),

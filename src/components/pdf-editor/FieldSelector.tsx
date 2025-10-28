@@ -69,9 +69,9 @@ const PRIMARY_FIELD_TYPES = [
 ];
 
 const LEASE_SPECIFIC_FIELDS = [
-  { type: FieldType.DATE, label: 'Move In Date', icon: CalendarDays, fieldLabel: 'Move In Date' },
-  { type: FieldType.DATE, label: 'Move Out Date', icon: CalendarDays, fieldLabel: 'Move Out Date' },
-  { type: FieldType.NUMBER, label: 'Rent Amount', icon: DollarSign, fieldLabel: 'Rent Amount' },
+  { type: FieldType.DATE, label: 'Move In Date', icon: CalendarDays, fieldLabel: 'Move In Date', hostOnly: false },
+  { type: FieldType.DATE, label: 'Move Out Date', icon: CalendarDays, fieldLabel: 'Move Out Date', hostOnly: false },
+  { type: FieldType.NUMBER, label: 'Rent Amount', icon: DollarSign, fieldLabel: 'Rent Amount', hostOnly: true },
 ];
 
 const OTHER_FIELD_TYPES = [
@@ -152,7 +152,16 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
               {LEASE_SPECIFIC_FIELDS.map((field) => {
                 const IconComponent = field.icon;
                 const isSelected = selectedField === field.type;
-                
+
+                // Check if this is a host-only field and if a non-host recipient is selected
+                const recipientIndex = recipients?.findIndex(r => r.id === selectedRecipient);
+                const isHostSelected = recipientIndex === 0; // Host is always index 0
+
+                // Don't render host-only fields when non-host is selected
+                if (field.hostOnly && !isHostSelected) {
+                  return null;
+                }
+
                 return (
                   <button
                     key={field.fieldLabel}
@@ -211,7 +220,17 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
               {OTHER_FIELD_TYPES.map((field) => {
                 const IconComponent = field.icon;
                 const isSelected = selectedField === field.type;
-                
+
+                // Check if this is a host-only field and if a non-host recipient is selected
+                const isHostOnlyField = field.type === FieldType.TEXT || field.type === FieldType.NUMBER;
+                const recipientIndex = recipients?.findIndex(r => r.id === selectedRecipient);
+                const isHostSelected = recipientIndex === 0; // Host is always index 0
+
+                // Don't render host-only fields when non-host is selected
+                if (isHostOnlyField && !isHostSelected) {
+                  return null;
+                }
+
                 return (
                   <button
                     key={field.type}

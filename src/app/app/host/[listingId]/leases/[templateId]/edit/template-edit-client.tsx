@@ -152,32 +152,30 @@ export default function TemplateEditClient({
 
   return (
     <BrandAlertProvider>
-      <div className="min-h-screen bg-[#f9f9f9] p-6">
-        <PDFEditor 
-          initialPdfFile={pdfFile}
-          initialWorkflowState="template"
-          templateType={(template.type as 'lease' | 'addendum') || 'lease'}
-          templateName={template.title}
-          initialTemplate={template}
-          initialFields={templateData?.fields || []}
-          initialRecipients={templateData?.recipients || []}
-          hostName={hostName}
-          hostEmail={hostEmail}
-          listingAddress={listingAddress}
-          listingId={listingId}
-          onCancel={handleCancel}
-          onSave={(updatedTemplateData) => {
-            const finalTemplateData = {
-              name: template.title,
-              type: template.type,
-              file: updatedTemplateData.pdfFile,
-              fields: updatedTemplateData.fields,
-              recipients: updatedTemplateData.recipients,
-            };
-            handleTemplateUpdated(finalTemplateData);
-          }}
-        />
-      </div>
+      <PDFEditor
+        initialPdfFile={pdfFile}
+        initialWorkflowState="template"
+        templateType={(template.type as 'lease' | 'addendum') || 'lease'}
+        templateName={template.title}
+        initialTemplate={template}
+        initialFields={templateData?.fields || []}
+        initialRecipients={templateData?.recipients || []}
+        hostName={hostName}
+        hostEmail={hostEmail}
+        listingAddress={listingAddress}
+        listingId={listingId}
+        onCancel={handleCancel}
+        onSave={(updatedTemplateData) => {
+          const finalTemplateData = {
+            name: template.title,
+            type: template.type,
+            file: updatedTemplateData.pdfFile,
+            fields: updatedTemplateData.fields,
+            recipients: updatedTemplateData.recipients,
+          };
+          handleTemplateUpdated(finalTemplateData);
+        }}
+      />
     </BrandAlertProvider>
   );
 }
