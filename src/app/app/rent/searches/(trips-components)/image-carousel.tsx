@@ -437,13 +437,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 <p className='text-[12px]'>View All</p>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] max-h-[90vh] sm:max-h-[95vh] lg:max-w-[90vw] lg:max-h-[90vh] pt-6 pb-4 rounded-lg flex flex-col">
+            <DialogContent className="max-w-[95vw] max-h-[90vh] sm:max-h-[95vh] lg:max-w-[90vw] lg:max-h-[98vh] pt-6 pb-4 rounded-lg flex flex-col overflow-hidden">
               <DialogHeader>
                 <DialogTitle className="text-xl text-center">All photos</DialogTitle>
               </DialogHeader>
               
               {/* Mobile: Grid layout */}
-              <div className="lg:hidden">
+              <div className="lg:hidden overflow-hidden">
                 <ScrollArea className="h-[80vh]">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pr-4">
                     {uniqueImages.map((image, index) => (
@@ -465,11 +465,11 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
               </div>
 
               {/* Desktop: Single large image carousel */}
-              <div className="hidden lg:flex flex-col flex-1">
+              <div className="hidden lg:flex flex-col flex-1 min-h-0 overflow-hidden">
                 {/* Main image carousel */}
-                <div className="flex-1 mb-4">
+                <div className="flex-[0_0_auto] mb-4">
                   <Carousel opts={{ loop: true }} setApi={setDialogApi}>
-                    <CarouselContent className="h-[70vh]">
+                    <CarouselContent className="h-[65dvh]">
                       {uniqueImages.map((image, index) => (
                         <CarouselItem key={image.id} className="flex items-center justify-center">
                           <div className="relative w-full h-full flex items-center justify-center">
@@ -493,9 +493,9 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 </div>
 
                 {/* Thumbnail carousel */}
-                <div className="h-24">
-                  <Carousel opts={{ loop: false, align: "start", slidesToScroll: 5 }} setApi={setThumbnailApi}>
-                    <CarouselContent className="-ml-2 pt-1">
+                <div className="flex-[3] min-h-0">
+                  <Carousel opts={{ loop: false, align: "start", slidesToScroll: 5 }} setApi={setThumbnailApi} className="h-full">
+                    <CarouselContent className="-ml-2 pt-1 h-full">
                       {uniqueImages.map((image, index) => (
                         <CarouselItem key={`thumb-${image.id}`} className="pl-2 basis-auto">
                           <div
