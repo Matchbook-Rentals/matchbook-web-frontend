@@ -189,9 +189,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
       new Date(housingRequest.endDate)
     );
     
-    // Calculate total based on months and partial days
-    const totalMonths = stayLength.months + (stayLength.days / 30);
-    return monthlyRent * totalMonths;
+    // Calculate total based on full calendar months (aligns with pricing tier model)
+    return monthlyRent * stayLength.months;
   };
 
   // Helper function to format dates

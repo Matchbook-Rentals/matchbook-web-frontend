@@ -16,10 +16,10 @@ export function calculateRent({ listing, trip, }: RentParams): number {
   }
   
   const { startDate, endDate } = trip;
-  
-  // Calculate length in days first, then convert to months (minimum 1 month)
-  const days = Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24));
-  const lengthInMonths = Math.max(1, Math.round(days / 30));
+
+  // Calculate length using full calendar months model (minimum 1 month)
+  const lengthOfStay = calculateLengthOfStay(startDate, endDate);
+  const lengthInMonths = Math.max(1, lengthOfStay.months);
 
   // 1. Try exact match first
   const exactMatch = listing.monthlyPricing?.find(pricing => pricing.months === lengthInMonths);
@@ -82,9 +82,9 @@ export const calculateLengthOfStay = (startDate: Date, endDate: Date) => {
 
 export const getUtilitiesIncluded = (
   listing: ListingWithPricing | null,
-  trip: Trip
+  trip: Trip | null
 ): boolean => {
-  if (!listing) {
+  if (!listing || !trip) {
     return false;
   }
 

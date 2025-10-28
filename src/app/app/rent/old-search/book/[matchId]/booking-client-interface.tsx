@@ -15,6 +15,7 @@ import { useUser } from '@clerk/nextjs'
 // import { updateBoldSignLease } from "@/app/actions/documents"
 import { toast } from "@/components/ui/use-toast"
 import { MatchWithRelations } from "@/types"
+import { calculateLengthOfStay } from '@/lib/calculate-rent'
 
 interface PropertyBookingPageProps {
   match: MatchWithRelations
@@ -28,14 +29,9 @@ export default function PropertyBookingPage({ match, clientSecret }: PropertyBoo
   const [useStripeCheckout, setUseStripeCheckout] = useState(false)
   const { user } = useUser()
   const [isLeaseSigned, setIsLeaseSigned] = useState(false)
-  // Calculate length of stay
+  // Calculate length of stay using full calendar months model
   const calculateStayLength = () => {
-    const startDate = new Date(match.trip.startDate);
-    const endDate = new Date(match.trip.endDate);
-    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const months = Math.floor(diffDays / 30);
-    const days = diffDays % 30;
+    const { months, days } = calculateLengthOfStay(match.trip.startDate, match.trip.endDate);
     return `${months} M | ${days} D`;
   };
 

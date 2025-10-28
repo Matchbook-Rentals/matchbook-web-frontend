@@ -22,17 +22,9 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
   const { userId } = useAuth();
   const totalMonthlyIncome = application?.incomes?.length > 0 && application.incomes.reduce((acc, income) => acc + Number(income.monthlyAmount || 0), 0);
 
-  // Calculate length of stay in days and months
-  const lengthOfStayDays = trip?.startDate && trip?.endDate
-    ? Math.ceil((trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24))
-    : null;
-
-  const lengthOfStayMonths = lengthOfStayDays
-    ? Math.ceil(lengthOfStayDays / 30.44) // Average number of days in a month
-    : null;
-
-  // TODO: get these from the listing
+  // Calculate length of stay using full calendar months model
   const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
+  const lengthOfStayMonths = lengthOfStay.months;
   const monthlyRent = currListing ? calculateRent({ listing: currListing, trip: trip }) : 0;
 
   // const calculatedPrice = lengthOfStayMonths ? calculatePrice(lengthOfStayMonths) : null;
