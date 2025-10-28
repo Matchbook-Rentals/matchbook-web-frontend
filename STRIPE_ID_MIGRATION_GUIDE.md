@@ -73,6 +73,13 @@ For Matchbook:
 2. Generate migration via `prisma migrate dev` and plan corresponding production migration.
 3. Create backfill script to map Medallion-verified users to a synthetic `verified` Stripe state (so existing hosts stay approved).
 
+**Important:** The onboarding completion logic (`isHostOnboardingComplete`) checks:
+- Stripe Account setup
+- Stripe onboarding complete
+- Identity verified via **either** Medallion OR Stripe Identity (dual system)
+
+It does **NOT** check `agreedToHostTerms` - this field exists for legal record-keeping but is not a blocker for accessing host features.
+
 ---
 
 ## 6. Backend Implementation Plan

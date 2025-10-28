@@ -219,16 +219,25 @@ stripe events list --limit 10
 
 ## Migration Strategy
 
-### Current State (Development)
-- **Medallion**: Default, production
-- **Stripe Identity**: Available via feature flag for testing
+### Current State (Production)
+- **Medallion**: Legacy system, still supported for backward compatibility
+- **Stripe Identity**: Primary verification system for all new verifications
+- **Dual Verification**: Both systems are accepted as valid via `isIdentityVerified()` utility
 
-### Rollout Plan (When Ready for Production)
-1. Enable for internal team testing
-2. A/B test with 5% of new hosts
-3. Monitor metrics (completion rate, failure reasons)
-4. Gradually increase to 100%
-5. Eventually deprecate Medallion
+### Host Onboarding Requirements
+A host is considered "onboarding complete" when:
+1. ✅ Stripe Account created (`stripeAccountId`)
+2. ✅ Stripe onboarding complete (`stripeChargesEnabled` && `stripeDetailsSubmitted`)
+3. ✅ Identity verified via **either** Medallion OR Stripe Identity
+
+**Note:** `agreedToHostTerms` is NO LONGER required for onboarding completion. Terms agreement is handled separately and does not gate access to host features.
+
+### Rollout Status
+1. ✅ Enabled for internal team testing
+2. ✅ Implemented dual verification system
+3. ✅ Deployed to production with feature flag
+4. ⏳ Monitor metrics (completion rate, failure reasons)
+5. ⏳ Eventually deprecate Medallion (keeping read-only support)
 
 ### Feature Flag Options for Production
 1. **Environment Variable** (simplest)

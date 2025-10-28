@@ -23,7 +23,7 @@ export default async function ApplicationsPage({ params }: ApplicationsPageProps
   console.log('ApplicationsPage: Starting data fetch...');
 
   // Check host onboarding requirements
-  // See host-onboarding-requirements.md for detailed requirements documentation
+  // See docs/host-onboarding-requirements.md for detailed requirements documentation
   const { sessionClaims } = await auth();
   const isAdminDev = sessionClaims?.metadata?.role === 'admin_dev';
 

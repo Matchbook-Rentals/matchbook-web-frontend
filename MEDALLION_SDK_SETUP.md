@@ -1,5 +1,10 @@
 # Medallion LOW_CODE_SDK Integration
 
+> **⚠️ DEPRECATION NOTICE**
+> Medallion is a **legacy** identity verification system. All new host verifications should use **Stripe Identity** instead.
+> See `STRIPE_IDENTITY_DEV_SETUP.md` for current implementation.
+> Medallion remains supported for backward compatibility with existing verified hosts.
+
 This project uses Authenticate.com's LOW_CODE_SDK approach for identity verification, which is simpler and more reliable than the API-based approach.
 
 ## Required Environment Variables

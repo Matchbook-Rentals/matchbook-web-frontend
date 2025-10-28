@@ -213,7 +213,7 @@ export const OnboardingChecklistCard = ({
   const stripeAccountIncomplete = hasStripeAccount && !stripeAccountComplete;
 
   // Real items with actual completion status
-  // See host-onboarding-requirements.md for detailed requirements documentation
+  // See docs/host-onboarding-requirements.md for detailed requirements documentation
   const requiredItems = [
     {
       id: 1,

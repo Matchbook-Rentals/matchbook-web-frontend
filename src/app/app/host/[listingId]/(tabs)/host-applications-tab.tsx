@@ -22,6 +22,7 @@ import { getListingDisplayName } from "@/utils/listing-helpers";
 import { HostApplicationCard } from "../../components/host-application-card";
 import { calculateRent } from "@/lib/calculate-rent";
 import { OnboardingModal } from "@/components/onboarding-modal";
+import { isIdentityVerified } from "@/lib/verification-utils";
 
 // Sample housing requests for when no real data exists
 const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => [
@@ -336,10 +337,9 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
 
     const hasStripeAccount = !!userData.stripeAccountId;
     const stripeComplete = userData.stripeChargesEnabled && userData.stripeDetailsSubmitted;
-    const hostTermsAgreed = !!userData.agreedToHostTerms;
-    const identityVerified = !!userData.medallionIdentityVerified;
+    const identityVerified = isIdentityVerified(userData);
 
-    return hasStripeAccount && stripeComplete && hostTermsAgreed && identityVerified;
+    return hasStripeAccount && stripeComplete && identityVerified;
   };
 
   const onboardingComplete = isOnboardingComplete(hostUserData);
