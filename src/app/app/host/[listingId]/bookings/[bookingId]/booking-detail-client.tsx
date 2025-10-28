@@ -19,6 +19,8 @@ interface BookingDetailClientProps {
     }>;
     profileImage: string;
     guestUserId: string;
+    matchId: string;
+    leaseDocumentId: string | null;
   };
   paymentsData: {
     upcoming: Array<{
@@ -62,8 +64,12 @@ export default function BookingDetailClient({
   };
 
   const handleViewLease = () => {
-    console.log('View lease for booking:', bookingId);
-    // TODO: Implement view lease functionality
+    if (bookingData.leaseDocumentId) {
+      window.open(`/api/documents/${bookingData.leaseDocumentId}/view`, '_blank');
+    } else {
+      // Fallback to lease signing page if no document exists yet
+      window.location.href = `/app/host/match/${bookingData.matchId}`;
+    }
   };
 
   const handleMessageRenter = () => {

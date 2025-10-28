@@ -99,6 +99,11 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
           numChildren: true,
           numPets: true
         }
+      },
+      match: {
+        select: {
+          leaseDocumentId: true
+        }
       }
     }
   });
@@ -125,6 +130,8 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     ],
     profileImage: booking.user.imageUrl || "/image-35.png",
     guestUserId: booking.user.id,
+    matchId: booking.matchId,
+    leaseDocumentId: booking.match?.leaseDocumentId || null,
   };
 
   // Format payment data for the table
