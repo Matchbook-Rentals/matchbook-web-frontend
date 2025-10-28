@@ -166,13 +166,13 @@ const HostBookingDetailsCardMobile: React.FC<HostBookingDetailsCardProps> = ({
             <div className="flex flex-col items-start gap-2 w-full">
               {/* Status Badge */}
               <Badge className={`${
-                status.toLowerCase() === 'approved' 
-                  ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e] hover:bg-[#e9f7ee] hover:text-[#1ca34e]'
+                status.toLowerCase() === 'approved'
+                  ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]'
                   : status.toLowerCase() === 'pending'
-                  ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22] hover:bg-[#fff3cd] hover:text-[#e67e22]'
+                  ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'
                   : status.toLowerCase() === 'declined'
-                  ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545] hover:bg-[#f8d7da] hover:text-[#dc3545]'
-                  : 'bg-gray-100 text-gray-600 border-gray-400 hover:bg-gray-100 hover:text-gray-600'
+                  ? 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]'
+                  : 'bg-gray-100 text-gray-600 border-gray-400'
               }`}>
                 {status}
               </Badge>
@@ -488,7 +488,7 @@ export const HostBookingDetailsCard: React.FC<HostBookingDetailsCardProps> = ({
                   </div>
 
                   <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${
-                    status.toLowerCase() === 'approved' 
+                    status.toLowerCase() === 'approved'
                       ? 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]'
                       : status.toLowerCase() === 'pending'
                       ? 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]'

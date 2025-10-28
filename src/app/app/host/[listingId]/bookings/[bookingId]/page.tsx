@@ -38,6 +38,19 @@ function formatAddress(listing: any): string {
   return parts.join(', ');
 }
 
+function formatBookingStatus(status: string): string {
+  switch (status) {
+    case 'payment_processing': return 'Payment Processing';
+    case 'pending_payment': return 'Pending Payment';
+    case 'payment_failed': return 'Payment Failed';
+    case 'reserved': return 'Reserved';
+    case 'confirmed': return 'Confirmed';
+    case 'cancelled': return 'Cancelled';
+    case 'active': return 'Active';
+    default: return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+}
+
 type RentPayment = {
   id: string;
   amount: number;
@@ -118,7 +131,7 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   
   const bookingData = {
     name: renterName,
-    status: booking.status === 'active' ? 'Active' : booking.status.charAt(0).toUpperCase() + booking.status.slice(1),
+    status: formatBookingStatus(booking.status),
     dates: formatDateRange(booking.startDate, booking.endDate),
     address: formatAddress(booking.listing),
     description: `for ${booking.listing.title}`,

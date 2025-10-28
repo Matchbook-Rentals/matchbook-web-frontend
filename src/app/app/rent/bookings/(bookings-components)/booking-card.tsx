@@ -113,16 +113,23 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
     }
   };
 
+  // Format booking status for display
+  const formatBookingStatus = (status: string): string => {
+    switch (status) {
+      case 'payment_processing': return 'Payment Processing';
+      case 'pending_payment': return 'Pending Payment';
+      case 'payment_failed': return 'Payment Failed';
+      case 'reserved': return 'Reserved';
+      case 'confirmed': return 'Confirmed';
+      case 'cancelled': return 'Cancelled';
+      case 'active': return 'Active';
+      default: return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+  };
+
   // Get status label
   const getStatusLabel = () => {
-    switch (booking.status) {
-      case 'active': return 'Active';
-      case 'upcoming': return 'Upcoming';
-      case 'pending_payment': return 'Processing';
-      case 'completed': return 'Completed';
-      case 'cancelled': return 'Cancelled';
-      default: return booking.status || 'Pending';
-    }
+    return formatBookingStatus(booking.status);
   };
 
   // Format guest/occupant details
