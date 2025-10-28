@@ -13,6 +13,22 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // Detect if this is a Clerk authentication error
+  // Part of idle tab session recovery fix - see docs/auth/clerk-stale-session-fix.md
+  const isClerkAuthError = () => {
+    const errorMessage = error?.message?.toLowerCase() || '';
+    const errorStack = error?.stack?.toLowerCase() || '';
+
+    return (
+      errorMessage.includes('clerkjs') ||
+      errorMessage.includes('token refresh failed') ||
+      errorMessage.includes('failed to fetch') && errorStack.includes('clerk') ||
+      errorMessage.includes('session_token_invalid') ||
+      errorMessage.includes('unauthorized') && errorStack.includes('clerk') ||
+      errorMessage.includes('unauthenticated') && errorStack.includes('clerk')
+    );
+  };
+
   // Log error to database silently when component mounts
   useEffect(() => {
     const logError = async () => {
@@ -21,6 +37,7 @@ export default function GlobalError({
           pathname: typeof window !== 'undefined' ? window.location.pathname : undefined,
           errorBoundary: 'GlobalError',
           timestamp: new Date().toISOString(),
+          isClerkAuthError: isClerkAuthError(),
           userActions: typeof window !== 'undefined' && window.sessionStorage
             ? JSON.parse(window.sessionStorage.getItem('recentUserActions') || '[]')
             : undefined,
@@ -32,6 +49,16 @@ export default function GlobalError({
     };
 
     logError();
+
+    // If this is a Clerk auth error, redirect to sign-in instead of showing error UI
+    // This prevents infinite reload loops and provides better UX
+    if (isClerkAuthError()) {
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+      // Only redirect if we're not already on an auth page
+      if (!currentPath.startsWith('/sign-in') && !currentPath.startsWith('/sign-up') && !currentPath.startsWith('/auth')) {
+        window.location.href = '/sign-in';
+      }
+    }
   }, [error]);
 
   return (

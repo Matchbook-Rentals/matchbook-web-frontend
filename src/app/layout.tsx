@@ -4,6 +4,7 @@ import { Inter, Poppins, Cutive, Dancing_Script, Caveat, Kalam, Great_Vibes, Pac
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AppSessionTracker from "@/components/AppSessionTracker";
+import AuthRecovery from "@/components/AuthRecovery";
 
 const inter = Inter({ subsets: ["latin"] });
 const cutive = Cutive({ 
@@ -115,7 +116,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider 
+    <ClerkProvider
+      // Idle tab session recovery fix - see docs/auth/clerk-stale-session-fix.md
+      __experimental_staleTimes={{
+        dynamic: 180000 // 3 minutes - keeps RSC payloads fresh longer to prevent stale session errors
+      }}
       localization={localization}
       appearance={{
         layout: {logoImageUrl: '/new-green-logo.png', socialButtonsPlacement: 'bottom', socialButtonsVariant: 'blockButton'}}
@@ -147,6 +152,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </noscript>
           )}
           <AppSessionTracker />
+          {/* Handles Clerk session recovery for idle tabs - see docs/auth/clerk-stale-session-fix.md */}
+          <AuthRecovery />
           <main>
             {children}
           </main>
