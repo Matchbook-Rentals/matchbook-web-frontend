@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SignatureCanvas } from './SignatureCanvas';
 import { Trash2, Star, StarOff } from 'lucide-react';
 import { SIGNATURE_FONTS } from './signature-fonts';
+import { BrandCheckbox } from '@/app/brandCheckbox';
+import { toast } from '@/components/ui/use-toast';
 
 interface UserSignature {
   id: string;
@@ -48,6 +50,8 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
   const [typedText, setTypedText] = useState<string>(recipientName);
   const [selectedFont, setSelectedFont] = useState<string>('dancing-script');
   const [saveAsDefault, setSaveAsDefault] = useState<boolean>(false);
+  const [affirmationConfirmed, setAffirmationConfirmed] = useState<boolean>(false);
+  const [hasAffirmedThisSession, setHasAffirmedThisSession] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Reset state when dialog opens
@@ -73,15 +77,33 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
 
   const handleUseDrawnSignature = async () => {
     if (!drawnSignature) return;
-    
+
+    // Validate affirmation on first signature
+    if (!hasAffirmedThisSession && !affirmationConfirmed) {
+      toast({
+        title: "Affirmation Required",
+        description: "Please confirm the e-signature affirmation to continue",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
+      // Mark as affirmed for this session
+      if (!hasAffirmedThisSession) {
+        setHasAffirmedThisSession(true);
+      }
+
       // Save signature if requested
       if (onSaveSignature && saveAsDefault) {
         await onSaveSignature('drawn', drawnSignature, undefined, saveAsDefault);
       }
-      
+
       onSign(drawnSignature, 'drawn');
+
+      // Reset checkbox for potential next signature (but keep session flag)
+      setAffirmationConfirmed(false);
       onClose();
     } catch (error) {
       console.error('Error saving drawn signature:', error);
@@ -92,15 +114,33 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
 
   const handleUseTypedSignature = async () => {
     if (!typedText.trim()) return;
-    
+
+    // Validate affirmation on first signature
+    if (!hasAffirmedThisSession && !affirmationConfirmed) {
+      toast({
+        title: "Affirmation Required",
+        description: "Please confirm the e-signature affirmation to continue",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
+      // Mark as affirmed for this session
+      if (!hasAffirmedThisSession) {
+        setHasAffirmedThisSession(true);
+      }
+
       // Save signature if requested
       if (onSaveSignature && saveAsDefault) {
         await onSaveSignature('typed', typedText.trim(), selectedFont, saveAsDefault);
       }
-      
+
       onSign(typedText.trim(), 'typed', selectedFont);
+
+      // Reset checkbox for potential next signature (but keep session flag)
+      setAffirmationConfirmed(false);
       onClose();
     } catch (error) {
       console.error('Error saving typed signature:', error);
@@ -110,7 +150,25 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
   };
 
   const handleUseSavedSignature = (signature: UserSignature) => {
+    // Validate affirmation on first signature
+    if (!hasAffirmedThisSession && !affirmationConfirmed) {
+      toast({
+        title: "Affirmation Required",
+        description: "Please confirm the e-signature affirmation to continue",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Mark as affirmed for this session
+    if (!hasAffirmedThisSession) {
+      setHasAffirmedThisSession(true);
+    }
+
     onSign(signature.data, signature.type, signature.fontFamily);
+
+    // Reset checkbox for potential next signature (but keep session flag)
+    setAffirmationConfirmed(false);
     onClose();
   };
 
@@ -165,17 +223,23 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
             />
 
             {onSaveSignature && (
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="save-drawn"
-                  checked={saveAsDefault}
-                  onChange={(e) => setSaveAsDefault(e.target.checked)}
-                  className="rounded"
+              <BrandCheckbox
+                name="save-drawn"
+                checked={saveAsDefault}
+                onChange={(e) => setSaveAsDefault(e.target.checked)}
+                label="Save this signature for future use"
+              />
+            )}
+
+            {!hasAffirmedThisSession && (
+              <div className="my-6">
+                <BrandCheckbox
+                  name="esignature-affirmation"
+                  checked={affirmationConfirmed}
+                  onChange={(e) => setAffirmationConfirmed(e.target.checked)}
+                  label="By checking this box, I affirm that the signature above is a legally binding representation of my signature and constitutes my agreement to the terms of this document."
+                  required
                 />
-                <Label htmlFor="save-drawn" className="text-xs sm:text-sm">
-                  Save this signature for future use
-                </Label>
               </div>
             )}
 
@@ -234,17 +298,23 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
               </div>
 
               {onSaveSignature && (
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="save-typed"
-                    checked={saveAsDefault}
-                    onChange={(e) => setSaveAsDefault(e.target.checked)}
-                    className="rounded"
+                <BrandCheckbox
+                  name="save-typed"
+                  checked={saveAsDefault}
+                  onChange={(e) => setSaveAsDefault(e.target.checked)}
+                  label="Save this signature for future use"
+                />
+              )}
+
+              {!hasAffirmedThisSession && (
+                <div className="my-6">
+                  <BrandCheckbox
+                    name="esignature-affirmation-typed"
+                    checked={affirmationConfirmed}
+                    onChange={(e) => setAffirmationConfirmed(e.target.checked)}
+                    label="By checking this box, I affirm that the signature above is a legally binding representation of my signature and constitutes my agreement to the terms of this document."
+                    required
                   />
-                  <Label htmlFor="save-typed" className="text-xs sm:text-sm">
-                    Save this signature for future use
-                  </Label>
                 </div>
               )}
             </div>
@@ -268,6 +338,18 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
             <div className="text-xs sm:text-sm text-gray-600">
               Choose from your saved signatures or manage your signature library.
             </div>
+
+            {!hasAffirmedThisSession && (
+              <div className="my-6">
+                <BrandCheckbox
+                  name="esignature-affirmation-saved"
+                  checked={affirmationConfirmed}
+                  onChange={(e) => setAffirmationConfirmed(e.target.checked)}
+                  label="By checking this box, I affirm that the signature I select is a legally binding representation of my signature and constitutes my agreement to the terms of this document."
+                  required
+                />
+              </div>
+            )}
 
             <div className="space-y-3 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
               {savedSignatures.map((signature) => (
