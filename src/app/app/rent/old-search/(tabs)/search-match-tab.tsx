@@ -315,7 +315,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         />
         <div className='flex justify-between gap-x-8 lg:gap-x-16 relative'>
           <div className='w-full lg:w-full'>
-            <ListingDescription listing={showListings[0]} isFlexible={!!isFlexible}/>
+            <ListingDescription listing={showListings[0]} isFlexible={!!isFlexible} trip={state.trip}/>
 
             <Card className="border-none shadow-none rounded-xl mt-5">
               <CardContent className="flex flex-col items-start gap-[18px] p-5">
