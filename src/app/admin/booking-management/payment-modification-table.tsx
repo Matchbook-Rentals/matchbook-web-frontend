@@ -199,7 +199,7 @@ export default function PaymentModificationTable({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="pt-4 md:pt-8 space-y-4">
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">

@@ -263,7 +263,7 @@ export const RentPaymentsTable = ({
 
   return (
     <>
-      <div className="flex flex-col w-full rounded-lg overflow-hidden bg-white shadow-sm border border-gray-100">
+      <div className="pt-4 md:pt-8 flex flex-col w-full rounded-lg overflow-hidden bg-white shadow-sm border border-gray-100">
         {showPaymentMethods ? (
           <>
             <div className="p-6 border-b border-gray-100">

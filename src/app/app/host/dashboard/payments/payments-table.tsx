@@ -144,7 +144,7 @@ export const PaymentsTable = ({ paymentsData }: PaymentsTableProps): JSX.Element
   ];
 
   return (
-    <div className="flex flex-col w-full  rounded-[20px] overflow-hidden">
+    <div className="pt-4 md:pt-8 flex flex-col w-full rounded-[20px] overflow-hidden">
       <div className="">
         <TabSelector
           tabs={tabs}

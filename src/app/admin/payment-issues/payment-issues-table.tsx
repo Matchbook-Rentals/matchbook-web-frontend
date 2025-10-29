@@ -143,7 +143,7 @@ export function PaymentIssuesTable({ disputes, refunds }: PaymentIssuesTableProp
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="disputes" className="space-y-4">
+      <TabsContent value="disputes" className="pt-4 md:pt-8 space-y-4">
         {disputes.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             No disputes found
@@ -233,7 +233,7 @@ export function PaymentIssuesTable({ disputes, refunds }: PaymentIssuesTableProp
         )}
       </TabsContent>
 
-      <TabsContent value="refunds" className="space-y-4">
+      <TabsContent value="refunds" className="pt-4 md:pt-8 space-y-4">
         {refunds.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             No refunds found
