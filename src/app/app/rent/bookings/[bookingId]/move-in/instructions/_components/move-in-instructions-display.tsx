@@ -146,7 +146,7 @@ export const MoveInInstructionsDisplay: React.FC<
   };
 
   return (
-    <Card className="w-full test">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Move-in Instructions</CardTitle>
       </CardHeader>

@@ -69,7 +69,7 @@ export default async function MoveInInstructionsPage({
   const address = formatAddress(booking.listing);
 
   return (
-    <div className="container mx-auto py-6 px-4 max-w-4xl">
+    <div className="w-full py-6 px-4">
       <div className="mb-6">
         <Link href={`/app/rent/bookings/${params.bookingId}`}>
           <Button variant="ghost" className="gap-2">
