@@ -142,13 +142,13 @@ The lease signing system is built on a modular step-based architecture that sepa
 - PDF Viewer: `/src/components/pdf-editor/PDFViewer.tsx`
 
 #### Sidebars
-- Template Sidebar: `/src/components/pdf-editor/sidebars/TemplateSidebar.tsx`
-- Document Sidebar: `/src/components/pdf-editor/sidebars/DocumentSidebar.tsx`
+- Template Sidebar: `/src/components/pdf-editor/sidebars/TemplateSidebar.tsx` (used for both template creation and document creation - template creation is just front-loading the work of document creation)
+- Document Sidebar: `/src/components/pdf-editor/sidebars/DocumentSidebar.tsx` (read-only reference view, currently not used in main workflows)
 - Signing Sidebar: `/src/components/pdf-editor/sidebars/SigningSidebar.tsx`
 
 #### Field Components
 - Signable Field: `/src/components/pdf-editor/SignableField.tsx`
-- Signature Dialog: `/src/components/pdf-editor/SignatureDialog.tsx`
+- Signature Dialog: `/src/components/pdf-editor/SignatureDialog.tsx` (includes e-signature affirmation)
 - Signature Canvas: `/src/components/pdf-editor/SignatureCanvas.tsx`
 
 #### Review Components

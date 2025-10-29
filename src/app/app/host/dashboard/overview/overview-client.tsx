@@ -60,19 +60,15 @@ const OverviewSection = ({ userFirstName }: { userFirstName: string | null }): J
   );
 };
 
-const StatisticsSection = ({ 
-  cards, 
-  showMockData, 
-  onToggleMockData 
-}: { 
+const StatisticsSection = ({
+  cards
+}: {
   cards: StatisticsCardData[];
-  showMockData: boolean;
-  onToggleMockData: () => void;
 }): JSX.Element => {
 
   const renderCard = (card: StatisticsCardData, index: number) => {
     const IconComponent = iconMap[card.iconName as keyof typeof iconMap];
-    
+
     // Render footer based on type
     let footerElement = null;
     if (card.footer?.type === "badges") {
@@ -120,10 +116,7 @@ const StatisticsSection = ({
         </>
       );
     }
-    
-    // Handle toggle card click
-    const handleCardClick = card.id === "mock-toggle" ? onToggleMockData : undefined;
-    
+
     return (
       <StatisticsCard
         key={index}
@@ -138,7 +131,6 @@ const StatisticsSection = ({
         badges={card.badges}
         subtitle={card.subtitle}
         footer={footerElement}
-        onClick={handleCardClick}
         className="h-full"
       />
     );
@@ -157,17 +149,13 @@ const StatisticsSection = ({
   );
 };
 
-const ApplicationsSection = ({ 
-  showMockData, 
-  mockChartData,
-  realChartData
-}: { 
-  showMockData: boolean; 
-  mockChartData: MockChartData;
-  realChartData: MockChartData;
+const ApplicationsSection = ({
+  chartData
+}: {
+  chartData: ChartData;
 }): JSX.Element => {
-  const applicationsData = showMockData ? mockChartData.applicationsData : realChartData.applicationsData;
-  const revenueData = showMockData ? mockChartData.revenueData : realChartData.revenueData;
+  const applicationsData = chartData.applicationsData;
+  const revenueData = chartData.revenueData;
 
   return (
     <div className="flex flex-col lg:flex-row items-stretch gap-6 w-full h-full">
@@ -200,7 +188,7 @@ const ApplicationsSection = ({
         </CardHeader>
 
         <CardContent className="p-6 flex flex-col gap-4 flex-1">
-          {applicationsData ? (
+          {applicationsData && applicationsData.length > 0 ? (
             <>
               <div className="flex gap-8 items-center">
                 <div className="inline-flex gap-1.5 items-center">
@@ -318,7 +306,7 @@ const ApplicationsSection = ({
         </CardHeader>
 
         <CardContent className="p-6 flex flex-col gap-4 flex-1">
-          {revenueData ? (
+          {revenueData && revenueData.length > 0 ? (
             <div className="flex-1 min-h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={revenueData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -416,7 +404,7 @@ interface StatisticsCardData {
   };
 }
 
-interface MockChartData {
+interface ChartData {
   applicationsData: Array<{
     month: string;
     approved: number;
@@ -433,39 +421,30 @@ interface MockChartData {
 
 interface OverviewClientProps {
   cards: StatisticsCardData[];
-  mockCards: StatisticsCardData[];
-  mockChartData: MockChartData;
-  realChartData: MockChartData;
+  chartData: ChartData;
   userFirstName: string | null;
   hostUserData: HostUserData | null;
   isAdminDev: boolean;
 }
 
-export default function OverviewClient({ cards, mockCards, mockChartData, realChartData, userFirstName, hostUserData, isAdminDev }: OverviewClientProps) {
-  const [showMockData, setShowMockData] = useState(false);
-  
+export default function OverviewClient({ cards, chartData, userFirstName, hostUserData, isAdminDev }: OverviewClientProps) {
   // Check if onboarding is complete
   const onboardingComplete = isHostOnboardingComplete(hostUserData);
-  
+
   // Show onboarding checklist if:
   // 1. User is admin_dev (always show for testing), OR
   // 2. Onboarding is not complete
   const shouldShowOnboardingChecklist = isAdminDev || !onboardingComplete;
-  
-  const displayCards = showMockData ? mockCards : cards;
+
   return (
     <div className="flex flex-col gap-6 p-6 bg-gray-50 h-full min-h-screen">
       <OverviewSection userFirstName={userFirstName} />
       {shouldShowOnboardingChecklist && (
         <OnboardingChecklistCard hostUserData={hostUserData} isAdminDev={isAdminDev} />
       )}
-      <StatisticsSection 
-        cards={displayCards} 
-        showMockData={showMockData}
-        onToggleMockData={() => setShowMockData(!showMockData)}
-      />
+      <StatisticsSection cards={cards} />
       <div className="flex-1">
-        <ApplicationsSection showMockData={showMockData} mockChartData={mockChartData} realChartData={realChartData} />
+        <ApplicationsSection chartData={chartData} />
       </div>
     </div>
   );

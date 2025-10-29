@@ -115,48 +115,46 @@ function CreateLeasePage({ template, applicationData }) {
 
 #### Sidebar - Purpose and Implementation
 
-**Component:** `DocumentSidebar` (`/src/components/pdf-editor/sidebars/DocumentSidebar.tsx`)
+**Component:** `TemplateSidebar` (`/src/components/pdf-editor/sidebars/TemplateSidebar.tsx`)
 
-**Purpose:** Provides a review-focused interface showing document details and field completion status (read-only, informational).
+**Purpose:** Provides an interactive editing interface for customizing lease documents from templates. Template creation and document creation use the same interface because **template creation is just front-loading the work of document creation**.
+
+**Key Concept:**
+- **Template Creation** = Pre-configuring a reusable lease structure (fields, recipients, layout)
+- **Document Creation** = Completing/customizing a template for a specific lease instance
+- Both use the same interactive editing interface because they're the same activity at different workflow stages
 
 **Contents:**
 
-1. **Document Information Card**
-   - Property address from listing/match data
-   - Monthly rent amount
-   - Lease term (start/end dates)
-   - Visual card with key lease details
+1. **Recipient Manager**
+   - Add/edit/remove recipients (Host, Renter, Additional Renter)
+   - Assign colors to recipients
+   - Set signing order
+   - Fully interactive during document creation
 
-2. **Recipients Summary**
-   - List of all signers with avatars
-   - Recipient roles (Host, Renter, Additional Renter)
-   - Color-coded recipient indicators
-   - Shows signing order
+2. **Field Selector Palette**
+   - Drag-and-drop field placement on PDF
+   - Field types: TEXT, NUMBER, SIGNATURE, INITIALS, NAME, EMAIL, DATE, etc.
+   - Field configuration (labels, required status, recipient assignment)
+   - Host-only field restrictions for TEXT and NUMBER types
 
-3. **Field Summary**
-   - Complete list of all fields in the document
-   - Field labels and current values
-   - Empty vs filled status indicators
-   - Clickable to navigate to field location on PDF
-   - Auto-hides date fields (SIGN_DATE, INITIAL_DATE) when paired with signatures
+3. **Field Management**
+   - Edit existing field properties
+   - Delete fields
+   - Reposition fields on the PDF
+   - Navigate to field locations
 
 **Key Features:**
-- **Field Navigation**: Click any field in sidebar to jump to its location on PDF
-- **Status Tracking**: Visual indicators for which fields are completed
-- **Smart Hiding**: Date fields that auto-fill (like SIGN_DATE paired with SIGNATURE) are hidden from the list to reduce clutter
-- **Read-Only Review**: Unlike TemplateSidebar, this is informational - no field palette or editing tools
+- **Interactive Editing**: Full field creation and modification capabilities
+- **Template Customization**: Hosts can add/remove fields to fit specific lease scenarios
+- **Recipient Flexibility**: Adjust recipients based on actual participants in the lease
+- **Last Chance Edits**: Document creation step is the final opportunity to customize before signing
 
 **Implementation Notes:**
-- Automatically populated from template's field definitions
-- Field values come from `documentData` or pre-filled props
-- Uses same field data structure as template but different UI
-- Navigation handled by PDFEditor's internal field focusing system
-- Filters out auto-filled date fields to show only meaningful completion status
-
-**Difference from TemplateSidebar:**
-- **Template**: Interactive (RecipientManager + FieldSelector palette with host-only restrictions)
-- **Document**: Review-only (Document info + Field status list)
-- Template = Configure fields | Document = Fill & review fields
+- Used in both `workflow.isTemplatePhase()` and `workflow.isDocumentPhase()`
+- Same component, same capabilities - only difference is workflow context
+- Document creation may have pre-filled values from application data
+- All template editing tools remain available during document creation
 
 **Field Type Restrictions:**
 All fields from the template are displayed, including:
@@ -185,7 +183,10 @@ interface SignerXStepProps {
 #### Features
 
 - Display read-only document with highlights for user's fields
-- Signature pad integration
+- Signature pad integration with e-signature affirmation
+- E-signature affirmation requirement (once per signing session)
+- Legal consent checkbox before first signature submission using BrandCheckbox
+- Session-based affirmation (subsequent signatures don't require re-confirmation)
 - Required field validation
 - Submission with signature data
 

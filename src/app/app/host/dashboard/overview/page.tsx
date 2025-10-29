@@ -1,6 +1,7 @@
 import React from "react";
 import OverviewClient from "./overview-client";
 import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import type { StatisticsCardData } from "./overview-client";
 import { getHostListingsCount } from "@/app/actions/listings";
 import { getAllUserDrafts } from "@/app/actions/listings-in-creation";
@@ -8,38 +9,192 @@ import { getHostHousingRequests } from "@/app/actions/housing-requests";
 import { getAllHostBookings } from "@/app/actions/bookings";
 import { getHostUserData } from "@/app/actions/user";
 import { refreshStripeVerificationStatus } from "@/app/actions/stripe-identity";
+import prisma from "@/lib/prismadb";
 
 // Force dynamic rendering to ensure fresh Stripe status on every page load
 export const dynamic = 'force-dynamic';
 
+// Helper to get last 12 months
+function getLast12Months() {
+  const now = new Date();
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const result = [];
+
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    result.push({
+      name: months[date.getMonth()],
+      index: date.getMonth(),
+      year: date.getFullYear()
+    });
+  }
+
+  return result;
+}
+
+// Helper to check if a date is within the last 12 months
+function isInLast12Months(date: Date | string) {
+  const d = new Date(date);
+  const now = new Date();
+  const twelveMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+
+  return d >= twelveMonthsAgo && d <= now;
+}
+
+type HousingRequest = {
+  status: string;
+  createdAt: Date | string;
+};
+
+// Format applications chart data from housing requests
+function formatApplicationsChartData(housingRequests: HousingRequest[]) {
+  const last12Months = getLast12Months();
+
+  const chartData = last12Months.map(({ name, index, year }) => {
+    const monthRequests = housingRequests.filter(hr => {
+      const createdDate = new Date(hr.createdAt);
+      return (
+        createdDate.getMonth() === index &&
+        createdDate.getFullYear() === year &&
+        isInLast12Months(hr.createdAt)
+      );
+    });
+
+    const approved = monthRequests.filter(hr => hr.status === 'approved').length;
+    const pending = monthRequests.filter(hr => hr.status === 'pending').length;
+    const declined = monthRequests.filter(hr => hr.status === 'declined').length;
+
+    return {
+      month: name,
+      approved,
+      pending,
+      declined,
+      spacer1: 1,
+      spacer2: 1,
+      hasData: approved > 0 || pending > 0 || declined > 0
+    };
+  });
+
+  // Find the first month with data
+  const firstDataIndex = chartData.findIndex(month => month.hasData);
+
+  // If no data exists, return empty array
+  if (firstDataIndex === -1) {
+    return [];
+  }
+
+  // Return data starting from first month with data
+  return chartData.slice(firstDataIndex).map(({ hasData, ...rest }) => rest);
+}
+
+type Payment = {
+  status: string;
+  totalAmount: number;
+  paymentCapturedAt: Date | string | null;
+};
+
+// Format revenue chart data from captured payments
+function formatRevenueChartData(payments: Payment[]) {
+  const last12Months = getLast12Months();
+
+  // Filter to only captured payments in last 12 months
+  const capturedPayments = payments.filter(payment =>
+    payment.status === 'SUCCEEDED' &&
+    payment.paymentCapturedAt &&
+    isInLast12Months(payment.paymentCapturedAt)
+  );
+
+  const chartData = last12Months.map(({ name, index, year }) => {
+    const monthRevenueCents = capturedPayments
+      .filter(payment => {
+        const capturedDate = new Date(payment.paymentCapturedAt!);
+        return (
+          capturedDate.getMonth() === index &&
+          capturedDate.getFullYear() === year
+        );
+      })
+      .reduce((sum, payment) => sum + payment.totalAmount, 0);
+
+    return {
+      month: name,
+      revenue: monthRevenueCents / 100, // Convert cents to dollars
+      hasData: monthRevenueCents > 0
+    };
+  });
+
+  // Find the first month with data
+  const firstDataIndex = chartData.findIndex(month => month.hasData);
+
+  // If no data exists, return empty array
+  if (firstDataIndex === -1) {
+    return [];
+  }
+
+  // Return data starting from first month with data
+  return chartData.slice(firstDataIndex).map(({ hasData, ...rest }) => rest);
+}
+
 async function fetchOverviewData() {
   try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
     const [listingsCount, userDrafts, housingRequests, hostBookings] = await Promise.all([
       getHostListingsCount(),
       getAllUserDrafts(),
       getHostHousingRequests(),
       getAllHostBookings()
     ]);
-    
+
+    // Fetch raw payment data for charts
+    const bookingsWithPayments = await prisma.booking.findMany({
+      where: {
+        listing: {
+          userId: userId
+        }
+      },
+      include: {
+        rentPayments: {
+          select: {
+            id: true,
+            status: true,
+            totalAmount: true,
+            paymentCapturedAt: true,
+          }
+        }
+      }
+    });
+
+    // Flatten all payments
+    const allPayments = bookingsWithPayments.flatMap(booking =>
+      booking.rentPayments.map(payment => ({
+        status: payment.status,
+        totalAmount: payment.totalAmount,
+        paymentCapturedAt: payment.paymentCapturedAt
+      }))
+    );
+
     // Calculate applications breakdown
     const approvedCount = housingRequests.filter(hr => hr.status === 'approved').length;
     const pendingCount = housingRequests.filter(hr => hr.status === 'pending').length;
     const declinedCount = housingRequests.filter(hr => hr.status === 'declined').length;
-    
-    // Calculate bookings breakdown 
+
+    // Calculate bookings breakdown
     const upcomingBookings = hostBookings.bookings.filter(booking => {
       const startDate = new Date(booking.startDate);
       const today = new Date();
       return startDate > today;
     }).length;
-    
+
     const activeBookings = hostBookings.bookings.filter(booking => {
       const startDate = new Date(booking.startDate);
       const endDate = new Date(booking.endDate);
       const today = new Date();
       return startDate <= today && endDate >= today;
     }).length;
-    
+
     return {
       totalListings: listingsCount,
       draftsCount: userDrafts?.length || 0,
@@ -55,7 +210,9 @@ async function fetchOverviewData() {
       bookingsBreakdown: {
         upcoming: upcomingBookings,
         active: activeBookings
-      }
+      },
+      housingRequests,  // Pass raw data for chart formatting
+      payments: allPayments, // Pass raw payment data for revenue chart
     };
   } catch (error) {
     console.error('Error fetching overview data:', error);
@@ -74,21 +231,23 @@ async function fetchOverviewData() {
       bookingsBreakdown: {
         upcoming: 0,
         active: 0
-      }
+      },
+      housingRequests: [],
+      payments: [],
     };
   }
 }
 
-const sampleData = {
-  totalListings: 3,
-  draftsCount: 2,
-  activeApplications: 24,
-  currentBookings: 3,
-  averageRating: 4.5,
-  monthlyRevenue: 8500
-};
-
-function buildStatisticsCards(data: typeof sampleData & { applicationsBreakdown?: { approved: number, pending: number, declined: number }, bookingsBreakdown?: { upcoming: number, active: number } }) {
+function buildStatisticsCards(data: {
+  totalListings: number;
+  draftsCount: number;
+  activeApplications: number;
+  currentBookings: number;
+  averageRating: number;
+  monthlyRevenue: number;
+  applicationsBreakdown?: { approved: number, pending: number, declined: number };
+  bookingsBreakdown?: { upcoming: number, active: number };
+}) {
   return [
     {
       id: "applications",
@@ -291,17 +450,6 @@ function buildZeroStatisticsCards() {
       badges: [],
       subtitle: { text: "Listed Properties" },
     },
-    {
-      id: "mock-toggle",
-      title: "Demo Mode",
-      value: "Preview with sample data",
-      iconName: "Database",
-      iconBg: "bg-gray-100",
-      iconColor: "text-gray-500",
-      asLink: false,
-      badges: [],
-      subtitle: { text: "Loads mock data" },
-    },
   ];
 }
 
@@ -353,79 +501,18 @@ export default async function OverviewPage() {
     });
   }
   
-  // Build mock cards with sample data
-  const mockCards = buildStatisticsCards(sampleData);
-  
-  // Build real cards with actual data or zero values
-  let realCards = data ? buildStatisticsCards(data) : buildZeroStatisticsCards();
-  
-  // Handle mock data card visibility based on admin status
-  if (isAdmin) {
-    // For admin users, replace the "All Reviews" card with the existing mock data toggle card
-    realCards = realCards.map(card => {
-      if (card.id === "reviews") {
-        // Find the existing mock-toggle card and use it to replace reviews
-        const mockToggleCard = realCards.find(c => c.id === "mock-toggle");
-        return mockToggleCard || card;
-      }
-      return card;
-    });
-    // Remove the duplicate mock-toggle card
-    realCards = realCards.filter((card, index, arr) => {
-      if (card.id === "mock-toggle") {
-        return arr.findIndex(c => c.id === "mock-toggle") === index;
-      }
-      return true;
-    });
-  } else {
-    // For non-admin users, remove the mock-toggle card entirely
-    realCards = realCards.filter(card => card.id !== "mock-toggle");
-  }
+  // Build cards with actual data or zero values
+  const cards = data ? buildStatisticsCards(data) : buildZeroStatisticsCards();
 
-  // Mock chart data for sample mode
-  const mockChartData = {
-    applicationsData: [
-      { month: "Jan", approved: 25, spacer1: 1, pending: 10, spacer2: 1, declined: 15 },
-      { month: "Feb", approved: 43, spacer1: 1, pending: 21, spacer2: 1, declined: 31 },
-      { month: "Mar", approved: 25, spacer1: 1, pending: 20, spacer2: 1, declined: 29 },
-      { month: "Apr", approved: 11, spacer1: 1, pending: 77, spacer2: 1, declined: 15 },
-      { month: "May", approved: 50, spacer1: 1, pending: 16, spacer2: 1, declined: 55 },
-      { month: "Jun", approved: 25, spacer1: 1, pending: 46, spacer2: 1, declined: 15 },
-      { month: "Jul", approved: 38, spacer1: 1, pending: 8, spacer2: 1, declined: 22 },
-      { month: "Aug", approved: 71, spacer1: 1, pending: 27, spacer2: 1, declined: 15 },
-      { month: "Sep", approved: 14, spacer1: 1, pending: 40, spacer2: 1, declined: 15 },
-      { month: "Oct", approved: 63, spacer1: 1, pending: 37, spacer2: 1, declined: 16 },
-      { month: "Nov", approved: 24, spacer1: 1, pending: 23, spacer2: 1, declined: 16 },
-      { month: "Dec", approved: 47, spacer1: 1, pending: 32, spacer2: 1, declined: 32 },
-    ],
-    revenueData: [
-      { month: "Jan", revenue: 45000 },
-      { month: "Feb", revenue: 52000 },
-      { month: "Mar", revenue: 48000 },
-      { month: "Apr", revenue: 61000 },
-      { month: "May", revenue: 55000 },
-      { month: "Jun", revenue: 67000 },
-      { month: "Jul", revenue: 72000 },
-      { month: "Aug", revenue: 68000 },
-      { month: "Sep", revenue: 59000 },
-      { month: "Oct", revenue: 63000 },
-      { month: "Nov", revenue: 58000 },
-      { month: "Dec", revenue: 71000 },
-    ]
-  };
-  
-  // For now, real chart data will show empty states when not in demo mode
-  // This could be enhanced later to show actual historical data
-  const realChartData = {
-    applicationsData: null, // No historical data available yet
-    revenueData: null // No revenue tracking available yet
+  // Format chart data from fetched data
+  const chartData = {
+    applicationsData: formatApplicationsChartData(data.housingRequests),
+    revenueData: formatRevenueChartData(data.payments)
   };
 
-  return <OverviewClient 
-    cards={realCards} 
-    mockCards={mockCards} 
-    mockChartData={mockChartData} 
-    realChartData={realChartData} 
+  return <OverviewClient
+    cards={cards}
+    chartData={chartData}
     userFirstName={user?.firstName || null}
     hostUserData={hostUserData}
     isAdminDev={isAdminDev}

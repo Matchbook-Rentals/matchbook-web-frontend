@@ -134,6 +134,8 @@ PDFEditor supports three workflow states, each with specific use cases:
 
 **Usage**: Creating specific lease documents from templates
 
+**Key Concept**: Template creation and document creation use the same interface because **template creation is just front-loading the work of document creation**. Both provide full interactive editing capabilities.
+
 ```typescript
 <PDFEditor
   initialWorkflowState="document"
@@ -149,9 +151,12 @@ PDFEditor supports three workflow states, each with specific use cases:
 ```
 
 **Features**:
-- Pre-populated fields from template
-- Host can fill in known values
-- Prepare document for signing
+- Same interactive editing as template mode (uses TemplateSidebar)
+- Pre-populated fields from template and application data
+- Host can add/remove/edit fields for this specific lease
+- Full recipient management
+- Field palette for adding new fields
+- Last chance to customize before signing
 
 **Used in**:
 - Document creation flows
@@ -287,6 +292,52 @@ Ensure PDFEditor is in a container that allows it to use `calc(100vh - 100px)` n
 **Not Supported**: PDFEditor assumes it's the primary component on the page and uses viewport-based sizing. Don't render multiple PDFEditor instances simultaneously.
 
 **Alternative**: Use a modal/dialog to show secondary PDFEditor instances, ensuring only one is rendered at a time.
+
+## E-Signature Affirmation
+
+### Purpose
+Provides legally binding consent for electronic signature usage in compliance with ESIGN Act requirements.
+
+### Behavior
+
+**First Signature in Session:**
+- BrandCheckbox appears with affirmation text in all tabs (Draw, Type, Saved)
+- User must check: "By checking this box, I affirm that the signature above is a legally binding representation of my signature and constitutes my agreement to the terms of this document."
+- Validation prevents signature submission without affirmation
+- Toast error displayed if user attempts to sign without checking: "Affirmation Required - Please confirm the e-signature affirmation to continue"
+
+**Subsequent Signatures:**
+- Checkbox does not appear (session affirmation already recorded)
+- User can sign immediately without re-confirming
+- Session state persists across Draw, Type, and Saved tabs
+
+### Implementation
+
+**Component**: SignatureDialog.tsx (`/src/components/pdf-editor/SignatureDialog.tsx`)
+
+**State Management:**
+- `affirmationConfirmed`: Boolean tracking current checkbox state
+- `hasAffirmedThisSession`: Boolean tracking if user has affirmed in this dialog session
+
+**UI Component**: BrandCheckbox (`@/app/brandCheckbox`)
+- Snazzy brand-styled checkbox with animations
+- Accessible with proper ARIA attributes
+- Consistent with application design system
+
+**Validation**: Required checkbox validation in all handlers:
+- `handleUseDrawnSignature()` - Draw tab
+- `handleUseTypedSignature()` - Type tab
+- `handleUseSavedSignature()` - Saved tab
+
+**Scope**: Per-session (component instance), not persisted to database
+
+### Legal Text
+
+**Standard affirmation text:**
+> By checking this box, I affirm that the signature above is a legally binding representation of my signature and constitutes my agreement to the terms of this document.
+
+**For saved signatures:**
+> By checking this box, I affirm that the signature I select is a legally binding representation of my signature and constitutes my agreement to the terms of this document.
 
 ## Layout Architecture
 
