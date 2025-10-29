@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPinIcon, MoreVertical, Home, Loader2, MoreVerticalIcon, Calendar, Clock } from "lucide-react";
+import { MapPinIcon, MoreVertical, Home, Loader2, MoreVerticalIcon, Calendar, Clock, FileText } from "lucide-react";
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -275,6 +275,16 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
                       >
                         <Calendar className="w-4 h-4" />
                         Modify Dates
+                      </Button>
+                    )}
+                    {bookingId && (
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-2 text-[#484a54] hover:text-[#484a54] hover:bg-gray-50"
+                        onClick={() => router.push(`/app/rent/bookings/${bookingId}/move-in/instructions`)}
+                      >
+                        <FileText className="w-4 h-4" />
+                        View Move-in Instructions
                       </Button>
                     )}
                     <Button
