@@ -1273,12 +1273,17 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
         {/* Document creation interface */}
         {workflow.isDocumentPhase() && (
-          <DocumentSidebar
-            tripMatchDetails={tripMatchDetails}
+          <TemplateSidebar
             recipients={recipients}
-            fields={fields}
-            signedFieldsStore={useSignedFieldsStore}
-            navigateToField={navigateToField}
+            setRecipients={setRecipients}
+            selectedRecipient={selectedRecipient}
+            setSelectedRecipient={setSelectedRecipient}
+            selectedField={selectedField}
+            setSelectedField={setSelectedField}
+            setInteractionMode={setInteractionMode}
+            startFieldDetection={startFieldDetection}
+            accordionStates={accordionStates}
+            toggleAccordion={toggleAccordion}
           />
         )}
 
