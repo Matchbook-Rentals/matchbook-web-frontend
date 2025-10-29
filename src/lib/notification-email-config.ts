@@ -268,7 +268,7 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
     subject: '', // Will be set dynamically with listing title
     headerText: 'Your Booking is Approaching',
     contentTitle: '',
-    buttonText: 'View booking',
+    buttonText: 'Booking details',
     getContentText: (content, notification) => {
       // Content will be formatted in the buildNotificationEmailData function
       return content;
@@ -666,10 +666,17 @@ export function buildNotificationEmailData(
     const firstName = user?.firstName || 'there';
     const listingTitle = additionalData.listingTitle || 'your booking';
     const moveInDate = additionalData.moveInDate || additionalData.date || 'your move-in date';
-    
+    const bookingId = additionalData.bookingId;
+
     // Format the email body
-    emailData.contentText = `Hi ${firstName}, your booking at ${listingTitle} starts in 3 days.\n\nMove-in is on ${moveInDate}.`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/renter/bookings`;
+    emailData.contentText = `Hi ${firstName}, your booking at ${listingTitle} starts in 3 days.\n\nMove-in is on ${moveInDate}.\n\nSee move-in instructions below.`;
+
+    // Link to move-in instructions page if bookingId is available
+    if (bookingId) {
+      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/rent/bookings/${bookingId}/move-in/instructions`;
+    } else {
+      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/rent/bookings`;
+    }
   }
 
   // Add special formatting for move-in upcoming notifications (host)
@@ -677,10 +684,18 @@ export function buildNotificationEmailData(
     const firstName = user?.firstName || 'there';
     const renterName = additionalData.renterName || additionalData.senderName || 'Your guest';
     const moveInDate = additionalData.moveInDate || additionalData.date || 'the scheduled date';
+    const listingId = additionalData.listingId;
+    const bookingId = additionalData.bookingId;
 
     // Format the email body
     emailData.contentText = `Hi ${firstName}, ${renterName} is scheduled to move-in in 3 days.\n\nMove-in is on ${moveInDate}.`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host-dashboard?tab=bookings`;
+
+    // Link to specific booking details page if both IDs are available
+    if (listingId && bookingId) {
+      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host/${listingId}/bookings/${bookingId}`;
+    } else {
+      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host-dashboard?tab=bookings`;
+    }
   }
 
   // Add special formatting for rent payment success notifications

@@ -172,6 +172,7 @@ export async function previewNotificationEmail({
         notificationUrl = '/app/renter/bookings'
         emailData = {
           listingTitle,
+          bookingId: 'test-booking-123',
           moveInDate: amount || 'March 20, 2024'
         }
         break
@@ -181,6 +182,8 @@ export async function previewNotificationEmail({
         notificationUrl = '/app/host-dashboard?tab=bookings'
         emailData = {
           listingTitle,
+          listingId: 'test-listing-123',
+          bookingId: 'test-booking-123',
           renterName: senderName || 'John Smith',
           moveInDate: amount || 'March 20, 2024'
         }

@@ -123,13 +123,18 @@ export function buildNotificationEmailData(
 
     case 'move_in_upcoming':
       return {
-        listingTitle: data.listingTitle
+        listingTitle: data.listingTitle,
+        bookingId: data.bookingId,
+        moveInDate: data.moveInDate || data.date || data.amount
       };
 
     case 'move_in_upcoming_host':
       return {
         listingTitle: data.listingTitle,
-        renterName: data.renterName || data.senderName
+        renterName: data.renterName || data.senderName,
+        listingId: data.listingId,
+        bookingId: data.bookingId,
+        moveInDate: data.moveInDate || data.date || data.amount
       };
 
     case 'move_out_upcoming':

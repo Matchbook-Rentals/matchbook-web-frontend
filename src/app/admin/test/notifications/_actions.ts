@@ -158,7 +158,21 @@ export async function sendTestNotification({
         notificationContent = `Move-in reminder: Your stay at ${listingTitle} begins soon!`
         notificationUrl = '/app/renter/bookings'
         emailData = buildNotificationEmailData('move_in_upcoming', {
-          listingTitle
+          listingTitle,
+          bookingId: 'test-booking-' + Date.now(),
+          moveInDate: amount || 'March 20, 2024'
+        })
+        break
+
+      case 'move_in_upcoming_host':
+        notificationContent = `${senderName} is moving into ${listingTitle} in 3 days`
+        notificationUrl = '/app/host-dashboard?tab=bookings'
+        emailData = buildNotificationEmailData('move_in_upcoming_host', {
+          listingTitle,
+          listingId: 'test-listing-' + Date.now(),
+          bookingId: 'test-booking-' + Date.now(),
+          renterName: senderName,
+          moveInDate: amount || 'March 20, 2024'
         })
         break
 
