@@ -23,15 +23,12 @@ import {
 import {
   Search,
   Eye,
-  Edit,
-  Copy
+  Edit
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
-import CopyListingButton from './[listingId]/copy-listing-button'
-import DeleteListingButton from './[listingId]/delete-listing-button'
 
 interface ListingData {
   id: string;
@@ -312,18 +309,6 @@ export default function ListingManagementTable({
                             Edit
                           </Button>
                         </Link>
-                        <CopyListingButton
-                          listingId={listing.id}
-                          listingTitle={listing.title}
-                          size="sm"
-                          showText={false}
-                        />
-                        <DeleteListingButton
-                          listingId={listing.id}
-                          listingTitle={listing.title}
-                          size="sm"
-                          showText={false}
-                        />
                       </>
                     ) : (
                       <>
@@ -334,10 +319,6 @@ export default function ListingManagementTable({
                         <Button variant="outline" size="sm" disabled>
                           <Edit className="h-4 w-4 mr-2" />
                           Edit
-                        </Button>
-                        <Button variant="outline" size="sm" disabled>
-                          <Copy className="h-4 w-4 mr-2" />
-                          Copy
                         </Button>
                       </>
                     )}

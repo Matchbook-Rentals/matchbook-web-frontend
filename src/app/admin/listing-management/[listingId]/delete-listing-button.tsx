@@ -170,15 +170,15 @@ export default function DeleteListingButton({
               <AlertDialogTitle className="text-center">Delete this listing?</AlertDialogTitle>
               <AlertDialogDescription className="space-y-4">
                 <p className="text-center">
-                  This action cannot be undone. The listing will be soft-deleted and can be restored later if needed.
+                  The listing will be soft-deleted and hidden from search results. All associated data (images, pricing, etc.) will be preserved and can be restored if needed.
                 </p>
 
                 {deletionResponse?.entityCounts && deletionResponse.entityCounts.total > 1 && (
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                    <p className="text-sm font-medium text-gray-900">
-                      This will affect {deletionResponse.entityCounts.total} database record(s):
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-sm font-medium text-blue-900">
+                      Associated data that will be preserved:
                     </p>
-                    <ul className="text-sm text-gray-600 mt-2 space-y-1">
+                    <ul className="text-sm text-blue-700 mt-2 space-y-1">
                       {deletionResponse.entityCounts.images > 0 && (
                         <li>• {deletionResponse.entityCounts.images} image(s)</li>
                       )}
