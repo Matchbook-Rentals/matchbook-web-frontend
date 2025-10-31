@@ -31,6 +31,7 @@ import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
 import CopyListingButton from './[listingId]/copy-listing-button'
+import DeleteListingButton from './[listingId]/delete-listing-button'
 
 interface ListingData {
   id: string;
@@ -312,6 +313,12 @@ export default function ListingManagementTable({
                           </Button>
                         </Link>
                         <CopyListingButton
+                          listingId={listing.id}
+                          listingTitle={listing.title}
+                          size="sm"
+                          showText={false}
+                        />
+                        <DeleteListingButton
                           listingId={listing.id}
                           listingTitle={listing.title}
                           size="sm"

@@ -9,6 +9,7 @@ import { Edit } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import CopyListingButton from './copy-listing-button'
+import DeleteListingButton from './delete-listing-button'
 
 export default async function ListingDetailPage({
   params
@@ -54,8 +55,13 @@ export default async function ListingDetailPage({
                       Edit Listing
                     </Button>
                   </Link>
-                  <CopyListingButton 
-                    listingId={listing.id} 
+                  <CopyListingButton
+                    listingId={listing.id}
+                    listingTitle={listing.title}
+                    size="sm"
+                  />
+                  <DeleteListingButton
+                    listingId={listing.id}
                     listingTitle={listing.title}
                     size="sm"
                   />
