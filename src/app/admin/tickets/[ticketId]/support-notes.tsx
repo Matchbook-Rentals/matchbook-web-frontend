@@ -13,26 +13,27 @@ interface SupportNotesProps {
 }
 
 export function SupportNotes({ ticketId, defaultNotes, onNotesSaved }: SupportNotesProps) {
-  const [notes, setNotes] = useState(defaultNotes)
+  const [notes, setNotes] = useState('')
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
   
   const handleSubmit = async (formData: FormData) => {
     const supportNotes = formData.get('supportNotes') as string
-    
+
     try {
       const result = await updateTicketSupportNotes(ticketId, supportNotes)
-      
+
       if (result.error) {
         setStatus({ type: 'error', message: result.error })
       } else if (result.success) {
         setStatus({ type: 'success', message: 'Notes saved successfully' })
+        setNotes('') // Clear the text field after successful save
         // Trigger activity log refresh
         onNotesSaved?.()
       }
     } catch (error) {
       setStatus({ type: 'error', message: 'Failed to save notes' })
     }
-    
+
     // Clear status after 3 seconds
     setTimeout(() => {
       setStatus(null)

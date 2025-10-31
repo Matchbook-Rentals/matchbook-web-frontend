@@ -122,16 +122,16 @@ export async function logStatusChanged(
 }
 
 export async function logNoteSaved(
-  ticketId: string, 
+  ticketId: string,
   notePreview: string,
   savedBy?: { id: string; name: string; email: string }
 ) {
   return logTicketActivity({
     ticketId,
     action: 'note_saved',
-    details: { 
-      notePreview: notePreview.substring(0, 100) + (notePreview.length > 100 ? '...' : ''),
-      message: 'Support note was saved' 
+    details: {
+      notePreview: notePreview,
+      message: 'Support note was saved'
     },
     actorType: savedBy ? 'admin' : 'system',
     actorId: savedBy?.id,
