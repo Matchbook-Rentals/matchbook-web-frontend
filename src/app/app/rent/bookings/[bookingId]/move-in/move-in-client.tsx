@@ -331,13 +331,13 @@ export default function MoveInClient({
         <CardContent className="space-y-6">
           <div className="prose prose-sm max-w-none">
             <p className="text-base">
-              We hope your move-in went smoothly! Please confirm below that you've successfully moved in so we can begin processing your rent payments.
+              We hope your move-in went smoothly! Please confirm below that you&apos;ve successfully moved in so we can begin processing your rent payments.
             </p>
             <p className="text-base">
-              If you experienced any issues during move-in, please let us know and we'll hold your payments while we work with you to resolve them.
+              If you experienced any issues during move-in, please let us know and we&apos;ll hold your payments while we work with you to resolve them.
             </p>
             <p className="text-sm text-muted-foreground italic">
-              Note: If we don't hear from you by the end of move-in day, we'll assume everything went well and process payments as scheduled.
+              Note: If we don&apos;t hear from you by the end of move-in day, we&apos;ll assume everything went well and process payments as scheduled.
             </p>
           </div>
 
@@ -365,7 +365,7 @@ export default function MoveInClient({
               ) : (
                 <>
                   <CheckCircle2 className="h-5 w-5 mr-2" />
-                  Yes, I've Successfully Moved In
+                  Yes, I&apos;ve Successfully Moved In
                 </>
               )}
             </BrandButton>
@@ -385,7 +385,7 @@ export default function MoveInClient({
               ) : (
                 <>
                   <AlertCircle className="h-5 w-5 mr-2" />
-                  I'm Having Issues with Move-In
+                  I&apos;m Having Issues with Move-In
                 </>
               )}
             </BrandButton>
