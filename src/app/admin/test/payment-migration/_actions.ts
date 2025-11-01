@@ -8,21 +8,26 @@ import { FEES } from '@/lib/fee-constants';
  * Get all bookings with their payment status for migration
  */
 export async function getMigrationBookings() {
+  // Get all matches first
+  const matches = await prisma.match.findMany({
+    select: {
+      id: true,
+      stripePaymentMethodId: true,
+      stripePaymentIntentId: true,
+      paymentAmount: true,
+    },
+  });
+
+  const matchMap = new Map(matches.map((m) => [m.id, m]));
+
+  // Get all bookings where the matchId exists in our match map
   const bookings = await prisma.booking.findMany({
     where: {
-      match: {
-        isNot: null,
+      matchId: {
+        in: Array.from(matchMap.keys()),
       },
     },
     include: {
-      match: {
-        select: {
-          id: true,
-          stripePaymentMethodId: true,
-          stripePaymentIntentId: true,
-          paymentAmount: true,
-        },
-      },
       rentPayments: {
         include: {
           charges: true,
@@ -35,6 +40,8 @@ export async function getMigrationBookings() {
   });
 
   return bookings.map((booking) => {
+    const match = matchMap.get(booking.matchId);
+
     const paymentsWithoutMethod = booking.rentPayments.filter(
       (rp) => !rp.stripePaymentMethodId
     );
@@ -55,7 +62,7 @@ export async function getMigrationBookings() {
       startDate: booking.startDate,
       createdAt: booking.createdAt,
       monthlyRent: booking.monthlyRent,
-      match: booking.match,
+      match: match || null,
       rentPayments: booking.rentPayments,
       needsPaymentMethod: paymentsWithoutMethod.length > 0,
       paymentsWithoutMethodCount: paymentsWithoutMethod.length,
