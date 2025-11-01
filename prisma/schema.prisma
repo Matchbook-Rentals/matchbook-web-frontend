@@ -63,6 +63,8 @@ enum RentPaymentType {
 }
 
 enum RentPaymentStatus {
+  PENDING_MOVE_IN   // Waiting for move-in completion before processing
+  FAILED_MOVE_IN    // Move-in failed, payment on hold
   PENDING           // Not yet attempted
   PROCESSING        // ACH in progress (3-5 days)
   AUTHORIZED        // Card authorized but not captured
@@ -509,7 +511,13 @@ model Booking {
 
   createdAt DateTime @default(now())
   status    String   @default("reserved")  // "reserved", "pending_payment", "confirmed", "payment_failed", "cancelled"
+
+  // Move-in tracking fields
   moveInCompletedAt DateTime?
+  moveInStatus String? @default("pending") // "pending", "confirmed", "issue_reported"
+  moveInConfirmedAt DateTime?
+  moveInIssueReportedAt DateTime?
+  moveInIssueNotes String? @db.Text
 
   // Payment tracking fields for ACH recovery flow
   paymentStatus         String?   // "pending", "processing", "settled", "failed"

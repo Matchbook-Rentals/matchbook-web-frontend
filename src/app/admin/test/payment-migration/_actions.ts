@@ -56,6 +56,14 @@ export async function getMigrationBookings() {
         rp.charges.some((c) => c.category === 'SECURITY_DEPOSIT')
     );
 
+    // Check for monthly rent payments that need PENDING_MOVE_IN migration
+    const monthlyRentPayments = booking.rentPayments.filter(
+      (rp) => rp.type === 'MONTHLY_RENT' && !rp.isPaid
+    );
+    const paymentsNotPendingMoveIn = monthlyRentPayments.filter(
+      (rp) => rp.status !== 'PENDING_MOVE_IN'
+    );
+
     return {
       id: booking.id,
       matchId: booking.matchId,
@@ -69,6 +77,8 @@ export async function getMigrationBookings() {
       needsChargeItemization: paymentsWithoutCharges.length > 0,
       paymentsWithoutChargesCount: paymentsWithoutCharges.length,
       hasSecurityDepositRecord,
+      needsPendingMoveInMigration: paymentsNotPendingMoveIn.length > 0,
+      paymentsNotPendingMoveInCount: paymentsNotPendingMoveIn.length,
     };
   });
 }
@@ -295,6 +305,74 @@ export async function createSecurityDepositRecord(bookingId: string) {
     };
   } catch (error) {
     console.error('Error creating security deposit record:', error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'Unknown error occurred',
+    };
+  }
+}
+
+/**
+ * Migrate rent payments to PENDING_MOVE_IN status
+ */
+export async function migratePaymentsToPendingMoveIn(bookingId: string) {
+  try {
+    // Get booking with rent payments
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        rentPayments: {
+          where: {
+            type: 'MONTHLY_RENT',
+            isPaid: false,
+          },
+          select: {
+            id: true,
+            status: true,
+            type: true,
+          },
+        },
+      },
+    });
+
+    if (!booking) {
+      return {
+        success: false,
+        error: 'Booking not found',
+      };
+    }
+
+    const paymentsToUpdate = booking.rentPayments.filter(
+      (rp) => rp.status !== 'PENDING_MOVE_IN'
+    );
+
+    if (paymentsToUpdate.length === 0) {
+      return {
+        success: true,
+        message: 'All monthly rent payments are already in PENDING_MOVE_IN status',
+        updatedCount: 0,
+      };
+    }
+
+    await prisma.rentPayment.updateMany({
+      where: {
+        id: {
+          in: paymentsToUpdate.map((rp) => rp.id),
+        },
+      },
+      data: {
+        status: 'PENDING_MOVE_IN',
+      },
+    });
+
+    return {
+      success: true,
+      message: `Migrated ${paymentsToUpdate.length} payment(s) to PENDING_MOVE_IN status`,
+      updatedCount: paymentsToUpdate.length,
+    };
+  } catch (error) {
+    console.error('Error migrating payments to PENDING_MOVE_IN:', error);
     return {
       success: false,
       error:

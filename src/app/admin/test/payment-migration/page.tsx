@@ -12,6 +12,7 @@ import {
   attachPaymentMethodToPayments,
   createSecurityDepositRecord,
   getSecurityDepositTransaction,
+  migratePaymentsToPendingMoveIn,
 } from './_actions';
 
 interface MigrationBooking {
@@ -43,6 +44,8 @@ interface MigrationBooking {
   needsChargeItemization: boolean;
   paymentsWithoutChargesCount: number;
   hasSecurityDepositRecord: boolean;
+  needsPendingMoveInMigration: boolean;
+  paymentsNotPendingMoveInCount: number;
 }
 
 export default function PaymentMigrationPage() {
@@ -51,7 +54,7 @@ export default function PaymentMigrationPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [bookings, setBookings] = useState<MigrationBooking[]>([]);
   const [processingBookingId, setProcessingBookingId] = useState<string | null>(null);
-  const [actionType, setActionType] = useState<'payment-method' | 'security-deposit' | null>(null);
+  const [actionType, setActionType] = useState<'payment-method' | 'security-deposit' | 'pending-move-in' | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [viewingTransaction, setViewingTransaction] = useState<{
     bookingId: string;
@@ -142,6 +145,37 @@ export default function PaymentMigrationPage() {
       }
     } catch (error) {
       console.error('Error creating security deposit:', error);
+      setMessage({
+        type: 'error',
+        text: 'An unexpected error occurred',
+      });
+    } finally {
+      setProcessingBookingId(null);
+      setActionType(null);
+    }
+  };
+
+  const handleMigrateToPendingMoveIn = async (bookingId: string) => {
+    setProcessingBookingId(bookingId);
+    setActionType('pending-move-in');
+    setMessage(null);
+
+    try {
+      const result = await migratePaymentsToPendingMoveIn(bookingId);
+      if (result.success) {
+        setMessage({
+          type: 'success',
+          text: result.message || 'Payments migrated to PENDING_MOVE_IN',
+        });
+        await loadBookings(); // Reload to show updated status
+      } else {
+        setMessage({
+          type: 'error',
+          text: result.error || 'Failed to migrate payments',
+        });
+      }
+    } catch (error) {
+      console.error('Error migrating to pending move-in:', error);
       setMessage({
         type: 'error',
         text: 'An unexpected error occurred',
@@ -255,6 +289,17 @@ export default function PaymentMigrationPage() {
                       <Badge variant="outline" className="bg-red-50 text-red-700">
                         <XCircle className="h-3 w-3 mr-1" />
                         Missing Deposit Record
+                      </Badge>
+                    )}
+                    {!booking.needsPendingMoveInMigration ? (
+                      <Badge variant="outline" className="bg-green-50 text-green-700">
+                        <CheckCircle2 className="h-3 w-3 mr-1" />
+                        Pending Move-In Status OK
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700">
+                        <AlertCircle className="h-3 w-3 mr-1" />
+                        Needs Move-In Migration
                       </Badge>
                     )}
                   </div>
@@ -466,6 +511,26 @@ export default function PaymentMigrationPage() {
                       </>
                     ) : (
                       'Create Security Deposit Record'
+                    )}
+                  </Button>
+
+                  <Button
+                    onClick={() => handleMigrateToPendingMoveIn(booking.id)}
+                    disabled={
+                      !booking.needsPendingMoveInMigration ||
+                      processingBookingId === booking.id
+                    }
+                    variant="secondary"
+                    className="w-full"
+                  >
+                    {processingBookingId === booking.id &&
+                    actionType === 'pending-move-in' ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Migrating...
+                      </>
+                    ) : (
+                      'Migrate to Pending Move-In'
                     )}
                   </Button>
                 </div>
