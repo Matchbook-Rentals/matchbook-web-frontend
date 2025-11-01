@@ -9,6 +9,11 @@ import { FEES } from '@/lib/fee-constants';
  */
 export async function getMigrationBookings() {
   const bookings = await prisma.booking.findMany({
+    where: {
+      match: {
+        isNot: null,
+      },
+    },
     include: {
       match: {
         select: {
