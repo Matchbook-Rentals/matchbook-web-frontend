@@ -208,6 +208,11 @@ const findDuePayments = async (todayMidnight: Date) => {
 const processPayments = async (payments: any[]) => {
   let successful = 0;
   let failed = 0;
+  const failureDetails: Array<{
+    payment: any;
+    error: string;
+    isSystemError: boolean;
+  }> = [];
 
   for (const payment of payments) {
     try {
@@ -216,14 +221,31 @@ const processPayments = async (payments: any[]) => {
         successful++;
       } else {
         failed++;
+        failureDetails.push({
+          payment,
+          error: result.error || 'Unknown error',
+          isSystemError: false
+        });
       }
     } catch (error) {
       console.error(`Error processing payment ${payment.id}:`, error);
       failed++;
 
+      // Track system errors separately
+      failureDetails.push({
+        payment,
+        error: error instanceof Error ? error.message : 'Unknown system error',
+        isSystemError: true
+      });
+
       // Update payment with failure information
       await updatePaymentFailure(payment.id, 'Processing error occurred');
     }
+  }
+
+  // Send admin summary email if there were any failures
+  if (failureDetails.length > 0) {
+    await sendAdminFailureSummary(failureDetails);
   }
 
   return { successful, failed };
@@ -256,6 +278,11 @@ const processIndividualPayment = async (payment: any) => {
       ? Number(payment.totalAmount)
       : Number(payment.amount);
 
+    // Calculate booking duration in months (needed for metadata and fallback calculations)
+    const startDate = new Date(booking.startDate);
+    const endDate = new Date(booking.endDate);
+    const durationInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (MS_PER_DAY * DAYS_PER_MONTH_PRECISE));
+
     // Try to get platform fee from charges (new system)
     let platformFeeAmount = 0;
     let platformFeeRate = 0;
@@ -277,11 +304,6 @@ const processIndividualPayment = async (payment: any) => {
 
     // Fallback to legacy calculation if no charges
     if (platformFeeAmount === 0) {
-      // Calculate booking duration in months to determine platform fee rate
-      const startDate = new Date(booking.startDate);
-      const endDate = new Date(booking.endDate);
-      const durationInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (MS_PER_DAY * DAYS_PER_MONTH_PRECISE));
-
       // Determine platform fee rate based on booking duration
       // >= 6 months: 1.5% platform fee
       // < 6 months: 3% platform fee
@@ -361,24 +383,39 @@ const processIndividualPayment = async (payment: any) => {
   } catch (error) {
     console.error(`❌ Failed to process payment ${payment.id}:`, error);
 
-    // Extract meaningful error message
-    let errorMessage = 'Payment processing failed';
-    if (error instanceof Error) {
-      if (error.message.includes('insufficient_funds')) {
-        errorMessage = 'Insufficient funds';
-      } else if (error.message.includes('card_declined')) {
-        errorMessage = 'Card declined';
-      } else if (error.message.includes('payment_method_unavailable')) {
-        errorMessage = 'Payment method unavailable';
-      } else {
-        errorMessage = error.message;
+    // Distinguish between payment failures (sad path) and system errors (error path)
+    const isPaymentFailure = error instanceof Error && (
+      error.message.includes('insufficient_funds') ||
+      error.message.includes('card_declined') ||
+      error.message.includes('payment_method_unavailable') ||
+      error.message.includes('authentication_required') ||
+      error.message.includes('card_velocity_exceeded')
+    );
+
+    if (isPaymentFailure) {
+      // Payment failure (sad path): Update record and notify users
+      let errorMessage = 'Payment processing failed';
+      if (error instanceof Error) {
+        if (error.message.includes('insufficient_funds')) {
+          errorMessage = 'Insufficient funds';
+        } else if (error.message.includes('card_declined')) {
+          errorMessage = 'Card declined';
+        } else if (error.message.includes('payment_method_unavailable')) {
+          errorMessage = 'Payment method unavailable';
+        } else {
+          errorMessage = error.message;
+        }
       }
+
+      await updatePaymentFailure(payment.id, errorMessage);
+      await sendPaymentFailureNotifications(payment, errorMessage);
+
+      return { success: false, error: errorMessage };
+    } else {
+      // System error (error path): Re-throw to be handled at higher level
+      // Don't send notifications for bugs/system issues
+      throw error;
     }
-
-    await updatePaymentFailure(payment.id, errorMessage);
-    await sendPaymentFailureNotifications(payment, errorMessage);
-
-    return { success: false, error: errorMessage };
   }
 };
 
@@ -590,12 +627,11 @@ const sendPaymentProcessingNotifications = async (payment: any, paymentIntent: a
 };
 
 /**
- * Send notifications for failed payments
+ * Send notifications for failed payments (renter only)
  */
 const sendPaymentFailureNotifications = async (payment: any, errorMessage: string) => {
   const { booking } = payment;
   const renter = booking.user;
-  const host = booking.listing.user;
 
   const amount = centsToDollars(Number(payment.amount)).toFixed(2);
   const listingTitle = booking.listing.title;
@@ -626,32 +662,83 @@ const sendPaymentFailureNotifications = async (payment: any, errorMessage: strin
     subject: getNotificationEmailSubject('rent_payment_failed'),
     emailData: renterEmailData,
   });
+};
 
-  // Notify admin (tyler.bennett52@gmail.com) of failure
-  const adminEmailData = buildNotificationEmailData(
-    'rent_payment_failed',
-    {
-      content: `Rent payment failed for ${listingTitle}`,
-      url: '/admin'
-    },
-    undefined, // No user context for admin email
-    {
-      amount,
-      listingTitle,
-      paymentDate,
-      failureReason: errorMessage,
-      renterName: `${renter.firstName} ${renter.lastName}`.trim() || renter.email,
-      renterEmail: renter.email,
-      hostName: `${host.firstName} ${host.lastName}`.trim() || host.email,
-      hostEmail: host.email,
-      paymentId: payment.id,
-      retryCount: (payment.retryCount || 0) + 1,
-    }
-  );
+/**
+ * Send admin summary email for all payment failures
+ */
+const sendAdminFailureSummary = async (failures: Array<{
+  payment: any;
+  error: string;
+  isSystemError: boolean;
+}>) => {
+  const paymentFailures = failures.filter(f => !f.isSystemError);
+  const systemErrors = failures.filter(f => f.isSystemError);
 
-  await sendNotificationEmail({
+  let emailBody = `
+<h2>Rent Payment Processing Summary</h2>
+<p><strong>Total Failures:</strong> ${failures.length}</p>
+<p><strong>Payment Failures:</strong> ${paymentFailures.length} (card declined, insufficient funds, etc.)</p>
+<p><strong>System Errors:</strong> ${systemErrors.length} (bugs, infrastructure issues)</p>
+`;
+
+  if (paymentFailures.length > 0) {
+    emailBody += `
+<h3>Payment Failures (User-facing issues)</h3>
+<ul>
+`;
+    paymentFailures.forEach(({ payment, error }) => {
+      const { booking } = payment;
+      const renter = booking.user;
+      const host = booking.listing.user;
+      const amount = centsToDollars(Number(payment.amount)).toFixed(2);
+
+      emailBody += `
+  <li>
+    <strong>Payment ID:</strong> ${payment.id}<br>
+    <strong>Amount:</strong> $${amount}<br>
+    <strong>Listing:</strong> ${booking.listing.title}<br>
+    <strong>Renter:</strong> ${renter.firstName} ${renter.lastName} (${renter.email})<br>
+    <strong>Host:</strong> ${host.firstName} ${host.lastName} (${host.email})<br>
+    <strong>Error:</strong> ${error}<br>
+    <strong>Retry Count:</strong> ${(payment.retryCount || 0) + 1}/${MAX_PAYMENT_RETRIES}
+  </li>
+`;
+    });
+    emailBody += `</ul>`;
+  }
+
+  if (systemErrors.length > 0) {
+    emailBody += `
+<h3>System Errors (Requires code fix)</h3>
+<ul>
+`;
+    systemErrors.forEach(({ payment, error }) => {
+      const { booking } = payment;
+      const renter = booking.user;
+      const amount = centsToDollars(Number(payment.amount)).toFixed(2);
+
+      emailBody += `
+  <li>
+    <strong>Payment ID:</strong> ${payment.id}<br>
+    <strong>Amount:</strong> $${amount}<br>
+    <strong>Listing:</strong> ${booking.listing.title}<br>
+    <strong>Renter:</strong> ${renter.firstName} ${renter.lastName} (${renter.email})<br>
+    <strong>Error:</strong> ${error}
+  </li>
+`;
+    });
+    emailBody += `</ul>`;
+  }
+
+  // Use simple HTML email (not using notification template for admin emails)
+  const { Resend } = await import('resend');
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  await resend.emails.send({
+    from: 'MatchBook <noreply@matchbookrentals.com>',
     to: 'tyler.bennett52@gmail.com',
-    subject: `Rent Payment Failed - ${booking.listing.title}`,
-    emailData: adminEmailData,
+    subject: `Rent Payment Processing Failed - ${failures.length} issue${failures.length > 1 ? 's' : ''}`,
+    html: emailBody,
   });
 };
