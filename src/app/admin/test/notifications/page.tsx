@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { toast } from '@/hooks/use-toast'
-import { Bell, Send, CheckCircle, XCircle, Loader2, Mail, Home, Check, UserPlus, Info, DollarSign, AlertTriangle, FileText, MessageSquare, Calendar, Eye, Code, Maximize2, Star, Users, PlayCircle } from 'lucide-react'
+import { Bell, Send, CheckCircle, XCircle, Loader2, Mail, Home, Check, UserPlus, Info, DollarSign, AlertTriangle, FileText, MessageSquare, Calendar, Eye, Code, Maximize2, Star, Users, PlayCircle, Clock, AlertCircle } from 'lucide-react'
 import { sendTestNotification } from './_actions'
 import { previewNotificationEmail } from './_preview-actions'
 import { runCheckUnreadMessagesCron } from './_run-cron-actions'
@@ -259,6 +259,46 @@ export default function NotificationTestPage() {
       category: 'booking',
       sampleData: {
         listingTitle: 'City Center Flat'
+      }
+    },
+    {
+      id: 'move_in_confirmation_prompt',
+      name: 'Move-In Confirmation Prompt',
+      description: 'Initial prompt sent at 5 AM on move-in day',
+      icon: <Home className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        listingTitle: 'Modern Downtown Loft',
+        listingAddress: '123 Main St, San Francisco, CA',
+        moveInDate: 'March 20, 2024',
+        bookingId: 'test-booking-123'
+      }
+    },
+    {
+      id: 'move_in_confirmation_reminder',
+      name: 'Move-In Confirmation Reminder',
+      description: 'Reminder sent at 6 PM if no response',
+      icon: <Clock className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        listingTitle: 'Modern Downtown Loft',
+        autoConfirmTime: '3:00 AM tomorrow',
+        bookingId: 'test-booking-123'
+      }
+    },
+    {
+      id: 'move_in_issue_reported_host',
+      name: 'Move-In Issue Reported (Host)',
+      description: 'Notifies host when renter reports move-in problem',
+      icon: <AlertCircle className="h-4 w-4" />,
+      category: 'booking',
+      sampleData: {
+        listingTitle: 'Modern Downtown Loft',
+        renterName: 'Sarah Johnson',
+        issueNotes: 'The property was not cleaned as expected and some appliances are not working.',
+        reportedAt: 'March 20, 2024 at 2:30 PM',
+        bookingId: 'test-booking-123',
+        listingId: 'test-listing-456'
       }
     },
     // Payments
@@ -571,6 +611,9 @@ export default function NotificationTestPage() {
     'booking_change_approved',
     'move_in_upcoming',
     'move_in_upcoming_host',
+    'move_in_confirmation_prompt',
+    'move_in_confirmation_reminder',
+    'move_in_issue_reported_host',
     'payment_failed',
     'payment_failed_severe',
     'payment_failed_host',

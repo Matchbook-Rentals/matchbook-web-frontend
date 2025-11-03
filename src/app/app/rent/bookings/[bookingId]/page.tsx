@@ -35,9 +35,20 @@ type RentPayment = {
   amount: number;
   dueDate: Date;
   isPaid: boolean;
+  status?: string;
 };
 
 function getPaymentStatus(rentPayment: RentPayment): string {
+  // Check for explicit status field first
+  if (rentPayment.status === 'PENDING_MOVE_IN') return "Pending Move-In";
+  if (rentPayment.status === 'FAILED_MOVE_IN') return "Move-In Failed";
+  if (rentPayment.status === 'SUCCEEDED') return "Paid";
+  if (rentPayment.status === 'FAILED') return "Failed";
+  if (rentPayment.status === 'PROCESSING') return "Processing";
+  if (rentPayment.status === 'CANCELLED') return "Cancelled";
+  if (rentPayment.status === 'REFUNDED') return "Refunded";
+
+  // Fallback to legacy isPaid logic
   if (rentPayment.isPaid) return "Paid";
 
   const now = new Date();
@@ -188,8 +199,27 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
 
   // Format payment data for the table
   const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayEnd = new Date(todayStart);
+  todayEnd.setDate(todayEnd.getDate() + 1);
+
+  // Helper to check if payment is "paid"
+  const isPaymentPaid = (payment: any) => {
+    return payment.isPaid ||
+           payment.status === 'SUCCEEDED' ||
+           payment.status === 'REFUNDED';
+  };
+
+  // Upcoming: future payments OR same-day unpaid payments
   const upcomingPayments = booking.rentPayments
-    .filter((payment: any) => new Date(payment.dueDate) >= now)
+    .filter((payment: any) => {
+      const dueDate = new Date(payment.dueDate);
+      // Future payments
+      if (dueDate >= todayEnd) return true;
+      // Same-day unpaid payments
+      if (dueDate >= todayStart && dueDate < todayEnd && !isPaymentPaid(payment)) return true;
+      return false;
+    })
     .map((payment: any) => {
       const hasPendingModification = payment.paymentModifications.length > 0; // Show red dot for any pending modification
       const modification = payment.paymentModifications[0]; // Get the first (and should be only) pending modification
@@ -233,8 +263,16 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
       };
     });
 
+  // Past: past payments OR same-day paid payments
   const pastPayments = booking.rentPayments
-    .filter((payment: any) => new Date(payment.dueDate) < now)
+    .filter((payment: any) => {
+      const dueDate = new Date(payment.dueDate);
+      // Past payments
+      if (dueDate < todayStart) return true;
+      // Same-day paid payments
+      if (dueDate >= todayStart && dueDate < todayEnd && isPaymentPaid(payment)) return true;
+      return false;
+    })
     .reverse()
     .map((payment: any) => {
       const hasPendingModification = payment.paymentModifications.length > 0; // Show red dot for any pending modification

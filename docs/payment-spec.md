@@ -24,11 +24,14 @@
 
 ## Overview
 
-The Matchbook platform processes two main types of transactions:
+The Matchbook platform processes three main types of transactions:
 1. **Initial Deposit Payment** - Security deposit + pet deposit + $7 transfer fee (paid at lease signing)
-2. **Monthly Rent Payments** - Recurring rent payments (scheduled separately, not covered in lease signing flow)
+2. **Move-In First Payment** - First month's rent payment processed immediately on move-in confirmation
+3. **Monthly Rent Payments** - Recurring rent payments (scheduled and processed automatically)
 
-This spec focuses on the **initial deposit payment** during the lease signing process.
+This spec covers all three payment flows. See also:
+- [Move-In Flow Documentation](./move-in-flow.md) for detailed move-in confirmation process
+- [Process Rent Payments Cron](./cron/process-rent-payments.md) for recurring payment processing
 
 ---
 
@@ -201,6 +204,30 @@ Stripe sends webhook events as payment progresses:
 | `processing` | ACH payment initiated, awaiting bank transfer | Wait 3-5 days for settlement |
 | `captured` | Payment successfully charged and settled | Booking confirmed |
 | `failed` | Payment attempt failed | User needs to retry with different method |
+
+### Rent Payment Status Field Values
+**Database Field**: `RentPayment.status` (Enum)
+
+| Status | Description | When Applied |
+|--------|-------------|--------------|
+| `PENDING_MOVE_IN` | Payment created but waiting for move-in confirmation | Set when booking created before move-in date |
+| `FAILED_MOVE_IN` | Renter reported move-in issue, payments on hold | When renter reports issue during move-in |
+| `PENDING` | Payment scheduled and ready to be processed | After move-in confirmed or on due date |
+| `PROCESSING` | Payment currently being processed (ACH) | When ACH payment initiated |
+| `AUTHORIZED` | Payment authorized but not yet captured | Rarely used with auto-capture |
+| `SUCCEEDED` | Payment successfully completed | After successful card payment or ACH settlement |
+| `FAILED` | Payment attempt failed | After payment processing error |
+| `CANCELLED` | Payment cancelled (booking cancelled) | When booking is cancelled |
+| `REFUNDED` | Payment was refunded to renter | When refund processed |
+
+### Move-In Status Field Values
+**Database Field**: `Booking.moveInStatus` (String)
+
+| Status | Description | User Actions Available |
+|--------|-------------|------------------------|
+| `pending` | Awaiting move-in confirmation from renter | Renter can confirm or report issue |
+| `confirmed` | Renter confirmed successful move-in | None - first payment processed |
+| `issue_reported` | Renter reported move-in problem | Support intervention required |
 
 ### Match Timestamp Fields
 **Database Fields**: `Match.paymentAuthorizedAt`, `Match.paymentCapturedAt`
@@ -462,6 +489,183 @@ model Match {
 
 ---
 
+## Move-In Confirmation and First Payment
+
+**See [Move-In Flow Documentation](./move-in-flow.md) for complete details.**
+
+### Overview
+
+When a renter's move-in date arrives, they are prompted to confirm whether their move-in was successful. This confirmation triggers immediate processing of their first rent payment.
+
+### Payment Processing Logic
+
+**Location**: `src/app/app/rent/bookings/[bookingId]/move-in/_actions.ts:confirmMoveIn()`
+
+**Flow**:
+1. Renter confirms successful move-in on move-in day
+2. System finds all unpaid monthly rent payments for the booking
+3. Identifies first payment (earliest by due date)
+4. Processes first payment immediately via `processRentPaymentNow()`
+5. Transitions remaining payments from `PENDING_MOVE_IN` to `PENDING`
+6. Updates booking status to `confirmed`
+
+**Key Query Change** (Fixed in recent update):
+```typescript
+// OLD - Too restrictive, would miss payments if status changed
+rentPayments: {
+  where: {
+    status: 'PENDING_MOVE_IN',  // ❌ Problem: might not find payment
+    type: 'MONTHLY_RENT',
+  }
+}
+
+// NEW - More flexible, finds all unpaid payments
+rentPayments: {
+  where: {
+    type: 'MONTHLY_RENT',
+    isPaid: false,              // ✅ Finds payment regardless of status
+    cancelledAt: null,
+  },
+  orderBy: {
+    dueDate: 'asc',             // ✅ Earliest payment is first
+  },
+}
+```
+
+**First Payment Identification**:
+```typescript
+// Simply take the first element from ordered array
+const firstPayment = bookingDetails.rentPayments[0];
+```
+
+**Note**: Previously attempted to match payment dueDate to booking startDate, but timezone issues made this unreliable. Current approach is simpler and more reliable.
+
+### Immediate Payment Processing
+
+**File**: `src/lib/payment-processing.ts:processRentPaymentNow()`
+
+This function processes a rent payment immediately (bypassing the scheduled cron job):
+
+1. **Fetches payment with relations** - Gets booking, renter, host, payment method
+2. **Verifies host can receive payments** - Checks Stripe Connect account status
+3. **Calculates platform fee** - Reads from charges table or calculates legacy fee
+4. **Creates Stripe PaymentIntent**:
+   - `confirm: true` - Immediately attempts to charge
+   - `capture_method: 'automatic'` - Auto-captures successful payments
+   - `application_fee_amount` - Platform service fee
+   - `transfer_data` - Transfers funds to host's Stripe Connect account
+
+**Payment Outcomes**:
+
+| Status | Meaning | Database Updates | User Impact |
+|--------|---------|------------------|-------------|
+| `succeeded` | Card payment succeeded immediately | `isPaid: true`, `status: SUCCEEDED`, `paymentCapturedAt: NOW` | Payment complete, rent active |
+| `processing` | ACH payment initiated | `status: PROCESSING`, `paymentAuthorizedAt: NOW` | Payment processing, 3-5 days to settle |
+| `failed` | Payment rejected | `status: FAILED`, `failureReason: [error]`, `retryCount++` | Payment failed, retry needed |
+
+### Move-In Issue Reporting
+
+**Location**: `src/app/app/rent/bookings/[bookingId]/move-in/_actions.ts:reportMoveInIssue()`
+
+If renter reports a problem during move-in:
+1. Sets `booking.moveInStatus = 'issue_reported'`
+2. Marks all `PENDING_MOVE_IN` payments as `FAILED_MOVE_IN`
+3. Payments remain on hold until support intervention
+4. Prevents automatic payment processing
+
+**Database Changes**:
+```typescript
+await prisma.$transaction([
+  // Update booking
+  prisma.booking.update({
+    where: { id: bookingId },
+    data: {
+      moveInStatus: 'issue_reported',
+      moveInIssueReportedAt: new Date(),
+      moveInIssueNotes: reason || 'Issue reported without specific details',
+    },
+  }),
+  // Hold all payments
+  prisma.rentPayment.updateMany({
+    where: {
+      bookingId,
+      status: 'PENDING_MOVE_IN',
+    },
+    data: {
+      status: 'FAILED_MOVE_IN',
+    },
+  }),
+]);
+```
+
+### Admin Dev Testing Tools
+
+**Location**: `src/app/app/rent/bookings/[bookingId]/move-in/_actions.ts:resetMoveInStatus()`
+
+Admin_dev users can reset move-in status for testing:
+- Resets `moveInStatus` to `pending`
+- Clears all move-in timestamps and notes
+- Resets all monthly rent payments to `PENDING_MOVE_IN`
+- Clears payment authorization/capture timestamps
+- Removes Stripe PaymentIntent IDs
+
+**Security**: Requires `admin_dev` role check in both server component AND server action (defense-in-depth)
+
+### Move-In Payment Lifecycle
+
+```
+Booking Created (before move-in):
+  └─ RentPayments created with status: PENDING_MOVE_IN
+
+Move-In Day:
+  5:00 AM PT:
+    └─ Automated prompt sent to renter
+
+  During Day:
+    ├─ Renter may visit /app/rent/bookings/[bookingId]/move-in
+    └─ Three options:
+
+        Option A: Confirm Successful Move-In (Manual)
+          ├─ First payment processed immediately
+          │   ├─ If card: SUCCEEDED (instant)
+          │   └─ If ACH: PROCESSING (3-5 days)
+          ├─ Remaining payments: PENDING_MOVE_IN → PENDING
+          ├─ Booking.moveInStatus = 'confirmed'
+          ├─ Booking.moveInConfirmedAt = NOW
+          └─ Redirect to booking details
+
+        Option B: Report Move-In Issue
+          ├─ All payments: PENDING_MOVE_IN → FAILED_MOVE_IN
+          ├─ Booking.moveInStatus = 'issue_reported'
+          ├─ Booking.moveInIssueNotes = [reason]
+          ├─ Host notified immediately
+          └─ Support team intervention required
+
+        Option C: No Response
+          └─ Continue to next day...
+
+  6:00 PM PT:
+    └─ Reminder sent if no response yet
+
+Day After Move-In:
+  3:00 AM PT (if still no response):
+    └─ Auto-Confirm (Automated)
+        ├─ System calls confirmMoveIn() automatically
+        ├─ First payment processed immediately
+        │   ├─ If card: SUCCEEDED (instant)
+        │   └─ If ACH: PROCESSING (3-5 days)
+        ├─ Remaining payments: PENDING_MOVE_IN → PENDING
+        ├─ Booking.moveInStatus = 'confirmed'
+        ├─ Booking.moveInAutoConfirmedAt = NOW (audit)
+        └─ No notification sent to renter or host
+```
+
+**Total Response Window**: ~22 hours (5 AM to 3 AM next day)
+
+**See**: [Move-In Confirmation System](./notifications/move-in-confirmation-system.md) for complete automated flow details.
+
+---
+
 ## Error Handling
 
 ### Payment Processing Errors
@@ -557,8 +761,17 @@ const event = stripe.webhooks.constructEvent(
 | File | Purpose | Key Functions |
 |------|---------|---------------|
 | `src/app/actions/process-payment.ts` | Main payment processing server action | `processDirectPayment()` |
+| `src/lib/payment-processing.ts` | Immediate rent payment processing | `processRentPaymentNow()` |
 | `src/lib/payment-calculations.ts` | Pure calculation functions | `calculateCreditCardFee()`, `calculatePaymentBreakdown()` |
 | `src/lib/fee-constants.ts` | Fee structure constants | `FEES`, calculation helpers |
+
+### Move-In Flow
+
+| File | Purpose | Key Functions |
+|------|---------|---------------|
+| `src/app/app/rent/bookings/[bookingId]/move-in/page.tsx` | Move-in page server component | Data fetching, role checks |
+| `src/app/app/rent/bookings/[bookingId]/move-in/move-in-client.tsx` | Move-in confirmation UI | User interaction, confirmation dialogs |
+| `src/app/app/rent/bookings/[bookingId]/move-in/_actions.ts` | Move-in server actions | `confirmMoveIn()`, `reportMoveInIssue()`, `resetMoveInStatus()` |
 
 ### UI Components
 

@@ -8,14 +8,31 @@
 
 Automatically charges renters and transfers funds to hosts for rent payments due today. This is the core payment processing system for recurring rent payments.
 
+**Note**: This cron job processes scheduled rent payments with status `PENDING`. For immediate first payment processing during move-in confirmation, see [Move-In Flow Documentation](../move-in-flow.md).
+
 ## Business Logic
 
-1. **Find Due Payments**: Identifies rent payments where `dueDate` is today (UTC calendar date)
-2. **Payment Processing**: Creates Stripe PaymentIntents with automatic capture
+1. **Find Due Payments**: Identifies rent payments where `dueDate` is today (UTC calendar date) and `status` is `PENDING`
+2. **Payment Processing**: Creates Stripe PaymentIntents with automatic capture (via `processRentPaymentNow()`)
 3. **Fund Transfer**: Transfers full amount to host's Stripe Connect account
 4. **Record Keeping**: Updates payment status and creates transaction records
 5. **Notifications**: Sends email notifications for success/failure
 6. **Error Handling**: Implements retry logic (max 3 attempts)
+
+### Payment Status Requirements
+
+This cron job only processes payments with:
+- `status = 'PENDING'` - Ready for scheduled processing
+- `isPaid = false` - Not already paid
+- `cancelledAt = null` - Not cancelled
+
+**Excluded Statuses**:
+- `PENDING_MOVE_IN` - Waiting for move-in confirmation (see move-in flow)
+- `FAILED_MOVE_IN` - Move-in issue reported, payments on hold
+- `PROCESSING` - Already being processed (ACH in progress)
+- `SUCCEEDED` - Already completed
+- `FAILED` - Failed and needs manual intervention or retry
+- `CANCELLED` - Booking cancelled
 
 ## Fee Structure
 
@@ -68,14 +85,24 @@ Automatically charges renters and transfers funds to hosts for rent payments due
 
 ## Implementation Details
 
-**File:** `src/app/api/cron/process-rent-payments/route.ts`
+**Primary File:** `src/app/api/cron/process-rent-payments/route.ts`
+
+**Payment Processing Library:** `src/lib/payment-processing.ts`
 
 ### Key Functions
-- `findDuePayments()`: Queries for payments due today
-- `processPayment()`: Handles individual payment processing
+- `findDuePayments()`: Queries for payments with `status = 'PENDING'` and `dueDate = today`
+- `processRentPaymentNow()`: Extracted shared payment processing logic (used by both cron and move-in)
 - `createStripePaymentIntent()`: Creates and captures Stripe payment
-- `transferToHost()`: Transfers funds to host's Connect account
+- `transferToHost()`: Transfers funds to host's Connect account via Stripe Connect
 - `sendPaymentNotifications()`: Sends email/in-app notifications
+
+### Shared Payment Processing
+
+The `processRentPaymentNow()` function is used by:
+1. **Move-In Confirmation** - Processes first payment immediately when renter confirms move-in
+2. **Cron Job** - Processes scheduled PENDING payments daily
+
+This ensures consistent payment processing logic across all payment flows.
 
 ## Testing
 
@@ -125,5 +152,7 @@ Monitor payment processing through:
 ## Related Documentation
 
 - [Payment System Overview](/docs/payment-spec.md)
+- [Move-In Flow Documentation](/docs/move-in-flow.md)
 - [Stripe Integration](/docs/webhooks/stripe.md)
 - [Preview Rent Payments Cron](./preview-rent-payments.md)
+- [Send Move-In Reminders Cron](./send-move-in-reminders.md)

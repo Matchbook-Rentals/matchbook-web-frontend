@@ -159,15 +159,15 @@ export const RentPaymentsTable = ({
               </TableCell>
               {/* Status - Hidden below xl */}
               <TableCell className="hidden xl:table-cell w-fit h-[72px] px-6 py-4">
-                <Badge 
+                <Badge
                   className={`rounded-full px-2 py-0.5 font-medium text-xs ${
                     row.status === 'Completed' || row.status === 'Paid'
-                      ? 'bg-green-50 text-green-600 border border-green-200' 
-                      : row.status === 'Failed' || row.status === 'Overdue'
+                      ? 'bg-green-50 text-green-600 border border-green-200'
+                      : row.status === 'Failed' || row.status === 'Overdue' || row.status === 'Move-In Failed'
                       ? 'bg-red-50 text-red-600 border border-red-200'
-                      : row.status === 'Scheduled'
+                      : row.status === 'Scheduled' || row.status === 'Pending Move-In'
                       ? 'bg-[#e7f0f0] text-[#0b6969] border border-[#3c8787]'
-                      : row.status === 'Due'
+                      : row.status === 'Due' || row.status === 'Processing'
                       ? 'bg-yellow-50 text-yellow-600 border border-yellow-200'
                       : 'bg-gray-50 text-gray-600 border border-gray-200'
                   }`}
