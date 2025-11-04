@@ -5,12 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FieldType, FRIENDLY_FIELD_TYPE } from './types';
-import { 
-  PenTool, 
-  Type, 
-  Mail, 
-  User, 
-  CalendarDays, 
+import {
+  PenTool,
+  Type,
+  User,
+  CalendarDays,
   Clock,
   Disc,
   CheckSquare,
@@ -75,7 +74,6 @@ const LEASE_SPECIFIC_FIELDS = [
 ];
 
 const OTHER_FIELD_TYPES = [
-  { type: FieldType.EMAIL, label: 'Email', icon: Mail },
   { type: FieldType.TEXT, label: 'Text', icon: Type },
   // { type: FieldType.RADIO, label: 'Radio', icon: Disc },
   // { type: FieldType.CHECKBOX, label: 'Checkbox', icon: CheckSquare },
