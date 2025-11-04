@@ -151,12 +151,11 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
       {/* Container with scroll and mobile height constraint */}
       <div
         ref={containerRef}
-        className="relative w-full overflow-x-auto overflow-y-auto"
+        className="relative w-full overflow-x-auto"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         style={{
-          maxHeight: '80dvh',
           WebkitOverflowScrolling: 'touch',
           touchAction: isPinching ? 'none' : 'pan-x pan-y'
         }}

@@ -1877,7 +1877,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Success screen removed - now handled by toast + redirect in useStepCompletion
 
   return (
-    <div ref={pdfEditorContainerRef} className="flex flex-col bg-gray-50" style={{ height: contentHeight }}>
+    <>
       {/* Ghost cursor for field placement */}
       {selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place') && (
         <div
@@ -1919,7 +1919,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         <div className="flex-1 flex flex-col min-h-0">
 
           {/* PDF Viewer */}
-          <div className="flex-1 overflow-auto px-6 pb-6 max-h-screen">
+          <div className="flex-1 px-6">
             {/* Header for template creation */}
             {workflow.isTemplatePhase() && listingAddress && (
               <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
@@ -2363,6 +2363,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         onSave={handleFieldValueSave}
       />
 
-    </div>
+    </>
   );
 };

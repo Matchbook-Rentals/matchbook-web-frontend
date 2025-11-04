@@ -702,7 +702,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
   // Loading states
   const renderLoadingSpinner = (message: string) => (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="bg-gray-50 flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
         <p className="text-gray-600">{message}</p>
@@ -717,8 +717,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   if (currentStep === 'pdf-review' && documentPdfFile) {
     return (
       <BrandAlertProvider>
-        <div className="min-h-screen bg-gray-50">
-          <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
+        <div className="bg-gray-50">
+          <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8">
             <StepProgress
@@ -801,8 +801,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   // Show payment selector if in payment step
   if (currentStep === 'payment' || (leaseCompleted && currentStepState === 'complete-payment')) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
+      <div className="bg-background">
+        <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8">
             <StepProgress
@@ -887,8 +887,8 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
   return (
     <BrandAlertProvider>
-      <div className="min-h-screen bg-gray-50">
-        <div className={`container mx-auto pb-24 ${isMobile ? 'p-2' : 'p-4'}`}>
+      <div className="bg-gray-50">
+        <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
           <div className="mb-8 ">
             <StepProgress
@@ -1064,7 +1064,9 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                     });
 
                     return (
-                    <div className={`border rounded-lg bg-gray-50 ${isMobile ? 'overflow-x-auto' : ''}`}>
+                    <div className="space-y-4">
+                      {/* PDF Preview */}
+                      <div className={`border rounded-lg overflow-hidden bg-gray-50 ${isMobile ? 'overflow-x-auto' : ''}`}>
                       <PDFEditorSigner
                         initialPdfFile={documentPdfFile}
                         initialFields={documentFields}
@@ -1086,6 +1088,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                         onFinish={handleDocumentSigningComplete}
                         onFieldSign={handleFieldSign}
                       />
+                      </div>
                     </div>
                     );
                   })() : currentStepState === 'sign-lease' && isLoading ? (
