@@ -720,14 +720,16 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
         <div className="bg-gray-50">
           <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
-          <div className="mb-8">
-            <StepProgress
-              currentStep={1}
-              totalSteps={3}
-              labels={["Review and sign", "Review and pay", "Confirmation"]}
-              mobileTextBelow={true}
-              className='w-full max-w-2xl'
-            />
+          <div className="sticky top-0 bg-gray-50 z-50 border-b shadow-sm mb-8">
+            <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
+              <StepProgress
+                currentStep={1}
+                totalSteps={3}
+                labels={["Review and sign", "Review and pay", "Confirmation"]}
+                mobileTextBelow={true}
+                className='w-full max-w-2xl'
+              />
+            </div>
           </div>
 
           {/* Header */}
@@ -804,14 +806,16 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
       <div className="bg-background">
         <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
-          <div className="mb-8">
-            <StepProgress
-              currentStep={2}
-              totalSteps={3}
-              labels={["Review and sign", "Review and pay", "Confirmation"]}
-              mobileTextBelow={true}
-              className='w-full max-w-2xl'
-            />
+          <div className="sticky top-0 bg-background z-50 border-b shadow-sm mb-8">
+            <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
+              <StepProgress
+                currentStep={2}
+                totalSteps={3}
+                labels={["Review and sign", "Review and pay", "Confirmation"]}
+                mobileTextBelow={true}
+                className='w-full max-w-2xl'
+              />
+            </div>
           </div>
           
           {/* Header */}
@@ -890,14 +894,16 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
       <div className="bg-gray-50">
         <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
           {/* Step Progress Bar */}
-          <div className="mb-8 ">
-            <StepProgress
-              currentStep={progressCurrentStep}
-              totalSteps={3}
-              labels={["Review and sign", "Review and pay", "Confirmation"]}
-              mobileTextBelow={true}
-              className='w-full max-w-2xl'
-            />
+          <div className="sticky top-0 bg-gray-50 z-50 border-b shadow-sm mb-8">
+            <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
+              <StepProgress
+                currentStep={progressCurrentStep}
+                totalSteps={3}
+                labels={["Review and sign", "Review and pay", "Confirmation"]}
+                mobileTextBelow={true}
+                className='w-full max-w-2xl'
+              />
+            </div>
           </div>
 
           {/* Admin Debug Panel for main view */}

@@ -2289,7 +2289,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                       size="sm"
                       spinOnClick={getUnsignedFields(useSignedFieldsStore.getState().signedFields).length === 0}
                     >
-                      {getUnsignedFields(useSignedFieldsStore.getState().signedFields).length === 0 ? 'Save and Send' : 'Next Action'}
+                      {getUnsignedFields(useSignedFieldsStore.getState().signedFields).length === 0 ? 'Save and Continue' : 'Next Action'}
                     </BrandButton>
                   </>
                 )}
