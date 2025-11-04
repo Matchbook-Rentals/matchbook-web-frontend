@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
@@ -20,6 +21,7 @@ type BookingWithRelations = Booking & {
     title: string;
     imageSrc?: string;
     userId?: string;
+    locationString?: string;
   };
   trip?: {
     numAdults: number;
@@ -96,18 +98,32 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   // Get status badge style
   const getStatusBadgeStyle = () => {
     switch (booking.status) {
+      // Green (success): confirmed, completed, active
+      case 'confirmed':
+      case 'completed':
       case 'active':
       case 'approved':
         return 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]';
-      case 'upcoming':
-      case 'pending':
-      case 'pending_payment':
-        return 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]';
-      case 'completed':
-        return 'bg-gray-100 text-gray-600 border-gray-400';
+
+      // Red (failure): payment_failed, cancelled, issue_reported, move_in_issue
+      case 'payment_failed':
       case 'cancelled':
       case 'declined':
+      case 'issue_reported':
+      case 'move_in_issue':
         return 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]';
+
+      // Gray (pending): reserved, pending_payment, pending, payment_processing
+      case 'reserved':
+      case 'pending':
+      case 'pending_payment':
+      case 'payment_processing':
+        return 'bg-gray-100 text-gray-600 border-gray-400';
+
+      // Yellow/Orange for upcoming (keeping for any edge cases)
+      case 'upcoming':
+        return 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]';
+
       default:
         return 'bg-gray-100 text-gray-600 border-gray-400';
     }
@@ -123,7 +139,16 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
       case 'confirmed': return 'Confirmed';
       case 'cancelled': return 'Cancelled';
       case 'active': return 'Active';
-      default: return status.charAt(0).toUpperCase() + status.slice(1);
+      case 'completed': return 'Completed';
+      case 'pending': return 'Pending';
+      case 'issue_reported': return 'Issue Reported';
+      case 'move_in_issue': return 'Move-In Issue';
+      default:
+        // Convert snake_case to Title Case
+        return status
+          .split('_')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
     }
   };
 
@@ -224,7 +249,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
 
   // Get listing details
   const listingTitle = booking.listing?.title || 'Unnamed Property';
-  const listingAddress = booking.listing?.address || 'Address not available';
+  const listingAddress = booking.listing?.locationString || 'Address not available';
   const listingImage = booking.listing?.imageSrc || '/placeholderImages/image_1.jpg';
 
   const occupants = getOccupants();
@@ -290,9 +315,24 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
             <div className="font-medium text-[#484a54] text-base flex-1 min-w-0 truncate">
               {listingTitle}
             </div>
-            <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
-              {getStatusLabel()}
-            </Badge>
+            {booking.status === 'payment_processing' ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
+                      {getStatusLabel()}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Your payment is on its way, this can take up to 5 days.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <Badge className={`px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
+                {getStatusLabel()}
+              </Badge>
+            )}
           </div>
 
           {/* Row 3: Address | Dates */}
@@ -385,9 +425,24 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
                     {listingTitle}
                   </div>
 
-                  <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
-                    {getStatusLabel()}
-                  </Badge>
+                  {booking.status === 'payment_processing' ? (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
+                            {getStatusLabel()}
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Your payment is on its way, this can take up to 5 days.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ) : (
+                    <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle()}`}>
+                      {getStatusLabel()}
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="text-sm text-[#777b8b]">

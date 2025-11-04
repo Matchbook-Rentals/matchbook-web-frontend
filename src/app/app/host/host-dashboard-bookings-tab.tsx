@@ -334,6 +334,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
           icon: <Clock className="h-4 w-4" />,
           className: "text-green-600"
         };
+      case "confirmed":
+        return {
+          label: "Confirmed",
+          icon: <Check className="h-4 w-4" />,
+          className: "text-green-600"
+        };
       case "upcoming":
         return {
           label: "Upcoming",
@@ -347,17 +353,35 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
           icon: <Calendar className="h-4 w-4" />,
           className: "text-blue-600"
         };
+      case "reserved":
+        return {
+          label: "Reserved",
+          icon: <Calendar className="h-4 w-4" />,
+          className: "text-gray-600"
+        };
       case "pending_payment":
         return {
-          label: "Processing",
+          label: "Pending Payment",
           icon: <Clock className="h-4 w-4" />,
           className: "text-[#d97706]"
         };
+      case "payment_processing":
+        return {
+          label: "Payment Processing",
+          icon: <Clock className="h-4 w-4" />,
+          className: "text-gray-600"
+        };
+      case "payment_failed":
+        return {
+          label: "Payment Failed",
+          icon: <XCircle className="h-4 w-4" />,
+          className: "text-red-600"
+        };
       case "completed":
         return {
-          label: "Past",
+          label: "Completed",
           icon: <Check className="h-4 w-4" />,
-          className: "text-gray-600"
+          className: "text-green-600"
         };
       case "cancelled":
         return {
@@ -365,37 +389,54 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
           icon: <XCircle className="h-4 w-4" />,
           className: "text-red-600"
         };
-      default:
+      case "issue_reported":
         return {
-          label: "Upcoming",
+          label: "Issue Reported",
+          icon: <XCircle className="h-4 w-4" />,
+          className: "text-red-600"
+        };
+      case "move_in_issue":
+        return {
+          label: "Move-In Issue",
+          icon: <XCircle className="h-4 w-4" />,
+          className: "text-red-600"
+        };
+      default:
+        // Convert snake_case to Title Case for any unknown statuses
+        const formattedStatus = booking.status
+          .split('_')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+        return {
+          label: formattedStatus,
           icon: <Calendar className="h-4 w-4" />,
-          className: "text-blue-600"
+          className: "text-gray-600"
         };
     }
   };
 
   // Get signature status text for awaiting signature bookings
   const getSignatureStatusText = (booking: BookingWithRelations) => {
-    if (!booking.match?.BoldSignLease) return booking.status;
-    
+    if (!booking.match?.BoldSignLease) return getStatusInfo(booking).label;
+
     const { BoldSignLease } = booking.match;
-    
+
     // If tenant hasn't signed yet
     if (!BoldSignLease.tenantSigned) {
       return "Awaiting Renter signature";
     }
-    
+
     // If tenant signed but landlord hasn't
     if (BoldSignLease.tenantSigned && !BoldSignLease.landlordSigned) {
       return "Awaiting your signature";
     }
-    
+
     // If both signed but no payment authorized
     if (BoldSignLease.tenantSigned && BoldSignLease.landlordSigned && !booking.match.paymentAuthorizedAt) {
       return "Awaiting payment authorization";
     }
-    
-    return booking.status;
+
+    return getStatusInfo(booking).label;
   };
 
   // Format date range

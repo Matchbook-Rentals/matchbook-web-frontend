@@ -47,7 +47,16 @@ function formatBookingStatus(status: string): string {
     case 'confirmed': return 'Confirmed';
     case 'cancelled': return 'Cancelled';
     case 'active': return 'Active';
-    default: return status.charAt(0).toUpperCase() + status.slice(1);
+    case 'completed': return 'Completed';
+    case 'pending': return 'Pending';
+    case 'issue_reported': return 'Issue Reported';
+    case 'move_in_issue': return 'Move-In Issue';
+    default:
+      // Convert snake_case to Title Case
+      return status
+        .split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
   }
 }
 

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { findConversationBetweenUsers, createListingConversation } from "@/app/actions/conversations";
@@ -77,17 +78,37 @@ interface RentBookingDetailsCardProps {
 const getStatusBadgeStyle = (status: string) => {
   const normalizedStatus = status.toLowerCase();
   switch (normalizedStatus) {
+    // Green (success): confirmed, completed, active
+    case 'confirmed':
+    case 'completed':
     case 'active':
     case 'approved':
       return 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]';
-    case 'upcoming':
-    case 'pending':
-      return 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]';
-    case 'completed':
-      return 'bg-gray-100 text-gray-600 border-gray-400';
+
+    // Red (failure): payment_failed, cancelled, issue_reported, move_in_issue
+    case 'payment_failed':
+    case 'payment failed':
     case 'cancelled':
     case 'declined':
+    case 'issue_reported':
+    case 'issue reported':
+    case 'move_in_issue':
+    case 'move-in issue':
       return 'bg-[#f8d7da] text-[#dc3545] border-[#dc3545]';
+
+    // Gray (pending): reserved, pending_payment, pending, payment_processing
+    case 'reserved':
+    case 'pending':
+    case 'pending_payment':
+    case 'pending payment':
+    case 'payment_processing':
+    case 'payment processing':
+      return 'bg-gray-100 text-gray-600 border-gray-400';
+
+    // Yellow/Orange for upcoming (keeping for any edge cases)
+    case 'upcoming':
+      return 'bg-[#fff3cd] text-[#e67e22] border-[#e67e22]';
+
     default:
       return 'bg-gray-100 text-gray-600 border-gray-400';
   }
@@ -204,9 +225,26 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
                     Host: {name}
                   </div>
 
-                  <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle(status)}`}>
-                    {status}
-                  </Badge>
+                  {status.toLowerCase() === 'payment processing' || status.toLowerCase() === 'payment_processing' ? (
+                    <TooltipProvider delayDuration={0}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="inline-block">
+                            <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle(status)}`}>
+                              {status}
+                            </Badge>
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Your payment is on its way, this can take up to 5 days.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ) : (
+                    <Badge className={`px-2.5 py-1 font-medium rounded-full flex-shrink-0 ${getStatusBadgeStyle(status)}`}>
+                      {status}
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="font-text-label-small-regular text-[#777b8b] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)]">
