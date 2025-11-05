@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/brandDialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2, Upload } from 'lucide-react';
+import { Home, MapPin, DollarSign, Calendar, User, Bed, Bath, Square, Wifi, Car, Heart, Users, Building, PawPrint, Edit, Check, X, Plus, Minus, Loader2, PencilIcon, Trash2, Upload, ChevronUp, ChevronDown } from 'lucide-react';
 import { createNumberChangeHandler, createNumberBlurHandler } from '@/lib/number-validation';
 import Tile from '@/components/ui/tile';
 import { ListingCreationCard } from '@/app/app/host/add-property/listing-creation-card';
@@ -178,6 +178,9 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
   const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
   const [dragOverTrash, setDragOverTrash] = useState(false);
   const [dropPreviewIndex, setDropPreviewIndex] = useState<number | null>(null);
+  const [animatingPhotoId, setAnimatingPhotoId] = useState<string | null>(null);
+  const photoRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const photoPositions = useRef<Map<string, DOMRect>>(new Map());
   const [showLocationConfirmDialog, setShowLocationConfirmDialog] = useState(false);
   const [pendingLocationUpdate, setPendingLocationUpdate] = useState<any>(null);
   const [showLocationBrandDialog, setShowLocationBrandDialog] = useState(false);
@@ -1015,19 +1018,145 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
   const handleDrop = (e: React.DragEvent, targetIndex: number) => {
     e.preventDefault();
-    
+
     if (!draggedImageId || !formData.listingImages) return;
-    
+
     const draggedIndex = formData.listingImages.findIndex(img => img.id === draggedImageId);
     if (draggedIndex === -1) return;
-    
+
     const updatedImages = [...formData.listingImages];
     const [draggedImage] = updatedImages.splice(draggedIndex, 1);
     updatedImages.splice(targetIndex, 0, draggedImage);
-    
+
     updateFormData('listingImages', updatedImages);
     setDraggedImageId(null);
     setDropPreviewIndex(null);
+  };
+
+  // Move photo up in the order (earlier position)
+  const handleMovePhotoUp = (index: number) => {
+    if (index === 0 || !formData.listingImages) return;
+
+    // Capture current positions (FIRST)
+    formData.listingImages.forEach((img) => {
+      const element = photoRefs.current.get(img.id);
+      if (element) {
+        photoPositions.current.set(img.id, element.getBoundingClientRect());
+      }
+    });
+
+    const photoId = formData.listingImages[index].id;
+    const swapPhotoId = formData.listingImages[index - 1].id;
+    setAnimatingPhotoId(photoId);
+
+    const updatedImages = [...formData.listingImages];
+    const [photo] = updatedImages.splice(index, 1);
+    updatedImages.splice(index - 1, 0, photo);
+
+    updateFormData('listingImages', updatedImages);
+
+    // Animate after DOM update
+    requestAnimationFrame(() => {
+      const movedElement = photoRefs.current.get(photoId);
+      const swapElement = photoRefs.current.get(swapPhotoId);
+
+      if (movedElement && swapElement) {
+        const oldPos = photoPositions.current.get(photoId);
+        const swapOldPos = photoPositions.current.get(swapPhotoId);
+        const newPos = movedElement.getBoundingClientRect();
+        const swapNewPos = swapElement.getBoundingClientRect();
+
+        if (oldPos && swapOldPos) {
+          // Calculate deltas
+          const deltaY = oldPos.top - newPos.top;
+          const deltaX = oldPos.left - newPos.left;
+          const swapDeltaY = swapOldPos.top - swapNewPos.top;
+          const swapDeltaX = swapOldPos.left - swapNewPos.left;
+
+          // INVERT: Set initial transform
+          movedElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+          swapElement.style.transform = `translate(${swapDeltaX}px, ${swapDeltaY}px)`;
+          movedElement.style.transition = 'none';
+          swapElement.style.transition = 'none';
+
+          // PLAY: Animate to final position
+          requestAnimationFrame(() => {
+            movedElement.style.transition = 'transform 300ms ease-in-out';
+            swapElement.style.transition = 'transform 300ms ease-in-out';
+            movedElement.style.transform = 'translate(0, 0)';
+            swapElement.style.transform = 'translate(0, 0)';
+          });
+        }
+      }
+
+      setTimeout(() => setAnimatingPhotoId(null), 300);
+    });
+  };
+
+  // Move photo down in the order (later position)
+  const handleMovePhotoDown = (index: number) => {
+    if (!formData.listingImages || index === formData.listingImages.length - 1) return;
+
+    // Capture current positions (FIRST)
+    formData.listingImages.forEach((img) => {
+      const element = photoRefs.current.get(img.id);
+      if (element) {
+        photoPositions.current.set(img.id, element.getBoundingClientRect());
+      }
+    });
+
+    const photoId = formData.listingImages[index].id;
+    const swapPhotoId = formData.listingImages[index + 1].id;
+    setAnimatingPhotoId(photoId);
+
+    const updatedImages = [...formData.listingImages];
+    const [photo] = updatedImages.splice(index, 1);
+    updatedImages.splice(index + 1, 0, photo);
+
+    updateFormData('listingImages', updatedImages);
+
+    // Animate after DOM update
+    requestAnimationFrame(() => {
+      const movedElement = photoRefs.current.get(photoId);
+      const swapElement = photoRefs.current.get(swapPhotoId);
+
+      if (movedElement && swapElement) {
+        const oldPos = photoPositions.current.get(photoId);
+        const swapOldPos = photoPositions.current.get(swapPhotoId);
+        const newPos = movedElement.getBoundingClientRect();
+        const swapNewPos = swapElement.getBoundingClientRect();
+
+        if (oldPos && swapOldPos) {
+          // Calculate deltas
+          const deltaY = oldPos.top - newPos.top;
+          const deltaX = oldPos.left - newPos.left;
+          const swapDeltaY = swapOldPos.top - swapNewPos.top;
+          const swapDeltaX = swapOldPos.left - swapNewPos.left;
+
+          // INVERT: Set initial transform
+          movedElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+          swapElement.style.transform = `translate(${swapDeltaX}px, ${swapDeltaY}px)`;
+          movedElement.style.transition = 'none';
+          swapElement.style.transition = 'none';
+
+          // PLAY: Animate to final position
+          requestAnimationFrame(() => {
+            movedElement.style.transition = 'transform 300ms ease-in-out';
+            swapElement.style.transition = 'transform 300ms ease-in-out';
+            movedElement.style.transform = 'translate(0, 0)';
+            swapElement.style.transform = 'translate(0, 0)';
+          });
+        }
+      }
+
+      setTimeout(() => setAnimatingPhotoId(null), 300);
+    });
+  };
+
+  // Delete photo (mobile)
+  const handleDeletePhoto = (imageId: string) => {
+    const updatedImages = formData.listingImages?.filter(img => img.id !== imageId) || [];
+    updateFormData('listingImages', updatedImages);
   };
 
   // Client-side file validation
@@ -1727,11 +1856,11 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
                 {/* Drag and Drop Photos */}
                 <div className="space-y-4">
-                  <p className="text-sm text-gray-600 text-center">Drag photos to reorder or drop on trash to delete</p>
-                  
-                  {/* Trash Zone */}
+                  <p className="hidden sm:block text-sm text-gray-600 text-center">Drag photos to reorder or drop on trash to delete</p>
+
+                  {/* Trash Zone - Desktop/Tablet Only */}
                   <div
-                    className={`w-full h-16 border-2 border-dashed rounded-lg flex items-center justify-center transition-colors ${
+                    className={`hidden sm:flex w-full h-16 border-2 border-dashed rounded-lg items-center justify-center transition-colors ${
                       dragOverTrash ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-gray-50'
                     }`}
                     onDragOver={handleDragOver}
@@ -1746,24 +1875,36 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   </div>
 
                   {/* Photo Grid */}
-                  <div 
-                    className="flex flex-wrap gap-4 justify-start"
+                  <div
+                    className="flex flex-wrap gap-4 justify-around sm:justify-start"
                     onDragLeave={handleDragLeave}
                   >
                     {(formData.listingImages || []).map((image, index) => (
-                      <div key={image.id} className="relative">
+                      <div
+                        key={image.id}
+                        className="relative"
+                        ref={(el) => {
+                          if (el) {
+                            photoRefs.current.set(image.id, el);
+                          } else {
+                            photoRefs.current.delete(image.id);
+                          }
+                        }}
+                      >
                         {/* Drop Preview Indicator */}
                         {dropPreviewIndex === index && draggedImageId !== image.id && (
                           <div className="absolute -left-2 top-0 w-1 h-full bg-blue-500 rounded-full z-10" />
                         )}
-                        
+
                         <div
-                          className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden cursor-grab border-2 transition-all border-transparent ${
-                            draggedImageId === image.id 
-                              ? 'opacity-50 border-black scale-95' 
+                          className={`w-[175px] h-[108px] relative rounded-lg overflow-hidden cursor-grab border-2 border-transparent ${
+                            draggedImageId === image.id
+                              ? 'opacity-50 border-black scale-95 transition-all duration-300'
                               : dropPreviewIndex === index && draggedImageId !== image.id
-                              ? 'border-blue-300 shadow-lg'
-                              : 'hover:border-gray-300'
+                              ? 'border-blue-300 shadow-lg transition-all duration-300'
+                              : animatingPhotoId === image.id
+                              ? 'scale-105 shadow-lg border-blue-400'
+                              : 'hover:border-gray-300 transition-all duration-300'
                           }`}
                           draggable
                           onDragStart={(e) => handleDragStart(e, image.id)}
@@ -1777,8 +1918,46 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                             width={175}
                             height={108}
                           />
-                          <div className="absolute top-2 left-2 bg-white text-black text-xs px-2 py-1 rounded font-medium border border-black">
-                            {index < 4 ? 'Cover Photo' : index + 1}
+                          {/* Number Badge - Desktop/Tablet Only */}
+                          <div className="hidden sm:flex absolute top-2 left-2 bg-white text-black text-xs px-2 py-1 rounded font-medium border border-black">
+                            {index + 1}
+                          </div>
+                          {/* Trash Button - Mobile Only */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeletePhoto(image.id);
+                            }}
+                            className="absolute top-2 left-2 bg-white/90 p-1.5 rounded border border-gray-300 shadow-sm hover:bg-red-50 hover:border-red-400 active:bg-red-100 sm:hidden"
+                          >
+                            <Trash2 className="w-4 h-4 text-gray-700" />
+                          </button>
+                          {/* Mobile Reorder Buttons - Mobile Only */}
+                          <div className="absolute top-2 right-2 flex flex-col gap-1 sm:hidden">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMovePhotoUp(index);
+                              }}
+                              disabled={index === 0}
+                              className={`bg-white/90 p-1 rounded border border-gray-300 shadow-sm ${
+                                index === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white active:bg-gray-100'
+                              }`}
+                            >
+                              <ChevronUp className="w-4 h-4 text-gray-700" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMovePhotoDown(index);
+                              }}
+                              disabled={index === (formData.listingImages?.length || 0) - 1}
+                              className={`bg-white/90 p-1 rounded border border-gray-300 shadow-sm ${
+                                index === (formData.listingImages?.length || 0) - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white active:bg-gray-100'
+                              }`}
+                            >
+                              <ChevronDown className="w-4 h-4 text-gray-700" />
+                            </button>
                           </div>
                         </div>
                       </div>
