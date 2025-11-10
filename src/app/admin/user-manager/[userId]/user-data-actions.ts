@@ -196,90 +196,13 @@ export async function getUserData(userId: string) {
     console.log('⭐ [getUserData] Found', favorites.length, 'favorites')
 
     const result = {
-      renterBookings: renterBookings.map(booking => ({
-        id: booking.id,
-        startDate: booking.startDate,
-        endDate: booking.endDate,
-        status: booking.status,
-        totalAmount: booking.totalAmount,
-        listing: booking.listing,
-        trip: booking.trip,
-        createdAt: booking.createdAt,
-        type: 'renter' as const
-      })),
-      hostBookings: hostBookings.map(booking => ({
-        id: booking.id,
-        startDate: booking.startDate,
-        endDate: booking.endDate,
-        status: booking.status,
-        totalAmount: booking.totalAmount,
-        listing: booking.listing,
-        trip: booking.trip,
-        renter: booking.user,
-        createdAt: booking.createdAt,
-        type: 'host' as const
-      })),
-      trips: trips.map(trip => ({
-        id: trip.id,
-        locationString: trip.locationString,
-        city: trip.city,
-        state: trip.state,
-        startDate: trip.startDate,
-        endDate: trip.endDate,
-        minPrice: trip.minPrice,
-        maxPrice: trip.maxPrice,
-        minBeds: trip.minBeds,
-        minBedrooms: trip.minBedrooms,
-        minBathrooms: trip.minBathrooms,
-        numAdults: trip.numAdults,
-        numPets: trip.numPets,
-        numChildren: trip.numChildren,
-        tripStatus: trip.tripStatus,
-        furnished: trip.furnished,
-        petsAllowed: trip.petsAllowed,
-        createdAt: trip.createdAt
-      })),
-      listings: listings.map(listing => ({
-        id: listing.id,
-        title: listing.title,
-        streetAddress1: listing.streetAddress1,
-        city: listing.city,
-        state: listing.state,
-        shortestLeasePrice: listing.shortestLeasePrice,
-        longestLeasePrice: listing.longestLeasePrice,
-        status: listing.status,
-        roomCount: listing.roomCount,
-        bathroomCount: listing.bathroomCount,
-        createdAt: listing.createdAt
-      })),
-      housingRequests: housingRequests.map(request => ({
-        id: request.id,
-        status: request.status,
-        startDate: request.startDate,
-        endDate: request.endDate,
-        listing: request.listing,
-        trip: request.trip,
-        submittedAt: request.createdAt
-      })),
-      matches: matches.map(match => ({
-        id: match.id,
-        monthlyRent: match.monthlyRent,
-        paymentStatus: match.paymentStatus,
-        tenantSignedAt: match.tenantSignedAt,
-        landlordSignedAt: match.landlordSignedAt,
-        listing: {
-          ...match.listing,
-          price: match.listing.shortestLeasePrice // Use shortestLeasePrice as the display price
-        },
-        trip: match.trip,
-        matchScore: 85 // Mock match score - you could calculate this based on criteria
-      })),
-      favorites: favorites.map(favorite => ({
-        id: favorite.id,
-        rank: favorite.rank,
-        trip: favorite.trip,
-        createdAt: favorite.createdAt
-      }))
+      renterBookings: renterBookings,
+      hostBookings: hostBookings,
+      trips: trips,
+      listings: listings,
+      housingRequests: housingRequests,
+      matches: matches,
+      favorites: favorites
     }
     
     const totalCounts = {

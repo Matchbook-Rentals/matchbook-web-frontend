@@ -62,9 +62,12 @@ export default async function UserDetailPage({ params }: PageProps) {
         email => email.id === user.primaryEmailAddressId
       )?.emailAddress || '',
       role: (user.publicMetadata.role as string) || 'No role',
-      createdAt: user.createdAt,
-      lastSignInAt: user.lastSignInAt,
-      phoneNumbers: user.phoneNumbers,
+      createdAt: user.createdAt ? new Date(user.createdAt).toISOString() : null,
+      lastSignInAt: user.lastSignInAt ? new Date(user.lastSignInAt).toISOString() : null,
+      phoneNumbers: user.phoneNumbers?.map(phone => ({
+        phoneNumber: phone.phoneNumber,
+        id: phone.id
+      })) || [],
       renterBookings: userData.renterBookings,
       hostBookings: userData.hostBookings,
       trips: userData.trips,
