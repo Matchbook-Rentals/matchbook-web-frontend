@@ -51,7 +51,7 @@ const GuestFilterOptionsDialog: React.FC<GuestFilterOptionsDialogProps> = ({
         ...listing,
         calculatedPrice: listing.price // For guests, use simple price
       };
-      return matchesFilters(listingWithPrice, localFilters);
+      return matchesFilters(listingWithPrice, localFilters, false, session);
     }).length;
 
     return filteredCount;

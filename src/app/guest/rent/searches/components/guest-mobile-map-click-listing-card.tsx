@@ -13,6 +13,8 @@ import AmenityListItem from '@/app/app/rent/old-search/(components)/amenity-list
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { Badge } from "@/components/ui/badge"
 import { BrandButton } from "@/components/ui/brandButton"
+import { getUtilitiesIncluded } from '@/lib/calculate-rent';
+import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
 
 interface GuestListingCardProps {
   listing: {
@@ -66,6 +68,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
   customSnapshot
 }) => {
   const router = useRouter();
+  const { state } = useGuestTripContext();
   const [isHovered, setIsHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -82,6 +85,9 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
   // Use properties and functions from the resolved listingsSnapshot
   const isLiked = listingsSnapshot.isLiked(listing.id);
   const isDisliked = listingsSnapshot.isDisliked(listing.id);
+
+  // Calculate utilities based on trip duration
+  const utilitiesIncluded = getUtilitiesIncluded(listing, state.guestSession);
 
   // Constants for styling
   const sectionStyles = 'border-b pb-3 pt-3';
@@ -399,11 +405,11 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
                 />
                 <AmenityListItem
                   icon={
-                    listing.utilitiesIncluded
+                    utilitiesIncluded
                       ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon
                       : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon
                   }
-                  label={listing.utilitiesIncluded ? 'Utilities Included' : 'Utilities Not Included'}
+                  label={utilitiesIncluded ? 'Utilities Included' : 'Utilities Not Included'}
                   labelClassNames={amenityTextStyle}
                   iconClassNames="h-[22px] w-[22px]"
                 />

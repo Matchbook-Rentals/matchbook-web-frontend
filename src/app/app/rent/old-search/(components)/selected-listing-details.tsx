@@ -16,6 +16,7 @@ import HighlightsSection from '@/app/app/rent/searches/(trips-components)/highli
 import AmenitiesSection from '@/app/app/rent/searches/(trips-components)/amenities-section';
 import HostInformation from '@/app/app/rent/searches/(trips-components)/host-information';
 import DescriptionSection from '@/app/app/rent/searches/(trips-components)/description-section';
+import { useTripContext } from '@/contexts/trip-context-provider';
 
 import { ListingAndImages } from '@/types';
 
@@ -26,9 +27,9 @@ interface SelectedListingDetailsProps {
   height?: string;
 }
 
-const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({ 
-  listing, 
-  distance, 
+const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
+  listing,
+  distance,
   customSnapshot,
   height = 'calc(100vh-200px)'
 }) => {
@@ -36,7 +37,8 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
   const pathname = usePathname();
   const { tripId } = useParams();
   const baseUrl = process.env.NEXT_PUBLIC_URL || "";
-  
+  const { state } = useTripContext();
+
   // Always call the hook unconditionally to comply with rules of hooks
   const snapshotFromHook = useListingsSnapshot();
   // Then use either the custom snapshot or the one from the hook
@@ -137,7 +139,7 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
 
           {/* Highlights Section */}
           <div className="lg:mt-4 mt-2">
-            <HighlightsSection listing={listing} />
+            <HighlightsSection listing={listing} trip={state.trip} />
           </div>
 
           {/* Description Section */}

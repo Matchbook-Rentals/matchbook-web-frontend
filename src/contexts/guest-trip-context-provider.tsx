@@ -166,9 +166,9 @@ export const GuestTripContextProvider: React.FC<GuestTripContextProviderProps> =
       matchesFilters({
         ...listing,
         calculatedPrice: listing.price
-      }, filters)
+      }, filters, false, session)
     );
-  }, [allListings, filters]);
+  }, [allListings, filters, session]);
 
   // Filtered swipe listings (excludes liked/disliked AND applies filters)
   const swipeShowListings: ListingWithAvailability[] = useMemo(() => {

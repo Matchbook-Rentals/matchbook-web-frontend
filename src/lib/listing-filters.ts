@@ -1,5 +1,6 @@
 import { ListingAndImages } from '@/types';
 import { subDays, addDays, differenceInDays, isValid } from 'date-fns';
+import { getUtilitiesIncluded } from './calculate-rent';
 
 export interface FilterOptions {
   propertyTypes: string[];
@@ -42,7 +43,8 @@ export interface TripDates {
 export const matchesFilters = (
   listing: ListingWithCalculations,
   filters: FilterOptions,
-  enableLogging = false
+  enableLogging = false,
+  tripOrSession?: { startDate?: Date | null; endDate?: Date | null } | null
 ): boolean => {
   // Property type filter
   const matchesPropertyType = filters.propertyTypes.length === 0 ||
@@ -77,11 +79,15 @@ export const matchesFilters = (
     (filters.furnished && listing.furnished) ||
     (filters.unfurnished && !listing.furnished);
 
-  // Utilities filter
+  // Utilities filter - use duration-specific pricing if trip/session dates available
+  const utilitiesIncluded = tripOrSession
+    ? getUtilitiesIncluded(listing as any, tripOrSession as any)
+    : listing.utilitiesIncluded;
+
   const matchesUtilities =
     filters.utilities.length === 0 || filters.utilities.length === 2 ||
-    (filters.utilities.includes('utilitiesIncluded') && listing.utilitiesIncluded) ||
-    (filters.utilities.includes('utilitiesNotIncluded') && !listing.utilitiesIncluded);
+    (filters.utilities.includes('utilitiesIncluded') && utilitiesIncluded) ||
+    (filters.utilities.includes('utilitiesNotIncluded') && !utilitiesIncluded);
 
   // Pets filter
   const matchesPets =

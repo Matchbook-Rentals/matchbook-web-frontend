@@ -13,6 +13,7 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import { iconAmenities } from '@/lib/amenities-list';
 import { Badge } from "@/components/ui/badge"
 import { BrandButton } from "@/components/ui/brandButton"
+import { getUtilitiesIncluded } from '@/lib/calculate-rent';
 
 interface DesktopListingCardProps {
   listing: {
@@ -55,6 +56,9 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
   // Use properties and functions from the snapshot
   const isLiked = listingsSnapshot.isLiked(listing.id);
   const isDisliked = listingsSnapshot.isDisliked(listing.id);
+
+  // Calculate utilities based on trip duration
+  const utilitiesIncluded = getUtilitiesIncluded(listing, state.guestSession);
 
   // Constants for styling
   const sectionStyles = 'border-b pb-3 pt-3';
@@ -365,11 +369,11 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
                 />
                 <AmenityListItem
                   icon={
-                    listing.utilitiesIncluded
+                    utilitiesIncluded
                       ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon
                       : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon
                   }
-                  label={listing.utilitiesIncluded ? 'Utilities Included' : 'Utilities Not Included'}
+                  label={utilitiesIncluded ? 'Utilities Included' : 'Utilities Not Included'}
                   labelClassNames={amenityTextStyle}
                   iconClassNames="h-[22px] w-[22px]"
                 />

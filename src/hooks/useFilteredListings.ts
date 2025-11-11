@@ -88,24 +88,24 @@ export const useFilteredListings = ({
       const isNotFavorited = !lookup.favIds.has(listing.id);
       const isNotDisliked = !lookup.dislikedIds.has(listing.id);
       // Removed isNotRequested check - we want to show requested listings
-      const passesFilters = matchesFilters(listing, filters);
+      const passesFilters = matchesFilters(listing, filters, false, trip);
 
       return isNotFavorited &&
         isNotDisliked &&
         passesFilters;
     });
-  }, [processedListings, filters, lookup]);
+  }, [processedListings, filters, lookup, trip]);
 
   // Filter liked listings that also match filters
   const likedListings = useMemo(() => {
     return processedListings
-      .filter(listing => lookup.favIds.has(listing.id) && matchesFilters(listing, filters))
+      .filter(listing => lookup.favIds.has(listing.id) && matchesFilters(listing, filters, false, trip))
       .sort((a, b) => {
       // Sort by favorite order if needed
       // For now, just return them in order
       return 0;
     });
-  }, [processedListings, filters, lookup.favIds]);
+  }, [processedListings, filters, lookup.favIds, trip]);
 
   // Get disliked listings (no filter applied)
   const dislikedListings = useMemo(() => {
@@ -133,7 +133,7 @@ export const useFilteredListings = ({
   const filteredCount = useMemo(() => {
     // Get all listings that match filters
     const filteredListings = processedListings.filter(listing =>
-      matchesFilters(listing, filters)
+      matchesFilters(listing, filters, false, trip)
     );
 
     // Get IDs of filtered listings
@@ -145,7 +145,7 @@ export const useFilteredListings = ({
     );
 
     return filteredListings.length + likedNotInFiltered.length;
-  }, [processedListings, filters, lookup.favIds]);
+  }, [processedListings, filters, lookup.favIds, trip]);
 
   return {
     processedListings,
@@ -194,7 +194,7 @@ export const useFilterPreview = (
     // Filter listings with debug logging and exclude disliked listings
     const filteredListings = processedListings.filter(listing => {
       const isNotDisliked = !dislikedIds.has(listing.id);
-      const passesFilters = matchesFilters(listing, filters, true); // Enable logging for preview
+      const passesFilters = matchesFilters(listing, filters, true, trip); // Enable logging for preview
       return isNotDisliked && passesFilters;
     });
 
@@ -211,7 +211,7 @@ export const useFilterPreview = (
 
     // Apply filters to liked listings
     const filteredLikedListings = processedLikedListings.filter(listing =>
-      matchesFilters(listing, filters, true) // Enable logging for liked listings too
+      matchesFilters(listing, filters, true, trip) // Enable logging for liked listings too
     );
 
     // Get IDs of filtered regular listings

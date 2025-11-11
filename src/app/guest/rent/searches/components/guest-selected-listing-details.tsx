@@ -15,6 +15,7 @@ import HighlightsSection from '@/app/app/rent/searches/(trips-components)/highli
 import AmenitiesSection from '@/app/app/rent/searches/(trips-components)/amenities-section';
 import HostInformation from '@/app/app/rent/searches/(trips-components)/host-information';
 import DescriptionSection from '@/app/app/rent/searches/(trips-components)/description-section';
+import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
 
 import { ListingAndImages } from '@/types';
 
@@ -35,6 +36,7 @@ const GuestSelectedListingDetails: React.FC<GuestSelectedListingDetailsProps> = 
   const pathname = usePathname();
   const { sessionId } = useParams(); // Use sessionId instead of tripId for guest
   const baseUrl = process.env.NEXT_PUBLIC_URL || "";
+  const { state } = useGuestTripContext();
 
   // Use guest-provided snapshot only
   const listingsSnapshot = customSnapshot;
@@ -134,7 +136,7 @@ const GuestSelectedListingDetails: React.FC<GuestSelectedListingDetailsProps> = 
 
           {/* Highlights Section */}
           <div className="lg:mt-4 mt-2">
-            <HighlightsSection listing={listing} />
+            <HighlightsSection listing={listing} trip={state.session as any} />
           </div>
 
           {/* Description Section */}
