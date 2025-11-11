@@ -1642,8 +1642,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
 
 
       {/* Amenities */}
-      {(displayAmenities.length > 0 || editingSections['amenities']) && (
-        <Card className="p-6 rounded-xl shadow-[0px_0px_5px_#00000029]">
+      <Card className="p-6 rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-8 p-0">
             <div className="flex items-center justify-between w-full">
               <h2 className={sectionHeaderStyles}>
@@ -1742,7 +1741,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                   ))}
                 </div>
             ) : (
-              displayAmenities.length > 0 && (
+              displayAmenities.length > 0 ? (
                 <div className="flex items-center gap-5 w-full flex-wrap">
                   {displayAmenities.map((amenity, index) => {
                     const IconComponent = amenity.icon;
@@ -1762,15 +1761,15 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                     );
                   })}
                 </div>
+              ) : (
+                <p className="text-gray-500">No amenities selected.</p>
               )
             )}
           </CardContent>
         </Card>
-      )}
 
       {/* Photos */}
-      {currentListing.listingImages && currentListing.listingImages.length > 0 && (
-        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
+      <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardHeader className="p-6 pb-0">
             <div className="flex items-center justify-between w-full">
               <CardTitle className={sectionHeaderStyles}>
@@ -1983,23 +1982,26 @@ const SummaryTab: React.FC<SummaryTabProps> = ({ listing, onListingUpdate }) => 
                 </div>
               </div>
             ) : (
-              <div className="flex flex-wrap gap-6 justify-start">
-                {currentListing.listingImages.map((image, index) => (
-                  <div key={index} className="w-[175px] h-[108px] relative rounded-lg overflow-hidden">
-                    <Image
-                      src={image.url}
-                      alt={`Property image ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      width={175}
-                      height={108}
-                    />
-                  </div>
-                ))}
-              </div>
+              currentListing.listingImages && currentListing.listingImages.length > 0 ? (
+                <div className="flex flex-wrap gap-6 justify-start">
+                  {currentListing.listingImages.map((image, index) => (
+                    <div key={index} className="w-[175px] h-[108px] relative rounded-lg overflow-hidden">
+                      <Image
+                        src={image.url}
+                        alt={`Property image ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        width={175}
+                        height={108}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500">No photos uploaded.</p>
+              )
             )}
           </CardContent>
         </Card>
-      )}
 
       {/* Location Update Brand Dialog */}
       <Dialog open={showLocationBrandDialog} onOpenChange={setShowLocationBrandDialog}>
