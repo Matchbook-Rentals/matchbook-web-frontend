@@ -4,7 +4,7 @@ import { checkAdminAccess } from '@/utils/roles'
 import { currentUser } from '@clerk/nextjs/server'
 
 // Configure route for larger payloads
-export const maxDuration = 300 // 5 minutes for large imports
+export const maxDuration = 60 // Maximum allowed for hobby plan
 export const dynamic = 'force-dynamic'
 
 interface ImportListingData {
