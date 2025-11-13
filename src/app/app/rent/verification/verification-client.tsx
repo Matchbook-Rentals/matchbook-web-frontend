@@ -656,8 +656,7 @@ export default function VerificationClient({
                   You can view your background check status by logging into your Matchbook account.
                   The results will be processed automatically. You should receive results within 24-48 hours.
                 </p>
-                
-                {/* Developer testing section - would be removed in production */}
+
                 {apiResponse.responseDetails && (
                   <div className="mt-4 border-t pt-4">
                     <Button
@@ -669,7 +668,7 @@ export default function VerificationClient({
                     >
                       {showResponseDetails ? "Hide" : "Show"} API Response Details
                     </Button>
-                    
+
                     {showResponseDetails && (
                       <div className="bg-gray-100 p-3 rounded-md border overflow-auto max-h-60">
                         <pre className="text-xs font-mono whitespace-pre-wrap break-words">

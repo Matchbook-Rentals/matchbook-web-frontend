@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../ui/button";
+import { BrandButton } from "../ui/brandButton";
 import { Card, CardContent } from "../ui/card";
 
 export const VerificationStandOut = (): JSX.Element => {
@@ -73,9 +73,13 @@ export const VerificationStandOut = (): JSX.Element => {
               ))}
             </div>
 
-            <Button className="relative w-full sm:w-auto sm:min-w-[278px] h-12 sm:h-[50px] px-6 bg-[#0a6b6c] text-white font-medium rounded-md hover:bg-[#085556] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <BrandButton
+              href="/app/rent/verification"
+              size="lg"
+              className="w-full sm:w-auto"
+            >
               Start Screening
-            </Button>
+            </BrandButton>
           </div>
         </CardContent>
       </Card>

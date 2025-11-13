@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../ui/button";
+import { BrandButton } from "../ui/brandButton";
 import { Card, CardContent } from "../ui/card";
 
 export const VerificationWhyItMatters = (): JSX.Element => {
@@ -81,9 +81,12 @@ export const VerificationWhyItMatters = (): JSX.Element => {
       </div>
 
       {/* CTA Button */}
-      <Button className="bg-teal-700 hover:bg-teal-800 text-white font-medium py-3 px-6 rounded-md disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+      <BrandButton
+        href="/app/rent/verification"
+        size="lg"
+      >
         Start Screening
-      </Button>
+      </BrandButton>
     </section>
   );
 };
