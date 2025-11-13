@@ -269,7 +269,7 @@ export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange }:
                       {step === "complete" && isStepCurrent(step) && (
                         <div className="flex items-start gap-2 mt-1">
                           <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
-                            Background check results typically arrive within 24-48 hours, but can take up to 2 weeks. You'll receive an email when your results are ready.
+                            Background check results typically arrive within 24-48 hours, but can take up to 2 weeks. You&apos;ll receive an email when your results are ready.
                             You can now view your credit report and safely leave this page.
                           </p>
                         </div>
