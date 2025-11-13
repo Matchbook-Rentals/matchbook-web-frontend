@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Card, CardContent } from "@/components/ui/card";
 import { BrandButton } from "@/components/ui/brandButton";
-import StripeVerificationPayment from "@/components/stripe/stripe-verification-payment";
+import { VerificationPaymentSelector } from "@/components/stripe/verification-payment-selector";
 
 interface ProcessingScreenProps {
   formData: any;
@@ -67,34 +67,23 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
   // Submit verification to API
   const submitVerification = async () => {
     try {
-      const response = await fetch("/api/verification/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // MOCK MODE - Skip API call entirely
+      console.log("🎭 MOCK MODE: Simulating verification submission");
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (data.status === "CREDIT_FAILED") {
-          setError("Credit check did not meet minimum requirements. No charge was made for the background check.");
-          setCurrentStep("isoftpull");
-          return;
-        }
-        throw new Error(data.error || "Verification submission failed");
-      }
-
-      // Credit check passed
+      // Simulate credit check passing
+      await new Promise(resolve => setTimeout(resolve, 1000));
       setCompletedSteps(prev => [...prev, "isoftpull"]);
 
-      if (data.status === "PROCESSING_BGS") {
-        // Accio submission successful
-        setCompletedSteps(prev => [...prev, "accio"]);
-        setCurrentStep("polling");
+      // Simulate Accio submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setCompletedSteps(prev => [...prev, "accio"]);
+      setCurrentStep("polling");
 
-        // Start polling for results
-        startPolling();
-      }
+      // Simulate background check submission - spin for 2 seconds then show complete step
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setCompletedSteps(prev => [...prev, "polling"]);
+      setCurrentStep("complete");
+      setShowPendingMessage(true);
 
     } catch (err) {
       console.error("Verification submission error:", err);
@@ -204,6 +193,8 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
                     <div className="flex-shrink-0 mt-1">
                       {isStepError && step === currentStep ? (
                         <AlertCircle className="w-6 h-6 text-red-600" />
+                      ) : step === "complete" && isStepCurrent(step) ? (
+                        <Clock className="w-6 h-6 text-amber-600" />
                       ) : isStepComplete(step) ? (
                         <CheckCircle2 className="w-6 h-6 text-green-600" />
                       ) : isStepCurrent(step) && step === "select-payment" ? (
@@ -222,7 +213,7 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
 
                       {step === "select-payment" && !isStepComplete("select-payment") && (
                         <div className="mt-4 w-full">
-                          <StripeVerificationPayment
+                          <VerificationPaymentSelector
                             formData={formData}
                             onPaymentSuccess={handlePaymentSuccess}
                             onCancel={onBack || (() => window.history.back())}
@@ -259,31 +250,20 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
                       )}
 
                       {step === "polling" && (
-                        <div className="space-y-2">
-                          <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
-                            Background check submitted successfully. Results typically arrive within 24-48 hours.
-                          </p>
-                          {showPendingMessage && (
-                            <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg p-3 mt-2">
-                              <Clock className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                              <div className="flex-1">
-                                <p className="[font-family:'Poppins',Helvetica] font-medium text-amber-900 text-sm">
-                                  Background check in progress
-                                </p>
-                                <p className="[font-family:'Poppins',Helvetica] font-normal text-amber-700 text-xs mt-1">
-                                  This process can take up to 2 weeks. You'll receive an email when your results are ready.
-                                  You can safely leave this page and check back later.
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
+                        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
+                          {!showPendingMessage
+                            ? "Submitting background check request..."
+                            : "Background check submitted successfully. Results typically arrive within 24-48 hours."}
+                        </p>
                       )}
 
-                      {step === "complete" && isStepComplete(step) && (
-                        <p className="[font-family:'Poppins',Helvetica] font-normal text-green-600 text-sm mt-1">
-                          All verification checks have been completed. You can view your results below.
-                        </p>
+                      {step === "complete" && isStepCurrent(step) && (
+                        <div className="flex items-start gap-2 mt-1">
+                          <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
+                            Background check results typically arrive within 24-48 hours, but can take up to 2 weeks. You'll receive an email when your results are ready.
+                            You can now view your credit report and safely leave this page.
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -295,28 +275,14 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
                   <BrandButton
                     type="button"
                     size="lg"
-                    onClick={onComplete}
+                    onClick={() => window.location.href = "/app/rent/verification"}
                   >
-                    View Results
-                  </BrandButton>
-                </div>
-              )}
-
-              {showPendingMessage && currentStep === "polling" && (
-                <div className="w-full flex justify-end mt-4">
-                  <BrandButton
-                    type="button"
-                    size="lg"
-                    variant="outline"
-                    onClick={() => window.location.href = "/app/dashboard"}
-                  >
-                    Continue to Dashboard
+                    View Credit Report
                   </BrandButton>
                 </div>
               )}
             </CardContent>
           </Card>
-        )}
 
         {/* Error Display */}
         {error && currentStep !== "isoftpull" && (

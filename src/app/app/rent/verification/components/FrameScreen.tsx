@@ -141,7 +141,7 @@ export const FrameScreen = (): JSX.Element => {
                 <PersonalInformationSection />
                 <CurrentAddressSection form={form} />
 
-                <div className="w-full flex justify-between px-6">
+                <div className="w-full flex flex-wrap-reverse md:flex-nowrap justify-end md:justify-between gap-3 px-6">
                   {process.env.NODE_ENV === 'development' && (
                     <BrandButton
                       type="button"

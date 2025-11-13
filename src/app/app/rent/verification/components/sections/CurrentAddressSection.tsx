@@ -131,12 +131,12 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
             Personal Information
           </h2>
 
-          <div className="flex items-start gap-5 self-stretch w-full">
+          <div className="flex flex-wrap md:flex-nowrap items-start gap-5 self-stretch w-full">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       First Name
@@ -158,7 +158,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               control={form.control}
               name="lastName"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       Last Name
@@ -178,12 +178,12 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
             />
           </div>
 
-          <div className="flex items-start gap-5 self-stretch w-full">
+          <div className="flex flex-wrap md:flex-nowrap items-start gap-5 self-stretch w-full">
             <FormField
               control={form.control}
               name="ssn"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       Social Security No
@@ -211,7 +211,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               control={form.control}
               name="dob"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       Date of Birth
@@ -267,12 +267,12 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               )}
             />
 
-            <div className="flex items-start gap-5 self-stretch w-full">
+            <div className="flex flex-wrap md:flex-nowrap items-start gap-5 self-stretch w-full">
               <FormField
                 control={form.control}
                 name="city"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start gap-1.5 flex-1">
+                  <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                     <FormLabel className="inline-flex items-center gap-1.5">
                       <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         City
@@ -294,7 +294,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                 control={form.control}
                 name="state"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start gap-1.5 flex-1">
+                  <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                     <FormLabel className="inline-flex items-center gap-1.5">
                       <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         State
@@ -323,7 +323,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                 control={form.control}
                 name="zip"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start gap-1.5 flex-1">
+                  <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                     <FormLabel className="inline-flex items-center gap-1.5">
                       <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         Zip Code

@@ -3,6 +3,10 @@ import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
 import { generateVerificationXml } from "@/app/app/rent/verification/utils";
 
+// FORCED MOCK MODE - Always use mock responses for Accio Data background checks
+// Set to false to use real API
+const MOCK_MODE = true;
+
 export async function POST(request: Request) {
   try {
     const user = await currentUser();
@@ -154,31 +158,35 @@ export async function POST(request: Request) {
     try {
       const orderNumber = `MBWEB-${Date.now()}`;
 
-      // Generate XML payload for Accio Data
-      const xmlPayload = generateVerificationXml({
-        orderNumber,
-        firstName,
-        lastName,
-        ssn,
-        dob,
-        address,
-        city,
-        state,
-        zip,
-      });
+      if (MOCK_MODE) {
+        console.log('🎭 MOCK MODE: Skipping real Accio Data submission');
+      } else {
+        // Generate XML payload for Accio Data
+        const xmlPayload = generateVerificationXml({
+          orderNumber,
+          firstName,
+          lastName,
+          ssn,
+          dob,
+          address,
+          city,
+          state,
+          zip,
+        });
 
-      // Submit to Accio Data
-      const accioResponse = await fetch(
-        "https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml",
-        {
-          method: "POST",
-          headers: { "Content-Type": "text/xml" },
-          body: xmlPayload,
+        // Submit to Accio Data
+        const accioResponse = await fetch(
+          "https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml",
+          {
+            method: "POST",
+            headers: { "Content-Type": "text/xml" },
+            body: xmlPayload,
+          }
+        );
+
+        if (!accioResponse.ok) {
+          throw new Error(`Accio Data API error: ${accioResponse.status}`);
         }
-      );
-
-      if (!accioResponse.ok) {
-        throw new Error(`Accio Data API error: ${accioResponse.status}`);
       }
 
       // Mark purchase as redeemed
@@ -210,11 +218,15 @@ export async function POST(request: Request) {
         },
       });
 
+      const message = MOCK_MODE
+        ? "Background check submitted successfully (MOCK MODE). Results typically arrive within 24-48 hours, but can take up to 2 weeks."
+        : "Background check submitted successfully. Results typically arrive within 24-48 hours, but can take up to 2 weeks.";
+
       return NextResponse.json({
         success: true,
         status: "PROCESSING_BGS",
         orderId: orderNumber,
-        message: "Background check submitted successfully. Results typically arrive within 24-48 hours, but can take up to 2 weeks.",
+        message,
       });
 
     } catch (error) {

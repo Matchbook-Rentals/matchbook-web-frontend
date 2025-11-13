@@ -1,19 +1,13 @@
 [build]
-builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
+builder = "dockerfile"
 
 [deploy]
-startCommand = ""
 healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
-
-# Resource allocation
-# For email worker: Spring Boot + Redis client + rate limiter
-# Tested to use ~200-500MB RAM under load
-# Using minimum viable resources for cost optimization
 numReplicas = 1
+
 [deploy.resources]
-memoryGB = 0.5    # 512MB RAM (minimum for Spring Boot, tested working)
-vCPU = 0.5        # 0.5 vCPU (rate limiting at 2/sec, not CPU-bound)
+memoryGB = 0.5
+vCPU = 0.5
