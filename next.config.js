@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  optimizeFonts: false, // Disable font optimization to avoid build hanging
   images: {
     remotePatterns: [
       {

@@ -256,7 +256,7 @@ const BackgroundCheckWebhookTester: React.FC = () => {
                   placeholder="MBWEB-12345678"
                 />
                 <p className="text-xs text-muted-foreground">
-                  This should match an existing BGSReport in your database with status='pending'
+                  This should match an existing BGSReport in your database with status=&apos;pending&apos;
                 </p>
               </div>
 
@@ -350,7 +350,7 @@ const BackgroundCheckWebhookTester: React.FC = () => {
               <div>
                 <p className="font-medium">Create a test BGSReport</p>
                 <p className="text-sm text-muted-foreground">
-                  Use Prisma Studio or create one via the verification form. Note the order ID and ensure status is 'pending'.
+                  Use Prisma Studio or create one via the verification form. Note the order ID and ensure status is &apos;pending&apos;.
                 </p>
               </div>
             </div>
@@ -374,7 +374,7 @@ const BackgroundCheckWebhookTester: React.FC = () => {
               <div>
                 <p className="font-medium">Send the webhook</p>
                 <p className="text-sm text-muted-foreground">
-                  Click "Send to Webhook Endpoint" to POST the XML to /api/background-check-webhook
+                  Click &quot;Send to Webhook Endpoint&quot; to POST the XML to /api/background-check-webhook
                 </p>
               </div>
             </div>
@@ -386,7 +386,7 @@ const BackgroundCheckWebhookTester: React.FC = () => {
               <div>
                 <p className="font-medium">Verify database update</p>
                 <p className="text-sm text-muted-foreground">
-                  The tool will automatically check the database after a successful webhook. You can also use the "Check Database" tab to manually verify.
+                  The tool will automatically check the database after a successful webhook. You can also use the &quot;Check Database&quot; tab to manually verify.
                 </p>
               </div>
             </div>
@@ -402,7 +402,7 @@ const BackgroundCheckWebhookTester: React.FC = () => {
           <div>
             <p className="font-medium">Successful Webhook (200)</p>
             <p className="text-sm text-muted-foreground">
-              BGSReport status updated from 'pending' to 'completed', reportData populated with XML, receivedAt timestamp set
+              BGSReport status updated from &apos;pending&apos; to &apos;completed&apos;, reportData populated with XML, receivedAt timestamp set
             </p>
           </div>
           <div>
