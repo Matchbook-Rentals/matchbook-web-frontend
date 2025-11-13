@@ -6,40 +6,38 @@ import { v4 as uuidv4 } from 'uuid';
 export async function POST(req: Request) {
   try {
     const { userId } = auth();
-    
+
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     // Parse request body
     const body = await req.json();
     const { returnUrl } = body;
-    
+
     // Generate a unique session identifier
     const sessionId = uuidv4();
 
-    // Create a payment intent for $25.00
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 2500, // Amount in cents
-      currency: 'usd',
+    // Create a setup intent to save payment method for future use
+    // We'll charge the saved payment method separately via another endpoint
+    const setupIntent = await stripe.setupIntents.create({
       metadata: {
         userId,
         type: 'matchbookVerification',
         sessionId,
+        amount: '2500', // Store amount in metadata for reference
       },
-      // Set up automatic payment methods for better UX
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      // Restrict to only card and US bank account (ACH) payment methods
+      payment_method_types: ['card', 'us_bank_account'],
     });
 
-    return NextResponse.json({ 
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id,
+    return NextResponse.json({
+      clientSecret: setupIntent.client_secret,
+      setupIntentId: setupIntent.id,
       sessionId,
     });
   } catch (error: any) {
-    console.error('Error creating payment intent:', error);
+    console.error('Error creating setup intent:', error);
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }

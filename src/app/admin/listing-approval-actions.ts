@@ -23,7 +23,8 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
   const [rawListings, baseTotalCount] = await prisma.$transaction([
     prisma.listing.findMany({
       where: {
-        approvalStatus: 'pendingReview'
+        approvalStatus: 'pendingReview',
+        deletedAt: null
       },
       skip: skip,
       take: pageSize,
@@ -46,7 +47,8 @@ export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZ
     }),
     prisma.listing.count({
       where: {
-        approvalStatus: 'pendingReview'
+        approvalStatus: 'pendingReview',
+        deletedAt: null
       }
     })
   ]);
@@ -98,7 +100,8 @@ export async function getListingDetails(listingId: string) {
   // Fetch listing without user relation to avoid orphaned listing errors
   const listing = await prisma.listing.findUnique({
     where: {
-      id: listingId
+      id: listingId,
+      deletedAt: null
     },
     include: {
       listingImages: {
