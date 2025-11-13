@@ -14,14 +14,16 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { BrandButton } from "@/components/ui/brandButton";
 import { VerificationPaymentSelector } from "@/components/stripe/verification-payment-selector";
+import { VerificationFooter } from "./VerificationFooter";
 
 interface ProcessingScreenProps {
   formData: any;
   onComplete?: () => void;
   onBack?: () => void;
+  onStepChange?: (step: ProcessingStep) => void;
 }
 
-type ProcessingStep =
+export type ProcessingStep =
   | "select-payment"
   | "payment"
   | "isoftpull"
@@ -38,7 +40,7 @@ const stepLabels: Record<ProcessingStep, string> = {
   complete: "Verification Complete",
 };
 
-export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScreenProps): JSX.Element => {
+export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange }: ProcessingScreenProps): JSX.Element => {
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState<ProcessingStep>("select-payment");
   const [completedSteps, setCompletedSteps] = useState<ProcessingStep[]>([]);
@@ -46,6 +48,13 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
   const [pollingCount, setPollingCount] = useState(0);
   const [showPendingMessage, setShowPendingMessage] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<any>(null);
+
+  // Notify parent of step changes
+  useEffect(() => {
+    if (onStepChange) {
+      onStepChange(currentStep);
+    }
+  }, [currentStep, onStepChange]);
 
   // Handle payment success - called by embedded payment form
   const handlePaymentSuccess = async () => {
@@ -145,7 +154,7 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
   const isStepError = error && (step === currentStep);
 
   return (
-    <div className="flex flex-col w-full items-start justify-center gap-4 p-4">
+    <div className="flex flex-col w-full items-start justify-center gap-4 p-2 md:p-4 pb-24">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -270,17 +279,6 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
                 );
               })}
 
-              {currentStep === "complete" && (
-                <div className="w-full flex justify-end mt-4">
-                  <BrandButton
-                    type="button"
-                    size="lg"
-                    onClick={() => window.location.href = "/app/rent/verification"}
-                  >
-                    View Credit Report
-                  </BrandButton>
-                </div>
-              )}
             </CardContent>
           </Card>
 
@@ -303,6 +301,7 @@ export const ProcessingScreen = ({ formData, onComplete, onBack }: ProcessingScr
           </Card>
         )}
       </div>
+
     </div>
   );
 };

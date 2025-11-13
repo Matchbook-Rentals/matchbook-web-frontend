@@ -95,7 +95,7 @@ export const AuthorizationDisclosureScreen = ({
   onSubmit
 }: AuthorizationDisclosureScreenProps): JSX.Element => {
   return (
-    <div className="flex flex-col w-full items-start justify-center gap-4 p-4">
+    <div className="flex flex-col w-full items-start justify-center gap-4 p-2 md:p-4 pb-24">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -129,7 +129,7 @@ export const AuthorizationDisclosureScreen = ({
         </div>
 
         <Card className="w-full rounded-2xl border border-solid border-[#cfd4dc]">
-          <CardContent className="flex flex-col items-center justify-center gap-8 p-6">
+          <CardContent className="flex flex-col items-center justify-center gap-8 p-3 md:p-6">
             {disclosureSections.map((section, index) => (
               <Card
                 key={index}
@@ -244,25 +244,6 @@ export const AuthorizationDisclosureScreen = ({
                 />
               </CardContent>
             </Card>
-
-            <div className="w-full flex justify-between items-center">
-              <BrandButton
-                type="button"
-                variant="outline"
-                size="lg"
-                onClick={onBack}
-              >
-                Back
-              </BrandButton>
-
-              <BrandButton
-                type="button"
-                size="lg"
-                onClick={onSubmit}
-              >
-                Complete Verification
-              </BrandButton>
-            </div>
           </CardContent>
         </Card>
       </div>

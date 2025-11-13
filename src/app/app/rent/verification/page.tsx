@@ -73,7 +73,7 @@ export default async function VerificationPage({
   return (
     <div className={`min-h-screen bg-background ${PAGE_MARGIN} `}>
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto  py-8">
         <Suspense fallback={<div>Loading...</div>}>
           <FrameScreen />
         </Suspense>

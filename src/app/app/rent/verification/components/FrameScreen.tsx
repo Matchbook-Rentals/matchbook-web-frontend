@@ -9,9 +9,10 @@ import { BrandButton } from "@/components/ui/brandButton";
 import { CurrentAddressSection } from "./sections/CurrentAddressSection";
 import { PersonalInformationSection } from "./sections/PersonalInformationSection";
 import { AuthorizationDisclosureScreen } from "./AuthorizationDisclosureScreen";
-import { ProcessingScreen } from "./ProcessingScreen";
+import { ProcessingScreen, type ProcessingStep } from "./ProcessingScreen";
 import { VerificationResultsScreen } from "./VerificationResultsScreen";
 import { VerificationDetailsScreen } from "./details/VerificationDetailsScreen";
+import { VerificationFooter } from "./VerificationFooter";
 import { verificationSchema, type VerificationFormValues } from "../utils";
 
 type Step = "personal-info" | "authorization" | "processing" | "results" | "details";
@@ -19,6 +20,7 @@ type Step = "personal-info" | "authorization" | "processing" | "results" | "deta
 export const FrameScreen = (): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<Step>("personal-info");
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [processingStep, setProcessingStep] = useState<ProcessingStep>("select-payment");
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -116,7 +118,7 @@ export const FrameScreen = (): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col w-full items-start justify-center relative overflow-hidden">
+    <div className="flex flex-col w-full items-start justify-center relative overflow-hidden pb-24">
       <Form {...form}>
         <div
           className={`w-full transition-all duration-300 ease-in-out ${
@@ -125,7 +127,7 @@ export const FrameScreen = (): JSX.Element => {
         >
           {currentStep === "personal-info" && (
             <div className="flex flex-col w-full items-start justify-center relative">
-              <nav className="inline-flex items-center gap-4 relative flex-[0_0_auto] px-4 mb-6">
+              <nav className="inline-flex items-center gap-4 relative flex-[0_0_auto] px-2 md:px-4 mb-6">
                 <HomeIcon className="w-6 h-6 text-gray-500" />
 
                 <div className="relative w-fit mt-[-1.00px] font-text-md-regular font-[number:var(--text-md-regular-font-weight)] text-gray-500 text-[length:var(--text-md-regular-font-size)] tracking-[var(--text-md-regular-letter-spacing)] leading-[var(--text-md-regular-line-height)] whitespace-nowrap [font-style:var(--text-md-regular-font-style)]">
@@ -140,38 +142,18 @@ export const FrameScreen = (): JSX.Element => {
               <main className="flex flex-col items-start justify-center relative self-stretch w-full flex-[0_0_auto] gap-6">
                 <PersonalInformationSection />
                 <CurrentAddressSection form={form} />
-
-                <div className="w-full flex flex-wrap-reverse md:flex-nowrap justify-end md:justify-between gap-3 px-6">
-                  {process.env.NODE_ENV === 'development' && (
-                    <BrandButton
-                      type="button"
-                      variant="outline"
-                      size="lg"
-                      onClick={loadDevData}
-                    >
-                      Skip (Dev)
-                    </BrandButton>
-                  )}
-                  <div className={process.env.NODE_ENV === 'development' ? '' : 'ml-auto'}>
-                    <BrandButton
-                      type="button"
-                      size="lg"
-                      onClick={handlePersonalInfoSubmit}
-                    >
-                      Continue to Authorization
-                    </BrandButton>
-                  </div>
-                </div>
               </main>
             </div>
           )}
 
           {currentStep === "authorization" && (
-            <AuthorizationDisclosureScreen
-              form={form}
-              onBack={handleBack}
-              onSubmit={handleFinalSubmit}
-            />
+            <>
+              <AuthorizationDisclosureScreen
+                form={form}
+                onBack={handleBack}
+                onSubmit={handleFinalSubmit}
+              />
+            </>
           )}
 
           {currentStep === "processing" && (
@@ -179,6 +161,7 @@ export const FrameScreen = (): JSX.Element => {
               formData={form.getValues()}
               onComplete={handleProcessingComplete}
               onBack={handleBackToAuthorization}
+              onStepChange={setProcessingStep}
             />
           )}
 
@@ -191,6 +174,68 @@ export const FrameScreen = (): JSX.Element => {
           )}
         </div>
       </Form>
+
+      {/* Fixed Footer with Context-Dependent Buttons */}
+      {currentStep === "personal-info" && (
+        <VerificationFooter
+          secondaryButton={
+            process.env.NODE_ENV === 'development'
+              ? {
+                  label: "Skip (Dev)",
+                  onClick: loadDevData,
+                  variant: "outline",
+                }
+              : undefined
+          }
+          primaryButton={{
+            label: "Continue to Authorization",
+            onClick: handlePersonalInfoSubmit,
+          }}
+        />
+      )}
+
+      {currentStep === "authorization" && (
+        <VerificationFooter
+          secondaryButton={{
+            label: "Back",
+            onClick: handleBack,
+            variant: "outline",
+          }}
+          primaryButton={{
+            label: "Agree & Continue",
+            onClick: handleFinalSubmit,
+          }}
+        />
+      )}
+
+      {currentStep === "processing" && (
+        <VerificationFooter
+          secondaryButton={
+            // Allow back unless payment is processing
+            processingStep !== "payment" && processingStep !== "isoftpull"
+              ? {
+                  label: "Back",
+                  onClick: handleBackToAuthorization,
+                  variant: "outline",
+                }
+              : undefined
+          }
+          primaryButton={{
+            label: "View Report",
+            onClick: handleProcessingComplete,
+            disabled: processingStep !== "complete",
+          }}
+        />
+      )}
+
+      {currentStep === "results" && (
+        <VerificationFooter
+          primaryButton={{
+            label: "View Details",
+            onClick: handleViewDetails,
+          }}
+        />
+      )}
     </div>
   );
 };

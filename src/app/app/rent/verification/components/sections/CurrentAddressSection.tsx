@@ -124,8 +124,8 @@ const US_STATES = [
 
 export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX.Element => {
   return (
-    <div className="flex flex-col items-center justify-center gap-8 p-6 self-stretch w-full rounded-2xl overflow-hidden border border-solid border-[#cfd4dc]">
-      <div className="flex flex-col items-start gap-8 p-6 self-stretch w-full bg-neutral-50 rounded-xl">
+    <div className="flex flex-col items-center justify-center gap-8 p-3 md:p-6 self-stretch w-full rounded-2xl overflow-hidden border border-solid border-[#cfd4dc]">
+      <div className="flex flex-col items-start gap-8 p-3 md:p-6 self-stretch w-full bg-neutral-50 rounded-xl">
         <div className="flex flex-col items-start gap-5 self-stretch w-full">
           <h2 className="self-stretch [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
             Personal Information
@@ -237,7 +237,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
         </div>
       </div>
 
-      <div className="flex flex-col items-start gap-8 p-6 self-stretch w-full bg-neutral-50 rounded-xl">
+      <div className="flex flex-col items-start gap-8 p-3 md:p-6 self-stretch w-full bg-neutral-50 rounded-xl">
         <div className="flex flex-col items-start gap-5 self-stretch w-full">
           <h2 className="self-stretch [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[0] leading-[normal]">
             Current Address
