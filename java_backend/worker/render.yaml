@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: matchbook-worker
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./worker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_QUEUE_ENABLED
+        value: true
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: matchbook-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: matchbook-redis
+          property: port
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: matchbook-redis
+          property: connectionString
+      - key: REDIS_USE_SSL
+        value: true
+
+  - type: redis
+    name: matchbook-redis
+    plan: starter
+    ipAllowList: []

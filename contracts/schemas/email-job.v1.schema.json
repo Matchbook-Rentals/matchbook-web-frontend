@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://matchbookrentals.com/schemas/email-job.v1.json",
+  "title": "EmailJob",
+  "description": "Email job payload for Redis queue processing between Next.js frontend and Java worker backend",
+  "type": "object",
+  "required": ["to", "subject", "html", "jobId", "enqueuedAt"],
+  "properties": {
+    "to": {
+      "type": "string",
+      "format": "email",
+      "description": "Recipient email address",
+      "examples": ["user@example.com", "customer@matchbookrentals.com"]
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 998,
+      "description": "Email subject line (RFC 5322 recommends max 998 characters)",
+      "examples": ["Welcome to MatchBook!", "Your booking is confirmed"]
+    },
+    "html": {
+      "type": "string",
+      "minLength": 1,
+      "description": "HTML email body content",
+      "examples": ["<h1>Welcome</h1><p>Thank you for signing up!</p>"]
+    },
+    "from": {
+      "type": "string",
+      "description": "Sender email address (optional, defaults to 'MatchBook Rentals <no-reply@matchbookrentals.com>' in worker)",
+      "examples": ["MatchBook Rentals <no-reply@matchbookrentals.com>"]
+    },
+    "replyTo": {
+      "type": "string",
+      "format": "email",
+      "description": "Reply-to email address (optional)",
+      "examples": ["support@matchbookrentals.com"]
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Additional metadata for tracking and logging (all values must be strings)",
+      "examples": [
+        {
+          "userId": "user_123",
+          "notificationType": "booking_confirmed",
+          "listingId": "listing_456"
+        }
+      ]
+    },
+    "jobId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique job identifier (UUID v4)",
+      "examples": ["550e8400-e29b-41d4-a716-446655440000"]
+    },
+    "enqueuedAt": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix timestamp in milliseconds when job was enqueued",
+      "examples": [1699564800000]
+    },
+    "attemptNumber": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3,
+      "default": 1,
+      "description": "Current attempt number (1-3). Defaults to 1 if not provided. Worker increments on retry."
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "to": "customer@example.com",
+      "subject": "Welcome to MatchBook!",
+      "html": "<h1>Welcome</h1><p>Thank you for signing up!</p>",
+      "from": "MatchBook Rentals <no-reply@matchbookrentals.com>",
+      "jobId": "550e8400-e29b-41d4-a716-446655440000",
+      "enqueuedAt": 1699564800000,
+      "attemptNumber": 1
+    },
+    {
+      "to": "user@example.com",
+      "subject": "Booking Confirmation",
+      "html": "<h1>Your booking is confirmed</h1>",
+      "metadata": {
+        "userId": "user_123",
+        "bookingId": "booking_789"
+      },
+      "jobId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "enqueuedAt": 1699564850000
+    }
+  ]
+}

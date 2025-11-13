@@ -1,0 +1,8 @@
+# Generated files (if we add code generation in the future)
+/generated/
+
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store
