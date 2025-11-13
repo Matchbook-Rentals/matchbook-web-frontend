@@ -27,6 +27,16 @@ enum CreditBucket {
   Exceptional
 }
 
+enum VerificationStatus {
+  PENDING            // Verification started but not complete
+  PROCESSING_CREDIT  // iSoftPull credit check in progress
+  CREDIT_FAILED      // Failed credit check, stopped here
+  PROCESSING_BGS     // Accio Data background check in progress
+  COMPLETED          // All checks passed and completed
+  FAILED             // Overall verification failed
+  EXPIRED            // Verification has expired (>90 days)
+}
+
 enum ApprovalStatus {
   approved
   rejected
@@ -139,6 +149,7 @@ model User {
   personReports      PersonReport?
   creditReport       CreditReport?
   bgsReports         BGSReport[]
+  verification       Verification?
   conversations      ConversationParticipant[]
   messageReads       MessageRead[]
   sentMessages       Message[]                 @relation("MessageSender")
@@ -988,19 +999,20 @@ model VerificationImage {
 }
 
 model Purchase {
-  id         String     @id @default(cuid())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  status     String     @default("pending")
-  isRedeemed Boolean    @default(false)
-  email      String?
-  type       String
-  amount     Int?
-  userId     String?
-  orderId    String?
-  metadata   Json?
-  user       User?      @relation(fields: [userId], references: [id])
-  bgsReport  BGSReport?
+  id           String         @id @default(cuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  status       String         @default("pending")
+  isRedeemed   Boolean        @default(false)
+  email        String?
+  type         String
+  amount       Int?
+  userId       String?
+  orderId      String?
+  metadata     Json?
+  user         User?          @relation(fields: [userId], references: [id])
+  bgsReport    BGSReport?
+  verification Verification?
 
   @@index([userId])
 }
@@ -1015,11 +1027,12 @@ model BGSReport {
   status          String    @default("pending")
   reportData      Json?
   receivedAt      DateTime?
-  
+
   // Relationships
-  purchase        Purchase? @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  purchase        Purchase?     @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verification    Verification?
+
   @@index([orderId])
   @@index([userId])
 }
@@ -1052,7 +1065,54 @@ model CreditReport {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verification Verification?
+}
+
+model Verification {
+  id                  String              @id @default(uuid())
+  userId              String              @unique // One verification per user
+
+  // Overall Status
+  status              VerificationStatus  @default(PENDING)
+
+  // Dates
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  screeningDate       DateTime?           // When verification was completed
+  validUntil          DateTime?           // 90 days from screeningDate
+
+  // Purchase & Order Tracking
+  purchaseId          String?             @unique
+  creditReportId      String?             @unique
+  bgsReportId         String?             @unique
+
+  // Credit Information (denormalized for fast access)
+  creditBucket        CreditBucket?
+  creditStatus        String?             // "completed", "pending", "failed"
+
+  // Background Check Results (extracted from BGSReport JSON)
+  evictionStatus      String?             // "No Records Found", "Records Found", "Under Review"
+  evictionCount       Int?                @default(0)
+  criminalStatus      String?             // "No Records Found", "Records Found", "Under Review"
+  criminalRecordCount Int?                @default(0)
+
+  // Workflow Tracking
+  creditCheckedAt     DateTime?
+  backgroundCheckedAt DateTime?
+
+  // Metadata
+  notes               String?             @db.Text
+
+  // Relationships
+  user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purchase            Purchase?           @relation(fields: [purchaseId], references: [id])
+  creditReport        CreditReport?       @relation(fields: [creditReportId], references: [id])
+  bgsReport           BGSReport?          @relation(fields: [bgsReportId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([validUntil])
 }
 
 model RentPayment {

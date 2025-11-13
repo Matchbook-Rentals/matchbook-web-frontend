@@ -126,7 +126,7 @@ export async function handlePaymentIntentSucceeded(event: PaymentIntentSucceeded
     const sessionId = paymentIntent.metadata.sessionId;
 
     // Create a purchase record with isRedeemed=false and store the session ID
-    await prismadb.purchase.create({
+    const purchase = await prismadb.purchase.create({
       data: {
         type: 'matchbookVerification',
         amount: paymentIntent.amount,
@@ -142,6 +142,35 @@ export async function handlePaymentIntentSucceeded(event: PaymentIntentSucceeded
     });
 
     console.log(`User ${userId} verification payment succeeded - purchase created with session ID: ${sessionId}`);
+
+    // Create or update Verification record
+    if (userId) {
+      const existingVerification = await prismadb.verification.findUnique({
+        where: { userId },
+      });
+
+      if (existingVerification) {
+        // Update existing verification
+        await prismadb.verification.update({
+          where: { userId },
+          data: {
+            status: 'PENDING',
+            purchaseId: purchase.id,
+          },
+        });
+        console.log(`Updated existing verification record for user ${userId}`);
+      } else {
+        // Create new verification record
+        await prismadb.verification.create({
+          data: {
+            userId,
+            purchaseId: purchase.id,
+            status: 'PENDING',
+          },
+        });
+        console.log(`Created new verification record for user ${userId}`);
+      }
+    }
   } else if ((type === 'security_deposit_direct' || type === 'lease_deposit_and_rent') && matchId) {
     // Handle deposit payment settlement (ACH or card)
     console.log(`✅ Payment succeeded for match ${matchId}`);

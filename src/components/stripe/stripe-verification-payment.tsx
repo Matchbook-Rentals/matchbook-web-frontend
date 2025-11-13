@@ -9,8 +9,17 @@ import {
   useElements,
   LinkAuthenticationElement,
 } from '@stripe/react-stripe-js';
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { HomeIcon, AlertCircle } from 'lucide-react';
+import { BrandButton } from "@/components/ui/brandButton";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 // Initialize Stripe
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -68,7 +77,7 @@ const VerificationCheckoutForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
     // Get the stored session ID
     const sessionId = localStorage.getItem('verificationSessionId') || '';
-    
+
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -90,24 +99,30 @@ const VerificationCheckoutForm = ({ onSuccess }: { onSuccess: () => void }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-4">
-        <LinkAuthenticationElement 
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
+        <LinkAuthenticationElement
           onChange={(e) => {
             setEmail(e.value.email);
           }}
         />
         <PaymentElement id="payment-element" />
       </div>
-      <Button
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+
+      <BrandButton
+        size="lg"
         disabled={isLoading || !stripe || !elements}
         type="submit"
       >
         {isLoading ? "Processing..." : "Pay $25.00"}
-      </Button>
+      </BrandButton>
+
       {/* Show any error or success messages */}
-      {message && <div className="mt-4 text-sm text-center text-gray-700">{message}</div>}
+      {message && (
+        <div className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm text-center">
+          {message}
+        </div>
+      )}
     </form>
   );
 };
@@ -118,10 +133,10 @@ interface StripeVerificationPaymentProps {
   onCancel: () => void;
 }
 
-export default function StripeVerificationPayment({ 
-  formData, 
+export default function StripeVerificationPayment({
+  formData,
   onPaymentSuccess,
-  onCancel 
+  onCancel
 }: StripeVerificationPaymentProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -133,9 +148,9 @@ export default function StripeVerificationPayment({
         // Save form data to local storage for retrieval after redirect
         localStorage.setItem('verificationFormData', JSON.stringify(formData));
         console.log('Form data saved to localStorage:', formData);
-        
+
         const returnUrl = `${window.location.origin}/app/verification/review`;
-        
+
         const response = await fetch('/api/create-payment-intent/background-verification', {
           method: 'POST',
           headers: {
@@ -166,44 +181,51 @@ export default function StripeVerificationPayment({
   }, [formData]);
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="mb-6">
-        <Button 
-          variant="ghost" 
+    <div className="flex flex-col w-full items-start justify-center gap-6">
+      {/* Payment Form */}
+      {error ? (
+        <Card className="w-full rounded-xl border border-red-200 bg-red-50">
+          <CardContent className="p-4">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="[font-family:'Poppins',Helvetica] font-semibold text-red-900 text-sm">
+                  Error
+                </p>
+                <p className="[font-family:'Poppins',Helvetica] font-normal text-red-700 text-sm mt-1">
+                  {error}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : !clientSecret ? (
+        <Card className="w-full rounded-2xl border border-solid border-[#cfd4dc]">
+          <CardContent className="flex justify-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787]"></div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="w-full rounded-2xl border border-solid border-[#cfd4dc]">
+          <CardContent className="p-8">
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <VerificationCheckoutForm onSuccess={onPaymentSuccess} />
+            </Elements>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Back Button */}
+      <div className="w-full flex justify-start">
+        <BrandButton
+          type="button"
+          variant="outline"
+          size="lg"
           onClick={onCancel}
-          className="text-blue-600"
         >
-          ← Back
-        </Button>
+          Back
+        </BrandButton>
       </div>
-
-      <h2 className="text-xl font-bold mb-4 text-center">Background Verification Payment</h2>
-      <p className="text-center mb-6 text-gray-600">
-        One-time fee of $25.00 for complete background screening
-      </p>
-
-      <Card className="p-6">
-        {error ? (
-          <div className="text-center text-red-600 p-4">
-            <p>{error}</p>
-            <Button 
-              onClick={onCancel} 
-              className="mt-4"
-              variant="outline"
-            >
-              Go Back
-            </Button>
-          </div>
-        ) : !clientSecret ? (
-          <div className="flex justify-center p-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-          </div>
-        ) : (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <VerificationCheckoutForm onSuccess={onPaymentSuccess} />
-          </Elements>
-        )}
-      </Card>
     </div>
   );
 }

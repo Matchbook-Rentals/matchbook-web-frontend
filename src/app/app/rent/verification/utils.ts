@@ -10,6 +10,15 @@ export const verificationSchema = z.object({
   city: z.string().min(2, "City is required and must be at least 2 characters"),
   state: z.string().min(2, "State is required"),
   zip: z.string().regex(/^\d{5}(-\d{4})?$/, "Zip code must be in format 12345 or 12345-6789"),
+  fcraRightsAcknowledgment: z.boolean().refine(val => val === true, {
+    message: "You must acknowledge your FCRA rights to continue"
+  }),
+  creditAuthorizationAcknowledgment: z.boolean().refine(val => val === true, {
+    message: "You must authorize the credit report to continue"
+  }),
+  backgroundCheckAuthorization: z.boolean().refine(val => val === true, {
+    message: "You must authorize the background check to continue"
+  }),
 });
 
 export type VerificationFormValues = z.infer<typeof verificationSchema>;

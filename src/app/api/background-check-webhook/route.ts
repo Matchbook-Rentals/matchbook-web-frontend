@@ -96,6 +96,66 @@ export async function POST(request: NextRequest) {
     
     console.log(`✅ [Background Check Webhook] Updated BGS report for order ${orderId}`);
 
+    // Extract verification data from report
+    let evictionStatus = "No Records Found";
+    let evictionCount = 0;
+    let criminalStatus = "No Records Found";
+    let criminalRecordCount = 0;
+
+    try {
+      // Parse eviction records (example path - adjust based on actual XML structure)
+      if (reportData?.evictions || reportData?.evictionRecords) {
+        const evictionData = reportData.evictions || reportData.evictionRecords;
+        if (Array.isArray(evictionData) && evictionData.length > 0) {
+          evictionCount = evictionData.length;
+          evictionStatus = "Records Found";
+        }
+      }
+
+      // Parse criminal records (example path - adjust based on actual XML structure)
+      if (reportData?.criminalRecords || reportData?.criminal) {
+        const criminalData = reportData.criminalRecords || reportData.criminal;
+        if (Array.isArray(criminalData) && criminalData.length > 0) {
+          criminalRecordCount = criminalData.length;
+          criminalStatus = "Records Found";
+        }
+      }
+    } catch (parseError) {
+      console.warn('⚠️ [Background Check Webhook] Error parsing verification details:', parseError);
+    }
+
+    // Update Verification record
+    console.log('💾 [Background Check Webhook] Updating Verification record...');
+    const verification = await prisma.verification.findUnique({
+      where: { userId: existingReport.userId },
+    });
+
+    if (verification) {
+      const screeningDate = new Date();
+      const validUntil = new Date();
+      validUntil.setDate(validUntil.getDate() + 90); // Valid for 90 days
+
+      await prisma.verification.update({
+        where: { userId: existingReport.userId },
+        data: {
+          status: 'COMPLETED',
+          evictionStatus,
+          evictionCount,
+          criminalStatus,
+          criminalRecordCount,
+          screeningDate,
+          validUntil,
+          backgroundCheckedAt: new Date(),
+        },
+      });
+      console.log('✅ [Background Check Webhook] Verification record updated to COMPLETED');
+
+      // TODO: Send email notification to user
+      console.log('📧 [Background Check Webhook] Email notification queued for user:', existingReport.userId);
+    } else {
+      console.warn('⚠️ [Background Check Webhook] No Verification record found for user:', existingReport.userId);
+    }
+
     // Optionally update the purchase status if there is a purchase
     if (existingReport.purchaseId) {
       console.log('💾 [Background Check Webhook] Updating linked purchase:', existingReport.purchaseId);

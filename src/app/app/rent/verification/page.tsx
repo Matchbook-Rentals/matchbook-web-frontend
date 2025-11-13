@@ -1,10 +1,9 @@
 import { PAGE_MARGIN } from "@/constants/styles"
-import Image from "next/image"
-import VerificationClient from "./verification-client"
 import { Suspense } from "react"
-import { auth, currentUser } from "@clerk/nextjs/server"
+import { auth } from "@clerk/nextjs/server"
 import prismadb from "@/lib/prismadb"
 import { VerificationFormValues } from "./utils"
+import { FrameScreen } from "./components/FrameScreen"
 
 // Handle server component with payment status and purchase check
 export default async function VerificationPage({
@@ -16,7 +15,7 @@ export default async function VerificationPage({
   const { userId } = auth()
   let hasPurchase = false
   let applicationData: Partial<VerificationFormValues> | undefined = undefined
-  
+
   // Check for unredeemed purchases if user is logged in
   if (userId) {
     const purchases = await prismadb.purchase.findMany({
@@ -26,7 +25,7 @@ export default async function VerificationPage({
         isRedeemed: false
       }
     })
-    
+
     // Set hasPurchase flag if there are any unredeemed verification purchases
     hasPurchase = purchases.length > 0
 
@@ -46,8 +45,8 @@ export default async function VerificationPage({
         // Don't prefill SSN for security reasons
         ssn: "",
         // Format date of birth to YYYY-MM-DD if available
-        dob: userApplication.dateOfBirth ? 
-          userApplication.dateOfBirth.toISOString().split('T')[0] : 
+        dob: userApplication.dateOfBirth ?
+          userApplication.dateOfBirth.toISOString().split('T')[0] :
           "",
       }
 
@@ -76,11 +75,7 @@ export default async function VerificationPage({
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <Suspense fallback={<div>Loading...</div>}>
-          <VerificationClient 
-            paymentStatus={paymentStatus} 
-            serverHasPurchase={hasPurchase}
-            applicationData={applicationData}
-          />
+          <FrameScreen />
         </Suspense>
       </main>
     </div>

@@ -22,9 +22,9 @@ export async function POST(request: Request) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'Background Screening',
+              name: 'MatchBook Renter Verification',
             },
-            unit_amount: 1099, // $10.99 in cents
+            unit_amount: 2500, // $25.00 in cents
           },
           quantity: 1,
         },
