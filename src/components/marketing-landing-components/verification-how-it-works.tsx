@@ -23,8 +23,8 @@ export const VerificationHowItWorks = (): JSX.Element => {
 
       {/* CTA Button */}
       <BrandButton
-        href="/app/rent/verification"
         size="lg"
+        disabled
       >
         Start Screening
       </BrandButton>

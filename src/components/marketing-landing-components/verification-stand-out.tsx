@@ -74,9 +74,9 @@ export const VerificationStandOut = (): JSX.Element => {
             </div>
 
             <BrandButton
-              href="/app/rent/verification"
               size="lg"
               className="w-full sm:w-auto"
+              disabled
             >
               Start Screening
             </BrandButton>
