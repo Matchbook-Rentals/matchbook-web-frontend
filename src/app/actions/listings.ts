@@ -9,6 +9,7 @@ import { STATE_CODE_MAPPING } from "@/constants/state-code-mapping";
 import { differenceInDays, isValid } from 'date-fns'; // Import date-fns for validation
 import { capNumberValue } from '@/lib/number-validation';
 import { revalidatePath } from "next/cache";
+import { calculateLengthOfStay } from '@/lib/calculate-rent';
 
 // Types for deletion checking
 interface BookingDetail {
@@ -256,9 +257,25 @@ export const pullListingsFromDb = async (
         ? listing.category.toLowerCase().replace(/\s+/g, '')
         : listing.category;
 
+      // Calculate utilities for this specific trip duration and write to deprecated field
+      const lengthOfStay = calculateLengthOfStay(startDate, endDate);
+      const matchingPricing = listing.monthlyPricing?.find(
+        pricing => pricing.months === lengthOfStay.months
+      );
+
+      // Use duration-specific utilities with fallback to 1-month policy
+      let utilitiesIncluded = false;
+      if (matchingPricing?.utilitiesIncluded !== undefined) {
+        utilitiesIncluded = matchingPricing.utilitiesIncluded;
+      } else {
+        const oneMonthPricing = listing.monthlyPricing?.find(pricing => pricing.months === 1);
+        utilitiesIncluded = oneMonthPricing?.utilitiesIncluded ?? false;
+      }
+
       return {
         ...listing,
         category: normalizedCategory, // Normalize category format
+        utilitiesIncluded, // Set utilities based on trip duration
         distance, // Add the distance calculated by the raw query
         listingImages: listing.listingImages,
         bedrooms: listing.bedrooms,

@@ -4,6 +4,7 @@ import prisma from '@/lib/prismadb';
 import { Prisma } from '@prisma/client';
 import { ListingAndImages } from '@/types/';
 import { statesInRadiusData } from "@/constants/state-radius-data";
+import { calculateLengthOfStay } from '@/lib/calculate-rent';
 
 /**
  * Guest version of pullListingsFromDb that doesn't require authentication
@@ -128,9 +129,25 @@ export const pullGuestListingsFromDb = async (
         ? listing.category.toLowerCase().replace(/\s+/g, '')
         : listing.category;
 
+      // Calculate utilities for this specific trip duration and write to deprecated field
+      const lengthOfStay = calculateLengthOfStay(startDate, endDate);
+      const matchingPricing = listing.monthlyPricing?.find(
+        pricing => pricing.months === lengthOfStay.months
+      );
+
+      // Use duration-specific utilities with fallback to 1-month policy
+      let utilitiesIncluded = false;
+      if (matchingPricing?.utilitiesIncluded !== undefined) {
+        utilitiesIncluded = matchingPricing.utilitiesIncluded;
+      } else {
+        const oneMonthPricing = listing.monthlyPricing?.find(pricing => pricing.months === 1);
+        utilitiesIncluded = oneMonthPricing?.utilitiesIncluded ?? false;
+      }
+
       return {
         ...listing,
         category: normalizedCategory, // Normalize category format
+        utilitiesIncluded, // Set utilities based on trip duration
         distance: Math.round(distance * 100) / 100,
       } as ListingAndImages;
     });
