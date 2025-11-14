@@ -197,40 +197,6 @@ export async function previewNotificationEmail({
         }
         break
 
-      case 'move_in_confirmation_prompt':
-        notificationContent = `Please confirm your move-in at ${listingTitle}`
-        notificationUrl = '/app/rent/bookings/test-booking-123/move-in'
-        emailData = {
-          listingTitle,
-          listingAddress: messageContent || '123 Main St, San Francisco, CA',
-          moveInDate: amount || 'March 20, 2024',
-          bookingId: 'test-booking-123'
-        }
-        break
-
-      case 'move_in_confirmation_reminder':
-        notificationContent = `Reminder: Please confirm your move-in at ${listingTitle}`
-        notificationUrl = '/app/rent/bookings/test-booking-123/move-in'
-        emailData = {
-          listingTitle,
-          autoConfirmTime: '3:00 AM tomorrow',
-          bookingId: 'test-booking-123'
-        }
-        break
-
-      case 'move_in_issue_reported_host':
-        notificationContent = `${senderName || 'Sarah Johnson'} reported a move-in issue at ${listingTitle}`
-        notificationUrl = '/app/host/test-listing-456/bookings/test-booking-123'
-        emailData = {
-          listingTitle,
-          renterName: senderName || 'Sarah Johnson',
-          issueNotes: messageContent || 'The property was not cleaned as expected and some appliances are not working.',
-          reportedAt: 'March 20, 2024 at 2:30 PM',
-          bookingId: 'test-booking-123',
-          listingId: 'test-listing-456'
-        }
-        break
-
       case 'payment_success':
         notificationContent = `Payment of $${amount} for ${listingTitle} was successful.`
         notificationUrl = '/app/renter/payments'

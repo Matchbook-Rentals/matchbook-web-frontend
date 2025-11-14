@@ -184,40 +184,6 @@ export async function sendTestNotification({
         })
         break
 
-      case 'move_in_confirmation_prompt':
-        notificationContent = `Please confirm your move-in at ${listingTitle}`
-        notificationUrl = '/app/rent/bookings/test-booking-' + Date.now() + '/move-in'
-        emailData = buildNotificationEmailData('move_in_confirmation_prompt', {
-          listingTitle,
-          listingAddress: messageContent || '123 Main St, San Francisco, CA',
-          moveInDate: amount || 'March 20, 2024',
-          bookingId: 'test-booking-' + Date.now()
-        })
-        break
-
-      case 'move_in_confirmation_reminder':
-        notificationContent = `Reminder: Please confirm your move-in at ${listingTitle}`
-        notificationUrl = '/app/rent/bookings/test-booking-' + Date.now() + '/move-in'
-        emailData = buildNotificationEmailData('move_in_confirmation_reminder', {
-          listingTitle,
-          autoConfirmTime: '3:00 AM tomorrow',
-          bookingId: 'test-booking-' + Date.now()
-        })
-        break
-
-      case 'move_in_issue_reported_host':
-        notificationContent = `${senderName || 'Sarah Johnson'} reported a move-in issue at ${listingTitle}`
-        notificationUrl = '/app/host/test-listing-' + Date.now() + '/bookings/test-booking-' + Date.now()
-        emailData = buildNotificationEmailData('move_in_issue_reported_host', {
-          listingTitle,
-          renterName: senderName || 'Sarah Johnson',
-          issueNotes: messageContent || 'The property was not cleaned as expected and some appliances are not working.',
-          reportedAt: 'March 20, 2024 at 2:30 PM',
-          bookingId: 'test-booking-' + Date.now(),
-          listingId: 'test-listing-' + Date.now()
-        })
-        break
-
       case 'payment_success':
         notificationContent = `Payment of $${amount} for ${listingTitle} was successful.`
         notificationUrl = '/app/renter/payments'

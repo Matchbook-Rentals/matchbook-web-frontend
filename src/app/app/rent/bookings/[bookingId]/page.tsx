@@ -40,8 +40,6 @@ type RentPayment = {
 
 function getPaymentStatus(rentPayment: RentPayment): string {
   // Check for explicit status field first
-  if (rentPayment.status === 'PENDING_MOVE_IN') return "Pending Move-In";
-  if (rentPayment.status === 'FAILED_MOVE_IN') return "Move-In Failed";
   if (rentPayment.status === 'SUCCEEDED') return "Paid";
   if (rentPayment.status === 'FAILED') return "Failed";
   if (rentPayment.status === 'PROCESSING') return "Processing";

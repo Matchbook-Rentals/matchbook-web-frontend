@@ -73,8 +73,8 @@ enum RentPaymentType {
 }
 
 enum RentPaymentStatus {
-  PENDING_MOVE_IN   // Waiting for move-in completion before processing
-  FAILED_MOVE_IN    // Move-in failed, payment on hold
+  PENDING_MOVE_IN   // DEPRECATED: No longer used as of 2025-11-14. Remove in next migration.
+  FAILED_MOVE_IN    // DEPRECATED: No longer used as of 2025-11-14. Remove in next migration.
   PENDING           // Not yet attempted
   PROCESSING        // ACH in progress (3-5 days)
   AUTHORIZED        // Card authorized but not captured
@@ -523,7 +523,7 @@ model Booking {
   createdAt DateTime @default(now())
   status    String   @default("reserved")  // "reserved", "pending_payment", "confirmed", "payment_failed", "cancelled"
 
-  // Move-in tracking fields
+  // DEPRECATED: Move-in tracking fields - no longer used as of 2025-11-14. Remove in next migration.
   moveInCompletedAt DateTime?
   moveInStatus String? @default("pending") // "pending", "confirmed", "issue_reported"
   moveInConfirmedAt DateTime?

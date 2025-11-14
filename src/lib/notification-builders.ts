@@ -142,31 +142,6 @@ export function buildNotificationEmailData(
         listingTitle: data.listingTitle
       };
 
-    case 'move_in_confirmation_prompt':
-      return {
-        listingTitle: data.listingTitle,
-        listingAddress: data.listingAddress,
-        bookingId: data.bookingId,
-        moveInDate: data.moveInDate || data.date
-      };
-
-    case 'move_in_confirmation_reminder':
-      return {
-        listingTitle: data.listingTitle,
-        bookingId: data.bookingId,
-        autoConfirmTime: data.autoConfirmTime || '3:00 AM tomorrow'
-      };
-
-    case 'move_in_issue_reported_host':
-      return {
-        listingTitle: data.listingTitle,
-        renterName: data.renterName || data.senderName,
-        bookingId: data.bookingId,
-        listingId: data.listingId,
-        issueNotes: data.issueNotes || data.issueDescription,
-        reportedAt: data.reportedAt
-      };
-
     case 'payment_success':
       return {
         amount: data.amount,

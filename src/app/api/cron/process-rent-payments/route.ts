@@ -155,11 +155,7 @@ const findDuePayments = async (todayMidnight: Date) => {
       cancelledAt: null,
       stripePaymentMethodId: { not: null },
       // Only process payments that haven't exceeded retry limit
-      retryCount: { lt: MAX_PAYMENT_RETRIES },
-      // Skip payments awaiting move-in completion
-      // Note: Status transitions from PENDING_MOVE_IN to PENDING when:
-      // User signals successful/failure of move-in. Failure to answer will assume success at end of day
-      status: { not: 'PENDING_MOVE_IN' }
+      retryCount: { lt: MAX_PAYMENT_RETRIES }
     },
     include: {
       booking: {

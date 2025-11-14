@@ -310,37 +310,6 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
     }
   },
 
-  // Move-in confirmation prompts
-  move_in_confirmation_prompt: {
-    subject: '', // Dynamic subject
-    headerText: 'Welcome to Your New Home!',
-    contentTitle: '',
-    buttonText: 'Confirm Move-In or Report Issue',
-    getContentText: (content, notification) => {
-      return content;
-    }
-  },
-
-  move_in_confirmation_reminder: {
-    subject: '', // Dynamic subject
-    headerText: 'Move-In Confirmation Needed',
-    contentTitle: '',
-    buttonText: 'Confirm Move-In or Report Issue',
-    getContentText: (content, notification) => {
-      return content;
-    }
-  },
-
-  move_in_issue_reported_host: {
-    subject: '', // Dynamic subject
-    headerText: 'Move-In Issue Reported',
-    contentTitle: '',
-    buttonText: 'View Booking Details',
-    getContentText: (content, notification) => {
-      return content;
-    }
-  },
-
   rent_payment_failed: {
     subject: 'Payment Issue. Action Required',
     headerText: 'Payment Issue',
@@ -726,58 +695,6 @@ export function buildNotificationEmailData(
       emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host/${listingId}/bookings/${bookingId}`;
     } else {
       emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host-dashboard?tab=bookings`;
-    }
-  }
-
-  // Add special formatting for move-in confirmation prompt
-  if (actionType === 'move_in_confirmation_prompt' && additionalData) {
-    const firstName = user?.firstName || 'there';
-    const listingTitle = additionalData.listingTitle || 'your new home';
-    const listingAddress = additionalData.listingAddress || '';
-    const moveInDate = additionalData.moveInDate || 'today';
-    const bookingId = additionalData.bookingId;
-
-    emailData.contentText = `Hi ${firstName}, we hope your move-in to ${listingTitle} went smoothly!\n\nYour move-in date: ${moveInDate}\nProperty address: ${listingAddress}\n\nPlease confirm below that you've successfully moved in so we can begin processing your rent payments.\n\nIf you experienced any issues with your move-in (property condition, keys, access, etc.), please let us know immediately and we'll work with you to resolve them. Your payments will remain on hold until the issues are addressed.`;
-
-    emailData.subject = `Confirm Your Move-In at ${listingTitle}`;
-
-    if (bookingId) {
-      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/rent/bookings/${bookingId}/move-in`;
-    }
-  }
-
-  // Add special formatting for move-in confirmation reminder
-  if (actionType === 'move_in_confirmation_reminder' && additionalData) {
-    const firstName = user?.firstName || 'there';
-    const listingTitle = additionalData.listingTitle || 'your new home';
-    const autoConfirmTime = additionalData.autoConfirmTime || '3:00 AM tomorrow';
-    const bookingId = additionalData.bookingId;
-
-    emailData.contentText = `Hi ${firstName}, this is a friendly reminder to confirm your move-in at ${listingTitle}.\n\n⏰ Important: If we don't hear from you by tonight, we'll assume your move-in was successful and automatically begin processing your first rent payment tomorrow morning at ${autoConfirmTime}.\n\nIf everything went smoothly, please click below to confirm.\n\nIf you experienced any issues, please report them now so we can help resolve them before processing payments.`;
-
-    emailData.subject = `Reminder: Confirm Your Move-In at ${listingTitle}`;
-
-    if (bookingId) {
-      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/rent/bookings/${bookingId}/move-in`;
-    }
-  }
-
-  // Add special formatting for move-in issue reported (host notification)
-  if (actionType === 'move_in_issue_reported_host' && additionalData) {
-    const firstName = user?.firstName || 'there';
-    const renterName = additionalData.renterName || 'Your renter';
-    const listingTitle = additionalData.listingTitle || 'your property';
-    const issueNotes = additionalData.issueNotes || 'No details provided';
-    const reportedAt = additionalData.reportedAt || 'recently';
-    const listingId = additionalData.listingId;
-    const bookingId = additionalData.bookingId;
-
-    emailData.contentText = `Hi ${firstName}, ${renterName} has reported an issue with their move-in at ${listingTitle}.\n\nIssue reported: ${reportedAt}\n\nDetails from renter:\n"${issueNotes}"\n\nTheir rent payments are currently on hold. Our support team has been notified and will work with both of you to resolve this issue. You may also receive direct contact from the renter.\n\nPlease review the booking details and be prepared to assist in resolving the issue.`;
-
-    emailData.subject = `Move-In Issue Reported: ${listingTitle}`;
-
-    if (listingId && bookingId) {
-      emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host/${listingId}/bookings/${bookingId}`;
     }
   }
 

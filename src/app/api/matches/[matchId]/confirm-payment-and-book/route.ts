@@ -425,7 +425,6 @@ export async function POST(
               baseAmount: payment.baseAmount || dollarsToCents(payment.amount), // New: base amount before fees
               dueDate: payment.dueDate,
               isPaid: false,
-              status: 'PENDING_MOVE_IN', // New payments await move-in completion before processing
               stripePaymentMethodId: match.stripePaymentMethodId, // Attach payment method for auto-charging
               type: 'MONTHLY_RENT'
             }
