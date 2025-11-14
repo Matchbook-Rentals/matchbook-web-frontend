@@ -4,6 +4,7 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import { ListingAndImages } from '@/types';
 import { Trip } from '@prisma/client';
 import { getUtilitiesIncluded } from '@/lib/calculate-rent';
+import { PropertyType } from '@/constants/enums';
 
 interface HighlightsSectionProps {
   listing: ListingAndImages;
@@ -21,7 +22,7 @@ const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing, trip }) 
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
           {/* Category-dependent icons */}
-          {listing.category === "singleFamily" && (
+          {listing.category === PropertyType.SingleFamily && (
             <div className="flex items-start gap-1.5">
               <div className="relative w-5 h-5">
                 <AmenitiesIcons.UpdatedSingleFamilyIcon className="absolute w-4 h-4 top-0.5 left-0.5" />
@@ -31,7 +32,7 @@ const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing, trip }) 
               </span>
             </div>
           )}
-          {listing.category === "townhouse" && (
+          {listing.category === PropertyType.Townhouse && (
             <div className="flex items-start gap-1.5">
               <div className="relative w-5 h-5">
                 <AmenitiesIcons.UpdatedTownhouseIcon className="absolute w-4 h-4 top-0.5 left-0.5" />
@@ -41,7 +42,7 @@ const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing, trip }) 
               </span>
             </div>
           )}
-          {listing.category === "privateRoom" && (
+          {listing.category === PropertyType.PrivateRoom && (
             <div className="flex items-start gap-1.5">
               <div className="relative w-5 h-5">
                 <AmenitiesIcons.UpdatedSingleRoomIcon className="absolute w-4 h-4 top-0.5 left-0.5" />
@@ -51,7 +52,7 @@ const HighlightsSection: React.FC<HighlightsSectionProps> = ({ listing, trip }) 
               </span>
             </div>
           )}
-          {(listing.category === "apartment" || listing.category === "condo") && (
+          {listing.category === PropertyType.Apartment && (
             <div className="flex items-start gap-1.5">
               <div className="relative w-5 h-5">
                 <AmenitiesIcons.UpdatedApartmentIcon className="absolute w-4 h-4 top-0.5 left-0.5" />

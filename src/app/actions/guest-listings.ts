@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/client';
 import { ListingAndImages } from '@/types/';
 import { statesInRadiusData } from "@/constants/state-radius-data";
 import { calculateLengthOfStay } from '@/lib/calculate-rent';
+import { normalizeCategory, getCategoryDisplay } from '@/constants/enums';
 
 /**
  * Guest version of pullListingsFromDb that doesn't require authentication
@@ -124,10 +125,8 @@ export const pullGuestListingsFromDb = async (
     const listingsWithFullDetails = listings.map(listing => {
       const distance = listingsWithDistanceMap.get(listing.id) || 0;
 
-      // Normalize category to handle inconsistent casing in database
-      const normalizedCategory = listing.category
-        ? listing.category.toLowerCase().replace(/\s+/g, '')
-        : listing.category;
+      // Normalize category to PropertyType enum value
+      const normalizedCategory = normalizeCategory(listing.category);
 
       // Calculate utilities for this specific trip duration and write to deprecated field
       const lengthOfStay = calculateLengthOfStay(startDate, endDate);
@@ -147,6 +146,7 @@ export const pullGuestListingsFromDb = async (
       return {
         ...listing,
         category: normalizedCategory, // Normalize category format
+        displayCategory: getCategoryDisplay(normalizedCategory), // Add human-readable display name
         utilitiesIncluded, // Set utilities based on trip duration
         distance: Math.round(distance * 100) / 100,
       } as ListingAndImages;

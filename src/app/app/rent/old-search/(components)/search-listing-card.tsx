@@ -18,7 +18,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
-import { ListingStatus } from '@/constants/enums'
+import { ListingStatus, PropertyType } from '@/constants/enums'
 
 const TITLE_MAX_LENGTH = 40
 
@@ -219,13 +219,13 @@ export default function SearchListingCard({ listing, status, className, style, d
             <div className={bodyTextStyle}>
               {(() => {
                 switch (listing.category) {
-                  case 'privateRoom':
+                  case PropertyType.PrivateRoom:
                     return 'Private Room';
-                  case 'singleFamily':
+                  case PropertyType.SingleFamily:
                     return 'Single Family';
-                  case 'townhouse':
+                  case PropertyType.Townhouse:
                     return 'Townhouse';
-                  case 'apartment':
+                  case PropertyType.Apartment:
                     return 'Apartment';
                   default:
                     return 'Property';

@@ -14,6 +14,7 @@ import { iconAmenities } from '@/lib/amenities-list';
 import { Badge } from "@/components/ui/badge"
 import { BrandButton } from "@/components/ui/brandButton"
 import { getUtilitiesIncluded } from '@/lib/calculate-rent';
+import { PropertyType } from '@/constants/enums';
 
 interface DesktopListingCardProps {
   listing: {
@@ -216,20 +217,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
           <div className="flex flex-col gap-0 pb-6">
             <div className="flex items-center justify-between w-full">
               <div className="font-normal text-[#4f4f4f] text-sm">
-                {(() => {
-                  switch (listing.category) {
-                    case 'privateRoom':
-                      return 'Private Room';
-                    case 'singleFamily':
-                      return 'Single Family';
-                    case 'townhouse':
-                      return 'Townhouse';
-                    case 'apartment':
-                      return 'Apartment';
-                    default:
-                      return 'Property';
-                  }
-                })()}
+                {listing.displayCategory}
               </div>
 
               <div className="flex items-center gap-0.5">
@@ -327,7 +315,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
             <div className={sectionStyles}>
               <h3 className={sectionHeaderStyles}>Highlights</h3>
               <div className="space-y-1 py-1">
-                {listing.category === 'singleFamily' && (
+                {listing.category === PropertyType.SingleFamily && (
                   <AmenityListItem
                     icon={AmenitiesIcons.UpdatedSingleFamilyIcon}
                     label="Single Family"
@@ -335,7 +323,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
                     iconClassNames="h-[22px] w-[22px]"
                   />
                 )}
-                {listing.category === 'townhouse' && (
+                {listing.category === PropertyType.Townhouse && (
                   <AmenityListItem
                     icon={AmenitiesIcons.UpdatedTownhouseIcon}
                     label="Townhouse"
@@ -343,7 +331,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
                     iconClassNames="h-[22px] w-[22px]"
                   />
                 )}
-                {listing.category === 'privateRoom' && (
+                {listing.category === PropertyType.PrivateRoom && (
                   <AmenityListItem
                     icon={AmenitiesIcons.UpdatedSingleRoomIcon}
                     label="Private Room"
@@ -351,7 +339,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
                     iconClassNames="h-[22px] w-[22px]"
                   />
                 )}
-                {(listing.category === 'apartment' || listing.category === 'condo') && (
+                {listing.category === PropertyType.Apartment && (
                   <AmenityListItem
                     icon={AmenitiesIcons.UpdatedApartmentIcon}
                     label="Apartment"

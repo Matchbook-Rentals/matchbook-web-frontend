@@ -10,6 +10,7 @@ import { differenceInDays, isValid } from 'date-fns'; // Import date-fns for val
 import { capNumberValue } from '@/lib/number-validation';
 import { revalidatePath } from "next/cache";
 import { calculateLengthOfStay } from '@/lib/calculate-rent';
+import { normalizeCategory, getCategoryDisplay } from '@/constants/enums';
 
 // Types for deletion checking
 interface BookingDetail {
@@ -252,10 +253,8 @@ export const pullListingsFromDb = async (
     const listingsWithFullDetails = listings.map(listing => {
       const distance = listingsWithDistanceMap.get(listing.id) ?? Infinity; // Use Infinity if somehow not found
 
-      // Normalize category to handle inconsistent casing in database
-      const normalizedCategory = listing.category
-        ? listing.category.toLowerCase().replace(/\s+/g, '')
-        : listing.category;
+      // Normalize category to PropertyType enum value
+      const normalizedCategory = normalizeCategory(listing.category);
 
       // Calculate utilities for this specific trip duration and write to deprecated field
       const lengthOfStay = calculateLengthOfStay(startDate, endDate);
@@ -275,6 +274,7 @@ export const pullListingsFromDb = async (
       return {
         ...listing,
         category: normalizedCategory, // Normalize category format
+        displayCategory: getCategoryDisplay(normalizedCategory), // Add human-readable display name
         utilitiesIncluded, // Set utilities based on trip duration
         distance, // Add the distance calculated by the raw query
         listingImages: listing.listingImages,

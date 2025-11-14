@@ -44,6 +44,7 @@ export interface ListingAndImages extends Listing {
   availableEnd?: Date;
   isActuallyAvailable?: boolean; // Helper flag from calculation
   monthlyPricing?: ListingMonthlyPricing[];
+  displayCategory?: string; // Human-readable category display name
 }
 
 export interface RequestWithUser extends HousingRequest {
@@ -74,6 +75,7 @@ export interface ListingAndImages extends Listing {
   uScore?: number
   unavailablePeriods?: ListingUnavailability[]
   bookings?: Booking[]
+  displayCategory?: string // Human-readable category display name
 };
 
 export interface RequestWithUser extends HousingRequest {

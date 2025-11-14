@@ -230,20 +230,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         <div className="flex flex-col gap-0 pb-6">
           <div className="flex items-center justify-between w-full">
             <div className={bodyTextStyle}>
-              {(() => {
-                switch (listing.category) {
-                  case 'privateRoom':
-                    return 'Private Room';
-                  case 'singleFamily':
-                    return 'Single Family';
-                  case 'townhouse':
-                    return 'Townhouse';
-                  case 'apartment':
-                    return 'Apartment';
-                  default:
-                    return 'Property';
-                }
-              })()} in {listing.state}
+              {listing.displayCategory} in {listing.state}
             </div>
 
             <div className="flex items-center gap-0.5">
