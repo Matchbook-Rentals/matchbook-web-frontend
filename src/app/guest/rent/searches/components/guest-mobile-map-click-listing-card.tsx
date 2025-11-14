@@ -416,7 +416,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
             {/* Description Section */}
             <div className={sectionStyles}>
               <h3 className={sectionHeaderStyles}>Description</h3>
-              <p className="text-[14px] text-gray-600">
+              <p className="text-[14px] text-gray-600 whitespace-pre-wrap break-words">
                 {listing.description || 'No description available for this property.'}
               </p>
             </div>
