@@ -490,6 +490,16 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
                 onResetRequest={(resetFn) => {
                   mapResetRef.current = resetFn;
                 }}
+                customSnapshot={{
+                  // Real snapshot for guest likes/dislikes with database persistence
+                  isLiked: (id: string) => favIds.has(id),
+                  isDisliked: (id: string) => dislikedIds.has(id),
+                  isRequested: () => false,
+                  optimisticLike: actions.optimisticLike,
+                  optimisticDislike: actions.optimisticDislike,
+                  optimisticRemoveLike: actions.optimisticRemoveLike,
+                  optimisticRemoveDislike: actions.optimisticRemoveDislike,
+                }}
               />
             </div>
           )}
