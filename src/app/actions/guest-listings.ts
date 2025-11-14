@@ -122,8 +122,15 @@ export const pullGuestListingsFromDb = async (
 
     const listingsWithFullDetails = listings.map(listing => {
       const distance = listingsWithDistanceMap.get(listing.id) || 0;
+
+      // Normalize category to handle inconsistent casing in database
+      const normalizedCategory = listing.category
+        ? listing.category.toLowerCase().replace(/\s+/g, '')
+        : listing.category;
+
       return {
         ...listing,
+        category: normalizedCategory, // Normalize category format
         distance: Math.round(distance * 100) / 100,
       } as ListingAndImages;
     });

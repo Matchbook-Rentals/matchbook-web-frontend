@@ -250,8 +250,15 @@ export const pullListingsFromDb = async (
 
     const listingsWithFullDetails = listings.map(listing => {
       const distance = listingsWithDistanceMap.get(listing.id) ?? Infinity; // Use Infinity if somehow not found
+
+      // Normalize category to handle inconsistent casing in database
+      const normalizedCategory = listing.category
+        ? listing.category.toLowerCase().replace(/\s+/g, '')
+        : listing.category;
+
       return {
         ...listing,
+        category: normalizedCategory, // Normalize category format
         distance, // Add the distance calculated by the raw query
         listingImages: listing.listingImages,
         bedrooms: listing.bedrooms,
