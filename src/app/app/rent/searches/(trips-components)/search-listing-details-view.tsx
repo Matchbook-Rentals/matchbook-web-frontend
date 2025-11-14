@@ -135,7 +135,7 @@ function ListingDetailsView({
           listingImages={listing.listingImages || []}
         />
         <div className='flex justify-between gap-x-8 relative'>
-          <ListingDescription listing={listing} showFullAmenities={showFullAmenities} />
+          <ListingDescription listing={listing} showFullAmenities={showFullAmenities} trip={state.trip} />
           <div
             className="w-1/2 mt-6 h-fit lg:w-full rounded-[12px] shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
           >

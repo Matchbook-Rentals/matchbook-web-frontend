@@ -96,6 +96,12 @@ export const getUtilitiesIncluded = (
     pricing => pricing.months === lengthOfStay.months
   );
 
-  // Use duration-specific utilities value (no fallback - utilitiesIncluded field is deprecated)
-  return monthlyPricing?.utilitiesIncluded ?? false;
+  // If we have a match, use that; otherwise fallback to 1-month policy
+  if (monthlyPricing?.utilitiesIncluded !== undefined) {
+    return monthlyPricing.utilitiesIncluded;
+  }
+
+  // Fallback to 1-month policy
+  const oneMonthPricing = listing.monthlyPricing?.find(pricing => pricing.months === 1);
+  return oneMonthPricing?.utilitiesIncluded ?? false;
 }

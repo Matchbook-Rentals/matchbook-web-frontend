@@ -38,6 +38,15 @@ const GuestSelectedListingDetails: React.FC<GuestSelectedListingDetailsProps> = 
   const baseUrl = process.env.NEXT_PUBLIC_URL || "";
   const { state } = useGuestTripContext();
 
+  // Create mock trip object from guest session for utilities calculation
+  const mockTrip = state.session ? {
+    id: 'guest',
+    startDate: state.session.searchParams.startDate || new Date(),
+    endDate: state.session.searchParams.endDate || new Date(),
+    latitude: state.session.searchParams.lat,
+    longitude: state.session.searchParams.lng,
+  } : null;
+
   // Use guest-provided snapshot only
   const listingsSnapshot = customSnapshot;
 
@@ -136,7 +145,7 @@ const GuestSelectedListingDetails: React.FC<GuestSelectedListingDetailsProps> = 
 
           {/* Highlights Section */}
           <div className="lg:mt-4 mt-2">
-            <HighlightsSection listing={listing} trip={state.session as any} />
+            <HighlightsSection listing={listing} trip={mockTrip as any} />
           </div>
 
           {/* Description Section */}
