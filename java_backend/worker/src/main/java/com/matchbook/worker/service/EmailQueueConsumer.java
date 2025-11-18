@@ -16,7 +16,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Email queue consumer with rate limiting (2 emails/sec per Resend limits)
+ * Email queue consumer with rate limiting (conservative 1.67 emails/sec to avoid Resend rate limits)
  */
 @Service
 @Slf4j
@@ -28,7 +28,9 @@ public class EmailQueueConsumer {
     private static final String DLQ = "matchbook:emails:dlq";
 
     private static final int MAX_ATTEMPTS = 3;
-    private static final double EMAILS_PER_SECOND = 2.0;
+    // Conservative rate: 1 email every 600ms (1.67/sec) to avoid Resend rate limits
+    // Resend allows 2/sec but measures per calendar second, so we add buffer
+    private static final double EMAILS_PER_SECOND = 1.67;
     private static final long POLL_TIMEOUT_SECONDS = 5;
     private static final long RETRY_DELAY_BASE_MS = 1000; // 1 second base
 
