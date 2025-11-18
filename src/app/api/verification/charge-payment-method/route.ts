@@ -41,8 +41,8 @@ export async function POST(req: Request) {
         userId,
         type: 'matchbookVerification',
       },
-      // Explicitly allow card and us_bank_account payment methods
-      payment_method_types: ['card', 'us_bank_account'],
+      // Restrict to only card payment methods (no ACH/bank accounts)
+      payment_method_types: ['card'],
     });
 
     console.log('✅ [Verification Payment] Payment intent created:', {

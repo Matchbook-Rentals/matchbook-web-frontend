@@ -107,7 +107,7 @@ const AddPaymentMethodForm = ({
         <PaymentElement
           options={{
             layout: 'tabs',
-            paymentMethodOrder: ['card', 'us_bank_account'],
+            paymentMethodOrder: ['card'],
           }}
         />
       </div>
@@ -167,10 +167,13 @@ export const VerificationPaymentSelector = ({
 
         const data = await response.json();
         console.log('💳 Fetched payment methods:', data.paymentMethods);
-        setSavedPaymentMethods(data.paymentMethods || []);
 
-        // If no saved methods, show the form immediately
-        if (!data.paymentMethods || data.paymentMethods.length === 0) {
+        // Filter to card payment methods only (exclude ACH/bank accounts)
+        const cardOnlyMethods = (data.paymentMethods || []).filter(pm => pm.type === 'card');
+        setSavedPaymentMethods(cardOnlyMethods);
+
+        // If no saved card methods, show the form immediately
+        if (!cardOnlyMethods || cardOnlyMethods.length === 0) {
           setShowAddNewForm(true);
         }
       } catch (error) {

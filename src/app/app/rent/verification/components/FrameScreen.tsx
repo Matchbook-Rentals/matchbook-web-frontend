@@ -188,7 +188,7 @@ export const FrameScreen = (): JSX.Element => {
               : undefined
           }
           primaryButton={{
-            label: "Continue to Authorization",
+            label: "Continue",
             onClick: handlePersonalInfoSubmit,
           }}
         />
@@ -202,7 +202,7 @@ export const FrameScreen = (): JSX.Element => {
             variant: "outline",
           }}
           primaryButton={{
-            label: "Agree & Continue",
+            label: "Continue",
             onClick: handleFinalSubmit,
           }}
         />

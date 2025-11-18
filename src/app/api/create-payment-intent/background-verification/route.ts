@@ -27,8 +27,8 @@ export async function POST(req: Request) {
         sessionId,
         amount: '2500', // Store amount in metadata for reference
       },
-      // Restrict to only card and US bank account (ACH) payment methods
-      payment_method_types: ['card', 'us_bank_account'],
+      // Restrict to only card payment methods (no ACH/bank accounts)
+      payment_method_types: ['card'],
     });
 
     return NextResponse.json({
