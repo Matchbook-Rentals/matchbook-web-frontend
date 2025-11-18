@@ -288,10 +288,12 @@ export default function HostListingCard({
   };
 
   // Share functionality
+  const baseUrl = process.env.NEXT_PUBLIC_URL || "https://matchbookrentals.com";
+
   const handleShare = async () => {
     setIsPopoverOpen(false); // Close popover if opened from mobile menu
 
-    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
     const shareData = {
       title: listing.title || displayAddress,
       text: "Check out this listing",
@@ -325,7 +327,7 @@ export default function HostListingCard({
   };
 
   const handleCopyLink = async () => {
-    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast.success("Link copied to clipboard!");
@@ -337,7 +339,7 @@ export default function HostListingCard({
   };
 
   const handleEmailShare = () => {
-    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
     const subject = `${listing.title || displayAddress} on Matchbook`;
     const body = `Check out this listing on Matchbook!\n\nClick here to view: ${shareUrl}`;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -345,7 +347,7 @@ export default function HostListingCard({
   };
 
   const handleMessageShare = () => {
-    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
     const body = `Check out this listing\n\n${shareUrl}`;
     window.location.href = `sms:?body=${encodeURIComponent(body)}`;
     setIsShareDialogOpen(false);
