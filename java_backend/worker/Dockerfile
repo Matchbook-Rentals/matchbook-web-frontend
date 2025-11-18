@@ -9,7 +9,17 @@ RUN mvn dependency:go-offline -B
 
 # Copy source and build
 COPY src ./src
-RUN mvn clean package -DskipTests -B
+RUN echo "========================================" && \
+    echo "Building Email Worker v1.1" && \
+    echo "Configuration:" && \
+    echo "  Rate Limit: 1.67 emails/sec" && \
+    echo "  Interval: 1 email per 600ms" && \
+    echo "  Strategy: Single-threaded with blocking rate limiter" && \
+    echo "  Retry: Exponential backoff (1s, 2s, 4s)" && \
+    echo "  Max Attempts: 3 before DLQ" && \
+    echo "  Build Date: $(date '+%Y-%m-%d %H:%M:%S')" && \
+    echo "========================================" && \
+    mvn clean package -DskipTests -B
 
 # Runtime stage
 FROM eclipse-temurin:17-jre-alpine

@@ -58,7 +58,15 @@ public class EmailQueueConsumer {
     public void init() {
         if (queueEnabled) {
             running = true;
-            log.info("Email queue consumer initialized. Rate limit: {} emails/sec", EMAILS_PER_SECOND);
+            long millisPerEmail = Math.round(1000.0 / EMAILS_PER_SECOND);
+            log.info("========================================");
+            log.info("Email Queue Consumer Configuration:");
+            log.info("  Rate Limit: {} emails/sec", EMAILS_PER_SECOND);
+            log.info("  Interval: 1 email per {}ms", millisPerEmail);
+            log.info("  Max Attempts: {}", MAX_ATTEMPTS);
+            log.info("  Retry Base Delay: {}ms", RETRY_DELAY_BASE_MS);
+            log.info("  Queue Poll Timeout: {}s", POLL_TIMEOUT_SECONDS);
+            log.info("========================================");
             // Start consumer thread
             Thread consumerThread = new Thread(this::consumeQueue, "email-queue-consumer");
             consumerThread.setDaemon(false);
