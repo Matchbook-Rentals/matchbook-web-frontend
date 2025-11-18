@@ -21,6 +21,8 @@ export const FrameScreen = (): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<Step>("personal-info");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [processingStep, setProcessingStep] = useState<ProcessingStep>("select-payment");
+  const [canPay, setCanPay] = useState(false);
+  const [paymentFn, setPaymentFn] = useState<(() => void) | null>(null);
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -117,6 +119,11 @@ export const FrameScreen = (): JSX.Element => {
     }, 300);
   };
 
+  const handlePaymentMethodReady = (ready: boolean, payFn: () => void) => {
+    setCanPay(ready);
+    setPaymentFn(() => payFn);
+  };
+
   return (
     <div className="flex flex-col w-full items-start justify-center relative overflow-hidden pb-24">
       <Form {...form}>
@@ -162,6 +169,7 @@ export const FrameScreen = (): JSX.Element => {
               onComplete={handleProcessingComplete}
               onBack={handleBackToAuthorization}
               onStepChange={setProcessingStep}
+              onPaymentMethodReady={handlePaymentMethodReady}
             />
           )}
 
@@ -221,9 +229,9 @@ export const FrameScreen = (): JSX.Element => {
               : undefined
           }
           primaryButton={{
-            label: "View Report",
-            onClick: handleProcessingComplete,
-            disabled: processingStep !== "complete",
+            label: processingStep === "select-payment" ? "Pay $25.00" : "View Report",
+            onClick: processingStep === "select-payment" && paymentFn ? paymentFn : handleProcessingComplete,
+            disabled: processingStep === "select-payment" ? !canPay : processingStep !== "complete",
           }}
         />
       )}

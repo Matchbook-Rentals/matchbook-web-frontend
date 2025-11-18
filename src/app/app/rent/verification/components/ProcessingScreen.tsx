@@ -2,6 +2,7 @@
 
 import { HomeIcon, CheckCircle2, Loader2, AlertCircle, Clock } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@clerk/nextjs";
 import {
   Breadcrumb,
@@ -21,6 +22,7 @@ interface ProcessingScreenProps {
   onComplete?: () => void;
   onBack?: () => void;
   onStepChange?: (step: ProcessingStep) => void;
+  onPaymentMethodReady?: (canPay: boolean, payFn: () => void) => void;
 }
 
 export type ProcessingStep =
@@ -32,15 +34,15 @@ export type ProcessingStep =
   | "complete";
 
 const stepLabels: Record<ProcessingStep, string> = {
-  "select-payment": "Select Payment Method",
-  payment: "Processing Payment",
-  isoftpull: "Running Credit Pre-Screen (iSoftPull)",
-  accio: "Submitting Background Check (Accio Data)",
-  polling: "Waiting for Background Check Results",
-  complete: "Verification Complete",
+  "select-payment": "Preparing your verification...",
+  payment: "Processing payment...",
+  isoftpull: "Gathering information...",
+  accio: "Performing background checks...",
+  polling: "Finalizing verification...",
+  complete: "Verification complete!",
 };
 
-export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange }: ProcessingScreenProps): JSX.Element => {
+export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange, onPaymentMethodReady }: ProcessingScreenProps): JSX.Element => {
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState<ProcessingStep>("select-payment");
   const [completedSteps, setCompletedSteps] = useState<ProcessingStep[]>([]);
@@ -188,99 +190,54 @@ export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange }:
           </p>
         </div>
 
-        {/* Processing Steps - Always visible */}
-        <Card className="w-full rounded-2xl border border-solid border-[#cfd4dc]">
-          <CardContent className="flex flex-col items-start justify-center gap-6 p-8">
-            {(["select-payment", "payment", "isoftpull", "accio", "polling", "complete"] as ProcessingStep[]).map((step) => {
-                // Skip polling step in UI unless we're actively polling
-                if (step === "polling" && currentStep !== "polling" && !isStepComplete("polling")) {
-                  return null;
-                }
+        {/* Payment Selector - Show when on payment selection step */}
+        {currentStep === "select-payment" && !isStepComplete("select-payment") && (
+              <VerificationPaymentSelector
+                formData={formData}
+                onPaymentSuccess={handlePaymentSuccess}
+                onCancel={onBack || (() => window.history.back())}
+                onPaymentMethodReady={onPaymentMethodReady}
+              />
+        )}
 
-                return (
-                  <div key={step} className="flex items-start gap-4 w-full">
-                    <div className="flex-shrink-0 mt-1">
-                      {isStepError && step === currentStep ? (
-                        <AlertCircle className="w-6 h-6 text-red-600" />
-                      ) : step === "complete" && isStepCurrent(step) ? (
-                        <Clock className="w-6 h-6 text-amber-600" />
-                      ) : isStepComplete(step) ? (
-                        <CheckCircle2 className="w-6 h-6 text-green-600" />
-                      ) : isStepCurrent(step) && step === "select-payment" ? (
-                        <div className="w-6 h-6 rounded-full border-2 border-gray-300" />
-                      ) : isStepCurrent(step) ? (
-                        <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
-                      ) : (
-                        <div className="w-6 h-6 rounded-full border-2 border-gray-300" />
-                      )}
-                    </div>
+        {/* Processing Status - Centered spinner with sliding text */}
+        {currentStep !== "select-payment" && (
+          <div className="flex flex-col items-center justify-center gap-8 py-12 w-full min-h-[300px]">
+              {/* Spinner */}
+              {error ? (
+                <AlertCircle className="w-16 h-16 text-red-600" />
+              ) : currentStep === "complete" ? (
+                <CheckCircle2 className="w-16 h-16 text-green-600" />
+              ) : (
+                <Loader2 className="w-16 h-16 text-blue-600 animate-spin" />
+              )}
 
-                    <div className="flex-1">
-                      <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-base">
-                        {stepLabels[step]}
-                      </h3>
+              {/* Sliding Status Text */}
+              <div className="relative w-full flex justify-center items-center overflow-hidden min-h-[60px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentStep}
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="absolute"
+                  >
+                    <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-xl text-center">
+                      {error || stepLabels[currentStep]}
+                    </h3>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
 
-                      {step === "select-payment" && !isStepComplete("select-payment") && (
-                        <div className="mt-4 w-full">
-                          <VerificationPaymentSelector
-                            formData={formData}
-                            onPaymentSuccess={handlePaymentSuccess}
-                            onCancel={onBack || (() => window.history.back())}
-                          />
-                        </div>
-                      )}
-
-                      {step === "select-payment" && isStepComplete("select-payment") && (
-                        <p className="[font-family:'Poppins',Helvetica] font-normal text-green-600 text-sm mt-1">
-                          Payment method confirmed
-                        </p>
-                      )}
-
-                      {step === "payment" && (
-                        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm mt-1">
-                          {isStepComplete("payment")
-                            ? "Payment of $25.00 processed successfully"
-                            : "Processing your payment securely..."}
-                        </p>
-                      )}
-
-                      {step === "isoftpull" && (
-                        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm mt-1">
-                          {error && currentStep === "isoftpull"
-                            ? error
-                            : "Checking credit score to determine eligibility. This helps avoid unnecessary charges."}
-                        </p>
-                      )}
-
-                      {step === "accio" && (
-                        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm mt-1">
-                          Submitting request for comprehensive background check including criminal history and eviction records.
-                        </p>
-                      )}
-
-                      {step === "polling" && (
-                        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
-                          {!showPendingMessage
-                            ? "Submitting background check request..."
-                            : "Background check submitted successfully. Results typically arrive within 24-48 hours."}
-                        </p>
-                      )}
-
-                      {step === "complete" && isStepCurrent(step) && (
-                        <div className="flex items-start gap-2 mt-1">
-                          <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
-                            Background check results typically arrive within 24-48 hours, but can take up to 2 weeks. You&apos;ll receive an email when your results are ready.
-                            You can now view your credit report and safely leave this page.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-
-            </CardContent>
-          </Card>
+              {/* Additional info for complete state */}
+              {currentStep === "complete" && (
+                <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm text-center max-w-md">
+                  Background check results typically arrive within 24-48 hours, but can take up to 2 weeks. You&apos;ll receive an email when your results are ready.
+                </p>
+              )}
+          </div>
+        )}
 
         {/* Error Display */}
         {error && currentStep !== "isoftpull" && (
