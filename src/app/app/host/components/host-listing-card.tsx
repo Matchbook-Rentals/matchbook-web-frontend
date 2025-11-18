@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVerticalIcon, MapPinIcon, BedSingleIcon, BathIcon, SquareIcon, TrashIcon } from "lucide-react";
+import { MoreVerticalIcon, MapPinIcon, BedSingleIcon, BathIcon, SquareIcon, TrashIcon, ShareIcon, MailIcon, MessageSquareIcon, CopyIcon } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
@@ -15,6 +15,21 @@ import { Input } from "@/components/ui/input";
 import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from "@/components/ui/drawer";
 
 // Types for deletion response
 interface BookingDetail {
@@ -90,6 +105,7 @@ export default function HostListingCard({
   const [entityCounts, setEntityCounts] = React.useState<EntityCounts | null>(null);
   const [deletionBlocked, setDeletionBlocked] = React.useState(false);
   const [modalState, setModalState] = React.useState<'checking' | 'confirmation' | 'blocked' | 'deleting'>('checking');
+  const [isShareDialogOpen, setIsShareDialogOpen] = React.useState(false);
 
   // Map listing status to display status and color
   const getStatusInfo = (listing: ListingAndImages) => {
@@ -271,6 +287,99 @@ export default function HostListingCard({
     setModalState('checking'); // Reset to initial state
   };
 
+  // Share functionality
+  const handleShare = async () => {
+    setIsPopoverOpen(false); // Close popover if opened from mobile menu
+
+    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
+    const shareData = {
+      title: listing.title || displayAddress,
+      text: "Check out this listing",
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        toast.success("Shared successfully!");
+      } catch (error: any) {
+        // User cancelled - this is normal behavior, don't show error
+        if (error?.name === 'AbortError') {
+          return; // Silent return, no error toast
+        }
+
+        // Permission denied
+        if (error?.name === 'NotAllowedError') {
+          toast.error("Permission denied. Please allow sharing permissions.");
+          return;
+        }
+
+        // Actual error - open fallback dialog
+        console.error("Error sharing:", error);
+        toast.error("Could not share. Please try copying the link instead.");
+        setIsShareDialogOpen(true);
+      }
+    } else {
+      setIsShareDialogOpen(true);
+    }
+  };
+
+  const handleCopyLink = async () => {
+    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success("Link copied to clipboard!");
+      setIsShareDialogOpen(false);
+    } catch (error) {
+      console.error("Clipboard error:", error);
+      toast.error("Could not copy link.");
+    }
+  };
+
+  const handleEmailShare = () => {
+    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
+    const subject = listing.title || displayAddress;
+    const body = `Check out this listing\n\n${shareUrl}`;
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setIsShareDialogOpen(false);
+  };
+
+  const handleMessageShare = () => {
+    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
+    const body = `Check out this listing\n\n${shareUrl}`;
+    window.location.href = `sms:?body=${encodeURIComponent(body)}`;
+    setIsShareDialogOpen(false);
+  };
+
+  const shareOptions = (
+    <div className="flex flex-col gap-3 my-4">
+      <button
+        onClick={handleCopyLink}
+        className="flex items-center gap-3 px-4 py-4 bg-gray-100 rounded-lg hover:bg-gray-200
+                   min-h-[48px] touch-manipulation active:bg-gray-300 transition-colors"
+      >
+        <CopyIcon size={20} />
+        <span className="text-base">Copy Link</span>
+      </button>
+      <button
+        onClick={handleEmailShare}
+        className="flex items-center gap-3 px-4 py-4 bg-gray-100 rounded-lg hover:bg-gray-200
+                   min-h-[48px] touch-manipulation active:bg-gray-300 transition-colors"
+      >
+        <MailIcon size={20} />
+        <span className="text-base">Email</span>
+      </button>
+      <button
+        onClick={handleMessageShare}
+        className="flex items-center gap-3 px-4 py-4 bg-gray-100 rounded-lg hover:bg-gray-200
+                   min-h-[48px] touch-manipulation active:bg-gray-300 transition-colors"
+      >
+        <MessageSquareIcon size={20} />
+        <span className="text-base">Message</span>
+      </button>
+    </div>
+  );
+
   // For drafts without an address, use "Delete Draft" as confirmation text
   const confirmationText = (isDraft && !listing.streetAddress1) ? "Delete Draft" : listing.streetAddress1;
   const isDeleteButtonDisabled = deleteConfirmationText.toLowerCase() !== confirmationText?.toLowerCase();
@@ -429,6 +538,21 @@ export default function HostListingCard({
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2" align="end">
                       <div className="flex flex-col gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="justify-start"
+                          onClick={handleShare}
+                        >
+                          <Image
+                            src="/icon_png/share.png"
+                            alt="Share"
+                            width={16}
+                            height={16}
+                            className="w-4 h-4 mr-2"
+                          />
+                          Share
+                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -620,31 +744,47 @@ export default function HostListingCard({
 
           {/* Right Side - Price and Actions */}
           <div className="flex flex-col justify-between items-end">
-            {/* More Options Button */}
-            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-lg border-[#3c8787] h-10 w-10"
-                >
-                  <MoreVerticalIcon className="h-5 w-5" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-48 p-2" align="end">
-                <div className="flex flex-col gap-1">
+            {/* Share and More Options Buttons */}
+            <div className="flex items-center gap-2">
+              <BrandButton
+                variant="default"
+                size="icon"
+                onClick={handleShare}
+                className="h-10 w-10 rounded-lg"
+              >
+                <Image
+                  src="/icon_png/share.png"
+                  alt="Share"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
+              </BrandButton>
+              <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                <PopoverTrigger asChild>
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
-                    onClick={handleDeleteListing}
+                    variant="outline"
+                    size="icon"
+                    className="rounded-lg border-[#3c8787] h-10 w-10"
                   >
-                    <TrashIcon className="h-4 w-4 mr-2" />
-                    {isDraft ? 'Delete Draft' : 'Delete Listing'}
+                    <MoreVerticalIcon className="h-5 w-5" />
                   </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-48 p-2" align="end">
+                  <div className="flex flex-col gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={handleDeleteListing}
+                    >
+                      <TrashIcon className="h-4 w-4 mr-2" />
+                      {isDraft ? 'Delete Draft' : 'Delete Listing'}
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
 
             <div className="flex flex-col items-end gap-3">
               {/* Price */}
@@ -737,6 +877,53 @@ export default function HostListingCard({
           </div>
         )}
       </BrandModal>
+
+      {/* Share Dialog/Drawer */}
+      {isMobile ? (
+        <Drawer open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
+          <DrawerContent
+            className="pb-safe"
+            style={{
+              paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom))'
+            }}
+          >
+            <DrawerHeader>
+              <DrawerTitle>Share</DrawerTitle>
+              <DrawerDescription>Select an option to share:</DrawerDescription>
+            </DrawerHeader>
+            <div className="px-4 pb-4">
+              {shareOptions}
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={() => setIsShareDialogOpen(false)}
+                  className="px-4 py-3 rounded-lg bg-gray-200 hover:bg-gray-300
+                             min-h-[44px] touch-manipulation active:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
+          <DialogContent hideCloseButton>
+            <DialogHeader>
+              <DialogTitle>Share</DialogTitle>
+              <DialogDescription>Select an option to share:</DialogDescription>
+            </DialogHeader>
+            {shareOptions}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setIsShareDialogOpen(false)}
+                className="px-4 py-3 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }
