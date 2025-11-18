@@ -24,62 +24,12 @@ import {
 
 const disclosureSections = [
   {
-    title: "CREDIT REPORT AND BACKGROUND CHECK AUTHORIZATION DISCLOSURE",
-    content: `Authorization to Obtain Reports.
-
-By completing the Credit Report Authorization Form and Background Check Authorization Form, you authorize Matchbook LLC and its designated agencies to obtain consumer reports and background checks ("Reports") about you in compliance with the Fair Credit Reporting Act.
-
-Lawful Purpose.
-
-Any and all information obtained under the Credit Report Authorization Form and Background Check Authorization Form is collected for the valid purpose of evaluating your qualifications to rent a property listed on the Matchbook LLC platform and for any other lawful purpose covered under the Fair Credit Reporting Act. The results of your Credit Report and Background Check may impact whether you are matched with a host.
-
-Confidentiality.
-
-Matchbook LLC agrees to handle your information with care and in accordance with applicable privacy laws. Your reports will not be sold or disclosed to any third party except as explicitly stated in this consent or as required by law. Matchbook LLC may share a general summary of your credit standing (e.g., "Excellent (800–850)," "Good (670–739)," "Fair (580–669)," or ("Poor (300–579)") with hosts to assist in evaluating your application. Your full report will not be shared with hosts, property owners, or managers.
-
-Authorization to Obtain Reports.
-
-By completing the Credit Report Authorization Form and Background Check Authorization Form, you authorize Matchbook LLC and its designated agencies to obtain consumer reports and background checks ("Reports") about you in compliance with the Fair Credit Reporting Act.
-
-Lawful Purpose.
-
-Any and all information obtained under the Credit Report Authorization Form and Background Check Authorization Form is collected for the valid purpose of evaluating your qualifications to rent a property listed on the Matchbook LLC platform and for any other lawful purpose covered under the Fair Credit Reporting Act. The results of your Credit Report and Background Check may impact whether you are matched with a host.
-
-Confidentiality.
-
-Matchbook LLC agrees to handle your information with care and in accordance with applicable privacy laws. Your reports will not be sold or disclosed to any third party except as explicitly stated in this consent or as required by law. Matchbook LLC may share a general summary of your credit standing (e.g., "Excellent (800–850)," "Good (670–739)," "Fair (580–669)," or ("Poor (300–579)") with hosts to assist in evaluating your application. Your full report will not be shared with hosts, property owners, or managers.`,
+    title: "Background Check Authorization",
+    htmlPath: "/legal/rental-background-report-authorization-and-disclosure-form.html",
   },
   {
-    title: "Credit Authorization",
-    content: `I hereby authorize Matchbook LLC and its designated agents and representatives, including third-party screening providers to obtain a consumer credit report ("Report") from a consumer credit reporting agency (such as ISoftPull).  I authorize all corporations, former employees, credit agency, educational institution, government agency (local, state, or federal), or other related entity, and their agents and representatives, to release any and all information they may have about me.
-
-I understand that my personal information such as my date of birth and social security number will be used for the purpose of obtaining this Report. I understand that the Report may include, but is not limited to, information related to the following from any credit reporting agency or other financial or public sources:
-
-Credit history;
-
-I hereby authorize Matchbook LLC and its designated agents and representatives, including third-party screening providers to obtain a consumer credit report ("Report") from a consumer credit reporting agency (such as ISoftPull).  I authorize all corporations, former employees, credit agency, educational institution, government agency (local, state, or federal), or other related entity, and their agents and representatives, to release any and all information they may have about me.
-
-I understand that my personal information such as my date of birth and social security number will be used for the purpose of obtaining this Report. I understand that the Report may include, but is not limited to, information related to the following from any credit reporting agency or other financial or public sources:
-
-Credit history;`,
-  },
-  {
-    title: "Placeholder",
-    content: `This is placeholder content for the third legal disclosure section.
-
-The actual legal content is waiting at the lawyers office and will be provided once reviewed and approved by legal counsel.
-
-This section will contain important information regarding tenant rights, data privacy, and other legally required disclosures in accordance with federal and state regulations.
-
-Please note that this is temporary content used only for testing the scroll behavior and layout of the disclosure sections.
-
-This is placeholder content for the third legal disclosure section.
-
-The actual legal content is waiting at the lawyers office and will be provided once reviewed and approved by legal counsel.
-
-This section will contain important information regarding tenant rights, data privacy, and other legally required disclosures in accordance with federal and state regulations.
-
-Please note that this is temporary content used only for testing the scroll behavior and layout of the disclosure sections.`,
+    title: "Credit Check Authorization",
+    htmlPath: "/legal/RENTER CREDIT CHECK AUTHORIZATION FORM 10-09-25 Final.html",
   },
 ];
 
@@ -136,13 +86,18 @@ export const AuthorizationDisclosureScreen = ({
                 className="w-full rounded-xl border border-solid border-[#e6e6e6]"
               >
                 <CardContent className="flex flex-col items-start gap-2 px-3 py-4">
-                  <h2 className="font-m3-title-medium font-[number:var(--m3-title-medium-font-weight)] text-[#373940] text-[length:var(--m3-title-medium-font-size)] tracking-[var(--m3-title-medium-letter-spacing)] leading-[var(--m3-title-medium-line-height)] [font-style:var(--m3-title-medium-font-style)]">
+                  <h2 className="font-m3-title-medium font-[number:var(--m3-title-medium-font-weight)] text-[#373940] text-[length:var(--m3-title-medium-font-size)] tracking-[var(--m3-title-medium-letter-spacing)] leading-[var(--m3-title-medium-line-height)] [font-style:var(--m3-title-medium-font-style)] font-bold">
                     {section.title}
                   </h2>
 
                   <ScrollArea className="w-full h-[373px]">
-                    <div className="[font-family:'Poppins',Helvetica] font-normal text-[#373940] text-sm tracking-[0] leading-[normal] whitespace-pre-line pr-4">
-                      {section.content}
+                    <div className="w-full pr-4">
+                      <iframe
+                        src={section.htmlPath}
+                        className="w-full h-[350px] border-0"
+                        title={section.title}
+                        sandbox="allow-same-origin"
+                      />
                     </div>
                   </ScrollArea>
                 </CardContent>
@@ -162,25 +117,9 @@ export const AuthorizationDisclosureScreen = ({
                           onChange={(e) => field.onChange(e.target.checked)}
                           name="fcraRightsAcknowledgment"
                           label={
-                            <>
-                              <span className="font-semibold text-[#373940]">
-                                By checking this box, I confirm that I have been
-                                provided with my{" "}
-                              </span>
-                              <a
-                                href="#"
-                                className="font-semibold text-[#2644ac] underline"
-                              >
-                                Summary of Rights
-                              </a>
-                              <span className="font-semibold text-[#373940]">
-                                {" "}
-                                under the FCRA.{" "}
-                              </span>
-                              <span className="text-[#373940]">
-                                CREDIT REPORT AND BACKGROUND CHECK AUTHORIZATION DISCLOSURE
-                              </span>
-                            </>
+                            <span className="font-semibold text-[#373940]">
+                              By checking this box, I confirm that I have read and understood the Background Check Authorization and Credit Check Authorization disclosures above.
+                            </span>
                           }
                         />
                       </FormControl>
@@ -200,14 +139,9 @@ export const AuthorizationDisclosureScreen = ({
                           onChange={(e) => field.onChange(e.target.checked)}
                           name="creditAuthorizationAcknowledgment"
                           label={
-                            <>
-                              <span className="font-semibold text-[#373940]">
-                                By checking this box, I authorize Matchbook LLC to obtain my{" "}
-                              </span>
-                              <span className="text-[#373940]">
-                                credit report for rental evaluation purposes.
-                              </span>
-                            </>
+                            <span className="font-semibold text-[#373940]">
+                              By checking this box, I authorize Matchbook LLC to obtain my credit report for rental evaluation purposes.
+                            </span>
                           }
                         />
                       </FormControl>
@@ -227,14 +161,9 @@ export const AuthorizationDisclosureScreen = ({
                           onChange={(e) => field.onChange(e.target.checked)}
                           name="backgroundCheckAuthorization"
                           label={
-                            <>
-                              <span className="font-semibold text-[#373940]">
-                                By checking this box, I authorize Matchbook LLC to conduct a{" "}
-                              </span>
-                              <span className="text-[#373940]">
-                                background check and eviction history search.
-                              </span>
-                            </>
+                            <span className="font-semibold text-[#373940]">
+                              By checking this box, I authorize Matchbook LLC to conduct a background check and eviction history search.
+                            </span>
                           }
                         />
                       </FormControl>
