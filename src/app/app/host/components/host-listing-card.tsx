@@ -291,7 +291,7 @@ export default function HostListingCard({
   const handleShare = async () => {
     setIsPopoverOpen(false); // Close popover if opened from mobile menu
 
-    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
+    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
     const shareData = {
       title: listing.title || displayAddress,
       text: "Check out this listing",
@@ -325,7 +325,7 @@ export default function HostListingCard({
   };
 
   const handleCopyLink = async () => {
-    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
+    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast.success("Link copied to clipboard!");
@@ -337,15 +337,15 @@ export default function HostListingCard({
   };
 
   const handleEmailShare = () => {
-    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
-    const subject = listing.title || displayAddress;
-    const body = `Check out this listing\n\n${shareUrl}`;
+    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
+    const subject = `${listing.title || displayAddress} on Matchbook`;
+    const body = `Check out this listing on Matchbook!\n\nClick here to view: ${shareUrl}`;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setIsShareDialogOpen(false);
   };
 
   const handleMessageShare = () => {
-    const shareUrl = `${window.location.origin}/guest/listing/${listing.id}`;
+    const shareUrl = `${process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com'}/guest/listing/${listing.id}`;
     const body = `Check out this listing\n\n${shareUrl}`;
     window.location.href = `sms:?body=${encodeURIComponent(body)}`;
     setIsShareDialogOpen(false);
@@ -525,7 +525,21 @@ export default function HostListingCard({
                     <span className="text-gray-600 text-sm font-medium">No photo added</span>
                   </div>
                 )}
-                <div className="absolute top-2.5 right-2.5">
+                <div className="absolute top-2.5 right-2.5 flex items-center gap-2">
+                  <BrandButton
+                    variant="default"
+                    size="icon"
+                    onClick={handleShare}
+                    className="w-6 h-6 p-0 min-w-0"
+                  >
+                    <Image
+                      src="/icon_png/share.png"
+                      alt="Share"
+                      width={12}
+                      height={12}
+                      className="w-3 h-3"
+                    />
+                  </BrandButton>
                   <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger asChild>
                       <Button
@@ -538,21 +552,6 @@ export default function HostListingCard({
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2" align="end">
                       <div className="flex flex-col gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="justify-start"
-                          onClick={handleShare}
-                        >
-                          <Image
-                            src="/icon_png/share.png"
-                            alt="Share"
-                            width={16}
-                            height={16}
-                            className="w-4 h-4 mr-2"
-                          />
-                          Share
-                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"
