@@ -83,7 +83,7 @@ export const VerificationWhyItMatters = (): JSX.Element => {
       {/* CTA Button */}
       <BrandButton
         size="lg"
-        disabled
+        href="/app/rent/verification"
       >
         Start Screening
       </BrandButton>
