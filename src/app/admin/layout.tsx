@@ -92,11 +92,6 @@ export default async function AdminLayout({
       url: "/admin/notifications",
       icon: "Bell",
     },
-    {
-      title: "Move-In Failures",
-      url: "/admin/move-in-failures",
-      icon: "AlertCircle",
-    },
   ];
 
   const devToolsItems = [
