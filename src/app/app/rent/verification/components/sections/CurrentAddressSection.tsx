@@ -4,6 +4,7 @@ import { UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DateOfBirthPicker } from "@/components/ui/date-of-birth-picker";
 import type { VerificationFormValues } from "../../utils";
 
 const personalInfoFields = [
@@ -219,15 +220,39 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                     <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <div className="relative w-full">
-                      <Input
-                        type="date"
-                        placeholder="dd/mm/yyyy"
-                        className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]"
-                        {...field}
-                      />
-                      <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#667085] pointer-events-none" />
-                    </div>
+                    <DateOfBirthPicker
+                      value={field.value ? (() => {
+                        // Parse YYYY-MM-DD string to Date in local timezone
+                        const [year, month, day] = field.value.split('-').map(Number);
+                        return new Date(year, month - 1, day);
+                      })() : null}
+                      onChange={(date) => {
+                        if (date) {
+                          console.log('[DOB Picker] Date selected:', {
+                            rawDate: date,
+                            dateString: date.toString(),
+                            toISOString: date.toISOString(),
+                            getFullYear: date.getFullYear(),
+                            getMonth: date.getMonth(),
+                            getDate: date.getDate(),
+                            getTimezoneOffset: date.getTimezoneOffset()
+                          });
+
+                          // Extract date components directly to avoid any timezone issues
+                          const year = date.getFullYear();
+                          const month = String(date.getMonth() + 1).padStart(2, '0');
+                          const day = String(date.getDate()).padStart(2, '0');
+                          const formatted = `${year}-${month}-${day}`;
+
+                          console.log('[DOB Picker] Formatted date:', formatted);
+                          field.onChange(formatted);
+                        } else {
+                          field.onChange('');
+                        }
+                      }}
+                      placeholder="MM/DD/YYYY"
+                      className="h-12 border-[#d0d5dd] shadow-shadows-shadow-xs"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
