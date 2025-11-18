@@ -11,6 +11,7 @@ import {
 import { Loader2, CreditCard, Building2, CheckCircle2, Trash2, Plus } from 'lucide-react';
 import { BrandButton } from '@/components/ui/brandButton';
 import { Card, CardContent } from '@/components/ui/card';
+import { AddPaymentMethodCardOnly } from '@/components/stripe/add-payment-method-card-only';
 
 // Initialize Stripe
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -36,114 +37,14 @@ interface VerificationPaymentSelectorProps {
   formData: any;
   onPaymentSuccess: () => void;
   onCancel: () => void;
+  onPaymentMethodReady?: (canPay: boolean, payFn: () => void) => void;
 }
-
-// Form for adding new payment method
-const AddPaymentMethodForm = ({
-  clientSecret,
-  onSuccess,
-  onCancel,
-}: {
-  clientSecret: string;
-  onSuccess: (paymentMethodId: string) => void;
-  onCancel: () => void;
-}) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsProcessing(true);
-    setErrorMessage(null);
-
-    try {
-      // Validate the payment element
-      const { error: validateError } = await elements.submit();
-      if (validateError) {
-        setErrorMessage(validateError.message || 'Please check your payment details');
-        setIsProcessing(false);
-        return;
-      }
-
-      // Confirm setup to save payment method
-      const { error, setupIntent } = await stripe.confirmSetup({
-        elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/app/rent/verification`,
-        },
-        redirect: 'if_required',
-      });
-
-      if (error) {
-        setErrorMessage(error.message || 'Failed to add payment method');
-        setIsProcessing(false);
-        return;
-      }
-
-      if (setupIntent && setupIntent.status === 'succeeded' && setupIntent.payment_method) {
-        console.log('✅ Payment method saved:', setupIntent.payment_method);
-        onSuccess(setupIntent.payment_method as string);
-      } else {
-        setErrorMessage('Payment method setup failed with unexpected status');
-        setIsProcessing(false);
-      }
-    } catch (err) {
-      console.error('❌ Payment setup error:', err);
-      setErrorMessage(err instanceof Error ? err.message : 'Unknown error occurred');
-      setIsProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
-        <PaymentElement
-          options={{
-            layout: 'tabs',
-            paymentMethodOrder: ['card'],
-          }}
-        />
-      </div>
-
-      {errorMessage && (
-        <div className="[font-family:'Poppins',Helvetica] font-normal text-red-600 text-sm">
-          {errorMessage}
-        </div>
-      )}
-
-      <div className="flex gap-3">
-        <BrandButton
-          type="button"
-          variant="outline"
-          size="lg"
-          onClick={onCancel}
-          disabled={isProcessing}
-        >
-          Back
-        </BrandButton>
-        <BrandButton
-          type="submit"
-          size="lg"
-          disabled={!stripe || !elements || isProcessing}
-        >
-          {isProcessing ? 'Processing...' : 'Save & Continue'}
-        </BrandButton>
-      </div>
-    </form>
-  );
-};
 
 export const VerificationPaymentSelector = ({
   formData,
   onPaymentSuccess,
   onCancel,
+  onPaymentMethodReady,
 }: VerificationPaymentSelectorProps) => {
   const [savedPaymentMethods, setSavedPaymentMethods] = useState<SavedPaymentMethod[]>([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
@@ -153,6 +54,7 @@ export const VerificationPaymentSelector = ({
   const [deletingPaymentMethodId, setDeletingPaymentMethodId] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isCreatingSetupIntent, setIsCreatingSetupIntent] = useState(false);
 
   // Fetch saved payment methods on mount
   useEffect(() => {
@@ -188,38 +90,50 @@ export const VerificationPaymentSelector = ({
     fetchPaymentMethods();
   }, []);
 
-  // Create setup intent when showing new method form
+  // Notify parent when payment method selection changes
   useEffect(() => {
-    if (!showAddNewForm) return;
+    if (onPaymentMethodReady) {
+      const canPay = !showAddNewForm && !!selectedPaymentMethod && !isProcessing;
+      onPaymentMethodReady(canPay, handleUseExistingMethod);
+    }
+  }, [selectedPaymentMethod, showAddNewForm, isProcessing, onPaymentMethodReady]);
 
-    const createSetupIntent = async () => {
-      try {
-        console.log('🔧 Creating setup intent for new payment method');
+  // Handle clicking "Add New Payment Method" - creates setup intent on-demand
+  const handleAddNewPaymentMethod = async () => {
+    setIsCreatingSetupIntent(true);
+    setErrorMessage(null);
 
-        // Save form data to localStorage for later retrieval
-        localStorage.setItem('verificationFormData', JSON.stringify(formData));
+    try {
+      console.log('🔧 Creating setup intent for new payment method');
 
-        const response = await fetch('/api/create-payment-intent/background-verification', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ returnUrl: window.location.href }),
-        });
+      // Save form data to localStorage for later retrieval
+      localStorage.setItem('verificationFormData', JSON.stringify(formData));
 
-        if (!response.ok) {
-          throw new Error('Failed to create setup intent');
-        }
+      const response = await fetch('/api/create-payment-intent/background-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ returnUrl: window.location.href }),
+      });
 
-        const data = await response.json();
-        setClientSecret(data.clientSecret);
-        console.log('✅ Setup intent created');
-      } catch (error) {
-        console.error('❌ Error creating setup intent:', error);
-        setErrorMessage('Failed to initialize payment form');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Failed to create setup intent' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
       }
-    };
 
-    createSetupIntent();
-  }, [showAddNewForm, formData]);
+      const data = await response.json();
+      setClientSecret(data.clientSecret);
+      setShowAddNewForm(true);
+      console.log('✅ Setup intent created');
+    } catch (error) {
+      console.error('❌ Error creating setup intent:', error);
+      const errorMsg = error instanceof Error ? error.message : 'Failed to initialize payment form';
+      setErrorMessage(errorMsg);
+      // Don't show the form if setup intent creation failed
+      setShowAddNewForm(false);
+    } finally {
+      setIsCreatingSetupIntent(false);
+    }
+  };
 
   // Poll for payment status
   const pollPaymentStatus = async (paymentIntentId: string): Promise<boolean> => {
@@ -343,75 +257,35 @@ export const VerificationPaymentSelector = ({
     }
   };
 
-  // Handle new payment method added
+  // Handle new payment method added - just save it, don't charge yet
   const handleNewPaymentMethodAdded = async (paymentMethodId: string) => {
-    console.log('✅ New payment method added:', paymentMethodId);
-
-    // Now charge this payment method using the same flow as existing methods
-    setIsProcessing(true);
-    setErrorMessage(null);
+    console.log('✅ New payment method saved:', paymentMethodId);
 
     try {
-      console.log('💳 Creating payment intent with new method:', paymentMethodId);
-
-      // Step 1: Create payment intent
-      const response = await fetch('/api/verification/charge-payment-method', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentMethodId }),
-      });
-
-      const data = await response.json();
+      // Refresh the payment methods list to include the newly saved method
+      const response = await fetch('/api/user/payment-methods');
 
       if (!response.ok) {
-        throw new Error(data.error || data.details || 'Failed to create payment intent');
+        throw new Error('Failed to refresh payment methods');
       }
 
-      const { clientSecret, paymentIntentId } = data;
+      const data = await response.json();
+      const cardOnlyMethods = (data.paymentMethods || []).filter(pm => pm.type === 'card');
+      setSavedPaymentMethods(cardOnlyMethods);
 
-      if (!clientSecret) {
-        throw new Error('No client secret returned from server');
-      }
+      // Auto-select the newly added payment method
+      setSelectedPaymentMethod(paymentMethodId);
 
-      console.log('✅ Payment intent created, confirming with Stripe...');
+      // Hide the add new form
+      setShowAddNewForm(false);
+      setClientSecret(null);
 
-      // Step 2: Confirm payment with Stripe (handles 3D Secure if needed)
-      if (!stripePromise) {
-        throw new Error('Stripe not loaded');
-      }
-
-      const stripe = await stripePromise;
-      if (!stripe) {
-        throw new Error('Failed to load Stripe');
-      }
-
-      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
-        clientSecret,
-        redirect: 'if_required',
-        confirmParams: {
-          return_url: `${window.location.origin}/app/rent/verification`,
-        },
-      });
-
-      if (confirmError) {
-        throw new Error(confirmError.message || 'Payment confirmation failed');
-      }
-
-      console.log('✅ Payment confirmed, starting polling...');
-
-      // Step 3: Poll for payment status
-      const success = await pollPaymentStatus(paymentIntentId);
-
-      if (success) {
-        console.log('✅ Payment successful');
-        onPaymentSuccess();
-      } else {
-        setIsProcessing(false);
-      }
+      console.log('✅ Payment method ready to use. User can now click "Pay $25.00" to charge.');
     } catch (error) {
-      console.error('❌ Error charging new payment method:', error);
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to process payment');
-      setIsProcessing(false);
+      console.error('❌ Error refreshing payment methods:', error);
+      // Even if refresh fails, try to proceed
+      setShowAddNewForm(false);
+      setSelectedPaymentMethod(paymentMethodId);
     }
   };
 
@@ -485,24 +359,18 @@ export const VerificationPaymentSelector = ({
             </CardContent>
           </Card>
         ) : (
-          <Card className="w-full rounded-2xl border border-solid border-[#cfd4dc]">
-            <CardContent className="p-8">
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <AddPaymentMethodForm
-                  clientSecret={clientSecret}
-                  onSuccess={handleNewPaymentMethodAdded}
-                  onCancel={() => {
-                    if (savedPaymentMethods.length > 0) {
-                      setShowAddNewForm(false);
-                      setClientSecret(null);
-                    } else {
-                      onCancel();
-                    }
-                  }}
-                />
-              </Elements>
-            </CardContent>
-          </Card>
+          <AddPaymentMethodCardOnly
+            clientSecret={clientSecret}
+            onSuccess={handleNewPaymentMethodAdded}
+            onCancel={() => {
+              if (savedPaymentMethods.length > 0) {
+                setShowAddNewForm(false);
+                setClientSecret(null);
+              } else {
+                onCancel();
+              }
+            }}
+          />
         )}
       </div>
     );
@@ -592,13 +460,19 @@ export const VerificationPaymentSelector = ({
 
               {/* Add new payment method button */}
               <div
-                className="border-2 border-dashed border-[#cfd4dc] rounded-lg p-4 cursor-pointer hover:border-[#3c8787] transition-colors"
-                onClick={() => setShowAddNewForm(true)}
+                className={`border-2 border-dashed border-[#cfd4dc] rounded-lg p-4 cursor-pointer hover:border-[#3c8787] transition-colors ${
+                  isCreatingSetupIntent ? 'opacity-50 cursor-wait' : ''
+                }`}
+                onClick={isCreatingSetupIntent ? undefined : handleAddNewPaymentMethod}
               >
                 <div className="flex items-center justify-center gap-2 text-[#5d606d]">
-                  <Plus className="w-4 h-4" />
+                  {isCreatingSetupIntent ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Plus className="w-4 h-4" />
+                  )}
                   <span className="[font-family:'Poppins',Helvetica] font-normal text-sm">
-                    Add New Payment Method
+                    {isCreatingSetupIntent ? 'Loading...' : 'Add New Payment Method'}
                   </span>
                 </div>
               </div>
@@ -607,26 +481,6 @@ export const VerificationPaymentSelector = ({
         </CardContent>
       </Card>
 
-      {/* Action buttons */}
-      <div className="flex gap-3">
-        <BrandButton
-          type="button"
-          variant="outline"
-          size="lg"
-          onClick={onCancel}
-          disabled={isProcessing}
-        >
-          Back
-        </BrandButton>
-        <BrandButton
-          type="button"
-          size="lg"
-          onClick={handleUseExistingMethod}
-          disabled={!selectedPaymentMethod || isProcessing}
-        >
-          {isProcessing ? 'Processing...' : 'Pay $25.00'}
-        </BrandButton>
-      </div>
     </div>
   );
 };
