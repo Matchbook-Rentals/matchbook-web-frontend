@@ -10,11 +10,13 @@ RUN mvn dependency:go-offline -B
 # Copy source and build
 COPY src ./src
 RUN echo "========================================" && \
-    echo "Building Email Worker v1.1" && \
+    echo "Building Email Worker v1.2.1" && \
     echo "Configuration:" && \
     echo "  Rate Limit: 1.67 emails/sec" && \
     echo "  Interval: 1 email per 600ms" && \
     echo "  Strategy: Single-threaded with blocking rate limiter" && \
+    echo "  FIX 1: Rate limiter acquired AFTER queue pop" && \
+    echo "  FIX 2: Added timestamp safety check (600ms min)" && \
     echo "  Retry: Exponential backoff (1s, 2s, 4s)" && \
     echo "  Max Attempts: 3 before DLQ" && \
     echo "  Build Date: $(date '+%Y-%m-%d %H:%M:%S')" && \

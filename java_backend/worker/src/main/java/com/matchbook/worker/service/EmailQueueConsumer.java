@@ -33,6 +33,7 @@ public class EmailQueueConsumer {
     private static final double EMAILS_PER_SECOND = 1.67;
     private static final long POLL_TIMEOUT_SECONDS = 5;
     private static final long RETRY_DELAY_BASE_MS = 1000; // 1 second base
+    private static final long MIN_INTERVAL_MS = 600; // Minimum 600ms between sends
 
     private final RedisTemplate<String, String> redisTemplate;
     private final ResendService resendService;
@@ -43,6 +44,7 @@ public class EmailQueueConsumer {
     private boolean queueEnabled;
 
     private volatile boolean running = false;
+    private volatile long lastEmailSentAt = 0; // Track last email send time
 
     public EmailQueueConsumer(
             RedisTemplate<String, String> redisTemplate,
@@ -105,10 +107,7 @@ public class EmailQueueConsumer {
      */
     private void processNextEmail() {
         try {
-            // Block until we can send (rate limiting)
-            rateLimiter.acquire();
-
-            // Pop email from queue (blocking with timeout)
+            // Pop email from queue FIRST (blocking with timeout)
             String jobJson = redisTemplate.opsForList()
                     .rightPopAndLeftPush(PENDING_QUEUE, PROCESSING_QUEUE,
                             POLL_TIMEOUT_SECONDS, TimeUnit.SECONDS);
@@ -118,12 +117,31 @@ public class EmailQueueConsumer {
             }
 
             EmailJob job = objectMapper.readValue(jobJson, EmailJob.class);
+
+            // ONLY acquire rate limit permit when we have an email to send
+            // This fixes the bug where permits were wasted on empty queue polls
+            // and retries were consuming double permits
+            rateLimiter.acquire();
+
+            // Additional safety check: ensure minimum interval between sends
+            long now = System.currentTimeMillis();
+            long timeSinceLastEmail = now - lastEmailSentAt;
+            if (timeSinceLastEmail < MIN_INTERVAL_MS) {
+                long additionalWait = MIN_INTERVAL_MS - timeSinceLastEmail;
+                log.debug("Additional rate limit safety: waiting {}ms more (last email {}ms ago)",
+                        additionalWait, timeSinceLastEmail);
+                Thread.sleep(additionalWait);
+            }
+
             log.debug("Processing email job {} (attempt {})", job.getJobId(), job.getAttemptNumber());
 
             // Send email
             boolean success = resendService.sendEmail(job);
 
             if (success) {
+                // Update last email sent timestamp
+                lastEmailSentAt = System.currentTimeMillis();
+
                 // Remove from processing queue
                 redisTemplate.opsForList().remove(PROCESSING_QUEUE, 1, jobJson);
                 log.info("Email sent successfully: {}", job.getJobId());
