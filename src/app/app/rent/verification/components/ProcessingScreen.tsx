@@ -1,6 +1,6 @@
 "use client"
 
-import { HomeIcon, CheckCircle2, Loader2, AlertCircle, Clock } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle, Clock } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@clerk/nextjs";
@@ -246,8 +246,8 @@ export const ProcessingScreen = ({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/" className="flex items-center">
-              <HomeIcon className="w-6 h-6" />
+            <BreadcrumbLink href="/">
+              <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator>/</BreadcrumbSeparator>

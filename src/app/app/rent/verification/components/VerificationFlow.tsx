@@ -1,11 +1,18 @@
 "use client"
 
-import { HomeIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { BrandButton } from "@/components/ui/brandButton";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { CurrentAddressSection } from "./sections/CurrentAddressSection";
 import { PersonalInformationSection } from "./sections/PersonalInformationSection";
 import { AuthorizationDisclosureScreen } from "./AuthorizationDisclosureScreen";
@@ -17,7 +24,7 @@ import { verificationSchema, type VerificationFormValues } from "../utils";
 
 type Step = "personal-info" | "authorization" | "processing" | "results" | "details";
 
-export const FrameScreen = (): JSX.Element => {
+export const VerificationFlow = (): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<Step>("personal-info");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [processingStep, setProcessingStep] = useState<ProcessingStep>("select-payment");
@@ -101,6 +108,12 @@ export const FrameScreen = (): JSX.Element => {
         setCurrentStep("processing");
         setIsTransitioning(false);
       }, 300);
+    } else {
+      // Scroll to bottom to show validation errors
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -140,21 +153,31 @@ export const FrameScreen = (): JSX.Element => {
           }`}
         >
           {currentStep === "personal-info" && (
-            <div className="flex flex-col w-full items-start justify-center relative">
-              <nav className="inline-flex items-center gap-4 relative flex-[0_0_auto] px-2 md:px-4 mb-6">
-                <HomeIcon className="w-6 h-6 text-gray-500" />
+            <div className="flex flex-col w-full items-start justify-center relative gap-4 p-2 md:p-4">
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">
+                      <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>MatchBook Renter Verification</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
 
-                <div className="relative w-fit mt-[-1.00px] font-text-md-regular font-[number:var(--text-md-regular-font-weight)] text-gray-500 text-[length:var(--text-md-regular-font-size)] tracking-[var(--text-md-regular-letter-spacing)] leading-[var(--text-md-regular-line-height)] whitespace-nowrap [font-style:var(--text-md-regular-font-style)]">
-                  /
-                </div>
+              <div className="flex flex-col w-full items-start gap-1">
+                <h1 className="font-text-heading-medium-medium text-[#373940] text-4xl">
+                  Complete MatchBook Renter Verification
+                </h1>
+                <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
+                  This screening includes a credit check, eviction history, and criminal background check
+                </p>
+              </div>
 
-                <div className="relative w-fit mt-[-1.00px] font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-900 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
-                  MatchBook Renter Verification
-                </div>
-              </nav>
-
-              <main className="flex flex-col items-start justify-center relative self-stretch w-full flex-[0_0_auto] gap-6">
-                <PersonalInformationSection />
+              <main className="flex flex-col items-start justify-center relative self-stretch w-full flex-[0_0_auto]">
                 <CurrentAddressSection form={form} />
               </main>
             </div>
@@ -228,8 +251,8 @@ export const FrameScreen = (): JSX.Element => {
       {currentStep === "processing" && (
         <VerificationFooter
           secondaryButton={
-            // Allow back unless payment is processing
-            processingStep !== "payment" && processingStep !== "isoftpull"
+            // Only show back button during payment selection
+            processingStep === "select-payment"
               ? {
                   label: "Back",
                   onClick: handleBackToAuthorization,

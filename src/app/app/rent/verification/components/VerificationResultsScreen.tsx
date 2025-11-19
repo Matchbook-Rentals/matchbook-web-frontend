@@ -1,6 +1,6 @@
 "use client"
 
-import { DownloadIcon, HomeIcon } from "lucide-react";
+import { DownloadIcon } from "lucide-react";
 import React from "react";
 import { useUser } from "@clerk/nextjs";
 import {
@@ -46,8 +46,8 @@ export const VerificationResultsScreen = ({ onViewDetails }: VerificationResults
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/" className="flex items-center">
-              <HomeIcon className="w-6 h-6" />
+            <BreadcrumbLink href="/">
+              <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator>

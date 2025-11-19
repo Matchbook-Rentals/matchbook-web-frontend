@@ -1,6 +1,5 @@
 "use client"
 
-import { HomeIcon } from "lucide-react";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import {
@@ -49,8 +48,8 @@ export const AuthorizationDisclosureScreen = ({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/" className="flex items-center">
-              <HomeIcon className="w-6 h-6" />
+            <BreadcrumbLink href="/">
+              <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator>
@@ -66,17 +65,16 @@ export const AuthorizationDisclosureScreen = ({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex flex-col items-start justify-center gap-6 w-full">
-        <div className="flex flex-col w-full items-start gap-1">
-          <h1 className="font-text-heading-medium-medium font-[number:var(--text-heading-medium-medium-font-weight)] text-[#373940] text-[length:var(--text-heading-medium-medium-font-size)] tracking-[var(--text-heading-medium-medium-letter-spacing)] leading-[var(--text-heading-medium-medium-line-height)] [font-style:var(--text-heading-medium-medium-font-style)]">
-            Complete MatchBook Renter Verification
-          </h1>
+      <div className="flex flex-col w-full items-start gap-1">
+        <h1 className="font-text-heading-medium-medium text-[#373940] text-4xl">
+          Complete MatchBook Renter Verification
+        </h1>
+        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
+          Review and authorize the screening disclosures below
+        </p>
+      </div>
 
-          <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[-0.28px] leading-[normal]">
-            This screening includes a credit range, background check, and
-            eviction history.
-          </p>
-        </div>
+      <div className="flex flex-col items-start justify-center gap-6 w-full">
 
         <Card className="w-full rounded-2xl border border-solid border-[#cfd4dc]">
           <CardContent className="flex flex-col items-center justify-center gap-8 p-3 md:p-6">

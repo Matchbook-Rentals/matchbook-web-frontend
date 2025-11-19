@@ -1,4 +1,3 @@
-import { HomeIcon } from "lucide-react";
 import React from "react";
 import {
   Breadcrumb,
@@ -15,8 +14,8 @@ export const RenterVerificationSection = (): JSX.Element => {
       <Breadcrumb>
         <BreadcrumbList className="flex items-center gap-4">
           <BreadcrumbItem>
-            <BreadcrumbLink href="/" className="flex items-center">
-              <HomeIcon className="w-6 h-6" />
+            <BreadcrumbLink href="/">
+              <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator className="font-text-md-regular font-[number:var(--text-md-regular-font-weight)] text-gray-500 text-[length:var(--text-md-regular-font-size)] tracking-[var(--text-md-regular-letter-spacing)] leading-[var(--text-md-regular-line-height)] [font-style:var(--text-md-regular-font-style)]">

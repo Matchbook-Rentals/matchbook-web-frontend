@@ -1,9 +1,9 @@
-import { PAGE_MARGIN } from "@/constants/styles"
+import { APP_PAGE_MARGIN } from "@/constants/styles"
 import { Suspense } from "react"
 import { auth } from "@clerk/nextjs/server"
 import prismadb from "@/lib/prismadb"
 import { VerificationFormValues } from "./utils"
-import { FrameScreen } from "./components/FrameScreen"
+import { VerificationFlow } from "./components/VerificationFlow"
 
 // Handle server component with payment status and purchase check
 export default async function VerificationPage({
@@ -71,11 +71,11 @@ export default async function VerificationPage({
   }
 
   return (
-    <div className={`min-h-screen bg-background ${PAGE_MARGIN} `}>
+    <div className={`min-h-screen bg-background ${APP_PAGE_MARGIN} `}>
       {/* Main Content */}
-      <main className="container mx-auto  py-8">
+      <main className="md:container mx-auto py-8">
         <Suspense fallback={<div>Loading...</div>}>
-          <FrameScreen />
+          <VerificationFlow />
         </Suspense>
       </main>
     </div>
