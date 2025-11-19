@@ -75,7 +75,111 @@ export const VerificationResultsScreen = ({ onViewDetails }: VerificationResults
         </header>
 
         <Card className="w-full shadow-[0px_2px_12px_#0000001a]">
-          <CardContent className="flex flex-col items-start justify-end gap-2 p-6">
+          {/* Mobile Layout - Completely reorganized */}
+          <CardContent className="flex md:hidden flex-col gap-4 p-3">
+            {/* Top Section - Multi-line layout */}
+            <div className="flex flex-col">
+              {/* Line 1: Avatar, Name, Verified Badge */}
+              <div className="flex items-center gap-3">
+                <AvatarWithFallback
+                  src={user?.imageUrl}
+                  firstName={user?.firstName || undefined}
+                  lastName={user?.lastName || undefined}
+                  email={user?.emailAddresses?.[0]?.emailAddress}
+                  alt={fullName}
+                  className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                  size={64}
+                />
+
+                <h2 className="flex-1 font-text-label-large-medium font-[number:var(--text-label-large-medium-font-weight)] text-[#484a54] text-[length:var(--text-label-large-medium-font-size)] tracking-[var(--text-label-large-medium-letter-spacing)] leading-[var(--text-label-large-medium-line-height)] [font-style:var(--text-label-large-medium-font-style)]">
+                  {fullName}
+                </h2>
+
+                <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#e9f7ee] rounded-full border border-solid border-[#1ca34e] text-[#1ca34e] hover:bg-[#e9f7ee]">
+                  <img
+                    className="w-4 h-4"
+                    alt="Tick"
+                    src="/tick.svg"
+                  />
+                  <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
+                    Verified
+                  </span>
+                </Badge>
+              </div>
+
+              {/* Line 2: Location with avatar placeholder space and download button */}
+              <div className="flex items-center gap-3">
+                <div className="w-16 flex-shrink-0" /> {/* Avatar placeholder */}
+                <p className="flex-1 font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-xsmall-regular-font-size)] tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                  {location}
+                </p>
+                <DownloadIcon className="w-5 h-5 text-[#484a54] cursor-pointer hover:text-[#0b6969]" />
+              </div>
+
+            </div>
+
+            {/* Row 2: Credit Range - Full Width */}
+            <div className="w-full inline-flex items-center gap-3 p-3 rounded-lg border border-solid border-[#e6e6e6]">
+              <span className="font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                Credit Range:
+              </span>
+              <span className="font-text-label-xsmall-semi-bold font-[number:var(--text-label-xsmall-semi-bold-font-weight)] text-[#484a54] text-[length:var(--text-label-xsmall-semi-bold-font-size)] tracking-[var(--text-label-xsmall-semi-bold-letter-spacing)] leading-[var(--text-label-xsmall-semi-bold-line-height)] [font-style:var(--text-label-xsmall-semi-bold-font-style)]">
+                {verificationData.creditRange}
+              </span>
+            </div>
+
+            {/* Row 3: Criminal Record & Evictions - Side by Side */}
+            <div className="flex gap-2">
+              <div className="flex-1 inline-flex items-center gap-2 p-3 rounded-lg border border-solid border-[#e6e6e6]">
+                <span className="font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                  Criminal:
+                </span>
+                <span className="font-text-label-xsmall-semi-bold font-[number:var(--text-label-xsmall-semi-bold-font-weight)] text-[#484a54] text-[length:var(--text-label-xsmall-semi-bold-font-size)] tracking-[var(--text-label-xsmall-semi-bold-letter-spacing)] leading-[var(--text-label-xsmall-semi-bold-line-height)] [font-style:var(--text-label-xsmall-semi-bold-font-style)]">
+                  {verificationData.criminalRecord}
+                </span>
+              </div>
+
+              <div className="flex-1 inline-flex items-center gap-2 p-3 rounded-lg border border-solid border-[#e6e6e6]">
+                <span className="font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-[#5d606d] text-[length:var(--text-label-xsmall-regular-font-size)] tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
+                  Evictions:
+                </span>
+                <span className="font-text-label-xsmall-semi-bold font-[number:var(--text-label-xsmall-semi-bold-font-weight)] text-[#484a54] text-[length:var(--text-label-xsmall-semi-bold-font-size)] tracking-[var(--text-label-xsmall-semi-bold-letter-spacing)] leading-[var(--text-label-xsmall-semi-bold-line-height)] [font-style:var(--text-label-xsmall-semi-bold-font-style)]">
+                  {verificationData.evictions}
+                </span>
+              </div>
+            </div>
+
+            {/* Row 4: Screening Dates */}
+            <div className="w-full flex justify-between items-center p-3 rounded-md border border-solid border-[#e6e6e6]">
+              <div className="flex flex-col items-start">
+                <span className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
+                  Screening Date
+                </span>
+                <span className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
+                  {verificationData.screeningDate}
+                </span>
+              </div>
+
+              <div className="flex flex-col items-end">
+                <span className="font-text-label-medium-medium font-[number:var(--text-label-medium-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-medium-medium-font-size)] tracking-[var(--text-label-medium-medium-letter-spacing)] leading-[var(--text-label-medium-medium-line-height)] [font-style:var(--text-label-medium-medium-font-style)]">
+                  Valid Until
+                </span>
+                <span className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#777b8b] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
+                  {verificationData.validUntil}
+                </span>
+              </div>
+            </div>
+
+            {/* View button - Half width right-aligned at bottom */}
+            <div className="flex justify-end">
+              <BrandButton size="sm" onClick={onViewDetails} className="w-1/2">
+                View
+              </BrandButton>
+            </div>
+          </CardContent>
+
+          {/* Desktop Layout - Original unchanged */}
+          <CardContent className="hidden md:flex flex-col items-start justify-end gap-2 p-6">
             <div className="flex items-start justify-between self-stretch w-full">
               <div className="inline-flex items-center gap-[9px]">
                 <AvatarWithFallback
