@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Check, Square } from "lucide-react";
 import {
   Card,
@@ -10,6 +10,10 @@ import { isIdentityVerified } from "@/lib/verification-utils";
 import { loadStripe } from '@stripe/stripe-js';
 import { createStripeVerificationSession } from '@/app/actions/stripe-identity';
 import { useRouter } from "next/navigation";
+import BrandModal from "@/components/BrandModal";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { BrandButton } from "@/components/ui/brandButton";
+import { agreeToHostTerms } from "@/app/actions/user";
 
 export interface HostUserData {
   id: string;
@@ -31,6 +35,8 @@ export interface OnboardingChecklistCardProps {
   hideHeader?: boolean;
 }
 
+const FCRA_CONTENT_ENDPOINT = "/api/legal/fcra";
+
 // Utility function to check if host onboarding is complete
 export function isHostOnboardingComplete(hostUserData: HostUserData | null): boolean {
   if (!hostUserData) return false;
@@ -38,8 +44,9 @@ export function isHostOnboardingComplete(hostUserData: HostUserData | null): boo
   const hasStripeAccount = !!hostUserData.stripeAccountId;
   const stripeComplete = hostUserData.stripeChargesEnabled && hostUserData.stripeDetailsSubmitted;
   const identityVerified = isIdentityVerified(hostUserData);
+  const fcraAcknowledged = !!hostUserData.agreedToHostTerms;
 
-  return hasStripeAccount && stripeComplete && identityVerified;
+  return hasStripeAccount && stripeComplete && identityVerified && fcraAcknowledged;
 }
 
 export const OnboardingChecklistCard = ({
@@ -54,6 +61,65 @@ export const OnboardingChecklistCard = ({
   const [isCompletingAuth, setIsCompletingAuth] = useState(false);
   const [isCompletingStripeAuth, setIsCompletingStripeAuth] = useState(false);
   const [isVerifyingIdentity, setIsVerifyingIdentity] = useState(false);
+  const [isFcraModalOpen, setIsFcraModalOpen] = useState(false);
+  const [fcraContent, setFcraContent] = useState<string | null>(null);
+  const [isLoadingFcraContent, setIsLoadingFcraContent] = useState(false);
+  const [fcraLoadError, setFcraLoadError] = useState<string | null>(null);
+  const [isAcknowledgingFcra, setIsAcknowledgingFcra] = useState(false);
+
+  useEffect(() => {
+    if (!isFcraModalOpen || fcraContent) {
+      return;
+    }
+
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchFcraContent = async () => {
+      try {
+        setIsLoadingFcraContent(true);
+        setFcraLoadError(null);
+
+        const response = await fetch(FCRA_CONTENT_ENDPOINT, { signal: controller.signal });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load FCRA content (${response.status})`);
+        }
+
+        const data = await response.json();
+        const html = data?.content;
+
+        if (!html) {
+          throw new Error("No FCRA content returned from server");
+        }
+
+        if (isMounted) {
+          setFcraContent(html);
+        }
+      } catch (error) {
+        const err = error as Error;
+        if (err?.name === "AbortError") {
+          return;
+        }
+
+        console.error("Error loading FCRA content:", error);
+        if (isMounted) {
+          setFcraLoadError("Unable to load FCRA content. Please try again.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoadingFcraContent(false);
+        }
+      }
+    };
+
+    fetchFcraContent();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [isFcraModalOpen, fcraContent]);
 
   const handleStripeSetup = async () => {
     setIsRedirecting(true);
@@ -207,10 +273,40 @@ export const OnboardingChecklistCard = ({
     }
   };
 
+  const handleOpenFcraModal = () => {
+    setIsFcraModalOpen(true);
+  };
+
+  const handleFcraAcknowledge = async () => {
+    setIsAcknowledgingFcra(true);
+    try {
+      const formData = new FormData();
+      const redirectUrl = typeof window !== "undefined" ? window.location.href : "/app/host/dashboard/overview";
+      formData.append("redirect_url", redirectUrl);
+
+      const result = await agreeToHostTerms(formData);
+
+      if (!result?.success) {
+        throw new Error("Failed to acknowledge FCRA compliance");
+      }
+
+      setIsFcraModalOpen(false);
+
+      // Refresh checklist state to show completion
+      router.refresh();
+    } catch (error) {
+      console.error("Error acknowledging FCRA compliance:", error);
+      alert("We couldn't save your FCRA acknowledgment. Please try again.");
+    } finally {
+      setIsAcknowledgingFcra(false);
+    }
+  };
+
   // Check if Stripe account exists but is incomplete
   const hasStripeAccount = !!hostUserData?.stripeAccountId;
   const stripeAccountComplete = hostUserData?.stripeChargesEnabled && hostUserData?.stripeDetailsSubmitted;
   const stripeAccountIncomplete = hasStripeAccount && !stripeAccountComplete;
+  const fcraAcknowledged = !!hostUserData?.agreedToHostTerms;
 
   // Real items with actual completion status
   // See docs/host-onboarding-requirements.md for detailed requirements documentation
@@ -224,6 +320,11 @@ export const OnboardingChecklistCard = ({
       id: 2,
       text: "Complete Identity Verification",
       completed: isIdentityVerified(hostUserData),
+    },
+    {
+      id: 3,
+      text: "Acknowledge FCRA Compliance",
+      completed: fcraAcknowledged,
     },
   ];
 
@@ -278,10 +379,12 @@ export const OnboardingChecklistCard = ({
             {items.map((item) => {
               const isStripeItem = item.text.includes("Stripe Account");
               const isIdentityVerificationItem = item.text.includes("Identity Verification");
+              const isFcraComplianceItem = item.text.includes("FCRA Compliance");
               const isTestMedallionItem = item.text.includes("Force Medallion Verification");
               const isTestStripeItem = item.text.includes("Force Stripe Verification");
               const shouldBeStripeClickable = !item.completed && isStripeItem && !isTestMedallionItem && !isTestStripeItem;
               const shouldBeIdentityVerificationClickable = !item.completed && isIdentityVerificationItem && !isTestMedallionItem && !isTestStripeItem;
+              const shouldBeFcraClickable = !item.completed && isFcraComplianceItem;
               const shouldBeTestMedallionClickable = !item.completed && isTestMedallionItem;
               const shouldBeTestStripeClickable = !item.completed && isTestStripeItem;
 
@@ -312,6 +415,13 @@ export const OnboardingChecklistCard = ({
                         className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
                       >
                         {isVerifyingIdentity ? 'Opening verification...' : item.text}
+                      </button>
+                    ) : shouldBeFcraClickable ? (
+                      <button
+                        onClick={handleOpenFcraModal}
+                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
+                      >
+                        {item.text}
                       </button>
                     ) : shouldBeTestMedallionClickable ? (
                       <button
@@ -344,16 +454,71 @@ export const OnboardingChecklistCard = ({
     </Card>
   );
 
+  const fcraDialog = (
+    <BrandModal
+      isOpen={isFcraModalOpen}
+      onOpenChange={setIsFcraModalOpen}
+      className="w-full md:max-w-3xl"
+      heightStyle="!top-[5vh] md:!top-[20vh]"
+    >
+      <div className="flex flex-col gap-4 p-0 md:py-3 md:px-6">
+        <div className="border rounded-md h-[80dvh] md:h-[65vh] overflow-hidden bg-white">
+          <ScrollArea className="h-full">
+            <div className="px-4 py-3">
+              {isLoadingFcraContent && (
+                <p className="text-sm text-gray-500">Loading FCRA content...</p>
+              )}
+              {fcraLoadError && !isLoadingFcraContent && (
+                <p className="text-sm text-red-600">{fcraLoadError}</p>
+              )}
+              {fcraContent && !isLoadingFcraContent && !fcraLoadError && (
+                <div
+                  className="prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{ __html: fcraContent }}
+                />
+              )}
+            </div>
+          </ScrollArea>
+        </div>
+
+        <div className="flex items-center justify-end gap-3">
+          <BrandButton
+            variant="outline"
+            onClick={() => setIsFcraModalOpen(false)}
+            disabled={isAcknowledgingFcra}
+          >
+            Cancel
+          </BrandButton>
+          <BrandButton
+            onClick={handleFcraAcknowledge}
+            disabled={isAcknowledgingFcra || isLoadingFcraContent || !!fcraLoadError}
+            isLoading={isAcknowledgingFcra}
+          >
+            {isAcknowledgingFcra ? "Saving..." : "Agree"}
+          </BrandButton>
+        </div>
+      </div>
+    </BrandModal>
+  );
+
   // For admin_dev users, show both the real version and test version
   if (isAdminDev) {
     return (
-      <div className="flex flex-col gap-4">
-        {renderChecklist(requiredItems, title, hideHeader)}
-        {renderChecklist(testRequiredItems, `${title} (Test)`, hideHeader)}
-      </div>
+      <>
+        <div className="flex flex-col gap-4">
+          {renderChecklist(requiredItems, title, hideHeader)}
+          {renderChecklist(testRequiredItems, `${title} (Test)`, hideHeader)}
+        </div>
+        {fcraDialog}
+      </>
     );
   }
 
   // For regular users, just show the real version
-  return renderChecklist(requiredItems, title, hideHeader);
+  return (
+    <>
+      {renderChecklist(requiredItems, title, hideHeader)}
+      {fcraDialog}
+    </>
+  );
 };
