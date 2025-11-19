@@ -41,7 +41,7 @@ const stepLabels: Record<ProcessingStep, string> = {
   isoftpull: "Gathering information...",
   accio: "Performing background checks...",
   polling: "Finalizing verification...",
-  complete: "Verification complete!",
+  complete: "Verification Complete!",
 };
 
 export const ProcessingScreen = ({
@@ -68,6 +68,17 @@ export const ProcessingScreen = ({
       onStepChange(currentStep);
     }
   }, [currentStep, onStepChange]);
+
+  // Auto-proceed to report after verification completes
+  useEffect(() => {
+    if (currentStep === "complete" && onComplete) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep, onComplete]);
 
   // Handle payment trigger from parent component
   useEffect(() => {
@@ -293,7 +304,7 @@ export const ProcessingScreen = ({
               {error ? (
                 <AlertCircle className="w-16 h-16 text-red-600" />
               ) : currentStep === "complete" ? (
-                <CheckCircle2 className="w-16 h-16 text-green-600" />
+                null
               ) : (
                 <Loader2 className="w-16 h-16 text-blue-600 animate-spin" />
               )}
@@ -309,7 +320,7 @@ export const ProcessingScreen = ({
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="absolute"
                   >
-                    <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-xl text-center">
+                    <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-2xl text-center">
                       {error || stepLabels[currentStep]}
                     </h3>
                   </motion.div>
@@ -318,8 +329,8 @@ export const ProcessingScreen = ({
 
               {/* Additional info for complete state */}
               {currentStep === "complete" && (
-                <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm text-center max-w-md">
-                  Background check results typically arrive within 24-48 hours, but can take up to 2 weeks. You&apos;ll receive an email when your results are ready.
+                <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-lg text-center max-w-md">
+                  Proceeding to report...
                 </p>
               )}
           </div>
