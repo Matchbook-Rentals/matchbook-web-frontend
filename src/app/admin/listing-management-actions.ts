@@ -523,7 +523,6 @@ export async function copyListingToAdmin(listingId: string) {
         shortestLeasePrice: originalListing.shortestLeasePrice,
         longestLeasePrice: originalListing.longestLeasePrice,
         furnished: originalListing.furnished,
-        utilitiesIncluded: originalListing.utilitiesIncluded,
         petsAllowed: originalListing.petsAllowed,
         markedActiveByUser: originalListing.markedActiveByUser,
         

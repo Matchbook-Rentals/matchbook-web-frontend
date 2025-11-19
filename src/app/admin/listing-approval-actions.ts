@@ -207,6 +207,7 @@ export async function approveRejectListing(
 
   revalidatePath('/admin/listing-approval')
   revalidatePath(`/admin/listing-approval/${listingId}`)
+  revalidatePath('/admin/listing-management')
 
   return listing
 }
