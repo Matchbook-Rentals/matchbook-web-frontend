@@ -210,9 +210,6 @@ export const VerificationFormSection = (): JSX.Element => {
 
           {/* Screening information */}
           <div className="flex flex-col mt-8 gap-2">
-            <p className="tracking-[0] leading-5 text-[#5d606d] text-sm font-['Poppins',Helvetica]">
-              This screening includes:
-            </p>
             <ul className="flex flex-col gap-1">
               {screeningItems.map((item, index) => (
                 <li

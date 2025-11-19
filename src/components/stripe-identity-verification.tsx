@@ -169,7 +169,7 @@ export default function StripeIdentityVerification({
         {verificationStatus === 'success' && (
           <div className="text-center py-8">
             <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-green-700 mb-2">
+            <h3 className="text-xl test font-semibold text-green-700 mb-2">
               Verification Complete!
             </h3>
             <p className="text-gray-600 mb-4">

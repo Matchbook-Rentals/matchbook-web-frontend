@@ -66,7 +66,7 @@ export const AuthorizationDisclosureScreen = ({
       </Breadcrumb>
 
       <div className="flex flex-col w-full items-start gap-1">
-        <h1 className="font-text-heading-medium-medium text-[#373940] text-4xl">
+        <h1 className="font-text-heading-medium-medium text-[#373940] text-2xl md:text-4xl">
           Complete MatchBook Renter Verification
         </h1>
         <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
@@ -76,8 +76,8 @@ export const AuthorizationDisclosureScreen = ({
 
       <div className="flex flex-col items-start justify-center gap-6 w-full">
 
-        <Card className="w-full rounded-2xl border border-solid border-[#cfd4dc]">
-          <CardContent className="flex flex-col items-center justify-center gap-8 p-3 md:p-6">
+        <Card className="w-full rounded-2xl shadow-none p-0 border-none md:p-0  ">
+          <CardContent className="flex flex-col items-center justify-center gap-8  p-3 md:p-0">
             {disclosureSections.map((section, index) => (
               <Card
                 key={index}

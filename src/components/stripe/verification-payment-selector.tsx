@@ -37,7 +37,7 @@ interface VerificationPaymentSelectorProps {
   formData: any;
   onPaymentSuccess: () => void;
   onCancel: () => void;
-  onPaymentMethodReady?: (canPay: boolean, payFn: () => void) => void;
+  onPaymentMethodReady?: (canPay: boolean, paymentMethodId: string | null) => void;
 }
 
 export const VerificationPaymentSelector = ({
@@ -94,7 +94,7 @@ export const VerificationPaymentSelector = ({
   useEffect(() => {
     if (onPaymentMethodReady) {
       const canPay = !showAddNewForm && !!selectedPaymentMethod && !isProcessing;
-      onPaymentMethodReady(canPay, handleUseExistingMethod);
+      onPaymentMethodReady(canPay, selectedPaymentMethod);
     }
   }, [selectedPaymentMethod, showAddNewForm, isProcessing, onPaymentMethodReady]);
 
