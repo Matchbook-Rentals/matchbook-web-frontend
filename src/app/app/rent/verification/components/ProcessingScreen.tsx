@@ -22,7 +22,9 @@ interface ProcessingScreenProps {
   onComplete?: () => void;
   onBack?: () => void;
   onStepChange?: (step: ProcessingStep) => void;
-  onPaymentMethodReady?: (canPay: boolean, payFn: () => void) => void;
+  onPaymentMethodReady?: (canPay: boolean, paymentMethodId: string | null) => void;
+  selectedPaymentMethodId?: string | null;
+  shouldStartPayment?: boolean;
 }
 
 export type ProcessingStep =
@@ -42,7 +44,15 @@ const stepLabels: Record<ProcessingStep, string> = {
   complete: "Verification complete!",
 };
 
-export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange, onPaymentMethodReady }: ProcessingScreenProps): JSX.Element => {
+export const ProcessingScreen = ({
+  formData,
+  onComplete,
+  onBack,
+  onStepChange,
+  onPaymentMethodReady,
+  selectedPaymentMethodId,
+  shouldStartPayment
+}: ProcessingScreenProps): JSX.Element => {
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState<ProcessingStep>("select-payment");
   const [completedSteps, setCompletedSteps] = useState<ProcessingStep[]>([]);
@@ -50,6 +60,7 @@ export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange, o
   const [pollingCount, setPollingCount] = useState(0);
   const [showPendingMessage, setShowPendingMessage] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<any>(null);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   // Notify parent of step changes
   useEffect(() => {
@@ -58,17 +69,140 @@ export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange, o
     }
   }, [currentStep, onStepChange]);
 
-  // Handle payment success - called by embedded payment form
+  // Handle payment trigger from parent component
+  useEffect(() => {
+    if (shouldStartPayment && selectedPaymentMethodId && !isProcessingPayment && currentStep === "select-payment") {
+      setCurrentStep("payment");
+    }
+  }, [shouldStartPayment, selectedPaymentMethodId, isProcessingPayment, currentStep]);
+
+  // Handle payment processing when payment step is reached
+  useEffect(() => {
+    if (currentStep === "payment" && selectedPaymentMethodId && !isProcessingPayment) {
+      processPayment();
+    }
+  }, [currentStep, selectedPaymentMethodId, isProcessingPayment]);
+
+  // Process payment with the selected payment method
+  const processPayment = async () => {
+    if (!selectedPaymentMethodId) return;
+
+    setIsProcessingPayment(true);
+    setError(null);
+
+    try {
+      console.log('💳 Creating payment intent with saved method:', selectedPaymentMethodId);
+
+      // Step 1: Create payment intent
+      const response = await fetch('/api/verification/charge-payment-method', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentMethodId: selectedPaymentMethodId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.details || 'Failed to create payment intent');
+      }
+
+      const { clientSecret, paymentIntentId } = data;
+
+      if (!clientSecret) {
+        throw new Error('No client secret returned from server');
+      }
+
+      console.log('✅ Payment intent created, confirming with Stripe...');
+
+      // Step 2: Load Stripe and confirm payment
+      const stripe = await import('@stripe/stripe-js').then(m =>
+        m.loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+      );
+
+      if (!stripe) {
+        throw new Error('Failed to load Stripe');
+      }
+
+      const { error: confirmError } = await stripe.confirmPayment({
+        clientSecret,
+        redirect: 'if_required',
+        confirmParams: {
+          return_url: `${window.location.origin}/app/rent/verification`,
+        },
+      });
+
+      if (confirmError) {
+        throw new Error(confirmError.message || 'Payment confirmation failed');
+      }
+
+      console.log('✅ Payment confirmed, starting polling...');
+
+      // Step 3: Poll for payment status
+      const success = await pollPaymentStatus(paymentIntentId);
+
+      if (success) {
+        console.log('✅ Payment successful');
+        handlePaymentSuccess();
+      } else {
+        setIsProcessingPayment(false);
+      }
+    } catch (error) {
+      console.error('❌ Error processing payment:', error);
+      setError(error instanceof Error ? error.message : 'Failed to process payment');
+      setIsProcessingPayment(false);
+    }
+  };
+
+  // Poll for payment status
+  const pollPaymentStatus = async (paymentIntentId: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      let pollCount = 0;
+      const maxPolls = 40; // 40 polls * 3 seconds = 2 minutes max
+
+      const pollInterval = setInterval(async () => {
+        try {
+          pollCount++;
+          console.log(`🔍 Polling payment status (${pollCount}/${maxPolls})...`);
+
+          const response = await fetch(`/api/verification/payment-status?paymentIntentId=${paymentIntentId}`);
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Failed to check payment status');
+          }
+
+          console.log('📊 Payment status:', data.status);
+
+          // For ACH/bank transfers, 'processing' means the payment was initiated successfully
+          if (data.status === 'succeeded' || data.status === 'processing') {
+            clearInterval(pollInterval);
+            console.log('✅ Payment succeeded or processing');
+            resolve(true);
+          } else if (data.status === 'canceled' || data.status === 'failed' || data.status === 'requires_payment_method') {
+            clearInterval(pollInterval);
+            console.error('❌ Payment failed');
+            setError(data.error || 'Payment failed. Please try a different payment method.');
+            resolve(false);
+          } else if (pollCount >= maxPolls) {
+            clearInterval(pollInterval);
+            console.error('❌ Payment polling timeout');
+            setError('Payment is taking longer than expected. Please check back later.');
+            resolve(false);
+          }
+        } catch (error) {
+          console.error('❌ Error polling payment status:', error);
+          clearInterval(pollInterval);
+          setError('Failed to check payment status');
+          resolve(false);
+        }
+      }, 3000); // Poll every 3 seconds
+    });
+  };
+
+  // Handle payment success - called after payment is confirmed
   const handlePaymentSuccess = async () => {
-    // Mark select-payment step complete, move to payment processing
-    setCompletedSteps(prev => [...prev, "select-payment"]);
-    setCurrentStep("payment");
-
-    // Wait a moment for webhook to create Purchase record
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
     // Mark payment complete, move to credit check
-    setCompletedSteps(prev => [...prev, "payment"]);
+    setCompletedSteps(prev => [...prev, "select-payment", "payment"]);
     setCurrentStep("isoftpull");
 
     // Submit verification (two-tier flow)
@@ -102,54 +236,6 @@ export const ProcessingScreen = ({ formData, onComplete, onBack, onStepChange, o
     }
   };
 
-  // Poll for verification status
-  const startPolling = () => {
-    let pollInterval: NodeJS.Timeout;
-    let pollCount = 0;
-
-    const poll = async () => {
-      try {
-        const response = await fetch("/api/verification/status");
-        const data = await response.json();
-
-        setVerificationStatus(data);
-        pollCount++;
-        setPollingCount(pollCount);
-
-        // Show "can take weeks" message after 20 polls (~5 minutes)
-        if (pollCount >= 20) {
-          setShowPendingMessage(true);
-        }
-
-        if (data.status === "COMPLETED") {
-          clearInterval(pollInterval);
-          setCompletedSteps(prev => [...prev, "polling", "complete"]);
-          setCurrentStep("complete");
-        } else if (data.status === "FAILED") {
-          clearInterval(pollInterval);
-          setError("Verification failed. Please contact support.");
-        }
-
-      } catch (err) {
-        console.error("Polling error:", err);
-      }
-    };
-
-    // Poll every 15 seconds for first 5 minutes
-    pollInterval = setInterval(poll, 15000);
-    poll(); // Initial poll
-
-    // After 5 minutes, switch to polling every 60 seconds
-    setTimeout(() => {
-      clearInterval(pollInterval);
-      if (currentStep === "polling") {
-        pollInterval = setInterval(poll, 60000);
-      }
-    }, 5 * 60 * 1000);
-
-    // Cleanup on unmount
-    return () => clearInterval(pollInterval);
-  };
 
   const isStepComplete = (step: ProcessingStep) => completedSteps.includes(step);
   const isStepCurrent = (step: ProcessingStep) => currentStep === step;

@@ -22,7 +22,8 @@ export const FrameScreen = (): JSX.Element => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [processingStep, setProcessingStep] = useState<ProcessingStep>("select-payment");
   const [canPay, setCanPay] = useState(false);
-  const [paymentFn, setPaymentFn] = useState<(() => void) | null>(null);
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null);
+  const [shouldStartPayment, setShouldStartPayment] = useState(false);
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -119,9 +120,15 @@ export const FrameScreen = (): JSX.Element => {
     }, 300);
   };
 
-  const handlePaymentMethodReady = (ready: boolean, payFn: () => void) => {
+  const handlePaymentMethodReady = (ready: boolean, paymentMethodId: string | null) => {
     setCanPay(ready);
-    setPaymentFn(() => payFn);
+    setSelectedPaymentMethodId(paymentMethodId);
+  };
+
+  const handlePayClick = () => {
+    // When Pay $25.00 is clicked, trigger the payment to start
+    setShouldStartPayment(true);
+    setProcessingStep("payment");
   };
 
   return (
@@ -170,6 +177,8 @@ export const FrameScreen = (): JSX.Element => {
               onBack={handleBackToAuthorization}
               onStepChange={setProcessingStep}
               onPaymentMethodReady={handlePaymentMethodReady}
+              selectedPaymentMethodId={selectedPaymentMethodId}
+              shouldStartPayment={shouldStartPayment}
             />
           )}
 
@@ -230,7 +239,7 @@ export const FrameScreen = (): JSX.Element => {
           }
           primaryButton={{
             label: processingStep === "select-payment" ? "Pay $25.00" : "View Report",
-            onClick: processingStep === "select-payment" && paymentFn ? paymentFn : handleProcessingComplete,
+            onClick: processingStep === "select-payment" ? handlePayClick : handleProcessingComplete,
             disabled: processingStep === "select-payment" ? !canPay : processingStep !== "complete",
           }}
         />
