@@ -241,7 +241,12 @@ const processPayments = async (payments: any[]) => {
 
   // Send admin summary email if there were any failures
   if (failureDetails.length > 0) {
-    await sendAdminFailureSummary(failureDetails);
+    try {
+      await sendAdminFailureSummary(failureDetails);
+    } catch (error) {
+      console.error('Failed to send admin failure summary email:', error);
+      // Don't throw - user notifications already sent, admin email failure shouldn't crash the cron
+    }
   }
 
   return { successful, failed };
@@ -727,14 +732,25 @@ const sendAdminFailureSummary = async (failures: Array<{
     emailBody += `</ul>`;
   }
 
-  // Use simple HTML email (not using notification template for admin emails)
-  const { Resend } = await import('resend');
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  // Use sendNotificationEmail to go through the queue with rate limiting and retries
+  // Create a simple admin notification email data structure
+  const adminEmailData = {
+    recipientName: 'Admin',
+    message: emailBody,
+    actionUrl: undefined,
+    actionText: undefined,
+  };
 
-  await resend.emails.send({
-    from: 'MatchBook <noreply@matchbookrentals.com>',
+  const result = await sendNotificationEmail({
     to: 'tyler.bennett52@gmail.com',
     subject: `Rent Payment Processing Failed - ${failures.length} issue${failures.length > 1 ? 's' : ''}`,
-    html: emailBody,
+    emailData: adminEmailData,
   });
+
+  if (!result.success) {
+    console.error('Failed to send admin summary email:', result.error);
+    throw new Error(`Admin email failed: ${result.error}`);
+  }
+
+  console.log(`Admin failure summary sent successfully (emailId: ${result.emailId})`);
 };

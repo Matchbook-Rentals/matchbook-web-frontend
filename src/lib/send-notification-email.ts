@@ -73,7 +73,7 @@ async function sendViaQueue({
 }
 
 /**
- * Send email directly via Resend (original implementation)
+ * Send email directly via Resend (fallback when queue is unavailable)
  */
 async function sendDirectly({
   to,
@@ -81,6 +81,8 @@ async function sendDirectly({
   emailData
 }: SendNotificationEmailInput): Promise<SendNotificationEmailResponse> {
   try {
+    console.log(`[Email] Using direct send fallback for ${to}`);
+
     // Send the email using Resend
     const { data, error } = await resend.emails.send({
       from: 'MatchBook Rentals <no-reply@matchbookrentals.com>',
@@ -99,7 +101,7 @@ async function sendDirectly({
       return { success: false, error: 'Invalid response from email service' };
     }
 
-    console.log(`[Email] Sent directly to ${to} (emailId: ${data.id})`);
+    console.log(`[Email] Sent directly to ${to} (emailId: ${data.id}) - fallback successful`);
 
     return { success: true, emailId: data.id };
   } catch (error) {
