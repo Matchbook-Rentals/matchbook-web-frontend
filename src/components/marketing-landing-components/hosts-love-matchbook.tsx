@@ -38,9 +38,9 @@ export const HostsLoveMatchbook = (): JSX.Element => {
   return (
     <section className="flex flex-col items-center gap-14 px-4 md:px-[100px] lg:px-[150px] py-16 max-w-[1600px] mx-auto">
       <header className="inline-flex flex-col items-center gap-1">
-        <h1 className="w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
-          Why Hosts Love MatchBook
-        </h1>
+        <h3 className="w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
+          MatchBook is Free for Hosts
+        </h3>
       </header>
 
       <div className="flex flex-col items-start gap-6 w-full">

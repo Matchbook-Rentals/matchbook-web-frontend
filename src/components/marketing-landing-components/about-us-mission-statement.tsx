@@ -43,9 +43,9 @@ export const Frame = (): JSX.Element => {
   return (
     <section className="flex flex-col items-start gap-[54px] px-[5%] md:px-[10%] lg:px-[150px] py-16 relative bg-[#e7f0f04c]">
       <header className="flex flex-col items-center gap-1 relative self-stretch w-full">
-        <h1 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
-          Mission Statement
-        </h1>
+        <h3 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
+          Tenant Screening and Rental Tools
+        </h3>
 
         <div className="flex flex-col items-center gap-4 relative self-stretch w-full">
           <p className="relative w-full max-w-[720px] mt-[-1.00px] font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-neutral900 text-[length:var(--text-label-medium-regular-font-size)] text-center tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">

@@ -1,8 +1,17 @@
+import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
 import { CaliforniaPrivacyHtmlContent } from "./california-privacy-html-content";
 import fs from "fs";
 import path from "path";
+
+export const metadata: Metadata = {
+  title: 'Privacy Notice for California Residents and Other States',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function CaliforniaPrivacyNoticePage() {
   const user = await currentUser();

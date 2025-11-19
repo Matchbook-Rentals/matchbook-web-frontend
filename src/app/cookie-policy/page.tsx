@@ -1,6 +1,15 @@
+import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
 import { CookieNoticeContent } from "../cookie-notice/cookie-notice-content";
+
+export const metadata: Metadata = {
+  title: 'Cookie Policy',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function CookiePolicyPage() {
   const user = await currentUser();

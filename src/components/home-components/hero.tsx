@@ -50,6 +50,9 @@ const Hero: React.FC<HeroProps> = ({ hasAccess, tripCount, isSignedIn }) => {
       {/* Overlay - Kept commented out as per original */}
       {/* <div className="absolute inset-0 bg-gray-400 opacity-50"></div> */}
 
+      {/* SEO H1 - visually hidden but accessible to search engines */}
+      <h1 className="sr-only">Midterm Rentals</h1>
+
       {/* Desktop Search Content */}
       <div className="hidden sm:block w-full z-10">
         <DesktopSearchTrigger

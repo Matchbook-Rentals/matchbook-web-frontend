@@ -1,8 +1,17 @@
+import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
 import { FcraHtmlContent } from "./fcra-html-content";
 import fs from "fs";
 import path from "path";
+
+export const metadata: Metadata = {
+  title: 'Host Fair Credit Reporting Act Compliance Addendum',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function HostFCRACompliancePage() {
   const user = await currentUser();

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Metadata } from 'next';
 import ReactMarkdown from 'react-markdown';
 import { PAGE_MARGIN } from '@/constants/styles';
 import prisma from '@/lib/prismadb'
@@ -8,6 +9,11 @@ import SocialLinks from '@/components/SocialLinks';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
+
+export const metadata: Metadata = {
+  title: 'MatchBook Rentals | Articles & Resources',
+  description: 'Expert advice and resources for monthly rentals, midterm leasing, and property management. Learn tips for hosts and renters.',
+};
 
 const poppins = Poppins({ 
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -29,8 +35,8 @@ export default async function Home() {
   return (
     <main className={`${PAGE_MARGIN} ${poppins.className} mx-auto px-4 py-8`}>
       <div className="flex justify-center mb-8">
-        <MarketingPageHeader 
-          headerText="Articles" 
+        <MarketingPageHeader
+          headerText="Rental Resources & Articles"
           breadcrumbText="Articles"
         />
       </div>

@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Hero from "@/components/home-components/hero";
 import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
@@ -11,6 +12,11 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { checkClientBetaAccess } from "@/utils/client-roles";
 import { getUserTripsCount } from "@/app/actions/trips";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
+
+export const metadata: Metadata = {
+  title: 'MatchBook Rentals | Monthly Rentals',
+  description: 'MatchBook is a monthly rental platform built to make renting easier and more affordable for hosts and renters. Find furnished and unfurnished rentals, with leases from 30 days to 1 year.',
+};
 
 const WebHomePage = async () => {
   const user = await currentUser();

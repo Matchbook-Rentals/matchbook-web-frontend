@@ -1,9 +1,15 @@
+import { Metadata } from 'next';
 import Footer from "@/components/marketing-landing-components/footer";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
 import { ContactInformation } from '@/components/marketing-landing-components/contact-information';
 import { ContactForm } from '@/components/marketing-landing-components/contact-form';
 import { currentUser } from "@clerk/nextjs/server";
+
+export const metadata: Metadata = {
+  title: 'MatchBook Rentals | Contact Us',
+  description: 'Have questions? Contact the MatchBook team. We\'re here to help hosts and renters with support for monthly rentals.',
+};
 
 export default async function ContactPage() {
   const user = await currentUser();

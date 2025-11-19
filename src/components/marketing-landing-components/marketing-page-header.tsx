@@ -32,9 +32,9 @@ export const MarketingPageHeader = ({
       <CardContent className="p-0 flex flex-col items-center w-full bg-background">
         <div className="flex flex-col items-center">
           {highlightedText && (
-            <p className="w-fit [font-family:'Lora',Helvetica] font-semibold text-[#0b6969] text-base text-center">
+            <h2 className="w-fit [font-family:'Lora',Helvetica] font-semibold text-[#0b6969] text-base text-center">
               {highlightedText}
-            </p>
+            </h2>
           )}
           <h1 className="w-fit font-[Lora] font-medium text-gray-neutral900 text-center tracking-[-2px] leading-[100%]" style={{ fontSize: 'clamp(32px, 5vw, 56px)' }}>
             {headerText}

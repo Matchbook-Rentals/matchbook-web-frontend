@@ -1,4 +1,5 @@
 import React from "react";
+import { Metadata } from 'next';
 import MatchbookHeader from "../../components/marketing-landing-components/matchbook-header";
 import { DitchPaperwork } from "../../components/marketing-landing-components/ditch-paperwork";
 import { ListYourProperty } from "../../components/marketing-landing-components/list-your-property";
@@ -11,6 +12,11 @@ import { currentUser } from "@clerk/nextjs/server";
 import { HostsPageWrapper } from "@/components/hosts-page-wrapper";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
+
+export const metadata: Metadata = {
+  title: 'MatchBook Rentals | Become a Host',
+  description: 'Become a MatchBook host today. List your midterm rental, screen renters, manage bookings, and receive rent directly to your account; all completely free.',
+};
 
 
 export default async function HostsPage(): Promise<React.ReactNode> {
@@ -38,8 +44,8 @@ export default async function HostsPage(): Promise<React.ReactNode> {
         />
         <div className="flex justify-center p-8">
           <MarketingPageHeader
-            headerText="Become a Host"
-            highlightedText="Earn More, Keep More"
+            headerText="Manage your Midterm Rental"
+            highlightedText="List Your Monthly Rental for Free"
           />
         </div>
 

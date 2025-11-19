@@ -1,8 +1,17 @@
+import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
 import { TermsHtmlContent } from "./terms-html-content";
 import fs from "fs";
 import path from "path";
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function TermsOfServicePage() {
   const user = await currentUser();

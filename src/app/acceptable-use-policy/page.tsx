@@ -1,6 +1,15 @@
+import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
 import { AcceptableUseContent } from "./acceptable-use-content";
+
+export const metadata: Metadata = {
+  title: 'Acceptable Use Policy',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function AcceptableUsePolicyPage() {
   const user = await currentUser();

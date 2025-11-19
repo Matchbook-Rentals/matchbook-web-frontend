@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Footer from "@/components/marketing-landing-components/footer";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { MarketingPageHeader } from "@/components/marketing-landing-components/marketing-page-header";
@@ -5,6 +6,11 @@ import { VerificationHowItWorks } from "@/components/marketing-landing-component
 import { VerificationWhyItMatters } from "@/components/marketing-landing-components/verification-why-it-matters";
 import { VerificationStandOut } from "@/components/marketing-landing-components/verification-stand-out";
 import { currentUser } from "@clerk/nextjs/server";
+
+export const metadata: Metadata = {
+  title: 'MatchBook Rentals | Renter Verification',
+  description: 'MatchBook\'s comprehensive renter verification includes background checks, credit reports, and income verification to help hosts find qualified tenants.',
+};
 
 export default async function VerificationPage() {
   const user = await currentUser();

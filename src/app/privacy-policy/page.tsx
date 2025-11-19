@@ -1,6 +1,15 @@
+import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
 import { PrivacyPolicyContent } from "./privacy-policy-content";
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function PrivacyPolicyPage() {
   const user = await currentUser();

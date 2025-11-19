@@ -8,7 +8,7 @@ export const VerificationHowItWorks = (): JSX.Element => {
       {/* Section Header */}
       <header className="flex flex-col w-[730px] items-center justify-center gap-4 relative flex-[0_0_auto]">
         <h2 className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] tracking-[-2.00px] leading-[normal]">
-          How it Works
+          How Verification Works
         </h2>
       </header>
 

@@ -1,6 +1,15 @@
 // pages/unauthorized.tsx
+import { Metadata } from 'next';
 import { BrandButton } from "@/components/ui/brandButton";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: 'Access Denied',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function Unauthorized() {
   return (

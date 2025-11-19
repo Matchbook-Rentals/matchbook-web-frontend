@@ -149,11 +149,11 @@ export default function RentEasyCopy(): JSX.Element {
       >
       {/* Header */}
       <header className="inline-flex flex-col items-center gap-1 relative">
-        <h1 className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-neutral900 text-[24px] sm:text-[28px] md:text-[32px] lg:text-[36px] xl:text-[40px] text-center tracking-[-2.00px] leading-[normal] whitespace-nowrap">
-          Renting shouldn&apos;t be so hard.
-        </h1>
+        <h2 className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-neutral900 text-[24px] sm:text-[28px] md:text-[32px] lg:text-[36px] xl:text-[40px] text-center tracking-[-2.00px] leading-[normal] whitespace-nowrap">
+          List Your Monthly Rental for Free
+        </h2>
         <p className="relative self-stretch [font-family:'Poppins',Helvetica] font-medium text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] xl:text-[24px] leading-[100%] tracking-[0px] text-center text-[#6C737F] whitespace-nowrap">
-          Now, it doesn&apos;t have to be.
+          Renting made easy for hosts and renters
         </p>
       </header>
 

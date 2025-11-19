@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Metadata } from 'next';
 import TabSelector from '@/components/ui/tab-selector';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
@@ -7,6 +8,11 @@ import { Montserrat } from 'next/font/google';
 import Footer from '@/components/marketing-landing-components/footer';
 import { currentUser } from "@clerk/nextjs/server";
 import FAQSection from '@/components/home-components/faq-section';
+
+export const metadata: Metadata = {
+  title: 'MatchBook Rentals | Frequently Asked Questions',
+  description: 'Renter and host frequently asked questions. Get answers to your questions here.',
+};
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 

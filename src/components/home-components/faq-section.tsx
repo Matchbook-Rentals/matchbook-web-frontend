@@ -131,19 +131,20 @@ const FAQSection = () => {
   return (
     <MarketingContainer>
       <div className="w-full">
-        <h1 
-          className={`font-medium text-center mb-8 ${poppins.className}`}
-          style={{
-            fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-            lineHeight: '100%',
-            letterSpacing: 'clamp(-1px, -0.1vw, -2px)',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-        >
-          Frequently Asked Questions
-        </h1>
+        {/* SEO Headings */}
+        <div className="mb-8">
+          <h1
+            className={`font-medium text-center ${poppins.className}`}
+            style={{
+              fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+              lineHeight: '100%',
+              letterSpacing: 'clamp(-1px, -0.1vw, -2px)',
+            }}
+          >
+            Renter Questions
+          </h1>
+          <h2 className="sr-only">Host Questions</h2>
+        </div>
         <TabSelector
           tabs={tabs}
           tabsListClassName={`px-0 space-x-6  border-b-0 ${inter.className}`}

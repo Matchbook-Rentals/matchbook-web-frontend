@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Footer from '@/components/marketing-landing-components/footer';
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
@@ -6,6 +7,11 @@ import { Frame as MissionStatement } from '@/components/marketing-landing-compon
 import { Frame as WhatMakesUsDifferent } from '@/components/marketing-landing-components/about-us-makes-us-different';
 import { AboutUsLookingAhead } from '@/components/marketing-landing-components/about-us-looking-ahead';
 import { currentUser } from "@clerk/nextjs/server";
+
+export const metadata: Metadata = {
+  title: 'MatchBook Rentals | About Us',
+  description: 'MatchBook is committed to honesty and integrity, simplifying rentals, putting relationships over transactions, providing real value upfront, and creating a better renting experience for all. Learn more about us here.',
+};
 
 export default async function AboutPage() {
   const user = await currentUser();
@@ -24,7 +30,10 @@ export default async function AboutPage() {
     <>
       <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
       <div className="flex justify-center p-8">
-        <MarketingPageHeader headerText="About Us" />
+        <MarketingPageHeader
+          headerText="Simplifying Midterm Rentals"
+          highlightedText="Better Rental Experience"
+        />
       </div>
       <AboutUsOurJourney />
       <MissionStatement />
