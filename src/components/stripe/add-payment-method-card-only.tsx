@@ -173,7 +173,7 @@ export function AddPaymentMethodCardOnly({
         </div>
 
         <p className="text-sm text-gray-600 mb-4">
-          Add a credit or debit card to pay for your background check. You won't be charged until you click "Pay $25.00" below.
+          Add a credit or debit card to pay for your background check. You won&apos;t be charged until you click &quot;Pay $25.00&quot; below.
         </p>
 
         <Elements
