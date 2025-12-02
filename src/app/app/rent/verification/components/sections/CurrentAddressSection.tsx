@@ -25,7 +25,7 @@ const personalInfoFields = [
 const personalInfoSecondRow = [
   {
     id: "ssn",
-    label: "Social Security No",
+    label: "Social Security Number",
     placeholder: "Enter SSN",
     required: true,
   },
@@ -187,7 +187,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                 <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                      Social Security No
+                      Social Security Number
                     </span>
                     <span className="text-red-500">*</span>
                   </FormLabel>

@@ -16,7 +16,7 @@ import { AddPaymentMethodCardOnly } from '@/components/stripe/add-payment-method
 // Initialize Stripe
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-interface SavedPaymentMethod {
+export interface SavedPaymentMethod {
   id: string;
   type: 'card' | 'us_bank_account';
   card?: {
@@ -38,6 +38,8 @@ interface VerificationPaymentSelectorProps {
   onPaymentSuccess: () => void;
   onCancel: () => void;
   onPaymentMethodReady?: (canPay: boolean, paymentMethodId: string | null) => void;
+  initialPaymentMethods?: SavedPaymentMethod[];
+  initialClientSecret?: string | null;
 }
 
 export const VerificationPaymentSelector = ({
@@ -45,19 +47,33 @@ export const VerificationPaymentSelector = ({
   onPaymentSuccess,
   onCancel,
   onPaymentMethodReady,
+  initialPaymentMethods,
+  initialClientSecret,
 }: VerificationPaymentSelectorProps) => {
-  const [savedPaymentMethods, setSavedPaymentMethods] = useState<SavedPaymentMethod[]>([]);
+  // If initial data provided, start with it and skip loading state
+  const hasInitialData = initialPaymentMethods !== undefined;
+  const [savedPaymentMethods, setSavedPaymentMethods] = useState<SavedPaymentMethod[]>(
+    initialPaymentMethods || []
+  );
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
-  const [isLoadingMethods, setIsLoadingMethods] = useState(true);
-  const [showAddNewForm, setShowAddNewForm] = useState(false);
+  const [isLoadingMethods, setIsLoadingMethods] = useState(!hasInitialData);
+  const [showAddNewForm, setShowAddNewForm] = useState(
+    hasInitialData && initialPaymentMethods.length === 0
+  );
   const [isProcessing, setIsProcessing] = useState(false);
   const [deletingPaymentMethodId, setDeletingPaymentMethodId] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(initialClientSecret || null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCreatingSetupIntent, setIsCreatingSetupIntent] = useState(false);
 
-  // Fetch saved payment methods on mount
+  // Fetch saved payment methods on mount (skip if initial data provided)
   useEffect(() => {
+    // If we have initial data, skip the fetch entirely
+    if (hasInitialData) {
+      console.log('💳 Using initial payment methods data, skipping fetch');
+      return;
+    }
+
     const fetchPaymentMethods = async () => {
       try {
         console.log('💳 Fetching saved payment methods...');
@@ -71,12 +87,27 @@ export const VerificationPaymentSelector = ({
         console.log('💳 Fetched payment methods:', data.paymentMethods);
 
         // Filter to card payment methods only (exclude ACH/bank accounts)
-        const cardOnlyMethods = (data.paymentMethods || []).filter(pm => pm.type === 'card');
+        const cardOnlyMethods = (data.paymentMethods || []).filter((pm: SavedPaymentMethod) => pm.type === 'card');
         setSavedPaymentMethods(cardOnlyMethods);
 
-        // If no saved card methods, show the form immediately
+        // If no saved card methods, auto-create setup intent and show form immediately
         if (!cardOnlyMethods || cardOnlyMethods.length === 0) {
           setShowAddNewForm(true);
+          // Auto-create setup intent so user doesn't have to click
+          try {
+            localStorage.setItem('verificationFormData', JSON.stringify(formData));
+            const setupResponse = await fetch('/api/create-payment-intent/background-verification', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ returnUrl: window.location.href }),
+            });
+            if (setupResponse.ok) {
+              const setupData = await setupResponse.json();
+              setClientSecret(setupData.clientSecret);
+            }
+          } catch (setupError) {
+            console.error('❌ Error auto-creating setup intent:', setupError);
+          }
         }
       } catch (error) {
         console.error('❌ Error fetching payment methods:', error);
@@ -270,7 +301,7 @@ export const VerificationPaymentSelector = ({
       }
 
       const data = await response.json();
-      const cardOnlyMethods = (data.paymentMethods || []).filter(pm => pm.type === 'card');
+      const cardOnlyMethods = (data.paymentMethods || []).filter((pm: SavedPaymentMethod) => pm.type === 'card');
       setSavedPaymentMethods(cardOnlyMethods);
 
       // Auto-select the newly added payment method

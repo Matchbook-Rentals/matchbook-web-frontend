@@ -15,16 +15,27 @@ import {
 } from "@/components/ui/breadcrumb";
 import { CurrentAddressSection } from "./sections/CurrentAddressSection";
 import { PersonalInformationSection } from "./sections/PersonalInformationSection";
-import { AuthorizationDisclosureScreen } from "./AuthorizationDisclosureScreen";
+import { AuthorizationStepScreen } from "./AuthorizationStepScreen";
+import { BackgroundCheckAuthorizationContent } from "./legal/BackgroundCheckAuthorizationContent";
+import { CreditCheckAuthorizationContent } from "./legal/CreditCheckAuthorizationContent";
 import { ProcessingScreen, type ProcessingStep } from "./ProcessingScreen";
 import { VerificationResultsScreen } from "./VerificationResultsScreen";
 import { VerificationDetailsScreen } from "./details/VerificationDetailsScreen";
 import { VerificationFooter } from "./VerificationFooter";
 import { verificationSchema, type VerificationFormValues } from "../utils";
+import type { SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
 
-type Step = "personal-info" | "authorization" | "processing" | "results" | "details";
+type Step = "personal-info" | "background-auth" | "credit-auth" | "processing" | "results" | "details";
 
-export const VerificationFlow = (): JSX.Element => {
+interface VerificationFlowProps {
+  initialPaymentMethods?: SavedPaymentMethod[];
+  initialClientSecret?: string | null;
+}
+
+export const VerificationFlow = ({
+  initialPaymentMethods,
+  initialClientSecret,
+}: VerificationFlowProps): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<Step>("personal-info");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [processingStep, setProcessingStep] = useState<ProcessingStep>("select-payment");
@@ -43,7 +54,6 @@ export const VerificationFlow = (): JSX.Element => {
       city: "",
       state: "",
       zip: "",
-      fcraRightsAcknowledgment: false,
       creditAuthorizationAcknowledgment: false,
       backgroundCheckAuthorization: false,
     },
@@ -58,7 +68,7 @@ export const VerificationFlow = (): JSX.Element => {
     form.setValue("city", "San Francisco");
     form.setValue("state", "CA");
     form.setValue("zip", "94102");
-    transitionToNextStep();
+    transitionToBackgroundAuth();
   };
 
   const handlePersonalInfoSubmit = async () => {
@@ -67,19 +77,20 @@ export const VerificationFlow = (): JSX.Element => {
     const isValid = await form.trigger(personalInfoFields);
 
     if (isValid) {
-      transitionToNextStep();
+      transitionToBackgroundAuth();
     }
   };
 
-  const transitionToNextStep = () => {
+  const transitionToBackgroundAuth = () => {
     setIsTransitioning(true);
     setTimeout(() => {
-      setCurrentStep("authorization");
+      setCurrentStep("background-auth");
       setIsTransitioning(false);
+      scrollToTop();
     }, 300);
   };
 
-  const handleBack = () => {
+  const handleBackToPersonalInfo = () => {
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentStep("personal-info");
@@ -87,34 +98,63 @@ export const VerificationFlow = (): JSX.Element => {
     }, 300);
   };
 
-  const handleBackToAuthorization = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToCheckbox = (checkboxId: string) => {
+    const element = document.getElementById(checkboxId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  const handleBackgroundAuthSubmit = async () => {
+    const isValid = await form.trigger("backgroundCheckAuthorization");
+
+    if (isValid) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentStep("credit-auth");
+        setIsTransitioning(false);
+        scrollToTop();
+      }, 300);
+    } else {
+      scrollToCheckbox("background-auth-checkbox");
+    }
+  };
+
+  const handleBackToBackgroundAuth = () => {
     setIsTransitioning(true);
     setTimeout(() => {
-      setCurrentStep("authorization");
+      setCurrentStep("background-auth");
       setIsTransitioning(false);
     }, 300);
   };
 
-  const handleFinalSubmit = async () => {
-    const authFields = ["fcraRightsAcknowledgment", "creditAuthorizationAcknowledgment", "backgroundCheckAuthorization"] as const;
-    const isValid = await form.trigger(authFields);
+  const handleCreditAuthSubmit = async () => {
+    const isValid = await form.trigger("creditAuthorizationAcknowledgment");
 
     if (isValid) {
       const data = form.getValues();
       console.log("Complete verification submitted:", data);
-      // Transition to processing screen
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentStep("processing");
         setIsTransitioning(false);
+        scrollToTop();
       }, 300);
     } else {
-      // Scroll to bottom to show validation errors
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      });
+      scrollToCheckbox("credit-auth-checkbox");
     }
+  };
+
+  const handleBackToCreditAuth = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentStep("credit-auth");
+      setIsTransitioning(false);
+    }, 300);
   };
 
   const handleProcessingComplete = () => {
@@ -122,6 +162,7 @@ export const VerificationFlow = (): JSX.Element => {
     setTimeout(() => {
       setCurrentStep("results");
       setIsTransitioning(false);
+      scrollToTop();
     }, 300);
   };
 
@@ -130,6 +171,7 @@ export const VerificationFlow = (): JSX.Element => {
     setTimeout(() => {
       setCurrentStep("details");
       setIsTransitioning(false);
+      scrollToTop();
     }, 300);
   };
 
@@ -183,25 +225,41 @@ export const VerificationFlow = (): JSX.Element => {
             </div>
           )}
 
-          {currentStep === "authorization" && (
-            <>
-              <AuthorizationDisclosureScreen
-                form={form}
-                onBack={handleBack}
-                onSubmit={handleFinalSubmit}
-              />
-            </>
+          {currentStep === "background-auth" && (
+            <AuthorizationStepScreen
+              form={form}
+              title="Background Check Authorization"
+              checkboxName="backgroundCheckAuthorization"
+              checkboxLabel="By checking this box, I authorize Matchbook LLC to conduct a background check and eviction history search."
+              checkboxId="background-auth-checkbox"
+            >
+              <BackgroundCheckAuthorizationContent />
+            </AuthorizationStepScreen>
+          )}
+
+          {currentStep === "credit-auth" && (
+            <AuthorizationStepScreen
+              form={form}
+              title="Credit Check Authorization"
+              checkboxName="creditAuthorizationAcknowledgment"
+              checkboxLabel="By checking this box, I authorize Matchbook LLC to obtain my credit report for rental evaluation purposes."
+              checkboxId="credit-auth-checkbox"
+            >
+              <CreditCheckAuthorizationContent />
+            </AuthorizationStepScreen>
           )}
 
           {currentStep === "processing" && (
             <ProcessingScreen
               formData={form.getValues()}
               onComplete={handleProcessingComplete}
-              onBack={handleBackToAuthorization}
+              onBack={handleBackToCreditAuth}
               onStepChange={setProcessingStep}
               onPaymentMethodReady={handlePaymentMethodReady}
               selectedPaymentMethodId={selectedPaymentMethodId}
               shouldStartPayment={shouldStartPayment}
+              initialPaymentMethods={initialPaymentMethods}
+              initialClientSecret={initialClientSecret}
             />
           )}
 
@@ -234,16 +292,30 @@ export const VerificationFlow = (): JSX.Element => {
         />
       )}
 
-      {currentStep === "authorization" && (
+      {currentStep === "background-auth" && (
         <VerificationFooter
           secondaryButton={{
             label: "Back",
-            onClick: handleBack,
+            onClick: handleBackToPersonalInfo,
             variant: "outline",
           }}
           primaryButton={{
             label: "Continue",
-            onClick: handleFinalSubmit,
+            onClick: handleBackgroundAuthSubmit,
+          }}
+        />
+      )}
+
+      {currentStep === "credit-auth" && (
+        <VerificationFooter
+          secondaryButton={{
+            label: "Back",
+            onClick: handleBackToBackgroundAuth,
+            variant: "outline",
+          }}
+          primaryButton={{
+            label: "Continue",
+            onClick: handleCreditAuthSubmit,
           }}
         />
       )}
@@ -255,7 +327,7 @@ export const VerificationFlow = (): JSX.Element => {
             processingStep === "select-payment"
               ? {
                   label: "Back",
-                  onClick: handleBackToAuthorization,
+                  onClick: handleBackToCreditAuth,
                   variant: "outline",
                 }
               : undefined

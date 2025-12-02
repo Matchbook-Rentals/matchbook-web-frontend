@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Card, CardContent } from "@/components/ui/card";
 import { BrandButton } from "@/components/ui/brandButton";
-import { VerificationPaymentSelector } from "@/components/stripe/verification-payment-selector";
+import { VerificationPaymentSelector, SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
 import { VerificationFooter } from "./VerificationFooter";
 
 interface ProcessingScreenProps {
@@ -25,6 +25,8 @@ interface ProcessingScreenProps {
   onPaymentMethodReady?: (canPay: boolean, paymentMethodId: string | null) => void;
   selectedPaymentMethodId?: string | null;
   shouldStartPayment?: boolean;
+  initialPaymentMethods?: SavedPaymentMethod[];
+  initialClientSecret?: string | null;
 }
 
 export type ProcessingStep =
@@ -51,7 +53,9 @@ export const ProcessingScreen = ({
   onStepChange,
   onPaymentMethodReady,
   selectedPaymentMethodId,
-  shouldStartPayment
+  shouldStartPayment,
+  initialPaymentMethods,
+  initialClientSecret,
 }: ProcessingScreenProps): JSX.Element => {
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState<ProcessingStep>("select-payment");
@@ -294,6 +298,8 @@ export const ProcessingScreen = ({
                 onPaymentSuccess={handlePaymentSuccess}
                 onCancel={onBack || (() => window.history.back())}
                 onPaymentMethodReady={onPaymentMethodReady}
+                initialPaymentMethods={initialPaymentMethods}
+                initialClientSecret={initialClientSecret}
               />
         )}
 

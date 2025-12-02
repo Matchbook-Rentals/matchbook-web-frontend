@@ -24,7 +24,7 @@ export const VerificationFormSection = (): JSX.Element => {
   const personalInfoFields2 = [
     {
       id: "ssn",
-      label: "Social Security No",
+      label: "Social Security Number",
       placeholder: "Enter SSN",
       required: true,
     },
