@@ -277,3 +277,42 @@
   font-weight: 400;
 }
 
+/* Print styles for verification report */
+@media print {
+  /* Hide navigation, headers, footers */
+  header,
+  nav,
+  footer,
+  .no-print,
+  [data-clerk-component],
+  .cl-userButtonTrigger {
+    display: none !important;
+  }
+
+  /* Reset page margins */
+  @page {
+    margin: 0.5in;
+    size: auto;
+  }
+
+  /* Ensure backgrounds print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Reset body styling for print */
+  body {
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Ensure cards don't break across pages */
+  .print-no-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+

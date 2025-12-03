@@ -10,30 +10,31 @@ import {
 
 export const RenterVerificationSection = (): JSX.Element => {
   return (
-    <section className="flex flex-col w-full items-start gap-4">
+    <section className="flex flex-col w-full items-start gap-3 md:gap-4">
       <Breadcrumb>
-        <BreadcrumbList className="flex items-center gap-4">
+        <BreadcrumbList className="flex items-center gap-2 md:gap-4 flex-wrap">
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
               <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator className="font-text-md-regular font-[number:var(--text-md-regular-font-weight)] text-gray-500 text-[length:var(--text-md-regular-font-size)] tracking-[var(--text-md-regular-letter-spacing)] leading-[var(--text-md-regular-line-height)] [font-style:var(--text-md-regular-font-style)]">
+          <BreadcrumbSeparator className="text-gray-500 text-sm">
             /
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink
               href="/app/rent/verification"
-              className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-900 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
+              className="text-gray-900 text-xs md:text-sm"
             >
-              MatchBook Renter Verification
+              <span className="hidden md:inline">MatchBook Renter Verification</span>
+              <span className="md:hidden">Verification</span>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator className="font-text-md-regular font-[number:var(--text-md-regular-font-weight)] text-gray-500 text-[length:var(--text-md-regular-font-size)] tracking-[var(--text-md-regular-letter-spacing)] leading-[var(--text-md-regular-line-height)] [font-style:var(--text-md-regular-font-style)]">
+          <BreadcrumbSeparator className="text-gray-500 text-sm">
             /
           </BreadcrumbSeparator>
           <BreadcrumbItem>
-            <BreadcrumbPage className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-900 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
+            <BreadcrumbPage className="text-gray-900 text-xs md:text-sm">
               Details
             </BreadcrumbPage>
           </BreadcrumbItem>
@@ -41,10 +42,10 @@ export const RenterVerificationSection = (): JSX.Element => {
       </Breadcrumb>
 
       <header className="flex flex-col items-start gap-1 w-full">
-        <h1 className="w-full font-text-heading-medium-medium font-[number:var(--text-heading-medium-medium-font-weight)] text-[#373940] text-[length:var(--text-heading-medium-medium-font-size)] tracking-[var(--text-heading-medium-medium-letter-spacing)] leading-[var(--text-heading-medium-medium-line-height)] [font-style:var(--text-heading-medium-medium-font-style)]">
+        <h1 className="w-full text-[#373940] text-xl md:text-2xl font-medium">
           Renter Verification Report
         </h1>
-        <p className="w-full [font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[-0.28px] leading-[normal]">
+        <p className="w-full [font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-xs md:text-sm tracking-[-0.28px] leading-[normal]">
           Detailed verification results for rental screening purposes.
         </p>
       </header>

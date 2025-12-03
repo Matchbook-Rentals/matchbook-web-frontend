@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser, auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
 import { generateVerificationXml } from "@/app/app/rent/verification/utils";
+import { headers } from "next/headers";
 
 // FORCED MOCK MODE - Always use mock responses for Accio Data background checks
 // Set to false to use real API
@@ -81,11 +82,17 @@ export async function POST(request: Request) {
     // STEP 1: iSoftPull Credit Check (Free if fail)
     // ========================================
     try {
+      console.log('\n📤 [Verification] Calling iSoftPull API...');
+
       const isoftpullResponse = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/api/background-check/credit-score/isoftpull`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-internal-request": "true",
+            "x-user-id": user.id,
+          },
           body: JSON.stringify({
             first_name: firstName,
             last_name: lastName,
@@ -97,6 +104,8 @@ export async function POST(request: Request) {
           }),
         }
       );
+
+      console.log(`📥 [Verification] iSoftPull response status: ${isoftpullResponse.status}`);
 
       const creditData = await isoftpullResponse.json();
 

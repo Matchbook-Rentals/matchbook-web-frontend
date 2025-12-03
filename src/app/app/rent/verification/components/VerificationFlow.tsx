@@ -6,6 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { BrandButton } from "@/components/ui/brandButton";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -24,6 +31,16 @@ import { VerificationDetailsScreen } from "./details/VerificationDetailsScreen";
 import { VerificationFooter } from "./VerificationFooter";
 import { verificationSchema, type VerificationFormValues } from "../utils";
 import type { SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
+import type { ISoftPullResponse } from "@/types/isoftpull";
+
+// iSoftPull test clients for development testing
+const ISOFTPULL_TEST_CLIENTS = [
+  { firstName: "Steve", lastName: "Johnson", credit: "~700 (Good)", ssn: "111111111", dob: "1980-08-15", address: "3557 Lancer Way", city: "Carlsbad", state: "CA", zip: "92008" },
+  { firstName: "John", lastName: "Dough", credit: "~600 (Fair)", ssn: "222222222", dob: "1982-04-15", address: "310 Tamarack Ave", city: "Carlsbad", state: "CA", zip: "92010" },
+  { firstName: "Susie", lastName: "Que", credit: "~500 (Poor)", ssn: "333333333", dob: "1983-06-15", address: "2270 Camino Vida Roble", city: "Carlsbad", state: "CA", zip: "92011" },
+  { firstName: "Chris", lastName: "Iceman", credit: "Frozen", ssn: "444444444", dob: "1982-09-15", address: "3743 Jefferson St", city: "Carlsbad", state: "CA", zip: "92008" },
+  { firstName: "Jeff", lastName: "Nascore", credit: "No Score", ssn: "555555555", dob: "1979-10-15", address: "1999 California St", city: "Carlsbad", state: "CA", zip: "92054" },
+];
 
 type Step = "personal-info" | "background-auth" | "credit-auth" | "processing" | "results" | "details";
 
@@ -42,6 +59,8 @@ export const VerificationFlow = ({
   const [canPay, setCanPay] = useState(false);
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null);
   const [shouldStartPayment, setShouldStartPayment] = useState(false);
+  const [showTestClientModal, setShowTestClientModal] = useState(false);
+  const [creditData, setCreditData] = useState<ISoftPullResponse | null>(null);
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -59,15 +78,20 @@ export const VerificationFlow = ({
     },
   });
 
-  const loadDevData = () => {
-    form.setValue("firstName", "John");
-    form.setValue("lastName", "Doe");
-    form.setValue("ssn", "123456789");
-    form.setValue("dob", "1990-01-15");
-    form.setValue("address", "123 Main Street");
-    form.setValue("city", "San Francisco");
-    form.setValue("state", "CA");
-    form.setValue("zip", "94102");
+  const openTestClientModal = () => {
+    setShowTestClientModal(true);
+  };
+
+  const selectTestClient = (client: typeof ISOFTPULL_TEST_CLIENTS[number]) => {
+    form.setValue("firstName", client.firstName);
+    form.setValue("lastName", client.lastName);
+    form.setValue("ssn", client.ssn);
+    form.setValue("dob", client.dob);
+    form.setValue("address", client.address);
+    form.setValue("city", client.city);
+    form.setValue("state", client.state);
+    form.setValue("zip", client.zip);
+    setShowTestClientModal(false);
     transitionToBackgroundAuth();
   };
 
@@ -180,6 +204,10 @@ export const VerificationFlow = ({
     setSelectedPaymentMethodId(paymentMethodId);
   };
 
+  const handleCreditDataReceived = (data: ISoftPullResponse) => {
+    setCreditData(data);
+  };
+
   const handlePayClick = () => {
     // When Pay $25.00 is clicked, trigger the payment to start
     setShouldStartPayment(true);
@@ -256,6 +284,7 @@ export const VerificationFlow = ({
               onBack={handleBackToCreditAuth}
               onStepChange={setProcessingStep}
               onPaymentMethodReady={handlePaymentMethodReady}
+              onCreditDataReceived={handleCreditDataReceived}
               selectedPaymentMethodId={selectedPaymentMethodId}
               shouldStartPayment={shouldStartPayment}
               initialPaymentMethods={initialPaymentMethods}
@@ -264,7 +293,10 @@ export const VerificationFlow = ({
           )}
 
           {currentStep === "results" && (
-            <VerificationResultsScreen onViewDetails={handleViewDetails} />
+            <VerificationResultsScreen
+              onViewDetails={handleViewDetails}
+              creditData={creditData}
+            />
           )}
 
           {currentStep === "details" && (
@@ -280,7 +312,7 @@ export const VerificationFlow = ({
             process.env.NODE_ENV === 'development'
               ? {
                   label: "Skip (Dev)",
-                  onClick: loadDevData,
+                  onClick: openTestClientModal,
                   variant: "outline",
                 }
               : undefined
@@ -348,6 +380,39 @@ export const VerificationFlow = ({
           }}
         />
       )}
+
+      {/* Test Client Selector Modal (Dev Only) */}
+      <Dialog open={showTestClientModal} onOpenChange={setShowTestClientModal}>
+        <DialogContent className="sm:max-w-md" xOnRight>
+          <DialogHeader>
+            <DialogTitle>Select Test Client</DialogTitle>
+            <DialogDescription>
+              Choose an iSoftPull test applicant to auto-fill the form
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2 mt-4">
+            {ISOFTPULL_TEST_CLIENTS.map((client) => (
+              <button
+                key={client.ssn}
+                onClick={() => selectTestClient(client)}
+                className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors text-left"
+              >
+                <div>
+                  <div className="font-medium text-gray-900">
+                    {client.firstName} {client.lastName}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    SSN: {client.ssn}
+                  </div>
+                </div>
+                <div className="text-sm font-medium text-primary">
+                  {client.credit}
+                </div>
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

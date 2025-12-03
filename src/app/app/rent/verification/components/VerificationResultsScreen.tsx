@@ -15,24 +15,56 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { AvatarWithFallback } from "@/components/ui/avatar-with-fallback";
 import { BrandButton } from "@/components/ui/brandButton";
+import type { ISoftPullResponse } from "@/types/isoftpull";
+
+// Helper to format credit bucket name to display range
+const formatCreditRange = (intelligenceName: string | undefined): string => {
+  if (!intelligenceName) return "Pending";
+
+  // Normalize: replace underscores with spaces (e.g., "Very_Good" → "Very Good")
+  const normalized = intelligenceName.replace(/_/g, " ");
+
+  const ranges: Record<string, string> = {
+    "Exceptional": "Exceptional (800–850)",
+    "Very Good": "Very Good (740–799)",
+    "Good": "Good (670–739)",
+    "Fair": "Fair (580–669)",
+    "Poor": "Poor (300–579)",
+  };
+  return ranges[normalized] || normalized;
+};
+
+// Helper to format date as MM/DD/YY
+const formatDate = (date: Date): string => {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const year = String(date.getFullYear()).slice(-2);
+  return `${month}/${day}/${year}`;
+};
 
 interface VerificationResultsScreenProps {
   onViewDetails?: () => void;
+  creditData?: ISoftPullResponse | null;
 }
 
-export const VerificationResultsScreen = ({ onViewDetails }: VerificationResultsScreenProps): JSX.Element => {
+export const VerificationResultsScreen = ({ onViewDetails, creditData }: VerificationResultsScreenProps): JSX.Element => {
   const { user } = useUser();
 
   const fullName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : "Loading...";
   const location = "Salt Lake City, UT"; // TODO: Add location from user metadata when available
 
+  // Calculate screening date (now) and valid until (90 days from now)
+  const screeningDate = new Date();
+  const validUntilDate = new Date(screeningDate);
+  validUntilDate.setDate(validUntilDate.getDate() + 90);
+
   const verificationData = {
     verified: true,
-    creditRange: "Good (670–739)",
-    evictions: "No",
-    criminalRecord: "No",
-    screeningDate: "06/25/25",
-    validUntil: "09/25/25",
+    creditRange: formatCreditRange(creditData?.intelligence?.name),
+    evictions: "No", // Mocked until Accio Data integration
+    criminalRecord: "No", // Mocked until Accio Data integration
+    screeningDate: formatDate(screeningDate),
+    validUntil: formatDate(validUntilDate),
   };
 
   const infoItems = [

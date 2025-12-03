@@ -8,14 +8,16 @@ import { BlogArticle } from '@prisma/client';
 import SocialLinks from '@/components/SocialLinks';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
+import { checkAdminAccess } from '@/utils/roles';
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Articles & Resources',
   description: 'Expert advice and resources for monthly rentals, midterm leasing, and property management. Learn tips for hosts and renters.',
 };
 
-const poppins = Poppins({ 
+const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   subsets: ["latin"]
 });
@@ -30,6 +32,11 @@ async function getBlogArticles(): Promise<BlogArticle[]> {
 }
 
 export default async function Home() {
+  const isAdmin = await checkAdminAccess();
+  if (isAdmin) {
+    redirect('/manage/articles');
+  }
+
   const articles = await getBlogArticles();
 
   return (

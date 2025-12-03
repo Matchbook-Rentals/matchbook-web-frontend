@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BrandButton } from "@/components/ui/brandButton";
 import { VerificationPaymentSelector, SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
 import { VerificationFooter } from "./VerificationFooter";
+import type { ISoftPullResponse } from "@/types/isoftpull";
 
 interface ProcessingScreenProps {
   formData: any;
@@ -23,6 +24,7 @@ interface ProcessingScreenProps {
   onBack?: () => void;
   onStepChange?: (step: ProcessingStep) => void;
   onPaymentMethodReady?: (canPay: boolean, paymentMethodId: string | null) => void;
+  onCreditDataReceived?: (data: ISoftPullResponse) => void;
   selectedPaymentMethodId?: string | null;
   shouldStartPayment?: boolean;
   initialPaymentMethods?: SavedPaymentMethod[];
@@ -52,6 +54,7 @@ export const ProcessingScreen = ({
   onBack,
   onStepChange,
   onPaymentMethodReady,
+  onCreditDataReceived,
   selectedPaymentMethodId,
   shouldStartPayment,
   initialPaymentMethods,
@@ -227,19 +230,44 @@ export const ProcessingScreen = ({
   // Submit verification to API
   const submitVerification = async () => {
     try {
-      // MOCK MODE - Skip API call entirely
-      console.log("🎭 MOCK MODE: Simulating verification submission");
+      console.log("📤 Calling iSoftPull API...");
 
-      // Simulate credit check passing
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Call the real iSoftPull endpoint
+      const response = await fetch("/api/verification/isoftpull", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zip: formData.zip,
+          ssn: formData.ssn,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("📥 iSoftPull response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.error || "iSoftPull credit check failed");
+      }
+
+      // Pass credit data to parent
+      if (data.creditData && onCreditDataReceived) {
+        onCreditDataReceived(data.creditData);
+      }
+
       setCompletedSteps(prev => [...prev, "isoftpull"]);
 
-      // Simulate Accio submission
+      // Simulate Accio submission (still mocked)
+      setCurrentStep("accio");
       await new Promise(resolve => setTimeout(resolve, 1000));
       setCompletedSteps(prev => [...prev, "accio"]);
       setCurrentStep("polling");
 
-      // Simulate background check submission - spin for 2 seconds then show complete step
+      // Simulate background check completion
       await new Promise(resolve => setTimeout(resolve, 2000));
       setCompletedSteps(prev => [...prev, "polling"]);
       setCurrentStep("complete");
@@ -254,7 +282,7 @@ export const ProcessingScreen = ({
 
   const isStepComplete = (step: ProcessingStep) => completedSteps.includes(step);
   const isStepCurrent = (step: ProcessingStep) => currentStep === step;
-  const isStepError = error && (step === currentStep);
+  const isStepError = (step: ProcessingStep) => error && (step === currentStep);
 
   return (
     <div className="flex flex-col w-full items-start justify-center gap-4 p-2 md:p-4 pb-24">

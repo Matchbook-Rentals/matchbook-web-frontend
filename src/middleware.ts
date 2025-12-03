@@ -6,6 +6,7 @@ import { Roles } from "@/types/globals";
 const isProtectedRoute = createRouteMatcher([
   "/app(.*)",
   "/admin(.*)", // Added protection for all admin routes
+  "/manage(.*)", // Added protection for all manage routes (marketing/content management)
   "/test(.*)", // Added protection for all test routes
 ]);
 
@@ -40,6 +41,11 @@ const checkPreviewAccess = (userRole?: string) => {
 const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
   // Admin-only routes
   if (pathname.startsWith('/admin')) {
+    return checkAdminAccess(userRole);
+  }
+
+  // Manage routes (content management) - admin only
+  if (pathname.startsWith('/manage')) {
     return checkAdminAccess(userRole);
   }
 

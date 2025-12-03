@@ -1090,6 +1090,7 @@ model Verification {
   // Credit Information (denormalized for fast access)
   creditBucket        CreditBucket?
   creditStatus        String?             // "completed", "pending", "failed"
+  creditReportUrl     String?             // iSoftPull report URL
 
   // Background Check Results (extracted from BGSReport JSON)
   evictionStatus      String?             // "No Records Found", "Records Found", "Under Review"
