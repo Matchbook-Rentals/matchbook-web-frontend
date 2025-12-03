@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import { uploadArticle } from './_actions'
 import { UploadButton } from '@/app/utils/uploadthing'
 import Image from 'next/image'
+import { EditorCommandBar } from '@/components/ui/editor-command-bar'
+import { MarkdownEditor } from '@/components/ui/markdown-editor'
 
 export function NewArticleForm() {
   const router = useRouter()
@@ -16,6 +18,7 @@ export function NewArticleForm() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [hasSelection, setHasSelection] = useState(false)
   const [publishDate, setPublishDate] = useState(
     new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
   )
@@ -154,23 +157,17 @@ export function NewArticleForm() {
 
       <div className="mb-10">
         <h2 className="text-2xl font-semibold mb-4 font-[Lora]">
-          <input
-            type="text"
-            placeholder="Title"
-            className="w-full border-none outline-none focus:ring-0 bg-transparent"
-            disabled
-            value={title || 'Title'}
-          />
+          {title || 'Title'}
         </h2>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam..."
-          className="w-full min-h-[400px] border-none outline-none focus:ring-0 bg-transparent resize-none text-gray-600 leading-relaxed"
+        <MarkdownEditor
+          content={content}
+          onContentChange={setContent}
+          onSelectionChange={setHasSelection}
+          placeholder="Start writing your article..."
         />
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center pb-20">
         <BrandButton
           onClick={handleSubmit}
           disabled={isSubmitting}
@@ -179,6 +176,10 @@ export function NewArticleForm() {
           Continue
         </BrandButton>
       </div>
+
+      <EditorCommandBar
+        hasSelection={hasSelection}
+      />
     </div>
   )
 }
