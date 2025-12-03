@@ -1102,6 +1102,9 @@ model Verification {
   creditCheckedAt     DateTime?
   backgroundCheckedAt DateTime?
 
+  // Refund Tracking (spam prevention - one refund per user)
+  verificationRefundedAt DateTime?         // If set, user has already received a refund
+
   // Metadata
   notes               String?             @db.Text
 
