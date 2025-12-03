@@ -340,7 +340,7 @@ export const ProcessingScreen = ({
               ) : currentStep === "complete" ? (
                 null
               ) : (
-                <Loader2 className="w-16 h-16 text-blue-600 animate-spin" />
+                <Loader2 className="w-16 h-16 text-[#0b6969] animate-spin" />
               )}
 
               {/* Sliding Status Text */}

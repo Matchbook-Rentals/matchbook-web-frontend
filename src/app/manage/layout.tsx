@@ -4,7 +4,7 @@ import { currentUser } from '@clerk/nextjs/server'
 import { checkAdminAccess } from '@/utils/roles'
 import Link from 'next/link'
 import UserMenu from '@/components/userMenu'
-import { APP_PAGE_MARGIN } from '@/constants/styles'
+import { PAGE_MARGIN } from '@/constants/styles'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,7 +33,7 @@ export default async function ManageLayout({
   return (
     <div className="min-h-screen bg-background">
       <nav className="bg-background border-b">
-        <div className={`flex mx-auto items-center py-3 justify-between ${APP_PAGE_MARGIN}`}>
+        <div className={`flex items-center py-3 justify-between ${PAGE_MARGIN}`}>
           <div className="w-1/3">
             <Link href="/">
               <img

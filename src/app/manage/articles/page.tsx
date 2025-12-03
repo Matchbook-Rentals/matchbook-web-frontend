@@ -6,6 +6,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { ArticleCardMenu } from './components/article-card-menu'
+import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header'
+import { PAGE_MARGIN } from '@/constants/styles'
+import { BrandButton } from '@/components/ui/brandButton'
 
 async function getBlogArticles(): Promise<BlogArticle[]> {
   const articles = await prisma.blogArticle.findMany({
@@ -24,8 +27,13 @@ export default async function ArticlesManagerPage() {
   const articles = await getBlogArticles()
 
   return (
-    <div className="container mx-auto py-10 px-4">
-      <h1 className="text-3xl font-semibold text-center mb-10">Articles manager</h1>
+    <div className={`${PAGE_MARGIN} py-10`}>
+      <div className="flex justify-center mb-10">
+        <MarketingPageHeader
+          headerText="Articles"
+          breadcrumbText="Articles"
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
@@ -34,12 +42,9 @@ export default async function ArticlesManagerPage() {
       </div>
 
       <div className="flex justify-center mt-10">
-        <Link
-          href="/admin/upload-article"
-          className="inline-flex items-center justify-center px-6 py-3 border border-[#3c8787] text-[#3c8787] rounded-lg font-medium hover:bg-[#3c8787] hover:text-white transition-colors"
-        >
+        <BrandButton variant="outline" href="/manage/articles/new">
           Create New Article
-        </Link>
+        </BrandButton>
       </div>
     </div>
   )
