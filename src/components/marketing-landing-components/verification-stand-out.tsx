@@ -73,12 +73,13 @@ export const VerificationStandOut = (): JSX.Element => {
               ))}
             </div>
 
+            {/* CTA Button - Temporarily disabled */}
             <BrandButton
               size="lg"
               className="w-full sm:w-auto"
-              href="/app/rent/verification"
+              disabled
             >
-              Start Screening
+              Coming Soon
             </BrandButton>
           </div>
         </CardContent>

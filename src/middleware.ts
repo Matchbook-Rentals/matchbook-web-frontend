@@ -52,19 +52,10 @@ const checkRouteAccess = (pathname: string, userRole?: string): boolean => {
   // All /app routes are now open to authenticated users
   // Only /admin routes remain restricted
 
-  // TODO: Restore these beta access routes after MX period
-  // Routes requiring admin OR preview access
-  // const adminOrPreviewRoutes = [
-  //   '/app/rent/application',
-  //   '/app/rent/verification'
-  // ];
-  // 
-  // for (const route of adminOrPreviewRoutes) {
-  //   if (pathname.startsWith(route)) {
-  //     return checkAdminAccess(userRole) || checkPreviewAccess(userRole);
-  //   }
-  // }
-
+  // Temporarily restrict verification routes - admin only
+  if (pathname.startsWith('/app/rent/verification')) {
+    return checkAdminAccess(userRole);
+  }
 
   // Default: allow access to other routes
   return true;

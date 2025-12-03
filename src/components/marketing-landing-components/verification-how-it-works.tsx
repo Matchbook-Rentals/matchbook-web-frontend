@@ -21,12 +21,12 @@ export const VerificationHowItWorks = (): JSX.Element => {
         />
       </div>
 
-      {/* CTA Button */}
+      {/* CTA Button - Temporarily disabled */}
       <BrandButton
         size="lg"
-        href="/app/rent/verification"
+        disabled
       >
-        Start Screening
+        Coming Soon
       </BrandButton>
     </section>
   );
