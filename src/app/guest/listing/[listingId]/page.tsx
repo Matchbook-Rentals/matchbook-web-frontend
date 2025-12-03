@@ -102,10 +102,11 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
 
   return (
     <>
-      <MatchbookHeader 
-        userId={user?.id || null} 
-        user={userObject} 
-        isSignedIn={!!user?.id} 
+      <MatchbookHeader
+        userId={user?.id || null}
+        user={userObject}
+        isSignedIn={!!user?.id}
+        className={`${PAGE_MARGIN} px-0`}
       />
       <div className={`${PAGE_MARGIN} font-montserrat min-h-screen`}>
         <PublicListingDetailsView 

@@ -1,8 +1,13 @@
 'use client'
 import React from 'react';
 import { ListingAndImages } from '@/types';
-import { VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge, StarIcon } from '@/components/icons';
-import { Button } from '@/components/ui/button';
+import { StarIcon } from '@/components/icons';
+import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { BrandButton } from '@/components/ui/brandButton';
+import Image from 'next/image';
 
 interface PublicListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -11,114 +16,108 @@ interface PublicListingDetailsBoxProps {
 const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({ listing }) => {
   const host = listing.user;
 
-  // Style variables (matching search-listing-details-box.tsx exactly)
-  const currencyStyles = "md:text-[24px] lg:text-[30px] xl:text-[32px] 2xl:text-[36px] font-medium";
-  const currencyStylesUnderline = "md:text-[16px] lg:text-[20px] xl:text-[21px] 2xl:text-[24px] font-normal underline";
-  const badgeSpans = "flex items-center gap-2 whitespace-nowrap text-[16px] font-medium";
-  const mediumText = "md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium";
-  const normalText = "md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal";
-
-  // Calculate price range from monthlyPricing table
   const getPriceRange = () => {
     if (!listing.monthlyPricing || listing.monthlyPricing.length === 0) {
-      // Fallback to listing.price if no pricing table
       return { min: listing.price || 0, max: listing.price || 0, hasRange: false };
     }
 
     const prices = listing.monthlyPricing.map(pricing => pricing.price);
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
-    
-    return { 
-      min: minPrice, 
-      max: maxPrice, 
-      hasRange: minPrice !== maxPrice 
+
+    return {
+      min: minPrice,
+      max: maxPrice,
+      hasRange: minPrice !== maxPrice
     };
-  };
-
-  const calculateTimeOnMatchbook = () => {
-    if (!host?.createdAt) return 'New to Matchbook';
-
-    const createdDate = new Date(host?.createdAt);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - createdDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays < 30) return `${diffDays} days on Matchbook`;
-
-    const diffMonths = Math.floor(diffDays / 30);
-    if (diffMonths < 12) return `${diffMonths} months on Matchbook`;
-
-    const diffYears = Math.floor(diffDays / 365);
-    return `${diffYears} years on Matchbook`;
   };
 
   const priceRange = getPriceRange();
 
   return (
-    <div className='p-4 rounded-md font-poppin' style={{ fontFamily: 'Poppins' }}>
-      {/* Pricing Information Section */}
-      <div className='flex justify-between items-center gap-x-4 mb-4'>
-        <div className='whitespace-nowrap'>
-          {priceRange.hasRange ? (
-            <p className={currencyStyles}>
-              ${priceRange.min.toLocaleString()} - ${priceRange.max.toLocaleString()} 
-              <span className={currencyStylesUnderline}>month</span>
-            </p>
-          ) : (
-            <p className={currencyStyles}>
-              ${priceRange.min.toLocaleString()} 
-              <span className={currencyStylesUnderline}>month</span>
-            </p>
+    <Card className="w-full border border-[#0000001a] rounded-xl">
+      <CardContent className="flex flex-col items-start gap-5 p-4">
+        {/* Host information */}
+        <div className="flex items-center gap-3 w-full">
+          <Avatar className="w-[59px] h-[59px] rounded-xl">
+            <AvatarImage
+              src={host?.imageUrl || ''}
+              alt={`${host?.firstName || 'Host'} profile`}
+            />
+            <AvatarFallback className="rounded-xl bg-[#3c8787] text-white font-medium text-xl">
+              {((host?.firstName?.charAt(0) || '') + (host?.lastName?.charAt(0) || '')) || 'H'}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex flex-col gap-0.5">
+            <div className="font-medium text-[#373940] text-sm font-['Poppins']">
+              Hosted by {host?.firstName || 'Host'}
+            </div>
+
+            <div className="flex items-center gap-1 h-8">
+              <StarIcon className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+              <span className="font-normal text-[#717680] text-sm font-['Poppins']">
+                {listing?.averageRating
+                  ? `${listing.averageRating.toFixed(1)} (${listing?.numberOfStays || 0})`
+                  : <span className="italic">No reviews yet</span>}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Verified badge */}
+        <Badge
+          variant="outline"
+          className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
+        >
+          <Image
+            src="/svg/verified-badge.svg"
+            alt="Verified"
+            width={16}
+            height={16}
+          />
+          <span className="font-normal text-xs text-[#717680] font-['Poppins']">
+            Verified
+          </span>
+        </Badge>
+
+        <Separator className="w-full" />
+
+        {/* Pricing information */}
+        <div className="flex justify-between w-full">
+          <div className="flex flex-col gap-1">
+            <div className="font-semibold text-[#373940] text-sm font-['Poppins']">
+              {priceRange.hasRange
+                ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()}`
+                : `$${priceRange.min.toLocaleString()}`
+              }
+            </div>
+            <div className="font-normal text-[#5d606d] text-base font-['Poppins']">Month</div>
+          </div>
+
+          {listing.depositSize && (
+            <div className="flex flex-col gap-1 items-end">
+              <div className="font-semibold text-[#373940] text-sm font-['Poppins']">
+                ${listing.depositSize?.toLocaleString()}
+              </div>
+              <div className="font-normal text-[#5d606d] text-base font-['Poppins']">Deposit</div>
+            </div>
           )}
         </div>
-        {/* Only show deposit if there's no price range (single price) */}
-        {!priceRange.hasRange && listing.depositSize && (
-          <div className='whitespace-nowrap'>
-            <p className={currencyStyles}>${listing.depositSize.toLocaleString()} <span className={currencyStylesUnderline}>deposit</span></p>
-          </div>
-        )}
-      </div>
 
-      {/* Host Information Section */}
-      <div className='mb-4 space-y-2'>
-        <div className='flex items-center justify-between'>
-          <p className={mediumText}>Hosted by {host?.firstName || 'Host'}</p>
-          <p className={`${normalText} flex gap-x-2 items-center`}>
-            <StarIcon /> {listing?.averageRating ? listing.averageRating.toFixed(1) : <span className="italic">No reviews yet</span>}
-            {listing?.averageRating && <span className='text-sm pt-2 pl-0 -translate-x-1'>({listing?.numberOfStays || 0})</span>}
-          </p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-600">{calculateTimeOnMatchbook()}</p>
-        </div>
-      </div>
-
-      {/* Host Badges Section */}
-      <div className='flex justify-between gap-2 mb-4'>
-        <span className={badgeSpans}><VerifiedBadge />Verified</span>
-        <span className={badgeSpans}><TrailBlazerBadge />Trail Blazer</span>
-        <span className={badgeSpans}><HallmarkHostBadge />Hallmark Host</span>
-      </div>
-
-      {/* Public view call to action */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-md">
-        <p className="text-sm text-gray-700 mb-2">
-          Interested in this property?
-        </p>
-        <p className="text-xs text-gray-500 mb-3">
-          Sign up with MatchBook to contact the host and start your application.
-        </p>
-        <Button 
+        {/* Get Started Button */}
+        <BrandButton
+          variant="outline"
+          className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
           onClick={() => {
             window.location.href = '/sign-up?redirect=' + encodeURIComponent(window.location.pathname);
           }}
-          className="w-full bg-[#0B6E6E] hover:bg-[#0B6E6E]/90 text-white"
         >
           Get Started
-        </Button>
-      </div>
-    </div>
+        </BrandButton>
+
+      </CardContent>
+    </Card>
   );
 };
 
