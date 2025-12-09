@@ -94,6 +94,80 @@ export async function deleteArticle(articleId: string) {
   }
 }
 
+export async function updateArticle(articleId: string, formData: FormData) {
+  const isAdmin = await checkAdminAccess()
+  if (!isAdmin) {
+    return {
+      success: false,
+      error: 'Unauthorized: Admin privileges required'
+    }
+  }
+
+  const title = formData.get('title') as string
+  const slugFromForm = formData.get('slug') as string
+  const content = formData.get('content') as string
+  const imageUrl = formData.get('imageUrl') as string
+  const published = formData.get('published') === 'on'
+  const authorName = formData.get('authorName') as string
+  const authorTitle = formData.get('authorTitle') as string
+
+  if (!title || !content) {
+    return {
+      success: false,
+      error: 'Title and content are required'
+    }
+  }
+
+  const slug = slugFromForm || slugify(title)
+
+  // Strip markdown formatting for excerpt
+  const stripMarkdown = (text: string) => {
+    return text
+      .replace(/^#{1,6}\s+/gm, '') // Remove heading markers
+      .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold
+      .replace(/\*(.+?)\*/g, '$1') // Remove italic
+      .replace(/__(.+?)__/g, '$1') // Remove bold (alt)
+      .replace(/_(.+?)_/g, '$1') // Remove italic (alt)
+      .replace(/^[-*+]\s+/gm, '') // Remove list markers
+      .replace(/^\d+\.\s+/gm, '') // Remove numbered list markers
+      .replace(/\[(.+?)\]\(.+?\)/g, '$1') // Remove links, keep text
+      .replace(/<u>(.+?)<\/u>/g, '$1') // Remove underline tags
+      .trim()
+  }
+
+  // Generate excerpt from first 100 words of content
+  const excerpt = stripMarkdown(content).split(/\s+/).slice(0, 100).join(' ')
+
+  try {
+    await prisma.blogArticle.update({
+      where: { id: articleId },
+      data: {
+        title,
+        slug,
+        excerpt,
+        content,
+        imageUrl,
+        published,
+        authorName,
+        authorTitle,
+        updatedAt: new Date(),
+      },
+    })
+
+    revalidatePath('/manage/articles')
+    revalidatePath('/articles')
+    revalidatePath(`/articles/${slug}`)
+
+    return { success: true, message: 'Article updated successfully' }
+  } catch (error) {
+    console.error('Error updating article:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update article'
+    }
+  }
+}
+
 export async function uploadArticle(formData: FormData) {
   const isAdmin = await checkAdminAccess()
   if (!isAdmin) {
@@ -104,10 +178,11 @@ export async function uploadArticle(formData: FormData) {
   }
 
   const title = formData.get('title') as string
+  const slugFromForm = formData.get('slug') as string
   const content = formData.get('content') as string
   const imageUrl = formData.get('imageUrl') as string
   const published = formData.get('published') === 'on'
-  const authorName = (formData.get('authorName') as string) || 'The Matchbook Team'
+  const authorName = formData.get('authorName') as string
   const authorTitle = formData.get('authorTitle') as string
 
   if (!title || !content) {
@@ -117,7 +192,7 @@ export async function uploadArticle(formData: FormData) {
     }
   }
 
-  const slug = slugify(title)
+  const slug = slugFromForm || slugify(title)
 
   // Strip markdown formatting for excerpt
   const stripMarkdown = (text: string) => {

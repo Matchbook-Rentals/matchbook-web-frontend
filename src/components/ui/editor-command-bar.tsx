@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import {
   Bold,
   Italic,
@@ -9,8 +10,11 @@ import {
   Heading3,
   List,
   ListOrdered,
+  Link,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import BrandModal from '@/components/BrandModal'
+import { BrandButton } from '@/components/ui/brandButton'
 
 interface EditorCommandBarProps {
   hasSelection: boolean
@@ -52,6 +56,11 @@ function Divider() {
 export function EditorCommandBar({
   hasSelection,
 }: EditorCommandBarProps) {
+  const [linkModalOpen, setLinkModalOpen] = useState(false)
+  const [linkDisplayText, setLinkDisplayText] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
+  const [savedSelection, setSavedSelection] = useState<Range | null>(null)
+
   // Check if current selection has a specific format
   const isFormatActive = (format: string): boolean => {
     try {
@@ -119,6 +128,53 @@ export function EditorCommandBar({
   const insertList = (ordered: boolean) => {
     const command = ordered ? 'insertOrderedList' : 'insertUnorderedList'
     document.execCommand(command, false)
+  }
+
+  // Open link modal - capture selected text and selection range
+  const openLinkModal = () => {
+    const selection = window.getSelection()
+    if (selection && selection.rangeCount > 0) {
+      const selectedText = selection.toString()
+      const range = selection.getRangeAt(0).cloneRange()
+      setSavedSelection(range)
+      setLinkDisplayText(selectedText)
+    } else {
+      setSavedSelection(null)
+      setLinkDisplayText('')
+    }
+    setLinkUrl('')
+    setLinkModalOpen(true)
+  }
+
+  // Insert link at saved selection or cursor position
+  const insertLink = () => {
+    if (!linkUrl) return
+
+    // Auto-prepend https:// if no protocol specified
+    let url = linkUrl.trim()
+    if (!/^https?:\/\//i.test(url)) {
+      url = 'https://' + url
+    }
+
+    const displayText = linkDisplayText || linkUrl
+
+    // Restore selection if we have one
+    if (savedSelection) {
+      const selection = window.getSelection()
+      if (selection) {
+        selection.removeAllRanges()
+        selection.addRange(savedSelection)
+      }
+    }
+
+    // Use execCommand to create link
+    document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayText}</a>`)
+
+    // Close modal and reset state
+    setLinkModalOpen(false)
+    setLinkDisplayText('')
+    setLinkUrl('')
+    setSavedSelection(null)
   }
 
   // Check active states
@@ -204,8 +260,83 @@ export function EditorCommandBar({
           >
             <ListOrdered className="h-5 w-5" />
           </CommandButton>
+
+          <Divider />
+
+          {/* Link */}
+          <CommandButton
+            onClick={openLinkModal}
+            disabled={false}
+            title="Add Link"
+          >
+            <Link className="h-5 w-5" />
+          </CommandButton>
         </div>
       </div>
+
+      {/* Link Modal */}
+      <BrandModal
+        isOpen={linkModalOpen}
+        onOpenChange={setLinkModalOpen}
+        className="max-w-md"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        <form
+          className="p-6"
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (linkUrl) insertLink()
+          }}
+        >
+          <h2 className="text-xl font-semibold mb-4">Add Link</h2>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                URL
+              </label>
+              <input
+                type="text"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                placeholder="https://example.com"
+                autoFocus
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Display Text
+              </label>
+              <input
+                type="text"
+                value={linkDisplayText}
+                onChange={(e) => setLinkDisplayText(e.target.value)}
+                placeholder="Link text"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              type="button"
+              onClick={() => setLinkModalOpen(false)}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!linkUrl}
+              className="inline-flex items-center justify-center h-[40px] min-w-[160px] rounded-lg px-[14px] py-[10px] bg-[#3c8787] text-white font-semibold text-sm hover:bg-[#2d6565] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Insert
+            </button>
+          </div>
+        </form>
+      </BrandModal>
     </div>
   )
 }

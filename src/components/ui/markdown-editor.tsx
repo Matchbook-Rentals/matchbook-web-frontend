@@ -40,6 +40,9 @@ function markdownToHtml(markdown: string): string {
   // Underline (HTML in markdown)
   html = html.replace(/&lt;u&gt;(.+?)&lt;\/u&gt;/g, '<u>$1</u>')
 
+  // Links [text](url)
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+
   // Unordered lists
   html = html.replace(/^- (.+)$/gm, '<li>$1</li>')
 
@@ -100,6 +103,9 @@ function htmlToMarkdown(html: string): string {
 
   // Underline
   markdown = markdown.replace(/<u>(.*?)<\/u>/gi, '<u>$1</u>')
+
+  // Links
+  markdown = markdown.replace(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
 
   // Lists
   markdown = markdown.replace(/<ul>(.*?)<\/ul>/gis, (match, content) => {
@@ -187,6 +193,7 @@ export function MarkdownEditor({
         '[&_strong]:font-semibold',
         '[&_em]:italic',
         '[&_u]:underline',
+        '[&_a]:text-[#3c8787] [&_a]:underline [&_a]:hover:text-[#2a6363]',
         className
       )}
       suppressContentEditableWarning

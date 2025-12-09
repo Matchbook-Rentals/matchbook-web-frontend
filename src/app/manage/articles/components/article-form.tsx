@@ -1,35 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Plus } from 'lucide-react'
 import { BrandButton } from '@/components/ui/brandButton'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
-import { uploadArticle } from './_actions'
+import { uploadArticle, updateArticle } from '../new/_actions'
 import { UploadButton } from '@/app/utils/uploadthing'
 import Image from 'next/image'
 import { EditorCommandBar } from '@/components/ui/editor-command-bar'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header'
+import { BlogArticle } from '@prisma/client'
 
-export function NewArticleForm() {
+interface ArticleFormProps {
+  article?: BlogArticle
+}
+
+export function ArticleForm({ article }: ArticleFormProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-  const [hasSelection, setHasSelection] = useState(false)
-  const [publishDate, setPublishDate] = useState(
-    new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-  )
-  const [authorName, setAuthorName] = useState('')
-  const [authorTitle, setAuthorTitle] = useState('')
+  const isEditing = !!article
 
-  // Generate slug preview from title
-  const slugPreview = title
-    ? title.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
-    : 'title'
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [title, setTitle] = useState(article?.title || '')
+  const [content, setContent] = useState(article?.content || '')
+  const [imageUrl, setImageUrl] = useState(article?.imageUrl || '')
+  const [hasSelection, setHasSelection] = useState(false)
+  const [publishDate] = useState(
+    article?.createdAt
+      ? new Date(article.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+      : new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+  )
+  const [authorName, setAuthorName] = useState(article?.authorName || '')
+  const [authorTitle, setAuthorTitle] = useState((article as any)?.authorTitle || '')
+  const [slug, setSlug] = useState(article?.slug || '')
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!article?.slug)
+  const titleRef = useRef<HTMLTextAreaElement>(null)
+
+  // Auto-resize title textarea on mount
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.style.height = 'auto'
+      titleRef.current.style.height = titleRef.current.scrollHeight + 'px'
+    }
+  }, [])
+
+  // Auto-generate slug from title if not manually edited
+  const generateSlug = (text: string) => {
+    return text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
+  }
+
+  const slugPreview = slug || generateSlug(title) || 'title'
 
   const generateLoremIpsum = () => {
     const loremContent = `# Introduction
@@ -61,9 +83,19 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle)
+    // Auto-update slug if not manually edited
+    if (!slugManuallyEdited) {
+      setSlug(generateSlug(newTitle))
+    }
     if (newTitle.toLowerCase().trim() === 'lorem ipsum' && !content) {
       generateLoremIpsum()
     }
+  }
+
+  const handleSlugChange = (newSlug: string) => {
+    setSlugManuallyEdited(true)
+    // Sanitize the slug input
+    setSlug(newSlug.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-'))
   }
 
   const handleImageUpload = (res: any) => {
@@ -96,13 +128,19 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
     try {
       const formData = new FormData()
       formData.set('title', title)
+      formData.set('slug', slugPreview)
       formData.set('content', content)
       formData.set('imageUrl', imageUrl)
-      formData.set('published', 'off')
+      formData.set('published', article?.published ? 'on' : 'off')
       formData.set('authorName', authorName)
       formData.set('authorTitle', authorTitle)
 
-      const result = await uploadArticle(formData)
+      let result
+      if (isEditing) {
+        result = await updateArticle(article.id, formData)
+      } else {
+        result = await uploadArticle(formData)
+      }
 
       if (!result.success) {
         throw new Error(result.error)
@@ -110,15 +148,15 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
 
       toast({
         title: 'Success',
-        description: 'Article created successfully',
+        description: isEditing ? 'Article updated successfully' : 'Article created successfully',
       })
 
-      router.push('/manage/articles')
+      router.push('/articles')
       router.refresh()
     } catch (err: any) {
       toast({
         title: 'Error',
-        description: err.message || 'Failed to create article',
+        description: err.message || `Failed to ${isEditing ? 'update' : 'create'} article`,
         variant: 'destructive',
       })
     } finally {
@@ -132,17 +170,24 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
         <MarketingPageHeader
           headerText="Articles"
           articleSlug={slugPreview}
+          onSlugChange={handleSlugChange}
         />
       </div>
 
       <div className="text-center mb-6">
         <p className="text-[#0b6969] font-medium">Published {publishDate}</p>
-        <input
-          type="text"
+        <textarea
+          ref={titleRef}
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
           placeholder="Title"
-          className="text-4xl font-medium text-center w-full mt-2 border-none outline-none focus:ring-0 bg-transparent font-[Lora]"
+          rows={1}
+          className="text-4xl font-medium text-center w-full mt-2 border-none outline-none focus:ring-0 bg-transparent font-[Lora] resize-none overflow-hidden"
+          onInput={(e) => {
+            const target = e.target as HTMLTextAreaElement
+            target.style.height = 'auto'
+            target.style.height = target.scrollHeight + 'px'
+          }}
         />
       </div>
 
@@ -243,7 +288,7 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
           disabled={isSubmitting}
           spinOnClick
         >
-          Continue
+          {isEditing ? 'Save Changes' : 'Continue'}
         </BrandButton>
       </div>
 
