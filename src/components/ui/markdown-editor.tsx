@@ -24,10 +24,10 @@ function markdownToHtml(markdown: string): string {
     .replace(/>/g, '&gt;')
 
   // Then convert markdown to HTML
-  // Headings (must be at start of line)
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>')
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>')
-  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>')
+  // Headings (must be at start of line) - using H2, H3, H4 since article title is H2
+  html = html.replace(/^### (.+)$/gm, '<h4>$1</h4>')
+  html = html.replace(/^## (.+)$/gm, '<h3>$1</h3>')
+  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>')
 
   // Bold (** or __)
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -65,8 +65,8 @@ function markdownToHtml(markdown: string): string {
   html = html.replace(/\n/g, '<br>')
 
   // Clean up extra <br> tags around block elements
-  html = html.replace(/<br>(<h[1-6]>)/g, '$1')
-  html = html.replace(/(<\/h[1-6]>)<br>/g, '$1')
+  html = html.replace(/<br>(<h[2-4]>)/g, '$1')
+  html = html.replace(/(<\/h[2-4]>)<br>/g, '$1')
   html = html.replace(/<br>(<ul>)/g, '$1')
   html = html.replace(/(<\/ul>)<br>/g, '$1')
 
@@ -85,10 +85,10 @@ function htmlToMarkdown(html: string): string {
   markdown = markdown.replace(/<div>/gi, '\n')
   markdown = markdown.replace(/<\/div>/gi, '')
 
-  // Headings
-  markdown = markdown.replace(/<h1>(.*?)<\/h1>/gi, '# $1')
-  markdown = markdown.replace(/<h2>(.*?)<\/h2>/gi, '## $1')
-  markdown = markdown.replace(/<h3>(.*?)<\/h3>/gi, '### $1')
+  // Headings - H2, H3, H4 map to #, ##, ### in markdown
+  markdown = markdown.replace(/<h2>(.*?)<\/h2>/gi, '# $1')
+  markdown = markdown.replace(/<h3>(.*?)<\/h3>/gi, '## $1')
+  markdown = markdown.replace(/<h4>(.*?)<\/h4>/gi, '### $1')
 
   // Bold
   markdown = markdown.replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
@@ -179,9 +179,9 @@ export function MarkdownEditor({
       className={cn(
         'min-h-[400px] outline-none text-gray-600 leading-relaxed',
         'empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400',
-        '[&>h1]:text-3xl [&>h1]:font-semibold [&>h1]:my-4',
-        '[&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:my-3',
-        '[&>h3]:text-xl [&>h3]:font-semibold [&>h3]:my-2',
+        '[&>h2]:text-xl [&>h2]:font-semibold [&>h2]:my-4',
+        '[&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-3',
+        '[&>h4]:text-base [&>h4]:font-semibold [&>h4]:my-2',
         '[&>ul]:list-disc [&>ul]:ml-6 [&>ul]:my-2',
         '[&>ol]:list-decimal [&>ol]:ml-6 [&>ol]:my-2',
         '[&_strong]:font-semibold',

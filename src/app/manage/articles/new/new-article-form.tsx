@@ -10,6 +10,7 @@ import { UploadButton } from '@/app/utils/uploadthing'
 import Image from 'next/image'
 import { EditorCommandBar } from '@/components/ui/editor-command-bar'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
+import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header'
 
 export function NewArticleForm() {
   const router = useRouter()
@@ -22,6 +23,46 @@ export function NewArticleForm() {
   const [publishDate, setPublishDate] = useState(
     new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
   )
+
+  // Generate slug preview from title
+  const slugPreview = title
+    ? title.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
+    : 'title'
+
+  const generateLoremIpsum = () => {
+    const loremContent = `# Introduction
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+## Key Points
+
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit
+- Sed do eiusmod tempor incididunt ut labore
+- Ut enim ad minim veniam, quis nostrud exercitation
+- Duis aute irure dolor in reprehenderit in voluptate
+
+## Details
+
+Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.
+
+Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor ultrices leo.
+
+### Summary
+
+Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.`
+
+    setContent(loremContent)
+    setImageUrl('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=675&fit=crop')
+  }
+
+  const handleTitleChange = (newTitle: string) => {
+    setTitle(newTitle)
+    if (newTitle.toLowerCase().trim() === 'lorem ipsum' && !content) {
+      generateLoremIpsum()
+    }
+  }
 
   const handleImageUpload = (res: any) => {
     if (res && res.length > 0) {
@@ -84,12 +125,19 @@ export function NewArticleForm() {
 
   return (
     <div className="max-w-3xl mx-auto">
+      <div className="flex justify-center mb-10">
+        <MarketingPageHeader
+          headerText="Articles"
+          articleSlug={slugPreview}
+        />
+      </div>
+
       <div className="text-center mb-6">
         <p className="text-[#0b6969] font-medium">Published {publishDate}</p>
         <input
           type="text"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => handleTitleChange(e.target.value)}
           placeholder="Title"
           className="text-4xl font-medium text-center w-full mt-2 border-none outline-none focus:ring-0 bg-transparent font-[Lora]"
         />

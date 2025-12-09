@@ -83,12 +83,13 @@ export function EditorCommandBar({
     document.execCommand(command, false)
   }
 
-  // Insert or toggle a heading
+  // Insert or toggle a heading (level 1=H2, 2=H3, 3=H4 since article title is H2)
   const insertHeading = (level: number) => {
     const selection = window.getSelection()
     if (!selection) return
 
-    const tagName = `H${level}`
+    const htmlLevel = level + 1 // Offset by 1 since article title uses H2
+    const tagName = `H${htmlLevel}`
 
     // Check if already in this heading
     if (isInBlockElement(tagName)) {
@@ -100,7 +101,8 @@ export function EditorCommandBar({
         document.execCommand('formatBlock', false, tagName)
       } else {
         // Insert placeholder heading
-        const placeholder = level === 1 ? 'Heading' : 'Subheader'
+        const placeholders = ['Header', 'Subheader', 'Section']
+        const placeholder = placeholders[level - 1] || 'Header'
         document.execCommand('formatBlock', false, tagName)
         document.execCommand('insertText', false, placeholder)
 
@@ -123,9 +125,9 @@ export function EditorCommandBar({
   const isBold = isFormatActive('bold')
   const isItalic = isFormatActive('italic')
   const isUnderlined = isFormatActive('underline')
-  const isH1 = isInBlockElement('H1')
-  const isH2 = isInBlockElement('H2')
-  const isH3 = isInBlockElement('H3')
+  const isHeader = isInBlockElement('H2')
+  const isSubheader = isInBlockElement('H3')
+  const isSection = isInBlockElement('H4')
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
@@ -163,24 +165,24 @@ export function EditorCommandBar({
           <CommandButton
             onClick={() => insertHeading(1)}
             disabled={false}
-            active={isH1}
-            title="Heading 1"
+            active={isHeader}
+            title="Header"
           >
             <Heading1 className="h-5 w-5" />
           </CommandButton>
           <CommandButton
             onClick={() => insertHeading(2)}
             disabled={false}
-            active={isH2}
-            title="Heading 2"
+            active={isSubheader}
+            title="Subheader"
           >
             <Heading2 className="h-5 w-5" />
           </CommandButton>
           <CommandButton
             onClick={() => insertHeading(3)}
             disabled={false}
-            active={isH3}
-            title="Heading 3"
+            active={isSection}
+            title="Section"
           >
             <Heading3 className="h-5 w-5" />
           </CommandButton>

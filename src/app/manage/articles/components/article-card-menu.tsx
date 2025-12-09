@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { MoreVertical, Pencil, Trash2, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/use-toast'
+import { deleteArticle } from '../new/_actions'
 
 interface ArticleCardMenuProps {
   articleId: string
@@ -17,6 +20,8 @@ interface ArticleCardMenuProps {
 
 export function ArticleCardMenu({ articleId, articleTitle }: ArticleCardMenuProps) {
   const router = useRouter()
+  const { toast } = useToast()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleEdit = () => {
     router.push(`/manage/articles/${articleId}/edit`)
@@ -30,8 +35,33 @@ export function ArticleCardMenu({ articleId, articleTitle }: ArticleCardMenuProp
     if (!confirm(`Are you sure you want to delete "${articleTitle}"?`)) {
       return
     }
-    // TODO: Implement delete functionality
-    console.log('Delete article:', articleId)
+
+    setIsDeleting(true)
+    try {
+      const result = await deleteArticle(articleId)
+
+      if (result.success) {
+        toast({
+          title: 'Deleted',
+          description: 'Article deleted successfully',
+        })
+        router.refresh()
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error,
+          variant: 'destructive',
+        })
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to delete article',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   return (
