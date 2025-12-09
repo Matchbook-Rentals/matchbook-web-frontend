@@ -8,7 +8,13 @@ Accio Data provides:
 - **National Criminal Database Search** - Criminal history check
 - **Eviction Search** - Eviction records lookup
 
-**Cost:** $6.99 per county-level search (triggered when records are found)
+## Our Package
+
+We use the **"Criminal and Evictions"** package which includes:
+- National Criminal Database search
+- Nationwide Eviction search
+
+**Important:** We do NOT order county-level searches a la carte. County searches are only triggered automatically by Accio when their QA team finds reportable records in the National Criminal Database that require county-level verification.
 
 ## How It Works
 
@@ -26,12 +32,12 @@ Accio Data provides:
 - **Clear results**: Return almost instantly
 - **Possible records**: Routed to QA queue for FCRA compliance review (can take hours/days)
 - **National Criminal Database**: Always returns "Clear" in final results (FCRA compliance)
-- **County searches**: Triggered automatically when reportable records found ($6.99/county)
+- **County searches**: We do NOT order these directly. They are triggered automatically by Accio when records are found and require verification ($6.99/county, billed by Accio)
 
-### Two-Stage Criminal Check
+### Criminal Check Process
 
 1. **National Criminal DB** → Quick scan, returns "Clear" or routes to QA
-2. **County-Level Search** → Only if records found, billed separately
+2. **County-Level Search** → Only triggered by Accio if records found (we don't order these)
 
 ## Test Clients
 
