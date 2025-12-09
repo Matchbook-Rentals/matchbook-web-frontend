@@ -4,8 +4,10 @@ import { writeFile } from "fs/promises";
 import { join } from "path";
 import prisma from "@/lib/prismadb";
 
-const ISOFTPULL_API_URL = "https://app.isoftpull.com/api/v2/reports";
-const MOCK_MODE = false;
+// SAFETY: Real URL commented out to prevent accidental API calls
+// const ISOFTPULL_API_URL = "https://app.isoftpull.com/api/v2/reports";
+const ISOFTPULL_API_URL = "https://example.com/mocked-isoftpull";
+const MOCK_MODE = true;
 
 // iSoftPull requires full state names, not abbreviations
 const STATE_NAMES: Record<string, string> = {
@@ -52,16 +54,38 @@ export async function POST(request: Request) {
     console.log("📋 Request data:", { firstName, lastName, address, city, state, zip, ssn: "***" });
 
     if (MOCK_MODE) {
-      console.log("🎭 MOCK MODE: Returning fake credit data");
-      return NextResponse.json({
-        success: true,
-        creditData: {
-          intelligence: {
-            result: "passed",
-            name: "good",
-            score: 720,
+      console.log("🎭 MOCK MODE: Returning simulated credit data");
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      const mockCreditData = {
+        applicant: {
+          first_name: firstName,
+          last_name: lastName,
+          address,
+          city,
+          state,
+          zip,
+          ssn: "***masked***",
+        },
+        intelligence: {
+          name: "Very Good",
+          result: "passed",
+          credit_score: "750",
+        },
+        reports: {
+          link: "https://app.isoftpull.com/mock-report",
+          equifax: {
+            status: "success",
+            message: "Mock credit report",
           },
         },
+      };
+
+      return NextResponse.json({
+        success: true,
+        creditData: mockCreditData,
       });
     }
 
@@ -108,6 +132,43 @@ export async function POST(request: Request) {
     console.log("=".repeat(60));
     console.log("FULL RESPONSE:", JSON.stringify(creditData, null, 2));
     console.log("=".repeat(60) + "\n");
+
+    // Check for invalid SSN in response
+    const identityScan = creditData.reports?.transunion?.identity_scan || creditData.reports?.equifax?.identity_scan;
+    const fraudShield = creditData.reports?.transunion?.fraud_shield || creditData.reports?.equifax?.fraud_shield;
+
+    const hasInvalidSSN =
+      identityScan?.message?.includes("INVALID") ||
+      fraudShield?.Indicators?.includes("INVALID");
+
+    if (hasInvalidSSN) {
+      console.log("⚠️ Invalid SSN detected in iSoftPull response");
+      return NextResponse.json({
+        success: false,
+        errorType: "INVALID_SSN",
+        message: "The SSN provided could not be verified",
+        creditData, // Still return data for logging
+      });
+    }
+
+    // Check for no-hit / credit file not found
+    const equifaxReport = creditData.reports?.equifax;
+    const transunionReport = creditData.reports?.transunion;
+    const hasNoHit =
+      equifaxReport?.failure_type === "no-hit" ||
+      transunionReport?.failure_type === "no-hit" ||
+      creditData.intelligence?.result === "Failed" ||
+      creditData.intelligence?.credit_score === "failed";
+
+    if (hasNoHit) {
+      console.log("⚠️ No credit file found (no-hit) in iSoftPull response");
+      return NextResponse.json({
+        success: false,
+        errorType: "NO_CREDIT_FILE",
+        message: "No credit file was found for the provided information",
+        creditData, // Still return data for logging
+      });
+    }
 
     // Save to file for TypeScript interface creation
     try {
