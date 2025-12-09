@@ -1,11 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import prisma from '@/lib/prismadb';
-import { PAGE_MARGIN } from '@/constants/styles';
 import { notFound } from 'next/navigation';
-import { BlogArticle } from '@prisma/client';
-import Link from 'next/link';
 import Image from 'next/image';
-import SocialLinks from '@/components/SocialLinks';
 import { Poppins, Lora } from 'next/font/google';
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
 
@@ -36,16 +32,20 @@ export default async function ArticlePage({ params }: Params) {
 
   return (
     <main className={`max-w-3xl ${poppins.className} mx-auto px-4 py-8`}>
-      <div className="flex justify-center mb-8">
-        <MarketingPageHeader 
-          headerText={article.title} 
-          breadcrumbText="Articles"
+      <div className="flex justify-center mb-10">
+        <MarketingPageHeader
+          headerText="Articles"
           articleSlug={article.slug}
         />
       </div>
-      <div className="flex justify-between items-center px-1 mb-1 text-foreground">
-        <h3 className="text-[#0b6969] font-medium">{new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.createdAt))}</h3>
-        <SocialLinks className='mb-1' />
+
+      <div className="text-center mb-6">
+        <p className="text-[#0b6969] font-medium">
+          Published {new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.createdAt))}
+        </p>
+        <h1 className={`text-4xl font-medium mt-2 ${lora.className}`}>
+          {article.title}
+        </h1>
       </div>
       {article.imageUrl && (
         <Image
@@ -53,7 +53,7 @@ export default async function ArticlePage({ params }: Params) {
           alt={article.title}
           width={1515}
           height={337}
-          className="w-full aspect-[16/9] mb-4 rounded-lg object-cover"
+          className="w-full aspect-[16/9] mb-10 rounded-lg object-cover"
           priority={true}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
         />
