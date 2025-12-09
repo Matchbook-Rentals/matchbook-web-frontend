@@ -841,7 +841,7 @@ export const ProcessingScreen = ({
               </Button>
               <BrandButton
                 onClick={handleRetry}
-                disabled={!hasFormChanges || isRetrying}
+                disabled={isRetrying}
                 className="px-6"
               >
                 {isRetrying ? (
