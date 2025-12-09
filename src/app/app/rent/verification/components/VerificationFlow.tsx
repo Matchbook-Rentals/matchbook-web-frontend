@@ -54,11 +54,13 @@ type Step = "personal-info" | "background-auth" | "credit-auth" | "processing" |
 interface VerificationFlowProps {
   initialPaymentMethods?: SavedPaymentMethod[];
   initialClientSecret?: string | null;
+  isAdmin?: boolean;
 }
 
 export const VerificationFlow = ({
   initialPaymentMethods,
   initialClientSecret,
+  isAdmin = false,
 }: VerificationFlowProps): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<Step>("personal-info");
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -316,7 +318,7 @@ export const VerificationFlow = ({
       {currentStep === "personal-info" && (
         <VerificationFooter
           secondaryButton={
-            process.env.NODE_ENV === 'development'
+            isAdmin
               ? {
                   label: "Skip (Dev)",
                   onClick: openTestClientModal,
