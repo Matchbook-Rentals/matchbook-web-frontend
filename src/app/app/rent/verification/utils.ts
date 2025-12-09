@@ -62,6 +62,10 @@ export function generateVerificationXml(
       <phone>555-123-4567</phone>
     </subject>
     <package>Criminal and Evictions</package>
+    <subOrder type="National Criminal"/>
+    <subOrder type="evictions_check">
+      <state>${state}</state>
+    </subOrder>
     <postURL>${postbackUrl}</postURL>
   </placeOrder>
 </New_Order>`;

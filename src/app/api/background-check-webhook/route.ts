@@ -4,24 +4,32 @@ import { parseStringPromise } from 'xml2js';
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
+  let xmlData = '';
 
   console.log('🔔 [Background Check Webhook] Received webhook request');
 
+  // CRITICAL: Log the raw payload FIRST, before any other processing
+  // This ensures we capture the response even if database operations fail
   try {
-    // Get the raw XML from the request body
-    const xmlData = await request.text();
+    xmlData = await request.text();
+  } catch (readError) {
+    console.error('❌ [Background Check Webhook] Failed to read request body:', readError);
+    return NextResponse.json({ error: "Failed to read request body" }, { status: 400 });
+  }
 
-    // Always log webhook payload - search for BACKGROUND_CHECK_WEBHOOK in logs
-    console.log('\n' + '='.repeat(80));
-    console.log('BACKGROUND_CHECK_WEBHOOK_START');
-    console.log('='.repeat(80));
-    console.log(xmlData);
-    console.log('='.repeat(80));
-    console.log('BACKGROUND_CHECK_WEBHOOK_END');
-    console.log('='.repeat(80) + '\n');
+  // Always log webhook payload - search for BACKGROUND_CHECK_WEBHOOK in logs
+  console.log('\n' + '='.repeat(80));
+  console.log('BACKGROUND_CHECK_WEBHOOK_START');
+  console.log('='.repeat(80));
+  console.log(xmlData);
+  console.log('='.repeat(80));
+  console.log('BACKGROUND_CHECK_WEBHOOK_END');
+  console.log('='.repeat(80) + '\n');
 
-    console.log('📦 [Background Check Webhook] Raw XML payload:', xmlData.substring(0, 1000));
-    console.log('📏 [Background Check Webhook] XML length:', xmlData.length, 'characters');
+  console.log('📦 [Background Check Webhook] Raw XML payload:', xmlData.substring(0, 1000));
+  console.log('📏 [Background Check Webhook] XML length:', xmlData.length, 'characters');
+
+  try {
 
     // Parse the XML response
     console.log('🔍 [Background Check Webhook] Parsing XML...');
