@@ -13,6 +13,49 @@ function slugify(title: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
+export async function toggleArticlePublish(articleId: string) {
+  const isAdmin = await checkAdminAccess()
+  if (!isAdmin) {
+    return {
+      success: false,
+      error: 'Unauthorized: Admin privileges required'
+    }
+  }
+
+  try {
+    const article = await prisma.blogArticle.findUnique({
+      where: { id: articleId }
+    })
+
+    if (!article) {
+      return {
+        success: false,
+        error: 'Article not found'
+      }
+    }
+
+    const updated = await prisma.blogArticle.update({
+      where: { id: articleId },
+      data: { published: !article.published }
+    })
+
+    revalidatePath('/manage/articles')
+    revalidatePath('/articles')
+
+    return {
+      success: true,
+      published: updated.published,
+      message: updated.published ? 'Article published' : 'Article unpublished'
+    }
+  } catch (error) {
+    console.error('Error toggling article publish:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update article'
+    }
+  }
+}
+
 export async function deleteArticle(articleId: string) {
   const isAdmin = await checkAdminAccess()
   if (!isAdmin) {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { MoreVertical, Pencil, Trash2, Eye } from 'lucide-react'
+import { MoreVertical, Pencil, Trash2, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,17 +11,21 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
-import { deleteArticle } from '../new/_actions'
+import { deleteArticle, toggleArticlePublish } from '../new/_actions'
 
 interface ArticleCardMenuProps {
   articleId: string
   articleTitle: string
+  isPublished: boolean
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
-export function ArticleCardMenu({ articleId, articleTitle }: ArticleCardMenuProps) {
+export function ArticleCardMenu({ articleId, articleTitle, isPublished, open, onOpenChange }: ArticleCardMenuProps) {
   const router = useRouter()
   const { toast } = useToast()
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isToggling, setIsToggling] = useState(false)
 
   const handleEdit = () => {
     router.push(`/manage/articles/${articleId}/edit`)
@@ -29,6 +33,35 @@ export function ArticleCardMenu({ articleId, articleTitle }: ArticleCardMenuProp
 
   const handleView = () => {
     router.push(`/articles/${articleId}`)
+  }
+
+  const handleTogglePublish = async () => {
+    setIsToggling(true)
+    try {
+      const result = await toggleArticlePublish(articleId)
+
+      if (result.success) {
+        toast({
+          title: result.published ? 'Published' : 'Unpublished',
+          description: result.message,
+        })
+        router.refresh()
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error,
+          variant: 'destructive',
+        })
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to update article',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsToggling(false)
+    }
   }
 
   const handleDelete = async () => {
@@ -65,7 +98,7 @@ export function ArticleCardMenu({ articleId, articleTitle }: ArticleCardMenuProp
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -83,6 +116,19 @@ export function ArticleCardMenu({ articleId, articleTitle }: ArticleCardMenuProp
         <DropdownMenuItem onClick={handleEdit} className="cursor-pointer">
           <Pencil className="mr-2 h-4 w-4" />
           Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleTogglePublish} className="cursor-pointer">
+          {isPublished ? (
+            <>
+              <EyeOff className="mr-2 h-4 w-4" />
+              Unpublish
+            </>
+          ) : (
+            <>
+              <Eye className="mr-2 h-4 w-4" />
+              Publish
+            </>
+          )}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleDelete}

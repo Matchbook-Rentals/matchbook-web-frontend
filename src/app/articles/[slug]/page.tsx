@@ -6,12 +6,17 @@ import { BlogArticle } from '@prisma/client';
 import Link from 'next/link';
 import Image from 'next/image';
 import SocialLinks from '@/components/SocialLinks';
-import { Poppins } from 'next/font/google';
+import { Poppins, Lora } from 'next/font/google';
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
 
-const poppins = Poppins({ 
+const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   subsets: ["latin"]
+});
+
+const lora = Lora({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
 });
 
 interface Params {
@@ -30,7 +35,7 @@ export default async function ArticlePage({ params }: Params) {
   }
 
   return (
-    <main className={`${PAGE_MARGIN} ${poppins.className} mx-auto px-4 py-8`}>
+    <main className={`max-w-3xl ${poppins.className} mx-auto px-4 py-8`}>
       <div className="flex justify-center mb-8">
         <MarketingPageHeader 
           headerText={article.title} 
@@ -39,7 +44,7 @@ export default async function ArticlePage({ params }: Params) {
         />
       </div>
       <div className="flex justify-between items-center px-1 mb-1 text-foreground">
-        <h3 className={`${poppins.className}`}>{new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.createdAt))}</h3>
+        <h3 className="text-[#0b6969] font-medium">{new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.createdAt))}</h3>
         <SocialLinks className='mb-1' />
       </div>
       {article.imageUrl && (
@@ -48,7 +53,7 @@ export default async function ArticlePage({ params }: Params) {
           alt={article.title}
           width={1515}
           height={337}
-          className="w-full h-auto mb-4 rounded-lg object-cover max-h-[40vh]"
+          className="w-full aspect-[16/9] mb-4 rounded-lg object-cover"
           priority={true}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
         />
@@ -56,8 +61,9 @@ export default async function ArticlePage({ params }: Params) {
       <article className="w-full prose-sm md:prose-base lg:prose-lg mb-8">
         <ReactMarkdown
           components={{
-            h1: ({node, ...props}) => <h1 className="text-[36px] font-semibold my-3" {...props} />,
-            h2: ({node, ...props}) => <h2 className="text-[32px] font-semibold my-3" {...props} />,
+            h1: ({node, ...props}) => <h1 className={`text-xl font-medium my-4 ${lora.className}`} {...props} />,
+            h2: ({node, ...props}) => <h2 className={`text-lg font-medium my-3 ${lora.className}`} {...props} />,
+            h3: ({node, ...props}) => <h3 className={`text-base font-medium my-2 ${lora.className}`} {...props} />,
             p: ({node, ...props}) => <p className="mb-2" {...props} />,
             img: ({node, ...props}) => <img className="w-full h-auto my-4" {...props} />,
             a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
@@ -67,8 +73,8 @@ export default async function ArticlePage({ params }: Params) {
         >{article.content}</ReactMarkdown>
       </article>
       <div className="flex flex-col items-end mt-8">
-        <h4 className="font-medium text-[34px]">{article.authorName}</h4>
-        <h5 className="text-[20px] font-normal">{(article as any).authorTitle}</h5>
+        <h4 className="text-lg font-medium">{article.authorName}</h4>
+        <h5 className="text-sm text-gray-500">{(article as any).authorTitle}</h5>
       </div>
     </main>
   );

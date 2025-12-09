@@ -19,11 +19,12 @@ interface MatchbookHeaderProps {
   user: UserObject | null;
   isSignedIn: boolean;
   className?: string;
+  containerClassName?: string;
   buttonText?: string;
   buttonHref?: string;
 }
 
-export default function MatchbookHeader({ userId, user, isSignedIn, className, buttonText = "Become a Host", buttonHref = "/hosts" }: MatchbookHeaderProps): JSX.Element {
+export default function MatchbookHeader({ userId, user, isSignedIn, className, containerClassName, buttonText = "Become a Host", buttonHref = "/hosts" }: MatchbookHeaderProps): JSX.Element {
   const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
@@ -43,8 +44,9 @@ export default function MatchbookHeader({ userId, user, isSignedIn, className, b
   }, [isSignedIn, userId]);
 
   return (
-    <header className={cn("flex w-full items-center justify-between px-6 py-1 bg-background", className)}>
-      <div className="relative h-[72px] flex items-center">
+    <header className={cn("w-full bg-background", className)}>
+      <div className={cn("flex w-full items-center justify-between px-6 py-1", containerClassName)}>
+        <div className="relative h-[72px] flex items-center">
         <Link href="/">
           <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
           <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
@@ -63,6 +65,7 @@ export default function MatchbookHeader({ userId, user, isSignedIn, className, b
         </Button>
 
         <UserMenu color="white" mode="header" userId={userId} user={user} isSignedIn={isSignedIn} hasListings={hasListings} />
+        </div>
       </div>
     </header>
   );
