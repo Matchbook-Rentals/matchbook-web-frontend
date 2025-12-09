@@ -23,6 +23,8 @@ export function NewArticleForm() {
   const [publishDate, setPublishDate] = useState(
     new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
   )
+  const [authorName, setAuthorName] = useState('')
+  const [authorTitle, setAuthorTitle] = useState('')
 
   // Generate slug preview from title
   const slugPreview = title
@@ -97,7 +99,8 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
       formData.set('content', content)
       formData.set('imageUrl', imageUrl)
       formData.set('published', 'on')
-      formData.set('authorName', 'The Matchbook Team')
+      formData.set('authorName', authorName || 'The Matchbook Team')
+      formData.set('authorTitle', authorTitle)
 
       const result = await uploadArticle(formData)
 
@@ -213,6 +216,25 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
           onSelectionChange={setHasSelection}
           placeholder="Start writing your article..."
         />
+      </div>
+
+      <div className="flex justify-end mb-10">
+        <div className="text-right">
+          <input
+            type="text"
+            value={authorName}
+            onChange={(e) => setAuthorName(e.target.value)}
+            placeholder="Daniel Resner"
+            className="text-lg font-medium text-right w-full border-none outline-none focus:ring-0 bg-transparent"
+          />
+          <input
+            type="text"
+            value={authorTitle}
+            onChange={(e) => setAuthorTitle(e.target.value)}
+            placeholder="CEO"
+            className="text-sm text-gray-500 text-right w-full border-none outline-none focus:ring-0 bg-transparent"
+          />
+        </div>
       </div>
 
       <div className="flex justify-center pb-20">
