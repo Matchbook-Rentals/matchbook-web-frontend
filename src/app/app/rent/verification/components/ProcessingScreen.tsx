@@ -647,14 +647,15 @@ export const ProcessingScreen = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="password"
-                          placeholder="Enter SSN"
-                          maxLength={9}
+                          type="text"
+                          placeholder="123-45-6789"
+                          maxLength={11}
                           className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
-                          {...field}
+                          value={field.value ? field.value.replace(/(\d{3})(\d{2})(\d{0,4})/, (_, a, b, c) => c ? `${a}-${b}-${c}` : b ? `${a}-${b}` : a) : ''}
                           onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, '').slice(0, 9);
-                            field.onChange(value);
+                            // Strip non-digits and store raw value
+                            const rawValue = e.target.value.replace(/\D/g, '').slice(0, 9);
+                            field.onChange(rawValue);
                           }}
                         />
                       </FormControl>

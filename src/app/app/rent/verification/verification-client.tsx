@@ -451,16 +451,15 @@ export default function VerificationClient({
                   <FormItem>
                     <FormLabel>Social Security Number*</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="123456789" 
-                        type="password" 
-                        {...field} 
-                        maxLength={9}
-                        onInput={(e) => {
-                          // Force numbers only
-                          const target = e.target as HTMLInputElement;
-                          target.value = target.value.replace(/\D/g, '').slice(0, 9);
-                          field.onChange(target.value);
+                      <Input
+                        placeholder="123-45-6789"
+                        type="text"
+                        maxLength={11}
+                        value={field.value ? field.value.replace(/(\d{3})(\d{2})(\d{0,4})/, (_, a, b, c) => c ? `${a}-${b}-${c}` : b ? `${a}-${b}` : a) : ''}
+                        onChange={(e) => {
+                          // Strip non-digits and store raw value
+                          const rawValue = e.target.value.replace(/\D/g, '').slice(0, 9);
+                          field.onChange(rawValue);
                         }}
                       />
                     </FormControl>
