@@ -40,6 +40,13 @@ const ISOFTPULL_TEST_CLIENTS = [
   { firstName: "Susie", lastName: "Que", credit: "~500 (Poor)", ssn: "333333333", dob: "1983-06-15", address: "2270 Camino Vida Roble", city: "Carlsbad", state: "CA", zip: "92011" },
   { firstName: "Chris", lastName: "Iceman", credit: "Frozen", ssn: "444444444", dob: "1982-09-15", address: "3743 Jefferson St", city: "Carlsbad", state: "CA", zip: "92008" },
   { firstName: "Jeff", lastName: "Nascore", credit: "No Score", ssn: "555555555", dob: "1979-10-15", address: "1999 California St", city: "Carlsbad", state: "CA", zip: "92054" },
+  { firstName: "Invalid", lastName: "SSN", credit: "Invalid SSN", ssn: "000000000", dob: "1985-01-01", address: "123 Test St", city: "Carlsbad", state: "CA", zip: "92008" },
+];
+
+// Accio Data test clients for background check testing
+const ACCIO_TEST_CLIENTS = [
+  { firstName: "Dante", lastName: "Blackwood", credit: "Eviction Records", ssn: "118829724", dob: "1994-05-13", address: "751 N Indian Creek DR", city: "Clarkston", state: "GA", zip: "30021" },
+  { firstName: "Marcus", lastName: "Snell", credit: "Criminal Records", ssn: "123456789", dob: "1983-03-24", address: "123 Any Street", city: "Anytown", state: "GA", zip: "30021" },
 ];
 
 type Step = "personal-info" | "background-auth" | "credit-auth" | "processing" | "results" | "details";
@@ -279,7 +286,7 @@ export const VerificationFlow = ({
 
           {currentStep === "processing" && (
             <ProcessingScreen
-              formData={form.getValues()}
+              form={form}
               onComplete={handleProcessingComplete}
               onBack={handleBackToCreditAuth}
               onStepChange={setProcessingStep}
@@ -383,33 +390,64 @@ export const VerificationFlow = ({
 
       {/* Test Client Selector Modal (Dev Only) */}
       <Dialog open={showTestClientModal} onOpenChange={setShowTestClientModal}>
-        <DialogContent className="sm:max-w-md" xOnRight>
+        <DialogContent className="sm:max-w-md max-h-[80vh] overflow-y-auto" xOnRight>
           <DialogHeader>
             <DialogTitle>Select Test Client</DialogTitle>
             <DialogDescription>
-              Choose an iSoftPull test applicant to auto-fill the form
+              Choose a test applicant to auto-fill the form
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col gap-2 mt-4">
-            {ISOFTPULL_TEST_CLIENTS.map((client) => (
-              <button
-                key={client.ssn}
-                onClick={() => selectTestClient(client)}
-                className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors text-left"
-              >
-                <div>
-                  <div className="font-medium text-gray-900">
-                    {client.firstName} {client.lastName}
+
+          {/* iSoftPull Test Clients */}
+          <div className="mt-4">
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">iSoftPull (Credit Check)</h3>
+            <div className="flex flex-col gap-2">
+              {ISOFTPULL_TEST_CLIENTS.map((client) => (
+                <button
+                  key={client.ssn}
+                  onClick={() => selectTestClient(client)}
+                  className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors text-left"
+                >
+                  <div>
+                    <div className="font-medium text-gray-900">
+                      {client.firstName} {client.lastName}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      SSN: {client.ssn}
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-500">
-                    SSN: {client.ssn}
+                  <div className="text-sm font-medium text-primary">
+                    {client.credit}
                   </div>
-                </div>
-                <div className="text-sm font-medium text-primary">
-                  {client.credit}
-                </div>
-              </button>
-            ))}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Accio Data Test Clients */}
+          <div className="mt-4">
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Accio Data (Background Check)</h3>
+            <div className="flex flex-col gap-2">
+              {ACCIO_TEST_CLIENTS.map((client) => (
+                <button
+                  key={`accio-${client.ssn}`}
+                  onClick={() => selectTestClient(client)}
+                  className="flex items-center justify-between p-3 rounded-lg border border-orange-200 hover:border-orange-500 hover:bg-orange-50 transition-colors text-left"
+                >
+                  <div>
+                    <div className="font-medium text-gray-900">
+                      {client.firstName} {client.lastName}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      SSN: {client.ssn}
+                    </div>
+                  </div>
+                  <div className="text-sm font-medium text-orange-600">
+                    {client.credit}
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         </DialogContent>
       </Dialog>

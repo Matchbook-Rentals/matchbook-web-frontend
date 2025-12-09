@@ -32,10 +32,14 @@ export function generateVerificationXml(
 ): string {
   const { account, username, password } = accountDetails;
   const { firstName, lastName, ssn, dob, address, city, state, zip } = data;
-  
+
   // Create a unique order ID for tracking
   const orderId = `MBWEB-${Date.now().toString().slice(-8)}`;
-  
+
+  // Use NEXT_PUBLIC_BASE_URL for webhook callback
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://matchbookrentals.com';
+  const postbackUrl = `${baseUrl}/api/background-check-webhook`;
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <New_Order>
   <login>
@@ -57,9 +61,8 @@ export function generateVerificationXml(
       <email>verification@matchbookrentals.com</email>
       <phone>555-123-4567</phone>
     </subject>
-    <subOrder type="National Criminal" />
-    <subOrder type="County_criminal" />
-    <package>A LA CARTE</package>
+    <package>Criminal and Evictions</package>
+    <postURL>${postbackUrl}</postURL>
   </placeOrder>
 </New_Order>`;
 }

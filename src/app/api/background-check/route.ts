@@ -14,29 +14,26 @@ const ACCOUNT_DETAILS = {
   password: process.env.ACCIO_PASSWORD
 };
 
-// For debugging - log requests and responses fully
-const DEBUG = true; // Set to false in production
-
 // API endpoint to handle background check requests
 export async function POST(request: Request) {
   try {
     // Get the authenticated user
     const { userId } = auth();
-    
+
     // Check for test mode header
     const testUserId = request.headers.get('x-test-user-id');
     const effectiveUserId = testUserId || userId;
-    
+
     if (!effectiveUserId) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     // Parse request body
     const body = await request.json();
-    
+
     // Validate request data
     const parseResult = verificationSchema.safeParse(body);
     if (!parseResult.success) {
@@ -45,34 +42,38 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    
+
     const data = parseResult.data;
-    
+
     // Check if user has an unredeemed background check purchase
+    // Accept both 'backgroundCheck' (test page) and 'matchbookVerification' (verification flow)
     const unredeemedPurchase = await prisma.purchase.findFirst({
       where: {
         userId: effectiveUserId,
-        type: 'backgroundCheck',
+        type: { in: ['backgroundCheck', 'matchbookVerification'] },
         isRedeemed: false,
       },
     });
-    
+
     if (!unredeemedPurchase) {
       return NextResponse.json(
         { error: "No unredeemed background check purchase found" },
         { status: 403 }
       );
     }
-    
+
     // Generate XML for the combined check
     const xmlPayload = generateVerificationXml(data, ACCOUNT_DETAILS);
-    
-    if (DEBUG) {
-      console.log("=== XML REQUEST PAYLOAD ===");
-      console.log(xmlPayload);
-      console.log("==========================");
-    }
-    
+
+    // Always log request - search for BACKGROUND_CHECK_REQUEST in logs
+    console.log("\n" + "=".repeat(80));
+    console.log("BACKGROUND_CHECK_REQUEST_START");
+    console.log("=".repeat(80));
+    console.log(xmlPayload);
+    console.log("=".repeat(80));
+    console.log("BACKGROUND_CHECK_REQUEST_END");
+    console.log("=".repeat(80) + "\n");
+
     // Send XML to Accio Data API for testing
     const accioResponse = await fetch("https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml", {
       method: "POST",
@@ -81,16 +82,19 @@ export async function POST(request: Request) {
       },
       body: xmlPayload,
     });
-    
+
     // Get response text regardless of status code
     const responseText = await accioResponse.text();
-    
-    if (DEBUG) {
-      console.log("=== ACCIO API RESPONSE ===");
-      console.log("Status:", accioResponse.status, accioResponse.statusText);
-      console.log("Response Text:", responseText);
-      console.log("=========================");
-    }
+
+    // Always log response - search for BACKGROUND_CHECK_RESPONSE in logs
+    console.log("\n" + "=".repeat(80));
+    console.log("BACKGROUND_CHECK_RESPONSE_START");
+    console.log("=".repeat(80));
+    console.log("Status:", accioResponse.status, accioResponse.statusText);
+    console.log(responseText);
+    console.log("=".repeat(80));
+    console.log("BACKGROUND_CHECK_RESPONSE_END");
+    console.log("=".repeat(80) + "\n");
     
     // Check for XML error nodes in the response
     if (responseText.includes("<error") || !accioResponse.ok) {
@@ -160,17 +164,18 @@ export async function POST(request: Request) {
     });
     
   } catch (error) {
-    if (DEBUG) {
-      console.error("=== API ERROR ===");
-      console.error("Error processing background check request:", error);
-      console.error("==================");
-    }
-    
-    // Provide more details in development mode
+    console.error("\n" + "=".repeat(80));
+    console.error("BACKGROUND_CHECK_ERROR_START");
+    console.error("=".repeat(80));
+    console.error("Error processing background check request:", error);
+    console.error("=".repeat(80));
+    console.error("BACKGROUND_CHECK_ERROR_END");
+    console.error("=".repeat(80) + "\n");
+
     return NextResponse.json(
-      { 
-        error: "Failed to process background check request", 
-        details: DEBUG ? (error instanceof Error ? error.stack : String(error)) : undefined
+      {
+        error: "Failed to process background check request",
+        details: error instanceof Error ? error.stack : String(error)
       },
       { status: 500 }
     );

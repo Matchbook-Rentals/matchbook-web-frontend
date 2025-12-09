@@ -11,6 +11,15 @@ export async function POST(request: NextRequest) {
     // Get the raw XML from the request body
     const xmlData = await request.text();
 
+    // Always log webhook payload - search for BACKGROUND_CHECK_WEBHOOK in logs
+    console.log('\n' + '='.repeat(80));
+    console.log('BACKGROUND_CHECK_WEBHOOK_START');
+    console.log('='.repeat(80));
+    console.log(xmlData);
+    console.log('='.repeat(80));
+    console.log('BACKGROUND_CHECK_WEBHOOK_END');
+    console.log('='.repeat(80) + '\n');
+
     console.log('📦 [Background Check Webhook] Raw XML payload:', xmlData.substring(0, 1000));
     console.log('📏 [Background Check Webhook] XML length:', xmlData.length, 'characters');
 

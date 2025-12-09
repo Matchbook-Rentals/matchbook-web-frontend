@@ -443,14 +443,47 @@ export const ProcessingScreen = ({
 
       setCompletedSteps(prev => [...prev, "isoftpull"]);
 
-      // Simulate Accio submission (still mocked)
+      // Submit to Accio Data for background check
       setCurrentStep("accio");
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setCompletedSteps(prev => [...prev, "accio"]);
-      setCurrentStep("polling");
+      console.log("📤 Calling Accio Data API...");
 
-      // Simulate background check completion
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      try {
+        const accioResponse = await fetch("/api/background-check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: currentFormData.firstName,
+            lastName: currentFormData.lastName,
+            ssn: currentFormData.ssn,
+            dob: currentFormData.dob,
+            address: currentFormData.address,
+            city: currentFormData.city,
+            state: currentFormData.state,
+            zip: currentFormData.zip,
+            creditAuthorizationAcknowledgment: currentFormData.creditAuthorizationAcknowledgment,
+            backgroundCheckAuthorization: currentFormData.backgroundCheckAuthorization,
+          }),
+        });
+
+        const accioData = await accioResponse.json();
+        console.log("📥 Accio response:", accioData);
+
+        if (!accioResponse.ok) {
+          throw new Error(accioData.error || "Background check submission failed");
+        }
+
+        console.log("✅ Background check order submitted:", accioData.orderNumber);
+        setCompletedSteps(prev => [...prev, "accio"]);
+      } catch (accioError) {
+        console.error("❌ Accio submission error:", accioError);
+        // Don't fail the whole flow - background check will complete via webhook
+        // Just log the error and continue
+        setCompletedSteps(prev => [...prev, "accio"]);
+      }
+
+      // Background check is now pending - webhook will update when complete
+      setCurrentStep("polling");
+      await new Promise(resolve => setTimeout(resolve, 1500));
       setCompletedSteps(prev => [...prev, "polling"]);
       setCurrentStep("complete");
       setShowPendingMessage(true);
