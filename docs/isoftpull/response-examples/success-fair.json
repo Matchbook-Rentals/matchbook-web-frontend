@@ -1,0 +1,31 @@
+{
+  "applicant": {
+    "first_name": "John",
+    "middle_name": null,
+    "last_name": "Dough",
+    "address": "310 Tamarack Ave",
+    "city": "Carlsbad",
+    "state": "California",
+    "zip": "92010",
+    "date_of_birth": "1982-04-15",
+    "ssn": "222222222",
+    "email": null,
+    "phone": null
+  },
+  "intelligence": {
+    "name": "fair",
+    "result": "passed",
+    "credit_score": "620"
+  },
+  "reports": {
+    "link": "https://app.isoftpull.com/client/applicants/view_only/example-fair/soft_pull",
+    "equifax": {
+      "status": "success",
+      "message": "Equifax credit report generation succeeded",
+      "ofac": null,
+      "identity_scan": null,
+      "truvalidate": null,
+      "fraud_shield": null
+    }
+  }
+}

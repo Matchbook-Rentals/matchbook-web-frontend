@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Request: Package with IncludeDefaultProducts, no explicit subOrders
+  Test Client: Dante Blackwood
+  Date: 2024-12-09
+  Result: Only National Criminal was added (evictions not included as default)
+-->
+<XML>
+  <order orderID="24670" number="TEST-12345">
+    <subOrder type="National Criminal" comments="added by IncludeDefaultProducts" suborderID="722081"/>
+  </order>
+</XML>

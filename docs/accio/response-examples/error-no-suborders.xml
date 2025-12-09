@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Request: Package only, no subOrders or IncludeDefaultProducts
+  Test Client: Dante Blackwood
+  Date: 2024-12-09
+  Result: Error - order rejected
+-->
+<XML>
+  <error n="31" orderID="24666">
+    <errortext>This order contained no subOrder elements</errortext>
+    <additionalinfo>&lt;placeOrder number="MBWEB-04562975"&gt;
+    &lt;subject&gt;
+      &lt;name_first&gt;Dante&lt;/name_first&gt;
+      &lt;name_last&gt;Blackwood&lt;/name_last&gt;
+      &lt;ssn&gt;118829724&lt;/ssn&gt;
+      &lt;dob&gt;19940513&lt;/dob&gt;
+      &lt;address&gt;751 N Indian Creek DR&lt;/address&gt;
+      &lt;city&gt;Clarkston&lt;/city&gt;
+      &lt;state&gt;GA&lt;/state&gt;
+      &lt;zip&gt;30021&lt;/zip&gt;
+      &lt;email&gt;verification@matchbookrentals.com&lt;/email&gt;
+      &lt;phone&gt;555-123-4567&lt;/phone&gt;
+    &lt;/subject&gt;
+    &lt;package&gt;Criminal and Evictions&lt;/package&gt;
+    &lt;postURL&gt;https://matchbookrentals.com/api/background-check-webhook&lt;/postURL&gt;
+  &lt;/placeOrder&gt;</additionalinfo>
+  </error>
+</XML>

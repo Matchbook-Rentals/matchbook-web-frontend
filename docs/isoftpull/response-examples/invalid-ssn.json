@@ -1,0 +1,35 @@
+{
+  "applicant": {
+    "first_name": "Invalid",
+    "middle_name": null,
+    "last_name": "SSN",
+    "address": "123 Test St",
+    "city": "Carlsbad",
+    "state": "California",
+    "zip": "92008",
+    "date_of_birth": "1985-01-01",
+    "ssn": "000000000",
+    "email": null,
+    "phone": null
+  },
+  "intelligence": {
+    "name": "invalid",
+    "result": "SSN validation failed",
+    "credit_score": "failed"
+  },
+  "reports": {
+    "link": null,
+    "equifax": {
+      "status": "failed",
+      "message": "Unable to validate SSN",
+      "ofac": null,
+      "identity_scan": {
+        "message": "INVALID SSN - The SSN provided does not match any records"
+      },
+      "truvalidate": null,
+      "fraud_shield": {
+        "Indicators": ["INVALID SSN"]
+      }
+    }
+  }
+}

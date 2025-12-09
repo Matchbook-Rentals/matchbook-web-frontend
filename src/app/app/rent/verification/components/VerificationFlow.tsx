@@ -33,6 +33,16 @@ import { verificationSchema, type VerificationFormValues } from "../utils";
 import type { SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
 import type { ISoftPullResponse } from "@/types/isoftpull";
 
+// BGSReport data structure from Accio webhook
+interface BGSReportData {
+  id: string;
+  status: string;
+  reportData?: {
+    evictions?: { records?: unknown[] };
+    criminal?: { records?: unknown[] };
+  } | null;
+}
+
 // iSoftPull test clients for development testing
 const ISOFTPULL_TEST_CLIENTS = [
   { firstName: "Steve", lastName: "Johnson", credit: "~700 (Good)", ssn: "111111111", dob: "1980-08-15", address: "3557 Lancer Way", city: "Carlsbad", state: "CA", zip: "92008" },
@@ -70,6 +80,7 @@ export const VerificationFlow = ({
   const [shouldStartPayment, setShouldStartPayment] = useState(false);
   const [showTestClientModal, setShowTestClientModal] = useState(false);
   const [creditData, setCreditData] = useState<ISoftPullResponse | null>(null);
+  const [bgsReport, setBgsReport] = useState<BGSReportData | null>(null);
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -305,6 +316,7 @@ export const VerificationFlow = ({
             <VerificationResultsScreen
               onViewDetails={handleViewDetails}
               creditData={creditData}
+              bgsReport={bgsReport}
             />
           )}
 

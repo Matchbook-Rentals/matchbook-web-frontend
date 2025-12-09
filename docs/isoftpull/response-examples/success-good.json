@@ -1,0 +1,31 @@
+{
+  "applicant": {
+    "first_name": "Steve",
+    "middle_name": null,
+    "last_name": "Johnson",
+    "address": "3557 Lancer Way",
+    "city": "Carlsbad",
+    "state": "California",
+    "zip": "92008",
+    "date_of_birth": "1980-08-15",
+    "ssn": "111111111",
+    "email": null,
+    "phone": null
+  },
+  "intelligence": {
+    "name": "good",
+    "result": "passed",
+    "credit_score": "720"
+  },
+  "reports": {
+    "link": "https://app.isoftpull.com/client/applicants/view_only/example-good/soft_pull",
+    "equifax": {
+      "status": "success",
+      "message": "Equifax credit report generation succeeded",
+      "ofac": null,
+      "identity_scan": null,
+      "truvalidate": null,
+      "fraud_shield": null
+    }
+  }
+}

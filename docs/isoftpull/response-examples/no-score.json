@@ -1,0 +1,31 @@
+{
+  "applicant": {
+    "first_name": "Jeff",
+    "middle_name": null,
+    "last_name": "Nascore",
+    "address": "1999 California St",
+    "city": "Carlsbad",
+    "state": "California",
+    "zip": "92054",
+    "date_of_birth": "1979-10-15",
+    "ssn": "555555555",
+    "email": null,
+    "phone": null
+  },
+  "intelligence": {
+    "name": "no score",
+    "result": "No offers matched",
+    "credit_score": "no score"
+  },
+  "reports": {
+    "link": "https://app.isoftpull.com/client/applicants/view_only/example-no-score/soft_pull",
+    "equifax": {
+      "status": "success",
+      "message": "Credit file found but insufficient history to generate score",
+      "ofac": null,
+      "identity_scan": null,
+      "truvalidate": null,
+      "fraud_shield": null
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Request: Explicit subOrders for National Criminal and evictions_check
+  Test Client: Marcus Snell
+  Date: 2024-12-09
+  Result: Both subOrders created successfully
+-->
+<XML>
+  <order orderID="24672" number="TEST-12347">
+    <subOrder type="National Criminal" suborderID="722127"/>
+    <subOrder type="evictions_check" suborderID="722128"/>
+  </order>
+</XML>

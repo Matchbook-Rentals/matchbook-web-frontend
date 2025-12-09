@@ -1,0 +1,32 @@
+{
+  "applicant": {
+    "first_name": "Chris",
+    "middle_name": null,
+    "last_name": "Iceman",
+    "address": "3743 Jefferson St",
+    "city": "Carlsbad",
+    "state": "California",
+    "zip": "92008",
+    "date_of_birth": "1982-09-15",
+    "ssn": "444444444",
+    "email": null,
+    "phone": null
+  },
+  "intelligence": {
+    "name": "frozen",
+    "result": "Credit file is frozen",
+    "credit_score": "frozen"
+  },
+  "reports": {
+    "link": "https://app.isoftpull.com/client/applicants/view_only/example-frozen/soft_pull",
+    "equifax": {
+      "status": "failed",
+      "message": "Credit file is frozen - consumer must unfreeze before report can be pulled",
+      "failure_type": "frozen",
+      "ofac": null,
+      "identity_scan": null,
+      "truvalidate": null,
+      "fraud_shield": null
+    }
+  }
+}

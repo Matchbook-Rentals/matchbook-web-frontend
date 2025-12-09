@@ -101,20 +101,20 @@ export type ProcessingStep =
   | "polling"
   | "complete"
   | "ssn-error"
-  | "refund"
   | "refund-success"
+  | "verification-failed"
   | "no-credit-file";
 
 const stepLabels: Record<ProcessingStep, string> = {
   "select-payment": "Preparing your verification...",
-  payment: "Processing payment...",
+  payment: "Authorizing payment...",
   isoftpull: "Gathering information...",
   accio: "Performing background checks...",
-  polling: "Finalizing verification...",
+  polling: "Finalizing payment...",
   complete: "Verification Complete!",
   "ssn-error": "SSN Verification Failed",
-  refund: "Verification Could Not Be Completed",
   "refund-success": "Refund Processed",
+  "verification-failed": "Verification Could Not Be Completed",
   "no-credit-file": "No Credit File Found",
 };
 
@@ -145,6 +145,7 @@ export const ProcessingScreen = ({
   const [isRetrying, setIsRetrying] = useState(false);
   const [isProcessingRefund, setIsProcessingRefund] = useState(false);
   const [refundError, setRefundError] = useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
 
   // Get form data for API calls
   const formData = form.getValues();
@@ -224,13 +225,16 @@ export const ProcessingScreen = ({
         throw new Error(data.error || data.details || 'Failed to create payment intent');
       }
 
-      const { clientSecret, paymentIntentId } = data;
+      const { clientSecret, paymentIntentId: newPaymentIntentId } = data;
 
       if (!clientSecret) {
         throw new Error('No client secret returned from server');
       }
 
-      console.log('✅ Payment intent created, confirming with Stripe...');
+      // Store paymentIntentId for later capture/cancel
+      setPaymentIntentId(newPaymentIntentId);
+
+      console.log('✅ Payment intent created (pre-auth hold), confirming with Stripe...');
 
       // Step 2: Load Stripe and confirm payment
       const stripe = await import('@stripe/stripe-js').then(m =>
@@ -255,8 +259,8 @@ export const ProcessingScreen = ({
 
       console.log('✅ Payment confirmed, starting polling...');
 
-      // Step 3: Poll for payment status
-      const success = await pollPaymentStatus(paymentIntentId);
+      // Step 3: Poll for payment status (hold is placed when status is requires_capture)
+      const success = await pollPaymentStatus(newPaymentIntentId);
 
       if (success) {
         console.log('✅ Payment successful');
@@ -291,10 +295,11 @@ export const ProcessingScreen = ({
 
           console.log('📊 Payment status:', data.status);
 
-          // For ACH/bank transfers, 'processing' means the payment was initiated successfully
-          if (data.status === 'succeeded' || data.status === 'processing') {
+          // With manual capture (pre-auth), 'requires_capture' means hold is placed successfully
+          // 'succeeded' means already captured, 'processing' is for ACH/bank transfers
+          if (data.status === 'requires_capture' || data.status === 'succeeded' || data.status === 'processing') {
             clearInterval(pollInterval);
-            console.log('✅ Payment succeeded or processing');
+            console.log('✅ Payment hold placed successfully (requires_capture) or already captured');
             resolve(true);
           } else if (data.status === 'canceled' || data.status === 'failed' || data.status === 'requires_payment_method') {
             clearInterval(pollInterval);
@@ -337,41 +342,71 @@ export const ProcessingScreen = ({
     setIsRetrying(false);
   };
 
-  // Handle get refund - immediately process refund via Stripe
-  const handleGetRefund = async () => {
+  // Handle cancel payment - releases the pre-auth hold (no charge made)
+  const handleCancelPayment = async () => {
+    if (!paymentIntentId) {
+      setRefundError('No payment found to cancel.');
+      return;
+    }
+
     setIsProcessingRefund(true);
     setRefundError(null);
 
     try {
-      const response = await fetch('/api/verification/refund', {
+      const response = await fetch('/api/verification/cancel-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentIntentId }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.error === 'ALREADY_REFUNDED') {
-          setRefundError('You have already received a refund for this verification.');
-        } else if (data.error === 'NO_PURCHASE') {
-          setRefundError('No payment found to refund.');
-        } else if (data.error === 'NO_PAYMENT_INTENT') {
-          setRefundError('Payment information not found. Please contact support.');
-        } else {
-          setRefundError(data.message || 'Failed to process refund. Please contact support.');
-        }
+        setRefundError(data.error || 'Failed to process refund. Please contact support.');
         setIsProcessingRefund(false);
         return;
       }
 
-      console.log('✅ Refund processed:', data.refundId);
+      console.log('✅ Payment hold released');
       setCurrentStep("refund-success");
     } catch (error) {
-      console.error('❌ Refund error:', error);
+      console.error('❌ Cancel payment error:', error);
       setRefundError('Failed to process refund. Please try again or contact support.');
     } finally {
       setIsProcessingRefund(false);
     }
+  };
+
+  // Auto-cancel payment on second verification failure (no user action needed)
+  const autoCancelPayment = async () => {
+    if (!paymentIntentId) {
+      console.error('❌ No payment intent to cancel');
+      setCurrentStep("verification-failed"); // Still show failure screen, nothing was charged
+      return;
+    }
+
+    console.log('🔄 Auto-canceling payment after second failure...');
+
+    try {
+      const response = await fetch('/api/verification/cancel-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentIntentId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('❌ Failed to auto-cancel payment:', data.error);
+        // Still show failure screen - the hold will expire anyway
+      } else {
+        console.log('✅ Payment auto-canceled successfully');
+      }
+    } catch (error) {
+      console.error('❌ Error auto-canceling payment:', error);
+    }
+
+    setCurrentStep("verification-failed");
   };
 
   // Submit verification to API
@@ -414,8 +449,8 @@ export const ProcessingScreen = ({
           // First failure - show retry screen
           setCurrentStep("ssn-error");
         } else {
-          // Second failure - show refund screen
-          setCurrentStep("refund");
+          // Second failure - auto-cancel payment and show refund success
+          await autoCancelPayment();
         }
         return;
       }
@@ -430,8 +465,8 @@ export const ProcessingScreen = ({
           // First failure - show retry screen
           setCurrentStep("no-credit-file");
         } else {
-          // Second failure - show refund screen
-          setCurrentStep("refund");
+          // Second failure - auto-cancel payment and show refund success
+          await autoCancelPayment();
         }
         return;
       }
@@ -483,6 +518,29 @@ export const ProcessingScreen = ({
 
       // Background check is now pending - webhook will update when complete
       setCurrentStep("polling");
+
+      // Capture the payment now that verification succeeded
+      if (paymentIntentId) {
+        console.log('💰 Capturing payment hold...');
+        try {
+          const captureResponse = await fetch('/api/verification/capture-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ paymentIntentId }),
+          });
+
+          if (!captureResponse.ok) {
+            const captureData = await captureResponse.json();
+            console.error('❌ Failed to capture payment:', captureData.error);
+            // Don't fail the flow - payment can be captured manually if needed
+          } else {
+            console.log('✅ Payment captured successfully');
+          }
+        } catch (captureError) {
+          console.error('❌ Error capturing payment:', captureError);
+        }
+      }
+
       await new Promise(resolve => setTimeout(resolve, 1500));
       setCompletedSteps(prev => [...prev, "polling"]);
       setCurrentStep("complete");
@@ -526,10 +584,10 @@ export const ProcessingScreen = ({
               ? "SSN Verification Failed"
               : currentStep === "no-credit-file"
               ? "No Credit File Found"
-              : currentStep === "refund"
-              ? "Verification Could Not Be Completed"
               : currentStep === "refund-success"
               ? "Refund Processed"
+              : currentStep === "verification-failed"
+              ? "Verification Could Not Be Completed"
               : "Processing Your Verification"}
           </h1>
 
@@ -542,10 +600,10 @@ export const ProcessingScreen = ({
               ? "Please double-check your Social Security Number and other details below."
               : currentStep === "no-credit-file"
               ? "Please verify your information below is correct."
-              : currentStep === "refund"
-              ? "We were unable to verify your information."
               : currentStep === "refund-success"
-              ? "Your refund has been successfully processed."
+              ? "Your refund has been processed."
+              : currentStep === "verification-failed"
+              ? "We've refunded your payment."
               : "Please wait while we process your verification checks."}
           </p>
         </div>
@@ -767,7 +825,7 @@ export const ProcessingScreen = ({
             <div className="flex flex-row gap-4 w-full max-w-lg justify-end mt-2">
               <Button
                 variant="outline"
-                onClick={handleGetRefund}
+                onClick={handleCancelPayment}
                 disabled={isProcessingRefund}
                 className="px-6"
               >
@@ -777,7 +835,7 @@ export const ProcessingScreen = ({
                     Processing...
                   </>
                 ) : (
-                  "Get A Refund"
+                  "Get Refund"
                 )}
               </Button>
               <BrandButton
@@ -801,59 +859,36 @@ export const ProcessingScreen = ({
           </div>
         )}
 
-        {/* Refund Screen - After user requests refund or second failure */}
-        {currentStep === "refund" && (
+        
+        {/* Verification Failed Screen - Auto-refund after second failure */}
+        {currentStep === "verification-failed" && (
           <div className="flex flex-col items-center justify-center gap-8 py-12 w-full min-h-[300px]">
             <AlertCircle className="w-16 h-16 text-amber-500" />
             <div className="flex flex-col items-center gap-4 max-w-md text-center">
               <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-2xl">
-                Verification Could Not Be Completed
+                We Couldn&apos;t Complete Your Verification
               </h3>
               <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-base">
-                We were unable to verify your information. This may happen if the details provided don&apos;t match credit bureau records.
+                Unfortunately, the information provided doesn&apos;t match what&apos;s on file with our credit data providers. This can happen for a variety of reasons.
               </p>
               <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-base">
-                You can request a full refund of your $25 payment below.
+                Don&apos;t worry — your $25 has been refunded.
               </p>
-
-              {/* Refund Error Display */}
-              {refundError && (
-                <div className="w-full bg-red-50 border border-red-200 rounded-lg p-3 mt-2">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
-                    <p className="[font-family:'Poppins',Helvetica] font-normal text-red-700 text-sm">
-                      {refundError}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex flex-row gap-4 mt-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowSupportDialog(true)}
-                >
-                  Contact Support
-                </Button>
-                <BrandButton
-                  onClick={handleGetRefund}
-                  disabled={isProcessingRefund}
-                >
-                  {isProcessingRefund ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    "Get A Refund"
-                  )}
-                </BrandButton>
-              </div>
+              <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm mt-2">
+                If you believe this is an error or need assistance, please contact our support team.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => setShowSupportDialog(true)}
+                className="mt-4"
+              >
+                Contact Support
+              </Button>
             </div>
           </div>
         )}
 
-        {/* Refund Success Screen */}
+        {/* Refund Success Screen - User requested refund */}
         {currentStep === "refund-success" && (
           <div className="flex flex-col items-center justify-center gap-8 py-12 w-full min-h-[300px]">
             <CheckCircle2 className="w-16 h-16 text-green-500" />
@@ -862,7 +897,7 @@ export const ProcessingScreen = ({
                 Refund Processed
               </h3>
               <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-base">
-                Your $25 refund has been processed and will appear on your statement within 5-10 business days.
+                Your $25 refund has been processed.
               </p>
               <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm mt-2">
                 If you have any questions, please don&apos;t hesitate to contact our support team.
@@ -879,7 +914,7 @@ export const ProcessingScreen = ({
         )}
 
         {/* Processing Status - Centered spinner with sliding text */}
-        {currentStep !== "select-payment" && currentStep !== "ssn-error" && currentStep !== "refund" && currentStep !== "refund-success" && currentStep !== "no-credit-file" && (
+        {currentStep !== "select-payment" && currentStep !== "ssn-error" && currentStep !== "refund-success" && currentStep !== "verification-failed" && currentStep !== "no-credit-file" && (
           <div className="flex flex-col items-center justify-center gap-8 py-12 w-full min-h-[300px]">
               {/* Spinner */}
               {error ? (

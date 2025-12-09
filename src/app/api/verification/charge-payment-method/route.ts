@@ -31,12 +31,15 @@ export async function POST(req: Request) {
     console.log('✅ [Verification Payment] Found customer:', customerId);
 
     // Create a payment intent for $25.00 using the saved payment method
-    // Don't confirm yet - let client handle confirmation and polling
+    // Using manual capture (pre-authorization) - hold funds but don't charge yet
+    // If verification succeeds → capture the hold
+    // If verification fails → cancel the hold (no refund needed)
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 2500, // $25.00 in cents
       currency: 'usd',
       customer: customerId,
       payment_method: paymentMethodId,
+      capture_method: 'manual', // Pre-auth: hold funds without capturing
       metadata: {
         userId,
         type: 'matchbookVerification',

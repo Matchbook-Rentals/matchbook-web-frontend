@@ -1,0 +1,31 @@
+{
+  "applicant": {
+    "first_name": "Susie",
+    "middle_name": null,
+    "last_name": "Que",
+    "address": "2270 Camino Vida Roble",
+    "city": "Carlsbad",
+    "state": "California",
+    "zip": "92011",
+    "date_of_birth": "1983-06-15",
+    "ssn": "333333333",
+    "email": null,
+    "phone": null
+  },
+  "intelligence": {
+    "name": "poor",
+    "result": "passed",
+    "credit_score": "520"
+  },
+  "reports": {
+    "link": "https://app.isoftpull.com/client/applicants/view_only/example-poor/soft_pull",
+    "equifax": {
+      "status": "success",
+      "message": "Equifax credit report generation succeeded",
+      "ofac": null,
+      "identity_scan": null,
+      "truvalidate": null,
+      "fraud_shield": null
+    }
+  }
+}

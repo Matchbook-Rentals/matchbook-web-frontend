@@ -1,7 +1,7 @@
 "use client"
 
 import { DownloadIcon } from "lucide-react";
-import React from "react";
+import React, { useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import {
   Breadcrumb,
@@ -16,6 +16,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AvatarWithFallback } from "@/components/ui/avatar-with-fallback";
 import { BrandButton } from "@/components/ui/brandButton";
 import type { ISoftPullResponse } from "@/types/isoftpull";
+
+interface BackgroundCheckStatus {
+  evictions: string;
+  criminalRecord: string;
+  isComplete: boolean;
+}
+
+// BGSReport data structure from Accio webhook
+interface BGSReportData {
+  id: string;
+  status: string;
+  reportData?: {
+    evictions?: { records?: unknown[] };
+    criminal?: { records?: unknown[] };
+  } | null;
+}
 
 // Helper to format credit bucket name to display range
 const formatCreditRange = (intelligenceName: string | undefined): string => {
@@ -45,9 +61,10 @@ const formatDate = (date: Date): string => {
 interface VerificationResultsScreenProps {
   onViewDetails?: () => void;
   creditData?: ISoftPullResponse | null;
+  bgsReport?: BGSReportData | null;
 }
 
-export const VerificationResultsScreen = ({ onViewDetails, creditData }: VerificationResultsScreenProps): JSX.Element => {
+export const VerificationResultsScreen = ({ onViewDetails, creditData, bgsReport }: VerificationResultsScreenProps): JSX.Element => {
   const { user } = useUser();
 
   const fullName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : "Loading...";
@@ -58,11 +75,30 @@ export const VerificationResultsScreen = ({ onViewDetails, creditData }: Verific
   const validUntilDate = new Date(screeningDate);
   validUntilDate.setDate(validUntilDate.getDate() + 90);
 
+  // Determine background check status from BGSReport
+  const getBackgroundCheckStatus = useCallback((): BackgroundCheckStatus => {
+    if (!bgsReport || bgsReport.status === 'pending') {
+      return { evictions: 'Pending', criminalRecord: 'Pending', isComplete: false };
+    }
+
+    const reportData = bgsReport.reportData;
+    const evictionRecords = reportData?.evictions?.records || [];
+    const criminalRecords = reportData?.criminal?.records || [];
+
+    return {
+      evictions: evictionRecords.length > 0 ? 'Records Found' : 'Clear',
+      criminalRecord: criminalRecords.length > 0 ? 'Records Found' : 'Clear',
+      isComplete: true,
+    };
+  }, [bgsReport]);
+
+  const bgStatus = getBackgroundCheckStatus();
+
   const verificationData = {
     verified: true,
     creditRange: formatCreditRange(creditData?.intelligence?.name),
-    evictions: "No", // Mocked until Accio Data integration
-    criminalRecord: "No", // Mocked until Accio Data integration
+    evictions: bgStatus.evictions,
+    criminalRecord: bgStatus.criminalRecord,
     screeningDate: formatDate(screeningDate),
     validUntil: formatDate(validUntilDate),
   };

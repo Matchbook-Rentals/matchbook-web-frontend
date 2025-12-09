@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { 
+import {
   verificationSchema,
   generateVerificationXml
 } from "@/app/app/rent/verification/utils";
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+
+// SAFETY: Set to true to prevent API calls during development
+// NOTE: ACCIO_* env vars are commented out in .env to ensure we don't accidentally call the real API
+const MOCK_MODE = true;
 
 // Use the provided test credentials
 const ACCOUNT_DETAILS = {
@@ -69,67 +73,96 @@ export async function POST(request: Request) {
     console.log("\n" + "=".repeat(80));
     console.log("BACKGROUND_CHECK_REQUEST_START");
     console.log("=".repeat(80));
+    console.log("🔧 MOCK_MODE:", MOCK_MODE);
     console.log(xmlPayload);
     console.log("=".repeat(80));
     console.log("BACKGROUND_CHECK_REQUEST_END");
     console.log("=".repeat(80) + "\n");
 
-    // Send XML to Accio Data API for testing
-    const accioResponse = await fetch("https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml", {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/xml", // Fixed Content-Type as required by API
-      },
-      body: xmlPayload,
-    });
+    let responseText: string;
+    let orderNumber: string;
 
-    // Get response text regardless of status code
-    const responseText = await accioResponse.text();
+    if (MOCK_MODE) {
+      console.log("🎭 MOCK MODE: Returning simulated Accio response");
 
-    // Always log response - search for BACKGROUND_CHECK_RESPONSE in logs
-    console.log("\n" + "=".repeat(80));
-    console.log("BACKGROUND_CHECK_RESPONSE_START");
-    console.log("=".repeat(80));
-    console.log("Status:", accioResponse.status, accioResponse.statusText);
-    console.log(responseText);
-    console.log("=".repeat(80));
-    console.log("BACKGROUND_CHECK_RESPONSE_END");
-    console.log("=".repeat(80) + "\n");
-    
-    // Check for XML error nodes in the response
-    if (responseText.includes("<error") || !accioResponse.ok) {
-      console.error("Error from Accio API:", responseText);
-      
-      // Try to extract error message from XML
-      let errorMessage = "Unknown error occurred";
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Generate mock order number
+      orderNumber = "MOCK-" + Math.floor(Math.random() * 10000000);
+
+      // Mock successful response XML
+      responseText = `<?xml version="1.0" encoding="UTF-8"?>
+<XML>
+  <order_number>${orderNumber}</order_number>
+  <status>pending</status>
+  <message>Order placed successfully (MOCK)</message>
+</XML>`;
+
+      console.log("\n" + "=".repeat(80));
+      console.log("BACKGROUND_CHECK_RESPONSE_START (MOCK)");
+      console.log("=".repeat(80));
+      console.log(responseText);
+      console.log("=".repeat(80));
+      console.log("BACKGROUND_CHECK_RESPONSE_END");
+      console.log("=".repeat(80) + "\n");
+    } else {
+      // Send XML to Accio Data API
+      const accioResponse = await fetch("https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/xml",
+        },
+        body: xmlPayload,
+      });
+
+      // Get response text regardless of status code
+      responseText = await accioResponse.text();
+
+      // Always log response - search for BACKGROUND_CHECK_RESPONSE in logs
+      console.log("\n" + "=".repeat(80));
+      console.log("BACKGROUND_CHECK_RESPONSE_START");
+      console.log("=".repeat(80));
+      console.log("Status:", accioResponse.status, accioResponse.statusText);
+      console.log(responseText);
+      console.log("=".repeat(80));
+      console.log("BACKGROUND_CHECK_RESPONSE_END");
+      console.log("=".repeat(80) + "\n");
+
+      // Check for XML error nodes in the response
+      if (responseText.includes("<error") || !accioResponse.ok) {
+        console.error("Error from Accio API:", responseText);
+
+        // Try to extract error message from XML
+        let errorMessage = "Unknown error occurred";
+        try {
+          const errorMatch = responseText.match(/<errortext>(.*?)<\/errortext>/);
+          if (errorMatch && errorMatch[1]) {
+            errorMessage = errorMatch[1];
+          }
+        } catch (err) {
+          console.warn("Could not parse error from response", err);
+        }
+
+        return NextResponse.json(
+          {
+            error: errorMessage,
+            details: responseText
+          },
+          { status: 400 }
+        );
+      }
+
+      // Extract order number if available
+      orderNumber = "BC-" + Math.floor(Math.random() * 10000000);
       try {
-        const errorMatch = responseText.match(/<errortext>(.*?)<\/errortext>/);
-        if (errorMatch && errorMatch[1]) {
-          errorMessage = errorMatch[1];
+        const orderMatch = responseText.match(/<order_number>(.*?)<\/order_number>/);
+        if (orderMatch && orderMatch[1]) {
+          orderNumber = orderMatch[1];
         }
       } catch (err) {
-        console.warn("Could not parse error from response", err);
+        console.warn("Could not parse order number from response", err);
       }
-      
-      return NextResponse.json(
-        { 
-          error: errorMessage,
-          details: responseText
-        },
-        { status: 400 }
-      );
-    }
-    
-    // Extract order number if available (this would be implementation-specific)
-    let orderNumber = "BC-" + Math.floor(Math.random() * 10000000);
-    try {
-      // Try to extract order number from XML response (example pattern, adjust according to actual response)
-      const orderMatch = responseText.match(/<order_number>(.*?)<\/order_number>/);
-      if (orderMatch && orderMatch[1]) {
-        orderNumber = orderMatch[1];
-      }
-    } catch (err) {
-      console.warn("Could not parse order number from response", err);
     }
     
     // Update the purchase with the orderId and mark as redeemed

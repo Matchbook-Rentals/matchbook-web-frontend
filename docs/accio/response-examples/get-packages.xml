@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Request: getPackages query to list available packages
+  Date: 2024-12-09
+-->
+<XML>
+  <package>A La Carte</package>
+  <package>Criminal and Evictions</package>
+  <package>Canada Screen</package>
+  <package>International</package>
+</XML>

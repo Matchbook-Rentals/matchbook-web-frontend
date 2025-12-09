@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Request: Used "evictions check" (with space) instead of "evictions_check" (with underscore)
+  Test Client: Marcus Snell
+  Date: 2024-12-09
+  Result: Error - product type not recognized
+-->
+<XML>
+  <error n="77" orderID="24671">
+    <errortext>This order has one or more problems, please correct and resubmit or consider using the Cancel_out_of_scope_elements directive. </errortext>
+    <additionalinfo>Component errors: Not in the package;
+Product types with business rule conflicts: 'evictions check'.
+Allowable product types/quantites:
+evictions_check:1
+County_criminal:5
+National Criminal:1</additionalinfo>
+  </error>
+</XML>

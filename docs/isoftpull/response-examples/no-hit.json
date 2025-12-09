@@ -1,0 +1,31 @@
+{
+  "applicant": {
+    "first_name": "Invalid",
+    "middle_name": null,
+    "last_name": "SSN",
+    "address": "123 Test St",
+    "city": "Carlsbad",
+    "state": "California",
+    "zip": "92008",
+    "date_of_birth": null,
+    "ssn": "000000000",
+    "email": null,
+    "phone": null
+  },
+  "intelligence": {
+    "name": "Poor",
+    "result": "No offers matched",
+    "credit_score": "failed"
+  },
+  "reports": {
+    "link": "https://app.isoftpull.com/client/applicants/view_only/f03ba7b5-7614-4d25-b96f-8046a276ac87/soft_pull",
+    "equifax": {
+      "status": "success",
+      "message": "Equifax credit report generation succeeded",
+      "ofac": null,
+      "identity_scan": null,
+      "truvalidate": null,
+      "fraud_shield": null
+    }
+  }
+}

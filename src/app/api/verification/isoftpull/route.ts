@@ -5,6 +5,7 @@ import { join } from "path";
 import prisma from "@/lib/prismadb";
 
 // SAFETY: Real URL commented out to prevent accidental API calls
+// NOTE: ISOFTPULL_* env vars are commented out in .env to ensure we don't accidentally call the real API
 // const ISOFTPULL_API_URL = "https://app.isoftpull.com/api/v2/reports";
 const ISOFTPULL_API_URL = "https://example.com/mocked-isoftpull";
 const MOCK_MODE = true;
@@ -58,6 +59,42 @@ export async function POST(request: Request) {
 
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Use "No Score" test client (SSN 555555555) to trigger no-hit for refund testing
+      const isNoHitTest = ssn === "555555555";
+
+      if (isNoHitTest) {
+        console.log("🎭 MOCK: Simulating NO_CREDIT_FILE (no-hit) response");
+        const mockNoHitData = {
+          applicant: {
+            first_name: firstName,
+            last_name: lastName,
+            address,
+            city,
+            state,
+            zip,
+            ssn: "***masked***",
+          },
+          intelligence: {
+            name: null,
+            result: "Failed",
+            credit_score: "failed",
+          },
+          reports: {
+            equifax: {
+              failure_type: "no-hit",
+              message: "No credit file found",
+            },
+          },
+        };
+
+        return NextResponse.json({
+          success: false,
+          errorType: "NO_CREDIT_FILE",
+          message: "No credit file was found for the provided information",
+          creditData: mockNoHitData,
+        });
+      }
 
       const mockCreditData = {
         applicant: {
