@@ -110,26 +110,48 @@ export async function POST(req: Request) {
       const { userId, type, matchId, hostUserId } = paymentIntent.metadata;
 
       if (type === 'matchbookVerification') {
-        // Extract the session ID
-        const sessionId = paymentIntent.metadata.sessionId;
-        
-        // Create a purchase record with isRedeemed=false and store the session ID
-        await prismadb.purchase.create({
-          data: {
+        // Check if Purchase already exists (may have been created by payment-status polling)
+        const existingPurchases = await prismadb.purchase.findMany({
+          where: {
+            userId: userId || undefined,
             type: 'matchbookVerification',
-            amount: paymentIntent.amount,
-            userId: userId || null,
-            email: paymentIntent.receipt_email || null,
-            status: 'completed',
-            isRedeemed: false,
-            metadata: JSON.stringify({ 
-              sessionId,
-              paymentIntentId: paymentIntent.id 
-            }),
           },
         });
-        
-        console.log(`User ${userId} verification payment succeeded - purchase created with session ID: ${sessionId}`);
+
+        const alreadyExists = existingPurchases.some((p) => {
+          if (!p.metadata) return false;
+          try {
+            const meta = typeof p.metadata === 'string' ? JSON.parse(p.metadata) : p.metadata;
+            return meta.paymentIntentId === paymentIntent.id;
+          } catch {
+            return false;
+          }
+        });
+
+        if (alreadyExists) {
+          console.log(`ℹ️ [Webhook] Purchase already exists for paymentIntentId ${paymentIntent.id}, skipping creation`);
+        } else {
+          // Extract the session ID
+          const sessionId = paymentIntent.metadata.sessionId;
+
+          // Create a purchase record with isRedeemed=false and store the session ID
+          await prismadb.purchase.create({
+            data: {
+              type: 'matchbookVerification',
+              amount: paymentIntent.amount,
+              userId: userId || null,
+              email: paymentIntent.receipt_email || null,
+              status: 'completed',
+              isRedeemed: false,
+              metadata: JSON.stringify({
+                sessionId,
+                paymentIntentId: paymentIntent.id
+              }),
+            },
+          });
+
+          console.log(`User ${userId} verification payment succeeded - purchase created with session ID: ${sessionId}`);
+        }
       } else if ((type === 'security_deposit_direct' || type === 'lease_deposit_and_rent') && matchId) {
         // Handle deposit payment settlement (ACH or card)
         console.log(`✅ Payment succeeded for match ${matchId}`);

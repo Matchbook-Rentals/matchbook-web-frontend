@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
+import prisma from '@/lib/prismadb';
 
 export async function GET(req: Request) {
   try {
@@ -29,6 +30,51 @@ export async function GET(req: Request) {
       amount: paymentIntent.amount,
     });
 
+    let purchaseCreated = false;
+
+    // Create Purchase record when payment succeeds (sync, to avoid race condition with webhook)
+    if (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing') {
+      // Check if Purchase already exists for this paymentIntentId
+      const existingPurchases = await prisma.purchase.findMany({
+        where: {
+          userId: userId,
+          type: 'matchbookVerification',
+        },
+      });
+
+      // Check if any existing purchase has this paymentIntentId in metadata
+      const alreadyExists = existingPurchases.some((p) => {
+        if (!p.metadata) return false;
+        try {
+          const meta = typeof p.metadata === 'string' ? JSON.parse(p.metadata) : p.metadata;
+          return meta.paymentIntentId === paymentIntentId;
+        } catch {
+          return false;
+        }
+      });
+
+      if (!alreadyExists) {
+        console.log('✅ [Payment Status] Creating Purchase record for paymentIntentId:', paymentIntentId);
+        await prisma.purchase.create({
+          data: {
+            type: 'matchbookVerification',
+            amount: paymentIntent.amount,
+            userId: userId,
+            email: paymentIntent.receipt_email || null,
+            status: 'completed',
+            isRedeemed: false,
+            metadata: JSON.stringify({
+              paymentIntentId: paymentIntent.id,
+            }),
+          },
+        });
+        purchaseCreated = true;
+        console.log('✅ [Payment Status] Purchase record created successfully');
+      } else {
+        console.log('ℹ️ [Payment Status] Purchase already exists for paymentIntentId:', paymentIntentId);
+      }
+    }
+
     // Return status and relevant information
     return NextResponse.json({
       status: paymentIntent.status,
@@ -36,6 +82,7 @@ export async function GET(req: Request) {
       amount: paymentIntent.amount,
       currency: paymentIntent.currency,
       error: paymentIntent.last_payment_error?.message || null,
+      purchaseCreated,
     });
   } catch (error: any) {
     console.error('❌ [Payment Status] Error checking payment status:', error);
