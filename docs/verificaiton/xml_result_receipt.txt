@@ -1,0 +1,3264 @@
+Receiving Results via XML
+
+Receiving Results via XML
+Version 1.0.0
+This document was typeset May 21, 2024
+Copyright 2005-2022 Accio Data , Inc.
+All rights reserved. No part of this publication may be reproduced, stored in a retrieval system,
+or transmitted, in any form, or by any means, electronic, mechanical, or otherwise, without the
+prior consent of Accio Data , Inc.
+For information on obtaining permission for use of material from this work, please submit a
+written request to :
+Accio Data , Inc.
+PO Box 787
+Dripping Springs, TX
+78620
+For technical support, please contact Accio Data at 512 858-9329.
+Errors and omissions : We make every effort to provide you with complete and accurate documentation. If you find errors or omissions in this manual, please report them to us promptly so
+that we may correct our manuals.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+1
+
+Contents
+1 Communication
+1.1 SNI . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.2 Ciphers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.2.1 Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3 Communication via HTTP/HTTPS . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3.1 Account setup for HTTP/HTTPS communication . . . . . . . . . . . . . . . . .
+1.4 Communication via SFTP . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.5 XML structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.6 Results for a specific order . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.6.1 Results in PDF format . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.6.2 PDF format . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.6.3 Order Number Changes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.7 Hidden Components . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+5
+5
+5
+5
+5
+5
+6
+6
+6
+7
+7
+7
+8
+
+2 Results XML Format
+2.1 Example Result XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.2 The clientInfo Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.2.1 clientInfo Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.3 The accountInfo Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.3.1 accountInfo Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.4 The orderInfo Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.4.1 orderInfo Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.5 The profile Element . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.6 The completeOrder Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.7 The reportURL Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.7.1 reportURL Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.8 The subject Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.8.1 subject Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.9 The HTML summary Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10 The subOrder Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.1 Address History to 7 Year County Criminal Results XML . . . . . . . . . . . . .
+2.10.2 Address History to 10 Year County Criminal Results XML . . . . . . . . . . . .
+2.10.3 Address History to 7 Year Statewide Criminal Results XML . . . . . . . . . . .
+2.10.4 Address History to 10 Year Statewide Criminal Results XML . . . . . . . . . .
+2.10.5 Address Information Report Results XML . . . . . . . . . . . . . . . . . . . . .
+2.10.6 Address Information Report 2 Results XML . . . . . . . . . . . . . . . . . . . .
+
+9
+9
+10
+11
+11
+11
+11
+12
+12
+12
+13
+13
+13
+13
+15
+15
+18
+19
+19
+19
+19
+21
+
+2
+
+Receiving Results via XML
+
+CONTENTS
+
+2.10.7 Consent based SSN verification with the SSA Results XML . . . . . . . . . . .
+2.10.8 Commercial Drivers’ License Verification Results XML . . . . . . . . . . . . . .
+2.10.9 CDL Employment Verification Results XML . . . . . . . . . . . . . . . . . . . .
+2.10.10 Civil County Lower Results XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.11 Civil County Upper Results XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.12 County Criminal Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.13 Credential Verification Results XML . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.14 Custom Product Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.15 Drug Screen Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.16 Education Verification Results XML . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.17 International Education Verification Results XML . . . . . . . . . . . . . . . .
+2.10.18 Employment Credit Report Results XML . . . . . . . . . . . . . . . . . . . . .
+2.10.19 Employment Verification Results XML . . . . . . . . . . . . . . . . . . . . . .
+2.10.20 Level2 Employment Verification Results XML . . . . . . . . . . . . . . . . . .
+2.10.21 Level3 Employment Verification Results XML . . . . . . . . . . . . . . . . . .
+2.10.22 International Employment Verification Results XML . . . . . . . . . . . . . . .
+2.10.23 EVerify Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.24 Gap Verification Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.25 Medical Sanctions History Results XML . . . . . . . . . . . . . . . . . . . . . .
+2.10.26 Federal Bankruptcy Court Results XML . . . . . . . . . . . . . . . . . . . . . .
+2.10.27 Federal Civil Court Results XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.28 Federal Criminal Court Results XML . . . . . . . . . . . . . . . . . . . . . . .
+2.10.29 Federal Statewide Bankruptcy Court Results XML . . . . . . . . . . . . . . . .
+2.10.30 Federal Statewide Civil Court Results XML . . . . . . . . . . . . . . . . . . . .
+2.10.31 Federal Statewide Criminal Court Results XML . . . . . . . . . . . . . . . . . .
+2.10.32 General Sanctions Administration List Check Results XML . . . . . . . . . . .
+2.10.33 Global Terrorist Watch List . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.34 Form I-9 Verification Results XML . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.35 Mail Completed Report Results XML . . . . . . . . . . . . . . . . . . . . . . .
+2.10.36 Military Verification Results XML . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.37 Monitor National (Multijurisdictional) Criminal Report Results XML . . . . . .
+2.10.38 MVR Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.39 National (Multijurisdictional) Criminal Report Results XML . . . . . . . . . .
+2.10.40 National Federal Criminal Report Results XML . . . . . . . . . . . . . . . . . .
+2.10.41 National (Multijurisdictional) Criminal with Alias Report Results XML . . . . .
+2.10.42 National (Multijurisdictional) Criminal with Alias Report source 2 Results
+XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.43 Office of Inspector General List Check Results XML . . . . . . . . . . . . . . .
+2.10.44 Professional Reference Check Results XML . . . . . . . . . . . . . . . . . . . .
+2.10.45 Reference Check Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.46 Safety First Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.47 Sex Offender Database Results XML . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.48 Sex Offender Multistate Database Results XML . . . . . . . . . . . . . . . . .
+2.10.49 Specially Designated Nationals Database Search Results XML . . . . . . . . .
+2.10.50 SSN Verification Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.51 Standard Credit Report Results XML . . . . . . . . . . . . . . . . . . . . . . .
+2.10.52 Statewide Civil Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+3
+
+21
+21
+21
+21
+22
+22
+25
+26
+27
+27
+29
+31
+31
+33
+33
+33
+35
+35
+37
+37
+37
+37
+38
+38
+38
+39
+39
+39
+39
+39
+40
+40
+41
+41
+41
+42
+42
+42
+42
+43
+44
+44
+44
+44
+45
+45
+
+Receiving Results via XML
+
+CONTENTS
+
+2.10.53 Statewide Criminal Results XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.54 Statewide Criminal Data Base Results XML . . . . . . . . . . . . . . . . . . . .
+2.10.55 Trac Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.56 Trac to 7year criminal Results XML . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.57 Trac to 3year criminal Results XML . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.58 Trac to Federal criminal Results XML . . . . . . . . . . . . . . . . . . . . . . .
+2.10.59 TriMerged Credit Report Results XML . . . . . . . . . . . . . . . . . . . . . . .
+2.10.60 Workers Compensation Results XML . . . . . . . . . . . . . . . . . . . . . . .
+2.10.61 subOrder Fees XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10.62 Prior Address XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+45
+45
+46
+46
+46
+46
+46
+47
+47
+47
+
+3 Summary Results XML Format
+49
+3.1 Example Summary Results XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+3.1.1 Summary Results Additional Subject Data . . . . . . . . . . . . . . . . . . . . . 49
+4 Your Response
+4.1 Standard XML response . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+4.2 Valid XML “results accepted” response . . . . . . . . . . . . . . . . . . . . . . . . . .
+4.3 sample error response . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+4
+
+51
+51
+51
+52
+
+Chapter 1
+Communication
+1.1
+
+SNI
+
+Communication with Accio Servers requires SNI (Server Name Identification) aware clients. Most
+modern clients support SNI, but some older software may not.
+
+1.2
+
+Ciphers
+
+Communication with Accio Servers require modern communication ciphers. This may limit the
+ability of older clients and servers in older environments to connect to the Accio Servers. Some
+environments like Java 6, Java 7, windows XP, and the like, may not support modern ciphers.
+
+1.2.1
+
+Protocol
+
+Communication with us is via XML, which can be delivered either via HTTPS or SFTP.
+
+1.3
+
+Communication via HTTP/HTTPS
+
+Documents are posted to your server with a Content-Type of text/xml. We initiate all outbound
+communication requests to you, posting to the URL you specify unless you initiate a getOrderResults. Results are queued for transmission on our end at the same time they would be made
+available to you for web delivery. Under normal operating conditions you will receive the results
+via XML seconds after we have completed work on the last research element, but during times of
+heavy load it’s possible for delivery to be delayed.
+
+1.3.1
+
+Account setup for HTTP/HTTPS communication
+
+You will need to supply the following information to us :
+• Post URL. This is the URL we will post your completed results to. Example :
+https://mycompany.com/recv/ScreeningResults.aspx
+
+5
+
+Receiving Results via XML
+
+CHAPTER 1. COMMUNICATION
+
+• account, username, and password : Credentials you supply us. You do not have to use credentials if you don’t wish.
+When we set up your server, we will configure the following internal settings for your account’s
+admin user :
+• XMLresults_post_url
+• XMLresults_post_account optional
+• XMLresults_post_username optional
+• XMLresults_post_password optional
+
+1.4
+
+Communication via SFTP
+
+You will need to supply us with the SFTP post URL, which we will enter into the XML Post Results
+Credentials configuration for our account. This URL is of the form
+sftp://account:password@host/pathname/__ORDERNUMBER__.xml
+Note that __ORDERNUMBER__ and any other part of the file path can be replaced with or augmented with other information that will be used to create the filename and directory to upload
+results to. You can also use any or all of the following (all preceded by and followed by two
+underscores) : ACCOUNT, USERNAME, ORDERNUMBER, FIRSTNAME, LASTNAME, BILLINGID1,
+BILLINGID2, BILLINGID3, MMDDYYYY, HHMMSSUU.
+
+1.5
+
+XML structure
+
+XML documents generated by us will follow the hierarchy outlined in this documentation, but
+individual XML nodes are unordered. When interfacing with us, you should select an XML parser
+which does not depend on node order to function correctly.
+
+1.6
+
+Results for a specific order
+
+Normally order results are pushed when a component completes and/or when the order is completed. If desired you can pull the results for a specific order. All you need to do to get the results
+for a specific order is put a getOrderResults node in your XML request as in the following example
+:
+<XML>
+<login>
+<account>youraccount </account>
+<username>youruser </username>
+<password>yourpassword </password>
+</login>
+<getOrderResults orderID="427722" />
+</XML>
+The value of the attribute orderID is the order number of the results you wish to pull.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+6
+
+Receiving Results via XML
+
+1.6.1
+
+CHAPTER 1. COMMUNICATION
+
+Results in PDF format
+
+It is possible to get the order results in Base64 encoded PDF format. To do so, include the attribute
+‘format="pdf"’ in the <getOrderResults> node. Ex:
+<getOrderResults format="pdf" orderID="427722" />
+Note that the encoded PDF will be in a node called pdfresults which replaces the completeOrder
+node when receiving results with pdf format.
+If format is not specified or not “pdf”, we will return the standard XML results. See
+the “The completeOrder Block” section below for standard XML results.
+
+1.6.2
+
+PDF format
+
+To get results for a specific order in PDF format, add the “format” attribute to the getOrderResults
+node like this:
+<XML>
+<login>
+<account>youraccount</account>
+<username>youruser</username>
+<password>yourpassword</password>
+</login>
+<getOrderResults orderID="427722" format="pdf" />
+</XML>
+This will replace the completeOrder node of your results with pdfresults:
+<pdfresults encoding="base64">
+<!-- base64-encoded PDF data -->
+</pdfresults>
+Note Retrieving PDF results does not include any Supporting Documents in the resulting PDF
+document.
+
+1.6.3
+
+Order Number Changes
+
+When order is submitted as draft or sent to the applicant, the order number will change once the
+order is activated. Accio will automatically return the results for the final order even if you use
+getOrderResults with the old order number.
+For example, a draft order is submitted and gets order number 100. The order is later activated
+and has a new order number of 105. When using getOrderResults for order number 100, Accio will
+automatically return the results for order 105. This node will be added to results:
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+7
+
+Receiving Results via XML
+
+CHAPTER 1. COMMUNICATION
+
+<ScreeningResults>
+<orderInfo>
+<ordernumber_changed_to>105</ordernumber_changed_to>
+</orderInfo>
+</ScreeningResults>
+
+1.7
+
+Hidden Components
+
+Please Note: Those componnents hidden on the PDF/HTML reports will not be omitted from the
+XML results.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+8
+
+Chapter 2
+Results XML Format
+The results XML will always include a login section and a completeOrder section. Depending on how we configure your account, it may also include some of the optional clientInfo,
+accountInfo, and orderInfo sections.
+
+2.1
+
+Example Result XML
+
+Our server will push XML to the supplied URL similar to the following example :
+<ScreeningResults>
+<login>
+<account>youraccount </account>
+from XMLresults_post_account
+<username>yourusername </username> from XMLresults_post_username
+<password>yourpassword </password> from XMLresults_post_password
+</login>
+<clientInfo/> optional
+<accountInfo/> optional
+<orderInfo/> optional
+<completeOrder number="" remote_number="98761" isactive="Y" archived="N"
+reviewed="N" reference_number="">
+<time_ordered>2014-10-14 13:29:32</time_ordered>
+<time_filled>2014-10-17 10:59:52</time_filled>
+<reportURL>
+<HTML>https://some.domain.name/c/d/show_order?order_number=98761</HTML>
+<PDF_Color>https://some.domain.name/c/d/show_order?
+order_number=98761&amp;pdf2=1</PDF_Color>
+<PDF_BW>https://some.domain.name/c/d/show_order?
+order_number=98761&amp;pdf2=1&amp;black=X</PDF_BW>
+</reportURL>
+<subject>
+.
+.
+</subject>
+<subOrder number="" remote_number="709234" filledStatus="filled"
+
+9
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+filledCode="unknown" held_for_review="N" held_for_release_form="N" type="AIM"
+description="SSN Address Trace">
+.
+.
+</subOrder>
+</completeOrder>
+<completeOrder number="79944" remote_number="98762" isactive="Y" archived="N"
+reviewed="N" reference_number="">
+<time_ordered>2014-10-16 13:29:32</time_ordered>
+<time_filled>2014-10-17 10:59:52</time_filled>
+<reportURL>
+<HTML>https://some.domain.name/c/d/show_order?order_number=98761</HTML>
+<PDF_Color>https://some.domain.name/c/d/show_order?
+order_number=98761&amp;pdf2=1</PDF_Color>
+<PDF_BW>https://some.domain.name/c/d/show_order?
+order_number=98761&amp;pdf2=1&amp;black=X</PDF_BW>
+</reportURL>
+<subject>
+.
+.
+</subject>
+<subOrder number="619510" remote_number="709235" filledStatus="filled"
+filledCode="hits" held_for_review="N" held_for_release_form="N" type="County_criminal"
+description="County Criminal History">
+.
+.
+</subOrder>
+<subOrder number="619511" remote_number="709236" filledStatus="filled"
+filledCode="hits" held_for_review="N" held_for_release_form="N" type="County_criminal"
+description="County Criminal History">
+.
+.
+</subOrder>
+</completeOrder>
+</ScreeningResults>
+
+The login information from the previous example will be pulled from the ordering account
+under the admin user.
+Note: the password field with be XML encoded. The &, <, >, ”, and ’ characters will be encoded
+with &amp; &lt; &gt; &quote; and &apos;
+
+2.2
+
+The clientInfo Block
+
+The clientInfo block is returned on complete orders. For researchers, this block will only be
+present if Send client info to supplier? is set to Y for this supplier on the vendor management
+pages and Send client info in XML? is set to Yes on the manage accounts page. An example
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+10
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+clientInfo block with all possible clientInfo elements follows:
+
+2.2.1
+
+clientInfo Example
+
+<clientInfo>
+<account>myaccount </account>
+<username>admin </username>
+<packageset></packageset> Always Empty
+<primaryuser_contact_name>John Q Smith </primaryuser_contact_name>
+<primaryuser_contact_address>123 Easy St. </primaryuser_contact_address>
+<primaryuser_contact_city>Austin </primaryuser_contact_city>
+<primaryuser_contact_state>TX </primaryuser_contact_state>
+<primaryuser_contact_zip>78731 </primaryuser_contact_zip>
+<primaryuser_contact_telephone>8005551212 </primaryuser_contact_telephone>
+<primaryuser_contact_fax>8665551212 </primaryuser_contact_fax>
+<primaryuser_contact_email>john.smith@abctesting.com </primaryuser_contact_email>
+<primaryuser_contact_title>HR Administrator </primaryuser_contact_title>
+<report_format>myformatter </report_format>
+</clientInfo>
+
+2.3
+
+The accountInfo Block
+
+The accountInfo block is returned on complete orders. For researchers, this block will only be
+present if Send client info to supplier? is set to Y for this supplier on the vendor management
+pages and Send client info in XML? is set to Yes on the manage accounts page. An example accountInfo block with all possible accountInfo elements follows:
+
+2.3.1
+
+accountInfo Example
+
+<accountInfo>
+<company_name>Acme pens</company_name>
+<packageset>Acme_packages</packageset>
+<primaryuser_contact_name>John Q Smith </primaryuser_contact_name>
+<primaryuser_contact_address>123 Easy St. </primaryuser_contact_address>
+<primaryuser_contact_city>Austin </primaryuser_contact_city>
+<primaryuser_contact_state>TX </primaryuser_contact_state>
+<primaryuser_contact_zip>78731 </primaryuser_contact_zip>
+<primaryuser_contact_telephone>8005551212 </primaryuser_contact_telephone>
+<primaryuser_contact_fax>8665551212 </primaryuser_contact_fax>
+<primaryuser_contact_email>john.smith@abctesting.com </primaryuser_contact_email>
+<report_format>myformatter </report_format>
+</accountInfo>
+
+2.4
+
+The orderInfo Block
+
+The orderInfo block is returned on complete orders and updates to subcomponents. It is always
+included with updates to subcomponents. On complete orders, this block will only be present to
+researchers if Send client info to supplier? is set to Y for this supplier on the vendor management pages and Send client info in XML? is set to Yes on the manage accounts page. An
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+11
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+example orderInfo block with all possible orderInfo elements follows:
+
+2.4.1
+
+orderInfo Example
+
+<orderInfo>
+<packagename>Management Plus </packagename>
+<requester_name>Bill Ordering </requester_name>
+<requester_phone>5555555555 </requester_phone>
+<requester_fax>5555555512 </requester_fax>
+<requester_email>billo@acmechecks.com </requester_email>
+<requester_billingdata>For location 512 </requester_billingdata>
+<requester_billingdata2/>
+<requester_billingdata3/>
+<requester_billingdata4/>
+<requester_billingdata5/>
+<requester_billingdata6/>
+<requester_billingdata7/>
+<requester_billingdata8/>
+<requester_billingdata9/>
+<requester_billingdata10/>
+<ordernumber_changed_to>2314085 </ordernumber_changed_to>
+<time_applicant_completed>2016-05-06 16:14:56 </time_applicant_completed>
+</orderInfo>
+Note: The ordernumber change to element specifies the number of the order that replaced
+the requested order. The time applicant complete element is only included if the order used the
+applicant portal during processing.
+
+2.5
+
+The profile Element
+
+When configuring a vendor to send Accio XML you can specify a “profile” to be included as an
+element in the place order block. This field is not used by the Accio system, and is simply copied
+into any outbound XML for the configured vendor.
+
+2.6
+
+The completeOrder Block
+
+The completeOrder block has 6 attributes.
+• number : This is the number you supplied to us at order entry time if you placed the order via
+XML. It will be empty if you placed the order via our web interface or if you did not specify
+a number attribute in the placeOrder node when placing the order via XML.
+• remote_number : This is our unique internal order number generated by us at the time of
+order entry.
+• isactive Y|S|N : Y order is active; S order is saved but not active; N order is not active.
+• archived Y|N : Y order is marked archived; N order is not marked archived.
+• reviewed Y|N : Y order is marked reviewed; N order is not marked reviewed.
+• reference_number : This attribute will be empty unless the order was an add-on to an existing
+order, or a generated add-on order. The value will be the number you supplied to us at order
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+12
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+entry time of the order this order was added to or generated from by AKA generation or
+add2crim etc.
+The completeOrder block contains all information about a given order. For subjects with more
+than one order number (for example, those that have AKA suborders or for whom you have added
+services to after initial order entry), more than one completeOrder block may be present.
+The completeOrder section contains the following XML blocks:
+• time_ordered Time stamp of when the order was placed
+• time_filled Time stamp of when the order completed
+• status The order status
+• order_state The current state of the order, “inprogress vendor”, “inprogress candidate”, inprogress recruiter”, “order confirmation”, “order completion”
+• reportURL URLs to view the report, HTML, color PDF and black and white PDF
+• subject Information on the subject of the search
+• report_html_summary Summary of the order results
+• subOrder Individual researched item. Note that more than one subOrder may be contained
+in each completeOrder.
+For the order state, if you would like to override the text that is sent back for any of the order
+states, you can do so using the “XML Order State Override” system variable in the XML section of
+Site Setup. There is a setting for each of the different order states.
+
+2.7
+
+The reportURL Block
+
+The reportURL block contains three different URLs which can be used to view the report of
+the order in different formats; HTML, color PDF, and black and white PDF. An example reportURL
+block with all possible fields follows:
+
+2.7.1
+
+reportURL Example
+
+<reportURL>
+<HTML>https://your.severdomain.com/c/d/show_order?order_number=1840216</HTML>
+<PDF_Color>https://your.severdomain.com/c/d/show_order?
+order_number=1840216&amp;pdf2=1</PDF_Color>
+<PDF_BW>https://your.severdomain.com/c/d/show_order?
+order_number=1840216&amp;pdf2=1&amp;black=X</PDF_BW>
+</reportURL>
+• The HTML node contains the URL to the HTML format of the report
+• The PDF_Color node contains the URL to the color PDF format of the report
+• The PDF_BW node contains the URL to the black and white PDF format of the report
+
+2.8
+
+The subject Block
+
+The subject block contains identifying information on the subject of this order. An example
+subject block with all possible subject data fields follows:
+
+2.8.1
+
+subject Example
+
+<subject>
+<name_first>John </name_first>
+<name_middle>Q </name_middle>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+letters, dashes, and apostrophes only
+letters, dashes, and apostrophes only
+
+13
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<name_last>Smith </name_last>
+letters, dashes, and apostrophes only
+<has_no_middle_name>U </has_no_middle_name> Y, N or U only
+<name_suffix>IV </name_suffix>
+free form
+<name_lastmaiden>William </name_lastmaiden>
+optional, letters, dashes, and apostrophes only
+<name_mother_maiden>Doe </name_mother_maiden>
+optional, letters, dashes, and apostrophes only
+<name_complete_mother>Jane Smith</name_complete_mother> optional, free form
+<name_complete_father>John Smith</name_complete_father> optional, free form
+<alias>
+zero to many aliases
+<name_first>John </name_first>
+alias name format as above
+<name_middle>Q </name_middle>
+<name_last>Jones </name_last>
+<name_suffix></name_suffix>
+</alias>
+<ssn>112111234 </ssn>
+<time_ordered></time_ordered>
+<address>123 Main Street </address>
+<city>Austin </city>
+<state>TX </state>
+<country/>
+<zip>78731 </zip>
+<dob>19740301 </dob>
+
+no separators, integer (short #s are left zero filled)
+
+optional
+
+YYYYMMDD. Unknown portions may be
+zeroed. E.G. 19740300 if day is unknown.
+<email>jane.doe@noemail.com</email>
+optional
+<dlnum>0123456789 </dlnum>
+optional
+<dlcountry>USA </dlcountry>
+optional, 3 letter ISO alpha-3 country code
+defaults to USA
+<dlstate>NJ </dlstate>
+optional, 2 letter USA state
+<intldlstate>Ontario </intldlstate>
+optional, non-USA state/province
+<race>U </race>
+U-unknown A-Asian B-Black H-Hispanic I-Indian
+<gender>M </gender>
+M, F, U, or blank
+<phone_number>555-555-1212 </phone_number> may not be present
+<citizenship_status>A citizen of the United States </citizenship_status> defaults to Citizen
+<city_of_birth>Los Angeles </city_of_birth>
+optional
+<country_of_birth>USA </country_of_birth>
+defaults to USA
+<passport_country>USA </passport_country>
+defaults to USA
+<jobstate>TX </jobstate>
+optional
+<jobcity>Sacramento </jobcity>
+<jobzip>94203 </jobzip>
+<prioraddress>
+Optional, zero to many can be listed
+Shows as Candidate Supplied Addr. Hist. on report
+<from>19990512</from>
+Must be YYYYMMDD
+<to>20020113</to>
+Must be YYYYMMDD
+<address>123 Main Street </address>
+<city>Austin </city>
+<state>TX </state>
+<county>Travis </county>
+optional
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+14
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<zip>78731 </zip>
+</prioraddress>
+<FCRAPurpose>Employment by Hire or Contract </FCRAPurpose> Contact your screener for a list
+<employment_status/>
+optional
+<ApplicantID>JBL0987654W </ApplicantID>
+optional
+<RequisitionNumber>RN0009876 </RequisitionNumber>
+optional
+<managerName>Jim Bob </managerName>
+optional
+<has_admitted_convictions>Y </has_admitted_convictions>
+optional, can default to ‘‘D’’
+if no value is passed
+<admitted_conviction_details>Arrested for hot checks </admitted_conviction_details> optional
+<position_requested>Clerk </position_requested>
+optional
+<drugscreen>N </drugscreen>
+optional, set to Y if drug screen
+<client_notes>Just some notes </client_notes>
+optional
+<client_disposition/>
+Disposition entered by the client, may be blank.
+<piifromapplicant>N </piifromapplicant>
+optional
+<portalfromapplicant>Y </portalfromapplicant>
+optional
+<require_ews>Y </require_ews>
+optional
+<applicantdocupload>Y </applicantdocupload>
+optional
+<quoteback_1>WSDF347865RR </quoteback_1>
+optional
+<quoteback_2>1239876540 </quoteback_2>
+optional
+<quoteback_3>YY7654902736TTT </quoteback_3>
+optional
+<intlgovtid>987654321 </intlgovtid>
+optional
+<intlgovtid_descr>Canada SIN </intlgovtid_descr>
+optional
+<client_reportcolor>red </client_reportcolor>
+optional, color of report disposition
+<country_of_birth/>
+optional. ISO-standard. Max 256 characters
+<state_of_birth/>
+optional. Max 256 characters
+<city_of_birth/>
+optional. Max 128 characters
+</subject>
+
+2.9
+
+The HTML summary Block
+
+The HTML summary block <report_html_summary> contains a CRA-specific HTML summary. Contact
+your CRA for more information. CRAs define the contents of this summary in
+/sysops/templates/XMLreport_HTMLsummary.template.
+
+2.10
+
+The subOrder Block
+
+The subOrder block has eight attributes.
+• number identifies this particular result in the subOrder numbered in the number attribute of
+the subOrder block. This will be an empty string if the order was not placed by XML.
+• remote_number identifies this particular result in the internal subOrder number assigned by
+the server when the order was entered.
+• held_for_review N—Y anything other than a ’N’ identifies that the results of this search, if
+any, are held for review, ie, they have not been released yet.
+• held_for_release_form N—Y anything other than a ’N’ identifies that the results of this search,
+if any, are held waiting for a release form to be Faxed to the report, ie, they have not been
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+15
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+released yet.
+• filledStatus filled—unfilled—in progress—failed
+• filledCode no hits—hits—clear—unknown—drugpositive—drugnegative—contact MRO—labreject—test-canceled—unobtainable—previous-positive—pass—fail
+• type The type of this request.
+• description Description of the request type.
+See the section postResults Attribute Definitions for more information on filledStatus and filledCode attributes.
+The requests type dictates the subnodes of the subOrder block. Valid request types are :
+• add2crim7yr – Address history to seven year county criminal history
+• add2crim10yr – Address history to ten year county criminal history
+• add2statewidecrim7yr – Address history to seven year statewide criminal history
+• add2statewidecrim10yr – Address history to ten year statewide criminal history
+• Adult_Abuse – Adult Abuse Registry Search
+• adverse_action_process – Adverse Action Process
+• AIM – Address History Search
+• AIM2 – Address History Search second Source
+• CBSV – Consent Based SSN verification with the SSA
+• CDL_Employment_verification – Commercial Drivers’ license employment verification
+• CDLIS – Commercial Drivers’ license verification
+• Civil_County_criminal_lower – Lower Civil county court search (nothing to do with criminal,
+misnomer)
+• Civil_County_criminal_upper – Upper Civil county court search (nothing to do with criminal,
+misnomer)
+• County_criminal – County criminal courthouse search
+• cna_registry – Certified nurses aid registry search
+• Credential_verification – Professional License or credentials verification
+• Credit – Employment Credit Report
+• Credit_std – Standard Credit Report
+• Credit_tri – TriMerged Credit Report
+• cp_customproductcode – Custom Product
+• Drug_screen – Drug screen
+• Drug_Alcohol_screen – (not supported) Drug and alcohol screen
+• Drug_schedule – (not supported) Online scheduled drug screen
+• Education_verification – Education verification
+• Employment_verification – Employment verification
+• Everify – Electronically verify the employment eligibility of newly hired employees
+• evictions_check – Check eviction history
+• FACIS_L1 – Medical Sanctions History Level 1
+• FACIS_L2 – Medical Sanctions History Level 2
+• FACIS – Medical Sanctions History Level 3
+• FACIS_L1M – Medical Sanctions History Level 1m
+• FACIS_L1MV – Medical Sanctions History Level 1m (w/verification)
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+16
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+• FACIS_L1_WLV – Medical Sanctions History Level 1 (w/ license verification)
+• FACIS_L2_WLV – Medical Sanctions History Level 2 (w/ license verification)
+• FACIS_L3_WLV – Medical Sanctions History Level 3 (w/ license verification)
+• FACIS_L1V – Medical Sanctions History Level 1 (w/verification)
+• FACIS_L2V – Medical Sanctions History Level 2 (w/verification)
+• FACIS_L3V – Medical Sanctions History Level 3 (w/verification)
+• FACIS_L1V_WLV – Medical Sanctions History Level 1 (w/verification and license verification)
+• FACIS_L2V_WLV– Medical Sanctions History Level 2 (w/verification and license verification)
+• FACIS_L3V_WLV– Medical Sanctions History Level 3 (w/verification and license verification)
+• FACIS_ALIAS_L1 – Medical Sanctions History Alias Level 1
+• FACIS_ALIAS_L2 – Medical Sanctions History Alias Level 2
+• FACIS_ALIAS – Medical Sanctions History Alias Level 3
+• FACIS_ALIAS_L1_WLV – Medical Sanctions History Alias Level 1 (w/ license verification)
+• FACIS_ALIAS_L2_WLV – Medical Sanctions History Alias Level 2 (w/ license verification)
+• FACIS_ALIAS_L3_WLV – Medical Sanctions History Alias Level 3 (w/ license verification)
+• FACIS_ALIAS_L1V – Medical Sanctions History Alias Level 1 (w/verification)
+• FACIS_ALIAS_L2V – Medical Sanctions History Alias Level 2 (w/verification)
+• FACIS_ALIAS_L3V – Medical Sanctions History Alias Level 3 (w/verification)
+• FACIS_ALIAS_L1V_WLV – Medical Sanctions History Alias Level 1 (w/verification and license verification)
+• FACIS_ALIAS_L2V_WLV – Medical Sanctions History Alias Level 2 (w/verification and license verification)
+• FACIS_ALIAS_L3V_WLV – Medical Sanctions History Alias Level 3 (w/verification and license verification)
+• FACIS_L1_2 – Medical Sanctions History Level 1 2
+• FACIS_L2_2 – Medical Sanctions History Level 2 2
+• FACIS_2 – Medical Sanctions History Level 3 2
+• FACIS_L1V_2 – Medical Sanctions History Level 1 (w/verification) 2
+• FACIS_L2V_2 – Medical Sanctions History Level 2 (w/verification) 2
+• FACIS_L1M_2 – Medical Sanctions History Level 1m 2
+• FACIS_L1MV_2 – Medical Sanctions History Level 1m (w/verification) 2
+• FACIS_L3V_2 – Medical Sanctions History Level 3 (w/verification) 2
+• OFAC – Office of Foreign Assets Control search)
+• Federal_criminal_bankruptcy – Federal bankruptcy court search (nothing to do with criminal,
+misnomer)
+• Federal_criminal_civil – Federal civil courthouse search (nothing to do with criminal, misnomer)
+• Federal_criminal_criminal – Federal criminal courthouse search
+• Federal_statewide_bankruptcy – Federal Statewide bankruptcy court search
+• Federal_statewide_civil – Federal Statewide civil courthouse search
+• Federal_statewide_criminal – Federal Statewide criminal courthouse search
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+17
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+• fmcsa_crash_inspection – Federal Motor Carrier Safety Administration Crash Inspection Report
+• GAP – Employment gap verification
+• globalreport – Terrorist watch list search
+• GSA – General Sanctions Administration list check
+• i9verification – Form I-9 verification
+• International_Education_verification – International Education verification
+• International_Employment_verification – International Employment verification
+• Level2_Employment_verification – Level2 Employment verification
+• Level3_Employment_verification – Level3 Employment verification
+• mail_completereport – Mail completed report
+• Metro_County_criminal – (not supported) Metro county criminal search
+• monitor_national_criminal – Recurring multijurisdictional criminal search. Note: this product
+must be ordered with an order that also includes a USOneSearch or USAliasSearch
+• MVR – Drivers’ license history
+• National Criminal – National/multistate criminal database search
+• National Criminal2 – National/multistate criminal database search second Source
+• National Federal Criminal – National federal criminal database search
+• National Alias Criminal – National/multistate criminal with alias database search
+• National Alias Criminal2 – National/multistate criminal with alias database search second
+Source
+• nursing_license – Nursing license check
+• OIG – Office of Inspector General list check
+• Professional_Reference_check – Call a person and check a reference
+• Reference_check – Call a person and check a reference
+• safety1st – Appriss product for organizations that does an AIM and criminal background check
+• SDN – Specially Designated Nationals database search
+• Sex_Offender – Statewide Sex offender search. Could be a database or a repository search
+• sex_offender_nationwide – Multistate sex offender database
+• SSN – SSN verification. E.G. is it validly issued, when & where, and is there a death record
+associated with it?
+• Statewide_civil – Statewide civil repository search
+• Statewide_criminal – Statewide criminal repository search
+• Statewide_criminal_db – Statewide criminal database search
+• Trac – Credit based address history (credit header)
+• Trac_to_7year_criminal – Credit header pulled, 7 year criminal history searched, credit header
+and criminal history bundled and returned.
+• Trac_to_3year_criminal – As above with 3 year history
+• Trac_to_Federal_criminal – 7 year address history to Federal district criminal search
+• USMA_retail_theft_screen – (not supported) history
+• Workers Compensation – Workers’ compensation history search (single state)
+
+2.10.1
+
+Address History to 7 Year County Criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’add2crim7yr ’
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+18
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.2
+
+Address History to 10 Year County Criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’add2crim10yr ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.3
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Address History to 10 Year Statewide Criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’add2statewidecrim10yr ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.5
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Address History to 7 Year Statewide Criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’add2statewidecrim7yr ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.4
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Adverse Action Process Results XML
+
+<subOrder number=’128 ’ remote number=’32 ’
+type=’Adverse action process ’
+remote subOrder=’32 ’
+filledCode=’CODE ’>
+<time ordered>2023-09-21 17:56:39 </time ordered>
+YYYY-MM-DD HH:MM:SS
+<time filled>2023-09-21 18:06:05 </time filled>
+YYYY-MM-DD HH:MM:SS
+<vendors>
+<vendor>
+<name>Preadverse Action Email Notification</name>
+<time submitted>2023-09-21 17:57:07 </time submitted>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+19
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<time completed/>
+<filled code>CODE </filled code>
+</vendor>
+<vendor>
+<name>Need To Print Preadverse Letters</name>
+<time submitted>2023-09-21 17:57:16 </time submitted>
+<time completed/>
+<filled code>clear</filled code>
+</vendor>
+<vendor>
+<name>Waiting For Preadverse Response</name>
+<time submitted>2023-09-21 17:59:52 </time submitted>
+<time completed>2023-09-21 18:06:05 </time completed>
+<filled code/>
+</vendor>
+<vendor>
+<name>Adverse Action Email Notification</name>
+<time submitted>2023-09-21 18:03:22 </time submitted>
+<time completed/>
+<filled code>CODE </filled code>
+</vendor>
+<vendor>
+<name>Client Activation Queue</name>
+<time submitted>2023-09-21 18:02:06 </time submitted>
+<time completed>2023-09-21 18:06:05 </time completed>
+<filled code/>
+</vendor>
+<vendor>
+<name>Need To Print Adverse Letters</name>
+<time submitted>2023-09-21 18:03:30 </time submitted>
+<time completed>2023-09-21 18:06:05 </time completed>
+<filled code>clear</filled code>
+</vendor>
+</vendors>
+<html encoding=’base64’>...</html>
+</subOrder>
+
+2.10.6
+
+Address Information Report Results XML
+
+Example Text Results
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’AIM ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+20
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+Example detailed results
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’AIM ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<person> Any number of persons may be returned
+<name_first>TEST</name_first>
+<name_middle>THE</name_middle>
+<name_last>CASE</name_last>
+<name_suffix>MR</name_suffix>
+<dob>19400323</dob> YYYYMMDD - may be empty/not present
+<dobfreeform/> May be empty/not present. Used when vendor sends a date
+in non-"YYYYMMDD" format, cannot be set manually
+<ssn>123456789</ssn>
+<gender/>
+<race/>
+<height/>
+<weight/>
+<haircolor/>
+<eyecolor/>
+<imageURL/>
+<persontype/> P=Plaintiff, D=Defendant, I=Individual, blank=unknown/unused
+<address>
+Any number of addresses may be returned
+<address> 1111 N TABLE NE RD APT 1 </address>
+<city>OCALA</city>
+<state>FL</state>
+<county>CITRUS</county>
+<zip>98765</zip>
+<from>19950000</from>
+<to>20040000</to>
+</address>
+
+</person>
+<ssnDeathMaster> 0 or 1 ssnDeathMaster
+<name_last>Testlast</name_last>
+<name_first>Testfirst</name_first>
+<name_middle>H</name_middle>
+<dod>20050814</dod> YYYYMMDD. Unknown portions may be zeroed.
+</ssnDeathMaster>
+<ssnvalidation> 0 or 1 ssnvalidation
+<ssnvalid>Y</ssnvalid>
+<ssnstateofissuance>MA</ssnstateofissuance>
+<ssnstartyearofissuance>1970</ssnstartyearofissuance>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+21
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<ssnendyearofissuance>1974</ssnendyearofissuance>
+<ssnvalidationtext>SSN is valid. Issued in MA between 1970 and 1974</ssnvalidationtext>
+</ssnvalidation>
+
+</subOrder>
+
+2.10.7
+
+Address Information Report 2 Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’AIM2 ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+... same as AIM results ...
+</subOrder>
+
+2.10.8
+
+Consent based SSN verification with the SSA Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’CBSV ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.9
+
+Commercial Drivers’ License Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’CDLIS ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.10
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+CDL Employment Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’CDL Employment verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<isdot>N</isdot>
+... same as Employment Verification ...
+</subOrder>
+
+2.10.11
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Civil County Lower Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+22
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+type=’Civil County criminal lower ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+... same as County Criminal results ...
+</subOrder>
+
+2.10.12
+
+Civil County Upper Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Civil County criminal upper ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+... same as County Criminal results ...
+</subOrder>
+
+2.10.13
+
+County Criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’County criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<county>Travis </county>
+<state>TX </state>
+<years_conviction>7 </years_conviction>
+<years_nonconviction>7 </years_nonconviction>
+<searchtype>both </searchtype> one of: felony, misdemeanor, both
+<notes_to_supplier>Please search </notes_to_supplier> optional, free-form, no char limit
+<case> Any number of cases may be returned
+<identified_by_name>Y</identified_by_name>
+<identified_by_dob>Y</identified_by_dob>
+<identified_by_ssn>Y</identified_by_ssn>
+<identified_by_partial_ssn>Y</identified_by_partial_ssn>
+<additional_identifiers>skull tattoo on left shoulder</additional_identifiers>
+<case_comments/>
+<case_number>TX DOC 11231-7</case_number>
+<offense_date>20010203</offense_date> Dates are YYYYMMDD format ONLY
+<filing_date>20010203</filing_date>
+<disposition_date>20010203</disposition_date>
+<pending_date>20010203</pending_date>
+<source>Dallas county courthouse</source>
+<defendant>
+<name_first>TEST</name_first>
+<name_middle>THE</name_middle>
+<name_last>CASE</name_last>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+23
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<name_suffix>MR</name_suffix>
+<dob>19400323</dob> YYYYMMDD - may be empty/not present
+<dobfreeform/> May be empty/not present. Used when vendor sends a date
+in non-"YYYYMMDD" format, cannot be set manually
+<ssn>123456789</ssn>
+<gender/>
+<race/>
+<height/>
+<weight/>
+<haircolor/>
+<eyecolor/>
+<imageURL/>
+<persontype/> P=Plaintiff, D=Defendant, I=Individual, blank=unknown/unused
+<address>
+Any number of addresses may be returned
+<address> 1111 N TABLE NE RD APT 1 </address>
+<city>OCALA</city>
+<state>FL</state>
+<county>CITRUS</county>
+<zip>98765</zip>
+<from>19950000</from>
+<to>20040000</to>
+</address>
+<alias>
+Any number of aliases may be returned
+<name_first>John</name_first> Optional may be empty/not present
+<name_middle>P</name_middle>
+Optional may be empty/not present
+<name_last>Smith</name_last>
+Optional may be empty/not present
+<name_suffix>Jr</name_suffix> Optional may be empty/not present
+<namefreeform>John P Smith Jr.</namefreeform> Optional may be empty/not present
+</alias>
+</defendant>
+<plaintiff>
+<name_first>TEST</name_first>
+<name_middle>THE</name_middle>
+<name_last>CASE</name_last>
+<name_suffix>MR</name_suffix>
+<dob>19400323</dob> YYYYMMDD - may be empty/not present
+<dobfreeform/> May be empty/not present. Used when vendor sends a date
+in non-"YYYYMMDD" format, cannot be set manually
+<ssn>123456789</ssn>
+<gender/>
+<race/>
+<height/>
+<weight/>
+<haircolor/>
+<eyecolor/>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+24
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<imageURL/>
+<persontype/> P=Plaintiff, D=Defendant, I=Individual, blank=unknown/unused
+<address>
+Any number of addresses may be returned
+<address> 1111 N TABLE NE RD APT 1 </address>
+<city>OCALA</city>
+<state>FL</state>
+<county>CITRUS</county>
+<zip>98765</zip>
+<from>19950000</from>
+<to>20040000</to>
+</address>
+</plaintiff>
+<individual>
+<name_first>TEST</name_first>
+<name_middle>THE</name_middle>
+<name_last>CASE</name_last>
+<name_suffix>MR</name_suffix>
+<dob>19400323</dob> YYYYMMDD - may be empty/not present
+<dobfreeform/> May be empty/not present. Used when vendor sends a date
+in non-"YYYYMMDD" format, cannot be set manually
+<ssn>123456789</ssn>
+<gender/>
+<race/>
+<height/>
+<weight/>
+<haircolor/>
+<eyecolor/>
+<imageURL/>
+<persontype/> P=Plaintiff, D=Defendant, I=Individual, blank=unknown/unused
+<address>
+Any number of addresses may be returned
+<address> 1111 N TABLE NE RD APT 1 </address>
+<city>OCALA</city>
+<state>FL</state>
+<county>CITRUS</county>
+<zip>98765</zip>
+<from>19950000</from>
+<to>20040000</to>
+</address>
+<alias>
+Any number of aliases may be returned
+<name_first>John</name_first> Optional may be empty/not present
+<name_middle>P</name_middle>
+Optional may be empty/not present
+<name_last>Smith</name_last>
+Optional may be empty/not present
+<name_suffix>Jr</name_suffix> Optional may be empty/not present
+<namefreeform>John P Smith Jr.</namefreeform> Optional may be empty/not present
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+25
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+</alias>
+</individual>
+<jurisdiction>Dallas county</jurisdiction>
+<jurisdiction_state>TX</jurisdiction_state>
+<preformatted_textblock/>Optional, unlimited size field, shown in a fixed width font
+<hidden>Y|N></hidden>Optional. Used to indicate that this case was found
+but is not reportable. Not sent - receive only
+<chargeinfo>Any number of charges may be included in a case
+<charge>Assault with a deadly weapon</charge>
+<statute>123.32.a</statute>
+<charge_number>1</charge_number>
+<crime_type>Felony</crime_type>
+<disposition>Guilty</disposition>
+<plea>Guilty</plea>
+<arrest_date_freeformat/>Preferred date format MM/DD/YYYY
+<sentencing_date_freeformat/>Preferred date format MM/DD/YYYY
+<offense_date_freeformat/>Preferred date format MM/DD/YYYY
+<filing_date_freeformat/>Preferred date format MM/DD/YYYY
+<disposition_date_freeformat/>Preferred date format MM/DD/YYYY
+<charge_comments/>
+<sentence_comments/> overall comments for all sentences, or in lieu thereof
+<sentencing>Any number of sentences may be included in a charge
+<sentence_type>fine</sentence_type>
+<date_active>1/13/2000</date_active>
+<active_amount>50.00</active_amount>
+<suspended_amount>25.00</suspended_amount>
+<completed_amount>125.00</completed_amount>
+<sentenceitem_comments/>
+</sentencing>
+<additionalInfo>
+zero to many additionalInfo nodes
+<title>Issuing Agency</title> titles may be anything
+<value>Lavon PD</title>
+</additionalInfo>
+<preformatted_textblock/>Optional, unlimited size field, shown in a fixed width font
+<hidden>Y|N></hidden>Optional. Used to indicate that this charge was found
+but is not reportable. Not sent - receive only
+</chargeinfo>
+</case>
+<datasources>list of data sources searched</datasources> Only provided by vendor
+cannot be input manually
+</subOrder>
+
+2.10.14
+
+Credential Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Credential verification ’
+filledStatus=’STATUS ’
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+26
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<description>CPA </description>
+<state>TX </state>
+optional
+<organization_name>CPAs of Texas</organization_name>
+<license_number>CPA1234</license_number>
+<date_received>20010201</date_received> Must be YYYYMMDD
+<expiration_date>20110201</expiration_date> Must be YYYYMMDD
+<comments>Some kind of comment optional </comments>
+<verified_organization_name/>
+<verified_license_number/>
+<verified_date_received/>
+<verified_expiration_date/>
+<verified_state/>
+<verified_license_status/>
+<call> Calls should be listed in the XML doc in order
+from newest to oldest. If there are no calls, or if you do
+not want to clear the call list, do not include this node
+<DateTime>1/13/2006 8:23 AM US/Central</DateTime>
+<operator>Sally S.</operator> May be a name or ID# to track who made the call
+<outcome>verification completed</outcome>
+<comments>Glad this one is over with!</comments>
+<ProviderName>John Quincy</ProviderName> The name of the person providing information
+<ProviderTitle>President</ProviderTitle>
+<ProviderPhone>555-555-1212 x12</ProviderPhone>
+<ProviderLocation>Jacksonville, FL</ProviderLocation>
+<method>Outbound call</method>
+</call>
+</subOrder>
+Note: all verified_FIELD nodes can have a matching disposition_FIELD node.
+
+2.10.15
+
+Custom Product Results XML
+
+<subOrder number=’123 ’ remote_number=’32 ’
+description=’Product Description ’ remote_order=’320 ’
+remote_subOrder=’3200 ’ held_for_review=’N ’ held_for_release_form=’N ’
+filledStatus=’filled ’ filledCode=’review ’ type=’Customproduct ’>
+<time_ordered>2020-05-19 15:16:42</time_ordered> YYYY-MM-DD HH:MM:SS
+<time_filled>2020-05-19 15:16:47</time_filled> YYYY-MM-DD HH:MM:SS
+<productcode>cp_customproductcode</productcode>
+customproduct code is configurable by Accio client
+<searchdescription>Text Field</searchdescription>
+<county>Travis</county>
+<state>TX</state>
+<country>USA</country>
+<city>Austin</city>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+27
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<address>123 Main Street</address>
+<intlgovtid>Government ID number</intlgovtid>
+<intlgovtid_descr>Government ID description</intlgovtid_descr>
+<license_number>TX</license_number>
+<license_issuer>99990000</license_issuer>
+<roll_number>999AAA00</roll_number>
+<dlnum>99990000</dlnum>
+<tax_id_number>12345</tax_id_number>
+<start_date>20000101</start_date>YYYYMMDD
+<end_date>20100101</end_date> YYYYMMDD
+<island>Bora Bora</island>
+<fees>
+<addon>0.00</addon>
+<adjustments>0.00</adjustments>
+<adjustmentReason/>
+<thirdparty>0.00</thirdparty>
+<taxes>0.00</taxes>
+</fees>
+<text>....</text>
+</subOrder>
+
+2.10.16
+
+Drug Screen Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Drug screen ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<chain_of_custody>0103350542</chain_of_custody>
+<specimen_collection_date>2008-04-16</specimen_collection_date>
+<donorId>275969105</donorId>
+<specimenId>3787652Y</specimenId>
+<sampleType>urine</sampleType>
+<DOT>N</DOT> Y|N
+<text>...</text>
+</subOrder>
+
+2.10.17
+
+Education Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Education verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<school_name>Johns Hopkins </school_name>
+<campus>Berkeley Teaching Hospital </campus>
+<name_first>Sarah </name_first>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+28
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<name_last>Smith </name_last>
+<major>Orthopedic resident </major>
+<highest_achieved>Y</highest_achieved>
+<currently_enrolled>Y</currently_enrolled>
+<degree>M.D. </degree>
+<GPA></GPA>
+<student_id_number></student_id_number>
+<address1></address1>
+<address2></address2>
+<city></city>
+<state></state>
+<zip></zip>
+<phone></phone>
+<attended_from>19990512</attended_from>Must be YYYYMMDD
+<attended_to>20060513</attended_to>
+Must be YYYYMMDD
+<transcript>N</transcript> Y|N
+<graduated>Y</graduated>
+Y|N
+<graduation_date></graduation_date>
+<levelCompleted/>
+restricted use
+<comments>Some kind of comment optional </comments>
+<verified_school_name>
+See subsequent list for other items
+Soap Tech</verified_school_name>
+<question>
+<prompt>Why are questions used in employment verifications?</prompt>
+<response>Because we can!</response>
+</question>
+<call>
+
+Calls should be listed in the XML doc in order
+from newest to oldest. If there are no calls, or if you do
+not want to clear the call list, do not include this node
+<DateTime>1/13/2006 8:23 AM US/Central</DateTime>
+<operator>Sally S.</operator> May be a name or ID# to track who made the call
+<outcome>verification completed</outcome>
+<comments>Glad this one is over with!</comments>
+<ProviderName>John Quincy</ProviderName> The name of the person providing information
+<ProviderTitle>President</ProviderTitle>
+<ProviderPhone>555-555-1212 x12</ProviderPhone>
+<ProviderLocation>Jacksonville, FL</ProviderLocation>
+<method>Outbound call</method>
+</call>
+</subOrder>
+
+Verified Items
+Note: all verified_FIELD nodes can have a matching disposition_FIELD node. The item node
+may be any of the following values :
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+29
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+• verified_graduation_date
+• verified_school_name
+• verified_major
+• verified_degree
+• verified_GPA
+• verified_student_id_number
+• verified_address1
+• verified_address2
+• verified_city
+• verified_state
+• verified_zip
+• verified_attended_from
+• verified_attended_to
+• verified_graduated
+• verified_summary
+• verified_verifier
+• verified_researcher
+• verified_phone_number
+
+2.10.18
+
+International Education Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’International Education verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<school_name>Johns Hopkins </school_name>
+<major>Orthopedic resident </major>
+<degree>M.D. </degree>
+<GPA></GPA>
+<student_id_number></student_id_number>
+<address1></address1>
+<address2></address2>
+<city></city>
+<state></state>
+<intlzip></intlzip>
+<country></country>
+<phone></phone>
+<email></email>
+<attended_from>19990512</attended_from>Must be YYYYMMDD
+<attended_to>20060513</attended_to>
+Must be YYYYMMDD
+<transcript>N</transcript> Y|N
+<graduated>Y</graduated>
+Y|N
+<graduation_date></graduation_date>
+<roll_number></roll_number>
+<levelCompleted/>
+restricted use
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+30
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<comments>Some kind of comment optional </comments>
+<verified_school_name>
+See subsequent list for other items
+Soap Tech</verified_school_name>
+<question>
+<prompt>Why are questions used in employment verifications?</prompt>
+<response>Because we can!</response>
+</question>
+<call>
+
+Calls should be listed in the XML doc in order
+from newest to oldest. If there are no calls, or if you do
+not want to clear the call list, do not include this node
+<DateTime>1/13/2006 8:23 AM US/Central</DateTime>
+<operator>Sally S.</operator> May be a name or ID# to track who made the call
+<outcome>verification completed</outcome>
+<comments>Glad this one is over with!</comments>
+<ProviderName>John Quincy</ProviderName> The name of the person providing information
+<ProviderTitle>President</ProviderTitle>
+<ProviderPhone>555-555-1212 x12</ProviderPhone>
+<ProviderLocation>Jacksonville, FL</ProviderLocation>
+<method>Outbound call</method>
+</call>
+</subOrder>
+
+Verified Items
+Note: all verified_FIELD nodes can have a matching disposition_FIELD node. The item node
+may be any of the following values :
+• verified_graduation_date
+• verified_school_name
+• verified_school_type
+• verified_major
+• verified_degree
+• verified_GPA
+• verified_student_id_number
+• verified_address1
+• verified_address2
+• verified_city
+• verified_state
+• verified_intlzip
+• verified_country
+• verified_attended_from
+• verified_attended_to
+• verified_graduated
+• verified_summary
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+31
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+• verified_verifier
+• verified_researcher
+• verified_url
+• verified_email
+
+2.10.19
+
+Employment Credit Report Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Credit ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.20
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Employment Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Employment verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<company_name>ABCCO </company_name>
+<position>TEST ASSISTANT </position>
+<contact>JOHN SHARP </contact>
+<email>john@acme.com </email>
+<phone_number>555-555-1212 </phone_number>
+<phone_extension>123 </phone_extension>
+<contact_current_employer>N </contact_current_employer> Y|N - optional
+<start_date>20000101 </start_date> Must be YYYYMMDD
+<end_date>20020101 </end_date> Must be YYYYMMDD
+<income>111.00 </income>
+<income_type>hourly </income_type>
+hourly, weekly, monthly, semimonthly,
+biweekly, annually
+<reason_for_leaving>this is an optional field</reason_for_leaving>
+<company_web_address/>
+<supervisor/>
+<supervisor_phone/>
+<address1>123 main street </address1>
+<address2></address2>
+<city>AUSTIN </city>
+<state>TX </state>
+<zip>78731 </zip>
+<is_alternate>N </is_alternate> Y|N - optional
+<comments>Some kind of comment optional </comments>
+<verified_income
+See subsequent list for other items
+>12.23/hr</verified_income>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+32
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<question>
+<prompt>How would you describe the candidate’s ethics?</prompt>
+<response>He would make a good congressman.</response>
+</question>
+<call>
+
+Calls should be listed in the XML doc in order
+from newest to oldest. If there are no calls, or if you do
+not want to clear the call list, do not include this node
+<DateTime>1/13/2006 8:23 AM US/Central</DateTime>
+<operator>Sally S.</operator> May be a name or ID# to track who made the call
+<outcome>verification completed</outcome>
+<comments>Glad this one is over with!</comments>
+<ProviderName>John Quincy</ProviderName> The name of the person providing information
+<ProviderTitle>President</ProviderTitle>
+<ProviderPhone>555-555-1212 x12</ProviderPhone>
+<ProviderLocation>Jacksonville, FL</ProviderLocation>
+<method>Outbound call</method>
+</call>
+<salarykey>1234</salarykey>
+</subOrder>
+
+Verified Items
+Note: all verified_FIELD nodes can have a matching disposition_FIELD node. The item node
+may be any of the following values :
+• verified_company_name
+• verified_position
+• verified_start_date
+• verified_end_date
+• verified_reason_for_leaving
+• verified_applicant_phone
+• verified_applicant_name_first
+• verified_applicant_name_middle
+• verified_applicant_name_last
+• verified_applicant_name_suffix
+• verified_employer_comments
+• verified_income
+• verified_eligible_for_rehire
+• verified_eligible_for_rehire_reason
+• verified_verifier
+• verified_verifier_position
+• verified_verifier_phone
+• verified_researcher
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+33
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+When posting results, only verified item fields you include will be updated. If you
+do not want to update a particular field, do not include it in your XML post. If you
+want to clear out a particular field, be sure to include an empty node.
+
+2.10.21
+
+Level2 Employment Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Level2 Employment verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+... same as Employment Verification ...
+<ismilitary>N</ismilitary>
+</subOrder>
+
+2.10.22
+
+Level3 Employment Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Level3 Employment verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+... same as Employment Verification ...
+<ismilitary>N</ismilitary>
+</subOrder>
+
+2.10.23
+
+International Employment Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’International Employment verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<company_name>ABCCO </company_name>
+<position>TEST ASSISTANT </position>
+<contact>JOHN SHARP </contact>
+<phone_number>555-555-1212 </phone_number>
+<phone_extension>123 </phone_extension>
+<contact_current_employer>N </contact_current_employer> Y|N - optional
+<start_date>20000101 </start_date> Must be YYYYMMDD
+<end_date>20020101 </end_date> Must be YYYYMMDD
+<income>111.00 </income>
+<income_type>hourly </income_type>
+hourly, weekly, monthly, semimonthly,
+biweekly, annually
+<reason_for_leaving>this is an optional field</reason_for_leaving>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+34
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<address1>123 main street </address1>
+<address2></address2>
+<city>Toronto </city>
+<intlstate>Ontario </intlstate>
+<intlzip>987654 </intlzip>
+<country>Canada </country>
+<is_alternate>N </is_alternate> Y|N - optional
+<comments>Some kind of comment optional </comments>
+<verified_income>12.23/hr</verified_income>
+See subsequent list for other items
+<question>
+<prompt>How would you describe the candidate’s ethics?</prompt>
+<response>He would make a good congressman.</response>
+</question>
+<call>
+
+Calls should be listed in the XML doc in order
+from newest to oldest. If there are no calls, or if you do
+not want to clear the call list, do not include this node
+<DateTime>1/13/2006 8:23 AM US/Central</DateTime>
+<operator>Sally S.</operator> May be a name or ID# to track who made the call
+<outcome>verification completed</outcome>
+<comments>Glad this one is over with!</comments>
+<ProviderName>John Quincy</ProviderName> The name of the person providing information
+<ProviderTitle>President</ProviderTitle>
+<ProviderPhone>555-555-1212 x12</ProviderPhone>
+<ProviderLocation>Jacksonville, FL</ProviderLocation>
+<method>Outbound call</method>
+</call>
+</subOrder>
+
+Verified Items
+Note: all verified_FIELD nodes can have a matching disposition_FIELD node. The item node
+may be any of the following values :
+• verified_company_name
+• verified_position
+• verified_intlstate
+• verified_intlzip
+• verified_start_date
+• verified_end_date
+• verified_reason_for_leaving
+• verified_DOB
+• verified_SSN
+• verified_previous_names
+• verified_applicant_phone
+• verified_applicant_name_first
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+35
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+• verified_applicant_name_middle
+• verified_applicant_name_last
+• verified_applicant_name_suffix
+• verified_employer_comments
+• verified_income
+• verified_eligible_for_rehire
+• verified_eligible_for_rehire_reason
+• verified_verifier
+• verified_verifier_position
+• verified_verifier_phone
+• verified_researcher
+
+2.10.24
+
+EVerify Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Everify ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<hire_date>20081011 </hire_date> Must be YYYYMMDD
+<doc_type>I-94 </doc_type> Must be one of the following:
+I-94
+List B, C Documents
+I-551
+I-688
+I-688A
+I-688B
+I-766
+Unexpired or Expired U.S. Passport
+Unexpired Foreign Passport with I-94 Stamp
+Unexpired Foreign Passport with I-551 Stamp
+<doc_exp_date>20160202 </doc_exp_date> Must be YYYYMMDD
+<alien_number>678510785 </alien_number>
+<i94number>3467925378 </i94number>
+<visanumber>76098654 </visanumber>
+<passportnumber>123456789 </passportnumber>
+<case number>2010028174834FA </case number>
+Provided by Everify
+<current state>CRCV </current state>
+Provided by Everify
+<closure description>Resolved Authorized </closure description>
+<closed by>TWOM9179 </closed by>
+Provided by Everify
+<closed date>20100128 </closed date>
+</subOrder>
+
+2.10.25
+
+Gap Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’GAP ’
+filledStatus=’STATUS ’
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+36
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<start_date></start_date>Must be YYYYMMDD
+<end_date></end_date>
+Must be YYYYMMDD
+<activities/>
+<person_interviewed/>
+<reference_name>Jim Bob</reference_name>
+<reference_type>personal</reference_type>
+<reference_phonenumber>5555555555</reference_phonenumber>
+<reference2_name/>
+<reference2_type/>
+<reference2_phonenumber/>
+<comments/>
+<verified_reference_name
+See subsequent list for other items
+>John Adamson</verified_reference_name>
+
+<call>
+
+Calls should be listed in the XML doc in order
+from newest to oldest. If there are no calls, or if you do
+not want to clear the call list, do not include this node
+<DateTime>1/13/2006 8:23 AM US/Central</DateTime>
+<operator>Sally S.</operator> May be a name or ID# to track who made the call
+<outcome>verification completed</outcome>
+<comments>Glad this one is over with!</comments>
+<ProviderName>John Quincy</ProviderName> The name of the person providing information
+<ProviderTitle>President</ProviderTitle>
+<ProviderPhone>555-555-1212 x12</ProviderPhone>
+<ProviderLocation>Jacksonville, FL</ProviderLocation>
+<method>Outbound call</method>
+</call>
+</subOrder>
+
+Verified Items
+Note: all verified_FIELD nodes can have a matching disposition_FIELD node. The item node
+may be any of the following values :
+• verified reference name
+• verified reference type
+• verified reference phonenumber
+• verified reference2 name
+• verified reference2 type
+• verified reference2 phonenumber
+• verified activities
+• verified person interviewed
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+37
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+• verified start date
+• verified end date
+
+2.10.26
+
+Medical Sanctions History Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’FACIS ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.27
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Federal Bankruptcy Court Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Federal criminal bankruptcy ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<county>Travis </county>
+<state>TX </state>
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+... same as County Criminal results ...
+</subOrder>
+
+2.10.28
+
+Federal Civil Court Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Federal criminal civil ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<county>Travis </county>
+<state>TX </state>
+<notes_to_supplier>Please search </notes_to_supplier> optional, free-form, no char limit
+... same as County Criminal results ...
+</subOrder>
+
+2.10.29
+
+Federal Criminal Court Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Federal criminal criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+38
+
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<county>Travis </county>
+<state>TX </state>
+<notes_to_supplier>Please search </notes_to_supplier> optional, free-form, no char limit
+... same as County Criminal results ...
+</subOrder>
+
+2.10.30
+
+Federal Statewide Bankruptcy Court Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Federal statewide bankruptcy ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<state>TX </state>
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+... same as County Criminal results ...
+</subOrder>
+
+2.10.31
+
+Federal Statewide Civil Court Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Federal statewide civil ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<state>TX </state>
+<notes_to_supplier>Please search </notes_to_supplier> optional, free-form, no char limit
+... same as County Criminal results ...
+</subOrder>
+
+2.10.32
+
+Federal Statewide Criminal Court Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Federal statewide criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<state>TX </state>
+<notes_to_supplier>Please search </notes_to_supplier> optional, free-form, no char limit
+... same as County Criminal results ...
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+39
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+</subOrder>
+
+2.10.33
+
+General Sanctions Administration List Check Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’GSA ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.34
+
+Global Terrorist Watch List
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’globalreport ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.35
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Form I-9 Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’i9verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<citizenship_status></citizenship_status>
+Citizen, Lawful Permanent Resident, Noncitize
+</subOrder>
+
+2.10.36
+
+Mail Completed Report Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’mail_completereport ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.37
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Military Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Military verification ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+40
+
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<branch_of_service></branch_of_service>
+<rank_at_discharge></rank_at_discharge>
+<from_date></from_date>Must be YYYYMMDD
+<to_date></to_date>
+Must be YYYYMMDD
+</subOrder>
+
+2.10.38
+
+YYYY-MM-DD HH:MM:SS
+
+Monitor National (Multijurisdictional) Criminal Report Results
+XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’monitor national criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+... same as County Criminal results ...
+</subOrder>
+
+2.10.39
+
+MVR Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’MVR ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+YYYY-MM-DD HH:MM:SS
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<dlnum>99990000 </dlnum>
+<dlstate>TX </dlstate>
+<dlexpiration>20100101</dlexpiration>
+<text>...</text>
+<mvr_violation>
+0 to n mvr violation blocks
+<violation_type>VIOL</violation_type>
+<description>HEADLAMPS TO BE LIT
+LOCATION/DOCKET: DRIPPING SPRINGS MUNPTS: 2</description>
+<violation_date>20160301</violation_date>
+Date Format YYYYMMDD
+<conviction_date>20160320</conviction_date>
+Date Format YYYYMMDD
+<reinstatement_date>20160401</reinstatement_date> Date Format YYYYMMDD
+<state_description>LIGHTS VIOL</state_description>
+<state_code>LGTVIOL</state_code>
+<state_points>2</state_points>
+<avd_code>XX01</avd_code>
+<acd_code>A12</acd_code>
+<avd2>A212</avd2>
+<violation_key>VIOL123</violation_key>
+<vendor_points>3</vendor_points>
+</mvr_violation>
+<mvr_license> 0 to n mvr license blocks
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+41
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<license_issue_date>20160101</license_issue_date>
+Date Format YYYYMMDD
+<license_expiration_date>20210101</license_expiration_date>
+Date Format YYYYMMDD
+<license_class>R</license_class>
+<license_code>OPERATOR</license_code>
+<license_type>PERSONAL</license_type>
+<license_status>VALID</license_status>
+<license_endorsements>GOOD PERSON</license_endorsements>
+<license_restrictions>MUST USE EYEGLASSES</license_restrictions>
+</mvr_license>
+</subOrder>
+
+2.10.40
+
+National (Multijurisdictional) Criminal Report Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’National Criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+... same as County Criminal results ...
+</subOrder>
+
+2.10.41
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+National Federal Criminal Report Results XML
+
+<subOrder number=‘128 ’ remote_number=‘32 ’
+type=‘National Federal Criminal’>
+description=‘National Federal Criminal’
+remote_order=‘320 ’
+remote_subOrder=‘3200 ’
+held_for_review=‘N’
+held_for_release_form=‘N’
+filledStatus=‘filled’
+filledCode=‘clear’ >
+<time_ordered>2017-12-20 16:36:12</time_ordered>
+<time_filled>2017-12-20 16:52:42</time_filled>
+<fees>
+<addon>0.00</addon>
+<adjustments>0.00</adjustments>
+<adjustmentReason/>
+<thirdparty>0.00</thirdparty>
+<taxes>0.00</taxes>
+</fees>
+</subOrder>
+
+2.10.42
+
+National (Multijurisdictional) Criminal with Alias Report Results
+XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’National Alias Criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+42
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+... same as County Criminal results ...
+... same as Address Infomation detailed results ... optional
+</subOrder>
+
+2.10.43
+
+National (Multijurisdictional) Criminal with Alias Report source 2
+Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’National Alias Criminal2 ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+... same as County Criminal results ...
+... same as Address Infomation detailed results ... optional
+</subOrder>
+
+2.10.44
+
+Office of Inspector General List Check Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’OIG ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.45
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Professional Reference Check Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’ProfessionalReference check ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+... same as Reference Check ...
+</subOrder>
+
+2.10.46
+
+Reference Check Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Reference check ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+43
+
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<time_filled>2010-01-26 17:38:53 </time_filled>
+YYYY-MM-DD HH:MM:SS
+<contactname>John Smith </contactname>
+<contactphone>555-555-1212 </contactphone>
+<contactfax>555-555-1212 </contactfax>
+<type>Personal, Professional, etc </type>
+not required
+<relationship>coach, supervisor, friend, etc </relationship> not required
+<contactaddress>123 main street </contactaddress>
+<contactcity>AUSTIN </contactcity>
+<contactstate>TX </contactstate>
+<contactzip>78731 </contactzip>
+<contactemail>test@test.com </contactemail>
+<comments>Some kind of comment optional </comments>
+<text>Reference check response information goes here </text>
+<verified_contactname
+See subsequent list for other items
+>John Adamson </verified_contactname>
+
+<call>
+
+Calls should be listed in the XML doc in order
+from newest to oldest. If there are no calls, or if you do
+not want to clear the call list, do not include this node
+<DateTime>1/13/2006 8:23 AM US/Central</DateTime>
+<operator>Sally S.</operator> May be a name or ID# to track who made the call
+<outcome>verification completed</outcome>
+<comments>Glad this one is over with!</comments>
+<ProviderName>John Quincy</ProviderName> The name of the person providing information
+<ProviderTitle>President</ProviderTitle>
+<ProviderPhone>555-555-1212 x12</ProviderPhone>
+<ProviderLocation>Jacksonville, FL</ProviderLocation>
+<method>Outbound call</method>
+</call>
+</subOrder>
+
+Verified Items
+Note: all verified_FIELD nodes can have a matching disposition_FIELD node. The item node
+may be any of the following values :
+• verified contactname
+• verified contactphone
+• verified type
+• verified relationship
+• verified contactaddress
+• verified contactcity
+• verified contactstate
+• verified contactzip
+
+2.10.47
+
+Safety First Results XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+44
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’safety1st ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+... same as AIM results ...
+</subOrder>
+
+2.10.48
+
+Sex Offender Database Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Sex_Offender ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<state>TX </state>
+<text>...</text>
+</subOrder>
+
+2.10.49
+
+Sex Offender Multistate Database Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’sex_offender_nationwide ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.50
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Specially Designated Nationals Database Search Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’SDN ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.51
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+SSN Verification Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’SSN ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+45
+
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.52
+
+Standard Credit Report Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Credit_std ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.53
+
+YYYY-MM-DD HH:MM:SS
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Statewide Civil Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Statewide_civil ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<state>TX </state>
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+... same as County Criminal results ...
+</subOrder>
+
+2.10.54
+
+Statewide Criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Statewide_criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<state>TX </state>
+... same as County Criminal results ...
+</subOrder>
+
+2.10.55
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Statewide Criminal Data Base Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Statewide_criminal_db ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<state>TX </state>
+... same as County Criminal results ...
+</subOrder>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+46
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+2.10.56
+
+CHAPTER 2. RESULTS XML FORMAT
+
+Trac Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Trac ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.57
+
+Trac to 7year criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Trac to 7year criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.58
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Trac to Federal criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Trac to Federal criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.60
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Trac to 3year criminal Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Trac to 3year criminal ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+2.10.59
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+TriMerged Credit Report Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Credit_tri ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<text>...</text>
+</subOrder>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+47
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+Receiving Results via XML
+
+2.10.61
+
+CHAPTER 2. RESULTS XML FORMAT
+
+Workers Compensation Results XML
+
+<subOrder number=’128 ’ remote_number=’32 ’
+type=’Workers Compensation ’
+filledStatus=’STATUS ’
+filledCode=’CODE ’>
+<time_ordered>2010-01-26 17:38:04 </time_ordered>
+<time_filled>2010-01-26 17:38:53 </time_filled>
+<state>AL </state>
+<text>...</text>
+</subOrder>
+
+2.10.62
+
+YYYY-MM-DD HH:MM:SS
+YYYY-MM-DD HH:MM:SS
+
+subOrder Fees XML
+
+Each of the subOrder blocks may include details on the fees associated with the subOrder. The
+fee data will be contained in the following nodes.
+<addon>8.00</addon>
+Base subOrder Fees
+<adjustments>0.00</adjustments> Adjustments Fees for subOrder
+<adjustmentReason/>
+Reason to adjustment fees
+<thirdparty>7.50</thirdparty>
+Third Party Fees
+<taxes>0.00</taxes>
+Taxes Associated with Fees
+<total>15.50</total>
+Total Fees
+These node are included by default. To control their display set the “Include Billing Info In XML
+Results” parameter in the at the “Site”, “Pricebook”, or “Account” level to “No”
+
+2.10.63
+
+Prior Address XML
+
+Any prior addresses associated with the order will be included a subOrder block, one address per
+block.
+<subOrder number="" remote_number="600190" description="Candidate Supplied Address History"
+held_for_review="N" held_for_release_form="N" filledStatus="fi
+filledCode="clear" type="Candidate_supplied_address_history">
+<time_ordered>2015-08-13 13:47:01</time_ordered>
+<time_filled>2015-08-13 13:47:01</time_filled>
+<person>
+<name_first>Johnnifer</name_first>
+<name_middle>Testify</name_middle>
+<name_last>Baddington</name_last>
+<name_suffix/>
+<namefreeform/>
+<dob>19660816</dob> YYYYMMDD - may be empty/not present
+<dobfreeform/>
+May be empty/not present. Used when vendor sends a date
+in non-"YYYYMMDD" format, cannot be set manually
+<ssn>987654321</ssn>
+<gender/>
+<race/>
+<height/>
+<weight/>
+<haircolor/>
+<eyecolor/>
+<imageURL/>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+48
+
+Receiving Results via XML
+
+CHAPTER 2. RESULTS XML FORMAT
+
+<persontype/>
+P=Plaintiff, D=Defendant, I=Individual, blank=unknown/unused
+<address>
+Any number of addresses may be returned
+<address>123 Main Street</address>
+<city>Austin</city>
+<state>TX</state>
+<county>TRAVIS</county>
+<zip>78731</zip>
+<country>France</country> optional, ISO-standard. Max 128 characters
+<country_iso3>FRA</country_iso3> optional, 3 letter ISO alpha-3 code
+<intlstate/>
+optional, Max 128 characters
+<intlzip/>
+optional, Max 128 characters
+<from>19990512</from>
+integer, YYYYMMDD
+<to>20020113</to>
+integer, YYYYMMDD
+</address>
+</person>
+</subOrder>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+49
+
+Receiving Results via XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+CHAPTER 2. RESULTS XML FORMAT
+
+50
+
+Chapter 3
+Summary Results XML Format
+The summary results XML will ONLY include a login section and a completeOrder section. The
+completeOrder section will have one tag - status, unless configured otherwise.
+
+3.1
+
+Example Summary Results XML
+
+Our server will push XML to the supplied URL similar to the following example :
+<ScreeningResults>
+<login>
+<account>youraccount </account> from XMLresults_post_account
+<username>yourusername </username> from XMLresults_post_username
+<password>yourpassword </password> from XMLresults_post_password
+</login>
+<completeOrder number=‘’ remote_number=‘98761’ isactive=‘Y’ archived=‘N’
+reviewed=‘N’ reference_number=‘’>
+<status>clear</status> ‘hits’, ‘unknown’, or ‘clear’
+<state>order complete</state>
+</completeOrder>
+</ScreeningResults>
+Status is determined in the following manner:
+• If there is at least one red component, it returns “hits”
+• If there are no red components and at least one black, it returns “unknown”
+• Otherwise (all components are green) it returns “clear”
+Adjudicating at the subject-level does not affect it.
+
+3.1.1
+
+Summary Results Additional Subject Data
+
+By default, the system does not include a section with subject information when sending summary
+results. The system can be configured to send back a subset of the subject information if required.
+
+51
+
+Receiving Results via XML
+
+CHAPTER 3. SUMMARY RESULTS XML FORMAT
+
+The “Order Summary Subject Fields” system variable which can be set at the site, price book,
+account of package level is a list of fields that can be included in the subject block of the summary
+results. Only the fields in the list may be included and are as follows:
+• SSN
+• Date of Birth
+• Client Disposition
+• ApplicantID
+• International Government Id
+• International Government Id Description
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+52
+
+Chapter 4
+Your Response
+After receiving and storing the XML results, respond with a valid XML document with no nodes
+named error. Our server will consider the results to have been accepted by your system only if we
+receive such a document.
+If our server detects too many post failures to your system, it will discontinue
+attempts to post results. You must respond to us as expected or your integration
+will fail in production.
+
+4.1
+
+Standard XML response
+
+<XML>
+<order orderID=’123456’ number=’123’>
+
+number is optional, present if specified by you
+when ordered
+<subOrder type=’sometype’ suborderID=’654321’>
+</subOrder>
+</order>
+<error n=’12’>
+if no errors, none will be present.
+<errortext>some error description related to N in error</errortext>
+<additionalinfo>more information, may not be present</additionalinfo>
+</error>
+</XML>
+This response format returns the orderID and suborderID(s) for successfully ordered products,
+which enables the manage backlogs page to work for these results. Although other formats are
+supported, the standard format ensures full compatibility between services.
+
+4.2
+
+Valid XML “results accepted” response
+
+<XML>Accepted
+</XML>
+
+53
+
+Receiving Results via XML
+
+CHAPTER 4. YOUR RESPONSE
+
+Any valid XML document that does not contain an <error> node will be considered an “accepted” response. An invalid XML document, one with an <error> node, or any non-XML response
+will be considered a failed post.
+
+4.3
+
+sample error response
+
+<response>
+<error>Our database is down, please try again later.</error>
+</response>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+54
+
+Receiving Results via XML
+
+CHAPTER 4. YOUR RESPONSE
+
+Revision History
+Version number follows this pattern, MAJOR.MINOR.PATCH, where:
+1. MAJOR version incremented when incompatible changes are made
+2. MINOR version incremented when functionality in a backwards-compatible manner is added
+3. PATCH version incremented when backwards-compatible bug fixes are made
+
+Revision
+1.0.0
+
+Date
+01/05/2018
+
+Revision History
+Description
+Creation (original)
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+55
+
+

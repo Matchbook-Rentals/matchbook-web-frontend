@@ -1,0 +1,4113 @@
+Order Entry via XML
+
+Order Entry via XML
+Version 1.0.0
+This document was typeset May 21, 2024
+Copyright 2005-2022 Accio Data , Inc.
+All rights reserved. No part of this publication may be reproduced, stored in a retrieval system,
+or transmitted, in any form, or by any means, electronic, mechanical, or otherwise, without the
+prior consent of Accio Data , Inc.
+For information on obtaining permission for use of material from this work, please submit a
+written request to :
+Accio Data , Inc.
+PO Box 787
+Dripping Springs, TX
+78620
+For technical support, please contact Accio Data at 512 858-9329.
+Errors and omissions : We make every effort to provide you with complete and accurate documentation. If you find errors or omissions in this manual, please report them to us promptly so
+that we may correct our manuals.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+1
+
+Order Entry via XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+2
+
+Contents
+1 Introduction
+
+7
+
+2 Communication
+9
+2.1 SNI . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+2.2 Ciphers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+2.2.1 Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+2.2.2 Sample Code - Sending XML to Accio Data - C# . . . . . . . . . . . . . . . . . 11
+2.2.3 Sample Code - Sending XML to Accio Data - Visual Basic . . . . . . . . . . . . 13
+2.2.4 Sample Code - Sending XML to Accio Data - Ruby . . . . . . . . . . . . . . . . 15
+3 Placing an order
+3.1 The Login Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.2 The Mode Node . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.3 The placeOrder Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.4 The order on behalf of Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5 The postBackInfo Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5.1 Disable postBackInfo block . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.6 The orderInfo Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.7 The Subject Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8 The subOrder Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.1 Address History to 7 Year County Criminal Order XML . . . . . . . . . . . . .
+3.8.2 Address History to 10 Year County Criminal Order XML . . . . . . . . . . . .
+3.8.3 Address History to 7 Year Statewide Criminal Order XML . . . . . . . . . . .
+3.8.4 Address History to 10 Year Statewide Criminal Order XML . . . . . . . . . . .
+3.8.5 Address Information Report Order XML . . . . . . . . . . . . . . . . . . . . .
+3.8.6 Adult Abuse Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.7 Adverse Action Process Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.8 Consent Based SSN verification with the SSA Order XML . . . . . . . . . . .
+3.8.9 Commercial Drivers’ License Verification Order XML . . . . . . . . . . . . . .
+3.8.10 CDL Employment Verification Order XML . . . . . . . . . . . . . . . . . . . .
+3.8.11 Civil County Lower Order XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.12 Civil County Upper Order XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.13 County Criminal Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.14 Certified Nurses Aid Registry Order XML . . . . . . . . . . . . . . . . . . . .
+3.8.15 Credential Verification Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.16 Custom Product Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.17 Drug Screen Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+3
+
+17
+17
+17
+18
+19
+20
+21
+22
+22
+24
+27
+27
+27
+28
+28
+28
+28
+28
+28
+28
+29
+29
+29
+30
+30
+30
+31
+
+Order Entry via XML
+
+CONTENTS
+
+3.8.18 Education Verification Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.19 International Education Verification Order XML . . . . . . . . . . . . . . . . .
+3.8.20 Employment Credit Report Order XML . . . . . . . . . . . . . . . . . . . . . .
+3.8.21 Employment Verification Order XML . . . . . . . . . . . . . . . . . . . . . . .
+3.8.22 Level2 Employment Verification Order XML . . . . . . . . . . . . . . . . . . .
+3.8.23 Level3 Employment Verification Order XML . . . . . . . . . . . . . . . . . . .
+3.8.24 International Employment Verification Order XML . . . . . . . . . . . . . . .
+3.8.25 I-9 Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.26 EVerify Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.27 Evictions Check Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.28 FMCSA Crash Inspection Order XML . . . . . . . . . . . . . . . . . . . . . . .
+3.8.29 Gap Verification Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.30 Medical Sanctions History Order XML (Level 3) . . . . . . . . . . . . . . . . .
+3.8.31 Medical Sanctions History Order XML (Level 3 - with verification) . . . . . . .
+3.8.32 Medical Sanctions History Order XML (Level 1) . . . . . . . . . . . . . . . . .
+3.8.33 Medical Sanctions History Order XML (Level 1 - with verification) . . . . . . .
+3.8.34 Medical Sanctions History Order XML (Level 1m) . . . . . . . . . . . . . . . .
+3.8.35 Medical Sanctions History Order XML (Level 1m - with verification) . . . . . .
+3.8.36 Medical Sanctions History Order XML (Level 2) . . . . . . . . . . . . . . . . .
+3.8.37 Medical Sanctions History Order XML (Level 2 - with verification) . . . . . . .
+3.8.38 Office of Foreign Assets Control Search . . . . . . . . . . . . . . . . . . . . .
+3.8.39 Federal Bankruptcy Court Order XML . . . . . . . . . . . . . . . . . . . . . .
+3.8.40 Federal Civil Court Order XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.41 Federal Criminal Court Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.42 Federal Statewide Bankruptcy Court Order XML . . . . . . . . . . . . . . . .
+3.8.43 Federal Statewide Civil Court Order XML . . . . . . . . . . . . . . . . . . . .
+3.8.44 Federal Criminal Statewide Court Order XML . . . . . . . . . . . . . . . . . .
+3.8.45 General Sanctions Administration List Check Order XML . . . . . . . . . . . .
+3.8.46 Global Terrorist Watch List . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.47 Form I-9 Verification Order XML . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.48 Mail Completed Report Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.49 Monitor National (Multijurisdictional) Criminal Report Order XML . . . . . .
+3.8.50 MVR Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.51 National (Multijurisdictional) Criminal Report Order XML . . . . . . . . . . .
+3.8.52 National Federal Criminal Report Order XML . . . . . . . . . . . . . . . . . .
+3.8.53 National (Multijurisdictional) Criminal with Alias Report Order XML . . . . .
+3.8.54 National (Multijurisdictional) Criminal with Alias Report source 2 Order XML
+3.8.55 Nursing License Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.56 Office of Inspector General List Check Order XML . . . . . . . . . . . . . . .
+3.8.57 Professional Reference Check Order XML . . . . . . . . . . . . . . . . . . . .
+3.8.58 International Professional Reference Check Order XML . . . . . . . . . . . . .
+3.8.59 Reference Check Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.60 Safety First Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.61 Sex Offender Database Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.62 Sex Offender Multistate Database Order XML . . . . . . . . . . . . . . . . . .
+3.8.63 Specially Designated Nationals Database Search Order XML . . . . . . . . . .
+3.8.64 SSN Verification Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+4
+
+31
+32
+33
+33
+34
+35
+35
+36
+37
+40
+40
+40
+41
+41
+41
+41
+41
+41
+41
+42
+42
+42
+42
+42
+42
+42
+43
+43
+43
+43
+43
+43
+43
+44
+44
+44
+44
+44
+44
+44
+45
+45
+46
+46
+46
+46
+46
+
+Order Entry via XML
+
+CONTENTS
+
+3.8.65 Standard Credit Report Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.66 Statewide Civil Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.67 Statewide Criminal Order XML . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.68 Statewide Criminal Data Base Order XML . . . . . . . . . . . . . . . . . . . .
+3.8.69 Trac Order XML . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.70 Trac to 7year criminal Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.71 Trac to 3year criminal Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.8.72 Trac to Federal criminal Order XML . . . . . . . . . . . . . . . . . . . . . . .
+3.8.73 TriMerged Credit Report Order XML . . . . . . . . . . . . . . . . . . . . . . .
+3.8.74 Workers Compensation Order XML . . . . . . . . . . . . . . . . . . . . . . . .
+3.9 The addToOrder Block . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.10 Autogenerating Criminal Searches . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.11 Order Control Settings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+46
+46
+46
+47
+47
+47
+47
+47
+47
+47
+47
+48
+48
+
+4 Order Response
+53
+4.1 Response Error Codes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 53
+5 Sending Imaged Documents
+59
+5.1 Image File Formats . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59
+6 Other XML Queries
+61
+6.1 Packages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 61
+6.2 Results for a specific order . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 61
+7 Standard Data Formats
+7.1 Dates . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+7.2 Data Definition Guide for Common “<placeOrder >” XML Elements . . . . . . . . . .
+7.2.1 Elements of the Subject node . . . . . . . . . . . . . . . . . . . . . . . . . . .
+7.2.2 Elements of the subOrder node, Education verification attribute . . . . . . . .
+7.2.3 Elements of the subOrder node, Employment verification attribute . . . . . .
+7.2.4 Elements of the subOrder node, fmcsa crash inspection attribute . . . . . . .
+7.2.5 Elements of the subOrder node, MVR attribute . . . . . . . . . . . . . . . . .
+7.3 State Conversion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+5
+
+63
+63
+63
+63
+64
+65
+66
+66
+66
+
+Order Entry via XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+CONTENTS
+
+6
+
+Chapter 1
+Introduction
+This document is for developers integrating alternate order entry methods into the Accio Data
+platform. It may be provided to third parties who wish to automatically order from you, or you
+can use it to develop an alternative web-based ordering platform, to integrate into an applicant
+tracking system, or similar.
+
+7
+
+Order Entry via XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+CHAPTER 1. INTRODUCTION
+
+8
+
+Chapter 2
+Communication
+2.1
+
+SNI
+
+Communication with Accio Servers requires SNI (Server Name Identification) aware clients. Most
+modern clients support SNI, but some older software may not.
+
+2.2
+
+Ciphers
+
+Communication with Accio Servers require modern communication ciphers. This may limit the
+ability of older clients and servers in older environments to connect to the Accio Servers. Some
+environments like Java 6, Java 7, windows XP, and the like, may not support modern ciphers.
+
+2.2.1
+
+Protocol
+
+Communication with Accio Data is via XML transferred over HTTPS. Documents are posted to
+the Accio Data server with a Content-Type of text/xml and are returned to you with the same
+Content-Type.
+Files are posted to the URL for the server of the company you’re working with. If you’re integrating with more than one company using Accio Data ’s platform, you will interact with each on
+that company’s server URL. XML files are posted to the server at the URL
+https://somecompany.acciodata.com/c/p/researcherxml
+
+The URL domain name may be .acciodata.com, .bgsecured.com, or a custom URL.
+
+The XML file sent to Accio Data has the following major components :
+• login : Your account information
+
+9
+
+Order Entry via XML
+
+CHAPTER 2. COMMUNICATION
+
+• mode : PROD , DRAFT or TEST (defaults to TEST if not specified)
+• placeOrder : place an order (1 to 50 may be attached)
+• addToOrder : add to an existing order
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+10
+
+Order Entry via XML
+
+2.2.2
+
+CHAPTER 2. COMMUNICATION
+
+Sample Code - Sending XML to Accio Data - C#
+
+This is an example application which can be used to send an XML order over to Accio Data from
+the command line.
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net;
+using System.Web;
+using System.IO;
+
+namespace send_xmltoURL
+{
+class Program
+{
+static void usage()
+{
+System.Console.WriteLine(
+@"
+Usage:
+send_xmltoURL <server>:[port] <xml file> [url]
+<required>, [optional]
+example:
+send_xmltoURL www.acciodata.com somefile.xml");
+}
+static void Main(string[] args)
+{
+if (args.Length < 2)
+{
+usage();
+return;
+}
+// set up the uri
+string [] hostname = args[0].Split(’:’);
+string server = hostname[0];
+string port = (hostname.Length > 1) ? hostname[1] : "443";
+string path = (args.Length > 2) ? args[2] : "/c/p/researcherxml";
+// set up a text/xml POST request
+UriBuilder ub = new UriBuilder("https", server, Convert.ToInt16(port), path);
+WebRequest request = WebRequest.Create(ub.Uri);
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+11
+
+Order Entry via XML
+
+CHAPTER 2. COMMUNICATION
+
+request.Method = "POST";
+request.ContentType = "text/xml";
+// read in the xml file
+StreamReader file = File.OpenText(args[1]);
+string data = file.ReadToEnd();
+file.Close();
+Byte[] byte_data = Encoding.UTF8.GetBytes(data);
+request.ContentLength = byte_data.Length;
+// post the data
+Stream data_stream = request.GetRequestStream();
+data_stream.Write(byte_data, 0, byte_data.Length);
+data_stream.Close();
+// get the response.
+WebResponse response = request.GetResponse();
+Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+data_stream = response.GetResponseStream();
+StreamReader reader = new StreamReader(data_stream);
+string response_string = reader.ReadToEnd();
+// display the content.
+Console.WriteLine(response_string);
+// clean up
+reader.Close();
+data_stream.Close();
+response.Close();
+}
+}
+}
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+12
+
+Order Entry via XML
+
+2.2.3
+
+CHAPTER 2. COMMUNICATION
+
+Sample Code - Sending XML to Accio Data - Visual Basic
+
+This is an example application which can be used to send an XML order over to Accio Data from
+the command line.
+Main.vb.txt
+Imports System
+Imports System.Collections.Generic
+Imports System.Linq
+Imports System.Text
+Imports System.Net
+Imports System.Web
+Imports System.IO
+
+Module Accio_vb_sample
+Sub usage()
+System.Console.WriteLine(vbCr & vbLf & "Usage:
+" & vbCr & vbLf &
+" send_xmltoURL <server>:[port] <xml file> [url]" & vbCr & vbLf &
+" <required>, [optional] " & vbCr & vbLf & "
+" & vbCr & vbLf &
+"example:" & vbCr & vbLf & " send_xmltoURL www.acciodata.com somefile.xml")
+End Sub
+Sub Main(ByVal args As String())
+If args.Length < 2 Then
+usage()
+Return
+End If
+’ set up the uri
+Dim hostname As String() = args(0).Split(":"c)
+Dim server As String = hostname(0)
+Dim port As String = If((hostname.Length > 1), hostname(1), "443")
+Dim path As String = If((args.Length > 2), args(2), "/c/p/researcherxml")
+’ set up a text/xml POST request
+Dim ub As New UriBuilder("https", server, Convert.ToInt16(port), path)
+Dim request As WebRequest = WebRequest.Create(ub.Uri)
+request.Method = "POST"
+request.ContentType = "text/xml"
+’ read in the xml file
+Dim xml_file As StreamReader = File.OpenText(args(1))
+Dim data As String = xml_file.ReadToEnd()
+xml_file.Close()
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+13
+
+Order Entry via XML
+
+CHAPTER 2. COMMUNICATION
+
+Dim byte_data As [Byte]() = Encoding.UTF8.GetBytes(data)
+request.ContentLength = byte_data.Length
+’ post the data
+Dim data_stream As Stream = request.GetRequestStream()
+data_stream.Write(byte_data, 0, byte_data.Length)
+data_stream.Close()
+’ get the response.
+Dim response As WebResponse = request.GetResponse()
+Console.WriteLine(DirectCast(response, HttpWebResponse).StatusDescription)
+data_stream = response.GetResponseStream()
+Dim reader As New StreamReader(data_stream)
+Dim response_string As String = reader.ReadToEnd()
+’ display the content.
+Console.WriteLine(response_string)
+’ clean up
+reader.Close()
+data_stream.Close()
+response.Close()
+End Sub
+
+End Module
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+14
+
+Order Entry via XML
+
+2.2.4
+
+CHAPTER 2. COMMUNICATION
+
+Sample Code - Sending XML to Accio Data - Ruby
+
+This is an example application which can be used to send an XML order over to Accio Data from
+the command line.
+#!/usr/local/bin/ruby
+USAGE = <<txt
+Usage:
+send_xmltoURL <server>:[port] <xml file> [postpath]
+<required>, [optional]
+example:
+send_xmltoURL orders.someplace.com somefile.xml
+txt
+def main()
+if(ARGV[0].to_s.empty? && ARGV[1].to_s.empty?)
+puts USAGE
+exit(1)
+end
+servername,port = ARGV[0].split(’:’)
+(port==nil) && port = 443
+xmlfilename = ARGV[1]
+postpath = ARGV[2]
+(postpath.to_s.length ==0) && (postpath = ’/c/p/researcherxml’)
+headers = {’Content-Type’=> ’text/xml’}
+require "cgi"
+require ’net/https’
+postdoc = File.read(xmlfilename) # read in XML file
+h = Net::HTTP.new(servername, port)
+h.use_ssl=true
+h.request_post(postpath, postdoc, headers) {|response|
+STDOUT.print(response.body) # show the response
+}
+end
+main()
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+15
+
+Order Entry via XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+CHAPTER 2. COMMUNICATION
+
+16
+
+Chapter 3
+Placing an order
+To place an order, the XML file you send to Accio Data will contain one root node named New Order
+containing two subnode types :
+• login : Your account information
+• mode : PROD—DRAFT—TEST
+• placeOrder : an order (more than one may be attached)
+
+3.1
+
+The Login Block
+
+<login>
+<account>accountname</account>
+<username>username</username>
+<password>yourpassword</password>
+</login>
+This block is required for all requests. The account, username, and password will be assigned
+to you by the company you’re working with following their administration guide’s instructions in
+the “Setting up Vendor (Researcher) Accounts” section.
+
+3.2
+
+The Mode Node
+
+<mode>PROD</mode>
+Mode defaults to TEST, valid values are TEST, DRAFT, or PROD. Transactions submitted in
+TEST mode go through the same validation as production mode posts, and return the same XML
+response document as PROD posts — order numbers and all. However, in TEST mode the orders
+are not committed.
+DRAFT mode orders will return XML to you the same as TEST or PROD mode, but like TEST
+mode orders will not be dispatched to suppliers. Unlike test mode, the order will show up in the
+system in draft mode. TEST mode orders don’t show up except via Screenings / Look Up Orders —
+if you have the order number — and can be committed and become production orders, or deleted
+through the Accio UI.
+
+17
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+When writing an integration, orders should be placed in TEST mode while testing your XML
+interface. Once you’re done with initial testing, move to DRAFT mode. Draft mode orders will
+persist on the remote system, allowing you to log in via the web interface and review the order to
+ensure that the XML you sent created the intended order.
+Before posting PROD mode orders, you should coordinate with your screening services provider
+to ensure that orders are appropriately discarded or processed as production orders.
+
+3.3
+
+The placeOrder Block
+
+<placeOrder number=‘‘123’’>
+
+number is optional, up to 256 characters. Quoted back
+with results where used
+<account>accountname</account> Optional, used if placing orders on behalf of
+<username>username</username>
+user, however order on behalf of is preferred
+<profile>profile</profile>
+Optional, a profile string
+<orderOnBehalfOf/>
+Optional block, identifies the ordering account and user
+<postBackInfo/>
+Optional block, info on where to post back status and results
+<orderInfo/>
+Optional block, info on person requesting the order
+<subject>...</subject> exactly one subject per placeOrder
+<package> A La Carte</package> Optional, defaults to A La Carte
+<subOrder type=’County_criminal’> ... </subOrder> any number >=1 may be included
+<image/> zero to many images per order
+<GenerateCrimsFromSubjectAddresses/>
+Optional autocrim, follow link for info
+<Cancel_out_of_scope_elements/>
+Optional, follow link for info
+<UseOrderingRequirements/>
+Optional, follow link for info
+<Upgrade_products_per_package/>
+Optional, follow link for info
+<Delete_disallowed_products/>
+Optional, follow link for info
+<Add_AKAs_from_AIM/>
+Optional, follow link for info
+<Expand AKAs to Suborders/> Optional, follow link for info
+<IncludeDefaultProducts/> Optional, follow link for info
+<IncludePreselectedProducts/> Optional, follow link for info
+<preselect all included products/>
+Optional, Draft mode only, follow link for info
+<SuppressApplicantPortalEmail/>
+Optional, follow link for info
+<SuppressDraftEmailNotice/>
+Optional, Draft mode only, follow link for info
+<SendApplicantInviteViaBoth/>
+Optional, follow link for info
+<SendApplicantInviteViaSMS/>
+Optional, follow link for info
+<SendApplicantInviteViaEMail/>
+Optional, follow link for info
+
+</placeOrder>
+When placing orders on behalf of another user, the system checks to make sure the user specified
+in the Login Block has permission to place orders on the users behalf. If the user specified in the
+Login Block does not have permission, the following error is generated
+<errortext>
+a placeOrder/addToOrder is attempting to place the order on
+behalf of another user, but this account does not have sysop or parent privileges
+</errortext>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+18
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+When sending in orders, we recommend sending one order per XML post. This makes the
+debugging process easier if errors occur, and it also makes it easier to identify and separate out any
+bad orders.
+If you do send more than one order per post, orders will be processed in document order until
+all have been processed or the first error is found. Your confirmation XML document will confirm
+all placed orders and, if an error occurred, will indicate the type of error in an <error> XML node.
+Because the parser stops processing at the first error, you will never receive more than one error
+message in a response document.
+If using the number attribute on the placeOrder node, the number supplied must be an integer.
+This number will not be quoted back in the placeOrder response, but it will be quoted back in any
+results that are posted to your server in the <completeOrder> node as follows :
+<completeOrder number=’’123’’ remote_number=’’555444’’ ...>
+number is the number that you supplied when placing the order, and remote_number is the
+order number assigned in the remote system and quoted to you in the placeOrder response.
+The profile is not used internally by Accio, but can be used by those vendors receiving Accio
+xml however they see fit. When generating outbound Accio XML this value can be set on site setup
+under Vendor Configuration Ü Accio Integrated using the <Vendor Name> Profile field. You can
+also reach this setting from the vendor configuration page using the System Level variables gear
+icon at the bottom of the page.
+NOTE This is intended to be used by third party vendors as they see fit. Set this value as
+directed by the third party vendor.
+
+3.4
+
+The order on behalf of Block
+
+The placeOrder’s orderOnBehalfOf node may contain account and username nodes (both) or a
+match by field node. All three are allowed in which case account and username override match by field.
+If account is present username must also be present.
+The following values for match by field fieldname may be used:
+• primaryuser contact email
+• primaryuser contact name
+• primaryuser contact title
+• primaryuser contact telephone
+• primaryuser contact fax
+The matching text must be a complete match (not a partial match or a wildcard match) that
+identifies an account and user. Note that some values may identify more than one user in which
+case if the matches are all in the same account then the first match will be used, however if the list
+includes matches from more than one account an error response will be returned.
+An account and username may also be present at the placeOrder or addToOrder level and will
+be supported for backward compatibility, however order on behalf of is preferred. If account and
+username are only supplied in the login node then the login user is the ordering user.
+<order_on_behalf_of>
+Optional, preferred way to supply ordering account and username
+<account>someAccount</account>
+Optional, ordering account text
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+19
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<username>someUserName</username>
+Optional, ordering user text
+<match_by_field fieldname="someFieldName">someMatchFieldText</match_by_field>
+Optional, used to match a user by criteria from the account record
+</order_on_behalf_of>
+
+3.5
+
+The postBackInfo Block
+
+The placeOrder’s postBackInfo node is an optional block which contains information on where to
+post back XML status and results of the order. It also contains what type of status and results to
+post back.
+All allowable postBackInfo nodes are shown in the example below.
+
+<postBackInfo>
+<authentication> HTTP authorization Info
+<type>Basic</type> The type of authentication, ‘‘Basic’’ or ‘‘Token’’
+<username>authuser</username> The username to use in the auth header for ‘‘Basic’’, or the
+<password>authpassword</password> The password to use in the auth header for ‘‘Basic, or t
+</authentication>
+<URL>https://somedomainname/somepath/someprogram</URL> exactly one URL per postBackInfo
+<guID>styue786tghYTR4567</guID>
+exactly one guID per postBackInfo
+<account>someAccount</account>
+Optional, account text
+<username>someUserName</username>
+Optional, username text
+<request_source>someATSName</request_source> Optional, text letters and numbers only
+<postback_types>ICR::OCR</postback_types> Optional, see definition
+</postBackInfo>
+Note: The password in the authentication block is XML encoded. The &, <, >, ”, and ’ characters will be encoded with &amp; &lt; &gt; &quote; and &apos;. These characters must be decoded
+if compared to the unencoded password.
+If the postBackInfo node is supplied, it must contain one URL node and one guID node both
+with values. The URL node must contain the full URL to where to post back order status and results
+XML. The guID node contains the text which will be placed in the account, username, and password
+nodes of the status and results XML posts to the URL.
+• If the account node is available and has a value, this value, instead of the guID value, will be
+used in the account node of the status and results XML posts the URL.
+• If the username node is available and has a value, this value, instead of the guID value, will
+be used in the username node of the status and results XML posts the URL.
+• The value used in request source node is used to tell which service is placing the order.
+The postback types node is used to define the type of status and results post backs to send to
+the URL. If this node is not available the default is to send all status and result XML post backs to
+the URL. One or more of the following types may be used separated by 2 colons “::”.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+20
+
+Order Entry via XML
+
+Type Code
+IPV
+ICR
+OCR
+IPC
+EXP
+IPR
+
+CNF
+
+DEL
+PDF
+PDI
+RDC
+CETA
+NONE
+
+CHAPTER 3. PLACING AN ORDER
+
+Post Back XML
+Send the in progress vendor status XML when the order goes from
+DRAFT to an actual order in the system.
+Send component completion XML when each component of the
+order completes.
+Send complete order XML when the order completes.
+Send waiting for applicant status XML when the order is placed
+through the invitation.
+Send invitation expired notification when a candidate invitation
+expires.
+Send waiting for recruiter status XML when the order is placed
+through the invitation and completed in a draft mode waiting for
+the recruiter to complete.
+Send the in-progress vendor status XML when the order goes from
+an invitation being completed by the applicant or completed by the
+recruiter when the order is placed through the invitation and
+completed in a draft mode.
+Sent if the order is deleted or canceled. Note: This is for the order,
+not an individual component.
+Send a pdf of the completed report and no other other information
+back when the order is complete.
+Include a pdf along with XML order details of the completed report
+back when the order is complete.
+Send a post back every time the report disposition changed.
+Send component level ETA updates.
+Use this, by itself, if for some reason you are sending a post back
+block and don’t want post backs.
+
+If the receiving end requires the use of HTTP Basic Authorization, the credentials to use may
+be passed in the “authorization” block inside the “postBackInfo” block. This block contains the
+following nodes.
+Node
+type
+username
+password
+
+3.5.1
+
+Contents Description
+The type of HTTP authorization header to send, currently only
+“Basic” is supported.
+The user name to be sent in the HTTP Basic Authorization header.
+The password to be sent in the HTTP Basic Authorization header.
+
+Disable postBackInfo block
+
+The system can be configured to ignore the contents of the postBackInfo block. Setting the “Ignore
+Postback Info Block” system variable at the site, price book, account, or package level to “Yes” will
+result int he system ignoring the postBackInfo block as if it has not been include dint he XML.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+21
+
+Order Entry via XML
+
+3.6
+
+CHAPTER 3. PLACING AN ORDER
+
+The orderInfo Block
+
+The placeOrder’s orderInfo node contains miscellaneous information about the order such as information about the person requesting the order. Many of these miscellaneous items can have default
+settings on the Accio Data server, and where they do setting the use_default attribute to Y will
+instruct us to pull the default information from our database. use_default setting is only applied
+if no value is specified for the element. If a value is specified it will be honored. Not specifying
+use_default or a value for the element will result in empty nodes in the order for these fields.
+All allowable orderInfo nodes are shown in the example below. use_default is indicated for
+the nodes that support this feature.
+<orderInfo>
+Optional block, info on person requesting the order
+<requester_name use_default=’Y’/>
+Optional, 50 characters, name of person ordering
+<requester_phone use_default=’Y’/>
+Optional, 50 characters, phone of person ordering
+<requester_fax use_default=’Y’/>
+Optional, 50 characters, fax of person ordering
+<requester_email use_default=’Y’/>
+Optional, one address or a colon separated list
+<requester_billingdata/>
+Optional, 128 characters, free format, will
+appear on invoices
+<requester_billingdata2/>
+Optional, 128 characters, free format
+<requester_billingdata3/>
+Optional, 128 characters, free format
+<requester_billingdata4/>
+Optional, 128 characters, free format
+<requester_billingdata5/>
+Optional, 128 characters, free format
+<requester_billingdata6/>
+Optional, 128 characters, free format
+<requester_billingdata7/>
+Optional, 128 characters, free format
+<requester_billingdata8/>
+Optional, 128 characters, free format
+<requester_billingdata9/>
+Optional, 128 characters, free format
+<requester_billingdata10/>
+Optional, 128 characters, free format
+</orderInfo>
+
+3.7
+
+The Subject Block
+
+The subject block contains identifying information on the subject of this order. An example
+subject block with all possible subject data fields follows:
+<subject>
+<name_first>John </name_first>
+letters, dashes, and apostrophes only
+<name_middle>Q </name_middle>
+letters, dashes, and apostrophes only
+<name_last>Smith </name_last>
+letters, dashes, and apostrophes only
+<has_no_middle_name>U </has_no_middle_name> Y, N or U only
+<name_type>Current </name_type>
+Current, Previous, Maiden, or Alias only
+<name_suffix>IV </name_suffix>
+free form
+<name_lastmaiden>William </name_lastmaiden>
+optional, letters, dashes, and apostrophes only
+<name_mother_maiden>Doe </name_mother_maiden>
+optional, letters, dashes, and apostrophes only
+<name_complete_mother>Jane Smith</name_complete_mother> optional, free form
+<name_complete_father>John Smith</name_complete_father> optional, free form
+<alias>
+zero to 10 aliases may be specified
+<name_first>James </name_first>
+letters, dashes, and apostrophes only
+<name_middle></name_middle>
+letters, dashes, and apostrophes only
+<name_last>Smith </name_last>
+letters, dashes, and apostrophes only
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+22
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<name_suffix></name_suffix>
+free form
+<has_no_middle_name>U </has_no_middle_name> Y, N or U only
+<name_type>Current </name_type>
+Current, Previous, Maiden, or Alias only
+</alias>
+<ssn>112111234 </ssn>
+no separators, integer (short #s left zero filled)
+<country>USA </country>
+Optional. should be blank or USA for US addresses.
+ISO 3166-1 Alpha-3 codes preferred; Max 256 chars
+<address>123 Main Street </address>
+<city>Austin </city>
+<state>TX </state>
+See ‘State Conversion’
+<jobstate>CA </jobstate>
+See ‘State Conversion’
+<jobcity>Sacramento </jobcity>
+<jobzip>94203 </jobzip>
+<jobtitle>Office Worker </jobtitle>
+<zip>78731 </zip>
+<FCRAPurpose>Employment by Hire or Contract </FCRAPurpose> Contact your screener for a list
+<prioraddress>
+Optional, zero to many can be listed
+Shows as Candidate Supplied Addr. Hist. on report
+<from>19990512</from>
+Must be YYYYMMDD
+<to>20020113</to>
+Must be YYYYMMDD
+<address>123 Main Street </address>
+<city>Austin </city>
+<state>TX </state>
+<county>Travis </county>
+optional
+<zip>78731 </zip>
+</prioraddress>
+<dob>19740301 </dob>
+YYYYMMDD. Unknown portions may be
+zeroed. E.G. 19740300 if day is unknown.
+<email>jane.doe@noemail.com</email>
+optional
+<race>U </race>
+U-unknown A-Asian B-Black H-Hispanic I-Indian
+<gender>M </gender>
+M, F, U, or blank
+<dlnum>0123456789 </dlnum>
+optional
+<dlcountry>USA </dlcountry>
+optional, ISO 3166-1 Alpha-3 codes preferred;
+Max 50 chars
+<dlstate>NJ </dlstate>
+optional, 2 char USA state. See ‘State Conversion’
+<intldlstate>Ontario </intldlstate>
+optional, non-USA state/province
+<citizenship_status>Citizen </citizenship_status> Needed for EVerify:
+Citizen
+Lawful Permanent Resident
+Noncitizen Authorized To Work
+<employment_status/>
+not required - for client use as desired
+<phone_number>555-555-1212 </phone_number> may not be present
+<has_admitted_convictions/>
+Y|N. Default’s to ‘‘D’’ if not selected
+<admitted_conviction_details/>
+Should only be present if Y above
+<manager_notes_title>
+optional
+<manager_notes>
+optional
+<client_notes/>
+Notes entered by the client. free-form, no char limit
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+23
+
+Order Entry via XML
+
+<client_disposition/>
+<ApplicantID/>
+<piifromapplicant/>
+<portalfromapplicant/>
+<require_ews/>
+<applicantdocupload/>
+<RequisitionNumber/>
+<subjectRequestsReportCopy/>
+
+CHAPTER 3. PLACING AN ORDER
+
+Disposition entered by the client (Report disposition)
+free-form, 128 characters max
+Optional. for customer use. Max 128 characters
+optional if Y send email to collect PII
+optional if Y send to applicant to complete
+optional if Y require electronic signature
+optional if Y send to applicant to upload required
+documents if any
+Optional. for customer use. Max 32 characters
+Optional. If Y, send email to applicant when complete
+
+<quoteback_1>WSDF347865RR </quoteback_1>
+<quoteback_2>1239876540 </quoteback_2>
+<quoteback_3>YY7654902736TTT </quoteback_3>
+
+optional quote back
+optional quote back
+optional quote back
+
+<intlgovtid/>
+Optional - NON-US Government ID number
+<intlgovtid_descr/> Description of above
+<country_of_birth/>
+<state_of_birth/>
+<city_of_birth/>
+<applicant_pays/>
+<rent_monthly/>
+<income_monthly/>
+
+Optional. ISO 3166-1 Alpha-3 codes preferred; Max 256 chars
+Optional. Max 256 characters
+Optional. Max 128 characters
+Optional. If Y, applicant pays for the order
+Optional
+Optional
+
+</subject>
+NOTE Although the ‘require ews’ is optional, the system will set it to ‘Y’ if the node is missing
+and either the ‘piifromapplicant’ or ‘portalfromapplicant’ are set to ‘Y’. You will need to explicitly
+set ‘require ews’ to ‘N’ in order to disable the Release Form when also requesting ‘piifromapplicant’
+or ‘portalfromapplicant’.
+
+3.8
+
+The subOrder Block
+
+The subOrder’s type dictates the subnodes of the subOrder block.
+<subOrder type=’County_criminal’>
+...
+subOrder type-specific xml nodes
+...
+</subOrder>
+</placeOrder>
+NOTE: It is possible to provide a “number” attribute for a subOrder for orders in
+PROD mode. The order must also not use <portalfromapplicant>. If the order
+is sent in DRAFT mode or using <portalfromapplicant>, the number will not be
+maintained as the subOrders are subject to change.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+24
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+Valid subOrder types have a link to sample XML and are as follows :
+• add2crim7yr – Address history to seven year county criminal history
+• add2crim10yr – Address history to ten year county criminal history
+• add2statewidecrim7yr – Address history to seven year statewide criminal history
+• add2statewidecrim10yr – Address history to ten year statewide criminal history
+• Adult_Abuse – Adult Abuse Registry Search
+• adverse_action_process – Adverse Action Process
+• AIM – Address History Search
+• AIM2 – Address History Search second Source
+• CBSV – Consent Based SSN verification with the SSA
+• CDL_Employment_verification – Commercial Drivers’ license employment verification
+• CDLIS – Commercial Drivers’ license verification
+• Civil_County_criminal_lower – Lower Civil county court search (nothing to do with criminal,
+misnomer)
+• Civil_County_criminal_upper – Upper Civil county court search (nothing to do with criminal,
+misnomer)
+• County_criminal – County criminal courthouse search
+• cna_registry – Certified nurses aid registry search
+• Credential_verification – Professional License or credentials verification
+• Credit – Employment Credit Report
+• Credit_std – Standard Credit Report
+• Credit_tri – TriMerged Credit Report
+• cp_customproductcode – Custom Product
+• Drug_screen – Drug screen
+• Drug_Alcohol_screen – (not supported) Drug and alcohol screen
+• Drug_schedule – (not supported) Online scheduled drug screen
+• Education_verification – Education verification
+• Employment_verification – Employment verification
+• Everify – Electronically verify the employment eligibility of newly hired employees
+• evictions_check – Check eviction history
+• FACIS_L1 – Medical Sanctions History Level 1
+• FACIS_L2 – Medical Sanctions History Level 2
+• FACIS – Medical Sanctions History Level 3
+• FACIS_L1M – Medical Sanctions History Level 1m
+• FACIS_L1MV – Medical Sanctions History Level 1m (w/verification)
+• FACIS_L1_WLV – Medical Sanctions History Level 1 (w/ license verification)
+• FACIS_L2_WLV – Medical Sanctions History Level 2 (w/ license verification)
+• FACIS_L3_WLV – Medical Sanctions History Level 3 (w/ license verification)
+• FACIS_L1V – Medical Sanctions History Level 1 (w/verification)
+• FACIS_L2V – Medical Sanctions History Level 2 (w/verification)
+• FACIS_L3V – Medical Sanctions History Level 3 (w/verification)
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+25
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+• FACIS_L1V_WLV – Medical Sanctions History Level 1 (w/verification and license verification)
+• FACIS_L2V_WLV– Medical Sanctions History Level 2 (w/verification and license verification)
+• FACIS_L3V_WLV– Medical Sanctions History Level 3 (w/verification and license verification)
+• FACIS_ALIAS_L1 – Medical Sanctions History Alias Level 1
+• FACIS_ALIAS_L2 – Medical Sanctions History Alias Level 2
+• FACIS_ALIAS – Medical Sanctions History Alias Level 3
+• FACIS_ALIAS_L1_WLV – Medical Sanctions History Alias Level 1 (w/ license verification)
+• FACIS_ALIAS_L2_WLV – Medical Sanctions History Alias Level 2 (w/ license verification)
+• FACIS_ALIAS_L3_WLV – Medical Sanctions History Alias Level 3 (w/ license verification)
+• FACIS_ALIAS_L1V – Medical Sanctions History Alias Level 1 (w/verification)
+• FACIS_ALIAS_L2V – Medical Sanctions History Alias Level 2 (w/verification)
+• FACIS_ALIAS_L3V – Medical Sanctions History Alias Level 3 (w/verification)
+• FACIS_ALIAS_L1V_WLV – Medical Sanctions History Alias Level 1 (w/verification and license verification)
+• FACIS_ALIAS_L2V_WLV – Medical Sanctions History Alias Level 2 (w/verification and license verification)
+• FACIS_ALIAS_L3V_WLV – Medical Sanctions History Alias Level 3 (w/verification and license verification)
+• FACIS_L1_2 – Medical Sanctions History Level 1 2
+• FACIS_L2_2 – Medical Sanctions History Level 2 2
+• FACIS_2 – Medical Sanctions History Level 3 2
+• FACIS_L1V_2 – Medical Sanctions History Level 1 (w/verification) 2
+• FACIS_L2V_2 – Medical Sanctions History Level 2 (w/verification) 2
+• FACIS_L1M_2 – Medical Sanctions History Level 1m 2
+• FACIS_L1MV_2 – Medical Sanctions History Level 1m (w/verification) 2
+• FACIS_L3V_2 – Medical Sanctions History Level 3 (w/verification) 2
+• OFAC – Office of Foreign Assets Control search)
+• Federal_criminal_bankruptcy – Federal bankruptcy court search (nothing to do with criminal,
+misnomer)
+• Federal_criminal_civil – Federal civil courthouse search (nothing to do with criminal, misnomer)
+• Federal_criminal_criminal – Federal criminal courthouse search
+• Federal_statewide_bankruptcy – Federal Statewide bankruptcy court search
+• Federal_statewide_civil – Federal Statewide civil courthouse search
+• Federal_statewide_criminal – Federal Statewide criminal courthouse search
+• fmcsa_crash_inspection – Federal Motor Carrier Safety Administration Crash Inspection Report
+• GAP – Employment gap verification
+• globalreport – Terrorist watch list search
+• GSA – General Sanctions Administration list check
+• i9verification – Form I-9 verification
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+26
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+• International_Education_verification – International Education verification
+• International_Employment_verification – International Employment verification
+• Level2_Employment_verification – Level2 Employment verification
+• Level3_Employment_verification – Level3 Employment verification
+• mail_completereport – Mail completed report
+• Metro_County_criminal – (not supported) Metro county criminal search
+• monitor_national_criminal – Recurring multijurisdictional criminal search. Note: this product
+must be ordered with an order that also includes a USOneSearch or USAliasSearch
+• MVR – Drivers’ license history
+• National Criminal – National/multistate criminal database search
+• National Criminal2 – National/multistate criminal database search second Source
+• National Federal Criminal – National federal criminal database search
+• National Alias Criminal – National/multistate criminal with alias database search
+• National Alias Criminal2 – National/multistate criminal with alias database search second
+Source
+• nursing_license – Nursing license check
+• OIG – Office of Inspector General list check
+• Professional_Reference_check – Call a person and check a reference
+• Reference_check – Call a person and check a reference
+• safety1st – Appriss product for organizations that does an AIM and criminal background check
+• SDN – Specially Designated Nationals database search
+• Sex_Offender – Statewide Sex offender search. Could be a database or a repository search
+• sex_offender_nationwide – Multistate sex offender database
+• SSN – SSN verification. E.G. is it validly issued, when & where, and is there a death record
+associated with it?
+• Statewide_civil – Statewide civil repository search
+• Statewide_criminal – Statewide criminal repository search
+• Statewide_criminal_db – Statewide criminal database search
+• Trac – Credit based address history (credit header)
+• Trac_to_7year_criminal – Credit header pulled, 7 year criminal history searched, credit header
+and criminal history bundled and returned.
+• Trac_to_3year_criminal – As above with 3 year history
+• Trac_to_Federal_criminal – 7 year address history to Federal district criminal search
+• USMA_retail_theft_screen – (not supported) history
+• Workers Compensation – Workers’ compensation history search (single state)
+
+3.8.1
+
+Address History to 7 Year County Criminal Order XML
+
+<subOrder type=’add2crim7yr’>
+</subOrder>
+
+3.8.2
+
+Address History to 10 Year County Criminal Order XML
+
+<subOrder type=’add2crim10yr’>
+</subOrder>
+
+3.8.3
+
+Address History to 7 Year Statewide Criminal Order XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+27
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<subOrder type=’add2statewidecrim7yr’>
+</subOrder>
+
+3.8.4
+
+Address History to 10 Year Statewide Criminal Order XML
+
+<subOrder type=’add2statewidecrim10yr’>
+</subOrder>
+
+3.8.5
+
+Address Information Report Order XML
+
+<subOrder type=’AIM’>
+</subOrder>
+<subOrder type=’AIM2’>
+</subOrder>
+
+3.8.6
+
+Adult Abuse Order XML
+
+<subOrder type=’Adult Abuse’>
+<state>TX </state>
+</subOrder>
+
+3.8.7
+
+Adverse Action Process Order XML
+
+<subOrder type=’adverse action process’>
+</subOrder>
+
+3.8.8
+
+Consent Based SSN verification with the SSA Order XML
+
+<subOrder type=’CBSV’>
+</subOrder>
+
+3.8.9
+
+Commercial Drivers’ License Verification Order XML
+
+<subOrder type=’CDLIS’>
+</subOrder>
+
+3.8.10
+
+CDL Employment Verification Order XML
+
+<subOrder type=’CDL Employment verification’>
+<company_name>ABCCO </company_name>
+<position>TEST ASSISTANT </position>
+<contact>JOHN SHARP </contact>
+<email>john@acme.com </email>
+<phone_number>555-555-1212 </phone_number>
+<phone_extension>123 </phone_extension>
+<start_date>20000101 </start_date>
+Must be YYYYMMDD
+<end_date>20020101 </end_date>
+Must be YYYYMMDD
+<income>111.00 </income>
+<income_type>hourly </income_type>
+hourly, weekly, monthly, semimonthly,
+biweekly, annually
+<reason_for_leaving>this is an optional field</reason_for_leaving>
+<isdot/>
+Y|N - optional, defaults to N if omitted
+<address1>123 main street </address1>
+<address2></address2>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+28
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<city>AUSTIN </city>
+<state>TX </state>
+See ‘State Conversion’
+<zip>78731 </zip>
+<comments>Some kind of comment optional </comments>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+<salarykey>1234 </salarykey>
+</subOrder>
+
+3.8.11
+
+Civil County Lower Order XML
+
+<subOrder type=’Civil County criminal lower’>
+<county>Travis </county>
+<state>TX </state>
+<years_conviction>7 </years_conviction>
+<years_nonconviction>7 </years_nonconviction>
+<notes_to_supplier>Please search </notes_to_supplier>
+
+optional
+optional
+optional,
+free-form,
+65000 char limit
+
+</subOrder>
+
+3.8.12
+
+Civil County Upper Order XML
+
+<subOrder type=’Civil County criminal upper’>
+<county>Travis </county>
+<state>TX </state>
+<years_conviction>7 </years_conviction>
+<years_nonconviction>7 </years_nonconviction>
+<notes_to_supplier>Please search </notes_to_supplier>
+
+</subOrder>
+
+3.8.13
+
+County Criminal Order XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+29
+
+optional
+optional
+optional,
+free-form,
+65000 char limit
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<subOrder type=’County criminal’>
+<county>Travis </county>
+<state>TX </state>
+<years_conviction>7 </years_conviction>
+optional
+<years_nonconviction>7 </years_nonconviction>
+optional
+<searchtype>both </searchtype> one of: felony, misdemeanor, both
+<notes_to_supplier>Please search </notes_to_supplier> optional,
+free-form,
+65000 char limit
+</subOrder>
+
+3.8.14
+
+Certified Nurses Aid Registry Order XML
+
+<subOrder type=’cna registry’>
+<state>TX </state>
+<notes_to_supplier>Provide Docket Copies for Felonies </notes_to_supplier>optional,
+free-form,
+65000 char limit
+</subOrder>
+
+3.8.15
+
+Credential Verification Order XML
+
+<subOrder type=’Credential verification’>
+<description>CPA </description>
+<state>TX </state>
+optional. See ‘State Conversion’
+<organization_name>CPAs of Texas</organization_name>
+<license_number>CPA1234</license_number>
+<date_received>20010201</date_received> Must be YYYYMMDD
+<expiration_date>20110201</expiration_date> Must be YYYYMMDD
+<comments>Some kind of comment optional </comments>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+</subOrder>
+
+3.8.16
+
+Custom Product Order XML
+
+<subOrder type=’cp customproductcode’> customproductcode is configurable by the Accio client
+<address>123 Main Street</address> optional
+<city>Austin</city> optional
+<country>USA</country> optional ISO 3166-1 Alpha-3 codes preferred; Max 256 chars
+<county>Travis</county> optional
+<dlnum>99990000</dlnum> optional
+<end_date>20100101</end_date> optional Must be YYYYMMDD
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+30
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<intlgovtid>99990000</intlgovtid> optional
+<intlgovtid_descr>Identity Card</intlgovtid_descr> optional
+<island>Bora Bora</island> optional
+<license_issuer>TX</license_issuer> optional
+<license_number>99990000</license_number> optional
+<roll_number>999AAA00</roll_number> optional
+<searchdescription>Text field</searchdescription> optional
+<state>TX</state> optional
+<start_date>20000101</start_date>optional Must be YYYYMMDD
+<tax_id_number>12345</tax_id_number> optional
+<chain_of_custody>0103350542</chain_of_custody> optional
+<specimen_collection_date>2008-04-16 Em:pt</specimen_collection_date> optional
+<donorId>275969105</donorId> optional
+<specimenId>3787652Y</specimenId> optional
+<sampleType>urine</sampleType> optional
+<DOT>N</DOT> optional Y|N
+<examination_date>20100101</examination_date> optional Must be YYYYMMDD
+<physicalId>153245</physicalId> optional
+</subOrder>
+
+3.8.17
+
+Drug Screen Order XML
+
+<subOrder type=’Drug screen’>
+<chain_of_custody>0103350542</chain_of_custody>
+<specimen_collection_date>2008-04-16 Em:pt</specimen_collection_date>
+<donorId>275969105</donorId>
+<specimenId>3787652Y</specimenId>
+<sampleType>urine</sampleType>
+<DOT>N</DOT> Y|N
+</subOrder>
+
+3.8.18
+
+Education Verification Order XML
+
+<subOrder type=’Education verification’>
+<school_name>Johns Hopkins </school_name>
+<campus>Berkeley Teaching Hospital </campus>
+<major>Orthopedic resident </major>
+<degree>M.D. </degree>
+<name_first>Sarah </name_first>
+<name_last>Smith </name_last>
+<GPA></GPA>
+<student_id_number></student_id_number>
+<address1></address1>
+<address2></address2>
+<city></city>
+<state></state> See ‘State Conversion’
+<zip></zip>
+<country></country> Not required, normally blank.
+If the value is not blank or "USA", this product is converted to
+International Education/Employment (when it’s available in the package)
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+31
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+ISO 3166-1 Alpha-3 codes preferred; Max 128 chars
+<attended_from>19990512</attended_from>Must be YYYYMMDD
+<attended_to>20060513</attended_to>
+Must be YYYYMMDD
+<transcript>N</transcript> Y|N
+<graduated>Y</graduated>
+Y|N
+<highest_achieved>Y</highest_achieved>
+Y|N
+<currently_enrolled>Y</currently_enrolled>
+Y|N
+<graduation_date></graduation_date>
+<phone>555-555-1212</phone>
+<levelCompleted/>
+restricted use
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+<comments>Some kind of comment optional </comments>
+</subOrder>
+
+3.8.19
+
+International Education Verification Order XML
+
+<subOrder type=’International Education verification’>
+<school_name>Oxford Business College </school_name>
+<major>Business Administration </major>
+<degree>MBA </degree>
+<GPA></GPA>
+<name_last>Accio</name_last>
+<name_first>Joe</name_first>
+<highest_achieved></highest_achieved>
+<currently_enrolled>Y</currently_enrolled>
+<student_id_number></student_id_number>
+<address1>65 George Street</address1>
+<address2></address2>
+<city>Oxford</city>
+<state>Oxford</state>
+<intlzip>OX1 2BQ</intlzip>
+<country>UK</country> ISO 3166-1 Alpha-3 codes preferred; Max 128 chars
+<attended_from>19990512</attended_from>Must be YYYYMMDD
+<attended_to>20060513</attended_to>
+Must be YYYYMMDD
+<transcript>N</transcript> Y|N
+<graduated>Y</graduated>
+Y|N
+<graduation_date></graduation_date>
+<phone>+33 1 49 60 19 60</phone>
+<levelCompleted/>
+restricted use
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+32
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<roll_number/>
+may be required for some countries
+<comments>Some kind of comment optional </comments>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+</subOrder>
+
+3.8.20
+
+Employment Credit Report Order XML
+
+<subOrder type=’Credit’>
+</subOrder>
+
+3.8.21
+
+Employment Verification Order XML
+
+<subOrder type=’Employment verification’>
+<company_name>ABCCO </company_name>
+<position>TEST ASSISTANT </position>
+<contact>JOHN SHARP </contact>
+<email>john@acme.com </email>
+<phone_number>555-555-1212 </phone_number>
+<phone_extension>123 </phone_extension>
+<contact_current_employer>N </contact_current_employer> Y|N - optional
+<start_date>20000101 </start_date> Must be YYYYMMDD
+<end_date>20020101 </end_date> Must be YYYYMMDD
+<income>111.00 </income>
+<income_type>hourly </income_type>
+hourly, weekly, monthly, semimonthly,
+biweekly, annually
+<reason_for_leaving>this is an optional field</reason_for_leaving>
+<address1>123 main street </address1>
+<address2></address2>
+<city>AUSTIN </city>
+<state>TX </state> See ‘State Conversion’
+<zip>78731 </zip>
+<country></country> Not required, normally blank.
+If the value is not blank or "USA", this product is converted to
+International Education/Employment (when it’s available in the package)
+ISO 3166-1 Alpha-3 codes preferred;Max 128 chars
+<is_alternate>N </is_alternate> Y|N - optional
+<company_web_address/>
+<supervisor/>
+<supervisor_phone/>
+<comments>Some kind of comment optional </comments>
+<question>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+33
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+<salarykey>1234 </salarykey>
+</subOrder>
+
+3.8.22
+
+Level2 Employment Verification Order XML
+
+<subOrder type=’Level2 Employment verification’>
+<company_name>ABCCO </company_name>
+<position>TEST ASSISTANT </position>
+<contact>JOHN SHARP </contact>
+<email>john@acme.com </email>
+<phone_number>555-555-1212 </phone_number>
+<phone_extension>123 </phone_extension>
+<contact_current_employer>N </contact_current_employer> Y|N - optional
+<start_date>20000101 </start_date> Must be YYYYMMDD
+<end_date>20020101 </end_date> Must be YYYYMMDD
+<income>111.00 </income>
+<income_type>hourly </income_type>
+hourly, weekly, monthly, semimonthly,
+biweekly, annually
+<reason_for_leaving>this is an optional field</reason_for_leaving>
+<address1>123 main street </address1>
+<address2></address2>
+<city>AUSTIN </city>
+<state>TX </state>
+<zip>78731 </zip>
+<is_alternate>N </is_alternate> Y|N - optional
+<ismilitary/> Y|N - optional
+<company_web_address/>
+<supervisor/>
+<supervisor_phone/>
+<comments>Some kind of comment optional </comments>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+34
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+</question>
+<salarykey>1234 </salarykey>
+</subOrder>
+
+3.8.23
+
+Level3 Employment Verification Order XML
+
+<subOrder type=’Level3 Employment verification’>
+<company_name>ABCCO </company_name>
+<position>TEST ASSISTANT </position>
+<contact>JOHN SHARP </contact>
+<email>john@acme.com </email>
+<phone_number>555-555-1212 </phone_number>
+<phone_extension>123 </phone_extension>
+<contact_current_employer>N </contact_current_employer> Y|N - optional
+<start_date>20000101 </start_date> Must be YYYYMMDD
+<end_date>20020101 </end_date> Must be YYYYMMDD
+<income>111.00 </income>
+<income_type>hourly </income_type>
+hourly, weekly, monthly, semimonthly,
+biweekly, annually
+<reason_for_leaving>this is an optional field</reason_for_leaving>
+<address1>123 main street </address1>
+<address2></address2>
+<city>AUSTIN </city>
+<state>TX </state>
+<zip>78731 </zip>
+<is_alternate>N </is_alternate> Y|N - optional
+<ismilitary/> Y|N - optional
+<company_web_address/>
+<supervisor/>
+<supervisor_phone/>
+<comments>Some kind of comment optional </comments>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+<salarykey>1234 </salarykey>
+</subOrder>
+
+3.8.24
+
+International Employment Verification Order XML
+
+<subOrder type=’International Employment verification’>
+<company_name>ABCCO </company_name>
+<position>TEST ASSISTANT </position>
+<contact>JOHN SHARP </contact>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+35
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<phone_number>555-555-1212 </phone_number>
+<phone_extension>123 </phone_extension>
+<contact_current_employer>N </contact_current_employer> Y|N - optional
+<start_date>20000101 </start_date> Must be YYYYMMDD
+<end_date>20020101 </end_date> Must be YYYYMMDD
+<income>111.00 </income>
+<income_type>hourly </income_type>
+hourly, weekly, monthly, semimonthly,
+biweekly, annually
+<reason_for_leaving>this is an optional field</reason_for_leaving>
+<address1>38 Holywell St </address1>
+<address2></address2>
+<city>Oxford </city>
+<intlstate>Oxford </intlstate>
+<intlzip>OX1 3SP </intlzip>
+<country>UK </country> ISO 3166-1 Alpha-3 codes preferred; Max 128 chars
+<is_alternate>N </is_alternate> Y|N - optional
+<comments>Some kind of comment optional </comments>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+<salarykey>1234 </salarykey>
+</subOrder>
+
+3.8.25
+
+I-9 Order XML
+
+<Accio_Order>
+<mode>PROD</mode>
+<login>
+<account>account</account>
+<username>admin</username>
+<password>passwd</password>
+</login>
+<placeOrder>
+<SuppressDraftEmailNotice/>
+<NoAdditionalXMLDirectives/>
+<orderInfo>
+<requester_name use_default="Y"/>
+<requester_phone use_default="Y"/>
+<requester_billingdata/>
+</orderInfo>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+36
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<subject>
+<name_last>Smith</name_last>
+<name_first>John</name_first>
+<email>John.Smith@DOMAIN.COM</email>
+</subject>
+<package>I9 hiddenpackage</package>
+<subOrder type="i9documentation" />
+</placeOrder>
+</Accio_Order>
+
+3.8.26
+
+EVerify Order XML
+
+<subOrder type=’Everify’>
+<hire_date>20081011 </hire_date> Must be YYYYMMDD
+<overdue_reason>1 </overdue_reason> See Below
+<overdue_reason_other/>
+<doc_type>28 </doc_type> See Below
+<doc_id>25 </doc_id>
+<listb_id>101 </listb_id> See Below
+<dmv_id_doc_number>M100000111110 </dmv_id_doc_number>
+<dmv_id_has_expiration>Y </dmv_id_has_expiration>
+<state_issuing_authority>IL </state_issuing_authority>
+<listc_id>1300 </listc_id> See Below
+<doc_exp_date>20160202 </doc_exp_date> Must be YYYYMMDD
+<alien_number>678510785 </alien_number>
+<i94number>3467925378 </i94number>
+<cardnumber>AAA1234567890 </cardnumber>
+<visanumber>76098654 </visanumber>
+<passportnumber>123456789 </passportnumber>
+<supportingdoc_id>1 </supportingdoc_id>
+<no_foreign_passport>N </no_foreign_passport>
+<country_issued_code>N/A </country_issued_code> ISO 3166-1 Alpha-3 codes preferred;
+Max 20 chars
+</subOrder>
+The doc type element can be one of the following:
+• 11
+• 12
+• 13
+• 17
+• 19
+• 24
+• 25
+• I-94
+• I-551
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+37
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+• I-766
+• LISTB,CDOCUMENTS
+• UNEXPIREDOREXPIREDU.S.PASSPORT
+• UNEXPIREDFOREIGNPASSPORTWITHI-94STAMP
+• UNEXPIREDFOREIGNPASSPORTWITHI-551STAMP
+The overdue reason element can be:
+• 1 - Audit revealed that new hire was not run
+• 2 - Awaiting social security number
+• 3 - Federal contractor verifying an existing employee
+• 4 - Other
+• 5 - Technical problems
+Citizenship Status Codes:
+• 4 - A citizen of the United States
+• 5 - A noncitizen national of the United States
+• 6 - A lawful permanent resident
+• 7 - A noncitizen authorized to work
+
+Citizen Status Document ID
+4
+1
+4
+2
+4
+3
+4
+4
+4
+5
+4
+6
+4
+7
+4
+9
+4
+10
+4
+11
+4
+12
+4
+8
+4
+21
+4
+22
+5
+1
+5
+2
+5
+3
+5
+4
+5
+5
+5
+6
+5
+7
+Continued on next page
+
+LIST B Document ID’s
+Document Type
+Driver’s license or ID card issued by a U.S. state or outlying possession
+ID card issued by a U.S. federal, state or local government agency
+School ID card
+Voter registration card
+U.S. military card or draft record
+Military dependent’s ID card
+U.S. Coast Guard Merchant Mariner Card
+Driver’s license issued by a Canadian government authority
+School record or report card (under age 18)
+Clinic, doctor or hospital record (under age 18)
+Day-care or nursery school record (under age 18)
+Native American tribal document
+Minor under age 18 without a List B document
+Special Placement
+Driver’s license or ID card issued by a U.S. state or outlying possession
+ID card issued by a U.S. federal, state or local government agency
+School ID card
+Voter registration card
+U.S. military card or draft record
+Military dependent’s ID card
+U.S. Coast Guard Merchant Mariner Card
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+38
+
+Order Entry via XML
+
+Citizen Status
+5
+5
+5
+5
+5
+5
+5
+6
+6
+6
+6
+6
+6
+6
+6
+6
+6
+6
+6
+6
+6
+7
+7
+7
+7
+7
+7
+7
+7
+7
+7
+7
+7
+7
+7
+
+Document ID
+9
+10
+11
+12
+8
+21
+22
+1
+2
+3
+4
+5
+6
+7
+9
+10
+11
+12
+8
+21
+22
+1
+2
+3
+4
+5
+6
+7
+9
+10
+11
+12
+8
+21
+22
+
+CHAPTER 3. PLACING AN ORDER
+
+Document Type
+Driver’s license issued by a Canadian government authority
+School record or report card (under age 18)
+Clinic, doctor or hospital record (under age 18)
+Day-care or nursery school record (under age 18)
+Native American tribal document
+Minor under age 18 without a List B document
+Special Placement
+Driver’s license or ID card issued by a U.S. state or outlying possession
+ID card issued by a U.S. federal, state or local government agency
+School ID card
+Voter registration card
+U.S. military card or draft record
+Military dependent’s ID card
+U.S. Coast Guard Merchant Mariner Card
+Driver’s license issued by a Canadian government authority
+School record or report card (under age 18)
+Clinic, doctor or hospital record (under age 18)
+Day-care or nursery school record (under age 18)
+Native American tribal document
+Minor under age 18 without a List B document
+Special Placement
+Driver’s license or ID card issued by a U.S. state or outlying possession
+ID card issued by a U.S. federal, state or local government agency
+School ID card
+Voter registration card
+U.S. military card or draft record
+Military dependent’s ID card
+U.S. Coast Guard Merchant Mariner Card
+Driver’s license issued by a Canadian government authority
+School record or report card (under age 18)
+Clinic, doctor or hospital record (under age 18)
+Day-care or nursery school record (under age 18)
+Native American tribal document
+Minor under age 18 without a List B document
+Special Placement
+
+LIST C Document ID’s
+Citizen Status Document ID
+Document Type
+4
+13
+Social Security Card
+4
+14
+Certification of Birth Abroad (Form FS-545)
+4
+15
+Certification of Report of Birth (Form DS-1350)
+4
+23
+Consular Report of Birth Abroad (Form FS-240)
+Continued on next page
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+39
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+Citizen Status
+4
+4
+4
+4
+
+Document ID
+16
+17
+18
+19
+
+4
+
+20
+
+5
+5
+5
+5
+5
+5
+5
+5
+
+13
+14
+15
+23
+16
+17
+18
+19
+
+5
+
+20
+
+6
+6
+6
+
+13
+17
+20
+
+7
+7
+7
+
+13
+17
+20
+
+Document Type
+U.S. birth certificate (original or certified copy)
+Native American tribal document
+U.S. Citizen ID Card (Form I-197)
+ID Card for Use of Resident Citizen
+in the United States (Form I-179)
+Employment authorization document issued
+by the U.S. Department of Homeland Security
+Social Security Card
+Certification of Birth Abroad (Form FS-545)
+Certification of Report of Birth (Form DS-1350)
+Consular Report of Birth Abroad (Form FS-240)
+U.S. birth certificate (original or certified copy)
+Native American tribal document
+U.S. Citizen ID Card (Form I-197)
+ID Card for Use of Resident Citizen
+in the United States (Form I-179)
+Employment authorization document issued
+by the U.S. Department of Homeland Security
+Social Security Card
+Native American tribal document
+Employment authorization document issued
+by the U.S. Department of Homeland Security
+Social Security Card
+Native American tribal document
+Employment authorization document issued
+by the U.S. Department of Homeland Security
+
+Other elements are free-form unless otherwise specified
+
+3.8.27
+
+Evictions Check Order XML
+
+<subOrder type=’evictions check’>
+<state>TX </state>
+</subOrder>
+
+3.8.28
+
+FMCSA Crash Inspection Order XML
+
+<subOrder type=’fmcsa crash inspection’>
+<dlnum>22222222 </dlnum>
+<dlstate>TX </dlstate>
+</subOrder>
+
+3.8.29
+
+Gap Verification Order XML
+
+<subOrder type=’GAP’>
+<start_date></start_date>Must be YYYYMMDD
+<end_date></end_date>
+Must be YYYYMMDD
+<reference_name>John Smith</reference_name>
+<reference_type>Neighbor</reference_type>
+<reference_phonenumber>555-555-1212</reference_phonenumber>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+40
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+</subOrder>
+
+3.8.30
+
+Medical Sanctions History Order XML (Level 3)
+
+<subOrder type=’FACIS’>
+</subOrder>
+
+3.8.31
+
+Medical Sanctions History Order XML (Level 3 - with verification)
+
+Verification request settings are set explicitly by request type
+<subOrder type=’FACIS L3V’>
+</subOrder>
+
+3.8.32
+
+Medical Sanctions History Order XML (Level 1)
+
+<subOrder type=’FACIS L1’>
+</subOrder>
+
+3.8.33
+
+Medical Sanctions History Order XML (Level 1 - with verification)
+
+Verification request settings are set explicitly by request type
+<subOrder type=’FACIS L1V’>
+</subOrder>
+
+3.8.34
+
+Medical Sanctions History Order XML (Level 1m)
+
+<subOrder type=’FACIS L1m’>
+</subOrder>
+
+3.8.35
+
+Medical Sanctions History Order XML (Level 1m - with verification)
+
+Verification request settings are set explicitly by request type
+<subOrder type=’FACIS L1mV’>
+</subOrder>
+
+3.8.36
+
+Medical Sanctions History Order XML (Level 2)
+
+<subOrder type=’FACIS L2’>
+<state>TX </state>
+</subOrder>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+41
+
+Order Entry via XML
+
+3.8.37
+
+CHAPTER 3. PLACING AN ORDER
+
+Medical Sanctions History Order XML (Level 2 - with verification)
+
+Verification request settings are set explicitly by request type
+<subOrder type=’FACIS L2V’>
+<state>TX </state>
+</subOrder>
+
+3.8.38
+
+Office of Foreign Assets Control Search
+
+Note: OFAC is no longer supported and has been replaced by SDN.
+
+3.8.39
+
+Federal Bankruptcy Court Order XML
+
+<subOrder type=’Federal criminal bankruptcy’>
+<county>NORTHERN </county> See info in the Federal Criminal section
+<state>TX </state>
+</subOrder>
+
+3.8.40
+
+Federal Civil Court Order XML
+
+<subOrder type=’Federal criminal civil’>
+<county>FEDERAL </county> See info in the Federal Criminal section
+<state>AK </state>
+<notes_to_supplier>Please search </notes_to_supplier> optional,
+free-form,
+65000 char limit
+</subOrder>
+
+3.8.41
+
+Federal Criminal Court Order XML
+
+<subOrder type=’Federal criminal criminal’>
+<county>Travis </county> See notes below
+<state>TX </state>
+<notes_to_supplier>Please search </notes_to_supplier>
+
+optional,
+free-form,
+65000 char limit
+
+</subOrder>
+For District-level Federal searches, Accio Data users will, by default, send the district name,
+which will be one of CENTRAL, EASTERN, MIDDLE, NORTHERN, SOUTHERN, WESTERN, or FEDERAL (for states with just one district). However, some Accio Data users will choose to send the
+county name instead, either should be considered valid.
+
+3.8.42
+
+Federal Statewide Bankruptcy Court Order XML
+
+<subOrder type=’Federal statewide bankruptcy’>
+<state>TX </state>
+<years_conviction>7 </years_conviction> optional
+<years_nonconviction>7 </years_nonconviction> optional
+</subOrder>
+
+3.8.43
+
+Federal Statewide Civil Court Order XML
+
+<subOrder type=’Federal statewide civil’>
+<state>TX </state>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+42
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<years_conviction>7 </years_conviction> optional
+<years_nonconviction>7 </years_nonconviction> optional
+<notes_to_supplier>Please search </notes_to_supplier> optional,
+free-form,
+65000 char limit
+</subOrder>
+
+3.8.44
+
+Federal Criminal Statewide Court Order XML
+
+<subOrder type=’Federal statewide criminal’>
+<state>TX </state>
+<years_conviction>7 </years_conviction> optional
+<years_nonconviction>7 </years_nonconviction> optional
+<notes_to_supplier>Please search </notes_to_supplier> optional,
+free-form,
+65000 char limit
+</subOrder>
+
+3.8.45
+
+General Sanctions Administration List Check Order XML
+
+<subOrder type=’GSA’>
+</subOrder>
+
+3.8.46
+
+Global Terrorist Watch List
+
+<subOrder type=’globalreport’>
+</subOrder>
+
+3.8.47
+
+Form I-9 Verification Order XML
+
+<subOrder type=’i9verification’>
+<citizenship_status></citizenship_status>
+</subOrder>
+
+3.8.48
+
+Mail Completed Report Order XML
+
+<subOrder type=’mail_completereport’>
+</subOrder>
+
+3.8.49
+
+Monitor National (Multijurisdictional) Criminal Report Order XML
+
+<subOrder type=’monitor national criminal’>
+</subOrder>
+
+3.8.50
+
+MVR Order XML
+
+<subOrder type=’MVR’>
+<dlnum>99990000 </dlnum>
+<dlstate>TX </dlstate> See ‘State Conversion’
+<mvr_searchtype>standard </mvr_searchtype> Optional
+</subOrder>
+Note that in the absence of a valid value for mvr searchtype, the value “standard” is assumed
+unless an option selector system variable exists for the state. In this case, the first mvr search type
+specified in the mvr option selector, overrides “standard” as the default. Set or check mvr option
+selectors in the “MVR setup” section of the “Operations/site customization” Ü “Site Setup” page.
+Valid values for mvr searchtype are:
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+43
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+• standard
+• extended
+• unlimited
+• commercial-use
+• cdl
+while all states support the ordering of the standard MVR search type, availability of other
+search types will vary by state depending upon what is offered through the state and/or your
+vendor.
+
+3.8.51
+
+National (Multijurisdictional) Criminal Report Order XML
+
+<subOrder type=’National Criminal’>
+</subOrder>
+<subOrder type=’National Criminal2’>
+</subOrder>
+
+3.8.52
+
+National Federal Criminal Report Order XML
+
+<subOrder type=‘National Federal Criminal’>
+</subOrder>
+
+3.8.53
+
+National (Multijurisdictional) Criminal with Alias Report Order XML
+
+<subOrder type=’National Alias Criminal’>
+</subOrder>
+
+3.8.54
+
+National (Multijurisdictional) Criminal with Alias Report source 2
+Order XML
+
+<subOrder type=’National Alias Criminal2’>
+</subOrder>
+
+3.8.55
+
+Nursing License Order XML
+
+<subOrder type=’nursing license’>
+<state>TX </state>
+<license_number>12345678 </license_number>
+</subOrder>
+
+3.8.56
+
+Office of Inspector General List Check Order XML
+
+<subOrder type=’OIG’>
+</subOrder>
+
+3.8.57
+
+Professional Reference Check Order XML
+
+<subOrder type=’ProfessionalReference check’>
+<contactname>John Smith </contactname>
+<contactphone>555-555-1212 </contactphone>
+<contactemail>John.Smith@abc.com </contactemail>
+<contactaddress>123 main street </contactaddress>
+<contactcity>AUSTIN </contactcity>
+<contactstate>TX </contactstate>
+<contactzip>78731 </contactzip>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+44
+
+not required
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<contactcountry></contactcountry> not required, normally blank
+If the value is not blank or "USA", this product is converted to
+International Education/Employment (when it’s available in the package)
+ISO 3166-1 Alpha-3 codes preferred; Max 128 chars
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+</subOrder>
+
+3.8.58
+
+International Professional Reference Check Order XML
+
+<subOrder type=’InternationalProfessionalReference check’>
+<contactname>Juan Gonzalez </contactname>
+<contactphone>011-555-555-1212 </contactphone>
+<contactemail>Juan.gonzalez@abc.com </contactemail>
+<contactaddress>555 de Mayo </contactaddress>
+<contactcity>Ciudad Frontera </contactcity>
+<contactstate>CO </contactstate>
+<contactzip>25668 </contactzip>
+<contactcountry>MEX </contactcountry>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+</subOrder>
+
+3.8.59
+
+not required
+
+Reference Check Order XML
+
+<subOrder type=’Reference check’>
+<contactname>John Smith </contactname>
+<contactphone>555-555-1212 </contactphone>
+<contactemail>John.Smith@abc.com </contactemail>
+not required
+<contactfax>555-555-1212 </contactfax>
+not required
+<type>Personal, Professional, etc </type>
+not required
+<relationship>coach, supervisor, friend, etc </relationship> not required
+<contactaddress>123 main street </contactaddress>
+<contactcity>AUSTIN </contactcity>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+45
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<contactstate>TX </contactstate>
+<contactzip>78731 </contactzip>
+<comments>Some kind of comment optional </comments>
+<question>
+<prompt>Test Question 1</prompt>
+<standardresponse>Pass</standardresponse>
+<standardresponse>Fail</standardresponse>
+</question>
+<question>
+<prompt>Test Question 2</prompt>
+<standardresponse>Yes</standardresponse>
+<standardresponse>No</standardresponse>
+</question>
+</subOrder>
+
+3.8.60
+
+Safety First Order XML
+
+<subOrder type=’safety1st’>
+</subOrder>
+
+3.8.61
+
+Sex Offender Database Order XML
+
+<subOrder type=’Sex_Offender’>
+<state>TX </state>
+</subOrder>
+
+3.8.62
+
+Sex Offender Multistate Database Order XML
+
+<subOrder type=’sex_offender_nationwide’>
+</subOrder>
+
+3.8.63
+
+Specially Designated Nationals Database Search Order XML
+
+<subOrder type=’SDN’>
+</subOrder>
+
+3.8.64
+
+SSN Verification Order XML
+
+<subOrder type=’SSN’>
+</subOrder>
+
+3.8.65
+
+Standard Credit Report Order XML
+
+<subOrder type=’Credit_std’>
+</subOrder>
+
+3.8.66
+
+Statewide Civil Order XML
+
+<subOrder type=’Statewide_civil’>
+<state>TX </state>
+</subOrder>
+
+3.8.67
+
+Statewide Criminal Order XML
+
+<subOrder type=’Statewide_criminal’>
+<state>TX </state>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+46
+
+Order Entry via XML
+
+CHAPTER 3. PLACING AN ORDER
+
+<notes_to_supplier>Provide Docket Copies for Felonies </notes_to_supplier>optional,
+free-form,
+65000 char limit
+</subOrder>
+
+3.8.68
+
+Statewide Criminal Data Base Order XML
+
+<subOrder type=’Statewide_criminal_db’>
+<state>TX </state>
+</subOrder>
+
+3.8.69
+
+Trac Order XML
+
+<subOrder type=’Trac’>
+</subOrder>
+
+3.8.70
+
+Trac to 7year criminal Order XML
+
+<subOrder type=’Trac to 7year criminal’>
+</subOrder>
+
+3.8.71
+
+Trac to 3year criminal Order XML
+
+<subOrder type=’Trac to 3year criminal’>
+</subOrder>
+
+3.8.72
+
+Trac to Federal criminal Order XML
+
+<subOrder type=’Trac to Federal criminal’>
+</subOrder>
+
+3.8.73
+
+TriMerged Credit Report Order XML
+
+<subOrder type=’Credit_tri’>
+</subOrder>
+
+3.8.74
+
+Workers Compensation Order XML
+
+<subOrder type=’Workers Compensation’>
+<state>AL </state>
+</subOrder>
+
+3.9
+
+The addToOrder Block
+
+<addToOrder orderID=’’12345’’> Must match an existing order number in the system
+<account>accountname</account> optional. Used if placing orders on
+<username>username</username>
+behalf of another user
+<subject>...</subject> not required for addToOrder
+<subOrder type=’County_criminal’> ... </subOrder> any number >=1 may be included
+<image/> zero to many images per order
+</addToOrder>
+addToOrder adds additional research items to an existing order. Otherwise, features and restrictions are similar to the placeOrder block.
+NOTE : If the optional <subject> node is left off, the subject data from the existing order
+will be copied to the new subOrder. If the subject node is included in the addToOrder, none of the
+subject information from the existing order will be copied to the new subOrder.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+47
+
+Order Entry via XML
+
+3.10
+
+CHAPTER 3. PLACING AN ORDER
+
+Autogenerating Criminal Searches
+
+When placing an order, you can provide a list of addresses in the subject XML in <prioraddress>
+blocks. If you do so, you may ask the system to automatically generate criminal records searches
+in the areas indicated by these addresses by adding optional nodes to the <placeOrder> block as
+outlined below. The system will not order duplicate searches if they appear in the address list more
+than once or if they have already been ordered elsewhere with subOrder nodes.
+
+Autogenerated criminals will generate only up to the maximum number of searches
+allowed by the package you’re ordering in. Searches beyond the package limit will
+not be generated.
+
+Tag Name
+
+GenerateCrimsFromSubjectAddresses
+
+GenerateCrimsFromAIMAddresses
+
+3.11
+
+Function
+Create county criminal searches from each address supplied in
+<prioraddress> blocks (unless overridden with a statewide
+search). If a county name is supplied, it is used for the search. If one
+is not supplied, the system attempts to determine a county to search
+based on the zip code, if no zip code then city and state is used.
+If your pricebook is configured to run statewide criminals in certain
+states in lieu of county courthouse searches, this tag will add a
+single statewide search in lieu of the county searches it would
+otherwise have ordered.
+Your system provider will have configured the statewide overrides
+for your pricebook by setting the system variable
+generate_statewide_criminal_states/pricebookname.
+As GenerateCrimsFromSubjectAddresses except it adds crims from
+counties found in the AIM search with this order. If this node is
+specified but no AIM component was ordered, an error response
+will be generated.
+
+Order Control Settings
+
+The following XML elements can be included in your <placeOrder> block to control the ordering
+process :
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+48
+
+Order Entry via XML
+
+Tag Name
+
+<Cancel_out_of_scope_elements>
+
+<Delete_disallowed_products>
+
+<Add_AKAs_from_AIM>
+
+CHAPTER 3. PLACING AN ORDER
+
+Function
+If your order has elements that are not included in the scope of the
+package you have ordered or in jurisdictions not allowed, cancel the
+out of scope elements and order the rest of the elements instead of
+canceling the entire order.
+Components that are canceled may have a special status indicator
+on the response node similar to this : <subOrder
+type="County_criminal" suborderID="617341"
+status="canceled - out of scope"/>
+Whether they have this node depends on whether it’s an item that is
+allowed in a package but the package maximum has been exceeded
+(you’ll always get this node) and on whether you’ve also included
+the node <Delete_disallowed_products/>. Without the latter,
+you’ll be notified of elements canceled because that product type
+isn’t allowed in your package. With the latter, you will instead be
+notified of elements deleted because that product type isn’t allowed
+in your package.
+If the product is in a jurisdiction not allowed, you’ll see something
+like this : <subOrder type="County_criminal"
+suborderID="617341" status="canceled jurisdiction not allowed"/>
+This node is only used in conjunction with
+<Cancel_out_of_scope_elements/>. See the documentation for
+this node above for further information.
+If this node is present, add all AKA’s found from the AIM search to
+this order. Note that if no AIM search is run with this order,
+inclusion of this element will cause an error to be thrown. This
+functionality can be modified with the subnode <MaxTotalAKAs>
+which will set the maximum number of AKAs to add to this order. If
+MaxTotalAKAs is not specified, then your account’s standard setting
+(the setting that would be used if you placed an order online) will
+be used. Example:
+<Add_AKAs_from_AIM/> # Add AKAs from AIM up to the
+# standard # akas to automatically
+# include for this account
+<Add_AKAs_from_AIM>
+<MaxTotalAKAs>10</MaxTotalAKAs>
+</Add_AKAs_from_AIM>
+Continued on next page
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+49
+
+Order Entry via XML
+
+Tag Name
+
+CHAPTER 3. PLACING AN ORDER
+
+Order Control Tags (continued)
+Function
+NOTE : When specified, the AIM search is run while the connection
+is held open and the success/failure status messages will be
+returned only after the AIM search has completed. This will
+significantly increase the time to submit an order. If you are sending
+a large number of orders with this setting, you may want to
+consider parallelizing order submission to us – but please limit
+parallel connections to 8 at a time.
+
+<Expand_AKAs_to_Suborders>
+
+<Upgrade_products_per_package>
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+NOTE : If the aforementioned AIM search fails to complete in the
+timeout interval (100 seconds), this function will not be performed
+and you will receive an error response with error=52.
+When specified, components that are expandable to AKA’s (contact
+us for a list), such as county courthouse searches, will be expanded
+for all AKA’s listed in the original order. AKA’s from the AIM search
+will also be expanded if <Add_AKAs_from_AIM> is specified. This
+directive only is active when the XML mode is “PROD”.
+When specified, the system will automatically upgrade employment
+verifications to level 2 employments then to level 3 employments
+then to CDL employments as necessary to fit the specified package.
+Reference checks will be upgraded to Professional reference checks
+as necessary to fit the package. This allows the developer to always
+send over a standard employment verification (for example)
+without knowing whether the package ordered instead will run a
+level 2 or 3 employment. Our software will upgrade the verification
+as necessary to fit within the products allowed in the package
+chosen.
+Any products so upgraded will be shown as the new product type in
+the XML response document you receive in the “type” attribute, and
+a new attribute named “origtype” will show the type as originally
+ordered. When logged on our internal software’s XML log we’ll see
+an “origtype” property indicating the original component type as
+well.
+Continued on next page
+
+50
+
+Order Entry via XML
+
+Tag Name
+
+CHAPTER 3. PLACING AN ORDER
+
+Order Control Tags (continued)
+Function
+
+When specified, PROD mode XML orders must follow the ordering
+requirements which are set for the standard order form page. This
+<UseOrderingRequirements>
+only checks to see if a value is present for the required field, it does
+NOT validate if the value present is a valid string or integer for that
+field, only that a value is present.
+When specified, default products included in the package will be
+automatically added to the order even if subOrder nodes are not
+included for them. This will only work for products that require no
+additional information to order. E.G. a Credit report could be
+added, but an employment verification could not.
+<IncludeDefaultProducts>
+The exceptions are statewide and county criminal searches which
+are in a package that includes specific state and/or county searches.
+The statewide searches must have the included=1 and the state
+defined. The countywide searches must have included=1 the state
+and county defined.
+When specified, products preselected in the package will be
+automatically added to the order even if subOrder nodes are not
+<IncludePreselectedProducts>
+included for them. This will only work for products that require no
+additional information to order. E.G. a Credit report could be
+added, but an employment verification could not.
+When specified, products preselected or included in the package
+will be automatically selected even if subOrder nodes are not
+included for them (your CRA preselects products on their
+web-based pricing management interface in the num preselected
+column). This directive works for all products regardless of whether
+<preselect_all_included_products>
+they require additional information. Because of this, this node
+should only be used for draft orders. If this node is used for
+production orders, products that require additional information
+(like employment verifications) will be ordered even though they
+have no information.
+Continued on next page
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+51
+
+Order Entry via XML
+
+Tag Name
+
+CHAPTER 3. PLACING AN ORDER
+
+Order Control Tags (continued)
+Function
+
+When specified, will suppress any email which would have been
+<SuppressApplicantPortalEmail>
+sent to the applicant to either supply PII, Electronic Wet Signature,
+or complete the order by the applicant portal.
+When specified, will suppress any email which would have been
+sent when a DRAFT XML order was entered into the system
+<SuppressDraftEmailNotice>
+controlled by the “XML draft order email notification template”.
+This only applies to DRAFT XML orders.
+When specified, any other suborders associated with the new order
+will be searched and duplicate county and statewide criminal
+searches will be removed from the new search. The results for any
+<replace_duplicate_jurisdictions_with_original>
+suborder removed as a result of this will contain information
+indicating that the component was deleted and what suborder
+caused the component to be deleted.
+Highest Priority (Precedence). This tag is optional if
+<portalfromapplicant>, <piifromapplicant>, or <require_ews>
+<SendApplicantInviteViaBoth>
+tags are used. SendApplicantInviteViaBoth will send the applicant
+invite by both email and SMS.
+Priority is lower than SendApplicantInviteViaBoth but higher than
+SendApplicantInviteViaEMail. This tag is optional if
+<SendApplicantInviteViaSMS>
+<portalfromapplicant>, <piifromapplicant>, or <require_ews>
+tags is used to send applicant invite over SMS.
+Lowest Priority (Precedence), This tag is optional if
+<SendApplicantInviteViaEMail>
+<portalfromapplicant>, <piifromapplicant>, or
+<require_ews>tags is used to send applicant invite over email.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+52
+
+Chapter 4
+Order Response
+After submitting your order XML, the system will respond in the same session with a response XML
+document. The response document has the following structure :
+<XML>
+<order orderID=’123456’ number=’123’>
+
+number is optional, present if specified by you
+when ordered
+<subOrder type=’sometype’ suborderID=’654321’>
+
+</subOrder>
+<applicantPortalURL>
+https://someURL/c/p/collect_information?guikey=epZ5d1Dmbf4uh2ErPZvuiSjSchoanWji
+</applicantPortalURL> optional, present if <piifromapplicant> or <portalfromapplicant>
+or <require_ews> was set to Y by you when ordered
+</order>
+<error n=’12’>
+if no errors, none will be present.
+<errortext>some error description related to N in error</errortext>
+<additionalinfo>more information, may not be present</additionalinfo>
+</error>
+</XML>
+
+4.1
+
+Response Error Codes
+
+• 0 – Unknown error classification
+• 1 – XML document was not parseable.
+• 2 – Content-Type was not specified.
+• 3 – Content-Length was not specified.
+• 4 – Content-Type was not text/xml.
+• 5 – This shouldn’t happen. Please contact customer service for assistance.
+• 6 – No login block was included in the XML document posted.
+• 7 – No account was specified in the login block.
+• 8 – No username was specified in the login block.
+• 9 – No password was specified in the login block.
+
+53
+
+Order Entry via XML
+
+CHAPTER 4. ORDER RESPONSE
+
+• 10 – Login Authentication for this account failed.
+• 11 – This user’s password has expired.
+• 12 – Logins for this user have been disabled.
+• 13 – Login has been attempted with a temporary password. Only permanent passwords may
+access the XML research system.
+• 14 – The XML document posted to us contained none of a postResults node, a getPendingOrders node, a placeOrder node, an addToOrder node, a getPackages node, node, a additionalFees node or a createUser node. You must include one or more.
+• 15 – This account is not configured to manage data for any vendors (vendors we manage is
+empty) or there are no placeOrder/addToOrder/additionalFees/createUser nodes in the XML
+document. One or the other must be true.
+• 16 – The getPendingOrders node had no startingOrderNumber subnode (see ”The getPendingOrders block” in the Accio Data ”XML Integration Manual” for more information)
+• 17 – Internal assertion error : tabletoxml matched more than one row.
+• 18 – A postResults element contained no order attribute
+• 19 – A postResults element contained no subOrder attribute
+• 20 – A postResults element contained no filledStatus attribute
+• 21 – A postResults element contained no filledCode attribute
+• 22 – A postResults element’s filledStatus attribute contained an illegal value
+• 23 – A postResults element’s filledCode attribute contained an illegal value
+• 24 – A postResults element’s order or subOrder number could not be found in our system
+• 25 – The order you are posting to is not assigned to a vendorname you manage. Your client
+should check your account/user’s vendors we manage variable and make sure it is correct.
+• 26 – This account/username is not allowed to order (ordering enabled is not Y)
+• 27 – This account/username is not a client account. Client accounts may not order (client is
+not Y)
+• 28 – A placeOrder/addToOrder is attempting to place the order on behalf of another user, but
+this account does not have sysop or parent privileges
+• 29 – Ordering on behalf of other accounts is not yet a released feature and is disabled for this
+account
+• 30 – This subOrder’s type attribute is missing or not recognized
+• 31 – This order contained no subOrder elements
+• 32 – This order contained no subject element
+• 33 – Internal error inserting subject information into our database
+• 34 – Internal exception of an unknown nature
+• 35 – Subject node subtree contained invalid information, database insert failed
+• 36 – An invalid date was supplied
+• 37 – An image was supplied with no documenttype attribute (or zero length)
+• 38 – An image was supplied with no pagerange attribute (or zero length)
+• 39 – An image was supplied with no format attribute (or zero length) valid formats are tiff
+or pdf
+• 40 – An image was supplied with an invalid format (only tiff or pdf accepted)
+• 41 – An addToOrder was placed but the referenced orderID could not be found in the account
+• 42 – Error inserting a criminalcase into our database, either because an improperly formatted
+field was posted to us or internal error
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+54
+
+Order Entry via XML
+
+CHAPTER 4. ORDER RESPONSE
+
+• 43 – Error inserting a criminalcharge into our database, either because an improperly formatted field was posted to us or internal error
+• 44 – Error inserting a criminal sentence into our database, either because an improperly
+formatted field was posted to us or internal error
+• 45 – Invalid package specified (or none was specified and this account has no A La Carte
+package)
+• 46 – An internal error occurred, please contact Accio Data
+• 47 – getPackages is inquiring about another account, but this account does not have the
+required privileges
+• 48 – You are trying to order on behalf of a nonexistent account or getPackages is inquiring
+about a nonexistent account
+• 49 – Secondary account specified but user was not. If you have an ¡account¿ override node,
+you must also specify a ¡username¿ override node
+• 50 – Feature not available
+• 51 – Add AKAs from AIM was specified but no AIM component was ordered in this request
+• 52 – Add AKAs from AIM timed out waiting for the AIM search to fill
+• 53 – GenerateCrimsFromAIMAddresses was requested but no AIM component was ordered
+• 54 –’Unknown node encoding
+• 55 – Secondary account node specified but no value for account name
+• 56 – Secondary username node specified but no value for username
+• 57 – Error inserting a custom question into our database, either because an improperly formatted field was posted to us or internal error
+• 58 – An additionalFees is attempting to edit billing, but this account does not have sysopl2
+privileges
+• 59 – missing order attribute on additionalFees node
+• 60 – Could not find any information on an order number for additionalFees
+• 61 – AdditionalFees amount is invalid. Please use only numbers and a period in the total
+attribute
+• 62 – AdditionalFees did not find total attribute for node
+• 63 – User creation is not allowed for demo accounts.
+• 64 – This account is not allowed to create new users.
+• 65 – A systemAdministration is attempted, but this account does not have sysopl2 privileges
+• 66 – A systemAdministration/order element contained no order attribute
+• 67 – A systemAdministration/order element contained bad order number attribute
+• 68 – Error inserting a defendant/plantiff/prioraddress into our database, either because an
+improperly formatted field was posted to us or internal error
+• 69 – Error inserting a postalAddress into our database, either because an improperly formatted field was posted to us or internal error
+• 70 – A logAction is attempted, but this account does not have sysopl2 privileges
+• 71 – A placeOrder/addToOrder is attempting to place the order on behalf of another user, but
+this account does not have parent privileges
+• 72 – A subOrder node did not have a type property
+• 73 – An invalid doc type was supplied
+• 74 – Error charging credit card
+• 75 – Internal assertion error : tabletoxml did not match any row.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+55
+
+Order Entry via XML
+
+CHAPTER 4. ORDER RESPONSE
+
+• 76 – Invalid citizenship
+• 77 – This order has one or more of the following problems :
+– it contains products not included in this package
+– it contains product(s) in quantities greater than allowed by this package
+– it contains products in jurisdictions not allowed in this package
+Please correct and resubmit or consider using the Cancel out of scope elements directive.
+• 78 – The placeOrder/unsolicited account/username is not allowed to order (ordering enabled
+is not Y)
+• 79 – The placeOrder/addToOrder/unsolicited is attempting to place the order on behalf of
+another user, but the user does not exist; check the spelling of the account and username.
+• 80 – The postResults unsolicited result account node missing or has no value
+• 81 – The postResults unsolicited result username node missing or has no value
+• 82 – The postResults unsolicited result must have 1 and only 1 subOrder
+• 83 – Missing or empty string for postResults unsolicited result subOrder type
+• 84 – Can not generate signature sign on
+• 85 – A generateSignatureLogin is attempting to login on behalf of another user, but this
+account does not have parent privileges
+• 86 – A generateSignatureLogin is attempting to login on behalf of another user, but this
+account is not a parent of the other user
+• 87 – A generateGUILogin is attempting to login on behalf of another user, but this account
+does not have parent privileges
+• 88 – A generateGUILogin is attempting to login on behalf of another user, but this account is
+not a parent of the other user
+• 89 – A getOrderResults is missing a orderID attribute or the orderID attribute does not have
+a value
+• 90 – A getOrderResults orderID attribute value is not a valid order number
+• 91 – A getOrderResults asked for results you can not view
+• 92 – An order with a mode other than DRAFT was submitted with the preselect all included products
+directive, which is allowed only for draft orders
+• 93 – A RenewApplicantPortalURL is attempting to renew a portal URL on behalf of another
+user, but this account does not have sysop or parent privileges
+• 94 – The RenewApplicantPortalURL is attempting to renew a portal URL on behalf of another
+user, but the user does not exist; check the spelling of the account and username.
+• 95 – A RenewApplicantPortalURL was missing the URL node.
+• 96 – A RenewApplicantPortalURL URL node was missing a value.
+• 97 – A RenewApplicantPortalURL URL is missing the guikey parameter and value.
+• 98 – Did not find RenewApplicantPortalURL URL in applicant portal list of URLs for this
+account and username.
+• 99 – RenewApplicantPortalURL URL already has had a response from applicant.
+• 100 – Missing or bad data for a releaseform.
+• 101 – Bad order number for a releaseform.
+• 102 – Trying to post a releaseform to an order you do not have permission to access.
+• 103 – Encountered an unknown error when uploading a release form.
+• 104 – The date of birth is not a valid number of years.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+56
+
+Order Entry via XML
+
+CHAPTER 4. ORDER RESPONSE
+
+• 105 – A picture was supplied with no format attribute (or zero length) valid formats are jpg
+or png
+• 106 – A picture was supplied with an invalid format (only jpg or png accepted)
+• 107 – The placeOrder/addToOrder/unsolicited is attempting to request information from the
+applicant, to do so the subject/email node must contain the subject’s email address, but the
+node was missing or empty.
+• 108 – Your account is not properly configured for StayClear monitoring. Please contact customer service for assistance.
+• 109 – Internal problem generating the PDF results. Please contact customer service for assistance.
+• 110 – The order you are posting to is now managed by another remote order.
+• 111 – The order you are posting to is now managed by another vendor.
+• 112 – The order you are posting a web verification to is now managed by vendor name.
+• 113 – Web verification may not update a filled component.
+• 114 – Missing required global state organization id
+• 115 – Missing required account state organization id
+• 116 – Missing required document upload information
+• 117 – Too many criminal charges
+• 118 – Received results, but could not update order.
+• 119 – Encountered search types that are not enabled for this account.
+• 120 – GenerateCrimsFromAIMAddresses timed out waiting for the AIM search to fill.
+• 121 – Add2crim timed out waiting for the AIM search to fill.
+• 122 – Order timed out waiting for the AIM search to fill.
+• 123 – Credit limit exceeded
+• 124 – The mode tag is missing or the mode value is not valid.
+• 130 – terminations is inquiring about another account, but this account does not have the
+required privileges
+• 131 – terminations person not found
+• 132 – invalid termination date
+• 999 – This feature is not yet supported.
+Orders which are not included in the response XML document were not accepted.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+57
+
+Order Entry via XML
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+CHAPTER 4. ORDER RESPONSE
+
+58
+
+Chapter 5
+Sending Imaged Documents
+Sometimes it is necessary to attach images to background check requests or results. Signed release
+forms, employment applications, and supporting documentation may be attached to the order or
+results as images. Each order/results (<placeOrder> or <postResults>) block in the XML document can contain any number of base64 encoded images in separate <image> tags identified
+by two keys (documenttype and pagerange) provided as attributes of the image tag. Each image
+uploaded must have a unique combination of these keys.
+Documenttype may be an arbitrary string, but there is one special document type of “Release
+Form” which should be used to designate a generic release form signed by the applicant.
+The tag attribute to designate whether this document is visible to clients or not is titled “clientvisible”. Valid values are ‘Y’ and ‘N’. If clientvisible is not used, the default is ‘Y’.
+A sample image tag is as follows :
+<image documenttype=‘Release Form’ pagerange=‘all’ format=‘tiff’ clientvisible=‘Y’>
+... base64 encoded data ...
+</image>
+Or, to upload images in file per page mode :
+<image documenttype=‘Employment Application’ pagerange=‘1’ format=‘tiff‘>
+... base64 encoded data ...
+</image>
+<image documenttype=‘Employment Application’ pagerange=‘2’ format=‘tiff’>
+... base64 encoded data ...
+</image>
+<image documenttype=‘Employment Application’ pagerange=‘3’ format=‘tiff’>
+... base64 encoded data ...
+</image>
+
+5.1
+
+Image File Formats
+
+The uploaded image’s file format is designated in the “format” attribute of the image tag. The only
+supported formats at this time are tiff and pdf.
+
+59
+
+Order Entry via XML
+
+CHAPTER 5. SENDING IMAGED DOCUMENTS
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+60
+
+Chapter 6
+Other XML Queries
+6.1
+
+Packages
+
+If desired, XML can be used to pull a list of packages available to an account. Attempting to place
+an order with an invalid packagename will result in an error message listing the available packages,
+but this query will return more information about the packages available to you. All you need to
+do is include a getPackages node in your XML request as in the following example :
+<New_Order>
+<login>
+<account>youraccount </account>
+<username>youruser </username>
+<password>yourpassword </password>
+</login>
+<getPackages account="subaccount"/>
+</New_Order>
+The response document will be as follows :
+<XML>
+<package>somename</package>
+.
+.
+.
+</XML>
+If the account is a sysop or client user with switch user capabilities, then you can include an
+account attribute to the getPackages node.
+
+6.2
+
+Results for a specific order
+
+Normally order results are pushed when a component completes and/or when the order is completed. If desired you can pull the results for a specific order. All you need to do to get the results
+for a specific order is put a getOrderResults node in your XML request as in the following example
+:
+
+61
+
+Order Entry via XML
+
+CHAPTER 6. OTHER XML QUERIES
+
+<XML>
+<login>
+<account>youraccount </account>
+<username>youruser </username>
+<password>yourpassword </password>
+</login>
+<getOrderResults orderID="427722" />
+</XML>
+The value of the attribute orderID is the order number of the results you wish to pull.
+The response document, including additional getOrderResults attribute settings, is defined in
+the Chapter “Results for a specific order” in the Results Delivery manual.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+62
+
+Chapter 7
+Standard Data Formats
+7.1
+
+Dates
+
+Most dates sent to Accio Data must be formatted in our standard date format, which is YYYYMMDD.
+Any unknown or unspecified date element will be represented by 00. E.G. 19820300 reads as March
+??, 1982.
+There are also some special date formats allowed as follows :
+• current : used in End Date field for present employer
+• 99990000 : used in End Date field for present employer, means “current”
+This is supported for both standard data entry and applicantcheck/schoolcheck. A current date
+in numeric representation in the XML interface would be entered as “99990000”.
+
+7.2
+
+Data Definition Guide for Common “<placeOrder >”
+XML Elements
+
+The following is a list of common XML node elements and their presentation/storage considerations. This list is not all-inclusive but rather a work in progress. Additional elements will be added
+as required.
+
+7.2.1
+
+Elements of the Subject node
+
+XML Element
+<name_first>
+<name_middle>
+<name_last>
+<name_lastmaiden>
+<name_suffix>
+
+Elements of the “<subject >” node
+Display Value
+Data Length
+Data Format
+First Name 50 characters letters, dashes, and apostrophes only
+Middle Name 50 characters letters, dashes, and apostrophes only
+Last Name 50 characters letters, dashes, and apostrophes only
+Maiden Last Name 50 characters letters, dashes, and apostrophes only
+Name Suffix
+8 characters free form
+Continued on next page
+
+63
+
+Order Entry via XML
+
+CHAPTER 7. STANDARD DATA FORMATS
+
+(continued from previous page)
+XML Element
+Display Value
+<has_no_middle_name>
+Has No Middle Name
+
+Data Length
+1 character
+
+Social Security Number
+Date of Birth
+Gender
+Race
+Phone Number
+Address
+City
+State
+Postal Zip Code
+Manager Name
+Position Requested
+Is a Drug Screen
+Citizenship Status
+Employment Status
+Applicant ID
+
+10 characters
+10 characters
+1 character
+50 characters
+50 characters
+255 characters
+50 characters
+50 characters
+50 characters
+64 characters
+128 characters
+1 character
+128 characters
+128 characters
+32 characters
+
+<ssn>
+<dob>
+<gender>
+<race>
+<phone_number>
+<address>
+<city>
+<state>
+<zip>
+<manager_Name>
+<position_requested>
+<drugscreen>
+<citizenship_status>
+<employment_status>
+<ApplicantID>
+
+Data Format
+Y for yes, N for No, U for unknown
+anything else you get unexpected results.
+integer
+integer(YYYYMMDD)
+M or F
+alphabetic
+alphanumeric
+alphanumeric
+alphanumeric
+alphabetic
+alphanumeric
+alphanumeric
+alphanumeric
+Y or N
+alphanumeric
+alphanumeric
+alphanumeric
+
+Note, For the name first, name middle, name last and name lastmaiden alphanumeric contents
+are accepted, but if the order goes in in draft mode or requires modification in the Order Entry
+screen, the user makign the modifications will be forced to use latters and dashes only
+
+7.2.2
+
+Elements of the subOrder node, Education verification attribute
+
+Elements of the “<subOrder >” node, Education verification attribute
+XML Element
+Display Value
+Data Length
+Data Format
+<name_first>
+Name first 128 characters alphanumeric
+<name_last>
+Name last 128 characters alphanumeric
+<campus>
+Campus 128 characters alphanumeric
+<school_name_>
+School name 128 characters alphanumeric
+<school_type_>
+School type 128 characters alphanumeric
+<othername>
+Other name 128 characters alphanumeric
+<attended_from_>
+Attended from
+10 characters integer(YYYYMMDD)
+<attended_to_>
+Attended to
+10 characters integer(YYYYMMDD)
+<major>
+Major
+64 characters alphanumeric
+<degree>
+Degree
+32 characters alphanumeric
+<GPA>
+Gpa
+50 characters floating point
+<graduated>
+Graduated
+1 character Y or N
+<graduation_date>
+Graduation date
+10 characters integer(YYYYMMDD)
+<highest_achieved>
+Highest achieved
+1 character Y or N
+<currently_enrolled> Currently enrolled
+1 character Y or N
+<levelCompleted>
+Level completed
+32 characters alphanumeric
+Continued on next page
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+64
+
+Order Entry via XML
+
+CHAPTER 7. STANDARD DATA FORMATS
+
+(continued from previous page)
+XML Element
+Display Value
+<student_id_number> Student id number
+<transcript>
+Transcript
+<phone>
+Phone
+<address1>
+Address1
+<address2>
+Address2
+<city>
+City
+<state>
+State
+<country>
+Country
+<zip>
+Zip
+<comments>
+Comments
+
+7.2.3
+
+Data Length
+128 characters
+1 character
+128 characters
+128 characters
+128 characters
+128 characters
+128 characters
+128 characters
+10 characters
+16777215 bytes
+
+Data Format
+alphanumeric
+Y or N
+alphanumeric
+alphanumeric
+alphanumeric
+alphanumeric
+alphabetic
+alphanumeric
+alphanumeric
+BLOB
+
+Elements of the subOrder node, Employment verification attribute
+
+Elements of the “<subOrder >” node, Employment verification attribute
+XML Element
+Display Value
+Data Length
+Data Format
+<company_name>
+Company name
+128 characters alphanumeric
+<position>
+Position
+128 characters alphanumeric
+<contact>
+Contact
+128 characters alphanumeric
+<supervisor>
+Supervisor
+128 characters alphanumeric
+<supervisor_phone>
+Supervisor phone
+256 characters alphanumeric
+<email>
+Email
+128 characters alphanumeric
+<contact_current_employer> Contact this employer (whether
+1 character Y or N
+current or not, current in the
+node name is a misnomer)
+<employeeid>
+Employee id
+128 characters alphanumeric
+<income>
+Income
+10 characters floating point
+<income_type>
+Income type
+20 characters hourly,
+weekly,
+monthly, semimonthly,
+biweekly, annually
+<startincome>
+Startincome
+128 characters alphanumeric
+<endincome>
+Endincome
+128 characters alphanumeric
+<salarykey>
+Salary key
+128 characters alphanumeric
+<start_date_>
+Start date
+10 characters integer(YYYYMMDD)
+<end_date_>
+End date to
+10 characters integer(YYYYMMDD)
+<reason_for_leaving>
+Reason for leaving
+512 characters alphanumeric
+<phone_number>
+Phone Number
+20 characters alphanumeric
+<phone_extension>
+Phone extension
+10 characters alphanumeric
+<address1>
+Address1
+128 characters alphanumeric
+<address2>
+Address2
+128 characters alphanumeric
+Continued on next page
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+65
+
+Order Entry via XML
+
+CHAPTER 7. STANDARD DATA FORMATS
+
+(continued from previous page)
+XML Element
+Display Value
+<city>
+City
+<state>
+State
+<zip>
+Zip
+<is_alternate>
+Is alternate
+<employercode>
+Employer code
+<employer_status> Employer status
+<comments>
+Comments
+
+Data Length
+128 characters
+2 characters
+10 characters
+1 character
+128 characters
+1 character
+16777215 bytes
+
+Data Format
+alphanumeric
+alphabetic
+alphabetic
+Y or N
+alphanumeric
+U, P, C, and S ***
+BLOB
+
+• ***Interpret values as: [U]known, [P]revious, [C]urrent), [S]ame as current.
+
+7.2.4
+
+Elements of the subOrder node, fmcsa crash inspection attribute
+Elements of the “<subOrder >” node, fmcsa crash inspection attribute
+XML Element Display Value
+Data Length
+Data Format
+<dlnum>
+License number 50 characters alphanumeric state-specific
+<state>
+License State
+2 characters alphabetic
+
+7.2.5
+
+Elements of the subOrder node, MVR attribute
+
+Elements of the “<subOrder >” node, MVR attribute
+XML Element
+Display Value
+Data Length
+Data Format
+<dlnum>
+License number 50 characters alphanumeric state-specific
+<state>
+License State
+2 characters alphabetic
+<mvr_searchtype>
+MVR search type 20 characters standard, extended, etc
+<dlexpiration>
+License expiration 10 characters integer(YYYYMMDD)
+
+7.3
+
+State Conversion
+
+The standard format for specifying states of the United States is using the 2 letter state abbreviation.
+The Accio XML integration will attempt to automatically convert full state names into their 2 letter
+abbreviation for <subject> and <subOrder> nodes.
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+66
+
+Index
+A
+account, 17
+add2crim10yr
+Order XML, 27
+add2crim7yr
+Order XML, 27
+add2statewidecrim10yr
+Order XML, 28
+add2statewidecrim7yr
+Order XML, 27
+Add AKAs from AIM, 48
+addToOrder, 47
+Adult Abuse
+Order XML, 28
+Adverse Action Process
+Order XML, 28
+AIM
+Order XML, 28
+C
+Cancel out of scope elements, 48
+CBSV
+Order XML, 28
+CDL Employment Verification
+Order XML, 28
+CDLIS
+Order XML, 28
+Certified Nurses Aid Registry
+Order XML, 30
+Civil County Lower
+Order XML, 29
+Civil County Upper
+Order XML, 29
+County Criminal
+Order XML, 29
+Credential Verification
+Order XML, 30
+Custom Product
+Order XML, 30
+
+D
+Date formats, 63
+Drug Screen
+Order XML, 31
+E
+Education Verification
+Order XML, 31
+Employment Credit
+Order XML, 33
+Employment Verification
+Order XML, 33
+Everify
+Order XML, 37
+Evictions Check
+Order XML, 40
+Expand AKAs to Suborders, 48
+F
+FACIS
+Order XML, 41
+FACIS L1
+Order XML, 41
+FACIS L1m
+Order XML, 41
+FACIS L1mV
+Order XML, 41
+FACIS L1V
+Order XML, 41
+FACIS L2
+Order XML, 41
+FACIS L2V
+Order XML, 42
+FACIS L3V
+Order XML, 41
+Federal Bankruptcy
+Order XML, 42
+Federal Civil
+Order XML, 42
+Federal Criminal
+
+67
+
+Order Entry via XML
+
+Order XML, 42
+Federal Statewide Bankruptcy
+Order XML, 42
+Federal Statewide Civil
+Order XML, 42
+Federal Statewide Criminal
+Order XML, 43
+FMCSA Crash Inspection
+Order XML, 40
+Form I-9 Verification
+Order XML, 43
+G
+Gap Verification
+Order XML, 40
+GenerateCrimsFromAIMAddresses, 48
+GenerateCrimsFromSubjectAddresses, 48
+Generated Criminal Searches, 48
+globalreport
+Order XML, 43
+GSA
+Order XML, 43
+I
+I-9
+Order XML, 36
+IncludeDefaultProducts, 51
+IncludePreselectedProducts, 51
+International Education Verification
+Order XML, 32
+International Employment Verification
+Order XML, 35
+International Professional Reference Check
+Order XML, 45
+L
+Level2 Employment Verification
+Order XML, 34
+Level3 Employment Verification
+Order XML, 35
+login, 17
+M
+Mail Completed Report
+Order XML, 43
+mode, 17
+Monitor National Criminal
+Order XML, 43
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+INDEX
+
+Monitor National Multijurisdictional Criminal
+Order XML, 43
+Multijurisdictional Criminal
+Order XML, 44
+Multijurisdictional Criminal with Alias
+Order XML, 44
+Multijurisdictional Criminal with Alias source 2
+Order XML, 44
+MVR
+Order XML, 43
+N
+National Alias Criminal
+Order XML, 44
+National Alias Criminal2
+Order XML, 44
+National Criminal
+Order XML, 44
+National Federal Criminal
+Order XML, 44
+Nursing License
+Order XML, 44
+O
+OFAC
+Order XML, 42
+OIG
+Order XML, 44
+orderInfo, 22
+orderOnBehalfOf, 19
+P
+package, 18, 61
+password, 17
+placeOrder, 18
+postBackInfo, 20
+preselect all included products, 51
+Professional Reference Check
+Order XML, 44
+R
+Reference Check
+Order XML, 45
+replace duplicate jurisdictions with original, 52
+S
+Safety First
+Order XML, 46
+SDN
+
+68
+
+Order Entry via XML
+
+INDEX
+
+Order XML, 46
+SendApplicantInviteViaBoth, 52
+SendApplicantInviteViaEMail, 52
+SendApplicantInviteViaSMS, 52
+Sex Offender
+Order XML, 46
+Sex Offender Multistate
+Order XML, 46
+specificresults, 61
+SSN verification
+Order XML, 46
+Standard Credit
+Order XML, 46
+Statewide Civil
+Order XML, 46
+Statewide Criminal
+Order XML, 46
+Statewide Criminal Database
+Order XML, 47
+Subject
+Order XML, 22
+subOrder, 24
+SuppressApplicantPortalEmail, 52
+SuppressDraftEmailNotice, 52
+T
+Trac
+Order XML, 47
+Trac to 3year criminal
+Order XML, 47
+Trac to 7year criminal
+Order XML, 47
+Trac to Federal criminal
+Order XML, 47
+TriMerged Credit
+Order XML, 47
+U
+Upgrade products per package, 50
+URL, 9
+UseOrderingRequirements, 51
+username, 17
+W
+Workers Compensation
+Order XML, 47
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+69
+
+Order Entry via XML
+
+INDEX
+
+Revision History
+Version number follows this pattern, MAJOR.MINOR.PATCH, where:
+1. MAJOR version incremented when incompatible changes are made
+2. MINOR version incremented when functionality in a backwards-compatible manner is added
+3. PATCH version incremented when backwards-compatible bug fixes are made
+
+Revision
+1.0.0
+
+Date
+01/05/2018
+
+Revision History
+Description
+Creation (original)
+
+Technical Support : 512 858-9329
+support@acciodata.com
+
+70
+
+
