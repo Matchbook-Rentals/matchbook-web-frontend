@@ -6,6 +6,7 @@ import { Poppins, Lora } from 'next/font/google';
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
 import { checkAdminAccess } from '@/utils/roles';
 import { AdminControls } from './admin-controls';
+import { Metadata } from 'next';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -20,6 +21,28 @@ const lora = Lora({
 interface Params {
   params: {
     slug: string;
+  };
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const article = await prisma.blogArticle.findUnique({
+    where: { slug: params.slug },
+  });
+
+  if (!article) {
+    return {
+      title: 'Article Not Found',
+    };
+  }
+
+  return {
+    title: article.metaTitle || article.title,
+    description: article.metaDescription || article.excerpt || undefined,
+    openGraph: {
+      title: article.metaTitle || article.title,
+      description: article.metaDescription || article.excerpt || undefined,
+      images: article.imageUrl ? [article.imageUrl] : undefined,
+    },
   };
 }
 

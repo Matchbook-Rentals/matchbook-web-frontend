@@ -47,6 +47,7 @@ export function ArticleForm({ article }: ArticleFormProps) {
   const [seoH2, setSeoH2] = useState(article?.seoH2 || '')
   const [slugError, setSlugError] = useState('')
   const [isValidatingSlug, setIsValidatingSlug] = useState(false)
+  const [editingLink, setEditingLink] = useState<HTMLAnchorElement | null>(null)
 
   // Auto-resize title textarea on mount
   useEffect(() => {
@@ -315,6 +316,7 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
           onContentChange={setContent}
           onSelectionChange={setHasSelection}
           placeholder="Start writing your article..."
+          onEditLink={setEditingLink}
         />
       </div>
 
@@ -348,6 +350,8 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
 
       <EditorCommandBar
         hasSelection={hasSelection}
+        editingLink={editingLink}
+        onClearEditingLink={() => setEditingLink(null)}
       />
 
       {/* SEO Modal */}

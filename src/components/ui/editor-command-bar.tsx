@@ -18,6 +18,8 @@ import { BrandButton } from '@/components/ui/brandButton'
 
 interface EditorCommandBarProps {
   hasSelection: boolean
+  editingLink?: HTMLAnchorElement | null
+  onClearEditingLink?: () => void
 }
 
 interface CommandButtonProps {
@@ -55,11 +57,14 @@ function Divider() {
 
 export function EditorCommandBar({
   hasSelection,
+  editingLink,
+  onClearEditingLink,
 }: EditorCommandBarProps) {
   const [linkModalOpen, setLinkModalOpen] = useState(false)
   const [linkDisplayText, setLinkDisplayText] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
   const [savedSelection, setSavedSelection] = useState<Range | null>(null)
+  const [editingLinkElement, setEditingLinkElement] = useState<HTMLAnchorElement | null>(null)
   const [, forceUpdate] = useState(0)
 
   // Re-render on selection change to update active format states
@@ -70,6 +75,17 @@ export function EditorCommandBar({
     document.addEventListener('selectionchange', handleSelectionChange)
     return () => document.removeEventListener('selectionchange', handleSelectionChange)
   }, [])
+
+  // Handle external edit link trigger
+  useEffect(() => {
+    if (editingLink) {
+      setEditingLinkElement(editingLink)
+      setLinkDisplayText(editingLink.textContent || '')
+      setLinkUrl(editingLink.href || '')
+      setLinkModalOpen(true)
+      onClearEditingLink?.()
+    }
+  }, [editingLink, onClearEditingLink])
 
   // Check if current selection has a specific format
   const isFormatActive = (format: string): boolean => {
@@ -215,17 +231,24 @@ export function EditorCommandBar({
 
     const displayText = linkDisplayText || linkUrl
 
-    // Restore selection if we have one
-    if (savedSelection) {
-      const selection = window.getSelection()
-      if (selection) {
-        selection.removeAllRanges()
-        selection.addRange(savedSelection)
+    // If editing an existing link, update it directly
+    if (editingLinkElement) {
+      editingLinkElement.href = url
+      editingLinkElement.textContent = displayText
+      setEditingLinkElement(null)
+    } else {
+      // Restore selection if we have one
+      if (savedSelection) {
+        const selection = window.getSelection()
+        if (selection) {
+          selection.removeAllRanges()
+          selection.addRange(savedSelection)
+        }
       }
-    }
 
-    // Use execCommand to create link
-    document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayText}</a>`)
+      // Use execCommand to create link
+      document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayText}</a>`)
+    }
 
     // Close modal and reset state
     setLinkModalOpen(false)

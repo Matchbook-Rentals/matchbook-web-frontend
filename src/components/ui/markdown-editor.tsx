@@ -1,7 +1,8 @@
 'use client'
 
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { ExternalLink, Pencil } from 'lucide-react'
 
 interface MarkdownEditorProps {
   content: string
@@ -9,6 +10,15 @@ interface MarkdownEditorProps {
   onSelectionChange: (hasSelection: boolean) => void
   placeholder?: string
   className?: string
+  onEditLink?: (element: HTMLAnchorElement) => void
+}
+
+interface LinkMenuState {
+  visible: boolean
+  x: number
+  y: number
+  url: string
+  element: HTMLAnchorElement | null
 }
 
 // Convert markdown to HTML for display
@@ -138,9 +148,17 @@ export function MarkdownEditor({
   onSelectionChange,
   placeholder = 'Start writing...',
   className,
+  onEditLink,
 }: MarkdownEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null)
   const isInternalUpdate = useRef(false)
+  const [linkMenu, setLinkMenu] = useState<LinkMenuState>({
+    visible: false,
+    x: 0,
+    y: 0,
+    url: '',
+    element: null,
+  })
 
   // Update editor HTML when content changes externally
   useEffect(() => {
@@ -176,28 +194,99 @@ export function MarkdownEditor({
     }
   }, [handleSelectionChange])
 
+  // Handle link clicks
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    const anchor = target.closest('a') as HTMLAnchorElement | null
+
+    if (anchor) {
+      e.preventDefault()
+      const rect = anchor.getBoundingClientRect()
+      setLinkMenu({
+        visible: true,
+        x: rect.left,
+        y: rect.bottom + 4,
+        url: anchor.href,
+        element: anchor,
+      })
+    } else {
+      setLinkMenu(prev => ({ ...prev, visible: false }))
+    }
+  }, [])
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('.link-context-menu') && !target.closest('a')) {
+        setLinkMenu(prev => ({ ...prev, visible: false }))
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleVisitUrl = () => {
+    if (linkMenu.url) {
+      window.open(linkMenu.url, '_blank', 'noopener,noreferrer')
+    }
+    setLinkMenu(prev => ({ ...prev, visible: false }))
+  }
+
+  const handleEditLink = () => {
+    if (linkMenu.element && onEditLink) {
+      onEditLink(linkMenu.element)
+    }
+    setLinkMenu(prev => ({ ...prev, visible: false }))
+  }
+
   return (
-    <div
-      ref={editorRef}
-      contentEditable
-      onInput={handleInput}
-      data-placeholder={placeholder}
-      className={cn(
-        'min-h-[400px] outline-none text-gray-600 leading-relaxed',
-        'empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400',
-        '[&>h2]:text-xl [&>h2]:font-semibold [&>h2]:my-4',
-        '[&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-3',
-        '[&>h4]:text-base [&>h4]:font-semibold [&>h4]:my-2',
-        '[&>ul]:list-disc [&>ul]:ml-6 [&>ul]:my-2',
-        '[&>ol]:list-decimal [&>ol]:ml-6 [&>ol]:my-2',
-        '[&_strong]:font-semibold',
-        '[&_em]:italic',
-        '[&_u]:underline',
-        '[&_a]:text-[#3c8787] [&_a]:underline [&_a]:hover:text-[#2a6363]',
-        className
+    <>
+      <div
+        ref={editorRef}
+        contentEditable
+        onInput={handleInput}
+        onClick={handleClick}
+        data-placeholder={placeholder}
+        className={cn(
+          'min-h-[400px] outline-none text-gray-600 leading-relaxed',
+          'empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400',
+          '[&>h2]:text-xl [&>h2]:font-semibold [&>h2]:my-4',
+          '[&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-3',
+          '[&>h4]:text-base [&>h4]:font-semibold [&>h4]:my-2',
+          '[&>ul]:list-disc [&>ul]:ml-6 [&>ul]:my-2',
+          '[&>ol]:list-decimal [&>ol]:ml-6 [&>ol]:my-2',
+          '[&_strong]:font-semibold',
+          '[&_em]:italic',
+          '[&_u]:underline',
+          '[&_a]:text-[#3c8787] [&_a]:underline [&_a]:hover:text-[#2a6363] [&_a]:cursor-pointer',
+          className
+        )}
+        suppressContentEditableWarning
+      />
+
+      {linkMenu.visible && (
+        <div
+          className="link-context-menu fixed z-50 min-w-[160px] overflow-hidden rounded-md border bg-white shadow-md"
+          style={{ left: linkMenu.x, top: linkMenu.y }}
+        >
+          <button
+            onClick={handleEditLink}
+            className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            <Pencil className="h-4 w-4" />
+            Edit Link
+          </button>
+          <button
+            onClick={handleVisitUrl}
+            className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            <ExternalLink className="h-4 w-4" />
+            Visit URL
+          </button>
+        </div>
       )}
-      suppressContentEditableWarning
-    />
+    </>
   )
 }
 
