@@ -1,3 +1,9 @@
+/**
+ * TODO: Verification Flow Improvements
+ * - Treat verifications as individual (not per-user singleton)
+ * - Handle live/in-progress verification before letting user submit a new one
+ */
+
 import { APP_PAGE_MARGIN } from "@/constants/styles"
 import { Suspense } from "react"
 import { auth } from "@clerk/nextjs/server"
