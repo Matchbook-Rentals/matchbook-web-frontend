@@ -306,16 +306,16 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
                 </tr>
                 <tr>
                   <td class="button-container">
-                    <a href="${buttonUrl}" class="button">
-                      ${buttonText}
+                    <a href="${buttonUrl}" class="button" style="color: #ffffff !important; text-decoration: none !important;">
+                      <span style="color: #ffffff !important;">${buttonText}</span>
                     </a>
                   </td>
                 </tr>
                 ${secondaryButtonText && secondaryButtonUrl ? `
                 <tr>
                   <td class="secondary-button-container">
-                    <a href="${secondaryButtonUrl}" class="button secondary-button">
-                      ${secondaryButtonText}
+                    <a href="${secondaryButtonUrl}" class="button secondary-button" style="color: #ffffff !important; text-decoration: none !important;">
+                      <span style="color: #ffffff !important;">${secondaryButtonText}</span>
                     </a>
                   </td>
                 </tr>
