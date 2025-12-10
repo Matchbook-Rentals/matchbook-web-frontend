@@ -1105,6 +1105,40 @@ model Verification {
   // Refund Tracking (spam prevention - one refund per user)
   verificationRefundedAt DateTime?         // If set, user has already received a refund
 
+  // FCRA Consent Tracking (key timestamps for compliance)
+  backgroundCheckConsentAt DateTime?       // When user consented to background check
+  creditCheckConsentAt     DateTime?       // When user consented to credit check
+  permissiblePurpose       String?         // "rental_screening" - certified purpose
+
+  // Security Context (captured at consent/submission time)
+  consentIpAddress         String?         // IP address when consent was given
+  consentUserAgent         String?         // Browser user agent at consent
+  consentCity              String?         // Geo-located city (from IP)
+  consentRegion            String?         // Geo-located state/region
+  consentCountry           String?         // Geo-located country code
+
+  // Authentication Context (at time of consent)
+  consentSessionId         String?         // Clerk session ID (hashed/fingerprint)
+  consentAuthMethod        String?         // "email", "google", "apple", etc.
+  identityVerifiedAtConsent Boolean?       // Was user identity-verified when they consented?
+  consentDeviceFingerprint  String?        // Browser/device fingerprint for fraud detection
+
+  // API Call Tracking (key timestamps)
+  creditCheckRequestedAt    DateTime?       // When iSoftPull API was called
+  creditCheckCompletedAt    DateTime?       // When iSoftPull response received
+  creditCheckRequestId      String?         // Correlation ID for credit check
+  backgroundCheckRequestedAt DateTime?      // When Accio API was called
+  backgroundCheckCompletedAt DateTime?      // When Accio webhook received
+  backgroundCheckRequestId   String?        // Correlation ID for background check (orderId)
+
+  // Payment Audit
+  paymentAuthorizedAt       DateTime?       // When Stripe pre-auth succeeded
+  paymentCapturedAt         DateTime?       // When payment was captured
+  paymentCancelledAt        DateTime?       // When payment hold was released
+
+  // Detailed Audit History (JSON array of all events)
+  auditHistory              Json?           // Array of {eventType, timestamp, data, actorType}
+
   // Metadata
   notes               String?             @db.Text
 
@@ -1596,6 +1630,11 @@ model BlogArticle {
   published   Boolean    @default(false)
   authorName  String     @default("The Matchbook Team")
   authorTitle String?
+  // SEO fields
+  metaTitle       String?  @db.VarChar(255)
+  metaDescription String?  @db.Text
+  seoH1           String?  @db.VarChar(255)
+  seoH2           String?  @db.VarChar(255)
   categories  Category[]
   tags        Tag[]
 
