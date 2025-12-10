@@ -271,6 +271,8 @@ export async function POST(request: NextRequest) {
           screeningDate,
           validUntil,
           backgroundCheckedAt: new Date(),
+          // Audit fields - mark background check as completed
+          backgroundCheckCompletedAt: new Date(),
         },
       });
       console.log('✅ [Background Check Webhook] Verification record updated to COMPLETED');

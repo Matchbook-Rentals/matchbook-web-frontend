@@ -6,6 +6,11 @@ import {
 } from "@/app/app/rent/verification/utils";
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+import {
+  generateRequestId,
+  getSecurityContext,
+  maskSSN,
+} from "@/lib/audit-logger";
 
 // SAFETY: Set to true to prevent API calls during development
 // NOTE: ACCIO_* env vars are commented out in .env to ensure we don't accidentally call the real API
@@ -38,8 +43,19 @@ export async function POST(request: Request) {
     // Parse request body
     const body = await request.json();
 
+    // Extract consent timestamps for audit
+    const {
+      creditCheckConsentAt,
+      backgroundCheckConsentAt,
+      ...formData
+    } = body;
+
+    // Generate request ID and capture start time for audit
+    const requestId = generateRequestId();
+    const startTime = Date.now();
+
     // Validate request data
-    const parseResult = verificationSchema.safeParse(body);
+    const parseResult = verificationSchema.safeParse(formData);
     if (!parseResult.success) {
       return NextResponse.json(
         { error: "Invalid request data", details: parseResult.error.format() },
@@ -186,7 +202,44 @@ export async function POST(request: Request) {
         status: 'pending'
       }
     });
-    
+
+    // Get security context for audit logging
+    const securityContext = await getSecurityContext();
+    const responseTimeMs = Date.now() - startTime;
+
+    // Update Verification with audit data
+    await prisma.verification.upsert({
+      where: { userId: effectiveUserId },
+      update: {
+        // Consent timestamps (only set if provided)
+        backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
+        creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
+        // API tracking
+        backgroundCheckRequestedAt: new Date(startTime),
+        backgroundCheckRequestId: orderNumber, // Use order number as request ID
+        permissiblePurpose: "rental_screening",
+        // Security context
+        consentIpAddress: securityContext.ipAddress,
+        consentUserAgent: securityContext.userAgent,
+        consentCity: securityContext.city,
+        consentRegion: securityContext.region,
+        consentCountry: securityContext.country,
+      },
+      create: {
+        userId: effectiveUserId,
+        backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
+        creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
+        backgroundCheckRequestedAt: new Date(startTime),
+        backgroundCheckRequestId: orderNumber,
+        permissiblePurpose: "rental_screening",
+        consentIpAddress: securityContext.ipAddress,
+        consentUserAgent: securityContext.userAgent,
+        consentCity: securityContext.city,
+        consentRegion: securityContext.region,
+        consentCountry: securityContext.country,
+      },
+    });
+
     console.log(`Background check order ${orderNumber} saved for purchase ${unredeemedPurchase.id}`);
     
     return NextResponse.json({

@@ -27,6 +27,7 @@ interface AuthorizationStepScreenProps {
   checkboxLabel: string;
   checkboxId: string;
   children: React.ReactNode;
+  onConsentChange?: (checked: boolean) => void;
 }
 
 export const AuthorizationStepScreen = ({
@@ -36,6 +37,7 @@ export const AuthorizationStepScreen = ({
   checkboxLabel,
   checkboxId,
   children,
+  onConsentChange,
 }: AuthorizationStepScreenProps): JSX.Element => {
   return (
     <div className="flex flex-col w-full items-start justify-center gap-4 p-2 md:p-4 pb-24">
@@ -81,7 +83,11 @@ export const AuthorizationStepScreen = ({
                   <FormControl>
                     <BrandCheckbox
                       checked={field.value as boolean}
-                      onChange={(e) => field.onChange(e.target.checked)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        field.onChange(checked);
+                        onConsentChange?.(checked);
+                      }}
                       name={checkboxName}
                       label={
                         <span className="font-semibold text-[#373940]">

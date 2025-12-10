@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+import { logPaymentEvent } from '@/lib/audit-logger';
 
 // Capture a pre-authorized payment after successful verification
 export async function POST(req: Request) {
@@ -61,6 +62,29 @@ export async function POST(req: Request) {
     });
 
     console.log('✅ [Verification] Purchase record created');
+
+    // Update Verification with payment capture audit
+    const verification = await prisma.verification.findUnique({
+      where: { userId },
+    });
+
+    if (verification) {
+      await prisma.verification.update({
+        where: { userId },
+        data: {
+          paymentCapturedAt: new Date(),
+        },
+      });
+
+      // Log to audit history
+      await logPaymentEvent(
+        verification.id,
+        'payment_captured',
+        capturedPayment.id,
+        capturedPayment.amount,
+        true
+      );
+    }
 
     return NextResponse.json({
       success: true,

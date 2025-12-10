@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
+import { logPaymentEvent } from '@/lib/audit-logger';
 
 // Cancel a pre-authorized payment when verification fails
 // This releases the hold immediately - no refund needed
@@ -48,18 +49,31 @@ export async function POST(req: Request) {
     });
 
     // Mark user as having a failed verification (for tracking purposes)
-    await prisma.verification.upsert({
+    const verification = await prisma.verification.upsert({
       where: { userId },
       update: {
         status: 'FAILED',
         verificationRefundedAt: new Date(), // Track that they got their money back
+        paymentCancelledAt: new Date(), // Audit: when hold was released
       },
       create: {
         userId,
         status: 'FAILED',
         verificationRefundedAt: new Date(),
+        paymentCancelledAt: new Date(),
       },
     });
+
+    // Log to audit history
+    if (verification) {
+      await logPaymentEvent(
+        verification.id,
+        'payment_cancelled',
+        canceledPayment.id,
+        paymentIntent.amount,
+        true
+      );
+    }
 
     console.log('✅ [Verification] Verification record updated');
 
