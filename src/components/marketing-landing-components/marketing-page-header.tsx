@@ -15,6 +15,8 @@ interface MarketingPageHeaderProps {
   highlightedText?: string;
   breadcrumbText?: string;
   articleSlug?: string;
+  onSlugChange?: (slug: string) => void;
+  asHeader?: boolean;
 }
 
 export const MarketingPageHeader = ({
@@ -22,7 +24,10 @@ export const MarketingPageHeader = ({
   highlightedText,
   breadcrumbText,
   articleSlug,
+  onSlugChange,
+  asHeader = true,
 }: MarketingPageHeaderProps): JSX.Element => {
+  const HeaderTag = asHeader ? 'h1' : 'span';
   const toTitleCase = (str: string) => {
     return str.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
   };
@@ -36,9 +41,9 @@ export const MarketingPageHeader = ({
               {highlightedText}
             </h2>
           )}
-          <h1 className="w-fit font-[Lora] font-medium text-gray-neutral900 text-center tracking-[-2px] leading-[100%]" style={{ fontSize: 'clamp(32px, 5vw, 56px)' }}>
+          <HeaderTag className="w-fit font-[Lora] font-medium text-gray-neutral900 text-center tracking-[-2px] leading-[100%]" style={{ fontSize: 'clamp(32px, 5vw, 56px)' }}>
             {headerText}
-          </h1>
+          </HeaderTag>
         </div>
 
         <Breadcrumb className="mt-3">
@@ -62,9 +67,19 @@ export const MarketingPageHeader = ({
                   /
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="[font-family:'Poppins',Helvetica] font-normal text-gray-3900 text-[14px] md:text-base leading-6">
-                    {toTitleCase(articleSlug)}
-                  </BreadcrumbPage>
+                  {onSlugChange ? (
+                    <input
+                      type="text"
+                      value={toTitleCase(articleSlug || '')}
+                      onChange={(e) => onSlugChange(e.target.value.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-'))}
+                      className="[font-family:'Poppins',Helvetica] font-normal text-gray-3900 text-[14px] md:text-base leading-6 bg-transparent border-none outline-none focus:ring-0 min-w-[60px]"
+                      style={{ width: `${Math.max(60, (articleSlug?.length || 5) * 10)}px` }}
+                    />
+                  ) : (
+                    <BreadcrumbPage className="[font-family:'Poppins',Helvetica] font-normal text-gray-3900 text-[14px] md:text-base leading-6">
+                      {toTitleCase(articleSlug)}
+                    </BreadcrumbPage>
+                  )}
                 </BreadcrumbItem>
               </>
             ) : (

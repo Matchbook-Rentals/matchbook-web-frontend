@@ -30,8 +30,7 @@ export default async function ArticlesPage() {
     <div className={`${PAGE_MARGIN} py-10`}>
       <div className="flex justify-center mb-10">
         <MarketingPageHeader
-          headerText="Rental Resources & Articles"
-          breadcrumbText="Articles"
+          headerText="Articles"
         />
       </div>
 

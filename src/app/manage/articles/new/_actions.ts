@@ -13,6 +13,16 @@ function slugify(title: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
+export async function checkSlugExists(slug: string, excludeArticleId?: string): Promise<boolean> {
+  const existingArticle = await prisma.blogArticle.findUnique({
+    where: { slug }
+  })
+  if (!existingArticle) return false
+  // If editing, allow the same slug for the same article
+  if (excludeArticleId && existingArticle.id === excludeArticleId) return false
+  return true
+}
+
 export async function toggleArticlePublish(articleId: string) {
   const isAdmin = await checkAdminAccess()
   if (!isAdmin) {
@@ -110,6 +120,10 @@ export async function updateArticle(articleId: string, formData: FormData) {
   const published = formData.get('published') === 'on'
   const authorName = formData.get('authorName') as string
   const authorTitle = formData.get('authorTitle') as string
+  const metaTitle = formData.get('metaTitle') as string
+  const metaDescription = formData.get('metaDescription') as string
+  const seoH1 = formData.get('seoH1') as string
+  const seoH2 = formData.get('seoH2') as string
 
   if (!title || !content) {
     return {
@@ -150,6 +164,10 @@ export async function updateArticle(articleId: string, formData: FormData) {
         published,
         authorName,
         authorTitle,
+        metaTitle,
+        metaDescription,
+        seoH1,
+        seoH2,
         updatedAt: new Date(),
       },
     })
@@ -184,6 +202,10 @@ export async function uploadArticle(formData: FormData) {
   const published = formData.get('published') === 'on'
   const authorName = formData.get('authorName') as string
   const authorTitle = formData.get('authorTitle') as string
+  const metaTitle = formData.get('metaTitle') as string
+  const metaDescription = formData.get('metaDescription') as string
+  const seoH1 = formData.get('seoH1') as string
+  const seoH2 = formData.get('seoH2') as string
 
   if (!title || !content) {
     return {
@@ -194,12 +216,23 @@ export async function uploadArticle(formData: FormData) {
 
   const slug = slugFromForm || slugify(title)
 
+  // Check if slug already exists
+  const existingArticle = await prisma.blogArticle.findUnique({
+    where: { slug }
+  })
+  if (existingArticle) {
+    return {
+      success: false,
+      error: `An article with the URL "${slug}" already exists. Please choose a different title or edit the slug.`
+    }
+  }
+
   // Strip markdown formatting for excerpt
   const stripMarkdown = (text: string) => {
     return text
       .replace(/^#{1,6}\s+/gm, '') // Remove heading markers
       .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold
-      .replace(/\*(.+?)\*/g, '$1') // Remove italic
+      .replace(/\*(.+?)\*\*/g, '$1') // Remove italic
       .replace(/__(.+?)__/g, '$1') // Remove bold (alt)
       .replace(/_(.+?)_/g, '$1') // Remove italic (alt)
       .replace(/^[-*+]\s+/gm, '') // Remove list markers
@@ -223,6 +256,10 @@ export async function uploadArticle(formData: FormData) {
         published,
         authorName,
         authorTitle,
+        metaTitle,
+        metaDescription,
+        seoH1,
+        seoH2,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

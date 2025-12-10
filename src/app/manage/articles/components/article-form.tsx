@@ -5,13 +5,14 @@ import { Plus } from 'lucide-react'
 import { BrandButton } from '@/components/ui/brandButton'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
-import { uploadArticle, updateArticle } from '../new/_actions'
+import { uploadArticle, updateArticle, checkSlugExists } from '../new/_actions'
 import { UploadButton } from '@/app/utils/uploadthing'
 import Image from 'next/image'
 import { EditorCommandBar } from '@/components/ui/editor-command-bar'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header'
 import { BlogArticle } from '@prisma/client'
+import BrandModal from '@/components/BrandModal'
 
 interface ArticleFormProps {
   article?: BlogArticle
@@ -37,6 +38,15 @@ export function ArticleForm({ article }: ArticleFormProps) {
   const [slug, setSlug] = useState(article?.slug || '')
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!article?.slug)
   const titleRef = useRef<HTMLTextAreaElement>(null)
+
+  // SEO fields
+  const [seoModalOpen, setSeoModalOpen] = useState(false)
+  const [metaTitle, setMetaTitle] = useState(article?.metaTitle || '')
+  const [metaDescription, setMetaDescription] = useState(article?.metaDescription || '')
+  const [seoH1, setSeoH1] = useState(article?.seoH1 || '')
+  const [seoH2, setSeoH2] = useState(article?.seoH2 || '')
+  const [slugError, setSlugError] = useState('')
+  const [isValidatingSlug, setIsValidatingSlug] = useState(false)
 
   // Auto-resize title textarea on mount
   useEffect(() => {
@@ -104,7 +114,23 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
     }
   }
 
-  const handleSubmit = async () => {
+  const validateSlug = async (slugToValidate: string) => {
+    if (!slugToValidate) {
+      setSlugError('')
+      return true
+    }
+    setIsValidatingSlug(true)
+    const exists = await checkSlugExists(slugToValidate, article?.id)
+    setIsValidatingSlug(false)
+    if (exists) {
+      setSlugError('This article ID is already taken')
+      return false
+    }
+    setSlugError('')
+    return true
+  }
+
+  const handleContinue = async () => {
     if (!title.trim()) {
       toast({
         title: 'Error',
@@ -123,6 +149,30 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
       return
     }
 
+    // Pre-fill SEO fields with defaults if empty
+    if (!metaTitle) setMetaTitle(title)
+    if (!seoH1) setSeoH1(title)
+
+    // Extract first heading from content for h2 if empty
+    if (!seoH2) {
+      const headingMatch = content.match(/^#{1,3}\s+(.+)$/m)
+      if (headingMatch) {
+        setSeoH2(headingMatch[1])
+      }
+    }
+
+    // Validate slug before opening modal
+    setSlugError('')
+    setSeoModalOpen(true)
+  }
+
+  const handleSubmit = async () => {
+    // Validate slug before submitting
+    const isSlugValid = await validateSlug(slugPreview)
+    if (!isSlugValid) {
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -134,6 +184,10 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
       formData.set('published', article?.published ? 'on' : 'off')
       formData.set('authorName', authorName)
       formData.set('authorTitle', authorTitle)
+      formData.set('metaTitle', metaTitle)
+      formData.set('metaDescription', metaDescription)
+      formData.set('seoH1', seoH1)
+      formData.set('seoH2', seoH2)
 
       let result
       if (isEditing) {
@@ -151,7 +205,8 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
         description: isEditing ? 'Article updated successfully' : 'Article created successfully',
       })
 
-      router.push('/articles')
+      setSeoModalOpen(false)
+      router.push(`/articles/${slugPreview}`)
       router.refresh()
     } catch (err: any) {
       toast({
@@ -284,9 +339,8 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
 
       <div className="flex justify-center pb-20">
         <BrandButton
-          onClick={handleSubmit}
+          onClick={handleContinue}
           disabled={isSubmitting}
-          spinOnClick
         >
           {isEditing ? 'Save Changes' : 'Continue'}
         </BrandButton>
@@ -295,6 +349,105 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
       <EditorCommandBar
         hasSelection={hasSelection}
       />
+
+      {/* SEO Modal */}
+      <BrandModal
+        isOpen={seoModalOpen}
+        onOpenChange={setSeoModalOpen}
+        className="max-w-xl"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        <div className="p-6">
+          <h2 className="text-2xl font-semibold mb-6">Add SEO</h2>
+
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Article ID
+              </label>
+              <input
+                type="text"
+                value={slugPreview}
+                onChange={(e) => {
+                  handleSlugChange(e.target.value)
+                  setSlugError('')
+                }}
+                onBlur={() => validateSlug(slugPreview)}
+                placeholder="article-url-slug"
+                className={`w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787] ${slugError ? 'ring-2 ring-red-500' : ''}`}
+              />
+              {slugError && (
+                <p className="text-red-500 text-sm mt-1">{slugError}</p>
+              )}
+              {isValidatingSlug && (
+                <p className="text-gray-400 text-sm mt-1">Checking availability...</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meta Title
+              </label>
+              <input
+                type="text"
+                value={metaTitle}
+                onChange={(e) => setMetaTitle(e.target.value)}
+                placeholder={title || 'Meta title'}
+                className="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meta Description
+              </label>
+              <input
+                type="text"
+                value={metaDescription}
+                onChange={(e) => setMetaDescription(e.target.value)}
+                placeholder="Meta description"
+                className="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                h1
+              </label>
+              <input
+                type="text"
+                value={seoH1}
+                onChange={(e) => setSeoH1(e.target.value)}
+                placeholder={title || 'H1 heading'}
+                className="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                h2
+              </label>
+              <input
+                type="text"
+                value={seoH2}
+                onChange={(e) => setSeoH2(e.target.value)}
+                placeholder="H2 subheading"
+                className="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787]"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end mt-8">
+            <BrandButton
+              onClick={handleSubmit}
+              disabled={isSubmitting || !!slugError || isValidatingSlug}
+              spinOnClick
+            >
+              View Article
+            </BrandButton>
+          </div>
+        </div>
+      </BrandModal>
     </div>
   )
 }
