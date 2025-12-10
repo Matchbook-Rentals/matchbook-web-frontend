@@ -14,6 +14,30 @@ export async function POST(request: NextRequest) {
 
   console.log('🔔 [Background Check Webhook] Received webhook request');
 
+  // Verify Basic Authentication
+  const authHeader = request.headers.get('authorization');
+  console.log('🔐 [Background Check Webhook] Auth header present:', !!authHeader);
+
+  if (authHeader) {
+    const expectedUsername = process.env.ACCIO_USERNAME;
+    const expectedPassword = process.env.ACCIO_PASSWORD;
+
+    // Decode Basic auth header
+    const base64Credentials = authHeader.split(' ')[1];
+    const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
+    const [username, password] = credentials.split(':');
+
+    console.log('🔐 [Background Check Webhook] Auth username:', username);
+
+    if (username !== expectedUsername || password !== expectedPassword) {
+      console.error('❌ [Background Check Webhook] Invalid credentials');
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    console.log('✅ [Background Check Webhook] Authentication verified');
+  } else {
+    console.log('⚠️ [Background Check Webhook] No auth header - proceeding anyway for backwards compatibility');
+  }
+
   // CRITICAL: Log the raw payload FIRST, before any other processing
   // This ensures we capture the response even if database operations fail
   try {

@@ -66,7 +66,15 @@ export function generateVerificationXml(
     <subOrder type="evictions_check">
       <state>${state}</state>
     </subOrder>
-    <postURL>${postbackUrl}</postURL>
+    <postBackInfo>
+      <authentication>
+        <type>Basic</type>
+        <username>${username}</username>
+        <password>${password}</password>
+      </authentication>
+      <URL>${postbackUrl}</URL>
+      <guID>${orderId}</guID>
+    </postBackInfo>
   </placeOrder>
 </New_Order>`;
 }
