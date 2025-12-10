@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Bold,
   Italic,
@@ -60,11 +60,40 @@ export function EditorCommandBar({
   const [linkDisplayText, setLinkDisplayText] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
   const [savedSelection, setSavedSelection] = useState<Range | null>(null)
+  const [, forceUpdate] = useState(0)
+
+  // Re-render on selection change to update active format states
+  useEffect(() => {
+    const handleSelectionChange = () => {
+      forceUpdate(n => n + 1)
+    }
+    document.addEventListener('selectionchange', handleSelectionChange)
+    return () => document.removeEventListener('selectionchange', handleSelectionChange)
+  }, [])
 
   // Check if current selection has a specific format
   const isFormatActive = (format: string): boolean => {
     try {
-      return document.queryCommandState(format)
+      // First check execCommand state
+      if (document.queryCommandState(format)) {
+        return true
+      }
+
+      // For underline, also check if we're inside a <u> element
+      if (format === 'underline') {
+        const selection = window.getSelection()
+        if (selection && selection.rangeCount > 0) {
+          let node: Node | null = selection.anchorNode
+          while (node) {
+            if (node.nodeType === Node.ELEMENT_NODE && (node as Element).tagName === 'U') {
+              return true
+            }
+            node = node.parentNode
+          }
+        }
+      }
+
+      return false
     } catch {
       return false
     }
@@ -89,6 +118,34 @@ export function EditorCommandBar({
 
   // Apply inline formatting using execCommand
   const applyFormat = (command: string) => {
+    // For underline, handle the case where text is inside a <u> tag from markdown
+    if (command === 'underline') {
+      const selection = window.getSelection()
+      if (selection && selection.rangeCount > 0) {
+        let node: Node | null = selection.anchorNode
+        let uElement: HTMLElement | null = null
+
+        // Check if we're inside a <u> element
+        while (node) {
+          if (node.nodeType === Node.ELEMENT_NODE && (node as Element).tagName === 'U') {
+            uElement = node as HTMLElement
+            break
+          }
+          node = node.parentNode
+        }
+
+        // If inside a <u> tag, unwrap it instead of using execCommand
+        if (uElement) {
+          const parent = uElement.parentNode
+          while (uElement.firstChild) {
+            parent?.insertBefore(uElement.firstChild, uElement)
+          }
+          parent?.removeChild(uElement)
+          return
+        }
+      }
+    }
+
     document.execCommand(command, false)
   }
 

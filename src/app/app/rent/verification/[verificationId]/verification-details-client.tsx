@@ -280,12 +280,16 @@ export function VerificationDetailsClient({ verification }: VerificationDetailsC
                     <div className="text-[#484a54] text-sm font-medium">Status</div>
                   </div>
                   <div className="self-stretch text-[#0b6969] text-xs font-medium">
-                    {verification.status === "COMPLETED" ? "Verified" : verification.status}
+                    {verification.status === "COMPLETED" ? "Verified" :
+                     verification.status === "PROCESSING_BGS" ? "Processing Background Check" :
+                     verification.status}
                   </div>
                 </div>
 
                 <div className="self-stretch text-[#484a54] text-xs">
-                  You&apos;re all set to apply to listings. Hosts can trust your record and history.
+                  {verification.status === "PROCESSING_BGS"
+                    ? "Processing time for background checks differs from state to state. We'll email you when it's complete."
+                    : "You're all set to apply to listings. Hosts can trust your record and history."}
                 </div>
               </div>
             </CardContent>
@@ -296,7 +300,7 @@ export function VerificationDetailsClient({ verification }: VerificationDetailsC
         <div className="w-full md:w-auto flex md:inline-flex items-center gap-4">
           <Link href="/app/rent/verification/list">
             <Button variant="outline" className="px-[18px] py-3 rounded-lg h-auto">
-              <span className="font-semibold text-base">Back to Summary</span>
+              <span className="font-semibold text-base">Back to List</span>
             </Button>
           </Link>
           <Button

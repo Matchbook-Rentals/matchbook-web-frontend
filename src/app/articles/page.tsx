@@ -6,6 +6,7 @@ import { PAGE_MARGIN } from '@/constants/styles'
 import { Metadata } from 'next'
 import { BrandButton } from '@/components/ui/brandButton'
 import { ArticleCard } from './components/article-card'
+import { FeaturedArticleCarousel } from './components/featured-article-carousel'
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Articles & Resources',
@@ -26,6 +27,9 @@ export default async function ArticlesPage() {
   const isAdmin = await checkAdminAccess();
   const articles = await getBlogArticles(isAdmin)
 
+  const featuredArticles = articles.slice(0, 3)
+  const gridArticles = articles
+
   return (
     <div className={`${PAGE_MARGIN} py-10`}>
       <div className="flex justify-center mb-10">
@@ -34,8 +38,14 @@ export default async function ArticlesPage() {
         />
       </div>
 
+      <FeaturedArticleCarousel articles={featuredArticles} />
+
+      <h2 className="text-3xl font-[Lora] font-medium text-center mb-8">
+        Latest Articles
+      </h2>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {articles.map((article) => (
+        {gridArticles.map((article) => (
           <ArticleCard key={article.id} article={article} isAdmin={isAdmin} />
         ))}
       </div>
