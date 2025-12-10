@@ -15,24 +15,25 @@ import { deleteArticle, toggleArticlePublish } from '../new/_actions'
 
 interface ArticleCardMenuProps {
   articleId: string
+  articleSlug: string
   articleTitle: string
   isPublished: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }
 
-export function ArticleCardMenu({ articleId, articleTitle, isPublished, open, onOpenChange }: ArticleCardMenuProps) {
+export function ArticleCardMenu({ articleId, articleSlug, articleTitle, isPublished, open, onOpenChange }: ArticleCardMenuProps) {
   const router = useRouter()
   const { toast } = useToast()
   const [isDeleting, setIsDeleting] = useState(false)
   const [isToggling, setIsToggling] = useState(false)
 
   const handleEdit = () => {
-    router.push(`/manage/articles/${articleId}/edit`)
+    router.push(`/manage/articles/${articleSlug}/edit`)
   }
 
   const handleView = () => {
-    router.push(`/articles/${articleId}`)
+    router.push(`/articles/${articleSlug}`)
   }
 
   const handleTogglePublish = async () => {

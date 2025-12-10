@@ -58,6 +58,7 @@ export function ArticleCard({ article, isAdmin }: ArticleCardProps) {
           <div className="absolute top-3 right-3">
             <ArticleCardMenu
               articleId={article.id}
+              articleSlug={article.slug}
               articleTitle={article.title}
               isPublished={article.published}
               open={menuOpen}
