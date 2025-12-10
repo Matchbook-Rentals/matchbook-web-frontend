@@ -37,6 +37,9 @@ interface ProcessingScreenProps {
   shouldStartPayment?: boolean;
   initialPaymentMethods?: SavedPaymentMethod[];
   initialClientSecret?: string | null;
+  // FCRA Consent timestamps for audit logging
+  backgroundCheckConsentAt?: Date | null;
+  creditCheckConsentAt?: Date | null;
 }
 
 const US_STATES = [
@@ -129,6 +132,8 @@ export const ProcessingScreen = ({
   shouldStartPayment,
   initialPaymentMethods,
   initialClientSecret,
+  backgroundCheckConsentAt,
+  creditCheckConsentAt,
 }: ProcessingScreenProps): JSX.Element => {
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState<ProcessingStep>("select-payment");
@@ -429,6 +434,9 @@ export const ProcessingScreen = ({
           state: currentFormData.state,
           zip: currentFormData.zip,
           ssn: currentFormData.ssn,
+          // FCRA audit timestamps
+          creditCheckConsentAt: creditCheckConsentAt?.toISOString(),
+          backgroundCheckConsentAt: backgroundCheckConsentAt?.toISOString(),
         }),
       });
 
@@ -497,6 +505,9 @@ export const ProcessingScreen = ({
             zip: currentFormData.zip,
             creditAuthorizationAcknowledgment: currentFormData.creditAuthorizationAcknowledgment,
             backgroundCheckAuthorization: currentFormData.backgroundCheckAuthorization,
+            // FCRA audit timestamps
+            creditCheckConsentAt: creditCheckConsentAt?.toISOString(),
+            backgroundCheckConsentAt: backgroundCheckConsentAt?.toISOString(),
           }),
         });
 
@@ -539,6 +550,19 @@ export const ProcessingScreen = ({
         } catch (captureError) {
           console.error('❌ Error capturing payment:', captureError);
         }
+      }
+
+      // Finalize verification - set COMPLETED status and dates
+      // Background check webhook will update with actual results later
+      try {
+        const finalizeResponse = await fetch('/api/verification/finalize', {
+          method: 'POST',
+        });
+        if (finalizeResponse.ok) {
+          console.log('✅ Verification finalized');
+        }
+      } catch (finalizeError) {
+        console.error('❌ Error finalizing verification:', finalizeError);
       }
 
       await new Promise(resolve => setTimeout(resolve, 1500));

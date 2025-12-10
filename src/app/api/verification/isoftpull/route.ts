@@ -3,6 +3,16 @@ import { auth } from "@clerk/nextjs/server";
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import prisma from "@/lib/prismadb";
+import {
+  generateRequestId,
+  getSecurityContext,
+  logApiRequest,
+  logApiResponse,
+  logConsentGiven,
+  logPermissiblePurpose,
+  maskSSN,
+  maskDOB,
+} from "@/lib/audit-logger";
 
 // SAFETY: Real URL commented out to prevent accidental API calls
 // NOTE: ISOFTPULL_* env vars are commented out in .env to ensure we don't accidentally call the real API
@@ -41,7 +51,21 @@ export async function POST(request: Request) {
     console.log("👤 User ID:", userId);
 
     const body = await request.json();
-    const { firstName, lastName, address, city, state, zip, ssn } = body;
+    const {
+      firstName,
+      lastName,
+      address,
+      city,
+      state,
+      zip,
+      ssn,
+      creditCheckConsentAt,
+      backgroundCheckConsentAt,
+    } = body;
+
+    // Generate request ID for audit trail correlation
+    const requestId = generateRequestId();
+    const startTime = Date.now();
 
     // Validate required fields
     if (!firstName || !lastName || !address || !city || !state || !zip || !ssn) {
@@ -119,6 +143,51 @@ export async function POST(request: Request) {
           },
         },
       };
+
+      // Save mock data to database (same as real flow)
+      // Map iSoftPull intelligence.name to Prisma CreditBucket enum
+      const creditBucketMap: Record<string, string> = {
+        "Very Good": "Very_Good",
+        "Exceptional": "Exceptional",
+        "Good": "Good",
+        "Fair": "Fair",
+        "Low": "Low",
+      };
+      const prismaCreditBucket = creditBucketMap[mockCreditData.intelligence.name] || "Fair";
+
+      try {
+        await prisma.creditReport.upsert({
+          where: { userId },
+          update: {
+            creditBucket: prismaCreditBucket,
+            creditUpdatedAt: new Date(),
+          },
+          create: {
+            userId,
+            creditBucket: prismaCreditBucket,
+            creditUpdatedAt: new Date(),
+          },
+        });
+
+        await prisma.verification.upsert({
+          where: { userId },
+          update: {
+            creditBucket: prismaCreditBucket,
+            creditStatus: "completed",
+            creditCheckedAt: new Date(),
+          },
+          create: {
+            userId,
+            creditBucket: prismaCreditBucket,
+            creditStatus: "completed",
+            creditCheckedAt: new Date(),
+          },
+        });
+
+        console.log("✅ [MOCK] Saved creditBucket to database:", prismaCreditBucket);
+      } catch (dbError) {
+        console.error("❌ [MOCK] Database error:", dbError);
+      }
 
       return NextResponse.json({
         success: true,
@@ -234,14 +303,31 @@ export async function POST(request: Request) {
         },
       });
 
-      // Update Verification with report URL
-      await prisma.verification.upsert({
+      // Get security context for audit logging
+      const securityContext = await getSecurityContext();
+      const responseTimeMs = Date.now() - startTime;
+
+      // Update Verification with report URL and audit data
+      const verification = await prisma.verification.upsert({
         where: { userId },
         update: {
           creditReportUrl: reportUrl,
           creditBucket: creditData.intelligence?.name || "Fair",
           creditStatus: "completed",
           creditCheckedAt: new Date(),
+          // Audit fields
+          creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
+          backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
+          creditCheckRequestedAt: new Date(startTime),
+          creditCheckCompletedAt: new Date(),
+          creditCheckRequestId: requestId,
+          permissiblePurpose: "rental_screening",
+          // Security context (only set if not already set)
+          consentIpAddress: securityContext.ipAddress,
+          consentUserAgent: securityContext.userAgent,
+          consentCity: securityContext.city,
+          consentRegion: securityContext.region,
+          consentCountry: securityContext.country,
         },
         create: {
           userId,
@@ -249,8 +335,38 @@ export async function POST(request: Request) {
           creditBucket: creditData.intelligence?.name || "Fair",
           creditStatus: "completed",
           creditCheckedAt: new Date(),
+          // Audit fields
+          creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
+          backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
+          creditCheckRequestedAt: new Date(startTime),
+          creditCheckCompletedAt: new Date(),
+          creditCheckRequestId: requestId,
+          permissiblePurpose: "rental_screening",
+          // Security context
+          consentIpAddress: securityContext.ipAddress,
+          consentUserAgent: securityContext.userAgent,
+          consentCity: securityContext.city,
+          consentRegion: securityContext.region,
+          consentCountry: securityContext.country,
         },
       });
+
+      // Add to audit history
+      if (verification) {
+        await logApiResponse(
+          verification.id,
+          'isoftpull',
+          requestId,
+          true,
+          {
+            creditBucket: creditData.intelligence?.name,
+            ssnLast4: maskSSN(ssn),
+            city,
+            state,
+          },
+          responseTimeMs
+        );
+      }
 
       console.log("✅ Credit report and verification saved to database");
       console.log("📎 Report URL:", reportUrl);

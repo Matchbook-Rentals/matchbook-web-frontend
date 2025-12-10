@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
@@ -26,22 +27,9 @@ import { AuthorizationStepScreen } from "./AuthorizationStepScreen";
 import { BackgroundCheckAuthorizationContent } from "./legal/BackgroundCheckAuthorizationContent";
 import { CreditCheckAuthorizationContent } from "./legal/CreditCheckAuthorizationContent";
 import { ProcessingScreen, type ProcessingStep } from "./ProcessingScreen";
-import { VerificationResultsScreen } from "./VerificationResultsScreen";
-import { VerificationDetailsScreen } from "./details/VerificationDetailsScreen";
 import { VerificationFooter } from "./VerificationFooter";
 import { verificationSchema, type VerificationFormValues } from "../utils";
 import type { SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
-import type { ISoftPullResponse } from "@/types/isoftpull";
-
-// BGSReport data structure from Accio webhook
-interface BGSReportData {
-  id: string;
-  status: string;
-  reportData?: {
-    evictions?: { records?: unknown[] };
-    criminal?: { records?: unknown[] };
-  } | null;
-}
 
 // iSoftPull test clients for development testing
 const ISOFTPULL_TEST_CLIENTS = [
@@ -59,7 +47,7 @@ const ACCIO_TEST_CLIENTS = [
   { firstName: "Marcus", lastName: "Snell", credit: "Criminal Records", ssn: "123456789", dob: "1983-03-24", address: "123 Any Street", city: "Anytown", state: "GA", zip: "30021" },
 ];
 
-type Step = "personal-info" | "background-auth" | "credit-auth" | "processing" | "results" | "details";
+type Step = "personal-info" | "background-auth" | "credit-auth" | "processing";
 
 interface VerificationFlowProps {
   initialPaymentMethods?: SavedPaymentMethod[];
@@ -72,6 +60,7 @@ export const VerificationFlow = ({
   initialClientSecret,
   isAdmin = false,
 }: VerificationFlowProps): JSX.Element => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<Step>("personal-info");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [processingStep, setProcessingStep] = useState<ProcessingStep>("select-payment");
@@ -79,8 +68,29 @@ export const VerificationFlow = ({
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null);
   const [shouldStartPayment, setShouldStartPayment] = useState(false);
   const [showTestClientModal, setShowTestClientModal] = useState(false);
-  const [creditData, setCreditData] = useState<ISoftPullResponse | null>(null);
-  const [bgsReport, setBgsReport] = useState<BGSReportData | null>(null);
+
+  // Consent timestamp tracking for FCRA compliance audit
+  // These track when the user checked the authorization checkbox
+  // If unchecked and rechecked, timestamp updates to latest check time
+  const [backgroundCheckConsentAt, setBackgroundCheckConsentAt] = useState<Date | null>(null);
+  const [creditCheckConsentAt, setCreditCheckConsentAt] = useState<Date | null>(null);
+
+  // Handlers for consent checkbox changes
+  const handleBackgroundConsentChange = (checked: boolean) => {
+    if (checked) {
+      setBackgroundCheckConsentAt(new Date());
+    } else {
+      setBackgroundCheckConsentAt(null);
+    }
+  };
+
+  const handleCreditConsentChange = (checked: boolean) => {
+    if (checked) {
+      setCreditCheckConsentAt(new Date());
+    } else {
+      setCreditCheckConsentAt(null);
+    }
+  };
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -202,30 +212,13 @@ export const VerificationFlow = ({
   };
 
   const handleProcessingComplete = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentStep("results");
-      setIsTransitioning(false);
-      scrollToTop();
-    }, 300);
-  };
-
-  const handleViewDetails = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentStep("details");
-      setIsTransitioning(false);
-      scrollToTop();
-    }, 300);
+    // Redirect to the verification list page after completion
+    router.push("/app/rent/verification/list");
   };
 
   const handlePaymentMethodReady = (ready: boolean, paymentMethodId: string | null) => {
     setCanPay(ready);
     setSelectedPaymentMethodId(paymentMethodId);
-  };
-
-  const handleCreditDataReceived = (data: ISoftPullResponse) => {
-    setCreditData(data);
   };
 
   const handlePayClick = () => {
@@ -280,6 +273,7 @@ export const VerificationFlow = ({
               checkboxName="backgroundCheckAuthorization"
               checkboxLabel="By checking this box, I authorize Matchbook LLC to conduct a background check and eviction history search."
               checkboxId="background-auth-checkbox"
+              onConsentChange={handleBackgroundConsentChange}
             >
               <BackgroundCheckAuthorizationContent />
             </AuthorizationStepScreen>
@@ -292,6 +286,7 @@ export const VerificationFlow = ({
               checkboxName="creditAuthorizationAcknowledgment"
               checkboxLabel="By checking this box, I authorize Matchbook LLC to obtain my credit report for rental evaluation purposes."
               checkboxId="credit-auth-checkbox"
+              onConsentChange={handleCreditConsentChange}
             >
               <CreditCheckAuthorizationContent />
             </AuthorizationStepScreen>
@@ -304,25 +299,15 @@ export const VerificationFlow = ({
               onBack={handleBackToCreditAuth}
               onStepChange={setProcessingStep}
               onPaymentMethodReady={handlePaymentMethodReady}
-              onCreditDataReceived={handleCreditDataReceived}
               selectedPaymentMethodId={selectedPaymentMethodId}
               shouldStartPayment={shouldStartPayment}
               initialPaymentMethods={initialPaymentMethods}
               initialClientSecret={initialClientSecret}
+              backgroundCheckConsentAt={backgroundCheckConsentAt}
+              creditCheckConsentAt={creditCheckConsentAt}
             />
           )}
 
-          {currentStep === "results" && (
-            <VerificationResultsScreen
-              onViewDetails={handleViewDetails}
-              creditData={creditData}
-              bgsReport={bgsReport}
-            />
-          )}
-
-          {currentStep === "details" && (
-            <VerificationDetailsScreen />
-          )}
         </div>
       </Form>
 
@@ -389,15 +374,6 @@ export const VerificationFlow = ({
             label: processingStep === "select-payment" ? "Pay $25.00" : "View Report",
             onClick: processingStep === "select-payment" ? handlePayClick : handleProcessingComplete,
             disabled: processingStep === "select-payment" ? !canPay : processingStep !== "complete",
-          }}
-        />
-      )}
-
-      {currentStep === "results" && (
-        <VerificationFooter
-          primaryButton={{
-            label: "View Details",
-            onClick: handleViewDetails,
           }}
         />
       )}
