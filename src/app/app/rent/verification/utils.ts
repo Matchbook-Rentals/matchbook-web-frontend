@@ -49,6 +49,16 @@ export function generateVerificationXml(
   </login>
   <mode>PROD</mode>
   <placeOrder number="${orderId}">
+    <postBackInfo>
+      <authentication>
+        <type>Basic</type>
+        <username>${username}</username>
+        <password>${password}</password>
+      </authentication>
+      <URL>${postbackUrl}</URL>
+      <guID>${orderId}</guID>
+      <postback_types>ICR::OCR</postback_types>
+    </postBackInfo>
     <subject>
       <name_first>${firstName}</name_first>
       <name_last>${lastName}</name_last>
@@ -66,15 +76,6 @@ export function generateVerificationXml(
     <subOrder type="evictions_check">
       <state>${state}</state>
     </subOrder>
-    <postBackInfo>
-      <authentication>
-        <type>Basic</type>
-        <username>${username}</username>
-        <password>${password}</password>
-      </authentication>
-      <URL>${postbackUrl}</URL>
-      <guID>${orderId}</guID>
-    </postBackInfo>
   </placeOrder>
 </New_Order>`;
 }
