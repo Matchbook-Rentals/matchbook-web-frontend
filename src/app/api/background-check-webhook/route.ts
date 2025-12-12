@@ -77,34 +77,146 @@ export async function POST(request: NextRequest) {
     let reportData: AccioSimplifiedResult | null = null;
     let completeOrder: any = null;
 
-    // Try ScreeningResults completeOrder format (OCR - final results)
+    // Handle ScreeningResults completeOrder format (OCR - final results) - log only
     if (parsedXml?.ScreeningResults?.completeOrder) {
       completeOrder = parsedXml.ScreeningResults.completeOrder;
-      // Handle both single order and array of orders
       if (Array.isArray(completeOrder)) {
         completeOrder = completeOrder[0];
       }
-      orderId = completeOrder.remote_number || completeOrder.orderID;
-      orderNumber = completeOrder.number;
-      console.log('📋 [Background Check Webhook] Found OCR (completeOrder) format - processing results');
+      console.log('📋 [Background Check Webhook] Found OCR (completeOrder) format - logging only');
+      console.log('📋 [Background Check Webhook] Order number:', completeOrder.number);
+      console.log('📋 [Background Check Webhook] Remote order ID:', completeOrder.remote_number);
+      console.log('📋 [Background Check Webhook] Overall status:', completeOrder.status);
+      console.log('📋 [Background Check Webhook] Report URL:', completeOrder.reportURL?.HTML);
+      // Acknowledge receipt but don't process - using ICR for incremental updates
+      return NextResponse.json({
+        success: true,
+        message: "OCR received and logged - using ICR for incremental updates",
+        orderNumber: completeOrder.number,
+        status: completeOrder.status,
+        reportUrl: completeOrder.reportURL?.HTML
+      });
     }
-    // Handle ScreeningResults postResults format (ICR - initial/partial results)
+    // Handle ScreeningResults postResults format (ICR - incremental results) - process these
     else if (parsedXml?.ScreeningResults?.postResults) {
       const postResults = parsedXml.ScreeningResults.postResults;
-      console.log('📋 [Background Check Webhook] Found ICR (postResults) format - logging only');
+      console.log('📋 [Background Check Webhook] Found ICR (postResults) format - processing');
       console.log('📋 [Background Check Webhook] Order number:', postResults.order);
       console.log('📋 [Background Check Webhook] Remote order ID:', postResults.remote_order);
       console.log('📋 [Background Check Webhook] SubOrder type:', postResults.type);
       console.log('📋 [Background Check Webhook] SubOrder ID:', postResults.remote_subOrder);
       console.log('📋 [Background Check Webhook] Filled status:', postResults.filledStatus, '/', postResults.filledCode);
-      // Acknowledge receipt but don't process - wait for OCR (completeOrder)
+
+      // Use our order number for lookup (stored in postResults.order)
+      orderNumber = postResults.order;
+      orderId = postResults.order;
+
+      // Process ICR incrementally
+      const icrOrderNumber = postResults.order;
+      const subOrderType = postResults.type;
+      const filledCode = postResults.filledCode;
+      const filledStatus = postResults.filledStatus;
+      const heldForReview = postResults.held_for_review;
+
+      // Look up existing report by order number
+      console.log('🔍 [Background Check Webhook] Looking up BGS report for ICR order:', icrOrderNumber);
+      const existingReport = await prisma.bGSReport.findFirst({
+        where: { orderId: icrOrderNumber },
+        include: { purchase: true, user: true }
+      });
+
+      if (!existingReport) {
+        console.error(`❌ [Background Check Webhook] No BGS report found for order: ${icrOrderNumber}`);
+        return NextResponse.json(
+          { error: "BGS report not found", orderNumber: icrOrderNumber },
+          { status: 404 }
+        );
+      }
+
+      console.log('✅ [Background Check Webhook] Found BGS report:', existingReport.id);
+
+      // Get existing report data or initialize
+      const existingReportData = (existingReport.reportData as any) || {};
+
+      // Determine status based on filledCode
+      let status = "Pending";
+      if (heldForReview === 'Y') {
+        status = "Pending Review";
+      } else if (filledCode === 'clear' || filledCode === 'no hits') {
+        status = "Clear";
+      } else if (filledCode === 'hits') {
+        status = "Records Found";
+      } else if (filledStatus === 'filled') {
+        status = "Clear";
+      }
+
+      // Update the specific suborder result
+      if (subOrderType === 'National Criminal' || subOrderType === 'National Criminal2') {
+        existingReportData.nationalCriminal = {
+          status: filledStatus,
+          result: filledCode,
+          heldForReview: heldForReview === 'Y',
+          displayStatus: status,
+          receivedAt: new Date().toISOString()
+        };
+        console.log('📋 [Background Check Webhook] Updated National Criminal:', status);
+      } else if (subOrderType === 'evictions_check') {
+        existingReportData.evictions = {
+          status: filledStatus,
+          result: filledCode,
+          heldForReview: heldForReview === 'Y',
+          displayStatus: status,
+          receivedAt: new Date().toISOString()
+        };
+        console.log('📋 [Background Check Webhook] Updated Evictions:', status);
+      }
+
+      // Check if both results are in - if so, mark as completed
+      const hasCriminal = existingReportData.nationalCriminal?.result;
+      const hasEvictions = existingReportData.evictions?.result;
+      const newStatus = (hasCriminal && hasEvictions) ? 'completed' : 'processing';
+
+      // Update the BGS report
+      await prisma.bGSReport.update({
+        where: { id: existingReport.id },
+        data: {
+          status: newStatus,
+          reportData: existingReportData,
+          receivedAt: new Date()
+        }
+      });
+
+      console.log(`✅ [Background Check Webhook] ICR update complete - status: ${newStatus}`);
+
+      // If completed, also update Verification record
+      if (newStatus === 'completed' && existingReport.userId) {
+        const criminalStatus = existingReportData.nationalCriminal?.displayStatus || 'Pending';
+        const evictionStatus = existingReportData.evictions?.displayStatus || 'Pending';
+
+        await prisma.verification.upsert({
+          where: { userId: existingReport.userId },
+          update: {
+            backgroundCheckStatus: 'completed',
+            criminalRecordsStatus: criminalStatus,
+            evictionHistoryStatus: evictionStatus,
+          },
+          create: {
+            userId: existingReport.userId,
+            backgroundCheckStatus: 'completed',
+            criminalRecordsStatus: criminalStatus,
+            evictionHistoryStatus: evictionStatus,
+          }
+        });
+        console.log('✅ [Background Check Webhook] Updated Verification record');
+      }
+
       return NextResponse.json({
         success: true,
-        message: "ICR received and logged - awaiting complete results (OCR)",
-        orderNumber: postResults.order,
-        subOrderType: postResults.type,
-        filledStatus: postResults.filledStatus,
-        filledCode: postResults.filledCode
+        message: `ICR processed - ${subOrderType}: ${status}`,
+        orderNumber: icrOrderNumber,
+        subOrderType,
+        status,
+        overallStatus: newStatus
       });
     }
     // Try order confirmation format (initial order response)
