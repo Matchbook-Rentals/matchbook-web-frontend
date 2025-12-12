@@ -43,6 +43,7 @@ const ISOFTPULL_TEST_CLIENTS = [
 
 // Accio Data test clients for background check testing
 const ACCIO_TEST_CLIENTS = [
+  { firstName: "John", lastName: "Doe", credit: "Clean Record", ssn: "000000001", dob: "1990-01-01", address: "123 Test Street", city: "Atlanta", state: "GA", zip: "30301" },
   { firstName: "Dante", lastName: "Blackwood", credit: "Eviction Records", ssn: "118829724", dob: "1994-05-13", address: "751 N Indian Creek DR", city: "Clarkston", state: "GA", zip: "30021" },
   { firstName: "Marcus", lastName: "Snell", credit: "Criminal Records", ssn: "123456789", dob: "1983-03-24", address: "123 Any Street", city: "Anytown", state: "GA", zip: "30021" },
 ];
@@ -253,10 +254,10 @@ export const VerificationFlow = ({
 
               <div className="flex flex-col w-full items-start gap-1">
                 <h1 className="font-text-heading-medium-medium text-[#373940] text-4xl">
-                  Complete MatchBook Renter Verification
+                  MatchBook Renter Verification
                 </h1>
                 <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
-                  This screening includes a credit check, eviction history, and criminal background check
+                  This includes a credit check, eviction history, and criminal background check
                 </p>
               </div>
 

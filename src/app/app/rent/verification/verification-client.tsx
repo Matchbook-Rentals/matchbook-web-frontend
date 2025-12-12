@@ -260,7 +260,7 @@ export default function VerificationClient({
   // Initial welcome screen
   if (!showForm) {
     return (
-      <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-12 items-center max-w-3xl test mx-auto">
         {/* Village Illustration */}
         <div className="relative aspect-square max-w-md mx-auto">
           <Image

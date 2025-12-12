@@ -138,7 +138,7 @@ export default async function VerificationPage({
   return (
     <div className={`min-h-screen bg-background ${APP_PAGE_MARGIN} `}>
       {/* Main Content */}
-      <main className="md:container mx-auto py-8">
+      <main className="max-w-3xl mx-auto py-8">
         <Suspense fallback={<div>Loading...</div>}>
           <VerificationFlow
             initialPaymentMethods={initialPaymentMethods}
