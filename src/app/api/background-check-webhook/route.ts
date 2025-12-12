@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     let reportData: AccioSimplifiedResult | null = null;
     let completeOrder: any = null;
 
-    // Try ScreeningResults format (webhook callback)
+    // Try ScreeningResults completeOrder format (OCR - final results)
     if (parsedXml?.ScreeningResults?.completeOrder) {
       completeOrder = parsedXml.ScreeningResults.completeOrder;
       // Handle both single order and array of orders
@@ -86,7 +86,26 @@ export async function POST(request: NextRequest) {
       }
       orderId = completeOrder.remote_number || completeOrder.orderID;
       orderNumber = completeOrder.number;
-      console.log('📋 [Background Check Webhook] Found ScreeningResults format');
+      console.log('📋 [Background Check Webhook] Found OCR (completeOrder) format - processing results');
+    }
+    // Handle ScreeningResults postResults format (ICR - initial/partial results)
+    else if (parsedXml?.ScreeningResults?.postResults) {
+      const postResults = parsedXml.ScreeningResults.postResults;
+      console.log('📋 [Background Check Webhook] Found ICR (postResults) format - logging only');
+      console.log('📋 [Background Check Webhook] Order number:', postResults.order);
+      console.log('📋 [Background Check Webhook] Remote order ID:', postResults.remote_order);
+      console.log('📋 [Background Check Webhook] SubOrder type:', postResults.type);
+      console.log('📋 [Background Check Webhook] SubOrder ID:', postResults.remote_subOrder);
+      console.log('📋 [Background Check Webhook] Filled status:', postResults.filledStatus, '/', postResults.filledCode);
+      // Acknowledge receipt but don't process - wait for OCR (completeOrder)
+      return NextResponse.json({
+        success: true,
+        message: "ICR received and logged - awaiting complete results (OCR)",
+        orderNumber: postResults.order,
+        subOrderType: postResults.type,
+        filledStatus: postResults.filledStatus,
+        filledCode: postResults.filledCode
+      });
     }
     // Try order confirmation format (initial order response)
     else if (parsedXml?.XML?.order) {
