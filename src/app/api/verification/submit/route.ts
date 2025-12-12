@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 
 // FORCED MOCK MODE - Always use mock responses for Accio Data background checks
 // Set to false to use real API
-const MOCK_MODE = true;
+const MOCK_MODE = false;
 
 export async function POST(request: Request) {
   try {

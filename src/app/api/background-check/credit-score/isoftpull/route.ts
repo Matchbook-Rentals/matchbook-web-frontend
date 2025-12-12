@@ -8,7 +8,7 @@ import { join } from 'path';
 const ISOFTPULL_API_URL = 'https://app.isoftpull.com/api/v2/reports';
 // FORCED MOCK MODE - Always use mock responses for iSoftPull credit checks
 // Set to false to use real API
-const MOCK_MODE = false;
+const MOCK_MODE = true;
 
 export async function POST(request: Request) {
   try {

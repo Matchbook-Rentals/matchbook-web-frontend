@@ -14,7 +14,7 @@ import {
 
 // SAFETY: Set to true to prevent API calls during development
 // NOTE: ACCIO_* env vars are commented out in .env to ensure we don't accidentally call the real API
-const MOCK_MODE = true;
+const MOCK_MODE = false;
 
 // Use the provided test credentials
 const ACCOUNT_DETAILS = {
