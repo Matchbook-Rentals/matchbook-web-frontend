@@ -122,8 +122,6 @@ export async function updateArticle(articleId: string, formData: FormData) {
   const authorTitle = formData.get('authorTitle') as string
   const metaTitle = formData.get('metaTitle') as string
   const metaDescription = formData.get('metaDescription') as string
-  const seoH1 = formData.get('seoH1') as string
-  const seoH2 = formData.get('seoH2') as string
 
   if (!title || !content) {
     return {
@@ -166,8 +164,6 @@ export async function updateArticle(articleId: string, formData: FormData) {
         authorTitle,
         metaTitle,
         metaDescription,
-        seoH1,
-        seoH2,
         updatedAt: new Date(),
       },
     })
@@ -204,8 +200,6 @@ export async function uploadArticle(formData: FormData) {
   const authorTitle = formData.get('authorTitle') as string
   const metaTitle = formData.get('metaTitle') as string
   const metaDescription = formData.get('metaDescription') as string
-  const seoH1 = formData.get('seoH1') as string
-  const seoH2 = formData.get('seoH2') as string
 
   if (!title || !content) {
     return {
@@ -258,8 +252,6 @@ export async function uploadArticle(formData: FormData) {
         authorTitle,
         metaTitle,
         metaDescription,
-        seoH1,
-        seoH2,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

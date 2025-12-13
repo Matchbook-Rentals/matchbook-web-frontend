@@ -43,8 +43,6 @@ export function ArticleForm({ article }: ArticleFormProps) {
   const [seoModalOpen, setSeoModalOpen] = useState(false)
   const [metaTitle, setMetaTitle] = useState(article?.metaTitle || '')
   const [metaDescription, setMetaDescription] = useState(article?.metaDescription || '')
-  const [seoH1, setSeoH1] = useState(article?.seoH1 || '')
-  const [seoH2, setSeoH2] = useState(article?.seoH2 || '')
   const [slugError, setSlugError] = useState('')
   const [isValidatingSlug, setIsValidatingSlug] = useState(false)
   const [editingLink, setEditingLink] = useState<HTMLAnchorElement | null>(null)
@@ -152,15 +150,6 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
 
     // Pre-fill SEO fields with defaults if empty
     if (!metaTitle) setMetaTitle(title)
-    if (!seoH1) setSeoH1(title)
-
-    // Extract first heading from content for h2 if empty
-    if (!seoH2) {
-      const headingMatch = content.match(/^#{1,3}\s+(.+)$/m)
-      if (headingMatch) {
-        setSeoH2(headingMatch[1])
-      }
-    }
 
     // Validate slug before opening modal
     setSlugError('')
@@ -187,8 +176,6 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
       formData.set('authorTitle', authorTitle)
       formData.set('metaTitle', metaTitle)
       formData.set('metaDescription', metaDescription)
-      formData.set('seoH1', seoH1)
-      formData.set('seoH2', seoH2)
 
       let result
       if (isEditing) {
@@ -410,32 +397,6 @@ Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulpu
                 value={metaDescription}
                 onChange={(e) => setMetaDescription(e.target.value)}
                 placeholder="Meta description"
-                className="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                h1
-              </label>
-              <input
-                type="text"
-                value={seoH1}
-                onChange={(e) => setSeoH1(e.target.value)}
-                placeholder={title || 'H1 heading'}
-                className="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                h2
-              </label>
-              <input
-                type="text"
-                value={seoH2}
-                onChange={(e) => setSeoH2(e.target.value)}
-                placeholder="H2 subheading"
                 className="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3c8787]"
               />
             </div>

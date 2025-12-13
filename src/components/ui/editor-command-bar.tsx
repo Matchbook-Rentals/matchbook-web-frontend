@@ -5,9 +5,9 @@ import {
   Bold,
   Italic,
   Underline,
-  Heading1,
   Heading2,
   Heading3,
+  Heading4,
   List,
   ListOrdered,
   Link,
@@ -297,30 +297,30 @@ export function EditorCommandBar({
 
           <Divider />
 
-          {/* Headings - always enabled */}
+          {/* Headings - always enabled (H2/H3/H4 since article title is H1) */}
           <CommandButton
             onClick={() => insertHeading(1)}
             disabled={false}
             active={isHeader}
-            title="Header"
+            title="Header (H2)"
           >
-            <Heading1 className="h-5 w-5" />
+            <Heading2 className="h-5 w-5" />
           </CommandButton>
           <CommandButton
             onClick={() => insertHeading(2)}
             disabled={false}
             active={isSubheader}
-            title="Subheader"
+            title="Subheader (H3)"
           >
-            <Heading2 className="h-5 w-5" />
+            <Heading3 className="h-5 w-5" />
           </CommandButton>
           <CommandButton
             onClick={() => insertHeading(3)}
             disabled={false}
             active={isSection}
-            title="Section"
+            title="Section (H4)"
           >
-            <Heading3 className="h-5 w-5" />
+            <Heading4 className="h-5 w-5" />
           </CommandButton>
 
           <Divider />

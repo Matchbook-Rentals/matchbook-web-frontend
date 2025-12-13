@@ -1633,8 +1633,6 @@ model BlogArticle {
   // SEO fields
   metaTitle       String?  @db.VarChar(255)
   metaDescription String?  @db.Text
-  seoH1           String?  @db.VarChar(255)
-  seoH2           String?  @db.VarChar(255)
   categories  Category[]
   tags        Tag[]
 

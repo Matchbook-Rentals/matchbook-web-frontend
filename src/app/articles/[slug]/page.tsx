@@ -99,17 +99,20 @@ export default async function ArticlePage({ params }: Params) {
           )}
         </div>
       )}
-      <article className="w-full prose-sm md:prose-base lg:prose-lg mb-8">
+      <article className="w-full text-gray-600 leading-relaxed mb-8">
         <ReactMarkdown
           components={{
-            h1: ({node, ...props}) => <h2 className={`text-xl font-medium my-4 ${lora.className}`} {...props} />,
-            h2: ({node, ...props}) => <h3 className={`text-lg font-medium my-3 ${lora.className}`} {...props} />,
-            h3: ({node, ...props}) => <h4 className={`text-base font-medium my-2 ${lora.className}`} {...props} />,
+            h1: ({node, ...props}) => <h2 className="text-xl font-semibold my-4" {...props} />,
+            h2: ({node, ...props}) => <h3 className="text-lg font-semibold my-3" {...props} />,
+            h3: ({node, ...props}) => <h4 className="text-base font-semibold my-2" {...props} />,
             p: ({node, ...props}) => <p className="mb-2" {...props} />,
             img: ({node, ...props}) => <img className="w-full h-auto my-4" {...props} />,
-            a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
-            ul: ({node, ...props}) => <ul className="list-disc ml-4" {...props} />,
-            strong: ({node, ...props}) => <strong className="font-semibold" {...props} />
+            a: ({node, ...props}) => <a className="text-[#3c8787] underline hover:text-[#2a6363]" target="_blank" rel="noopener noreferrer" {...props} />,
+            ul: ({node, ...props}) => <ul className="list-disc ml-6 my-2" {...props} />,
+            ol: ({node, ...props}) => <ol className="list-decimal ml-6 my-2" {...props} />,
+            strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
+            em: ({node, ...props}) => <em className="italic" {...props} />,
+            u: ({node, ...props}) => <u className="underline" {...props} />
           }}
         >{article.content}</ReactMarkdown>
       </article>

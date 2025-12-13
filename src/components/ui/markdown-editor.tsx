@@ -63,25 +63,20 @@ function markdownToHtml(markdown: string): string {
   // This is simplified - a full implementation would track list types
   html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`)
 
-  // Paragraphs - wrap lines that aren't already wrapped in block elements
-  const lines = html.split('\n')
-  html = lines.map(line => {
-    const trimmed = line.trim()
-    if (!trimmed) return '<br>'
-    if (trimmed.startsWith('<h') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol') || trimmed.startsWith('<li')) {
-      return line
+  // Split by double newlines (paragraph breaks) first
+  const paragraphs = html.split(/\n\n+/)
+
+  html = paragraphs.map(para => {
+    const trimmed = para.trim()
+    if (!trimmed) return ''
+    // Don't wrap block elements in paragraphs
+    if (trimmed.startsWith('<h') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol')) {
+      return trimmed
     }
-    return line
-  }).join('\n')
-
-  // Convert newlines to <br> for non-block content
-  html = html.replace(/\n/g, '<br>')
-
-  // Clean up extra <br> tags around block elements
-  html = html.replace(/<br>(<h[2-4]>)/g, '$1')
-  html = html.replace(/(<\/h[2-4]>)<br>/g, '$1')
-  html = html.replace(/<br>(<ul>)/g, '$1')
-  html = html.replace(/(<\/ul>)<br>/g, '$1')
+    // Single newlines within a paragraph become spaces (standard markdown behavior)
+    const collapsed = trimmed.replace(/\n/g, ' ')
+    return `<p>${collapsed}</p>`
+  }).filter(Boolean).join('\n')
 
   return html
 }
@@ -98,10 +93,15 @@ function htmlToMarkdown(html: string): string {
   markdown = markdown.replace(/<div>/gi, '\n')
   markdown = markdown.replace(/<\/div>/gi, '')
 
+  // Paragraphs - convert to double newlines
+  markdown = markdown.replace(/<\/p>\s*<p>/gi, '\n\n')
+  markdown = markdown.replace(/<p>/gi, '')
+  markdown = markdown.replace(/<\/p>/gi, '\n\n')
+
   // Headings - H2, H3, H4 map to #, ##, ### in markdown
-  markdown = markdown.replace(/<h2>(.*?)<\/h2>/gi, '# $1')
-  markdown = markdown.replace(/<h3>(.*?)<\/h3>/gi, '## $1')
-  markdown = markdown.replace(/<h4>(.*?)<\/h4>/gi, '### $1')
+  markdown = markdown.replace(/<h2>(.*?)<\/h2>/gi, '# $1\n\n')
+  markdown = markdown.replace(/<h3>(.*?)<\/h3>/gi, '## $1\n\n')
+  markdown = markdown.replace(/<h4>(.*?)<\/h4>/gi, '### $1\n\n')
 
   // Bold
   markdown = markdown.replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
@@ -136,7 +136,7 @@ function htmlToMarkdown(html: string): string {
   markdown = markdown.replace(/&gt;/g, '>')
   markdown = markdown.replace(/&nbsp;/g, ' ')
 
-  // Clean up multiple newlines
+  // Clean up multiple newlines (keep max 2)
   markdown = markdown.replace(/\n{3,}/g, '\n\n')
 
   return markdown.trim()
@@ -251,6 +251,7 @@ export function MarkdownEditor({
         className={cn(
           'min-h-[400px] outline-none text-gray-600 leading-relaxed',
           'empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400',
+          '[&>p]:mb-2',
           '[&>h2]:text-xl [&>h2]:font-semibold [&>h2]:my-4',
           '[&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-3',
           '[&>h4]:text-base [&>h4]:font-semibold [&>h4]:my-2',
