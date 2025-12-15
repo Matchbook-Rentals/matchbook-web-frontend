@@ -14,15 +14,19 @@ interface MarketingPageHeaderProps {
   headerText: string;
   highlightedText?: string;
   breadcrumbText?: string;
+  breadcrumbTextClassName?: string;
   articleSlug?: string;
   onSlugChange?: (slug: string) => void;
   asHeader?: boolean;
 }
 
+const defaultBreadcrumbClassName = "[font-family:'Poppins',Helvetica] font-normal text-[#101828] text-[14px] md:text-base leading-6";
+
 export const MarketingPageHeader = ({
   headerText,
   highlightedText,
   breadcrumbText,
+  breadcrumbTextClassName = defaultBreadcrumbClassName,
   articleSlug,
   onSlugChange,
   asHeader = true,
@@ -37,7 +41,7 @@ export const MarketingPageHeader = ({
       <CardContent className="p-0 flex flex-col items-center w-full bg-background">
         <div className="flex flex-col items-center">
           {highlightedText && (
-            <h2 className="w-fit [font-family:'Lora',Helvetica] font-semibold text-[#0b6969] text-base text-center">
+            <h2 className="w-fit font-[Lora] font-semibold text-[#0B6969]/90 text-[16px] text-center leading-normal">
               {highlightedText}
             </h2>
           )}
@@ -84,7 +88,7 @@ export const MarketingPageHeader = ({
               </>
             ) : (
               <BreadcrumbItem>
-                <BreadcrumbPage className="[font-family:'Poppins',Helvetica] font-normal text-gray-3900 text-[14px] md:text-base leading-6">
+                <BreadcrumbPage className={breadcrumbTextClassName}>
                   {breadcrumbText || headerText}
                 </BreadcrumbPage>
               </BreadcrumbItem>

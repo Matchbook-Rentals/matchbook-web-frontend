@@ -60,6 +60,7 @@ export const ReviewsSection = (): JSX.Element => {
 
   return (
     <section className="relative w-full bg-[#0B6969]">
+      <h2 className="sr-only">Real Reviews, Reliable Renters, Worry-Free Renting</h2>
       {/* Mobile/Tablet view - just the image */}
       <div className="block lg:hidden w-full">
         <img

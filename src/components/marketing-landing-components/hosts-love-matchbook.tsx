@@ -38,9 +38,9 @@ export const HostsLoveMatchbook = (): JSX.Element => {
   return (
     <section className="flex flex-col items-center gap-14 px-4 md:px-[100px] lg:px-[150px] py-16 max-w-[1600px] mx-auto">
       <header className="inline-flex flex-col items-center gap-1">
-        <h3 className="w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
-          MatchBook is Free for Hosts
-        </h3>
+        <h2 className="w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
+          Why Hosts Love MatchBook
+        </h2>
       </header>
 
       <div className="flex flex-col items-start gap-6 w-full">
@@ -59,12 +59,12 @@ export const HostsLoveMatchbook = (): JSX.Element => {
                 <div className="flex-col gap-4 flex items-start w-full">
                   <div className="flex-col gap-2 flex items-start w-full">
                     <div className="gap-4 flex items-start w-full">
-                      <h2 className="flex-1 mt-[-1.00px] font-['Poppins',Helvetica] text-2xl tracking-[0] leading-8">
+                      <h3 className="flex-1 mt-[-1.00px] font-['Poppins',Helvetica] text-2xl tracking-[0] leading-8">
                         <span className="font-semibold text-[#101828]">
                           {feature.id}.{" "}
                         </span>
                         <span className="text-[#101828]">{feature.title}</span>
-                      </h2>
+                      </h3>
                     </div>
                     <p className="font-['Poppins',Helvetica] font-normal text-[#484a54] text-base tracking-[0] leading-6">
                       {feature.description}
@@ -91,10 +91,10 @@ export const HostsLoveMatchbook = (): JSX.Element => {
                 <div className="flex-col gap-4 flex items-start w-full">
                   <div className="flex-col gap-2 flex items-start w-full">
                     <div className="gap-4 flex items-start w-full">
-                      <h2 className="flex-1 mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#101828] text-2xl tracking-[0] leading-8">
+                      <h3 className="flex-1 mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#101828] text-2xl tracking-[0] leading-8">
                         <span className="font-semibold">{feature.id}. </span>
                         <span>{feature.title}</span>
-                      </h2>
+                      </h3>
                     </div>
                     <p className="font-['Poppins',Helvetica] font-normal text-[#484a54] text-base tracking-[0] leading-6">
                       {feature.description}
@@ -121,12 +121,12 @@ export const HostsLoveMatchbook = (): JSX.Element => {
                 <div className="flex-col gap-4 flex items-start w-full">
                   <div className="flex-col gap-2 flex items-start w-full">
                     <div className="gap-4 flex items-start w-full">
-                      <h2 className="flex-1 mt-[-1.00px] font-['Poppins',Helvetica] text-2xl tracking-[0] leading-8">
+                      <h3 className="flex-1 mt-[-1.00px] font-['Poppins',Helvetica] text-2xl tracking-[0] leading-8">
                         <span className="font-semibold text-[#101828]">
                           {feature.id}.{" "}
                         </span>
                         <span className="text-[#101828]">{feature.title}</span>
-                      </h2>
+                      </h3>
                     </div>
                     <p className="font-['Poppins',Helvetica] font-normal text-[#484a54] text-base tracking-[0] leading-6">
                       {feature.description}

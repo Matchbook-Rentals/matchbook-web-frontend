@@ -44,8 +44,9 @@ export default async function HostsPage(): Promise<React.ReactNode> {
         />
         <div className="flex justify-center p-8">
           <MarketingPageHeader
-            headerText="Manage your Midterm Rental"
-            highlightedText="List Your Monthly Rental for Free"
+            headerText="Become a Host"
+            highlightedText="Earn More, Keep More"
+            breadcrumbText="Become a host"
           />
         </div>
 
