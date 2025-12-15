@@ -31,8 +31,8 @@ export default async function AboutPage() {
       <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
       <div className="flex justify-center p-8">
         <MarketingPageHeader
-          headerText="Simplifying Midterm Rentals"
-          highlightedText="Better Rental Experience"
+          headerText="About Us"
+          highlightedText="About Us"
         />
       </div>
       <AboutUsOurJourney />

@@ -63,11 +63,11 @@ MatchBook integrates essential features into one platform accessible for all bud
                       <feature.icon className="w-6 h-6 text-[#3c8787]" />
                     </div>
 
-                    <div
+                    <h3
                       className={`relative ${feature.width} font-['Poppins',Helvetica] font-normal text-gray-neutral900 text-xs text-center tracking-[0] leading-6`}
                     >
                       {feature.title}
-                    </div>
+                    </h3>
                   </div>
                 </CardContent>
               </Card>

@@ -3,6 +3,7 @@ import React from "react";
 export const AboutUsLookingAhead = (): JSX.Element => {
   return (
     <>
+      <h2 className="sr-only">Looking Ahead</h2>
       {/* Desktop Layout */}
       <section className="hidden md:block relative w-full h-[488px] overflow-hidden" style={{ backgroundColor: '#FBFBFB' }}>
         <div className="relative w-full max-w-[1440px] mx-auto h-full flex items-center justify-center">

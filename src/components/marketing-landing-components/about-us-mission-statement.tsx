@@ -43,9 +43,9 @@ export const Frame = (): JSX.Element => {
   return (
     <section className="flex flex-col items-start gap-[54px] px-[5%] md:px-[10%] lg:px-[150px] py-16 relative bg-[#e7f0f04c]">
       <header className="flex flex-col items-center gap-1 relative self-stretch w-full">
-        <h3 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
+        <h2 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] leading-[normal]">
           Tenant Screening and Rental Tools
-        </h3>
+        </h2>
 
         <div className="flex flex-col items-center gap-4 relative self-stretch w-full">
           <p className="relative w-full max-w-[720px] mt-[-1.00px] font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-neutral900 text-[length:var(--text-label-medium-regular-font-size)] text-center tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
@@ -66,9 +66,9 @@ At MatchBook, we’re reshaping the rental experience by putting people first. W
               </div>
 
               <div className="flex flex-col items-center gap-2 relative self-stretch w-full md:flex-grow">
-                <h2 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-[#101828] text-[20px] md:text-2xl text-center tracking-[0] leading-8">
+                <h3 className="relative self-stretch mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-[#101828] text-[20px] md:text-2xl text-center tracking-[0] leading-8">
                   {value.title}
-                </h2>
+                </h3>
 
                 <p className="relative self-stretch font-['Poppins',Helvetica] font-normal text-[#484a54] text-base text-center tracking-[0] leading-6">
                   {value.description}

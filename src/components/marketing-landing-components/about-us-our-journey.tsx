@@ -6,9 +6,9 @@ export const AboutUsOurJourney = (): JSX.Element => {
   return (
     <section className="flex flex-col items-center gap-14  pt-8 pb-16">
       <header className="flex flex-col items-center gap-6 w-full">
-        <h1 className="w-full font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] font-['Poppins',Helvetica]">
+        <h2 className="w-full font-medium text-gray-neutral900 text-[40px] text-center tracking-[-2.00px] font-['Poppins',Helvetica]">
           Our Journey
-        </h1>
+        </h2>
 
         <div className="flex flex-col items-center gap-4 w-full">
           <p className="w-full font-text-label-medium-regular text-gray-neutral900 text-[16px] text-center">
