@@ -50,9 +50,9 @@ export const ContactInformation = (): JSX.Element => {
             {item.icon}
 
             <div className="flex-col flex-1 items-start flex relative gap-1">
-              <div className="font-['Poppins',Helvetica] font-normal text-white text-[min(1.8vh,18px)] leading-[100%] tracking-[0px]">
+              <h3 className="font-['Poppins',Helvetica] font-normal text-white text-[min(1.8vh,18px)] leading-[100%] tracking-[0px]">
                 {item.title}
-              </div>
+              </h3>
 
               <a
                 className="font-['Poppins',Helvetica] font-normal text-[#f1f1f1] text-[min(1.5vh,14px)] leading-[100%] tracking-[0px] opacity-90"
