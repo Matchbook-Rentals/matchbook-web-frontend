@@ -131,9 +131,9 @@ const FAQSection = () => {
   return (
     <MarketingContainer>
       <div className="w-full">
-        {/* SEO Headings */}
+        {/* SEO Heading */}
         <div className="mb-8">
-          <h1
+          <h2
             className={`font-medium text-center ${poppins.className}`}
             style={{
               fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
@@ -141,9 +141,8 @@ const FAQSection = () => {
               letterSpacing: 'clamp(-1px, -0.1vw, -2px)',
             }}
           >
-            Renter Questions
-          </h1>
-          <h2 className="sr-only">Host Questions</h2>
+            Frequently Asked Questions
+          </h2>
         </div>
         <TabSelector
           tabs={tabs}

@@ -68,9 +68,9 @@ export default function RecentArticle() {
                 Featured Article
               </p>
 
-              <h2 
-                className="text-white" 
-                style={{ 
+              <h3
+                className="text-white"
+                style={{
                   fontFamily: 'Lora',
                   fontWeight: 500,
                   fontSize: 'clamp(1.25rem, 4vw, 28px)',
@@ -79,7 +79,7 @@ export default function RecentArticle() {
                 }}
               >
                 {article.title}
-              </h2>
+              </h3>
             </div>
           </CardContent>
 

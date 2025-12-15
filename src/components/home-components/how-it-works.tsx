@@ -16,9 +16,9 @@ export const HowItWorks = (): JSX.Element => {
         }}
       >
         <header className="text-center">
-          <h3 className="font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] tracking-[-2.00px] leading-normal">
-            MatchBook Makes Renting Easy
-          </h3>
+          <h2 className="font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] tracking-[-2.00px] leading-normal">
+            How MatchBook Works
+          </h2>
         </header>
         
         <div className="w-full flex items-center justify-center relative">

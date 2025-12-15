@@ -1,5 +1,8 @@
 import Link from "next/link";
 import SocialLinks from "../SocialLinks";
+
+// TODO: Rework sub-desktop views. One idea is moving the social links to a new row at mobile.
+
 export default function Footer() {
 
   return (
