@@ -40,69 +40,75 @@ export const AuthorizationStepScreen = ({
   onConsentChange,
 }: AuthorizationStepScreenProps): JSX.Element => {
   return (
-    <div className="flex flex-col w-full items-start justify-center gap-4 p-2 md:p-4 pb-24">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">
-              <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>
-            <span className="font-text-md-regular font-[number:var(--text-md-regular-font-weight)] text-gray-500 text-[length:var(--text-md-regular-font-size)] tracking-[var(--text-md-regular-letter-spacing)] leading-[var(--text-md-regular-line-height)] [font-style:var(--text-md-regular-font-style)]">
-              /
-            </span>
-          </BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <BreadcrumbPage className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-900 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
-              MatchBook Renter Verification
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <div className="flex flex-col p-2 md:p-4">
+      {/* Header - fixed size */}
+      <div className="space-y-4 mb-4">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">
+                <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <span className="font-text-md-regular font-[number:var(--text-md-regular-font-weight)] text-gray-500 text-[length:var(--text-md-regular-font-size)] tracking-[var(--text-md-regular-letter-spacing)] leading-[var(--text-md-regular-line-height)] [font-style:var(--text-md-regular-font-style)]">
+                /
+              </span>
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-gray-900 text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]">
+                MatchBook Renter Verification
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <div className="flex flex-col w-full items-start gap-1">
-        <h1 className="font-text-heading-medium-medium text-[#373940] text-2xl md:text-4xl">
-          {title}
-        </h1>
-        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
-          Please review and authorize the disclosure below
-        </p>
+        <div className="flex flex-col w-full items-start gap-1">
+          <h1 className="font-text-heading-medium-medium text-[#373940] text-2xl md:text-4xl">
+            {title}
+          </h1>
+          <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm">
+            Please review and authorize the disclosure below
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-col items-start justify-center gap-6 w-full">
-        <Card className="w-full rounded-2xl shadow-none p-0 border border-solid border-[#e6e6e6]">
-          <CardContent className="flex flex-col items-start gap-6 p-4 md:p-6">
+      {/* Main content area */}
+      <Card className="w-full rounded-2xl shadow-none p-0 border border-solid border-[#e6e6e6]">
+        <CardContent className="flex flex-col gap-6 p-4 md:p-6">
+          {/* Scrollable legal content */}
+          <div className="max-h-[50dvh] overflow-y-auto pr-2">
             {children}
+          </div>
 
-            <FormField
-              control={form.control}
-              name={checkboxName}
-              render={({ field }) => (
-                <FormItem id={checkboxId} className="w-full pt-4 border-t border-[#e6e6e6]">
-                  <FormControl>
-                    <BrandCheckbox
-                      checked={field.value as boolean}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        field.onChange(checked);
-                        onConsentChange?.(checked);
-                      }}
-                      name={checkboxName}
-                      label={
-                        <span className="font-semibold text-[#373940]">
-                          {checkboxLabel}
-                        </span>
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
-      </div>
+          {/* Checkbox - always visible */}
+          <FormField
+            control={form.control}
+            name={checkboxName}
+            render={({ field }) => (
+              <FormItem id={checkboxId} className="w-full pt-4 border-t border-[#e6e6e6]">
+                <FormControl>
+                  <BrandCheckbox
+                    checked={field.value as boolean}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      field.onChange(checked);
+                      onConsentChange?.(checked);
+                    }}
+                    name={checkboxName}
+                    label={
+                      <span className="font-semibold text-[#373940]">
+                        {checkboxLabel}
+                      </span>
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 };

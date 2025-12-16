@@ -229,7 +229,7 @@ export const VerificationFlow = ({
   };
 
   return (
-    <div className="flex flex-col w-full items-start justify-center relative overflow-hidden pb-24">
+    <div className="flex flex-col w-full items-start justify-center relative overflow-hidden">
       <Form {...form}>
         <div
           className={`w-full transition-all duration-300 ease-in-out ${
@@ -237,7 +237,7 @@ export const VerificationFlow = ({
           }`}
         >
           {currentStep === "personal-info" && (
-            <div className="flex flex-col w-full items-start justify-center relative gap-4 p-2 md:p-4">
+            <div className="flex flex-col w-full items-start justify-center relative gap-4 p-2 pb-24">
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
