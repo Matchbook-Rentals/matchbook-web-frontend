@@ -168,32 +168,44 @@ export function EditorCommandBar({
   // Insert or toggle a heading (level 1=H2, 2=H3, 3=H4 since article title is H2)
   const insertHeading = (level: number) => {
     const selection = window.getSelection()
-    if (!selection) return
+    if (!selection || selection.rangeCount === 0) return
 
     const htmlLevel = level + 1 // Offset by 1 since article title uses H2
     const tagName = `H${htmlLevel}`
 
-    // Check if already in this heading
+    // Check if already in this heading - toggle off
     if (isInBlockElement(tagName)) {
-      // Remove heading - convert to paragraph
       document.execCommand('formatBlock', false, 'p')
-    } else {
-      if (selection.toString().length > 0) {
-        // Format selected text as heading
-        document.execCommand('formatBlock', false, tagName)
-      } else {
-        // Insert placeholder heading
-        const placeholders = ['Header', 'Subheader', 'Section']
-        const placeholder = placeholders[level - 1] || 'Header'
-        document.execCommand('formatBlock', false, tagName)
-        document.execCommand('insertText', false, placeholder)
+      return
+    }
 
-        // Select the placeholder text
-        const range = selection.getRangeAt(0)
-        range.setStart(range.startContainer, range.startOffset - placeholder.length)
-        selection.removeAllRanges()
-        selection.addRange(range)
+    if (selection.toString().length > 0) {
+      // Text selected: format selection as heading
+      document.execCommand('formatBlock', false, tagName)
+    } else {
+      // No selection: smart detection for new line
+      const placeholders = ['Header', 'Subheader', 'Section']
+      const placeholder = placeholders[level - 1] || 'Header'
+
+      // Check if current line has content
+      const range = selection.getRangeAt(0)
+      const currentNode = range.startContainer
+      const currentText = currentNode.textContent || ''
+      const isEmptyLine = currentText.trim() === ''
+
+      // Only insert new line if cursor is in middle of existing content
+      if (!isEmptyLine) {
+        document.execCommand('insertParagraph', false)
       }
+
+      document.execCommand('formatBlock', false, tagName)
+      document.execCommand('insertText', false, placeholder)
+
+      // Select the placeholder text for easy replacement
+      const newRange = selection.getRangeAt(0)
+      newRange.setStart(newRange.startContainer, newRange.startOffset - placeholder.length)
+      selection.removeAllRanges()
+      selection.addRange(newRange)
     }
   }
 
@@ -274,7 +286,7 @@ export function EditorCommandBar({
             onClick={() => applyFormat('bold')}
             disabled={!hasSelection}
             active={isBold}
-            title="Bold"
+            title="Bold selected text"
           >
             <Bold className="h-5 w-5" />
           </CommandButton>
@@ -282,7 +294,7 @@ export function EditorCommandBar({
             onClick={() => applyFormat('italic')}
             disabled={!hasSelection}
             active={isItalic}
-            title="Italic"
+            title="Italicize selected text"
           >
             <Italic className="h-5 w-5" />
           </CommandButton>
@@ -290,7 +302,7 @@ export function EditorCommandBar({
             onClick={() => applyFormat('underline')}
             disabled={!hasSelection}
             active={isUnderlined}
-            title="Underline"
+            title="Underline selected text"
           >
             <Underline className="h-5 w-5" />
           </CommandButton>
@@ -302,7 +314,7 @@ export function EditorCommandBar({
             onClick={() => insertHeading(1)}
             disabled={false}
             active={isHeader}
-            title="Header (H2)"
+            title="Heading: Select text to convert, or click to insert new heading"
           >
             <Heading2 className="h-5 w-5" />
           </CommandButton>
@@ -310,7 +322,7 @@ export function EditorCommandBar({
             onClick={() => insertHeading(2)}
             disabled={false}
             active={isSubheader}
-            title="Subheader (H3)"
+            title="Subheading: Select text to convert, or click to insert new subheading"
           >
             <Heading3 className="h-5 w-5" />
           </CommandButton>
@@ -318,7 +330,7 @@ export function EditorCommandBar({
             onClick={() => insertHeading(3)}
             disabled={false}
             active={isSection}
-            title="Section (H4)"
+            title="Section: Select text to convert, or click to insert new section header"
           >
             <Heading4 className="h-5 w-5" />
           </CommandButton>
@@ -329,14 +341,14 @@ export function EditorCommandBar({
           <CommandButton
             onClick={() => insertList(false)}
             disabled={!hasSelection}
-            title="Bullet List"
+            title="Create bullet list from selected text"
           >
             <List className="h-5 w-5" />
           </CommandButton>
           <CommandButton
             onClick={() => insertList(true)}
             disabled={!hasSelection}
-            title="Numbered List"
+            title="Create numbered list from selected text"
           >
             <ListOrdered className="h-5 w-5" />
           </CommandButton>
@@ -347,7 +359,7 @@ export function EditorCommandBar({
           <CommandButton
             onClick={openLinkModal}
             disabled={false}
-            title="Add Link"
+            title="Add link: Select text first, or click to insert new link"
           >
             <Link className="h-5 w-5" />
           </CommandButton>

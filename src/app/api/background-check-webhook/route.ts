@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/lib/prismadb';
 import { parseStringPromise } from 'xml2js';
+import { sendNotificationEmail } from '@/lib/send-notification-email';
+import { fetchAndParseEvictionRecords } from '@/lib/accio-pdf-parser';
 import type {
   AccioScreeningResults,
   AccioCompleteOrder,
   AccioSubOrder,
   AccioSimplifiedResult,
 } from '@/types/accio';
+
+// Accio credentials for PDF fetch
+const ACCIO_CREDENTIALS = {
+  account: process.env.ACCIO_ACCOUNT || 'matchbook',
+  username: process.env.ACCIO_USERNAME || '',
+  password: process.env.ACCIO_PASSWORD || '',
+};
 
 // Helper to return XML success response (Accio requires XML, not JSON)
 function xmlSuccess(message: string = "Accepted"): NextResponse {
@@ -22,6 +31,79 @@ function xmlError(errorMessage: string, status: number = 400): NextResponse {
     `<response><error>${errorMessage}</error></response>`,
     { status, headers: { 'Content-Type': 'text/xml' } }
   );
+}
+
+// Helper to parse Accio date format (YYYYMMDD) to Date
+function parseAccioDate(dateStr: string | undefined): Date | null {
+  if (!dateStr || dateStr.length !== 8) return null;
+  const year = parseInt(dateStr.substring(0, 4));
+  const month = parseInt(dateStr.substring(4, 6)) - 1; // 0-indexed
+  const day = parseInt(dateStr.substring(6, 8));
+  const date = new Date(year, month, day);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+// Helper to send eviction hit email notification
+async function sendEvictionHitEmail(
+  verificationId: string,
+  firstName: string,
+  lastName: string
+): Promise<void> {
+  try {
+    const result = await sendNotificationEmail({
+      to: 'tyler.bennett52@gmail.com',
+      subject: `[MatchBook] Eviction Hit - ${firstName} ${lastName}`,
+      emailData: {
+        companyName: 'MatchBook',
+        headerText: 'Eviction Record Found',
+        contentTitle: 'Action Required',
+        contentText: `Verification for ${firstName} ${lastName} has eviction hits. Please review in admin panel and enter eviction case details.`,
+        buttonText: 'Review Now',
+        buttonUrl: `https://matchbookrentals.com/admin/eviction-review/${verificationId}`,
+        companyAddress: '3024 N 1400 E',
+        companyCity: 'Ogden, UT',
+        companyWebsite: 'matchbookrentals.com',
+      }
+    });
+    if (result.success) {
+      console.log('📧 [Background Check Webhook] Eviction hit email sent successfully');
+    } else {
+      console.error('📧 [Background Check Webhook] Failed to send eviction hit email:', result.error);
+    }
+  } catch (error) {
+    console.error('📧 [Background Check Webhook] Error sending eviction hit email:', error);
+  }
+}
+
+// Helper to send user completion email when background check is done
+async function sendUserCompletionEmail(
+  userEmail: string,
+  firstName: string
+): Promise<void> {
+  try {
+    const result = await sendNotificationEmail({
+      to: userEmail,
+      subject: 'Your MatchBook Background Check is Complete',
+      emailData: {
+        companyName: 'MatchBook',
+        headerText: 'Background Check Complete',
+        contentTitle: 'Your Verification is Ready',
+        contentText: `Hi ${firstName}, your background check has been completed. You can now apply to rentals on MatchBook.`,
+        buttonText: 'View My Verification',
+        buttonUrl: 'https://matchbookrentals.com/app/rent/verification',
+        companyAddress: '3024 N 1400 E',
+        companyCity: 'Ogden, UT',
+        companyWebsite: 'matchbookrentals.com',
+      }
+    });
+    if (result.success) {
+      console.log('📧 [Background Check Webhook] User completion email sent successfully');
+    } else {
+      console.error('📧 [Background Check Webhook] Failed to send user completion email:', result.error);
+    }
+  } catch (error) {
+    console.error('📧 [Background Check Webhook] Error sending user completion email:', error);
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -93,132 +175,296 @@ export async function POST(request: NextRequest) {
     let reportData: AccioSimplifiedResult | null = null;
     let completeOrder: any = null;
 
-    // Handle ScreeningResults completeOrder format (OCR - final results) - log only
+    // Handle ScreeningResults completeOrder format (OCR - final results)
     if (parsedXml?.ScreeningResults?.completeOrder) {
-      completeOrder = parsedXml.ScreeningResults.completeOrder;
-      if (Array.isArray(completeOrder)) {
-        completeOrder = completeOrder[0];
-      }
-      console.log('📋 [Background Check Webhook] Found OCR (completeOrder) format - logging only');
+      const completeOrders = Array.isArray(parsedXml.ScreeningResults.completeOrder)
+        ? parsedXml.ScreeningResults.completeOrder
+        : [parsedXml.ScreeningResults.completeOrder];
+
+      completeOrder = completeOrders[0]; // Primary order for basic info
+
+      console.log('📋 [Background Check Webhook] Found OCR (completeOrder) format - processing');
+      console.log('📋 [Background Check Webhook] Number of completeOrders:', completeOrders.length);
       console.log('📋 [Background Check Webhook] Order number:', completeOrder.number);
       console.log('📋 [Background Check Webhook] Remote order ID:', completeOrder.remote_number);
       console.log('📋 [Background Check Webhook] Overall status:', completeOrder.status);
       console.log('📋 [Background Check Webhook] Report URL:', completeOrder.reportURL?.HTML);
-      // Acknowledge receipt - Accio requires XML response
-      return xmlSuccess("OCR received");
-    }
-    // Handle ScreeningResults postResults format (ICR - incremental results) - process these
-    else if (parsedXml?.ScreeningResults?.postResults) {
-      const postResults = parsedXml.ScreeningResults.postResults;
-      console.log('📋 [Background Check Webhook] Found ICR (postResults) format - processing');
-      console.log('📋 [Background Check Webhook] Order number:', postResults.order);
-      console.log('📋 [Background Check Webhook] Remote order ID:', postResults.remote_order);
-      console.log('📋 [Background Check Webhook] SubOrder type:', postResults.type);
-      console.log('📋 [Background Check Webhook] SubOrder ID:', postResults.remote_subOrder);
-      console.log('📋 [Background Check Webhook] Filled status:', postResults.filledStatus, '/', postResults.filledCode);
 
-      // Use our order number for lookup (stored in postResults.order)
-      orderNumber = postResults.order;
-      orderId = postResults.order;
+      // Get the order ID - try from number first, then reference_number
+      const orderNumber = completeOrder.number || completeOrders.find((o: any) => o.reference_number)?.reference_number;
 
-      // Process ICR incrementally
-      const icrOrderNumber = postResults.order;
-      const subOrderType = postResults.type;
-      const filledCode = postResults.filledCode;
-      const filledStatus = postResults.filledStatus;
-      const heldForReview = postResults.held_for_review;
+      if (!orderNumber) {
+        console.log('⚠️ [Background Check Webhook] OCR has no order number - acknowledging receipt');
+        return xmlSuccess("OCR received - no order number");
+      }
 
-      // Look up existing report by order number
-      console.log('🔍 [Background Check Webhook] Looking up BGS report for ICR order:', icrOrderNumber);
+      // Find the BGSReport
+      console.log('🔍 [Background Check Webhook] Looking up BGS report for OCR order:', orderNumber);
       const existingReport = await prisma.bGSReport.findFirst({
-        where: { orderId: icrOrderNumber },
-        include: { purchase: true, user: true }
+        where: { orderId: orderNumber },
+        include: { user: true }
       });
 
       if (!existingReport) {
-        console.error(`❌ [Background Check Webhook] No BGS report found for order: ${icrOrderNumber}`);
-        // Still return success to stop Accio retries - we logged the data
-        return xmlSuccess("Received - no matching order");
+        console.log('⚠️ [Background Check Webhook] No BGS report found for OCR order:', orderNumber);
+        return xmlSuccess("OCR received - no matching order");
       }
 
       console.log('✅ [Background Check Webhook] Found BGS report:', existingReport.id);
 
-      // Get existing report data or initialize
-      const existingReportData = (existingReport.reportData as any) || {};
+      // Get subject info for email
+      const firstName = completeOrder.subject?.name_first || 'Unknown';
+      const lastName = completeOrder.subject?.name_last || 'Unknown';
 
-      // Determine status based on filledCode
-      let status = "Pending";
-      if (heldForReview === 'Y') {
-        status = "Pending Review";
-      } else if (filledCode === 'clear' || filledCode === 'no hits') {
-        status = "Clear";
-      } else if (filledCode === 'hits') {
-        status = "Records Found";
-      } else if (filledStatus === 'filled') {
-        status = "Clear";
+      // Collect all criminal cases and eviction status from all completeOrders
+      const criminalCases: any[] = [];
+      let evictionStatus = "No Records Found";
+      let criminalStatus = "No Records Found";
+      let evictionCount = 0;
+      let criminalRecordCount = 0;
+      let reportUrl = completeOrder.reportURL?.HTML || '';
+
+      // Process all completeOrders to find subOrders with data
+      for (const order of completeOrders) {
+        const subOrders = order.subOrder
+          ? (Array.isArray(order.subOrder) ? order.subOrder : [order.subOrder])
+          : [];
+
+        for (const subOrder of subOrders) {
+          const subOrderType = subOrder.type || '';
+          const filledCode = subOrder.filledCode || '';
+          const heldForReview = subOrder.held_for_review || '';
+
+          console.log('📋 [Background Check Webhook] Processing subOrder:', subOrderType, 'filledCode:', filledCode);
+
+          // Handle County Criminal (contains case details)
+          if (subOrderType === 'County_criminal' && filledCode === 'hits') {
+            criminalStatus = heldForReview === 'Y' ? "Under Review" : "Records Found";
+
+            // Extract case details
+            const cases = subOrder.case
+              ? (Array.isArray(subOrder.case) ? subOrder.case : [subOrder.case])
+              : [];
+
+            for (const caseData of cases) {
+              criminalCases.push({
+                caseNumber: caseData.case_number || '',
+                filingDate: parseAccioDate(caseData.filing_date),
+                dispositionDate: parseAccioDate(caseData.disposition_date),
+                pendingDate: parseAccioDate(caseData.pending_date),
+                jurisdiction: subOrder.county || caseData.jurisdiction || '',
+                jurisdictionState: subOrder.state || caseData.jurisdiction_state || '',
+                courtSource: caseData.source || '',
+                charge: caseData.chargeinfo?.charge || '',
+                chargeNumber: parseInt(caseData.chargeinfo?.charge_number) || 1,
+                crimeType: caseData.chargeinfo?.crime_type || '',
+                disposition: caseData.chargeinfo?.disposition || '',
+                sentenceComments: caseData.chargeinfo?.sentence_comments || '',
+                identifiedByName: caseData.identified_by_name === 'Y',
+                identifiedByDob: caseData.identified_by_dob === 'Y',
+                identifiedBySsn: caseData.identified_by_ssn === 'Y',
+                rawData: caseData,
+              });
+            }
+            criminalRecordCount = criminalCases.length;
+            console.log('📋 [Background Check Webhook] Found', criminalCases.length, 'criminal cases');
+          }
+
+          // Handle National Criminal
+          if ((subOrderType === 'National Criminal' || subOrderType === 'National Criminal2')) {
+            if (filledCode === 'hits') {
+              criminalStatus = heldForReview === 'Y' ? "Under Review" : "Records Found";
+            } else if (filledCode === 'clear' && criminalStatus === "No Records Found") {
+              criminalStatus = "No Records Found";
+            }
+          }
+
+          // Handle Evictions
+          if (subOrderType === 'evictions_check') {
+            if (filledCode === 'hits') {
+              evictionStatus = heldForReview === 'Y' ? "Under Review" : "Records Found";
+              evictionCount = 1; // We don't get detailed eviction data in webhook
+            } else if (filledCode === 'clear') {
+              evictionStatus = "No Records Found";
+            }
+          }
+        }
       }
 
-      // Update the specific suborder result
-      if (subOrderType === 'National Criminal' || subOrderType === 'National Criminal2') {
-        existingReportData.nationalCriminal = {
-          status: filledStatus,
-          result: filledCode,
-          heldForReview: heldForReview === 'Y',
-          displayStatus: status,
-          receivedAt: new Date().toISOString()
-        };
-        console.log('📋 [Background Check Webhook] Updated National Criminal:', status);
-      } else if (subOrderType === 'evictions_check') {
-        existingReportData.evictions = {
-          status: filledStatus,
-          result: filledCode,
-          heldForReview: heldForReview === 'Y',
-          displayStatus: status,
-          receivedAt: new Date().toISOString()
-        };
-        console.log('📋 [Background Check Webhook] Updated Evictions:', status);
+      console.log('📋 [Background Check Webhook] Final OCR results:', {
+        criminalStatus,
+        criminalRecordCount,
+        evictionStatus,
+        evictionCount,
+      });
+
+      // Get or create Verification record
+      let verification = await prisma.verification.findUnique({
+        where: { userId: existingReport.userId },
+      });
+
+      if (!verification) {
+        console.log('⚠️ [Background Check Webhook] No verification found for user, creating one');
+        verification = await prisma.verification.create({
+          data: {
+            userId: existingReport.userId,
+            status: 'PROCESSING_BGS',
+          },
+        });
       }
 
-      // Check if both results are in - if so, mark as completed
-      const hasCriminal = existingReportData.nationalCriminal?.result;
-      const hasEvictions = existingReportData.evictions?.result;
-      const newStatus = (hasCriminal && hasEvictions) ? 'completed' : 'processing';
+      // Determine review statuses
+      const evictionReviewStatus = evictionStatus === "Records Found" ? "pending_review" : "not_applicable";
+      const criminalReviewStatus = criminalCases.length > 0 ? "reviewed" : "not_applicable"; // Auto-reviewed since we have details
 
-      // Update the BGS report
+      // Update BGS Report
       await prisma.bGSReport.update({
         where: { id: existingReport.id },
         data: {
-          status: newStatus,
-          reportData: existingReportData,
-          receivedAt: new Date()
-        }
+          status: 'completed',
+          reportData: {
+            status: 'complete',
+            orderId: orderNumber,
+            reportUrl,
+            criminalStatus,
+            criminalRecordCount,
+            evictionStatus,
+            evictionCount,
+            receivedAt: new Date().toISOString(),
+          } as any,
+          receivedAt: new Date(),
+        },
       });
 
-      console.log(`✅ [Background Check Webhook] ICR update complete - status: ${newStatus}`);
-
-      // If completed, also update Verification record
-      if (newStatus === 'completed' && existingReport.userId) {
-        const criminalStatus = existingReportData.nationalCriminal?.displayStatus || 'Pending';
-        const evictionStatus = existingReportData.evictions?.displayStatus || 'Pending';
-
-        await prisma.verification.upsert({
-          where: { userId: existingReport.userId },
-          update: {
-            backgroundCheckStatus: 'completed',
-            criminalRecordsStatus: criminalStatus,
-            evictionHistoryStatus: evictionStatus,
-          },
-          create: {
-            userId: existingReport.userId,
-            backgroundCheckStatus: 'completed',
-            criminalRecordsStatus: criminalStatus,
-            evictionHistoryStatus: evictionStatus,
-          }
+      // Create criminal records in database
+      if (criminalCases.length > 0) {
+        console.log('💾 [Background Check Webhook] Creating', criminalCases.length, 'criminal records');
+        await prisma.criminalRecord.createMany({
+          data: criminalCases.map(c => ({
+            verificationId: verification!.id,
+            caseNumber: c.caseNumber,
+            filingDate: c.filingDate,
+            dispositionDate: c.dispositionDate,
+            pendingDate: c.pendingDate,
+            jurisdiction: c.jurisdiction,
+            jurisdictionState: c.jurisdictionState,
+            courtSource: c.courtSource,
+            charge: c.charge,
+            chargeNumber: c.chargeNumber,
+            crimeType: c.crimeType,
+            disposition: c.disposition,
+            sentenceComments: c.sentenceComments,
+            identifiedByName: c.identifiedByName,
+            identifiedByDob: c.identifiedByDob,
+            identifiedBySsn: c.identifiedBySsn,
+            rawData: c.rawData,
+          })),
         });
-        console.log('✅ [Background Check Webhook] Updated Verification record');
+        console.log('✅ [Background Check Webhook] Criminal records created');
       }
 
-      return xmlSuccess(`ICR processed - ${subOrderType}: ${status}`);
+      // Update Verification
+      const screeningDate = new Date();
+      const validUntil = new Date();
+      validUntil.setDate(validUntil.getDate() + 90);
+
+      await prisma.verification.update({
+        where: { id: verification.id },
+        data: {
+          status: 'COMPLETED',
+          evictionStatus,
+          evictionCount,
+          criminalStatus,
+          criminalRecordCount,
+          evictionReviewStatus,
+          criminalReviewStatus,
+          screeningDate,
+          validUntil,
+          backgroundCheckedAt: new Date(),
+          backgroundCheckCompletedAt: new Date(),
+          bgsReportId: existingReport.id,
+        },
+      });
+      console.log('✅ [Background Check Webhook] Verification updated to COMPLETED');
+
+      // If eviction hits found, fetch PDF and parse eviction records
+      if (evictionStatus === "Records Found") {
+        console.log('📄 [Background Check Webhook] Eviction hits detected - fetching PDF for details');
+
+        // Get the remote order ID for PDF fetch
+        const remoteOrderId = completeOrder.remote_number;
+        if (remoteOrderId && ACCIO_CREDENTIALS.username) {
+          try {
+            const pdfResult = await fetchAndParseEvictionRecords(remoteOrderId, ACCIO_CREDENTIALS);
+
+            if (pdfResult.success && pdfResult.evictionRecords.length > 0) {
+              console.log(`📄 [Background Check Webhook] Parsed ${pdfResult.evictionRecords.length} eviction records from PDF`);
+
+              // Create eviction records in database (unverified - needs admin review)
+              await prisma.evictionRecord.createMany({
+                data: pdfResult.evictionRecords.map(record => ({
+                  verificationId: verification!.id,
+                  caseNumber: record.caseNumber,
+                  filingDate: record.filingDate ? new Date(record.filingDate) : null,
+                  dispositionDate: record.dispositionDate ? new Date(record.dispositionDate) : null,
+                  plaintiff: record.plaintiff,
+                  defendantAddress: record.defendantAddress,
+                  judgmentAmount: record.judgmentAmount,
+                  disposition: record.disposition,
+                  court: record.court,
+                  enteredBy: 'system-auto',
+                  notes: 'Auto-extracted from PDF - pending verification',
+                  verified: false,
+                })),
+              });
+
+              // Update eviction count - keep pending_review for admin verification
+              await prisma.verification.update({
+                where: { id: verification!.id },
+                data: {
+                  evictionCount: pdfResult.evictionRecords.length,
+                  evictionReviewStatus: 'pending_review',
+                },
+              });
+
+              console.log('✅ [Background Check Webhook] Eviction records auto-extracted and saved');
+            } else {
+              console.log('⚠️ [Background Check Webhook] Could not parse eviction records from PDF:', pdfResult.error);
+              // Keep pending_review status so admin can manually enter
+            }
+          } catch (pdfError) {
+            console.error('❌ [Background Check Webhook] Error fetching/parsing eviction PDF:', pdfError);
+            // Keep pending_review status so admin can manually enter
+          }
+        }
+
+        // Still send admin email notification for eviction hits
+        console.log('📧 [Background Check Webhook] Sending eviction notification email');
+        await sendEvictionHitEmail(verification.id, firstName, lastName);
+      } else {
+        // No eviction hits - send user completion email immediately
+        console.log('📧 [Background Check Webhook] No eviction hits - sending user completion email');
+        const userEmail = existingReport.user?.email;
+        if (userEmail) {
+          await sendUserCompletionEmail(userEmail, firstName);
+        }
+      }
+
+      return xmlSuccess("OCR processed");
+    }
+    // Handle ScreeningResults postResults format (ICR - incremental results) - logging only
+    // We rely on OCR (completeOrder) for full processing, ICR is just for tracking progress
+    else if (parsedXml?.ScreeningResults?.postResults) {
+      const postResults = parsedXml.ScreeningResults.postResults;
+      console.log('📋 [Background Check Webhook] ICR received (logging only - waiting for OCR)');
+      console.log('📋 [Background Check Webhook] Order:', postResults.order);
+      console.log('📋 [Background Check Webhook] Type:', postResults.type);
+      console.log('📋 [Background Check Webhook] Status:', postResults.filledStatus, '/', postResults.filledCode);
+
+      orderNumber = postResults.order;
+      orderId = postResults.order;
+
+      return xmlSuccess(`ICR logged - ${postResults.type}: ${postResults.filledCode}`);
     }
     // Try order confirmation format (initial order response)
     else if (parsedXml?.XML?.order) {

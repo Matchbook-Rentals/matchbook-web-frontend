@@ -1,0 +1,38 @@
+Subject: Eviction Case Details Missing from XML Results (getOrderResults)
+
+Hi,
+
+We're using the "Criminal and Evictions" package and had a question about the XML results from `getOrderResults`. For County Criminal results, the XML includes full case details in `<case>` elements, but for Evictions we only receive this:
+
+<subOrder type="evictions_check" filledCode="hits">
+  <time_ordered>2025-12-12 17:01:30</time_ordered>
+  <time_filled>2025-12-15 10:41:40</time_filled>
+  <fees>...</fees>
+</subOrder>
+
+We're able to access the eviction case details just fine via the HTML/PDF reports, but I wanted to confirm we can't get them in the XML before we finalize a PDF workflow.
+
+Account: matchbook
+Example Order: 24776
+
+Here's a sample of our order requests, in case the issue is with our order configuration:
+
+<placeOrder number="MBWEB-76890108">
+  <postBackInfo>
+    <authentication>...</authentication>
+    <URL>https://matchbookrentals.com/api/background-check-webhook</URL>
+    <guID>MBWEB-76890108</guID>
+    <postback_types>ICR::OCR</postback_types>
+  </postBackInfo>
+  <subject>...</subject>
+  <package>Criminal and Evictions</package>
+  <subOrder type="National Criminal"/>
+  <subOrder type="evictions_check">
+    <state>GA</state>
+  </subOrder>
+</placeOrder>
+
+Thank you!
+
+Tyler Bennett
+MatchBook Rentals

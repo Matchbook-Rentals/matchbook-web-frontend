@@ -27,17 +27,23 @@ function markdownToHtml(markdown: string): string {
 
   let html = markdown
 
-  // Escape HTML entities first (but preserve our markdown)
+  // Preserve heading HTML tags before escaping (headings are stored as HTML, not # syntax)
+  const headingPlaceholders: string[] = []
+  html = html.replace(/<(h[2-4])>(.*?)<\/\1>/gi, (match) => {
+    headingPlaceholders.push(match)
+    return `__HEADING_${headingPlaceholders.length - 1}__`
+  })
+
+  // Escape HTML entities (but preserve our markdown)
   html = html
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
 
-  // Then convert markdown to HTML
-  // Headings (must be at start of line) - using H2, H3, H4 since article title is H2
-  html = html.replace(/^### (.+)$/gm, '<h4>$1</h4>')
-  html = html.replace(/^## (.+)$/gm, '<h3>$1</h3>')
-  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>')
+  // Restore heading tags
+  headingPlaceholders.forEach((heading, i) => {
+    html = html.replace(`__HEADING_${i}__`, heading)
+  })
 
   // Bold (** or __)
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -73,9 +79,9 @@ function markdownToHtml(markdown: string): string {
     if (trimmed.startsWith('<h') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol')) {
       return trimmed
     }
-    // Single newlines within a paragraph become spaces (standard markdown behavior)
-    const collapsed = trimmed.replace(/\n/g, ' ')
-    return `<p>${collapsed}</p>`
+    // Convert single newlines to <br> (user-friendly: Enter = line break)
+    const withBreaks = trimmed.replace(/\n/g, '<br>')
+    return `<p>${withBreaks}</p>`
   }).filter(Boolean).join('\n')
 
   return html
@@ -87,8 +93,8 @@ function htmlToMarkdown(html: string): string {
 
   let markdown = html
 
-  // Replace <br> and </div><div> with newlines
-  markdown = markdown.replace(/<br\s*\/?>/gi, '\n')
+  // Replace <br> with hard line break (two spaces + newline for CommonMark)
+  markdown = markdown.replace(/<br\s*\/?>/gi, '  \n')
   markdown = markdown.replace(/<\/div><div>/gi, '\n')
   markdown = markdown.replace(/<div>/gi, '\n')
   markdown = markdown.replace(/<\/div>/gi, '')
@@ -98,18 +104,32 @@ function htmlToMarkdown(html: string): string {
   markdown = markdown.replace(/<p>/gi, '')
   markdown = markdown.replace(/<\/p>/gi, '\n\n')
 
-  // Headings - H2, H3, H4 map to #, ##, ### in markdown
-  markdown = markdown.replace(/<h2>(.*?)<\/h2>/gi, '# $1\n\n')
-  markdown = markdown.replace(/<h3>(.*?)<\/h3>/gi, '## $1\n\n')
-  markdown = markdown.replace(/<h4>(.*?)<\/h4>/gi, '### $1\n\n')
+  // Headings - keep as HTML tags (not # syntax) so user-typed # stays literal
+  markdown = markdown.replace(/<h2>(.*?)<\/h2>/gi, '<h2>$1</h2>\n\n')
+  markdown = markdown.replace(/<h3>(.*?)<\/h3>/gi, '<h3>$1</h3>\n\n')
+  markdown = markdown.replace(/<h4>(.*?)<\/h4>/gi, '<h4>$1</h4>\n\n')
 
-  // Bold
-  markdown = markdown.replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
-  markdown = markdown.replace(/<b>(.*?)<\/b>/gi, '**$1**')
+  // Bold - move whitespace outside markers to comply with CommonMark
+  const wrapBold = (_match: string, content: string) => {
+    const trimmed = content.trim()
+    if (!trimmed) return content
+    const leading = content.match(/^(\s*)/)?.[1] || ''
+    const trailing = content.match(/(\s*)$/)?.[1] || ''
+    return `${leading}**${trimmed}**${trailing}`
+  }
+  markdown = markdown.replace(/<strong>(.*?)<\/strong>/gi, wrapBold)
+  markdown = markdown.replace(/<b>(.*?)<\/b>/gi, wrapBold)
 
-  // Italic
-  markdown = markdown.replace(/<em>(.*?)<\/em>/gi, '*$1*')
-  markdown = markdown.replace(/<i>(.*?)<\/i>/gi, '*$1*')
+  // Italic - move whitespace outside markers to comply with CommonMark
+  const wrapItalic = (_match: string, content: string) => {
+    const trimmed = content.trim()
+    if (!trimmed) return content
+    const leading = content.match(/^(\s*)/)?.[1] || ''
+    const trailing = content.match(/(\s*)$/)?.[1] || ''
+    return `${leading}*${trimmed}*${trailing}`
+  }
+  markdown = markdown.replace(/<em>(.*?)<\/em>/gi, wrapItalic)
+  markdown = markdown.replace(/<i>(.*?)<\/i>/gi, wrapItalic)
 
   // Underline
   markdown = markdown.replace(/<u>(.*?)<\/u>/gi, '<u>$1</u>')
@@ -127,8 +147,8 @@ function htmlToMarkdown(html: string): string {
   })
   markdown = markdown.replace(/<li>(.*?)<\/li>/gi, '- $1\n')
 
-  // Remove any remaining HTML tags
-  markdown = markdown.replace(/<[^>]+>/g, '')
+  // Remove any remaining HTML tags (except headings which we keep)
+  markdown = markdown.replace(/<(?!\/?h[2-4]>)[^>]+>/g, '')
 
   // Decode HTML entities
   markdown = markdown.replace(/&amp;/g, '&')

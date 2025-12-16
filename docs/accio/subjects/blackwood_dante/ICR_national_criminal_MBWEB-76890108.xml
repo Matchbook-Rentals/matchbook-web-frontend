@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Order: MBWEB-76890108
+  Remote Order: 24776
+  Remote SubOrder: 724800
+  Subject: Dante Blackwood
+  Type: National Criminal
+  Status: filled / CLEAR
+  Received: 2025-12-16 05:42:21 UTC
+
+  Note: ICR (Individual Component Result) - postResults format
+  National Criminal came back CLEAR (no hits on national database)
+  Note: County Criminal had HITS but National Criminal is CLEAR
+-->
+<ScreeningResults>
+  <login>
+    <account>MBWEB-76890108</account>
+    <username>MBWEB-76890108</username>
+    <password>MBWEB-76890108</password>
+  </login>
+  <postResults order="MBWEB-76890108" subOrder="" remote_order="24776" remote_subOrder="724800" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="clear" type="National Criminal" reference_number="">
+    <time_ordered>2025-12-12 17:01:30</time_ordered>
+    <time_filled>2025-12-15 10:42:59</time_filled>
+    <fees>
+      <addon>0.00</addon>
+      <adjustments>0.00</adjustments>
+      <adjustmentReason> Included in package.</adjustmentReason>
+      <thirdparty>0.00</thirdparty>
+      <taxes>0.00</taxes>
+    </fees>
+    <datasources/>
+  </postResults>
+  <orderInfo>
+    <packagename>Criminal and Evictions</packagename>
+  </orderInfo>
+</ScreeningResults>

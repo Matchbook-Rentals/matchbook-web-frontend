@@ -1,4 +1,6 @@
 import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
+import rehypeRaw from 'rehype-raw';
 import prisma from '@/lib/prismadb';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -101,10 +103,12 @@ export default async function ArticlePage({ params }: Params) {
       )}
       <article className="w-full text-gray-600 leading-relaxed mb-8">
         <ReactMarkdown
+          remarkPlugins={[remarkBreaks]}
+          rehypePlugins={[rehypeRaw]}
           components={{
-            h1: ({node, ...props}) => <h2 className="text-xl font-semibold my-4" {...props} />,
-            h2: ({node, ...props}) => <h3 className="text-lg font-semibold my-3" {...props} />,
-            h3: ({node, ...props}) => <h4 className="text-base font-semibold my-2" {...props} />,
+            h2: ({node, ...props}) => <h2 className="text-xl font-semibold my-4" {...props} />,
+            h3: ({node, ...props}) => <h3 className="text-lg font-semibold my-3" {...props} />,
+            h4: ({node, ...props}) => <h4 className="text-base font-semibold my-2" {...props} />,
             p: ({node, ...props}) => <p className="mb-2" {...props} />,
             img: ({node, ...props}) => <img className="w-full h-auto my-4" {...props} />,
             a: ({node, ...props}) => <a className="text-[#3c8787] underline hover:text-[#2a6363]" target="_blank" rel="noopener noreferrer" {...props} />,

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Order: MBWEB-JOHNDOE-TEST1
+  Remote Order: 24754
+  Remote SubOrder: 723968
+  Subject: John Doe
+  Type: evictions_check
+  Status: filled / clear
+  Received: 2025-12-15 15:25:51 UTC
+-->
+<ScreeningResults>
+  <login>
+    <account>MBWEB-JOHNDOE-TEST1</account>
+    <username>MBWEB-JOHNDOE-TEST1</username>
+    <password>MBWEB-JOHNDOE-TEST1</password>
+  </login>
+  <postResults order="MBWEB-JOHNDOE-TEST1" subOrder="" remote_order="24754" remote_subOrder="723968" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="clear" type="evictions_check" reference_number="">
+    <time_ordered>2025-12-12 14:24:35</time_ordered>
+    <time_filled>2025-12-12 14:24:43</time_filled>
+    <fees>
+      <addon>0.00</addon>
+      <adjustments>0.00</adjustments>
+      <adjustmentReason> Included in package.</adjustmentReason>
+      <thirdparty>0.00</thirdparty>
+      <taxes>0.00</taxes>
+    </fees>
+  </postResults>
+  <orderInfo>
+    <packagename>Criminal and Evictions</packagename>
+    <requester_name/>
+    <requester_phone/>
+    <requester_fax/>
+    <requester_email/>
+    <requester_billingdata/>
+    <requester_billingdata2/>
+    <requester_billingdata3/>
+    <requester_billingdata4/>
+    <requester_billingdata5/>
+    <requester_billingdata6/>
+    <requester_billingdata7/>
+    <requester_billingdata8/>
+    <requester_billingdata9/>
+    <requester_billingdata10/>
+  </orderInfo>
+</ScreeningResults>

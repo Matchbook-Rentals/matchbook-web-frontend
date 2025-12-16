@@ -32,3 +32,9 @@ export const checkAdminAccess = async () => {
   const userRole = sessionClaims?.metadata.role
   return userRole?.includes('admin') || false
 }
+
+export const checkDeveloperAccess = async () => {
+  const { sessionClaims } = auth()
+  const userRole = sessionClaims?.metadata.role
+  return userRole === 'admin_dev'
+}

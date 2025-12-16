@@ -351,6 +351,76 @@ curl -X POST https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml \
 
 ---
 
+## Test 6: MBWEB-DANTE-TEST1 (ICR only - with DB record)
+
+**Date**: 2025-12-15
+**Order ID**: 24823
+**Order Number**: MBWEB-DANTE-TEST1
+**Subject**: Dante Blackwood (Eviction Records test subject)
+**Webhook URL**: https://matchbook-web-frontend.vercel.app/api/background-check-webhook
+**postBackInfo Format**: Full `<authentication>` block + `<postback_types>ICR</postback_types>`
+**XML Order**: Fixed - `postBackInfo` BEFORE `subject`
+**DB Setup**: BGSReport created with orderId `MBWEB-DANTE-TEST1`, Verification linked with credit "completed"
+**Webhook Received**: Pending
+
+```bash
+curl -X POST https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml \
+  -H "Content-Type: text/xml" \
+  -d '<?xml version="1.0" encoding="UTF-8"?>
+<New_Order>
+  <login>
+    <account>matchbook</account>
+    <username>Tyler.Bennett@matchbookrentals.com</username>
+    <password>Cd@QrP5gRVqFyBH</password>
+  </login>
+  <mode>PROD</mode>
+  <placeOrder number="MBWEB-DANTE-TEST1">
+    <postBackInfo>
+      <authentication>
+        <type>Basic</type>
+        <username>Tyler.Bennett@matchbookrentals.com</username>
+        <password>Cd@QrP5gRVqFyBH</password>
+      </authentication>
+      <URL>https://matchbook-web-frontend.vercel.app/api/background-check-webhook</URL>
+      <guID>MBWEB-DANTE-TEST1</guID>
+      <postback_types>ICR</postback_types>
+    </postBackInfo>
+    <subject>
+      <name_first>Dante</name_first>
+      <name_last>Blackwood</name_last>
+      <ssn>118829724</ssn>
+      <dob>19940513</dob>
+      <address>751 N Indian Creek DR</address>
+      <city>Clarkston</city>
+      <state>GA</state>
+      <zip>30021</zip>
+      <email>verification@matchbookrentals.com</email>
+      <phone>555-123-4567</phone>
+    </subject>
+    <package>Criminal and Evictions</package>
+    <subOrder type="National Criminal"/>
+    <subOrder type="evictions_check">
+      <state>GA</state>
+    </subOrder>
+  </placeOrder>
+</New_Order>'
+```
+
+**Response**:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<XML>
+  <order orderID="24823" number="MBWEB-DANTE-TEST1">
+    <subOrder type="National Criminal" suborderID="725015"/>
+    <subOrder type="evictions_check" suborderID="725016"/>
+  </order>
+</XML>
+```
+
+**Purpose**: Test ICR-only postback with matching DB record to verify webhook updates BGSReport correctly.
+
+---
+
 ## Summary Table
 
 | Order Number | Order ID | Subject | Auth Block | postback_types | XML Order | Webhook Hit |
@@ -358,8 +428,9 @@ curl -X POST https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml \
 | MBWEB-STAGING-TEST | 24687 | Dante Blackwood (wrong addr) | No | None | Wrong | ❓ |
 | MBWEB-STAGING-TEST2 | 24688 | Dante Blackwood (correct) | No | None | Wrong | ❓ |
 | MBWEB-STAGING-TEST3 | 24689 | John Doe | Yes | None | Wrong | ❓ |
-| MBWEB-JOHNDOE-TEST1 | 24754 | John Doe | Yes | ICR::OCR | **Fixed** | ✅ ICR |
-| MBWEB-SNELL-TEST1 | 24772 | Marcus Snell | Yes | OCR | **Fixed** | ❓ |
+| MBWEB-JOHNDOE-TEST1 | 24754 | John Doe | Yes | ICR::OCR | **Fixed** | ✅ ICR+OCR |
+| MBWEB-SNELL-TEST1 | 24772 | Marcus Snell | Yes | OCR | **Fixed** | ✅ OCR |
+| MBWEB-DANTE-TEST1 | 24823 | Dante Blackwood | Yes | ICR | **Fixed** | Pending |
 
 ---
 
@@ -389,4 +460,4 @@ curl -X POST https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml \
 
 ---
 
-**Last Updated**: 2024-12-12
+**Last Updated**: 2025-12-15

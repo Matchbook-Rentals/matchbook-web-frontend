@@ -1069,6 +1069,75 @@ model CreditReport {
   verification Verification?
 }
 
+// Criminal records extracted from Accio OCR webhook (auto-populated)
+model CriminalRecord {
+  id                String    @id @default(cuid())
+  verificationId    String
+
+  // Case identification
+  caseNumber        String
+  filingDate        DateTime?
+  dispositionDate   DateTime?
+  pendingDate       DateTime?
+
+  // Court/jurisdiction
+  jurisdiction      String?   // County (e.g., "COBB")
+  jurisdictionState String?   // State (e.g., "GA")
+  courtSource       String?   // e.g., "SUPERIOR COURT", "STATE COURT"
+
+  // Charge details
+  charge            String    // e.g., "THEFT OF SERVICES", "BATTERY"
+  chargeNumber      Int?      @default(1)
+  crimeType         String?   // "Felony", "Misdemeanor"
+  disposition       String?   // "PENDING", "Guilty", etc.
+  sentenceComments  String?   @db.Text // e.g., "12 MONTHS PROBATION; 5,500 FINE"
+
+  // Match confidence
+  identifiedByName  Boolean   @default(false)
+  identifiedByDob   Boolean   @default(false)
+  identifiedBySsn   Boolean   @default(false)
+
+  // Metadata
+  createdAt         DateTime  @default(now())
+  rawData           Json?     // Original XML data for reference
+
+  verification      Verification @relation(fields: [verificationId], references: [id], onDelete: Cascade)
+
+  @@index([verificationId])
+}
+
+// Eviction records manually entered from Accio portal (not in webhook XML)
+model EvictionRecord {
+  id                String    @id @default(cuid())
+  verificationId    String
+
+  // Case identification
+  caseNumber        String
+  filingDate        DateTime?
+  dispositionDate   DateTime?
+
+  // Parties
+  plaintiff         String?   // e.g., "HAMMOND RESIDENTIAL GROUP"
+  defendantAddress  String?   // Address at time of eviction
+
+  // Judgment
+  judgmentAmount    Decimal?  @db.Decimal(10, 2)
+  disposition       String?   // e.g., "JUDGEMENT WITH RESTITUTION OF PREMISES"
+
+  // Court
+  court             String?   // e.g., "DEKALB COUNTY MAGISTRATE COURT - DECATUR"
+
+  // Metadata
+  createdAt         DateTime  @default(now())
+  enteredBy         String?   // Admin user who entered the record
+  notes             String?   @db.Text
+  verified          Boolean   @default(false) // Admin verified the PDF-parsed data
+
+  verification      Verification @relation(fields: [verificationId], references: [id], onDelete: Cascade)
+
+  @@index([verificationId])
+}
+
 model Verification {
   id                  String              @id @default(uuid())
   userId              String              @unique // One verification per user
@@ -1097,6 +1166,10 @@ model Verification {
   evictionCount       Int?                @default(0)
   criminalStatus      String?             // "No Records Found", "Records Found", "Under Review"
   criminalRecordCount Int?                @default(0)
+
+  // Admin Review Status (for manual data entry workflow)
+  evictionReviewStatus  String?           // "pending_review", "reviewed", "not_applicable"
+  criminalReviewStatus  String?           // "pending_review", "reviewed", "not_applicable"
 
   // Workflow Tracking
   creditCheckedAt     DateTime?
@@ -1148,9 +1221,14 @@ model Verification {
   creditReport        CreditReport?       @relation(fields: [creditReportId], references: [id])
   bgsReport           BGSReport?          @relation(fields: [bgsReportId], references: [id])
 
+  // Background check detail records
+  criminalRecords     CriminalRecord[]
+  evictionRecords     EvictionRecord[]
+
   @@index([userId])
   @@index([status])
   @@index([validUntil])
+  @@index([evictionReviewStatus])
 }
 
 model RentPayment {

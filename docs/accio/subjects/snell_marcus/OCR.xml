@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Order: MBWEB-SNELL-TEST1
+  Remote Order: 24772
+  Subject: Marcus Snell
+  Status: clear
+  Received: 2025-12-15 15:41:06 UTC
+  Report URL: https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24772
+-->
+<ScreeningResults>
+  <login>
+    <account>MBWEB-SNELL-TEST1</account>
+    <username>MBWEB-SNELL-TEST1</username>
+    <password>MBWEB-SNELL-TEST1</password>
+  </login>
+  <clientInfo>
+    <report_format/>
+    <primaryuser_contact_fax/>
+    <account>matchbook</account>
+    <primaryuser_contact_state/>
+    <primaryuser_contact_name>Tyler Bennett</primaryuser_contact_name>
+    <primaryuser_contact_city/>
+    <primaryuser_contact_zip/>
+    <primaryuser_contact_email>Tyler.Bennett@matchbookrentals.com</primaryuser_contact_email>
+    <primaryuser_contact_telephone>317-908-7302</primaryuser_contact_telephone>
+    <primaryuser_contact_address/>
+    <primaryuser_contact_title/>
+    <username>tyler.bennett@matchbookrentals.com</username>
+    <packageset/>
+  </clientInfo>
+  <accountInfo>
+    <report_format/>
+    <packageset>matchbook</packageset>
+    <company_name>Matchbook Rentals</company_name>
+    <primaryuser_contact_fax/>
+    <primaryuser_contact_name>Daniel Resner</primaryuser_contact_name>
+    <primaryuser_contact_state>UT</primaryuser_contact_state>
+    <primaryuser_contact_city>OGDEN</primaryuser_contact_city>
+    <primaryuser_contact_zip>84414</primaryuser_contact_zip>
+    <primaryuser_contact_email>daniel.resner@matchbookrentals.com</primaryuser_contact_email>
+    <primaryuser_contact_telephone>317-908-7302</primaryuser_contact_telephone>
+    <primaryuser_contact_address>3024 N 1400 E</primaryuser_contact_address>
+  </accountInfo>
+  <orderInfo>
+    <packagename>Criminal and Evictions</packagename>
+    <requester_name/>
+    <requester_phone/>
+    <requester_fax/>
+    <requester_email/>
+    <requester_billingdata/>
+    <requester_billingdata2/>
+    <requester_billingdata3/>
+    <requester_billingdata4/>
+    <requester_billingdata5/>
+    <requester_billingdata6/>
+    <requester_billingdata7/>
+    <requester_billingdata8/>
+    <requester_billingdata9/>
+    <requester_billingdata10/>
+  </orderInfo>
+  <completeOrder number="MBWEB-SNELL-TEST1" remote_number="24772" isactive="Y" archived="N" reviewed="N" reference_number="">
+    <status>clear</status>
+    <time_filled>2025-12-15 10:41:00</time_filled>
+    <time_ordered>2025-12-12 14:56:16</time_ordered>
+    <reportURL>
+      <HTML>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24772</HTML>
+      <PDF_Color>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24772&amp;pdf2=1</PDF_Color>
+      <PDF_BW>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24772&amp;pdf2=1&amp;black=X</PDF_BW>
+    </reportURL>
+    <subject>
+      <name_first>Marcus</name_first>
+      <name_last>Snell</name_last>
+      <ssn>123456789</ssn>
+      <dob>19830324</dob>
+      <address>123 Any Street</address>
+      <city>Anytown</city>
+      <state>GA</state>
+      <zip>30021</zip>
+      <email>verification@matchbookrentals.com</email>
+    </subject>
+    <report_html_summary><![CDATA[
+<p>The background check for Marcus Snell is complete.</p>
+<p>To view the report, go to: <a href="https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24772" target="_blank">https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24772</a></p>
+<pre>
+Component                                               - Status
+--------------------------------------------------------------------------------
+National Criminal History Search                        - CLEAR
+Evictions and Property Damage Check                     - CLEAR
+</pre>
+]]></report_html_summary>
+    <order_state>order completion</order_state>
+    <subOrder number="" remote_number="724744" description="National Criminal History Search" remote_order="24772" remote_subOrder="724744" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="clear" type="National Criminal">
+      <time_ordered>2025-12-12 14:56:15</time_ordered>
+      <time_filled>2025-12-15 10:41:00</time_filled>
+      <fees>
+        <addon>0.00</addon>
+        <adjustments>0.00</adjustments>
+        <adjustmentReason> Included in package.</adjustmentReason>
+        <thirdparty>0.00</thirdparty>
+        <taxes>0.00</taxes>
+      </fees>
+      <datasources/>
+    </subOrder>
+    <subOrder number="" remote_number="724745" description="Evictions and Property Damage Check" remote_order="24772" remote_subOrder="724745" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="clear" type="evictions_check">
+      <time_ordered>2025-12-12 14:56:15</time_ordered>
+      <time_filled>2025-12-12 14:56:25</time_filled>
+      <fees>
+        <addon>0.00</addon>
+        <adjustments>0.00</adjustments>
+        <adjustmentReason> Included in package.</adjustmentReason>
+        <thirdparty>0.00</thirdparty>
+        <taxes>0.00</taxes>
+      </fees>
+    </subOrder>
+  </completeOrder>
+</ScreeningResults>

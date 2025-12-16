@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Order: MBWEB-76890108
+  Remote Order: 24776
+  Subject: Dante Blackwood
+  Status: HITS (Criminal + Evictions)
+  Received: 2025-12-16 02:12:15 UTC
+  Report URL: https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24776
+
+  FINDINGS:
+  - Criminal County History: HITS
+    - Case #123145: THEFT OF SERVICES (Felony) - PENDING - Active Warrant
+    - Case #56684: BATTERY (Misdemeanor) - Guilty - 12mo probation, $5500 fine
+  - National Criminal History Search: CLEAR
+  - Evictions and Property Damage Check: HITS
+-->
+<ScreeningResults>
+  <login>
+    <account>MBWEB-76890108</account>
+    <username>MBWEB-76890108</username>
+    <password>MBWEB-76890108</password>
+  </login>
+  <clientInfo>
+    <username>tyler.bennett@matchbookrentals.com</username>
+    <primaryuser_contact_fax/>
+    <primaryuser_contact_address/>
+    <account>matchbook</account>
+    <primaryuser_contact_telephone>317-908-7302</primaryuser_contact_telephone>
+    <primaryuser_contact_title/>
+    <primaryuser_contact_name>Tyler Bennett</primaryuser_contact_name>
+    <primaryuser_contact_city/>
+    <primaryuser_contact_email>Tyler.Bennett@matchbookrentals.com</primaryuser_contact_email>
+    <primaryuser_contact_zip/>
+    <primaryuser_contact_state/>
+    <report_format/>
+    <packageset/>
+  </clientInfo>
+  <accountInfo>
+    <primaryuser_contact_fax/>
+    <primaryuser_contact_address>3024 N 1400 E</primaryuser_contact_address>
+    <primaryuser_contact_telephone>317-908-7302</primaryuser_contact_telephone>
+    <primaryuser_contact_name>Daniel Resner</primaryuser_contact_name>
+    <packageset>matchbook</packageset>
+    <primaryuser_contact_city>OGDEN</primaryuser_contact_city>
+    <primaryuser_contact_email>daniel.resner@matchbookrentals.com</primaryuser_contact_email>
+    <primaryuser_contact_zip>84414</primaryuser_contact_zip>
+    <primaryuser_contact_state>UT</primaryuser_contact_state>
+    <report_format/>
+    <company_name>Matchbook Rentals</company_name>
+  </accountInfo>
+  <orderInfo>
+    <packagename>Criminal and Evictions</packagename>
+  </orderInfo>
+  <completeOrder number="MBWEB-76890108" remote_number="24776" isactive="Y" archived="N" reviewed="N" reference_number="">
+    <status>hits</status>
+    <time_filled>2025-12-15 10:42:59</time_filled>
+    <time_ordered>2025-12-12 17:01:31</time_ordered>
+    <reportURL>
+      <HTML>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24776</HTML>
+      <PDF_Color>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24776&amp;pdf2=1</PDF_Color>
+      <PDF_BW>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24776&amp;pdf2=1&amp;black=X</PDF_BW>
+    </reportURL>
+    <subject>
+      <name_first>Dante</name_first>
+      <name_last>Blackwood</name_last>
+      <ssn>118829724</ssn>
+      <dob>19940513</dob>
+      <address>751 N Indian Creek DR</address>
+      <city>Clarkston</city>
+      <state>GA</state>
+      <zip>30021</zip>
+      <email>verification@matchbookrentals.com</email>
+    </subject>
+    <report_html_summary><![CDATA[
+<p>The background check for Dante Blackwood is complete.</p>
+<pre>
+Component                                               - Status
+--------------------------------------------------------------------------------
+Criminal County History                                 - HITS
+National Criminal History Search                        - CLEAR
+Evictions and Property Damage Check                     - HITS
+</pre>
+]]></report_html_summary>
+    <order_state>order completion</order_state>
+
+    <!-- National Criminal - CLEAR -->
+    <subOrder number="" remote_number="724800" description="National Criminal History Search" remote_order="24776" remote_subOrder="724800" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="clear" type="National Criminal">
+      <time_ordered>2025-12-12 17:01:30</time_ordered>
+      <time_filled>2025-12-15 10:42:59</time_filled>
+    </subOrder>
+
+    <!-- Evictions - HITS -->
+    <subOrder number="" remote_number="724801" description="Evictions and Property Damage Check" remote_order="24776" remote_subOrder="724801" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="hits" type="evictions_check">
+      <time_ordered>2025-12-12 17:01:30</time_ordered>
+      <time_filled>2025-12-15 10:41:40</time_filled>
+    </subOrder>
+  </completeOrder>
+
+  <!-- Second completeOrder with Criminal County History details -->
+  <completeOrder number="" remote_number="24804" isactive="Y" archived="N" reviewed="N" reference_number="MBWEB-76890108">
+    <status>hits</status>
+    <time_filled>2025-12-15 10:47:26</time_filled>
+    <time_ordered>2025-12-15 10:42:32</time_ordered>
+    <reportURL>
+      <HTML>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=24776</HTML>
+    </reportURL>
+    <subject>
+      <name_first>Dante</name_first>
+      <name_last>Blackwood</name_last>
+      <ssn>118829724</ssn>
+      <dob>19940513</dob>
+      <address>751 N Indian Creek DR</address>
+      <city>Clarkston</city>
+      <state>GA</state>
+      <zip>30021</zip>
+    </subject>
+    <order_state>order completion</order_state>
+
+    <!-- Criminal County History - HITS with case details -->
+    <subOrder number="" remote_number="724979" description="Criminal County History " remote_order="24804" remote_subOrder="724979" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="hits" type="County_criminal">
+      <time_ordered>2025-12-15 10:42:27</time_ordered>
+      <time_filled>2025-12-15 10:47:26</time_filled>
+      <county>COBB</county>
+      <state>GA</state>
+      <years_conviction>7</years_conviction>
+
+      <!-- Case 1: THEFT OF SERVICES - Felony - PENDING with Active Warrant -->
+      <case>
+        <identified_by_name>Y</identified_by_name>
+        <identified_by_dob>Y</identified_by_dob>
+        <identified_by_ssn>N</identified_by_ssn>
+        <case_number>123145</case_number>
+        <filing_date>20200120</filing_date>
+        <pending_date>20260120</pending_date>
+        <jurisdiction>COBB</jurisdiction>
+        <jurisdiction_state>GA</jurisdiction_state>
+        <source>SUPERIOR COURT</source>
+        <defendant>
+          <name_first>Dante</name_first>
+          <name_last>Blackwood</name_last>
+          <dob>19940513</dob>
+          <dobfreeform>5/13/1994</dobfreeform>
+        </defendant>
+        <chargeinfo>
+          <sentence_comments>12/10/2025 - FAILURE TO APPEAR - WARRANT ISSUED - ACTIVE</sentence_comments>
+          <charge_number>1</charge_number>
+          <crime_type>Felony</crime_type>
+          <disposition>PENDING</disposition>
+          <charge>THEFT OF SERVICES</charge>
+        </chargeinfo>
+      </case>
+
+      <!-- Case 2: BATTERY - Misdemeanor - Guilty -->
+      <case>
+        <identified_by_name>Y</identified_by_name>
+        <identified_by_dob>Y</identified_by_dob>
+        <identified_by_ssn>N</identified_by_ssn>
+        <case_number>56684</case_number>
+        <filing_date>20200120</filing_date>
+        <disposition_date>20210520</disposition_date>
+        <jurisdiction>COBB</jurisdiction>
+        <jurisdiction_state>GA</jurisdiction_state>
+        <source>STATE COURT</source>
+        <defendant>
+          <name_first>Dante</name_first>
+          <name_last>Blackwood</name_last>
+          <dob>19940513</dob>
+          <dobfreeform>5/13/1994</dobfreeform>
+        </defendant>
+        <chargeinfo>
+          <sentence_comments>12 MONTHS PROBATION; 5,500 FINE</sentence_comments>
+          <charge_number>1</charge_number>
+          <crime_type>Misdemeanor</crime_type>
+          <disposition>Guilty</disposition>
+          <charge>BATTERY</charge>
+        </chargeinfo>
+      </case>
+    </subOrder>
+  </completeOrder>
+</ScreeningResults>

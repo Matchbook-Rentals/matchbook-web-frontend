@@ -3,7 +3,7 @@ import { checkAdminAccess } from '@/utils/roles'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { UsersIcon, BookText, Database, TicketIcon, Bell, Home, UserSearch } from 'lucide-react'
+import { UsersIcon, BookText, Database, TicketIcon, Bell, Home, UserSearch, AlertTriangle } from 'lucide-react'
 
 export default async function AdminDashboard() {
   if (!(await checkAdminAccess())) {
@@ -111,7 +111,22 @@ export default async function AdminDashboard() {
                 </Link>
               </CardContent>
             </Card>
-            
+
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  <h2 className="text-xl font-semibold">Eviction Review</h2>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Review verifications with eviction hits
+                </p>
+                <Link href="/admin/eviction-review">
+                  <Button>Review Evictions</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
           </div>
         </CardContent>
       </Card>
