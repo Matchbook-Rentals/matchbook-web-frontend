@@ -6,7 +6,7 @@ import { Roles } from "@/types/globals";
 const isProtectedRoute = createRouteMatcher([
   "/app(.*)",
   "/admin(.*)", // Added protection for all admin routes
-  "/manage(.*)", // Added protection for all manage routes (marketing/content management)
+  // "/manage(.*)", // Removed - layout handles auth (testing layout-only auth)
   "/test(.*)", // Added protection for all test routes
 ]);
 
