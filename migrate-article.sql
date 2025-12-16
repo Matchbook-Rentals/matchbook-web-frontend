@@ -1,11 +1,26 @@
--- Migration: Fix military article content and slug
--- Target: Production BlogArticle table
--- Article ID: cmj6i6wcu0000v2fel0dq7otu
+-- Migration: Create fixed copy of military article for comparison
+-- Original slug: military-moves-made-easy-flexible-rentals-for-pcs-and-tdy-moves
+-- New slug: military-pcs-tdy-rentals (fixed version)
 
-UPDATE `BlogArticle`
-SET
-  slug = 'military-pcs-tdy-rentals',
-  content = 'Anyone in the military and their families know that moves can be frequent, stressful, and often unpredictable. Many service members choose military lodging or on-base lodging for their temporary stays.
+INSERT INTO `BlogArticle` (
+  id,
+  slug,
+  title,
+  content,
+  excerpt,
+  createdAt,
+  updatedAt,
+  published,
+  imageUrl,
+  authorName,
+  authorTitle,
+  metaTitle,
+  metaDescription
+) VALUES (
+  CONCAT('fixed-', SUBSTRING(MD5(RAND()), 1, 20)),
+  'military-pcs-tdy-rentals',
+  'Military moves made easy: Flexible rentals for PCS, and TDY moves',
+  'Anyone in the military and their families know that moves can be frequent, stressful, and often unpredictable. Many service members choose military lodging or on-base lodging for their temporary stays.
 
 This is true for both [Permanent Change of Station (PCS)](https://www.militaryonesource.mil/moving-pcs/plan-to-move/pcs-the-basics-about-permanent-change-of-station/) and Temporary Duty (TDY) assignments. They often use these options before finding long-term housing. Some even go to platforms like Airbnb or VRBO to find monthly rentals off-base, but these options can be limited, expensive, and not ideal for families.
 
@@ -66,5 +81,13 @@ Midterm rentals match perfectly with TDY length, offering home-like comfort with
 PCS and TDY moves don''t have to be stressful when flexible housing options like midterm rentals are accessible. Midterm rentals allow service members to find comfort, affordability, and adaptability in their stay that matches the often fast-paced unpredictability of military life.
 
 So, if you''re military and looking for your next monthly stay, [browse our military-friendly midterm rentals](https://matchbookrentals.com/) today and make your next move easier.',
-  updatedAt = NOW()
-WHERE id = 'cmj6i6wcu0000v2fel0dq7otu';
+  'Anyone in the military and their families know that moves can be frequent, stressful, and often unpredictable. Many service members choose military lodging or on-base lodging for their temporary stays. This is true for both Permanent Change of Station (PCS) and Temporary Duty (TDY) assignments. They often use these options before finding long-term housing. Some even go to platforms like Airbnb or VRBO to find monthly rentals off-base, but these options can be limited, expensive, and not ideal for families. So, what is your alternative? Midterm rentals. Midterm or monthly rentals are stays that last from 30 days to less',
+  NOW(),
+  NOW(),
+  0,
+  'https://utfs.io/f/8a2269a0-e132-4689-a93b-3a72d9d2501a-76i4pp.jpg',
+  '',
+  '',
+  'Military moves made easy: Flexible rentals for PCS, and TDY moves',
+  'PCS or TDY move coming up? Learn how midterm rentals offer flexible, family-friendly housing for military members between duty stations.'
+);
