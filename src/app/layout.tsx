@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter, Poppins, Cutive, Dancing_Script, Caveat, Kalam, Great_Vibes, Pacifico, Sacramento, Allura } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AppSessionTracker from "@/components/AppSessionTracker";
@@ -127,19 +128,21 @@ export default function RootLayout({
     }>
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
         <head>
-          {process.env.NODE_ENV === 'production' && (
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        </head>
+        {process.env.NODE_ENV === 'production' && (
+          <Script
+            id="gtm-script"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-PKKBSZQ7');`
-              }}
-            />
-          )}
-          <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        </head>
+            }}
+          />
+        )}
         <body className={`${poppins.className} ${dancingScript.variable} ${caveat.variable} ${kalam.variable} ${greatVibes.variable} ${pacifico.variable} ${sacramento.variable} ${allura.variable}`}>
           {process.env.NODE_ENV === 'production' && (
             <noscript>

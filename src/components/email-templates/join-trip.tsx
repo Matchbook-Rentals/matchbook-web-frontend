@@ -8,6 +8,7 @@ const JoinTripEmailTemplate: React.FC<JoinTripEmailProps> = ({ tripLink }) => {
   const imgUrl = `${process.env.NEXT_PUBLIC_URL}/logo-nav-new.png`;
   return (
     <html>
+      {/* eslint-disable-next-line @next/next/no-head-element -- Email templates require raw HTML head, not next/head */}
       <head>
         <style>{`
           body { font-family: Arial, sans-serif; }
