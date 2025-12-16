@@ -8,6 +8,22 @@ import type {
   AccioSimplifiedResult,
 } from '@/types/accio';
 
+// Helper to return XML success response (Accio requires XML, not JSON)
+function xmlSuccess(message: string = "Accepted"): NextResponse {
+  return new NextResponse(`<XML>${message}</XML>`, {
+    status: 200,
+    headers: { 'Content-Type': 'text/xml' }
+  });
+}
+
+// Helper to return XML error response
+function xmlError(errorMessage: string, status: number = 400): NextResponse {
+  return new NextResponse(
+    `<response><error>${errorMessage}</error></response>`,
+    { status, headers: { 'Content-Type': 'text/xml' } }
+  );
+}
+
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
   let xmlData = '';
@@ -31,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     if (username !== expectedUsername || password !== expectedPassword) {
       console.error('❌ [Background Check Webhook] Invalid credentials');
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return xmlError("Unauthorized", 401);
     }
     console.log('✅ [Background Check Webhook] Authentication verified');
   } else {
@@ -44,7 +60,7 @@ export async function POST(request: NextRequest) {
     xmlData = await request.text();
   } catch (readError) {
     console.error('❌ [Background Check Webhook] Failed to read request body:', readError);
-    return NextResponse.json({ error: "Failed to read request body" }, { status: 400 });
+    return xmlError("Failed to read request body");
   }
 
   // Always log webhook payload - search for BACKGROUND_CHECK_WEBHOOK in logs
@@ -88,14 +104,8 @@ export async function POST(request: NextRequest) {
       console.log('📋 [Background Check Webhook] Remote order ID:', completeOrder.remote_number);
       console.log('📋 [Background Check Webhook] Overall status:', completeOrder.status);
       console.log('📋 [Background Check Webhook] Report URL:', completeOrder.reportURL?.HTML);
-      // Acknowledge receipt but don't process - using ICR for incremental updates
-      return NextResponse.json({
-        success: true,
-        message: "OCR received and logged - using ICR for incremental updates",
-        orderNumber: completeOrder.number,
-        status: completeOrder.status,
-        reportUrl: completeOrder.reportURL?.HTML
-      });
+      // Acknowledge receipt - Accio requires XML response
+      return xmlSuccess("OCR received");
     }
     // Handle ScreeningResults postResults format (ICR - incremental results) - process these
     else if (parsedXml?.ScreeningResults?.postResults) {
@@ -127,10 +137,8 @@ export async function POST(request: NextRequest) {
 
       if (!existingReport) {
         console.error(`❌ [Background Check Webhook] No BGS report found for order: ${icrOrderNumber}`);
-        return NextResponse.json(
-          { error: "BGS report not found", orderNumber: icrOrderNumber },
-          { status: 404 }
-        );
+        // Still return success to stop Accio retries - we logged the data
+        return xmlSuccess("Received - no matching order");
       }
 
       console.log('✅ [Background Check Webhook] Found BGS report:', existingReport.id);
@@ -210,14 +218,7 @@ export async function POST(request: NextRequest) {
         console.log('✅ [Background Check Webhook] Updated Verification record');
       }
 
-      return NextResponse.json({
-        success: true,
-        message: `ICR processed - ${subOrderType}: ${status}`,
-        orderNumber: icrOrderNumber,
-        subOrderType,
-        status,
-        overallStatus: newStatus
-      });
+      return xmlSuccess(`ICR processed - ${subOrderType}: ${status}`);
     }
     // Try order confirmation format (initial order response)
     else if (parsedXml?.XML?.order) {
@@ -239,10 +240,8 @@ export async function POST(request: NextRequest) {
     if (!orderId) {
       console.error('❌ [Background Check Webhook] Could not extract order ID from XML');
       console.error('   Parsed XML structure:', JSON.stringify(parsedXml, null, 2));
-      return NextResponse.json(
-        { error: "Order ID not found in XML response" },
-        { status: 400 }
-      );
+      // Still return success to stop retries - we logged the data
+      return xmlSuccess("Received - could not extract order ID");
     }
 
     console.log('🔑 [Background Check Webhook] Extracted order ID:', orderId);
@@ -263,10 +262,8 @@ export async function POST(request: NextRequest) {
     if (!existingReport) {
       console.error(`❌ [Background Check Webhook] No BGS report found for order ID: ${orderId}`);
       console.error('   This order ID does not exist in our database');
-      return NextResponse.json(
-        { error: "BGS report not found for this order ID" },
-        { status: 404 }
-      );
+      // Still return success to stop retries - we logged the data
+      return xmlSuccess("Received - no matching order");
     }
 
     console.log('✅ [Background Check Webhook] Found BGS report:', {
@@ -458,12 +455,8 @@ export async function POST(request: NextRequest) {
     console.log('✅ [Background Check Webhook] Webhook processed successfully');
     console.log('⏱️ [Background Check Webhook] Processing time:', processingTime, 'ms');
 
-    return NextResponse.json({
-      success: true,
-      message: "Background check results received and processed",
-      orderId: orderId
-    });
-    
+    return xmlSuccess("Results processed");
+
   } catch (error) {
     const processingTime = Date.now() - startTime;
     console.error('❌ [Background Check Webhook] Error processing webhook:', error);
@@ -472,13 +465,9 @@ export async function POST(request: NextRequest) {
     console.error('   Stack:', error instanceof Error ? error.stack : 'N/A');
     console.error('⏱️ [Background Check Webhook] Failed after:', processingTime, 'ms');
 
-    return NextResponse.json(
-      { 
-        error: "Failed to process background check results",
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    // Still return success to stop retries - we logged the data
+    // Only return actual error if we want Accio to retry
+    return xmlSuccess("Received with processing error - logged");
   }
 }
 
