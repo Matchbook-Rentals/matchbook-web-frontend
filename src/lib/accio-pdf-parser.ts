@@ -5,7 +5,12 @@
  * The XML response only contains hits/clear status for evictions, but the PDF has full case details.
  */
 
+import { readFile } from 'fs/promises';
+import path from 'path';
+import { extractText, getDocumentProxy } from 'unpdf';
+
 const ACCIO_URL = "https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml";
+const MOCK_PDF_PATH = 'docs/accio/order-24776-report.pdf';
 
 interface AccioCredentials {
   account: string;
@@ -40,11 +45,28 @@ interface ParseResult {
 
 /**
  * Fetch PDF results from Accio for a given order
+ * For mock orders (MOCK-*), returns sample PDF from disk instead of hitting API
  */
 export async function fetchAccioPdf(
   orderId: string,
   credentials: AccioCredentials
 ): Promise<PdfFetchResult> {
+  // For mock orders, return sample PDF from disk
+  if (orderId.startsWith('MOCK-')) {
+    try {
+      const pdfPath = path.join(process.cwd(), MOCK_PDF_PATH);
+      console.log(`[PDF Parser] Mock order detected - loading sample PDF from ${pdfPath}`);
+      const pdfBuffer = await readFile(pdfPath);
+      console.log(`[PDF Parser] Loaded mock PDF: ${pdfBuffer.length} bytes`);
+      return { success: true, pdfBuffer };
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to load mock PDF: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      };
+    }
+  }
+
   const xmlRequest = `<?xml version="1.0" encoding="UTF-8"?>
 <XML>
   <login>
@@ -191,8 +213,8 @@ export function parseEvictionRecordsSimple(text: string): ParsedEvictionRecord[]
       if (addr) record.defendantAddress = addr;
     }
 
-    // Extract plaintiff
-    const plaintiffMatch = caseSection.match(/Plaintif[f]?\s+([A-Z][^\n]+)/i);
+    // Extract plaintiff - stop at next field (Judgment Amount, Filing Date, etc.)
+    const plaintiffMatch = caseSection.match(/Plaintif[f]?\s+([A-Z][A-Z\s]+?)(?=\s*Judgment|\s*Filing|\s*Disposition|\n|$)/i);
     if (plaintiffMatch) record.plaintiff = plaintiffMatch[1].trim();
 
     // Extract judgment amount
@@ -207,9 +229,9 @@ export function parseEvictionRecordsSimple(text: string): ParsedEvictionRecord[]
     const dispDateMatch = caseSection.match(/Disposition Date\s+(\d{1,2}\/\d{1,2}\/\d{4})/i);
     if (dispDateMatch) record.dispositionDate = parseDate(dispDateMatch[1]);
 
-    // Extract disposition text - after "Disposition Date" line, before court info
-    // Look for text after the last date that starts with capital letters
-    const dispMatch = caseSection.match(/Disposition\s+([A-Z][A-Z\s]+?)(?=\s+[A-Z]+\s+COUNTY|\n\s*Case Comments|$)/im);
+    // Extract disposition text - after "Disposition" (not "Disposition Date"), before court info
+    // Match "Disposition JUDGEMENT WITH..." but not "Disposition Date"
+    const dispMatch = caseSection.match(/(?<!Date\s*)Disposition\s+([A-Z][A-Z\s]+?)(?=\s+[A-Z]+\s+COUNTY|\s*Case Comments|\n|$)/im);
     if (dispMatch) record.disposition = dispMatch[1].trim();
 
     // Extract court - it's split: "DEKALB COUNTY MAGISTRATE COURT - DE-" then "CATUR"
@@ -254,11 +276,9 @@ export async function fetchAndParseEvictionRecords(
   console.log(`[PDF Parser] PDF fetched, size: ${pdfResult.pdfBuffer.length} bytes`);
 
   try {
-    // Extract text from PDF using pdf-parse v2 API
-    const { PDFParse } = await import('pdf-parse');
-    const parser = new PDFParse({ data: pdfResult.pdfBuffer });
-    const pdfData = await parser.getText();
-    const text = pdfData.text;
+    // Extract text from PDF using unpdf (serverless-optimized)
+    const pdf = await getDocumentProxy(new Uint8Array(pdfResult.pdfBuffer));
+    const { text } = await extractText(pdf, { mergePages: true });
 
     console.log(`[PDF Parser] Extracted ${text.length} characters from PDF`);
 
