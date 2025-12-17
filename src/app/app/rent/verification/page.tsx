@@ -22,7 +22,7 @@ export default async function VerificationPage({
 }) {
   const paymentStatus = searchParams.payment as string
   const { userId } = auth()
-  const isAdmin = process.env.IS_STAGING === 'true' // Show dev tools on staging
+  const isAdmin = process.env.IS_STAGING === 'true' || process.env.NODE_ENV === 'development' // Show dev tools on staging and dev
   let hasPurchase = false
   let applicationData: Partial<VerificationFormValues> | undefined = undefined
   let initialPaymentMethods: SavedPaymentMethod[] = []
