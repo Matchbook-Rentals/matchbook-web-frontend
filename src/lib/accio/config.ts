@@ -8,7 +8,7 @@
  */
 
 export type AccioEnvironment = 'development' | 'staging' | 'production';
-export type MockSubject = 'blackwood_dante' | 'doe_john';
+export type MockSubject = 'blackwood_dante'; // | 'doe_john';
 
 export const getAccioEnvironment = (): AccioEnvironment => {
   // Explicit staging flag (only set on staging site)

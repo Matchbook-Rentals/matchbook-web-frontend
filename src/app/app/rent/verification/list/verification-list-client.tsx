@@ -88,9 +88,11 @@ function VerificationCard({ verification }: { verification: VerificationData }) 
   const router = useRouter()
   const user = verification.user
 
-  // Use subject name from verification form, fallback to user profile
-  const firstName = verification.subjectFirstName || user.firstName || ""
-  const lastName = verification.subjectLastName || user.lastName || ""
+  // Use subject name from verification form (no fallback to user profile)
+  const firstName = verification.subjectFirstName || ""
+  const lastName = verification.subjectLastName || ""
+  // const firstName = verification.subjectFirstName || user.firstName || ""
+  // const lastName = verification.subjectLastName || user.lastName || ""
   const fullName = `${firstName} ${lastName}`.trim() || "Unknown"
   const location = "Salt Lake City, UT" // TODO: Get from user profile
 

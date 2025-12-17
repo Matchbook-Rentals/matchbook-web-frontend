@@ -17,6 +17,7 @@ export async function POST(request: Request) {
     }
 
     const formData = await request.json();
+    console.log('📋 [Verification Submit] Received formData:', JSON.stringify(formData, null, 2));
     const {
       firstName,
       lastName,
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
       state,
       zip,
     } = formData;
+    console.log('📋 [Verification Submit] Extracted firstName:', firstName, 'lastName:', lastName);
 
     // Validate required fields
     if (!firstName || !lastName || !ssn || !dob || !address || !city || !state || !zip) {

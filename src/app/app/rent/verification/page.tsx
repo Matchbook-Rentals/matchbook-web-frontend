@@ -9,7 +9,7 @@ import { Suspense } from "react"
 import { auth } from "@clerk/nextjs/server"
 import prismadb from "@/lib/prismadb"
 import stripe from "@/lib/stripe"
-import { checkAdminAccess } from "@/utils/roles"
+// import { checkAdminAccess } from "@/utils/roles"
 import { VerificationFormValues } from "./utils"
 import { VerificationFlow } from "./components/VerificationFlow"
 import type { SavedPaymentMethod } from "@/components/stripe/verification-payment-selector"
@@ -22,7 +22,7 @@ export default async function VerificationPage({
 }) {
   const paymentStatus = searchParams.payment as string
   const { userId } = auth()
-  const isAdmin = await checkAdminAccess()
+  const isAdmin = process.env.IS_STAGING === 'true' // Show dev tools on staging
   let hasPurchase = false
   let applicationData: Partial<VerificationFormValues> | undefined = undefined
   let initialPaymentMethods: SavedPaymentMethod[] = []

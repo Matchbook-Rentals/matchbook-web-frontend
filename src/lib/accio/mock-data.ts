@@ -1,8 +1,10 @@
 /**
  * Mock XML data for Accio background check testing
  *
- * Contains embedded XML responses from docs/accio/subjects/
- * - blackwood_dante: Criminal + eviction records (hits)
+ * Available subjects:
+ * - blackwood_dante: Criminal records (2) + eviction record (1)
+ *
+ * Commented out:
  * - doe_john: Clean record (clear)
  */
 
@@ -17,7 +19,7 @@ interface MockSubjectData {
 export const MOCK_SUBJECTS: Record<MockSubject, MockSubjectData> = {
   blackwood_dante: {
     name: 'Dante Blackwood',
-    description: 'Criminal + eviction records',
+    description: '2 criminal records + 1 eviction record',
     xml: `<?xml version="1.0" encoding="UTF-8"?>
 <ScreeningResults>
   <login>
@@ -185,88 +187,14 @@ Evictions and Property Damage Check                     - HITS
 </ScreeningResults>`,
   },
 
-  doe_john: {
-    name: 'John Doe',
-    description: 'Clean record',
-    xml: `<?xml version="1.0" encoding="UTF-8"?>
-<ScreeningResults>
-  <login>
-    <account>{{ORDER_ID}}</account>
-    <username>{{ORDER_ID}}</username>
-    <password>{{ORDER_ID}}</password>
-  </login>
-  <clientInfo>
-    <primaryuser_contact_fax/>
-    <primaryuser_contact_city/>
-    <report_format/>
-    <primaryuser_contact_email>Tyler.Bennett@matchbookrentals.com</primaryuser_contact_email>
-    <account>matchbook</account>
-    <primaryuser_contact_address/>
-    <username>tyler.bennett@matchbookrentals.com</username>
-    <primaryuser_contact_telephone>317-908-7302</primaryuser_contact_telephone>
-    <primaryuser_contact_zip/>
-    <primaryuser_contact_title/>
-    <primaryuser_contact_name>Tyler Bennett</primaryuser_contact_name>
-    <primaryuser_contact_state/>
-    <packageset/>
-  </clientInfo>
-  <accountInfo>
-    <packageset>matchbook</packageset>
-    <primaryuser_contact_fax/>
-    <primaryuser_contact_city>OGDEN</primaryuser_contact_city>
-    <report_format/>
-    <primaryuser_contact_email>daniel.resner@matchbookrentals.com</primaryuser_contact_email>
-    <primaryuser_contact_address>3024 N 1400 E</primaryuser_contact_address>
-    <primaryuser_contact_telephone>317-908-7302</primaryuser_contact_telephone>
-    <primaryuser_contact_zip>84414</primaryuser_contact_zip>
-    <primaryuser_contact_name>Daniel Resner</primaryuser_contact_name>
-    <primaryuser_contact_state>UT</primaryuser_contact_state>
-    <company_name>Matchbook Rentals</company_name>
-  </accountInfo>
-  <orderInfo>
-    <packagename>Criminal and Evictions</packagename>
-  </orderInfo>
-  <completeOrder number="{{ORDER_ID}}" remote_number="MOCK-24754" isactive="Y" archived="N" reviewed="N" reference_number="">
-    <status>clear</status>
-    <time_ordered>{{TIME_ORDERED}}</time_ordered>
-    <time_filled>{{TIME_FILLED}}</time_filled>
-    <reportURL>
-      <HTML>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=MOCK</HTML>
-      <PDF_Color>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=MOCK&amp;pdf2=1</PDF_Color>
-      <PDF_BW>https://globalbackgroundscreening.bgsecured.com/c/d/show_order?order_number=MOCK&amp;pdf2=1&amp;black=X</PDF_BW>
-    </reportURL>
-    <subject>
-      <name_first>John</name_first>
-      <name_last>Doe</name_last>
-      <ssn>000000001</ssn>
-      <dob>19900101</dob>
-      <address>123 Test Street</address>
-      <city>Atlanta</city>
-      <state>GA</state>
-      <zip>30301</zip>
-      <email>verification@matchbookrentals.com</email>
-    </subject>
-    <report_html_summary><![CDATA[
-<p>The background check for John Doe is complete.</p>
-<pre>
-Component                                               - Status
---------------------------------------------------------------------------------
-National Criminal History Search                        - CLEAR
-Evictions and Property Damage Check                     - CLEAR
-</pre>
-]]></report_html_summary>
-    <order_state>order completion</order_state>
-    <subOrder number="" remote_number="723967" description="National Criminal History Search" remote_order="MOCK-24754" remote_subOrder="723967" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="clear" type="National Criminal">
-      <time_ordered>{{TIME_ORDERED}}</time_ordered>
-      <time_filled>{{TIME_FILLED}}</time_filled>
-    </subOrder>
-    <subOrder number="" remote_number="723968" description="Evictions and Property Damage Check" remote_order="MOCK-24754" remote_subOrder="723968" held_for_review="N" held_for_release_form="N" filledStatus="filled" filledCode="clear" type="evictions_check">
-      <time_ordered>{{TIME_ORDERED}}</time_ordered>
-      <time_filled>{{TIME_FILLED}}</time_filled>
-    </subOrder>
-  </completeOrder>
-</ScreeningResults>`,
-  },
+  // doe_john: {
+  //   name: 'John Doe',
+  //   description: 'Clean record',
+  //   xml: `<?xml version="1.0" encoding="UTF-8"?>
+  // <ScreeningResults>
+  //   ...
+  // </ScreeningResults>`,
+  // },
 };
 
 /**
