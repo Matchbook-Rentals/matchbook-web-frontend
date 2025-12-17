@@ -180,8 +180,9 @@ export function EditorCommandBar({
     }
 
     if (selection.toString().length > 0) {
-      // Text selected: format selection as heading
-      document.execCommand('formatBlock', false, tagName)
+      // Text selected: wrap only selected text in heading (not entire block)
+      const selectedText = selection.toString()
+      document.execCommand('insertHTML', false, `<${tagName.toLowerCase()}>${selectedText}</${tagName.toLowerCase()}>`)
     } else {
       // No selection: smart detection for new line
       const placeholders = ['Header', 'Subheader', 'Section']
