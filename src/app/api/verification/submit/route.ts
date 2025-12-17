@@ -3,10 +3,11 @@ import { currentUser, auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
 import { generateVerificationXml } from "@/app/app/rent/verification/utils";
 import { headers } from "next/headers";
-
-// FORCED MOCK MODE - Always use mock responses for Accio Data background checks
-// Set to false to use real API
-const MOCK_MODE = false;
+import {
+  shouldUseMock,
+  getAccioEnvironment,
+  triggerMockWebhook,
+} from "@/lib/accio";
 
 export async function POST(request: Request) {
   try {
@@ -54,29 +55,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Find or create Verification record
-    let verification = await prisma.verification.findUnique({
-      where: { userId: user.id },
+    // Create new Verification record (multiple verifications per user allowed)
+    let verification = await prisma.verification.create({
+      data: {
+        userId: user.id,
+        purchaseId: unredeemedPurchase.id,
+        status: "PROCESSING_CREDIT",
+        subjectFirstName: firstName,
+        subjectLastName: lastName,
+      },
     });
-
-    if (!verification) {
-      verification = await prisma.verification.create({
-        data: {
-          userId: user.id,
-          purchaseId: unredeemedPurchase.id,
-          status: "PROCESSING_CREDIT",
-        },
-      });
-    } else {
-      // Update existing verification
-      verification = await prisma.verification.update({
-        where: { userId: user.id },
-        data: {
-          status: "PROCESSING_CREDIT",
-          purchaseId: unredeemedPurchase.id,
-        },
-      });
-    }
 
     // ========================================
     // STEP 1: iSoftPull Credit Check (Free if fail)
@@ -165,10 +153,15 @@ export async function POST(request: Request) {
     // STEP 2: Accio Data Background Check (Paid)
     // ========================================
     try {
-      const orderNumber = `MBWEB-${Date.now()}`;
+      const useMock = shouldUseMock();
+      const accioEnv = getAccioEnvironment();
+      const orderNumber = useMock ? `MOCK-${Date.now()}` : `MBWEB-${Date.now()}`;
 
-      if (MOCK_MODE) {
-        console.log('🎭 MOCK MODE: Skipping real Accio Data submission');
+      if (useMock) {
+        console.log(`🎭 MOCK MODE (${accioEnv}): Skipping real Accio Data submission`);
+
+        // Schedule mock webhook trigger (non-blocking)
+        triggerMockWebhook(orderNumber);
       } else {
         // Generate XML payload for Accio Data
         const xmlPayload = generateVerificationXml({
@@ -227,8 +220,8 @@ export async function POST(request: Request) {
         },
       });
 
-      const message = MOCK_MODE
-        ? "Background check submitted successfully (MOCK MODE). Results typically arrive within 24-48 hours, but can take up to 2 weeks."
+      const message = useMock
+        ? `Background check submitted successfully (MOCK - ${accioEnv}). Webhook will trigger in ~2 seconds.`
         : "Background check submitted successfully. Results typically arrive within 24-48 hours, but can take up to 2 weeks.";
 
       return NextResponse.json({

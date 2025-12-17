@@ -11,8 +11,8 @@ export default async function VerificationListPage() {
     redirect("/sign-in")
   }
 
-  // Fetch user's verification
-  const verification = await prismadb.verification.findUnique({
+  // Fetch all user's verifications (most recent first)
+  const verifications = await prismadb.verification.findMany({
     where: { userId },
     include: {
       user: {
@@ -37,18 +37,25 @@ export default async function VerificationListPage() {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   })
 
-  // If no verification exists or hasn't started processing, redirect to verification flow
-  // Allow PROCESSING_BGS (waiting for Accio webhook) or COMPLETED
-  if (!verification || (verification.status !== "PROCESSING_BGS" && verification.status !== "COMPLETED")) {
+  // Filter to only show verifications that are in progress or completed
+  const displayableVerifications = verifications.filter(
+    (v) => v.status === "PROCESSING_BGS" || v.status === "COMPLETED"
+  )
+
+  // If no displayable verifications, redirect to verification flow
+  if (displayableVerifications.length === 0) {
     redirect("/app/rent/verification")
   }
 
   return (
     <div className={`min-h-screen bg-background ${APP_PAGE_MARGIN}`}>
       <main className="md:container mx-auto py-8">
-        <VerificationListClient verification={verification} />
+        <VerificationListClient verifications={displayableVerifications} />
       </main>
     </div>
   )

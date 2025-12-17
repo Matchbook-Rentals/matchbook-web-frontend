@@ -20,7 +20,7 @@ export const VerificationFooter = ({
   secondaryButton,
 }: VerificationFooterProps): JSX.Element => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 shadow-lg z-50">
       <div className="pl-2 pr-2 md:pl-12 md:pr-12 py-4 flex justify-between items-center gap-3">
         {secondaryButton ? (
           <BrandButton

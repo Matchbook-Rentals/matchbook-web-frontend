@@ -9,13 +9,16 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Fetch verification record with all relations
-    const verification = await prisma.verification.findUnique({
+    // Fetch the most recent verification record with all relations
+    const verification = await prisma.verification.findFirst({
       where: { userId: user.id },
       include: {
         creditReport: true,
         bgsReport: true,
         purchase: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 

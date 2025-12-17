@@ -26,6 +26,8 @@ interface VerificationData {
   evictionCount: number | null
   criminalStatus: string | null
   criminalRecordCount: number | null
+  subjectFirstName: string | null
+  subjectLastName: string | null
   user: {
     firstName: string | null
     lastName: string | null
@@ -44,7 +46,7 @@ interface VerificationData {
 }
 
 interface VerificationListClientProps {
-  verification: VerificationData
+  verifications: VerificationData[]
 }
 
 const formatCreditBucket = (bucket: CreditBucket | null | undefined): string => {
@@ -82,16 +84,20 @@ const formatCriminalStatus = (status: string | null): string => {
   return status
 }
 
-export function VerificationListClient({ verification }: VerificationListClientProps) {
+function VerificationCard({ verification }: { verification: VerificationData }) {
   const router = useRouter()
   const user = verification.user
 
-  const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Unknown"
+  // Use subject name from verification form, fallback to user profile
+  const firstName = verification.subjectFirstName || user.firstName || ""
+  const lastName = verification.subjectLastName || user.lastName || ""
+  const fullName = `${firstName} ${lastName}`.trim() || "Unknown"
   const location = "Salt Lake City, UT" // TODO: Get from user profile
 
   const creditBucket = verification.creditBucket || verification.creditReport?.creditBucket
   const evictionStatus = formatEvictionStatus(verification.evictionStatus)
   const criminalStatus = formatCriminalStatus(verification.criminalStatus)
+  const isProcessing = verification.status === "PROCESSING_BGS"
 
   const handleViewDetails = () => {
     router.push(`/app/rent/verification/${verification.id}`)
@@ -104,44 +110,15 @@ export function VerificationListClient({ verification }: VerificationListClientP
   ]
 
   return (
-    <div className="flex flex-col w-full items-start justify-center gap-4 p-4">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">
-              <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>
-            <span className="text-gray-500 text-sm">/</span>
-          </BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <BreadcrumbPage className="text-gray-900 text-sm">
-              MatchBook Renter Verification
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      <div className="flex flex-col items-start gap-6 w-full">
-        <header className="flex flex-col w-full items-start gap-1">
-          <h1 className="text-[#373940] text-2xl font-medium">
-            MatchBook Renter Verification Summary
-          </h1>
-          <p className="text-[#5d606d] text-sm">
-            Track, manage, and reuse your verification
-          </p>
-        </header>
-
-        <Card className="w-full shadow-[0px_2px_12px_#0000001a]">
+    <Card className="w-full shadow-[0px_2px_12px_#0000001a]">
           {/* Mobile Layout */}
           <CardContent className="flex md:hidden flex-col gap-4 p-3">
             <div className="flex flex-col">
               <div className="flex items-center gap-3">
                 <AvatarWithFallback
                   src={user.imageUrl || undefined}
-                  firstName={user.firstName || undefined}
-                  lastName={user.lastName || undefined}
+                  firstName={firstName || undefined}
+                  lastName={lastName || undefined}
                   email={user.email || undefined}
                   alt={fullName}
                   className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
@@ -152,10 +129,16 @@ export function VerificationListClient({ verification }: VerificationListClientP
                   {fullName}
                 </h2>
 
-                <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#e9f7ee] rounded-full border border-solid border-[#1ca34e] text-[#1ca34e] hover:bg-[#e9f7ee]">
-                  <img className="w-4 h-4" alt="Tick" src="/tick.svg" />
-                  <span className="font-medium text-sm">Verified</span>
-                </Badge>
+                {isProcessing ? (
+                  <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#fff8e6] rounded-full border border-solid border-[#f5a623] text-[#f5a623] hover:bg-[#fff8e6]">
+                    <span className="font-medium text-sm">Processing</span>
+                  </Badge>
+                ) : (
+                  <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#e9f7ee] rounded-full border border-solid border-[#1ca34e] text-[#1ca34e] hover:bg-[#e9f7ee]">
+                    <img className="w-4 h-4" alt="Tick" src="/tick.svg" />
+                    <span className="font-medium text-sm">Verified</span>
+                  </Badge>
+                )}
               </div>
 
               <div className="flex items-center gap-3">
@@ -209,8 +192,8 @@ export function VerificationListClient({ verification }: VerificationListClientP
               <div className="inline-flex items-center gap-[9px]">
                 <AvatarWithFallback
                   src={user.imageUrl || undefined}
-                  firstName={user.firstName || undefined}
-                  lastName={user.lastName || undefined}
+                  firstName={firstName || undefined}
+                  lastName={lastName || undefined}
                   email={user.email || undefined}
                   alt={fullName}
                   className="w-[81px] h-[85px] rounded-xl object-cover"
@@ -223,10 +206,16 @@ export function VerificationListClient({ verification }: VerificationListClientP
                     <p className="text-[#777b8b] text-xs">{location}</p>
                   </div>
 
-                  <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#e9f7ee] rounded-full border border-solid border-[#1ca34e] text-[#1ca34e] hover:bg-[#e9f7ee]">
-                    <img className="w-4 h-4" alt="Tick" src="/tick.svg" />
-                    <span className="font-medium text-sm">Verified</span>
-                  </Badge>
+                  {isProcessing ? (
+                    <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#fff8e6] rounded-full border border-solid border-[#f5a623] text-[#f5a623] hover:bg-[#fff8e6]">
+                      <span className="font-medium text-sm">Processing</span>
+                    </Badge>
+                  ) : (
+                    <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#e9f7ee] rounded-full border border-solid border-[#1ca34e] text-[#1ca34e] hover:bg-[#e9f7ee]">
+                      <img className="w-4 h-4" alt="Tick" src="/tick.svg" />
+                      <span className="font-medium text-sm">Verified</span>
+                    </Badge>
+                  )}
                 </div>
               </div>
 
@@ -271,6 +260,45 @@ export function VerificationListClient({ verification }: VerificationListClientP
             </div>
           </CardContent>
         </Card>
+  )
+}
+
+export function VerificationListClient({ verifications }: VerificationListClientProps) {
+  return (
+    <div className="flex flex-col w-full items-start justify-center gap-4 p-4">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">
+              <img src="/logo-small.svg" alt="Home" className="w-[18px] h-[18px] -translate-y-[1px]" />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator>
+            <span className="text-gray-500 text-sm">/</span>
+          </BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbPage className="text-gray-900 text-sm">
+              MatchBook Renter Verification
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <div className="flex flex-col items-start gap-6 w-full">
+        <header className="flex flex-col w-full items-start gap-1">
+          <h1 className="text-[#373940] text-2xl font-medium">
+            MatchBook Renter Verification Summary
+          </h1>
+          <p className="text-[#5d606d] text-sm">
+            Track, manage, and reuse your verifications
+          </p>
+        </header>
+
+        <div className="flex flex-col gap-4 w-full">
+          {verifications.map((verification) => (
+            <VerificationCard key={verification.id} verification={verification} />
+          ))}
+        </div>
       </div>
     </div>
   )

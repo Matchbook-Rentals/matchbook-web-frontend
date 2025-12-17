@@ -31,6 +31,8 @@ interface VerificationData {
   evictionCount: number | null
   criminalStatus: string | null
   criminalRecordCount: number | null
+  subjectFirstName: string | null
+  subjectLastName: string | null
   user: {
     id: string
     firstName: string | null
@@ -124,7 +126,7 @@ const getEvictionDescription = (status: string | null, count: number | null): st
     return "No public eviction records or property damage claims found."
   }
   const recordCount = count || 0
-  return `${recordCount} eviction record${recordCount !== 1 ? "s" : ""} found. Click for more details.`
+  return `${recordCount} eviction record${recordCount !== 1 ? "s" : ""} found.`
 }
 
 const getCriminalDescription = (status: string | null, count: number | null): string => {
@@ -133,7 +135,7 @@ const getCriminalDescription = (status: string | null, count: number | null): st
     return "No felony or misdemeanor records found."
   }
   const recordCount = count || 0
-  return `${recordCount} criminal record${recordCount !== 1 ? "s" : ""} found. Click for more details.`
+  return `${recordCount} criminal record${recordCount !== 1 ? "s" : ""} found.`
 }
 
 const formatEvictionStatus = (status: string | null): string => {
@@ -263,10 +265,9 @@ const EvictionRecordDetails = ({ record }: { record: VerificationData['evictionR
 export function VerificationDetailsClient({ verification }: VerificationDetailsClientProps) {
   const user = verification.user
 
-  // Try to get name from report data first, fallback to user profile
-  const reportData = verification.bgsReport?.reportData as { firstName?: string; lastName?: string } | null
-  const firstName = reportData?.firstName || user.firstName || ""
-  const lastName = reportData?.lastName || user.lastName || ""
+  // Use subject name from verification form, fallback to user profile
+  const firstName = verification.subjectFirstName || user.firstName || ""
+  const lastName = verification.subjectLastName || user.lastName || ""
   const fullName = `${firstName} ${lastName}`.trim() || "Unknown"
 
   const creditBucket = verification.creditBucket || verification.creditReport?.creditBucket

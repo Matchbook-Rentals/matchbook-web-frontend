@@ -11,10 +11,12 @@ import {
   getSecurityContext,
   maskSSN,
 } from "@/lib/audit-logger";
-
-// SAFETY: Set to true to prevent API calls during development
-// NOTE: ACCIO_* env vars are commented out in .env to ensure we don't accidentally call the real API
-const MOCK_MODE = false;
+import {
+  shouldUseMock,
+  getAccioEnvironment,
+  triggerMockWebhook,
+  createMockOrderResponse,
+} from "@/lib/accio";
 
 // Use the provided test credentials
 const ACCOUNT_DETAILS = {
@@ -85,11 +87,16 @@ export async function POST(request: Request) {
     // Generate XML for the combined check
     const xmlPayload = generateVerificationXml(data, ACCOUNT_DETAILS);
 
+    // Determine if we should use mock mode
+    const useMock = shouldUseMock();
+    const accioEnv = getAccioEnvironment();
+
     // Always log request - search for BACKGROUND_CHECK_REQUEST in logs
     console.log("\n" + "=".repeat(80));
     console.log("BACKGROUND_CHECK_REQUEST_START");
     console.log("=".repeat(80));
-    console.log("🔧 MOCK_MODE:", MOCK_MODE);
+    console.log("🔧 Environment:", accioEnv);
+    console.log("🔧 Mock Mode:", useMock);
     console.log(xmlPayload);
     console.log("=".repeat(80));
     console.log("BACKGROUND_CHECK_REQUEST_END");
@@ -98,22 +105,17 @@ export async function POST(request: Request) {
     let responseText: string;
     let orderNumber: string;
 
-    if (MOCK_MODE) {
-      console.log("🎭 MOCK MODE: Returning simulated Accio response");
-
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    if (useMock) {
+      console.log(`🎭 MOCK MODE (${accioEnv}): Returning simulated Accio response`);
 
       // Generate mock order number
-      orderNumber = "MOCK-" + Math.floor(Math.random() * 10000000);
+      orderNumber = "MOCK-" + Date.now();
 
-      // Mock successful response XML
-      responseText = `<?xml version="1.0" encoding="UTF-8"?>
-<XML>
-  <order_number>${orderNumber}</order_number>
-  <status>pending</status>
-  <message>Order placed successfully (MOCK)</message>
-</XML>`;
+      // Create mock response XML
+      responseText = createMockOrderResponse(orderNumber);
+
+      // Schedule mock webhook trigger (non-blocking)
+      triggerMockWebhook(orderNumber);
 
       console.log("\n" + "=".repeat(80));
       console.log("BACKGROUND_CHECK_RESPONSE_START (MOCK)");
@@ -207,25 +209,9 @@ export async function POST(request: Request) {
     const securityContext = await getSecurityContext();
     const responseTimeMs = Date.now() - startTime;
 
-    // Update Verification with audit data
-    await prisma.verification.upsert({
-      where: { userId: effectiveUserId },
-      update: {
-        // Consent timestamps (only set if provided)
-        backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
-        creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
-        // API tracking
-        backgroundCheckRequestedAt: new Date(startTime),
-        backgroundCheckRequestId: orderNumber, // Use order number as request ID
-        permissiblePurpose: "rental_screening",
-        // Security context
-        consentIpAddress: securityContext.ipAddress,
-        consentUserAgent: securityContext.userAgent,
-        consentCity: securityContext.city,
-        consentRegion: securityContext.region,
-        consentCountry: securityContext.country,
-      },
-      create: {
+    // Create new Verification with audit data (multiple verifications per user allowed)
+    await prisma.verification.create({
+      data: {
         userId: effectiveUserId,
         backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
         creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,

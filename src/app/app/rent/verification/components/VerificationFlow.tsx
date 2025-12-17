@@ -272,7 +272,7 @@ export const VerificationFlow = ({
               form={form}
               title="Background Check Authorization"
               checkboxName="backgroundCheckAuthorization"
-              checkboxLabel="By checking this box, I authorize Matchbook LLC to conduct a background check and eviction history search."
+              checkboxLabel="By checking this box, you consent to the use of electronic signatures which shall have the same legal effect as a handwritten signature. You authorize MatchBook to obtain your Consumer Report for rental application purposes, and you understand that such report, with your prior consent, may be shared with Hosts in connection with your rental applications."
               checkboxId="background-auth-checkbox"
               onConsentChange={handleBackgroundConsentChange}
             >
@@ -285,7 +285,7 @@ export const VerificationFlow = ({
               form={form}
               title="Credit Check Authorization"
               checkboxName="creditAuthorizationAcknowledgment"
-              checkboxLabel="By checking this box, I authorize Matchbook LLC to obtain my credit report for rental evaluation purposes."
+              checkboxLabel="By checking this box, you consent to the use of electronic signatures which shall have the same legal effect as a handwritten signature. You authorize MatchBook to obtain your Consumer Report for rental application purposes, and you understand that such report, with your prior consent, may be shared with Hosts in connection with your rental applications."
               checkboxId="credit-auth-checkbox"
               onConsentChange={handleCreditConsentChange}
             >
@@ -372,7 +372,7 @@ export const VerificationFlow = ({
               : undefined
           }
           primaryButton={{
-            label: processingStep === "select-payment" ? "Pay $25.00" : "View Report",
+            label: processingStep === "select-payment" ? "Continue" : "View Report",
             onClick: processingStep === "select-payment" ? handlePayClick : handleProcessingComplete,
             disabled: processingStep === "select-payment" ? !canPay : processingStep !== "complete",
           }}

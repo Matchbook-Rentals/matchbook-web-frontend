@@ -634,14 +634,34 @@ export const ProcessingScreen = ({
 
         {/* Payment Selector - Show when on payment selection step */}
         {currentStep === "select-payment" && !isStepComplete("select-payment") && (
-              <VerificationPaymentSelector
-                formData={formData}
-                onPaymentSuccess={handlePaymentSuccess}
-                onCancel={onBack || (() => window.history.back())}
-                onPaymentMethodReady={onPaymentMethodReady}
-                initialPaymentMethods={initialPaymentMethods}
-                initialClientSecret={initialClientSecret}
-              />
+          <>
+            {/* Receipt Summary */}
+            <div className="w-full rounded-xl border border-[#e6e6e6] bg-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img src="/tick.svg" alt="" className="w-6 h-6" />
+                <div className="flex flex-col">
+                  <span className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-sm">
+                    Renter Verification
+                  </span>
+                  <span className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-xs">
+                    Includes credit range, background check, and eviction history, valid for 90 days
+                  </span>
+                </div>
+              </div>
+              <span className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-sm whitespace-nowrap">
+                Pay $25.00
+              </span>
+            </div>
+
+            <VerificationPaymentSelector
+              formData={formData}
+              onPaymentSuccess={handlePaymentSuccess}
+              onCancel={onBack || (() => window.history.back())}
+              onPaymentMethodReady={onPaymentMethodReady}
+              initialPaymentMethods={initialPaymentMethods}
+              initialClientSecret={initialClientSecret}
+            />
+          </>
         )}
 
         {/* Error Screen with Inline Form - SSN Error or No Credit File */}

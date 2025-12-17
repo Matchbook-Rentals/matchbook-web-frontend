@@ -149,7 +149,7 @@ model User {
   personReports      PersonReport?
   creditReport       CreditReport?
   bgsReports         BGSReport[]
-  verification       Verification?
+  verifications      Verification[]
   conversations      ConversationParticipant[]
   messageReads       MessageRead[]
   sentMessages       Message[]                 @relation("MessageSender")
@@ -1140,7 +1140,11 @@ model EvictionRecord {
 
 model Verification {
   id                  String              @id @default(uuid())
-  userId              String              @unique // One verification per user
+  userId              String              // Multiple verifications per user allowed
+
+  // Subject Information (from verification form, NOT user profile)
+  subjectFirstName    String?             // Name entered during verification
+  subjectLastName     String?             // Name entered during verification
 
   // Overall Status
   status              VerificationStatus  @default(PENDING)
