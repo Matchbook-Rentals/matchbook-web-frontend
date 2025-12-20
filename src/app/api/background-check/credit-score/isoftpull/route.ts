@@ -4,11 +4,10 @@ import prisma from '@/lib/prismadb'
 import { headers } from 'next/headers';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import { getISoftPullUrl } from "@/lib/verification/config";
 
-const ISOFTPULL_API_URL = 'https://app.isoftpull.com/api/v2/reports';
-// FORCED MOCK MODE - Always use mock responses for iSoftPull credit checks
-// Set to false to use real API
-const MOCK_MODE = true;
+// Mock mode based on environment (same as config.ts)
+const isDev = process.env.NODE_ENV === 'development';
 
 export async function POST(request: Request) {
   try {
@@ -40,8 +39,8 @@ export async function POST(request: Request) {
     console.log('\n' + '='.repeat(60));
     console.log('🚀 iSOFTPULL CREDIT CHECK STARTED');
     console.log('='.repeat(60));
-    console.log('🔧 MOCK_MODE:', MOCK_MODE);
-    if (MOCK_MODE) {
+    console.log('🔧 isDev:', isDev);
+    if (isDev) {
       console.log('🎭 MODE: MOCK - Using fake credit check response');
     } else {
       console.log('🔥 MODE: REAL - Calling real iSoftPull API!');
@@ -67,7 +66,7 @@ export async function POST(request: Request) {
     console.log('All required fields validated successfully');
 
     // Mock response for development/testing
-    if (MOCK_MODE) {
+    if (isDev) {
       console.log('✅ Returning mock credit data (passed)');
       const creditData = {
         intelligence: {
@@ -121,7 +120,7 @@ export async function POST(request: Request) {
 
     // Make request to iSoftPull API
     console.log('Making request to iSoftPull API...');
-    const response = await fetch(ISOFTPULL_API_URL, {
+    const response = await fetch(getISoftPullUrl(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

@@ -17,6 +17,7 @@ import {
   triggerMockWebhook,
   createMockOrderResponse,
 } from "@/lib/accio";
+import { getAccioUrl } from "@/lib/verification/config";
 
 // Use the provided test credentials
 const ACCOUNT_DETAILS = {
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
       console.log("=".repeat(80) + "\n");
     } else {
       // Send XML to Accio Data API
-      const accioResponse = await fetch("https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml", {
+      const accioResponse = await fetch(getAccioUrl(), {
         method: "POST",
         headers: {
           "Content-Type": "text/xml",

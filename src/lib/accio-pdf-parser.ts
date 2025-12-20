@@ -8,8 +8,7 @@
 import { readFile } from 'fs/promises';
 import path from 'path';
 import { extractText, getDocumentProxy } from 'unpdf';
-
-const ACCIO_URL = "https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml";
+import { getAccioUrl } from "@/lib/verification/config";
 const MOCK_PDF_PATH = 'docs/accio/order-24776-report.pdf';
 
 interface AccioCredentials {
@@ -78,7 +77,7 @@ export async function fetchAccioPdf(
 </XML>`;
 
   try {
-    const response = await fetch(ACCIO_URL, {
+    const response = await fetch(getAccioUrl(), {
       method: "POST",
       headers: {
         "Content-Type": "text/xml",
