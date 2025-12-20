@@ -32,8 +32,11 @@ export async function GET(req: Request) {
 
     let purchaseCreated = false;
 
-    // Create Purchase record when payment succeeds (sync, to avoid race condition with webhook)
-    if (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing') {
+    // Create Purchase record when payment is authorized or succeeds
+    // - requires_capture: pre-auth hold placed (manual capture flow)
+    // - succeeded: payment fully captured
+    // - processing: async payment (e.g., ACH) in progress
+    if (paymentIntent.status === 'requires_capture' || paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing') {
       // Check if Purchase already exists for this paymentIntentId
       const existingPurchases = await prisma.purchase.findMany({
         where: {

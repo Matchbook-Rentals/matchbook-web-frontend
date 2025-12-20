@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { AvatarWithFallback } from "@/components/ui/avatar-with-fallback"
 import { BrandButton } from "@/components/ui/brandButton"
 import type { CreditBucket } from "@prisma/client"
 
@@ -117,23 +116,13 @@ function VerificationCard({ verification }: { verification: VerificationData }) 
           <CardContent className="flex md:hidden flex-col gap-4 p-3">
             <div className="flex flex-col">
               <div className="flex items-center gap-3">
-                <AvatarWithFallback
-                  src={user.imageUrl || undefined}
-                  firstName={firstName || undefined}
-                  lastName={lastName || undefined}
-                  email={user.email || undefined}
-                  alt={fullName}
-                  className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
-                  size={64}
-                />
-
                 <h2 className="flex-1 text-[#484a54] text-lg font-medium">
                   {fullName}
                 </h2>
 
                 {isProcessing ? (
-                  <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#fff8e6] rounded-full border border-solid border-[#f5a623] text-[#f5a623] hover:bg-[#fff8e6]">
-                    <span className="font-medium text-sm">Processing</span>
+                  <Badge className="inline-flex items-center gap-1.5 h-auto bg-[#fff8e6] rounded-full border border-solid border-[#f5a623] text-[#f5a623] hover:bg-[#fff8e6]">
+                    <span className="font-medium text-sm">Pending</span>
                   </Badge>
                 ) : (
                   <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#e9f7ee] rounded-full border border-solid border-[#1ca34e] text-[#1ca34e] hover:bg-[#e9f7ee]">
@@ -144,7 +133,6 @@ function VerificationCard({ verification }: { verification: VerificationData }) 
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-16 flex-shrink-0" />
                 <p className="flex-1 text-[#777b8b] text-xs">{location}</p>
                 <DownloadIcon className="w-5 h-5 text-[#484a54] cursor-pointer hover:text-[#0b6969]" />
               </div>
@@ -192,25 +180,15 @@ function VerificationCard({ verification }: { verification: VerificationData }) 
           <CardContent className="hidden md:flex flex-col items-start justify-end gap-2 p-6">
             <div className="flex items-start justify-between self-stretch w-full">
               <div className="inline-flex items-center gap-[9px]">
-                <AvatarWithFallback
-                  src={user.imageUrl || undefined}
-                  firstName={firstName || undefined}
-                  lastName={lastName || undefined}
-                  email={user.email || undefined}
-                  alt={fullName}
-                  className="w-[81px] h-[85px] rounded-xl object-cover"
-                  size={85}
-                />
-
-                <div className="flex flex-col w-[154px] items-start gap-2">
+                <div className="flex flex-col items-start gap-2">
                   <div className="flex flex-col items-start self-stretch w-full">
                     <h2 className="text-[#484a54] text-lg font-medium">{fullName}</h2>
                     <p className="text-[#777b8b] text-xs">{location}</p>
                   </div>
 
                   {isProcessing ? (
-                    <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#fff8e6] rounded-full border border-solid border-[#f5a623] text-[#f5a623] hover:bg-[#fff8e6]">
-                      <span className="font-medium text-sm">Processing</span>
+                    <Badge className="inline-flex items-center gap-1.5 h-auto bg-[#fff8e6] rounded-full border border-solid border-[#f5a623] text-[#f5a623] hover:bg-[#fff8e6]">
+                      <span className="font-medium text-sm">Pending</span>
                     </Badge>
                   ) : (
                     <Badge className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 h-auto bg-[#e9f7ee] rounded-full border border-solid border-[#1ca34e] text-[#1ca34e] hover:bg-[#e9f7ee]">
