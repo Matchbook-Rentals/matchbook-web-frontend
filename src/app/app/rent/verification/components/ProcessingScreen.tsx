@@ -23,8 +23,16 @@ import { DateOfBirthPicker } from "@/components/ui/date-of-birth-picker";
 import { VerificationPaymentSelector, SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
 import { VerificationFooter } from "./VerificationFooter";
 import { SupportDialog } from "@/components/ui/support-dialog";
+import { toast } from "sonner";
 import type { ISoftPullResponse } from "@/types/isoftpull";
 import type { VerificationFormValues } from "../utils";
+
+export interface ErrorHandlers {
+  handleRefund: () => Promise<void>;
+  handleRetry: () => Promise<void>;
+  isProcessingRefund: boolean;
+  isRetrying: boolean;
+}
 
 interface ProcessingScreenProps {
   form: UseFormReturn<VerificationFormValues>;
@@ -33,6 +41,7 @@ interface ProcessingScreenProps {
   onStepChange?: (step: ProcessingStep) => void;
   onPaymentMethodReady?: (canPay: boolean, paymentMethodId: string | null) => void;
   onCreditDataReceived?: (data: ISoftPullResponse) => void;
+  onErrorHandlers?: (handlers: ErrorHandlers) => void;
   selectedPaymentMethodId?: string | null;
   shouldStartPayment?: boolean;
   initialPaymentMethods?: SavedPaymentMethod[];
@@ -128,6 +137,7 @@ export const ProcessingScreen = ({
   onStepChange,
   onPaymentMethodReady,
   onCreditDataReceived,
+  onErrorHandlers,
   selectedPaymentMethodId,
   shouldStartPayment,
   initialPaymentMethods,
@@ -181,6 +191,18 @@ export const ProcessingScreen = ({
       onStepChange(currentStep);
     }
   }, [currentStep, onStepChange]);
+
+  // Expose error handlers to parent for footer buttons
+  useEffect(() => {
+    if (onErrorHandlers && (currentStep === "ssn-error" || currentStep === "no-credit-file")) {
+      onErrorHandlers({
+        handleRefund: handleCancelPayment,
+        handleRetry,
+        isProcessingRefund,
+        isRetrying,
+      });
+    }
+  }, [currentStep, isProcessingRefund, isRetrying, onErrorHandlers]);
 
   // Auto-proceed to report after verification completes
   useEffect(() => {
@@ -414,16 +436,16 @@ export const ProcessingScreen = ({
     setCurrentStep("verification-failed");
   };
 
-  // Submit verification to API
+  // Submit verification to API - single orchestrated call
   const submitVerification = async () => {
     // Get fresh form values
     const currentFormData = form.getValues();
 
     try {
-      console.log("📤 Calling iSoftPull API...");
+      console.log("📤 Calling verification orchestrator...");
 
-      // Call the real iSoftPull endpoint
-      const response = await fetch("/api/verification/isoftpull", {
+      // Single API call that handles the entire flow server-side
+      const response = await fetch("/api/verification/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -434,6 +456,7 @@ export const ProcessingScreen = ({
           state: currentFormData.state,
           zip: currentFormData.zip,
           ssn: currentFormData.ssn,
+          dob: currentFormData.dob,
           // FCRA audit timestamps
           creditCheckConsentAt: creditCheckConsentAt?.toISOString(),
           backgroundCheckConsentAt: backgroundCheckConsentAt?.toISOString(),
@@ -441,93 +464,36 @@ export const ProcessingScreen = ({
       });
 
       const data = await response.json();
-      console.log("📥 iSoftPull response:", data);
+      console.log("📥 Verification response:", data);
 
-      if (!response.ok) {
-        throw new Error(data.error || "iSoftPull credit check failed");
-      }
+      // Handle credit check errors (SSN or no credit file)
+      if (!data.success) {
+        if (data.errorType === "INVALID_SSN" || data.errorType === "NO_CREDIT_FILE") {
+          console.log("⚠️ Credit check failed:", data.errorType, "attempt:", ssnAttemptCount + 1);
+          const newAttemptCount = ssnAttemptCount + 1;
+          setSsnAttemptCount(newAttemptCount);
 
-      // Handle Invalid SSN error
-      if (data.errorType === "INVALID_SSN") {
-        console.log("⚠️ Invalid SSN detected, attempt:", ssnAttemptCount + 1);
-        const newAttemptCount = ssnAttemptCount + 1;
-        setSsnAttemptCount(newAttemptCount);
-
-        if (newAttemptCount === 1) {
-          // First failure - show retry screen
-          setCurrentStep("ssn-error");
-        } else {
-          // Second failure - auto-cancel payment and show refund success
-          await autoCancelPayment();
+          if (newAttemptCount === 1) {
+            // First failure - show retry screen
+            setCurrentStep(data.errorType === "INVALID_SSN" ? "ssn-error" : "no-credit-file");
+          } else {
+            // Second failure - auto-cancel payment and show refund success
+            await autoCancelPayment();
+          }
+          return;
         }
-        return;
+
+        // Other errors
+        throw new Error(data.message || data.error || "Verification failed");
       }
 
-      // Handle No Credit File (no-hit) error - allow one retry
-      if (data.errorType === "NO_CREDIT_FILE") {
-        console.log("⚠️ No credit file found, attempt:", ssnAttemptCount + 1);
-        const newAttemptCount = ssnAttemptCount + 1;
-        setSsnAttemptCount(newAttemptCount);
-
-        if (newAttemptCount === 1) {
-          // First failure - show retry screen
-          setCurrentStep("no-credit-file");
-        } else {
-          // Second failure - auto-cancel payment and show refund success
-          await autoCancelPayment();
-        }
-        return;
-      }
-
-      // Pass credit data to parent
+      // Success - pass credit data to parent if available
       if (data.creditData && onCreditDataReceived) {
         onCreditDataReceived(data.creditData);
       }
 
-      setCompletedSteps(prev => [...prev, "isoftpull"]);
-
-      // Submit to Accio Data for background check
-      setCurrentStep("accio");
-      console.log("📤 Calling Accio Data API...");
-
-      try {
-        const accioResponse = await fetch("/api/background-check", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            firstName: currentFormData.firstName,
-            lastName: currentFormData.lastName,
-            ssn: currentFormData.ssn,
-            dob: currentFormData.dob,
-            address: currentFormData.address,
-            city: currentFormData.city,
-            state: currentFormData.state,
-            zip: currentFormData.zip,
-            creditAuthorizationAcknowledgment: currentFormData.creditAuthorizationAcknowledgment,
-            backgroundCheckAuthorization: currentFormData.backgroundCheckAuthorization,
-            // FCRA audit timestamps
-            creditCheckConsentAt: creditCheckConsentAt?.toISOString(),
-            backgroundCheckConsentAt: backgroundCheckConsentAt?.toISOString(),
-          }),
-        });
-
-        const accioData = await accioResponse.json();
-        console.log("📥 Accio response:", accioData);
-
-        if (!accioResponse.ok) {
-          throw new Error(accioData.error || "Background check submission failed");
-        }
-
-        console.log("✅ Background check order submitted:", accioData.orderNumber);
-        setCompletedSteps(prev => [...prev, "accio"]);
-      } catch (accioError) {
-        console.error("❌ Accio submission error:", accioError);
-        // Don't fail the whole flow - background check will complete via webhook
-        // Just log the error and continue
-        setCompletedSteps(prev => [...prev, "accio"]);
-      }
-
-      // Background check is now pending - webhook will update when complete
+      // Mark all steps complete
+      setCompletedSteps(prev => [...prev, "isoftpull", "accio"]);
       setCurrentStep("polling");
 
       // Capture the payment now that verification succeeded
@@ -543,26 +509,12 @@ export const ProcessingScreen = ({
           if (!captureResponse.ok) {
             const captureData = await captureResponse.json();
             console.error('❌ Failed to capture payment:', captureData.error);
-            // Don't fail the flow - payment can be captured manually if needed
           } else {
             console.log('✅ Payment captured successfully');
           }
         } catch (captureError) {
           console.error('❌ Error capturing payment:', captureError);
         }
-      }
-
-      // Finalize verification - set COMPLETED status and dates
-      // Background check webhook will update with actual results later
-      try {
-        const finalizeResponse = await fetch('/api/verification/finalize', {
-          method: 'POST',
-        });
-        if (finalizeResponse.ok) {
-          console.log('✅ Verification finalized');
-        }
-      } catch (finalizeError) {
-        console.error('❌ Error finalizing verification:', finalizeError);
       }
 
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -572,7 +524,16 @@ export const ProcessingScreen = ({
 
     } catch (err) {
       console.error("Verification submission error:", err);
-      setError(err instanceof Error ? err.message : "Failed to submit verification");
+      const message = err instanceof Error ? err.message : "Failed to submit verification";
+
+      // Show toast for service unavailable errors
+      if (message.includes("temporarily unavailable") || message.includes("not configured")) {
+        toast.error("Service Temporarily Unavailable", {
+          description: "Please try again in a few minutes. If the problem persists, contact support.",
+        });
+      }
+
+      setError(message);
     }
   };
 
@@ -682,7 +643,7 @@ export const ProcessingScreen = ({
                   control={form.control}
                   name="ssn"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[200px]">
+                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[200px]">
                       <FormLabel className="inline-flex items-center gap-1.5">
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                           Social Security Number
@@ -711,7 +672,7 @@ export const ProcessingScreen = ({
                   control={form.control}
                   name="dob"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[200px]">
+                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[200px]">
                       <FormLabel className="inline-flex items-center gap-1.5">
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                           Date of Birth
@@ -774,7 +735,7 @@ export const ProcessingScreen = ({
                   control={form.control}
                   name="city"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[140px]">
+                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[140px]">
                       <FormLabel className="inline-flex items-center gap-1.5">
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                           City
@@ -796,7 +757,7 @@ export const ProcessingScreen = ({
                   control={form.control}
                   name="state"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[140px]">
+                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[140px]">
                       <FormLabel className="inline-flex items-center gap-1.5">
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                           State
@@ -825,7 +786,7 @@ export const ProcessingScreen = ({
                   control={form.control}
                   name="zip"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[120px]">
+                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[120px]">
                       <FormLabel className="inline-flex items-center gap-1.5">
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                           Zip Code
@@ -866,41 +827,7 @@ export const ProcessingScreen = ({
               </div>
             )}
 
-            {/* Action Buttons */}
-            <div className="flex flex-row gap-4 w-full max-w-lg justify-end mt-2">
-              <Button
-                variant="outline"
-                onClick={handleCancelPayment}
-                disabled={isProcessingRefund}
-                className="px-6"
-              >
-                {isProcessingRefund ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  "Get Refund"
-                )}
-              </Button>
-              <BrandButton
-                onClick={handleRetry}
-                disabled={isRetrying}
-                className="px-6"
-              >
-                {isRetrying ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Retrying...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Retry
-                  </>
-                )}
-              </BrandButton>
-            </div>
+            {/* Action buttons moved to fixed footer via onErrorHandlers */}
           </div>
         )}
 
@@ -917,18 +844,12 @@ export const ProcessingScreen = ({
                 Unfortunately, the information provided doesn&apos;t match what&apos;s on file with our credit data providers. This can happen for a variety of reasons.
               </p>
               <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-base">
-                Don&apos;t worry — your $25 has been refunded.
+                Don&apos;t worry, your $25 has been refunded.
               </p>
               <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm mt-2">
                 If you believe this is an error or need assistance, please contact our support team.
               </p>
-              <Button
-                variant="outline"
-                onClick={() => setShowSupportDialog(true)}
-                className="mt-4"
-              >
-                Contact Support
-              </Button>
+              {/* Action buttons in fixed footer */}
             </div>
           </div>
         )}
@@ -947,13 +868,7 @@ export const ProcessingScreen = ({
               <p className="[font-family:'Poppins',Helvetica] font-normal text-[#5d606d] text-sm mt-2">
                 If you have any questions, please don&apos;t hesitate to contact our support team.
               </p>
-              <Button
-                variant="outline"
-                onClick={() => setShowSupportDialog(true)}
-                className="mt-4"
-              >
-                Contact Support
-              </Button>
+              {/* Action buttons in fixed footer */}
             </div>
           </div>
         )}

@@ -26,7 +26,7 @@ import { PersonalInformationSection } from "./sections/PersonalInformationSectio
 import { AuthorizationStepScreen } from "./AuthorizationStepScreen";
 import { BackgroundCheckAuthorizationContent } from "./legal/BackgroundCheckAuthorizationContent";
 import { CreditCheckAuthorizationContent } from "./legal/CreditCheckAuthorizationContent";
-import { ProcessingScreen, type ProcessingStep } from "./ProcessingScreen";
+import { ProcessingScreen, type ProcessingStep, type ErrorHandlers } from "./ProcessingScreen";
 import { VerificationFooter } from "./VerificationFooter";
 import { verificationSchema, type VerificationFormValues } from "../utils";
 import type { SavedPaymentMethod } from "@/components/stripe/verification-payment-selector";
@@ -69,6 +69,7 @@ export const VerificationFlow = ({
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null);
   const [shouldStartPayment, setShouldStartPayment] = useState(false);
   const [showTestClientModal, setShowTestClientModal] = useState(false);
+  const [errorHandlers, setErrorHandlers] = useState<ErrorHandlers | null>(null);
 
   // Consent timestamp tracking for FCRA compliance audit
   // These track when the user checked the authorization checkbox
@@ -272,7 +273,7 @@ export const VerificationFlow = ({
               form={form}
               title="Background Check Authorization"
               checkboxName="backgroundCheckAuthorization"
-              checkboxLabel="By checking this box, you consent to the use of electronic signatures which shall have the same legal effect as a handwritten signature. You authorize MatchBook to obtain your Consumer Report for rental application purposes, and you understand that such report, with your prior consent, may be shared with Hosts in connection with your rental applications."
+              checkboxLabel="By checking this box, you consent to the use of electronic signatures, which shall have the same legal effect as a handwritten signature. You authorize MatchBook to obtain your background report for rental application purposes and understand that such report, with your prior consent, may be shared with Hosts in connection with your rental applications."
               checkboxId="background-auth-checkbox"
               onConsentChange={handleBackgroundConsentChange}
             >
@@ -300,6 +301,7 @@ export const VerificationFlow = ({
               onBack={handleBackToCreditAuth}
               onStepChange={setProcessingStep}
               onPaymentMethodReady={handlePaymentMethodReady}
+              onErrorHandlers={setErrorHandlers}
               selectedPaymentMethodId={selectedPaymentMethodId}
               shouldStartPayment={shouldStartPayment}
               initialPaymentMethods={initialPaymentMethods}
@@ -362,20 +364,44 @@ export const VerificationFlow = ({
       {currentStep === "processing" && (
         <VerificationFooter
           secondaryButton={
-            // Only show back button during payment selection
             processingStep === "select-payment"
               ? {
                   label: "Back",
                   onClick: handleBackToCreditAuth,
                   variant: "outline",
                 }
+              : (processingStep === "ssn-error" || processingStep === "no-credit-file") && errorHandlers
+              ? {
+                  label: errorHandlers.isProcessingRefund ? "Processing..." : "Get Refund",
+                  onClick: errorHandlers.handleRefund,
+                  variant: "outline",
+                }
+              : (processingStep === "verification-failed" || processingStep === "refund-success")
+              ? {
+                  label: "Go Home",
+                  onClick: () => router.push("/"),
+                  variant: "outline",
+                }
               : undefined
           }
-          primaryButton={{
-            label: processingStep === "select-payment" ? "Continue" : "View Report",
-            onClick: processingStep === "select-payment" ? handlePayClick : handleProcessingComplete,
-            disabled: processingStep === "select-payment" ? !canPay : processingStep !== "complete",
-          }}
+          primaryButton={
+            (processingStep === "ssn-error" || processingStep === "no-credit-file") && errorHandlers
+              ? {
+                  label: errorHandlers.isRetrying ? "Retrying..." : "Retry",
+                  onClick: errorHandlers.handleRetry,
+                  disabled: errorHandlers.isRetrying || errorHandlers.isProcessingRefund,
+                }
+              : (processingStep === "verification-failed" || processingStep === "refund-success")
+              ? {
+                  label: "Contact Support",
+                  onClick: () => window.open("mailto:support@matchbookrentals.com", "_blank"),
+                }
+              : {
+                  label: processingStep === "select-payment" ? "Continue" : "View Report",
+                  onClick: processingStep === "select-payment" ? handlePayClick : handleProcessingComplete,
+                  disabled: processingStep === "select-payment" ? !canPay : processingStep !== "complete",
+                }
+          }
         />
       )}
 

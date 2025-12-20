@@ -7,6 +7,7 @@
 import { APP_PAGE_MARGIN } from "@/constants/styles"
 import { Suspense } from "react"
 import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
 import prismadb from "@/lib/prismadb"
 import stripe from "@/lib/stripe"
 // import { checkAdminAccess } from "@/utils/roles"
@@ -21,8 +22,33 @@ export default async function VerificationPage({
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   const paymentStatus = searchParams.payment as string
+  const forceNew = searchParams.force === "true"
   const { userId } = auth()
-  const isAdmin = process.env.IS_STAGING === 'true' || process.env.NODE_ENV === 'development' // Show dev tools on staging and dev
+
+  // Check if user already has a valid verification with completed credit check
+  // Skip redirect if ?force=true is passed (user wants to start a new verification)
+  if (userId && !forceNew) {
+    const existingVerification = await prismadb.verification.findFirst({
+      where: {
+        userId,
+        creditStatus: "completed",
+        status: {
+          notIn: ["EXPIRED", "FAILED", "CREDIT_FAILED"],
+        },
+        OR: [
+          { validUntil: null }, // No expiry set yet (still processing)
+          { validUntil: { gt: new Date() } }, // Not expired
+        ],
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (existingVerification) {
+      console.log(`[Verification Page] User ${userId} has valid verification ${existingVerification.id}, redirecting to /verification/list`);
+      redirect("/app/rent/verification/list");
+    }
+  }
+  const isAdmin = process.env.NODE_ENV === 'development' // Dev tools only in development
   let hasPurchase = false
   let applicationData: Partial<VerificationFormValues> | undefined = undefined
   let initialPaymentMethods: SavedPaymentMethod[] = []
@@ -135,8 +161,24 @@ export default async function VerificationPage({
     }
   }
 
+  // ⚠️ REMOVE BEFORE COMMIT - Debug env display for testing
+  const debugEnvVars = {
+    NODE_ENV: process.env.NODE_ENV,
+    ISOFTPULL_API_ID: process.env.ISOFTPULL_API_ID ? `${process.env.ISOFTPULL_API_ID.slice(0, 4)}...` : 'NOT SET',
+    ISOFTPULL_API_TOKEN: process.env.ISOFTPULL_API_TOKEN ? `${process.env.ISOFTPULL_API_TOKEN.slice(0, 4)}...` : 'NOT SET',
+    ACCIO_ACCOUNT: process.env.ACCIO_ACCOUNT ? `${process.env.ACCIO_ACCOUNT.slice(0, 4)}...` : 'NOT SET',
+    ACCIO_PASSWORD: process.env.ACCIO_PASSWORD ? '****' : 'NOT SET',
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+  }
+
   return (
     <div className={`bg-background ${APP_PAGE_MARGIN}`}>
+      {/* ⚠️ REMOVE BEFORE COMMIT - Debug env display */}
+      <div className="bg-yellow-100 border-2 border-yellow-500 p-4 mb-4 rounded font-mono text-sm">
+        <div className="font-bold text-yellow-800 mb-2">⚠️ DEBUG - REMOVE BEFORE COMMIT</div>
+        <pre className="text-yellow-900 overflow-x-auto">{JSON.stringify(debugEnvVars, null, 2)}</pre>
+      </div>
+
       {/* Main Content */}
       <main className="max-w-3xl mx-auto py-8">
         <Suspense fallback={<div>Loading...</div>}>

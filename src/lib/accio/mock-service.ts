@@ -18,6 +18,13 @@ export const triggerMockWebhook = (
   orderId: string,
   subject: MockSubject = MOCK_CONFIG.defaultSubject
 ): void => {
+  // Check if auto-trigger is disabled (for testing slow flows)
+  if (!MOCK_CONFIG.autoTriggerWebhook) {
+    console.log(`[Accio Mock] Auto-trigger disabled. Order ${orderId} will remain in PROCESSING_BGS status.`);
+    console.log(`[Accio Mock] To trigger manually: POST /api/dev/background-check/mock-webhook-trigger with { "orderId": "${orderId}" }`);
+    return;
+  }
+
   // Non-blocking: schedule webhook trigger
   setTimeout(async () => {
     try {

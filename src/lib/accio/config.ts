@@ -22,15 +22,14 @@ export const getAccioEnvironment = (): AccioEnvironment => {
 };
 
 export const shouldUseMock = (): boolean => {
-  const env = getAccioEnvironment();
-  if (env === 'development') return true;
-  if (env === 'production') return false;
-
-  // Staging: mock only if no credentials
-  return !process.env.ACCIO_ACCOUNT || !process.env.ACCIO_PASSWORD;
+  // Only mock in development - staging and production require real credentials
+  return getAccioEnvironment() === 'development';
 };
 
 export const MOCK_CONFIG = {
   webhookDelayMs: 2000,
   defaultSubject: 'blackwood_dante' as MockSubject,
+  // Set MOCK_AUTO_WEBHOOK=false in .env.local to disable auto-triggering
+  // This allows testing "slow flow" scenarios where results take time
+  autoTriggerWebhook: process.env.MOCK_AUTO_WEBHOOK !== 'false',
 };
