@@ -880,7 +880,7 @@ export const ProcessingScreen = ({
               {error ? (
                 <AlertCircle className="w-16 h-16 text-red-600" />
               ) : currentStep === "complete" ? (
-                null
+                <div className="w-16 h-16" />
               ) : (
                 <Loader2 className="w-16 h-16 text-[#0b6969] animate-spin" />
               )}

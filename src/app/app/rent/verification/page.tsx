@@ -161,24 +161,8 @@ export default async function VerificationPage({
     }
   }
 
-  // ⚠️ REMOVE BEFORE COMMIT - Debug env display for testing
-  const debugEnvVars = {
-    NODE_ENV: process.env.NODE_ENV,
-    ISOFTPULL_API_ID: process.env.ISOFTPULL_API_ID ? `${process.env.ISOFTPULL_API_ID.slice(0, 4)}...` : 'NOT SET',
-    ISOFTPULL_API_TOKEN: process.env.ISOFTPULL_API_TOKEN ? `${process.env.ISOFTPULL_API_TOKEN.slice(0, 4)}...` : 'NOT SET',
-    ACCIO_ACCOUNT: process.env.ACCIO_ACCOUNT ? `${process.env.ACCIO_ACCOUNT.slice(0, 4)}...` : 'NOT SET',
-    ACCIO_PASSWORD: process.env.ACCIO_PASSWORD ? '****' : 'NOT SET',
-    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
-  }
-
   return (
     <div className={`bg-background ${APP_PAGE_MARGIN}`}>
-      {/* ⚠️ REMOVE BEFORE COMMIT - Debug env display */}
-      <div className="bg-yellow-100 border-2 border-yellow-500 p-4 mb-4 rounded font-mono text-sm">
-        <div className="font-bold text-yellow-800 mb-2">⚠️ DEBUG - REMOVE BEFORE COMMIT</div>
-        <pre className="text-yellow-900 overflow-x-auto">{JSON.stringify(debugEnvVars, null, 2)}</pre>
-      </div>
-
       {/* Main Content */}
       <main className="max-w-3xl mx-auto py-8">
         <Suspense fallback={<div>Loading...</div>}>
