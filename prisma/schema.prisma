@@ -19,6 +19,7 @@ enum TripStatus {
 }
 
 enum CreditBucket {
+  Poor
   Low
   Fair
   Good
