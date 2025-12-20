@@ -155,16 +155,40 @@ export async function runCreditCheck(params: CreditCheckParams): Promise<CreditC
       fraudShield?.Indicators?.includes("INVALID");
 
     if (hasInvalidSSN) {
-      console.log("⚠️ Invalid SSN detected in iSoftPull response");
+      const responseTimeMs = Date.now() - startTime;
 
       // Update verification with failure status
-      await prisma.verification.update({
+      const failedVerification = await prisma.verification.update({
         where: { id: verificationId },
         data: {
           creditStatus: "failed",
           creditCheckedAt: new Date(),
+          creditCheckRequestedAt: new Date(startTime),
+          creditCheckCompletedAt: new Date(),
+          creditCheckRequestId: requestId,
         },
       });
+
+      // Log failure audit trail
+      console.log("\n" + "=".repeat(70));
+      console.log("❌ VERIFICATION AUDIT TRAIL - CREDIT CHECK FAILED");
+      console.log("=".repeat(70));
+      console.log("\n--- IDENTIFICATION ---");
+      console.log("Verification ID:", failedVerification.id);
+      console.log("User ID:", userId);
+      console.log("Subject Name:", firstName, lastName);
+      console.log("SSN (masked):", maskSSN(ssn));
+      console.log("\n--- FAILURE DETAILS ---");
+      console.log("Error Type:", "INVALID_SSN");
+      console.log("Error Message:", "The SSN provided could not be verified");
+      console.log("Response Time:", responseTimeMs, "ms");
+      console.log("Request ID:", requestId);
+      console.log("\n--- ADDRESS SUBMITTED ---");
+      console.log("Street:", address);
+      console.log("City:", city);
+      console.log("State:", state);
+      console.log("ZIP:", zip);
+      console.log("\n" + "=".repeat(70) + "\n");
 
       return {
         success: false,
@@ -184,16 +208,40 @@ export async function runCreditCheck(params: CreditCheckParams): Promise<CreditC
       creditData.intelligence?.credit_score === "failed";
 
     if (hasNoHit) {
-      console.log("⚠️ No credit file found (no-hit) in iSoftPull response");
+      const responseTimeMs = Date.now() - startTime;
 
       // Update verification with failure status
-      await prisma.verification.update({
+      const failedVerification = await prisma.verification.update({
         where: { id: verificationId },
         data: {
           creditStatus: "failed",
           creditCheckedAt: new Date(),
+          creditCheckRequestedAt: new Date(startTime),
+          creditCheckCompletedAt: new Date(),
+          creditCheckRequestId: requestId,
         },
       });
+
+      // Log failure audit trail
+      console.log("\n" + "=".repeat(70));
+      console.log("❌ VERIFICATION AUDIT TRAIL - CREDIT CHECK FAILED");
+      console.log("=".repeat(70));
+      console.log("\n--- IDENTIFICATION ---");
+      console.log("Verification ID:", failedVerification.id);
+      console.log("User ID:", userId);
+      console.log("Subject Name:", firstName, lastName);
+      console.log("SSN (masked):", maskSSN(ssn));
+      console.log("\n--- FAILURE DETAILS ---");
+      console.log("Error Type:", "NO_CREDIT_FILE");
+      console.log("Error Message:", "No credit file was found for the provided information");
+      console.log("Response Time:", responseTimeMs, "ms");
+      console.log("Request ID:", requestId);
+      console.log("\n--- ADDRESS SUBMITTED ---");
+      console.log("Street:", address);
+      console.log("City:", city);
+      console.log("State:", state);
+      console.log("ZIP:", zip);
+      console.log("\n" + "=".repeat(70) + "\n");
 
       return {
         success: false,
@@ -233,6 +281,11 @@ export async function runCreditCheck(params: CreditCheckParams): Promise<CreditC
     const securityContext = await getSecurityContext();
     const responseTimeMs = Date.now() - startTime;
 
+    // Calculate screening date and validity period (90 days)
+    const screeningDate = new Date();
+    const validUntil = new Date(screeningDate);
+    validUntil.setDate(validUntil.getDate() + 90);
+
     // Update verification with credit data
     const updatedVerification = await prisma.verification.update({
       where: { id: verificationId },
@@ -243,6 +296,8 @@ export async function runCreditCheck(params: CreditCheckParams): Promise<CreditC
         creditBucket,
         creditStatus: "completed",
         creditCheckedAt: new Date(),
+        screeningDate,
+        validUntil,
         creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
         backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
         creditCheckRequestedAt: new Date(startTime),
@@ -258,19 +313,57 @@ export async function runCreditCheck(params: CreditCheckParams): Promise<CreditC
     });
 
     // Log verification state for audit trail
-    console.log("\n" + "=".repeat(60));
-    console.log("📋 VERIFICATION STATE AFTER CREDIT CHECK");
-    console.log("=".repeat(60));
+    console.log("\n" + "=".repeat(70));
+    console.log("📋 VERIFICATION AUDIT TRAIL - CREDIT CHECK COMPLETED");
+    console.log("=".repeat(70));
+
+    // Identification
+    console.log("\n--- IDENTIFICATION ---");
     console.log("Verification ID:", updatedVerification.id);
-    console.log("Status:", updatedVerification.status);
+    console.log("User ID:", userId);
+    console.log("Subject Name:", updatedVerification.subjectFirstName, updatedVerification.subjectLastName);
+    console.log("SSN (masked):", maskSSN(ssn));
+
+    // Request Details
+    console.log("\n--- REQUEST DETAILS ---");
+    console.log("Request ID:", updatedVerification.creditCheckRequestId);
+    console.log("Request Started:", updatedVerification.creditCheckRequestedAt);
+    console.log("Request Completed:", updatedVerification.creditCheckCompletedAt);
+    console.log("Response Time:", responseTimeMs, "ms");
+    console.log("Provider:", "iSoftPull");
+    console.log("Permissible Purpose:", updatedVerification.permissiblePurpose);
+
+    // Results
+    console.log("\n--- RESULTS ---");
     console.log("Credit Status:", updatedVerification.creditStatus);
     console.log("Credit Bucket:", updatedVerification.creditBucket);
-    console.log("Subject:", updatedVerification.subjectFirstName, updatedVerification.subjectLastName);
-    console.log("Credit Checked At:", updatedVerification.creditCheckedAt);
-    console.log("Credit Check Request ID:", updatedVerification.creditCheckRequestId);
-    console.log("Consent IP:", updatedVerification.consentIpAddress);
-    console.log("Consent Location:", [updatedVerification.consentCity, updatedVerification.consentRegion, updatedVerification.consentCountry].filter(Boolean).join(", "));
-    console.log("=".repeat(60) + "\n");
+    console.log("Credit Score:", creditData.intelligence?.credit_score || "N/A");
+    console.log("Report URL:", reportUrl || "N/A");
+
+    // Consent & Authorization
+    console.log("\n--- CONSENT & AUTHORIZATION ---");
+    console.log("Credit Check Consent At:", updatedVerification.creditCheckConsentAt || "Not recorded");
+    console.log("Background Check Consent At:", updatedVerification.backgroundCheckConsentAt || "Not recorded");
+
+    // Security Context
+    console.log("\n--- SECURITY CONTEXT ---");
+    console.log("IP Address:", updatedVerification.consentIpAddress || "N/A");
+    console.log("User Agent:", updatedVerification.consentUserAgent || "N/A");
+    console.log("Location:", [updatedVerification.consentCity, updatedVerification.consentRegion, updatedVerification.consentCountry].filter(Boolean).join(", ") || "N/A");
+
+    // Validity
+    console.log("\n--- VALIDITY PERIOD ---");
+    console.log("Screening Date:", updatedVerification.screeningDate);
+    console.log("Valid Until:", updatedVerification.validUntil);
+
+    // Address Used
+    console.log("\n--- ADDRESS SUBMITTED ---");
+    console.log("Street:", address);
+    console.log("City:", city);
+    console.log("State:", state, "→", fullStateName);
+    console.log("ZIP:", zip);
+
+    console.log("\n" + "=".repeat(70) + "\n");
 
     // Log API response for audit
     await logApiResponse(

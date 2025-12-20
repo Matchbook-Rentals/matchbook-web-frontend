@@ -383,11 +383,7 @@ export async function POST(request: NextRequest) {
         console.log('✅ [Background Check Webhook] Criminal records created');
       }
 
-      // Update Verification
-      const screeningDate = new Date();
-      const validUntil = new Date();
-      validUntil.setDate(validUntil.getDate() + 90);
-
+      // Update Verification (screeningDate/validUntil already set at credit check time)
       await prisma.verification.update({
         where: { id: verification.id },
         data: {
@@ -398,8 +394,6 @@ export async function POST(request: NextRequest) {
           criminalRecordCount,
           evictionReviewStatus,
           criminalReviewStatus,
-          screeningDate,
-          validUntil,
           backgroundCheckedAt: new Date(),
           backgroundCheckCompletedAt: new Date(),
           bgsReportId: existingReport.id,
@@ -686,11 +680,8 @@ export async function POST(request: NextRequest) {
     });
 
     if (verification) {
-      const screeningDate = new Date();
-      const validUntil = new Date();
-      validUntil.setDate(validUntil.getDate() + 90); // Valid for 90 days
-
-      await prisma.verification.update({
+      // screeningDate/validUntil already set at credit check time
+      const updatedVerification = await prisma.verification.update({
         where: { id: verification.id },
         data: {
           status: 'COMPLETED',
@@ -698,14 +689,57 @@ export async function POST(request: NextRequest) {
           evictionCount,
           criminalStatus,
           criminalRecordCount,
-          screeningDate,
-          validUntil,
           backgroundCheckedAt: new Date(),
-          // Audit fields - mark background check as completed
           backgroundCheckCompletedAt: new Date(),
         },
       });
-      console.log('✅ [Background Check Webhook] Verification record updated to COMPLETED');
+
+      // Comprehensive audit trail for background check completion
+      const processingTimeMs = Date.now() - startTime;
+      console.log("\n" + "=".repeat(70));
+      console.log("📋 VERIFICATION AUDIT TRAIL - BACKGROUND CHECK COMPLETED");
+      console.log("=".repeat(70));
+
+      // Identification
+      console.log("\n--- IDENTIFICATION ---");
+      console.log("Verification ID:", updatedVerification.id);
+      console.log("User ID:", existingReport.userId);
+      console.log("Subject Name:", updatedVerification.subjectFirstName, updatedVerification.subjectLastName);
+      console.log("Order ID:", orderId);
+      console.log("Order Number:", orderNumber);
+
+      // Request Details
+      console.log("\n--- REQUEST DETAILS ---");
+      console.log("Background Check Requested At:", updatedVerification.backgroundCheckRequestedAt);
+      console.log("Background Check Completed At:", updatedVerification.backgroundCheckCompletedAt);
+      console.log("Webhook Processing Time:", processingTimeMs, "ms");
+      console.log("Provider:", "Accio Data");
+
+      // Results
+      console.log("\n--- RESULTS ---");
+      console.log("Verification Status:", updatedVerification.status);
+      console.log("Criminal Status:", criminalStatus);
+      console.log("Criminal Record Count:", criminalRecordCount);
+      console.log("Eviction Status:", evictionStatus);
+      console.log("Eviction Count:", evictionCount);
+
+      // Report URLs
+      console.log("\n--- REPORT URLS ---");
+      console.log("HTML Report:", simplifiedReport.reportUrls.html || "N/A");
+      console.log("PDF Report:", simplifiedReport.reportUrls.pdfColor || "N/A");
+
+      // Validity
+      console.log("\n--- VALIDITY PERIOD ---");
+      console.log("Screening Date:", updatedVerification.screeningDate);
+      console.log("Valid Until:", updatedVerification.validUntil);
+
+      // Credit Check Summary (from earlier step)
+      console.log("\n--- CREDIT CHECK SUMMARY ---");
+      console.log("Credit Status:", updatedVerification.creditStatus);
+      console.log("Credit Bucket:", updatedVerification.creditBucket);
+      console.log("Credit Checked At:", updatedVerification.creditCheckedAt);
+
+      console.log("\n" + "=".repeat(70) + "\n");
 
       // TODO: Send email notification to user
       console.log('📧 [Background Check Webhook] Email notification queued for user:', existingReport.userId);

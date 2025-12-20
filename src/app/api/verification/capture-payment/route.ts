@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     });
 
     if (verification) {
-      await prisma.verification.update({
+      const updatedVerification = await prisma.verification.update({
         where: { id: verification.id },
         data: {
           paymentCapturedAt: new Date(),
@@ -85,6 +85,29 @@ export async function POST(req: Request) {
         capturedPayment.amount,
         true
       );
+
+      // Comprehensive audit trail for payment capture
+      console.log("\n" + "=".repeat(70));
+      console.log("💰 VERIFICATION AUDIT TRAIL - PAYMENT CAPTURED");
+      console.log("=".repeat(70));
+
+      console.log("\n--- IDENTIFICATION ---");
+      console.log("Verification ID:", updatedVerification.id);
+      console.log("User ID:", userId);
+      console.log("Subject Name:", updatedVerification.subjectFirstName, updatedVerification.subjectLastName);
+
+      console.log("\n--- PAYMENT DETAILS ---");
+      console.log("Payment Intent ID:", capturedPayment.id);
+      console.log("Amount:", (capturedPayment.amount / 100).toFixed(2), capturedPayment.currency?.toUpperCase());
+      console.log("Status:", capturedPayment.status);
+      console.log("Payment Method:", capturedPayment.payment_method);
+      console.log("Captured At:", new Date().toISOString());
+
+      console.log("\n--- STRIPE METADATA ---");
+      console.log("Customer ID:", capturedPayment.customer || "N/A");
+      console.log("Receipt Email:", capturedPayment.receipt_email || "N/A");
+
+      console.log("\n" + "=".repeat(70) + "\n");
     }
 
     return NextResponse.json({

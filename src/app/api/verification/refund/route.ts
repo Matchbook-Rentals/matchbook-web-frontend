@@ -96,8 +96,9 @@ export async function POST(request: Request) {
       orderBy: { createdAt: 'desc' },
     });
 
+    let updatedVerification;
     if (existingVerification) {
-      await prisma.verification.update({
+      updatedVerification = await prisma.verification.update({
         where: { id: existingVerification.id },
         data: {
           verificationRefundedAt: new Date(),
@@ -105,7 +106,7 @@ export async function POST(request: Request) {
         },
       });
     } else {
-      await prisma.verification.create({
+      updatedVerification = await prisma.verification.create({
         data: {
           userId,
           verificationRefundedAt: new Date(),
@@ -114,8 +115,32 @@ export async function POST(request: Request) {
       });
     }
 
-    console.log("✅ Verification record updated with refund timestamp");
-    console.log("=".repeat(60) + "\n");
+    // Comprehensive audit trail for refund
+    console.log("\n" + "=".repeat(70));
+    console.log("💸 VERIFICATION AUDIT TRAIL - REFUND PROCESSED");
+    console.log("=".repeat(70));
+
+    console.log("\n--- IDENTIFICATION ---");
+    console.log("Verification ID:", updatedVerification.id);
+    console.log("User ID:", userId);
+    console.log("Subject Name:", updatedVerification.subjectFirstName || "N/A", updatedVerification.subjectLastName || "");
+
+    console.log("\n--- REFUND DETAILS ---");
+    console.log("Refund ID:", refund.id);
+    console.log("Payment Intent ID:", paymentIntentId);
+    console.log("Amount:", (refund.amount / 100).toFixed(2), refund.currency?.toUpperCase());
+    console.log("Status:", refund.status);
+    console.log("Refunded At:", new Date().toISOString());
+
+    console.log("\n--- VERIFICATION STATUS ---");
+    console.log("Previous Status:", existingVerification?.status || "N/A");
+    console.log("New Status:", "FAILED");
+    console.log("Credit Status:", updatedVerification.creditStatus || "N/A");
+
+    console.log("\n--- REASON ---");
+    console.log("Reason:", "Credit check failure - user requested refund");
+
+    console.log("\n" + "=".repeat(70) + "\n");
 
     return NextResponse.json({
       success: true,
