@@ -49,20 +49,31 @@ export async function POST(req: Request) {
     });
 
     // Mark user as having a failed verification (for tracking purposes)
-    const verification = await prisma.verification.upsert({
+    const existingVerification = await prisma.verification.findFirst({
       where: { userId },
-      update: {
-        status: 'FAILED',
-        verificationRefundedAt: new Date(), // Track that they got their money back
-        paymentCancelledAt: new Date(), // Audit: when hold was released
-      },
-      create: {
-        userId,
-        status: 'FAILED',
-        verificationRefundedAt: new Date(),
-        paymentCancelledAt: new Date(),
-      },
+      orderBy: { createdAt: 'desc' },
     });
+
+    let verification = existingVerification;
+    if (existingVerification) {
+      verification = await prisma.verification.update({
+        where: { id: existingVerification.id },
+        data: {
+          status: 'FAILED',
+          verificationRefundedAt: new Date(), // Track that they got their money back
+          paymentCancelledAt: new Date(), // Audit: when hold was released
+        },
+      });
+    } else {
+      verification = await prisma.verification.create({
+        data: {
+          userId,
+          status: 'FAILED',
+          verificationRefundedAt: new Date(),
+          paymentCancelledAt: new Date(),
+        },
+      });
+    }
 
     // Log to audit history
     if (verification) {

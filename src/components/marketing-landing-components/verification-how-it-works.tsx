@@ -1,7 +1,10 @@
 import React from "react";
+import Link from "next/link";
 import { BrandButton } from "../ui/brandButton";
+import { hasVerificationKeys } from "@/lib/verification/config";
 
 export const VerificationHowItWorks = (): JSX.Element => {
+  const keysConfigured = hasVerificationKeys();
 
   return (
     <section className="flex flex-col w-full max-w-[1440px] items-center justify-center gap-10 md:px-[60px] py-16 relative">
@@ -21,13 +24,18 @@ export const VerificationHowItWorks = (): JSX.Element => {
         />
       </div>
 
-      {/* CTA Button - Temporarily disabled */}
-      <BrandButton
-        size="lg"
-        disabled
-      >
-        Coming Soon
-      </BrandButton>
+      {/* CTA Button */}
+      {keysConfigured ? (
+        <Link href="/app/rent/verification">
+          <BrandButton size="lg">
+            Get Verified
+          </BrandButton>
+        </Link>
+      ) : (
+        <BrandButton size="lg" disabled>
+          Coming Soon
+        </BrandButton>
+      )}
     </section>
   );
 };

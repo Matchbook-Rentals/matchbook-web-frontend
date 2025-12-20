@@ -17,11 +17,21 @@ export async function POST() {
     const validUntil = new Date(now)
     validUntil.setDate(validUntil.getDate() + 90)
 
+    // Find the most recent verification for this user
+    const existingVerification = await prismadb.verification.findFirst({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    if (!existingVerification) {
+      return NextResponse.json({ error: "No verification found" }, { status: 404 })
+    }
+
     // Only update dates and background check statuses
     // DO NOT touch creditBucket - it's already set by iSoftPull
     // Status stays PENDING - only Accio webhook sets COMPLETED
     const verification = await prismadb.verification.update({
-      where: { userId },
+      where: { id: existingVerification.id },
       data: {
         status: "PROCESSING_BGS",
         screeningDate: now,

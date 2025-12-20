@@ -64,13 +64,14 @@ export async function POST(req: Request) {
     console.log('✅ [Verification] Purchase record created');
 
     // Update Verification with payment capture audit
-    const verification = await prisma.verification.findUnique({
+    const verification = await prisma.verification.findFirst({
       where: { userId },
+      orderBy: { createdAt: 'desc' },
     });
 
     if (verification) {
       await prisma.verification.update({
-        where: { userId },
+        where: { id: verification.id },
         data: {
           paymentCapturedAt: new Date(),
         },

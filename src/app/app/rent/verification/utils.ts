@@ -5,7 +5,17 @@ export const verificationSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   ssn: z.string().regex(/^\d{9}$/, "SSN must be 9 digits"),
-  dob: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+  dob: z.string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format")
+    .refine((dateStr) => {
+      const dob = new Date(dateStr);
+      const today = new Date();
+      const age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      const dayDiff = today.getDate() - dob.getDate();
+      const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+      return actualAge >= 18;
+    }, "Must be 18 or older for Verification"),
   address: z.string().min(3, "Address is required and must be at least 3 characters"),
   city: z.string().min(2, "City is required and must be at least 2 characters"),
   state: z.string().min(2, "State is required"),

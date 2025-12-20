@@ -137,7 +137,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               control={form.control}
               name="firstName"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       First Name
@@ -147,7 +147,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                   <FormControl>
                     <Input
                       placeholder="Enter First Name"
-                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]"
+                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular "
                       {...field}
                     />
                   </FormControl>
@@ -159,7 +159,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               control={form.control}
               name="lastName"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       Last Name
@@ -169,7 +169,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                   <FormControl>
                     <Input
                       placeholder="Enter Last Name"
-                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]"
+                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular "
                       {...field}
                     />
                   </FormControl>
@@ -184,7 +184,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               control={form.control}
               name="ssn"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       Social Security Number
@@ -196,7 +196,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                       type="text"
                       placeholder="123-45-6789"
                       maxLength={11}
-                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]"
+                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular "
                       value={field.value ? field.value.replace(/(\d{3})(\d{2})(\d{0,4})/, (_, a, b, c) => c ? `${a}-${b}-${c}` : b ? `${a}-${b}` : a) : ''}
                       onChange={(e) => {
                         // Strip non-digits and store raw value
@@ -213,7 +213,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               control={form.control}
               name="dob"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[230px]">
+                <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
                     <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                       Date of Birth
@@ -284,7 +284,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                   <FormControl>
                     <Input
                       placeholder="Enter Street Address"
-                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]"
+                      className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular "
                       {...field}
                     />
                   </FormControl>
@@ -298,7 +298,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                 control={form.control}
                 name="city"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-[200px]">
+                  <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[200px]">
                     <FormLabel className="inline-flex items-center gap-1.5">
                       <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         City
@@ -308,7 +308,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                     <FormControl>
                       <Input
                         placeholder="Enter City"
-                        className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]"
+                        className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular "
                         {...field}
                       />
                     </FormControl>
@@ -316,7 +316,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                   </FormItem>
                 )}
               />
-              <div className="flex flex-1 gap-5 min-w-[200px]">
+              <div className="flex flex-1 gap-5 min-w-0 md:min-w-[200px]">
                 <FormField
                   control={form.control}
                   name="state"
@@ -330,7 +330,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                       </FormLabel>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
-                          <SelectTrigger className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]">
+                          <SelectTrigger className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular ">
                             <SelectValue placeholder="Select State" />
                           </SelectTrigger>
                         </FormControl>
@@ -361,7 +361,7 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                         <Input
                           placeholder="Enter Zip Code"
                           maxLength={10}
-                          className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular text-[#667085]"
+                          className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs font-text-label-medium-regular "
                           {...field}
                           onChange={(e) => {
                             let value = e.target.value.replace(/[^\d-]/g, '');

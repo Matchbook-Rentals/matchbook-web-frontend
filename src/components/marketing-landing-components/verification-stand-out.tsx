@@ -1,8 +1,12 @@
 import React from "react";
+import Link from "next/link";
 import { BrandButton } from "../ui/brandButton";
 import { Card, CardContent } from "../ui/card";
+import { hasVerificationKeys } from "@/lib/verification/config";
 
 export const VerificationStandOut = (): JSX.Element => {
+  const keysConfigured = hasVerificationKeys();
+
   // Data for verification features
   const verificationFeatures = [
     {
@@ -73,14 +77,18 @@ export const VerificationStandOut = (): JSX.Element => {
               ))}
             </div>
 
-            {/* CTA Button - Temporarily disabled */}
-            <BrandButton
-              size="lg"
-              className="w-full sm:w-auto"
-              disabled
-            >
-              Coming Soon
-            </BrandButton>
+            {/* CTA Button */}
+            {keysConfigured ? (
+              <Link href="/app/rent/verification" className="w-full sm:w-auto">
+                <BrandButton size="lg" className="w-full sm:w-auto">
+                  Get Verified
+                </BrandButton>
+              </Link>
+            ) : (
+              <BrandButton size="lg" className="w-full sm:w-auto" disabled>
+                Coming Soon
+              </BrandButton>
+            )}
           </div>
         </CardContent>
       </Card>

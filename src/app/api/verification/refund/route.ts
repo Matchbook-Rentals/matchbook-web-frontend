@@ -17,9 +17,10 @@ export async function POST(request: Request) {
     console.log("=".repeat(60));
     console.log("👤 User ID:", userId);
 
-    // Check if user has already received a refund
-    const verification = await prisma.verification.findUnique({
+    // Check if user has already received a refund (check most recent verification)
+    const verification = await prisma.verification.findFirst({
       where: { userId },
+      orderBy: { createdAt: 'desc' },
     });
 
     if (verification?.verificationRefundedAt) {
@@ -90,18 +91,28 @@ export async function POST(request: Request) {
     console.log("✅ Refund created:", refund.id, "Status:", refund.status);
 
     // Mark user as refunded (spam prevention)
-    await prisma.verification.upsert({
+    const existingVerification = await prisma.verification.findFirst({
       where: { userId },
-      update: {
-        verificationRefundedAt: new Date(),
-        status: "FAILED",
-      },
-      create: {
-        userId,
-        verificationRefundedAt: new Date(),
-        status: "FAILED",
-      },
+      orderBy: { createdAt: 'desc' },
     });
+
+    if (existingVerification) {
+      await prisma.verification.update({
+        where: { id: existingVerification.id },
+        data: {
+          verificationRefundedAt: new Date(),
+          status: "FAILED",
+        },
+      });
+    } else {
+      await prisma.verification.create({
+        data: {
+          userId,
+          verificationRefundedAt: new Date(),
+          status: "FAILED",
+        },
+      });
+    }
 
     console.log("✅ Verification record updated with refund timestamp");
     console.log("=".repeat(60) + "\n");

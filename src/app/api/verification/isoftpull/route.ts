@@ -6,19 +6,10 @@ import prisma from "@/lib/prismadb";
 import {
   generateRequestId,
   getSecurityContext,
-  logApiRequest,
   logApiResponse,
-  logConsentGiven,
-  logPermissiblePurpose,
   maskSSN,
-  maskDOB,
 } from "@/lib/audit-logger";
-
-// SAFETY: Real URL commented out to prevent accidental API calls
-// NOTE: ISOFTPULL_* env vars are commented out in .env to ensure we don't accidentally call the real API
-// const ISOFTPULL_API_URL = "https://app.isoftpull.com/api/v2/reports";
-const ISOFTPULL_API_URL = "https://example.com/mocked-isoftpull";
-const MOCK_MODE = true;
+import { getISoftPullUrl, hasISoftPullKeys } from "@/lib/verification/config";
 
 // iSoftPull requires full state names, not abbreviations
 const STATE_NAMES: Record<string, string> = {
@@ -44,11 +35,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const apiUrl = getISoftPullUrl();
+    const isDev = process.env.NODE_ENV === 'development';
+
     console.log("\n" + "=".repeat(60));
     console.log("🚀 iSOFTPULL CREDIT CHECK STARTED");
     console.log("=".repeat(60));
-    console.log("🔧 MOCK_MODE:", MOCK_MODE);
+    console.log("🔧 Environment:", isDev ? "development (mock)" : "production");
+    console.log("🔗 API URL:", apiUrl);
     console.log("👤 User ID:", userId);
+
+    // Check for required credentials in production
+    if (!isDev && !hasISoftPullKeys()) {
+      console.error("❌ iSoftPull credentials not configured");
+      return NextResponse.json(
+        {
+          error: "Verification service temporarily unavailable. Please try again later.",
+          code: "CREDENTIALS_NOT_CONFIGURED",
+        },
+        { status: 503 }
+      );
+    }
 
     const body = await request.json();
     const {
@@ -63,142 +70,21 @@ export async function POST(request: Request) {
       backgroundCheckConsentAt,
     } = body;
 
-    // Generate request ID for audit trail correlation
     const requestId = generateRequestId();
     const startTime = Date.now();
 
     // Validate required fields
     if (!firstName || !lastName || !address || !city || !state || !zip || !ssn) {
       console.log("❌ Missing required fields");
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     console.log("📋 Request data:", { firstName, lastName, address, city, state, zip, ssn: "***" });
 
-    if (MOCK_MODE) {
-      console.log("🎭 MOCK MODE: Returning simulated credit data");
-
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Use "No Score" test client (SSN 555555555) to trigger no-hit for refund testing
-      const isNoHitTest = ssn === "555555555";
-
-      if (isNoHitTest) {
-        console.log("🎭 MOCK: Simulating NO_CREDIT_FILE (no-hit) response");
-        const mockNoHitData = {
-          applicant: {
-            first_name: firstName,
-            last_name: lastName,
-            address,
-            city,
-            state,
-            zip,
-            ssn: "***masked***",
-          },
-          intelligence: {
-            name: null,
-            result: "Failed",
-            credit_score: "failed",
-          },
-          reports: {
-            equifax: {
-              failure_type: "no-hit",
-              message: "No credit file found",
-            },
-          },
-        };
-
-        return NextResponse.json({
-          success: false,
-          errorType: "NO_CREDIT_FILE",
-          message: "No credit file was found for the provided information",
-          creditData: mockNoHitData,
-        });
-      }
-
-      const mockCreditData = {
-        applicant: {
-          first_name: firstName,
-          last_name: lastName,
-          address,
-          city,
-          state,
-          zip,
-          ssn: "***masked***",
-        },
-        intelligence: {
-          name: "Very Good",
-          result: "passed",
-          credit_score: "750",
-        },
-        reports: {
-          link: "https://app.isoftpull.com/mock-report",
-          equifax: {
-            status: "success",
-            message: "Mock credit report",
-          },
-        },
-      };
-
-      // Save mock data to database (same as real flow)
-      // Map iSoftPull intelligence.name to Prisma CreditBucket enum
-      const creditBucketMap: Record<string, string> = {
-        "Very Good": "Very_Good",
-        "Exceptional": "Exceptional",
-        "Good": "Good",
-        "Fair": "Fair",
-        "Low": "Low",
-      };
-      const prismaCreditBucket = creditBucketMap[mockCreditData.intelligence.name] || "Fair";
-
-      try {
-        await prisma.creditReport.upsert({
-          where: { userId },
-          update: {
-            creditBucket: prismaCreditBucket,
-            creditUpdatedAt: new Date(),
-          },
-          create: {
-            userId,
-            creditBucket: prismaCreditBucket,
-            creditUpdatedAt: new Date(),
-          },
-        });
-
-        await prisma.verification.upsert({
-          where: { userId },
-          update: {
-            creditBucket: prismaCreditBucket,
-            creditStatus: "completed",
-            creditCheckedAt: new Date(),
-          },
-          create: {
-            userId,
-            creditBucket: prismaCreditBucket,
-            creditStatus: "completed",
-            creditCheckedAt: new Date(),
-          },
-        });
-
-        console.log("✅ [MOCK] Saved creditBucket to database:", prismaCreditBucket);
-      } catch (dbError) {
-        console.error("❌ [MOCK] Database error:", dbError);
-      }
-
-      return NextResponse.json({
-        success: true,
-        creditData: mockCreditData,
-      });
-    }
-
-    // Real API call
     // Convert state abbreviation to full name (iSoftPull requires full names)
     const fullStateName = STATE_NAMES[state.toUpperCase()] || state;
 
+    // Build form data for iSoftPull API
     const formData = new URLSearchParams();
     formData.append("first_name", firstName);
     formData.append("last_name", lastName);
@@ -209,15 +95,15 @@ export async function POST(request: Request) {
     formData.append("ssn", ssn);
 
     console.log("📍 State converted:", state, "→", fullStateName);
+    console.log("🔥 Calling iSoftPull API...");
 
-    console.log("🔥 MODE: REAL - Calling iSoftPull API...");
-
-    const response = await fetch(ISOFTPULL_API_URL, {
+    // Call the API (mock endpoint in dev, real endpoint in prod)
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        "api-key": process.env.ISOFTPULL_API_ID!,
-        "api-secret": process.env.ISOFTPULL_API_TOKEN!,
+        "api-key": process.env.ISOFTPULL_API_ID || "",
+        "api-secret": process.env.ISOFTPULL_API_TOKEN || "",
       },
       body: formData.toString(),
     });
@@ -253,7 +139,7 @@ export async function POST(request: Request) {
         success: false,
         errorType: "INVALID_SSN",
         message: "The SSN provided could not be verified",
-        creditData, // Still return data for logging
+        creditData,
       });
     }
 
@@ -272,11 +158,11 @@ export async function POST(request: Request) {
         success: false,
         errorType: "NO_CREDIT_FILE",
         message: "No credit file was found for the provided information",
-        creditData, // Still return data for logging
+        creditData,
       });
     }
 
-    // Save to file for TypeScript interface creation
+    // Save response to file for debugging (non-critical)
     try {
       const filePath = join(process.cwd(), "isoftpull-response.json");
       await writeFile(filePath, JSON.stringify(creditData, null, 2));
@@ -287,71 +173,96 @@ export async function POST(request: Request) {
 
     // Update credit report in database
     const reportUrl = creditData.reports?.link || null;
+    const creditBucket = creditData.intelligence?.name || "Fair";
 
     try {
-      // Update or create CreditReport
       await prisma.creditReport.upsert({
         where: { userId },
         update: {
-          creditBucket: creditData.intelligence?.name || "Fair",
+          creditBucket,
           creditUpdatedAt: new Date(),
         },
         create: {
           userId,
-          creditBucket: creditData.intelligence?.name || "Fair",
+          creditBucket,
           creditUpdatedAt: new Date(),
         },
       });
 
-      // Get security context for audit logging
       const securityContext = await getSecurityContext();
       const responseTimeMs = Date.now() - startTime;
 
-      // Update Verification with report URL and audit data
-      const verification = await prisma.verification.upsert({
+      // Find existing verification or create one
+      let existingVerification = await prisma.verification.findFirst({
         where: { userId },
-        update: {
-          creditReportUrl: reportUrl,
-          creditBucket: creditData.intelligence?.name || "Fair",
-          creditStatus: "completed",
-          creditCheckedAt: new Date(),
-          // Audit fields
-          creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
-          backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
-          creditCheckRequestedAt: new Date(startTime),
-          creditCheckCompletedAt: new Date(),
-          creditCheckRequestId: requestId,
-          permissiblePurpose: "rental_screening",
-          // Security context (only set if not already set)
-          consentIpAddress: securityContext.ipAddress,
-          consentUserAgent: securityContext.userAgent,
-          consentCity: securityContext.city,
-          consentRegion: securityContext.region,
-          consentCountry: securityContext.country,
-        },
-        create: {
-          userId,
-          creditReportUrl: reportUrl,
-          creditBucket: creditData.intelligence?.name || "Fair",
-          creditStatus: "completed",
-          creditCheckedAt: new Date(),
-          // Audit fields
-          creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
-          backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
-          creditCheckRequestedAt: new Date(startTime),
-          creditCheckCompletedAt: new Date(),
-          creditCheckRequestId: requestId,
-          permissiblePurpose: "rental_screening",
-          // Security context
-          consentIpAddress: securityContext.ipAddress,
-          consentUserAgent: securityContext.userAgent,
-          consentCity: securityContext.city,
-          consentRegion: securityContext.region,
-          consentCountry: securityContext.country,
-        },
+        orderBy: { createdAt: 'desc' },
       });
 
-      // Add to audit history
+      let verification = existingVerification;
+      if (existingVerification) {
+        // Update existing verification with credit data
+        verification = await prisma.verification.update({
+          where: { id: existingVerification.id },
+          data: {
+            subjectFirstName: firstName,
+            subjectLastName: lastName,
+            creditReportUrl: reportUrl,
+            creditBucket,
+            creditStatus: "completed",
+            creditCheckedAt: new Date(),
+            creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
+            backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
+            creditCheckRequestedAt: new Date(startTime),
+            creditCheckCompletedAt: new Date(),
+            creditCheckRequestId: requestId,
+            permissiblePurpose: "rental_screening",
+            consentIpAddress: securityContext.ipAddress,
+            consentUserAgent: securityContext.userAgent,
+            consentCity: securityContext.city,
+            consentRegion: securityContext.region,
+            consentCountry: securityContext.country,
+          },
+        });
+      } else {
+        // No verification exists - create one and link to unredeemed purchase
+        console.log("📝 No verification found, creating new one...");
+
+        const unredeemedPurchase = await prisma.purchase.findFirst({
+          where: {
+            userId,
+            type: { in: ['backgroundCheck', 'matchbookVerification'] },
+            isRedeemed: false,
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        verification = await prisma.verification.create({
+          data: {
+            userId,
+            purchaseId: unredeemedPurchase?.id,
+            status: "PROCESSING_CREDIT",
+            subjectFirstName: firstName,
+            subjectLastName: lastName,
+            creditReportUrl: reportUrl,
+            creditBucket,
+            creditStatus: "completed",
+            creditCheckedAt: new Date(),
+            creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
+            backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
+            creditCheckRequestedAt: new Date(startTime),
+            creditCheckCompletedAt: new Date(),
+            creditCheckRequestId: requestId,
+            permissiblePurpose: "rental_screening",
+            consentIpAddress: securityContext.ipAddress,
+            consentUserAgent: securityContext.userAgent,
+            consentCity: securityContext.city,
+            consentRegion: securityContext.region,
+            consentCountry: securityContext.country,
+          },
+        });
+        console.log("✅ Created new verification:", verification.id);
+      }
+
       if (verification) {
         await logApiResponse(
           verification.id,
@@ -380,9 +291,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("❌ iSoftPull error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

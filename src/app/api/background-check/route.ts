@@ -209,22 +209,34 @@ export async function POST(request: Request) {
     const securityContext = await getSecurityContext();
     const responseTimeMs = Date.now() - startTime;
 
-    // Create new Verification with audit data (multiple verifications per user allowed)
-    await prisma.verification.create({
-      data: {
-        userId: effectiveUserId,
-        backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
-        creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
-        backgroundCheckRequestedAt: new Date(startTime),
-        backgroundCheckRequestId: orderNumber,
-        permissiblePurpose: "rental_screening",
-        consentIpAddress: securityContext.ipAddress,
-        consentUserAgent: securityContext.userAgent,
-        consentCity: securityContext.city,
-        consentRegion: securityContext.region,
-        consentCountry: securityContext.country,
-      },
+    // Find the existing verification (created by submit, updated by isoftpull with creditBucket)
+    const existingVerification = await prisma.verification.findFirst({
+      where: { userId: effectiveUserId },
+      orderBy: { createdAt: 'desc' },
     });
+
+    if (existingVerification) {
+      // Update existing verification with BGS audit data (preserves creditBucket)
+      await prisma.verification.update({
+        where: { id: existingVerification.id },
+        data: {
+          subjectFirstName: data.firstName,
+          subjectLastName: data.lastName,
+          backgroundCheckConsentAt: backgroundCheckConsentAt ? new Date(backgroundCheckConsentAt) : undefined,
+          creditCheckConsentAt: creditCheckConsentAt ? new Date(creditCheckConsentAt) : undefined,
+          backgroundCheckRequestedAt: new Date(startTime),
+          backgroundCheckRequestId: orderNumber,
+          permissiblePurpose: "rental_screening",
+          consentIpAddress: securityContext.ipAddress,
+          consentUserAgent: securityContext.userAgent,
+          consentCity: securityContext.city,
+          consentRegion: securityContext.region,
+          consentCountry: securityContext.country,
+        },
+      });
+    } else {
+      console.warn("⚠️ No existing verification found to update with BGS data");
+    }
 
     console.log(`Background check order ${orderNumber} saved for purchase ${unredeemedPurchase.id}`);
     

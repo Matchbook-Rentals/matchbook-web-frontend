@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
-import { currentUser, auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
 import { generateVerificationXml } from "@/app/app/rent/verification/utils";
-import { headers } from "next/headers";
-import {
-  shouldUseMock,
-  getAccioEnvironment,
-  triggerMockWebhook,
-} from "@/lib/accio";
+import { getAccioUrl, hasAccioKeys } from "@/lib/verification/config";
+
+// Accio API credentials
+const ACCOUNT_DETAILS = {
+  account: process.env.ACCIO_ACCOUNT || "",
+  username: process.env.ACCIO_USERNAME || "",
+  password: process.env.ACCIO_PASSWORD || "",
+};
 
 export async function POST(request: Request) {
   try {
@@ -155,19 +157,32 @@ export async function POST(request: Request) {
     // STEP 2: Accio Data Background Check (Paid)
     // ========================================
     try {
-      const useMock = shouldUseMock();
-      const accioEnv = getAccioEnvironment();
-      const orderNumber = useMock ? `MOCK-${Date.now()}` : `MBWEB-${Date.now()}`;
+      const accioUrl = getAccioUrl();
+      const isDev = process.env.NODE_ENV === 'development';
 
-      if (useMock) {
-        console.log(`🎭 MOCK MODE (${accioEnv}): Skipping real Accio Data submission`);
+      console.log("\n" + "=".repeat(60));
+      console.log("🚀 ACCIO BACKGROUND CHECK STARTED");
+      console.log("=".repeat(60));
+      console.log("🔧 Environment:", isDev ? "development (mock)" : "production");
+      console.log("🔗 API URL:", accioUrl);
 
-        // Schedule mock webhook trigger (non-blocking)
-        triggerMockWebhook(orderNumber);
-      } else {
-        // Generate XML payload for Accio Data
-        const xmlPayload = generateVerificationXml({
-          orderNumber,
+      // Check for required credentials in production
+      if (!isDev && !hasAccioKeys()) {
+        console.error("❌ Accio credentials not configured");
+        return NextResponse.json(
+          {
+            error: "Verification service temporarily unavailable. Please try again later.",
+            code: "CREDENTIALS_NOT_CONFIGURED",
+          },
+          { status: 503 }
+        );
+      }
+
+      const orderNumber = isDev ? `MOCK-${Date.now()}` : `MBWEB-${Date.now()}`;
+
+      // Generate XML payload for Accio Data
+      const xmlPayload = generateVerificationXml(
+        {
           firstName,
           lastName,
           ssn,
@@ -176,22 +191,30 @@ export async function POST(request: Request) {
           city,
           state,
           zip,
-        });
+          creditAuthorizationAcknowledgment: true,
+          backgroundCheckAuthorization: true,
+        },
+        ACCOUNT_DETAILS
+      );
 
-        // Submit to Accio Data
-        const accioResponse = await fetch(
-          "https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml",
-          {
-            method: "POST",
-            headers: { "Content-Type": "text/xml" },
-            body: xmlPayload,
-          }
-        );
+      console.log("📋 Submitting to Accio...");
+      console.log("📄 [OUTGOING] XML Payload:\n", xmlPayload);
 
-        if (!accioResponse.ok) {
-          throw new Error(`Accio Data API error: ${accioResponse.status}`);
-        }
+      // Call the API (mock endpoint in dev, real endpoint in prod)
+      const accioResponse = await fetch(accioUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/xml" },
+        body: xmlPayload,
+      });
+
+      if (!accioResponse.ok) {
+        const errorText = await accioResponse.text();
+        console.error("❌ Accio API error:", errorText);
+        throw new Error(`Accio Data API error: ${accioResponse.status}`);
       }
+
+      const responseText = await accioResponse.text();
+      console.log("✅ Accio response:", responseText);
 
       // Mark purchase as redeemed
       await prisma.purchase.update({
@@ -218,12 +241,12 @@ export async function POST(request: Request) {
         where: { id: verification.id },
         data: {
           bgsReportId: bgsReport.id,
-          backgroundCheckedAt: new Date(), // Submitted, not completed
+          backgroundCheckedAt: new Date(),
         },
       });
 
-      const message = useMock
-        ? `Background check submitted successfully (MOCK - ${accioEnv}). Webhook will trigger in ~2 seconds.`
+      const message = isDev
+        ? "Background check submitted successfully (MOCK). Webhook will trigger in ~2 seconds."
         : "Background check submitted successfully. Results typically arrive within 24-48 hours, but can take up to 2 weeks.";
 
       return NextResponse.json({
