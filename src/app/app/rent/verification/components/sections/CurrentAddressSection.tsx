@@ -186,8 +186,9 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               render={({ field }) => (
                 <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[230px]">
                   <FormLabel className="inline-flex items-center gap-1.5">
-                    <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                      Social Security Number
+                    <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5">
+                      <span className="xs:hidden">Social Security #</span>
+                      <span className="hidden xs:inline">Social Security Number</span>
                     </span>
                     <span className="text-red-500">*</span>
                   </FormLabel>
@@ -293,12 +294,13 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
               )}
             />
 
-            <div className="flex flex-wrap items-start gap-5 self-stretch w-full">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start gap-5 self-stretch w-full">
+              {/* City - full width on mobile */}
               <FormField
                 control={form.control}
                 name="city"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[200px]">
+                  <FormItem className="flex flex-col items-start gap-1.5 w-full sm:flex-1 sm:min-w-0 md:min-w-[200px]">
                     <FormLabel className="inline-flex items-center gap-1.5">
                       <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
                         City
@@ -316,7 +318,8 @@ export const CurrentAddressSection = ({ form }: CurrentAddressSectionProps): JSX
                   </FormItem>
                 )}
               />
-              <div className="flex flex-1 gap-5 min-w-0 md:min-w-[200px]">
+              {/* State and Zip - side by side */}
+              <div className="flex flex-1 gap-5 w-full sm:w-auto sm:min-w-0 md:min-w-[200px]">
                 <FormField
                   control={form.control}
                   name="state"

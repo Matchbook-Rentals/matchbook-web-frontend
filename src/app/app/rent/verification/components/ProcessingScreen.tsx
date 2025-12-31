@@ -646,7 +646,8 @@ export const ProcessingScreen = ({
                     <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[200px]">
                       <FormLabel className="inline-flex items-center gap-1.5">
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
-                          Social Security Number
+                          <span className="xs:hidden">Social Security #</span>
+                          <span className="hidden xs:inline">Social Security Number</span>
                         </span>
                         <span className="text-red-500">*</span>
                       </FormLabel>
@@ -730,12 +731,13 @@ export const ProcessingScreen = ({
               />
 
               {/* City, State, Zip Row */}
-              <div className="flex flex-wrap md:flex-nowrap items-start gap-4 w-full">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap md:flex-nowrap items-start gap-4 w-full">
+                {/* City - full width on mobile */}
                 <FormField
                   control={form.control}
                   name="city"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[140px]">
+                    <FormItem className="flex flex-col items-start gap-1.5 w-full sm:flex-1 sm:min-w-0 md:min-w-[140px]">
                       <FormLabel className="inline-flex items-center gap-1.5">
                         <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
                           City
@@ -753,65 +755,68 @@ export const ProcessingScreen = ({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="state"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[140px]">
-                      <FormLabel className="inline-flex items-center gap-1.5">
-                        <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
-                          State
-                        </span>
-                        <span className="text-red-500">*</span>
-                      </FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                {/* State and Zip - side by side on mobile */}
+                <div className="flex items-start gap-4 w-full sm:flex-1 sm:min-w-0">
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[140px]">
+                        <FormLabel className="inline-flex items-center gap-1.5">
+                          <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
+                            State
+                          </span>
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-12 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
+                              <SelectValue placeholder="Select State" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {US_STATES.map((state) => (
+                              <SelectItem key={state.value} value={state.value}>
+                                {state.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="zip"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[120px]">
+                        <FormLabel className="inline-flex items-center gap-1.5">
+                          <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
+                            Zip Code
+                          </span>
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
-                          <SelectTrigger className="h-12 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs">
-                            <SelectValue placeholder="Select State" />
-                          </SelectTrigger>
+                          <Input
+                            placeholder="Enter Zip"
+                            maxLength={10}
+                            className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
+                            {...field}
+                            onChange={(e) => {
+                              let value = e.target.value.replace(/[^\d-]/g, '');
+                              if (value.length > 5 && !value.includes('-')) {
+                                value = value.substring(0, 5) + '-' + value.substring(5, 9);
+                              }
+                              field.onChange(value);
+                            }}
+                          />
                         </FormControl>
-                        <SelectContent>
-                          {US_STATES.map((state) => (
-                            <SelectItem key={state.value} value={state.value}>
-                              {state.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="zip"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col items-start gap-1.5 flex-1 min-w-0 md:min-w-[120px]">
-                      <FormLabel className="inline-flex items-center gap-1.5">
-                        <span className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm">
-                          Zip Code
-                        </span>
-                        <span className="text-red-500">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter Zip"
-                          maxLength={10}
-                          className="h-12 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs"
-                          {...field}
-                          onChange={(e) => {
-                            let value = e.target.value.replace(/[^\d-]/g, '');
-                            if (value.length > 5 && !value.includes('-')) {
-                              value = value.substring(0, 5) + '-' + value.substring(5, 9);
-                            }
-                            field.onChange(value);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 

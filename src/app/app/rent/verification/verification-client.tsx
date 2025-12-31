@@ -449,7 +449,10 @@ export default function VerificationClient({
                 name="ssn"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Social Security Number*</FormLabel>
+                    <FormLabel>
+                      <span className="xs:hidden">Social Security #*</span>
+                      <span className="hidden xs:inline">Social Security Number*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="123-45-6789"
