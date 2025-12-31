@@ -6,6 +6,11 @@ export const TEST_USER = {
   password: process.env.TEST_USER_PASSWORD!
 };
 
+export const TEST_ADMIN = {
+  email: process.env.TEST_ADMIN_EMAIL!,
+  password: process.env.TEST_ADMIN_PASSWORD!
+};
+
 export async function signIn(
   page: Page, 
   email: string = TEST_USER.email, 
@@ -42,16 +47,20 @@ export async function signIn(
 export async function signOut(page: Page) {
   // Click on User Profile button
   await page.getByTestId('user-menu-trigger').click();
-  
+
   // Click Sign Out button in the dropdown
   await page.getByTestId('sign-out-button').click({ force: true });
-  
+
   // Wait for sign out to complete
   await page.waitForURL((url) => {
     const pathname = url.pathname;
     return pathname === '/' || pathname.includes('/sign-in');
   }, { timeout: 10000 });
-  
+
   // Wait for the sign-in menu to be available (indicating successful sign-out)
   await page.waitForSelector('[data-testid="user-menu-trigger"]', { timeout: 10000 });
+}
+
+export async function signInAsAdmin(page: Page) {
+  return signIn(page, TEST_ADMIN.email, TEST_ADMIN.password);
 }

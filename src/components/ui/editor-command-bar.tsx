@@ -117,6 +117,7 @@ export function EditorCommandBar({
 
   // Check if we're inside a specific block element
   const isInBlockElement = (tagName: string): boolean => {
+    if (typeof window === 'undefined') return false
     const selection = window.getSelection()
     if (!selection || selection.rangeCount === 0) return false
 

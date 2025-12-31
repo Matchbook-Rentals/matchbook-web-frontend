@@ -3,6 +3,10 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { ExternalLink, Pencil } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkBreaks from 'remark-breaks'
+import rehypeRaw from 'rehype-raw'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 interface MarkdownEditorProps {
   content: string
@@ -21,70 +25,30 @@ interface LinkMenuState {
   element: HTMLAnchorElement | null
 }
 
-// Convert markdown to HTML for display
+// Convert markdown to HTML using ReactMarkdown (same as published view)
 function markdownToHtml(markdown: string): string {
   if (!markdown) return ''
 
-  let html = markdown
+  const element = (
+    <ReactMarkdown
+      remarkPlugins={[remarkBreaks]}
+      rehypePlugins={[rehypeRaw]}
+      components={{
+        h2: ({node, ...props}) => <h2 {...props} />,
+        h3: ({node, ...props}) => <h3 {...props} />,
+        h4: ({node, ...props}) => <h4 {...props} />,
+        p: ({node, ...props}) => <p {...props} />,
+        a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" {...props} />,
+        ul: ({node, ...props}) => <ul {...props} />,
+        ol: ({node, ...props}) => <ol {...props} />,
+        strong: ({node, ...props}) => <strong {...props} />,
+        em: ({node, ...props}) => <em {...props} />,
+        u: ({node, ...props}) => <u {...props} />
+      }}
+    >{markdown}</ReactMarkdown>
+  )
 
-  // Preserve heading HTML tags before escaping (headings are stored as HTML, not # syntax)
-  const headingPlaceholders: string[] = []
-  html = html.replace(/<(h[2-4])>(.*?)<\/\1>/gi, (match) => {
-    headingPlaceholders.push(match)
-    return `__HEADING_${headingPlaceholders.length - 1}__`
-  })
-
-  // Escape HTML entities (but preserve our markdown)
-  html = html
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-
-  // Restore heading tags
-  headingPlaceholders.forEach((heading, i) => {
-    html = html.replace(`__HEADING_${i}__`, heading)
-  })
-
-  // Bold (** or __)
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-  html = html.replace(/__(.+?)__/g, '<strong>$1</strong>')
-
-  // Italic (* or _) - be careful not to match ** or __
-  html = html.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>')
-  html = html.replace(/(?<!_)_(?!_)(.+?)(?<!_)_(?!_)/g, '<em>$1</em>')
-
-  // Underline (HTML in markdown)
-  html = html.replace(/&lt;u&gt;(.+?)&lt;\/u&gt;/g, '<u>$1</u>')
-
-  // Links [text](url)
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-
-  // Unordered lists
-  html = html.replace(/^- (.+)$/gm, '<li>$1</li>')
-
-  // Ordered lists
-  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-
-  // Wrap consecutive <li> elements in <ul> or <ol>
-  // This is simplified - a full implementation would track list types
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`)
-
-  // Split by double newlines (paragraph breaks) first
-  const paragraphs = html.split(/\n\n+/)
-
-  html = paragraphs.map(para => {
-    const trimmed = para.trim()
-    if (!trimmed) return ''
-    // Don't wrap block elements in paragraphs
-    if (trimmed.startsWith('<h') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol')) {
-      return trimmed
-    }
-    // Convert single newlines to <br> (user-friendly: Enter = line break)
-    const withBreaks = trimmed.replace(/\n/g, '<br>')
-    return `<p>${withBreaks}</p>`
-  }).filter(Boolean).join('\n')
-
-  return html
+  return renderToStaticMarkup(element)
 }
 
 // Convert HTML back to markdown
@@ -93,8 +57,8 @@ function htmlToMarkdown(html: string): string {
 
   let markdown = html
 
-  // Replace <br> with hard line break (two spaces + newline for CommonMark)
-  markdown = markdown.replace(/<br\s*\/?>/gi, '  \n')
+  // Replace <br> with newline (remark-breaks handles single newlines)
+  markdown = markdown.replace(/<br\s*\/?>/gi, '\n')
   markdown = markdown.replace(/<\/div><div>/gi, '\n')
   markdown = markdown.replace(/<div>/gi, '\n')
   markdown = markdown.replace(/<\/div>/gi, '')
@@ -131,8 +95,9 @@ function htmlToMarkdown(html: string): string {
   markdown = markdown.replace(/<em>(.*?)<\/em>/gi, wrapItalic)
   markdown = markdown.replace(/<i>(.*?)<\/i>/gi, wrapItalic)
 
-  // Underline
-  markdown = markdown.replace(/<u>(.*?)<\/u>/gi, '<u>$1</u>')
+  // Underline - handle <u> with attributes and <span style="text-decoration: underline">
+  markdown = markdown.replace(/<u[^>]*>(.*?)<\/u>/gi, '<u>$1</u>')
+  markdown = markdown.replace(/<span[^>]*style="[^"]*text-decoration:\s*underline[^"]*"[^>]*>(.*?)<\/span>/gi, '<u>$1</u>')
 
   // Links
   markdown = markdown.replace(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
@@ -143,12 +108,12 @@ function htmlToMarkdown(html: string): string {
   })
   markdown = markdown.replace(/<ol>(.*?)<\/ol>/gis, (match, content) => {
     let index = 1
-    return content.replace(/<li>(.*?)<\/li>/gi, () => `${index++}. ` + '$1\n')
+    return content.replace(/<li>(.*?)<\/li>/gi, (_, text) => `${index++}. ${text}\n`)
   })
   markdown = markdown.replace(/<li>(.*?)<\/li>/gi, '- $1\n')
 
-  // Remove any remaining HTML tags (except headings which we keep)
-  markdown = markdown.replace(/<(?!\/?h[2-4]>)[^>]+>/g, '')
+  // Remove any remaining HTML tags (except headings and underlines which we keep)
+  markdown = markdown.replace(/<(?!\/?(?:h[2-4]|u)>)[^>]+>/g, '')
 
   // Decode HTML entities
   markdown = markdown.replace(/&amp;/g, '&')
@@ -156,7 +121,7 @@ function htmlToMarkdown(html: string): string {
   markdown = markdown.replace(/&gt;/g, '>')
   markdown = markdown.replace(/&nbsp;/g, ' ')
 
-  // Clean up multiple newlines (keep max 2)
+  // Clean up multiple newlines (keep max one blank line)
   markdown = markdown.replace(/\n{3,}/g, '\n\n')
 
   return markdown.trim()
