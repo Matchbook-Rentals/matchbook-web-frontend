@@ -42,6 +42,13 @@ const CRON_JOBS: CronJob[] = [
     description: 'Emails preview of tomorrow\'s rent payments to tyler.bennett52@gmail.com',
     endpoint: '/api/cron/preview-rent-payments',
     status: 'idle'
+  },
+  {
+    id: 'complete-ended-bookings',
+    name: 'Complete Ended Bookings',
+    description: 'Marks bookings as completed when their end date has passed',
+    endpoint: '/api/cron/complete-ended-bookings',
+    status: 'idle'
   }
 ]
 

@@ -522,7 +522,7 @@ model Booking {
   rentPayments RentPayment[]
 
   createdAt DateTime @default(now())
-  status    String   @default("reserved")  // "reserved", "pending_payment", "confirmed", "payment_failed", "cancelled"
+  status    String   @default("reserved")  // "reserved", "pending_payment", "confirmed", "active", "completed", "payment_failed", "cancelled"
 
   // DEPRECATED: Move-in tracking fields - no longer used as of 2025-11-14. Remove in next migration.
   moveInCompletedAt DateTime?
