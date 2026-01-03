@@ -1,8 +1,12 @@
 import React from "react";
+import Link from "next/link";
 import { BrandButton } from "../ui/brandButton";
 import { Card, CardContent } from "../ui/card";
+import { hasVerificationKeys } from "@/lib/verification/config";
 
 export const VerificationWhyItMatters = (): JSX.Element => {
+  const keysConfigured = hasVerificationKeys();
+
   // Feature card data for mapping
   const featureCards = [
     {
@@ -80,13 +84,18 @@ export const VerificationWhyItMatters = (): JSX.Element => {
         ))}
       </div>
 
-      {/* CTA Button - Temporarily disabled */}
-      <BrandButton
-        size="lg"
-        disabled
-      >
-        Coming Soon
-      </BrandButton>
+      {/* CTA Button */}
+      {keysConfigured ? (
+        <Link href="/app/rent/verification">
+          <BrandButton size="lg">
+            Get Verified
+          </BrandButton>
+        </Link>
+      ) : (
+        <BrandButton size="lg" disabled>
+          Coming Soon
+        </BrandButton>
+      )}
     </section>
   );
 };
