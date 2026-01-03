@@ -38,7 +38,7 @@ const guestFaqData = [
     "question": "How does MatchBook Renter Verification work?",
     "answer": (
       <>
-        Matchbook Renter Verification is a background screening that includes a credit summary, criminal background, and eviction history check. When renters apply to properties on MatchBook, this screening is attached to the application. Matchbook Renter Verification is optional and costs $25 and is valid for 3 months.{" "}
+        MatchBook Renter Verification is a background screening that includes a credit summary, criminal background, and eviction history check. When renters apply to properties on MatchBook, this screening is attached to the application. MatchBook Renter Verification is optional and costs $25 and is valid for 3 months.{" "}
         {/* <a href="#" className="text-blue-600 hover:text-blue-800 underline">
           See more
         </a> */}

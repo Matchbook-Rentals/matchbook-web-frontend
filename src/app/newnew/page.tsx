@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Hero from "@/components/home-components/hero";
-import PopularListingsSection from "@/components/home-components/popular-listings-section";
+import PopularListingsSectionWrapper from "@/components/home-components/popular-listings-section-wrapper";
 import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
 import Footer from "@/components/marketing-landing-components/footer";
 import { HowItWorks } from "@/components/home-components/how-it-works";
@@ -10,9 +11,10 @@ import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import RecentArticle from "@/components/home-components/recent-article";
 import FAQSection from "@/components/home-components/faq-section";
 import { currentUser } from "@clerk/nextjs/server";
-import { getUserTripsCount } from "@/app/actions/trips";
+import { getUserTripsCount, getMostRecentTrip } from "@/app/actions/trips";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
-import { getRandomTestListings } from "@/app/actions/listings";
+import { getPopularListingAreas } from "@/app/actions/listings";
+import { checkAdminAccess } from "@/utils/roles";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Monthly Rentals',
@@ -20,7 +22,6 @@ export const metadata: Metadata = {
 };
 
 const SPACER_CLASS = "h-[90px]";
-const LISTINGS_COUNT = 48;
 
 const Spacer = () => <div className={SPACER_CLASS} />;
 
@@ -39,14 +40,32 @@ const serializeUser = (user: any) => {
 };
 
 const NewNewHomePage = async () => {
-  const [user, listings] = await Promise.all([
+  const isAdmin = await checkAdminAccess();
+  if (!isAdmin) {
+    redirect('/');
+  }
+
+  const [user, popularAreas] = await Promise.all([
     currentUser(),
-    getRandomTestListings(LISTINGS_COUNT)
+    getPopularListingAreas(5) // Fetch 5 to account for potential skips
   ]);
 
   const userObject = serializeUser(user);
   const tripCount = user?.id ? await getUserTripsCount() : 0;
   const hasAccess = true;
+
+  // Get user's most recent trip location if signed in
+  let userTripLocation = null;
+  if (user?.id) {
+    const recentTrip = await getMostRecentTrip();
+    if (recentTrip?.city || recentTrip?.locationString) {
+      userTripLocation = {
+        city: recentTrip.city,
+        state: recentTrip.state,
+        locationString: recentTrip.locationString,
+      };
+    }
+  }
 
   return (
     <HomePageWrapper>
@@ -54,7 +73,11 @@ const NewNewHomePage = async () => {
         <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
         <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!user?.id} />
         <Spacer />
-        <PopularListingsSection listings={listings} />
+        <PopularListingsSectionWrapper
+          isSignedIn={!!user?.id}
+          userTripLocation={userTripLocation}
+          popularAreas={popularAreas}
+        />
         <Spacer />
         <RentEasyCopy />
         <Spacer />
