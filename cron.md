@@ -16,6 +16,7 @@ All cron jobs are implemented as API routes under `/api/cron/` and require autho
 | **Roll Search Dates** | Daily (recommended early morning) | Expires outdated items and rolls search dates forward | [Details](./docs/cron/roll-search-dates.md) |
 | **Send Move-In Reminders** | Daily at 9:00 AM PT (4:00 PM UTC) | Sends move-in reminders to renters and hosts 3 days before move-in | [Details](./docs/cron/send-move-in-reminders.md) |
 | **Preview Move-In Reminders** | On-demand or before main job | Previews how many move-in notifications will be sent without sending them | [Details](./docs/cron/preview-move-in-reminders.md) |
+| **Complete Ended Bookings** | Daily at 2:00 AM PT (9:00 AM UTC) | Marks bookings as completed when their end date has passed | - |
 
 ## Quick Start
 
@@ -60,6 +61,10 @@ curl -H "Authorization: Bearer ${CRON_SECRET}" \
 # Preview move-in reminders
 curl -H "Authorization: Bearer ${CRON_SECRET}" \
   https://your-domain.com/api/cron/preview-move-in-reminders
+
+# Complete ended bookings
+curl -H "Authorization: Bearer ${CRON_SECRET}" \
+  https://your-domain.com/api/cron/complete-ended-bookings
 ```
 
 ## External Scheduling
@@ -77,6 +82,7 @@ on:
     - cron: '0 8 * * *'  # Payment jobs at 1 AM PT
     - cron: '0 0 * * *'  # Message checks at midnight UTC
     - cron: '0 2 * * *'  # Search date rolling at 2 AM UTC
+    - cron: '0 9 * * *'  # Complete ended bookings at 2 AM PT (9 AM UTC)
     - cron: '0 16 * * *'  # Move-in reminders at 9 AM PT (4 PM UTC)
 
 jobs:
@@ -93,6 +99,8 @@ jobs:
             https://your-domain.com/api/cron/preview-rent-payments
           curl -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             https://your-domain.com/api/cron/roll-search-dates
+          curl -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://your-domain.com/api/cron/complete-ended-bookings
           curl -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             https://your-domain.com/api/cron/send-move-in-reminders
 ```
@@ -119,6 +127,9 @@ Add to your server's crontab:
 
 # Roll search dates daily at 2 AM UTC
 0 2 * * * curl -H "Authorization: Bearer ${CRON_SECRET}" https://your-domain.com/api/cron/roll-search-dates
+
+# Complete ended bookings daily at 2 AM Pacific (9 AM UTC)
+0 9 * * * curl -H "Authorization: Bearer ${CRON_SECRET}" https://your-domain.com/api/cron/complete-ended-bookings
 
 # Send move-in reminders daily at 9 AM Pacific (4 PM UTC)
 0 16 * * * curl -H "Authorization: Bearer ${CRON_SECRET}" https://your-domain.com/api/cron/send-move-in-reminders
