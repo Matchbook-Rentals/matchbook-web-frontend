@@ -69,8 +69,8 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Legal Links */}
-          <div className="text-lg mx-auto">
+          {/* Legal Links - hidden on small, shown on sm+ */}
+          <div className="text-lg mx-auto hidden sm:block">
             <h3 className="text-xl font-semibold">Legal</h3>
             <nav className="flex flex-col">
               <Link
@@ -116,6 +116,18 @@ export default function Footer() {
             <h3 className="text-xl font-semibold">Follow Us</h3>
             <SocialLinks className="pt-3 md:pt-6 w-[88px] md:w-auto justify-center" />
           </div>
+        </div>
+
+        {/* Legal Links - mobile only row */}
+        <div className="sm:hidden flex flex-col items-start pt-6 px-4">
+          <h3 className="text-xl font-semibold mb-2">Legal</h3>
+          <nav className="flex flex-wrap gap-x-4 gap-y-1">
+            <Link href="/terms-of-service" className="text-gray-500 hover:text-black" prefetch={false}>Terms of Service</Link>
+            <Link href="/privacy-policy" className="text-gray-500 hover:text-black" prefetch={false}>Privacy Policy</Link>
+            <Link href="/acceptable-use-policy" className="text-gray-500 hover:text-black" prefetch={false}>Acceptable Use</Link>
+            <Link href="/california-privacy-notice" className="text-gray-500 hover:text-black" prefetch={false}>CA Privacy Notice</Link>
+            <Link href="/cookie-notice" className="text-gray-500 hover:text-black" prefetch={false}>Cookie Notice</Link>
+          </nav>
         </div>
       </div>
     </footer>

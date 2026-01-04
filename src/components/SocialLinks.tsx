@@ -5,11 +5,12 @@ import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from "./Icons"
 
 interface SocialLinksProps {
   className?: string;
+  noWrap?: boolean;
 }
 
-export default function SocialLinks({ className = "" }: SocialLinksProps) {
+export default function SocialLinks({ className = "", noWrap = false }: SocialLinksProps) {
   return (
-    <div className={`flex flex-wrap gap-2 ${className}`}>
+    <div className={`flex ${noWrap ? 'flex-nowrap' : 'flex-wrap'} gap-2 ${className}`}>
       <Link
         href="https://x.com/matchbookrntls"
         className="bg-secondaryBrand hover:bg-secondaryBrand/80 text-white rounded-full p-1.5 md:p-2 transition-colors duration-200"
