@@ -9,8 +9,8 @@ export const VerificationHowItWorks = (): JSX.Element => {
   return (
     <section className="flex flex-col w-full max-w-[1440px] items-center justify-center gap-10 md:px-[60px] py-16 relative">
       {/* Section Header */}
-      <header className="flex flex-col w-[730px] items-center justify-center gap-4 relative flex-[0_0_auto]">
-        <h2 className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[40px] tracking-[-2.00px] leading-[normal]">
+      <header className="flex flex-col w-full max-w-[730px] items-center justify-center gap-4 relative flex-[0_0_auto] px-4 md:px-0">
+        <h2 className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-medium text-gray-neutral900 text-[28px] md:text-[40px] tracking-[-2.00px] leading-[normal]">
           How Verification Works
         </h2>
       </header>
