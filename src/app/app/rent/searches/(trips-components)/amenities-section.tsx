@@ -37,7 +37,7 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
   const initialDisplayCount = 6;
 
   return (
-    <Card className="bg-[#FAFAFA] border-none rounded-xl mt-5">
+    <Card className="shadow-none rounded-xl mt-5 border-primaryBrand border-[1.5px]">
       <CardContent className="flex flex-col items-start gap-[18px] p-5">
         <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">
           Amenities

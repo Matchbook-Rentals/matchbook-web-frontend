@@ -19,7 +19,7 @@ const DescriptionSection: React.FC<DescriptionSectionProps> = ({ listing }) => {
 
   return (
     <Card className="border-none shadow-none rounded-xl mt-5">
-      <CardContent className="flex flex-col items-start gap-[18px] p-5">
+      <CardContent className="flex flex-col items-start gap-[18px] py-5 px-0">
         <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">
           Description
         </h3>
