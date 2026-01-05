@@ -11,7 +11,7 @@ interface TripsContentProps {
 
 const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
   return (
-    <main className="flex flex-col items-start gap-6 px-6 py-8 relative bg-gray-50 min-h-screen">
+    <main className="flex mx-auto max-w-[1280px] flex-col items-start gap-6 px-6 py-8 relative min-h-screen">
       <div className="flex flex-col items-start gap-6 relative w-full">
         <SearchResultsSection />
         <SearchContainerSection trips={trips} />

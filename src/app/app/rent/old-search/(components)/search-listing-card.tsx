@@ -1,29 +1,17 @@
-import Image from 'next/image'
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { BrandButton } from "@/components/ui/brandButton"
-import { MoreHorizontal, Star, ChevronLeft, ChevronRight, Heart, Share2 as Share2Icon, Heart as HeartIcon, Bed, Bath, Square } from "lucide-react"
+import { Heart, Heart as HeartIcon } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState, useRef, useEffect } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@clerk/nextjs'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
-import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus, PropertyType } from '@/constants/enums'
 
 const TITLE_MAX_LENGTH = 40
 
 // Text style variables
-const headerTextStyle = "font-medium text-black text-base"
+const headerTextStyle = "font-medium text-black text-sm"
 const bodyTextStyle = "font-normal text-[#4f4f4f] text-sm"
 
 interface SearchListingCardProps {
@@ -48,10 +36,7 @@ interface SearchListingCardProps {
 export default function SearchListingCard({ listing, status, className, style, detailsClassName, detailsStyle, callToAction, contextLabel }: SearchListingCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const setHoveredListing = useListingHoverStore((state) => state.setHoveredListing)
-  const router = useRouter()
-  const { userId } = useAuth()
   const { state, actions } = useTripContext()
-  let isFlexible = state.trip.flexibleStart || state.trip.flexibleEnd;
 
   // Create ref for the image container and state for dimensions
   const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -153,7 +138,7 @@ export default function SearchListingCard({ listing, status, className, style, d
   };
 
   return (
-    <Card className="flex flex-col w-[361.5px] items-start relative border border-solid border-[#0000001a] rounded-xl overflow-hidden cursor-pointer"
+    <Card className={`flex flex-col w-full max-w-[280px] items-start relative border-none shadow-none rounded-xl overflow-hidden cursor-pointer ${className || ''}`}
       onMouseEnter={() => {
         setIsHovered(true)
         setHoveredListing(listing)
@@ -189,23 +174,32 @@ export default function SearchListingCard({ listing, status, className, style, d
               e.stopPropagation();
             }}
           >
-            <HeartIcon 
-              className={`w-[18px] h-[18px] ${favIds.has(listing.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+            <HeartIcon
+              className={`w-[18px] h-[18px] ${favIds.has(listing.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
             />
           </BrandButton>
-          {/* <BrandButton
-            variant="default"
-            size="icon"
-            className="w-[31px] h-[31px] bg-white hover:bg-white/90 text-gray-600 hover:text-gray-700 min-w-[31px]"
-          >
-            <Share2Icon className="w-[18px] h-[18px]" />
-          </BrandButton> */}
         </div>
+
+        {/* Call to Action Button on Image */}
+        {callToAction && (
+          <div className="absolute bottom-3 left-3 right-3">
+            <BrandButton
+              variant="default"
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                callToAction.action();
+              }}
+              className="w-full"
+            >
+              {callToAction.label}
+            </BrandButton>
+          </div>
+        )}
       </div>
 
-      <CardContent className="w-full p-4 pt-3 flex flex-col gap-0">
+      <CardContent className="w-full pt-3 pb-0 px-4 flex flex-col gap-0">
         {/* Row 1: Property Title */}
-        <div className="flex flex-col gap-0 pb-1">
+        <div className="flex flex-col gap-0 pb-2">
           <h3 className={`${headerTextStyle} truncate whitespace-nowrap`}>
             {listing.title.length > TITLE_MAX_LENGTH
               ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
@@ -213,91 +207,28 @@ export default function SearchListingCard({ listing, status, className, style, d
           </h3>
         </div>
 
-        {/* Row 2: Location and Rating */}
-        <div className="flex flex-col gap-0 pb-6">
-          <div className="flex items-center justify-between flex-wrap gap-x-2 gap-y-1 w-full">
-            <div className={bodyTextStyle}>
-              {(() => {
-                switch (listing.category) {
-                  case PropertyType.PrivateRoom:
-                    return 'Private Room';
-                  case PropertyType.SingleFamily:
-                    return 'Single Family';
-                  case PropertyType.Townhouse:
-                    return 'Townhouse';
-                  case PropertyType.Apartment:
-                    return 'Apartment';
-                  default:
-                    return 'Property';
-                }
-              })()} in {listing.state}
-            </div>
-
-            <div className="flex items-center gap-0.5">
-              {listing.averageRating ? (
-                <>
-                  <div className="flex items-center">
-                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
-                    <span className={bodyTextStyle}>
-                      {listing.averageRating.toFixed(1)}
-                    </span>
-                  </div>
-                  <span className={bodyTextStyle}>
-                    ({listing.numberOfStays || 0} reviews)
-                  </span>
-                </>
-              ) : (
-                <span className={`${bodyTextStyle} italic`}>
-                  No reviews yet
-                </span>
-              )}
-            </div>
+        {/* Row 2: Property Details */}
+        <div className="flex flex-col gap-0 pb-2">
+          <div className={bodyTextStyle}>
+            {listing.roomCount || 4} Bed, {listing.bathroomCount || 2} Bath {(() => {
+              switch (listing.category) {
+                case PropertyType.PrivateRoom:
+                  return 'Private Room';
+                case PropertyType.SingleFamily:
+                  return 'Single Family';
+                case PropertyType.Townhouse:
+                  return 'Townhouse';
+                case PropertyType.Apartment:
+                  return 'Apartment';
+                default:
+                  return 'Property';
+              }
+            })()}
           </div>
         </div>
 
-        {/* Row 3: Property Features */}
-        <div className="flex flex-col gap-3 pb-3">
-          <div className="flex items-center justify-between flex-wrap gap-x-3 gap-y-2 w-full">
-            <Badge
-              variant="outline"
-              className="bg-transparent border-none p-0 flex items-center gap-1.5"
-            >
-              <div className="relative w-5 h-5">
-                <Bed className="w-[18px] h-4 text-[#5d606d]" />
-              </div>
-              <span className={bodyTextStyle}>
-                {listing.roomCount || 4} bds
-              </span>
-            </Badge>
-            <div className="h-4 border-l-2 border-gray-200 hidden min-[360px]:block"></div>
-            <Badge
-              variant="outline"
-              className="bg-transparent border-none p-0 flex items-center gap-1.5"
-            >
-              <div className="relative w-5 h-5">
-                <Bath className="w-[18px] h-4 text-[#5d606d]" />
-              </div>
-              <span className={bodyTextStyle}>
-                {listing.bathroomCount || 2} ba
-              </span>
-            </Badge>
-            <div className="h-4 border-l-2 border-gray-200 hidden min-[360px]:block"></div>
-            <Badge
-              variant="outline"
-              className="bg-transparent border-none p-0 flex items-center gap-1.5"
-            >
-              <div className="relative w-5 h-5">
-                <Square className="w-5 h-5 text-[#5d606d]" />
-              </div>
-              <span className={bodyTextStyle}>
-                {listing.squareFootage?.toLocaleString() || 0} sqft
-              </span>
-            </Badge>
-          </div>
-        </div>
-
-        {/* Row 4: Availability */}
-        <div className="flex flex-col gap-3">
+        {/* Row 3: Availability */}
+        <div className="flex flex-col gap-0 pb-2">
           <div className={bodyTextStyle}>
             Available {state.trip.startDate?.toLocaleDateString('en-gb', {
               day: '2-digit',
@@ -310,25 +241,18 @@ export default function SearchListingCard({ listing, status, className, style, d
         </div>
       </CardContent>
 
-      <CardFooter className="w-full p-4 border-t border-[#002c581a]">
-        <div className="w-full">
-          <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-xl">
+      <CardFooter className="w-full py-0 px-4 border-none border-[#002c581a]">
+        <div className="w-full flex items-center justify-between">
+          <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-sm">
             ${listing.price?.toLocaleString() || 2350} / month
           </h2>
+          {listing.averageRating && (
+            <span className={bodyTextStyle}>
+              {listing.averageRating.toFixed(1)} ({listing.numberOfStays || 0})
+            </span>
+          )}
         </div>
       </CardFooter>
-
-      {callToAction && (
-        <div className="pt-2 pb-4 w-full flex justify-center">
-          <BrandButton
-            variant="default"
-            onClick={() => callToAction.action()}
-            className="w-[95%] mx-auto"
-          >
-            {callToAction.label}
-          </BrandButton>
-        </div>
-      )}
 
       {/* Display the image container's dimensions at the bottom of the card */}
       {/* <div className="text-center text-xs text-gray-500 pb-2">

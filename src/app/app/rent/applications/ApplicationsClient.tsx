@@ -178,7 +178,7 @@ interface ApplicationCardsProps {
 const ApplicationCards = ({ applications }: ApplicationCardsProps) => {
   if (applications.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-8 justify-center py-12 text-gray-500 w-full">
+      <div className="flex flex-col max-w-[1280px] mx-auto items-center gap-8 justify-center py-12 text-gray-500 w-full">
         <img
           src="/host-dashboard/empty/applications.png"
           alt="No applications"
@@ -192,7 +192,7 @@ const ApplicationCards = ({ applications }: ApplicationCardsProps) => {
   }
 
   return (
-    <div className="flex flex-col items-start gap-6 sm:gap-8 w-full">
+    <div className="flex max-w-[1280px] mx-auto flex-col items-start gap-6 sm:gap-8 w-full">
       {applications.map((application) => (
         <ApplicationCard key={application.id} application={application} />
       ))}
