@@ -10,6 +10,7 @@ import { X, Heart, CheckCircle, Check } from 'lucide-react';
 import { BrandButton } from '@/components/ui/brandButton';
 import Image from 'next/image';
 import { useTripContext } from '@/contexts/trip-context-provider';
+import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
 
 interface ListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -142,10 +143,16 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({
           </div>
         </div>
 
+        {/* Message Host */}
+        <SearchMessageHostDialog
+          listingId={listing.id}
+          hostName={host?.firstName || 'Host'}
+        />
+
         {/* Apply Now Button */}
         <BrandButton
-          variant="outline"
-          className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
+          variant="default"
+          className="w-full min-w-0 mt-1 font-semibold bg-[#0B6E6E] hover:bg-[#0B6E6E]/90"
           onClick={() => optimisticApply(listing)}
         >
           Apply Now
