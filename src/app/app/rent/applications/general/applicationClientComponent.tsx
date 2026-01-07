@@ -554,8 +554,8 @@ export default function ApplicationClientComponent({
 
 
   return (
-    <div className='bg-gray-50'>
-      <div className="flex flex-col w-full mx-auto max-w-[1200px] items-start justify-center gap-4 p-4">
+    <div className='bg-gray-50 mx-auto max-w-[1200px]'>
+      <div className="flex flex-col w-full  items-start justify-center gap-4 p-4">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 py-0 w-full">
           <BrandButton

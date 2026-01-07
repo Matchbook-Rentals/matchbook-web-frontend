@@ -12,7 +12,7 @@ interface BookingsContentProps {
 
 const BookingsContent: React.FC<BookingsContentProps> = ({ bookings, hasListings }) => {
   return (
-    <main className="flex flex-col min-w-[1280px] items-start gap-6 px-6 py-8 relative bg-gray-50 min-h-screen">
+    <main className="flex flex-col mx-auto max-w-[1280px] items-start gap-6 px-6 py-8 relative min-h-screen">
       <div className="flex flex-col items-start gap-6 relative w-full">
         <BookingsResultsSection />
         <BookingsContainerSection bookings={bookings} hasListings={hasListings} />

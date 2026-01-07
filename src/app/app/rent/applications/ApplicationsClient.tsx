@@ -71,7 +71,7 @@ export default function ApplicationsClient({ housingRequests }: ApplicationsClie
   }, [housingRequests, searchTerm, statusFilter]);
 
   return (
-    <div className="flex flex-col items-start gap-8 px-4 sm:px-6 py-6 sm:py-8 bg-[#f9f9f9] min-h-screen">
+    <div className="flex max-w-[1280px] mx-auto flex-col items-start gap-8 px-4 sm:px-6 py-6 sm:py-8  min-h-screen">
       <ApplicationsHeader />
       
       <div className="flex flex-col items-start gap-6 sm:gap-8 w-full">
@@ -192,7 +192,7 @@ const ApplicationCards = ({ applications }: ApplicationCardsProps) => {
   }
 
   return (
-    <div className="flex max-w-[1280px] mx-auto flex-col items-start gap-6 sm:gap-8 w-full">
+    <div className="flex  flex-col items-start gap-6 sm:gap-8 w-full">
       {applications.map((application) => (
         <ApplicationCard key={application.id} application={application} />
       ))}
