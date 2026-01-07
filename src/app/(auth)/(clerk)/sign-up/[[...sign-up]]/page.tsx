@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { SignUp } from "@clerk/nextjs";
+import { SignUpWithReferral } from "./sign-up-with-referral";
 
 export const metadata: Metadata = {
   title: 'Sign Up',
@@ -159,7 +159,7 @@ export default function Page() {
       
       {/* Form container */}
       <div className="flex justify-center items-center w-full relative z-10  pt-8">
-        <SignUp />
+        <SignUpWithReferral />
       </div>
       
       {/* Background gradient for desktop only */}

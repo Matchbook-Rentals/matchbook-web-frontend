@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { createPaymentReceipt } from '@/lib/receipt-utils';
 import { createNotification } from '@/app/actions/notifications';
+import { qualifyReferral } from '@/lib/referral';
 
 export async function POST(
   request: NextRequest,
@@ -148,7 +149,7 @@ export async function POST(
       try {
         const rentDueAtBooking = match.listing.rentDueAtBooking || 77;
         const paymentMethodType = 'card'; // Assuming card payment for now
-        
+
         await createPaymentReceipt({
           userId: match.trip.userId, // Receipt for the tenant
           matchId: params.matchId,
@@ -160,11 +161,35 @@ export async function POST(
           stripeChargeId: paymentIntent.latest_charge as string,
           transactionStatus: 'succeeded'
         });
-        
+
         console.log('Generated payment receipt for match:', params.matchId);
       } catch (receiptError) {
         console.error('Error generating receipt:', receiptError);
         // Don't fail the payment capture if receipt generation fails
+      }
+
+      // Check if this is the host's first booking and qualify referral if applicable
+      try {
+        const hostId = match.listing.userId;
+
+        // Count host's confirmed bookings (including this one)
+        const hostBookingsCount = await prisma.booking.count({
+          where: {
+            listing: { userId: hostId },
+            status: 'confirmed'
+          }
+        });
+
+        // If this is the host's first booking, try to qualify their referral
+        if (hostBookingsCount === 1) {
+          const wasQualified = await qualifyReferral(hostId, booking.id);
+          if (wasQualified) {
+            console.log(`🎉 [Referral] Qualified referral for host ${hostId} on their first booking (${booking.id})`);
+          }
+        }
+      } catch (referralError) {
+        console.error('Error processing referral qualification:', referralError);
+        // Don't fail the payment capture if referral processing fails
       }
 
       return NextResponse.json({

@@ -5,6 +5,7 @@ import prisma from '@/lib/prismadb';
 import { logger } from '@/lib/logger';
 import { createNotification } from '@/app/actions/notifications';
 import { buildNotificationEmailData } from '@/lib/notification-builders';
+import { generateReferralCode, findUserByReferralCode, createReferral } from '@/lib/referral';
 
 export async function POST(req: Request) {
   const startTime = Date.now();
@@ -72,7 +73,7 @@ export async function POST(req: Request) {
   console.log('🏷️ [Clerk Webhook] Event type:', eventType);
 
   if (eventType === 'user.created') {
-    const { id, email_addresses, first_name, last_name, image_url } = evt.data;
+    const { id, email_addresses, first_name, last_name, image_url, unsafe_metadata } = evt.data;
 
     console.log('👤 [Clerk Webhook] Processing user.created event');
     console.log('   User data:', {
@@ -80,10 +81,30 @@ export async function POST(req: Request) {
       email: email_addresses[0]?.email_address,
       firstName: first_name,
       lastName: last_name,
-      hasImage: !!image_url
+      hasImage: !!image_url,
+      referralCode: (unsafe_metadata as any)?.referralCode || 'none'
     });
 
     try {
+      // Generate a unique referral code for this new user
+      let newUserReferralCode: string | null = null;
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      while (attempts < maxAttempts) {
+        const candidateCode = generateReferralCode();
+        const existingUser = await prisma.user.findUnique({
+          where: { referralCode: candidateCode },
+          select: { id: true },
+        });
+
+        if (!existingUser) {
+          newUserReferralCode = candidateCode;
+          break;
+        }
+        attempts++;
+      }
+
       console.log('💾 [Clerk Webhook] Creating user in database...');
       await prisma.user.create({
         data: {
@@ -92,14 +113,52 @@ export async function POST(req: Request) {
           firstName: first_name || null,
           lastName: last_name || null,
           imageUrl: image_url || null,
+          referralCode: newUserReferralCode,
         },
       });
 
       console.log('✅ [Clerk Webhook] User created successfully');
+      if (newUserReferralCode) {
+        console.log(`🔗 [Clerk Webhook] Generated referral code: ${newUserReferralCode}`);
+      }
       logger.info('User created via webhook', {
         userId: id,
         email: email_addresses[0]?.email_address,
+        referralCode: newUserReferralCode,
       });
+
+      // Handle referral tracking if user signed up via referral link
+      const referralCodeFromSignup = (unsafe_metadata as any)?.referralCode;
+      if (referralCodeFromSignup) {
+        console.log(`🎯 [Clerk Webhook] Processing referral code: ${referralCodeFromSignup}`);
+        try {
+          const referrer = await findUserByReferralCode(referralCodeFromSignup);
+          if (referrer) {
+            // Prevent self-referral
+            if (referrer.id !== id) {
+              await createReferral(referrer.id, id);
+              console.log(`✅ [Clerk Webhook] Referral created: ${referrer.id} -> ${id}`);
+              logger.info('Referral created via webhook', {
+                referrerId: referrer.id,
+                referredUserId: id,
+                referralCode: referralCodeFromSignup,
+              });
+            } else {
+              console.log('⚠️ [Clerk Webhook] Self-referral attempted, ignoring');
+            }
+          } else {
+            console.log(`⚠️ [Clerk Webhook] No referrer found for code: ${referralCodeFromSignup}`);
+          }
+        } catch (referralError) {
+          // Don't fail webhook if referral tracking fails
+          console.error('❌ [Clerk Webhook] Error processing referral:', referralError);
+          logger.error('Failed to process referral', {
+            userId: id,
+            referralCode: referralCodeFromSignup,
+            error: referralError instanceof Error ? referralError.message : 'Unknown error',
+          });
+        }
+      }
 
       // Send welcome notification
       console.log('📧 [Clerk Webhook] Sending welcome notification...');
