@@ -185,9 +185,79 @@ model User {
   signatures              UserSignature[]
   signingInitials         String?   // User's preferred initials for document signing
 
+  // Referral program
+  referralCode            String?   @unique // Unique code for sharing (e.g., "X7K9M2")
+  referredByUserId        String?   // ID of user who referred this user
+  referredByUser          User?     @relation("UserReferrals", fields: [referredByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referrals               User[]    @relation("UserReferrals") // Users this person has referred
+  referralsMade           Referral[] @relation("ReferralsMade")
+  referralReceived        Referral?  @relation("ReferralReceived")
+  payoutsReceived         Payout[]   @relation("PayoutsReceived")
+
   // Soft delete fields
   deletedAt               DateTime? // When the user was soft deleted
   deletedBy               String?   // Who/what deleted the user (e.g., "clerk_webhook", admin ID, etc.)
+
+  @@index([referredByUserId])
+}
+
+model Referral {
+  id                   String    @id @default(uuid())
+  referrerId           String    // User who made the referral
+  referredUserId       String    @unique // User who was referred (one referral per user)
+  status               String    @default("pending") // pending | qualified
+  qualifiedAt          DateTime? // When the referred user's first booking completed
+  qualifyingBookingId  String?   @unique // The booking that qualified this referral (one booking = one referral)
+  payoutQuarter        String?   // e.g., "2025-Q1"
+  rewardAmount         Int       @default(5000) // $50.00 in cents
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  // Payout relationship (set when payout is marked as paid)
+  payoutId             String?
+  payout               Payout?   @relation("PayoutReferrals", fields: [payoutId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  referrer             User      @relation("ReferralsMade", fields: [referrerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referredUser         User      @relation("ReferralReceived", fields: [referredUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  qualifyingBooking    Booking?  @relation(fields: [qualifyingBookingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([referrerId])
+  @@index([referredUserId])
+  @@index([status])
+  @@index([payoutQuarter])
+  @@index([payoutId])
+}
+
+model Payout {
+  id               String    @id @default(uuid())
+  userId           String    // User receiving the payout (the referrer)
+  quarter          String    // e.g., "2025-Q1"
+
+  // Payout details
+  amount           Int       // Total amount in cents (sum of qualified referrals for this quarter)
+  referralCount    Int       // Number of referrals included in this payout
+
+  // Status tracking
+  status           String    @default("pending") // pending | paid
+  paidAt           DateTime?
+
+  // Optional: Payment tracking
+  paymentMethod    String?   // "check", "venmo", "paypal", "bank_transfer", etc.
+  paymentReference String?   // Check number, transaction ID, etc.
+  notes            String?   @db.Text
+
+  // Timestamps
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relationships
+  user             User      @relation("PayoutsReceived", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referrals        Referral[] @relation("PayoutReferrals")
+
+  @@unique([userId, quarter]) // One payout per user per quarter
+  @@index([userId])
+  @@index([quarter])
+  @@index([status])
 }
 
 model UserPreferences {
@@ -547,6 +617,7 @@ model Booking {
   reviews             Review[]
   stripeDisputes      StripeDispute[]
   refunds             Refund[]
+  qualifiedReferral   Referral?  // The referral that was qualified by this booking (if any)
 
   @@index([tripId])
 }
