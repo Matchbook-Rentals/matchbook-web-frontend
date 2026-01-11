@@ -1,4 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { setupClerkTestingToken } from '@clerk/testing/playwright';
+import {
+  getReferralCode,
+  findReferralByEmail,
+  deleteTestUser,
+  completeSignup,
+  generateTestEmail,
+} from './helpers/referral';
 
 test.describe('Referral Flow', () => {
   test('visiting /ref/[code] sets cookie and redirects to /hosts', async ({ page, context }) => {
@@ -113,5 +121,102 @@ test.describe('Referral Flow - Authenticated', () => {
     // Verify clipboard contains the referral URL
     // const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
     // expect(clipboardText).toMatch(/matchbookrentals\.com\/ref\/[A-Z0-9]{6}/);
+  });
+});
+
+// Full integration test for signup with referral
+// Requires: TEST_USER_EMAIL env var with a user that has a referral code
+test.describe('Referral Signup Integration', () => {
+  let testUserId: string | null = null;
+  let testEmail: string;
+
+  test.beforeEach(() => {
+    testEmail = generateTestEmail();
+    testUserId = null;
+  });
+
+  test.afterEach(async ({ request }) => {
+    // Cleanup: Delete test user if created
+    if (testUserId) {
+      await deleteTestUser(request, testUserId);
+    }
+  });
+
+  test('signup with referral code creates referral record', async ({ page, request }) => {
+    // Skip if TEST_USER_EMAIL not configured
+    const referrerEmail = process.env.TEST_USER_EMAIL;
+    if (!referrerEmail) {
+      test.skip();
+      return;
+    }
+
+    // Enable Clerk testing mode (bypasses bot detection)
+    await setupClerkTestingToken({ page });
+
+    // 1. Get referrer's code
+    const referrerCode = await getReferralCode(request, referrerEmail);
+    if (!referrerCode) {
+      console.log('TEST_USER does not have a referral code, skipping test');
+      test.skip();
+      return;
+    }
+
+    // 2. Visit referral link to set cookie
+    await page.goto(`/ref/${referrerCode}`);
+    await expect(page).toHaveURL(/.*\/hosts/);
+
+    // Verify cookie was set
+    const cookies = await page.context().cookies();
+    const referralCookie = cookies.find(c => c.name === 'referral_code');
+    expect(referralCookie).toBeTruthy();
+    expect(referralCookie?.value).toBe(referrerCode);
+
+    // 3. Navigate to signup
+    await page.goto('/sign-up');
+
+    // 4. Complete Clerk signup with test email
+    await completeSignup(page, testEmail);
+
+    // 5. Wait for webhook to process
+    await page.waitForTimeout(5000);
+
+    // 6. Verify referral was created via dev API
+    const referral = await findReferralByEmail(request, testEmail);
+
+    expect(referral).toBeTruthy();
+    expect(referral.status).toBe('pending');
+
+    // Save userId for cleanup
+    testUserId = referral.referredHost.id;
+  });
+
+  test('signup without referral code does not create referral', async ({ page, request }) => {
+    // Enable Clerk testing mode (bypasses bot detection)
+    await setupClerkTestingToken({ page });
+
+    // 1. Go directly to signup (no referral link visit)
+    await page.goto('/sign-up');
+
+    // Verify no referral cookie
+    const cookies = await page.context().cookies();
+    const referralCookie = cookies.find(c => c.name === 'referral_code');
+    expect(referralCookie).toBeFalsy();
+
+    // 2. Complete signup
+    await completeSignup(page, testEmail);
+
+    // 3. Wait for webhook
+    await page.waitForTimeout(5000);
+
+    // 4. Verify NO referral was created
+    const referral = await findReferralByEmail(request, testEmail);
+    expect(referral).toBeFalsy();
+
+    // Find and cleanup the user
+    const usersResp = await request.get(`/api/dev/users?search=${encodeURIComponent(testEmail)}`);
+    const usersData = await usersResp.json();
+    if (usersData.users && usersData.users.length > 0) {
+      testUserId = usersData.users[0].id;
+    }
   });
 });

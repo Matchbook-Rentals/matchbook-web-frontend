@@ -11,8 +11,6 @@ import { capNumberValue } from '@/lib/number-validation';
 import { revalidatePath } from "next/cache";
 import { calculateLengthOfStay } from '@/lib/calculate-rent';
 import { normalizeCategory, getCategoryDisplay } from '@/constants/enums';
-import { cookies } from 'next/headers';
-import { processReferralOnFirstListing } from '@/lib/referral';
 
 // Types for deletion checking
 interface BookingDetail {
@@ -1197,10 +1195,6 @@ export const updateListingMoveInData = async (
 
 export const createListingTransaction = async (listingData: any, userId: string) => {
   try {
-    // Check for referral cookie before creating listing
-    const cookieStore = await cookies();
-    const referralCode = cookieStore.get('referral_code')?.value;
-
     // Extract listing images and monthly pricing from the data to handle them separately
     const { listingImages, monthlyPricing, ...listingDataWithoutRelations } = listingData;
 
@@ -1257,26 +1251,6 @@ export const createListingTransaction = async (listingData: any, userId: string)
 
       return listing;
     });
-
-    // Process referral if this was potentially a first listing
-    // This is done after the transaction succeeds to ensure we only credit referrals for successful listings
-    if (referralCode) {
-      try {
-        // At this point the listing count will be 1 if this was their first listing
-        const existingListingCount = await prisma.listing.count({
-          where: { userId },
-        });
-
-        // If they now have exactly 1 listing, this was their first
-        if (existingListingCount === 1) {
-          // Pass skipListingCheck=true since we already verified it's the first listing
-          await processReferralOnFirstListing(userId, referralCode, true);
-        }
-      } catch (referralError) {
-        // Don't fail the listing creation if referral processing fails
-        console.error('[Referral] Error processing referral on listing creation:', referralError);
-      }
-    }
 
     return result;
   } catch (error) {

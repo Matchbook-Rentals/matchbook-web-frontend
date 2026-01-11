@@ -16,7 +16,8 @@ export const ReferHostHero = ({ isSignedIn, referralCode }: ReferHostHeroProps) 
   const handleCopyLink = () => {
     if (!referralCode) return;
 
-    const referralLink = `https://matchbookrentals.com/ref/${referralCode}`;
+    const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://matchbookrentals.com';
+    const referralLink = `${baseUrl}/ref/${referralCode}`;
     navigator.clipboard.writeText(referralLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

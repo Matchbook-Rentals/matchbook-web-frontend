@@ -4,8 +4,6 @@ import prisma from "@/lib/prismadb";
 import { checkAuth } from '@/lib/auth-utils';
 import { capNumberValue } from '@/lib/number-validation';
 import { revalidatePath } from "next/cache";
-import { cookies } from 'next/headers';
-import { processReferralOnFirstListing } from '@/lib/referral';
 
 
 export const getFirstListingInCreation = async (): Promise<{ id: string } | null> => {
@@ -128,11 +126,6 @@ export const createListingFromDraftTransaction = async (
   }
 ) => {
   try {
-    // Check for referral cookie before creating listing
-    // We need to read this before the transaction to process referrals on first listing
-    const cookieStore = await cookies();
-    const referralCode = cookieStore.get('referral_code')?.value;
-
     // First get the draft
     const draft = await getDraftWithImages(draftId, userId);
     
@@ -297,26 +290,6 @@ export const createListingFromDraftTransaction = async (
     revalidatePath('/app/host/dashboard');
     revalidatePath('/app/host/dashboard/overview');
     revalidatePath('/app/host/dashboard/listings');
-
-    // Process referral if this was potentially a first listing
-    // This is done after the transaction succeeds to ensure we only credit referrals for successful listings
-    if (referralCode) {
-      try {
-        // At this point the listing count will be 1 if this was their first listing
-        const existingListingCount = await prisma.listing.count({
-          where: { userId },
-        });
-
-        // If they now have exactly 1 listing, this was their first
-        if (existingListingCount === 1) {
-          // Pass skipListingCheck=true since we already verified it's the first listing
-          await processReferralOnFirstListing(userId, referralCode, true);
-        }
-      } catch (referralError) {
-        // Don't fail the listing creation if referral processing fails
-        console.error('[Referral] Error processing referral on listing creation:', referralError);
-      }
-    }
 
     return result;
   } catch (error) {
