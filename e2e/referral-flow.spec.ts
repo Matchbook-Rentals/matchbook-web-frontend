@@ -6,6 +6,7 @@ import {
   deleteTestUser,
   completeSignup,
   generateTestEmail,
+  qualifyReferralForHost,
 } from './helpers/referral';
 
 test.describe('Referral Flow', () => {
@@ -83,17 +84,32 @@ test.describe('Referral Flow', () => {
   });
 });
 
-// Note: Tests for authenticated user flows (Copy Link button, etc.)
-// would require authentication setup which depends on the test environment
+// Tests for authenticated user flows using TEST_USER credentials
 test.describe('Referral Flow - Authenticated', () => {
-  test.skip('authenticated user sees Copy Link button', async ({ page }) => {
-    // This test is skipped because it requires authentication
-    // To enable: set up Clerk test user credentials in environment
+  test('authenticated user sees Copy Link button', async ({ page }) => {
+    const email = process.env.TEST_USER_EMAIL;
+    const password = process.env.TEST_USER_PASSWORD;
+    if (!email || !password) {
+      test.skip();
+      return;
+    }
 
-    // Login steps would go here
-    // await page.goto('/sign-in');
-    // ... login flow ...
+    // Enable Clerk testing mode
+    await setupClerkTestingToken({ page });
 
+    // Sign in with test user
+    await page.goto('/sign-in');
+    await page.waitForSelector('form', { state: 'visible' });
+    await page.fill('input[name="identifier"]', email);
+    await page.getByRole('button', { name: /continue/i }).click();
+    await page.waitForSelector('input[name="password"]', { state: 'visible' });
+    await page.fill('input[name="password"]', password);
+    await page.getByRole('button', { name: /continue/i }).click();
+
+    // Wait for sign-in to complete
+    await page.waitForURL((url) => !url.pathname.includes('/sign-in'), { timeout: 30000 });
+
+    // Go to refer-host page
     await page.goto('/refer-host');
 
     // Should see the "Copy Link" button instead of "Sign In"
@@ -101,15 +117,33 @@ test.describe('Referral Flow - Authenticated', () => {
     await expect(copyLinkButton).toBeVisible();
   });
 
-  test.skip('Copy Link button copies referral URL to clipboard', async ({ page, context }) => {
-    // This test is skipped because it requires authentication
-    // To enable: set up Clerk test user credentials and grant clipboard permissions
+  test('Copy Link button copies referral URL to clipboard', async ({ page, context }) => {
+    const email = process.env.TEST_USER_EMAIL;
+    const password = process.env.TEST_USER_PASSWORD;
+    if (!email || !password) {
+      test.skip();
+      return;
+    }
 
     // Grant clipboard permissions
-    // await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
-    // Login steps would go here
+    // Enable Clerk testing mode
+    await setupClerkTestingToken({ page });
 
+    // Sign in with test user
+    await page.goto('/sign-in');
+    await page.waitForSelector('form', { state: 'visible' });
+    await page.fill('input[name="identifier"]', email);
+    await page.getByRole('button', { name: /continue/i }).click();
+    await page.waitForSelector('input[name="password"]', { state: 'visible' });
+    await page.fill('input[name="password"]', password);
+    await page.getByRole('button', { name: /continue/i }).click();
+
+    // Wait for sign-in to complete
+    await page.waitForURL((url) => !url.pathname.includes('/sign-in'), { timeout: 30000 });
+
+    // Go to refer-host page
     await page.goto('/refer-host');
 
     const copyLinkButton = page.getByRole('button', { name: /copy link/i });
@@ -119,13 +153,14 @@ test.describe('Referral Flow - Authenticated', () => {
     await expect(page.getByRole('button', { name: /copied/i })).toBeVisible();
 
     // Verify clipboard contains the referral URL
-    // const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
-    // expect(clipboardText).toMatch(/matchbookrentals\.com\/ref\/[A-Z0-9]{6}/);
+    const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboardText).toMatch(/\/ref\/[A-Z0-9]{6}/);
   });
 });
 
 // Full integration test for signup with referral
-// Requires: TEST_USER_EMAIL env var with a user that has a referral code
+// Uses Clerk's test email format (+clerk_test) which can be verified with code 424242
+// See: https://clerk.com/docs/guides/development/testing/test-emails-and-phones
 test.describe('Referral Signup Integration', () => {
   let testUserId: string | null = null;
   let testEmail: string;
@@ -143,6 +178,8 @@ test.describe('Referral Signup Integration', () => {
   });
 
   test('signup with referral code creates referral record', async ({ page, request }) => {
+    test.setTimeout(60000); // 60 second timeout for retries
+
     // Skip if TEST_USER_EMAIL not configured
     const referrerEmail = process.env.TEST_USER_EMAIL;
     if (!referrerEmail) {
@@ -156,7 +193,6 @@ test.describe('Referral Signup Integration', () => {
     // 1. Get referrer's code
     const referrerCode = await getReferralCode(request, referrerEmail);
     if (!referrerCode) {
-      console.log('TEST_USER does not have a referral code, skipping test');
       test.skip();
       return;
     }
@@ -174,20 +210,42 @@ test.describe('Referral Signup Integration', () => {
     // 3. Navigate to signup
     await page.goto('/sign-up');
 
-    // 4. Complete Clerk signup with test email
+    // Wait a bit for client-side hydration and cookie reading
+    await page.waitForTimeout(1000);
+
+    // 4. Complete Clerk signup with test email (uses 424242 verification code)
     await completeSignup(page, testEmail);
 
-    // 5. Wait for webhook to process
-    await page.waitForTimeout(5000);
+    // 5. Navigate to home to trigger ReferralProcessor
+    // The processor needs time to:
+    // - Detect user is signed in
+    // - Wait for Clerk webhook to create user in DB (with retries)
+    // - Make the API call to create the referral
+    await page.goto('/');
 
-    // 6. Verify referral was created via dev API
+    // Wait for retries (up to 5 retries at 2s each = 10s max, plus buffer)
+    await page.waitForTimeout(15000);
+
+    // 6. Verify user was created with referredByUserId set
+    const usersResp = await request.get(`/api/dev/users?search=${encodeURIComponent(testEmail)}`);
+    const usersData = await usersResp.json();
+    expect(usersData.users).toHaveLength(1);
+    const newUser = usersData.users[0];
+
+    // The user should have referredByUserId pointing to the referrer
+    expect(newUser.referredByUserId).toBeTruthy();
+
+    // 7. Verify referral record was created
     const referral = await findReferralByEmail(request, testEmail);
-
     expect(referral).toBeTruthy();
     expect(referral.status).toBe('pending');
 
+    // Verify the referral links correctly
+    expect(referral.referrer.referralCode).toBe(referrerCode);
+    expect(referral.referredHost.email).toBe(testEmail);
+
     // Save userId for cleanup
-    testUserId = referral.referredHost.id;
+    testUserId = newUser.id;
   });
 
   test('signup without referral code does not create referral', async ({ page, request }) => {
@@ -202,7 +260,7 @@ test.describe('Referral Signup Integration', () => {
     const referralCookie = cookies.find(c => c.name === 'referral_code');
     expect(referralCookie).toBeFalsy();
 
-    // 2. Complete signup
+    // 2. Complete signup (uses 424242 verification code)
     await completeSignup(page, testEmail);
 
     // 3. Wait for webhook
@@ -218,5 +276,65 @@ test.describe('Referral Signup Integration', () => {
     if (usersData.users && usersData.users.length > 0) {
       testUserId = usersData.users[0].id;
     }
+  });
+
+  test('referral qualifies when host gets first booking', async ({ page, request }) => {
+    test.setTimeout(90000); // 90 second timeout for full flow
+
+    // Skip if TEST_USER_EMAIL not configured
+    const referrerEmail = process.env.TEST_USER_EMAIL;
+    if (!referrerEmail) {
+      test.skip();
+      return;
+    }
+
+    // Enable Clerk testing mode (bypasses bot detection)
+    await setupClerkTestingToken({ page });
+
+    // 1. Get referrer's code
+    const referrerCode = await getReferralCode(request, referrerEmail);
+    if (!referrerCode) {
+      test.skip();
+      return;
+    }
+
+    // 2. Visit referral link to set cookie
+    await page.goto(`/ref/${referrerCode}`);
+    await expect(page).toHaveURL(/.*\/hosts/);
+
+    // 3. Navigate to signup
+    await page.goto('/sign-up');
+    await page.waitForTimeout(1000);
+
+    // 4. Complete Clerk signup with test email
+    await completeSignup(page, testEmail);
+
+    // 5. Navigate to home to trigger ReferralProcessor
+    await page.goto('/');
+    await page.waitForTimeout(15000);
+
+    // 6. Verify referral was created and is pending
+    const referral = await findReferralByEmail(request, testEmail);
+    expect(referral).toBeTruthy();
+    expect(referral.status).toBe('pending');
+
+    // Get the new user's ID
+    const usersResp = await request.get(`/api/dev/users?search=${encodeURIComponent(testEmail)}`);
+    const usersData = await usersResp.json();
+    expect(usersData.users).toHaveLength(1);
+    const newUser = usersData.users[0];
+    testUserId = newUser.id;
+
+    // 7. Simulate host getting their first booking
+    const qualifyResult = await qualifyReferralForHost(request, newUser.id);
+    expect(qualifyResult.success).toBe(true);
+    expect(qualifyResult.status).toBe('qualified');
+    expect(qualifyResult.bookingId).toBeTruthy();
+
+    // 8. Verify referral is now qualified
+    const updatedReferral = await findReferralByEmail(request, testEmail);
+    expect(updatedReferral).toBeTruthy();
+    expect(updatedReferral.status).toBe('qualified');
+    expect(updatedReferral.qualifyingBookingId).toBe(qualifyResult.bookingId);
   });
 });
