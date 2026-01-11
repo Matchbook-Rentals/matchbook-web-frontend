@@ -36,12 +36,12 @@ interface Tab {
 const TripsPage: React.FC = () => {
   const { state } = useTripContext();
   const searchParams = useSearchParams();
-  const initialTab = searchParams.get('tab') || 'recommended';
+  const initialTab = searchParams.get('tab') || 'allListings';
   const [activeTab, setActiveTab] = useState(initialTab); // State to track active tab
 
   // Effect to update activeTab when URL search parameter changes
   useEffect(() => {
-    const currentTab = searchParams.get('tab') || 'recommended';
+    const currentTab = searchParams.get('tab') || 'allListings';
     if (currentTab !== activeTab) {
       setActiveTab(currentTab);
     }
