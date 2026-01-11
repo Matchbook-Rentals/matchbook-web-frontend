@@ -53,7 +53,7 @@ export default function GuestSearchClient({
   // Effect to update activeTab when URL search parameter changes
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const currentTab = params.get('tab') || 'recommended';
+    const currentTab = params.get('tab') || 'allListings';
     if (currentTab !== activeTab) {
       setActiveTab(currentTab);
     }

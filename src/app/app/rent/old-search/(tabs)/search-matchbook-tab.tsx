@@ -117,7 +117,7 @@ export function SearchMatchbookTab() {
   return (
     <>
       {matchedListings.length > 0 && (
-        <div className="grid justify-center space-4 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mx-auto">
+        <div className="flex flex-wrap gap-4 pb-12">
           {matchedListings.map((listing) => (
             <SearchListingCard
               key={listing.id}

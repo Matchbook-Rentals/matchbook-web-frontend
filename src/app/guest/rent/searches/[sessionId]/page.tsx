@@ -88,7 +88,7 @@ export default async function GuestSearchPage({
         sessionId={sessionId}
         sessionData={sessionData}
         listings={listings}
-        initialTab={searchParams.tab || 'recommended'}
+        initialTab={searchParams.tab || 'allListings'}
       />
     );
   } catch (error) {
@@ -99,7 +99,7 @@ export default async function GuestSearchPage({
         sessionId={sessionId}
         sessionData={sessionData}
         listings={[]}
-        initialTab={searchParams.tab || 'recommended'}
+        initialTab={searchParams.tab || 'allListings'}
       />
     );
   }
