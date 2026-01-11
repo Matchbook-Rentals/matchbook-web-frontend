@@ -4,54 +4,57 @@ import styles from './brandCheckbox.module.css';
 export interface BrandCheckboxProps {
   /** If `true`, React will focus the element on mount. */
   autoFocus?: boolean;
-  
+
   /** Controls whether the input is selected. When you pass this prop, you must also pass an `onChange` handler that updates the passed value. */
   checked?: boolean;
-  
+
   /** Specifies the initial value that a user can change. */
   defaultChecked?: boolean;
-  
+
   /** Descriptive text that will be rendered adjacent to the control's label. */
   description?: string;
-  
+
   /** Sets whether or not the element should be disabled. Prevents selection. */
   disabled?: boolean;
-  
+
   /** Error text that will be rendered below the control. */
   error?: string;
-  
+
   /** Specifies the `id` of the `<form>` this input belongs to. If omitted, it's the closest parent form. */
   form?: string;
-  
+
   /** Visually hides the specified elements. The hidden elements will still be present and visible to screen readers. */
   hiddenElements?: ('label' | 'description' | 'error')[];
-  
+
   /** Sets whether the `Checkbox` should be rendered as indeterminate ("partially checked") or not. */
   indeterminate?: boolean;
-  
+
   /** Sets whether or not the element is in an invalid state. This is a display-only prop, and will not prevent form submission. */
   invalid?: boolean;
-  
+
   /** Text that describes the control. Will be both visible and clickable. */
   label?: React.ReactNode;
-  
+
   /** Specifies the name for this input that's submitted with the form. */
   name?: string;
-  
+
   /** Required for controlled inputs. Fires immediately when the input's value is changed by the user. */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  
+
   /** If `true`, the input is not editable by the user. */
   readOnly?: boolean;
-  
+
   /** If `true`, the value must be provided for the form to submit. */
   required?: boolean;
-  
+
   /** Overrides the default tab key behavior. Avoid using values other than `-1` and `0`. */
   tabIndex?: number;
-  
+
   /** Controls the input's text. When you pass this prop, you must also pass an `onChange` handler that updates the passed value. */
   value?: string;
+
+  /** Test ID for e2e testing. */
+  'data-testid'?: string;
 }
 
 export const BrandCheckbox: React.FC<BrandCheckboxProps> = ({
@@ -72,6 +75,7 @@ export const BrandCheckbox: React.FC<BrandCheckboxProps> = ({
   required,
   tabIndex,
   value,
+  'data-testid': dataTestId,
 }) => {
   const checkboxRef = React.useRef<HTMLInputElement>(null);
   
@@ -113,6 +117,7 @@ export const BrandCheckbox: React.FC<BrandCheckboxProps> = ({
               .filter(Boolean)
               .join(' ') || undefined
           }
+          data-testid={dataTestId}
         />
         {label && showLabel && (
           <label className={styles['brand-checkbox-label']} htmlFor={name}>

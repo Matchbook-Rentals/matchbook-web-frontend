@@ -28,6 +28,7 @@ export const VerificationFooter = ({
             variant={secondaryButton.variant || "outline"}
             size="lg"
             onClick={secondaryButton.onClick}
+            data-testid="verification-secondary-button"
           >
             {secondaryButton.label}
           </BrandButton>
@@ -41,6 +42,7 @@ export const VerificationFooter = ({
             size="lg"
             onClick={primaryButton.onClick}
             disabled={primaryButton.disabled}
+            data-testid="verification-primary-button"
           >
             {primaryButton.loading ? "Processing..." : primaryButton.label}
           </BrandButton>

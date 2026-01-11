@@ -230,15 +230,16 @@ export const VerificationFlow = ({
   };
 
   return (
-    <div className="flex flex-col w-full items-start justify-center relative overflow-hidden">
+    <div className="flex flex-col w-full items-start justify-center relative overflow-hidden" data-testid="verification-flow">
       <Form {...form}>
         <div
           className={`w-full transition-all duration-300 ease-in-out ${
             isTransitioning ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'
           }`}
+          data-testid={`verification-step-${currentStep}`}
         >
           {currentStep === "personal-info" && (
-            <div className="flex flex-col w-full items-start justify-center relative gap-4 p-2 pb-24">
+            <div className="flex flex-col w-full items-start justify-center relative gap-4 p-2 pb-24" data-testid="personal-info-step">
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
@@ -407,7 +408,7 @@ export const VerificationFlow = ({
 
       {/* Test Client Selector Modal (Dev Only) */}
       <Dialog open={showTestClientModal} onOpenChange={setShowTestClientModal}>
-        <DialogContent className="sm:max-w-md max-h-[80vh] overflow-y-auto" xOnRight>
+        <DialogContent className="sm:max-w-md max-h-[80vh] overflow-y-auto" xOnRight data-testid="test-client-modal">
           <DialogHeader>
             <DialogTitle>Select Test Client</DialogTitle>
             <DialogDescription>
@@ -424,6 +425,7 @@ export const VerificationFlow = ({
                   key={client.ssn}
                   onClick={() => selectTestClient(client)}
                   className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors text-left"
+                  data-testid={`test-client-${client.ssn}`}
                 >
                   <div>
                     <div className="font-medium text-gray-900">
@@ -450,6 +452,7 @@ export const VerificationFlow = ({
                   key={`accio-${client.ssn}`}
                   onClick={() => selectTestClient(client)}
                   className="flex items-center justify-between p-3 rounded-lg border border-orange-200 hover:border-orange-500 hover:bg-orange-50 transition-colors text-left"
+                  data-testid={`test-client-accio-${client.ssn}`}
                 >
                   <div>
                     <div className="font-medium text-gray-900">

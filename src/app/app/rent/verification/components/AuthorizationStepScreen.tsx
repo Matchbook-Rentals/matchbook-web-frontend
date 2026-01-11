@@ -101,6 +101,7 @@ export const AuthorizationStepScreen = ({
                         {checkboxLabel}
                       </span>
                     }
+                    data-testid={`${checkboxName}-checkbox`}
                   />
                 </FormControl>
                 <FormMessage />

@@ -543,7 +543,7 @@ export const ProcessingScreen = ({
   const isStepError = (step: ProcessingStep) => error && (step === currentStep);
 
   return (
-    <div className="flex flex-col w-full items-start justify-center gap-4 p-2 md:p-4 pb-24">
+    <div className="flex flex-col w-full items-start justify-center gap-4 p-2 md:p-4 pb-24" data-testid={`processing-screen-${currentStep}`}>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

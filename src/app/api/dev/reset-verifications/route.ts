@@ -1,17 +1,22 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import prisma from '@/lib/prismadb';
 
-// DEV ONLY - Delete all verifications for tyler.bennett52@gmail.com
+// DEV ONLY - Delete all verifications for the current authenticated user
 export async function POST() {
   if (process.env.NODE_ENV === 'production') {
     return NextResponse.json({ error: 'Not available in production' }, { status: 403 });
   }
 
-  const email = 'tyler.bennett52@gmail.com';
+  const { userId } = auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+  }
 
   try {
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -46,6 +51,19 @@ export async function POST() {
       where: { userId: user.id },
     });
 
+    // Delete verification-related purchases
+    const deletedPurchases = await prisma.purchase.deleteMany({
+      where: {
+        userId: user.id,
+        type: 'matchbookVerification',
+      },
+    });
+
+    // Delete credit reports
+    const deletedCreditReports = await prisma.creditReport.deleteMany({
+      where: { userId: user.id },
+    });
+
     return NextResponse.json({
       success: true,
       deleted: {
@@ -53,6 +71,8 @@ export async function POST() {
         evictionRecords: deletedEvictions.count,
         criminalRecords: deletedCriminals.count,
         bgsReports: deletedBgsReports.count,
+        purchases: deletedPurchases.count,
+        creditReports: deletedCreditReports.count,
       },
     });
   } catch (error) {
@@ -67,7 +87,7 @@ export async function GET() {
   }
 
   return NextResponse.json({
-    message: 'POST to this endpoint to delete all verifications for tyler.bennett52@gmail.com',
-    warning: 'DEV ONLY',
+    message: 'POST to this endpoint to delete all verifications for the currently authenticated user',
+    warning: 'DEV ONLY - Used for e2e testing',
   });
 }
