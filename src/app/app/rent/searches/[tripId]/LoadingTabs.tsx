@@ -3,7 +3,8 @@
 import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
 import { SearchTabSelector } from '@/components/ui/search-tab-selector';
-import LoadingSkeleton from './LoadingSkeleton'; // Import the LoadingSkeleton component
+import LoadingSkeleton from './LoadingSkeleton';
+import MapTabLoadingSkeleton from './MapTabLoadingSkeleton';
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import { useWindowSize } from '@/hooks/useWindowSize';
@@ -73,7 +74,7 @@ const LoadingTabs: React.FC = () => {
     {
       label: 'All Listings',
       value: 'allListings',
-      content: <LoadingSkeleton />,
+      content: <MapTabLoadingSkeleton />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
       Icon: ALlListingsIcon
@@ -119,7 +120,7 @@ const LoadingTabs: React.FC = () => {
     {
       label: 'All Listings',
       value: 'allListings',
-      content: <LoadingSkeleton />,
+      content: <MapTabLoadingSkeleton />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
       Icon: <ALlListingsIcon className='mt-1' />,
@@ -151,11 +152,11 @@ const LoadingTabs: React.FC = () => {
       {/* Desktop TabSelector - Hidden on small screens, visible on md and up */}
       <div className="hidden md:block w-full">
         <SearchTabSelector
-          defaultValue='recommended'
+          defaultValue='allListings'
           className='mx-0'
         />
         <div className="w-full mt-4">
-          <LoadingSkeleton />
+          <MapTabLoadingSkeleton />
         </div>
       </div>
 
@@ -163,7 +164,7 @@ const LoadingTabs: React.FC = () => {
       <div className="md:hidden w-full">
         <MobileTabSelector
           tabs={mobileTabs}
-          defaultTab='recommended'
+          defaultTab='allListings'
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto pb-0'
         />
