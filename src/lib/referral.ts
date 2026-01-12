@@ -68,7 +68,7 @@ export async function getOrCreateReferralCode(userId: string): Promise<string> {
       const updated = await prisma.user.update({
         where: {
           id: userId,
-          referralCode: null, // Only update if no code exists yet
+          referralCode: { equals: null }, // Only update if no code exists yet
         },
         data: { referralCode: code },
         select: { referralCode: true },
