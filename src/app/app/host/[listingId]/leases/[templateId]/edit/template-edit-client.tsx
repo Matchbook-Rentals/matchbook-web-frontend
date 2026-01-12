@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PDFEditor } from "@/components/pdf-editor/PDFEditor";
 import { toast } from "@/components/ui/use-toast";
+import { Dialog, DialogContent } from "@/components/brandDialog";
 import { BrandAlertProvider } from "@/hooks/useBrandAlert";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -41,6 +42,8 @@ export default function TemplateEditClient({
   const router = useRouter();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -76,6 +79,9 @@ export default function TemplateEditClient({
   }, [pdfBase64, template.pdfFileName, template.updatedAt]);
 
   const handleTemplateUpdated = async (templateData: any) => {
+    setShowUploadModal(true);
+    setUploadSuccess(false);
+
     try {
       const response = await fetch(`/api/pdf-templates/${template.id}`, {
         method: 'PUT',
@@ -92,16 +98,17 @@ export default function TemplateEditClient({
       });
 
       if (response.ok) {
-        toast({
-          title: "Template updated",
-          description: `"${templateData.name || template.title}" has been successfully updated.`,
-        });
-        
-        router.push(`/app/host/${listingId}/leases`);
+        setUploadSuccess(true);
+
+        setTimeout(() => {
+          router.push(`/app/host/${listingId}/leases`);
+        }, 1000);
       } else {
         const error = await response.json();
         console.error('Failed to update template:', error);
-        
+
+        setShowUploadModal(false);
+
         toast({
           title: "Update failed",
           description: error.error || "Failed to update template. Please try again.",
@@ -110,7 +117,9 @@ export default function TemplateEditClient({
       }
     } catch (error) {
       console.error('Error updating template:', error);
-      
+
+      setShowUploadModal(false);
+
       toast({
         title: "Error",
         description: "Error updating template. Please check your connection and try again.",
@@ -154,6 +163,27 @@ export default function TemplateEditClient({
 
   return (
     <BrandAlertProvider>
+      <Dialog open={showUploadModal} onOpenChange={() => {}}>
+        <DialogContent
+          className="!z-[9999] max-w-md !top-[30vh]"
+          showCloseButton={false}
+        >
+          <div className="p-6 text-center">
+            {!uploadSuccess ? (
+              <>
+                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#3c8787] mx-auto mb-6"></div>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2">Saving Template</h2>
+                <p className="text-gray-600">Please wait while we save your changes...</p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2">Changes Saved!</h2>
+                <p className="text-gray-600">Taking you back to your leases page...</p>
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
       <PDFEditor
         initialPdfFile={pdfFile}
         initialWorkflowState="template"
