@@ -8,6 +8,7 @@ interface MobilePDFWrapperProps {
   children: React.ReactNode;
   isMobile: boolean;
   onZoomChange?: (zoomLevel: number) => void;
+  isPlacementMode?: boolean; // When true, disables pinch-zoom for field placement
 }
 
 const getMobileZoomPreference = (): number => {
@@ -29,7 +30,8 @@ const clampZoomLevel = (zoom: number): number => {
 export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
   children,
   isMobile,
-  onZoomChange
+  onZoomChange,
+  isPlacementMode = false
 }) => {
   const [zoomLevel, setZoomLevel] = useState(() => {
     // Start with fit-to-width by default on mobile
@@ -79,6 +81,9 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // Disable pinch-zoom during field placement mode
+    if (isPlacementMode) return;
+
     if (e.touches.length === 2) {
       const distance = getTouchDistance(e.touches);
       touchRef.current = {
@@ -157,7 +162,8 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
         onTouchEnd={handleTouchEnd}
         style={{
           WebkitOverflowScrolling: 'touch',
-          touchAction: isPinching ? 'none' : 'pan-x pan-y'
+          // During placement mode, use 'manipulation' to allow taps but prevent pinch-zoom
+          touchAction: isPlacementMode ? 'manipulation' : (isPinching ? 'none' : 'pan-x pan-y')
         }}
       >
         {/* PDF Content with Transform */}

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Upload, FileText, X } from "lucide-react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +29,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
     existingTemplate?.type || "lease"
   );
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const isMobile = useIsMobile();
 
   clientLogger.info('TemplateCreationStep - Component initialized', {
     hasExistingTemplate: !!existingTemplate,
@@ -243,7 +245,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
 
     return (
       <div className="space-y-6">
-        <PDFEditor 
+        <PDFEditor
           initialPdfFile={uploadedFile || undefined}
           initialWorkflowState="template"
           templateType={templateType as 'lease' | 'addendum'}
@@ -253,6 +255,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
           hostEmail={hostEmail}
           listingAddress={listingAddress}
           listingId={listingId}
+          isMobile={isMobile}
           onCancel={existingTemplate ? onCancel : () => setStep("upload")}
           onSave={(templateData) => {
             // Combine the metadata from step 1 with the field data from editor

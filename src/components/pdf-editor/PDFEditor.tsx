@@ -14,6 +14,7 @@ import { FieldItem } from './FieldItem';
 import { FieldSelector } from './FieldSelector';
 import { SignableField } from './SignableField';
 import { RecipientManager, type Recipient } from './RecipientManager';
+import { getRecipientColor } from './recipient-colors';
 import { TemplateBrowser } from './TemplateBrowser';
 import { DocumentTemplateSelector } from './DocumentTemplateSelector';
 import { DocumentSelector } from './DocumentSelector';
@@ -28,6 +29,7 @@ import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES
 import { TemplateSidebar } from './sidebars/TemplateSidebar';
 import { DocumentSidebar } from './sidebars/DocumentSidebar';
 import { SigningSidebar } from './sidebars/SigningSidebar';
+import { MobileFieldFAB, MobileFieldDrawer, MobilePlacementToast } from './mobile';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
@@ -337,6 +339,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Template browser state
   const [showTemplateBrowser, setShowTemplateBrowser] = useState(false);
+
+  // Mobile field drawer state
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Document selector state
   const [showDocumentSelector, setShowDocumentSelector] = useState(false);
@@ -1045,6 +1050,30 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   };
 
+  // Helper to get ordinal name for new recipients
+  const getOrdinalName = (index: number): string => {
+    if (index === 0) return 'Host';
+    if (index === 1) return 'Primary Renter';
+    const v = index;
+    const suffix = ['th', 'st', 'nd', 'rd'];
+    const ordinalNum = v - 1; // Convert to 1-indexed for display
+    return ordinalNum + (suffix[(v - 20) % 10] || suffix[v] || suffix[0]) + ' Renter';
+  };
+
+  // Handle adding a new recipient (for mobile UI)
+  const handleAddRecipient = () => {
+    const newIndex = recipients.length;
+    const newRecipient: Recipient = {
+      id: `recipient-${Date.now()}`,
+      name: getOrdinalName(newIndex),
+      email: `renter-${newIndex}@template.placeholder`,
+      color: getRecipientColor(newIndex),
+      role: 'RENTER'
+    };
+    setRecipients([...recipients, newRecipient]);
+    setSelectedRecipient(newRecipient.id);
+  };
+
   // Remove recipient
   const removeRecipient = (id: string) => {
     const recipientIndex = recipients.findIndex(r => r.id === id);
@@ -1709,6 +1738,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     setInteractionMode('click-to-place');
   };
 
+  // Mobile touch-friendly field placement (no MouseEvent required)
+  const startMobileFieldPlacement = (fieldType: FieldType, label?: string) => {
+    if (!selectedRecipient) return;
+    setSelectedField(fieldType);
+    if (label) setPendingFieldLabel(label);
+    setIsDragging(true);
+    setInteractionMode('click-to-place');
+    setIsMobileDrawerOpen(false);
+  };
+
   // Cancel field placement
   const cancelFieldPlacement = () => {
     setSelectedField(null);
@@ -1897,8 +1936,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
       {/* Main content area with sidebar and editor */}
       <div ref={pdfEditorContainerRef} className={`flex flex-1 min-h-0 ${isMobile ? 'flex-col' : 'flex-row'}`}>
-        {/* Sidebar - responsive layout - conditionally rendered */}
-        {!hideDefaultSidebar && (
+        {/* Sidebar - responsive layout - conditionally rendered (hidden on mobile in template/document phases) */}
+        {!hideDefaultSidebar && !(isMobile && (workflow.isTemplatePhase() || workflow.isDocumentPhase())) && (
           <div className={`${
             isMobile
               ? 'w-full bg-[#e7f0f0] border-b border-gray-200 overflow-y-visible'
@@ -1933,7 +1972,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             )}
 
             {isMobile ? (
-              <MobilePDFWrapper isMobile={isMobile}>
+              <MobilePDFWrapper
+                isMobile={isMobile}
+                isPlacementMode={!!selectedField && interactionMode === 'click-to-place'}
+              >
                 <PDFViewer
                   file={pdfFile}
                   onPageClick={handlePageClick}
@@ -2307,6 +2349,41 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             )}
           </div>
         </div>
+      )}
+
+      {/* Mobile FAB and Drawer for field selection */}
+      {isMobile && (workflow.isTemplatePhase() || workflow.isDocumentPhase()) && (
+        <>
+          <MobileFieldFAB
+            onClick={() => {
+              if (selectedField && interactionMode === 'click-to-place') {
+                cancelFieldPlacement();
+              } else {
+                setIsMobileDrawerOpen(true);
+              }
+            }}
+            isPlacingField={!!selectedField && interactionMode === 'click-to-place'}
+            showFooter={showFooter}
+          />
+
+          <MobileFieldDrawer
+            isOpen={isMobileDrawerOpen}
+            onClose={() => setIsMobileDrawerOpen(false)}
+            recipients={recipients}
+            selectedRecipient={selectedRecipient}
+            onRecipientChange={setSelectedRecipient}
+            onFieldSelect={startMobileFieldPlacement}
+            onAddRecipient={handleAddRecipient}
+          />
+
+          {selectedField && interactionMode === 'click-to-place' && (
+            <MobilePlacementToast
+              fieldType={selectedField}
+              recipientName={recipients.find((r) => r.id === selectedRecipient)?.title || recipients.find((r) => r.id === selectedRecipient)?.name || 'Unknown'}
+              onCancel={cancelFieldPlacement}
+            />
+          )}
+        </>
       )}
 
       {/* Template Browser Modal */}

@@ -177,18 +177,18 @@ export function LeasesPageClient({ listingId }: LeasesPageClientProps) {
 
   if (loading) {
     return (
-      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9]">
-        <header className="flex items-end gap-6 w-full">
+      <main className="flex flex-col items-start gap-6 px-4 md:px-6 py-6 md:py-8 bg-[#f9f9f9]">
+        <header className="flex flex-row items-start md:items-end justify-between gap-4 md:gap-6 w-full">
           <div className="flex flex-col items-start gap-2 flex-1">
-            <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
+            <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-xl md:text-2xl tracking-[0] leading-tight md:leading-[28.8px]">
               Lease and Addendums
             </h1>
-            <p className="font-normal text-[#777b8b] text-base leading-6 [font-family:'Poppins',Helvetica] tracking-[0]">
+            <p className="font-normal text-[#777b8b] text-sm md:text-base leading-5 md:leading-6 [font-family:'Poppins',Helvetica] tracking-[0]">
               Renters will be required to sign these documents at booking
             </p>
           </div>
           <Button
-            className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto"
+            className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto shrink-0"
             onClick={() => router.push(`/app/host/${listingId}/leases/create`)}
           >
             Add Lease or Addendum
@@ -206,18 +206,18 @@ export function LeasesPageClient({ listingId }: LeasesPageClientProps) {
 
   if (error) {
     return (
-      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9]">
-        <header className="flex items-end gap-6 w-full">
+      <main className="flex flex-col items-start gap-6 px-4 md:px-6 py-6 md:py-8 bg-[#f9f9f9]">
+        <header className="flex flex-row items-start md:items-end justify-between gap-4 md:gap-6 w-full">
           <div className="flex flex-col items-start gap-2 flex-1">
-            <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
+            <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-xl md:text-2xl tracking-[0] leading-tight md:leading-[28.8px]">
               Lease and Addendums
             </h1>
-            <p className="font-normal text-[#777b8b] text-base leading-6 [font-family:'Poppins',Helvetica] tracking-[0]">
+            <p className="font-normal text-[#777b8b] text-sm md:text-base leading-5 md:leading-6 [font-family:'Poppins',Helvetica] tracking-[0]">
               Renters will be required to sign these documents at booking
             </p>
           </div>
           <Button
-            className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto"
+            className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto shrink-0"
             onClick={() => router.push(`/app/host/${listingId}/leases/create`)}
           >
             Add Lease or Addendum
@@ -240,18 +240,18 @@ export function LeasesPageClient({ listingId }: LeasesPageClientProps) {
   }
 
   return (
-    <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9]">
-      <header className="flex items-end gap-6 w-full">
+    <main className="flex flex-col items-start gap-6 px-4 md:px-6 py-6 md:py-8 bg-[#f9f9f9]">
+      <header className="flex flex-row items-start md:items-end justify-between gap-4 md:gap-6 w-full">
         <div className="flex flex-col items-start gap-2 flex-1">
-          <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
+          <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-xl md:text-2xl tracking-[0] leading-tight md:leading-[28.8px]">
             Lease and Addendums
           </h1>
-          <p className="font-normal text-[#777b8b] text-base leading-6 [font-family:'Poppins',Helvetica] tracking-[0]">
+          <p className="font-normal text-[#777b8b] text-sm md:text-base leading-5 md:leading-6 [font-family:'Poppins',Helvetica] tracking-[0]">
             Renters will be required to sign these documents at booking
           </p>
         </div>
         <Button
-          className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto"
+          className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto shrink-0"
           onClick={() => router.push(`/app/host/${listingId}/leases/create`)}
         >
           Add Lease or Addendum
@@ -280,8 +280,9 @@ export function LeasesPageClient({ listingId }: LeasesPageClientProps) {
                 key={template.id}
                 className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029] border-0"
               >
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-2 w-full">
+                <CardContent className="p-4 md:p-6">
+                  {/* Desktop Layout */}
+                  <div className="hidden md:flex items-start gap-2 w-full">
                     <div className="flex items-start gap-6 flex-1">
                       <div className="flex flex-col items-start gap-2.5 flex-1">
                         <div className="flex flex-col items-start justify-center gap-2 w-full">
@@ -338,6 +339,66 @@ export function LeasesPageClient({ listingId }: LeasesPageClientProps) {
                           <Trash2Icon className="w-5 h-5 text-red-500" />
                         </Button>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Mobile Layout */}
+                  <div className="flex md:hidden flex-col gap-3 w-full">
+                    {/* Row 1: Title and Date */}
+                    <div className="flex flex-col gap-1">
+                      <h2 className="font-medium text-[#484a54] text-base leading-tight">
+                        {template.title}
+                      </h2>
+                      <p className="text-[#777b8b] text-sm">
+                        {formatLastUpdated(template.updatedAt)}
+                      </p>
+                    </div>
+
+                    {/* Row 2: Badges */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge
+                        className={`${badgeColor} rounded-full border-solid font-medium text-sm text-center leading-5 whitespace-nowrap [font-family:'Poppins',Helvetica] tracking-[0]`}
+                      >
+                        {type}
+                      </Badge>
+                      <Badge
+                        className={`${statusColor} rounded-full border-solid font-medium text-sm text-center leading-5 whitespace-nowrap [font-family:'Poppins',Helvetica] tracking-[0]`}
+                      >
+                        {status}
+                      </Badge>
+                    </div>
+
+                    {/* Row 3: Buttons */}
+                    <div className="flex items-center gap-2 pt-1">
+                      <Button
+                        variant="default"
+                        className="bg-[#3c8787] hover:bg-[#2d6666] text-white h-auto flex-1"
+                        onClick={() => router.push(`/app/host/${listingId}/leases/${template.id}/edit`)}
+                      >
+                        {buttonText}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="p-2.5 rounded-lg border-[#3c8787] h-auto shrink-0"
+                        onClick={() => {
+                          if (template.pdfFileUrl) {
+                            window.open(template.pdfFileUrl, '_blank');
+                          }
+                        }}
+                        title="Download PDF"
+                      >
+                        <DownloadIcon className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="p-2.5 rounded-lg border-red-500 hover:bg-red-50 h-auto shrink-0"
+                        onClick={() => openDeleteDialog(template)}
+                        title="Delete template"
+                      >
+                        <Trash2Icon className="w-5 h-5 text-red-500" />
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
