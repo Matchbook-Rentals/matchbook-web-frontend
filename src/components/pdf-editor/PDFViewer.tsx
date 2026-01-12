@@ -29,6 +29,7 @@ interface PDFViewerProps {
   children?: React.ReactNode;
   pageWidth?: number;
   isFieldPlacementMode?: boolean;
+  isMobile?: boolean; // Use touch events on mobile, mouse on desktop
 }
 
 export interface PageClickEvent {
@@ -39,12 +40,13 @@ export interface PageClickEvent {
   pageHeight: number;
 }
 
-export const PDFViewer: React.FC<PDFViewerProps> = ({ 
-  file, 
-  onPageClick, 
-  children, 
+export const PDFViewer: React.FC<PDFViewerProps> = ({
+  file,
+  onPageClick,
+  children,
   pageWidth = 800,
-  isFieldPlacementMode = false
+  isFieldPlacementMode = false,
+  isMobile = false
 }) => {
   const [numPages, setNumPages] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -151,29 +153,29 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                   "absolute inset-0 z-10",
                   isFieldPlacementMode ? "cursor-crosshair" : "cursor-default"
                 )}
-                onMouseDown={(e) => {
-                  // Skip if clicking on a field - let field handle it
-                  const target = e.target as Element;
-                  if (target.closest('[data-field-id]')) return;
-                  onDocumentPageClick(e, index + 1);
-                }}
-                onTouchEnd={(e) => {
-                  // Skip if tapping on a field - let field handle it
-                  const target = e.target as Element;
-                  if (target.closest('[data-field-id]')) return;
-
-                  // Handle touch for mobile - convert touch to mouse event format
-                  const touch = e.changedTouches[0];
-                  if (touch) {
-                    const pageElement = (e.target as Element)?.closest(PDF_VIEWER_PAGE_SELECTOR) as HTMLElement;
-                    const syntheticEvent = {
-                      clientX: touch.clientX,
-                      clientY: touch.clientY,
-                      target: pageElement || e.target,
-                    } as unknown as React.MouseEvent<HTMLDivElement, MouseEvent>;
-                    onDocumentPageClick(syntheticEvent, index + 1);
-                  }
-                }}
+                {...(isMobile
+                  ? {
+                      // Mobile: use touch events only
+                      onTouchEnd: (e: React.TouchEvent) => {
+                        const touch = e.changedTouches[0];
+                        if (touch) {
+                          const pageElement = (e.target as Element)?.closest(PDF_VIEWER_PAGE_SELECTOR) as HTMLElement;
+                          const syntheticEvent = {
+                            clientX: touch.clientX,
+                            clientY: touch.clientY,
+                            target: pageElement || e.target,
+                          } as unknown as React.MouseEvent<HTMLDivElement, MouseEvent>;
+                          onDocumentPageClick(syntheticEvent, index + 1);
+                        }
+                      }
+                    }
+                  : {
+                      // Desktop: use mouse events only
+                      onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
+                        onDocumentPageClick(e, index + 1);
+                      }
+                    }
+                )}
                 style={{ pointerEvents: 'auto' }}
               />
               {/* Render fields for this page */}

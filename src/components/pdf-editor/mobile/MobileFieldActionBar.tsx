@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Trash2, Calendar } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { FieldFormType, FieldType } from '../types';
 
 interface MobileFieldActionBarProps {
@@ -9,6 +10,7 @@ interface MobileFieldActionBarProps {
   onDelete: () => void;
   onAddSignDate?: () => void;
   onAddInitialDate?: () => void;
+  showFooter?: boolean;
 }
 
 export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
@@ -16,6 +18,7 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
   onDelete,
   onAddSignDate,
   onAddInitialDate,
+  showFooter = true,
 }) => {
   if (!activeField) return null;
 
@@ -31,40 +34,51 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
     }
   };
 
-  return (
-    <div
-      className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg"
-      style={{
-        paddingBottom: 'env(safe-area-inset-bottom)',
-      }}
-    >
-      <div className="flex items-center justify-center gap-8 px-4 py-3">
-        {/* Delete button */}
-        <button
-          onClick={onDelete}
-          className="flex flex-col items-center gap-1 px-4 py-2 rounded-lg active:bg-gray-100 transition-colors"
-        >
-          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-100">
-            <Trash2 className="w-6 h-6 text-red-600" />
-          </div>
-          <span className="text-xs text-gray-600">Delete</span>
-        </button>
+  const baseBottom = showFooter
+    ? 'calc(80px + 16px + env(safe-area-inset-bottom))'
+    : 'calc(16px + env(safe-area-inset-bottom))';
 
-        {/* Add date button - only for signature/initials fields */}
-        {showCalendarButton && (
-          <button
-            onClick={handleCalendarClick}
-            className="flex flex-col items-center gap-1 px-4 py-2 rounded-lg active:bg-gray-100 transition-colors"
-          >
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100">
-              <Calendar className="w-6 h-6 text-blue-600" />
-            </div>
-            <span className="text-xs text-gray-600">
-              {activeField.type === FieldType.SIGNATURE ? 'Sign Date' : 'Date'}
-            </span>
-          </button>
+  return (
+    <>
+      {/* Delete button - left side */}
+      <button
+        onClick={onDelete}
+        aria-label="Delete field"
+        className={cn(
+          'fixed z-50 flex items-center justify-center',
+          'w-14 h-14 rounded-full shadow-lg',
+          'transition-all duration-200 ease-in-out',
+          'active:scale-95',
+          'bg-red-500 hover:bg-red-600',
         )}
-      </div>
-    </div>
+        style={{
+          left: '16px',
+          bottom: baseBottom,
+        }}
+      >
+        <Trash2 className="w-6 h-6 text-white" />
+      </button>
+
+      {/* Add date button - next to FAB (left of it) */}
+      {showCalendarButton && (
+        <button
+          onClick={handleCalendarClick}
+          aria-label={activeField.type === FieldType.SIGNATURE ? 'Add sign date' : 'Add date'}
+          className={cn(
+            'fixed z-50 flex items-center justify-center',
+            'w-14 h-14 rounded-full shadow-lg',
+            'transition-all duration-200 ease-in-out',
+            'active:scale-95',
+            'bg-blue-500 hover:bg-blue-600',
+          )}
+          style={{
+            right: 'calc(16px + 56px + 12px)', // FAB width + gap
+            bottom: baseBottom,
+          }}
+        >
+          <Calendar className="w-6 h-6 text-white" />
+        </button>
+      )}
+    </>
   );
 };

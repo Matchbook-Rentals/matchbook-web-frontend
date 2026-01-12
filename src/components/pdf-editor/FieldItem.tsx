@@ -17,19 +17,20 @@ interface FieldItemProps {
   onRemove?: (fieldId: string) => void;
   onAddSignDate?: (fieldId: string) => void;
   onAddInitialDate?: (fieldId: string) => void;
-  onFieldClick?: (field: FieldFormType) => void; // Add field click handler
+  onFieldClick?: (field: FieldFormType) => void;
   active?: boolean;
   pageElement?: HTMLElement;
-  signedValue?: any; // Add support for showing values
-  showValues?: boolean; // Add flag to show values vs labels
-  canRemove?: boolean; // Add flag to control if field can be removed
+  signedValue?: any;
+  showValues?: boolean;
+  canRemove?: boolean;
+  isMobile?: boolean; // Use touch events on mobile, click on desktop
 }
 
-export const FieldItem: React.FC<FieldItemProps> = ({ 
-  field, 
+export const FieldItem: React.FC<FieldItemProps> = ({
+  field,
   recipient,
-  onResize, 
-  onMove, 
+  onResize,
+  onMove,
   onRemove,
   onAddSignDate,
   onAddInitialDate,
@@ -38,7 +39,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
   pageElement,
   signedValue,
   showValues = false,
-  canRemove = true
+  canRemove = true,
+  isMobile = false
 }) => {
   const [dimensions, setDimensions] = useState({
     x: 0,
@@ -210,9 +212,10 @@ export const FieldItem: React.FC<FieldItemProps> = ({
           !active && signerStyles.base,
           !active && signerStyles.fieldItem,
         )}
-        onClick={handleFieldClick}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        {...(isMobile
+          ? { onTouchStart: handleTouchStart, onTouchEnd: handleTouchEnd }
+          : { onClick: handleFieldClick }
+        )}
       >
         <FieldContent
           field={field}
@@ -234,8 +237,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
           </div>
         )}
 
-        {/* Add sign date button - only show for signature fields */}
-        {field.type === FieldType.SIGNATURE && onAddSignDate && (
+        {/* Add sign date button - desktop only (mobile uses MobileFieldActionBar) */}
+        {!isMobile && field.type === FieldType.SIGNATURE && onAddSignDate && (
           <button
             className="absolute -top-2 -left-2 h-5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200] px-2 gap-1"
             onClick={handleAddSignDate}
@@ -246,8 +249,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
           </button>
         )}
 
-        {/* Add initial date button - only show for initials fields */}
-        {field.type === FieldType.INITIALS && onAddInitialDate && (
+        {/* Add initial date button - desktop only (mobile uses MobileFieldActionBar) */}
+        {!isMobile && field.type === FieldType.INITIALS && onAddInitialDate && (
           <button
             className="absolute -top-2 -left-2 h-5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200] px-2 gap-1"
             onClick={handleAddInitialDate}
@@ -258,8 +261,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
           </button>
         )}
 
-        {/* Remove button */}
-        {canRemove && (
+        {/* Remove button - desktop only (mobile uses MobileFieldActionBar) */}
+        {!isMobile && canRemove && (
           <button
             className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200]"
             onClick={handleRemove}

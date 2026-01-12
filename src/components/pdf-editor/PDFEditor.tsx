@@ -188,6 +188,9 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [showFieldLabels, setShowFieldLabels] = useState(true);
   const [pageWidth, setPageWidth] = useState(customPageWidth);
 
+  // Ref for PDF container to focus after drawer closes (mobile)
+  const pdfContainerRef = useRef<HTMLDivElement>(null);
+
   // Initialize new workflow system
   const initialPhase = legacyStateToPhase(initialWorkflowState);
   const workflow = useWorkflowStateMachine(initialPhase);
@@ -760,7 +763,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Handle clicking on PDF to add field (supports both click-to-place and drag modes)
   function handlePageClick(event: Parameters<OnPDFViewerPageClick>[0]) {
     // Deselect active field when tapping PDF background (for mobile action bar)
-    if (activeFieldId) {
+    // Only deselect if NOT placing a new field
+    if (activeFieldId && !selectedField) {
       setActiveFieldId(null);
     }
 
@@ -1751,6 +1755,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     setIsDragging(true);
     setInteractionMode('click-to-place');
     setIsMobileDrawerOpen(false);
+
+    // Focus PDF container after drawer closes so first tap registers
+    setTimeout(() => {
+      pdfContainerRef.current?.focus();
+    }, 100);
   };
 
   // Cancel field placement
@@ -1984,6 +1993,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             )}
 
             {isMobile ? (
+              <div ref={pdfContainerRef} tabIndex={-1} className="outline-none">
               <MobilePDFWrapper
                 isMobile={isMobile}
                 isPlacementMode={!!selectedField && interactionMode === 'click-to-place'}
@@ -1994,6 +2004,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                   onPageClick={handlePageClick}
                   pageWidth={pageWidth}
                   isFieldPlacementMode={!!selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place')}
+                  isMobile={isMobile}
                 >
                   {/* Helper function to determine if a field should be shown for renter (signer2) */}
                   {fields.filter((field) => {
@@ -2044,7 +2055,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                       active={field.formId === activeFieldId}
                       pageElement={pageElement}
                       signedValue={useSignedFieldsStore.getState().signedFields[field.formId]}
-                      showValues={workflow.isDocumentPhase()} // Show values in document mode
+                      showValues={workflow.isDocumentPhase()}
+                      isMobile={isMobile}
                     />
                   );
                 }
@@ -2107,6 +2119,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               })}
                 </PDFViewer>
               </MobilePDFWrapper>
+              </div>
             ) : (
               <PDFViewer
                 file={pdfFile}

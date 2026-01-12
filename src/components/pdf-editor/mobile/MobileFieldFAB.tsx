@@ -31,8 +31,6 @@ export const MobileFieldFAB: React.FC<MobileFieldFABProps> = ({
         isPlacingField
           ? 'bg-red-500 hover:bg-red-600'
           : 'bg-[#3c8787] hover:bg-[#2d6666]',
-        // Pulse animation when placing
-        isPlacingField && 'animate-pulse',
         // Disabled state
         disabled && 'opacity-50 cursor-not-allowed',
       )}
