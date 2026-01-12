@@ -29,7 +29,7 @@ import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES
 import { TemplateSidebar } from './sidebars/TemplateSidebar';
 import { DocumentSidebar } from './sidebars/DocumentSidebar';
 import { SigningSidebar } from './sidebars/SigningSidebar';
-import { MobileFieldFAB, MobileFieldDrawer, MobilePlacementToast, MobileFieldActionBar } from './mobile';
+import { MobileFieldFAB, MobileFieldDrawer, MobilePlacementToast, MobileFieldActionBar, MobileTextFieldConfigDrawer } from './mobile';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
@@ -345,6 +345,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Mobile field drawer state
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [isMobileTextConfigOpen, setIsMobileTextConfigOpen] = useState(false);
 
   // Document selector state
   const [showDocumentSelector, setShowDocumentSelector] = useState(false);
@@ -2429,7 +2430,16 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 handleAddInitialDate(activeFieldId);
               }
             }}
+            onConfigure={() => setIsMobileTextConfigOpen(true)}
             showFooter={showFooter}
+          />
+
+          {/* Mobile text field configuration drawer */}
+          <MobileTextFieldConfigDrawer
+            isOpen={isMobileTextConfigOpen}
+            onClose={() => setIsMobileTextConfigOpen(false)}
+            field={activeFieldId ? fields.find(f => f.formId === activeFieldId) || null : null}
+            onSave={handleTextFieldConfigSave}
           />
         </>
       )}

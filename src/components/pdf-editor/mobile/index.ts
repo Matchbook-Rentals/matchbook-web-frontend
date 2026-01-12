@@ -4,3 +4,4 @@ export { MobileRecipientSelector } from './MobileRecipientSelector';
 export { MobileFieldGrid } from './MobileFieldGrid';
 export { MobilePlacementToast } from './MobilePlacementToast';
 export { MobileFieldActionBar } from './MobileFieldActionBar';
+export { MobileTextFieldConfigDrawer } from './MobileTextFieldConfigDrawer';
