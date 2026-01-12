@@ -193,7 +193,7 @@ export const FieldItem: React.FC<FieldItemProps> = ({
       minHeight={MIN_HEIGHT_PX}
       minWidth={MIN_WIDTH_PX}
       bounds="parent"
-      enableResizing={{
+      enableResizing={isMobile ? false : {
         top: true,
         right: true,
         bottom: true,
