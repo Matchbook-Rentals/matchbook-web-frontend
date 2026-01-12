@@ -29,7 +29,7 @@ import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES
 import { TemplateSidebar } from './sidebars/TemplateSidebar';
 import { DocumentSidebar } from './sidebars/DocumentSidebar';
 import { SigningSidebar } from './sidebars/SigningSidebar';
-import { MobileFieldFAB, MobileFieldDrawer, MobilePlacementToast, MobileFieldActionBar, MobileTextFieldConfigDrawer } from './mobile';
+import { MobileFieldFAB, MobileFieldDrawer, MobilePlacementToast, MobileFieldActionBar, MobileTextFieldConfigDrawer, MobileResizeToast } from './mobile';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
@@ -346,6 +346,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Mobile field drawer state
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isMobileTextConfigOpen, setIsMobileTextConfigOpen] = useState(false);
+  const [isResizingField, setIsResizingField] = useState(false);
 
   // Document selector state
   const [showDocumentSelector, setShowDocumentSelector] = useState(false);
@@ -767,6 +768,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     // Only deselect if NOT placing a new field
     if (activeFieldId && !selectedField) {
       setActiveFieldId(null);
+      setIsResizingField(false);
     }
 
     if (!selectedField || !selectedRecipient || (interactionMode !== 'click-to-place' && interactionMode !== 'dragging' && interactionMode !== 'detecting')) {
@@ -2060,6 +2062,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                       signedValue={useSignedFieldsStore.getState().signedFields[field.formId]}
                       showValues={workflow.isDocumentPhase()}
                       isMobile={isMobile}
+                      isResizing={isResizingField && field.formId === activeFieldId}
                     />
                   );
                 }
@@ -2183,6 +2186,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                         pageElement={pageElement}
                         signedValue={signedValue}
                         showValues={workflow.isDocumentPhase()} // Show values in document mode
+                        isResizing={isResizingField && field.formId === activeFieldId}
                       />
                     );
                   }
@@ -2420,6 +2424,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               if (activeFieldId) {
                 removeField(activeFieldId);
                 setActiveFieldId(null);
+                setIsResizingField(false);
               }
             }}
             onAddSignDate={() => {
@@ -2433,8 +2438,15 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               }
             }}
             onConfigure={() => setIsMobileTextConfigOpen(true)}
+            isResizing={isResizingField}
+            onToggleResize={() => setIsResizingField(!isResizingField)}
             showFooter={showFooter}
           />
+
+          {/* Mobile resize mode toast */}
+          {isResizingField && (
+            <MobileResizeToast onCancel={() => setIsResizingField(false)} />
+          )}
 
           {/* Mobile text field configuration drawer */}
           <MobileTextFieldConfigDrawer

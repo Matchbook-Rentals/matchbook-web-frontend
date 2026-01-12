@@ -24,6 +24,7 @@ interface FieldItemProps {
   showValues?: boolean;
   canRemove?: boolean;
   isMobile?: boolean; // Use touch events on mobile, click on desktop
+  isResizing?: boolean; // Mobile resize mode - enables resize handles
 }
 
 export const FieldItem: React.FC<FieldItemProps> = ({
@@ -40,7 +41,8 @@ export const FieldItem: React.FC<FieldItemProps> = ({
   signedValue,
   showValues = false,
   canRemove = true,
-  isMobile = false
+  isMobile = false,
+  isResizing = false,
 }) => {
   const [dimensions, setDimensions] = useState({
     x: 0,
@@ -193,7 +195,7 @@ export const FieldItem: React.FC<FieldItemProps> = ({
       minHeight={MIN_HEIGHT_PX}
       minWidth={MIN_WIDTH_PX}
       bounds="parent"
-      enableResizing={isMobile ? false : {
+      enableResizing={(isMobile && !isResizing) ? false : {
         top: true,
         right: true,
         bottom: true,
@@ -211,6 +213,7 @@ export const FieldItem: React.FC<FieldItemProps> = ({
           active ? 'ring-[3px] ring-black' : 'ring-2',
           !active && signerStyles.base,
           !active && signerStyles.fieldItem,
+          isResizing && 'border-2 border-dashed border-[#3c8787]',
         )}
         {...(isMobile
           ? { onTouchStart: handleTouchStart, onTouchEnd: handleTouchEnd }

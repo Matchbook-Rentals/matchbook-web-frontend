@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Trash2, Calendar, Type } from 'lucide-react';
+import { Trash2, Calendar, Type, Maximize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FieldFormType, FieldType } from '../types';
 
@@ -20,6 +20,8 @@ interface MobileFieldActionBarProps {
   onAddSignDate?: () => void;
   onAddInitialDate?: () => void;
   onConfigure?: () => void;
+  isResizing?: boolean;
+  onToggleResize?: () => void;
   showFooter?: boolean;
 }
 
@@ -29,6 +31,8 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
   onAddSignDate,
   onAddInitialDate,
   onConfigure,
+  isResizing = false,
+  onToggleResize,
   showFooter = true,
 }) => {
   if (!activeField) return null;
@@ -73,7 +77,7 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
         <Trash2 className="w-6 h-6 text-white" />
       </button>
 
-      {/* Add date button - next to FAB (left of it) - for signature/initials */}
+      {/* Add date button - for signature/initials */}
       {showCalendarButton && (
         <button
           onClick={handleCalendarClick}
@@ -86,7 +90,7 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
             'bg-white border-2 border-[#3c8787] hover:bg-[#3c8787]/10',
           )}
           style={{
-            right: 'calc(16px + 56px + 12px)', // FAB width + gap
+            right: 'calc(16px + 56px + 12px + 56px + 12px)', // Second slot from FAB
             bottom: baseBottom,
           }}
         >
@@ -94,7 +98,7 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
         </button>
       )}
 
-      {/* Configure button - next to FAB (left of it) - for text/number/email/name/date fields */}
+      {/* Configure button - for text/number/email/name/date fields */}
       {showConfigButton && (
         <button
           onClick={onConfigure}
@@ -107,11 +111,34 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
             'bg-white border-2 border-[#3c8787] hover:bg-[#3c8787]/10',
           )}
           style={{
-            right: 'calc(16px + 56px + 12px)', // FAB width + gap
+            right: 'calc(16px + 56px + 12px + 56px + 12px)', // Second slot from FAB
             bottom: baseBottom,
           }}
         >
           <Type className="w-6 h-6 text-[#3c8787]" />
+        </button>
+      )}
+
+      {/* Resize button - always available, closest to FAB */}
+      {onToggleResize && (
+        <button
+          onClick={onToggleResize}
+          aria-label={isResizing ? 'Exit resize mode' : 'Resize field'}
+          className={cn(
+            'fixed z-50 flex items-center justify-center',
+            'w-14 h-14 rounded-full shadow-lg',
+            'transition-all duration-200 ease-in-out',
+            'active:scale-95',
+            isResizing
+              ? 'bg-[#3c8787] hover:bg-[#2d6666]' // Filled when active
+              : 'bg-white border-2 border-[#3c8787] hover:bg-[#3c8787]/10', // Outline when inactive
+          )}
+          style={{
+            right: 'calc(16px + 56px + 12px)', // First slot from FAB
+            bottom: baseBottom,
+          }}
+        >
+          <Maximize2 className={cn('w-6 h-6', isResizing ? 'text-white' : 'text-[#3c8787]')} />
         </button>
       )}
     </>
