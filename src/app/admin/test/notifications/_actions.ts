@@ -212,10 +212,12 @@ export async function sendTestNotification({
         break
 
       case 'listing_approved':
+        const testListingId = 'test-listing-' + Date.now()
         notificationContent = `Your listing "${listingTitle}" is now live on MatchBook!`
-        notificationUrl = '/app/host-dashboard?tab=calendar'
+        notificationUrl = `/app/host/${testListingId}/calendar`
         emailData = buildNotificationEmailData('listing_approved', {
-          listingTitle
+          listingTitle,
+          listingId: testListingId
         })
         break
 

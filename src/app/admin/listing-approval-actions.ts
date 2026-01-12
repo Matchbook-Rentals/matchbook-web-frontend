@@ -196,11 +196,12 @@ export async function approveRejectListing(
     await createNotification({
       userId: listing.userId,
       content: `Your listing "${listing.title}" is now live on MatchBook!`,
-      url: '/app/host-dashboard?tab=calendar',
+      url: `/app/host/${listingId}/calendar`,
       actionType: 'listing_approved',
       actionId: listingId,
       emailData: {
-        listingTitle: listing.title
+        listingTitle: listing.title,
+        listingId: listingId
       }
     })
   }

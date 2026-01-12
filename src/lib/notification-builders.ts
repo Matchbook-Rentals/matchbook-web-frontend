@@ -182,7 +182,8 @@ export function buildNotificationEmailData(
 
     case 'listing_approved':
       return {
-        listingTitle: data.listingTitle
+        listingTitle: data.listingTitle,
+        listingId: data.listingId
       };
 
     case 'welcome_renter':

@@ -596,10 +596,13 @@ export function buildNotificationEmailData(
   if (actionType === 'listing_approved' && additionalData) {
     const hostName = user?.firstName || 'there';
     const listingTitle = additionalData.listingTitle || 'your listing';
-    
+    const listingId = additionalData.listingId;
+
     // Format the email body
     emailData.contentText = `Hi ${hostName},\n\nYour listing "${listingTitle}" is now live on MatchBook!\n\nPlease ensure your calendar is up to date.`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host-dashboard?tab=calendar`;
+    emailData.buttonUrl = listingId
+      ? `${process.env.NEXT_PUBLIC_URL}/app/host/${listingId}/calendar`
+      : `${process.env.NEXT_PUBLIC_URL}/app/host-dashboard?tab=calendar`;
   }
 
   // Add special formatting for welcome renter notifications
