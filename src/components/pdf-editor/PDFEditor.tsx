@@ -962,10 +962,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       return;
     }
 
-    // Check if a sign date already exists for this recipient
+    // Check if a sign date already exists for this specific signature field
     const existingSignDate = fields.find(f =>
       f.type === FieldType.SIGN_DATE &&
-      f.recipientIndex === signatureField.recipientIndex
+      f.fieldMeta?.linkedFieldId === signatureFieldId
     );
 
     if (existingSignDate) {
@@ -994,7 +994,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       recipientIndex: signatureField.recipientIndex,
       fieldMeta: {
         label: 'Sign Date',
-        required: true
+        required: true,
+        linkedFieldId: signatureFieldId,
       }
     };
 
@@ -1010,10 +1011,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       return;
     }
 
-    // Check if an initial date already exists for this recipient
+    // Check if an initial date already exists for this specific initials field
     const existingInitialDate = fields.find(f =>
       f.type === FieldType.INITIAL_DATE &&
-      f.recipientIndex === initialsField.recipientIndex
+      f.fieldMeta?.linkedFieldId === initialsFieldId
     );
 
     if (existingInitialDate) {
@@ -1042,7 +1043,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       recipientIndex: initialsField.recipientIndex,
       fieldMeta: {
         label: 'Initial Date',
-        required: true
+        required: true,
+        linkedFieldId: initialsFieldId,
       }
     };
 

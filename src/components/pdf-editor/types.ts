@@ -27,6 +27,8 @@ export interface FieldMeta {
   pattern?: string; // Regex validation
   textAlign?: 'left' | 'center' | 'right';
   direction?: 'horizontal' | 'vertical'; // For checkbox/radio layout
+  linkedFieldId?: string; // For SIGN_DATE/INITIAL_DATE: references parent signature/initials field
+  defaultValue?: string; // Default value for the field
 }
 
 // Field form type using percentage-based positioning
