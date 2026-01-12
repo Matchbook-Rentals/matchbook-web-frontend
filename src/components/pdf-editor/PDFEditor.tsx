@@ -29,7 +29,7 @@ import { FieldFormType, FieldType, MatchDetails, FieldMeta, ADVANCED_FIELD_TYPES
 import { TemplateSidebar } from './sidebars/TemplateSidebar';
 import { DocumentSidebar } from './sidebars/DocumentSidebar';
 import { SigningSidebar } from './sidebars/SigningSidebar';
-import { MobileFieldFAB, MobileFieldDrawer, MobilePlacementToast } from './mobile';
+import { MobileFieldFAB, MobileFieldDrawer, MobilePlacementToast, MobileFieldActionBar } from './mobile';
 import { createFieldAtPosition, getPage, isWithinPageBounds, getFieldBounds, findBestPositionForSignDate, findBestPositionForInitialDate } from './field-utils';
 import { PdfTemplate } from '@prisma/client';
 import { handleSignerCompletion } from '@/app/actions/documents';
@@ -2383,6 +2383,27 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               onCancel={cancelFieldPlacement}
             />
           )}
+
+          {/* Mobile action bar when a field is selected */}
+          <MobileFieldActionBar
+            activeField={activeFieldId ? fields.find(f => f.formId === activeFieldId) || null : null}
+            onDelete={() => {
+              if (activeFieldId) {
+                removeField(activeFieldId);
+                setActiveFieldId(null);
+              }
+            }}
+            onAddSignDate={() => {
+              if (activeFieldId) {
+                handleAddSignDate(activeFieldId);
+              }
+            }}
+            onAddInitialDate={() => {
+              if (activeFieldId) {
+                handleAddInitialDate(activeFieldId);
+              }
+            }}
+          />
         </>
       )}
 

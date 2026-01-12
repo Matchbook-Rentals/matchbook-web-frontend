@@ -127,16 +127,19 @@ export const FieldItem: React.FC<FieldItemProps> = ({
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     onRemove?.(field.formId);
   };
 
   const handleAddSignDate = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     onAddSignDate?.(field.formId);
   };
 
   const handleAddInitialDate = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     onAddInitialDate?.(field.formId);
   };
 
@@ -205,7 +208,7 @@ export const FieldItem: React.FC<FieldItemProps> = ({
 
         {/* Add sign date button - only show for signature fields */}
         {field.type === FieldType.SIGNATURE && onAddSignDate && (
-          <button 
+          <button
             className="absolute -top-2 -left-2 h-5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200] px-2 gap-1"
             onClick={handleAddSignDate}
             title="Add sign date field"
@@ -226,10 +229,10 @@ export const FieldItem: React.FC<FieldItemProps> = ({
             <span className="whitespace-nowrap">Date</span>
           </button>
         )}
-        
+
         {/* Remove button */}
-        {(
-          <button 
+        {canRemove && (
+          <button
             className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-[200]"
             onClick={handleRemove}
             title="Remove field"
