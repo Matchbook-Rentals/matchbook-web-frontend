@@ -227,7 +227,10 @@ export const FieldItem: React.FC<FieldItemProps> = ({
         {/* Field label in top-left corner - show when field has default value */}
         {field.fieldMeta?.defaultValue && field.fieldMeta?.label && (
           <div
-            className="absolute -top-2 -left-2 px-1.5 py-0.5 text-[10px] font-semibold text-white rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            className={cn(
+              "absolute -top-2 -left-2 px-1.5 py-0.5 text-[10px] font-semibold text-white rounded shadow-sm transition-opacity duration-200",
+              isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            )}
             style={{
               backgroundColor: getRecipientBorderColor(),
               zIndex: 201,
