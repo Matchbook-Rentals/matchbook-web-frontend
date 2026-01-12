@@ -2,11 +2,22 @@ import React from "react";
 import { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
+import fs from "fs";
+import path from "path";
 
 export const metadata: Metadata = {
   title: "MatchBook Rentals | Referral Program Terms",
   description: "Terms and conditions for the MatchBook host referral program.",
 };
+
+function ReferralHtmlContent({ htmlContent }: { htmlContent: string }) {
+  return (
+    <div
+      className="prose prose-sm max-w-none"
+      dangerouslySetInnerHTML={{ __html: htmlContent }}
+    />
+  );
+}
 
 export default async function ReferralTermsPage() {
   const user = await currentUser();
@@ -24,6 +35,14 @@ export default async function ReferralTermsPage() {
       }
     : null;
 
+  const htmlFilePath = path.join(
+    process.cwd(),
+    "src",
+    "legal",
+    "referral-program-12-15-25.html"
+  );
+  const htmlContent = fs.readFileSync(htmlFilePath, "utf-8");
+
   return (
     <LegalPageTemplate
       userId={user?.id || null}
@@ -31,11 +50,7 @@ export default async function ReferralTermsPage() {
       isSignedIn={!!user?.id}
       pageTitle="Referral Program Terms"
     >
-      <div className="space-y-6">
-        <p className="text-gray-500">
-          Referral program terms content will be added here.
-        </p>
-      </div>
+      <ReferralHtmlContent htmlContent={htmlContent} />
     </LegalPageTemplate>
   );
 }

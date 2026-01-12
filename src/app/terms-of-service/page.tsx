@@ -34,7 +34,7 @@ export default async function TermsOfServicePage() {
     process.cwd(),
     "src",
     "legal",
-    "terms-of-service-09-24-25.html"
+    "terms-of-service-12-15-25.html"
   );
   const htmlContent = fs.readFileSync(htmlFilePath, "utf-8");
 
