@@ -83,14 +83,14 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
             'w-14 h-14 rounded-full shadow-lg',
             'transition-all duration-200 ease-in-out',
             'active:scale-95',
-            'bg-blue-500 hover:bg-blue-600',
+            'bg-white border-2 border-[#3c8787] hover:bg-[#3c8787]/10',
           )}
           style={{
             right: 'calc(16px + 56px + 12px)', // FAB width + gap
             bottom: baseBottom,
           }}
         >
-          <Calendar className="w-6 h-6 text-white" />
+          <Calendar className="w-6 h-6 text-[#3c8787]" />
         </button>
       )}
 
@@ -104,14 +104,14 @@ export const MobileFieldActionBar: React.FC<MobileFieldActionBarProps> = ({
             'w-14 h-14 rounded-full shadow-lg',
             'transition-all duration-200 ease-in-out',
             'active:scale-95',
-            'bg-blue-500 hover:bg-blue-600',
+            'bg-white border-2 border-[#3c8787] hover:bg-[#3c8787]/10',
           )}
           style={{
             right: 'calc(16px + 56px + 12px)', // FAB width + gap
             bottom: baseBottom,
           }}
         >
-          <Type className="w-6 h-6 text-white" />
+          <Type className="w-6 h-6 text-[#3c8787]" />
         </button>
       )}
     </>
