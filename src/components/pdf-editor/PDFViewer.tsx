@@ -2,6 +2,7 @@
 
 import React, { useCallback, useRef, useState } from 'react';
 import { Document, Page } from 'react-pdf';
+import { cn } from '@/lib/utils';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
@@ -144,14 +145,37 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                   </div>
                 }
               />
-              {/* Transparent click overlay - only active in field placement mode */}
-              {isFieldPlacementMode && (
-                <div
-                  className="absolute inset-0 z-10 cursor-crosshair"
-                  onMouseDown={(e) => onDocumentPageClick(e, index + 1)}
-                  style={{ pointerEvents: 'auto' }}
-                />
-              )}
+              {/* Click overlay - always present to handle clicks/taps for field placement and deselection */}
+              <div
+                className={cn(
+                  "absolute inset-0 z-10",
+                  isFieldPlacementMode ? "cursor-crosshair" : "cursor-default"
+                )}
+                onMouseDown={(e) => {
+                  // Skip if clicking on a field - let field handle it
+                  const target = e.target as Element;
+                  if (target.closest('[data-field-id]')) return;
+                  onDocumentPageClick(e, index + 1);
+                }}
+                onTouchEnd={(e) => {
+                  // Skip if tapping on a field - let field handle it
+                  const target = e.target as Element;
+                  if (target.closest('[data-field-id]')) return;
+
+                  // Handle touch for mobile - convert touch to mouse event format
+                  const touch = e.changedTouches[0];
+                  if (touch) {
+                    const pageElement = (e.target as Element)?.closest(PDF_VIEWER_PAGE_SELECTOR) as HTMLElement;
+                    const syntheticEvent = {
+                      clientX: touch.clientX,
+                      clientY: touch.clientY,
+                      target: pageElement || e.target,
+                    } as unknown as React.MouseEvent<HTMLDivElement, MouseEvent>;
+                    onDocumentPageClick(syntheticEvent, index + 1);
+                  }
+                }}
+                style={{ pointerEvents: 'auto' }}
+              />
               {/* Render fields for this page */}
               {React.Children.map(children, (child) => {
                 if (React.isValidElement(child) && child.props.field?.pageNumber === index + 1) {

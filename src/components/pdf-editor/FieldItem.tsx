@@ -47,6 +47,10 @@ export const FieldItem: React.FC<FieldItemProps> = ({
     height: 40,
   });
 
+  // Track touch start position to detect taps vs drags
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const TAP_THRESHOLD = 10; // pixels - if movement is less than this, it's a tap
+
   const recipientIndex = field.recipientIndex ?? 0;
   // For invalid recipient indices, use default styles
   const recipientColors = useRecipientColors(recipientIndex);
@@ -149,6 +153,27 @@ export const FieldItem: React.FC<FieldItemProps> = ({
     onFieldClick?.(field);
   };
 
+  // Touch handlers to detect taps on mobile (Rnd intercepts events for drag handling)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({ x: touch.clientX, y: touch.clientY });
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart) return;
+
+    const touch = e.changedTouches[0];
+    const dx = Math.abs(touch.clientX - touchStart.x);
+    const dy = Math.abs(touch.clientY - touchStart.y);
+
+    // If minimal movement, treat as tap and select field
+    if (dx < TAP_THRESHOLD && dy < TAP_THRESHOLD) {
+      onFieldClick?.(field);
+    }
+
+    setTouchStart(null);
+  };
+
   if (!pageElement) return null;
 
   return (
@@ -180,11 +205,14 @@ export const FieldItem: React.FC<FieldItemProps> = ({
       <div
         className={cn(
           'relative flex h-full w-full items-center justify-center rounded-[2px]',
-          'bg-white/90 px-2 ring-2 transition-colors cursor-move',
-          signerStyles.base,
-          signerStyles.fieldItem,
+          'bg-white/90 px-2 transition-colors cursor-move',
+          active ? 'ring-[3px] ring-black' : 'ring-2',
+          !active && signerStyles.base,
+          !active && signerStyles.fieldItem,
         )}
         onClick={handleFieldClick}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         <FieldContent
           field={field}

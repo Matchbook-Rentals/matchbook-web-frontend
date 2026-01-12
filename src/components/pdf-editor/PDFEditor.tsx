@@ -759,6 +759,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Handle clicking on PDF to add field (supports both click-to-place and drag modes)
   function handlePageClick(event: Parameters<OnPDFViewerPageClick>[0]) {
+    // Deselect active field when tapping PDF background (for mobile action bar)
+    if (activeFieldId) {
+      setActiveFieldId(null);
+    }
+
     if (!selectedField || !selectedRecipient || (interactionMode !== 'click-to-place' && interactionMode !== 'dragging' && interactionMode !== 'detecting')) {
       return;
     }
@@ -1782,6 +1787,13 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Handle clicking on a field to configure it or edit its value
   const handleFieldClick = (field: FieldFormType) => {
+    // On mobile, always select the field for action bar (don't open modals)
+    if (isMobile) {
+      setActiveFieldId(field.formId);
+      return;
+    }
+
+    // Desktop behavior: open modals for configurable fields
     // In template mode, configure field settings
     if (workflow.isTemplatePhase()) {
       // Only open modal for configurable field types
@@ -1975,6 +1987,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
               <MobilePDFWrapper
                 isMobile={isMobile}
                 isPlacementMode={!!selectedField && interactionMode === 'click-to-place'}
+                hideZoomControls={workflow.isTemplatePhase() || workflow.isDocumentPhase()}
               >
                 <PDFViewer
                   file={pdfFile}
@@ -2403,6 +2416,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                 handleAddInitialDate(activeFieldId);
               }
             }}
+            showFooter={showFooter}
           />
         </>
       )}

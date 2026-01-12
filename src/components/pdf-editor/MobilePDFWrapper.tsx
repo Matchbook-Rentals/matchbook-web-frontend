@@ -9,6 +9,7 @@ interface MobilePDFWrapperProps {
   isMobile: boolean;
   onZoomChange?: (zoomLevel: number) => void;
   isPlacementMode?: boolean; // When true, disables pinch-zoom for field placement
+  hideZoomControls?: boolean; // When true, hides zoom bar and locks zoom at 1.0
 }
 
 const getMobileZoomPreference = (): number => {
@@ -31,7 +32,8 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
   children,
   isMobile,
   onZoomChange,
-  isPlacementMode = false
+  isPlacementMode = false,
+  hideZoomControls = false
 }) => {
   const [zoomLevel, setZoomLevel] = useState(() => {
     // Start with fit-to-width by default on mobile
@@ -46,10 +48,12 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
     touches: TouchList;
   } | null>(null);
 
-  // Set initial zoom on mobile mount (removed fit-to-width auto-sizing)
+  // Reset zoom to 1.0 when zoom controls are hidden (template/document editing)
   useEffect(() => {
-    // No longer auto-fitting to width - users can manually zoom as needed
-  }, [isMobile]);
+    if (hideZoomControls && zoomLevel !== 1.0) {
+      setZoomLevel(1.0);
+    }
+  }, [hideZoomControls]);
 
   // Notify parent of zoom changes
   useEffect(() => {
@@ -81,8 +85,8 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // Disable pinch-zoom during field placement mode
-    if (isPlacementMode) return;
+    // Disable pinch-zoom during field placement mode or when zoom controls are hidden
+    if (isPlacementMode || hideZoomControls) return;
 
     if (e.touches.length === 2) {
       const distance = getTouchDistance(e.touches);
@@ -121,37 +125,39 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
 
   return (
     <div className="relative w-full">
-      {/* Fixed Zoom Controls Bar at Top */}
-      <div className="sticky top-0 z-40 bg-white border-b shadow-sm mb-2">
-        <div className="flex items-center justify-center gap-2 p-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleZoomOut}
-            disabled={zoomLevel <= 0.5}
-            className="p-2 h-8 w-8"
-            aria-label="Zoom Out"
-          >
-            <ZoomOut className="h-4 w-4" />
-          </Button>
+      {/* Fixed Zoom Controls Bar at Top - hidden during template/document editing */}
+      {!hideZoomControls && (
+        <div className="sticky top-0 z-40 bg-white border-b shadow-sm mb-2">
+          <div className="flex items-center justify-center gap-2 p-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleZoomOut}
+              disabled={zoomLevel <= 0.5}
+              className="p-2 h-8 w-8"
+              aria-label="Zoom Out"
+            >
+              <ZoomOut className="h-4 w-4" />
+            </Button>
 
-          {/* Zoom Level Indicator */}
-          <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm font-medium min-w-[60px] text-center">
-            {Math.round(zoomLevel * 100)}%
+            {/* Zoom Level Indicator */}
+            <div className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm font-medium min-w-[60px] text-center">
+              {Math.round(zoomLevel * 100)}%
+            </div>
+
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleZoomIn}
+              disabled={zoomLevel >= 3.0}
+              className="p-2 h-8 w-8"
+              aria-label="Zoom In"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </Button>
           </div>
-
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleZoomIn}
-            disabled={zoomLevel >= 3.0}
-            className="p-2 h-8 w-8"
-            aria-label="Zoom In"
-          >
-            <ZoomIn className="h-4 w-4" />
-          </Button>
         </div>
-      </div>
+      )}
 
       {/* Container with scroll and mobile height constraint */}
       <div
@@ -162,8 +168,8 @@ export const MobilePDFWrapper: React.FC<MobilePDFWrapperProps> = ({
         onTouchEnd={handleTouchEnd}
         style={{
           WebkitOverflowScrolling: 'touch',
-          // During placement mode, use 'manipulation' to allow taps but prevent pinch-zoom
-          touchAction: isPlacementMode ? 'manipulation' : (isPinching ? 'none' : 'pan-x pan-y')
+          // During placement mode or when zoom is hidden, use 'manipulation' to allow taps but prevent pinch-zoom
+          touchAction: (isPlacementMode || hideZoomControls) ? 'manipulation' : (isPinching ? 'none' : 'pan-x pan-y')
         }}
       >
         {/* PDF Content with Transform */}
