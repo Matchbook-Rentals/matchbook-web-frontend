@@ -227,8 +227,7 @@ export const pullListingsFromDb = async (
           { // Add condition to include only listings with compatible monthly pricing
             monthlyPricing: {
               some: {
-                months: { gte: tripLengthMonths } // >= floored months for inclusivity
-                // Optional: Add { lte: longestLeaseLength } if enforcing max from schema
+                months: { lte: tripLengthMonths } // Trip must be >= listing's minimum duration
               }
             }
           }
