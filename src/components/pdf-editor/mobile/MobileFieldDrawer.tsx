@@ -20,6 +20,7 @@ interface MobileFieldDrawerProps {
   onRecipientChange: (recipientId: string) => void;
   onFieldSelect: (fieldType: FieldType, label?: string) => void;
   onAddRecipient?: () => void;
+  recipientError?: string | null;
 }
 
 export const MobileFieldDrawer: React.FC<MobileFieldDrawerProps> = ({
@@ -30,6 +31,7 @@ export const MobileFieldDrawer: React.FC<MobileFieldDrawerProps> = ({
   onRecipientChange,
   onFieldSelect,
   onAddRecipient,
+  recipientError,
 }) => {
   const handleFieldSelect = (fieldType: FieldType, label?: string) => {
     onFieldSelect(fieldType, label);
@@ -59,6 +61,9 @@ export const MobileFieldDrawer: React.FC<MobileFieldDrawerProps> = ({
               onSelect={onRecipientChange}
               onAddRecipient={onAddRecipient}
             />
+            {recipientError && (
+              <p className="text-sm text-red-500 mt-2">{recipientError}</p>
+            )}
           </div>
 
           {/* Field Grid */}

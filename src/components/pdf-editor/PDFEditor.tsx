@@ -181,6 +181,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   const [pdfFile, setPdfFile] = useState<File | null>(initialPdfFile || null);
   const [recipients, setRecipients] = useState<Recipient[]>(initialRecipients || []);
   const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null);
+  const [recipientError, setRecipientError] = useState<string | null>(null);
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
   const [selectedField, setSelectedField] = useState<FieldType | null>(null);
   const [pendingFieldLabel, setPendingFieldLabel] = useState<string | null>(null);
@@ -1754,7 +1755,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
 
   // Mobile touch-friendly field placement (no MouseEvent required)
   const startMobileFieldPlacement = (fieldType: FieldType, label?: string) => {
-    if (!selectedRecipient) return;
+    if (!selectedRecipient) {
+      setRecipientError('Please select a recipient first');
+      return;
+    }
+    setRecipientError(null);
     setSelectedField(fieldType);
     if (label) setPendingFieldLabel(label);
     setIsDragging(true);
@@ -2404,9 +2409,13 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
             onClose={() => setIsMobileDrawerOpen(false)}
             recipients={recipients}
             selectedRecipient={selectedRecipient}
-            onRecipientChange={setSelectedRecipient}
+            onRecipientChange={(id) => {
+              setSelectedRecipient(id);
+              setRecipientError(null);
+            }}
             onFieldSelect={startMobileFieldPlacement}
             onAddRecipient={handleAddRecipient}
+            recipientError={recipientError}
           />
 
           {selectedField && interactionMode === 'click-to-place' && (
