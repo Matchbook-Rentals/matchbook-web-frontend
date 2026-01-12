@@ -20,8 +20,8 @@ export default function MapTabLoadingSkeleton() {
 
       {/* Desktop Layout: Grid + Map */}
       <div className="hidden md:flex flex-1 flex-row justify-center overflow-hidden">
-        {/* Listings grid skeleton - 3/5 width */}
-        <div className="w-3/5 pr-4 h-full">
+        {/* Listings grid skeleton - 1/2 width */}
+        <div className="w-1/2 pr-4 h-full">
           <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,280px))] gap-4 h-full">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="flex flex-col space-y-2 max-w-[280px]">
@@ -34,8 +34,8 @@ export default function MapTabLoadingSkeleton() {
           </div>
         </div>
 
-        {/* Map skeleton - 2/5 width */}
-        <div className="w-2/5 min-h-[90dvh]">
+        {/* Map skeleton - 1/2 width */}
+        <div className="w-1/2 min-h-[70dvh]">
           <div className="w-full h-full bg-gray-200 rounded-lg" />
         </div>
       </div>
