@@ -527,7 +527,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
       {/* Application Title Section */}
       <header className="flex items-end pb-4 pl-2 gap-6 relative self-stretch w-full flex-[0_0_auto]">
         <div className="flex flex-col items-start gap-2 relative flex-1 grow">
-          <h1 className="relative w-[430px] mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-transparent text-2xl tracking-[0] leading-[28.8px]">
+          <h1 className="relative w-full max-w-[430px] mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-transparent text-2xl tracking-[0] leading-[28.8px]">
             <span className="font-medium text-[#020202]">Application </span>
             <span className="text-[#5d606d] text-base leading-[19.2px]">
               / {getUserName()}
@@ -535,7 +535,8 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           </h1>
         </div>
 
-        <div className="inline-flex items-center gap-3 relative flex-[0_0_auto]">
+        {/* Desktop buttons - hidden on mobile */}
+        <div className="hidden sm:inline-flex items-center gap-3 relative flex-[0_0_auto]">
           {currentStatus === 'pending' && (
             <>
               <Button
@@ -652,6 +653,123 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
 
         </div>
       </header>
+
+      {/* Mobile buttons - shown only on mobile */}
+      <div className="flex sm:hidden items-center justify-end gap-3 w-full mb-4">
+        {currentStatus === 'pending' && (
+          <>
+            <Button
+              variant="ghost"
+              onClick={handleDecline}
+              disabled={isDeclining || isApproving}
+              className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 flex-[0_0_auto] rounded-lg overflow-hidden h-auto hover:bg-transparent"
+            >
+              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] text-sm tracking-[0] leading-5 hover:underline whitespace-nowrap">
+                {isDeclining ? 'Declining...' : 'Decline'}
+              </span>
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={handleUploadLease}
+              disabled={isUploadingLease || isDeclining}
+              className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto hover:bg-transparent"
+            >
+              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                {getUploadButtonText('Approve')}
+              </span>
+            </Button>
+          </>
+        )}
+
+        {currentStatus === 'approved' && (
+          <>
+            <div className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-secondaryBrand h-auto">
+              <Check className="h-4 w-4 text-secondaryBrand" />
+              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-secondaryBrand text-sm tracking-[0] leading-5 whitespace-nowrap">
+                Approved
+              </span>
+            </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="flex-[0_0_auto] relative h-auto w-auto p-2"
+                >
+                  <MoreHorizontalIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {!housingRequest.hasBooking ? (
+                  <DropdownMenuItem
+                    onClick={handleUnapprove}
+                    disabled={isUnapproving}
+                    className="text-[#e62e2e] focus:text-[#e62e2e] cursor-pointer"
+                  >
+                    {isUnapproving ? 'Unapproving...' : 'Unapprove Application'}
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem
+                    disabled
+                    className="text-gray-400 cursor-pointer"
+                    onClick={() => toast.error('Cannot unapprove application with active booking')}
+                  >
+                    Cannot unapprove - has active booking
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        )}
+
+        {currentStatus === 'declined' && (
+          <BrandModal
+            isOpen={isDeclineModalOpen}
+            onOpenChange={setIsDeclineModalOpen}
+            triggerButton={
+              <Button
+                variant="outline"
+                className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#e62e2e] h-auto hover:bg-[#e62e2e] transition-colors cursor-pointer"
+              >
+                <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#e62e2e] hover:text-white text-sm tracking-[0] leading-5 whitespace-nowrap">
+                  ✗ Declined
+                </span>
+              </Button>
+            }
+            className="max-w-md"
+          >
+            <div className="flex flex-col gap-4 p-4">
+              <h2 className="text-center text-xl font-semibold font-['Poppins',Helvetica] text-neutralneutral-900">
+                Undo Decline?
+              </h2>
+              <p className="text-center text-base font-normal font-['Poppins'] text-[#5D606D]">
+                This application will return to your pending list for review.
+              </p>
+              <div className="flex gap-3 justify-center pt-2">
+                <BrandButton
+                  onClick={() => setIsDeclineModalOpen(false)}
+                  variant="outline"
+                  size="sm"
+                  disabled={isUndoingDecline}
+                >
+                  Cancel
+                </BrandButton>
+                <BrandButton
+                  onClick={handleUndoDecline}
+                  variant="default"
+                  size="sm"
+                  disabled={isUndoingDecline}
+                  isLoading={isUndoingDecline}
+                >
+                  {isUndoingDecline ? 'Undoing...' : 'Undo Decline'}
+                </BrandButton>
+              </div>
+            </div>
+          </BrandModal>
+        )}
+      </div>
 
       {/* Main Content Sections */}
       <section className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
