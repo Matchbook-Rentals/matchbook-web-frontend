@@ -43,6 +43,64 @@ export async function getHousingRequestById(housingRequestId: string) {
                   }
                 },
                 residentialHistories: true,
+                felony: true,
+                felonyExplanation: true,
+                evicted: true,
+                evictedExplanation: true,
+              }
+            },
+            verifications: {
+              where: {
+                status: {
+                  in: ['COMPLETED', 'PROCESSING_BGS']
+                }
+              },
+              orderBy: {
+                createdAt: 'desc'
+              },
+              take: 1,
+              select: {
+                id: true,
+                status: true,
+                screeningDate: true,
+                validUntil: true,
+                creditBucket: true,
+                evictionStatus: true,
+                evictionCount: true,
+                criminalStatus: true,
+                criminalRecordCount: true,
+                subjectFirstName: true,
+                subjectLastName: true,
+                criminalRecords: {
+                  select: {
+                    id: true,
+                    caseNumber: true,
+                    charge: true,
+                    crimeType: true,
+                    disposition: true,
+                    filingDate: true,
+                    dispositionDate: true,
+                    pendingDate: true,
+                    sentenceComments: true,
+                    jurisdiction: true,
+                    jurisdictionState: true,
+                    courtSource: true,
+                  }
+                },
+                evictionRecords: {
+                  select: {
+                    id: true,
+                    caseNumber: true,
+                    filingDate: true,
+                    dispositionDate: true,
+                    plaintiff: true,
+                    defendantAddress: true,
+                    judgmentAmount: true,
+                    disposition: true,
+                    court: true,
+                    notes: true,
+                  }
+                },
               }
             }
           }

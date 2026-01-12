@@ -31,7 +31,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { APP_PAGE_MARGIN } from "@/constants/styles";
-import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
+import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto, CreditBucket } from "@prisma/client";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
@@ -44,6 +44,7 @@ import { useClientLogger } from "@/hooks/useClientLogger";
 import { useUser } from "@clerk/nextjs";
 import { SecureFileViewer } from "@/components/secure-file-viewer";
 import BrandModal from "@/components/BrandModal";
+import { VerificationReportContent } from "@/components/verification/verification-report-content";
 
 // Centralized styles for consistent text formatting
 const STYLES = {
@@ -51,6 +52,46 @@ const STYLES = {
   labelText: "font-['Poppins'] text-base font-normal leading-normal text-[#5D606D]",
   valueText: "font-text-label-medium-medium font-[number:var(--text-label-medium-medium-font-weight)] text-neutralneutral-900 text-[length:var(--text-label-medium-medium-font-size)] tracking-[var(--text-label-medium-medium-letter-spacing)] leading-[var(--text-label-medium-medium-line-height)] [font-style:var(--text-label-medium-medium-font-style)]"
 } as const;
+
+interface VerificationRecord {
+  id: string;
+  status: string;
+  screeningDate: Date | null;
+  validUntil: Date | null;
+  creditBucket: CreditBucket | null;
+  evictionStatus: string | null;
+  evictionCount: number | null;
+  criminalStatus: string | null;
+  criminalRecordCount: number | null;
+  subjectFirstName: string | null;
+  subjectLastName: string | null;
+  criminalRecords: Array<{
+    id: string;
+    caseNumber: string;
+    charge: string | null;
+    crimeType: string | null;
+    disposition: string | null;
+    filingDate: Date | null;
+    dispositionDate: Date | null;
+    pendingDate: Date | null;
+    sentenceComments: string | null;
+    jurisdiction: string | null;
+    jurisdictionState: string | null;
+    courtSource: string | null;
+  }>;
+  evictionRecords: Array<{
+    id: string;
+    caseNumber: string;
+    filingDate: Date | null;
+    dispositionDate: Date | null;
+    plaintiff: string | null;
+    defendantAddress: string | null;
+    judgmentAmount: unknown;
+    disposition: string | null;
+    court: string | null;
+    notes: string | null;
+  }>;
+}
 
 interface HousingRequestWithUser extends HousingRequest {
   user: User & {
@@ -61,6 +102,7 @@ interface HousingRequestWithUser extends HousingRequest {
         idPhotos: IDPhoto[];
       })[];
     })[];
+    verifications?: VerificationRecord[];
   };
   listing: Listing;
   trip?: any;
@@ -149,8 +191,12 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const [boldSignLeaseId, setBoldSignLeaseId] = useState(housingRequest.boldSignLeaseId);
   const [isStripeDialogOpen, setIsStripeDialogOpen] = useState(false);
   const [isLeaseSelectionOpen, setIsLeaseSelectionOpen] = useState(false);
+  const [verificationModalOpen, setVerificationModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
+  // Get user's latest completed verification
+  const verification = user.verifications?.[0] || null;
+
   // Admin detection and editable income state
   const [testIncome, setTestIncome] = useState<number | null>(null);
   const [isEditingIncome, setIsEditingIncome] = useState(false);
@@ -823,15 +869,47 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 <div className={`relative self-stretch mt-[-1.00px] ${STYLES.labelText}`}>
                   Renter Verification Report
                 </div>
-                <Button
-                  variant="outline"
-                  disabled
-                  className="w-full sm:w-auto h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
-                >
-                  <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
-                    Coming Soon
-                  </span>
-                </Button>
+                {verification ? (
+                  <BrandModal
+                    className="max-w-2xl"
+                    isOpen={verificationModalOpen}
+                    onOpenChange={setVerificationModalOpen}
+                    triggerButton={
+                      <Button
+                        variant="outline"
+                        className="w-full sm:w-auto h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
+                      >
+                        <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          View Report
+                        </span>
+                      </Button>
+                    }
+                  >
+                    <div className="flex flex-col gap-4">
+                      <VerificationReportContent verification={verification} showCard={false} />
+                      <div className="flex justify-end pt-4 border-t">
+                        <BrandButton
+                          onClick={() => setVerificationModalOpen(false)}
+                          variant="default"
+                          size="sm"
+                          className="min-w-[100px]"
+                        >
+                          Close
+                        </BrandButton>
+                      </div>
+                    </div>
+                  </BrandModal>
+                ) : (
+                  <Button
+                    variant="outline"
+                    disabled
+                    className="w-full sm:w-auto h-auto items-center justify-center gap-1 px-2 py-1 rounded-md border border-solid border-gray-300 text-gray-300"
+                  >
+                    <span className="[font-family:'Poppins',Helvetica] font-medium text-sm tracking-[0] leading-5 whitespace-nowrap">
+                      Not Verified
+                    </span>
+                  </Button>
+                )}
               </div>
             </div>
 
