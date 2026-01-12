@@ -169,7 +169,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'verification', label: 'MatchBook Renter Verification', href: '/verification', section: 4 },
-    { id: 'refer-host', label: 'Refer A Host', href: '/refer-host', section: 4 },
+    { id: 'refer-host', label: 'Refer a Host - Earn $50', href: '/refer-host', section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 
