@@ -63,38 +63,37 @@ export async function getOrCreateReferralCode(userId: string): Promise<string> {
     const code = generateReferralCode();
 
     try {
-      // Atomic update - if another request already set a code, this will fail
-      // with a different error, and if code collides, P2002 is thrown
-      const updated = await prisma.user.update({
+      // Atomic update using updateMany - only updates if user has no code yet
+      // updateMany supports filter conditions unlike update()
+      const result = await prisma.user.updateMany({
         where: {
           id: userId,
-          referralCode: { equals: null }, // Only update if no code exists yet
+          referralCode: null,
         },
         data: { referralCode: code },
+      });
+
+      if (result.count > 0) {
+        return code;
+      }
+
+      // count is 0 - either user doesn't exist or already has a code
+      const refetched = await prisma.user.findUnique({
+        where: { id: userId },
         select: { referralCode: true },
       });
 
-      if (updated.referralCode) {
-        return updated.referralCode;
+      if (refetched?.referralCode) {
+        return refetched.referralCode;
       }
+
+      // User doesn't exist
+      throw new Error(`User ${userId} not found`);
     } catch (error) {
       // P2002 = Unique constraint violation (code already exists)
       if (isUniqueConstraintError(error)) {
         console.log(`[Referral] Code collision on attempt ${attempt + 1}, retrying...`);
         continue;
-      }
-
-      // P2025 = Record not found (user doesn't exist or already has a code)
-      if ((error as any)?.code === 'P2025') {
-        // User might have gotten a code from another request, re-fetch
-        const refetched = await prisma.user.findUnique({
-          where: { id: userId },
-          select: { referralCode: true },
-        });
-
-        if (refetched?.referralCode) {
-          return refetched.referralCode;
-        }
       }
 
       // Unknown error, rethrow
