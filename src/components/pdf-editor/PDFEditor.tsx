@@ -1877,8 +1877,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Success screen removed - now handled by toast + redirect in useStepCompletion
 
   return (
-    <>
-      {/* Ghost cursor for field placement */}
+    <div className="relative flex flex-col flex-1 min-h-0">
+      {/* Ghost cursor for field placement - rendered via portal-like fixed positioning */}
       {selectedField && (interactionMode === 'dragging' || interactionMode === 'click-to-place') && (
         <div
           className="fixed pointer-events-none z-50"
@@ -1896,7 +1896,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       )}
 
       {/* Main content area with sidebar and editor */}
-      <div className={`flex flex-1 min-h-0 ${isMobile ? 'flex-col' : 'flex-row'}`}>
+      <div ref={pdfEditorContainerRef} className={`flex flex-1 min-h-0 ${isMobile ? 'flex-col' : 'flex-row'}`}>
         {/* Sidebar - responsive layout - conditionally rendered */}
         {!hideDefaultSidebar && (
           <div className={`${
@@ -2363,6 +2363,6 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         onSave={handleFieldValueSave}
       />
 
-    </>
+    </div>
   );
 };
