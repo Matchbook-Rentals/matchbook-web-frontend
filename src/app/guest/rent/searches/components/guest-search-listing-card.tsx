@@ -166,7 +166,7 @@ export default function SearchListingCard({ listing, status, className, style, d
   };
 
   return (
-    <Card className={`flex flex-col w-full max-w-[361.5px] items-start relative border border-solid border-[#0000001a] rounded-xl overflow-hidden cursor-pointer ${className || ''}`}
+    <Card className={`flex flex-col w-full max-w-[280px] items-start relative border border-solid border-[#0000001a] rounded-xl overflow-hidden cursor-pointer ${className || ''}`}
       onMouseEnter={() => {
         setIsHovered(true)
         setHoveredListing(listing)

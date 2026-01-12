@@ -13,6 +13,8 @@ interface GuestSearchListingsGridProps {
   height?: string;
   customSnapshot?: any; // Allow passing custom snapshot with overridden functions
   selectedListingId?: string | null; // ID of listing selected via map marker click
+  columnCount?: number; // Dynamic column count from parent (1-4)
+  gridGap?: number; // Gap between cards in pixels (default 16)
 }
 
 const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
@@ -20,7 +22,9 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
   withCallToAction = false,
   height,
   customSnapshot,
-  selectedListingId
+  selectedListingId,
+  columnCount,
+  gridGap = 16
 }) => {
   const ITEMS_PER_LOAD = 18; // Load 6 rows (18 items for 3 columns)
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
@@ -237,7 +241,15 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
       };
   }, [withCallToAction, optimisticApply, optimisticRemoveApply]);
 
+  // Update gridColumns state for infinite scroll observer
   useEffect(() => {
+    // If columnCount is provided from parent, use it
+    if (columnCount !== undefined) {
+      setGridColumns(columnCount);
+      return;
+    }
+
+    // Fallback: calculate from viewport width (mobile/non-map-tab usage)
     const updateGridColumns = () => {
       const width = window.innerWidth;
       if (width >= 1100) {
@@ -247,9 +259,6 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
       } else {
         setGridColumns(1);
         // Reset visible listings filter when in mobile view
-        // Note: This reset logic might need reconsideration. If the map filter
-        // should *always* apply regardless of screen size, this 'if' block
-        // should be removed entirely. For now, keeping the original behavior.
         if (visibleListingIds !== null) {
           setVisibleListingIds(null);
         }
@@ -259,7 +268,7 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
     updateGridColumns();
     window.addEventListener('resize', updateGridColumns);
     return () => window.removeEventListener('resize', updateGridColumns);
-  }, [visibleListingIds, setVisibleListingIds]); // Keep dependencies for now as reset logic is tied to them
+  }, [columnCount, visibleListingIds, setVisibleListingIds]);
 
   // Only treat as selected if user explicitly clicked a marker AND we're showing one listing
   const isSelectedListing = visibleListingIds?.length === 1 && selectedListingId !== null;
@@ -300,7 +309,18 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
             className={`${isSingleListing ? '' : 'flex-grow'} w-[103%] sm:w-full mx-auto rounded-md pb-16 md:pb-2 pr-3`}
             style={{ height: isSingleListing ? 'auto' : undefined }}
           >
-            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center ${isSelectedListing ? 'sm:justify-items-center' : 'sm:grid-cols-2 sm:justify-items-start min-[1100px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-0' : 'pb-12'}`}>
+            <div
+              ref={gridRef}
+              className={`grid grid-cols-1 justify-items-center ${
+                isSelectedListing ? 'sm:justify-items-center' : 'justify-items-start'
+              } ${isSingleListing ? 'pb-0' : 'pb-12'}`}
+              style={{
+                gridTemplateColumns: columnCount && !isSelectedListing
+                  ? `repeat(${columnCount}, 280px)`
+                  : undefined,
+                gap: `${gridGap}px`
+              }}
+            >
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
                 return (

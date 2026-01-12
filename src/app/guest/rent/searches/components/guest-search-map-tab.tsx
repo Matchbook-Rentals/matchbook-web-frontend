@@ -13,6 +13,7 @@ import { BrandButton } from '@/components/ui/brandButton';
 import { Map } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { calculateRent } from '@/lib/calculate-rent';
+import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
 import { X } from 'lucide-react';
 import { GuestFilterDisplay } from './guest-filter-display';
@@ -166,6 +167,11 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
   const [viewportHeight, setViewportHeight] = useState(0);
   const [calculatedHeight, setCalculatedHeight] = useState(0);
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
+
+  // Dynamic grid/map layout
+  const layoutContainerRef = useRef<HTMLDivElement>(null);
+  const { columnCount, listingsWidth, shouldShowSideBySide, gridGap, isCalculated } =
+    useListingsGridLayout(layoutContainerRef, { minMapWidth: 300 });
 
   useEffect(() => {
     setIsClient(true);
@@ -360,6 +366,8 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
         optimisticRemoveDislike: actions.optimisticRemoveDislike,
       }}
       selectedListingId={clickedMarkerId}
+      columnCount={isDesktopView ? columnCount : undefined}
+      gridGap={gridGap}
     />
   );
 
@@ -449,10 +457,19 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
           renderSelectedListingFilterDisplay() :
           <GuestFilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
         }
-        <div className="flex flex-col md:flex-row justify-start md:justify-center">
+        <div
+          ref={layoutContainerRef}
+          className="flex flex-col md:flex-row justify-start md:justify-center"
+        >
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (
-            <div className="w-full md:w-3/5 md:pr-4">
+            <div
+              className="w-full pr-4"
+              style={isDesktopView && isCalculated && shouldShowSideBySide
+                ? { width: `${listingsWidth}px`, flexShrink: 0 }
+                : undefined
+              }
+            >
               {renderListingsContent()}
             </div>
           )}
@@ -473,7 +490,10 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
 
           {/* Map container for Desktop */}
           {isClient && isDesktopView && (
-            <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
+            <div
+              className="mt-0"
+              style={isFullscreen ? { width: '100%' } : { flexGrow: 1, minWidth: 0 }}
+            >
               <GuestSearchMap
                 center={[mockTrip?.longitude || mapCenter.lng, mockTrip?.latitude || mapCenter.lat]}
                 zoom={zoomLevel}

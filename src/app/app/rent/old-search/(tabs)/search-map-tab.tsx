@@ -11,6 +11,7 @@ import { BrandButton } from '@/components/ui/brandButton';
 import { Map } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
+import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { calculateRent } from '@/lib/calculate-rent';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
 import { X } from 'lucide-react';
@@ -163,6 +164,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, contentHeight = null
 
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
+
+  // Dynamic grid/map layout
+  const layoutContainerRef = useRef<HTMLDivElement>(null);
+  const { columnCount, listingsWidth, shouldShowSideBySide, gridGap, isCalculated } =
+    useListingsGridLayout(layoutContainerRef, { minMapWidth: 300 });
 
   useEffect(() => {
     setIsClient(true);
@@ -385,6 +391,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, contentHeight = null
       height={calculatedHeight ?? '100%'}
       customSnapshot={enhancedSnapshot}
       selectedListingId={clickedMarkerId}
+      columnCount={isDesktopView ? columnCount : undefined}
+      gridGap={gridGap}
     />
   );
 
@@ -571,13 +579,22 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, contentHeight = null
           renderSelectedListingFilterDisplay() :
           <FilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
         }
-        <div className="flex-1 flex flex-col md:flex-row justify-start md:justify-center overflow-hidden">
+        <div
+          ref={layoutContainerRef}
+          className="flex-1 flex flex-col md:flex-row justify-start md:justify-center overflow-hidden"
+        >
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (
-            <div className="w-full md:w-3/5 md:pr-4 h-full">
-            {renderListingsContent()}
-          </div>
-        )}
+            <div
+              className="w-full h-full pr-4"
+              style={isDesktopView && isCalculated && shouldShowSideBySide
+                ? { width: `${listingsWidth}px`, flexShrink: 0 }
+                : undefined
+              }
+            >
+              {renderListingsContent()}
+            </div>
+          )}
 
         {/* Mobile-only Map button */}
         {isClient && !isDesktopView && (
@@ -595,8 +612,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen, contentHeight = null
 
           {/* Map container for Desktop - adjust width based on fullscreen state */}
           {isClient && isDesktopView && (
-            <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0 h-full`}>
-            <SearchMap
+            <div
+              className="mt-0 h-full"
+              style={isFullscreen ? { width: '100%' } : { flexGrow: 1, minWidth: 0 }}
+            >
+              <SearchMap
               center={[trip?.longitude || mapCenter.lng, trip?.latitude || mapCenter.lat]}
             zoom={zoomLevel}
             height={calculatedHeight ?? '100%'}
