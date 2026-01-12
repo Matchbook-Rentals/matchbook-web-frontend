@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { PDFEditor } from "@/components/pdf-editor/PDFEditor";
 import { toast } from "@/components/ui/use-toast";
 import { BrandAlertProvider } from "@/hooks/useBrandAlert";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface TemplateEditClientProps {
   template: {
@@ -40,6 +41,7 @@ export default function TemplateEditClient({
   const router = useRouter();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const loadPdfFile = async () => {
@@ -157,13 +159,13 @@ export default function TemplateEditClient({
         initialWorkflowState="template"
         templateType={(template.type as 'lease' | 'addendum') || 'lease'}
         templateName={template.title}
-        initialTemplate={template}
         initialFields={templateData?.fields || []}
         initialRecipients={templateData?.recipients || []}
         hostName={hostName}
         hostEmail={hostEmail}
         listingAddress={listingAddress}
         listingId={listingId}
+        isMobile={isMobile}
         onCancel={handleCancel}
         onSave={(updatedTemplateData) => {
           const finalTemplateData = {
