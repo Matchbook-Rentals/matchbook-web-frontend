@@ -168,8 +168,9 @@ export async function POST(req: Request) {
           userId: id,
           content: 'Welcome to MatchBook!',
           actionType: 'welcome_renter',
-          url: '/app/rent/searches',
-          read: false,
+          actionId: id, // Use user ID as action ID for welcome notifications
+          url: '/',
+          unread: true,
           emailData
         });
         console.log('✅ [Clerk Webhook] Welcome notification sent successfully');
