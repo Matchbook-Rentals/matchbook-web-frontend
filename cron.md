@@ -17,6 +17,7 @@ All cron jobs are implemented as API routes under `/api/cron/` and require autho
 | **Send Move-In Reminders** | Daily at 9:00 AM PT (4:00 PM UTC) | Sends move-in reminders to renters and hosts 3 days before move-in | [Details](./docs/cron/send-move-in-reminders.md) |
 | **Preview Move-In Reminders** | On-demand or before main job | Previews how many move-in notifications will be sent without sending them | [Details](./docs/cron/preview-move-in-reminders.md) |
 | **Complete Ended Bookings** | Daily at 2:00 AM PT (9:00 AM UTC) | Marks bookings as completed when their end date has passed | - |
+| **Preview Complete Ended Bookings** | On-demand | Previews which bookings would be marked as completed without modifying them | - |
 
 ## Quick Start
 
@@ -65,6 +66,10 @@ curl -H "Authorization: Bearer ${CRON_SECRET}" \
 # Complete ended bookings
 curl -H "Authorization: Bearer ${CRON_SECRET}" \
   https://your-domain.com/api/cron/complete-ended-bookings
+
+# Preview complete ended bookings
+curl -H "Authorization: Bearer ${CRON_SECRET}" \
+  https://your-domain.com/api/cron/preview-complete-ended-bookings
 ```
 
 ## External Scheduling
