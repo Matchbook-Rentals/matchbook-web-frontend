@@ -3,6 +3,7 @@
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
 import { createNotification } from './notifications'
+import { buildNotificationEmailData } from '@/lib/notification-builders'
 import { createBookingFromCompletedMatch } from './bookings'
 import { approveHousingRequest } from './housing-requests'
 
@@ -85,7 +86,7 @@ export async function handleSignerCompletion(
 
 // Send notification to the next signer
 async function sendNextSignerNotification(
-  documentId: string, 
+  documentId: string,
   nextSigner: { id: string; name: string; email: string; role: string },
   documentTitle: string
 ) {
@@ -100,6 +101,39 @@ async function sendNextSignerNotification(
       console.log(`⚠️ User not found for email: ${nextSigner.email}`)
       return
     }
+
+    // Find the match associated with this document to get the URL
+    const match = await prisma.match.findFirst({
+      where: { leaseDocumentId: documentId },
+      include: {
+        listing: { select: { title: true, userId: true } }
+      }
+    })
+
+    if (!match) {
+      console.log(`⚠️ No match found for document: ${documentId}`)
+      return
+    }
+
+    // Get host name for the email
+    const host = await prisma.user.findUnique({
+      where: { id: match.listing.userId },
+      select: { firstName: true, lastName: true }
+    })
+    const hostName = host ? `${host.firstName || ''} ${host.lastName || ''}`.trim() : 'the host'
+
+    // Send notification to the renter that the lease is ready for signing
+    await createNotification({
+      userId: user.id,
+      content: `You have a Match!`,
+      url: `/app/rent/match/${match.id}/lease-signing`,
+      actionType: 'application_approved',
+      actionId: documentId,
+      emailData: buildNotificationEmailData('application_approved', {
+        listingTitle: match.listing.title,
+        hostName
+      })
+    })
 
     console.log(`✅ Sent signing notification to ${nextSigner.name}`)
   } catch (error) {
