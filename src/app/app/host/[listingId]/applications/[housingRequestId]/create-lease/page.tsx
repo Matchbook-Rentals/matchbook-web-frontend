@@ -15,6 +15,7 @@ import Link from "next/link";
 import { createMergedDocument } from "@/actions/documents";
 import { BrandAlertProvider } from "@/hooks/useBrandAlert";
 import { useSignedFieldsStore } from "@/stores/signed-fields-store";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Helper function to get recipient color for proper styling
 const getRecipientColor = (index: number) => {
@@ -86,7 +87,8 @@ function CreateLeasePageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { signedFields, setSignedField, initializeSignedFields } = useSignedFieldsStore();
-  
+  const isMobile = useIsMobile();
+
   const listingId = params.listingId as string;
   const housingRequestId = params.housingRequestId as string;
   const templateIdsParam = searchParams.get('templates');
@@ -411,7 +413,7 @@ function CreateLeasePageContent() {
   const getButtonProps = () => {
     if (currentWorkflowState === 'signer1') {
       const unsignedFields = getUnsignedHostFields();
-      
+
       if (unsignedFields.length > 0) {
         return {
           text: 'Next Action',
@@ -419,7 +421,7 @@ function CreateLeasePageContent() {
         };
       } else {
         return {
-          text: 'Save and Continue', 
+          text: 'Save and Continue',
           action: completeStepFunction
         };
       }
@@ -428,6 +430,18 @@ function CreateLeasePageContent() {
       text: 'Create & Sign Document',
       action: completeStepFunction
     };
+  };
+
+  // Get contextual guidance text for mobile footer
+  const getGuidanceText = () => {
+    if (currentWorkflowState === 'signer1') {
+      const unsignedFields = getUnsignedHostFields();
+      if (unsignedFields.length > 0) {
+        return `${unsignedFields.length} signature field${unsignedFields.length > 1 ? 's' : ''} remaining`;
+      }
+      return 'All fields signed - ready to send';
+    }
+    return 'Review your lease package';
   };
 
   if (loading) {
@@ -509,28 +523,24 @@ function CreateLeasePageContent() {
 
   return (
     <BrandAlertProvider>
-      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] ">
+      <main className={`flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] ${mergedPDF && isMobile ? 'pb-24' : ''}`}>
 
       {/* Header */}
       <header className="flex flex-col gap-4 w-full">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
-              {currentWorkflowState === 'signer1' ? 'Sign and Send Lease' : 'Create Lease Package'}
+              {currentWorkflowState === 'signer1' ? 'Sign and Send Lease' : 'Finalize Lease'}
             </h1>
             <p className="text-[#5d606d] text-base leading-[19.2px] mt-1">
-              {isMerging 
-                ? `Merging ${templates.length} documents...`
-                : mergedPDF 
-                ? `Merged package: ${mergedPDF.pageCount} pages • ${mergedPDF.fields.filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).length} signature fields`
-                : templates.length === 1 
-                ? `Editing: ${templates[0].title}` 
-                : `${templates.length} documents selected for lease package`
+              {currentWorkflowState === 'signer1'
+                ? `${mergedPDF?.fields.filter(f => ['SIGNATURE', 'INITIALS'].includes(f.type)).length || 0} signature fields`
+                : 'Review and edit the lease before signing'
               }
             </p>
           </div>
           
-          {mergedPDF && (() => {
+          {mergedPDF && !isMobile && (() => {
             const buttonProps = getButtonProps();
             const isDisabled = !buttonProps.action || isCreatingDocument;
             return (
@@ -625,6 +635,7 @@ function CreateLeasePageContent() {
             }}
             currentUserInitials={housingRequest?.listing?.user?.signingInitials}
             currentUserName={housingRequest?.listing?.user ? `${housingRequest.listing.user.firstName || ''} ${housingRequest.listing.user.lastName || ''}`.trim() || housingRequest.listing.user.email : undefined}
+            isMobile={isMobile}
             customSidebarContent={(workflowState, defaultContent) => {
               // Only show custom sidebar during signing states
               if (workflowState === 'signer1') {
@@ -669,6 +680,32 @@ function CreateLeasePageContent() {
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787] mx-auto mb-4"></div>
             <p className="text-[#777b8b]">Loading templates...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Action Footer */}
+      {mergedPDF && isMobile && (
+        <div
+          className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50"
+          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
+          <div className="px-4 py-4 flex justify-between items-center gap-3">
+            <div className="text-sm text-gray-600 flex-1 min-w-0">
+              {getGuidanceText()}
+            </div>
+            <Button
+              onClick={() => {
+                const buttonProps = getButtonProps();
+                if (buttonProps.action) {
+                  buttonProps.action();
+                }
+              }}
+              disabled={!getButtonProps().action || isCreatingDocument}
+              className="bg-[#3c8787] hover:bg-[#2d6666] text-white px-4 py-2 whitespace-nowrap flex-shrink-0"
+            >
+              {isCreatingDocument ? 'Creating...' : getButtonProps().text}
+            </Button>
           </div>
         </div>
       )}

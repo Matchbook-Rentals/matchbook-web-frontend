@@ -29,6 +29,7 @@ interface PDFEditorDocumentProps {
   currentUserInitials?: string; // User's saved initials
   currentUserName?: string; // User's name for generating initials
   // signedFields are now provided by context
+  isMobile?: boolean; // Whether to use mobile-optimized layout
 }
 
 export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({ 
@@ -51,7 +52,8 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
   onSigningActionReady,
   onFieldSign,
   currentUserInitials,
-  currentUserName
+  currentUserName,
+  isMobile
 }) => {
   return (
     <PDFEditor
@@ -77,6 +79,7 @@ export const PDFEditorDocument: React.FC<PDFEditorDocumentProps> = ({
       onFieldSign={onFieldSign}
       currentUserInitials={currentUserInitials}
       currentUserName={currentUserName}
+      isMobile={isMobile}
     />
   );
 };
