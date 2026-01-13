@@ -6,6 +6,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AppSessionTracker from "@/components/AppSessionTracker";
 import AuthRecovery from "@/components/AuthRecovery";
+import { ReferralProcessor } from "@/components/referral-processor";
 
 const inter = Inter({ subsets: ["latin"] });
 const cutive = Cutive({ 
@@ -157,6 +158,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <AppSessionTracker />
           {/* Handles Clerk session recovery for idle tabs - see docs/auth/clerk-stale-session-fix.md */}
           <AuthRecovery />
+          {/* Process referral codes for new signups */}
+          <ReferralProcessor />
           <main>
             {children}
           </main>

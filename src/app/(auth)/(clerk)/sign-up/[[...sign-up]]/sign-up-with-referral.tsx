@@ -1,7 +1,7 @@
 "use client";
 
-import { SignUp } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { SignUp, useUser } from "@clerk/nextjs";
+import { useEffect, useState, useCallback } from "react";
 
 const REFERRAL_COOKIE_NAME = 'referral_code';
 
@@ -28,9 +28,26 @@ function getReferralCodeFromLocalStorage(): string | null {
   }
 }
 
+function clearReferralCode(): void {
+  // Clear cookie
+  if (typeof document !== 'undefined') {
+    document.cookie = `${REFERRAL_COOKIE_NAME}=; path=/; max-age=0`;
+  }
+  // Clear localStorage
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem(REFERRAL_COOKIE_NAME);
+    } catch {
+      // Ignore
+    }
+  }
+}
+
 export function SignUpWithReferral() {
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [referralProcessed, setReferralProcessed] = useState(false);
+  const { isSignedIn, user } = useUser();
 
   useEffect(() => {
     // Try cookie first, then localStorage as backup
@@ -49,6 +66,36 @@ export function SignUpWithReferral() {
 
     setIsReady(true);
   }, []);
+
+  // Process referral after successful signup
+  const processReferral = useCallback(async (userId: string, code: string) => {
+    try {
+      console.log(`[SignUp] Processing referral for user ${userId} with code ${code}`);
+      const response = await fetch('/api/referrals/process', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ referralCode: code }),
+      });
+
+      if (response.ok) {
+        console.log('[SignUp] Referral processed successfully');
+        clearReferralCode();
+      } else {
+        const data = await response.json();
+        console.log(`[SignUp] Referral processing failed: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('[SignUp] Error processing referral:', error);
+    }
+  }, []);
+
+  // When user signs in (after completing signup), process the referral
+  useEffect(() => {
+    if (isSignedIn && user && referralCode && !referralProcessed) {
+      setReferralProcessed(true);
+      processReferral(user.id, referralCode);
+    }
+  }, [isSignedIn, user, referralCode, referralProcessed, processReferral]);
 
   // Wait until we've checked for referral code before rendering
   // This prevents a flash where SignUp renders without the metadata
