@@ -33,9 +33,11 @@ const ListingDetailsBoxWithState: React.FC<ListingDetailsBoxWithStateProps> = ({
   const host = listing.user;
   const detailsBoxRef = useRef<HTMLDivElement>(null);
 
-  // Check current like/dislike state
+  // Check current like/dislike/applied/matched state
   const isLiked = state.lookup.favIds.has(listing.id);
   const isDisliked = state.lookup.dislikedIds.has(listing.id);
+  const hasApplied = state.lookup.requestedIds.has(listing.id);
+  const isMatched = state.lookup.matchIds.has(listing.id);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -220,13 +222,31 @@ const ListingDetailsBoxWithState: React.FC<ListingDetailsBoxWithStateProps> = ({
         </div>
 
         {/* Apply Now Button */}
-        <BrandButton
-          variant="outline"
-          className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
-          onClick={() => optimisticApply(listing)}
-        >
-          Apply Now
-        </BrandButton>
+        {isMatched ? (
+          <BrandButton
+            variant="default"
+            className="w-full min-w-0 mt-1 font-semibold cursor-default"
+            disabled
+          >
+            Matched
+          </BrandButton>
+        ) : hasApplied ? (
+          <BrandButton
+            variant="outline"
+            className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold cursor-default opacity-70"
+            disabled
+          >
+            Applied
+          </BrandButton>
+        ) : (
+          <BrandButton
+            variant="outline"
+            className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
+            onClick={() => optimisticApply(listing)}
+          >
+            Apply Now
+          </BrandButton>
+        )}
       </CardContent>
     </Card>
   );
