@@ -133,6 +133,7 @@ export async function runBackgroundCheck(params: BackgroundCheckParams): Promise
       console.log("=".repeat(80) + "\n");
     } else {
       // Send XML to Accio Data API
+      console.log("[LAST-CALL] Accio URL:", getAccioUrl());
       const accioResponse = await fetch(getAccioUrl(), {
         method: "POST",
         headers: {
@@ -178,11 +179,25 @@ export async function runBackgroundCheck(params: BackgroundCheckParams): Promise
       }
 
       // Extract order number if available
+      // Accio returns order number in various formats:
+      // 1. As attribute: <order orderID="MBWEB-04710192" number="MBWEB-04710192">
+      // 2. As text node: <order_number>MBWEB-04710192</order_number>
       orderNumber = "BC-" + Math.floor(Math.random() * 10000000);
       try {
-        const orderMatch = responseText.match(/<order_number>(.*?)<\/order_number>/);
+        // Try attribute format first (most common)
+        let orderMatch = responseText.match(/orderID="([^"]+)"/);
+        if (!orderMatch) {
+          orderMatch = responseText.match(/number="([^"]+)"/);
+        }
+        // Fallback to text node format
+        if (!orderMatch) {
+          orderMatch = responseText.match(/<order_number>(.*?)<\/order_number>/);
+        }
         if (orderMatch && orderMatch[1]) {
           orderNumber = orderMatch[1];
+          console.log("📋 Extracted order number:", orderNumber);
+        } else {
+          console.warn("⚠️ Could not extract order number from response, using fallback:", orderNumber);
         }
       } catch (err) {
         console.warn("Could not parse order number from response", err);
