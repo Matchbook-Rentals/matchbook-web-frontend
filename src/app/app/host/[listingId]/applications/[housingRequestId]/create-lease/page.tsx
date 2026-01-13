@@ -432,18 +432,6 @@ function CreateLeasePageContent() {
     };
   };
 
-  // Get contextual guidance text for mobile footer
-  const getGuidanceText = () => {
-    if (currentWorkflowState === 'signer1') {
-      const unsignedFields = getUnsignedHostFields();
-      if (unsignedFields.length > 0) {
-        return `${unsignedFields.length} signature field${unsignedFields.length > 1 ? 's' : ''} remaining`;
-      }
-      return 'All fields signed - ready to send';
-    }
-    return 'Review your lease package';
-  };
-
   if (loading) {
     return (
       <main className="flex flex-col items-start gap-6 px-6  py-8 bg-[#f9f9f9] ">
@@ -523,7 +511,7 @@ function CreateLeasePageContent() {
 
   return (
     <BrandAlertProvider>
-      <main className={`flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9] ${mergedPDF && isMobile ? 'pb-24' : ''}`}>
+      <main className="flex flex-col items-start gap-6 px-6 py-8 bg-[#f9f9f9]">
 
       {/* Header */}
       <header className="flex flex-col gap-4 w-full">
@@ -680,32 +668,6 @@ function CreateLeasePageContent() {
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3c8787] mx-auto mb-4"></div>
             <p className="text-[#777b8b]">Loading templates...</p>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile Action Footer */}
-      {mergedPDF && isMobile && (
-        <div
-          className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50"
-          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
-        >
-          <div className="px-4 py-4 flex justify-between items-center gap-3">
-            <div className="text-sm text-gray-600 flex-1 min-w-0">
-              {getGuidanceText()}
-            </div>
-            <Button
-              onClick={() => {
-                const buttonProps = getButtonProps();
-                if (buttonProps.action) {
-                  buttonProps.action();
-                }
-              }}
-              disabled={!getButtonProps().action || isCreatingDocument}
-              className="bg-[#3c8787] hover:bg-[#2d6666] text-white px-4 py-2 whitespace-nowrap flex-shrink-0"
-            >
-              {isCreatingDocument ? 'Creating...' : getButtonProps().text}
-            </Button>
           </div>
         </div>
       )}
