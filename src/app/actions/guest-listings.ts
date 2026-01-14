@@ -100,7 +100,7 @@ export const pullGuestListingsFromDb = async (
           { // Add condition to include only listings with compatible monthly pricing
             monthlyPricing: {
               some: {
-                months: { gte: tripLengthMonths } // >= floored months for inclusivity
+                months: tripLengthMonths // Exact match on floored trip length in months
               }
             }
           }

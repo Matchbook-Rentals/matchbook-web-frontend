@@ -227,7 +227,7 @@ export const pullListingsFromDb = async (
           { // Add condition to include only listings with compatible monthly pricing
             monthlyPricing: {
               some: {
-                months: { lte: tripLengthMonths } // Trip must be >= listing's minimum duration
+                months: tripLengthMonths // Exact match on floored trip length in months
               }
             }
           }
