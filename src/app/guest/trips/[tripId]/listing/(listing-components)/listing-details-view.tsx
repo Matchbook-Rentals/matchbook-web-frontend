@@ -12,12 +12,14 @@ interface ListingDetailsViewProps {
   listing: ListingAndImages;
   locationString: string;
   calculatedPrice: number;
+  trip?: any;  // Trip or mock trip for price/utilities calculation
 }
 
 export default function ListingDetailsView({
   listing,
   locationString,
   calculatedPrice,
+  trip,
 }: ListingDetailsViewProps) {
   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
@@ -73,7 +75,7 @@ export default function ListingDetailsView({
       <div className="w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6">
         <ListingImageCarousel listingImages={listing.listingImages || []} />
         <div className="flex justify-between gap-x-8 relative">
-          <ListingDescription listing={listing} />
+          <ListingDescription listing={listing} trip={trip} />
           <div className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block">
             <ListingDetailsBox listing={listing} calculatedPrice={calculatedPrice} />
           </div>

@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { BrandButton } from "@/components/ui/brandButton"
-import { MoreHorizontal, Star, ChevronLeft, ChevronRight, Heart, Share2 as Share2Icon, Heart as HeartIcon, Bed, Bath, Square } from "lucide-react"
+import { Heart, Heart as HeartIcon } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState, useRef, useEffect } from 'react'
 import { useGuestTripContext } from '@/contexts/guest-trip-context-provider'
@@ -24,7 +23,7 @@ import { calculateRent } from '@/lib/calculate-rent'
 const TITLE_MAX_LENGTH = 40
 
 // Text style variables
-const headerTextStyle = "font-medium text-black text-base"
+const headerTextStyle = "font-medium text-black text-sm"
 const bodyTextStyle = "font-normal text-[#4f4f4f] text-sm"
 
 interface SearchListingCardProps {
@@ -161,12 +160,17 @@ export default function SearchListingCard({ listing, status, className, style, d
       return;
     }
 
-    // For guests, show auth prompt instead of opening listing details
-    actions.showAuthPrompt('view', listing.id);
+    // Navigate to guest listing detail view
+    if (state.session?.id) {
+      router.push(`/guest/trips/${state.session.id}/listing/${listing.id}`);
+    } else {
+      // Fallback to auth prompt if no session
+      actions.showAuthPrompt('view', listing.id);
+    }
   };
 
   return (
-    <Card className={`flex flex-col w-full max-w-[280px] items-start relative border border-solid border-[#0000001a] rounded-xl overflow-hidden cursor-pointer ${className || ''}`}
+    <Card className={`flex flex-col w-full max-w-[280px] items-start relative border-none shadow-none rounded-xl overflow-hidden cursor-pointer ${className || ''}`}
       onMouseEnter={() => {
         setIsHovered(true)
         setHoveredListing(listing)
@@ -216,7 +220,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         </div>
       </div>
 
-      <CardContent className="w-full p-4 pt-3 flex flex-col gap-0">
+      <CardContent className="w-full pt-3 pb-0 px-0 flex flex-col gap-0">
         {/* Row 1: Property Title */}
         <div className="flex flex-col gap-0 pb-1">
           <h3 className={`${headerTextStyle} truncate whitespace-nowrap`}>
@@ -226,78 +230,15 @@ export default function SearchListingCard({ listing, status, className, style, d
           </h3>
         </div>
 
-        {/* Row 2: Location and Rating */}
-        <div className="flex flex-col gap-0 pb-6">
-          <div className="flex items-center justify-between w-full">
-            <div className={bodyTextStyle}>
-              {listing.displayCategory} in {listing.state}
-            </div>
-
-            <div className="flex items-center gap-0.5">
-              {listing.averageRating ? (
-                <>
-                  <div className="flex items-center">
-                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
-                    <span className={bodyTextStyle}>
-                      {listing.averageRating.toFixed(1)}
-                    </span>
-                  </div>
-                  <span className={bodyTextStyle}>
-                    ({listing.numberOfStays || 0})
-                  </span>
-                </>
-              ) : (
-                <span className={`${bodyTextStyle} italic`}>
-                  No reviews yet
-                </span>
-              )}
-            </div>
+        {/* Row 2: Property Details */}
+        <div className="flex flex-col gap-0 pb-2">
+          <div className={bodyTextStyle}>
+            {listing.roomCount || 4} Bed, {listing.bathroomCount || 2} Bath {listing.displayCategory || 'Property'}
           </div>
         </div>
 
-        {/* Row 3: Property Features */}
-        <div className="flex flex-col gap-3 pb-3">
-          <div className="flex items-center justify-between w-full">
-            <Badge
-              variant="outline"
-              className="bg-transparent border-none p-0 flex items-center gap-1.5"
-            >
-              <div className="relative w-5 h-5">
-                <Bed className="w-[18px] h-4 text-[#5d606d]" />
-              </div>
-              <span className={bodyTextStyle}>
-                {listing.roomCount || 4} bds
-              </span>
-            </Badge>
-            <div className="h-4 border-l-2 border-gray-200"></div>
-            <Badge
-              variant="outline"
-              className="bg-transparent border-none p-0 flex items-center gap-1.5"
-            >
-              <div className="relative w-5 h-5">
-                <Bath className="w-[18px] h-4 text-[#5d606d]" />
-              </div>
-              <span className={bodyTextStyle}>
-                {listing.bathroomCount || 2} ba
-              </span>
-            </Badge>
-            <div className="h-4 border-l-2 border-gray-200"></div>
-            <Badge
-              variant="outline"
-              className="bg-transparent border-none p-0 flex items-center gap-1.5"
-            >
-              <div className="relative w-5 h-5">
-                <Square className="w-5 h-5 text-[#5d606d]" />
-              </div>
-              <span className={bodyTextStyle}>
-                {listing.squareFootage?.toLocaleString() || 0} sqft
-              </span>
-            </Badge>
-          </div>
-        </div>
-
-        {/* Row 4: Availability */}
-        <div className="flex flex-col gap-3">
+        {/* Row 3: Availability */}
+        <div className="flex flex-col gap-0 pb-2">
           <div className={bodyTextStyle}>
             Available {state.session?.searchParams.startDate?.toLocaleDateString('en-gb', {
               day: '2-digit',
@@ -310,11 +251,16 @@ export default function SearchListingCard({ listing, status, className, style, d
         </div>
       </CardContent>
 
-      <CardFooter className="w-full p-4 border-t border-[#002c581a]">
-        <div className="w-full">
-          <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-xl">
+      <CardFooter className="w-full py-0 px-0 border-none">
+        <div className="w-full flex items-center justify-between">
+          <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-sm">
             ${calculatedPrice?.toLocaleString() || 0} / month
           </h2>
+          {listing.averageRating && (
+            <span className={bodyTextStyle}>
+              {listing.averageRating.toFixed(1)} ({listing.numberOfStays || 0})
+            </span>
+          )}
         </div>
       </CardFooter>
 

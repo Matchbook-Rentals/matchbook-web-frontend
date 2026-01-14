@@ -86,8 +86,12 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
   const isLiked = listingsSnapshot.isLiked(listing.id);
   const isDisliked = listingsSnapshot.isDisliked(listing.id);
 
-  // Calculate utilities based on trip duration
-  const utilitiesIncluded = getUtilitiesIncluded(listing, state.guestSession);
+  // Create mock trip object from guest session for utilities calculation
+  const mockTrip = state.session ? {
+    startDate: state.session.searchParams.startDate,
+    endDate: state.session.searchParams.endDate,
+  } : null;
+  const utilitiesIncluded = getUtilitiesIncluded(listing, mockTrip as any);
 
   // Constants for styling
   const sectionStyles = 'border-b pb-3 pt-3';

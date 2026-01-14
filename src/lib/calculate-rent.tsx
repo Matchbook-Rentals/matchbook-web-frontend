@@ -96,12 +96,22 @@ export const getUtilitiesIncluded = (
     pricing => pricing.months === lengthOfStay.months
   );
 
-  // If we have a match, use that; otherwise fallback to 1-month policy
+  // If we have an exact match, use that
   if (monthlyPricing?.utilitiesIncluded !== undefined) {
     return monthlyPricing.utilitiesIncluded;
   }
 
-  // Fallback to 1-month policy
-  const oneMonthPricing = listing.monthlyPricing?.find(pricing => pricing.months === 1);
-  return oneMonthPricing?.utilitiesIncluded ?? false;
+  // Fallback to closest available month (same logic as calculateRent)
+  if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
+    const closest = listing.monthlyPricing.reduce((prev, curr) => {
+      const prevDiff = Math.abs(prev.months - lengthOfStay.months);
+      const currDiff = Math.abs(curr.months - lengthOfStay.months);
+      if (currDiff < prevDiff) return curr;
+      if (currDiff === prevDiff && curr.months < prev.months) return curr;
+      return prev;
+    });
+    return closest.utilitiesIncluded;
+  }
+
+  return false;
 }

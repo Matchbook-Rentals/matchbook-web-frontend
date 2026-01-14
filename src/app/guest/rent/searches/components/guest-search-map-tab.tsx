@@ -175,25 +175,17 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
 
   useEffect(() => {
     setIsClient(true);
-    const checkScreenSize = () => {
-      setIsDesktopView(window.innerWidth >= 768);
-    };
 
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
+    const updateLayout = () => {
+      const isDesktop = window.innerWidth >= 768;
+      setIsDesktopView(isDesktop);
 
-    return () => {
-      window.removeEventListener('resize', checkScreenSize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const setHeight = () => {
+      // Calculate height immediately with current desktop state
       if (containerRef.current) {
         const containerRect = containerRef.current.getBoundingClientRect();
         const newStartY = containerRect.top;
         const newViewportHeight = window.innerHeight;
-        const filterDisplayHeight = isDesktopView ? 115 : 0;
+        const filterDisplayHeight = isDesktop ? 115 : 0;
         const newCalculatedHeight = newViewportHeight - newStartY - filterDisplayHeight;
         setStartY(newStartY);
         setViewportHeight(newViewportHeight);
@@ -203,13 +195,13 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
       }
     };
 
-    setHeight();
-    window.addEventListener('resize', setHeight);
+    updateLayout();
+    window.addEventListener('resize', updateLayout);
 
     return () => {
-      window.removeEventListener('resize', setHeight);
+      window.removeEventListener('resize', updateLayout);
     };
-  }, [isDesktopView]);
+  }, []);
 
   // Handle map mounting/unmounting with delay
   useEffect(() => {
@@ -326,7 +318,13 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
   const hasNoListingsAtAll = () => listings.length === 0;
   const isSingleListingSelected = () => visibleListingIds && visibleListingIds.length === 1 && clickedMarkerId !== null;
   const getSelectedListing = () => displayListings.find(listing => listing.id === visibleListingIds?.[0]);
-  const formatHeight = () => typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight;
+  const formatHeight = () => {
+    if (typeof calculatedHeight === 'number') {
+      // Use minimum height of 500px to prevent 0px on initial render
+      return `${Math.max(calculatedHeight, 500)}px`;
+    }
+    return calculatedHeight;
+  };
 
   // Rendering helper functions
   const renderSelectedListingDetails = () => {
@@ -497,7 +495,7 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
               <GuestSearchMap
                 center={[mockTrip?.longitude || mapCenter.lng, mockTrip?.latitude || mapCenter.lat]}
                 zoom={zoomLevel}
-                height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
+                height={formatHeight()}
                 markers={markers}
                 isFullscreen={isFullscreen}
                 setIsFullscreen={setIsFullscreen}
