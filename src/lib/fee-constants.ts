@@ -6,8 +6,8 @@
  *   - Always a flat rate regardless of deposit amount or trip duration
  *
  * SERVICE FEE: Percentage-based fee charged on monthly rent
- *   - 3% for trips 6 months or shorter
- *   - 1.5% for trips longer than 6 months
+ *   - 3% for trips shorter than 6 months
+ *   - 1.5% for trips 6 months or longer
  *   - Applied to the monthly rent amount (base rent + pet rent)
  *   - NOT applied to deposits
  *
@@ -45,9 +45,9 @@ export const FEES = {
    * Applied to monthly rent amounts only
    */
   SERVICE_FEE: {
-    /** 3% rate for trips 6 months or shorter */
+    /** 3% rate for trips shorter than 6 months */
     SHORT_TERM_RATE: 0.03,
-    /** 1.5% rate for trips longer than 6 months */
+    /** 1.5% rate for trips 6 months or longer */
     LONG_TERM_RATE: 0.015,
     /** Threshold in months for rate change */
     THRESHOLD_MONTHS: 6
@@ -69,8 +69,8 @@ export const FEES = {
  * @returns The applicable service fee rate (0.03 or 0.015)
  */
 export function getServiceFeeRate(tripMonths: number): number {
-  return tripMonths > FEES.SERVICE_FEE.THRESHOLD_MONTHS 
-    ? FEES.SERVICE_FEE.LONG_TERM_RATE 
+  return tripMonths >= FEES.SERVICE_FEE.THRESHOLD_MONTHS
+    ? FEES.SERVICE_FEE.LONG_TERM_RATE
     : FEES.SERVICE_FEE.SHORT_TERM_RATE;
 }
 

@@ -306,7 +306,7 @@ export function calculateServiceFee(
   rentAmount: number,
   tripMonths: number
 ): number {
-  const rate = tripMonths > FEES.SERVICE_FEE.THRESHOLD_MONTHS
+  const rate = tripMonths >= FEES.SERVICE_FEE.THRESHOLD_MONTHS
     ? FEES.SERVICE_FEE.LONG_TERM_RATE
     : FEES.SERVICE_FEE.SHORT_TERM_RATE;
 
