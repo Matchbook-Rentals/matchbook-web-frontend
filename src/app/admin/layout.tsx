@@ -92,6 +92,11 @@ export default async function AdminLayout({
       url: "/admin/notifications",
       icon: "Bell",
     },
+    {
+      title: "Referrals",
+      url: "/admin/referrals",
+      icon: "Gift",
+    },
   ];
 
   const devToolsItems = [
