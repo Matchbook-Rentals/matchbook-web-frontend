@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { CaliforniaPrivacyHtmlContent } from "./california-privacy-html-content";
 import fs from "fs";
 import path from "path";
@@ -37,6 +38,7 @@ export default async function CaliforniaPrivacyNoticePage() {
 
   const userId = user?.id || null;
   const isSignedIn = !!user;
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   return (
     <LegalPageTemplate
@@ -44,6 +46,7 @@ export default async function CaliforniaPrivacyNoticePage() {
       user={userObject}
       isSignedIn={isSignedIn}
       pageTitle="Privacy Notice for California Residents and Other States"
+      hasListings={hasListings}
     >
       <CaliforniaPrivacyHtmlContent htmlContent={htmlContent} />
     </LegalPageTemplate>

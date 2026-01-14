@@ -10,6 +10,7 @@ import { ReviewsSection } from "../../components/marketing-landing-components/re
 import Footer from "@/components/marketing-landing-components/footer";
 import { currentUser } from "@clerk/nextjs/server";
 import { HostsPageWrapper } from "@/components/hosts-page-wrapper";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 
@@ -32,15 +33,18 @@ export default async function HostsPage(): Promise<React.ReactNode> {
     publicMetadata: user.publicMetadata
   } : null;
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   return (
     <HostsPageWrapper>
       <div className="bg-background">
-        <MatchbookHeader 
-          userId={user?.id || null} 
-          user={userObject} 
+        <MatchbookHeader
+          userId={user?.id || null}
+          user={userObject}
           isSignedIn={!!user?.id}
           buttonText="List Your Property"
           buttonHref="/app/host/add-property"
+          hasListings={hasListings}
         />
         <div className="flex justify-center p-8">
           <MarketingPageHeader

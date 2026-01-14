@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { CookieNoticeContent } from "../cookie-notice/cookie-notice-content";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function CookiePolicyPage() {
 
   const userId = user?.id || null;
   const isSignedIn = !!user;
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   return (
     <LegalPageTemplate
@@ -33,6 +35,7 @@ export default async function CookiePolicyPage() {
       user={userObject}
       isSignedIn={isSignedIn}
       pageTitle="Cookie Policy"
+      hasListings={hasListings}
     >
       <CookieNoticeContent />
     </LegalPageTemplate>

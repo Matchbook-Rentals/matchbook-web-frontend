@@ -7,6 +7,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { ReferHostHero } from "./refer-host-hero";
 import { ReferHostHowItWorks } from "./refer-host-how-it-works";
 import { getOrCreateReferralCode } from "@/lib/referral";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Refer a Host',
@@ -35,12 +36,15 @@ export default async function ReferHostPage(): Promise<React.ReactNode> {
     }
   }
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   return (
     <div className="bg-background min-h-screen flex flex-col">
       <MatchbookHeader
         userId={user?.id || null}
         user={userObject}
         isSignedIn={!!user?.id}
+        hasListings={hasListings}
       />
       <div className="flex justify-center p-8">
         <MarketingPageHeader

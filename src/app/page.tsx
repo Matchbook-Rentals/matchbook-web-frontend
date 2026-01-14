@@ -11,6 +11,7 @@ import FAQSection from "@/components/home-components/faq-section";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { checkClientBetaAccess } from "@/utils/client-roles";
 import { getUserTripsCount } from "@/app/actions/trips";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 
 export const metadata: Metadata = {
@@ -37,11 +38,12 @@ const WebHomePage = async () => {
   
   // Get trip count if user is authenticated
   const tripCount = user?.id ? await getUserTripsCount() : 0;
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   return (
     <HomePageWrapper>
       <div className="overflow-x-hidden bg-background">
-        <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+        <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} hasListings={hasListings} />
         <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!user?.id} />
         <div className={spacerDivClassNames} />
         <RentEasyCopy />

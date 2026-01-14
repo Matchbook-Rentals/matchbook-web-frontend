@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import Footer from "@/components/marketing-landing-components/footer";
 import { cn } from "@/lib/utils";
 
@@ -15,13 +16,16 @@ export default async function ViewTermsPage() {
     publicMetadata: user.publicMetadata
   } : null;
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   return (
     <>
-      <MatchbookHeader 
-        userId={user?.id || null} 
-        user={userObject} 
+      <MatchbookHeader
+        userId={user?.id || null}
+        user={userObject}
         isSignedIn={!!user?.id}
         className="max-w-[80vw] md:max-w-[85vw] sm:max-w-[95vw] mx-auto px-4"
+        hasListings={hasListings}
       />
       
       <div className="container mx-auto px-4 py-8 max-w-[80vw] md:max-w-[85vw] sm:max-w-[95vw]">

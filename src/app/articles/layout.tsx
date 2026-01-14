@@ -3,6 +3,7 @@ import Footer from "@/components/marketing-landing-components/footer";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import { currentUser } from "@clerk/nextjs/server";
 import { PAGE_MARGIN } from "@/constants/styles";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 
 
 export default async function BlogLayout({
@@ -22,9 +23,11 @@ export default async function BlogLayout({
     publicMetadata: user.publicMetadata
   } : null;
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   return (
     <>
-      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} containerClassName={`${PAGE_MARGIN} px-0`} />
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} containerClassName={`${PAGE_MARGIN} px-0`} hasListings={hasListings} />
       {children}
       <Footer />
     </>

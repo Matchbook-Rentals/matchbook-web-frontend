@@ -22,26 +22,32 @@ interface MatchbookHeaderProps {
   containerClassName?: string;
   buttonText?: string;
   buttonHref?: string;
+  hasListings?: boolean;
 }
 
-export default function MatchbookHeader({ userId, user, isSignedIn, className, containerClassName, buttonText = "Become a Host", buttonHref = "/hosts" }: MatchbookHeaderProps): JSX.Element {
-  const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
+export default function MatchbookHeader({ userId, user, isSignedIn, className, containerClassName, buttonText = "Become a Host", buttonHref = "/hosts", hasListings: hasListingsProp }: MatchbookHeaderProps): JSX.Element {
+  const [hasListingsState, setHasListingsState] = useState<boolean | undefined>(hasListingsProp);
 
   useEffect(() => {
+    // Skip client-side fetch if hasListings was provided from server
+    if (hasListingsProp !== undefined) return;
+
     async function checkUserListings() {
       if (isSignedIn && userId) {
         try {
           const listingsCount = await getHostListingsCount();
-          setHasListings(listingsCount > 0);
+          setHasListingsState(listingsCount > 0);
         } catch (error) {
           console.error('Error fetching listings count:', error);
-          setHasListings(undefined);
+          setHasListingsState(undefined);
         }
       }
     }
-    
+
     checkUserListings();
-  }, [isSignedIn, userId]);
+  }, [isSignedIn, userId, hasListingsProp]);
+
+  const hasListings = hasListingsProp ?? hasListingsState;
 
   return (
     <header className={cn("w-full bg-background", className)}>
@@ -60,7 +66,7 @@ export default function MatchbookHeader({ userId, user, isSignedIn, className, c
           className="text-[#3c8787] border-[#3c8787] hover:bg-primaryBrand hover:text-white font-medium transition-colors duration-300 hidden md:block"
         >
           <Link href={hasListings ? "/refer-host" : buttonHref}>
-            {hasListings ? "Refer a Friend" : buttonText}
+            {hasListings ? "Refer a Host" : buttonText}
           </Link>
         </Button>
 

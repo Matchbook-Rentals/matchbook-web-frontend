@@ -6,6 +6,7 @@ import { VerificationHowItWorks } from "@/components/marketing-landing-component
 import { VerificationWhyItMatters } from "@/components/marketing-landing-components/verification-why-it-matters";
 import { VerificationStandOut } from "@/components/marketing-landing-components/verification-stand-out";
 import { currentUser } from "@clerk/nextjs/server";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Renter Verification',
@@ -25,9 +26,11 @@ export default async function VerificationPage() {
     publicMetadata: user.publicMetadata
   } : null;
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   return (
     <main className="max-w-full overflow-hidden">
-      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} hasListings={hasListings} />
       <div className="flex justify-center p-8 bg-background">
         <MarketingPageHeader headerText="MatchBook Renter Verification" breadcrumbText="Renter Verification" />
       </div>

@@ -1132,17 +1132,32 @@ export const getHostListings = async (page: number = 1, itemsPerPage: number = 1
 export const getHostListingsCount = async (): Promise<number> => {
   try {
     const userId = await checkAuth();
-    
+
     const totalCount = await prisma.listing.count({
       where: {
         userId: userId,
         deletedAt: null // Exclude soft-deleted listings
       }
     });
-    
+
     return totalCount;
   } catch (error) {
     console.error('Error in getHostListingsCount:', error);
+    return 0;
+  }
+}
+
+export const getHostListingsCountForUser = async (userId: string): Promise<number> => {
+  try {
+    const totalCount = await prisma.listing.count({
+      where: {
+        userId: userId,
+        deletedAt: null
+      }
+    });
+    return totalCount;
+  } catch (error) {
+    console.error('Error in getHostListingsCountForUser:', error);
     return 0;
   }
 }

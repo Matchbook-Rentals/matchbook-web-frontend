@@ -8,6 +8,7 @@ import { calculateRent } from '@/lib/calculate-rent';
 import PublicListingDetailsView from './(components)/public-listing-details-view'
 import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from 'next';
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 
 interface ListingPageProps {
   params: {
@@ -97,6 +98,8 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
     publicMetadata: user.publicMetadata
   } : null;
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   // Default location string for display
   const locationString = `${listing.city}, ${listing.state}`
 
@@ -107,6 +110,7 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
         user={userObject}
         isSignedIn={!!user?.id}
         className={`${PAGE_MARGIN} px-0`}
+        hasListings={hasListings}
       />
       <div className={`${PAGE_MARGIN} font-montserrat min-h-screen`}>
         <PublicListingDetailsView 

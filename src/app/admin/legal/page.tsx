@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { LegalContent } from "./legal-content";
 
 export default async function LegalPage() {
@@ -17,6 +18,7 @@ export default async function LegalPage() {
 
   const userId = user?.id || null;
   const isSignedIn = !!user;
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   return (
     <LegalPageTemplate
@@ -24,6 +26,7 @@ export default async function LegalPage() {
       user={userObject}
       isSignedIn={isSignedIn}
       pageTitle="Legal Documents"
+      hasListings={hasListings}
     >
       <LegalContent />
     </LegalPageTemplate>

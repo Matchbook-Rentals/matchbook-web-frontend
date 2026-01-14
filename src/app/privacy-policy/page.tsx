@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { PrivacyPolicyContent } from "./privacy-policy-content";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function PrivacyPolicyPage() {
 
   const userId = user?.id || null;
   const isSignedIn = !!user;
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   return (
     <LegalPageTemplate
@@ -33,6 +35,7 @@ export default async function PrivacyPolicyPage() {
       user={userObject}
       isSignedIn={isSignedIn}
       pageTitle="Privacy Policy"
+      hasListings={hasListings}
     >
       <PrivacyPolicyContent />
     </LegalPageTemplate>

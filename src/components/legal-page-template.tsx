@@ -25,6 +25,7 @@ interface LegalPageTemplateProps {
   isSignedIn: boolean;
   pageTitle: string;
   children?: React.ReactNode;
+  hasListings?: boolean;
 }
 
 export default function LegalPageTemplate({
@@ -32,14 +33,16 @@ export default function LegalPageTemplate({
   user,
   isSignedIn,
   pageTitle,
-  children
+  children,
+  hasListings
 }: LegalPageTemplateProps) {
   return (
     <div className="min-h-screen flex flex-col">
-      <MatchbookHeader 
-        userId={userId} 
-        user={user} 
-        isSignedIn={isSignedIn} 
+      <MatchbookHeader
+        userId={userId}
+        user={user}
+        isSignedIn={isSignedIn}
+        hasListings={hasListings}
       />
       
       <main className="flex-1 container mx-auto px-6 py-2">

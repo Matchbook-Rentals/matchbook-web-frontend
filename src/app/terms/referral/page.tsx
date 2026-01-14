@@ -2,6 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import fs from "fs";
 import path from "path";
 
@@ -42,6 +43,7 @@ export default async function ReferralTermsPage() {
     "referral-program-12-15-25.html"
   );
   const htmlContent = fs.readFileSync(htmlFilePath, "utf-8");
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   return (
     <LegalPageTemplate
@@ -49,6 +51,7 @@ export default async function ReferralTermsPage() {
       user={userObject}
       isSignedIn={!!user?.id}
       pageTitle="Referral Program Terms"
+      hasListings={hasListings}
     >
       <ReferralHtmlContent htmlContent={htmlContent} />
     </LegalPageTemplate>

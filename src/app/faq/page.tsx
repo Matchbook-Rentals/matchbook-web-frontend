@@ -8,6 +8,7 @@ import { Montserrat } from 'next/font/google';
 import Footer from '@/components/marketing-landing-components/footer';
 import { currentUser } from "@clerk/nextjs/server";
 import FAQSection from '@/components/home-components/faq-section';
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Frequently Asked Questions',
@@ -141,9 +142,11 @@ const FAQPage = async () => {
     publicMetadata: user.publicMetadata
   } : null;
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   return (
     <>
-      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} hasListings={hasListings} />
       <FAQSection />
       <Footer />
     </>

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { currentUser } from "@clerk/nextjs/server";
 import LegalPageTemplate from "@/components/legal-page-template";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { TermsHtmlContent } from "./terms-html-content";
 import fs from "fs";
 import path from "path";
@@ -28,6 +29,7 @@ export default async function TermsOfServicePage() {
 
   const userId = user?.id || null;
   const isSignedIn = !!user;
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   // Read the HTML file on the server
   const htmlFilePath = path.join(
@@ -44,6 +46,7 @@ export default async function TermsOfServicePage() {
       user={userObject}
       isSignedIn={isSignedIn}
       pageTitle="Terms of Service"
+      hasListings={hasListings}
     >
       <TermsHtmlContent htmlContent={htmlContent} />
     </LegalPageTemplate>

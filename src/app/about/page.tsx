@@ -7,6 +7,7 @@ import { Frame as MissionStatement } from '@/components/marketing-landing-compon
 import { Frame as WhatMakesUsDifferent } from '@/components/marketing-landing-components/about-us-makes-us-different';
 import { AboutUsLookingAhead } from '@/components/marketing-landing-components/about-us-looking-ahead';
 import { currentUser } from "@clerk/nextjs/server";
+import { getHostListingsCountForUser } from "@/app/actions/listings";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | About Us',
@@ -26,9 +27,11 @@ export default async function AboutPage() {
     publicMetadata: user.publicMetadata
   } : null;
 
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
+
   return (
     <>
-      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+      <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} hasListings={hasListings} />
       <div className="flex justify-center p-8">
         <MarketingPageHeader
           headerText="About Us"
