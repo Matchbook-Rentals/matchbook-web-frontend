@@ -65,9 +65,18 @@ type RentPayment = {
   amount: number;
   dueDate: Date;
   isPaid: boolean;
+  status?: string;
 };
 
 function getPaymentStatus(rentPayment: RentPayment): string {
+  // Check for explicit status field first
+  if (rentPayment.status === 'SUCCEEDED') return "Paid";
+  if (rentPayment.status === 'FAILED') return "Failed";
+  if (rentPayment.status === 'PROCESSING') return "Processing";
+  if (rentPayment.status === 'CANCELLED') return "Cancelled";
+  if (rentPayment.status === 'REFUNDED') return "Refunded";
+
+  // Fallback to legacy isPaid logic
   if (rentPayment.isPaid) return "Paid";
 
   const now = new Date();
