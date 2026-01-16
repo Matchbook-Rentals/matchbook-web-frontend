@@ -111,6 +111,11 @@ export default async function AdminLayout({
       icon: "AlertTriangle",
     },
     {
+      title: "Uncaptured Payments",
+      url: "/admin/uncaptured-payments",
+      icon: "DollarSign",
+    },
+    {
       title: "Stripe Integration",
       url: "/admin/stripe-integration",
       icon: "CreditCard",
