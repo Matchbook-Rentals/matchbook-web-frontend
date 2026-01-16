@@ -291,7 +291,7 @@ export const ProcessingScreen = ({
 
       if (success) {
         console.log('✅ Payment successful');
-        handlePaymentSuccess();
+        handlePaymentSuccess(newPaymentIntentId);
       } else {
         setIsProcessingPayment(false);
       }
@@ -350,13 +350,14 @@ export const ProcessingScreen = ({
   };
 
   // Handle payment success - called after payment is confirmed
-  const handlePaymentSuccess = async () => {
+  const handlePaymentSuccess = async (intentId?: string) => {
     // Mark payment complete, move to credit check
     setCompletedSteps(prev => [...prev, "select-payment", "payment"]);
     setCurrentStep("isoftpull");
 
     // Submit verification (two-tier flow)
-    await submitVerification();
+    // Pass intentId directly since React state may not have updated yet
+    await submitVerification(intentId || paymentIntentId);
   };
 
   // Handle retry after error - user has updated their info
@@ -365,7 +366,8 @@ export const ProcessingScreen = ({
     setInitialFormValues(null);
     setHasFormChanges(false);
     setCurrentStep("isoftpull");
-    await submitVerification();
+    // paymentIntentId should be in state by now since payment was already processed
+    await submitVerification(paymentIntentId);
     setIsRetrying(false);
   };
 
@@ -437,14 +439,17 @@ export const ProcessingScreen = ({
   };
 
   // Submit verification to API - single orchestrated call
-  const submitVerification = async () => {
+  const submitVerification = async (intentId?: string | null) => {
     // Get fresh form values
     const currentFormData = form.getValues();
 
-    try {
-      console.log("📤 Calling verification orchestrator...");
+    // Use passed intentId or fall back to state
+    const paymentId = intentId || paymentIntentId;
+    console.log("📤 Calling verification orchestrator with paymentIntentId:", paymentId);
 
+    try {
       // Single API call that handles the entire flow server-side
+      // Payment capture now happens server-side after successful iSoftPull
       const response = await fetch("/api/verification/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -460,6 +465,8 @@ export const ProcessingScreen = ({
           // FCRA audit timestamps
           creditCheckConsentAt: creditCheckConsentAt?.toISOString(),
           backgroundCheckConsentAt: backgroundCheckConsentAt?.toISOString(),
+          // Pass paymentIntentId for server-side capture after successful credit check
+          paymentIntentId: paymentId,
         }),
       });
 
@@ -493,29 +500,10 @@ export const ProcessingScreen = ({
       }
 
       // Mark all steps complete
+      // Note: Payment capture now happens server-side in /api/verification/run
+      // after successful iSoftPull credit check
       setCompletedSteps(prev => [...prev, "isoftpull", "accio"]);
       setCurrentStep("polling");
-
-      // Capture the payment now that verification succeeded
-      if (paymentIntentId) {
-        console.log('💰 Capturing payment hold...');
-        try {
-          const captureResponse = await fetch('/api/verification/capture-payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ paymentIntentId }),
-          });
-
-          if (!captureResponse.ok) {
-            const captureData = await captureResponse.json();
-            console.error('❌ Failed to capture payment:', captureData.error);
-          } else {
-            console.log('✅ Payment captured successfully');
-          }
-        } catch (captureError) {
-          console.error('❌ Error capturing payment:', captureError);
-        }
-      }
 
       await new Promise(resolve => setTimeout(resolve, 1500));
       setCompletedSteps(prev => [...prev, "polling"]);

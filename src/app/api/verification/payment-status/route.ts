@@ -57,14 +57,18 @@ export async function GET(req: Request) {
       });
 
       if (!alreadyExists) {
-        console.log('✅ [Payment Status] Creating Purchase record for paymentIntentId:', paymentIntentId);
+        // Use 'pending' status for pre-authorized payments (requires_capture/processing)
+        // Only use 'completed' if payment is already captured (succeeded)
+        const purchaseStatus = paymentIntent.status === 'succeeded' ? 'completed' : 'pending';
+
+        console.log('✅ [Payment Status] Creating Purchase record for paymentIntentId:', paymentIntentId, 'status:', purchaseStatus);
         await prisma.purchase.create({
           data: {
             type: 'matchbookVerification',
             amount: paymentIntent.amount,
             userId: userId,
             email: paymentIntent.receipt_email || null,
-            status: 'completed',
+            status: purchaseStatus,
             isRedeemed: false,
             metadata: JSON.stringify({
               paymentIntentId: paymentIntent.id,
@@ -72,7 +76,7 @@ export async function GET(req: Request) {
           },
         });
         purchaseCreated = true;
-        console.log('✅ [Payment Status] Purchase record created successfully');
+        console.log('✅ [Payment Status] Purchase record created successfully with status:', purchaseStatus);
       } else {
         console.log('ℹ️ [Payment Status] Purchase already exists for paymentIntentId:', paymentIntentId);
       }

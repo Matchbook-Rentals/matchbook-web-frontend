@@ -14,8 +14,10 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
+import stripe from "@/lib/stripe";
 import { runCreditCheck } from "@/lib/verification/credit-check";
 import { runBackgroundCheck } from "@/lib/verification/background-check";
+import { logPaymentEvent } from "@/lib/audit-logger";
 
 export async function POST(request: Request) {
   try {
@@ -38,6 +40,7 @@ export async function POST(request: Request) {
       dob,
       creditCheckConsentAt,
       backgroundCheckConsentAt,
+      paymentIntentId,
     } = body;
 
     console.log("\n" + "=".repeat(80));
@@ -45,6 +48,7 @@ export async function POST(request: Request) {
     console.log("=".repeat(80));
     console.log("👤 User ID:", userId);
     console.log("📋 Subject:", firstName, lastName);
+    console.log("💳 Payment Intent ID received:", paymentIntentId || "NOT PROVIDED");
 
     // Validate required fields
     if (!firstName || !lastName || !address || !city || !state || !zip || !ssn || !dob) {
@@ -140,6 +144,47 @@ export async function POST(request: Request) {
     }
 
     console.log("✅ Credit check passed:", creditResult.creditBucket);
+
+    // Step 3.5: Capture payment immediately after successful iSoftPull
+    // We get charged by iSoftPull for successful credit checks, so we must capture user payment now
+    if (paymentIntentId) {
+      console.log("\n💰 Step 3.5: Capturing payment after successful credit check...");
+      try {
+        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+        if (paymentIntent.status === "requires_capture") {
+          const capturedPayment = await stripe.paymentIntents.capture(paymentIntentId);
+          console.log("✅ Payment captured successfully:", capturedPayment.id);
+
+          // Update verification with payment capture timestamp
+          await prisma.verification.update({
+            where: { id: verification.id },
+            data: { paymentCapturedAt: new Date() },
+          });
+
+          // Log to audit history
+          await logPaymentEvent(
+            verification.id,
+            "payment_captured",
+            capturedPayment.id,
+            capturedPayment.amount,
+            true
+          );
+        } else if (paymentIntent.status === "succeeded") {
+          console.log("ℹ️ Payment already captured");
+        } else {
+          console.error("❌ Payment in unexpected state:", paymentIntent.status);
+          // Continue anyway - credit check already succeeded and we got charged
+          // Log this for manual review
+        }
+      } catch (captureError) {
+        console.error("❌ Failed to capture payment:", captureError);
+        // Since iSoftPull charged us, we continue with verification
+        // but this should be flagged for manual review
+      }
+    } else {
+      console.log("⚠️ No paymentIntentId provided - skipping payment capture");
+    }
 
     // Step 4: Run background check
     console.log("\n🔍 Step 4: Running background check...");

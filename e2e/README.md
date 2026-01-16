@@ -24,11 +24,19 @@ sudo npx playwright install-deps
    npx playwright install
    ```
 
-3. Set up test environment variables:
+3. Set up environment variables:
+
+   The tests require the following environment variables (typically already in your `.env.local`):
+
    ```bash
-   cp e2e/.env.test.example e2e/.env.test
+   # Required for dynamic test user creation/cleanup
+   CLERK_SECRET_KEY=sk_test_...
+
+   # Required for Clerk testing integration
+   CLERK_PUBLISHABLE_KEY=pk_test_...
    ```
-   Then edit `.env.test` with your test credentials.
+
+   **Note**: The tests dynamically create and clean up Clerk users, so `CLERK_SECRET_KEY` is required.
 
 ## Running Tests
 
@@ -98,10 +106,42 @@ npx playwright show-report
 
 ## Test Structure
 
+### Test Files
 - `auth-flow.spec.ts` - Complete authentication flow tests (sign in, sign out, session persistence)
 - `sign-in.spec.ts` - Sign in specific tests (valid/invalid credentials)
 - `sign-in-sign-out.spec.ts` - Simple sign in and sign out flow test
-- `helpers/auth.ts` - Helper functions for authentication
+- `verification-flow.spec.ts` - Verification flow tests including credit check and payment capture
+
+### Setup Files
+- `global.setup.ts` - Creates a fresh test user in Clerk before tests run
+- `global.teardown.ts` - Cleans up all test users after tests complete
+
+### Helper Files
+- `helpers/auth.ts` - Authentication helpers (sign in, sign out, session management)
+- `helpers/test-user.ts` - Dynamic test user creation/cleanup via Clerk API
+- `helpers/verification.ts` - Verification flow helpers (form filling, payment, assertions)
+
+## Test User Management
+
+Tests use dynamically created Clerk users instead of hardcoded credentials:
+
+1. **Before tests run** (`global.setup.ts`):
+   - Cleans up any stale test users from previous runs (older than 1 hour)
+   - Creates a fresh test user with `admin_dev` role
+   - Saves credentials to `.e2e-test-users.json` for cross-process sharing
+
+2. **During tests**:
+   - Tests read credentials from the shared file
+   - User has full access to protected routes like verification
+
+3. **After tests complete** (`global.teardown.ts`):
+   - Deletes all test users created during the run
+   - Removes the temporary credentials file
+
+This approach ensures:
+- No hardcoded test credentials in the codebase
+- Clean state for each test run
+- No accumulation of stale test users in Clerk
 
 ## Writing New Tests
 

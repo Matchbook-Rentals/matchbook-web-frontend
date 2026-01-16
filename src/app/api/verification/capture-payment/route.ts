@@ -47,21 +47,46 @@ export async function POST(req: Request) {
       amount: capturedPayment.amount,
     });
 
-    // Create Purchase record now that payment is captured
-    await prisma.purchase.create({
-      data: {
+    // Update or create Purchase record now that payment is captured
+    // Note: Purchase is typically created by payment-status when payment reaches requires_capture
+    // We update it to completed status here, or create if it doesn't exist (fallback)
+    const existingPurchase = await prisma.purchase.findFirst({
+      where: {
+        userId,
         type: 'matchbookVerification',
-        amount: capturedPayment.amount,
-        userId: userId,
-        status: 'completed',
         isRedeemed: false,
-        metadata: JSON.stringify({
-          paymentIntentId: capturedPayment.id,
-        }),
       },
+      orderBy: { createdAt: 'desc' },
     });
 
-    console.log('✅ [Verification] Purchase record created');
+    if (existingPurchase) {
+      // Update existing Purchase - avoid creating duplicates
+      await prisma.purchase.update({
+        where: { id: existingPurchase.id },
+        data: {
+          status: 'completed',
+          metadata: JSON.stringify({
+            paymentIntentId: capturedPayment.id,
+          }),
+        },
+      });
+      console.log('✅ [Verification] Purchase record updated:', existingPurchase.id);
+    } else {
+      // Fallback: create new Purchase if none exists
+      await prisma.purchase.create({
+        data: {
+          type: 'matchbookVerification',
+          amount: capturedPayment.amount,
+          userId: userId,
+          status: 'completed',
+          isRedeemed: false,
+          metadata: JSON.stringify({
+            paymentIntentId: capturedPayment.id,
+          }),
+        },
+      });
+      console.log('✅ [Verification] Purchase record created (fallback)');
+    }
 
     // Update Verification with payment capture audit
     const verification = await prisma.verification.findFirst({

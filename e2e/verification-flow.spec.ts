@@ -15,6 +15,8 @@ import {
   waitForNoCreditFileError,
   waitForVerificationFailed,
   waitForRefundSuccess,
+  capturePaymentIntentId,
+  verifyPaymentStatus,
   TEST_USERS,
   STRIPE_TEST_CARDS,
 } from './helpers/verification';
@@ -303,7 +305,7 @@ test.describe('Verification Flow', () => {
       await waitForVerificationFailed(page);
 
       // Verify refund message is shown
-      await expect(page.getByText(/refund/i)).toBeVisible();
+      await expect(page.getByText("We've refunded your payment.")).toBeVisible();
     });
 
     test('user can request refund after error', async ({ page }) => {
@@ -415,6 +417,106 @@ test.describe('Verification Flow', () => {
 
       // Should be back on credit auth
       await expect(page.getByTestId('verification-step-credit-auth')).toBeVisible();
+    });
+  });
+
+  test.describe('Payment Status Verification', () => {
+    test('successful verification captures payment (status: succeeded)', async ({ page }) => {
+      // Set up route interception to capture paymentIntentId
+      const getPaymentIntentId = await capturePaymentIntentId(page);
+
+      await expect(page.getByTestId('verification-flow')).toBeVisible();
+      await fillVerificationForm(page, TEST_USERS.GOOD_CREDIT);
+      await clickContinue(page);
+      await acceptBackgroundAuth(page);
+      await acceptCreditAuth(page);
+
+      await expect(page.getByTestId('processing-screen-select-payment')).toBeVisible();
+      await selectOrFillPaymentMethod(page);
+      await clickContinue(page);
+
+      await waitForVerificationComplete(page);
+
+      // Verify payment was captured
+      const paymentIntentId = await getPaymentIntentId();
+      expect(paymentIntentId).toBeTruthy();
+      await verifyPaymentStatus(page, paymentIntentId!, 'succeeded');
+    });
+
+    test('first credit check failure leaves payment uncaptured (status: requires_capture)', async ({ page }) => {
+      const getPaymentIntentId = await capturePaymentIntentId(page);
+
+      await expect(page.getByTestId('verification-flow')).toBeVisible();
+      await fillVerificationForm(page, TEST_USERS.INVALID_SSN);
+      await clickContinue(page);
+      await acceptBackgroundAuth(page);
+      await acceptCreditAuth(page);
+
+      await expect(page.getByTestId('processing-screen-select-payment')).toBeVisible();
+      await selectOrFillPaymentMethod(page);
+      await clickContinue(page);
+
+      // Wait for SSN error
+      await waitForSsnError(page);
+
+      // Payment should still be uncaptured (user might retry)
+      const paymentIntentId = await getPaymentIntentId();
+      expect(paymentIntentId).toBeTruthy();
+      await verifyPaymentStatus(page, paymentIntentId!, 'requires_capture');
+    });
+
+    test('user requesting refund cancels payment (status: canceled)', async ({ page }) => {
+      const getPaymentIntentId = await capturePaymentIntentId(page);
+
+      await expect(page.getByTestId('verification-flow')).toBeVisible();
+      await fillVerificationForm(page, TEST_USERS.INVALID_SSN);
+      await clickContinue(page);
+      await acceptBackgroundAuth(page);
+      await acceptCreditAuth(page);
+
+      await expect(page.getByTestId('processing-screen-select-payment')).toBeVisible();
+      await selectOrFillPaymentMethod(page);
+      await clickContinue(page);
+
+      await waitForSsnError(page);
+
+      // Click refund button
+      await page.getByRole('button', { name: /get.*refund/i }).click();
+      await waitForRefundSuccess(page);
+
+      // Payment should be canceled
+      const paymentIntentId = await getPaymentIntentId();
+      expect(paymentIntentId).toBeTruthy();
+      await verifyPaymentStatus(page, paymentIntentId!, 'canceled');
+    });
+
+    test('retry after failure with valid SSN captures payment (status: succeeded)', async ({ page }) => {
+      const getPaymentIntentId = await capturePaymentIntentId(page);
+
+      await expect(page.getByTestId('verification-flow')).toBeVisible();
+
+      // First attempt with invalid SSN
+      await fillVerificationForm(page, TEST_USERS.INVALID_SSN);
+      await clickContinue(page);
+      await acceptBackgroundAuth(page);
+      await acceptCreditAuth(page);
+
+      await expect(page.getByTestId('processing-screen-select-payment')).toBeVisible();
+      await selectOrFillPaymentMethod(page);
+      await clickContinue(page);
+
+      await waitForSsnError(page);
+
+      // Update SSN and retry (placeholder is different on retry screen)
+      await page.getByPlaceholder('123-45-6789').fill(TEST_USERS.GOOD_CREDIT.ssn);
+      await page.getByTestId('verification-primary-button').click();
+
+      await waitForVerificationComplete(page);
+
+      // Payment should be captured after successful retry
+      const paymentIntentId = await getPaymentIntentId();
+      expect(paymentIntentId).toBeTruthy();
+      await verifyPaymentStatus(page, paymentIntentId!, 'succeeded');
     });
   });
 

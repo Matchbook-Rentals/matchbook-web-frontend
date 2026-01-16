@@ -40,15 +40,21 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // Clerk setup - runs before all tests to obtain testing token
+    // Clerk setup - runs before all tests to obtain testing token and create test user
     {
       name: 'setup',
       testMatch: /global\.setup\.ts/,
+    },
+    // Teardown - runs after all tests to cleanup test users
+    {
+      name: 'teardown',
+      testMatch: /global\.teardown\.ts/,
     },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['setup'],
+      teardown: 'teardown',
     },
 
     // {

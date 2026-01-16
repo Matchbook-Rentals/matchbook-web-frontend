@@ -198,6 +198,16 @@ export async function selectOrFillPaymentMethod(
 
   // Fill Stripe card details in the iframe
   await fillStripeCard(page, cardNumber, expiry, cvc);
+
+  // Click "Save Card" button to save the payment method
+  const saveCardButton = page.getByRole('button', { name: /save card/i });
+  if (await saveCardButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await saveCardButton.click();
+    console.log('Clicked Save Card button');
+    // Wait for card to be saved (button may change or form may close)
+    await page.waitForTimeout(3000);
+  }
+
   return false;
 }
 
@@ -226,9 +236,14 @@ export async function fillStripeCard(
   // Fall back to Stripe iframe
   await page.waitForSelector('iframe[name*="__privateStripeFrame"]', { timeout: 10000 });
   const stripeFrame = page.frameLocator('iframe[name*="__privateStripeFrame"]').first();
-  await stripeFrame.getByPlaceholder('Card number').fill(cardNumber);
-  await stripeFrame.getByPlaceholder('MM / YY').fill(expiry);
-  await stripeFrame.getByPlaceholder('CVC').fill(cvc);
+
+  // Stripe inputs use accessible names, not placeholder attributes
+  await stripeFrame.getByRole('textbox', { name: 'Card number' }).fill(cardNumber);
+  await stripeFrame.getByRole('textbox', { name: /expiration/i }).fill(expiry);
+  await stripeFrame.getByRole('textbox', { name: /security code/i }).fill(cvc);
+
+  // Also need to fill ZIP code for Stripe
+  await stripeFrame.getByRole('textbox', { name: 'ZIP code' }).fill('92008');
 }
 
 /**
@@ -236,8 +251,9 @@ export async function fillStripeCard(
  */
 export async function waitForVerificationComplete(page: Page): Promise<void> {
   // Wait for completion indicators - either the complete screen or redirect to list
+  // Use specific heading to avoid matching multiple elements
   await expect(
-    page.getByText(/Verification Complete|Proceeding to report/i)
+    page.getByRole('heading', { name: /Verification Complete/i }).first()
   ).toBeVisible({ timeout: 60000 });
 }
 
@@ -267,6 +283,41 @@ export async function waitForRefundSuccess(page: Page): Promise<void> {
  */
 export async function waitForVerificationFailed(page: Page): Promise<void> {
   await expect(page.getByTestId('processing-screen-verification-failed')).toBeVisible({ timeout: 30000 });
+}
+
+/**
+ * Set up route interception to capture paymentIntentId
+ * Returns a promise that resolves with the paymentIntentId when payment is created
+ */
+export async function capturePaymentIntentId(page: Page): Promise<() => Promise<string | null>> {
+  let paymentIntentId: string | null = null;
+
+  await page.route('**/api/verification/charge-payment-method', async (route) => {
+    const response = await route.fetch();
+    const json = await response.json();
+    paymentIntentId = json.paymentIntentId || null;
+    console.log('Captured paymentIntentId:', paymentIntentId);
+    await route.fulfill({ response, json });
+  });
+
+  // Return a function to get the captured ID
+  return async () => paymentIntentId;
+}
+
+/**
+ * Verify the Stripe payment status via dev API
+ */
+export async function verifyPaymentStatus(
+  page: Page,
+  paymentIntentId: string,
+  expectedStatus: 'requires_capture' | 'succeeded' | 'canceled'
+): Promise<void> {
+  const response = await page.request.get(`/api/dev/payment-status?paymentIntentId=${paymentIntentId}`);
+  expect(response.ok()).toBeTruthy();
+
+  const data = await response.json();
+  console.log(`Payment ${paymentIntentId} status: ${data.status} (expected: ${expectedStatus})`);
+  expect(data.status).toBe(expectedStatus);
 }
 
 /**
