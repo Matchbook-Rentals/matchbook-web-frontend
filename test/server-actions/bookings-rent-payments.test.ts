@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateRentPayments } from '@/app/actions/bookings';
+import { generateRentPayments } from '@/lib/utils/rent-payments';
 
 /**
  * Tests for generateRentPayments function
