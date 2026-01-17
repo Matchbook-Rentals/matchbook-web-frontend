@@ -126,7 +126,7 @@ export async function getBookingWithModifications(bookingId: string) {
 }
 
 // Utility function to generate scheduled rent payments with pro-rating
-function generateRentPayments(
+export function generateRentPayments(
   bookingId: string,
   monthlyRent: number,
   startDate: Date,
@@ -583,6 +583,7 @@ export async function getHostBookings() {
           select: {
             id: true,
             amount: true,
+            type: true,
             dueDate: true,
             isPaid: true,
             paymentModifications: {
@@ -881,6 +882,7 @@ export async function getBookingsByListingId(listingId: string) {
           select: {
             id: true,
             amount: true,
+            type: true,
             dueDate: true,
             isPaid: true,
             paymentModifications: {
@@ -1234,6 +1236,7 @@ export async function getAllListingBookings(listingId: string) {
           select: {
             id: true,
             amount: true,
+            type: true,
             dueDate: true,
             isPaid: true,
             paymentModifications: {
