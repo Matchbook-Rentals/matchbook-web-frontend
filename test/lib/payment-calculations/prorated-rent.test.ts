@@ -471,4 +471,126 @@ describe('generatePaymentSchedule', () => {
       expect(schedule[0].breakdown?.petRent).toBeCloseTo(54.84, 0);
     });
   });
+
+  describe('Itemized charges in payment schedule', () => {
+    it('should include charges array in each payment', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 0, 1), endDate: localDate(2025, 0, 31) },
+        1000,
+        0,
+        true
+      );
+
+      expect(schedule[0].charges).toBeDefined();
+      expect(Array.isArray(schedule[0].charges)).toBe(true);
+      expect(schedule[0].charges!.length).toBeGreaterThan(0);
+    });
+
+    it('should include BASE_RENT charge', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 0, 1), endDate: localDate(2025, 0, 31) },
+        1000,
+        0,
+        true
+      );
+
+      const baseRentCharge = schedule[0].charges?.find(c => c.category === 'BASE_RENT');
+      expect(baseRentCharge).toBeDefined();
+      expect(baseRentCharge?.isApplied).toBe(true);
+    });
+
+    it('should include PLATFORM_FEE charge with correct rate metadata', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 0, 1), endDate: localDate(2025, 0, 31) },
+        1000,
+        0,
+        true
+      );
+
+      const platformFee = schedule[0].charges?.find(c => c.category === 'PLATFORM_FEE');
+      expect(platformFee).toBeDefined();
+      expect(platformFee?.isApplied).toBe(true);
+      // Metadata should include rate info
+      expect(platformFee?.metadata).toBeDefined();
+    });
+
+    it('should include PET_RENT charge when pet rent is specified', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 0, 1), endDate: localDate(2025, 0, 31) },
+        1000,
+        100, // pet rent
+        true
+      );
+
+      const petRentCharge = schedule[0].charges?.find(c => c.category === 'PET_RENT');
+      expect(petRentCharge).toBeDefined();
+      expect(petRentCharge?.isApplied).toBe(true);
+    });
+
+    it('should include baseAmount and totalAmount fields', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 0, 1), endDate: localDate(2025, 0, 31) },
+        1000,
+        0,
+        true
+      );
+
+      expect(schedule[0].baseAmount).toBeDefined();
+      expect(schedule[0].totalAmount).toBeDefined();
+      // totalAmount should be greater than baseAmount (includes fees)
+      expect(schedule[0].totalAmount).toBeGreaterThan(schedule[0].baseAmount!);
+    });
+
+    it('should have charges in cents (not dollars)', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 0, 1), endDate: localDate(2025, 0, 31) },
+        1000, // $1000 rent
+        0,
+        true
+      );
+
+      const baseRentCharge = schedule[0].charges?.find(c => c.category === 'BASE_RENT');
+      // $1000 in cents = 100000
+      expect(baseRentCharge?.amount).toBe(100000);
+    });
+  });
+
+  describe('Complete booking scenario: Feb 10 to Dec 31', () => {
+    it('should generate 11 payments with correct totals', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 1, 10), endDate: localDate(2025, 11, 31) },
+        1000,
+        0,
+        true
+      );
+
+      expect(schedule.length).toBe(11);
+
+      // First payment: Feb 10-28 (19 days of 28)
+      expect(schedule[0].isProrated).toBe(true);
+      // 1000 * 19 / 28 = 678.57
+      expect(schedule[0].breakdown?.rent).toBeCloseTo(678.57, 0);
+
+      // Payments 2-11 should be full months
+      for (let i = 1; i < 11; i++) {
+        expect(schedule[i].breakdown?.rent).toBe(1000);
+      }
+    });
+
+    it('should apply long-term rate (1.5%) for 11-month stay', () => {
+      const schedule = generatePaymentSchedule(
+        { startDate: localDate(2025, 1, 10), endDate: localDate(2025, 11, 31) },
+        1000,
+        0,
+        true
+      );
+
+      // 11 months >= 6, so 1.5% rate
+      // First month: 1.5% of $678.57 = $10.18
+      expect(schedule[0].breakdown?.serviceFee).toBeCloseTo(10.18, 0);
+
+      // Full month: 1.5% of $1000 = $15
+      expect(schedule[1].breakdown?.serviceFee).toBe(15);
+    });
+  });
 });

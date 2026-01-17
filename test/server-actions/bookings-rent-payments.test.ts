@@ -20,13 +20,13 @@ import { generateRentPayments } from '@/app/actions/bookings';
 // Helper to create local dates (month is 0-indexed: 0=Jan, 1=Feb, etc.)
 const localDate = (year: number, month: number, day: number) => new Date(year, month, day);
 
-describe('generateRentPayments', () => {
+describe('generateRentPayments', async () => {
   const mockBookingId = 'test-booking-123';
   const mockPaymentMethodId = 'pm_test_123';
 
-  describe('User scenario: January 15 to February 15, $1000 rent', () => {
-    it('should create 2 payments for Jan 15 to Feb 15', () => {
-      const payments = generateRentPayments(
+  describe('User scenario: January 15 to February 15, $1000 rent', async () => {
+    it('should create 2 payments for Jan 15 to Feb 15', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 15), // Jan 15, 2025
@@ -37,8 +37,8 @@ describe('generateRentPayments', () => {
       expect(payments).toHaveLength(2);
     });
 
-    it('should correctly prorate first payment (Jan 15-31: 17 days)', () => {
-      const payments = generateRentPayments(
+    it('should correctly prorate first payment (Jan 15-31: 17 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 15), // Jan 15
@@ -54,8 +54,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].type).toBe('MONTHLY_RENT');
     });
 
-    it('should correctly prorate second payment (Feb 1-15: 15 days of 28)', () => {
-      const payments = generateRentPayments(
+    it('should correctly prorate second payment (Feb 1-15: 15 days of 28)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 15), // Jan 15
@@ -70,8 +70,8 @@ describe('generateRentPayments', () => {
       expect(payments[1].paymentAuthorizedAt).toBeNull();
     });
 
-    it('should calculate different amount in leap year (Feb has 29 days)', () => {
-      const payments = generateRentPayments(
+    it('should calculate different amount in leap year (Feb has 29 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2024, 0, 15), // Jan 15, 2024 (leap year)
@@ -90,9 +90,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('First month proration only', () => {
-    it('should create single prorated payment for partial first month', () => {
-      const payments = generateRentPayments(
+  describe('First month proration only', async () => {
+    it('should create single prorated payment for partial first month', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 15), // Jan 15
@@ -106,8 +106,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].dueDate).toEqual(localDate(2025, 0, 15));
     });
 
-    it('should handle late start (January 25: 7 days)', () => {
-      const payments = generateRentPayments(
+    it('should handle late start (January 25: 7 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 25), // Jan 25
@@ -120,8 +120,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(226);
     });
 
-    it('should handle almost full month (January 2: 30 days)', () => {
-      const payments = generateRentPayments(
+    it('should handle almost full month (January 2: 30 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 2), // Jan 2
@@ -135,9 +135,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('Full months only (no proration)', () => {
-    it('should create single full payment for January 1-31', () => {
-      const payments = generateRentPayments(
+  describe('Full months only (no proration)', async () => {
+    it('should create single full payment for January 1-31', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 1), // Jan 1
@@ -150,8 +150,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].dueDate).toEqual(localDate(2025, 0, 1));
     });
 
-    it('should create 3 full payments for Jan 1 to Mar 31', () => {
-      const payments = generateRentPayments(
+    it('should create 3 full payments for Jan 1 to Mar 31', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 1), // Jan 1
@@ -169,8 +169,8 @@ describe('generateRentPayments', () => {
       expect(payments[2].dueDate).toEqual(localDate(2025, 2, 1));
     });
 
-    it('should handle full February (non-leap)', () => {
-      const payments = generateRentPayments(
+    it('should handle full February (non-leap)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 1, 1), // Feb 1
@@ -182,8 +182,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(1000);
     });
 
-    it('should handle full February (leap year)', () => {
-      const payments = generateRentPayments(
+    it('should handle full February (leap year)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2024, 1, 1), // Feb 1, 2024 (leap year)
@@ -196,9 +196,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('Last month proration only', () => {
-    it('should prorate last month when ending early', () => {
-      const payments = generateRentPayments(
+  describe('Last month proration only', async () => {
+    it('should prorate last month when ending early', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 1, 1), // Feb 1
@@ -211,8 +211,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(536);
     });
 
-    it('should prorate multi-month with early ending', () => {
-      const payments = generateRentPayments(
+    it('should prorate multi-month with early ending', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 1), // Jan 1
@@ -226,9 +226,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('February edge cases', () => {
-    it('should correctly calculate Feb 15 start (non-leap: 14 days)', () => {
-      const payments = generateRentPayments(
+  describe('February edge cases', async () => {
+    it('should correctly calculate Feb 15 start (non-leap: 14 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 1, 15), // Feb 15
@@ -241,8 +241,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(500);
     });
 
-    it('should correctly calculate Feb 15 start (leap year: 15 days)', () => {
-      const payments = generateRentPayments(
+    it('should correctly calculate Feb 15 start (leap year: 15 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2024, 1, 15), // Feb 15, 2024 (leap year)
@@ -255,8 +255,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(517);
     });
 
-    it('should correctly handle Feb 28 end in leap year (prorated)', () => {
-      const payments = generateRentPayments(
+    it('should correctly handle Feb 28 end in leap year (prorated)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2024, 1, 1), // Feb 1, 2024 (leap year)
@@ -270,8 +270,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(966);
     });
 
-    it('should handle Feb 20 start (non-leap: 9 days)', () => {
-      const payments = generateRentPayments(
+    it('should handle Feb 20 start (non-leap: 9 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 1, 20), // Feb 20
@@ -284,8 +284,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(321);
     });
 
-    it('should handle Feb 20 start (leap year: 10 days)', () => {
-      const payments = generateRentPayments(
+    it('should handle Feb 20 start (leap year: 10 days)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2024, 1, 20), // Feb 20, 2024 (leap year)
@@ -299,9 +299,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('Different rent amounts', () => {
-    it('should correctly prorate $1500 rent', () => {
-      const payments = generateRentPayments(
+  describe('Different rent amounts', async () => {
+    it('should correctly prorate $1500 rent', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1500,
         localDate(2025, 0, 15), // Jan 15
@@ -313,8 +313,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(823);
     });
 
-    it('should correctly prorate $2500 rent', () => {
-      const payments = generateRentPayments(
+    it('should correctly prorate $2500 rent', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         2500,
         localDate(2025, 0, 15), // Jan 15
@@ -326,8 +326,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(1371);
     });
 
-    it('should correctly prorate $750 rent', () => {
-      const payments = generateRentPayments(
+    it('should correctly prorate $750 rent', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         750,
         localDate(2025, 0, 15), // Jan 15
@@ -340,9 +340,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('30-day months', () => {
-    it('should correctly prorate April 15 start (16 days of 30)', () => {
-      const payments = generateRentPayments(
+  describe('30-day months', async () => {
+    it('should correctly prorate April 15 start (16 days of 30)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 3, 15), // Apr 15
@@ -355,8 +355,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(533);
     });
 
-    it('should correctly prorate June 1 to June 20 (20 days of 30)', () => {
-      const payments = generateRentPayments(
+    it('should correctly prorate June 1 to June 20 (20 days of 30)', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 5, 1), // Jun 1
@@ -370,9 +370,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('Long-term bookings (6+ months)', () => {
-    it('should generate 7 payments for Jan 15 to Jul 15', () => {
-      const payments = generateRentPayments(
+  describe('Long-term bookings (6+ months)', async () => {
+    it('should generate 7 payments for Jan 15 to Jul 15', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 15), // Jan 15
@@ -400,8 +400,8 @@ describe('generateRentPayments', () => {
       expect(payments[6].dueDate).toEqual(localDate(2025, 6, 1));
     });
 
-    it('should generate full year of payments', () => {
-      const payments = generateRentPayments(
+    it('should generate full year of payments', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 1), // Jan 1
@@ -418,9 +418,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('Payment metadata', () => {
-    it('should set correct bookingId on all payments', () => {
-      const payments = generateRentPayments(
+  describe('Payment metadata', async () => {
+    it('should set correct bookingId on all payments', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 1), // Jan 1
@@ -433,8 +433,8 @@ describe('generateRentPayments', () => {
       });
     });
 
-    it('should set correct stripePaymentMethodId on all payments', () => {
-      const payments = generateRentPayments(
+    it('should set correct stripePaymentMethodId on all payments', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 1), // Jan 1
@@ -447,8 +447,8 @@ describe('generateRentPayments', () => {
       });
     });
 
-    it('should only authorize first payment', () => {
-      const payments = generateRentPayments(
+    it('should only authorize first payment', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 15), // Jan 15
@@ -461,8 +461,8 @@ describe('generateRentPayments', () => {
       expect(payments[2].paymentAuthorizedAt).toBeNull();
     });
 
-    it('should set type to MONTHLY_RENT for all payments', () => {
-      const payments = generateRentPayments(
+    it('should set type to MONTHLY_RENT for all payments', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 1), // Jan 1
@@ -476,9 +476,9 @@ describe('generateRentPayments', () => {
     });
   });
 
-  describe('Very short stays', () => {
-    it('should handle 4-day stay at end of January', () => {
-      const payments = generateRentPayments(
+  describe('Very short stays', async () => {
+    it('should handle 4-day stay at end of January', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 0, 28), // Jan 28
@@ -491,8 +491,8 @@ describe('generateRentPayments', () => {
       expect(payments[0].amount).toBe(129);
     });
 
-    it('should handle 4-day stay at end of February', () => {
-      const payments = generateRentPayments(
+    it('should handle 4-day stay at end of February', async () => {
+      const payments = await generateRentPayments(
         mockBookingId,
         1000,
         localDate(2025, 1, 25), // Feb 25
