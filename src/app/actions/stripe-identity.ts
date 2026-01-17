@@ -161,18 +161,53 @@ export async function createStripeVerificationSession() {
 
     // Create a new verification session (modal-based flow)
     // If relatedPerson is defined, this will automatically attach to Connect account
-    const verificationSession = await stripe.identity.verificationSessions.create({
-      type: 'document',
-      ...(relatedPerson && { related_person: relatedPerson }),
-      provided_details: {
-        email: user.email || undefined,
-      },
-      metadata: {
-        user_id: user.id,
-        user_email: user.email || '',
-        user_name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
-      },
-    });
+    let verificationSession;
+    let linkedToConnect = false;
+
+    try {
+      verificationSession = await stripe.identity.verificationSessions.create({
+        type: 'document',
+        ...(relatedPerson && { related_person: relatedPerson }),
+        provided_details: {
+          email: user.email || undefined,
+        },
+        metadata: {
+          user_id: user.id,
+          user_email: user.email || '',
+          user_name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+        },
+      });
+      linkedToConnect = !!relatedPerson;
+    } catch (sessionError) {
+      // If linking to Connect account failed with permission error, retry without related_person
+      const isPermissionError = sessionError instanceof Error &&
+        sessionError.message.toLowerCase().includes('permission');
+
+      if (relatedPerson && isPermissionError) {
+        logger.warn('related_person linking failed with permission error, retrying without it', {
+          userId: user.id,
+          connectAccountId: user.stripeAccountId,
+          error: sessionError instanceof Error ? sessionError.message : 'Unknown error',
+        });
+
+        // Retry without related_person
+        verificationSession = await stripe.identity.verificationSessions.create({
+          type: 'document',
+          provided_details: {
+            email: user.email || undefined,
+          },
+          metadata: {
+            user_id: user.id,
+            user_email: user.email || '',
+            user_name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+          },
+        });
+        linkedToConnect = false;
+      } else {
+        // Not a permission error or no relatedPerson - rethrow
+        throw sessionError;
+      }
+    }
 
     // Store session ID and initial status in database
     await prismadb.user.update({
@@ -188,8 +223,8 @@ export async function createStripeVerificationSession() {
       userId: user.id,
       sessionId: verificationSession.id,
       status: verificationSession.status,
-      linkedToConnectAccount: !!relatedPerson,
-      connectAccountId: relatedPerson ? user.stripeAccountId : undefined,
+      linkedToConnectAccount: linkedToConnect,
+      connectAccountId: linkedToConnect ? user.stripeAccountId : undefined,
     });
 
     return {
