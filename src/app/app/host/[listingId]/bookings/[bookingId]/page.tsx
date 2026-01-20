@@ -146,14 +146,26 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
 
   // Format booking data for the card component
   const renterName = booking.user.fullName || `${booking.user.firstName || ''} ${booking.user.lastName || ''}`.trim() || booking.user.email || 'Unknown Renter';
-  
+
+  // Get price from next upcoming payment or most recent past payment
+  const now = new Date();
+  const sortedPayments = [...booking.rentPayments].sort(
+    (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+  );
+  const nextPayment = sortedPayments.find(p => new Date(p.dueDate) >= now);
+  const mostRecentPayment = [...sortedPayments].reverse().find(p => new Date(p.dueDate) < now);
+  const displayPayment = nextPayment || mostRecentPayment;
+  const displayPrice = displayPayment
+    ? `${formatPrice(displayPayment.amount / 100)} / Month`
+    : (booking.monthlyRent ? `${formatPrice(booking.monthlyRent)} / Month` : 'Price TBD');
+
   const bookingData = {
     name: renterName,
     status: formatBookingStatus(booking.status),
     dates: formatDateRange(booking.startDate, booking.endDate),
     address: formatAddress(booking.listing),
     description: `for ${booking.listing.title}`,
-    price: booking.monthlyRent ? `${formatPrice(booking.monthlyRent)} / Month` : 'Price TBD',
+    price: displayPrice,
     occupants: [
       { type: "Adult", count: booking.trip?.numAdults || 1, icon: "/host-dashboard/svg/adult.svg" },
       { type: "Children", count: booking.trip?.numChildren || 0, icon: "/host-dashboard/svg/kid.svg" },
@@ -168,7 +180,6 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   };
 
   // Format payment data for the table
-  const now = new Date();
   // These are LIVE amounts from booking.rentPayments (real database data, not hardcoded)
   const upcomingPayments = booking.rentPayments
     .filter((payment: any) => new Date(payment.dueDate) >= now)
