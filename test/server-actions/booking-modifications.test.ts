@@ -12,6 +12,10 @@ vi.mock('@/lib/prismadb', () => ({
       findUnique: vi.fn(),
       update: vi.fn(),
     },
+    rentPayment: {
+      createMany: vi.fn(),
+      update: vi.fn(),
+    },
     user: {
       findUnique: vi.fn(),
     },
@@ -61,10 +65,8 @@ const mockAuth = vi.mocked(auth);
  * - Two-party approval system (host & renter must both agree)
  * - Creates BookingModification record with pending status
  * - On approval, updates the actual Booking dates
+ * - Rent payments are recalculated when dates change
  * - Notifications sent to both parties
- *
- * IMPORTANT NOTE: Rent payment recalculation is NOT implemented yet.
- * When dates change, the rent schedule is NOT automatically updated.
  */
 
 // Helper to create local dates
@@ -346,6 +348,34 @@ describe('Booking Modifications', () => {
   });
 
   describe('approveBookingModification', () => {
+    // Mock rent payments for testing
+    const mockRentPayments = [
+      {
+        id: 'payment-1',
+        dueDate: localDate(2025, 0, 15),
+        amount: 56484,
+        totalAmount: 56484,
+        baseAmount: 54839,
+        status: 'PENDING',
+        isPaid: false,
+        stripePaymentMethodId: 'pm_test',
+        cancelledAt: null,
+        type: 'MONTHLY_RENT',
+      },
+      {
+        id: 'payment-2',
+        dueDate: localDate(2025, 1, 1),
+        amount: 55178,
+        totalAmount: 55178,
+        baseAmount: 53571,
+        status: 'PENDING',
+        isPaid: false,
+        stripePaymentMethodId: 'pm_test',
+        cancelledAt: null,
+        type: 'MONTHLY_RENT',
+      },
+    ];
+
     const mockPendingModification = {
       id: mockModificationId,
       bookingId: mockBookingId,
@@ -359,8 +389,12 @@ describe('Booking Modifications', () => {
       viewedAt: null,
       requestor: { fullName: 'Test Renter', firstName: 'Test', lastName: 'Renter' },
       booking: {
+        id: mockBookingId,
+        startDate: localDate(2025, 0, 15),
+        endDate: localDate(2025, 1, 15),
         listingId: mockListingId,
-        listing: { id: mockListingId, title: 'Test Listing', userId: mockHostId },
+        listing: { id: mockListingId, title: 'Test Listing', userId: mockHostId, monthlyRent: 1000 },
+        rentPayments: mockRentPayments,
       },
     };
 
@@ -375,9 +409,8 @@ describe('Booking Modifications', () => {
         mockAuth.mockReturnValue({ userId: mockRenterId }); // Renter trying to approve their own request
         mockPrisma.bookingModification.findUnique.mockResolvedValue(mockPendingModification as any);
 
-        // Server action wraps internal errors in generic message
         await expect(approveBookingModification(mockModificationId)).rejects.toThrow(
-          'Failed to approve booking modification'
+          'Unauthorized to approve this modification'
         );
       });
 
@@ -404,9 +437,8 @@ describe('Booking Modifications', () => {
           status: 'approved',
         } as any);
 
-        // Server action wraps internal errors in generic message
         await expect(approveBookingModification(mockModificationId)).rejects.toThrow(
-          'Failed to approve booking modification'
+          'Booking modification is no longer pending'
         );
       });
 
@@ -416,18 +448,16 @@ describe('Booking Modifications', () => {
           status: 'rejected',
         } as any);
 
-        // Server action wraps internal errors in generic message
         await expect(approveBookingModification(mockModificationId)).rejects.toThrow(
-          'Failed to approve booking modification'
+          'Booking modification is no longer pending'
         );
       });
 
       it('should throw error when modification not found', async () => {
         mockPrisma.bookingModification.findUnique.mockResolvedValue(null);
 
-        // Server action wraps internal errors in generic message
         await expect(approveBookingModification(mockModificationId)).rejects.toThrow(
-          'Failed to approve booking modification'
+          'Booking modification not found'
         );
       });
     });

@@ -28,8 +28,8 @@
  * - ✅ Basic date modification requests (implemented)
  * - ✅ Approval/rejection workflow (implemented)
  * - ✅ Notification system (implemented)
+ * - ✅ Rent payment recalculation on date changes (implemented)
  * - ❌ Guest count modifications (not yet implemented)
- * - ❌ Price recalculation for changes (not yet implemented)
  * - ❌ Dedicated modification management pages (not yet implemented)
  */
 
@@ -38,6 +38,12 @@ import { revalidatePath } from 'next/cache'
 import { auth } from '@clerk/nextjs/server'
 import { createNotification } from './notifications'
 import { approvePaymentModification, rejectPaymentModification } from './payment-modifications'
+import {
+  recalculatePaymentsForDateChange,
+  findPaidPaymentsInRemovedRange,
+  type ExistingPayment
+} from '@/lib/utils/rent-payments'
+import { dollarsToCents } from '@/lib/payment-constants'
 
 // Unified modification type that can represent both booking and payment modifications
 export type UnifiedModification = {
@@ -360,14 +366,18 @@ export async function approveBookingModification(bookingModificationId: string) 
   }
 
   try {
-    // Get the booking modification
+    // Get the booking modification with full booking details including rent payments
     const bookingModification = await prisma.bookingModification.findUnique({
       where: { id: bookingModificationId },
       include: {
         requestor: { select: { fullName: true, firstName: true, lastName: true } },
         booking: {
           include: {
-            listing: { select: { id: true, title: true, userId: true } }
+            listing: { select: { id: true, title: true, userId: true, monthlyRent: true } },
+            rentPayments: {
+              where: { type: 'MONTHLY_RENT', cancelledAt: null },
+              orderBy: { dueDate: 'asc' }
+            }
           }
         }
       }
@@ -387,26 +397,112 @@ export async function approveBookingModification(bookingModificationId: string) 
       throw new Error('Booking modification is no longer pending')
     }
 
-    // Update the booking modification and the original booking
-    await prisma.$transaction([
+    const booking = bookingModification.booking
+
+    // Convert existing rent payments to the expected format
+    const existingPayments: ExistingPayment[] = booking.rentPayments.map(p => ({
+      id: p.id,
+      dueDate: p.dueDate,
+      amount: p.amount,
+      totalAmount: p.totalAmount,
+      baseAmount: p.baseAmount,
+      status: p.status,
+      isPaid: p.isPaid,
+      stripePaymentMethodId: p.stripePaymentMethodId,
+      cancelledAt: p.cancelledAt
+    }))
+
+    // Validate: can't remove months with paid payments
+    const paidInRemovedRange = findPaidPaymentsInRemovedRange(
+      existingPayments,
+      bookingModification.newEndDate
+    )
+    if (paidInRemovedRange.length > 0) {
+      throw new Error(
+        `Cannot shorten booking: ${paidInRemovedRange.length} paid payment(s) exist in the removed period`
+      )
+    }
+
+    // Get the stripe payment method ID from the first existing payment
+    const stripePaymentMethodId = existingPayments[0]?.stripePaymentMethodId ?? null
+
+    // Convert monthly rent from dollars to cents for calculation
+    const monthlyRentCents = dollarsToCents(booking.listing.monthlyRent)
+
+    // Recalculate payments for the new date range
+    const recalc = recalculatePaymentsForDateChange(
+      existingPayments,
+      booking.startDate,
+      booking.endDate,
+      bookingModification.newStartDate,
+      bookingModification.newEndDate,
+      monthlyRentCents,
+      stripePaymentMethodId
+    )
+
+    // Build the transaction operations
+    const transactionOps = [
       // Update the booking modification status
       prisma.bookingModification.update({
         where: { id: bookingModificationId },
         data: {
           status: 'approved',
           approvedAt: new Date(),
-          viewedAt: bookingModification.viewedAt || new Date() // Mark as viewed if not already
+          viewedAt: bookingModification.viewedAt || new Date()
         }
       }),
-      // Update the original booking
+      // Update the original booking dates
       prisma.booking.update({
-        where: { id: bookingModification.bookingId },
+        where: { id: booking.id },
         data: {
           startDate: bookingModification.newStartDate,
           endDate: bookingModification.newEndDate
         }
       })
-    ])
+    ]
+
+    // Add new payments if any
+    if (recalc.paymentsToCreate.length > 0) {
+      // Set the bookingId on all new payments
+      const paymentsWithBookingId = recalc.paymentsToCreate.map(p => ({
+        ...p,
+        bookingId: booking.id
+      }))
+      transactionOps.push(
+        prisma.rentPayment.createMany({ data: paymentsWithBookingId })
+      )
+    }
+
+    // Update existing payments
+    for (const update of recalc.paymentsToUpdate) {
+      transactionOps.push(
+        prisma.rentPayment.update({
+          where: { id: update.id },
+          data: {
+            amount: update.amount,
+            totalAmount: update.totalAmount,
+            baseAmount: update.baseAmount
+          }
+        })
+      )
+    }
+
+    // Cancel removed payments (soft delete)
+    for (const paymentId of recalc.paymentIdsToCancel) {
+      transactionOps.push(
+        prisma.rentPayment.update({
+          where: { id: paymentId },
+          data: {
+            status: 'CANCELLED',
+            cancelledAt: new Date(),
+            cancellationReason: 'Booking shortened via modification'
+          }
+        })
+      )
+    }
+
+    // Execute the transaction
+    await prisma.$transaction(transactionOps)
 
     // Notify the requestor of approval
     const requestorName = bookingModification.requestor.fullName ||
@@ -445,7 +541,7 @@ export async function approveBookingModification(bookingModificationId: string) 
     return { success: true }
   } catch (error) {
     console.error('Error approving booking modification:', error)
-    throw new Error('Failed to approve booking modification')
+    throw error instanceof Error ? error : new Error('Failed to approve booking modification')
   }
 }
 

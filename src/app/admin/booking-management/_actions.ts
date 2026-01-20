@@ -1321,8 +1321,13 @@ export async function adminApproveBookingModification(modificationId: string, ad
             select: {
               id: true,
               title: true,
+              monthlyRent: true,
               user: { select: { id: true } }
             }
+          },
+          rentPayments: {
+            where: { type: 'MONTHLY_RENT', cancelledAt: null },
+            orderBy: { dueDate: 'asc' }
           }
         }
       },
@@ -1339,27 +1344,121 @@ export async function adminApproveBookingModification(modificationId: string, ad
     throw new Error('Modification is not pending');
   }
 
+  const booking = modification.booking;
   const now = new Date();
 
-  // Update the modification as approved
-  const updatedModification = await prisma.bookingModification.update({
-    where: { id: modificationId },
-    data: {
-      status: 'approved',
-      approvedAt: now,
-      updatedAt: now
-    }
-  });
+  // Import payment recalculation utilities
+  const { recalculatePaymentsForDateChange, findPaidPaymentsInRemovedRange } = await import('@/lib/utils/rent-payments');
+  const { dollarsToCents } = await import('@/lib/payment-constants');
 
-  // Update the actual booking with new dates
-  await prisma.booking.update({
-    where: { id: modification.bookingId },
-    data: {
-      startDate: modification.newStartDate,
-      endDate: modification.newEndDate,
-      updatedAt: now
-    }
-  });
+  // Import types
+  type ExistingPayment = import('@/lib/utils/rent-payments').ExistingPayment;
+
+  // Convert existing rent payments to the expected format
+  const existingPayments: ExistingPayment[] = booking.rentPayments.map(p => ({
+    id: p.id,
+    dueDate: p.dueDate,
+    amount: p.amount,
+    totalAmount: p.totalAmount,
+    baseAmount: p.baseAmount,
+    status: p.status,
+    isPaid: p.isPaid,
+    stripePaymentMethodId: p.stripePaymentMethodId,
+    cancelledAt: p.cancelledAt
+  }));
+
+  // Validate: can't remove months with paid payments
+  const paidInRemovedRange = findPaidPaymentsInRemovedRange(
+    existingPayments,
+    modification.newEndDate
+  );
+  if (paidInRemovedRange.length > 0) {
+    throw new Error(
+      `Cannot shorten booking: ${paidInRemovedRange.length} paid payment(s) exist in the removed period`
+    );
+  }
+
+  // Get the stripe payment method ID from the first existing payment
+  const stripePaymentMethodId = existingPayments[0]?.stripePaymentMethodId ?? null;
+
+  // Convert monthly rent from dollars to cents for calculation
+  const monthlyRentCents = dollarsToCents(booking.listing.monthlyRent);
+
+  // Recalculate payments for the new date range
+  const recalc = recalculatePaymentsForDateChange(
+    existingPayments,
+    booking.startDate,
+    booking.endDate,
+    modification.newStartDate,
+    modification.newEndDate,
+    monthlyRentCents,
+    stripePaymentMethodId
+  );
+
+  // Build the transaction operations
+  const transactionOps: any[] = [
+    // Update the modification as approved
+    prisma.bookingModification.update({
+      where: { id: modificationId },
+      data: {
+        status: 'approved',
+        approvedAt: now,
+        updatedAt: now
+      }
+    }),
+    // Update the actual booking with new dates
+    prisma.booking.update({
+      where: { id: modification.bookingId },
+      data: {
+        startDate: modification.newStartDate,
+        endDate: modification.newEndDate,
+        updatedAt: now
+      }
+    })
+  ];
+
+  // Add new payments if any
+  if (recalc.paymentsToCreate.length > 0) {
+    const paymentsWithBookingId = recalc.paymentsToCreate.map(p => ({
+      ...p,
+      bookingId: booking.id
+    }));
+    transactionOps.push(
+      prisma.rentPayment.createMany({ data: paymentsWithBookingId })
+    );
+  }
+
+  // Update existing payments
+  for (const update of recalc.paymentsToUpdate) {
+    transactionOps.push(
+      prisma.rentPayment.update({
+        where: { id: update.id },
+        data: {
+          amount: update.amount,
+          totalAmount: update.totalAmount,
+          baseAmount: update.baseAmount
+        }
+      })
+    );
+  }
+
+  // Cancel removed payments (soft delete)
+  for (const paymentId of recalc.paymentIdsToCancel) {
+    transactionOps.push(
+      prisma.rentPayment.update({
+        where: { id: paymentId },
+        data: {
+          status: 'CANCELLED',
+          cancelledAt: now,
+          cancellationReason: 'Booking shortened via admin modification approval'
+        }
+      })
+    );
+  }
+
+  // Execute the transaction
+  const results = await prisma.$transaction(transactionOps);
+  const updatedModification = results[0]; // First result is the modification update
 
   // Create notifications
   const reasonText = adminReason ? ` Reason: ${adminReason}` : '';
