@@ -51,6 +51,7 @@ interface BookingPaymentsTableProps {
   renterAvatar?: string;
   bookingId: string;
   renterId?: string;
+  className?: string;
 }
 
 export const BookingPaymentsTable = ({
@@ -58,7 +59,8 @@ export const BookingPaymentsTable = ({
   renterName,
   renterAvatar,
   bookingId,
-  renterId
+  renterId,
+  className = ""
 }: BookingPaymentsTableProps): JSX.Element => {
   const [selectedPayment, setSelectedPayment] = useState<BookingPaymentData | null>(null);
 
@@ -206,9 +208,7 @@ export const BookingPaymentsTable = ({
 
   return (
     <>
-      <div className="pt-4 md:pt-8 flex flex-col w-full rounded-[20px] overflow-hidden bg-white shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
-        </div>
+      <div className={`pt-4 md:pt-8 flex flex-col w-full rounded-[20px] overflow-hidden bg-white shadow-sm border border-gray-100 ${className}`}>
         <div className="p-0">
           <TabSelector
             tabs={tabs}
