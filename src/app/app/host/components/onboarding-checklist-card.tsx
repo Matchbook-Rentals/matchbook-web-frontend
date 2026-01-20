@@ -61,6 +61,7 @@ export const OnboardingChecklistCard = ({
   const [isCompletingAuth, setIsCompletingAuth] = useState(false);
   const [isCompletingStripeAuth, setIsCompletingStripeAuth] = useState(false);
   const [isVerifyingIdentity, setIsVerifyingIdentity] = useState(false);
+  const [identityVerificationError, setIdentityVerificationError] = useState<string | null>(null);
   const [isFcraModalOpen, setIsFcraModalOpen] = useState(false);
   const [fcraContent, setFcraContent] = useState<string | null>(null);
   const [isLoadingFcraContent, setIsLoadingFcraContent] = useState(false);
@@ -204,6 +205,7 @@ export const OnboardingChecklistCard = ({
 
   const handleIdentityVerificationClick = async () => {
     setIsVerifyingIdentity(true);
+    setIdentityVerificationError(null);
 
     try {
       console.log('🔐 Starting Stripe Identity verification...');
@@ -213,8 +215,7 @@ export const OnboardingChecklistCard = ({
 
       if (!result.success || !result.clientSecret) {
         console.error('❌ Failed to create verification session:', result.error);
-        // Don't show alert - session creation is a technical error we can't recover from
-        // User will just see loading state stop
+        setIdentityVerificationError('An error occurred. Please try again later.');
         setIsVerifyingIdentity(false);
         return;
       }
@@ -226,6 +227,7 @@ export const OnboardingChecklistCard = ({
 
       if (!stripe) {
         console.error('❌ Failed to load Stripe.js');
+        setIdentityVerificationError('An error occurred. Please try again later.');
         setIsVerifyingIdentity(false);
         return;
       }
@@ -245,6 +247,7 @@ export const OnboardingChecklistCard = ({
       // Verification results come via webhooks and polling
       if (sdkError) {
         console.error('❌ Stripe SDK error:', sdkError);
+        setIdentityVerificationError('An error occurred. Please try again later.');
         setIsVerifyingIdentity(false);
         return;
       }
@@ -268,7 +271,7 @@ export const OnboardingChecklistCard = ({
       setIsVerifyingIdentity(false);
     } catch (err) {
       console.error('❌ Unexpected error during verification:', err);
-      // Even on unexpected errors, don't show alert - just reset state
+      setIdentityVerificationError('An error occurred. Please try again later.');
       setIsVerifyingIdentity(false);
     }
   };
@@ -387,65 +390,70 @@ export const OnboardingChecklistCard = ({
               const shouldBeFcraClickable = !item.completed && isFcraComplianceItem;
               const shouldBeTestMedallionClickable = !item.completed && isTestMedallionItem;
               const shouldBeTestStripeClickable = !item.completed && isTestStripeItem;
+              const showIdentityError = isIdentityVerificationItem && identityVerificationError;
 
               return (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-end gap-2 relative self-stretch w-full flex-[0_0_auto]"
-                >
-                  {item.completed ? (
-                    <Check className="relative w-6 h-6 text-green-600" />
-                  ) : (
-                    <Square className="relative w-6 h-6 text-gray-400" />
-                  )}
-
-                  <div className="relative flex-1 mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-neutralneutral-700 text-base tracking-[0] leading-4">
-                    {shouldBeStripeClickable ? (
-                      <button
-                        onClick={handleStripeSetup}
-                        disabled={isRedirecting}
-                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
-                      >
-                        {isRedirecting ? 'Redirecting to Stripe...' : item.text}
-                      </button>
-                    ) : shouldBeIdentityVerificationClickable ? (
-                      <button
-                        onClick={handleIdentityVerificationClick}
-                        disabled={isVerifyingIdentity}
-                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
-                      >
-                        {isVerifyingIdentity ? 'Opening verification...' : item.text}
-                      </button>
-                    ) : shouldBeFcraClickable ? (
-                      <button
-                        onClick={handleOpenFcraModal}
-                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
-                      >
-                        {item.text}
-                      </button>
-                    ) : shouldBeTestMedallionClickable ? (
-                      <button
-                        onClick={handleTestMedallionAuthComplete}
-                        disabled={isCompletingAuth}
-                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
-                      >
-                        {isCompletingAuth ? 'Setting Medallion Verified...' : item.text}
-                      </button>
-                    ) : shouldBeTestStripeClickable ? (
-                      <button
-                        onClick={handleTestStripeAuthComplete}
-                        disabled={isCompletingStripeAuth}
-                        className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
-                      >
-                        {isCompletingStripeAuth ? 'Setting Stripe Verified...' : item.text}
-                      </button>
+                <React.Fragment key={item.id}>
+                  <div className="flex items-center justify-end gap-2 relative self-stretch w-full flex-[0_0_auto]">
+                    {item.completed ? (
+                      <Check className="relative w-6 h-6 text-green-600" />
                     ) : (
-                      <span className={`${item.completed ? '' : 'hover:underline cursor-pointer'} font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]`}>
-                        {item.text}
-                      </span>
+                      <Square className="relative w-6 h-6 text-gray-400" />
                     )}
+
+                    <div className="relative flex-1 mt-[-1.00px] [font-family:'Poppins',Helvetica] font-normal text-neutralneutral-700 text-base tracking-[0] leading-4">
+                      {shouldBeStripeClickable ? (
+                        <button
+                          onClick={handleStripeSetup}
+                          disabled={isRedirecting}
+                          className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
+                        >
+                          {isRedirecting ? 'Redirecting to Stripe...' : item.text}
+                        </button>
+                      ) : shouldBeIdentityVerificationClickable ? (
+                        <button
+                          onClick={handleIdentityVerificationClick}
+                          disabled={isVerifyingIdentity}
+                          className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
+                        >
+                          {isVerifyingIdentity ? 'Opening verification...' : item.text}
+                        </button>
+                      ) : shouldBeFcraClickable ? (
+                        <button
+                          onClick={handleOpenFcraModal}
+                          className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]"
+                        >
+                          {item.text}
+                        </button>
+                      ) : shouldBeTestMedallionClickable ? (
+                        <button
+                          onClick={handleTestMedallionAuthComplete}
+                          disabled={isCompletingAuth}
+                          className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
+                        >
+                          {isCompletingAuth ? 'Setting Medallion Verified...' : item.text}
+                        </button>
+                      ) : shouldBeTestStripeClickable ? (
+                        <button
+                          onClick={handleTestStripeAuthComplete}
+                          disabled={isCompletingStripeAuth}
+                          className="text-left hover:underline cursor-pointer font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)] disabled:opacity-50"
+                        >
+                          {isCompletingStripeAuth ? 'Setting Stripe Verified...' : item.text}
+                        </button>
+                      ) : (
+                        <span className={`${item.completed ? '' : 'hover:underline cursor-pointer'} font-text-label-medium-regular [font-style:var(--text-label-medium-regular-font-style)] font-[number:var(--text-label-medium-regular-font-weight)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] text-[length:var(--text-label-medium-regular-font-size)]`}>
+                          {item.text}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
+                  {showIdentityError && (
+                    <div className="ml-8 mt-1 text-sm text-red-600">
+                      {identityVerificationError}
+                    </div>
+                  )}
+                </React.Fragment>
               );
             })}
           </div>

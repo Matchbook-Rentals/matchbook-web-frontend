@@ -11,7 +11,13 @@ import prisma from "@/lib/prismadb";
 
 // DEV ONLY - Creates a BGSReport and Verification for webhook testing
 export async function POST(request: Request) {
-  // !!! DEV ONLY - Remove before production !!!
+  // Only allow in development
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json(
+      { error: 'This endpoint is only available in development' },
+      { status: 403 }
+    );
+  }
 
   const { userId, orderId } = await request.json();
 
