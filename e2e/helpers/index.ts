@@ -19,6 +19,9 @@ export * from './match';
 // Lease signing helpers
 export * from './signing';
 
+// Lease PDF generation helpers
+export * from './lease-pdf';
+
 // Booking/Payment helpers
 export * from './booking';
 

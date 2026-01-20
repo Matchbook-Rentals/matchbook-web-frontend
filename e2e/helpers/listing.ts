@@ -156,9 +156,9 @@ export async function createFullListing(
   console.log('Step 11: Submitting listing...');
   await submitListing(page);
 
-  // Wait for success page (Step 12)
+  // Wait for success page
   console.log('Waiting for success...');
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(1000);
 
   // Extract listing ID
   const listingId = await extractListingId(page);
@@ -178,50 +178,73 @@ export async function navigateToAddProperty(page: Page): Promise<void> {
 }
 
 /**
- * Click the Next button
+ * Click the Next button and verify page advances
  */
-export async function clickNext(page: Page): Promise<void> {
-  // Get current URL/step for comparison after click
-  const currentUrl = page.url();
+export async function clickNext(page: Page, maxRetries: number = 2): Promise<void> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    // Get page content before click to detect changes
+    const beforeContent = await page.locator('h1, h2, [class*="title"]').first().textContent().catch(() => '');
 
-  // Try data-testid first
-  let nextButton = page.getByTestId('next-button');
+    // Try data-testid first
+    let nextButton = page.getByTestId('next-button');
 
-  if (!await nextButton.isVisible({ timeout: 1000 }).catch(() => false)) {
-    // Fallback to finding by text
-    nextButton = page.getByRole('button', { name: /^next$/i });
-  }
-
-  if (!await nextButton.isVisible({ timeout: 1000 }).catch(() => false)) {
-    // Another fallback - find button containing "Next"
-    nextButton = page.locator('button:has-text("Next")').first();
-  }
-
-  // Scroll the button into view
-  await nextButton.scrollIntoViewIfNeeded();
-  await expect(nextButton).toBeVisible({ timeout: 5000 });
-
-  console.log('Clicking Next button...');
-
-  // Click the button
-  await nextButton.click({ force: true });
-
-  // Wait for navigation/step change
-  await page.waitForTimeout(1500);
-
-  // Check if we actually advanced
-  const newUrl = page.url();
-  if (newUrl === currentUrl) {
-    console.log('URL unchanged after click, checking for validation errors...');
-    // Check if there's a toast/error message
-    const toast = page.locator('[role="alert"], [data-testid="toast"], .toast').first();
-    if (await toast.isVisible({ timeout: 1000 }).catch(() => false)) {
-      const toastText = await toast.innerText().catch(() => 'Unknown error');
-      console.log('Toast message:', toastText);
+    if (!await nextButton.isVisible({ timeout: 1000 }).catch(() => false)) {
+      // Fallback to finding by text
+      nextButton = page.getByRole('button', { name: /^next$/i });
     }
-  } else {
-    console.log('Page URL changed, step advanced successfully');
+
+    if (!await nextButton.isVisible({ timeout: 1000 }).catch(() => false)) {
+      // Another fallback - find button containing "Next"
+      nextButton = page.locator('button:has-text("Next")').first();
+    }
+
+    // Ensure button is in viewport and clickable
+    await nextButton.scrollIntoViewIfNeeded();
+    await expect(nextButton).toBeVisible({ timeout: 5000 });
+
+    // Check if button is disabled
+    const isDisabled = await nextButton.isDisabled().catch(() => false);
+    if (isDisabled) {
+      console.log('Next button is disabled, waiting...');
+      await page.waitForTimeout(1000);
+      continue;
+    }
+
+    console.log(`Clicking Next button (attempt ${attempt + 1})...`);
+
+    // Click the button
+    await nextButton.click();
+
+    // Wait for potential page transition
+    await page.waitForTimeout(500);
+
+    // Check for toast error message (validation failed)
+    const toastError = page.locator('[data-radix-toast-viewport] [data-state="open"], [role="status"]').first();
+    if (await toastError.isVisible({ timeout: 500 }).catch(() => false)) {
+      const toastText = await toastError.textContent().catch(() => '');
+      if (toastText && toastText.includes('complete')) {
+        console.log('Validation error toast:', toastText);
+        throw new Error(`Validation failed: ${toastText}`);
+      }
+    }
+
+    // Check if page content changed (indicating step advanced)
+    const afterContent = await page.locator('h1, h2, [class*="title"]').first().textContent().catch(() => '');
+
+    if (afterContent !== beforeContent) {
+      console.log('Page content changed, step advanced successfully');
+      return;
+    }
+
+    // If this isn't the last attempt, wait and retry
+    if (attempt < maxRetries) {
+      console.log('Page did not advance, retrying...');
+      await page.waitForTimeout(1000);
+    }
   }
+
+  // Log current state for debugging
+  console.log('Warning: Page may not have advanced after clicking Next');
 }
 
 /**
@@ -318,6 +341,7 @@ async function fillLocationInput(page: Page, data: ListingData): Promise<void> {
 /**
  * Step 2: Confirm address
  * The address confirmation form has inputs with id/name: street, apt, city, state (select), zip
+ * Note: The component debounces state updates by 1 second, so we need to wait after changes
  */
 async function confirmAddress(page: Page, data: ListingData): Promise<void> {
   // Wait for the form to be visible
@@ -326,66 +350,53 @@ async function confirmAddress(page: Page, data: ListingData): Promise<void> {
   // Street Address - fill or verify
   const streetInput = page.locator('input#street, input[name="street"]').first();
   if (await streetInput.isVisible({ timeout: 3000 })) {
-    const currentValue = await streetInput.inputValue();
-    if (!currentValue) {
-      await streetInput.fill(data.streetAddress || '100 Congress Ave');
-    }
+    await streetInput.clear();
+    await streetInput.fill(data.streetAddress || '100 Congress Ave');
     console.log('Street address:', await streetInput.inputValue());
   }
 
   // City - fill or verify
   const cityInput = page.locator('input#city, input[name="city"]').first();
   if (await cityInput.isVisible({ timeout: 2000 })) {
-    const currentValue = await cityInput.inputValue();
-    if (!currentValue) {
-      await cityInput.fill(data.city || 'Austin');
-    }
+    await cityInput.clear();
+    await cityInput.fill(data.city || 'Austin');
     console.log('City:', await cityInput.inputValue());
   }
 
-  // State - it's a Radix Select dropdown
-  // Check if state is already selected by looking at the trigger value
+  // State - it's a Radix Select dropdown that stores state CODE but displays state NAME
   const stateSelect = page.locator('button[role="combobox"]').first();
   if (await stateSelect.isVisible({ timeout: 2000 })) {
     const selectedState = await stateSelect.innerText();
-    console.log('Current state value:', selectedState);
+    console.log('Current state display:', selectedState);
 
-    if (!selectedState || selectedState === 'Select a state') {
-      // Open the dropdown
-      await stateSelect.click();
-      await page.waitForTimeout(500);
+    // Always select state to ensure it's properly set
+    // Open the dropdown
+    await stateSelect.click();
+    await page.waitForTimeout(500);
 
-      // Convert state code to full name if needed
-      let stateName = data.state || 'Texas';
-      if (stateName.length === 2) {
-        stateName = STATE_NAMES[stateName.toUpperCase()] || stateName;
-      }
-
-      console.log(`Looking for state option: ${stateName}`);
-
-      // Find and click the state option
-      const stateOption = page.locator(`[role="option"]:has-text("${stateName}")`);
-
-      if (await stateOption.isVisible({ timeout: 3000 })) {
-        await stateOption.click();
-        console.log(`Selected state: ${stateName}`);
-        await page.waitForTimeout(500);
-      } else {
-        console.log(`State option "${stateName}" not found, listing available options...`);
-        // List some available options for debugging
-        const options = page.locator('[role="option"]');
-        const optionCount = await options.count();
-        console.log(`Found ${optionCount} state options`);
-        if (optionCount > 0) {
-          const firstOption = await options.first().innerText();
-          console.log(`First option: ${firstOption}`);
-        }
-        // Press escape to close
-        await page.keyboard.press('Escape');
-        await page.waitForTimeout(300);
-      }
+    // Convert state code to full name for clicking the option
+    let stateName = data.state || 'Texas';
+    if (stateName.length === 2) {
+      stateName = STATE_NAMES[stateName.toUpperCase()] || stateName;
     }
-    console.log('Final state value:', await stateSelect.innerText());
+
+    console.log(`Selecting state: ${stateName}`);
+
+    // Find and click the state option
+    const stateOption = page.locator(`[role="option"]:has-text("${stateName}")`).first();
+
+    if (await stateOption.isVisible({ timeout: 3000 })) {
+      await stateOption.click();
+      console.log(`Clicked state option: ${stateName}`);
+      await page.waitForTimeout(500);
+    } else {
+      console.log(`State option "${stateName}" not found`);
+      // Press escape to close dropdown
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(300);
+    }
+
+    console.log('Final state display:', await stateSelect.innerText());
   }
 
   // Zip - CRITICAL - must be filled
@@ -396,25 +407,22 @@ async function confirmAddress(page: Page, data: ListingData): Promise<void> {
   const zipInput = page.locator('input#zip, input[name="zip"]').first();
   if (await zipInput.isVisible({ timeout: 3000 })) {
     await zipInput.scrollIntoViewIfNeeded();
-    const currentValue = await zipInput.inputValue();
-    // Always fill zip if empty since it's required
-    if (!currentValue) {
-      await zipInput.click();
-      await zipInput.fill(data.postalCode || '78701');
-      console.log('Filled zip code:', data.postalCode || '78701');
-    } else {
-      console.log('Zip code already set:', currentValue);
-    }
+    await zipInput.clear();
+    await zipInput.fill(data.postalCode || '78701');
+    console.log('Filled zip code:', data.postalCode || '78701');
   } else {
     console.log('Warning: Zip input not found!');
   }
 
-  // Wait for geocoding to complete (the component debounces for 1 second)
-  await page.waitForTimeout(2000);
+  // IMPORTANT: Wait for debounced state update to complete
+  // The AddressConfirmation component debounces updates by 1 second,
+  // and then makes an async geocode request
+  console.log('Waiting for address state to propagate (debounce + geocode)...');
+  await page.waitForTimeout(3000);
 
   // Scroll back to top so Next button is visible
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(500);
 }
 
 /**
@@ -423,76 +431,98 @@ async function confirmAddress(page: Page, data: ListingData): Promise<void> {
  * and an input field for square footage.
  */
 async function fillRooms(page: Page, data: ListingData): Promise<void> {
-  // Wait for the rooms form to be visible
-  await page.waitForSelector('text=How many bedrooms', { timeout: 10000 });
+  // Wait for the rooms form to be visible - actual text is "How many bedrooms are there?"
+  await page.waitForSelector('text=How many bedrooms are there?', { timeout: 10000 });
+  console.log('Rooms form is visible');
 
   // Bedrooms - find the row containing "bedrooms" and click + to increment
-  const bedroomRow = page.locator('div:has-text("How many bedrooms are there?")').first();
+  // The counter has - and + buttons, with + being the last button
+  const bedroomRow = page.locator('div').filter({ hasText: /^How many bedrooms are there\?/ }).first();
   const targetBedrooms = data.bedrooms || 2;
 
-  // Default value is usually 1, click + to reach target
-  // Find the + button near the bedroom text
-  const bedroomPlusButton = bedroomRow.locator('button').last(); // Last button is usually +
+  // Find the + button (it contains a Plus icon or has + text)
+  const bedroomPlusButton = bedroomRow.locator('button:last-child, button:has-text("+")').last();
+
+  // Default value is 1, click + to reach target
   for (let i = 1; i < targetBedrooms; i++) {
     await bedroomPlusButton.click();
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(200);
   }
   console.log(`Set bedrooms to ${targetBedrooms}`);
 
   // Bathrooms - same approach
-  const bathroomRow = page.locator('div:has-text("How many bathrooms are there?")').first();
+  const bathroomRow = page.locator('div').filter({ hasText: /^How many bathrooms are there\?/ }).first();
   const targetBathrooms = data.bathrooms || 1;
 
-  // For bathrooms, the default is usually 1, and increments by 0.5
-  // So we need to click more times to reach full numbers
-  const bathroomPlusButton = bathroomRow.locator('button').last();
+  // For bathrooms, the default is 1, and increments by 0.5
+  const bathroomPlusButton = bathroomRow.locator('button:last-child, button:has-text("+")').last();
   const bathroomClicks = Math.round((targetBathrooms - 1) * 2); // Since increment is 0.5
   for (let i = 0; i < bathroomClicks; i++) {
     await bathroomPlusButton.click();
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(200);
   }
   console.log(`Set bathrooms to ${targetBathrooms}`);
 
-  // Square footage - find input with placeholder "1,234 sq ft"
-  const sqftInput = page.locator('input[placeholder*="sq ft"], input[inputmode="numeric"]').first();
+  // Square footage - the row contains "square feet" in the question
+  const sqftRow = page.locator('div').filter({ hasText: /square feet/i }).first();
+  const sqftInput = sqftRow.locator('input').first();
+
   if (await sqftInput.isVisible({ timeout: 3000 })) {
     await sqftInput.click();
+    await sqftInput.clear();
     await sqftInput.fill(String(data.squareFootage || 850));
     console.log(`Set square footage to ${data.squareFootage || 850}`);
   } else {
-    // Fallback: find any input in the square feet row
-    const sqftRow = page.locator('div:has-text("square feet")').first();
-    const sqftInputFallback = sqftRow.locator('input').first();
-    if (await sqftInputFallback.isVisible({ timeout: 2000 })) {
-      await sqftInputFallback.click();
-      await sqftInputFallback.fill(String(data.squareFootage || 850));
+    // Fallback: find any numeric input
+    const numericInput = page.locator('input[inputmode="numeric"], input[placeholder*="sq ft"]').first();
+    if (await numericInput.isVisible({ timeout: 2000 })) {
+      await numericInput.click();
+      await numericInput.clear();
+      await numericInput.fill(String(data.squareFootage || 850));
       console.log(`Set square footage (fallback) to ${data.squareFootage || 850}`);
     } else {
       console.log('Warning: Could not find square footage input');
     }
   }
 
-  // Wait a moment for state to update
+  // Wait for state to update
   await page.waitForTimeout(500);
 }
 
 /**
  * Step 4: Fill basics (title, description)
+ * Both title and description are Textarea elements
  */
 async function fillBasics(page: Page, data: ListingData): Promise<void> {
-  // Title
-  const titleInput = page.locator('input[name*="title" i], [data-testid="title-input"]').first();
-  if (await titleInput.isVisible({ timeout: 3000 })) {
-    await titleInput.clear();
-    await titleInput.fill(data.title || 'Test Listing');
+  // Wait for the basics form to be visible
+  await page.waitForSelector('text=Give your place a title', { timeout: 10000 });
+  console.log('Basics form is visible');
+
+  // Title - first textarea with placeholder "Enter a title..."
+  const titleTextarea = page.locator('textarea[placeholder="Enter a title..."]').first();
+  if (await titleTextarea.isVisible({ timeout: 3000 })) {
+    await titleTextarea.clear();
+    // Title has a 35 char limit, truncate if needed
+    const titleText = (data.title || 'Test Listing').substring(0, 35);
+    await titleTextarea.fill(titleText);
+    console.log(`Filled title: ${titleText}`);
+  } else {
+    console.log('Warning: Title textarea not found');
   }
 
-  // Description
-  const descriptionInput = page.locator('textarea[name*="description" i], [data-testid="description-input"], textarea').first();
-  if (await descriptionInput.isVisible({ timeout: 2000 })) {
-    await descriptionInput.clear();
-    await descriptionInput.fill(data.description || 'Test listing description for E2E testing.');
+  // Description - textarea with placeholder "Enter a description..."
+  const descriptionTextarea = page.locator('textarea[placeholder="Enter a description..."]').first();
+  if (await descriptionTextarea.isVisible({ timeout: 2000 })) {
+    await descriptionTextarea.clear();
+    const descText = data.description || 'Test listing description for E2E testing.';
+    await descriptionTextarea.fill(descText);
+    console.log(`Filled description: ${descText.substring(0, 50)}...`);
+  } else {
+    console.log('Warning: Description textarea not found');
   }
+
+  // Wait for state to update
+  await page.waitForTimeout(500);
 }
 
 /**
@@ -534,20 +564,20 @@ async function uploadPhotos(page: Page, data: ListingData): Promise<void> {
 
   if (uploadStarted) {
     console.log('Upload started, waiting for completion...');
-    // Wait for the button to change back to "Click to upload"
-    await page.locator('button:has-text("Click to upload")').waitFor({
+    // Wait for the button to change back (upload complete)
+    await page.locator('button:has-text("Click to upload"), button:has-text("Choose File"):not([disabled])').waitFor({
       state: 'visible',
-      timeout: 60000 // Give plenty of time for uploads
+      timeout: 90000 // 90 seconds for uploads (can be slow)
     });
     console.log('Upload completed');
   } else {
     // Maybe upload was instant or already done
     console.log('Upload may have completed quickly');
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1000);
   }
 
   // Verify photos were uploaded by checking for thumbnails
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(500);
   const thumbnails = page.locator('img[alt*="Listing photo"]');
   const thumbCount = await thumbnails.count();
   console.log(`Found ${thumbCount} photo thumbnails after upload`);
@@ -620,54 +650,85 @@ async function selectFeaturedPhotos(page: Page): Promise<void> {
 
 /**
  * Step 7: Fill amenities
+ * The amenities page has:
+ * - Laundry section (required): "In Unit", "In Complex", "Unavailable" as clickable cards
+ * - Other amenity categories as clickable cards
  */
 async function fillAmenities(page: Page, data: ListingData): Promise<void> {
-  // First, select laundry option (usually required)
-  const laundryMap: Record<string, string> = {
-    'inUnit': 'in-unit',
-    'shared': 'shared',
-    'none': 'none',
+  // Wait for the amenities form to be visible
+  await page.waitForSelector('text=What amenities does your property offer?', { timeout: 10000 });
+  console.log('Amenities form is visible');
+
+  // Laundry is required - select based on data.laundryType
+  // Options are: "In Unit", "In Complex", "Unavailable"
+  const laundryTextMap: Record<string, string> = {
+    'inUnit': 'In Unit',
+    'shared': 'In Complex',
+    'none': 'Unavailable',
   };
 
-  const laundryId = laundryMap[data.laundryType || 'shared'];
+  const laundryText = laundryTextMap[data.laundryType || 'shared'];
+  // Card data-testid format: card-{name-lowercase-with-dashes}
+  const laundryTestId = `card-${laundryText.toLowerCase().replace(/\s+/g, '-')}`;
+  console.log(`Selecting laundry option: ${laundryText} (testid: ${laundryTestId})`);
 
-  // Try to find laundry options
-  const laundryOption = page.locator(
-    `[id*="${laundryId}" i], ` +
-    `[data-testid*="${laundryId}" i], ` +
-    `[data-amenity*="laundry" i]`
-  ).first();
+  // Find the laundry card by data-testid (most reliable)
+  const laundryCard = page.getByTestId(laundryTestId);
 
-  if (await laundryOption.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await laundryOption.click();
+  if (await laundryCard.isVisible({ timeout: 3000 })) {
+    await laundryCard.click();
+    console.log(`Clicked laundry card: ${laundryTestId}`);
+    await page.waitForTimeout(300);
+
+    // Verify selection by checking for border style change
+    const isSelected = await laundryCard.evaluate(el =>
+      el.classList.contains('border-2') || el.style.borderWidth === '2px'
+    ).catch(() => false);
+    console.log(`Laundry selection verified: ${isSelected}`);
   } else {
-    // Try by text
-    const laundryText = data.laundryType === 'inUnit' ? 'In-Unit' :
-                        data.laundryType === 'shared' ? 'Shared' : 'None';
-    const laundryByText = page.getByText(laundryText, { exact: false }).first();
-    if (await laundryByText.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await laundryByText.click();
-    }
-  }
-
-  await page.waitForTimeout(300);
-
-  // Select additional amenities
-  for (const amenity of data.amenities || []) {
-    const amenityToggle = page.locator(
-      `[data-testid="${amenity}"], ` +
-      `[data-amenity="${amenity}"], ` +
-      `[id="${amenity}"], ` +
-      `input[name="${amenity}"]`
-    ).first();
-
-    if (await amenityToggle.isVisible({ timeout: 1000 }).catch(() => false)) {
-      const isChecked = await amenityToggle.isChecked().catch(() => false);
-      if (!isChecked) {
-        await amenityToggle.click();
+    console.log(`Card with testid ${laundryTestId} not found, trying fallback`);
+    // Fallback: Try clicking the card containing the text
+    const cardByText = page.locator(`[data-testid^="card-"]:has-text("${laundryText}")`).first();
+    if (await cardByText.isVisible({ timeout: 2000 })) {
+      await cardByText.click();
+      console.log(`Clicked card by text: ${laundryText}`);
+    } else {
+      // Last resort: click "In Complex" by testid
+      const inComplexCard = page.getByTestId('card-in-complex');
+      if (await inComplexCard.isVisible({ timeout: 2000 })) {
+        await inComplexCard.click();
+        console.log('Clicked In Complex card as fallback');
       }
     }
   }
+
+  await page.waitForTimeout(500);
+
+  // Optional: Select additional amenities by label text
+  // Amenities are displayed as cards with the amenity name
+  const amenityLabels: Record<string, string> = {
+    'wifi': 'WiFi',
+    'airConditioner': 'Air Conditioning',
+    'heater': 'Heater',
+    'parking': 'Off Street Parking',
+    'pool': 'Pool',
+    'gym': 'Gym',
+    'dishwasher': 'Dishwasher',
+  };
+
+  for (const amenity of data.amenities || []) {
+    const label = amenityLabels[amenity];
+    if (label) {
+      const amenityCard = page.getByText(label, { exact: true }).first();
+      if (await amenityCard.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await amenityCard.click();
+        console.log(`Selected amenity: ${label}`);
+        await page.waitForTimeout(200);
+      }
+    }
+  }
+
+  await page.waitForTimeout(500);
 }
 
 /**
@@ -703,74 +764,92 @@ async function fillPricing(page: Page, data: ListingData): Promise<void> {
 
 /**
  * Step 9: Verify/set monthly pricing
+ * This page shows a table with monthly rent inputs for each lease length
+ * Inputs are text inputs displaying values like "$0/mo"
  */
 async function verifyPricing(page: Page, data: ListingData): Promise<void> {
-  // This step shows pricing for each lease length tier
-  // Fill in the monthly rent for each visible input
+  // Wait for the verify pricing page
+  await page.waitForSelector('text=Select Monthly Rent', { timeout: 10000 });
+  console.log('Verify pricing page is visible');
 
   await page.waitForTimeout(500);
 
-  const priceInputs = page.locator(
-    'input[name*="price" i], ' +
-    'input[name*="rent" i], ' +
-    '[data-testid*="price-input"], ' +
-    'input[type="number"]'
-  );
+  // Find all text inputs in the pricing table
+  // These inputs are inside table rows, near "$" and "/mo" text
+  const priceInputs = page.locator('input[type="text"], input[inputmode="numeric"]');
 
   const count = await priceInputs.count();
-  console.log(`Found ${count} price inputs`);
+  console.log(`Found ${count} potential price inputs`);
 
+  // Fill each input with the monthly rent value
+  let filledCount = 0;
   for (let i = 0; i < count; i++) {
     const input = priceInputs.nth(i);
-    if (await input.isVisible()) {
-      await input.clear();
-      await input.fill(String(data.monthlyRent || 1500));
-      await page.waitForTimeout(100);
+    if (await input.isVisible({ timeout: 500 }).catch(() => false)) {
+      const currentValue = await input.inputValue().catch(() => '');
+      // Skip if already has a non-zero value
+      if (currentValue === '0' || currentValue === '' || currentValue === '$0') {
+        await input.click();
+        await input.clear();
+        await input.fill(String(data.monthlyRent || 1500));
+        filledCount++;
+        await page.waitForTimeout(100);
+      }
     }
   }
+
+  console.log(`Filled ${filledCount} price inputs with $${data.monthlyRent || 1500}`);
+  await page.waitForTimeout(500);
 }
 
 /**
  * Step 10: Fill deposits
+ * This page has 3 inputs: security deposit, pet deposit, pet rent
  */
 async function fillDeposits(page: Page, data: ListingData): Promise<void> {
-  // Security deposit
-  const depositInput = page.locator(
-    'input[name*="deposit" i], ' +
-    'input[name*="security" i], ' +
-    '[data-testid="security-deposit"]'
-  ).first();
+  // Wait for the deposits page
+  await page.waitForSelector('text=security deposit', { timeout: 10000 });
+  console.log('Deposits page is visible');
 
-  if (await depositInput.isVisible({ timeout: 3000 })) {
-    await depositInput.clear();
-    await depositInput.fill(String(data.securityDeposit || 1500));
+  // Find inputs by their associated labels
+  // Security deposit - "How much is the security deposit?"
+  const securityDepositRow = page.locator('div:has-text("How much is the security deposit?")').first();
+  const securityInput = securityDepositRow.locator('input').first();
+
+  if (await securityInput.isVisible({ timeout: 3000 })) {
+    await securityInput.click();
+    await securityInput.clear();
+    await securityInput.fill(String(data.securityDeposit || 1500));
+    console.log(`Filled security deposit: $${data.securityDeposit || 1500}`);
   }
 
-  // Pet deposit (if pets allowed)
-  if (data.petsAllowed && data.petDeposit) {
-    const petDepositInput = page.locator(
-      'input[name*="petDeposit" i], ' +
-      '[data-testid="pet-deposit"]'
-    ).first();
+  // Pet deposit - "Is there an extra deposit for pets?" (optional)
+  const petDepositRow = page.locator('div:has-text("extra deposit for pets")').first();
+  const petDepositInput = petDepositRow.locator('input').first();
 
-    if (await petDepositInput.isVisible({ timeout: 2000 }).catch(() => false)) {
+  if (await petDepositInput.isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (data.petDeposit) {
+      await petDepositInput.click();
       await petDepositInput.clear();
       await petDepositInput.fill(String(data.petDeposit));
-    }
-
-    // Pet rent
-    if (data.petRent) {
-      const petRentInput = page.locator(
-        'input[name*="petRent" i], ' +
-        '[data-testid="pet-rent"]'
-      ).first();
-
-      if (await petRentInput.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await petRentInput.clear();
-        await petRentInput.fill(String(data.petRent));
-      }
+      console.log(`Filled pet deposit: $${data.petDeposit}`);
     }
   }
+
+  // Pet rent - "Is there a monthly fee for pets?" (optional)
+  const petRentRow = page.locator('div:has-text("monthly fee for pets")').first();
+  const petRentInput = petRentRow.locator('input').first();
+
+  if (await petRentInput.isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (data.petRent) {
+      await petRentInput.click();
+      await petRentInput.clear();
+      await petRentInput.fill(String(data.petRent));
+      console.log(`Filled pet rent: $${data.petRent}/mo`);
+    }
+  }
+
+  await page.waitForTimeout(500);
 }
 
 /**
@@ -814,18 +893,11 @@ async function extractListingId(page: Page): Promise<string> {
     return draftMatch[1];
   }
 
-  // Try to find listing ID in page content
+  // Try to find listing ID in page content (quick check only)
   const listingIdElement = page.locator('[data-listing-id]').first();
   if (await listingIdElement.isVisible({ timeout: 2000 }).catch(() => false)) {
     const id = await listingIdElement.getAttribute('data-listing-id');
     if (id) return id;
-  }
-
-  // Check for success message with ID
-  const successText = await page.locator('.success-message, [data-testid="success"]').textContent().catch(() => '');
-  const idMatch = successText?.match(/([a-z0-9]{20,})/i);
-  if (idMatch) {
-    return idMatch[1];
   }
 
   // Return a placeholder if we can't find it

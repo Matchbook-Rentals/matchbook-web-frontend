@@ -69,6 +69,7 @@ export const MobileRecipientSelector: React.FC<MobileRecipientSelectorProps> = (
             </div>
           </SelectItem>
         ))}
+        {/* Temporarily disabled - multiple recipients
         {onAddRecipient && (
           <>
             <SelectSeparator />
@@ -80,6 +81,7 @@ export const MobileRecipientSelector: React.FC<MobileRecipientSelectorProps> = (
             </SelectItem>
           </>
         )}
+        */}
       </SelectContent>
     </Select>
   );
