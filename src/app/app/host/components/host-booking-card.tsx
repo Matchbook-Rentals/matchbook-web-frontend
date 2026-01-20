@@ -154,12 +154,12 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
 
       if (existing.conversationId) {
         // Navigate to existing conversation
-        router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
+        router.push(`/app/rent/messages?convo=${existing.conversationId}`);
       } else {
         // Create new conversation and navigate
         const result = await createListingConversation(listingId, guestUserId);
         if (result.success && result.conversationId) {
-          router.push(`/app/rent/messages?convoId=${result.conversationId}`);
+          router.push(`/app/rent/messages?convo=${result.conversationId}`);
         } else {
           console.error('Failed to create conversation:', result.error);
         }
@@ -479,12 +479,12 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
 
       if (existing.conversationId) {
         // Navigate to existing conversation
-        router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
+        router.push(`/app/rent/messages?convo=${existing.conversationId}`);
       } else {
         // Create new conversation and navigate
         const result = await createListingConversation(listingId, guestUserId);
         if (result.success && result.conversationId) {
-          router.push(`/app/rent/messages?convoId=${result.conversationId}`);
+          router.push(`/app/rent/messages?convo=${result.conversationId}`);
         } else {
           console.error('Failed to create conversation:', result.error);
         }

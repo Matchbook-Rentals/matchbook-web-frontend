@@ -123,12 +123,12 @@ const HostBookingDetailsCardMobile: React.FC<HostBookingDetailsCardProps> = ({
       
       if (existing.conversationId) {
         // Navigate to existing conversation
-        router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
+        router.push(`/app/rent/messages?convo=${existing.conversationId}`);
       } else {
         // Create new conversation and navigate
         const result = await createListingConversation(listingId, guestUserId);
         if (result.success && result.conversationId) {
-          router.push(`/app/rent/messages?convoId=${result.conversationId}`);
+          router.push(`/app/rent/messages?convo=${result.conversationId}`);
         } else {
           console.error('Failed to create conversation:', result.error);
         }
@@ -296,7 +296,9 @@ const HostBookingDetailsCardMobile: React.FC<HostBookingDetailsCardProps> = ({
           <Button
             variant="outline"
             className="flex-1 border-[#3c8787] text-[#3c8787] font-semibold hover:text-[#3c8787] hover:bg-transparent"
-            onClick={onPrimaryAction}
+            onClick={primaryButtonText === 'Modify Dates' && bookingId && bookingStartDate && bookingEndDate && guestUserId
+              ? () => setIsDateModificationModalOpen(true)
+              : onPrimaryAction}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -464,12 +466,12 @@ export const HostBookingDetailsCard: React.FC<HostBookingDetailsCardProps> = ({
       
       if (existing.conversationId) {
         // Navigate to existing conversation
-        router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
+        router.push(`/app/rent/messages?convo=${existing.conversationId}`);
       } else {
         // Create new conversation and navigate
         const result = await createListingConversation(listingId, guestUserId);
         if (result.success && result.conversationId) {
-          router.push(`/app/rent/messages?convoId=${result.conversationId}`);
+          router.push(`/app/rent/messages?convo=${result.conversationId}`);
         } else {
           console.error('Failed to create conversation:', result.error);
         }
@@ -517,6 +519,10 @@ export const HostBookingDetailsCard: React.FC<HostBookingDetailsCardProps> = ({
         onTertiaryAction={onTertiaryAction}
         listingId={listingId}
         guestUserId={guestUserId}
+        bookingId={bookingId}
+        bookingStartDate={bookingStartDate}
+        bookingEndDate={bookingEndDate}
+        bookingModifications={bookingModifications}
       />
     );
   }
@@ -680,7 +686,9 @@ export const HostBookingDetailsCard: React.FC<HostBookingDetailsCardProps> = ({
 
                 <BrandButton
                   variant="outline"
-                  onClick={onPrimaryAction}
+                  onClick={primaryButtonText === 'Modify Dates' && bookingId && bookingStartDate && bookingEndDate && guestUserId
+                    ? () => setIsDateModificationModalOpen(true)
+                    : onPrimaryAction}
                   disabled={isLoading}
                   className="w-full md:w-auto whitespace-nowrap"
                 >
@@ -694,7 +702,7 @@ export const HostBookingDetailsCard: React.FC<HostBookingDetailsCardProps> = ({
                   )}
                 </BrandButton>
 
-                <BrandButton 
+                <BrandButton
                   variant="outline"
                   onClick={onSecondaryAction}
                   disabled={isLoading}

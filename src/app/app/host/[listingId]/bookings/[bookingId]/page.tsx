@@ -163,6 +163,8 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     guestUserId: booking.user.id,
     matchId: booking.matchId,
     leaseDocumentId: booking.match?.leaseDocumentId || null,
+    startDate: booking.startDate,
+    endDate: booking.endDate,
   };
 
   // Format payment data for the table
