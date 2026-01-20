@@ -131,7 +131,7 @@ export default function RootLayout({
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         </head>
-        {process.env.NODE_ENV === 'production' && (
+        {process.env.NODE_ENV === 'production' ? (
           <Script
             id="gtm-script"
             strategy="afterInteractive"
@@ -143,7 +143,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PKKBSZQ7');`
             }}
           />
-        )}
+        ) : console.log('[GTM] Skipping Google Tag Manager in development')}
         <body className={`${poppins.className} ${dancingScript.variable} ${caveat.variable} ${kalam.variable} ${greatVibes.variable} ${pacifico.variable} ${sacramento.variable} ${allura.variable}`}>
           {process.env.NODE_ENV === 'production' && (
             <noscript>
