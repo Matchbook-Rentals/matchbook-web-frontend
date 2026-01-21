@@ -150,7 +150,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       href: '/app/rent/searches',
       section: 3
     },
-    { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
+    { id: 'settings', label: 'Account', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ] : [
@@ -166,7 +166,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       href: hasListings === false ? '/app/host/add-property' : '/app/host/dashboard/overview',
       section: 3
     },
-    { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
+    { id: 'settings', label: 'Account', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'verification', label: 'MatchBook Renter Verification', href: '/verification', section: 4 },
     { id: 'refer-host', label: 'Refer a Host - Earn $50', href: '/refer-host', section: 4 },
