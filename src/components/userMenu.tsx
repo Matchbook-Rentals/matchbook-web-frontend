@@ -567,6 +567,13 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                 >
                   Sign In
                 </button>
+                <Link
+                  href="/refer-host"
+                  className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Refer a Host - Earn $50
+                </Link>
                 <button onClick={() => setIsSupportOpen(true)} className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
                   Get help
                 </button>
