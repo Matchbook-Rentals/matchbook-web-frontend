@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PDFEditor } from "@/components/pdf-editor/PDFEditor";
 import { formatFileSize } from "@/lib/utils";
 import { clientLogger } from "@/lib/clientLogger";
+import { stripPDFAnnotations } from "@/lib/pdfCleaner";
 
 interface TemplateCreationStepProps {
   existingTemplate?: any;
@@ -38,10 +39,43 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
     step
   });
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [isCleaningPdf, setIsCleaningPdf] = useState(false);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === "application/pdf") {
-      setUploadedFile(file);
+      try {
+        setIsCleaningPdf(true);
+        clientLogger.info('TemplateCreationStep - Cleaning uploaded PDF', { fileName: file.name, size: file.size });
+
+        // Strip existing form fields, annotations, and links from the PDF
+        // This removes any pre-existing e-sign fields (e.g., from eSign.com, DocuSign, etc.)
+        const originalBytes = await file.arrayBuffer();
+        const cleanedBytes = await stripPDFAnnotations(originalBytes, {
+          stripAnnotations: true,
+          stripFormFields: true,
+          stripJavaScript: true,
+        });
+
+        // Create a new File from the cleaned bytes
+        const cleanedFile = new File([cleanedBytes], file.name, {
+          type: 'application/pdf',
+          lastModified: Date.now(),
+        });
+
+        clientLogger.info('TemplateCreationStep - PDF cleaned successfully', {
+          originalSize: originalBytes.byteLength,
+          cleanedSize: cleanedBytes.byteLength
+        });
+
+        setUploadedFile(cleanedFile);
+      } catch (error) {
+        clientLogger.error('TemplateCreationStep - Error cleaning PDF', { error });
+        // If cleaning fails, use the original file
+        setUploadedFile(file);
+      } finally {
+        setIsCleaningPdf(false);
+      }
     }
   };
 
@@ -130,7 +164,12 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
 
                     <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
                       <div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-                        {!uploadedFile ? (
+                        {isCleaningPdf ? (
+                          <div className="flex flex-col h-[100px] sm:h-[140px] items-center justify-center gap-3 px-6 sm:px-[100px] py-4 sm:py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49]">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#036e49]"></div>
+                            <span className="text-sm text-[#717680]">Preparing document...</span>
+                          </div>
+                        ) : !uploadedFile ? (
                           <>
                             <div className="flex flex-col h-[100px] sm:h-[140px] items-center justify-center gap-[35px] px-6 sm:px-[100px] py-4 sm:py-[21px] relative self-stretch w-full bg-white rounded-xl border border-dashed border-[#036e49]">
                               <div className="inline-flex flex-col items-center justify-center gap-3 relative flex-[0_0_auto]">
