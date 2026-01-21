@@ -24,6 +24,7 @@ import { HostBookingCard } from "./components/host-booking-card";
 type RentPayment = {
   id: string;
   amount: number;
+  type: string;
   dueDate: Date;
   isPaid: boolean;
 };
@@ -377,11 +378,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
           icon: <XCircle className="h-4 w-4" />,
           className: "text-red-600"
         };
+      // TODO: Expand the booking status enum in the schema to include "past" as a proper status
       case "completed":
         return {
-          label: "Completed",
+          label: "Past",
           icon: <Check className="h-4 w-4" />,
-          className: "text-green-600"
+          className: "text-green-600/50"
         };
       case "cancelled":
         return {
@@ -477,10 +479,13 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     return "Guest";
   };
 
-  // Helper function to get the largest payment from rentPayments
+  // Helper function to get the largest MONTHLY_RENT payment from rentPayments
+  // Filters out security deposits and other non-rent payment types
   const getLargestPayment = (rentPayments?: RentPayment[]): number => {
     if (!rentPayments || rentPayments.length === 0) return 0;
-    return Math.max(...rentPayments.map(payment => payment.amount));
+    const monthlyRentPayments = rentPayments.filter(payment => payment.type === 'MONTHLY_RENT');
+    if (monthlyRentPayments.length === 0) return 0;
+    return Math.max(...monthlyRentPayments.map(payment => payment.amount));
   };
   
   // Helper function to format amount as currency (amount is in cents)

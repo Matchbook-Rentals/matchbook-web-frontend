@@ -397,10 +397,14 @@ const getStatusBadgeStyle = (status: string) => {
   switch (normalizedStatus) {
     // Green (success): confirmed, completed, active
     case 'confirmed':
-    case 'completed':
     case 'active':
     case 'approved':
       return 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]';
+
+    // Muted green for past/completed bookings
+    case 'past':
+    case 'completed':
+      return 'bg-[#e9f7ee]/50 text-[#1ca34e] border-[#1ca34e]/50';
 
     // Red (failure): payment_failed, cancelled, issue_reported, move_in_issue
     case 'payment_failed':
