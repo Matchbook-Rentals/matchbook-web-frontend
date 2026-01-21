@@ -24,6 +24,7 @@ import { HostBookingCard } from "./components/host-booking-card";
 type RentPayment = {
   id: string;
   amount: number;
+  baseAmount?: number;
   type: string;
   dueDate: Date;
   isPaid: boolean;
@@ -268,12 +269,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
       bookingId: booking.id,
       monthlyRent: booking.monthlyRent,
       rentPayments: booking.rentPayments,
-      rentPaymentAmounts: booking.rentPayments?.map(p => p.amount),
-      largestPayment: getLargestPayment(booking.rentPayments),
-      displayAmount: getLargestPayment(booking.rentPayments) > 0 ? getLargestPayment(booking.rentPayments) : booking.monthlyRent,
-      formattedPrice: getLargestPayment(booking.rentPayments) > 0 
-        ? `$${getLargestPayment(booking.rentPayments).toLocaleString()} / Month`
-        : booking.monthlyRent 
+      rentPaymentAmounts: booking.rentPayments?.map(p => ({ amount: p.amount, baseAmount: p.baseAmount })),
+      displayPaymentAmount: getDisplayPaymentAmount(booking.rentPayments),
+      displayAmount: getDisplayPaymentAmount(booking.rentPayments) > 0 ? getDisplayPaymentAmount(booking.rentPayments) : booking.monthlyRent,
+      formattedPrice: getDisplayPaymentAmount(booking.rentPayments) > 0
+        ? `$${getDisplayPaymentAmount(booking.rentPayments).toLocaleString()} / Month`
+        : booking.monthlyRent
           ? `$${booking.monthlyRent.toLocaleString()} / Month`
           : "$0 / Month"
     });
@@ -479,13 +480,34 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     return "Guest";
   };
 
-  // Helper function to get the largest MONTHLY_RENT payment from rentPayments
-  // Filters out security deposits and other non-rent payment types
-  const getLargestPayment = (rentPayments?: RentPayment[]): number => {
+  // Helper function to get the baseAmount for display (host payout, excludes fees)
+  // Priority: next upcoming MONTHLY_RENT payment, then most recent past payment
+  const getDisplayPaymentAmount = (rentPayments?: RentPayment[]): number => {
     if (!rentPayments || rentPayments.length === 0) return 0;
+
     const monthlyRentPayments = rentPayments.filter(payment => payment.type === 'MONTHLY_RENT');
     if (monthlyRentPayments.length === 0) return 0;
-    return Math.max(...monthlyRentPayments.map(payment => payment.amount));
+
+    const now = new Date();
+    const upcomingPayments = monthlyRentPayments
+      .filter(payment => new Date(payment.dueDate) >= now)
+      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+
+    // Return next upcoming payment's baseAmount
+    if (upcomingPayments.length > 0) {
+      return upcomingPayments[0].baseAmount ?? upcomingPayments[0].amount;
+    }
+
+    // Fallback: most recent past payment
+    const pastPayments = monthlyRentPayments
+      .filter(payment => new Date(payment.dueDate) < now)
+      .sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime());
+
+    if (pastPayments.length > 0) {
+      return pastPayments[0].baseAmount ?? pastPayments[0].amount;
+    }
+
+    return 0;
   };
   
   // Helper function to format amount as currency (amount is in cents)
@@ -512,21 +534,20 @@ export default function HostDashboardBookingsTab({ bookings: propBookings, match
     ];
 
     const statusInfo = getStatusInfo(booking);
-    
-    // Get the largest payment amount, fallback to monthlyRent if no payments
-    const largestPaymentAmount = getLargestPayment(booking.rentPayments);
-    const displayAmount = largestPaymentAmount > 0 ? largestPaymentAmount : booking.monthlyRent;
-    
+
+    // Get the next payment baseAmount (host payout), fallback to monthlyRent if no payments
+    const paymentAmount = getDisplayPaymentAmount(booking.rentPayments);
+    const displayAmount = paymentAmount > 0 ? paymentAmount : booking.monthlyRent;
+
     // Log payment calculation for debugging
     console.log('💰 Payment Calculation for booking:', {
       bookingId: booking.id,
       monthlyRent: booking.monthlyRent,
       monthlyRentInDollars: booking.monthlyRent ? booking.monthlyRent / 100 : 0,
       rentPayments: booking.rentPayments,
-      rentPaymentAmounts: booking.rentPayments?.map(p => p.amount),
-      rentPaymentAmountsInDollars: booking.rentPayments?.map(p => p.amount / 100),
-      largestPayment: largestPaymentAmount,
-      largestPaymentInDollars: largestPaymentAmount / 100,
+      rentPaymentBaseAmounts: booking.rentPayments?.map(p => ({ amount: p.amount, baseAmount: p.baseAmount })),
+      paymentAmount: paymentAmount,
+      paymentAmountInDollars: paymentAmount / 100,
       displayAmount: displayAmount,
       displayAmountInDollars: displayAmount ? displayAmount / 100 : 0,
       formattedPrice: displayAmount ? `$${formatCurrency(displayAmount)} / Month` : "$0 / Month"

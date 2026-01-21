@@ -512,6 +512,7 @@ export async function getHostBookings() {
           select: {
             id: true,
             amount: true,
+            baseAmount: true,
             type: true,
             dueDate: true,
             isPaid: true,
@@ -811,6 +812,7 @@ export async function getBookingsByListingId(listingId: string) {
           select: {
             id: true,
             amount: true,
+            baseAmount: true,
             type: true,
             dueDate: true,
             isPaid: true,
@@ -1042,6 +1044,8 @@ export async function getAllHostBookings() {
           select: {
             id: true,
             amount: true,
+            baseAmount: true,
+            type: true,
             dueDate: true,
             isPaid: true
           }
@@ -1165,6 +1169,7 @@ export async function getAllListingBookings(listingId: string) {
           select: {
             id: true,
             amount: true,
+            baseAmount: true,
             type: true,
             dueDate: true,
             isPaid: true,
