@@ -209,7 +209,7 @@ export function TemplateCreationStep({ existingTemplate, onTemplateCreated, onCa
                             <FileText className="relative w-8 h-8 text-[#036e49] flex-shrink-0" />
                             
                             <div className="flex flex-col gap-1 relative flex-1 min-w-0">
-                              <span className="relative w-fit font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#344054] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] truncate">
+                              <span className="relative font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#344054] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] truncate">
                                 {uploadedFile.name}
                               </span>
                               <span className="relative w-fit font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
