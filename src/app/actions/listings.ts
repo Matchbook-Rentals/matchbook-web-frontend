@@ -224,6 +224,19 @@ export const pullListingsFromDb = async (
               }
             }
           },
+          { // Add condition to exclude listings with overlapping active bookings
+            NOT: {
+              bookings: {
+                some: {
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } },
+                    { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } }
+                  ]
+                }
+              }
+            }
+          },
           { // Add condition to include only listings with compatible monthly pricing
             monthlyPricing: {
               some: {
