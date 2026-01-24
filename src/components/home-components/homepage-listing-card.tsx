@@ -42,10 +42,14 @@ export default function HomepageListingCard({ listing, badge }: HomepageListingC
     if (listing.monthlyPricing?.length) {
       const prices = listing.monthlyPricing.map(p => p.price);
       const minPrice = Math.min(...prices);
-      return `$${minPrice.toLocaleString()}`;
+      const maxPrice = Math.max(...prices);
+      if (minPrice === maxPrice) {
+        return `$${minPrice.toLocaleString()} / mo`;
+      }
+      return `$${minPrice.toLocaleString()}-$${maxPrice.toLocaleString()} / mo`;
     }
     return listing.shortestLeasePrice
-      ? `$${listing.shortestLeasePrice.toLocaleString()}`
+      ? `$${listing.shortestLeasePrice.toLocaleString()} / mo`
       : 'Price on request';
   };
 
@@ -126,7 +130,7 @@ export default function HomepageListingCard({ listing, badge }: HomepageListingC
           </p>
           <div className="flex items-center justify-between mt-1">
             <p className="font-poppins text-[10px] font-normal text-[#373940] whitespace-nowrap">
-              {getDisplayPrice()} for 1 Month
+              {getDisplayPrice()}
             </p>
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 fill-[#373940] text-[#373940]" />

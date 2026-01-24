@@ -1482,7 +1482,8 @@ export const getListingsByLocation = async (
     const whereClause: Prisma.ListingWhereInput = {
       deletedAt: null,
       isTestListing: true,
-      createdAt: { gte: DEV_LISTINGS_CUTOFF }
+      createdAt: { gte: DEV_LISTINGS_CUTOFF },
+      monthlyPricing: { some: {} }
     };
 
     if (city) whereClause.city = city;
@@ -1522,7 +1523,8 @@ export const getPopularListingAreas = async (
         deletedAt: null,
         isTestListing: true,
         createdAt: { gte: DEV_LISTINGS_CUTOFF },
-        city: { not: null }
+        city: { not: null },
+        monthlyPricing: { some: {} }
       },
       _count: { id: true },
       orderBy: { _count: { id: 'desc' } },
@@ -1556,6 +1558,7 @@ export const getListingsNearLocation = async (
     const earthRadiusMiles = 3959;
 
     // Use raw SQL with Haversine formula for distance-based query
+    // Only include listings that have at least one monthly pricing entry
     const listings = await prisma.$queryRaw<(Listing & { distance: number })[]>`
       SELECT l.*,
         (${earthRadiusMiles} * acos(
@@ -1569,6 +1572,7 @@ export const getListingsNearLocation = async (
         AND l."createdAt" >= ${DEV_LISTINGS_CUTOFF}
         AND l.latitude != 0
         AND l.longitude != 0
+        AND EXISTS (SELECT 1 FROM "MonthlyPricing" mp WHERE mp."listingId" = l.id)
       HAVING (${earthRadiusMiles} * acos(
           cos(radians(${lat})) * cos(radians(l.latitude)) *
           cos(radians(l.longitude) - radians(${lng})) +
@@ -1642,6 +1646,7 @@ export async function getListingsByBounds(bounds: MapBounds): Promise<ListingAnd
         longitude: { gte: bounds.west, lte: bounds.east },
         approvalStatus: 'approved',
         markedActiveByUser: true,
+        monthlyPricing: { some: {} },
       },
       include: {
         listingImages: {
