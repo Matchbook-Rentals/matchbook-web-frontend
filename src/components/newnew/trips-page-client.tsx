@@ -1,14 +1,18 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { useScroll, useMotionValueEvent } from 'framer-motion';
 import { getListingsByBounds, MapBounds } from '@/app/actions/listings';
 import { ListingAndImages } from '@/types';
+import { ListingSection } from '@/lib/listings/get-listing-sections';
 import AnimatedSearchHeader from './animated-search-header';
 import SearchMap from '@/app/app/rent/old-search/(components)/search-map';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { Loader2 } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import { optimisticApplyDb } from '@/app/actions/housing-requests';
 
 // US bounding box for geolocation check
 const US_BOUNDS = {
@@ -96,6 +100,11 @@ interface TripsPageClientProps {
   user: UserObject | null;
   isSignedIn: boolean;
   defaultCenter: { lat: number; lng: number };
+  sections: ListingSection[];
+  favoriteListingIds: string[];
+  matchedListingIds: string[];
+  listingToMatchMap: Record<string, string>;
+  initialRequestedIds: string[];
 }
 
 const isInUS = (lat: number, lng: number): boolean => {
@@ -112,8 +121,59 @@ export default function TripsPageClient({
   user,
   isSignedIn,
   defaultCenter,
+  sections,
+  favoriteListingIds,
+  matchedListingIds,
+  listingToMatchMap,
+  initialRequestedIds,
 }: TripsPageClientProps) {
+  const router = useRouter();
+  const { toast } = useToast();
   const [mapCenter, setMapCenter] = useState(defaultCenter);
+  const [appliedIds, setAppliedIds] = useState<Set<string>>(
+    () => new Set(initialRequestedIds)
+  );
+
+  // Convert to Sets for O(1) lookup
+  const favoriteSet = useMemo(() => new Set(favoriteListingIds), [favoriteListingIds]);
+  const matchedSet = useMemo(() => new Set(matchedListingIds), [matchedListingIds]);
+
+  const getBadgeForListing = (listingId: string): 'matched' | 'liked' | undefined => {
+    if (matchedSet.has(listingId)) return 'matched';
+    if (favoriteSet.has(listingId)) return 'liked';
+    return undefined;
+  };
+
+  const handleApplyNow = async (listing: ListingAndImages, tripId: string) => {
+    // Optimistic update
+    setAppliedIds(prev => new Set([...prev, listing.id]));
+
+    const result = await optimisticApplyDb(tripId, listing);
+
+    if (result.success) {
+      toast({
+        title: "Application Sent",
+        description: `Your application for ${listing.title} has been submitted.`,
+      });
+    } else {
+      // Rollback on failure
+      setAppliedIds(prev => {
+        const next = new Set(prev);
+        next.delete(listing.id);
+        return next;
+      });
+      toast({
+        variant: "destructive",
+        title: "Application Failed",
+        description: result.message || "Failed to submit application. Please try again.",
+      });
+    }
+  };
+
+  const handleBookNow = (matchId: string) => {
+    router.push(`/app/rent/match/${matchId}`);
+  };
+
   const [listings, setListings] = useState<ListingAndImages[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -206,9 +266,33 @@ export default function TripsPageClient({
       <div className="flex h-[calc(100vh-80px)] pt-[80px]">
         {/* Listings sidebar */}
         <div className="w-3/5 overflow-y-auto p-4 border-r">
+          {/* Render all sections from getListingSections */}
+          {sections.map((section, index) => (
+            <div key={`${section.type}-${index}`} className="mb-8">
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">{section.title}</h2>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {section.listings.map((listing) => (
+                  <HomepageListingCard
+                    key={listing.id}
+                    listing={listing}
+                    badge={getBadgeForListing(listing.id)}
+                    tripId={section.tripId}
+                    matchId={listingToMatchMap[listing.id]}
+                    isApplied={appliedIds.has(listing.id)}
+                    onApply={handleApplyNow}
+                    onBookNow={handleBookNow}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Nearby listings section (map-based, client-side) */}
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              {isLoading ? 'Searching...' : `${listings.length} rentals found`}
+              {isLoading ? 'Searching...' : `${listings.length} rentals nearby`}
             </h2>
           </div>
 
@@ -227,6 +311,10 @@ export default function TripsPageClient({
                 <HomepageListingCard
                   key={listing.id}
                   listing={listing}
+                  badge={getBadgeForListing(listing.id)}
+                  matchId={listingToMatchMap[listing.id]}
+                  isApplied={appliedIds.has(listing.id)}
+                  onBookNow={handleBookNow}
                 />
               ))}
             </div>

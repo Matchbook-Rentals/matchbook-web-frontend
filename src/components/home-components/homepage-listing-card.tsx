@@ -12,11 +12,25 @@ const TITLE_MAX_LENGTH = 30;
 interface HomepageListingCardProps {
   listing: ListingAndImages;
   badge?: 'matched' | 'liked';
+  tripId?: string;
+  matchId?: string;
+  isApplied?: boolean;
+  onApply?: (listing: ListingAndImages, tripId: string) => Promise<void>;
+  onBookNow?: (matchId: string) => void;
 }
 
-export default function HomepageListingCard({ listing, badge }: HomepageListingCardProps) {
+export default function HomepageListingCard({
+  listing,
+  badge,
+  tripId,
+  matchId,
+  isApplied,
+  onApply,
+  onBookNow,
+}: HomepageListingCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
 
   const getImageUrl = () => {
     if (imageError) return PLACEHOLDER_IMAGE;
@@ -82,19 +96,54 @@ export default function HomepageListingCard({ listing, badge }: HomepageListingC
     );
   };
 
+  const handleApplyClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!tripId || !onApply || isApplying || isApplied) return;
+    setIsApplying(true);
+    try {
+      await onApply(listing, tripId);
+    } finally {
+      setIsApplying(false);
+    }
+  };
+
+  const handleBookNowClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (matchId && onBookNow) {
+      onBookNow(matchId);
+    }
+  };
+
   const renderActionButton = () => {
     if (badge === 'matched') {
+      const hasHandler = matchId && onBookNow;
       return (
-        <span className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center bg-secondaryBrand text-white hover:bg-primaryBrand transition-colors">
+        <button
+          onClick={hasHandler ? handleBookNowClick : undefined}
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center bg-secondaryBrand text-white hover:bg-primaryBrand transition-colors cursor-pointer"
+        >
           Book Now
-        </span>
+        </button>
       );
     }
     if (badge === 'liked') {
+      const hasHandler = tripId && onApply;
+      const isDisabled = isApplied || isApplying || !hasHandler;
+      const buttonText = isApplied ? 'Applied' : isApplying ? 'Applying...' : 'Apply Now';
       return (
-        <span className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center bg-secondaryBrand text-white hover:bg-primaryBrand transition-colors">
-          Apply Now
-        </span>
+        <button
+          onClick={hasHandler ? handleApplyClick : undefined}
+          disabled={isDisabled}
+          className={`absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center transition-colors ${
+            isApplied
+              ? 'bg-gray-400 text-white cursor-default'
+              : 'bg-secondaryBrand text-white hover:bg-primaryBrand cursor-pointer'
+          }`}
+        >
+          {buttonText}
+        </button>
       );
     }
     return null;

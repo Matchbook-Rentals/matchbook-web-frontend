@@ -19,13 +19,15 @@ interface TripWithFavorites {
   longitude: number;
   searchRadius: number | null;
   favorites: { listingId: string | null }[];
-  matches: { listingId: string | null }[];
+  matches: { id: string; listingId: string | null }[];
+  housingRequests: { listingId: string | null }[];
 }
 
 export interface UserTripData {
   tripLocation: string | null;
   favoriteListingIds: string[];
   matchedListingIds: string[];
+  requestedListingIds: string[];
 }
 
 /**
@@ -99,7 +101,8 @@ async function getRecentTrips(userId: string, limit: number): Promise<TripWithFa
     take: limit,
     include: {
       favorites: { select: { listingId: true } },
-      matches: { select: { listingId: true } },
+      matches: { select: { id: true, listingId: true } },
+      housingRequests: { select: { listingId: true } },
     },
   });
 }
@@ -174,9 +177,14 @@ async function fetchListingsNearLocation(
 }
 
 /**
- * Extracts valid listing IDs from favorites and matches
+ * Extracts valid listing IDs from favorites, matches, and housing requests
  */
-function extractListingIds(trip: TripWithFavorites): { favoriteIds: string[]; matchedIds: string[] } {
+function extractListingIds(trip: TripWithFavorites): {
+  favoriteIds: string[];
+  matchedIds: string[];
+  requestedIds: string[];
+  matchMap: Record<string, string>;
+} {
   const favoriteIds = trip.favorites
     .map(f => f.listingId)
     .filter((id): id is string => id !== null);
@@ -185,7 +193,19 @@ function extractListingIds(trip: TripWithFavorites): { favoriteIds: string[]; ma
     .map(m => m.listingId)
     .filter((id): id is string => id !== null);
 
-  return { favoriteIds, matchedIds };
+  const requestedIds = trip.housingRequests
+    .map(r => r.listingId)
+    .filter((id): id is string => id !== null);
+
+  // Build a map from listingId -> matchId
+  const matchMap: Record<string, string> = {};
+  for (const match of trip.matches) {
+    if (match.listingId) {
+      matchMap[match.listingId] = match.id;
+    }
+  }
+
+  return { favoriteIds, matchedIds, requestedIds, matchMap };
 }
 
 /**
@@ -288,6 +308,7 @@ async function buildLikedSection(
 export interface GetListingSectionsResult {
   sections: ListingSection[];
   tripData: UserTripData;
+  listingToMatchMap: Record<string, string>;
 }
 
 /**
@@ -301,26 +322,38 @@ export interface GetListingSectionsResult {
 export async function getListingSections(userId: string | null): Promise<GetListingSectionsResult> {
   const sections: ListingSection[] = [];
   const usedListingIds = new Set<string>();
+  let listingToMatchMap: Record<string, string> = {};
 
   // Default trip data for non-logged-in users
   let tripData: UserTripData = {
     tripLocation: null,
     favoriteListingIds: [],
     matchedListingIds: [],
+    requestedListingIds: [],
   };
 
   if (userId) {
     const recentTrips = await getRecentTrips(userId, MAX_RECENT_SEARCHES);
 
     // Build trip data from most recent trip (for badge logic)
+    // Also aggregate match maps and requested IDs across all trips
     if (recentTrips.length > 0) {
       const mostRecent = recentTrips[0];
-      const { favoriteIds, matchedIds } = extractListingIds(mostRecent);
+      const { favoriteIds, matchedIds, requestedIds, matchMap } = extractListingIds(mostRecent);
       tripData = {
         tripLocation: getTripLocation(mostRecent),
         favoriteListingIds: favoriteIds,
         matchedListingIds: matchedIds,
+        requestedListingIds: requestedIds,
       };
+      listingToMatchMap = { ...matchMap };
+
+      // Include match maps from other trips too
+      for (let i = 1; i < recentTrips.length; i++) {
+        const { matchMap: otherMatchMap, requestedIds: otherRequestedIds } = extractListingIds(recentTrips[i]);
+        listingToMatchMap = { ...listingToMatchMap, ...otherMatchMap };
+        tripData.requestedListingIds = [...tripData.requestedListingIds, ...otherRequestedIds];
+      }
     }
 
     // Section 1 & 2: Recent searches (up to 2 trips)
@@ -350,5 +383,5 @@ export async function getListingSections(userId: string | null): Promise<GetList
     });
   }
 
-  return { sections, tripData };
+  return { sections, tripData, listingToMatchMap };
 }

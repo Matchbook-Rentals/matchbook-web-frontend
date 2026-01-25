@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { currentUser } from "@clerk/nextjs/server";
 import { checkAdminAccess } from "@/utils/roles";
 import TripsPageClient from "@/components/newnew/trips-page-client";
+import { getListingSections } from "@/lib/listings/get-listing-sections";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Find Your Next Home',
@@ -38,12 +39,20 @@ export default async function TripsPage() {
   const user = await currentUser();
   const userObject = serializeUser(user);
 
+  // Get listing sections using shared logic
+  const { sections, tripData, listingToMatchMap } = await getListingSections(user?.id || null);
+
   return (
     <TripsPageClient
       userId={user?.id || null}
       user={userObject}
       isSignedIn={!!user?.id}
       defaultCenter={SALT_LAKE_CITY}
+      sections={sections}
+      favoriteListingIds={tripData.favoriteListingIds}
+      matchedListingIds={tripData.matchedListingIds}
+      listingToMatchMap={listingToMatchMap}
+      initialRequestedIds={tripData.requestedListingIds}
     />
   );
 }
