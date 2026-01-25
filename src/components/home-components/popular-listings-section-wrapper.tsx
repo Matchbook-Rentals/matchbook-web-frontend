@@ -12,6 +12,9 @@ interface UserTripLocation {
   city: string | null;
   state: string | null;
   locationString: string | null;
+  latitude?: number;
+  longitude?: number;
+  searchRadius?: number | null;
 }
 
 interface PopularArea {
@@ -64,15 +67,28 @@ export default function PopularListingsSectionWrapper({
       `${city?.toLowerCase() || ''}-${state?.toLowerCase() || ''}`;
 
     // Row 1: User's trip location OR generic popular
-    if (isSignedIn && userTripLocation?.city) {
-      const listings = await getListingsByLocation(
-        userTripLocation.city,
-        userTripLocation.state,
-        LISTINGS_PER_ROW
-      );
-      const displayName = userTripLocation.locationString || userTripLocation.city;
+    if (isSignedIn && userTripLocation && (userTripLocation.city || userTripLocation.latitude)) {
+      let listings: ListingAndImages[] = [];
+
+      if (userTripLocation.city) {
+        // Use city/state search
+        listings = await getListingsByLocation(
+          userTripLocation.city,
+          userTripLocation.state,
+          LISTINGS_PER_ROW
+        );
+      } else if (userTripLocation.latitude && userTripLocation.longitude) {
+        // Fall back to lat/lng search
+        listings = await getListingsNearLocation(
+          userTripLocation.latitude,
+          userTripLocation.longitude,
+          LISTINGS_PER_ROW
+        );
+      }
+
+      const displayName = userTripLocation.locationString || userTripLocation.city || 'your area';
       newSections.push({
-        title: `Your search in ${displayName}`,
+        title: `Your recent search in ${displayName}`,
         listings,
         showBadges: true,
       });

@@ -63,6 +63,9 @@ const NewNewHomePage = async () => {
         city: recentTrip.city,
         state: recentTrip.state,
         locationString: recentTrip.locationString,
+        latitude: recentTrip.latitude,
+        longitude: recentTrip.longitude,
+        searchRadius: recentTrip.searchRadius,
       };
     }
   }

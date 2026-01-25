@@ -1547,6 +1547,7 @@ export const getPopularListingAreas = async (
 /**
  * Fetches listings near a lat/lng coordinate for "near me" section.
  * Uses Haversine formula for distance calculation.
+ * Filters match pullListingsFromDb: approved, active, not deleted.
  */
 export const getListingsNearLocation = async (
   lat: number,
@@ -1557,70 +1558,48 @@ export const getListingsNearLocation = async (
   try {
     const earthRadiusMiles = 3959;
 
-    // Use raw SQL with Haversine formula for distance-based query
-    // Only include listings that have at least one monthly pricing entry
-    const listings = await prisma.$queryRaw<(Listing & { distance: number })[]>`
-      SELECT l.*,
+    // Get listing IDs with distance (matches pullListingsFromDb SQL style)
+    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
+      SELECT l.id,
         (${earthRadiusMiles} * acos(
           cos(radians(${lat})) * cos(radians(l.latitude)) *
           cos(radians(l.longitude) - radians(${lng})) +
           sin(radians(${lat})) * sin(radians(l.latitude))
         )) AS distance
-      FROM "Listing" l
-      WHERE l."deletedAt" IS NULL
-        AND l."isTestListing" = true
-        AND l."createdAt" >= ${DEV_LISTINGS_CUTOFF}
+      FROM Listing l
+      WHERE l.approvalStatus = 'approved'
+        AND l.markedActiveByUser = true
+        AND l.deletedAt IS NULL
         AND l.latitude != 0
         AND l.longitude != 0
-        AND EXISTS (SELECT 1 FROM "MonthlyPricing" mp WHERE mp."listingId" = l.id)
-      HAVING (${earthRadiusMiles} * acos(
-          cos(radians(${lat})) * cos(radians(l.latitude)) *
-          cos(radians(l.longitude) - radians(${lng})) +
-          sin(radians(${lat})) * sin(radians(l.latitude))
-        )) <= ${radiusMiles}
-      ORDER BY distance ASC
+      HAVING distance <= ${radiusMiles}
+      ORDER BY distance
       LIMIT ${count}
     `;
 
-    // Fetch images and pricing for the listings
-    const listingIds = listings.map(l => l.id);
+    const listingIds = listingsWithDistance.map(l => l.id);
 
     if (listingIds.length === 0) {
       return [];
     }
 
-    const [images, pricing] = await Promise.all([
-      prisma.listingImage.findMany({
-        where: { listingId: { in: listingIds } },
-        orderBy: { rank: 'asc' }
-      }),
-      prisma.monthlyPricing.findMany({
-        where: { listingId: { in: listingIds } }
-      })
-    ]);
-
-    // Group images and pricing by listing
-    const imagesByListing = new Map<string, typeof images>();
-    const pricingByListing = new Map<string, typeof pricing>();
-
-    images.forEach(img => {
-      const existing = imagesByListing.get(img.listingId) || [];
-      existing.push(img);
-      imagesByListing.set(img.listingId, existing);
+    // Fetch full listings with images
+    const listings = await prisma.listing.findMany({
+      where: { id: { in: listingIds } },
+      include: { listingImages: { orderBy: { rank: 'asc' } } }
     });
 
-    pricing.forEach(p => {
-      const existing = pricingByListing.get(p.listingId) || [];
-      existing.push(p);
-      pricingByListing.set(p.listingId, existing);
-    });
+    // Create distance map for sorting
+    const distanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
 
-    return listings.map(listing => ({
-      ...listing,
-      listingImages: (imagesByListing.get(listing.id) || []).slice(0, 1),
-      monthlyPricing: pricingByListing.get(listing.id) || [],
-      displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
-    }));
+    // Sort by distance and add displayCategory
+    return listings
+      .sort((a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0))
+      .map(listing => ({
+        ...listing,
+        listingImages: listing.listingImages || [],
+        displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
+      }));
   } catch (error) {
     console.error('Error fetching listings near location:', error);
     return [];

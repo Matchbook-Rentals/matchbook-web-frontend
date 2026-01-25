@@ -16,8 +16,12 @@ interface HomepageListingCardProps {
 
 export default function HomepageListingCard({ listing, badge }: HomepageListingCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
-  const getImageUrl = () => listing.listingImages?.[0]?.url || PLACEHOLDER_IMAGE;
+  const getImageUrl = () => {
+    if (imageError) return PLACEHOLDER_IMAGE;
+    return listing.listingImages?.[0]?.url || PLACEHOLDER_IMAGE;
+  };
 
   const getTruncatedTitle = () => {
     const title = listing.title || 'Untitled Listing';
@@ -108,6 +112,7 @@ export default function HomepageListingCard({ listing, badge }: HomepageListingC
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="169px"
+            onError={() => setImageError(true)}
           />
           {renderMatchedBadge()}
           {renderActionButton()}
