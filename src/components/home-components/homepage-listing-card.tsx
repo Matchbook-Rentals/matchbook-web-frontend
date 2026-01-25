@@ -149,7 +149,7 @@ export default function HomepageListingCard({
     return null;
   };
 
-  const listingUrl = `/guest/listing/${listing.id}`;
+  const listingUrl = `/search/listing/${listing.id}`;
 
   return (
     <Link href={listingUrl} className="block group flex-shrink-0 w-[169px]">
