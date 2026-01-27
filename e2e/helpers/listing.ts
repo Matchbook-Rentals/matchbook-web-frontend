@@ -959,3 +959,72 @@ export async function navigateToListing(page: Page, listingId: string): Promise<
   await page.goto(`/listing/${listingId}`);
   await page.waitForLoadState('networkidle');
 }
+
+/**
+ * Find an existing listing for a user by their email
+ * Used for booking flow tests to reuse a permanent listing instead of creating new ones
+ */
+export async function findExistingListingByEmail(
+  request: APIRequestContext,
+  email: string
+): Promise<{ listingId: string; title: string } | null> {
+  try {
+    // First, find the user by email
+    const userResponse = await request.get(`/api/dev/users?search=${encodeURIComponent(email)}`);
+    const userData = await userResponse.json();
+
+    if (!userData.users || userData.users.length === 0) {
+      console.log(`No user found with email: ${email}`);
+      return null;
+    }
+
+    const user = userData.users[0];
+    console.log(`Found user: ${user.id} (${user.email})`);
+
+    // Now find listings for this user
+    const listingsResponse = await request.get(`/api/dev/listings?userId=${user.id}`);
+    const listingsData = await listingsResponse.json();
+
+    if (!listingsData.listings || listingsData.listings.length === 0) {
+      console.log(`No listings found for user: ${user.id}`);
+      return null;
+    }
+
+    // Return the first (most recent) listing
+    const listing = listingsData.listings[0];
+    console.log(`Found existing listing: ${listing.id} - "${listing.title}"`);
+
+    return {
+      listingId: listing.id,
+      title: listing.title,
+    };
+  } catch (error) {
+    console.error('Error finding existing listing:', error);
+    return null;
+  }
+}
+
+/**
+ * Search for listings by title
+ */
+export async function searchListingsByTitle(
+  request: APIRequestContext,
+  searchTerm: string
+): Promise<Array<{ listingId: string; title: string }>> {
+  try {
+    const response = await request.get(`/api/dev/listings?search=${encodeURIComponent(searchTerm)}`);
+    const data = await response.json();
+
+    if (!data.listings || data.listings.length === 0) {
+      return [];
+    }
+
+    return data.listings.map((l: any) => ({
+      listingId: l.id,
+      title: l.title,
+    }));
+  } catch (error) {
+    console.error('Error searching listings:', error);
+    return [];
+  }
+}

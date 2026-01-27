@@ -186,8 +186,7 @@ export function generateEmailTemplateHtml(data: EmailTemplateData): string {
         background-color: #2a2a2a !important;
       }
       .button {
-        background-color: #ffffff !important;
-        color: #000000 !important;
+        background-color: #4a4a4a !important;
       }
       .tag-link {
         color: #ffffff !important;

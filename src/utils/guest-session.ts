@@ -40,7 +40,7 @@ export class GuestSessionService {
       if (typeof window === 'undefined') return false;
 
       // Store only session ID in cookie (much smaller than full JSON)
-      const maxAge = 24 * 60 * 60; // 24 hours in seconds
+      const maxAge = 10 * 365 * 24 * 60 * 60; // 10 years in seconds
       document.cookie = `${GUEST_SESSION_ID_KEY}=${session.id}; path=/; max-age=${maxAge}; SameSite=Lax; Secure`;
 
       // Cache full session data in localStorage for better performance
@@ -74,21 +74,15 @@ export class GuestSessionService {
       if (cached) {
         const session = JSON.parse(cached);
 
-        // Check if cached session is expired
-        if (Date.now() <= session.expiresAt) {
-          // Convert date strings back to Date objects
-          return {
-            ...session,
-            searchParams: {
-              ...session.searchParams,
-              startDate: session.searchParams.startDate ? new Date(session.searchParams.startDate) : undefined,
-              endDate: session.searchParams.endDate ? new Date(session.searchParams.endDate) : undefined,
-            },
-          };
-        } else {
-          // Clear expired cache
-          this.clearSession();
-        }
+        // Convert date strings back to Date objects
+        return {
+          ...session,
+          searchParams: {
+            ...session.searchParams,
+            startDate: session.searchParams.startDate ? new Date(session.searchParams.startDate) : undefined,
+            endDate: session.searchParams.endDate ? new Date(session.searchParams.endDate) : undefined,
+          },
+        };
       }
 
       // If no cache, try to get session ID from cookie for server fetch
@@ -162,7 +156,7 @@ export class GuestSessionService {
     if (!sessionId) return false;
 
     const session = this.getSessionById(sessionId);
-    return session !== null && Date.now() < session.expiresAt;
+    return session !== null;
   }
 
   static extendSession(additionalHours: number = 24): boolean {
@@ -219,7 +213,7 @@ export class GuestSessionService {
       },
       pendingActions: [],
       createdAt: Date.now(),
-      expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
+      expiresAt: Date.now() + (10 * 365 * 24 * 60 * 60 * 1000), // 10 years
     };
   }
 

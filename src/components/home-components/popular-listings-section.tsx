@@ -5,9 +5,22 @@ import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
 import { ChevronRight, ArrowRight } from 'lucide-react';
 import { useRef } from 'react';
+import Link from 'next/link';
+
+export interface ListingSection {
+  title: string;
+  listings: ListingAndImages[];
+  showBadges?: boolean;
+  center?: { lat: number; lng: number };
+  locationString?: string;
+  city?: string;
+  state?: string;
+}
 
 interface PopularListingsSectionProps {
-  listings: ListingAndImages[];
+  sections: ListingSection[];
+  guestFavoriteIds?: Set<string>;
+  onFavorite?: (listingId: string, isFavorited: boolean, center?: { lat: number; lng: number }, locationString?: string) => void;
 }
 
 type BadgeType = 'matched' | 'liked';
@@ -16,16 +29,12 @@ interface ListingRowProps {
   title: string;
   listings: ListingAndImages[];
   showBadges?: boolean;
+  guestFavoriteIds?: Set<string>;
+  onFavorite?: (listingId: string, isFavorited: boolean) => void;
+  searchUrl?: string;
 }
 
 const SCROLL_AMOUNT = 440;
-
-const SAMPLE_CITIES = [
-  'Nashville, TN',
-  'Las Vegas, NV',
-  'Austin, TX',
-  'Denver, CO',
-];
 
 const getBadgeForIndex = (index: number): BadgeType | undefined => {
   if (index === 0) return 'matched';
@@ -33,7 +42,7 @@ const getBadgeForIndex = (index: number): BadgeType | undefined => {
   return undefined;
 };
 
-function ListingRow({ title, listings, showBadges = false }: ListingRowProps) {
+function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, searchUrl }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollRight = () => {
@@ -48,9 +57,15 @@ function ListingRow({ title, listings, showBadges = false }: ListingRowProps) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h3 className="text-[#404040] text-lg font-medium">{title}</h3>
-          <div className="p-1 rounded-full bg-primaryBrand/10">
-            <ArrowRight className="w-4 h-4 text-primaryBrand" />
-          </div>
+          {searchUrl ? (
+            <Link href={searchUrl} className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors">
+              <ArrowRight className="w-4 h-4 text-primaryBrand" />
+            </Link>
+          ) : (
+            <div className="p-1 rounded-full bg-primaryBrand/10">
+              <ArrowRight className="w-4 h-4 text-primaryBrand" />
+            </div>
+          )}
         </div>
         <button
           onClick={scrollRight}
@@ -72,6 +87,8 @@ function ListingRow({ title, listings, showBadges = false }: ListingRowProps) {
               key={listing.id}
               listing={listing}
               badge={showBadges ? getBadgeForIndex(index) : undefined}
+              initialFavorited={guestFavoriteIds?.has(listing.id)}
+              onFavorite={onFavorite}
             />
           ))}
         </div>
@@ -82,21 +99,18 @@ function ListingRow({ title, listings, showBadges = false }: ListingRowProps) {
   );
 }
 
-export default function PopularListingsSection({ listings }: PopularListingsSectionProps) {
-  const hasListings = listings.length > 0;
+const buildSearchUrl = (section: ListingSection): string | undefined => {
+  if (!section.center) return undefined;
+  const params = new URLSearchParams();
+  params.set('lat', String(section.center.lat));
+  params.set('lng', String(section.center.lng));
+  if (section.city) params.set('city', section.city);
+  if (section.state) params.set('state', section.state);
+  return `/search?${params.toString()}`;
+};
 
-  const splitListingsIntoRows = () => {
-    if (!hasListings) return [];
-    const rowSize = Math.ceil(listings.length / 4);
-    return [
-      listings.slice(0, rowSize),
-      listings.slice(rowSize, rowSize * 2),
-      listings.slice(rowSize * 2, rowSize * 3),
-      listings.slice(rowSize * 3),
-    ];
-  };
-
-  const rows = splitListingsIntoRows();
+export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite }: PopularListingsSectionProps) {
+  const hasSections = sections.length > 0;
 
   const renderEmptyState = () => (
     <div className="text-center py-12 text-gray-500">
@@ -107,25 +121,18 @@ export default function PopularListingsSection({ listings }: PopularListingsSect
   return (
     <MarketingContainer>
       <section className="py-8">
-        {hasListings ? (
-          <>
+        {hasSections ? (
+          sections.map((section, index) => (
             <ListingRow
-              title="Your search in Palo Alto"
-              listings={rows[0] || []}
-              showBadges={true}
+              key={`${section.title}-${index}`}
+              title={section.title}
+              listings={section.listings}
+              showBadges={section.showBadges}
+              guestFavoriteIds={guestFavoriteIds}
+              onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.center, section.locationString) : undefined}
+              searchUrl={buildSearchUrl(section)}
             />
-            <ListingRow
-              title="Monthly rentals near me"
-              listings={rows[1] || []}
-            />
-            {SAMPLE_CITIES.slice(0, 2).map((city, index) => (
-              <ListingRow
-                key={city}
-                title={`Explore monthly rentals in ${city}`}
-                listings={rows[index + 2] || rows[0] || []}
-              />
-            ))}
-          </>
+          ))
         ) : (
           renderEmptyState()
         )}

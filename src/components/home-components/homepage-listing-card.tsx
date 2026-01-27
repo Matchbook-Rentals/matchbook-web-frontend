@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ListingAndImages } from '@/types';
 import { Heart, Star } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const PLACEHOLDER_IMAGE = '/stock_interior.webp';
 const TITLE_MAX_LENGTH = 30;
@@ -17,6 +17,8 @@ interface HomepageListingCardProps {
   isApplied?: boolean;
   onApply?: (listing: ListingAndImages, tripId: string) => Promise<void>;
   onBookNow?: (matchId: string) => void;
+  initialFavorited?: boolean;
+  onFavorite?: (listingId: string, isFavorited: boolean) => void;
 }
 
 export default function HomepageListingCard({
@@ -27,8 +29,11 @@ export default function HomepageListingCard({
   isApplied,
   onApply,
   onBookNow,
+  initialFavorited,
+  onFavorite,
 }: HomepageListingCardProps) {
-  const [isFavorited, setIsFavorited] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
+  useEffect(() => { setIsFavorited(initialFavorited ?? false); }, [initialFavorited]);
   const [imageError, setImageError] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
 
@@ -84,7 +89,9 @@ export default function HomepageListingCard({
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsFavorited(!isFavorited);
+    const newState = !isFavorited;
+    setIsFavorited(newState);
+    onFavorite?.(listing.id, newState);
   };
 
   const renderMatchedBadge = () => {

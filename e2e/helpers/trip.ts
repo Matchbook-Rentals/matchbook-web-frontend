@@ -12,6 +12,55 @@ export interface TripData {
   numPets?: number;
 }
 
+/**
+ * Create a trip via the dev API endpoint (most reliable for e2e testing)
+ * Requires the userId of the renter
+ */
+export async function createTripViaAPI(
+  request: APIRequestContext,
+  userId: string,
+  tripData: TripData
+): Promise<string> {
+  const response = await request.post('/api/dev/trips', {
+    data: {
+      userId,
+      locationString: tripData.location,
+      latitude: tripData.latitude || 30.2672, // Austin, TX default
+      longitude: tripData.longitude || -97.7431,
+      startDate: tripData.startDate?.toISOString(),
+      endDate: tripData.endDate?.toISOString(),
+      numAdults: tripData.numAdults || 1,
+      numChildren: tripData.numChildren || 0,
+      numPets: tripData.numPets || 0,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!data.success || !data.trip) {
+    throw new Error(`Failed to create trip via API: ${data.error || 'Unknown error'}`);
+  }
+
+  console.log(`Trip created via API: ${data.trip.id}`);
+  return data.trip.id;
+}
+
+/**
+ * Get the user ID for a given email via the dev API
+ */
+export async function getUserIdByEmail(
+  request: APIRequestContext,
+  email: string
+): Promise<string | null> {
+  const response = await request.get(`/api/dev/users?search=${encodeURIComponent(email)}`);
+  const data = await response.json();
+
+  if (data.users && data.users.length > 0) {
+    return data.users[0].id;
+  }
+  return null;
+}
+
 export const TEST_HOST = {
   email: process.env.TEST_HOST_EMAIL!,
   password: process.env.TEST_HOST_PASSWORD!
@@ -112,52 +161,112 @@ async function createTripMobile(page: Page, tripData: TripData): Promise<void> {
 }
 
 /**
- * Create trip using the search dialog
+ * Create trip using the search dialog (multi-step)
+ * Step 1: Select location
+ * Step 2: Select dates
+ * Step 3: Search/Submit
  */
 async function createTripDialog(page: Page, tripData: TripData): Promise<void> {
-  // Fill location
+  // Step 1: Fill location
   await fillLocation(page, tripData.location);
 
-  // Fill dates if provided
-  if (tripData.startDate || tripData.endDate) {
-    await fillDateRange(page, tripData.startDate, tripData.endDate);
+  // Wait a moment for selection to register
+  await page.waitForTimeout(500);
+
+  // Click Next to proceed to dates (if in multi-step dialog)
+  const nextButton = page.getByRole('button', { name: /next/i }).first();
+  if (await nextButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await nextButton.click();
+    await page.waitForTimeout(1000);
   }
 
-  // Fill guests if provided
+  // Step 2: Fill dates if provided
+  if (tripData.startDate || tripData.endDate) {
+    await fillDateRange(page, tripData.startDate, tripData.endDate);
+
+    // Click Next again to proceed to final step
+    if (await nextButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await nextButton.click();
+      await page.waitForTimeout(1000);
+    }
+  }
+
+  // Step 3: Fill guests if visible
   if (tripData.numAdults || tripData.numChildren || tripData.numPets) {
     await fillGuests(page, tripData);
   }
 
-  // Click search/submit button
-  const submitButton = page.getByRole('button', { name: /search|find|submit/i }).first();
-  await submitButton.click();
+  // Final step: Click search/submit button
+  const searchButton = page.getByRole('button', { name: /search|find|submit|let's go/i }).first();
+  if (await searchButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await searchButton.click();
+  } else {
+    // Try the next button one more time as it might be the final step
+    if (await nextButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await nextButton.click();
+    }
+  }
 }
 
 /**
  * Fill location in the search component
+ * Handles both inline search and dialog-based search
  */
 async function fillLocation(page: Page, location: string): Promise<void> {
-  // Look for location input in various forms
-  const locationInput = page.locator('input[placeholder*="Where"], input[placeholder*="location"], input[placeholder*="city"]').first();
+  // Look for location input - could be in dialog or on page
+  const locationInput = page.locator(
+    'input[placeholder*="Where"], ' +
+    'input[placeholder*="address"], ' +
+    'input[placeholder*="city"], ' +
+    'input[placeholder*="location"]'
+  ).first();
 
-  if (await locationInput.isVisible()) {
+  if (await locationInput.isVisible({ timeout: 5000 }).catch(() => false)) {
+    console.log('Found location input, typing location...');
     await locationInput.fill(location);
 
     // Wait for suggestions to appear
-    await page.waitForTimeout(1000);
-
-    // Click on first suggestion
-    const suggestion = page.locator('[role="option"], [data-suggestion], .suggestion-item').first();
-    if (await suggestion.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await suggestion.click();
-    } else {
-      // Try clicking on any list item that contains our location text
-      const listItem = page.locator(`text=${location}`).first();
-      if (await listItem.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await listItem.click();
-      }
-    }
+    await page.waitForTimeout(2000);
   }
+
+  // Now find and click on suggestions
+  console.log('Looking for location suggestions...');
+
+  // 1. Try clicking li elements within a ul (the suggestion list structure)
+  const ulListItem = page.locator('ul li').first();
+  if (await ulListItem.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await ulListItem.click();
+    console.log('Clicked ul > li element');
+    return;
+  }
+
+  // 2. Try data-testid selector (if component was reloaded)
+  const suggestionByTestId = page.locator('[data-testid="location-suggestion-item"]').first();
+  if (await suggestionByTestId.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await suggestionByTestId.click();
+    console.log('Clicked suggestion via data-testid');
+    return;
+  }
+
+  // 3. Try clicking any element with hover:bg-gray-100 class (suggestion styling)
+  const styledSuggestion = page.locator('.hover\\:bg-gray-100').first();
+  if (await styledSuggestion.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await styledSuggestion.click();
+    console.log('Clicked styled suggestion element');
+    return;
+  }
+
+  // 4. Try role="option"
+  const roleOption = page.locator('[role="option"]').first();
+  if (await roleOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await roleOption.click();
+    console.log('Clicked role=option');
+    return;
+  }
+
+  // 5. Try pressing Enter to select the first suggestion
+  console.log('No suggestion found, trying Enter key...');
+  await page.keyboard.press('Enter');
 }
 
 /**

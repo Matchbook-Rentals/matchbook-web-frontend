@@ -26,7 +26,7 @@ interface ViewedListing {
   actionId: string;
 }
 
-interface GuestTripContextType {
+export interface GuestTripContextType {
   state: {
     session: GuestSession | null;
     listings: ListingAndImages[];
@@ -70,7 +70,7 @@ interface GuestTripContextProviderProps {
   listingData: ListingAndImages[]; // Required - real listing data from database
 }
 
-const GuestTripContext = createContext<GuestTripContextType | undefined>(undefined);
+export const GuestTripContext = createContext<GuestTripContextType | undefined>(undefined);
 
 export const useGuestTripContext = () => {
   const context = useContext(GuestTripContext);

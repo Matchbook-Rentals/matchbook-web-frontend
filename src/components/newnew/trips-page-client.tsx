@@ -13,6 +13,9 @@ import HomepageListingCard from '@/components/home-components/homepage-listing-c
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { optimisticApplyDb } from '@/app/actions/housing-requests';
+import { createGuestSession } from '@/app/actions/guest-session-db';
+import { guestOptimisticFavorite, guestOptimisticRemoveFavorite } from '@/app/actions/guest-favorites';
+import { GuestSessionService } from '@/utils/guest-session';
 
 // US bounding box for geolocation check
 const US_BOUNDS = {
@@ -105,6 +108,8 @@ interface TripsPageClientProps {
   matchedListingIds: string[];
   listingToMatchMap: Record<string, string>;
   initialRequestedIds: string[];
+  guestFavoriteIds?: string[];
+  initialGuestSessionId?: string | null;
 }
 
 const isInUS = (lat: number, lng: number): boolean => {
@@ -126,6 +131,8 @@ export default function TripsPageClient({
   matchedListingIds,
   listingToMatchMap,
   initialRequestedIds,
+  guestFavoriteIds: initialGuestFavoriteIds,
+  initialGuestSessionId,
 }: TripsPageClientProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -133,9 +140,19 @@ export default function TripsPageClient({
   const [appliedIds, setAppliedIds] = useState<Set<string>>(
     () => new Set(initialRequestedIds)
   );
+  const [guestSessionId, setGuestSessionId] = useState<string | null>(initialGuestSessionId ?? null);
+  const [guestFavIds, setGuestFavIds] = useState<Set<string>>(
+    () => new Set(initialGuestFavoriteIds ?? [])
+  );
 
-  // Convert to Sets for O(1) lookup
-  const favoriteSet = useMemo(() => new Set(favoriteListingIds), [favoriteListingIds]);
+  // Merge authenticated and guest favorites for display
+  const favoriteSet = useMemo(() => {
+    const set = new Set(favoriteListingIds);
+    if (!isSignedIn) {
+      Array.from(guestFavIds).forEach(id => set.add(id));
+    }
+    return set;
+  }, [favoriteListingIds, guestFavIds, isSignedIn]);
   const matchedSet = useMemo(() => new Set(matchedListingIds), [matchedListingIds]);
 
   const getBadgeForListing = (listingId: string): 'matched' | 'liked' | undefined => {
@@ -172,6 +189,52 @@ export default function TripsPageClient({
 
   const handleBookNow = (matchId: string) => {
     router.push(`/app/rent/match/${matchId}`);
+  };
+
+  // Handle guest favorite toggle
+  const handleGuestFavorite = async (listingId: string, isFavorited: boolean) => {
+    if (isSignedIn) return;
+
+    let sessionId = guestSessionId;
+
+    // Lazy session creation on first like
+    if (!sessionId && isFavorited) {
+      const result = await createGuestSession({
+        locationString: 'Trips page',
+        latitude: mapCenter.lat,
+        longitude: mapCenter.lng,
+      });
+      if (!result.success || !result.sessionId) return;
+      sessionId = result.sessionId;
+      setGuestSessionId(sessionId);
+      GuestSessionService.storeSession(
+        GuestSessionService.createGuestSessionData({
+          locationString: 'Trips page',
+          latitude: mapCenter.lat,
+          longitude: mapCenter.lng,
+        }, sessionId)
+      );
+    }
+
+    if (!sessionId) return;
+
+    // Optimistic UI update
+    setGuestFavIds((prev) => {
+      const next = new Set(prev);
+      if (isFavorited) {
+        next.add(listingId);
+      } else {
+        next.delete(listingId);
+      }
+      return next;
+    });
+
+    // Persist to DB
+    if (isFavorited) {
+      await guestOptimisticFavorite(sessionId, listingId);
+    } else {
+      await guestOptimisticRemoveFavorite(sessionId, listingId);
+    }
   };
 
   const [listings, setListings] = useState<ListingAndImages[]>([]);
@@ -283,6 +346,8 @@ export default function TripsPageClient({
                     isApplied={appliedIds.has(listing.id)}
                     onApply={handleApplyNow}
                     onBookNow={handleBookNow}
+                    initialFavorited={!isSignedIn ? guestFavIds.has(listing.id) : undefined}
+                    onFavorite={!isSignedIn ? handleGuestFavorite : undefined}
                   />
                 ))}
               </div>
@@ -315,6 +380,8 @@ export default function TripsPageClient({
                   matchId={listingToMatchMap[listing.id]}
                   isApplied={appliedIds.has(listing.id)}
                   onBookNow={handleBookNow}
+                  initialFavorited={!isSignedIn ? guestFavIds.has(listing.id) : undefined}
+                  onFavorite={!isSignedIn ? handleGuestFavorite : undefined}
                 />
               ))}
             </div>

@@ -47,8 +47,8 @@ export async function createGuestSession(data: CreateGuestSessionData): Promise<
       startDate.setMonth(startDate.getMonth() - 1);
     }
 
-    // Set expiration to 24 hours from now
-    const expiresAt = new Date(Date.now() + (24 * 60 * 60 * 1000));
+    // Set expiration to 10 years (effectively permanent)
+    const expiresAt = new Date(Date.now() + (10 * 365 * 24 * 60 * 60 * 1000));
 
     const guestSession = await prisma.guestSession.create({
       data: {
@@ -100,13 +100,6 @@ export async function getGuestSession(sessionId: string): Promise<GuestSession |
       return null;
     }
 
-    // Check if session is expired
-    if (Date.now() > guestSession.expiresAt.getTime()) {
-      // Optionally clean up expired session
-      await cleanupExpiredSession(sessionId);
-      return null;
-    }
-
     // Convert database model to GuestSession interface format
     return {
       id: guestSession.id,
@@ -148,10 +141,6 @@ export async function updateGuestSession(
 
     if (!existingSession) {
       return { success: false, error: 'Session not found' };
-    }
-
-    if (Date.now() > existingSession.expiresAt.getTime()) {
-      return { success: false, error: 'Session expired' };
     }
 
     await prisma.guestSession.update({

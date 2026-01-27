@@ -30,3 +30,6 @@ export * from './referral';
 
 // Verification helpers (for credit check, background check flows)
 export * from './verification';
+
+// Guest session helpers (direct Prisma access for guest likes tests)
+export * from './guest-session';

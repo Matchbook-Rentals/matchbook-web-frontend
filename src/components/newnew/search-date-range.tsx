@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 import { add, Duration, endOfMonth, format, differenceInCalendarDays } from 'date-fns';
 
 // ─── Types ─────────────────────────────────────────────────────────
@@ -122,7 +123,7 @@ export default function SearchDateRange({
 
       if (minimumDateRange) {
         const minEnd = normalizeDate(add(s, minimumDateRange));
-        if (d < minEnd) return `Trips must be at least ${formatDuration(minimumDateRange)} long.`;
+        if (d < minEnd) return 'Searches must be for at least one month.';
       }
 
       if (maximumDateRange) {
@@ -237,21 +238,36 @@ export default function SearchDateRange({
       isDisabled && !isSelected && 'cursor-default',
     ].filter(Boolean).join(' ');
 
+    const dayButton = (
+      <button
+        className={circleClass}
+        onClick={() => !isDisabled && handleDateSelect(date)}
+        disabled={isDisabled}
+      >
+        <span className={`text-sm ${textColor}`}>{date.getDate()}</span>
+        {dateIsToday && (
+          <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-[5px] h-[5px] bg-[#98a1b2] rounded-full" />
+        )}
+      </button>
+    );
+
     return (
       <div
         key={`${monthNum}-${gridIndex}`}
         className={`w-10 h-10 flex items-center justify-center ${rangeBg}`}
       >
-        <button
-          className={circleClass}
-          onClick={() => !isDisabled && handleDateSelect(date)}
-          disabled={isDisabled}
-        >
-          <span className={`text-sm ${textColor}`}>{date.getDate()}</span>
-          {dateIsToday && (
-            <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-[5px] h-[5px] bg-[#98a1b2] rounded-full" />
-          )}
-        </button>
+        {isDisabled && disabledReason ? (
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>{dayButton}</TooltipTrigger>
+              <TooltipContent>
+                <p>{disabledReason}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          dayButton
+        )}
       </div>
     );
   };

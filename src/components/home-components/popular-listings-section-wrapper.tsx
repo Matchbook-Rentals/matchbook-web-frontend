@@ -7,6 +7,9 @@ import {
   getListingsByLocation,
   getListingsNearLocation,
 } from '@/app/actions/listings';
+import { createGuestSession } from '@/app/actions/guest-session-db';
+import { guestOptimisticFavorite, guestOptimisticRemoveFavorite, pullGuestFavoritesFromDb } from '@/app/actions/guest-favorites';
+import { GuestSessionService } from '@/utils/guest-session';
 
 interface UserTripLocation {
   city: string | null;
@@ -21,6 +24,8 @@ interface PopularArea {
   city: string;
   state: string;
   count: number;
+  avgLat: number;
+  avgLng: number;
 }
 
 interface PopularListingsSectionWrapperProps {
@@ -40,6 +45,73 @@ export default function PopularListingsSectionWrapper({
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [geoPermissionDenied, setGeoPermissionDenied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
+  const [guestFavoriteIds, setGuestFavoriteIds] = useState<Set<string>>(new Set());
+
+  // Load guest favorites on mount (only for unauthenticated users)
+  useEffect(() => {
+    if (isSignedIn) return;
+    const sessionId = GuestSessionService.getSessionIdFromCookie();
+    if (!sessionId) return;
+    setGuestSessionId(sessionId);
+    pullGuestFavoritesFromDb(sessionId).then((result) => {
+      if (result.success) {
+        setGuestFavoriteIds(new Set(result.favoriteIds));
+      }
+    });
+  }, [isSignedIn]);
+
+  // Handle guest favorite toggle
+  const handleGuestFavorite = useCallback(async (
+    listingId: string,
+    isFavorited: boolean,
+    center?: { lat: number; lng: number },
+    locationString?: string,
+  ) => {
+    if (isSignedIn) return;
+
+    let sessionId = guestSessionId;
+
+    // Lazy session creation on first like
+    if (!sessionId && isFavorited && center) {
+      const result = await createGuestSession({
+        locationString: locationString || 'Unknown',
+        latitude: center.lat,
+        longitude: center.lng,
+      });
+      if (!result.success || !result.sessionId) return;
+      sessionId = result.sessionId;
+      setGuestSessionId(sessionId);
+      // Store in cookie/localStorage for persistence
+      GuestSessionService.storeSession(
+        GuestSessionService.createGuestSessionData({
+          locationString: locationString || 'Unknown',
+          latitude: center.lat,
+          longitude: center.lng,
+        }, sessionId)
+      );
+    }
+
+    if (!sessionId) return;
+
+    // Optimistic UI update
+    setGuestFavoriteIds((prev) => {
+      const next = new Set(prev);
+      if (isFavorited) {
+        next.add(listingId);
+      } else {
+        next.delete(listingId);
+      }
+      return next;
+    });
+
+    // Persist to DB
+    if (isFavorited) {
+      await guestOptimisticFavorite(sessionId, listingId);
+    } else {
+      await guestOptimisticRemoveFavorite(sessionId, listingId);
+    }
+  }, [isSignedIn, guestSessionId]);
 
   // Get browser geolocation on mount
   useEffect(() => {
@@ -87,19 +159,30 @@ export default function PopularListingsSectionWrapper({
       }
 
       const displayName = userTripLocation.locationString || userTripLocation.city || 'your area';
+      const tripCenter = userTripLocation.latitude && userTripLocation.longitude
+        ? { lat: userTripLocation.latitude, lng: userTripLocation.longitude }
+        : undefined;
       newSections.push({
         title: `Your recent search in ${displayName}`,
         listings,
         showBadges: true,
+        center: tripCenter,
+        locationString: displayName,
+        city: userTripLocation.city || undefined,
+        state: userTripLocation.state || undefined,
       });
       usedLocations.add(makeLocationKey(userTripLocation.city, userTripLocation.state));
     } else if (popularAreas.length > 0) {
       const firstArea = popularAreas[0];
       const listings = await getListingsByLocation(firstArea.city, firstArea.state, LISTINGS_PER_ROW);
       newSections.push({
-        title: 'Popular rentals',
+        title: `Explore monthly rentals in ${firstArea.city}`,
         listings,
         showBadges: false,
+        center: { lat: firstArea.avgLat, lng: firstArea.avgLng },
+        locationString: `${firstArea.city}, ${firstArea.state}`,
+        city: firstArea.city,
+        state: firstArea.state,
       });
       usedLocations.add(makeLocationKey(firstArea.city, firstArea.state));
     }
@@ -115,6 +198,9 @@ export default function PopularListingsSectionWrapper({
         newSections.push({
           title: 'Monthly rentals near me',
           listings,
+          center: userLocation,
+          locationString: 'Near me',
+          // No city/state for geolocation-based rows
         });
       } else {
         // No listings nearby, use a popular area
@@ -130,6 +216,10 @@ export default function PopularListingsSectionWrapper({
           newSections.push({
             title: 'Monthly rentals near you',
             listings: fallbackListings,
+            center: { lat: fallbackArea.avgLat, lng: fallbackArea.avgLng },
+            locationString: `${fallbackArea.city}, ${fallbackArea.state}`,
+            city: fallbackArea.city,
+            state: fallbackArea.state,
           });
           usedLocations.add(makeLocationKey(fallbackArea.city, fallbackArea.state));
         }
@@ -148,6 +238,10 @@ export default function PopularListingsSectionWrapper({
         newSections.push({
           title: 'Monthly rentals near you',
           listings,
+          center: { lat: fallbackArea.avgLat, lng: fallbackArea.avgLng },
+          locationString: `${fallbackArea.city}, ${fallbackArea.state}`,
+          city: fallbackArea.city,
+          state: fallbackArea.state,
         });
         usedLocations.add(makeLocationKey(fallbackArea.city, fallbackArea.state));
       }
@@ -163,6 +257,10 @@ export default function PopularListingsSectionWrapper({
       newSections.push({
         title: `Explore monthly rentals in ${area.city}`,
         listings,
+        center: { lat: area.avgLat, lng: area.avgLng },
+        locationString: `${area.city}, ${area.state}`,
+        city: area.city,
+        state: area.state,
       });
       usedLocations.add(key);
     }
@@ -213,5 +311,11 @@ export default function PopularListingsSectionWrapper({
     );
   }
 
-  return <PopularListingsSection sections={sections} />;
+  return (
+    <PopularListingsSection
+      sections={sections}
+      guestFavoriteIds={isSignedIn ? undefined : guestFavoriteIds}
+      onFavorite={isSignedIn ? undefined : handleGuestFavorite}
+    />
+  );
 }

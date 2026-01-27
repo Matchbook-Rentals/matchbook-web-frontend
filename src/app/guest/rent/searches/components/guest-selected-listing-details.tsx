@@ -34,9 +34,14 @@ const GuestSelectedListingDetails: React.FC<GuestSelectedListingDetailsProps> = 
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const pathname = usePathname();
-  const { sessionId } = useParams(); // Use sessionId instead of tripId for guest
+  const params = useParams();
   const baseUrl = process.env.NEXT_PUBLIC_URL || "";
   const { state } = useGuestTripContext();
+
+  // Debug: see what useParams returns
+  console.log('useParams returns:', params);
+
+  const sessionId = (params.sessionId as string) || state.session?.id;
 
   // Create mock trip object from guest session for utilities calculation
   const mockTrip = state.session ? {
@@ -122,8 +127,8 @@ const GuestSelectedListingDetails: React.FC<GuestSelectedListingDetailsProps> = 
 
                 <ShareButton
                   title={`${listing.title} on Matchbook`}
-                  text={`Check out this listing on Matchbook: ${pathname}`}
-                  url={`${baseUrl}/guest/rent/searches/${sessionId}`}
+                  text={`Check out this listing on Matchbook`}
+                  url={`${baseUrl}/guest/trips/${sessionId}/listing/${listing.id}`}
                 />
               </div>
             </CardContent>

@@ -219,6 +219,7 @@ export async function createTestAccount(
 
 /**
  * Sign in to an existing test account
+ * Handles 2FA/verification step if required (uses code 424242 for +clerk_test emails)
  */
 export async function signInTestAccount(
   page: Page,
@@ -241,6 +242,31 @@ export async function signInTestAccount(
     // Fill password
     await page.fill('input[name="password"]', password);
     await page.getByRole('button', { name: /continue|sign in/i }).click();
+
+    // Wait briefly for navigation
+    await page.waitForTimeout(2000);
+
+    // Check if we hit factor-one (2FA/verification step)
+    if (page.url().includes('factor-one')) {
+      console.log('Verification step detected, entering code 424242...');
+
+      // Focus the OTP input
+      const otpContainer = page.locator('[data-otp-input-root]').first();
+      if (await otpContainer.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await otpContainer.click();
+      } else {
+        const firstInput = page.locator('input[inputmode="numeric"], input[type="text"]').first();
+        if (await firstInput.isVisible()) {
+          await firstInput.click();
+        }
+      }
+
+      // Type the verification code
+      await page.keyboard.type('424242', { delay: 100 });
+
+      // Wait for verification to complete
+      await page.waitForTimeout(2000);
+    }
 
     // Wait for navigation away from sign-in
     await page.waitForURL((url) => !url.pathname.includes('/sign-in'), { timeout: 15000 });

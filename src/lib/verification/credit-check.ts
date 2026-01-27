@@ -114,6 +114,7 @@ export async function runCreditCheck(params: CreditCheckParams): Promise<CreditC
 
   console.log("📍 State converted:", state, "→", fullStateName);
   console.log("🔥 Calling iSoftPull API...");
+  console.log("[LAST-CALL] iSoftPull URL:", apiUrl);
 
   try {
     // Call the API (mock endpoint in dev, real endpoint in prod)
