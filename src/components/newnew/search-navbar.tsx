@@ -13,6 +13,7 @@ import { getHostListingsCount } from '@/app/actions/listings';
 import { createTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { GuestSessionService } from '@/utils/guest-session';
+import { buildSearchUrl } from '@/app/search/search-page-client';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
 import { useToast } from '@/components/ui/use-toast';
@@ -86,6 +87,24 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
     }
   };
 
+  const handleSuggestedLocationClick = async (title: string) => {
+    const locationName = title.replace(/^Monthly Rentals in\s*/i, '');
+    setLocationDisplayValue(locationName);
+    setActivePopover(null);
+
+    try {
+      const response = await fetch(`/api/geocode?address=${encodeURIComponent(locationName)}`);
+      const data = await response.json();
+
+      if (data.results && data.results.length > 0) {
+        const { lat, lng } = data.results[0].geometry.location;
+        setSelectedLocation({ description: locationName, lat, lng });
+      }
+    } catch {
+      // Geocoding failed — display value is already set
+    }
+  };
+
   const handleDateChange = (start: Date | null, end: Date | null) => {
     setDateRange({ start, end });
   };
@@ -136,7 +155,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
       if (isClerkSignedIn) {
         const response = await createTrip(tripData);
         if (response.success && response.trip) {
-          router.push(`/app/rent/searches/${response.trip.id}`);
+          router.push(buildSearchUrl({ tripId: response.trip.id }));
         } else {
           toast({ variant: 'destructive', description: (response as any).error || 'Failed to create trip' });
         }
@@ -149,7 +168,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
             toast({ variant: 'destructive', description: 'Failed to store search data. Please try again.' });
             return;
           }
-          router.push(response.redirectUrl!);
+          router.push(buildSearchUrl({ sessionId: response.sessionId }));
         } else {
           toast({ variant: 'destructive', description: (response as any).error || 'Failed to create search' });
         }
@@ -271,6 +290,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                             <button
                               key={`suggested-${index}`}
                               className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                              onClick={() => handleSuggestedLocationClick(location.title)}
                             >
                               <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
                                 <Building2 className="w-6 h-6 text-gray-500" />
