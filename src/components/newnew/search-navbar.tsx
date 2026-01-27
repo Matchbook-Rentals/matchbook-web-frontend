@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import UserMenu from '@/components/userMenu';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import HeroLocationSuggest from '@/components/home-components/HeroLocationSuggest';
-import { DesktopDateRange } from '@/components/ui/custom-calendar/date-range-selector/desktop-date-range';
+import SearchDateRange from '@/components/newnew/search-date-range';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 import { getHostListingsCount } from '@/app/actions/listings';
 import { createTrip } from '@/app/actions/trips';
@@ -299,12 +299,12 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-auto p-0"
+                className="w-auto p-0 border-none"
                 align="center"
                 sideOffset={12}
                 onOpenAutoFocus={(e) => e.preventDefault()}
               >
-                <DesktopDateRange
+                <SearchDateRange
                   start={dateRange.start}
                   end={dateRange.end}
                   handleChange={handleDateChange}
