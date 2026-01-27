@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 import { add, Duration, endOfMonth, format, differenceInCalendarDays } from 'date-fns';
+import { motion } from 'framer-motion';
 
 // ─── Types ─────────────────────────────────────────────────────────
 
@@ -50,9 +51,11 @@ const isSameDate = (a: Date | null, b: Date | null): boolean => {
 const generateMonthGrid = (year: number, month: number): Date[] => {
   const firstOfMonth = new Date(year, month, 1);
   const leadingDays = (firstOfMonth.getDay() + 6) % 7; // Monday-start
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const totalCells = Math.ceil((leadingDays + daysInMonth) / 7) * 7;
   const gridStart = new Date(year, month, 1 - leadingDays);
 
-  return Array.from({ length: 42 }, (_, i) =>
+  return Array.from({ length: totalCells }, (_, i) =>
     new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + i)
   );
 };
@@ -214,22 +217,25 @@ export default function SearchDateRange({
 
   const renderDay = (date: Date, gridIndex: number, monthNum: number) => {
     const isCurrentMonth = date.getMonth() === monthNum;
+
+    if (!isCurrentMonth) {
+      return <div key={`${monthNum}-${gridIndex}`} className="w-10 h-10" />;
+    }
+
     const isStart = start && isSameDate(date, start);
     const isEnd = end && isSameDate(date, end);
     const isSelected = isStart || isEnd;
-    const disabledReason = isCurrentMonth ? getDisabledReason(date) : null;
-    const isDisabled = !isCurrentMonth || !!disabledReason;
+    const disabledReason = getDisabledReason(date);
+    const isDisabled = !!disabledReason;
     const dateIsToday = isSameDate(date, today);
 
     const rangeBg = getRangeBgClass(date, gridIndex, monthNum);
 
     const textColor = isSelected
       ? 'text-white'
-      : !isCurrentMonth
-        ? 'text-[#667085]'
-        : isDisabled
-          ? 'text-[#d0d5dd]'
-          : 'text-[#344054]';
+      : isDisabled
+        ? 'text-[#d0d5dd]'
+        : 'text-[#344054]';
 
     const circleClass = [
       'w-9 h-9 rounded-full flex items-center justify-center relative',
@@ -241,8 +247,8 @@ export default function SearchDateRange({
     const dayButton = (
       <button
         className={circleClass}
-        onClick={() => !isDisabled && handleDateSelect(date)}
-        disabled={isDisabled}
+        onClick={() => isCurrentMonth && !isDisabled && handleDateSelect(date)}
+        disabled={!isCurrentMonth || isDisabled}
       >
         <span className={`text-sm ${textColor}`}>{date.getDate()}</span>
         {dateIsToday && (
@@ -318,6 +324,8 @@ export default function SearchDateRange({
                 <span className="text-sm font-medium text-[#344054]">{day}</span>
               </div>
             ))}
+          </div>
+          <div className="flex flex-wrap" style={{ width: '280px' }}>
             {grid.map((date, i) => renderDay(date, i, month))}
           </div>
         </div>
@@ -365,7 +373,11 @@ export default function SearchDateRange({
   // ── Main Render ─────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col w-full max-w-[869px] items-center gap-6 p-6 bg-white rounded-xl overflow-hidden">
+    <motion.div
+      layout
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="flex flex-col w-full max-w-[869px] items-center gap-6 p-6 bg-white rounded-xl overflow-hidden"
+    >
       {/* Move-in / Move-out inputs */}
       <div className="flex items-start gap-4 w-full">
         <div className="flex flex-col items-start gap-1.5 flex-1">
@@ -399,6 +411,6 @@ export default function SearchDateRange({
 
         {renderFlexibilityBar()}
       </div>
-    </div>
+    </motion.div>
   );
 }
