@@ -8,10 +8,18 @@ import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(component
 import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from 'next';
 import { getHostListingsCountForUser } from "@/app/actions/listings";
+import { getListingApplicationState } from "@/app/actions/housing-requests";
+import { calculateRent } from '@/lib/calculate-rent';
+import { Trip } from '@prisma/client';
 
 interface ListingPageProps {
   params: {
     listingId: string
+  }
+  searchParams: {
+    tripId?: string
+    startDate?: string
+    endDate?: string
   }
 }
 
@@ -63,7 +71,7 @@ export async function generateMetadata({ params }: ListingPageProps): Promise<Me
   }
 }
 
-export default async function SearchListingPage({ params }: ListingPageProps) {
+export default async function SearchListingPage({ params, searchParams }: ListingPageProps) {
   // Fetch listing with approval and active status restrictions
   const listing = await prisma.listing.findUnique({
     where: {
@@ -99,6 +107,48 @@ export default async function SearchListingPage({ params }: ListingPageProps) {
 
   const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
+  // Parse query params for trip context
+  // Priority: dates > tripId
+  const { tripId, startDate: startDateStr, endDate: endDateStr } = searchParams;
+  const startDate = startDateStr ? new Date(startDateStr) : undefined;
+  const endDate = endDateStr ? new Date(endDateStr) : undefined;
+
+  // Build trip context
+  let tripContext: { tripId?: string; startDate: Date; endDate: Date } | null = null;
+  let calculatedPrice: number | null = null;
+
+  // If dates are provided, use them directly
+  if (startDate && endDate && !isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+    tripContext = { tripId, startDate, endDate };
+
+    // Calculate price using dates
+    const mockTrip = { startDate, endDate } as Trip;
+    const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
+    calculatedPrice = calculateRent({ listing: listingWithPricing, trip: mockTrip });
+  }
+  // Otherwise, if tripId is provided, fetch the trip to get dates
+  else if (tripId && user) {
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+    });
+
+    if (trip && trip.userId === user.id && trip.startDate && trip.endDate) {
+      tripContext = {
+        tripId: trip.id,
+        startDate: trip.startDate,
+        endDate: trip.endDate
+      };
+      const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
+      calculatedPrice = calculateRent({ listing: listingWithPricing, trip });
+    }
+  }
+
+  // Get user's application state for this listing (if authenticated)
+  let listingState: { hasApplied: boolean; isMatched: boolean } | null = null;
+  if (user) {
+    listingState = await getListingApplicationState(params.listingId, tripId);
+  }
+
   // Default location string for display
   const locationString = `${listing.city}, ${listing.state}`
 
@@ -115,6 +165,10 @@ export default async function SearchListingPage({ params }: ListingPageProps) {
         <PublicListingDetailsView
           listing={listing}
           locationString={locationString}
+          isAuthenticated={!!user}
+          tripContext={tripContext}
+          calculatedPrice={calculatedPrice}
+          listingState={listingState}
         />
       </div>
       <Footer />

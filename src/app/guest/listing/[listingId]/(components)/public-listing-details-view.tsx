@@ -11,11 +11,19 @@ import { Card, CardContent } from '@/components/ui/card';
 interface PublicListingDetailsViewProps {
   listing: ListingAndImages;
   locationString: string;
+  isAuthenticated?: boolean;
+  tripContext?: { tripId?: string; startDate: Date; endDate: Date } | null;
+  calculatedPrice?: number | null;
+  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
 }
 
 export default function PublicListingDetailsView({
   listing,
   locationString,
+  isAuthenticated = false,
+  tripContext = null,
+  calculatedPrice = null,
+  listingState = null,
 }: PublicListingDetailsViewProps) {
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -71,6 +79,10 @@ export default function PublicListingDetailsView({
           >
             <PublicListingDetailsBox
               listing={listing}
+              isAuthenticated={isAuthenticated}
+              tripContext={tripContext}
+              calculatedPrice={calculatedPrice}
+              listingState={listingState}
             />
           </div>
         </div>

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState, useTransition } from 'react';
 import { ListingAndImages } from '@/types';
 import { StarIcon } from '@/components/icons';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,12 +8,31 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { BrandButton } from '@/components/ui/brandButton';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { applyToListingFromSearch } from '@/app/actions/housing-requests';
+import { getOrCreateListingConversation } from '@/app/actions/housing-requests';
 
 interface PublicListingDetailsBoxProps {
   listing: ListingAndImages;
+  isAuthenticated?: boolean;
+  tripContext?: { tripId?: string; startDate: Date; endDate: Date } | null;
+  calculatedPrice?: number | null;
+  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
 }
 
-const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({ listing }) => {
+const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
+  listing,
+  isAuthenticated = false,
+  tripContext = null,
+  calculatedPrice = null,
+  listingState = null,
+}) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [hasApplied, setHasApplied] = useState(listingState?.hasApplied ?? false);
+  const [isMatched, setIsMatched] = useState(listingState?.isMatched ?? false);
+  const [error, setError] = useState<string | null>(null);
+
   const host = listing.user;
 
   const getPriceRange = () => {
@@ -33,6 +52,49 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({ listi
   };
 
   const priceRange = getPriceRange();
+
+  const handleGetStarted = () => {
+    const redirectPath = window.location.pathname + window.location.search;
+    window.location.href = '/sign-up?redirect=' + encodeURIComponent(redirectPath);
+  };
+
+  const handleApplyNow = () => {
+    setError(null);
+    startTransition(async () => {
+      const result = await applyToListingFromSearch(listing.id, {
+        tripId: tripContext?.tripId,
+        startDate: tripContext?.startDate,
+        endDate: tripContext?.endDate,
+      });
+
+      if (result.success) {
+        setHasApplied(true);
+        // Optionally navigate to the trip page
+        // router.push(`/app/rent/searches/${result.tripId}`);
+      } else {
+        setError(result.error || 'Failed to apply');
+      }
+    });
+  };
+
+  const handleMessageHost = () => {
+    if (!host?.id) return;
+
+    startTransition(async () => {
+      const result = await getOrCreateListingConversation(listing.id, host.id);
+      if (result.success && result.conversationId) {
+        router.push(`/app/messages?conversationId=${result.conversationId}`);
+      }
+    });
+  };
+
+  const getApplyButtonText = () => {
+    if (isMatched) return 'Matched';
+    if (hasApplied) return 'Applied';
+    return 'Apply Now';
+  };
+
+  const isApplyButtonDisabled = hasApplied || isMatched || isPending;
 
   return (
     <Card className="w-full border border-[#0000001a] rounded-xl">
@@ -87,9 +149,11 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({ listi
         <div className="flex justify-between w-full">
           <div className="flex flex-col gap-1">
             <div className="font-semibold text-[#373940] text-sm font-['Poppins']">
-              {priceRange.hasRange
-                ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()}`
-                : `$${priceRange.min.toLocaleString()}`
+              {calculatedPrice
+                ? `$${calculatedPrice.toLocaleString()}`
+                : priceRange.hasRange
+                  ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()}`
+                  : `$${priceRange.min.toLocaleString()}`
               }
             </div>
             <div className="font-normal text-[#5d606d] text-base font-['Poppins']">Month</div>
@@ -105,16 +169,48 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({ listi
           )}
         </div>
 
-        {/* Get Started Button */}
-        <BrandButton
-          variant="outline"
-          className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
-          onClick={() => {
-            window.location.href = '/sign-up?redirect=' + encodeURIComponent(window.location.pathname);
-          }}
-        >
-          Get Started
-        </BrandButton>
+        {/* Error message */}
+        {error && (
+          <div className="text-red-500 text-sm font-['Poppins']">
+            {error}
+          </div>
+        )}
+
+        {/* CTA Buttons */}
+        {!isAuthenticated ? (
+          // Not signed in: Show "Get Started" button
+          <BrandButton
+            variant="outline"
+            className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
+            onClick={handleGetStarted}
+          >
+            Get Started
+          </BrandButton>
+        ) : (
+          // Signed in: Show "Apply Now" + "Message Host" buttons
+          <div className="flex flex-col gap-2 w-full mt-1">
+            <BrandButton
+              variant={hasApplied || isMatched ? "secondary" : "outline"}
+              className={`w-full min-w-0 font-semibold transition-colors ${
+                hasApplied || isMatched
+                  ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
+                  : 'border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white'
+              }`}
+              onClick={handleApplyNow}
+              disabled={isApplyButtonDisabled}
+            >
+              {isPending ? 'Applying...' : getApplyButtonText()}
+            </BrandButton>
+            <BrandButton
+              variant="ghost"
+              className="w-full min-w-0 text-[#3c8787] font-medium hover:bg-[#3c8787]/10"
+              onClick={handleMessageHost}
+              disabled={isPending}
+            >
+              Message Host
+            </BrandButton>
+          </div>
+        )}
 
       </CardContent>
     </Card>
