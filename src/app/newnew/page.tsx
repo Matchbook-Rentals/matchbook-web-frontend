@@ -40,9 +40,11 @@ const serializeUser = (user: any) => {
 };
 
 const NewNewHomePage = async () => {
-  const isAdmin = await checkAdminAccess();
-  if (!isAdmin) {
-    redirect('/');
+  if (process.env.NODE_ENV === 'production') {
+    const isAdmin = await checkAdminAccess();
+    if (!isAdmin) {
+      redirect('/');
+    }
   }
 
   const [user, popularAreas] = await Promise.all([

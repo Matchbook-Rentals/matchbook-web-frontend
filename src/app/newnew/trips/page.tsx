@@ -31,9 +31,11 @@ const serializeUser = (user: any) => {
 };
 
 export default async function TripsPage() {
-  const isAdmin = await checkAdminAccess();
-  if (!isAdmin) {
-    redirect('/');
+  if (process.env.NODE_ENV === 'production') {
+    const isAdmin = await checkAdminAccess();
+    if (!isAdmin) {
+      redirect('/');
+    }
   }
 
   const user = await currentUser();
