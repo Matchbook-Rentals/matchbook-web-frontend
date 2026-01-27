@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, PlusCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { add, Duration, endOfMonth, format, differenceInCalendarDays } from 'date-fns';
 
@@ -325,7 +325,12 @@ export default function SearchDateRange({
               }`}
             onClick={() => setFlexibility(option.value)}
           >
-            {option.hasIcon && <PlusCircle className="w-5 h-5 text-[#3c8787]" />}
+            {option.hasIcon && (
+                                    <span className="flex flex-col items-center text-2xl text-[#3c8787] font-light mt-1">
+                    <span className="leading-[0.4]">+</span>
+                    <span className="leading-[0.3]">−</span>
+                  </span>
+                )}
             <span className="font-semibold text-base text-[#3c8787]">{option.label}</span>
           </Button>
         ))}
