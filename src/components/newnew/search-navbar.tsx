@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { SearchIcon } from 'lucide-react';
+import { SearchIcon, Clock, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import UserMenu from '@/components/userMenu';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
@@ -28,17 +28,29 @@ interface UserObject {
   publicMetadata?: Record<string, any>;
 }
 
+export interface RecentSearch {
+  location: string;
+  details: string;
+}
+
+export interface SuggestedLocationItem {
+  title: string;
+}
+
 interface SearchNavbarProps {
   userId: string | null;
   user: UserObject | null;
   isSignedIn: boolean;
+  recentSearches?: RecentSearch[];
+  suggestedLocations?: SuggestedLocationItem[];
 }
 
 type ActivePopover = 'where' | 'when' | 'who' | null;
 
-export default function SearchNavbar({ userId, user, isSignedIn }: SearchNavbarProps) {
+export default function SearchNavbar({ userId, user, isSignedIn, recentSearches = [], suggestedLocations = [] }: SearchNavbarProps) {
   const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
+  const [isTypingLocation, setIsTypingLocation] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<SuggestedLocation | null>(null);
   const [locationDisplayValue, setLocationDisplayValue] = useState('');
   const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({ start: null, end: null });
@@ -196,21 +208,83 @@ export default function SearchNavbar({ userId, user, isSignedIn }: SearchNavbarP
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[400px] p-0"
+                className="w-[402px] p-0 border-[#e9e9eb]"
                 align="start"
                 sideOffset={12}
                 onOpenAutoFocus={(e) => e.preventDefault()}
               >
-                <HeroLocationSuggest
-                  hasAccess={true}
-                  onLocationSelect={handleLocationSelect}
-                  setDisplayValue={setLocationDisplayValue}
-                  placeholder={
-                    selectedLocation?.description
-                      ? 'Wrong place? Begin typing and select another'
-                      : 'Enter an address or city'
-                  }
-                />
+                <div className="p-6 flex flex-col gap-6">
+                  <HeroLocationSuggest
+                    hasAccess={true}
+                    onLocationSelect={handleLocationSelect}
+                    onInputChange={(value) => setIsTypingLocation(value.length > 0)}
+                    showLocationIcon={true}
+                    setDisplayValue={setLocationDisplayValue}
+                    contentClassName="p-0"
+                    placeholder={
+                      selectedLocation?.description
+                        ? 'Wrong place? Begin typing and select another'
+                        : 'Enter an address or city'
+                    }
+                  />
+
+                  {!isTypingLocation && (
+                    <>
+                      {/* Recent Searches */}
+                      {recentSearches.length > 0 && (
+                        <div className="flex flex-col gap-3">
+                          <div className="px-3.5">
+                            <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
+                              Recent Searches
+                            </h3>
+                          </div>
+
+                          {recentSearches.map((search, index) => (
+                            <button
+                              key={`recent-${index}`}
+                              className="flex flex-col gap-1.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <Clock className="w-5 h-5 text-gray-500" />
+                                <span className="font-medium text-[#0d1b2a] text-sm leading-5">
+                                  {search.location}
+                                </span>
+                              </div>
+                              <span className="ml-[30px] text-xs text-gray-400">
+                                {search.details}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Suggested */}
+                      {suggestedLocations.length > 0 && (
+                        <div className="flex flex-col gap-3">
+                          <div className="px-3.5">
+                            <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
+                              Suggested
+                            </h3>
+                          </div>
+
+                          {suggestedLocations.map((location, index) => (
+                            <button
+                              key={`suggested-${index}`}
+                              className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                            >
+                              <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
+                                <Building2 className="w-6 h-6 text-gray-500" />
+                              </div>
+                              <span className="font-medium text-[#0d1b2a] text-sm leading-5 whitespace-nowrap">
+                                {location.title}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </PopoverContent>
             </Popover>
 

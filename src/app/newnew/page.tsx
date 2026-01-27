@@ -10,7 +10,8 @@ import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import RecentArticle from "@/components/home-components/recent-article";
 import FAQSection from "@/components/home-components/faq-section";
 import { currentUser } from "@clerk/nextjs/server";
-import { getMostRecentTrip } from "@/app/actions/trips";
+import { getMostRecentTrip, getAllUserTrips } from "@/app/actions/trips";
+import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 import { getPopularListingAreas } from "@/app/actions/listings";
 import { checkAdminAccess } from "@/utils/roles";
@@ -53,6 +54,28 @@ const NewNewHomePage = async () => {
 
   const userObject = serializeUser(user);
 
+  // Build recent searches from user's trips
+  let recentSearches: RecentSearch[] = [];
+  if (user?.id) {
+    try {
+      const trips = await getAllUserTrips();
+      recentSearches = trips.slice(0, 3).map((trip) => {
+        const formatDate = (d: Date | null | undefined) =>
+          d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+        const totalRenters = (trip.numAdults || 1) + (trip.numChildren || 0);
+        const dateStr = trip.startDate && trip.endDate
+          ? `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`
+          : 'Flexible dates';
+        return {
+          location: trip.locationString || 'Unknown location',
+          details: `${dateStr} - ${totalRenters} Renter${totalRenters !== 1 ? 's' : ''}`,
+        };
+      });
+    } catch {
+      // User may not be authenticated or trips may fail - that's fine
+    }
+  }
+
   // Get user's most recent trip location if signed in
   let userTripLocation = null;
   if (user?.id) {
@@ -72,7 +95,15 @@ const NewNewHomePage = async () => {
   return (
     <HomePageWrapper>
       <div className="overflow-x-hidden bg-background">
-        <SearchNavbar userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
+        <SearchNavbar
+          userId={user?.id || null}
+          user={userObject}
+          isSignedIn={!!user?.id}
+          recentSearches={recentSearches}
+          suggestedLocations={popularAreas.map((area) => ({
+            title: `Monthly Rentals in ${area.city}, ${area.state}`,
+          }))}
+        />
         <Spacer />
         <PopularListingsSectionWrapper
           isSignedIn={!!user?.id}
