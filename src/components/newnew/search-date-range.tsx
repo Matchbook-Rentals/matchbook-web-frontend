@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 import { add, Duration, endOfMonth, format, differenceInCalendarDays } from 'date-fns';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Types ─────────────────────────────────────────────────────────
 
@@ -289,46 +289,62 @@ export default function SearchDateRange({
   ) => (
     <div className="flex flex-col items-center flex-1">
       <div className="flex flex-col items-center gap-4 px-6 py-5 w-full">
-        <div className="flex flex-col items-center justify-center gap-3 w-full">
-          {/* Month header */}
-          <div className="flex w-[280px] items-center justify-between">
-            {showPrev ? (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="p-2 rounded-lg"
-                onClick={navigatePrev}
-                disabled={!canGoPrev}
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-            ) : (
-              <div className="w-10 h-10" />
-            )}
-            <span className="text-base font-semibold text-[#3c8787]">
+        <div className="flex w-[280px] items-center justify-between">
+          {showPrev ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="p-2 rounded-lg"
+              onClick={navigatePrev}
+              disabled={!canGoPrev}
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+          ) : (
+            <div className="w-10 h-10" />
+          )}
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={`${year}-${month}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="text-base font-semibold text-[#3c8787]"
+            >
               {new Date(year, month).toLocaleString('default', { month: 'long' })} {year}
-            </span>
-            {showNext ? (
-              <Button variant="ghost" size="icon" className="p-2 rounded-lg" onClick={navigateNext}>
-                <ChevronRight className="w-5 h-5" />
-              </Button>
-            ) : (
-              <div className="w-10 h-10" />
-            )}
-          </div>
-
-          {/* Weekday headers + Day grid */}
-          <div className="flex flex-wrap" style={{ width: '280px' }}>
-            {WEEK_DAYS.map((day, i) => (
-              <div key={`wk-${i}`} className="w-10 h-10 flex items-center justify-center">
-                <span className="text-sm font-medium text-[#344054]">{day}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap" style={{ width: '280px' }}>
-            {grid.map((date, i) => renderDay(date, i, month))}
-          </div>
+            </motion.span>
+          </AnimatePresence>
+          {showNext ? (
+            <Button variant="ghost" size="icon" className="p-2 rounded-lg" onClick={navigateNext}>
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+          ) : (
+            <div className="w-10 h-10" />
+          )}
         </div>
+
+        <div className="flex flex-wrap" style={{ width: '280px' }}>
+          {WEEK_DAYS.map((day, i) => (
+            <div key={`wk-${i}`} className="w-10 h-10 flex items-center justify-center">
+              <span className="text-sm font-medium text-[#344054]">{day}</span>
+            </div>
+          ))}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${year}-${month}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="flex flex-wrap"
+            style={{ width: '280px' }}
+          >
+            {grid.map((date, i) => renderDay(date, i, month))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -373,11 +389,7 @@ export default function SearchDateRange({
   // ── Main Render ─────────────────────────────────────────────────
 
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="flex flex-col w-full max-w-[869px] items-center gap-6 p-6 bg-white rounded-xl overflow-hidden"
-    >
+    <div className="flex flex-col w-full max-w-[869px] items-center gap-6 p-6 bg-white rounded-xl">
       {/* Move-in / Move-out inputs */}
       <div className="flex items-start gap-4 w-full">
         <div className="flex flex-col items-start gap-1.5 flex-1">
@@ -411,6 +423,6 @@ export default function SearchDateRange({
 
         {renderFlexibilityBar()}
       </div>
-    </motion.div>
+    </div>
   );
 }
