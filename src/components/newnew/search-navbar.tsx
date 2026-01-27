@@ -14,7 +14,7 @@ import { createTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { GuestSessionService } from '@/utils/guest-session';
 import { buildSearchUrl } from '@/app/search/search-page-client';
-import { useRouter } from 'next/navigation';
+
 import { useAuth } from '@clerk/nextjs';
 import { useToast } from '@/components/ui/use-toast';
 import { SuggestedLocation } from '@/types';
@@ -57,9 +57,9 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
   const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({ start: null, end: null });
   const [guests, setGuests] = useState({ adults: 1, children: 0, pets: 0 });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeocoding, setIsGeocoding] = useState(false);
 
   const { isSignedIn: isClerkSignedIn } = useAuth();
-  const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -119,15 +119,19 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
   };
 
   const formatGuestDisplay = () => {
-    const total = guests.adults + guests.children + guests.pets;
+    const renters = guests.adults + guests.children;
+    const total = renters + guests.pets;
     if (total <= 1) return '';
     const parts: string[] = [];
-    if (guests.adults > 0) parts.push(`${guests.adults} adult${guests.adults !== 1 ? 's' : ''}`);
-    if (guests.children > 0) parts.push(`${guests.children} child${guests.children !== 1 ? 'ren' : ''}`);
-    if (guests.pets > 0) parts.push(`${guests.pets} pet${guests.pets !== 1 ? 's' : ''}`);
-    return parts.join(', ');
+    if (renters > 0) parts.push(`${renters} Renter${renters !== 1 ? 's' : ''}`);
+    if (guests.pets > 0) parts.push(`${guests.pets} Pet${guests.pets !== 1 ? 's' : ''}`);
+    return parts.join(' and ');
   };
 
+  // TODO: handle rapid double-press — isSubmitting guard prevents duplicate calls,
+  // but if the first call completes and navigation starts before the second press,
+  // the user could trigger a second trip creation. Consider disabling the button
+  // via ref or debouncing at the UI level.
   const handleSubmit = async () => {
     if (isSubmitting) return;
     setActivePopover(null);
@@ -155,7 +159,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
       if (isClerkSignedIn) {
         const response = await createTrip(tripData);
         if (response.success && response.trip) {
-          router.push(buildSearchUrl({ tripId: response.trip.id }));
+          window.location.href = buildSearchUrl({ tripId: response.trip.id });
         } else {
           toast({ variant: 'destructive', description: (response as any).error || 'Failed to create trip' });
         }
@@ -163,12 +167,8 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
         const response = await createGuestTrip(tripData);
         if (response.success && response.sessionId) {
           const sessionData = GuestSessionService.createGuestSessionData(tripData, response.sessionId);
-          const stored = GuestSessionService.storeSession(sessionData);
-          if (!stored) {
-            toast({ variant: 'destructive', description: 'Failed to store search data. Please try again.' });
-            return;
-          }
-          router.push(buildSearchUrl({ sessionId: response.sessionId }));
+          GuestSessionService.storeSession(sessionData); // best-effort; DB is source of truth
+          window.location.href = buildSearchUrl({ sessionId: response.sessionId });
         } else {
           toast({ variant: 'destructive', description: (response as any).error || 'Failed to create search' });
         }
@@ -221,8 +221,9 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
               <PopoverTrigger asChild>
                 <button className="flex flex-col flex-1 min-w-0 border-r border-gray-300 pr-6 text-left">
                   <span className="text-xs font-medium text-gray-700">Where</span>
-                  <span className={`text-xs truncate ${locationDisplayValue ? 'text-gray-700' : 'text-gray-400'}`}>
+                  <span className={`text-xs truncate flex items-center gap-1.5 ${locationDisplayValue ? 'text-gray-700' : 'text-gray-400'}`}>
                     {locationDisplayValue || 'Choose Location'}
+                    {isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
                   </span>
                 </button>
               </PopoverTrigger>
@@ -237,6 +238,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                     hasAccess={true}
                     onLocationSelect={handleLocationSelect}
                     onInputChange={(value) => setIsTypingLocation(value.length > 0)}
+                    onGeocodingStateChange={setIsGeocoding}
                     showLocationIcon={true}
                     setDisplayValue={setLocationDisplayValue}
                     contentClassName="p-0"
@@ -360,9 +362,9 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
             size="icon"
             className="w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-2"
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isGeocoding}
           >
-            {isSubmitting ? (
+            {isSubmitting || isGeocoding ? (
               <ImSpinner8 className="animate-spin w-4 h-4" />
             ) : (
               <SearchIcon className="w-4 h-4" />
