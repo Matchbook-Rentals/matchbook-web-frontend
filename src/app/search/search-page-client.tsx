@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
 import { GuestTripContext } from '@/contexts/guest-trip-context-provider';
-import { GuestSession } from '@/utils/guest-session';
+import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { FilterOptions, matchesFilters } from '@/lib/listing-filters';
+import SearchFiltersModal from './search-filters-modal';
 import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-search-listings-grid';
 import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
 import GuestSearchMapMobile from '@/app/guest/rent/searches/components/guest-search-map-mobile';
@@ -13,9 +15,16 @@ import { GuestAuthModal } from '@/components/guest-auth-modal';
 import SearchResultsNavbar from '@/components/newnew/search-results-navbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { calculateRent } from '@/lib/calculate-rent';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Map } from 'lucide-react';
+import { Map, XIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createTrip } from '@/app/actions/trips';
+import { createGuestTrip } from '@/app/actions/guest-trips';
+import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
+import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
+import { guestOptimisticFavorite, guestOptimisticRemoveFavorite, guestOptimisticDislike, guestOptimisticRemoveDislike, pullGuestFavoritesFromDb } from '@/app/actions/guest-favorites';
+import type { TripData } from './page';
 
 interface UserObject {
   id: string;
@@ -33,6 +42,68 @@ interface SearchPageClientProps {
   isSignedIn: boolean;
   userId: string | null;
   user: UserObject | null;
+  tripId?: string;
+  sessionId?: string;
+  tripData?: TripData | null;
+  hasLocationParams: boolean;
+}
+
+export function buildSearchUrl(params: {
+  lat?: number;
+  lng?: number;
+  tripId?: string;
+  sessionId?: string;
+}): string {
+  const sp = new URLSearchParams();
+  if (params.tripId) {
+    sp.set('tripId', params.tripId);
+  } else if (params.sessionId) {
+    sp.set('sessionId', params.sessionId);
+  } else {
+    if (params.lat != null) sp.set('lat', String(params.lat));
+    if (params.lng != null) sp.set('lng', String(params.lng));
+  }
+  return `/search?${sp.toString()}`;
+}
+
+const FILTER_ITEMS = [
+  { icon: '/updated-icons-2.svg', label: 'Single Family', width: 'w-[156px]' },
+  { icon: '/updated-icons.svg', label: 'Air Conditioning', width: '' },
+  { icon: '/updated-icons-3.svg', label: 'Heating', width: '' },
+  { icon: '/updated-icons-1.svg', label: 'Wifi', width: '' },
+];
+
+function SearchFilterBar({ onFiltersClick }: { onFiltersClick?: () => void }) {
+  return (
+    <div className="flex w-full h-[51px] items-center justify-between p-3 rounded-lg border border-solid border-[#e6e6e6]">
+      <div className="inline-flex h-8 items-center gap-3">
+        {FILTER_ITEMS.map((item, index) => (
+          <Badge
+            key={index}
+            variant="secondary"
+            className={`flex ${item.width} items-center justify-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-full border border-solid border-[#d9dadf] hover:bg-gray-100 cursor-pointer`}
+          >
+            <img className="w-5 h-5" alt={item.label} src={item.icon} />
+            <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+              {item.label}
+            </span>
+            <XIcon className="w-5 h-5" />
+          </Badge>
+        ))}
+      </div>
+
+      <Button
+        variant="outline"
+        className="inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg border border-solid border-[#3c8787] hover:bg-[#3c8787]/10"
+        onClick={onFiltersClick}
+      >
+        <span className="font-['Poppins',Helvetica] font-medium text-[#3c8787] text-sm tracking-[0] leading-[normal]">
+          Filters
+        </span>
+        <img className="w-5 h-5" alt="Filters" src="/frame-4.svg" />
+      </Button>
+    </div>
+  );
 }
 
 const MARKER_STYLES = {
@@ -76,15 +147,30 @@ const getZoomLevel = (radius: number | undefined): number => {
   return 8;
 };
 
-export default function SearchPageClient({ listings, center, locationString, isSignedIn, userId, user }: SearchPageClientProps) {
+export default function SearchPageClient({
+  listings, center, locationString, isSignedIn, userId, user,
+  tripId: initialTripId, sessionId: initialSessionId, tripData, hasLocationParams,
+}: SearchPageClientProps) {
+  const router = useRouter();
 
-  // Local state for favorites/dislikes (visual-only, no DB persistence)
+  // Trip/session tracking
+  const [currentTripId, setCurrentTripId] = useState<string | undefined>(initialTripId);
+  const [currentSessionId, setCurrentSessionId] = useState<string | undefined>(initialSessionId);
+  const tripOrSessionRef = useRef<{ tripId?: string; sessionId?: string }>({
+    tripId: initialTripId,
+    sessionId: initialSessionId,
+  });
+
+  // Local state for favorites/dislikes
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
   const [dislikedIds, setDislikedIds] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<FilterOptions>(DEFAULT_FILTER_OPTIONS);
 
   // Auth modal state
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  // Filters modal state
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   // Map/layout state
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
@@ -104,7 +190,21 @@ export default function SearchPageClient({ listings, center, locationString, isS
   const { columnCount, listingsWidth, shouldShowSideBySide, gridGap, isCalculated } =
     useListingsGridLayout(layoutContainerRef, { minMapWidth: 300 });
 
-  // Client-side setup
+  // Load existing favorites/dislikes from DB on mount
+  useEffect(() => {
+    const loadExistingFavorites = async () => {
+      if (initialSessionId) {
+        const result = await pullGuestFavoritesFromDb(initialSessionId);
+        if (result.success) {
+          if (result.favoriteIds.length > 0) setFavIds(new Set(result.favoriteIds));
+          if (result.dislikeIds.length > 0) setDislikedIds(new Set(result.dislikeIds));
+        }
+      }
+    };
+    loadExistingFavorites();
+  }, [initialSessionId]);
+
+  // Client-side setup + geolocation
   useEffect(() => {
     setIsClient(true);
     const updateLayout = () => {
@@ -119,8 +219,22 @@ export default function SearchPageClient({ listings, center, locationString, isS
     };
     updateLayout();
     window.addEventListener('resize', updateLayout);
+
+    // Geolocation: if no location params were provided, try to detect user location
+    if (!hasLocationParams && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const url = buildSearchUrl({ lat: latitude, lng: longitude });
+          router.replace(url);
+        },
+        () => { /* geolocation denied or unavailable, keep Ogden default */ },
+        { timeout: 5000 }
+      );
+    }
+
     return () => window.removeEventListener('resize', updateLayout);
-  }, []);
+  }, [hasLocationParams, router]);
 
   // Mobile map mount/unmount
   useEffect(() => {
@@ -132,29 +246,109 @@ export default function SearchPageClient({ listings, center, locationString, isS
     }
   }, [isSlideMapOpen]);
 
-  // Optimistic actions (local state only)
+  // Lazily create a trip/session on first like/dislike
+  const ensureTripOrSession = useCallback(async (): Promise<{ tripId?: string; sessionId?: string }> => {
+    const current = tripOrSessionRef.current;
+    if (current.tripId || current.sessionId) return current;
+
+    const tripPayload = {
+      locationString: locationString,
+      latitude: center.lat,
+      longitude: center.lng,
+      startDate: tripData?.startDate ? new Date(tripData.startDate) : undefined,
+      endDate: tripData?.endDate ? new Date(tripData.endDate) : undefined,
+      numAdults: tripData?.numAdults ?? 1,
+      numChildren: tripData?.numChildren ?? 0,
+      numPets: tripData?.numPets ?? 0,
+    };
+
+    if (isSignedIn) {
+      const response = await createTrip(tripPayload);
+      if (response.success && response.trip) {
+        const newId = response.trip.id;
+        tripOrSessionRef.current = { tripId: newId };
+        setCurrentTripId(newId);
+        router.replace(buildSearchUrl({ tripId: newId }));
+        return { tripId: newId };
+      }
+    } else {
+      const response = await createGuestTrip(tripPayload);
+      if (response.success && response.sessionId) {
+        const newId = response.sessionId;
+        const sessionData = GuestSessionService.createGuestSessionData(tripPayload, newId);
+        GuestSessionService.storeSession(sessionData);
+        tripOrSessionRef.current = { sessionId: newId };
+        setCurrentSessionId(newId);
+        router.replace(buildSearchUrl({ sessionId: newId }));
+        return { sessionId: newId };
+      }
+    }
+    return {};
+  }, [isSignedIn, center, locationString, tripData, router]);
+
+  // DB-persisting optimistic actions
   const optimisticLike = useCallback(async (listingId: string) => {
     setFavIds(prev => new Set([...Array.from(prev), listingId]));
     setDislikedIds(prev => { const next = new Set(prev); next.delete(listingId); return next; });
-  }, []);
+
+    const ids = await ensureTripOrSession();
+    if (ids.tripId) {
+      await optimisticFavorite(ids.tripId, listingId);
+    } else if (ids.sessionId) {
+      await guestOptimisticFavorite(ids.sessionId, listingId);
+    }
+  }, [ensureTripOrSession]);
 
   const optimisticDislike = useCallback(async (listingId: string) => {
     setDislikedIds(prev => new Set([...Array.from(prev), listingId]));
     setFavIds(prev => { const next = new Set(prev); next.delete(listingId); return next; });
-  }, []);
+
+    const ids = await ensureTripOrSession();
+    if (ids.tripId) {
+      await optimisticDislikeDb(ids.tripId, listingId);
+    } else if (ids.sessionId) {
+      await guestOptimisticDislike(ids.sessionId, listingId);
+    }
+  }, [ensureTripOrSession]);
 
   const optimisticRemoveLike = useCallback(async (listingId: string) => {
     setFavIds(prev => { const next = new Set(prev); next.delete(listingId); return next; });
+
+    const current = tripOrSessionRef.current;
+    if (current.tripId) {
+      await optimisticRemoveFavorite(current.tripId, listingId);
+    } else if (current.sessionId) {
+      await guestOptimisticRemoveFavorite(current.sessionId, listingId);
+    }
   }, []);
 
   const optimisticRemoveDislike = useCallback(async (listingId: string) => {
     setDislikedIds(prev => { const next = new Set(prev); next.delete(listingId); return next; });
+
+    const current = tripOrSessionRef.current;
+    if (current.tripId) {
+      await optimisticRemoveDislikeDb(current.tripId, listingId);
+    } else if (current.sessionId) {
+      await guestOptimisticRemoveDislike(current.sessionId, listingId);
+    }
   }, []);
 
   const showAuthPrompt = useCallback(() => {
     if (isSignedIn) return;
     setShowAuthModal(true);
   }, [isSignedIn]);
+
+  // Callback for navbar to communicate new trip/session IDs
+  const handleSearchUpdate = useCallback((newTripId?: string, newSessionId?: string) => {
+    if (newTripId) {
+      tripOrSessionRef.current = { tripId: newTripId };
+      setCurrentTripId(newTripId);
+    }
+    if (newSessionId) {
+      tripOrSessionRef.current = { sessionId: newSessionId };
+      setCurrentSessionId(newSessionId);
+    }
+  }, []);
 
   // Build the GuestTripContext shim
   const shimSession: GuestSession = useMemo(() => ({
@@ -267,10 +461,16 @@ export default function SearchPageClient({ listings, center, locationString, isS
           user={user}
           isSignedIn={isSignedIn}
           locationString={locationString}
+          tripId={currentTripId}
+          sessionId={currentSessionId}
+          currentCenter={center}
+          tripData={tripData}
+          onSearchUpdate={handleSearchUpdate}
         />
 
         {/* Main content */}
         <div ref={containerRef} className="flex flex-col flex-1 mx-auto w-full sm:px-2">
+          <SearchFilterBar onFiltersClick={() => setIsFiltersOpen(true)} />
           <div ref={layoutContainerRef} className="flex flex-col md:flex-row justify-start md:justify-center flex-1">
             {/* Grid */}
             {!isFullscreen && (
@@ -364,6 +564,15 @@ export default function SearchPageClient({ listings, center, locationString, isS
       <GuestAuthModal
         isOpen={showAuthModal}
         onOpenChange={setShowAuthModal}
+      />
+
+      <SearchFiltersModal
+        isOpen={isFiltersOpen}
+        onOpenChange={setIsFiltersOpen}
+        filters={filters}
+        onApplyFilters={setFilters}
+        listings={allListings}
+        totalCount={allListings.length}
       />
     </GuestTripContext.Provider>
   );
