@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
-import Hero from "@/components/home-components/hero";
+import SearchNavbar from "@/components/newnew/search-navbar";
 import PopularListingsSectionWrapper from "@/components/home-components/popular-listings-section-wrapper";
 import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
 import Footer from "@/components/marketing-landing-components/footer";
@@ -11,7 +10,7 @@ import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import RecentArticle from "@/components/home-components/recent-article";
 import FAQSection from "@/components/home-components/faq-section";
 import { currentUser } from "@clerk/nextjs/server";
-import { getUserTripsCount, getMostRecentTrip } from "@/app/actions/trips";
+import { getMostRecentTrip } from "@/app/actions/trips";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 import { getPopularListingAreas } from "@/app/actions/listings";
 import { checkAdminAccess } from "@/utils/roles";
@@ -53,8 +52,6 @@ const NewNewHomePage = async () => {
   ]);
 
   const userObject = serializeUser(user);
-  const tripCount = user?.id ? await getUserTripsCount() : 0;
-  const hasAccess = true;
 
   // Get user's most recent trip location if signed in
   let userTripLocation = null;
@@ -75,8 +72,7 @@ const NewNewHomePage = async () => {
   return (
     <HomePageWrapper>
       <div className="overflow-x-hidden bg-background">
-        <MatchbookHeader userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
-        <Hero hasAccess={hasAccess} tripCount={tripCount} isSignedIn={!!user?.id} />
+        <SearchNavbar userId={user?.id || null} user={userObject} isSignedIn={!!user?.id} />
         <Spacer />
         <PopularListingsSectionWrapper
           isSignedIn={!!user?.id}
