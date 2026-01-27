@@ -10,7 +10,7 @@ import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-
 import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
 import GuestSearchMapMobile from '@/app/guest/rent/searches/components/guest-search-map-mobile';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
-import RenterNavbar from '@/components/platform-components/renterNavbar';
+import SearchResultsNavbar from '@/components/newnew/search-results-navbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { calculateRent } from '@/lib/calculate-rent';
 import { Button } from '@/components/ui/button';
@@ -262,15 +262,12 @@ export default function SearchPageClient({ listings, center, locationString, isS
   return (
     <GuestTripContext.Provider value={contextValue}>
       <div className="flex flex-col h-screen">
-        <RenterNavbar userId={userId} user={user} isSignedIn={isSignedIn} />
-        <div className="flex items-center gap-3 px-4 py-2 border-b bg-white">
-          <h1 className="text-lg font-medium text-gray-800">
-            Monthly rentals in {locationString}
-          </h1>
-          <span className="text-sm text-gray-500">
-            {showListings.length} listing{showListings.length !== 1 ? 's' : ''}
-          </span>
-        </div>
+        <SearchResultsNavbar
+          userId={userId}
+          user={user}
+          isSignedIn={isSignedIn}
+          locationString={locationString}
+        />
 
         {/* Main content */}
         <div ref={containerRef} className="flex flex-col flex-1 mx-auto w-full sm:px-2">
