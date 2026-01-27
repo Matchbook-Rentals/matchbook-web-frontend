@@ -66,35 +66,92 @@ export function buildSearchUrl(params: {
   return `/search?${sp.toString()}`;
 }
 
-const FILTER_ITEMS = [
-  { icon: '/updated-icons-2.svg', label: 'Single Family', width: 'w-[156px]' },
-  { icon: '/updated-icons.svg', label: 'Air Conditioning', width: '' },
-  { icon: '/updated-icons-3.svg', label: 'Heating', width: '' },
-  { icon: '/updated-icons-1.svg', label: 'Wifi', width: '' },
+// Human-readable labels for filter values displayed as active badges
+const FILTER_VALUE_LABELS: Record<string, string> = {
+  singleFamily: 'Single Family', apartment: 'Apartment', townhouse: 'Town House', privateRoom: 'Private Room',
+  utilitiesIncluded: 'Utilities Included', utilitiesNotIncluded: 'Utilities Not Included',
+  petsAllowed: 'Pets Welcome', petsNotAllowed: 'No Pets',
+  washerInUnit: 'In Unit', washerInComplex: 'In Complex',
+  airConditioner: 'Air Conditioning', heater: 'Heating', wifi: 'Wifi', dedicatedWorkspace: 'Workspace',
+  kitchenEssentials: 'Kitchen Essentials', garbageDisposal: 'Garbage Disposal', dishwasher: 'Dishwasher',
+  fridge: 'Refrigerator', oven: 'Oven/Stove',
+  sauna: 'Sauna', gym: 'Gym', sunroom: 'Sun Room', balcony: 'Balcony', pool: 'Pool', hotTub: 'Hot Tub',
+  fireplace: 'Fire Place',
+  fencedInYard: 'Fenced Yard', gatedEntry: 'Gated Entry', wheelchairAccess: 'Wheelchair',
+  keylessEntry: 'Keyless Entry', carbonMonoxide: 'CO Detector', smokeDetector: 'Smoke Detector', security: 'Security System',
+  offStreetParking: 'Parking', evCharging: 'EV Charging', garageParking: 'Garage',
+  mountainView: 'Mountain View', cityView: 'City View', waterfront: 'Waterfront', waterView: 'Water View',
+};
+
+interface ActiveFilter {
+  key: keyof FilterOptions;
+  value: string;
+  label: string;
+}
+
+const ARRAY_FILTER_KEYS: (keyof FilterOptions)[] = [
+  'propertyTypes', 'utilities', 'pets', 'laundry',
+  'basics', 'kitchen', 'luxury', 'accessibility', 'parking', 'location',
 ];
 
-function SearchFilterBar({ onFiltersClick }: { onFiltersClick?: () => void }) {
+function getActiveFilters(filters: FilterOptions): ActiveFilter[] {
+  const active: ActiveFilter[] = [];
+  for (const key of ARRAY_FILTER_KEYS) {
+    const arr = filters[key];
+    if (Array.isArray(arr)) {
+      for (const value of arr as string[]) {
+        active.push({ key, value, label: FILTER_VALUE_LABELS[value] || value });
+      }
+    }
+  }
+  if (filters.furnished) active.push({ key: 'furnished', value: 'furnished', label: 'Furnished' });
+  if (filters.unfurnished) active.push({ key: 'unfurnished', value: 'unfurnished', label: 'Unfurnished' });
+  if (filters.minPrice != null) active.push({ key: 'minPrice', value: String(filters.minPrice), label: `Min $${filters.minPrice}` });
+  if (filters.maxPrice != null) active.push({ key: 'maxPrice', value: String(filters.maxPrice), label: `Max $${filters.maxPrice}` });
+  if (filters.minBedrooms > 0) active.push({ key: 'minBedrooms', value: String(filters.minBedrooms), label: `${filters.minBedrooms}+ Beds` });
+  if (filters.minBathrooms > 0) active.push({ key: 'minBathrooms', value: String(filters.minBathrooms), label: `${filters.minBathrooms}+ Baths` });
+  return active;
+}
+
+function SearchFilterBar({ onFiltersClick, filters, onRemoveFilter, onSetAllFilters }: {
+  onFiltersClick?: () => void;
+  filters: FilterOptions;
+  onRemoveFilter: (filter: ActiveFilter) => void;
+  onSetAllFilters?: () => void;
+}) {
+  const activeFilters = getActiveFilters(filters);
+
   return (
-    <div className="flex w-full h-[51px] items-center justify-between p-3 rounded-lg border border-solid border-[#e6e6e6]">
-      <div className="inline-flex h-8 items-center gap-3">
-        {FILTER_ITEMS.map((item, index) => (
+    <div className="flex w-full min-h-[51px] items-center justify-between px-3 py-2 rounded-lg border border-solid border-[#e6e6e6] flex-shrink-0">
+      <div className="flex flex-wrap items-center gap-2 flex-1">
+        {activeFilters.map((filter) => (
           <Badge
-            key={index}
+            key={`${filter.key}-${filter.value}`}
             variant="secondary"
-            className={`flex ${item.width} items-center justify-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-full border border-solid border-[#d9dadf] hover:bg-gray-100 cursor-pointer`}
+            onClick={() => onRemoveFilter(filter)}
+            className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full border border-solid border-gray-900 bg-gray-100 text-gray-900 hover:bg-gray-200 cursor-pointer flex-shrink-0"
           >
-            <img className="w-5 h-5" alt={item.label} src={item.icon} />
-            <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
-              {item.label}
+            <span className="font-['Poppins',Helvetica] font-medium text-sm text-center tracking-[0] leading-5 whitespace-nowrap">
+              {filter.label}
             </span>
-            <XIcon className="w-5 h-5" />
+            <XIcon className="w-4 h-4" />
           </Badge>
         ))}
       </div>
 
+      {process.env.NODE_ENV === 'development' && (
+        <Button
+          variant="outline"
+          className="inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg border border-solid border-red-400 hover:bg-red-50 flex-shrink-0 ml-3"
+          onClick={onSetAllFilters}
+        >
+          <span className="font-medium text-red-500 text-xs whitespace-nowrap">Test All</span>
+        </Button>
+      )}
+
       <Button
         variant="outline"
-        className="inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg border border-solid border-[#3c8787] hover:bg-[#3c8787]/10"
+        className="inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg border border-solid border-[#3c8787] hover:bg-[#3c8787]/10 flex-shrink-0 ml-3"
         onClick={onFiltersClick}
       >
         <span className="font-['Poppins',Helvetica] font-medium text-[#3c8787] text-sm tracking-[0] leading-[normal]">
@@ -139,9 +196,9 @@ const slideUpVariants = {
 };
 
 const getZoomLevel = (radius: number | undefined): number => {
-  if (!radius) return 6;
-  if (radius >= 100) return 6;
-  if (radius >= 30) return 7;
+  if (!radius) return 8;
+  if (radius >= 100) return 8;
+  if (radius >= 30) return 9;
   if (radius >= 20) return 8;
   if (radius >= 10) return 9;
   return 8;
@@ -470,7 +527,48 @@ export default function SearchPageClient({
 
         {/* Main content */}
         <div ref={containerRef} className="flex flex-col flex-1 mx-auto w-full sm:px-2">
-          <SearchFilterBar onFiltersClick={() => setIsFiltersOpen(true)} />
+          <SearchFilterBar
+            onFiltersClick={() => setIsFiltersOpen(true)}
+            filters={filters}
+            onRemoveFilter={(filter) => {
+              setFilters(prev => {
+                const arr = prev[filter.key];
+                if (Array.isArray(arr)) {
+                  return { ...prev, [filter.key]: (arr as string[]).filter(v => v !== filter.value) };
+                }
+                if (filter.key === 'furnished' || filter.key === 'unfurnished') {
+                  return { ...prev, [filter.key]: false };
+                }
+                if (filter.key === 'minPrice' || filter.key === 'maxPrice') {
+                  return { ...prev, [filter.key]: null };
+                }
+                if (filter.key === 'minBedrooms' || filter.key === 'minBathrooms') {
+                  return { ...prev, [filter.key]: 0 };
+                }
+                return prev;
+              });
+            }}
+            onSetAllFilters={() => setFilters({
+              propertyTypes: ['singleFamily', 'apartment', 'townhouse', 'privateRoom'],
+              minPrice: 500,
+              maxPrice: 3000,
+              minBedrooms: 2,
+              minBeds: null,
+              minBathrooms: 1,
+              furnished: true,
+              unfurnished: true,
+              utilities: ['utilitiesIncluded', 'utilitiesNotIncluded'],
+              pets: ['petsAllowed', 'petsNotAllowed'],
+              searchRadius: 100,
+              accessibility: ['wheelchairAccess', 'keylessEntry', 'carbonMonoxide', 'smokeDetector', 'security', 'fencedInYard', 'gatedEntry'],
+              location: ['mountainView', 'cityView', 'waterfront', 'waterView'],
+              parking: ['offStreetParking', 'evCharging', 'garageParking'],
+              kitchen: ['kitchenEssentials', 'garbageDisposal', 'dishwasher', 'fridge', 'oven'],
+              basics: ['airConditioner', 'heater', 'wifi', 'dedicatedWorkspace'],
+              luxury: ['sauna', 'gym', 'sunroom', 'balcony', 'pool', 'hotTub', 'fireplace'],
+              laundry: ['washerInUnit', 'washerInComplex'],
+            })}
+          />
           <div ref={layoutContainerRef} className="flex flex-col md:flex-row justify-start md:justify-center flex-1">
             {/* Grid */}
             {!isFullscreen && (
