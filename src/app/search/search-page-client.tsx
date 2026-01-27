@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
 import { GuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { GuestSession } from '@/utils/guest-session';
@@ -11,17 +10,29 @@ import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-
 import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
 import GuestSearchMapMobile from '@/app/guest/rent/searches/components/guest-search-map-mobile';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
+import RenterNavbar from '@/components/platform-components/renterNavbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { calculateRent } from '@/lib/calculate-rent';
 import { Button } from '@/components/ui/button';
-import { Map, ArrowLeft } from 'lucide-react';
+import { Map } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+interface UserObject {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  imageUrl: string;
+  emailAddresses?: { emailAddress: string }[];
+  publicMetadata?: Record<string, any>;
+}
 
 interface SearchPageClientProps {
   listings: ListingAndImages[];
   center: { lat: number; lng: number };
   locationString: string;
   isSignedIn: boolean;
+  userId: string | null;
+  user: UserObject | null;
 }
 
 const MARKER_STYLES = {
@@ -65,8 +76,7 @@ const getZoomLevel = (radius: number | undefined): number => {
   return 8;
 };
 
-export default function SearchPageClient({ listings, center, locationString, isSignedIn }: SearchPageClientProps) {
-  const router = useRouter();
+export default function SearchPageClient({ listings, center, locationString, isSignedIn, userId, user }: SearchPageClientProps) {
 
   // Local state for favorites/dislikes (visual-only, no DB persistence)
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
@@ -252,15 +262,8 @@ export default function SearchPageClient({ listings, center, locationString, isS
   return (
     <GuestTripContext.Provider value={contextValue}>
       <div className="flex flex-col h-screen">
-        {/* Header bar */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b bg-white">
-          <button
-            onClick={() => router.back()}
-            className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
-          </button>
+        <RenterNavbar userId={userId} user={user} isSignedIn={isSignedIn} />
+        <div className="flex items-center gap-3 px-4 py-2 border-b bg-white">
           <h1 className="text-lg font-medium text-gray-800">
             Monthly rentals in {locationString}
           </h1>
