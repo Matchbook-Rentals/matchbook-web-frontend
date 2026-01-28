@@ -133,14 +133,14 @@ export default function MobileSearchOverlay({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 bg-white flex flex-col md:hidden"
+          className="fixed inset-0 z-50 bg-white/50 flex flex-col md:hidden"
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         >
           {/* Top bar */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-background">
             <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-gray-100">
               <X className="w-5 h-5 text-gray-700" />
             </button>
@@ -149,7 +149,7 @@ export default function MobileSearchOverlay({
           </div>
 
           {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-inherit">
             {/* WHERE card */}
             <AccordionCard
               icon={<MapPin className="w-4 h-4" />}
@@ -254,13 +254,7 @@ export default function MobileSearchOverlay({
           </div>
 
           {/* Bottom sticky bar */}
-          <div className="border-t border-gray-200 px-4 py-3 flex items-center justify-between bg-white">
-            <button
-              onClick={handleClearAll}
-              className="text-sm font-medium text-gray-700 underline underline-offset-2"
-            >
-              Clear all
-            </button>
+          <div className="border-t border-gray-200 px-4 py-3 flex items-center justify-end bg-background">
             <Button
               className="bg-primaryBrand hover:bg-primaryBrand/90 text-white px-6 py-2 rounded-lg flex items-center gap-2"
               onClick={handleSearchClick}
@@ -291,7 +285,7 @@ interface AccordionCardProps {
 
 function AccordionCard({ icon, title, summary, isExpanded, onToggle, children }: AccordionCardProps) {
   return (
-    <div className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden bg-background">
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between px-4 py-3"
