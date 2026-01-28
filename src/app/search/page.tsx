@@ -1,7 +1,9 @@
+import { redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
 import { getListingsNearLocation } from '@/app/actions/listings';
-import { getTripById } from '@/app/actions/trips';
+import { getTripById, createTripFromGuestSession } from '@/app/actions/trips';
 import { getGuestSession } from '@/app/actions/guest-session-db';
+import { convertGuestSessionToTrip } from '@/app/actions/guest-to-trip';
 import SearchPageClient from './search-page-client';
 
 const OGDEN_UT = { lat: 41.223, lng: -111.9738, city: 'Ogden', state: 'UT' };
@@ -46,6 +48,18 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const user = await currentUser();
   const userObject = serializeUser(user);
+
+  // Authed user with a guest session but no trip → convert and redirect
+  if (user?.id && sessionId && !tripId) {
+    const guestSession = await getGuestSession(sessionId);
+    if (guestSession) {
+      const result = await createTripFromGuestSession(guestSession);
+      if (result.success && result.tripId) {
+        await convertGuestSessionToTrip(sessionId, result.tripId);
+        redirect(`/search?tripId=${result.tripId}`);
+      }
+    }
+  }
 
   // Resolve location + tripData from trip/session record, URL params, or Ogden default
   let lat: number;
