@@ -192,7 +192,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
 
   return (
     <>
-    <div className="relative w-full bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_18%,rgba(9,88,89,0.06)_100%)]">
+    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
       {/* Header row */}
       <header className="flex items-center justify-between px-6 h-[76px]">
         <Link href="/">

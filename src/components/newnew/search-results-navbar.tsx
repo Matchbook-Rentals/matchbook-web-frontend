@@ -230,7 +230,7 @@ export default function SearchResultsNavbar({
   };
 
   return (
-    <div className="relative w-full bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_18%,rgba(9,88,89,0.06)_100%)]">
+    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
       {/* Header: flex-wrap lets the pill sit inline on md+ and wrap below on mobile */}
       <header className="flex flex-wrap items-center px-6 min-h-[76px] gap-y-3 pb-3 md:pb-0 md:h-[76px]">
         {/* Left: Logo */}
