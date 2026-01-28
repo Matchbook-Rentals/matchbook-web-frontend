@@ -461,7 +461,7 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
         >
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (
-            <div className="w-full md:w-1/2 pr-4">
+            <div className="w-full md:w-2/3 lg:w-1/2 pr-4">
               {renderListingsContent()}
             </div>
           )}
@@ -483,7 +483,7 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
           {/* Map container for Desktop */}
           {isClient && isDesktopView && (
             <div
-              className={isFullscreen ? 'w-full' : 'w-full md:w-1/2'}
+              className={isFullscreen ? 'w-full' : 'w-full md:w-1/3 lg:w-1/2'}
               style={{ minWidth: 0 }}
             >
               <GuestSearchMap

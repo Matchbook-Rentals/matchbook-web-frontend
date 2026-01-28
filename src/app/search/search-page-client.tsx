@@ -637,7 +637,7 @@ export default function SearchPageClient({
           <div ref={layoutContainerRef} className="flex flex-col md:flex-row justify-start md:justify-center flex-1">
             {/* Grid */}
             {!isFullscreen && (
-              <div className="w-full md:w-1/2 pr-4 relative">
+              <div className="w-full md:w-2/3 lg:w-1/2 pr-4 relative">
 
                 <GuestSearchListingsGrid
                   listings={showListings}
@@ -664,7 +664,7 @@ export default function SearchPageClient({
             {/* Desktop map */}
             {isClient && isDesktopView && (
               <div
-                className={`relative ${isFullscreen ? 'w-full' : 'w-full md:w-1/2'}`}
+                className={`relative ${isFullscreen ? 'w-full' : 'w-full md:w-1/3 lg:w-1/2'}`}
                 style={{ minWidth: 0 }}
               >
                 <GuestSearchMap
