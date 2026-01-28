@@ -3,9 +3,11 @@
 import { ListingAndImages } from '@/types';
 import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
-import { ChevronRight, ArrowRight } from 'lucide-react';
-import { useRef } from 'react';
-import Link from 'next/link';
+import { ChevronRight, ArrowRight, Loader2 } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createGuestSession } from '@/app/actions/guest-session-db';
+import { GuestSessionService } from '@/utils/guest-session';
 
 export interface ListingSection {
   title: string;
@@ -31,7 +33,8 @@ interface ListingRowProps {
   showBadges?: boolean;
   guestFavoriteIds?: Set<string>;
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
-  searchUrl?: string;
+  onExploreClick?: () => void;
+  isExploreLoading?: boolean;
 }
 
 const SCROLL_AMOUNT = 440;
@@ -42,7 +45,7 @@ const getBadgeForIndex = (index: number): BadgeType | undefined => {
   return undefined;
 };
 
-function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, searchUrl }: ListingRowProps) {
+function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onExploreClick, isExploreLoading }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollRight = () => {
@@ -57,10 +60,18 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h3 className="text-[#404040] text-lg font-medium">{title}</h3>
-          {searchUrl ? (
-            <Link href={searchUrl} className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors">
-              <ArrowRight className="w-4 h-4 text-primaryBrand" />
-            </Link>
+          {onExploreClick ? (
+            <button
+              onClick={onExploreClick}
+              disabled={isExploreLoading}
+              className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors disabled:opacity-50"
+            >
+              {isExploreLoading ? (
+                <Loader2 className="w-4 h-4 text-primaryBrand animate-spin" />
+              ) : (
+                <ArrowRight className="w-4 h-4 text-primaryBrand" />
+              )}
+            </button>
           ) : (
             <div className="p-1 rounded-full bg-primaryBrand/10">
               <ArrowRight className="w-4 h-4 text-primaryBrand" />
@@ -99,17 +110,40 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
   );
 }
 
-const buildSearchUrl = (section: ListingSection): string | undefined => {
-  if (!section.center) return undefined;
-  const params = new URLSearchParams();
-  params.set('lat', String(section.center.lat));
-  params.set('lng', String(section.center.lng));
-  if (section.city) params.set('city', section.city);
-  if (section.state) params.set('state', section.state);
-  return `/search?${params.toString()}`;
-};
+const hasExploreTarget = (section: ListingSection): boolean =>
+  section.center !== undefined;
 
 export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite }: PopularListingsSectionProps) {
+  const router = useRouter();
+  const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
+
+  const handleExploreClick = async (section: ListingSection, index: number) => {
+    if (!section.center) return;
+    setLoadingIndex(index);
+    try {
+      const result = await createGuestSession({
+        locationString: section.locationString || `${section.city}, ${section.state}`,
+        latitude: section.center.lat,
+        longitude: section.center.lng,
+        city: section.city,
+        state: section.state,
+      });
+      if (!result.success || !result.sessionId) return;
+
+      GuestSessionService.storeSession(
+        GuestSessionService.createGuestSessionData({
+          locationString: section.locationString || `${section.city}, ${section.state}`,
+          latitude: section.center.lat,
+          longitude: section.center.lng,
+        }, result.sessionId)
+      );
+
+      router.push(`/search?sessionId=${result.sessionId}`);
+    } finally {
+      setLoadingIndex(null);
+    }
+  };
+
   const hasSections = sections.length > 0;
 
   const renderEmptyState = () => (
@@ -130,7 +164,8 @@ export default function PopularListingsSection({ sections, guestFavoriteIds, onF
               showBadges={section.showBadges}
               guestFavoriteIds={guestFavoriteIds}
               onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.center, section.locationString) : undefined}
-              searchUrl={buildSearchUrl(section)}
+              onExploreClick={hasExploreTarget(section) ? () => handleExploreClick(section, index) : undefined}
+              isExploreLoading={loadingIndex === index}
             />
           ))
         ) : (
