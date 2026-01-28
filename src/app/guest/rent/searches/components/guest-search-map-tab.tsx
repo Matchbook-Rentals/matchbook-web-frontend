@@ -364,8 +364,8 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
         optimisticRemoveDislike: actions.optimisticRemoveDislike,
       }}
       selectedListingId={clickedMarkerId}
-      columnCount={isDesktopView ? columnCount : undefined}
-      gridGap={gridGap}
+      columnCount={isDesktopView ? 2 : undefined}
+      gridGap={16}
     />
   );
 
@@ -461,13 +461,7 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
         >
           {/* Grid container - hide when fullscreen */}
           {!isFullscreen && (
-            <div
-              className="w-full pr-4"
-              style={isDesktopView && isCalculated && shouldShowSideBySide
-                ? { width: `${listingsWidth}px`, flexShrink: 0 }
-                : undefined
-              }
-            >
+            <div className="w-full md:w-1/2 pr-4">
               {renderListingsContent()}
             </div>
           )}
@@ -489,8 +483,8 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
           {/* Map container for Desktop */}
           {isClient && isDesktopView && (
             <div
-              className="mt-0"
-              style={isFullscreen ? { width: '100%' } : { flexGrow: 1, minWidth: 0 }}
+              className={isFullscreen ? 'w-full' : 'w-full md:w-1/2'}
+              style={{ minWidth: 0 }}
             >
               <GuestSearchMap
                 center={[mockTrip?.longitude || mapCenter.lng, mockTrip?.latitude || mapCenter.lat]}

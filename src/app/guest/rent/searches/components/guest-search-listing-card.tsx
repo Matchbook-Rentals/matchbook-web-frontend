@@ -1,22 +1,13 @@
-import Image from 'next/image'
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { BrandButton } from "@/components/ui/brandButton"
 import { Heart, Heart as HeartIcon } from "lucide-react"
 import { ListingAndImages } from "@/types"
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { useGuestTripContext } from '@/contexts/guest-trip-context-provider'
 import { RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
-import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus } from '@/constants/enums'
 import { calculateRent } from '@/lib/calculate-rent'
 
@@ -53,29 +44,18 @@ export default function SearchListingCard({ listing, status, className, style, d
   const router = useRouter()
   const { userId } = useAuth()
   const { state, actions } = useGuestTripContext()
-  let isFlexible = false; // Guests don't have flexible dates yet
+  const hasTripDates = Boolean(trip?.startDate && trip?.endDate);
 
   // Calculate trip-specific price using the same logic as authenticated users
-  const calculatedPrice = trip ? calculateRent({ listing, trip }) : listing.price;
+  const calculatedPrice = hasTripDates ? calculateRent({ listing, trip }) : listing.price;
 
-  // Create ref for the image container and state for dimensions
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (imageContainerRef.current) {
-        setDimensions({
-          width: imageContainerRef.current.clientWidth,
-          height: imageContainerRef.current.clientHeight,
-        });
+  // When no dates, derive price range from monthlyPricing table
+  const priceRange = !hasTripDates && listing.monthlyPricing?.length
+    ? {
+        min: Math.min(...listing.monthlyPricing.map(p => p.price)),
+        max: Math.max(...listing.monthlyPricing.map(p => p.price)),
       }
-    };
-
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
+    : null;
 
   // Either use the custom snapshot passed in or fall back to the guest context
   const snapshot = customSnapshot || {
@@ -86,22 +66,6 @@ export default function SearchListingCard({ listing, status, className, style, d
     optimisticRemoveLike: (id: string) => actions.showAuthPrompt('like', id),
     optimisticRemoveDislike: (id: string) => actions.showAuthPrompt('like', id)
   };
-
-  const getStatusStyles = (status: ListingStatus) => {
-    if (snapshot.isLiked(listing.id)) {
-      return 'bg-primaryBrand'
-    } else if (snapshot.isDisliked(listing.id)) {
-      return 'bg-pinkBrand'
-    }
-
-    switch (status) {
-      case ListingStatus.Applied:
-        return 'bg-primaryBrand'
-      case ListingStatus.None:
-      default:
-        return 'bg-transparent hover:bg-white/60'
-    }
-  }
 
   const getStatusIcon = (status: ListingStatus) => {
     if (snapshot.isLiked(listing.id)) {
@@ -170,7 +134,7 @@ export default function SearchListingCard({ listing, status, className, style, d
   };
 
   return (
-    <Card className={`flex flex-col w-full max-w-[280px] items-start relative border-none shadow-none rounded-xl overflow-hidden cursor-pointer ${className || ''}`}
+    <Card className={`flex flex-col w-full items-start relative border-none shadow-none rounded-xl overflow-hidden cursor-pointer ${className || ''}`}
       onMouseEnter={() => {
         setIsHovered(true)
         setHoveredListing(listing)
@@ -185,18 +149,16 @@ export default function SearchListingCard({ listing, status, className, style, d
         {/* Property Image */}
         <div className="w-full">
           <img
-            className="w-full h-[175px] object-cover"
+            className="w-full aspect-[4/3] object-cover rounded-xl"
             alt="Property"
             src={listing.listingImages[0]?.url || '/placeholder-property.jpg'}
           />
         </div>
 
-        {/* Action Buttons */}
-        <div className="absolute top-4 right-4 flex items-center gap-2">
-          <BrandButton
-            variant="default"
-            size="icon"
-            className="w-[30px] h-[30px] bg-white hover:bg-white/90 text-gray-600 hover:text-gray-700 min-w-[30px] rounded-lg"
+        {/* Heart Button */}
+        <div className="absolute top-3 right-3">
+          <button
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-gray-200 transition-colors"
             onClick={(e: React.MouseEvent) => {
               if (snapshot.isLiked(listing.id)) {
                 snapshot.optimisticRemoveLike(listing.id);
@@ -209,14 +171,7 @@ export default function SearchListingCard({ listing, status, className, style, d
             <HeartIcon
               className={`w-[18px] h-[18px] ${snapshot.isLiked(listing.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
             />
-          </BrandButton>
-          {/* <BrandButton
-            variant="default"
-            size="icon"
-            className="w-[31px] h-[31px] bg-white hover:bg-white/90 text-gray-600 hover:text-gray-700 min-w-[31px]"
-          >
-            <Share2Icon className="w-[18px] h-[18px]" />
-          </BrandButton> */}
+          </button>
         </div>
       </div>
 
@@ -230,23 +185,10 @@ export default function SearchListingCard({ listing, status, className, style, d
           </h3>
         </div>
 
-        {/* Row 2: Property Details */}
+        {/* Row 2: Bed/Bath, Type, Location */}
         <div className="flex flex-col gap-0 pb-2">
-          <div className={bodyTextStyle}>
-            {listing.roomCount || 4} Bed, {listing.bathroomCount || 2} Bath {listing.displayCategory || 'Property'}
-          </div>
-        </div>
-
-        {/* Row 3: Availability */}
-        <div className="flex flex-col gap-0 pb-2">
-          <div className={bodyTextStyle}>
-            Available {state.session?.searchParams.startDate?.toLocaleDateString('en-gb', {
-              day: '2-digit',
-              month: 'short'
-            }) || 'now'} - {state.session?.searchParams.endDate?.toLocaleDateString('en-gb', {
-              day: '2-digit',
-              month: 'short'
-            }) || 'ongoing'}
+          <div className={`${bodyTextStyle} truncate`}>
+            {listing.roomCount || 4} Bed, {listing.bathroomCount || 2} bath {listing.displayCategory || 'Property'}{listing.state ? ` in ${listing.state}` : ''}
           </div>
         </div>
       </CardContent>
@@ -254,7 +196,10 @@ export default function SearchListingCard({ listing, status, className, style, d
       <CardFooter className="w-full py-0 px-0 border-none">
         <div className="w-full flex items-center justify-between">
           <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#484a54] text-sm">
-            ${calculatedPrice?.toLocaleString() || 0} / month
+            {priceRange && priceRange.min !== priceRange.max
+              ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()} / Month`
+              : `$${(priceRange?.min ?? calculatedPrice)?.toLocaleString() || 0} / Month`
+            }
           </h2>
           {listing.averageRating && (
             <span className={bodyTextStyle}>
@@ -275,11 +220,6 @@ export default function SearchListingCard({ listing, status, className, style, d
           </BrandButton>
         </div>
       )}
-
-      {/* Display the image container's dimensions at the bottom of the card */}
-      {/* <div className="text-center text-xs text-gray-500 pb-2">
-        Dimensions: {dimensions.width}px x {dimensions.height}px
-      </div> */}
     </Card>
   )
 }

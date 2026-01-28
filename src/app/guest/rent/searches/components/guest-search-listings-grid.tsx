@@ -252,9 +252,7 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
     // Fallback: calculate from viewport width (mobile/non-map-tab usage)
     const updateGridColumns = () => {
       const width = window.innerWidth;
-      if (width >= 1100) {
-        setGridColumns(3);
-      } else if (width >= 640) {
+      if (width >= 640) {
         setGridColumns(2);
       } else {
         setGridColumns(1);
@@ -316,7 +314,7 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
               } ${isSingleListing ? 'pb-0' : 'pb-12'}`}
               style={{
                 gridTemplateColumns: columnCount && !isSelectedListing
-                  ? `repeat(${columnCount}, 280px)`
+                  ? `repeat(${columnCount}, 1fr)`
                   : undefined,
                 gap: `${gridGap}px`
               }}
