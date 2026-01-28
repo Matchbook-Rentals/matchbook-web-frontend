@@ -5,7 +5,7 @@ import { X, ChevronDown, MapPin, Calendar, Users, SearchIcon } from 'lucide-reac
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import HeroLocationSuggest from '@/components/home-components/HeroLocationSuggest';
-import { MobileDateRange } from '@/components/ui/custom-calendar/mobile-date-range';
+import SearchDateRange from '@/components/newnew/search-date-range';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 import { SuggestedLocation } from '@/types';
 import { ImSpinner8 } from 'react-icons/im';
@@ -91,9 +91,9 @@ export default function MobileSearchOverlay({
     setActiveSection('when');
   };
 
-  const handleDateRangeChange = (range: { start: Date | null; end: Date | null }) => {
-    onDateChange(range.start, range.end);
-    if (range.start && range.end) {
+  const handleDateRangeChange = (start: Date | null, end: Date | null) => {
+    onDateChange(start, end);
+    if (start && end) {
       setActiveSection('who');
     }
   };
@@ -133,7 +133,7 @@ export default function MobileSearchOverlay({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 bg-white/50 flex flex-col md:hidden"
+          className="fixed inset-0 z-50 bg-white/40 flex flex-col md:hidden"
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
@@ -232,12 +232,13 @@ export default function MobileSearchOverlay({
               isExpanded={activeSection === 'when'}
               onToggle={() => setActiveSection(activeSection === 'when' ? null : 'when')}
             >
-              <MobileDateRange
-                dateRange={dateRange}
-                onDateRangeChange={handleDateRangeChange}
-                onClose={() => {}}
+              <SearchDateRange
+                start={dateRange.start}
+                end={dateRange.end}
+                handleChange={handleDateRangeChange}
                 minimumDateRange={{ months: 1 }}
                 maximumDateRange={{ months: 12 }}
+                singleMonth
               />
             </AccordionCard>
 
@@ -260,12 +261,12 @@ export default function MobileSearchOverlay({
               onClick={handleSearchClick}
               disabled={isSubmitting || isGeocoding}
             >
+              Search
               {isSubmitting || isGeocoding ? (
                 <ImSpinner8 className="animate-spin w-4 h-4" />
               ) : (
                 <SearchIcon className="w-4 h-4" />
               )}
-              Search
             </Button>
           </div>
         </motion.div>
@@ -285,7 +286,7 @@ interface AccordionCardProps {
 
 function AccordionCard({ icon, title, summary, isExpanded, onToggle, children }: AccordionCardProps) {
   return (
-    <div className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden bg-background">
+    <div className="rounded-2xl border border-gray-200 shadow-md overflow-hidden bg-background drop-shadow-md">
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between px-4 py-3"

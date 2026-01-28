@@ -15,6 +15,7 @@ interface SearchDateRangeProps {
   handleChange: (start: Date | null, end: Date | null) => void;
   minimumDateRange?: Duration | null;
   maximumDateRange?: Duration | null;
+  singleMonth?: boolean;
 }
 
 type FlexibilityValue = 'exact' | 1 | 2 | 3 | 7;
@@ -77,6 +78,7 @@ export default function SearchDateRange({
   handleChange,
   minimumDateRange,
   maximumDateRange,
+  singleMonth = false,
 }: SearchDateRangeProps) {
   const today = normalizeDate(new Date());
 
@@ -352,13 +354,13 @@ export default function SearchDateRange({
   // ── Render: Flexibility Bar ─────────────────────────────────────
 
   const renderFlexibilityBar = () => (
-    <div className="flex items-center gap-3 p-4 w-full border-t border-[#eaecf0]">
-      <div className="flex items-center gap-3 flex-1">
+    <div className="flex items-center gap-2 md:gap-3 p-3 md:p-4 w-full border-t border-[#eaecf0]">
+      <div className="flex items-center gap-1.5 md:gap-3 flex-1 min-w-0">
         {FLEXIBILITY_OPTIONS.map((option) => (
           <Button
             key={option.value}
             variant="outline"
-            className={`gap-1.5 px-4 py-2.5 rounded-lg border transition-colors
+            className={`gap-1 md:gap-1.5 px-2 md:px-4 py-2 md:py-2.5 rounded-lg border transition-colors flex-shrink min-w-0
               ${flexibility === option.value
                 ? 'bg-[#e7f0f0] border-[#3c8787]'
                 : 'border-[#b3d1d1] hover:bg-[#f0f7f7]'
@@ -366,12 +368,12 @@ export default function SearchDateRange({
             onClick={() => setFlexibility(option.value)}
           >
             {option.hasIcon && (
-                                    <span className="flex flex-col items-center text-2xl text-[#3c8787] font-light mt-1">
-                    <span className="leading-[0.4]">+</span>
-                    <span className="leading-[0.3]">−</span>
-                  </span>
-                )}
-            <span className="font-semibold text-base text-[#3c8787]">{option.label}</span>
+              <span className="flex flex-col items-center text-xl md:text-2xl text-[#3c8787] font-light mt-1">
+                <span className="leading-[0.4]">+</span>
+                <span className="leading-[0.3]">−</span>
+              </span>
+            )}
+            <span className="font-semibold text-sm md:text-base text-[#3c8787] whitespace-nowrap">{option.label}</span>
           </Button>
         ))}
       </div>
@@ -387,6 +389,21 @@ export default function SearchDateRange({
   );
 
   // ── Main Render ─────────────────────────────────────────────────
+
+  if (singleMonth) {
+    return (
+      <div className="flex flex-col w-full items-center bg-background rounded-xl">
+        <div className="w-full rounded-xl border border-[#eaecf0] overflow-hidden">
+          <div className="flex items-start w-full">
+            <div className="flex-1">
+              {renderMonth(leftYear, leftMonth, leftGrid, true, true)}
+            </div>
+          </div>
+          {renderFlexibilityBar()}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col w-full max-w-[869px] items-center gap-6 p-6 bg-white rounded-xl">
