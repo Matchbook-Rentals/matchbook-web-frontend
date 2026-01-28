@@ -401,22 +401,33 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
           <PopoverTrigger data-testid="user-menu-trigger" className={mode === 'header' ? "flex items-center gap-2 rounded-md pl-2 cursor-pointer" : "flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]"}>
             {mode === 'header' ? (
               <>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-[38px] w-[38px] transition-transform duration-300 ease-out group-hover:">
+                {/* Mobile: compact hamburger + avatar */}
+                <div className="flex md:hidden items-center gap-3 rounded-[12px] border border-[#4D5761] px-3 py-2">
+                  <MenuIcon className="text-charcoal h-[20px] w-[20px]" />
+                  <Avatar className="h-[28px] w-[28px]">
                     <AvatarImage src={user?.imageUrl} alt={fullName} />
                     <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
-
-                  <div className="flex flex-col">
-                    <span className="font-text-text-sm-semibold text-black text-left text-[14px] leading-[22px]">
-                      {fullName}
-                    </span>
-                    <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
-                      {pathname?.includes('host') ? 'Hosting' : 'Renting'}
-                    </span>
-                  </div>
                 </div>
-                <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+                {/* Desktop: avatar + name + chevron */}
+                <div className="hidden md:flex items-center gap-2">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-[38px] w-[38px] transition-transform duration-300 ease-out group-hover:">
+                      <AvatarImage src={user?.imageUrl} alt={fullName} />
+                      <AvatarFallback>{initials}</AvatarFallback>
+                    </Avatar>
+
+                    <div className="flex flex-col">
+                      <span className="font-text-text-sm-semibold text-black text-left text-[14px] leading-[22px]">
+                        {fullName}
+                      </span>
+                      <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
+                        {pathname?.includes('host') ? 'Hosting' : 'Renting'}
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+                </div>
               </>
             ) : (
               <>
@@ -539,19 +550,29 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       ) : (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <PopoverTrigger data-testid="user-menu-trigger" className="flex items-center gap-2 rounded-md p-2 cursor-pointer">
-            <div className="flex items-center gap-3">
-              <div className="relative min-w-[38px] min-h-[38px] rounded-full flex items-end justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110" style={{backgroundColor: '#0B6E6E'}}>
-                <FaUserLarge className="text-white h-[24px] w-[24px]" />
-              </div>
-
-              <div className="flex flex-col">
-                <span className="font-text-text-sm-semibold text-black text-[14px] leading-[22px]">
-                  Sign In                </span>
-                <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
-                </span>
+            {/* Mobile: compact hamburger + user icon */}
+            <div className="flex md:hidden items-center gap-3 rounded-[12px] border border-[#4D5761] px-3 py-2">
+              <MenuIcon className="text-charcoal h-[20px] w-[20px]" />
+              <div className="relative min-w-[28px] min-h-[28px] rounded-full flex items-end justify-center overflow-hidden" style={{backgroundColor: '#0B6E6E'}}>
+                <FaUserLarge className="text-white h-[18px] w-[18px]" />
               </div>
             </div>
-            <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+            {/* Desktop: avatar + name + chevron */}
+            <div className="hidden md:flex items-center gap-2">
+              <div className="flex items-center gap-3">
+                <div className="relative min-w-[38px] min-h-[38px] rounded-full flex items-end justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110" style={{backgroundColor: '#0B6E6E'}}>
+                  <FaUserLarge className="text-white h-[24px] w-[24px]" />
+                </div>
+
+                <div className="flex flex-col">
+                  <span className="font-text-text-sm-semibold text-black text-[14px] leading-[22px]">
+                    Sign In                </span>
+                  <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
+                  </span>
+                </div>
+              </div>
+              <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+            </div>
           </PopoverTrigger>
           <PopoverContent className="p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
