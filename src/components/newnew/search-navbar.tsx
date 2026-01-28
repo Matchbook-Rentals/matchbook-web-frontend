@@ -192,7 +192,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
 
   return (
     <>
-    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
+    <div className="relative z-50 w-full bg-gradient-to-b from-white to-primaryBrand/10">
       {/* Header row */}
       <header className="flex items-center justify-between px-6 h-[76px]">
         <Link href="/">
@@ -248,7 +248,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[calc(100vw-32px)] md:w-[402px] p-0 border-[#e9e9eb]"
+                className="w-[calc(100vw-32px)] md:w-[402px] p-0 border-[#e9e9eb] rounded-lg"
                 align="start"
                 sideOffset={12}
                 onOpenAutoFocus={(e) => e.preventDefault()}
@@ -341,7 +341,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-auto p-0 border-none"
+                className="w-auto p-0 border-none rounded-lg"
                 align="center"
                 sideOffset={12}
                 onOpenAutoFocus={(e) => e.preventDefault()}
@@ -367,7 +367,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[calc(100vw-32px)] md:w-[320px] p-0"
+                className="w-[calc(100vw-32px)] md:w-[320px] p-0 rounded-lg"
                 align="end"
                 sideOffset={12}
                 onOpenAutoFocus={(e) => e.preventDefault()}
@@ -393,6 +393,14 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
         </div>
       </div>
     </div>
+
+    {/* Desktop popover backdrop */}
+    {activePopover && (
+      <div
+        className="fixed inset-0 z-40 bg-gray-800/40 hidden md:block"
+        onClick={() => setActivePopover(null)}
+      />
+    )}
 
     <MobileSearchOverlay
       isOpen={isMobileOverlayOpen}
