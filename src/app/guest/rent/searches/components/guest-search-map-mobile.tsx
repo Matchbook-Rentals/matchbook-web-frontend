@@ -5,6 +5,7 @@ import { useListingHoverStore } from '@/store/listing-hover-store';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
+import { useVisibleListingsStore } from '@/store/visible-listings-store';
 import GuestMobileMapClickListingCard from './guest-mobile-map-click-listing-card';
 
 // No longer using clustering
@@ -46,6 +47,7 @@ interface GuestSearchMapProps {
   markerStyles: MarkerStyles;
   onClose: () => void;
   onCenterChanged?: (lng: number, lat: number) => void;
+  onBoundsChanged?: (bounds: { north: number; south: number; east: number; west: number }) => void;
   customSnapshot: any; // Required custom snapshot for guest mode
 }
 
@@ -57,6 +59,7 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
   markerStyles,
   onClose,
   onCenterChanged = () => {},
+  onBoundsChanged = () => {},
   customSnapshot
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -67,6 +70,7 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
   const [mapLoaded, setMapLoaded] = useState(false);
   const { shouldPanTo, clearPanTo } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
+  const setVisibleListingIds = useVisibleListingsStore((state) => state.setVisibleListingIds);
   const [currentZoom, setCurrentZoom] = useState(zoom);
   const markersDataRef = useRef<MapMarker[]>(markers);
   const [retryCount, setRetryCount] = useState(0);
@@ -103,6 +107,22 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
     return markersDataRef.current.filter(marker =>
       bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat))
     );
+  };
+
+  const notifyBoundsChanged = () => {
+    if (!mapRef.current) return;
+    const bounds = mapRef.current.getBounds();
+    onBoundsChanged({
+      north: bounds.getNorth(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      west: bounds.getWest(),
+    });
+  };
+
+  const updateVisibleMarkers = () => {
+    const visibleIds = getVisibleMarkers().map(marker => marker.listing.id);
+    setVisibleListingIds(visibleIds);
   };
 
   // Function to create a single marker
@@ -403,6 +423,8 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
               needsRender = true; // Zoom change might cross SIMPLE_MARKER_THRESHOLD
           }
           onCenterChanged(mapCenter.lng, mapCenter.lat);
+          notifyBoundsChanged();
+          updateVisibleMarkers();
 
           if(needsRender) {
               renderMarkers(); // This calls createSingleMarker which depends on visible count
@@ -415,6 +437,8 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
           if (!mapRef.current) return;
           setCurrentZoom(mapRef.current.getZoom());
           renderMarkers(); // Initial render
+          notifyBoundsChanged();
+          updateVisibleMarkers();
         });
         map.on('zoomend', handleMapInteractionEnd);
         map.on('moveend', handleMapInteractionEnd);
@@ -494,11 +518,13 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
         // Check if map is being manipulated to avoid race conditions
         if (!mapRef.current.isEasing() && !mapRef.current.isMoving() && !mapRef.current.isZooming()) {
             renderMarkers();
+            updateVisibleMarkers();
         } else {
             // If map is busy, defer rendering to idle state or next interaction end
             const onIdleOnce = () => {
                 if (mapRef.current) { // Check again as it might be removed
                     renderMarkers();
+                    updateVisibleMarkers();
                     mapRef.current.off('idle', onIdleOnce);
                 }
             };

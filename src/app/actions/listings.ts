@@ -1575,6 +1575,10 @@ export const getListingsNearLocation = async (
         AND l.deletedAt IS NULL
         AND l.latitude != 0
         AND l.longitude != 0
+        AND EXISTS (
+          SELECT 1 FROM ListingMonthlyPricing lmp
+          WHERE lmp.listingId = l.id
+        )
       HAVING distance <= ${radiusMiles}
       ORDER BY distance
       LIMIT ${count}
@@ -1622,13 +1626,38 @@ export interface MapBounds {
 
 export async function getListingsByBounds(bounds: MapBounds): Promise<ListingAndImages[]> {
   try {
+    const listingsWithRating = await prisma.$queryRaw<{ id: string; avgRating: number }[]>`
+      SELECT l.id,
+        COALESCE(AVG(r.rating), 0) AS avgRating
+      FROM Listing l
+      LEFT JOIN Review r
+        ON r.reviewedListingId = l.id
+        AND r.reviewType = 'RENTER_TO_LISTING'
+        AND r.isPublished = true
+      WHERE l.latitude BETWEEN ${bounds.south} AND ${bounds.north}
+        AND l.longitude BETWEEN ${bounds.west} AND ${bounds.east}
+        AND l.latitude != 0
+        AND l.longitude != 0
+        AND l.approvalStatus = 'approved'
+        AND l.markedActiveByUser = true
+        AND l.deletedAt IS NULL
+        AND EXISTS (
+          SELECT 1 FROM ListingMonthlyPricing lmp
+          WHERE lmp.listingId = l.id
+        )
+      GROUP BY l.id
+      ORDER BY avgRating DESC
+      LIMIT 100
+    `;
+
+    const listingIds = listingsWithRating.map(listing => listing.id);
+    if (listingIds.length === 0) {
+      return [];
+    }
+
     const listings = await prisma.listing.findMany({
       where: {
-        latitude: { gte: bounds.south, lte: bounds.north },
-        longitude: { gte: bounds.west, lte: bounds.east },
-        approvalStatus: 'approved',
-        markedActiveByUser: true,
-        monthlyPricing: { some: {} },
+        id: { in: listingIds },
       },
       include: {
         listingImages: {
@@ -1638,16 +1667,18 @@ export async function getListingsByBounds(bounds: MapBounds): Promise<ListingAnd
         monthlyPricing: true,
         bedrooms: true,
       },
-      take: 50,
     });
 
-    return listings.map(listing => ({
-      ...listing,
-      displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
-    })) as ListingAndImages[];
+    const listingById = new Map(listings.map(listing => [listing.id, listing]));
+    return listingIds
+      .map((id) => listingById.get(id))
+      .filter((listing): listing is (typeof listings)[number] => Boolean(listing))
+      .map(listing => ({
+        ...listing,
+        displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
+      })) as ListingAndImages[];
   } catch (error) {
     console.error('Error fetching listings by bounds:', error);
     return [];
   }
 }
-
