@@ -125,8 +125,8 @@ export default function HeroLocationSuggest({
         autoFocus={true}
       />
       {suggestions.length > 0 && (
-        <ul className="mt-3 sm:mt-5 max-h-64 overflow-y-auto">
-          {suggestions.map((suggestion) => (
+        <ul className="mt-3 sm:mt-5">
+          {suggestions.slice(0, 5).map((suggestion) => (
             <li
               className="hover:bg-gray-100 p-2 sm:p-3 cursor-pointer text-sm sm:text-base rounded-md flex items-center gap-2.5"
               key={suggestion.place_id}
