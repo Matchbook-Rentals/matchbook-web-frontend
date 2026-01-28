@@ -15,6 +15,10 @@ interface PublicListingDetailsViewProps {
   tripContext?: { tripId?: string; startDate: Date; endDate: Date } | null;
   calculatedPrice?: number | null;
   listingState?: { hasApplied: boolean; isMatched: boolean } | null;
+  onApplyClick?: () => void;
+  showDatePopover?: boolean;
+  onDatePopoverChange?: (open: boolean) => void;
+  onDatesSelected?: (start: Date, end: Date) => void;
 }
 
 export default function PublicListingDetailsView({
@@ -24,6 +28,10 @@ export default function PublicListingDetailsView({
   tripContext = null,
   calculatedPrice = null,
   listingState = null,
+  onApplyClick,
+  showDatePopover,
+  onDatePopoverChange,
+  onDatesSelected,
 }: PublicListingDetailsViewProps) {
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -58,7 +66,7 @@ export default function PublicListingDetailsView({
   return (
     <>
       <div className="w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6">
-        <ListingImageCarousel listingImages={listing.listingImages || []} />
+        <ListingImageCarousel listingImages={listing.listingImages || []} maxHeight={420} />
 
         <div className="flex justify-between gap-x-8 lg:gap-x-16 relative">
           <div className="w-full lg:w-full">
@@ -83,6 +91,10 @@ export default function PublicListingDetailsView({
               tripContext={tripContext}
               calculatedPrice={calculatedPrice}
               listingState={listingState}
+              onApplyClick={onApplyClick}
+              showDatePopover={showDatePopover}
+              onDatePopoverChange={onDatePopoverChange}
+              onDatesSelected={onDatesSelected}
             />
           </div>
         </div>

@@ -10,6 +10,7 @@ import { RejectIcon } from '@/components/icons';
 interface ListingImageCarouselProps {
   listingImages: ListingImage[]
   nextListingImages?: ListingImage[]
+  maxHeight?: number
 }
 
 // Helper functions for image optimization
@@ -67,7 +68,7 @@ const generateBlurDataURL = (width: number = 4, height: number = 3) => {
   return `data:image/svg+xml;base64,${btoa(svg)}`;
 };
 
-const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages, nextListingImages = [] }) => {
+const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages, nextListingImages = [], maxHeight }) => {
   const [activeImage, setActiveImage] = useState(0); // Index for desktop main image
   const [api, setApi] = useState<CarouselApi>();
   const [dialogApi, setDialogApi] = useState<CarouselApi>(); // API for dialog carousel
@@ -299,7 +300,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
+      <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]" style={maxHeight ? { maxHeight } : undefined}>
         {/* Main image */}
         <div
           className="w-1/2 h-full relative overflow-hidden rounded-lg bg-cover bg-center"
@@ -343,15 +344,15 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
               {chunkedImages.map((chunk, chunkIndex) => (
-                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[50vh] pl-4">
-                  <div className="grid grid-cols-2 grid-rows-2 gap-3 lg:gap-4">
+                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[50vh] pl-4" style={maxHeight ? { maxHeight } : undefined}>
+                  <div className={`grid grid-cols-2 grid-rows-2 gap-3 lg:gap-4${maxHeight ? ' h-full' : ''}`}>
                     {chunk.map((image, idx) => {
                       const isBottomRight = idx === 3 || (idx === chunk.length - 1 && chunk.length < 4);
                       const imageIndex = uniqueImages.indexOf(image);
                       return (
                         <div
                           key={`image-${image.id}-${idx}`}
-                          className="relative cursor-pointer h-[24vh] overflow-hidden rounded-lg"
+                          className={`relative cursor-pointer overflow-hidden rounded-lg${maxHeight ? '' : ' h-[24vh]'}`}
                           onClick={() => handleImageClick(imageIndex)}
                         >
                           <Image
@@ -392,11 +393,11 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       {/* Mobile Layout - Stacked */}
       <div className="lg:hidden flex flex-col space-y-4 w-full">
         {/* Main image with Show More button */}
-        <div className="w-full h-[30vh] relative">
+        <div className="w-full h-[30vh] relative" style={maxHeight ? { maxHeight: Math.round(maxHeight * 0.65) } : undefined}>
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
               {mobileImages.map((image, index) => (
-                  <CarouselItem key={image.id} className="w-full h-[30vh]">
+                  <CarouselItem key={image.id} className="w-full h-[30vh]" style={maxHeight ? { maxHeight: Math.round(maxHeight * 0.65) } : undefined}>
                     <div className="relative w-full h-full overflow-hidden rounded-[5px]">
                       {/* Thumbnail - loads fast, stretched */}
                       <Image

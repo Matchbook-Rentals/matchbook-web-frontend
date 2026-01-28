@@ -2,15 +2,15 @@ import { notFound } from 'next/navigation'
 import { ListingAndImages } from '@/types'
 import prisma from '@/lib/prismadb'
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
-import Footer from "@/components/marketing-landing-components/footer";
 import { PAGE_MARGIN } from '@/constants/styles'
-import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view'
 import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from 'next';
 import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { getListingApplicationState } from "@/app/actions/housing-requests";
 import { calculateRent } from '@/lib/calculate-rent';
 import { Trip } from '@prisma/client';
+import { getUserApplication } from '@/app/actions/applications';
+import ListingDetailWithWizard from './(components)/listing-detail-with-wizard';
 
 interface ListingPageProps {
   params: {
@@ -145,8 +145,10 @@ export default async function SearchListingPage({ params, searchParams }: Listin
 
   // Get user's application state for this listing (if authenticated)
   let listingState: { hasApplied: boolean; isMatched: boolean } | null = null;
+  let userApplication: any = null;
   if (user) {
     listingState = await getListingApplicationState(params.listingId, tripId);
+    userApplication = await getUserApplication();
   }
 
   // Default location string for display
@@ -162,16 +164,16 @@ export default async function SearchListingPage({ params, searchParams }: Listin
         hasListings={hasListings}
       />
       <div className={`${PAGE_MARGIN} font-montserrat min-h-screen`}>
-        <PublicListingDetailsView
+        <ListingDetailWithWizard
           listing={listing}
           locationString={locationString}
           isAuthenticated={!!user}
           tripContext={tripContext}
           calculatedPrice={calculatedPrice}
           listingState={listingState}
+          userApplication={userApplication}
         />
       </div>
-      <Footer />
     </>
   )
 }

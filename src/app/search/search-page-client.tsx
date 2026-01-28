@@ -643,9 +643,9 @@ export default function SearchPageClient({
                   listings={showListings}
                   height={formatHeight()}
                   customSnapshot={customSnapshot}
-                  selectedListingId={clickedMarkerId}
                   columnCount={isDesktopView ? 2 : undefined}
                   gridGap={16}
+                  tripId={currentTripId}
                 />
               </div>
             )}
@@ -681,6 +681,7 @@ export default function SearchPageClient({
                   onClickedMarkerChange={setClickedMarkerId}
                   onResetRequest={(resetFn) => { mapResetRef.current = resetFn; }}
                   customSnapshot={customSnapshot}
+                  tripId={currentTripId}
                 />
                 {(staleBounds || isSearching) && (
                   <Button
