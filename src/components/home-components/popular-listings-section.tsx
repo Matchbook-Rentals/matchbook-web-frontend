@@ -23,6 +23,7 @@ interface PopularListingsSectionProps {
   sections: ListingSection[];
   guestFavoriteIds?: Set<string>;
   onFavorite?: (listingId: string, isFavorited: boolean, center?: { lat: number; lng: number }, locationString?: string) => void;
+  onSignInPrompt?: () => void;
 }
 
 type BadgeType = 'matched' | 'liked';
@@ -33,6 +34,7 @@ interface ListingRowProps {
   showBadges?: boolean;
   guestFavoriteIds?: Set<string>;
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
+  onSignInPrompt?: () => void;
   onExploreClick?: () => void;
   isExploreLoading?: boolean;
 }
@@ -45,7 +47,7 @@ const getBadgeForIndex = (index: number): BadgeType | undefined => {
   return undefined;
 };
 
-function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onExploreClick, isExploreLoading }: ListingRowProps) {
+function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollRight = () => {
@@ -80,7 +82,7 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
         </div>
         <button
           onClick={scrollRight}
-          className="p-2 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors"
+          className="hidden md:flex p-2 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors items-center justify-center"
           aria-label="Scroll right"
         >
           <ChevronRight className="w-5 h-5 text-primaryBrand" />
@@ -93,15 +95,20 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
           className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {listings.map((listing, index) => (
-            <HomepageListingCard
-              key={listing.id}
-              listing={listing}
-              badge={showBadges ? getBadgeForIndex(index) : undefined}
-              initialFavorited={guestFavoriteIds?.has(listing.id)}
-              onFavorite={onFavorite}
-            />
-          ))}
+          {listings.map((listing, index) => {
+            const isFavorited = guestFavoriteIds?.has(listing.id);
+            const badge = isFavorited ? 'liked' as const : (showBadges ? getBadgeForIndex(index) : undefined);
+            return (
+              <HomepageListingCard
+                key={listing.id}
+                listing={listing}
+                badge={badge}
+                initialFavorited={isFavorited}
+                onFavorite={onFavorite}
+                onSignInPrompt={onSignInPrompt}
+              />
+            );
+          })}
         </div>
       ) : (
         <div className="text-gray-500 text-sm">No listings available</div>
@@ -113,7 +120,7 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
 const hasExploreTarget = (section: ListingSection): boolean =>
   section.center !== undefined;
 
-export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite }: PopularListingsSectionProps) {
+export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt }: PopularListingsSectionProps) {
   const router = useRouter();
   const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
 
@@ -164,6 +171,7 @@ export default function PopularListingsSection({ sections, guestFavoriteIds, onF
               showBadges={section.showBadges}
               guestFavoriteIds={guestFavoriteIds}
               onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.center, section.locationString) : undefined}
+              onSignInPrompt={onSignInPrompt}
               onExploreClick={hasExploreTarget(section) ? () => handleExploreClick(section, index) : undefined}
               isExploreLoading={loadingIndex === index}
             />

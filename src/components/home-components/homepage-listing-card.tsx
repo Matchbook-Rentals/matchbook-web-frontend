@@ -17,6 +17,7 @@ interface HomepageListingCardProps {
   isApplied?: boolean;
   onApply?: (listing: ListingAndImages, tripId: string) => Promise<void>;
   onBookNow?: (matchId: string) => void;
+  onSignInPrompt?: () => void;
   initialFavorited?: boolean;
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
 }
@@ -29,6 +30,7 @@ export default function HomepageListingCard({
   isApplied,
   onApply,
   onBookNow,
+  onSignInPrompt,
   initialFavorited,
   onFavorite,
 }: HomepageListingCardProps) {
@@ -136,12 +138,20 @@ export default function HomepageListingCard({
       );
     }
     if (badge === 'liked') {
-      const hasHandler = tripId && onApply;
-      const isDisabled = isApplied || isApplying || !hasHandler;
+      const hasApplyHandler = tripId && onApply;
+      const hasSignInPrompt = !hasApplyHandler && onSignInPrompt;
+      const isDisabled = isApplied || isApplying || (!hasApplyHandler && !hasSignInPrompt);
       const buttonText = isApplied ? 'Applied' : isApplying ? 'Applying...' : 'Apply Now';
+
+      const handleClick = hasApplyHandler
+        ? handleApplyClick
+        : hasSignInPrompt
+          ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); onSignInPrompt(); }
+          : undefined;
+
       return (
         <button
-          onClick={hasHandler ? handleApplyClick : undefined}
+          onClick={handleClick}
           disabled={isDisabled}
           className={`absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center transition-colors ${
             isApplied

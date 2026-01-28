@@ -10,6 +10,7 @@ import {
 import { createGuestSession } from '@/app/actions/guest-session-db';
 import { guestOptimisticFavorite, guestOptimisticRemoveFavorite, pullGuestFavoritesFromDb } from '@/app/actions/guest-favorites';
 import { GuestSessionService } from '@/utils/guest-session';
+import { GuestAuthModal } from '@/components/guest-auth-modal';
 
 interface UserTripLocation {
   city: string | null;
@@ -47,6 +48,7 @@ export default function PopularListingsSectionWrapper({
   const [isLoading, setIsLoading] = useState(true);
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
   const [guestFavoriteIds, setGuestFavoriteIds] = useState<Set<string>>(new Set());
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Load guest favorites on mount (only for unauthenticated users)
   useEffect(() => {
@@ -311,11 +313,17 @@ export default function PopularListingsSectionWrapper({
     );
   }
 
+  const handleGuestApplyPrompt = () => setShowAuthModal(true);
+
   return (
-    <PopularListingsSection
-      sections={sections}
-      guestFavoriteIds={isSignedIn ? undefined : guestFavoriteIds}
-      onFavorite={isSignedIn ? undefined : handleGuestFavorite}
-    />
+    <>
+      <PopularListingsSection
+        sections={sections}
+        guestFavoriteIds={isSignedIn ? undefined : guestFavoriteIds}
+        onFavorite={isSignedIn ? undefined : handleGuestFavorite}
+        onSignInPrompt={isSignedIn ? undefined : handleGuestApplyPrompt}
+      />
+      <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
+    </>
   );
 }

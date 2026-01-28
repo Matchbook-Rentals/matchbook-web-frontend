@@ -16,6 +16,7 @@ import { optimisticApplyDb } from '@/app/actions/housing-requests';
 import { createGuestSession } from '@/app/actions/guest-session-db';
 import { guestOptimisticFavorite, guestOptimisticRemoveFavorite } from '@/app/actions/guest-favorites';
 import { GuestSessionService } from '@/utils/guest-session';
+import { GuestAuthModal } from '@/components/guest-auth-modal';
 
 // US bounding box for geolocation check
 const US_BOUNDS = {
@@ -144,6 +145,7 @@ export default function TripsPageClient({
   const [guestFavIds, setGuestFavIds] = useState<Set<string>>(
     () => new Set(initialGuestFavoriteIds ?? [])
   );
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Merge authenticated and guest favorites for display
   const favoriteSet = useMemo(() => {
@@ -346,6 +348,7 @@ export default function TripsPageClient({
                     isApplied={appliedIds.has(listing.id)}
                     onApply={handleApplyNow}
                     onBookNow={handleBookNow}
+                    onSignInPrompt={!isSignedIn ? () => setShowAuthModal(true) : undefined}
                     initialFavorited={!isSignedIn ? guestFavIds.has(listing.id) : undefined}
                     onFavorite={!isSignedIn ? handleGuestFavorite : undefined}
                   />
@@ -380,6 +383,7 @@ export default function TripsPageClient({
                   matchId={listingToMatchMap[listing.id]}
                   isApplied={appliedIds.has(listing.id)}
                   onBookNow={handleBookNow}
+                  onSignInPrompt={!isSignedIn ? () => setShowAuthModal(true) : undefined}
                   initialFavorited={!isSignedIn ? guestFavIds.has(listing.id) : undefined}
                   onFavorite={!isSignedIn ? handleGuestFavorite : undefined}
                 />
@@ -400,6 +404,8 @@ export default function TripsPageClient({
           />
         </div>
       </div>
+
+      <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
     </div>
   );
 }
