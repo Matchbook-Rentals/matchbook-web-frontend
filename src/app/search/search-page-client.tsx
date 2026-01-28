@@ -123,8 +123,8 @@ function SearchFilterBar({ onFiltersClick, filters, onRemoveFilter, onSetAllFilt
   const activeFilters = getActiveFilters(filters);
 
   return (
-    <div className="flex w-full min-h-[51px] items-center justify-between px-3 py-2 rounded-lg border border-solid border-[#e6e6e6] flex-shrink-0">
-      <div className="flex flex-wrap items-center gap-2 flex-1">
+    <div className="flex w-full min-h-[51px] items-center justify-between px-3 py-2 md:rounded-lg md:border md:border-solid md:border-[#e6e6e6] flex-shrink-0">
+      <div className="hidden md:flex flex-wrap items-center gap-2 flex-1">
         {activeFilters.map((filter) => (
           <Badge
             key={`${filter.key}-${filter.value}`}
@@ -143,7 +143,7 @@ function SearchFilterBar({ onFiltersClick, filters, onRemoveFilter, onSetAllFilt
       {process.env.NODE_ENV === 'development' && (
         <Button
           variant="outline"
-          className="inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg border border-solid border-red-400 hover:bg-red-50 flex-shrink-0 ml-3"
+          className="hidden md:inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg border border-solid border-red-400 hover:bg-red-50 flex-shrink-0 ml-3"
           onClick={onSetAllFilters}
         >
           <span className="font-medium text-red-500 text-xs whitespace-nowrap">Test All</span>
@@ -151,11 +151,11 @@ function SearchFilterBar({ onFiltersClick, filters, onRemoveFilter, onSetAllFilt
       )}
 
       <Button
-        variant="outline"
-        className="inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg border border-solid border-[#3c8787] hover:bg-[#3c8787]/10 flex-shrink-0 ml-3"
+        variant="ghost"
+        className="inline-flex h-8 items-center justify-center gap-1.5 p-2.5 rounded-lg md:border md:border-solid md:border-[#3c8787] md:hover:bg-[#3c8787]/10 flex-shrink-0 ml-auto md:ml-3"
         onClick={onFiltersClick}
       >
-        <span className="font-['Poppins',Helvetica] font-medium text-[#3c8787] text-sm tracking-[0] leading-[normal]">
+        <span className="hidden md:inline font-['Poppins',Helvetica] font-medium text-[#3c8787] text-sm tracking-[0] leading-[normal]">
           Filters
         </span>
         <img className="w-5 h-5" alt="Filters" src="/frame-4.svg" />

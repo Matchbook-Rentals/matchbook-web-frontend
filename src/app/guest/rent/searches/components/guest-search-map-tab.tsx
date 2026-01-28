@@ -453,7 +453,7 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
       <div ref={containerRef} className="flex flex-col mx-auto w-full sm:px-2">
         {isSingleListingSelected() ?
           renderSelectedListingFilterDisplay() :
-          <GuestFilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} className="hidden md:block" />
+          <GuestFilterDisplay onOpenFilter={() => setIsFilterDialogOpen(true)} />
         }
         <div
           ref={layoutContainerRef}

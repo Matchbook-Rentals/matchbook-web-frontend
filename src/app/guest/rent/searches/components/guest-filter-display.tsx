@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from "lucide-react";
+import { X, SlidersHorizontal } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -255,19 +255,32 @@ export const GuestFilterDisplay: React.FC<GuestFilterDisplayProps> = ({ classNam
   const numFiltered = totalListings - totalResults;
 
 
+  // Mobile-only filter icon button
+  const mobileFilterButton = (
+    <div className="md:hidden flex w-full mb-4">
+      <button
+        onClick={onOpenFilter}
+        className="p-2"
+      >
+        <SlidersHorizontal className="w-5 h-5 text-primaryBrand" />
+      </button>
+    </div>
+  );
+
   // Show results with "No filters" badge when no filters are active
   if (activeFilters.length === 0) {
     return (
-      <div className={`w-full space-y-3 mb-4 ${className}`}>
+      <div className={`w-full ${className}`}>
+        {mobileFilterButton}
         {/* Results row */}
-        <div className="flex w-full items-center justify-start">
+        <div className="hidden md:flex w-full items-center justify-start mb-3">
           <div className="text-sm text-gray-600">
             {totalResults.toLocaleString()} Results
           </div>
         </div>
 
         {/* No filters card - styled like active filters */}
-        <Card className="flex w-full items-center justify-between p-3 rounded-lg border border-gray-200">
+        <Card className="hidden md:flex w-full items-center justify-between p-3 rounded-lg border border-gray-200 mb-4">
           <div className="flex flex-wrap items-center gap-2">
             <Badge
               variant="outline"
@@ -285,9 +298,10 @@ export const GuestFilterDisplay: React.FC<GuestFilterDisplayProps> = ({ classNam
   }
 
   return (
-    <div className={`w-full space-y-3 mb-4 ${className}`}>
+    <div className={`w-full ${className}`}>
+      {mobileFilterButton}
       {/* Results row */}
-      <div className="flex w-full items-center justify-start">
+      <div className="hidden md:flex w-full items-center justify-start mb-3">
         <div className="text-sm text-gray-600">
           {totalResults.toLocaleString()} Results
           {numFiltered > 0 && (
@@ -297,7 +311,7 @@ export const GuestFilterDisplay: React.FC<GuestFilterDisplayProps> = ({ classNam
       </div>
 
       {/* Filter tags row */}
-      <Card className="flex w-full items-center justify-between p-3 rounded-lg border border-gray-200">
+      <Card className="hidden md:flex w-full items-center justify-between p-3 rounded-lg border border-gray-200 mb-4">
         <div className="flex flex-wrap items-center gap-2">
           {activeFilters.map((filter, index) => (
             <Badge
