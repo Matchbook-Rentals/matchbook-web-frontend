@@ -7,6 +7,7 @@ import { GuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { FilterOptions, matchesFilters } from '@/lib/listing-filters';
+import { getListingsByBounds, type MapBounds } from '@/app/actions/listings';
 import SearchFiltersModal from './search-filters-modal';
 import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-search-listings-grid';
 import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
@@ -204,11 +205,18 @@ const getZoomLevel = (radius: number | undefined): number => {
   return 8;
 };
 
+const PREFETCH_RADIUS_MILES = 25;
+const BOUNDS_EPSILON = 0.001;
+
 export default function SearchPageClient({
-  listings, center, locationString, isSignedIn, userId, user,
+  listings: initialListings, center, locationString, isSignedIn, userId, user,
   tripId: initialTripId, sessionId: initialSessionId, tripData, hasLocationParams,
 }: SearchPageClientProps) {
   const router = useRouter();
+
+  const [listings, setListings] = useState<ListingAndImages[]>(initialListings);
+  const [staleBounds, setStaleBounds] = useState<MapBounds | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   // Trip/session tracking
   const [currentTripId, setCurrentTripId] = useState<string | undefined>(initialTripId);
@@ -236,8 +244,9 @@ export default function SearchPageClient({
   const [isClient, setIsClient] = useState(false);
   const [isDesktopView, setIsDesktopView] = useState(false);
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
-  const [zoomLevel] = useState(getZoomLevel(100));
+  const [zoomLevel] = useState(getZoomLevel(PREFETCH_RADIUS_MILES));
   const [currentMapCenter, setCurrentMapCenter] = useState(center);
+  const lastFetchedBoundsRef = useRef<MapBounds | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const layoutContainerRef = useRef<HTMLDivElement>(null);
@@ -246,6 +255,17 @@ export default function SearchPageClient({
 
   const { columnCount, listingsWidth, shouldShowSideBySide, gridGap, isCalculated } =
     useListingsGridLayout(layoutContainerRef, { minMapWidth: 300 });
+
+  useEffect(() => {
+    setCurrentMapCenter(center);
+  }, [center]);
+
+  useEffect(() => {
+    setListings(initialListings);
+    lastFetchedBoundsRef.current = null;
+    setStaleBounds(null);
+    setIsSearching(false);
+  }, [initialListings]);
 
   // Load existing favorites/dislikes from DB on mount
   useEffect(() => {
@@ -310,8 +330,8 @@ export default function SearchPageClient({
 
     const tripPayload = {
       locationString: locationString,
-      latitude: center.lat,
-      longitude: center.lng,
+      latitude: currentMapCenter.lat,
+      longitude: currentMapCenter.lng,
       startDate: tripData?.startDate ? new Date(tripData.startDate) : undefined,
       endDate: tripData?.endDate ? new Date(tripData.endDate) : undefined,
       numAdults: tripData?.numAdults ?? 1,
@@ -341,7 +361,7 @@ export default function SearchPageClient({
       }
     }
     return {};
-  }, [isSignedIn, center, locationString, tripData, router]);
+  }, [isSignedIn, currentMapCenter, locationString, tripData, router]);
 
   // DB-persisting optimistic actions
   const optimisticLike = useCallback(async (listingId: string) => {
@@ -395,6 +415,43 @@ export default function SearchPageClient({
     setShowAuthModal(true);
   }, [isSignedIn]);
 
+  const boundsAreClose = useCallback((a: MapBounds, b: MapBounds) => {
+    return (
+      Math.abs(a.north - b.north) < BOUNDS_EPSILON &&
+      Math.abs(a.south - b.south) < BOUNDS_EPSILON &&
+      Math.abs(a.east - b.east) < BOUNDS_EPSILON &&
+      Math.abs(a.west - b.west) < BOUNDS_EPSILON
+    );
+  }, []);
+
+  const handleBoundsChanged = useCallback((bounds: MapBounds) => {
+    if (!lastFetchedBoundsRef.current) {
+      lastFetchedBoundsRef.current = bounds;
+      return;
+    }
+    if (boundsAreClose(bounds, lastFetchedBoundsRef.current)) {
+      setStaleBounds(null);
+      return;
+    }
+    setStaleBounds(bounds);
+  }, [boundsAreClose]);
+
+  const searchThisArea = useCallback(async () => {
+    const bounds = staleBounds;
+    if (!bounds) return;
+    setIsSearching(true);
+    try {
+      const results = await getListingsByBounds(bounds);
+      setListings(results);
+      lastFetchedBoundsRef.current = bounds;
+      setStaleBounds(null);
+    } catch (error) {
+      console.error('Error fetching listings for bounds:', error);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [staleBounds]);
+
   // Callback for navbar to communicate new trip/session IDs
   const handleSearchUpdate = useCallback((newTripId?: string, newSessionId?: string) => {
     if (newTripId) {
@@ -412,14 +469,14 @@ export default function SearchPageClient({
     id: 'search-page',
     searchParams: {
       location: locationString,
-      lat: center.lat,
-      lng: center.lng,
+      lat: currentMapCenter.lat,
+      lng: currentMapCenter.lng,
       guests: { adults: 1, children: 0, pets: 0 },
     },
     pendingActions: [],
     createdAt: Date.now(),
     expiresAt: Date.now() + 86400000,
-  }), [center, locationString]);
+  }), [currentMapCenter, locationString]);
 
   const allListings = useMemo(() =>
     listings.map(l => ({ ...l, isActuallyAvailable: true })),
@@ -447,7 +504,7 @@ export default function SearchPageClient({
       dislikedListings,
       requestedListings: [],
       matchedListings: [],
-      isLoading: false,
+      isLoading: isSearching,
       lookup: { favIds, dislikedIds, requestedIds: new Set<string>(), matchIds: new Set<string>() },
       filters,
       filteredCount: allListings.length,
@@ -464,7 +521,7 @@ export default function SearchPageClient({
       optimisticRemoveLike,
       optimisticRemoveDislike,
     },
-  }), [shimSession, listings, allListings, showListings, likedListings, dislikedListings, favIds, dislikedIds, filters, showAuthPrompt, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
+  }), [shimSession, listings, allListings, showListings, likedListings, dislikedListings, favIds, dislikedIds, filters, showAuthPrompt, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike, isSearching]);
 
   // Custom snapshot for child components
   const customSnapshot = useMemo(() => ({
@@ -479,12 +536,12 @@ export default function SearchPageClient({
 
   // Map markers
   const mockTrip = useMemo(() => ({
-    latitude: center.lat,
-    longitude: center.lng,
-    searchRadius: 100,
+    latitude: currentMapCenter.lat,
+    longitude: currentMapCenter.lng,
+    searchRadius: PREFETCH_RADIUS_MILES,
     startDate: undefined,
     endDate: undefined,
-  }), [center]);
+  }), [currentMapCenter]);
 
   const markers = useMemo(() =>
     showListings
@@ -520,7 +577,7 @@ export default function SearchPageClient({
           locationString={locationString}
           tripId={currentTripId}
           sessionId={currentSessionId}
-          currentCenter={center}
+          currentCenter={currentMapCenter}
           tripData={tripData}
           onSearchUpdate={handleSearchUpdate}
         />
@@ -573,7 +630,7 @@ export default function SearchPageClient({
             {/* Grid */}
             {!isFullscreen && (
               <div
-                className="w-full pr-4"
+                className="w-full pr-4 relative"
                 style={isDesktopView && isCalculated && shouldShowSideBySide
                   ? { width: `${listingsWidth}px`, flexShrink: 0 }
                   : undefined
@@ -604,7 +661,7 @@ export default function SearchPageClient({
             {/* Desktop map */}
             {isClient && isDesktopView && (
               <div
-                className="mt-0"
+                className="mt-0 relative"
                 style={isFullscreen ? { width: '100%' } : { flexGrow: 1, minWidth: 0 }}
               >
                 <GuestSearchMap
@@ -617,10 +674,20 @@ export default function SearchPageClient({
                   markerStyles={MARKER_STYLES}
                   selectedMarkerId={clickedMarkerId}
                   onCenterChanged={(lng, lat) => setCurrentMapCenter({ lat, lng })}
+                  onBoundsChanged={handleBoundsChanged}
                   onClickedMarkerChange={setClickedMarkerId}
                   onResetRequest={(resetFn) => { mapResetRef.current = resetFn; }}
                   customSnapshot={customSnapshot}
                 />
+                {(staleBounds || isSearching) && (
+                  <Button
+                    onClick={searchThisArea}
+                    disabled={isSearching}
+                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full"
+                  >
+                    {isSearching ? 'Loading...' : 'Search this area'}
+                  </Button>
+                )}
               </div>
             )}
           </div>
@@ -645,6 +712,7 @@ export default function SearchPageClient({
                   markerStyles={MARKER_STYLES}
                   onClose={() => setIsSlideMapOpen(false)}
                   onCenterChanged={(lng, lat) => setCurrentMapCenter({ lat, lng })}
+                  onBoundsChanged={handleBoundsChanged}
                   customSnapshot={{
                     ...customSnapshot,
                     favoriteIds: favIds,
@@ -653,6 +721,15 @@ export default function SearchPageClient({
                     matchIds: new Set<string>(),
                   }}
                 />
+                {(staleBounds || isSearching) && (
+                  <Button
+                    onClick={searchThisArea}
+                    disabled={isSearching}
+                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full"
+                  >
+                    {isSearching ? 'Loading...' : 'Search this area'}
+                  </Button>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
