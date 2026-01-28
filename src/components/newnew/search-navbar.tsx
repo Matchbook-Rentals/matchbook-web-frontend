@@ -9,6 +9,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import HeroLocationSuggest from '@/components/home-components/HeroLocationSuggest';
 import SearchDateRange from '@/components/newnew/search-date-range';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
+import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
 import { getHostListingsCount } from '@/app/actions/listings';
 import { createTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
@@ -58,6 +59,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
   const [guests, setGuests] = useState({ adults: 1, children: 0, pets: 0 });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeocoding, setIsGeocoding] = useState(false);
+  const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
 
   const { isSignedIn: isClerkSignedIn } = useAuth();
   const { toast } = useToast();
@@ -128,6 +130,14 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
     return parts.join(' and ');
   };
 
+  const handleWhereClick = (e: React.MouseEvent) => {
+    if (window.innerWidth < 768) {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsMobileOverlayOpen(true);
+    }
+  };
+
   // TODO: handle rapid double-press — isSubmitting guard prevents duplicate calls,
   // but if the first call completes and navigation starts before the second press,
   // the user could trigger a second trip creation. Consider disabling the button
@@ -181,6 +191,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
   };
 
   return (
+    <>
     <div className="relative w-full bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_18%,rgba(9,88,89,0.06)_100%)]">
       {/* Header row */}
       <header className="flex items-center justify-between px-6 h-[76px]">
@@ -219,16 +230,25 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
             {/* WHERE */}
             <Popover open={activePopover === 'where'} onOpenChange={(open) => handlePopoverChange('where', open)}>
               <PopoverTrigger asChild>
-                <button className="flex flex-col flex-1 min-w-0 border-r border-gray-300 pr-6 text-left">
-                  <span className="text-xs font-medium text-gray-700">Where</span>
-                  <span className={`text-xs truncate flex items-center gap-1.5 ${locationDisplayValue ? 'text-gray-700' : 'text-gray-400'}`}>
+                <button
+                  className="flex flex-col flex-1 min-w-0 md:border-r md:border-gray-300 md:pr-6 text-left"
+                  onClick={handleWhereClick}
+                >
+                  {/* Mobile: single-line pill text */}
+                  <span className="md:hidden text-xs font-medium text-gray-500 truncate flex items-center justify-center gap-1.5 w-full">
+                    {locationDisplayValue || 'Begin Your Search'}
+                    {isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
+                  </span>
+                  {/* Desktop: two-line Where / Choose Location */}
+                  <span className="hidden md:inline text-xs font-medium text-gray-700">Where</span>
+                  <span className={`hidden md:flex text-xs truncate items-center gap-1.5 ${locationDisplayValue ? 'text-gray-700' : 'text-gray-400'}`}>
                     {locationDisplayValue || 'Choose Location'}
                     {isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
                   </span>
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[402px] p-0 border-[#e9e9eb]"
+                className="w-[calc(100vw-32px)] md:w-[402px] p-0 border-[#e9e9eb]"
                 align="start"
                 sideOffset={12}
                 onOpenAutoFocus={(e) => e.preventDefault()}
@@ -313,7 +333,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
             {/* WHEN */}
             <Popover open={activePopover === 'when'} onOpenChange={(open) => handlePopoverChange('when', open)}>
               <PopoverTrigger asChild>
-                <button className="flex flex-col flex-1 min-w-0 border-r border-gray-300 px-6 text-left">
+                <button className="hidden md:flex flex-col flex-1 min-w-0 border-r border-gray-300 px-6 text-left">
                   <span className="text-xs font-medium text-gray-700">When</span>
                   <span className={`text-xs truncate ${formatDateDisplay() ? 'text-gray-700' : 'text-gray-400'}`}>
                     {formatDateDisplay() || 'Add Dates'}
@@ -339,7 +359,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
             {/* WHO */}
             <Popover open={activePopover === 'who'} onOpenChange={(open) => handlePopoverChange('who', open)}>
               <PopoverTrigger asChild>
-                <button className="flex flex-col flex-1 min-w-0 pl-6 text-left">
+                <button className="hidden md:flex flex-col flex-1 min-w-0 pl-6 text-left">
                   <span className="text-xs font-medium text-gray-700">Who</span>
                   <span className={`text-xs truncate ${formatGuestDisplay() ? 'text-gray-700' : 'text-gray-400'}`}>
                     {formatGuestDisplay() || 'Add Renters'}
@@ -347,7 +367,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[320px] p-0"
+                className="w-[calc(100vw-32px)] md:w-[320px] p-0"
                 align="end"
                 sideOffset={12}
                 onOpenAutoFocus={(e) => e.preventDefault()}
@@ -360,7 +380,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
 
           <Button
             size="icon"
-            className="w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-2"
+            className="hidden md:flex w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-2 items-center justify-center"
             onClick={handleSubmit}
             disabled={isSubmitting || isGeocoding}
           >
@@ -373,5 +393,29 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
         </div>
       </div>
     </div>
+
+    <MobileSearchOverlay
+      isOpen={isMobileOverlayOpen}
+      onClose={() => setIsMobileOverlayOpen(false)}
+      onSubmit={() => {
+        setIsMobileOverlayOpen(false);
+        handleSubmit();
+      }}
+      isSubmitting={isSubmitting}
+      isGeocoding={isGeocoding}
+      selectedLocation={selectedLocation}
+      locationDisplayValue={locationDisplayValue}
+      setLocationDisplayValue={setLocationDisplayValue}
+      onLocationSelect={handleLocationSelect}
+      onGeocodingStateChange={setIsGeocoding}
+      onSuggestedLocationClick={handleSuggestedLocationClick}
+      dateRange={dateRange}
+      onDateChange={handleDateChange}
+      guests={guests}
+      setGuests={setGuests}
+      recentSearches={recentSearches}
+      suggestedLocations={suggestedLocations}
+    />
+    </>
   );
 }
