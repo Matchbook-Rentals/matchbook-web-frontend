@@ -9,8 +9,10 @@ import { BecomeHostCopy } from "@/components/home-components/become-host";
 import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import RecentArticle from "@/components/home-components/recent-article";
 import FAQSection from "@/components/home-components/faq-section";
+import { cookies } from "next/headers";
 import { currentUser } from "@clerk/nextjs/server";
 import { getMostRecentTrip, getAllUserTrips } from "@/app/actions/trips";
+import { getGuestSessionLocation } from "@/app/actions/guest-session-db";
 import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 import { getPopularListingAreas } from "@/app/actions/listings";
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
   description: 'MatchBook is a monthly rental platform built to make renting easier and more affordable for hosts and renters. Find furnished and unfurnished rentals, with leases from 30 days to 1 year.',
 };
 
-const SPACER_CLASS = "h-[90px]";
+const SPACER_CLASS = "h-[40px] md:h-[90px]";
 
 const Spacer = () => <div className={SPACER_CLASS} />;
 
@@ -89,6 +91,25 @@ const NewNewHomePage = async () => {
         longitude: recentTrip.longitude,
         searchRadius: recentTrip.searchRadius,
       };
+    }
+  }
+
+  // Guest fallback: use guest session location when not signed in
+  if (!user?.id && !userTripLocation) {
+    const cookieStore = await cookies();
+    const guestSessionId = cookieStore.get('matchbook_guest_session_id')?.value;
+    if (guestSessionId) {
+      const guestLocation = await getGuestSessionLocation(guestSessionId);
+      if (guestLocation?.city || guestLocation?.locationString) {
+        userTripLocation = {
+          city: guestLocation.city,
+          state: guestLocation.state,
+          locationString: guestLocation.locationString,
+          latitude: guestLocation.latitude,
+          longitude: guestLocation.longitude,
+          searchRadius: null,
+        };
+      }
     }
   }
 

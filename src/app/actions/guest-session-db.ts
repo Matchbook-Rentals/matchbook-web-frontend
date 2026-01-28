@@ -65,6 +65,44 @@ export async function createGuestSession(data: CreateGuestSessionData): Promise<
 }
 
 /**
+ * Get location data from a guest session by ID
+ * Lightweight query returning only location fields for the /newnew page
+ */
+export async function getGuestSessionLocation(sessionId: string): Promise<{
+  city: string | null;
+  state: string | null;
+  locationString: string;
+  latitude: number;
+  longitude: number;
+} | null> {
+  try {
+    const session = await prisma.guestSession.findUnique({
+      where: { id: sessionId },
+      select: {
+        city: true,
+        state: true,
+        locationString: true,
+        latitude: true,
+        longitude: true,
+      },
+    });
+
+    if (!session) return null;
+
+    return {
+      city: session.city,
+      state: session.state,
+      locationString: session.locationString,
+      latitude: session.latitude,
+      longitude: session.longitude,
+    };
+  } catch (error) {
+    console.error('Error fetching guest session location:', error);
+    return null;
+  }
+}
+
+/**
  * Get a guest session by ID
  */
 export async function getGuestSession(sessionId: string): Promise<GuestSession | null> {
