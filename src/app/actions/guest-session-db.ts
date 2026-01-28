@@ -32,21 +32,6 @@ interface CreateGuestSessionResponse {
  */
 export async function createGuestSession(data: CreateGuestSessionData): Promise<CreateGuestSessionResponse> {
   try {
-    const today = new Date();
-    let { startDate, endDate } = data;
-
-    // Handle date logic (same as existing guest trip creation)
-    if (!startDate && !endDate) {
-      startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-      endDate = new Date(today.getFullYear(), today.getMonth() + 2, 1);
-    } else if (startDate && !endDate) {
-      endDate = new Date(startDate);
-      endDate.setMonth(endDate.getMonth() + 1);
-    } else if (!startDate && endDate) {
-      startDate = new Date(endDate);
-      startDate.setMonth(startDate.getMonth() - 1);
-    }
-
     // Set expiration to 10 years (effectively permanent)
     const expiresAt = new Date(Date.now() + (10 * 365 * 24 * 60 * 60 * 1000));
 
@@ -57,8 +42,8 @@ export async function createGuestSession(data: CreateGuestSessionData): Promise<
         longitude: data.longitude,
         city: data.city,
         state: data.state,
-        startDate,
-        endDate,
+        startDate: data.startDate,
+        endDate: data.endDate,
         numAdults: data.numAdults || 1,
         numChildren: data.numChildren || 0,
         numPets: data.numPets || 0,

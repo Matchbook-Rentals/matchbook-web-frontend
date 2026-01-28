@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { MapPin } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { toast } from "@/components/ui/use-toast";
+
 import { SuggestedLocation } from "@/types";
 
 interface Suggestion {
@@ -18,6 +18,7 @@ interface HeroLocationSuggestProps {
   contentClassName?: string;
   onLocationSelect?: (location: SuggestedLocation) => void;
   onInputChange?: (value: string) => void;
+  onGeocodingStateChange?: (isGeocoding: boolean) => void;
   showLocationIcon?: boolean;
   placeholder?: string;
 }
@@ -28,6 +29,7 @@ export default function HeroLocationSuggest({
   contentClassName = "",
   onLocationSelect,
   onInputChange,
+  onGeocodingStateChange,
   showLocationIcon = false,
   setDisplayValue,
   placeholder = "Enter an address or city",
@@ -35,6 +37,7 @@ export default function HeroLocationSuggest({
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
+  const [isGeocoding, setIsGeocoding] = useState(false);
 
   const prefetchGeocode = async (description: string) => {
     try {
@@ -67,36 +70,43 @@ export default function HeroLocationSuggest({
     const trimmedDescription = description.slice(0, -5); // Remove country code
     onLocationSelect(null);
     setDisplayValue(trimmedDescription);
-
-    // Start timing
-    const startTime = performance.now();
-
     setInputValue("");
     setSuggestions([]);
     setOpen(false);
 
-    try {
+    setIsGeocoding(true);
+    onGeocodingStateChange?.(true);
+
+    const geocodeLocation = async (): Promise<{ lat: number; lng: number } | null> => {
       const response = await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
       const data = await response.json();
-      if (data.results && data.results.length > 0) {
-        const { lat, lng } = data.results[0].geometry.location;
+      if (data.results?.length > 0) {
+        return data.results[0].geometry.location;
+      }
+      return null;
+    };
 
-        if (onLocationSelect) {
-          onLocationSelect({ description: trimmedDescription, lat, lng });
-        }
-
-        // Calculate elapsed time
-        const endTime = performance.now();
-        const elapsedMs = Math.round(endTime - startTime);
-
-        toast({
-          title: "Location selected",
-          description: `${trimmedDescription} (processed in ${elapsedMs}ms)`,
-          style: { backgroundColor: '#f5f5f5', border: 'black solid 1px' }
-        });
+    try {
+      let result = await geocodeLocation();
+      if (!result) result = await geocodeLocation(); // retry once
+      if (result) {
+        onLocationSelect?.({ description: trimmedDescription, lat: result.lat, lng: result.lng });
+      } else {
+        console.error("Geocoding returned no results for:", trimmedDescription);
       }
     } catch (error) {
-      console.error("Error fetching geocode:", error);
+      console.error("Geocoding failed for:", trimmedDescription, error);
+      try {
+        const result = await geocodeLocation(); // retry once on network error
+        if (result) {
+          onLocationSelect?.({ description: trimmedDescription, lat: result.lat, lng: result.lng });
+        }
+      } catch (retryError) {
+        console.error("Geocoding retry also failed:", retryError);
+      }
+    } finally {
+      setIsGeocoding(false);
+      onGeocodingStateChange?.(false);
     }
   };
 

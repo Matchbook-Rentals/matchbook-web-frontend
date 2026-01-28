@@ -291,8 +291,7 @@ export async function createTrip(tripData: {
   }
 
   try {
-    // Destructure all properties from tripData for clarity and safety
-    let {
+    const {
       startDate,
       endDate,
       locationString,
@@ -302,22 +301,6 @@ export async function createTrip(tripData: {
       numChildren,
       numPets
     } = tripData;
-    const today = new Date();
-
-    // Handle date logic
-    if (!startDate && !endDate) {
-      // If neither date is provided, start next month and end the month after
-      startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-      endDate = new Date(today.getFullYear(), today.getMonth() + 2, 1);
-    } else if (startDate && !endDate) {
-      // If only start date is provided, end date is start date + 1 month
-      endDate = new Date(startDate);
-      endDate.setMonth(endDate.getMonth() + 1);
-    } else if (!startDate && endDate) {
-      // If only end date is provided, start date is end date - 1 month
-      startDate = new Date(endDate);
-      startDate.setMonth(startDate.getMonth() - 1);
-    }
 
     const newTrip = await prisma.trip.create({
       data: {
@@ -573,8 +556,8 @@ export async function getOrCreateTripForListing(
       return { success: true, trip: existingTrip };
     }
 
-    // Priority 3: No context provided, create trip with default dates
-    return await createTripWithDefaultDates(userId, listingId);
+    // Priority 3: No context provided, create trip for listing
+    return await createTripForListing(userId, listingId);
   } catch (error) {
     console.error('Error in getOrCreateTripForListing:', error);
     return {
@@ -635,7 +618,7 @@ async function findOrCreateTripWithDates(
   return { success: true, trip: newTrip };
 }
 
-async function createTripWithDefaultDates(
+async function createTripForListing(
   userId: string,
   listingId: string
 ): Promise<GetOrCreateTripResponse> {
@@ -648,11 +631,6 @@ async function createTripWithDefaultDates(
     return { success: false, error: 'Listing not found' };
   }
 
-  // Default: start next month, end 3 months from now
-  const today = new Date();
-  const startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-  const endDate = new Date(today.getFullYear(), today.getMonth() + 4, 1);
-
   const newTrip = await prisma.trip.create({
     data: {
       userId,
@@ -660,8 +638,6 @@ async function createTripWithDefaultDates(
       locationString: `${listing.city}, ${listing.state}`,
       latitude: listing.latitude,
       longitude: listing.longitude,
-      startDate,
-      endDate,
       numAdults: 1,
       numChildren: 0,
       numPets: 0,
