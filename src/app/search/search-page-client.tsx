@@ -216,6 +216,7 @@ export default function SearchPageClient({
 
   const [listings, setListings] = useState<ListingAndImages[]>(initialListings);
   const [staleBounds, setStaleBounds] = useState<MapBounds | null>(null);
+  const [visibleBounds, setVisibleBounds] = useState<MapBounds | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
   // Trip/session tracking
@@ -264,6 +265,7 @@ export default function SearchPageClient({
     setListings(initialListings);
     lastFetchedBoundsRef.current = null;
     setStaleBounds(null);
+    setVisibleBounds(null);
     setIsSearching(false);
   }, [initialListings]);
 
@@ -425,6 +427,7 @@ export default function SearchPageClient({
   }, []);
 
   const handleBoundsChanged = useCallback((bounds: MapBounds) => {
+    setVisibleBounds(bounds);
     if (!lastFetchedBoundsRef.current) {
       lastFetchedBoundsRef.current = bounds;
       return;
@@ -483,9 +486,14 @@ export default function SearchPageClient({
     [listings]
   );
 
+  const isWithinBounds = (lat: number, lng: number, bounds: MapBounds) =>
+    lat >= bounds.south && lat <= bounds.north && lng >= bounds.west && lng <= bounds.east;
+
   const showListings = useMemo(() =>
-    allListings.filter(l => matchesFilters({ ...l, calculatedPrice: l.price }, filters, false, null)),
-    [allListings, filters]
+    allListings
+      .filter(l => !visibleBounds || isWithinBounds(l.latitude, l.longitude, visibleBounds))
+      .filter(l => matchesFilters({ ...l, calculatedPrice: l.price }, filters, false, null)),
+    [allListings, filters, visibleBounds]
   );
 
   const likedListings = useMemo(() => listings.filter(l => favIds.has(l.id)), [listings, favIds]);
@@ -683,7 +691,7 @@ export default function SearchPageClient({
                   <Button
                     onClick={searchThisArea}
                     disabled={isSearching}
-                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full"
+                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full hover:bg-gray-100 hover:text-gray-900 hover:shadow-md"
                   >
                     {isSearching ? 'Loading...' : 'Search this area'}
                   </Button>
@@ -725,7 +733,7 @@ export default function SearchPageClient({
                   <Button
                     onClick={searchThisArea}
                     disabled={isSearching}
-                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full"
+                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full hover:bg-gray-100 hover:text-gray-900 hover:shadow-md"
                   >
                     {isSearching ? 'Loading...' : 'Search this area'}
                   </Button>

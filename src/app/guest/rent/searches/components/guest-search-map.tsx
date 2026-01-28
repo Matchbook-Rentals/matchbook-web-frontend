@@ -83,6 +83,7 @@ interface SearchMapProps {
   markerStyles: MarkerStyles;
   selectedMarkerId?: string | null;
   onCenterChanged?: (lng: number, lat: number) => void;
+  onBoundsChanged?: (bounds: { north: number; south: number; east: number; west: number }) => void;
   onClickedMarkerChange?: (markerId: string | null) => void;
   onResetRequest?: (resetFn: () => void) => void;
   customSnapshot: any; // Required custom snapshot for guest mode
@@ -98,6 +99,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   markerStyles,
   selectedMarkerId = null,
   onCenterChanged = () => { },
+  onBoundsChanged = () => {},
   onClickedMarkerChange = () => { },
   onResetRequest,
   customSnapshot,
@@ -157,11 +159,12 @@ const SearchMap: React.FC<SearchMapProps> = ({
     isFullscreenRef.current = isFullscreen;
   }, [isFullscreen]);
 
-  // Update markers data ref whenever markers prop changes
+  // Re-render markers whenever the markers prop changes
   useEffect(() => {
     markersDataRef.current = markers;
-    // Update marker colors to reflect any state changes (like dislike status)
     if (mapLoaded) {
+      renderMarkers();
+      updateVisibleMarkers();
       setTimeout(() => {
         updateMarkerColors();
       }, STYLE_UPDATE_DELAY);
@@ -229,6 +232,16 @@ const SearchMap: React.FC<SearchMapProps> = ({
   });
   const { renderMarkers, createSingleMarker } = markerManager;
 
+  const notifyBoundsChanged = () => {
+    if (!mapRef.current) return;
+    const bounds = mapRef.current.getBounds();
+    onBoundsChanged({
+      north: bounds.getNorth(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      west: bounds.getWest(),
+    });
+  };
 
 
 
@@ -298,6 +311,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
           // Always update visible markers on initial load
           updateVisibleMarkers();
+          notifyBoundsChanged();
           const newZoom = mapRef.current.getZoom();
           setCurrentZoom(newZoom);
           renderMarkers();
@@ -310,6 +324,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         // On zoom, update markers and visible listings
         map.on('zoomend', () => {
           debouncedUpdateMarkers();
+          notifyBoundsChanged();
         });
 
         // On move, update visible listings and re-render markers
@@ -319,6 +334,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
           // Report center change to parent
           const newCenter = mapRef.current.getCenter();
           onCenterChanged(newCenter.lng, newCenter.lat);
+          notifyBoundsChanged();
 
           // Update visible listings and render markers for pan changes
           debouncedUpdateMarkers();
@@ -428,16 +444,6 @@ const SearchMap: React.FC<SearchMapProps> = ({
   }, [hoveredListing, clickedMarkerId, selectedMarker, mapLoaded, markers]);
 
 
-  // Update markers data ref whenever markers prop changes
-  useEffect(() => {
-    markersDataRef.current = markers;
-    // Update marker colors to reflect any state changes (like dislike status)
-    if (mapLoaded) {
-      setTimeout(() => {
-        updateMarkerColors();
-      }, STYLE_UPDATE_DELAY);
-    }
-  }, [markers, mapLoaded]);
 
   // Effect to update map's zoom when the zoom prop changes (removed - handled in center effect)
   // The zoom is now handled together with center changes in the effect above
