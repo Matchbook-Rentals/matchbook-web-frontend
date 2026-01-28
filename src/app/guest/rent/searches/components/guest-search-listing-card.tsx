@@ -124,13 +124,7 @@ export default function SearchListingCard({ listing, status, className, style, d
       return;
     }
 
-    // Navigate to guest listing detail view
-    if (state.session?.id) {
-      router.push(`/guest/trips/${state.session.id}/listing/${listing.id}`);
-    } else {
-      // Fallback to auth prompt if no session
-      actions.showAuthPrompt('view', listing.id);
-    }
+    window.open(`/search/listing/${listing.id}`, '_blank');
   };
 
   return (
