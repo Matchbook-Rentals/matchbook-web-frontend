@@ -16,7 +16,6 @@ import { getGuestSessionLocation } from "@/app/actions/guest-session-db";
 import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 import { getPopularListingAreas } from "@/app/actions/listings";
-import { checkAdminAccess } from "@/utils/roles";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Monthly Rentals',
@@ -42,13 +41,6 @@ const serializeUser = (user: any) => {
 };
 
 const NewNewHomePage = async () => {
-  if (process.env.NODE_ENV === 'production') {
-    const isAdmin = await checkAdminAccess();
-    if (!isAdmin) {
-      redirect('/');
-    }
-  }
-
   const [user, popularAreas] = await Promise.all([
     currentUser(),
     getPopularListingAreas(5) // Fetch 5 to account for potential skips
