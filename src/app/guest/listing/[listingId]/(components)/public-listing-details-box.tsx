@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
 import { ListingAndImages } from '@/types';
 import { StarIcon } from '@/components/icons';
 import { Card, CardContent } from '@/components/ui/card';
@@ -48,6 +48,14 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
 
   const [popoverStart, setPopoverStart] = useState<Date | null>(null);
   const [popoverEnd, setPopoverEnd] = useState<Date | null>(null);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => setIsLargeScreen(window.innerWidth >= 1024);
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const host = listing.user;
 
@@ -270,9 +278,10 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                   </div>
                 </PopoverTrigger>
                 <PopoverContent
-                  className="w-auto p-4"
-                  side="top"
-                  align="center"
+                  className="w-auto p-4 shadow-xl"
+                  side="bottom"
+                  align="end"
+                  alignOffset={isLargeScreen ? -350 : -100}
                   sideOffset={8}
                 >
                   <div className="flex flex-col gap-3">
@@ -281,6 +290,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                       end={popoverEnd}
                       handleChange={handleDateChange}
                       minimumDateRange={{ months: 1 }}
+                      singleMonth={!isLargeScreen}
                     />
                     <Button
                       onClick={handleDateContinue}
