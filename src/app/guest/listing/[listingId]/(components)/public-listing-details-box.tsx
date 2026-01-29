@@ -11,6 +11,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { applyToListingFromSearch } from '@/app/actions/housing-requests';
 import { getOrCreateListingConversation } from '@/app/actions/housing-requests';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import SearchDateRange from '@/components/newnew/search-date-range';
+import { Button } from '@/components/ui/button';
+import { format } from 'date-fns';
+import { ChevronDown } from 'lucide-react';
 
 interface PublicListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -18,6 +23,10 @@ interface PublicListingDetailsBoxProps {
   tripContext?: { tripId?: string; startDate: Date; endDate: Date } | null;
   calculatedPrice?: number | null;
   listingState?: { hasApplied: boolean; isMatched: boolean } | null;
+  onApplyClick?: () => void;
+  showDatePopover?: boolean;
+  onDatePopoverChange?: (open: boolean) => void;
+  onDatesSelected?: (start: Date, end: Date) => void;
 }
 
 const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
@@ -26,6 +35,10 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   tripContext = null,
   calculatedPrice = null,
   listingState = null,
+  onApplyClick,
+  showDatePopover = false,
+  onDatePopoverChange,
+  onDatesSelected,
 }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -33,7 +46,33 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   const [isMatched, setIsMatched] = useState(listingState?.isMatched ?? false);
   const [error, setError] = useState<string | null>(null);
 
+  const [popoverStart, setPopoverStart] = useState<Date | null>(null);
+  const [popoverEnd, setPopoverEnd] = useState<Date | null>(null);
+
   const host = listing.user;
+
+  const handleApplyClick = () => {
+    if (onApplyClick) {
+      onApplyClick();
+      return;
+    }
+    handleApplyNow();
+  };
+
+  const handleDateChange = (start: Date | null, end: Date | null) => {
+    setPopoverStart(start);
+    setPopoverEnd(end);
+  };
+
+  const handleDateContinue = () => {
+    if (popoverStart && popoverEnd && onDatesSelected) {
+      onDatesSelected(popoverStart, popoverEnd);
+    }
+  };
+
+  const hasDates = !!(tripContext?.startDate && tripContext?.endDate);
+  const displayStart = tripContext?.startDate || popoverStart;
+  const displayEnd = tripContext?.endDate || popoverEnd;
 
   const getPriceRange = () => {
     if (!listing.monthlyPricing || listing.monthlyPricing.length === 0) {
@@ -187,20 +226,87 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
             Get Started
           </BrandButton>
         ) : (
-          // Signed in: Show "Apply Now" + "Message Host" buttons
+          // Signed in
           <div className="flex flex-col gap-2 w-full mt-1">
-            <BrandButton
-              variant={hasApplied || isMatched ? "secondary" : "outline"}
-              className={`w-full min-w-0 font-semibold transition-colors ${
-                hasApplied || isMatched
-                  ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
-                  : 'border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white'
-              }`}
-              onClick={handleApplyNow}
-              disabled={isApplyButtonDisabled}
-            >
-              {isPending ? 'Applying...' : getApplyButtonText()}
-            </BrandButton>
+            {/* Show Apply button when dates are filled, otherwise show date picker */}
+            {hasDates ? (
+              <BrandButton
+                variant={hasApplied || isMatched ? "secondary" : "outline"}
+                className={`w-full min-w-0 font-semibold transition-colors ${
+                  hasApplied || isMatched
+                    ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
+                    : 'border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white'
+                }`}
+                onClick={handleApplyClick}
+                disabled={isApplyButtonDisabled}
+              >
+                {isPending ? 'Applying...' : getApplyButtonText()}
+              </BrandButton>
+            ) : onApplyClick ? (
+              <Popover open={showDatePopover} onOpenChange={onDatePopoverChange}>
+                <PopoverTrigger asChild>
+                  <div className="w-full border border-gray-300 rounded-xl cursor-pointer hover:border-[#3c8787] transition-colors">
+                    <div className="flex divide-x divide-gray-300">
+                      <div className="flex-1 px-4 py-3">
+                        <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-In</div>
+                        <div className={`text-sm font-['Poppins'] ${displayStart ? 'text-[#373940]' : 'text-gray-400'}`}>
+                          {displayStart ? format(displayStart, 'MMM d, yyyy') : 'Add Date'}
+                        </div>
+                      </div>
+                      <div className="flex-1 px-4 py-3">
+                        <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-Out</div>
+                        <div className={`text-sm font-['Poppins'] ${displayEnd ? 'text-[#373940]' : 'text-gray-400'}`}>
+                          {displayEnd ? format(displayEnd, 'MMM d, yyyy') : 'Add Date'}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between px-4 py-3 border-t border-gray-300">
+                      <div>
+                        <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Renters</div>
+                        <div className="text-sm text-gray-400 font-['Poppins']">1 renter</div>
+                      </div>
+                      <ChevronDown className="w-5 h-5 text-gray-500" />
+                    </div>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-auto p-4"
+                  side="top"
+                  align="center"
+                  sideOffset={8}
+                >
+                  <div className="flex flex-col gap-3">
+                    <SearchDateRange
+                      start={popoverStart}
+                      end={popoverEnd}
+                      handleChange={handleDateChange}
+                      minimumDateRange={{ months: 1 }}
+                    />
+                    <Button
+                      onClick={handleDateContinue}
+                      disabled={!popoverStart || !popoverEnd}
+                      className="w-full bg-[#3c8787] hover:bg-[#2d6b6b] text-white font-semibold"
+                    >
+                      Continue
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <BrandButton
+                variant={hasApplied || isMatched ? "secondary" : "outline"}
+                className={`w-full min-w-0 font-semibold transition-colors ${
+                  hasApplied || isMatched
+                    ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
+                    : 'border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white'
+                }`}
+                onClick={handleApplyClick}
+                disabled={isApplyButtonDisabled}
+              >
+                {isPending ? 'Applying...' : getApplyButtonText()}
+              </BrandButton>
+            )}
+
             <BrandButton
               variant="ghost"
               className="w-full min-w-0 text-[#3c8787] font-medium hover:bg-[#3c8787]/10"
