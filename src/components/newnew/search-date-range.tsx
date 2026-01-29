@@ -16,6 +16,7 @@ interface SearchDateRangeProps {
   minimumDateRange?: Duration | null;
   maximumDateRange?: Duration | null;
   singleMonth?: boolean;
+  hideFlexibility?: boolean;
 }
 
 type FlexibilityValue = 'exact' | 1 | 2 | 3 | 7;
@@ -79,6 +80,7 @@ export default function SearchDateRange({
   minimumDateRange,
   maximumDateRange,
   singleMonth = false,
+  hideFlexibility = false,
 }: SearchDateRangeProps) {
   const today = normalizeDate(new Date());
 
@@ -399,7 +401,7 @@ export default function SearchDateRange({
               {renderMonth(leftYear, leftMonth, leftGrid, true, true)}
             </div>
           </div>
-          {renderFlexibilityBar()}
+          {!hideFlexibility && renderFlexibilityBar()}
         </div>
       </div>
     );
@@ -438,7 +440,7 @@ export default function SearchDateRange({
           </div>
         </div>
 
-        {renderFlexibilityBar()}
+        {!hideFlexibility && renderFlexibilityBar()}
       </div>
     </div>
   );

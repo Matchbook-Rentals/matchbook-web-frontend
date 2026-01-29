@@ -280,9 +280,9 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                 <PopoverContent
                   className="w-auto p-4 shadow-xl"
                   side="bottom"
-                  align="end"
-                  alignOffset={isLargeScreen ? -350 : -100}
-                  sideOffset={8}
+                  align="start"
+                  alignOffset={isLargeScreen ? -450 : -150}
+                  sideOffset={-100}
                 >
                   <div className="flex flex-col gap-3">
                     <SearchDateRange
@@ -291,6 +291,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                       handleChange={handleDateChange}
                       minimumDateRange={{ months: 1 }}
                       singleMonth={!isLargeScreen}
+                      hideFlexibility
                     />
                     <Button
                       onClick={handleDateContinue}
