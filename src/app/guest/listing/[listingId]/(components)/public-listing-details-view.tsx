@@ -12,13 +12,20 @@ interface PublicListingDetailsViewProps {
   listing: ListingAndImages;
   locationString: string;
   isAuthenticated?: boolean;
-  tripContext?: { tripId?: string; startDate: Date; endDate: Date } | null;
+  tripContext?: {
+    tripId?: string;
+    startDate: Date;
+    endDate: Date;
+    numAdults?: number;
+    numChildren?: number;
+    numPets?: number;
+  } | null;
   calculatedPrice?: number | null;
   listingState?: { hasApplied: boolean; isMatched: boolean } | null;
   onApplyClick?: () => void;
   showDatePopover?: boolean;
   onDatePopoverChange?: (open: boolean) => void;
-  onDatesSelected?: (start: Date, end: Date) => void;
+  onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
 }
 
 export default function PublicListingDetailsView({

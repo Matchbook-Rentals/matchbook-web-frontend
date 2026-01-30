@@ -16,7 +16,14 @@ interface ListingDetailWithWizardProps {
   listing: ListingAndImages;
   locationString: string;
   isAuthenticated: boolean;
-  tripContext: { tripId?: string; startDate: Date; endDate: Date } | null;
+  tripContext: {
+    tripId?: string;
+    startDate: Date;
+    endDate: Date;
+    numAdults?: number;
+    numChildren?: number;
+    numPets?: number;
+  } | null;
   calculatedPrice: number | null;
   listingState: { hasApplied: boolean; isMatched: boolean } | null;
   userApplication: any;
@@ -34,12 +41,20 @@ export default function ListingDetailWithWizard({
   const [wizardState, setWizardState] = useState<WizardState>('listing');
   const [showDatePopover, setShowDatePopover] = useState(false);
   const [collectedDates, setCollectedDates] = useState<{ start: Date; end: Date } | null>(null);
+  const [collectedGuests, setCollectedGuests] = useState<{ adults: number; children: number; pets: number } | null>(null);
   const [hasAppliedLocal, setHasAppliedLocal] = useState(false);
 
   const hasDates = !!initialTripContext;
 
   const effectiveTripContext = collectedDates
-    ? { tripId: initialTripContext?.tripId, startDate: collectedDates.start, endDate: collectedDates.end }
+    ? {
+        tripId: initialTripContext?.tripId,
+        startDate: collectedDates.start,
+        endDate: collectedDates.end,
+        numAdults: collectedGuests?.adults ?? 1,
+        numChildren: collectedGuests?.children ?? 0,
+        numPets: collectedGuests?.pets ?? 0,
+      }
     : initialTripContext;
 
   const effectivePrice = useCallback(() => {
@@ -65,8 +80,9 @@ export default function ListingDetailWithWizard({
     }
   };
 
-  const handleDatesSelected = (start: Date, end: Date) => {
+  const handleDatesSelected = (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => {
     setCollectedDates({ start, end });
+    setCollectedGuests(guests);
     setShowDatePopover(false);
     scrollToTopAndTransition('application');
   };
