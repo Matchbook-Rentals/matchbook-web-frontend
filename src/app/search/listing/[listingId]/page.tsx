@@ -114,12 +114,28 @@ export default async function SearchListingPage({ params, searchParams }: Listin
   const endDate = endDateStr ? new Date(endDateStr) : undefined;
 
   // Build trip context
-  let tripContext: { tripId?: string; startDate: Date; endDate: Date } | null = null;
+  let tripContext: { tripId?: string; startDate: Date; endDate: Date; numAdults?: number; numChildren?: number; numPets?: number } | null = null;
   let calculatedPrice: number | null = null;
 
   // If dates are provided, use them directly
   if (startDate && endDate && !isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
-    tripContext = { tripId, startDate, endDate };
+    // If tripId is also provided, fetch guest counts from trip
+    let guestCounts: { numAdults?: number; numChildren?: number; numPets?: number } = {};
+    if (tripId && user) {
+      const trip = await prisma.trip.findUnique({
+        where: { id: tripId },
+        select: { userId: true, numAdults: true, numChildren: true, numPets: true }
+      });
+      if (trip && trip.userId === user.id) {
+        guestCounts = {
+          numAdults: trip.numAdults ?? undefined,
+          numChildren: trip.numChildren ?? undefined,
+          numPets: trip.numPets ?? undefined,
+        };
+      }
+    }
+
+    tripContext = { tripId, startDate, endDate, ...guestCounts };
 
     // Calculate price using dates
     const mockTrip = { startDate, endDate } as Trip;
@@ -136,7 +152,10 @@ export default async function SearchListingPage({ params, searchParams }: Listin
       tripContext = {
         tripId: trip.id,
         startDate: trip.startDate,
-        endDate: trip.endDate
+        endDate: trip.endDate,
+        numAdults: trip.numAdults ?? undefined,
+        numChildren: trip.numChildren ?? undefined,
+        numPets: trip.numPets ?? undefined,
       };
       const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
       calculatedPrice = calculateRent({ listing: listingWithPricing, trip });

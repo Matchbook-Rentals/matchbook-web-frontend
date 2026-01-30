@@ -345,8 +345,8 @@ export async function editTrip(tripId: string, tripData: {
   locationString?: string;
   latitude?: number;
   longitude?: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | null;
+  endDate?: Date | null;
   numAdults?: number;
   numChildren?: number;
   numPets?: number;

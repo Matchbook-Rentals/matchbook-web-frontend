@@ -157,22 +157,28 @@ export default function SearchResultsNavbar({
 
   // Save dates on blur when the date popover closes
   const saveDatesOnBlur = async () => {
-    // Only proceed if we have both dates and they've changed
-    if (!dateRange.start || !dateRange.end || !haveDatesChanged()) return;
+    if (!haveDatesChanged()) return;
     if (isSavingDates) return;
 
-    // Determine if this is adding dates for the first time or changing existing dates
-    const isAddingDatesFirstTime = !hadDatesInitially.current;
-    const isChangingExistingDates = hadDatesInitially.current;
+    const hasBothDates = dateRange.start && dateRange.end;
+    const isClearingDates = !dateRange.start && !dateRange.end;
+
+    // Only save if we have both dates OR we're clearing dates (had dates initially)
+    if (!hasBothDates && !isClearingDates) return;
+    // Don't clear dates if we never had them
+    if (isClearingDates && !hadDatesInitially.current) return;
+
+    // Determine if this change should trigger a refetch
+    const shouldRefetch = hadDatesInitially.current;
 
     setIsSavingDates(true);
 
     try {
-      // Save to database
+      // Save to database (null values to clear dates)
       if (isClerkSignedIn && tripId) {
         const response = await editTrip(tripId, {
-          startDate: dateRange.start,
-          endDate: dateRange.end,
+          startDate: dateRange.start ?? null,
+          endDate: dateRange.end ?? null,
         });
         if (!response.success) {
           toast({ variant: 'destructive', description: response.error || 'Failed to save dates' });
@@ -180,8 +186,8 @@ export default function SearchResultsNavbar({
         }
       } else if (sessionId) {
         const response = await updateGuestSession(sessionId, {
-          startDate: dateRange.start,
-          endDate: dateRange.end,
+          startDate: dateRange.start ?? null,
+          endDate: dateRange.end ?? null,
         });
         if (!response.success) {
           toast({ variant: 'destructive', description: response.error || 'Failed to save dates' });
@@ -194,16 +200,16 @@ export default function SearchResultsNavbar({
 
       // Update initial refs so subsequent blurs know the new baseline
       initialDates.current = {
-        start: dateRange.start.toISOString(),
-        end: dateRange.end.toISOString(),
+        start: dateRange.start?.toISOString() ?? null,
+        end: dateRange.end?.toISOString() ?? null,
       };
-      hadDatesInitially.current = true;
+      hadDatesInitially.current = hasBothDates ? true : false;
 
       // Notify parent about the change
       onTripDataChange?.({
-        startDate: dateRange.start.toISOString(),
-        endDate: dateRange.end.toISOString(),
-        needsRefetch: isChangingExistingDates,
+        startDate: dateRange.start?.toISOString() ?? null,
+        endDate: dateRange.end?.toISOString() ?? null,
+        needsRefetch: shouldRefetch,
       });
     } catch {
       toast({ variant: 'destructive', description: 'Failed to save dates' });

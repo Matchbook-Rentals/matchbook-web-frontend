@@ -7,7 +7,7 @@ import { GuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { FilterOptions, matchesFilters } from '@/lib/listing-filters';
-import { getListingsByBounds, getListingsWithDates, type MapBounds } from '@/app/actions/listings';
+import { getListingsByBounds, getListingsWithDates, getListingsNearLocation, type MapBounds } from '@/app/actions/listings';
 import SearchFiltersModal from './search-filters-modal';
 import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-search-listings-grid';
 import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
@@ -491,6 +491,26 @@ export default function SearchPageClient({
     }
   }, [currentMapCenter]);
 
+  // Refetch listings without date filtering (when dates are cleared)
+  const refetchListingsWithoutDates = useCallback(async () => {
+    setIsSearching(true);
+    try {
+      const results = await getListingsNearLocation(
+        currentMapCenter.lat,
+        currentMapCenter.lng,
+        100,
+        PREFETCH_RADIUS_MILES
+      );
+      setListings(results);
+      lastFetchedBoundsRef.current = null;
+      setStaleBounds(null);
+    } catch (error) {
+      console.error('Error refetching listings without dates:', error);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [currentMapCenter]);
+
   // Handle trip data changes from navbar (dates/guests on blur)
   const handleTripDataChange = useCallback((changes: TripDataChange) => {
     setLocalTripData(prev => {
@@ -505,11 +525,17 @@ export default function SearchPageClient({
       };
     });
 
-    // If dates changed and need refetch, fetch listings with new dates
-    if (changes.needsRefetch && changes.startDate && changes.endDate) {
-      refetchListingsWithDates(changes.startDate, changes.endDate);
+    // If dates changed and need refetch
+    if (changes.needsRefetch) {
+      if (changes.startDate && changes.endDate) {
+        // Dates were set/changed - fetch with date filtering
+        refetchListingsWithDates(changes.startDate, changes.endDate);
+      } else if (changes.startDate === null && changes.endDate === null) {
+        // Dates were cleared - fetch without date filtering
+        refetchListingsWithoutDates();
+      }
     }
-  }, [refetchListingsWithDates]);
+  }, [refetchListingsWithDates, refetchListingsWithoutDates]);
 
   // Build the GuestTripContext shim
   const shimSession: GuestSession = useMemo(() => ({
