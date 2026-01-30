@@ -38,6 +38,7 @@ export default function HeroLocationSuggest({
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [isGeocoding, setIsGeocoding] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const prefetchGeocode = async (description: string) => {
     try {
@@ -51,6 +52,7 @@ export default function HeroLocationSuggest({
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
+    setSelectedIndex(-1);
     onInputChange?.(newValue);
     if (newValue.length > 0) {
       try {
@@ -63,6 +65,37 @@ export default function HeroLocationSuggest({
       }
     } else {
       setSuggestions([]);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const visibleSuggestions = suggestions.slice(0, 5);
+    const suggestionCount = visibleSuggestions.length;
+
+    if (suggestionCount === 0) return;
+
+    const isArrowDown = e.key === "ArrowDown";
+    const isArrowUp = e.key === "ArrowUp";
+    const isEnter = e.key === "Enter";
+    const isEscape = e.key === "Escape";
+
+    if (isArrowDown) {
+      e.preventDefault();
+      const nextIndex = selectedIndex >= suggestionCount - 1 ? 0 : selectedIndex + 1;
+      setSelectedIndex(nextIndex);
+      prefetchGeocode(visibleSuggestions[nextIndex].description);
+    } else if (isArrowUp) {
+      e.preventDefault();
+      const prevIndex = selectedIndex <= 0 ? suggestionCount - 1 : selectedIndex - 1;
+      setSelectedIndex(prevIndex);
+      prefetchGeocode(visibleSuggestions[prevIndex].description);
+    } else if (isEnter && selectedIndex >= 0) {
+      e.preventDefault();
+      const selected = visibleSuggestions[selectedIndex];
+      handleSelect(selected.description, selected.place_id);
+    } else if (isEscape) {
+      setSuggestions([]);
+      setSelectedIndex(-1);
     }
   };
 
@@ -115,23 +148,29 @@ export default function HeroLocationSuggest({
 
   return (
 
-    <div className={`p-4 rounded-2xl ${contentClassName}`}>
-      <input
-        value={inputValue}
-        onChange={handleInput}
-        placeholder={placeholder}
-        type="text"
-        className="w-full h-full text-sm sm:text-xl md:text-2xl focus:outline-none min-w-0"
-        autoFocus={true}
-      />
+    <div className={`${contentClassName}`}>
+      <div className="h-12 w-full bg-white rounded-lg border border-[#d0d5dd] px-3 flex items-center">
+        <input
+          value={inputValue}
+          onChange={handleInput}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          type="text"
+          className="w-full h-full text-sm focus:outline-none min-w-0 placeholder-[#667085]"
+          autoFocus={true}
+        />
+      </div>
       {suggestions.length > 0 && (
         <ul className="mt-3 sm:mt-5">
-          {suggestions.slice(0, 5).map((suggestion) => (
+          {suggestions.slice(0, 5).map((suggestion, index) => (
             <li
-              className="hover:bg-gray-100 p-2 sm:p-3 cursor-pointer text-sm sm:text-base rounded-md flex items-center gap-2.5"
+              className={`${index === selectedIndex ? 'bg-gray-100' : ''} hover:bg-gray-100 p-2 sm:p-3 cursor-pointer text-sm sm:text-base rounded-md flex items-center gap-2.5`}
               key={suggestion.place_id}
               onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
-              onMouseEnter={() => prefetchGeocode(suggestion.description)}
+              onMouseEnter={() => {
+                setSelectedIndex(index);
+                prefetchGeocode(suggestion.description);
+              }}
               data-testid="location-suggestion-item"
             >
               {showLocationIcon && <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />}
