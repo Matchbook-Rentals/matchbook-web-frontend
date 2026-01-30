@@ -7,9 +7,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from 'next';
 import { getHostListingsCountForUser } from "@/app/actions/listings";
 import { getListingApplicationState } from "@/app/actions/housing-requests";
+import { getTripApplication } from '@/app/actions/applications';
 import { calculateRent } from '@/lib/calculate-rent';
 import { Trip } from '@prisma/client';
-import { getUserApplication } from '@/app/actions/applications';
 import ListingDetailWithWizard from './(components)/listing-detail-with-wizard';
 
 interface ListingPageProps {
@@ -162,12 +162,14 @@ export default async function SearchListingPage({ params, searchParams }: Listin
     }
   }
 
-  // Get user's application state for this listing (if authenticated)
+  // Get user's application state and application data (if authenticated)
   let listingState: { hasApplied: boolean; isMatched: boolean } | null = null;
   let userApplication: any = null;
   if (user) {
     listingState = await getListingApplicationState(params.listingId, tripId);
-    userApplication = await getUserApplication();
+    // Load trip-specific application if exists, otherwise fall back to default
+    const appResult = await getTripApplication(tripId);
+    userApplication = appResult.success ? appResult.application : null;
   }
 
   // Default location string for display

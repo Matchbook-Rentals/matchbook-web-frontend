@@ -194,12 +194,19 @@ export async function getTripApplication(tripId?: string) {
         include: {
           incomes: true,
           verificationImages: true,
-          identifications: true,
-          residentialHistories: true,
+          identifications: {
+            include: {
+              idPhotos: true,
+            },
+          },
+          residentialHistories: {
+            orderBy: {
+              index: 'asc',
+            },
+          },
         },
       });
     }
-    // Debug residential histories if needed
 
     if (!application) {
       application = await prisma.application.findUnique({
@@ -212,8 +219,16 @@ export async function getTripApplication(tripId?: string) {
         include: {
           incomes: true,
           verificationImages: true,
-          identifications: true,
-          residentialHistories: true,
+          identifications: {
+            include: {
+              idPhotos: true,
+            },
+          },
+          residentialHistories: {
+            orderBy: {
+              index: 'asc',
+            },
+          },
         },
       });
     }

@@ -202,7 +202,11 @@ export default function ApplicationWizard({
     if (!isEdited()) return true;
 
     const applicationData = buildApplicationData();
-    const result = await upsertApplication(applicationData);
+    // If tripId exists, save to trip-specific application; otherwise save to default
+    const result = await upsertApplication({
+      ...applicationData,
+      tripId: tripContext.tripId,
+    });
     if (result.success) {
       markSynced();
       if (result.application?.id) {
@@ -256,9 +260,30 @@ export default function ApplicationWizard({
 
     setIsSubmitting(true);
     try {
-      // Save the application
+      // 1. First create/get the trip (this may create one if tripId is missing)
+      const applyResult = await applyToListingFromSearch(listing.id, {
+        tripId: tripContext.tripId,
+        startDate: tripContext.startDate,
+        endDate: tripContext.endDate,
+      });
+
+      if (!applyResult.success) {
+        toast({
+          title: 'Error',
+          description: applyResult.error || 'Failed to submit application',
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // 2. Now we have a guaranteed tripId - save the trip-specific application
       const applicationData = buildApplicationData();
-      const upsertResult = await upsertApplication(applicationData);
+      const upsertResult = await upsertApplication({
+        ...applicationData,
+        tripId: applyResult.tripId, // Use the returned tripId (guaranteed to exist)
+      });
+
       if (!upsertResult.success) {
         toast({ title: 'Error', description: 'Failed to save application', variant: 'destructive' });
         setIsSubmitting(false);
@@ -267,28 +292,13 @@ export default function ApplicationWizard({
 
       markSynced();
 
-      // Mark as complete
+      // 3. Mark as complete
       if (upsertResult.application?.id) {
         await markComplete(upsertResult.application.id);
       }
 
-      // Apply to the listing
-      const applyResult = await applyToListingFromSearch(listing.id, {
-        tripId: tripContext.tripId,
-        startDate: tripContext.startDate,
-        endDate: tripContext.endDate,
-      });
-
-      if (applyResult.success) {
-        toast({ title: 'Success', description: 'Application submitted successfully!' });
-        onComplete();
-      } else {
-        toast({
-          title: 'Error',
-          description: applyResult.error || 'Failed to submit application',
-          variant: 'destructive',
-        });
-      }
+      toast({ title: 'Success', description: 'Application submitted successfully!' });
+      onComplete();
     } catch (error) {
       toast({ title: 'Error', description: 'An unexpected error occurred', variant: 'destructive' });
     } finally {
