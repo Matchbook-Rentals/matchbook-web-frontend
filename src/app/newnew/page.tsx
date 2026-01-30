@@ -120,7 +120,7 @@ const NewNewHomePage = async () => {
             title: `Monthly Rentals in ${area.city}, ${area.state}`,
           }))}
         />
-        <Spacer />
+        <div className="h-[40px]" />
         <PopularListingsSectionWrapper
           isSignedIn={!!user?.id}
           userTripLocation={userTripLocation}
