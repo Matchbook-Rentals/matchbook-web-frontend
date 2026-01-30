@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
@@ -8,6 +8,7 @@ import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { useSearchParams } from 'next/navigation';
 import GuestDesktopListingCard from './guest-desktop-map-click-card';
 import ListingCard from './guest-desktop-map-click-card';
+import MapPinPopup from './map-pin-popup';
 
 // Import custom hooks
 import { useMapUtilities } from '@/app/app/rent/old-search/(components)/hooks/useMapUtilities';
@@ -87,6 +88,7 @@ interface SearchMapProps {
   onClickedMarkerChange?: (markerId: string | null) => void;
   onResetRequest?: (resetFn: () => void) => void;
   customSnapshot: any; // Required custom snapshot for guest mode
+  tripId?: string;
 }
 
 const SearchMap: React.FC<SearchMapProps> = ({
@@ -103,6 +105,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   onClickedMarkerChange = () => { },
   onResetRequest,
   customSnapshot,
+  tripId,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -123,6 +126,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const { state: { filters, session } } = useGuestTripContext();
   const searchRadius = 100; // Default for guests
   const queryParams = useSearchParams();
+
+  const mockTrip = useMemo(() => session ? {
+    startDate: session.searchParams.startDate,
+    endDate: session.searchParams.endDate,
+  } : null, [session]);
 
   // **Initialize Custom Hooks**
   const mapUtilities = useMapUtilities({ mapRef });
@@ -174,11 +182,6 @@ const SearchMap: React.FC<SearchMapProps> = ({
   /** Update visible listings based on current map bounds */
   const updateVisibleMarkers = () => {
     if (!mapRef.current) return;
-
-    // Don't update visible markers if we have a clicked marker in non-fullscreen mode
-    if (!isFullscreenRef.current && clickedMarkerIdRef.current) {
-      return;
-    }
 
     const bounds = mapRef.current.getBounds();
     const visibleIds = markersDataRef.current
@@ -261,10 +264,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       const newZoom = mapRef.current.getZoom();
       setCurrentZoom(newZoom);
       
-      // Only update visible markers if we don't have a clicked marker
-      if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
-        updateVisibleMarkers();
-      }
+      updateVisibleMarkers();
       
       // Only render markers if not skipping render
       if (!skipRender) {
@@ -341,13 +341,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
         });
 
         map.on('click', () => {
-          if (isFullscreenRef.current) {
-            setSelectedMarker(null);
-          }
+          setSelectedMarker(null);
+          setClickedMarkerId(null);
           setClickedCluster(null);
           if (!isFullscreenRef.current) {
-            setClickedMarkerId(null);
-            // Update visible markers to show all listings in bounds
             updateVisibleMarkers();
           }
         });
@@ -432,6 +429,17 @@ const SearchMap: React.FC<SearchMapProps> = ({
     setTimeout(updateVisibleMarkers, VISIBLE_MARKERS_UPDATE_DELAY);
   }, [queryParams]);
 
+  // Clear stale popup when markers refresh and selected marker is gone
+  useEffect(() => {
+    if (selectedMarker && !isFullscreenRef.current) {
+      const stillExists = markers.some(m => m.listing.id === selectedMarker.listing.id);
+      if (!stillExists) {
+        setSelectedMarker(null);
+        setClickedMarkerId(null);
+      }
+    }
+  }, [markers]);
+
   // Use debounced updates for hover/selection changes to prevent infinite loops
   useEffect(() => {
     if (!mapRef.current || !mapLoaded) return;
@@ -478,18 +486,12 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
 
   const handleFullscreen = () => {
-    // Don't adjust zoom when toggling fullscreen - just toggle the state
     setIsFullscreen(!isFullscreen);
 
-    // Clear selections when switching modes
-    if (!isFullscreen) {
-      // Entering fullscreen - clear non-fullscreen selection
-      setClickedMarkerId(null);
-      useVisibleListingsStore.getState().setVisibleListingIds(null);
-    } else {
-      // Exiting fullscreen - clear fullscreen selection
-      setSelectedMarker(null);
-    }
+    // Clear all selections when switching modes
+    setSelectedMarker(null);
+    setClickedMarkerId(null);
+    useVisibleListingsStore.getState().setVisibleListingIds(null);
 
     // Schedule a resize after the state change is processed
     setTimeout(() => {
@@ -548,6 +550,16 @@ const SearchMap: React.FC<SearchMapProps> = ({
                 />
               </div>
             </>
+          )}
+          {selectedMarker && !isFullscreen && (
+            <MapPinPopup
+              marker={selectedMarker}
+              mapRef={mapRef}
+              onClose={() => { setSelectedMarker(null); setClickedMarkerId(null); }}
+              customSnapshot={customSnapshot}
+              trip={mockTrip}
+              tripId={tripId}
+            />
           )}
         </>
       )}

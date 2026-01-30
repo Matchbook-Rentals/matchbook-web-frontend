@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
-import { useMapSelectionStore } from '@/store/map-selection-store';
-import { useVisibleListingsStore } from '@/store/visible-listings-store';
 
 // Constants
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
@@ -87,23 +85,15 @@ export const useMapMarkerManager = ({
 
   const handleNormalMarkerClick = useCallback((marker: any) => {
     const isSameMarker = clickedMarkerId === marker.listing.id;
-    
+
     if (isSameMarker) {
-      clearVisibleListings();
+      setSelectedMarker(null);
       setClickedMarkerId(null);
     } else {
-      filterToSingleListing(marker.listing.id);
+      setSelectedMarker(marker);
       setClickedMarkerId(marker.listing.id);
     }
-  }, [clickedMarkerId, setClickedMarkerId]);
-
-  const clearVisibleListings = () => {
-    useVisibleListingsStore.getState().setVisibleListingIds(null);
-  };
-
-  const filterToSingleListing = (listingId: string) => {
-    useVisibleListingsStore.getState().setVisibleListingIds([listingId]);
-  };
+  }, [clickedMarkerId, setClickedMarkerId, setSelectedMarker]);
 
   const createMarkerClickHandler = useCallback((marker: any) => {
     return (e: Event) => {

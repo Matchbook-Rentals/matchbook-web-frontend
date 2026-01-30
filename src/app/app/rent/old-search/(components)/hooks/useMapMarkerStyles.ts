@@ -102,8 +102,8 @@ export const useMapMarkerStyles = ({
 
   // Get marker state helper
   const getMarkerState = useCallback((id: string, correspondingMarker: any) => {
-    const isSelected = isFullscreenRef.current && selectedMarker?.listing.id === id;
-    const isHovered = hoveredListing?.id === id || (!isFullscreenRef.current && clickedMarkerId === id);
+    const isSelected = selectedMarker?.listing.id === id;
+    const isHovered = hoveredListing?.id === id || clickedMarkerId === id;
     const isLiked = correspondingMarker?.listing.isLiked;
     const isDisliked = correspondingMarker?.listing.isDisliked;
 

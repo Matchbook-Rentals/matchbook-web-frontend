@@ -7,13 +7,13 @@ import { GuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { FilterOptions, matchesFilters } from '@/lib/listing-filters';
-import { getListingsByBounds, type MapBounds } from '@/app/actions/listings';
+import { getListingsByBounds, getListingsWithDates, type MapBounds } from '@/app/actions/listings';
 import SearchFiltersModal from './search-filters-modal';
 import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-search-listings-grid';
 import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
 import GuestSearchMapMobile from '@/app/guest/rent/searches/components/guest-search-map-mobile';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
-import SearchResultsNavbar from '@/components/newnew/search-results-navbar';
+import SearchResultsNavbar, { TripDataChange } from '@/components/newnew/search-results-navbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { calculateRent } from '@/lib/calculate-rent';
 import { Badge } from '@/components/ui/badge';
@@ -227,6 +227,9 @@ export default function SearchPageClient({
     sessionId: initialSessionId,
   });
 
+  // Local trip data state that can be updated from navbar
+  const [localTripData, setLocalTripData] = useState<TripData | null>(tripData || null);
+
   // Local state for favorites/dislikes
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
   const [dislikedIds, setDislikedIds] = useState<Set<string>>(new Set());
@@ -336,7 +339,7 @@ export default function SearchPageClient({
       longitude: currentMapCenter.lng,
       startDate: tripData?.startDate ? new Date(tripData.startDate) : undefined,
       endDate: tripData?.endDate ? new Date(tripData.endDate) : undefined,
-      numAdults: tripData?.numAdults ?? 1,
+      numAdults: tripData?.numAdults ?? 0,
       numChildren: tripData?.numChildren ?? 0,
       numPets: tripData?.numPets ?? 0,
     };
@@ -467,6 +470,47 @@ export default function SearchPageClient({
     }
   }, []);
 
+  // Refetch listings with date filtering when dates change
+  const refetchListingsWithDates = useCallback(async (startDate: string, endDate: string) => {
+    setIsSearching(true);
+    try {
+      const results = await getListingsWithDates(
+        currentMapCenter.lat,
+        currentMapCenter.lng,
+        PREFETCH_RADIUS_MILES,
+        new Date(startDate),
+        new Date(endDate)
+      );
+      setListings(results);
+      lastFetchedBoundsRef.current = null;
+      setStaleBounds(null);
+    } catch (error) {
+      console.error('Error refetching listings with dates:', error);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [currentMapCenter]);
+
+  // Handle trip data changes from navbar (dates/guests on blur)
+  const handleTripDataChange = useCallback((changes: TripDataChange) => {
+    setLocalTripData(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        ...(changes.startDate !== undefined && { startDate: changes.startDate }),
+        ...(changes.endDate !== undefined && { endDate: changes.endDate }),
+        ...(changes.numAdults !== undefined && { numAdults: changes.numAdults }),
+        ...(changes.numChildren !== undefined && { numChildren: changes.numChildren }),
+        ...(changes.numPets !== undefined && { numPets: changes.numPets }),
+      };
+    });
+
+    // If dates changed and need refetch, fetch listings with new dates
+    if (changes.needsRefetch && changes.startDate && changes.endDate) {
+      refetchListingsWithDates(changes.startDate, changes.endDate);
+    }
+  }, [refetchListingsWithDates]);
+
   // Build the GuestTripContext shim
   const shimSession: GuestSession = useMemo(() => ({
     id: 'search-page',
@@ -542,14 +586,14 @@ export default function SearchPageClient({
     optimisticRemoveDislike,
   }), [favIds, dislikedIds, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
 
-  // Map markers
+  // Map markers - use localTripData for dates to enable price calculation
   const mockTrip = useMemo(() => ({
     latitude: currentMapCenter.lat,
     longitude: currentMapCenter.lng,
     searchRadius: PREFETCH_RADIUS_MILES,
-    startDate: undefined,
-    endDate: undefined,
-  }), [currentMapCenter]);
+    startDate: localTripData?.startDate ? new Date(localTripData.startDate) : undefined,
+    endDate: localTripData?.endDate ? new Date(localTripData.endDate) : undefined,
+  }), [currentMapCenter, localTripData]);
 
   const markers = useMemo(() =>
     showListings
@@ -586,8 +630,9 @@ export default function SearchPageClient({
           tripId={currentTripId}
           sessionId={currentSessionId}
           currentCenter={currentMapCenter}
-          tripData={tripData}
+          tripData={localTripData}
           onSearchUpdate={handleSearchUpdate}
+          onTripDataChange={handleTripDataChange}
         />
 
         {/* Main content */}
