@@ -206,7 +206,7 @@ export class GuestSessionService {
         startDate,
         endDate,
         guests: {
-          adults: tripData.numAdults || 1,
+          adults: tripData.numAdults ?? 0,
           children: tripData.numChildren || 0,
           pets: tripData.numPets || 0,
         },

@@ -56,13 +56,16 @@ const NewNewHomePage = async () => {
       recentSearches = trips.slice(0, 3).map((trip) => {
         const formatDate = (d: Date | null | undefined) =>
           d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-        const totalRenters = (trip.numAdults || 1) + (trip.numChildren || 0);
+        const totalRenters = (trip.numAdults ?? 0) + (trip.numChildren ?? 0);
         const dateStr = trip.startDate && trip.endDate
           ? `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`
           : 'Flexible dates';
+        const renterStr = totalRenters === 0
+          ? 'Add Renters'
+          : `${totalRenters} Renter${totalRenters !== 1 ? 's' : ''}`;
         return {
           location: trip.locationString || 'Unknown location',
-          details: `${dateStr} - ${totalRenters} Renter${totalRenters !== 1 ? 's' : ''}`,
+          details: `${dateStr} - ${renterStr}`,
         };
       });
     } catch {

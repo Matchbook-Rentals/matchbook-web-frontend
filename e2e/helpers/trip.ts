@@ -29,7 +29,7 @@ export async function createTripViaAPI(
       longitude: tripData.longitude || -97.7431,
       startDate: tripData.startDate?.toISOString(),
       endDate: tripData.endDate?.toISOString(),
-      numAdults: tripData.numAdults || 1,
+      numAdults: tripData.numAdults ?? 0,
       numChildren: tripData.numChildren || 0,
       numPets: tripData.numPets || 0,
     },

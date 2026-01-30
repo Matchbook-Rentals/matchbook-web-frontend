@@ -78,7 +78,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         tripData = {
           startDate: trip.startDate ? trip.startDate.toISOString() : null,
           endDate: trip.endDate ? trip.endDate.toISOString() : null,
-          numAdults: trip.numAdults ?? 1,
+          numAdults: trip.numAdults ?? 0,
           numChildren: trip.numChildren ?? 0,
           numPets: trip.numPets ?? 0,
           locationString,

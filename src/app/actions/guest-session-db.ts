@@ -44,7 +44,7 @@ export async function createGuestSession(data: CreateGuestSessionData): Promise<
         state: data.state,
         startDate: data.startDate,
         endDate: data.endDate,
-        numAdults: data.numAdults || 1,
+        numAdults: data.numAdults ?? 0,
         numChildren: data.numChildren || 0,
         numPets: data.numPets || 0,
         expiresAt,

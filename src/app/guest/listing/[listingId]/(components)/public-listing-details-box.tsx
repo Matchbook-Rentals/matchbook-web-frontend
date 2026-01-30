@@ -58,7 +58,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   const [popoverEnd, setPopoverEnd] = useState<Date | null>(null);
   const [popoverStep, setPopoverStep] = useState<'dates' | 'who'>('dates');
   const [guests, setGuests] = useState({
-    adults: tripContext?.numAdults ?? 1,
+    adults: tripContext?.numAdults ?? 0,
     children: tripContext?.numChildren ?? 0,
     pets: tripContext?.numPets ?? 0,
   });
@@ -89,8 +89,13 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   const handlePopoverContinue = () => {
     if (popoverStep === 'dates' && popoverStart && popoverEnd) {
       setPopoverStep('who');
-    } else if (popoverStep === 'who' && popoverStart && popoverEnd && onDatesSelected) {
-      onDatesSelected(popoverStart, popoverEnd, guests);
+    } else if (popoverStep === 'who' && onDatesSelected) {
+      // Use tripContext dates if available, otherwise use popover dates
+      const startDate = tripContext?.startDate || popoverStart;
+      const endDate = tripContext?.endDate || popoverEnd;
+      if (startDate && endDate) {
+        onDatesSelected(startDate, endDate, guests);
+      }
     }
   };
 
@@ -101,12 +106,19 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   };
 
   const hasDates = !!(tripContext?.startDate && tripContext?.endDate);
-  const hasGuestInfo = !!(tripContext?.numAdults !== undefined);
+  const hasRenterInfo = (tripContext?.numAdults ?? 0) > 0;
   const displayStart = tripContext?.startDate || popoverStart;
   const displayEnd = tripContext?.endDate || popoverEnd;
-  const displayGuests = hasGuestInfo
+  const displayGuests = hasRenterInfo
     ? { adults: tripContext!.numAdults!, children: tripContext!.numChildren ?? 0, pets: tripContext!.numPets ?? 0 }
     : guests;
+
+  // Determine initial popover step based on what data is missing
+  const getInitialPopoverStep = (): 'dates' | 'who' => {
+    if (!hasDates) return 'dates';
+    if (!hasRenterInfo) return 'who';
+    return 'dates'; // fallback
+  };
   const totalRenters = displayGuests.adults + displayGuests.children;
 
   const getPriceRange = () => {
@@ -263,8 +275,8 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
         ) : (
           // Signed in
           <div className="flex flex-col gap-2 w-full mt-1">
-            {/* Show Apply button when dates are filled, otherwise show date picker */}
-            {hasDates ? (
+            {/* Show Apply button when dates AND renter info are filled, otherwise show popover */}
+            {hasDates && hasRenterInfo ? (
               <BrandButton
                 variant={hasApplied || isMatched ? "secondary" : "outline"}
                 className={`w-full min-w-0 font-semibold transition-colors ${
@@ -279,7 +291,9 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
               </BrandButton>
             ) : onApplyClick ? (
               <Popover open={showDatePopover} onOpenChange={(open) => {
-                if (!open) setPopoverStep('dates');
+                if (open) {
+                  setPopoverStep(getInitialPopoverStep());
+                }
                 onDatePopoverChange?.(open);
               }}>
                 <PopoverTrigger asChild>
@@ -302,7 +316,9 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                       <div>
                         <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Renters</div>
                         <div className={`text-sm font-['Poppins'] ${totalRenters > 0 ? 'text-[#373940]' : 'text-gray-400'}`}>
-                          {totalRenters} renter{totalRenters !== 1 ? 's' : ''}{displayGuests.pets > 0 ? `, ${displayGuests.pets} pet${displayGuests.pets !== 1 ? 's' : ''}` : ''}
+                          {totalRenters === 0 && displayGuests.pets === 0
+                            ? 'Add Renters'
+                            : `${totalRenters} renter${totalRenters !== 1 ? 's' : ''}${displayGuests.pets > 0 ? `, ${displayGuests.pets} pet${displayGuests.pets !== 1 ? 's' : ''}` : ''}`}
                         </div>
                       </div>
                       <ChevronDown className="w-5 h-5 text-gray-500" />
@@ -329,24 +345,46 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                     ) : (
                       <div className="min-w-[280px]">
                         <div className="flex items-center gap-2 mb-2">
-                          <button
-                            onClick={handlePopoverBack}
-                            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                          >
-                            <ChevronLeft className="w-5 h-5 text-gray-600" />
-                          </button>
-                          <h3 className="font-semibold text-[#373940] font-['Poppins']">Who's coming?</h3>
+                          {/* Only show back button if dates were entered via popover (not from tripContext) */}
+                          {!hasDates && (
+                            <button
+                              onClick={handlePopoverBack}
+                              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                              <ChevronLeft className="w-5 h-5 text-gray-600" />
+                            </button>
+                          )}
+                          <h3 className="font-semibold text-[#373940] font-['Poppins']">Who&apos;s coming?</h3>
                         </div>
                         <GuestTypeCounter guests={guests} setGuests={setGuests} />
                       </div>
                     )}
-                    <Button
-                      onClick={handlePopoverContinue}
-                      disabled={popoverStep === 'dates' && (!popoverStart || !popoverEnd)}
-                      className="w-full bg-[#3c8787] hover:bg-[#2d6b6b] text-white font-semibold"
-                    >
-                      Continue
-                    </Button>
+                    <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-200 mt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (popoverStep === 'dates') {
+                            setPopoverStart(null);
+                            setPopoverEnd(null);
+                          } else {
+                            setGuests({ adults: 0, children: 0, pets: 0 });
+                          }
+                        }}
+                        className="text-sm font-medium text-[#2A7F7A] hover:text-[#236663] underline"
+                      >
+                        {popoverStep === 'dates' ? 'Clear dates' : 'Clear'}
+                      </button>
+                      <Button
+                        onClick={handlePopoverContinue}
+                        disabled={
+                          (popoverStep === 'dates' && (!popoverStart || !popoverEnd)) ||
+                          (popoverStep === 'who' && guests.adults < 1)
+                        }
+                        className="px-6 bg-[#2A7F7A] hover:bg-[#236663] text-white font-medium rounded-lg"
+                      >
+                        Continue
+                      </Button>
+                    </div>
                   </div>
                 </PopoverContent>
               </Popover>
