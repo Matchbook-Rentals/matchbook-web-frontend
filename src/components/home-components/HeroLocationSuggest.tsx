@@ -21,6 +21,7 @@ interface HeroLocationSuggestProps {
   onGeocodingStateChange?: (isGeocoding: boolean) => void;
   showLocationIcon?: boolean;
   placeholder?: string;
+  autoFocus?: boolean;
 }
 
 export default function HeroLocationSuggest({
@@ -33,6 +34,7 @@ export default function HeroLocationSuggest({
   showLocationIcon = false,
   setDisplayValue,
   placeholder = "Enter an address or city",
+  autoFocus = true,
 }: HeroLocationSuggestProps) {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -157,7 +159,7 @@ export default function HeroLocationSuggest({
           placeholder={placeholder}
           type="text"
           className="w-full h-full text-sm focus:outline-none min-w-0 placeholder-[#667085]"
-          autoFocus={true}
+          autoFocus={autoFocus}
         />
       </div>
       {suggestions.length > 0 && (

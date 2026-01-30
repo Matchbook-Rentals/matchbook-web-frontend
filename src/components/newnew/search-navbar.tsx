@@ -271,7 +271,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
 
                   {!isTypingLocation && (
                     <>
-                      {/* Recent Searches */}
+                      {/* Recent Searches - max 3 */}
                       {recentSearches.length > 0 && (
                         <div className="flex flex-col gap-3">
                           <div className="px-3.5">
@@ -280,7 +280,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                             </h3>
                           </div>
 
-                          {recentSearches.map((search, index) => (
+                          {recentSearches.slice(0, 3).map((search, index) => (
                             <button
                               key={`recent-${index}`}
                               className="flex flex-col gap-1.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
@@ -299,31 +299,37 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
                         </div>
                       )}
 
-                      {/* Suggested */}
-                      {suggestedLocations.length > 0 && (
-                        <div className="flex flex-col gap-3">
-                          <div className="px-3.5">
-                            <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
-                              Suggested
-                            </h3>
-                          </div>
+                      {/* Suggested - show (5 - recentSearches count) items */}
+                      {(() => {
+                        const recentCount = Math.min(recentSearches.length, 3);
+                        const suggestedCount = Math.max(0, 5 - recentCount);
+                        const visibleSuggestions = suggestedLocations.slice(0, suggestedCount);
 
-                          {suggestedLocations.map((location, index) => (
-                            <button
-                              key={`suggested-${index}`}
-                              className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
-                              onClick={() => handleSuggestedLocationClick(location.title)}
-                            >
-                              <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
-                                <Building2 className="w-6 h-6 text-gray-500" />
-                              </div>
-                              <span className="font-medium text-[#0d1b2a] text-sm leading-5 whitespace-nowrap">
-                                {location.title}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      )}
+                        return visibleSuggestions.length > 0 ? (
+                          <div className="flex flex-col gap-3">
+                            <div className="px-3.5">
+                              <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
+                                Suggested
+                              </h3>
+                            </div>
+
+                            {visibleSuggestions.map((location, index) => (
+                              <button
+                                key={`suggested-${index}`}
+                                className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                                onClick={() => handleSuggestedLocationClick(location.title)}
+                              >
+                                <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
+                                  <Building2 className="w-6 h-6 text-gray-500" />
+                                </div>
+                                <span className="font-medium text-[#0d1b2a] text-sm leading-5 whitespace-nowrap">
+                                  {location.title}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        ) : null;
+                      })()}
                     </>
                   )}
                 </div>

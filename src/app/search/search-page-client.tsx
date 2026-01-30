@@ -14,6 +14,7 @@ import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-ma
 import GuestSearchMapMobile from '@/app/guest/rent/searches/components/guest-search-map-mobile';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
 import SearchResultsNavbar, { TripDataChange } from '@/components/newnew/search-results-navbar';
+import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { calculateRent } from '@/lib/calculate-rent';
 import { Badge } from '@/components/ui/badge';
@@ -47,6 +48,8 @@ interface SearchPageClientProps {
   sessionId?: string;
   tripData?: TripData | null;
   hasLocationParams: boolean;
+  recentSearches?: RecentSearch[];
+  suggestedLocations?: SuggestedLocationItem[];
 }
 
 export function buildSearchUrl(params: {
@@ -211,6 +214,7 @@ const BOUNDS_EPSILON = 0.001;
 export default function SearchPageClient({
   listings: initialListings, center, locationString, isSignedIn, userId, user,
   tripId: initialTripId, sessionId: initialSessionId, tripData, hasLocationParams,
+  recentSearches = [], suggestedLocations = [],
 }: SearchPageClientProps) {
   const router = useRouter();
 
@@ -659,6 +663,8 @@ export default function SearchPageClient({
           tripData={localTripData}
           onSearchUpdate={handleSearchUpdate}
           onTripDataChange={handleTripDataChange}
+          recentSearches={recentSearches}
+          suggestedLocations={suggestedLocations}
         />
 
         {/* Main content */}

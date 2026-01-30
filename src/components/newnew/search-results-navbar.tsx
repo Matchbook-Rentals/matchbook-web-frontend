@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { SearchIcon } from 'lucide-react';
+import { SearchIcon, Clock, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import UserMenu from '@/components/userMenu';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
@@ -22,6 +22,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { SuggestedLocation } from '@/types';
 import { ImSpinner8 } from 'react-icons/im';
 import type { TripData } from '@/app/search/page';
+import type { RecentSearch, SuggestedLocationItem } from './search-navbar';
 
 interface UserObject {
   id: string;
@@ -52,6 +53,8 @@ interface SearchResultsNavbarProps {
   tripData?: TripData | null;
   onSearchUpdate?: (newTripId?: string, newSessionId?: string) => void; // kept for potential future use
   onTripDataChange?: (changes: TripDataChange) => void;
+  recentSearches?: RecentSearch[];
+  suggestedLocations?: SuggestedLocationItem[];
 }
 
 type ActivePopover = 'where' | 'when' | 'who' | null;
@@ -79,6 +82,8 @@ export default function SearchResultsNavbar({
   tripData,
   onSearchUpdate,
   onTripDataChange,
+  recentSearches = [],
+  suggestedLocations = [],
 }: SearchResultsNavbarProps) {
   const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
@@ -132,6 +137,24 @@ export default function SearchResultsNavbar({
     setSelectedLocation(location);
     if (location?.lat && location?.lng) {
       setActivePopover('when');
+    }
+  };
+
+  const handleSuggestedLocationClick = async (title: string) => {
+    const locationName = title.replace(/^Monthly Rentals in\s*/i, '');
+    setLocationDisplayValue(locationName);
+    setActivePopover(null);
+
+    try {
+      const response = await fetch(`/api/geocode?address=${encodeURIComponent(locationName)}`);
+      const data = await response.json();
+
+      if (data.results && data.results.length > 0) {
+        const { lat, lng } = data.results[0].geometry.location;
+        setSelectedLocation({ description: locationName, lat, lng });
+      }
+    } catch {
+      // Geocoding failed — display value is already set
     }
   };
 
@@ -429,7 +452,7 @@ export default function SearchResultsNavbar({
                   </button>
                 </PopoverTrigger>
                 <PopoverContent
-                  className="w-[min(402px,calc(100vw-2rem))] p-0 border-[#e9e9eb]"
+                  className="w-[min(402px,calc(100vw-2rem))] p-0 border-[#e9e9eb] rounded-lg"
                   align="start"
                   sideOffset={12}
                   onOpenAutoFocus={(e) => e.preventDefault()}
@@ -449,6 +472,70 @@ export default function SearchResultsNavbar({
                           : 'Enter an address or city'
                       }
                     />
+
+                    {!isTypingLocation && (
+                      <>
+                        {/* Recent Searches - max 3 */}
+                        {recentSearches.length > 0 && (
+                          <div className="flex flex-col gap-3">
+                            <div className="px-3.5">
+                              <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
+                                Recent Searches
+                              </h3>
+                            </div>
+
+                            {recentSearches.slice(0, 3).map((search, index) => (
+                              <button
+                                key={`recent-${index}`}
+                                className="flex flex-col gap-1.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Clock className="w-5 h-5 text-gray-500" />
+                                  <span className="font-medium text-[#0d1b2a] text-sm leading-5">
+                                    {search.location}
+                                  </span>
+                                </div>
+                                <span className="ml-[30px] text-xs text-gray-400">
+                                  {search.details}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Suggested - show (5 - recentSearches count) items */}
+                        {(() => {
+                          const recentCount = Math.min(recentSearches.length, 3);
+                          const suggestedCount = Math.max(0, 5 - recentCount);
+                          const visibleSuggestions = suggestedLocations.slice(0, suggestedCount);
+
+                          return visibleSuggestions.length > 0 ? (
+                            <div className="flex flex-col gap-3">
+                              <div className="px-3.5">
+                                <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
+                                  Suggested
+                                </h3>
+                              </div>
+
+                              {visibleSuggestions.map((location, index) => (
+                                <button
+                                  key={`suggested-${index}`}
+                                  className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                                  onClick={() => handleSuggestedLocationClick(location.title)}
+                                >
+                                  <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
+                                    <Building2 className="w-6 h-6 text-gray-500" />
+                                  </div>
+                                  <span className="font-medium text-[#0d1b2a] text-sm leading-5 whitespace-nowrap">
+                                    {location.title}
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                          ) : null;
+                        })()}
+                      </>
+                    )}
                   </div>
                 </PopoverContent>
               </Popover>
@@ -490,7 +577,7 @@ export default function SearchResultsNavbar({
                   </button>
                 </PopoverTrigger>
                 <PopoverContent
-                  className="w-[320px] p-0"
+                  className="w-[320px] p-0 rounded-lg"
                   align="end"
                   sideOffset={12}
                   onOpenAutoFocus={(e) => e.preventDefault()}

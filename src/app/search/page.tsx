@@ -1,10 +1,11 @@
 import { redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
-import { getListingsNearLocation } from '@/app/actions/listings';
-import { getTripById, createTripFromGuestSession } from '@/app/actions/trips';
+import { getListingsNearLocation, getPopularListingAreas } from '@/app/actions/listings';
+import { getTripById, createTripFromGuestSession, getAllUserTrips } from '@/app/actions/trips';
 import { getGuestSession } from '@/app/actions/guest-session-db';
 import { convertGuestSessionToTrip } from '@/app/actions/guest-to-trip';
 import SearchPageClient from './search-page-client';
+import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
 
 const OGDEN_UT = { lat: 41.223, lng: -111.9738, city: 'Ogden', state: 'UT' };
 
@@ -136,7 +137,40 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const PREFETCH_RADIUS_MILES = 25;
   const PREFETCH_COUNT = 100;
-  const listings = await getListingsNearLocation(lat, lng, PREFETCH_COUNT, PREFETCH_RADIUS_MILES);
+  const [listings, popularAreas] = await Promise.all([
+    getListingsNearLocation(lat, lng, PREFETCH_COUNT, PREFETCH_RADIUS_MILES),
+    getPopularListingAreas(5),
+  ]);
+
+  // Build recent searches from user's trips
+  let recentSearches: RecentSearch[] = [];
+  if (user?.id) {
+    try {
+      const trips = await getAllUserTrips();
+      recentSearches = trips.slice(0, 3).map((trip) => {
+        const formatDate = (d: Date | null | undefined) =>
+          d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+        const totalRenters = (trip.numAdults ?? 0) + (trip.numChildren ?? 0);
+        const dateStr = trip.startDate && trip.endDate
+          ? `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`
+          : 'Flexible dates';
+        const renterStr = totalRenters === 0
+          ? 'Add Renters'
+          : `${totalRenters} Renter${totalRenters !== 1 ? 's' : ''}`;
+        return {
+          location: trip.locationString || 'Unknown location',
+          details: `${dateStr} - ${renterStr}`,
+        };
+      });
+    } catch {
+      // User may not be authenticated or trips may fail - that's fine
+    }
+  }
+
+  // Build suggested locations from popular areas
+  const suggestedLocations: SuggestedLocationItem[] = popularAreas.map((area) => ({
+    title: `Monthly Rentals in ${area.city}, ${area.state}`,
+  }));
 
   return (
     <SearchPageClient
@@ -150,6 +184,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       sessionId={sessionId}
       tripData={tripData}
       hasLocationParams={hasLocationParams}
+      recentSearches={recentSearches}
+      suggestedLocations={suggestedLocations}
     />
   );
 }

@@ -167,6 +167,7 @@ export default function MobileSearchOverlay({
                   showLocationIcon={true}
                   setDisplayValue={setLocationDisplayValue}
                   contentClassName="p-0"
+                  autoFocus={false}
                   placeholder={
                     selectedLocation?.description
                       ? 'Wrong place? Begin typing and select another'
@@ -176,12 +177,13 @@ export default function MobileSearchOverlay({
 
                 {!isTypingLocation && (
                   <>
+                    {/* Recent Searches - max 3 on mobile */}
                     {recentSearches.length > 0 && (
                       <div className="flex flex-col gap-2">
                         <h3 className="font-normal text-[#0d1b2a] text-xs leading-5 px-1">
                           Recent Searches
                         </h3>
-                        {recentSearches.map((search, index) => (
+                        {recentSearches.slice(0, 3).map((search, index) => (
                           <button
                             key={`recent-mobile-${index}`}
                             className="flex flex-col gap-1 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
@@ -198,27 +200,34 @@ export default function MobileSearchOverlay({
                       </div>
                     )}
 
-                    {suggestedLocations.length > 0 && (
-                      <div className="flex flex-col gap-2">
-                        <h3 className="font-normal text-[#0d1b2a] text-xs leading-5 px-1">
-                          Suggested
-                        </h3>
-                        {suggestedLocations.map((location, index) => (
-                          <button
-                            key={`suggested-mobile-${index}`}
-                            className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
-                            onClick={() => handleSuggestedClick(location.title)}
-                          >
-                            <div className="flex w-[48px] h-[48px] items-center justify-center bg-white rounded-lg border border-[#eaecf0] shadow-sm flex-shrink-0">
-                              <Building2 className="w-5 h-5 text-gray-500" />
-                            </div>
-                            <span className="font-medium text-[#0d1b2a] text-sm">
-                              {location.title}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    {/* Suggested - show (3 - recentSearches count) items on mobile */}
+                    {(() => {
+                      const recentCount = Math.min(recentSearches.length, 3);
+                      const suggestedCount = Math.max(0, 3 - recentCount);
+                      const visibleSuggestions = suggestedLocations.slice(0, suggestedCount);
+
+                      return visibleSuggestions.length > 0 ? (
+                        <div className="flex flex-col gap-2">
+                          <h3 className="font-normal text-[#0d1b2a] text-xs leading-5 px-1">
+                            Suggested
+                          </h3>
+                          {visibleSuggestions.map((location, index) => (
+                            <button
+                              key={`suggested-mobile-${index}`}
+                              className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
+                              onClick={() => handleSuggestedClick(location.title)}
+                            >
+                              <div className="flex w-[48px] h-[48px] items-center justify-center bg-white rounded-lg border border-[#eaecf0] shadow-sm flex-shrink-0">
+                                <Building2 className="w-5 h-5 text-gray-500" />
+                              </div>
+                              <span className="font-medium text-[#0d1b2a] text-sm">
+                                {location.title}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      ) : null;
+                    })()}
                   </>
                 )}
               </div>
