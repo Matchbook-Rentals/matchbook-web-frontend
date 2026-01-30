@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { SearchIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,15 @@ interface UserObject {
   publicMetadata?: Record<string, any>;
 }
 
+export interface TripDataChange {
+  startDate?: string | null;
+  endDate?: string | null;
+  numAdults?: number;
+  numChildren?: number;
+  numPets?: number;
+  needsRefetch?: boolean;
+}
+
 interface SearchResultsNavbarProps {
   userId: string | null;
   user: UserObject | null;
@@ -42,6 +51,7 @@ interface SearchResultsNavbarProps {
   currentCenter?: { lat: number; lng: number };
   tripData?: TripData | null;
   onSearchUpdate?: (newTripId?: string, newSessionId?: string) => void; // kept for potential future use
+  onTripDataChange?: (changes: TripDataChange) => void;
 }
 
 type ActivePopover = 'where' | 'when' | 'who' | null;
@@ -68,6 +78,7 @@ export default function SearchResultsNavbar({
   currentCenter,
   tripData,
   onSearchUpdate,
+  onTripDataChange,
 }: SearchResultsNavbarProps) {
   const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
@@ -79,12 +90,26 @@ export default function SearchResultsNavbar({
     end: tripData?.endDate ? new Date(tripData.endDate) : null,
   }));
   const [guests, setGuests] = useState(() => ({
-    adults: tripData?.numAdults ?? 1,
+    adults: tripData?.numAdults ?? 0,
     children: tripData?.numChildren ?? 0,
     pets: tripData?.numPets ?? 0,
   }));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeocoding, setIsGeocoding] = useState(false);
+  const [isSavingDates, setIsSavingDates] = useState(false);
+  const [isSavingGuests, setIsSavingGuests] = useState(false);
+
+  // Track if we had dates when component mounted (for detecting "first time adding dates")
+  const hadDatesInitially = useRef(Boolean(tripData?.startDate && tripData?.endDate));
+  const initialDates = useRef({
+    start: tripData?.startDate || null,
+    end: tripData?.endDate || null,
+  });
+  const initialGuests = useRef({
+    adults: tripData?.numAdults ?? 0,
+    children: tripData?.numChildren ?? 0,
+    pets: tripData?.numPets ?? 0,
+  });
 
   const { isSignedIn: isClerkSignedIn } = useAuth();
   const { toast } = useToast();
@@ -103,10 +128,6 @@ export default function SearchResultsNavbar({
     checkUserListings();
   }, [isSignedIn, userId]);
 
-  const handlePopoverChange = (popover: ActivePopover, open: boolean) => {
-    setActivePopover(open ? popover : null);
-  };
-
   const handleLocationSelect = (location: SuggestedLocation | null) => {
     setSelectedLocation(location);
     if (location?.lat && location?.lng) {
@@ -116,6 +137,141 @@ export default function SearchResultsNavbar({
 
   const handleDateChange = (start: Date | null, end: Date | null) => {
     setDateRange({ start, end });
+  };
+
+  // Check if dates have changed from initial values
+  const haveDatesChanged = () => {
+    const startChanged = dateRange.start?.toISOString() !== initialDates.current.start;
+    const endChanged = dateRange.end?.toISOString() !== initialDates.current.end;
+    return startChanged || endChanged;
+  };
+
+  // Check if guests have changed from initial values
+  const haveGuestsChanged = () => {
+    return (
+      guests.adults !== initialGuests.current.adults ||
+      guests.children !== initialGuests.current.children ||
+      guests.pets !== initialGuests.current.pets
+    );
+  };
+
+  // Save dates on blur when the date popover closes
+  const saveDatesOnBlur = async () => {
+    // Only proceed if we have both dates and they've changed
+    if (!dateRange.start || !dateRange.end || !haveDatesChanged()) return;
+    if (isSavingDates) return;
+
+    // Determine if this is adding dates for the first time or changing existing dates
+    const isAddingDatesFirstTime = !hadDatesInitially.current;
+    const isChangingExistingDates = hadDatesInitially.current;
+
+    setIsSavingDates(true);
+
+    try {
+      // Save to database
+      if (isClerkSignedIn && tripId) {
+        const response = await editTrip(tripId, {
+          startDate: dateRange.start,
+          endDate: dateRange.end,
+        });
+        if (!response.success) {
+          toast({ variant: 'destructive', description: response.error || 'Failed to save dates' });
+          return;
+        }
+      } else if (sessionId) {
+        const response = await updateGuestSession(sessionId, {
+          startDate: dateRange.start,
+          endDate: dateRange.end,
+        });
+        if (!response.success) {
+          toast({ variant: 'destructive', description: response.error || 'Failed to save dates' });
+          return;
+        }
+      } else {
+        // No trip or session yet - don't auto-save, user must click search
+        return;
+      }
+
+      // Update initial refs so subsequent blurs know the new baseline
+      initialDates.current = {
+        start: dateRange.start.toISOString(),
+        end: dateRange.end.toISOString(),
+      };
+      hadDatesInitially.current = true;
+
+      // Notify parent about the change
+      onTripDataChange?.({
+        startDate: dateRange.start.toISOString(),
+        endDate: dateRange.end.toISOString(),
+        needsRefetch: isChangingExistingDates,
+      });
+    } catch {
+      toast({ variant: 'destructive', description: 'Failed to save dates' });
+    } finally {
+      setIsSavingDates(false);
+    }
+  };
+
+  // Save guests on blur when the guest popover closes
+  const saveGuestsOnBlur = async () => {
+    if (!haveGuestsChanged()) return;
+    if (isSavingGuests) return;
+
+    setIsSavingGuests(true);
+
+    try {
+      if (isClerkSignedIn && tripId) {
+        const response = await editTrip(tripId, {
+          numAdults: guests.adults,
+          numChildren: guests.children,
+          numPets: guests.pets,
+        });
+        if (!response.success) {
+          toast({ variant: 'destructive', description: response.error || 'Failed to save guests' });
+          return;
+        }
+      } else if (sessionId) {
+        const response = await updateGuestSession(sessionId, {
+          numAdults: guests.adults,
+          numChildren: guests.children,
+          numPets: guests.pets,
+        });
+        if (!response.success) {
+          toast({ variant: 'destructive', description: response.error || 'Failed to save guests' });
+          return;
+        }
+      } else {
+        // No trip or session yet - don't auto-save
+        return;
+      }
+
+      // Update initial refs
+      initialGuests.current = { ...guests };
+
+      // Notify parent about the change (guests don't trigger refetch)
+      onTripDataChange?.({
+        numAdults: guests.adults,
+        numChildren: guests.children,
+        numPets: guests.pets,
+        needsRefetch: false,
+      });
+    } catch {
+      toast({ variant: 'destructive', description: 'Failed to save guests' });
+    } finally {
+      setIsSavingGuests(false);
+    }
+  };
+
+  // Handle popover open/close - triggers save on close
+  const handlePopoverChange = (popover: ActivePopover, open: boolean) => {
+    // When closing a popover, trigger save before changing state
+    if (!open && activePopover === 'when') {
+      saveDatesOnBlur();
+    }
+    if (!open && activePopover === 'who') {
+      saveGuestsOnBlur();
+    }
+    setActivePopover(open ? popover : null);
   };
 
   const formatDateDisplay = () => {
@@ -129,8 +285,8 @@ export default function SearchResultsNavbar({
 
   const formatGuestDisplay = () => {
     const renters = guests.adults + guests.children;
-    const total = renters + guests.pets;
-    if (total <= 1) return '';
+    // Show "Add Renters" (empty string) only when no renters are set
+    if (renters === 0 && guests.pets === 0) return '';
     const parts: string[] = [];
     if (renters > 0) parts.push(`${renters} Renter${renters !== 1 ? 's' : ''}`);
     if (guests.pets > 0) parts.push(`${guests.pets} Pet${guests.pets !== 1 ? 's' : ''}`);

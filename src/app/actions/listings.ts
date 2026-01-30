@@ -1614,6 +1614,149 @@ export const getListingsNearLocation = async (
 };
 
 /**
+ * Get listings near a location filtered by trip dates.
+ * Used for refetching when dates change to ensure availability
+ * and pricing compatibility with new trip duration.
+ * No authentication required - public endpoint.
+ */
+export const getListingsWithDates = async (
+  lat: number,
+  lng: number,
+  radiusMiles: number,
+  startDate: Date,
+  endDate: Date
+): Promise<ListingAndImages[]> => {
+  const earthRadiusMiles = 3959;
+  const tripLengthDays = Math.max(1, differenceInDays(endDate, startDate));
+  const tripLengthMonths = Math.max(1, Math.floor(tripLengthDays / 30.44));
+
+  try {
+    // Get listing IDs within radius
+    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
+      SELECT l.id,
+        (${earthRadiusMiles} * acos(
+          cos(radians(${lat})) * cos(radians(l.latitude)) *
+          cos(radians(l.longitude) - radians(${lng})) +
+          sin(radians(${lat})) * sin(radians(l.latitude))
+        )) AS distance
+      FROM Listing l
+      WHERE l.approvalStatus = 'approved'
+        AND l.markedActiveByUser = true
+        AND l.deletedAt IS NULL
+        AND l.latitude != 0
+        AND l.longitude != 0
+      HAVING distance <= ${radiusMiles}
+      ORDER BY distance
+      LIMIT 100
+    `;
+
+    if (listingsWithDistance.length === 0) {
+      return [];
+    }
+
+    const listingIds = listingsWithDistance.map(l => l.id);
+
+    // Fetch full listing details with availability and pricing filtering
+    const listings = await prisma.listing.findMany({
+      where: {
+        AND: [
+          { id: { in: listingIds } },
+          { deletedAt: null },
+          // Exclude listings with overlapping unavailability
+          {
+            NOT: {
+              unavailablePeriods: {
+                some: {
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } }
+                  ]
+                }
+              }
+            }
+          },
+          // Exclude listings with overlapping active bookings
+          {
+            NOT: {
+              bookings: {
+                some: {
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } },
+                    { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } }
+                  ]
+                }
+              }
+            }
+          },
+          // Include only listings with compatible monthly pricing
+          {
+            monthlyPricing: {
+              some: {
+                months: tripLengthMonths
+              }
+            }
+          }
+        ]
+      },
+      include: {
+        listingImages: { orderBy: { rank: 'asc' } },
+        bedrooms: true,
+        unavailablePeriods: true,
+        user: true,
+        monthlyPricing: true
+      }
+    });
+
+    // Combine distance info with listing details
+    const distanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
+
+    const listingsWithFullDetails = listings.map(listing => {
+      const distance = distanceMap.get(listing.id) ?? Infinity;
+      const normalizedCategory = normalizeCategory(listing.category);
+
+      // Calculate utilities for trip duration
+      const lengthOfStay = calculateLengthOfStay(startDate, endDate);
+      const matchingPricing = listing.monthlyPricing?.find(
+        pricing => pricing.months === lengthOfStay.months
+      );
+
+      let utilitiesIncluded = false;
+      if (matchingPricing?.utilitiesIncluded !== undefined) {
+        utilitiesIncluded = matchingPricing.utilitiesIncluded;
+      } else if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
+        const closest = listing.monthlyPricing.reduce((prev, curr) => {
+          const prevDiff = Math.abs(prev.months - lengthOfStay.months);
+          const currDiff = Math.abs(curr.months - lengthOfStay.months);
+          if (currDiff < prevDiff) return curr;
+          if (currDiff === prevDiff && curr.months < prev.months) return curr;
+          return prev;
+        });
+        utilitiesIncluded = closest.utilitiesIncluded;
+      }
+
+      return {
+        ...listing,
+        category: normalizedCategory,
+        displayCategory: getCategoryDisplay(normalizedCategory),
+        utilitiesIncluded,
+        distance,
+        listingImages: listing.listingImages,
+        bedrooms: listing.bedrooms,
+        unavailablePeriods: listing.unavailablePeriods
+      };
+    });
+
+    // Sort by distance
+    listingsWithFullDetails.sort((a, b) => a.distance - b.distance);
+    return listingsWithFullDetails;
+  } catch (error) {
+    console.error('Error in getListingsWithDates:', error);
+    return [];
+  }
+};
+
+/**
  * Fetches listings within the given map bounds.
  * Used for dynamic map-based search where listings are fetched as user pans/zooms.
  */
