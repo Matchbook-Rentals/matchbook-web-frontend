@@ -400,204 +400,159 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
             </div>
           </div>
 
-          <div className={`${isMobile ? '' : 'h-[337px]'} flex ${isMobile ? 'flex-col gap-3' : 'items-center gap-5'} w-full`}>
-            <div className="flex flex-col items-start gap-1.5 flex-1">
-              <div className="flex flex-col items-start gap-1.5 w-full">
-                <div className="flex flex-col items-start gap-1.5 w-full">
-                  <div className="inline-flex flex-col items-start justify-center gap-1.5">
-                    <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                      Please upload A photo&nbsp;&nbsp;of your ID
-                    </Label>
-                    <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                      Upload ID (Front)
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-start gap-[18px] w-full">
-                    <div className="flex flex-col items-start gap-3 w-full">
-                      <UploadButton<UploadData, unknown>
-                        endpoint="incomeUploader"
-                        config={{
-                          mode: "auto",
-                          ...(isMobile && {
-                            input: {
-                              accept: "image/*",
-                              capture: "environment"
-                            }
-                          })
-                        }}
-                        className="uploadthing-custom w-full"
-                        appearance={{
-                          button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col h-[140px] gap-[35px] px-[100px] py-[21px]'} box-border items-center justify-center w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
-                          allowedContent: "hidden",
-                        }}
-                        onUploadBegin={(name) => {
-                          console.log('🚀 ID upload begin for file:', name);
-                        }}
-                        onUploadProgress={(progress) => {
-                          console.log('📊 ID upload progress:', progress, '%');
-                        }}
-                        onUploadAborted={() => {
-                          console.warn('⚠️ ID upload was aborted');
-                          toast({
-                            title: "Upload Cancelled",
-                            description: "ID upload was cancelled or timed out",
-                            variant: "destructive"
-                          });
-                        }}
-                        content={{
-                          button: ({ ready, isUploading }) => (
-                            <div className={`inline-flex ${isMobile ? 'flex-row' : 'flex-col'} items-center justify-center gap-3`}>
-                              {isUploading ? (
-                                <Loader2 className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'} text-secondaryBrand animate-spin`} />
-                              ) : (
-                                isMobile ? (
-                                  <Camera className="w-6 h-6 text-secondaryBrand" />
-                                ) : (
-                                  <Upload className="w-8 h-8 text-secondaryBrand" />
-                                )
-                              )}
-
-                              <div className="flex items-center gap-2">
-                                <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                                  {isUploading ? "Uploading..." : (isMobile ? "Upload or take photo" : "Drag and drop file or")}
-                                </div>
-                                {!isUploading && !isMobile && (
-                                  <span className="font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] underline">
-                                    Browse
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          ),
-                        }}
-                        onBeforeUploadBegin={(files) => {
-                          console.log('📤 ID onBeforeUploadBegin called with', files.length, 'files');
-                          
-                          // Validate files
-                          const maxFiles = 5;
-                          const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                          const maxSize = 50 * 1024 * 1024; // 50MB
-                          
-                          const errors: string[] = [];
-                          
-                          if (files.length > maxFiles) {
-                            errors.push(`You can only upload up to ${maxFiles} files at once.`);
-                          }
-                          
-                          files.forEach((file) => {
-                            if (!allowedTypes.includes(file.type.toLowerCase())) {
-                              const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
-                              errors.push(`File "${file.name}" has unsupported type "${fileExtension}". Please use PNG or JPG files only.`);
-                            }
-                            
-                            if (file.size > maxSize) {
-                              errors.push(`File "${file.name}" is too large. Maximum size is 50MB.`);
-                            }
-                          });
-                          
-                          if (errors.length > 0) {
-                            errors.forEach((error, index) => {
-                              setTimeout(() => {
-                                toast({
-                                  title: "Upload Error",
-                                  description: error,
-                                  variant: "destructive"
-                                });
-                              }, index * 100);
-                            });
-                            return [];
-                          }
-                          
-                          return files;
-                        }}
-                        onClientUploadComplete={async (res) => {
-                          console.log('✅ ID upload complete:', res);
-                          handleUploadFinish(res);
-                        }}
-                        onUploadError={(error) => {
-                          console.error("💥 ID upload error:", error);
-                          toast({
-                            title: "Upload Error",
-                            description: error.message || "Failed to upload ID photos. Please try again.",
-                            variant: "destructive"
-                          });
-                        }}
-                      />
-
-                      <div className="flex items-center gap-1 w-full">
-                        <div className="flex-1 font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                          Supported formats: PNG, JPG
-                        </div>
-                        <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                          Maximum size: 50MB
-                        </div>
-                      </div>
-                      {error?.idPhotos && <p className="mt-1 text-red-500 text-sm">{error.idPhotos}</p>}
-                    </div>
-                  </div>
+          <div className="flex flex-col items-start gap-1.5 w-full">
+            <div className="inline-flex flex-col items-start justify-center gap-1.5">
+              <Label className="[font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                {idPhotos && idPhotos.length > 0 ? 'Photo of your ID' : 'Please upload a photo of your ID'}
+              </Label>
+              {(!idPhotos || idPhotos.length === 0) && (
+                <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                  Upload ID (Front)
                 </div>
-              </div>
+              )}
             </div>
 
-            <div className="flex flex-col items-start gap-1.5 flex-1">
-              <div className="flex flex-col items-start gap-1.5 pt-4 pb-0 px-0 w-full">
-                <div className="flex flex-col items-start gap-[18px] w-full">
-                  <div className="flex flex-col items-start gap-3 w-full">
-                    {idPhotos && idPhotos.length > 0 ? (
-                      <SecureFileList
-                        files={idPhotos.map(photo => ({
-                          fileKey: photo.fileKey,
-                          customId: photo.customId,
-                          fileName: photo.fileName || 'ID Photo',
-                          isPrimary: photo.isPrimary,
-                          // Support backward compatibility with direct URLs
-                          url: photo.url
-                        }))}
-                        fileType="image"
-                        className="w-full"
-                        onRemove={(index) => {
-                          // Show confirmation modal
-                          setPhotoToDelete({ index, photo: idPhotos[index] });
-                          setDeleteModalOpen(true);
-                        }}
-                      />
-                    ) : (
-                      <div className={`flex flex-col ${isMobile ? 'gap-3 px-4 py-4' : 'h-[140px] gap-[35px] px-[100px] py-[21px]'} box-border items-center justify-center w-full bg-white rounded-xl border border-solid border-[#e7f0f0]`}>
-                        <div className="inline-flex flex-col items-center justify-center gap-3">
-                          <svg
-                            className="w-11 h-11 text-gray-600"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16"/>
-                            <path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/>
-                            <circle cx="13" cy="7" r="1" fill="currentColor"/>
-                            <rect x="8" y="2" width="14" height="14" rx="2"/>
-                          </svg>
+            {idPhotos && idPhotos.length > 0 ? (
+              <SecureFileList
+                files={idPhotos.map(photo => ({
+                  fileKey: photo.fileKey,
+                  customId: photo.customId,
+                  fileName: photo.fileName || 'ID Photo',
+                  isPrimary: photo.isPrimary,
+                  url: photo.url
+                }))}
+                fileType="image"
+                className="w-full"
+                variant="list"
+                title="Photo of Identification"
+                onRemove={(index) => {
+                  setPhotoToDelete({ index, photo: idPhotos[index] });
+                  setDeleteModalOpen(true);
+                }}
+              />
+            ) : (
+              <div className="flex flex-col items-start gap-3 w-full">
+                <UploadButton<UploadData, unknown>
+                  endpoint="incomeUploader"
+                  config={{
+                    mode: "auto",
+                    ...(isMobile && {
+                      input: {
+                        accept: "image/*",
+                        capture: "environment"
+                      }
+                    })
+                  }}
+                  className="uploadthing-custom w-full"
+                  appearance={{
+                    button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col h-[140px] gap-[35px] px-[100px] py-[21px]'} box-border items-center justify-center w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
+                    allowedContent: "hidden",
+                  }}
+                  onUploadBegin={(name) => {
+                    console.log('🚀 ID upload begin for file:', name);
+                  }}
+                  onUploadProgress={(progress) => {
+                    console.log('📊 ID upload progress:', progress, '%');
+                  }}
+                  onUploadAborted={() => {
+                    console.warn('⚠️ ID upload was aborted');
+                    toast({
+                      title: "Upload Cancelled",
+                      description: "ID upload was cancelled or timed out",
+                      variant: "destructive"
+                    });
+                  }}
+                  content={{
+                    button: ({ ready, isUploading }) => (
+                      <div className={`inline-flex ${isMobile ? 'flex-row' : 'flex-col'} items-center justify-center gap-3`}>
+                        {isUploading ? (
+                          <Loader2 className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'} text-secondaryBrand animate-spin`} />
+                        ) : (
+                          isMobile ? (
+                            <Camera className="w-6 h-6 text-secondaryBrand" />
+                          ) : (
+                            <Upload className="w-8 h-8 text-secondaryBrand" />
+                          )
+                        )}
 
-                          <div className="flex flex-col items-start justify-center w-full">
-                            <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                              ID Photos will display here
-                            </div>
-                            <div className="w-full font-text-label-xsmall-regular font-[number:var(--text-label-xsmall-regular-font-weight)] text-gray-400 text-[length:var(--text-label-xsmall-regular-font-size)] text-center tracking-[var(--text-label-xsmall-regular-letter-spacing)] leading-[var(--text-label-xsmall-regular-line-height)] [font-style:var(--text-label-xsmall-regular-font-style)]">
-                              At least 1 photo is required
-                            </div>
+                        <div className="flex items-center gap-2">
+                          <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-[#717680] text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                            {isUploading ? "Uploading..." : (isMobile ? "Upload or take photo" : "Drag and drop file or")}
                           </div>
+                          {!isUploading && !isMobile && (
+                            <span className="font-text-label-small-medium font-[number:var(--text-label-small-medium-font-weight)] text-[#0b6969] text-[length:var(--text-label-small-medium-font-size)] tracking-[var(--text-label-small-medium-letter-spacing)] leading-[var(--text-label-small-medium-line-height)] [font-style:var(--text-label-small-medium-font-style)] underline">
+                              Browse
+                            </span>
+                          )}
                         </div>
                       </div>
-                    )}
+                    ),
+                  }}
+                  onBeforeUploadBegin={(files) => {
+                    console.log('📤 ID onBeforeUploadBegin called with', files.length, 'files');
+
+                    // Only allow 1 file since we only want one photo
+                    if (files.length > 1) {
+                      toast({
+                        title: "Upload Error",
+                        description: "Please upload only one ID photo.",
+                        variant: "destructive"
+                      });
+                      return [files[0]]; // Only take the first file
+                    }
+
+                    // Validate file
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                    const maxSize = 50 * 1024 * 1024; // 50MB
+
+                    const file = files[0];
+
+                    if (!allowedTypes.includes(file.type.toLowerCase())) {
+                      const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
+                      toast({
+                        title: "Upload Error",
+                        description: `File has unsupported type "${fileExtension}". Please use PNG or JPG files only.`,
+                        variant: "destructive"
+                      });
+                      return [];
+                    }
+
+                    if (file.size > maxSize) {
+                      toast({
+                        title: "Upload Error",
+                        description: "File is too large. Maximum size is 50MB.",
+                        variant: "destructive"
+                      });
+                      return [];
+                    }
+
+                    return [file];
+                  }}
+                  onClientUploadComplete={async (res) => {
+                    console.log('✅ ID upload complete:', res);
+                    handleUploadFinish(res);
+                  }}
+                  onUploadError={(error) => {
+                    console.error("💥 ID upload error:", error);
+                    toast({
+                      title: "Upload Error",
+                      description: error.message || "Failed to upload ID photo. Please try again.",
+                      variant: "destructive"
+                    });
+                  }}
+                />
+
+                <div className="flex items-center gap-1 w-full">
+                  <div className="flex-1 font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                    Supported formats: PNG, JPG
+                  </div>
+                  <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                    Maximum size: 50MB
                   </div>
                 </div>
+                {error?.idPhotos && <p className="mt-1 text-red-500 text-sm">{error.idPhotos}</p>}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </CardContent>
