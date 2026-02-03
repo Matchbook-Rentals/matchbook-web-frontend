@@ -3,7 +3,7 @@
 import { ListingAndImages } from '@/types';
 import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
-import { ChevronRight, ArrowRight, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Loader2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createGuestSession } from '@/app/actions/guest-session-db';
@@ -50,6 +50,11 @@ const getBadgeForIndex = (index: number): BadgeType | undefined => {
 function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  const scrollLeft = () => {
+    if (!scrollContainerRef.current) return;
+    scrollContainerRef.current.scrollBy({ left: -SCROLL_AMOUNT, behavior: 'smooth' });
+  };
+
   const scrollRight = () => {
     if (!scrollContainerRef.current) return;
     scrollContainerRef.current.scrollBy({ left: SCROLL_AMOUNT, behavior: 'smooth' });
@@ -80,13 +85,22 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
             </div>
           )}
         </div>
-        <button
-          onClick={scrollRight}
-          className="hidden md:flex p-2 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors items-center justify-center"
-          aria-label="Scroll right"
-        >
-          <ChevronRight className="w-5 h-5 text-primaryBrand" />
-        </button>
+        <div className="hidden md:flex items-center gap-2">
+          <button
+            onClick={scrollLeft}
+            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-500" />
+          </button>
+          <button
+            onClick={scrollRight}
+            className="p-2 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors flex items-center justify-center"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-5 h-5 text-primaryBrand" />
+          </button>
+        </div>
       </div>
 
       {hasListings ? (
