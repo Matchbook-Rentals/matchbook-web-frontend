@@ -4,7 +4,7 @@ import { ListingAndImages } from '@/types';
 import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
 import { ChevronLeft, ChevronRight, ArrowRight, Loader2 } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createGuestSession } from '@/app/actions/guest-session-db';
 import { GuestSessionService } from '@/utils/guest-session';
@@ -49,6 +49,31 @@ const getBadgeForIndex = (index: number): BadgeType | undefined => {
 
 function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateScrollState = useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+  }, []);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    updateScrollState();
+    container.addEventListener('scroll', updateScrollState);
+    window.addEventListener('resize', updateScrollState);
+
+    return () => {
+      container.removeEventListener('scroll', updateScrollState);
+      window.removeEventListener('resize', updateScrollState);
+    };
+  }, [updateScrollState, listings]);
 
   const scrollLeft = () => {
     if (!scrollContainerRef.current) return;
@@ -88,17 +113,27 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
         <div className="hidden md:flex items-center gap-2">
           <button
             onClick={scrollLeft}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center"
+            disabled={!canScrollLeft}
+            className={`p-2 rounded-full transition-colors flex items-center justify-center ${
+              canScrollLeft
+                ? 'bg-gray-100 hover:bg-gray-200 cursor-pointer'
+                : 'bg-gray-50 cursor-default'
+            }`}
             aria-label="Scroll left"
           >
-            <ChevronLeft className="w-5 h-5 text-gray-500" />
+            <ChevronLeft className={`w-5 h-5 ${canScrollLeft ? 'text-gray-500' : 'text-gray-300'}`} />
           </button>
           <button
             onClick={scrollRight}
-            className="p-2 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors flex items-center justify-center"
+            disabled={!canScrollRight}
+            className={`p-2 rounded-full transition-colors flex items-center justify-center ${
+              canScrollRight
+                ? 'bg-primaryBrand/10 hover:bg-primaryBrand/20 cursor-pointer'
+                : 'bg-gray-50 cursor-default'
+            }`}
             aria-label="Scroll right"
           >
-            <ChevronRight className="w-5 h-5 text-primaryBrand" />
+            <ChevronRight className={`w-5 h-5 ${canScrollRight ? 'text-primaryBrand' : 'text-gray-300'}`} />
           </button>
         </div>
       </div>
