@@ -5,6 +5,7 @@ import { Roles } from "@/types/globals";
 
 const isProtectedRoute = createRouteMatcher([
   "/app(.*)",
+  "/rent(.*)", // Renter dashboard and related pages
   "/admin(.*)", // Added protection for all admin routes
   // "/manage(.*)", // Removed - layout handles auth (testing layout-only auth)
   "/test(.*)", // Added protection for all test routes
