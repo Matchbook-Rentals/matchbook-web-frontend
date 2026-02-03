@@ -1492,7 +1492,7 @@ export const getListingsByLocation = async (
     const listings = await prisma.listing.findMany({
       where: whereClause,
       include: {
-        listingImages: { orderBy: { rank: 'asc' }, take: 1 },
+        listingImages: { orderBy: { rank: 'asc' } },
         monthlyPricing: true
       },
       orderBy: { createdAt: 'desc' },
