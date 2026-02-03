@@ -103,6 +103,7 @@ export default function SearchResultsNavbar({
   const [isGeocoding, setIsGeocoding] = useState(false);
   const [isSavingDates, setIsSavingDates] = useState(false);
   const [isSavingGuests, setIsSavingGuests] = useState(false);
+  const [loadingRecentSearchId, setLoadingRecentSearchId] = useState<string | null>(null);
 
   // Track if we had dates when component mounted (for detecting "first time adding dates")
   const hadDatesInitially = useRef(Boolean(tripData?.startDate && tripData?.endDate));
@@ -159,6 +160,8 @@ export default function SearchResultsNavbar({
   };
 
   const handleRecentSearchClick = (tripId: string) => {
+    setLoadingRecentSearchId(tripId);
+    setTimeout(() => setLoadingRecentSearchId(null), 3000);
     window.location.href = buildSearchUrl({ tripId });
   };
 
@@ -493,9 +496,14 @@ export default function SearchResultsNavbar({
                                 key={`recent-${index}`}
                                 className="flex flex-col gap-1.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
                                 onClick={() => handleRecentSearchClick(search.tripId)}
+                                disabled={loadingRecentSearchId === search.tripId}
                               >
                                 <div className="flex items-center gap-2.5">
-                                  <Clock className="w-5 h-5 text-gray-500" />
+                                  {loadingRecentSearchId === search.tripId ? (
+                                    <ImSpinner8 className="w-5 h-5 text-gray-500 animate-spin" />
+                                  ) : (
+                                    <Clock className="w-5 h-5 text-gray-500" />
+                                  )}
                                   <span className="font-medium text-[#0d1b2a] text-sm leading-5">
                                     {search.location}
                                   </span>

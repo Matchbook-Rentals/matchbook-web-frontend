@@ -60,6 +60,7 @@ export default function MobileSearchOverlay({
 }: MobileSearchOverlayProps) {
   const [activeSection, setActiveSection] = useState<ActiveSection>('where');
   const [isTypingLocation, setIsTypingLocation] = useState(false);
+  const [loadingRecentSearchId, setLoadingRecentSearchId] = useState<string | null>(null);
 
   // Lock body scroll when overlay is open
   useEffect(() => {
@@ -93,6 +94,8 @@ export default function MobileSearchOverlay({
   };
 
   const handleRecentSearchClick = (tripId: string) => {
+    setLoadingRecentSearchId(tripId);
+    setTimeout(() => setLoadingRecentSearchId(null), 3000);
     window.location.href = buildSearchUrl({ tripId });
   };
 
@@ -193,9 +196,14 @@ export default function MobileSearchOverlay({
                             key={`recent-mobile-${index}`}
                             className="flex flex-col gap-1 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
                             onClick={() => handleRecentSearchClick(search.tripId)}
+                            disabled={loadingRecentSearchId === search.tripId}
                           >
                             <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-gray-500" />
+                              {loadingRecentSearchId === search.tripId ? (
+                                <ImSpinner8 className="w-4 h-4 text-gray-500 animate-spin" />
+                              ) : (
+                                <Clock className="w-4 h-4 text-gray-500" />
+                              )}
                               <span className="font-medium text-[#0d1b2a] text-sm">
                                 {search.location}
                               </span>
