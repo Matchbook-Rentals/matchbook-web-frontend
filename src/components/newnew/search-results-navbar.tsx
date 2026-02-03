@@ -158,6 +158,10 @@ export default function SearchResultsNavbar({
     }
   };
 
+  const handleRecentSearchClick = (tripId: string) => {
+    window.location.href = buildSearchUrl({ tripId });
+  };
+
   const handleDateChange = (start: Date | null, end: Date | null) => {
     setDateRange({ start, end });
   };
@@ -488,6 +492,7 @@ export default function SearchResultsNavbar({
                               <button
                                 key={`recent-${index}`}
                                 className="flex flex-col gap-1.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                                onClick={() => handleRecentSearchClick(search.tripId)}
                               >
                                 <div className="flex items-center gap-2.5">
                                   <Clock className="w-5 h-5 text-gray-500" />

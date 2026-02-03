@@ -11,6 +11,7 @@ import { SuggestedLocation } from '@/types';
 import { ImSpinner8 } from 'react-icons/im';
 import { RecentSearch, SuggestedLocationItem } from './search-navbar';
 import { Clock, Building2 } from 'lucide-react';
+import { buildSearchUrl } from '@/app/search/search-page-client';
 
 type ActiveSection = 'where' | 'when' | 'who' | null;
 
@@ -89,6 +90,10 @@ export default function MobileSearchOverlay({
   const handleSuggestedClick = (title: string) => {
     onSuggestedLocationClick(title);
     setActiveSection('when');
+  };
+
+  const handleRecentSearchClick = (tripId: string) => {
+    window.location.href = buildSearchUrl({ tripId });
   };
 
   const handleDateRangeChange = (start: Date | null, end: Date | null) => {
@@ -187,6 +192,7 @@ export default function MobileSearchOverlay({
                           <button
                             key={`recent-mobile-${index}`}
                             className="flex flex-col gap-1 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
+                            onClick={() => handleRecentSearchClick(search.tripId)}
                           >
                             <div className="flex items-center gap-2">
                               <Clock className="w-4 h-4 text-gray-500" />

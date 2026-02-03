@@ -64,6 +64,7 @@ const NewNewHomePage = async () => {
           ? 'Add Renters'
           : `${totalRenters} Renter${totalRenters !== 1 ? 's' : ''}`;
         return {
+          tripId: trip.id,
           location: trip.locationString || 'Unknown location',
           details: `${dateStr} - ${renterStr}`,
         };
