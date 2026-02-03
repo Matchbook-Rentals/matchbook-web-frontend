@@ -241,18 +241,51 @@ export default function SearchListingCard({ listing, status, className, style, d
 
         {/* Dot Indicators */}
         {hasMultipleImages && (
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-            {listing.listingImages.slice(0, 5).map((_, index) => (
-              <div
-                key={index}
-                className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                  index === currentSlide ? 'bg-white' : 'bg-white/50'
-                }`}
-              />
-            ))}
-            {listing.listingImages.length > 5 && (
-              <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
-            )}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 items-center">
+            {(() => {
+              const totalImages = listing.listingImages.length;
+              const maxDots = 5;
+
+              if (totalImages <= maxDots) {
+                // Show all dots if 5 or fewer images
+                return listing.listingImages.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                      index === currentSlide ? 'bg-white' : 'bg-white/50'
+                    }`}
+                  />
+                ));
+              }
+
+              // Sliding window: keep current slide visible with context
+              let startIdx = Math.max(0, currentSlide - 2);
+              let endIdx = startIdx + maxDots;
+
+              if (endIdx > totalImages) {
+                endIdx = totalImages;
+                startIdx = Math.max(0, endIdx - maxDots);
+              }
+
+              return Array.from({ length: endIdx - startIdx }, (_, i) => {
+                const imageIndex = startIdx + i;
+                const isActive = imageIndex === currentSlide;
+                const isEdge = (startIdx > 0 && i === 0) || (endIdx < totalImages && i === maxDots - 1);
+
+                return (
+                  <div
+                    key={imageIndex}
+                    className={`rounded-full transition-all ${
+                      isActive
+                        ? 'w-1.5 h-1.5 bg-white'
+                        : isEdge
+                          ? 'w-1 h-1 bg-white/40'
+                          : 'w-1.5 h-1.5 bg-white/50'
+                    }`}
+                  />
+                );
+              });
+            })()}
           </div>
         )}
 
