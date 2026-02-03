@@ -15,6 +15,7 @@ interface GuestSearchListingsGridProps {
   selectedListingId?: string | null; // ID of listing selected via map marker click
   columnCount?: number; // Dynamic column count from parent (1-4)
   gridGap?: number; // Gap between cards in pixels (default 16)
+  tripId?: string;
 }
 
 const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
@@ -24,7 +25,8 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
   customSnapshot,
   selectedListingId,
   columnCount,
-  gridGap = 16
+  gridGap = 16,
+  tripId,
 }) => {
   const ITEMS_PER_LOAD = 18; // Load 6 rows (18 items for 3 columns)
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
@@ -309,8 +311,8 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
           >
             <div
               ref={gridRef}
-              className={`grid grid-cols-1 sm:grid-cols-2 pl-4 justify-items-center ${
-                isSelectedListing ? 'sm:justify-items-center' : 'justify-items-start'
+              className={`grid grid-cols-2 md:grid-cols-5 pl-4 justify-items-center ${
+                isSelectedListing ? 'md:justify-items-center' : 'justify-items-start'
               } ${isSingleListing ? 'pb-0' : 'pb-12'}`}
               style={{
                 gridTemplateColumns: columnCount && !isSelectedListing
@@ -327,6 +329,7 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
                     listing={listing}
                     customSnapshot={guestSnapshot}
                     trip={mockTrip}
+                    tripId={tripId}
                     optimisticApply={optimisticApply}
                     optimisticRemoveApply={optimisticRemoveApply}
                     withCallToAction={withCallToAction}

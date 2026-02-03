@@ -213,7 +213,7 @@ export default function HomepageListingCard({
   return (
     <Link
       href={listingUrl}
-      className="block group flex-shrink-0 w-[280px]"
+      className="block group flex-shrink-0 w-[calc(50%-12px)] md:w-[calc(20%-19.2px)]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
