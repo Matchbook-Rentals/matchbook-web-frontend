@@ -239,52 +239,25 @@ export default function SearchListingCard({ listing, status, className, style, d
           )}
         </Carousel>
 
-        {/* Dot Indicators */}
+        {/* Dot Indicators - shows in batches of 5 */}
         {hasMultipleImages && (
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 items-center">
             {(() => {
               const totalImages = listing.listingImages.length;
-              const maxDots = 5;
+              const batchSize = 5;
+              const currentBatch = Math.floor(currentSlide / batchSize);
+              const batchStart = currentBatch * batchSize;
+              const batchEnd = Math.min(batchStart + batchSize, totalImages);
+              const positionInBatch = currentSlide - batchStart;
 
-              if (totalImages <= maxDots) {
-                // Show all dots if 5 or fewer images
-                return listing.listingImages.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                      index === currentSlide ? 'bg-white' : 'bg-white/50'
-                    }`}
-                  />
-                ));
-              }
-
-              // Sliding window: keep current slide visible with context
-              let startIdx = Math.max(0, currentSlide - 2);
-              let endIdx = startIdx + maxDots;
-
-              if (endIdx > totalImages) {
-                endIdx = totalImages;
-                startIdx = Math.max(0, endIdx - maxDots);
-              }
-
-              return Array.from({ length: endIdx - startIdx }, (_, i) => {
-                const imageIndex = startIdx + i;
-                const isActive = imageIndex === currentSlide;
-                const isEdge = (startIdx > 0 && i === 0) || (endIdx < totalImages && i === maxDots - 1);
-
-                return (
-                  <div
-                    key={imageIndex}
-                    className={`rounded-full transition-all ${
-                      isActive
-                        ? 'w-1.5 h-1.5 bg-white'
-                        : isEdge
-                          ? 'w-1 h-1 bg-white/40'
-                          : 'w-1.5 h-1.5 bg-white/50'
-                    }`}
-                  />
-                );
-              });
+              return Array.from({ length: batchEnd - batchStart }, (_, i) => (
+                <div
+                  key={i}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                    i === positionInBatch ? 'bg-white' : 'bg-white/50'
+                  }`}
+                />
+              ));
             })()}
           </div>
         )}
