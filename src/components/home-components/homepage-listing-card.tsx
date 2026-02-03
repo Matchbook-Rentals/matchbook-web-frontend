@@ -128,6 +128,7 @@ export default function HomepageListingCard({
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (badge === 'matched') return;
     const newState = !isFavorited;
     setIsFavorited(newState);
     onFavorite?.(listing.id, newState);
@@ -208,7 +209,7 @@ export default function HomepageListingCard({
   return (
     <Link
       href={listingUrl}
-      className="block group flex-shrink-0 w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-19.2px)]"
+      className="@container block group flex-shrink-0 w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-19.2px)]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

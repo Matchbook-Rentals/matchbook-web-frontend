@@ -226,7 +226,13 @@ export async function getUserBookings() {
           title: true,
           imageSrc: true,
           userId: true,
-          locationString: true
+          locationString: true,
+          listingImages: {
+            select: {
+              id: true,
+              url: true,
+            }
+          }
         }
       },
       trip: {

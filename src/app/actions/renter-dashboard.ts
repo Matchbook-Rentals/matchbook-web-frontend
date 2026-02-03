@@ -62,6 +62,7 @@ export interface DashboardBooking {
     imageSrc: string | null;
     userId: string;
     locationString: string | null;
+    listingImages: { id: string; url: string }[];
   } | null;
   trip: {
     numAdults: number;

@@ -116,7 +116,7 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
           >
             <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0">
               <Image
-                src={booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
+                src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
                 alt={booking.listing?.title || 'Property'}
                 fill
                 className="object-cover"
@@ -195,6 +195,7 @@ const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
             matchId={match.id}
             tripId={match.tripId}
             onBookNow={handleBookNow}
+            initialFavorited={true}
           />
         ))}
       </div>
