@@ -186,7 +186,7 @@ const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
   return (
     <section className="mb-8">
       <h2 className="text-lg font-medium text-[#404040] mb-4">Your Matches</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="flex gap-4 overflow-x-auto pb-2">
         {matches.map((match, index) => (
           <HomepageListingCard
             key={match.id}

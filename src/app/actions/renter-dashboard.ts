@@ -24,7 +24,10 @@ export interface DashboardListing {
   category: string | null;
   roomCount: number | null;
   bathroomCount: number | null;
+  streetAddress1: string | null;
+  city: string | null;
   state: string | null;
+  postalCode: string | null;
   shortestLeasePrice: number | null;
   listingImages: { id: string; url: string }[];
   monthlyPricing: { price: number }[];
@@ -164,7 +167,10 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
           category: listing.category,
           roomCount: listing.roomCount,
           bathroomCount: listing.bathroomCount,
+          streetAddress1: listing.streetAddress1,
+          city: listing.city,
           state: listing.state,
+          postalCode: listing.postalCode,
           shortestLeasePrice: listing.shortestLeasePrice,
           listingImages: listing.listingImages.map((img) => ({
             id: img.id,
@@ -218,7 +224,10 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
         category: match.listing.category,
         roomCount: match.listing.roomCount,
         bathroomCount: match.listing.bathroomCount,
+        streetAddress1: match.listing.streetAddress1,
+        city: match.listing.city,
         state: match.listing.state,
+        postalCode: match.listing.postalCode,
         shortestLeasePrice: match.listing.shortestLeasePrice,
         listingImages: match.listing.listingImages.map((img) => ({
           id: img.id,
@@ -249,7 +258,10 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
         category: req.listing.category,
         roomCount: req.listing.roomCount,
         bathroomCount: req.listing.bathroomCount,
+        streetAddress1: req.listing.streetAddress1,
+        city: req.listing.city,
         state: req.listing.state,
+        postalCode: req.listing.postalCode,
         shortestLeasePrice: req.listing.shortestLeasePrice,
         listingImages: req.listing.listingImages.map((img) => ({
           id: img.id,

@@ -42,7 +42,7 @@ export default function HomepageListingCard({
 }: HomepageListingCardProps) {
   const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
   useEffect(() => { setIsFavorited(initialFavorited ?? false); }, [initialFavorited]);
-  const [imageError, setImageError] = useState(false);
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
   const [isApplying, setIsApplying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
@@ -80,11 +80,6 @@ export default function HomepageListingCard({
   const hasMultipleImages = (listing.listingImages?.length ?? 0) > 1;
   const canScrollPrev = currentSlide > 0;
   const canScrollNext = currentSlide < (listing.listingImages?.length ?? 1) - 1;
-
-  const getImageUrl = () => {
-    if (imageError) return PLACEHOLDER_IMAGE;
-    return listing.listingImages?.[0]?.url || PLACEHOLDER_IMAGE;
-  };
 
   const getTruncatedTitle = () => {
     const title = listing.title || 'Untitled Listing';
@@ -230,27 +225,27 @@ export default function HomepageListingCard({
                 listing.listingImages!.map((image, index) => (
                   <CarouselItem key={image.id || index} className="pl-0">
                     <div className="relative aspect-[4/3] w-full">
-                      <Image
-                        src={image.url || PLACEHOLDER_IMAGE}
-                        alt={`${listing.title || 'Property'} image ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="280px"
-                        onError={() => setImageError(true)}
-                      />
+                      {failedImages.has(index) ? (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                          <span className="font-poppins text-gray-500 text-sm">Image unavailable</span>
+                        </div>
+                      ) : (
+                        <Image
+                          src={image.url || PLACEHOLDER_IMAGE}
+                          alt={`${listing.title || 'Property'} image ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="280px"
+                          onError={() => setFailedImages(prev => new Set(prev).add(index))}
+                        />
+                      )}
                     </div>
                   </CarouselItem>
                 ))
               ) : (
                 <CarouselItem className="pl-0">
-                  <div className="relative aspect-[4/3] w-full">
-                    <Image
-                      src={PLACEHOLDER_IMAGE}
-                      alt={listing.title || 'Property'}
-                      fill
-                      className="object-cover"
-                      sizes="280px"
-                    />
+                  <div className="relative aspect-[4/3] w-full bg-gray-200 flex items-center justify-center">
+                    <span className="font-poppins text-gray-500 text-sm">Image unavailable</span>
                   </div>
                 </CarouselItem>
               )}
