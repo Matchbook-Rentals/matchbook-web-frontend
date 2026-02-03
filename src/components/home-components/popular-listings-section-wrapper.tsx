@@ -292,8 +292,8 @@ export default function PopularListingsSectionWrapper({
                 <div className="w-6 h-6 bg-gray-200 rounded-full" />
               </div>
               <div className="flex gap-6 overflow-hidden">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((j) => (
-                  <div key={j} className="flex-shrink-0 w-[169px]">
+                {[1, 2, 3, 4, 5].map((j) => (
+                  <div key={j} className="flex-shrink-0 w-[280px]">
                     <div className="aspect-[4/3] bg-gray-200 rounded-xl" />
                     <div className="pt-3 flex flex-col gap-1">
                       <div className="h-4 bg-gray-200 rounded w-[85%]" />

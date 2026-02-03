@@ -39,7 +39,7 @@ interface ListingRowProps {
   isExploreLoading?: boolean;
 }
 
-const SCROLL_AMOUNT = 440;
+const SCROLL_AMOUNT = 608;
 
 const getBadgeForIndex = (index: number): BadgeType | undefined => {
   if (index === 0) return 'matched';

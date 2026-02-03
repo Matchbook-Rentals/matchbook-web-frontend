@@ -169,7 +169,7 @@ export default function HomepageListingCard({
   const listingUrl = `/search/listing/${listing.id}`;
 
   return (
-    <Link href={listingUrl} className="block group flex-shrink-0 w-[169px]">
+    <Link href={listingUrl} className="block group flex-shrink-0 w-[280px]">
       <div className="flex flex-col">
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
           <Image
@@ -177,7 +177,7 @@ export default function HomepageListingCard({
             alt={listing.title || 'Property'}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="169px"
+            sizes="280px"
             onError={() => setImageError(true)}
           />
           {renderMatchedBadge()}
