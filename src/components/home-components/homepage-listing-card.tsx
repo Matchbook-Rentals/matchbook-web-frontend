@@ -3,8 +3,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ListingAndImages } from '@/types';
-import { Heart, Star } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 const PLACEHOLDER_IMAGE = '/stock_interior.webp';
 const TITLE_MAX_LENGTH = 30;
@@ -38,6 +44,42 @@ export default function HomepageListingCard({
   useEffect(() => { setIsFavorited(initialFavorited ?? false); }, [initialFavorited]);
   const [imageError, setImageError] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Carousel navigation handlers
+  const scrollPrev = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    carouselApi?.scrollPrev();
+  }, [carouselApi]);
+
+  const scrollNext = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    carouselApi?.scrollNext();
+  }, [carouselApi]);
+
+  // Update current slide when carousel changes
+  const onCarouselSelect = useCallback(() => {
+    if (!carouselApi) return;
+    setCurrentSlide(carouselApi.selectedScrollSnap());
+  }, [carouselApi]);
+
+  // Set up carousel event listeners
+  useEffect(() => {
+    if (!carouselApi) return;
+    carouselApi.on('select', onCarouselSelect);
+    onCarouselSelect();
+    return () => {
+      carouselApi.off('select', onCarouselSelect);
+    };
+  }, [carouselApi, onCarouselSelect]);
+
+  const hasMultipleImages = (listing.listingImages?.length ?? 0) > 1;
+  const canScrollPrev = currentSlide > 0;
+  const canScrollNext = currentSlide < (listing.listingImages?.length ?? 1) - 1;
 
   const getImageUrl = () => {
     if (imageError) return PLACEHOLDER_IMAGE;
@@ -169,22 +211,96 @@ export default function HomepageListingCard({
   const listingUrl = `/search/listing/${listing.id}`;
 
   return (
-    <Link href={listingUrl} className="block group flex-shrink-0 w-[280px]">
+    <Link
+      href={listingUrl}
+      className="block group flex-shrink-0 w-[280px]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="flex flex-col">
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
-          <Image
-            src={getImageUrl()}
-            alt={listing.title || 'Property'}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="280px"
-            onError={() => setImageError(true)}
-          />
+        <div className="relative w-full overflow-hidden rounded-xl">
+          <Carousel
+            opts={{ loop: false }}
+            setApi={setCarouselApi}
+            className="w-full"
+            keyboardControls={false}
+          >
+            <CarouselContent className="ml-0">
+              {(listing.listingImages?.length ?? 0) > 0 ? (
+                listing.listingImages!.map((image, index) => (
+                  <CarouselItem key={image.id || index} className="pl-0">
+                    <div className="relative aspect-[4/3] w-full">
+                      <Image
+                        src={image.url || PLACEHOLDER_IMAGE}
+                        alt={`${listing.title || 'Property'} image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="280px"
+                        onError={() => setImageError(true)}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))
+              ) : (
+                <CarouselItem className="pl-0">
+                  <div className="relative aspect-[4/3] w-full">
+                    <Image
+                      src={PLACEHOLDER_IMAGE}
+                      alt={listing.title || 'Property'}
+                      fill
+                      className="object-cover"
+                      sizes="280px"
+                    />
+                  </div>
+                </CarouselItem>
+              )}
+            </CarouselContent>
+
+            {/* Navigation Arrows - only show on hover and if multiple images */}
+            {hasMultipleImages && isHovered && (
+              <>
+                {canScrollPrev && (
+                  <button
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-md transition-all z-10"
+                    onClick={scrollPrev}
+                  >
+                    <ChevronLeft className="w-4 h-4 text-gray-700" />
+                  </button>
+                )}
+                {canScrollNext && (
+                  <button
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-md transition-all z-10"
+                    onClick={scrollNext}
+                  >
+                    <ChevronRight className="w-4 h-4 text-gray-700" />
+                  </button>
+                )}
+              </>
+            )}
+          </Carousel>
+
+          {/* Dot Indicators */}
+          {hasMultipleImages && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+              {listing.listingImages!.slice(0, 5).map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                    index === currentSlide ? 'bg-white' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+              {listing.listingImages!.length > 5 && (
+                <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+              )}
+            </div>
+          )}
+
           {renderMatchedBadge()}
           {renderActionButton()}
           <button
             onClick={handleFavoriteClick}
-            className="absolute top-2 right-2 p-1.5 rounded-[6px] bg-white/80 hover:bg-white transition-colors"
+            className="absolute top-2 right-2 p-1.5 rounded-[6px] bg-white/80 hover:bg-white transition-colors z-10"
           >
             <Heart
               className={`w-4 h-4 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}

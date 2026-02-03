@@ -1,8 +1,8 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { BrandButton } from "@/components/ui/brandButton"
-import { Heart, Heart as HeartIcon } from "lucide-react"
+import { Heart, Heart as HeartIcon, ChevronLeft, ChevronRight } from "lucide-react"
 import { ListingAndImages } from "@/types"
-import { useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useGuestTripContext } from '@/contexts/guest-trip-context-provider'
 import { RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
@@ -10,6 +10,12 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
 import { ListingStatus } from '@/constants/enums'
 import { calculateRent } from '@/lib/calculate-rent'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel"
 
 const TITLE_MAX_LENGTH = 40
 
@@ -36,15 +42,49 @@ interface SearchListingCardProps {
   }
   customSnapshot?: any // Allow passing custom snapshot with overridden functions
   trip?: any // Mock trip object from guest session
+  tripId?: string
 }
 
-export default function SearchListingCard({ listing, status, className, style, detailsClassName, detailsStyle, callToAction, contextLabel, customSnapshot, trip }: SearchListingCardProps) {
+export default function SearchListingCard({ listing, status, className, style, detailsClassName, detailsStyle, callToAction, contextLabel, customSnapshot, trip, tripId }: SearchListingCardProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>()
+  const [currentSlide, setCurrentSlide] = useState(0)
   const setHoveredListing = useListingHoverStore((state) => state.setHoveredListing)
   const router = useRouter()
   const { userId } = useAuth()
   const { state, actions } = useGuestTripContext()
   const hasTripDates = Boolean(trip?.startDate && trip?.endDate);
+
+  // Carousel navigation handlers
+  const scrollPrev = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    carouselApi?.scrollPrev()
+  }, [carouselApi])
+
+  const scrollNext = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    carouselApi?.scrollNext()
+  }, [carouselApi])
+
+  // Update current slide when carousel changes
+  const onSelect = useCallback(() => {
+    if (!carouselApi) return
+    setCurrentSlide(carouselApi.selectedScrollSnap())
+  }, [carouselApi])
+
+  // Set up carousel event listeners
+  useEffect(() => {
+    if (!carouselApi) return
+    carouselApi.on('select', onSelect)
+    onSelect()
+    return () => {
+      carouselApi.off('select', onSelect)
+    }
+  }, [carouselApi, onSelect])
+
+  const hasMultipleImages = listing.listingImages.length > 1
+  const canScrollPrev = currentSlide > 0
+  const canScrollNext = currentSlide < listing.listingImages.length - 1
 
   // Calculate trip-specific price using the same logic as authenticated users
   const calculatedPrice = hasTripDates ? calculateRent({ listing, trip }) : listing.price;
@@ -124,7 +164,10 @@ export default function SearchListingCard({ listing, status, className, style, d
       return;
     }
 
-    window.open(`/search/listing/${listing.id}`, '_blank');
+    const url = tripId
+      ? `/search/listing/${listing.id}?tripId=${tripId}`
+      : `/search/listing/${listing.id}`;
+    window.open(url, '_blank');
   };
 
   return (
@@ -140,14 +183,78 @@ export default function SearchListingCard({ listing, status, className, style, d
       onClick={handleCardClick}
     >
       <div className="relative w-full">
-        {/* Property Image */}
-        <div className="w-full">
-          <img
-            className="w-full aspect-[4/3] object-cover rounded-xl"
-            alt="Property"
-            src={listing.listingImages[0]?.url || '/placeholder-property.jpg'}
-          />
-        </div>
+        {/* Property Image Carousel */}
+        <Carousel
+          opts={{ loop: false }}
+          setApi={setCarouselApi}
+          className="w-full"
+          keyboardControls={false}
+        >
+          <CarouselContent className="ml-0">
+            {listing.listingImages.length > 0 ? (
+              listing.listingImages.map((image, index) => (
+                <CarouselItem key={image.id || index} className="pl-0">
+                  <div className="aspect-[4/3] w-full overflow-hidden rounded-xl">
+                    <img
+                      className="w-full h-full object-cover"
+                      alt={`Property image ${index + 1}`}
+                      src={image.url}
+                    />
+                  </div>
+                </CarouselItem>
+              ))
+            ) : (
+              <CarouselItem className="pl-0">
+                <div className="aspect-[4/3] w-full overflow-hidden rounded-xl">
+                  <img
+                    className="w-full h-full object-cover"
+                    alt="Property"
+                    src="/placeholder-property.jpg"
+                  />
+                </div>
+              </CarouselItem>
+            )}
+          </CarouselContent>
+
+          {/* Navigation Arrows - only show on hover and if multiple images */}
+          {hasMultipleImages && isHovered && (
+            <>
+              {canScrollPrev && (
+                <button
+                  className="carousel-controls absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                  onClick={scrollPrev}
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-700" />
+                </button>
+              )}
+              {canScrollNext && (
+                <button
+                  className="carousel-controls absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                  onClick={scrollNext}
+                >
+                  <ChevronRight className="w-4 h-4 text-gray-700" />
+                </button>
+              )}
+            </>
+          )}
+        </Carousel>
+
+        {/* Dot Indicators */}
+        {hasMultipleImages && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {listing.listingImages.slice(0, 5).map((_, index) => (
+              <div
+                key={index}
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  index === currentSlide ? 'bg-white' : 'bg-white/50'
+                }`}
+              />
+            ))}
+            {listing.listingImages.length > 5 && (
+              <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+            )}
+          </div>
+        )}
 
         {/* Heart Button */}
         <div className="absolute top-3 right-3">
