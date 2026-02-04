@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ListingAndImages } from '@/types';
 import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view';
@@ -27,6 +27,7 @@ interface ListingDetailWithWizardProps {
   calculatedPrice: number | null;
   listingState: { hasApplied: boolean; isMatched: boolean } | null;
   userApplication: any;
+  shouldAutoApply?: boolean;
 }
 
 export default function ListingDetailWithWizard({
@@ -37,12 +38,21 @@ export default function ListingDetailWithWizard({
   calculatedPrice: initialCalculatedPrice,
   listingState: initialListingState,
   userApplication,
+  shouldAutoApply,
 }: ListingDetailWithWizardProps) {
   const [wizardState, setWizardState] = useState<WizardState>('listing');
   const [showDatePopover, setShowDatePopover] = useState(false);
   const [collectedDates, setCollectedDates] = useState<{ start: Date; end: Date } | null>(null);
   const [collectedGuests, setCollectedGuests] = useState<{ adults: number; children: number; pets: number } | null>(null);
   const [hasAppliedLocal, setHasAppliedLocal] = useState(false);
+  const hasTriedAutoApply = useRef(false);
+
+  // Auto-apply effect: show application wizard on mount if shouldAutoApply is true
+  useEffect(() => {
+    if (hasTriedAutoApply.current || !shouldAutoApply) return;
+    hasTriedAutoApply.current = true;
+    setWizardState('application');
+  }, [shouldAutoApply]);
 
   const hasDates = !!initialTripContext;
 

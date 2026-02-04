@@ -20,6 +20,7 @@ interface ListingPageProps {
     tripId?: string
     startDate?: string
     endDate?: string
+    isApplying?: string
   }
 }
 
@@ -175,6 +176,9 @@ export default async function SearchListingPage({ params, searchParams }: Listin
   // Default location string for display
   const locationString = `${listing.city}, ${listing.state}`
 
+  // Determine if we should auto-apply (all conditions must be met)
+  const shouldAutoApply = searchParams.isApplying === 'true' && !!user && !!tripContext;
+
   return (
     <>
       <MatchbookHeader
@@ -193,6 +197,7 @@ export default async function SearchListingPage({ params, searchParams }: Listin
           calculatedPrice={calculatedPrice}
           listingState={listingState}
           userApplication={userApplication}
+          shouldAutoApply={shouldAutoApply}
         />
       </div>
     </>

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
@@ -40,10 +41,10 @@ export default function HomepageListingCard({
   initialFavorited,
   onFavorite,
 }: HomepageListingCardProps) {
+  const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
   useEffect(() => { setIsFavorited(initialFavorited ?? false); }, [initialFavorited]);
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
-  const [isApplying, setIsApplying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -144,16 +145,11 @@ export default function HomepageListingCard({
     );
   };
 
-  const handleApplyClick = async (e: React.MouseEvent) => {
+  const handleApplyClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!tripId || !onApply || isApplying || isApplied) return;
-    setIsApplying(true);
-    try {
-      await onApply(listing, tripId);
-    } finally {
-      setIsApplying(false);
-    }
+    if (!tripId || isApplied) return;
+    router.push(`/search/listing/${listing.id}?tripId=${tripId}&isApplying=true`);
   };
 
   const handleBookNowClick = (e: React.MouseEvent) => {
@@ -177,12 +173,12 @@ export default function HomepageListingCard({
       );
     }
     if (badge === 'liked') {
-      const hasApplyHandler = tripId && onApply;
-      const hasSignInPrompt = !hasApplyHandler && onSignInPrompt;
-      const isDisabled = isApplied || isApplying || (!hasApplyHandler && !hasSignInPrompt);
-      const buttonText = isApplied ? 'Applied' : isApplying ? 'Applying...' : 'Apply Now';
+      const canApply = !!tripId;
+      const hasSignInPrompt = !canApply && onSignInPrompt;
+      const isDisabled = isApplied || (!canApply && !hasSignInPrompt);
+      const buttonText = isApplied ? 'Applied' : 'Apply Now';
 
-      const handleClick = hasApplyHandler
+      const handleClick = canApply
         ? handleApplyClick
         : hasSignInPrompt
           ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); onSignInPrompt(); }

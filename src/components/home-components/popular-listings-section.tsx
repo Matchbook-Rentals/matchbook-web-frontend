@@ -41,6 +41,7 @@ interface ListingRowProps {
   onExploreClick?: () => void;
   isExploreLoading?: boolean;
   authUserState?: Partial<HomepageUserState>;
+  sectionTripId?: string;
 }
 
 const SCROLL_AMOUNT = 608;
@@ -48,7 +49,8 @@ const SCROLL_AMOUNT = 608;
 const getListingState = (
   listingId: string,
   authUserState?: Partial<HomepageUserState>,
-  guestFavoriteIds?: Set<string>
+  guestFavoriteIds?: Set<string>,
+  sectionTripId?: string
 ) => {
   // Matches take priority
   const matchData = authUserState?.matchedListings?.find(m => m.listingId === listingId);
@@ -71,11 +73,12 @@ const getListingState = (
   return {
     badge: (isFavorited ? 'liked' : undefined) as BadgeType | undefined,
     initialFavorited: isFavorited,
-    isApplied
+    isApplied,
+    tripId: sectionTripId
   };
 };
 
-function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading, authUserState }: ListingRowProps) {
+function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading, authUserState, sectionTripId }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -176,7 +179,7 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
             // Pre-compute state for each listing and sort by priority
             const listingsWithState = listings.map(listing => ({
               listing,
-              state: getListingState(listing.id, authUserState, guestFavoriteIds)
+              state: getListingState(listing.id, authUserState, guestFavoriteIds, sectionTripId)
             }));
 
             // Sort: matched first, then liked, then others
@@ -266,6 +269,7 @@ export default function PopularListingsSection({ sections, guestFavoriteIds, onF
               onExploreClick={hasExploreTarget(section) ? () => handleExploreClick(section, index) : undefined}
               isExploreLoading={loadingIndex === index}
               authUserState={authUserState}
+              sectionTripId={section.sectionTripId}
             />
           ))
         ) : (

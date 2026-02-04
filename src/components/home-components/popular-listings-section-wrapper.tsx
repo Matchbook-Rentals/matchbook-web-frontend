@@ -230,6 +230,7 @@ export default function PopularListingsSectionWrapper({
         locationString: displayName,
         city: userTripLocation.city || undefined,
         state: userTripLocation.state || undefined,
+        sectionTripId: recentTripId || undefined,
       });
       usedLocations.add(makeLocationKey(userTripLocation.city, userTripLocation.state));
     } else if (popularAreas.length > 0) {
@@ -327,7 +328,7 @@ export default function PopularListingsSectionWrapper({
 
     setSections(newSections);
     setIsLoading(false);
-  }, [isSignedIn, userTripLocation, userLocation, geoPermissionDenied, popularAreas]);
+  }, [isSignedIn, userTripLocation, userLocation, geoPermissionDenied, popularAreas, recentTripId]);
 
   // Build sections when dependencies change
   useEffect(() => {
