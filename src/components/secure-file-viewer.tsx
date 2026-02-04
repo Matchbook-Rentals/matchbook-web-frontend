@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Loader2, FileWarning, Download, Eye } from 'lucide-react';
+import { Loader2, FileWarning, Download, Eye, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { BrandButton } from '@/components/ui/brandButton';
@@ -316,10 +316,13 @@ interface SecureFileListProps {
     customId?: string;
     fileName?: string;
     isPrimary?: boolean;
+    url?: string;
   }>;
   fileType?: 'image' | 'document';
   className?: string;
   onRemove?: (index: number) => void;
+  variant?: 'grid' | 'list';
+  title?: string;
 }
 
 export function SecureFileList({
@@ -327,7 +330,32 @@ export function SecureFileList({
   fileType = 'image',
   className,
   onRemove,
+  variant = 'grid',
+  title,
 }: SecureFileListProps) {
+  if (variant === 'list') {
+    return (
+      <div className={cn('w-full', className)}>
+        {title && (
+          <>
+            <h3 className="text-base font-medium text-[#344054] mb-2">{title}</h3>
+            <div className="border-b border-gray-200 mb-3" />
+          </>
+        )}
+        <div className="flex flex-col gap-2">
+          {files.map((file, index) => (
+            <SecureFileListItem
+              key={index}
+              file={file}
+              fileType={fileType}
+              onRemove={onRemove ? () => onRemove(index) : undefined}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={cn(' flex flex-wrap justify-center gap-3', className)}>
       {files.map((file, index) => (
@@ -348,18 +376,18 @@ export function SecureFileList({
               className="absolute -top-1 -right-1 w-8 h-8 bg-black/30 hover:bg-black/80 text-white hover:text-red-500 rounded-full flex items-center justify-center z-10 shadow-md transition-colors duration-200 transform translate-y-5"
               aria-label="Delete file"
             >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-4 w-4" 
-                fill="none" 
-                viewBox="0 0 24 24" 
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
             </button>
@@ -367,5 +395,158 @@ export function SecureFileList({
         </div>
       ))}
     </div>
+  );
+}
+
+// Compact list item for files
+interface SecureFileListItemProps {
+  file: {
+    fileKey?: string;
+    customId?: string;
+    fileName?: string;
+    url?: string;
+  };
+  fileType?: 'image' | 'document';
+  onRemove?: () => void;
+}
+
+function SecureFileListItem({ file, fileType = 'image', onRemove }: SecureFileListItemProps) {
+  const [signedUrl, setSignedUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [numPages, setNumPages] = useState<number>(0);
+
+  const fetchSignedUrl = async () => {
+    if (!file.fileKey && !file.customId) {
+      if (file.url) {
+        setSignedUrl(file.url);
+      }
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/get-private-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileKey: file.fileKey, customId: file.customId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const url = typeof data.signedUrl === 'string' ? data.signedUrl : data.signedUrl?.url;
+        setSignedUrl(url);
+      }
+    } catch (err) {
+      console.error('Failed to fetch signed URL:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleView = async () => {
+    if (!signedUrl) {
+      await fetchSignedUrl();
+    }
+    setModalOpen(true);
+  };
+
+  const handleDownload = async () => {
+    let url = signedUrl;
+    if (!url) {
+      await fetchSignedUrl();
+      url = signedUrl;
+    }
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
+
+  const isPdf = file.fileName?.toLowerCase().includes('.pdf');
+  const displayName = file.fileName || 'Uploaded file';
+
+  return (
+    <>
+      <div className="flex items-center justify-between py-2">
+        <span className="text-sm text-[#344054] font-medium truncate flex-1 mr-4">
+          {displayName}
+        </span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleView}
+            disabled={loading}
+            className="text-gray-500 hover:text-gray-700 transition-colors"
+            title="View"
+          >
+            <Eye className="w-5 h-5" />
+          </button>
+          {onRemove && (
+            <button
+              onClick={onRemove}
+              className="text-gray-500 hover:text-red-600 transition-colors"
+              title="Delete"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          )}
+          <button
+            onClick={handleDownload}
+            disabled={loading}
+            className="text-gray-500 hover:text-gray-700 transition-colors"
+            title="Download"
+          >
+            <Download className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* View Modal */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="max-w-[95vw] w-auto max-h-[90vh]">
+          <div className="max-h-[80vh] overflow-y-auto overflow-x-auto pt-8 px-4 pb-4">
+            {loading ? (
+              <div className="flex items-center justify-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+              </div>
+            ) : signedUrl ? (
+              isPdf ? (
+                <Document
+                  file={signedUrl}
+                  onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+                  loading={
+                    <div className="flex items-center justify-center p-8">
+                      <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+                    </div>
+                  }
+                  className="mx-auto"
+                >
+                  {Array.from({ length: numPages }, (_, index) => (
+                    <div key={index} className="mb-4 flex justify-center">
+                      <Page
+                        pageNumber={index + 1}
+                        renderTextLayer={true}
+                        renderAnnotationLayer={false}
+                        width={Math.min(700, window.innerWidth * 0.85)}
+                      />
+                    </div>
+                  ))}
+                </Document>
+              ) : (
+                <img
+                  src={signedUrl}
+                  alt={displayName}
+                  className="max-w-full max-h-[70vh] object-contain mx-auto rounded-lg"
+                />
+              )
+            ) : (
+              <div className="flex flex-col items-center justify-center p-8">
+                <FileWarning className="h-8 w-8 text-gray-400 mb-2" />
+                <span className="text-gray-500">Unable to load file</span>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
