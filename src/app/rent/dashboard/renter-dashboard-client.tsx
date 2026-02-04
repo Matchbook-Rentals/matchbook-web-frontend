@@ -96,8 +96,11 @@ const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
 };
 
 // Bookings Section
+const INITIAL_BOOKINGS_COUNT = 3;
+
 const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
   const router = useRouter();
+  const [showAll, setShowAll] = useState(false);
 
   if (bookings.length === 0) return null;
 
@@ -105,11 +108,14 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
     router.push(`/app/rent/messages?userId=${hostUserId}`);
   };
 
+  const visibleBookings = showAll ? bookings : bookings.slice(0, INITIAL_BOOKINGS_COUNT);
+  const hasMore = bookings.length > INITIAL_BOOKINGS_COUNT;
+
   return (
     <section className="mb-8">
       <h2 className="text-lg font-medium text-[#404040] mb-4">Your Bookings</h2>
       <div className="space-y-4">
-        {bookings.map((booking) => (
+        {visibleBookings.map((booking) => (
           <div
             key={booking.id}
             className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col md:flex-row"
@@ -157,6 +163,14 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
           </div>
         ))}
       </div>
+      {hasMore && !showAll && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="mt-4 text-sm text-primaryBrand hover:text-primaryBrand/80 font-medium"
+        >
+          View More Bookings ({bookings.length - INITIAL_BOOKINGS_COUNT})
+        </button>
+      )}
     </section>
   );
 };
