@@ -151,14 +151,9 @@ const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
 const INITIAL_BOOKINGS_COUNT = 3;
 
 const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
-  const router = useRouter();
   const [showAll, setShowAll] = useState(false);
 
   if (bookings.length === 0) return null;
-
-  const handleMessageHost = (hostUserId: string) => {
-    router.push(`/app/rent/messages?userId=${hostUserId}`);
-  };
 
   const visibleBookings = showAll ? bookings : bookings.slice(0, INITIAL_BOOKINGS_COUNT);
   const hasMore = bookings.length > INITIAL_BOOKINGS_COUNT;
@@ -211,7 +206,7 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
                   <BrandButton
                     variant="default"
                     size="sm"
-                    onClick={() => handleMessageHost(booking.listing!.userId)}
+                    href={`/app/rent/messages?userId=${booking.listing.userId}`}
                   >
                     Message Host
                   </BrandButton>
@@ -277,21 +272,15 @@ const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
 
 // Applications Section
 const ApplicationsSection = ({ applications }: { applications: DashboardApplication[] }) => {
-  const router = useRouter();
-
   if (applications.length === 0) return null;
-
-  const handleMessageHost = (hostUserId: string) => {
-    router.push(`/app/rent/messages?userId=${hostUserId}`);
-  };
 
   return (
     <section className="mb-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-medium text-[#404040]">Pending Applications</h2>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/app/rent/applications">Your Applications</Link>
-        </Button>
+        <BrandButton variant="outline" size="sm" href="/app/rent/applications">
+          Your Applications
+        </BrandButton>
       </div>
       <div className="space-y-4">
         {applications.map((app) => (
@@ -324,17 +313,17 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
                 </p>
               </div>
               <div className="flex items-center gap-3 mt-4">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/app/rent/applications/${app.id}`}>View</Link>
-                </Button>
+                <BrandButton variant="outline" size="sm" href={`/app/rent/applications/${app.id}`}>
+                  View
+                </BrandButton>
                 {app.listing.user && (
-                  <Button
+                  <BrandButton
                     variant="outline"
                     size="sm"
-                    onClick={() => handleMessageHost(app.listing.user!.id)}
+                    href={`/app/rent/messages?userId=${app.listing.user.id}`}
                   >
                     Message Host
-                  </Button>
+                  </BrandButton>
                 )}
                 <button className="p-1 hover:bg-gray-100 rounded">
                   <MoreHorizontal className="w-5 h-5 text-gray-500" />
