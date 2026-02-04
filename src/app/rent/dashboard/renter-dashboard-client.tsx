@@ -428,7 +428,7 @@ export default function RenterDashboardClient({ data }: RenterDashboardClientPro
     favorites.length > 0;
 
   return (
-    <div className={`py-6 ${APP_PAGE_MARGIN}`}>
+    <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto`}>
       <DashboardHeader />
       {hasContent ? (
         <>

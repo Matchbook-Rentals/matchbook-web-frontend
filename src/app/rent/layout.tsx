@@ -1,6 +1,6 @@
 import React from 'react';
 import { auth, currentUser } from "@clerk/nextjs/server";
-import RenterNavbar from '@/components/platform-components/renterNavbar';
+import RentNavbarSwitcher from '@/components/platform-components/rent-navbar-switcher';
 
 export default async function RentLayout({ children }: { children: React.ReactNode }) {
   const { userId } = await auth();
@@ -17,7 +17,7 @@ export default async function RentLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="min-h-screen bg-background font-poppins">
-      <RenterNavbar userId={userId} user={userObject} isSignedIn={!!userId} />
+      <RentNavbarSwitcher userId={userId} user={userObject} isSignedIn={!!userId} />
       <main>
         {children}
       </main>
