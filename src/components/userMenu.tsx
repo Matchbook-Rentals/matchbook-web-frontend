@@ -152,6 +152,8 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     },
     { id: 'settings', label: 'Account', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
+    { id: 'new-search', label: 'New Search', href: '/newnew', adminOnlyVisible: true, section: 4 },
+    { id: 'renter-dashboard', label: 'Renter Dashboard', href: '/rent/dashboard', adminOnlyVisible: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ] : [
     // Renter side menu items - open to all users
@@ -170,6 +172,8 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'verification', label: 'MatchBook Renter Verification', href: '/verification', section: 4 },
     { id: 'refer-host', label: 'Refer a Host - Earn $50', href: '/refer-host', section: 4 },
+    { id: 'new-search', label: 'New Search', href: '/newnew', adminOnlyVisible: true, section: 4 },
+    { id: 'renter-dashboard', label: 'Renter Dashboard', href: '/rent/dashboard', adminOnlyVisible: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 
