@@ -128,7 +128,8 @@ export default function HomepageListingCard({
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (badge === 'matched') return;
+    // Prevent unfavoriting when matched or has pending application
+    if (badge === 'matched' || isApplied) return;
     const newState = !isFavorited;
     setIsFavorited(newState);
     onFavorite?.(listing.id, newState);

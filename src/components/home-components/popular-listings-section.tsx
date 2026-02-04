@@ -8,6 +8,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createGuestSession } from '@/app/actions/guest-session-db';
 import { GuestSessionService } from '@/utils/guest-session';
+import { HomepageUserState } from '@/app/actions/homepage-user-state';
 
 export interface ListingSection {
   title: string;
@@ -17,13 +18,15 @@ export interface ListingSection {
   locationString?: string;
   city?: string;
   state?: string;
+  sectionTripId?: string;
 }
 
 interface PopularListingsSectionProps {
   sections: ListingSection[];
   guestFavoriteIds?: Set<string>;
-  onFavorite?: (listingId: string, isFavorited: boolean, center?: { lat: number; lng: number }, locationString?: string) => void;
+  onFavorite?: (listingId: string, isFavorited: boolean, sectionTripId?: string, center?: { lat: number; lng: number }, locationString?: string) => void;
   onSignInPrompt?: () => void;
+  authUserState?: Partial<HomepageUserState>;
 }
 
 type BadgeType = 'matched' | 'liked';
@@ -37,17 +40,42 @@ interface ListingRowProps {
   onSignInPrompt?: () => void;
   onExploreClick?: () => void;
   isExploreLoading?: boolean;
+  authUserState?: Partial<HomepageUserState>;
 }
 
 const SCROLL_AMOUNT = 608;
 
-const getBadgeForIndex = (index: number): BadgeType | undefined => {
-  if (index === 0) return 'matched';
-  if (index === 1) return 'liked';
-  return undefined;
+const getListingState = (
+  listingId: string,
+  authUserState?: Partial<HomepageUserState>,
+  guestFavoriteIds?: Set<string>
+) => {
+  // Matches take priority
+  const matchData = authUserState?.matchedListings?.find(m => m.listingId === listingId);
+  if (matchData) {
+    return {
+      badge: 'matched' as const,
+      initialFavorited: true,
+      matchId: matchData.matchId,
+      tripId: matchData.tripId,
+      isApplied: false
+    };
+  }
+
+  // Check favorites (auth user OR guest)
+  const isFavorited = authUserState?.favoritedListingIds?.includes(listingId)
+    ?? guestFavoriteIds?.has(listingId)
+    ?? false;
+  const isApplied = authUserState?.appliedListingIds?.includes(listingId) ?? false;
+
+  return {
+    badge: (isFavorited ? 'liked' : undefined) as BadgeType | undefined,
+    initialFavorited: isFavorited,
+    isApplied
+  };
 };
 
-function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading }: ListingRowProps) {
+function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading, authUserState }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -144,20 +172,34 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
           className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {listings.map((listing, index) => {
-            const isFavorited = guestFavoriteIds?.has(listing.id);
-            const badge = isFavorited ? 'liked' as const : (showBadges ? getBadgeForIndex(index) : undefined);
-            return (
+          {(() => {
+            // Pre-compute state for each listing and sort by priority
+            const listingsWithState = listings.map(listing => ({
+              listing,
+              state: getListingState(listing.id, authUserState, guestFavoriteIds)
+            }));
+
+            // Sort: matched first, then liked, then others
+            listingsWithState.sort((a, b) => {
+              const priorityA = a.state.badge === 'matched' ? 0 : a.state.initialFavorited ? 1 : 2;
+              const priorityB = b.state.badge === 'matched' ? 0 : b.state.initialFavorited ? 1 : 2;
+              return priorityA - priorityB;
+            });
+
+            return listingsWithState.map(({ listing, state }) => (
               <HomepageListingCard
                 key={listing.id}
                 listing={listing}
-                badge={badge}
-                initialFavorited={isFavorited}
+                badge={state.badge}
+                initialFavorited={state.initialFavorited}
+                isApplied={state.isApplied}
+                tripId={state.tripId}
+                matchId={state.matchId}
                 onFavorite={onFavorite}
                 onSignInPrompt={onSignInPrompt}
               />
-            );
-          })}
+            ));
+          })()}
         </div>
       ) : (
         <div className="text-gray-500 text-sm">No listings available</div>
@@ -169,7 +211,7 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
 const hasExploreTarget = (section: ListingSection): boolean =>
   section.center !== undefined;
 
-export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt }: PopularListingsSectionProps) {
+export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt, authUserState }: PopularListingsSectionProps) {
   const router = useRouter();
   const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
 
@@ -219,10 +261,11 @@ export default function PopularListingsSection({ sections, guestFavoriteIds, onF
               listings={section.listings}
               showBadges={section.showBadges}
               guestFavoriteIds={guestFavoriteIds}
-              onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.center, section.locationString) : undefined}
+              onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.sectionTripId, section.center, section.locationString) : undefined}
               onSignInPrompt={onSignInPrompt}
               onExploreClick={hasExploreTarget(section) ? () => handleExploreClick(section, index) : undefined}
               isExploreLoading={loadingIndex === index}
+              authUserState={authUserState}
             />
           ))
         ) : (

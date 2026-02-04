@@ -9,8 +9,11 @@ import {
 } from '@/app/actions/listings';
 import { createGuestSession } from '@/app/actions/guest-session-db';
 import { guestOptimisticFavorite, guestOptimisticRemoveFavorite, pullGuestFavoritesFromDb } from '@/app/actions/guest-favorites';
+import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
+import { createTrip } from '@/app/actions/trips';
 import { GuestSessionService } from '@/utils/guest-session';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
+import { HomepageUserState } from '@/app/actions/homepage-user-state';
 
 interface UserTripLocation {
   city: string | null;
@@ -33,6 +36,8 @@ interface PopularListingsSectionWrapperProps {
   isSignedIn: boolean;
   userTripLocation: UserTripLocation | null;
   popularAreas: PopularArea[];
+  userState?: HomepageUserState | null;
+  recentTripId?: string | null;
 }
 
 const LISTINGS_PER_ROW = 12;
@@ -41,6 +46,8 @@ export default function PopularListingsSectionWrapper({
   isSignedIn,
   userTripLocation,
   popularAreas,
+  userState,
+  recentTripId: initialRecentTripId,
 }: PopularListingsSectionWrapperProps) {
   const [sections, setSections] = useState<ListingSection[]>([]);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -49,6 +56,10 @@ export default function PopularListingsSectionWrapper({
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
   const [guestFavoriteIds, setGuestFavoriteIds] = useState<Set<string>>(new Set());
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authFavoriteIds, setAuthFavoriteIds] = useState<Set<string>>(
+    () => new Set(userState?.favoritedListingIds ?? [])
+  );
+  const [recentTripId, setRecentTripId] = useState<string | null>(initialRecentTripId ?? null);
 
   // Load guest favorites on mount (only for unauthenticated users)
   useEffect(() => {
@@ -67,6 +78,7 @@ export default function PopularListingsSectionWrapper({
   const handleGuestFavorite = useCallback(async (
     listingId: string,
     isFavorited: boolean,
+    _sectionTripId?: string,
     center?: { lat: number; lng: number },
     locationString?: string,
   ) => {
@@ -114,6 +126,52 @@ export default function PopularListingsSectionWrapper({
       await guestOptimisticRemoveFavorite(sessionId, listingId);
     }
   }, [isSignedIn, guestSessionId]);
+
+  // Handle authenticated user favorite toggle
+  const handleAuthFavorite = useCallback(async (
+    listingId: string,
+    isFavorited: boolean,
+    sectionTripId?: string,
+    center?: { lat: number; lng: number },
+    locationString?: string,
+  ) => {
+    if (!isSignedIn) return;
+
+    // Determine which trip to use
+    let tripId = sectionTripId || recentTripId;
+
+    // If no existing trip, create one based on listing location
+    if (!tripId && isFavorited && center) {
+      const result = await createTrip({
+        locationString: locationString || 'Unknown',
+        latitude: center.lat,
+        longitude: center.lng,
+      });
+      if (!result.success || !result.trip) return;
+      tripId = result.trip.id;
+      setRecentTripId(tripId);
+    }
+
+    if (!tripId) return;
+
+    // Optimistic UI update
+    setAuthFavoriteIds((prev) => {
+      const next = new Set(prev);
+      if (isFavorited) {
+        next.add(listingId);
+      } else {
+        next.delete(listingId);
+      }
+      return next;
+    });
+
+    // Persist to DB
+    if (isFavorited) {
+      await optimisticFavorite(tripId, listingId);
+    } else {
+      await optimisticRemoveFavorite(tripId, listingId);
+    }
+  }, [isSignedIn, recentTripId]);
 
   // Get browser geolocation on mount
   useEffect(() => {
@@ -320,8 +378,12 @@ export default function PopularListingsSectionWrapper({
       <PopularListingsSection
         sections={sections}
         guestFavoriteIds={isSignedIn ? undefined : guestFavoriteIds}
-        onFavorite={isSignedIn ? undefined : handleGuestFavorite}
+        onFavorite={isSignedIn ? handleAuthFavorite : handleGuestFavorite}
         onSignInPrompt={isSignedIn ? undefined : handleGuestApplyPrompt}
+        authUserState={isSignedIn ? {
+          ...userState,
+          favoritedListingIds: Array.from(authFavoriteIds),
+        } : undefined}
       />
       <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
     </>

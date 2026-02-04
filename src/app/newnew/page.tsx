@@ -16,6 +16,7 @@ import { getGuestSessionLocation } from "@/app/actions/guest-session-db";
 import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 import { getPopularListingAreas } from "@/app/actions/listings";
+import { getHomepageUserState, HomepageUserState } from "@/app/actions/homepage-user-state";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Monthly Rentals',
@@ -74,10 +75,20 @@ const NewNewHomePage = async () => {
     }
   }
 
-  // Get user's most recent trip location if signed in
+  // Get user's most recent trip location and user state if signed in
   let userTripLocation = null;
+  let recentTripId: string | null = null;
+  let userState: HomepageUserState | null = null;
+
   if (user?.id) {
-    const recentTrip = await getMostRecentTrip();
+    const [recentTrip, fetchedUserState] = await Promise.all([
+      getMostRecentTrip(),
+      getHomepageUserState()
+    ]);
+
+    userState = fetchedUserState;
+    recentTripId = recentTrip?.id || null;
+
     if (recentTrip?.city || recentTrip?.locationString) {
       userTripLocation = {
         city: recentTrip.city,
@@ -126,6 +137,8 @@ const NewNewHomePage = async () => {
           isSignedIn={!!user?.id}
           userTripLocation={userTripLocation}
           popularAreas={popularAreas}
+          userState={userState}
+          recentTripId={recentTripId}
         />
         <Spacer />
         <RentEasyCopy />
