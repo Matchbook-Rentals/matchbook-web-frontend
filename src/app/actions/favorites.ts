@@ -1,6 +1,6 @@
 'use server'
 import prisma from '@/lib/prismadb'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { TripAndMatches } from '@/types';
 
 export const createDbFavorite = async (tripId: string, listingId: string): Promise<string> => {
@@ -39,8 +39,10 @@ export const createDbFavorite = async (tripId: string, listingId: string): Promi
 
     console.log('Favorite Created', newFavorite)
 
-    // Revalidate the favorites page or any other relevant pages
+    // Revalidate the favorites page and trip cache
     revalidatePath('/favorites');
+    revalidateTag(`trip-${tripId}`);
+    revalidateTag('user-trips');
 
     return newFavorite.id;
   } catch (error) {
@@ -59,8 +61,12 @@ export const deleteDbFavorite = async (favoriteId: string) => {
 
     console.log('Favorite Deleted', deletedFavorite)
 
-    // Revalidate the favorites page or any other relevant pages
+    // Revalidate the favorites page and trip cache
     revalidatePath('/favorites');
+    if (deletedFavorite.tripId) {
+      revalidateTag(`trip-${deletedFavorite.tripId}`);
+      revalidateTag('user-trips');
+    }
 
     return deletedFavorite;
   } catch (error) {
@@ -106,6 +112,8 @@ export const optimisticRemoveFavorite = async (
 
     console.log('Delete operation result:', result);
     revalidatePath('/favorites');
+    revalidateTag(`trip-${tripId}`);
+    revalidateTag('user-trips');
 
     return { success: true };
   } catch (error) {

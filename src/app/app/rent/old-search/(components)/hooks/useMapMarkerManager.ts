@@ -232,10 +232,26 @@ export const useMapMarkerManager = ({
   // Style Updates for Existing Markers
   // ============================================
   
+  // ============================================
+  // Z-Index Calculation
+  // ============================================
+
+  const calculateZIndex = (markerData: any, isHovered: boolean): string => {
+    if (isHovered) return markerStyles.Z_INDEX.HOVER;
+    if (markerData.listing.isLiked) return markerStyles.Z_INDEX.LIKED;
+    if (markerData.listing.isDisliked) return markerStyles.Z_INDEX.DISLIKED;
+    return markerStyles.Z_INDEX.DEFAULT;
+  };
+
   const updateSimpleMarkerStyles = useCallback((element: HTMLElement, markerData: any, isHovered: boolean) => {
     updateSimpleMarkerColors(element, markerData, isHovered);
     updateSimpleMarkerHeart(element, markerData);
+    updateSimpleMarkerZIndex(element, markerData, isHovered);
   }, [markerStyles]);
+
+  const updateSimpleMarkerZIndex = (element: HTMLElement, markerData: any, isHovered: boolean) => {
+    element.style.zIndex = calculateZIndex(markerData, isHovered);
+  };
 
   const updateSimpleMarkerColors = (element: HTMLElement, markerData: any, isHovered: boolean) => {
     const svg = element.querySelector('svg');
@@ -296,7 +312,7 @@ export const useMapMarkerManager = ({
 
   const updatePriceBubbleStyles = useCallback((element: HTMLElement, markerData: any, isHovered: boolean) => {
     const colors = getPriceBubbleColors(markerData, isHovered);
-    applyPriceBubbleStyles(element, colors);
+    applyPriceBubbleStyles(element, colors, markerData, isHovered);
     updatePriceBubbleContent(element, markerData);
   }, [markerStyles]);
 
@@ -306,12 +322,13 @@ export const useMapMarkerManager = ({
     return markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
   };
 
-  const applyPriceBubbleStyles = (element: HTMLElement, colors: any) => {
+  const applyPriceBubbleStyles = (element: HTMLElement, colors: any, markerData: any, isHovered: boolean) => {
+    const zIndex = calculateZIndex(markerData, isHovered);
     Object.assign(element.style, {
       backgroundColor: colors.background,
       color: colors.text,
       border: `${BORDER_WIDTH} solid ${colors.border}`,
-      zIndex: markerStyles.Z_INDEX.DEFAULT
+      zIndex
     });
   };
 

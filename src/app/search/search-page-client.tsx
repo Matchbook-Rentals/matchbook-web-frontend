@@ -50,6 +50,8 @@ interface SearchPageClientProps {
   hasLocationParams: boolean;
   recentSearches?: RecentSearch[];
   suggestedLocations?: SuggestedLocationItem[];
+  initialFavoriteIds?: string[];
+  initialDislikeIds?: string[];
 }
 
 export function buildSearchUrl(params: {
@@ -215,6 +217,7 @@ export default function SearchPageClient({
   listings: initialListings, center, locationString, isSignedIn, userId, user,
   tripId: initialTripId, sessionId: initialSessionId, tripData, hasLocationParams,
   recentSearches = [], suggestedLocations = [],
+  initialFavoriteIds = [], initialDislikeIds = [],
 }: SearchPageClientProps) {
   const router = useRouter();
 
@@ -234,9 +237,9 @@ export default function SearchPageClient({
   // Local trip data state that can be updated from navbar
   const [localTripData, setLocalTripData] = useState<TripData | null>(tripData || null);
 
-  // Local state for favorites/dislikes
-  const [favIds, setFavIds] = useState<Set<string>>(new Set());
-  const [dislikedIds, setDislikedIds] = useState<Set<string>>(new Set());
+  // Local state for favorites/dislikes (initialized from server data if available)
+  const [favIds, setFavIds] = useState<Set<string>>(new Set(initialFavoriteIds));
+  const [dislikedIds, setDislikedIds] = useState<Set<string>>(new Set(initialDislikeIds));
   const [filters, setFilters] = useState<FilterOptions>(DEFAULT_FILTER_OPTIONS);
 
   // Auth modal state

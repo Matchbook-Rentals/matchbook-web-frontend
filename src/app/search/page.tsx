@@ -68,6 +68,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   let locationString: string;
   let tripData: TripData | null = null;
   let hasLocationParams = false;
+  let initialFavoriteIds: string[] = [];
+  let initialDislikeIds: string[] = [];
 
   if (tripId && user?.id) {
     try {
@@ -85,6 +87,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           locationString,
         };
         hasLocationParams = true;
+        // Extract favorite and dislike IDs from trip
+        initialFavoriteIds = trip.favorites?.map(f => f.listingId).filter((id): id is string => id !== null) ?? [];
+        initialDislikeIds = trip.dislikes?.map(d => d.listingId).filter((id): id is string => id !== null) ?? [];
       } else {
         tripId = undefined;
         lat = OGDEN_UT.lat;
@@ -187,6 +192,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       hasLocationParams={hasLocationParams}
       recentSearches={recentSearches}
       suggestedLocations={suggestedLocations}
+      initialFavoriteIds={initialFavoriteIds}
+      initialDislikeIds={initialDislikeIds}
     />
   );
 }
