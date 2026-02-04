@@ -61,37 +61,88 @@ const DashboardHeader = () => (
 );
 
 // Recent Searches Section
+const INITIAL_SEARCHES_COUNT = 3;
+const SEARCHES_PER_PAGE = 9;
+
+const SearchCard = ({ trip, compact = false }: { trip: DashboardTrip; compact?: boolean }) => (
+  <Link
+    href={`/guest/rent/searches/${trip.id}`}
+    className="flex items-center gap-4 bg-white border border-gray-200 rounded-lg px-4 py-3 hover:border-gray-300 transition-colors"
+  >
+    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+      <Home className="w-5 h-5 text-gray-500" />
+    </div>
+    <p className="font-medium text-sm text-[#404040] truncate min-w-0 shrink">
+      {getLocationDisplay(trip)}
+    </p>
+    <p className="text-sm text-gray-500 truncate min-w-0 shrink-[2]">
+      {formatDateRange(trip.startDate, trip.endDate)}
+    </p>
+    <p className="hidden sm:block text-sm text-gray-500 truncate min-w-0 shrink-[3]">
+      {formatOccupants(trip.numAdults, trip.numChildren, trip.numPets)}
+    </p>
+    <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+  </Link>
+);
+
 const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
   if (searches.length === 0) return null;
+
+  const hasMore = searches.length > INITIAL_SEARCHES_COUNT;
+  const remainingCount = searches.length - INITIAL_SEARCHES_COUNT;
+
+  const visibleSearches = isExpanded
+    ? searches.slice(0, INITIAL_SEARCHES_COUNT + currentPage * SEARCHES_PER_PAGE)
+    : searches.slice(0, INITIAL_SEARCHES_COUNT);
+
+  const totalExpandedPages = Math.ceil((searches.length - INITIAL_SEARCHES_COUNT) / SEARCHES_PER_PAGE);
+  const hasMorePages = isExpanded && currentPage < totalExpandedPages;
 
   return (
     <section className="mb-8">
       <h2 className="text-lg font-medium text-[#404040] mb-4">Recent Searches</h2>
-      <div className="flex gap-4 overflow-x-auto pb-2">
-        {searches.map((trip) => (
-          <Link
-            key={trip.id}
-            href={`/guest/rent/searches/${trip.id}`}
-            className="flex-shrink-0 flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-4 py-3 hover:border-gray-300 transition-colors min-w-[300px]"
-          >
-            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-              <Home className="w-5 h-5 text-gray-500" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm text-[#404040] truncate">
-                {getLocationDisplay(trip)}
-              </p>
-              <p className="text-xs text-gray-500">
-                {formatDateRange(trip.startDate, trip.endDate)}
-              </p>
-              <p className="text-xs text-gray-500">
-                {formatOccupants(trip.numAdults, trip.numChildren, trip.numPets)}
-              </p>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
-          </Link>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        {visibleSearches.map((trip) => (
+          <SearchCard key={trip.id} trip={trip} compact />
         ))}
       </div>
+
+      {/* See more button */}
+      {hasMore && !isExpanded && (
+        <button
+          onClick={() => setIsExpanded(true)}
+          className="mt-4 text-sm text-primaryBrand hover:text-primaryBrand/80 font-medium"
+        >
+          See more searches ({remainingCount})
+        </button>
+      )}
+
+      {/* Load more / Show less when expanded */}
+      {isExpanded && (
+        <div className="flex items-center gap-4 mt-4">
+          {hasMorePages && (
+            <button
+              onClick={() => setCurrentPage((p) => p + 1)}
+              className="text-sm text-primaryBrand hover:text-primaryBrand/80 font-medium"
+            >
+              Load more ({searches.length - visibleSearches.length} remaining)
+            </button>
+          )}
+          <button
+            onClick={() => {
+              setIsExpanded(false);
+              setCurrentPage(1);
+            }}
+            className="text-sm text-gray-500 hover:text-gray-700 font-medium"
+          >
+            Show less
+          </button>
+        </div>
+      )}
     </section>
   );
 };
