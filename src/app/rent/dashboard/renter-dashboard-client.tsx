@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Home, ChevronRight, ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { APP_PAGE_MARGIN } from '@/constants/styles';
 import type {
@@ -118,9 +119,9 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
         {visibleBookings.map((booking) => (
           <div
             key={booking.id}
-            className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col md:flex-row"
+            className="bg-inherit rounded-xl overflow-hidden flex flex-col md:flex-row"
           >
-            <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0">
+            <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0 rounded-[12px] overflow-hidden">
               <Image
                 src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
                 alt={booking.listing?.title || 'Property'}
@@ -130,33 +131,39 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
             </div>
             <div className="flex-1 p-4 flex flex-col justify-between">
               <div>
-                <h3 className="font-medium text-[#404040] text-lg">
+                <h3 className="font-poppins font-medium text-[#373940] text-[19px]">
                   {booking.listing?.title || 'Untitled Property'}
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  {formatDateRange(booking.startDate, booking.endDate)}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {booking.listing?.locationString || 'Location not available'}
-                </p>
-                {booking.trip && (
-                  <p className="text-sm text-gray-500">
-                    {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
+                <div className="flex flex-col justify-center py-1 flex-1">
+                  <p className="font-poppins font-normal text-[15px] text-[#777B8B]">
+                    {formatDateRange(booking.startDate, booking.endDate)}
                   </p>
+                </div>
+                <div className="flex flex-col justify-center py-1 flex-1">
+                  <p className="font-poppins font-normal text-[15px] text-[#777B8B]">
+                    {booking.listing?.locationString || 'Location not available'}
+                  </p>
+                </div>
+                {booking.trip && (
+                  <div className="flex flex-col justify-center py-1 flex-1">
+                    <p className="font-poppins font-normal text-[15px] text-[#777B8B]">
+                      {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
+                    </p>
+                  </div>
                 )}
               </div>
               <div className="flex gap-3 mt-4">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/app/rent/bookings/${booking.id}`}>View Details</Link>
-                </Button>
+                <BrandButton variant="outline" size="sm" href={`/app/rent/bookings/${booking.id}`}>
+                  View Details
+                </BrandButton>
                 {booking.listing?.userId && (
-                  <Button
+                  <BrandButton
+                    variant="default"
                     size="sm"
-                    className="bg-primaryBrand hover:bg-primaryBrand/90 text-white"
                     onClick={() => handleMessageHost(booking.listing!.userId)}
                   >
                     Message Host
-                  </Button>
+                  </BrandButton>
                 )}
               </div>
             </div>
