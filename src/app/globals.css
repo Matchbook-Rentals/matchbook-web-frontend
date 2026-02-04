@@ -277,6 +277,53 @@
   font-weight: 400;
 }
 
+/* Homepage Listing Card - Container Query Support */
+.\@container {
+  container-type: inline-size;
+}
+
+/* Container query scaled text classes - uncomment to use
+.listing-card-title {
+  font-size: clamp(12px, 5cqw, 16px);
+  font-weight: 500;
+  color: #404040;
+}
+*/
+
+.listing-card-details {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(12px, 5.6cqw, 14px);
+  font-weight: 400;
+  color: #373940;
+}
+
+/* DEBUG: Container query color borders - uncomment to test
+.listing-card-debug {
+  border: 3px solid red;
+}
+@container (min-width: 150px) {
+  .listing-card-debug { border-color: orange; }
+}
+@container (min-width: 180px) {
+  .listing-card-debug { border-color: yellow; }
+}
+@container (min-width: 210px) {
+  .listing-card-debug { border-color: lime; }
+}
+@container (min-width: 240px) {
+  .listing-card-debug { border-color: cyan; }
+}
+@container (min-width: 270px) {
+  .listing-card-debug { border-color: blue; }
+}
+@container (min-width: 300px) {
+  .listing-card-debug { border-color: purple; }
+}
+@container (min-width: 350px) {
+  .listing-card-debug { border-color: magenta; }
+}
+*/
+
 /* Print styles for verification report */
 @media print {
   /* Hide navigation, headers, footers */

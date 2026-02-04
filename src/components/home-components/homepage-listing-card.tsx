@@ -314,16 +314,16 @@ export default function HomepageListingCard({
           <h3 className="font-medium text-[#404040] text-sm truncate">
             {getTruncatedTitle()}
           </h3>
-          <p className="font-poppins text-[10px] font-normal text-[#373940]">
-            {getDetailsString()} {getLocationString()}
+          <p className="listing-card-details">
+            {getDetailsString()}
           </p>
           <div className="flex items-center justify-between mt-1">
-            <p className="font-poppins text-[10px] font-normal text-[#373940] whitespace-nowrap">
+            <p className="listing-card-details whitespace-nowrap">
               {getDisplayPrice()}
             </p>
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 fill-[#373940] text-[#373940]" />
-              <span className="font-poppins text-[10px] font-normal text-[#373940]">{getMockRating()} ({getMockReviewCount()})</span>
+              <span className="listing-card-details">{getMockRating()} ({getMockReviewCount()})</span>
             </div>
           </div>
         </div>
