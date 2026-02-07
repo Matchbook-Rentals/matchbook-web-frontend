@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { SearchIcon, Clock, Building2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import UserMenu from '@/components/userMenu';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
@@ -88,6 +88,7 @@ export default function SearchResultsNavbar({
 }: SearchResultsNavbarProps) {
   const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isTypingLocation, setIsTypingLocation] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<SuggestedLocation | null>(null);
   const [locationDisplayValue, setLocationDisplayValue] = useState(locationString);
@@ -134,6 +135,13 @@ export default function SearchResultsNavbar({
     }
     checkUserListings();
   }, [isSignedIn, userId]);
+
+  // Collapse bar back to header when no popover is active
+  useEffect(() => {
+    if (activePopover === null) {
+      setIsExpanded(false);
+    }
+  }, [activePopover]);
 
   const handleLocationSelect = (location: SuggestedLocation | null) => {
     setSelectedLocation(location);
@@ -308,7 +316,14 @@ export default function SearchResultsNavbar({
     if (!open && activePopover === 'who') {
       saveGuestsOnBlur();
     }
-    setActivePopover(open ? popover : null);
+
+    if (open) {
+      setIsExpanded(true);
+      setTimeout(() => setActivePopover(popover), 152);
+    } else {
+      setActivePopover(null);
+      // useEffect will set isExpanded=false
+    }
   };
 
   const formatDateDisplay = () => {
@@ -422,56 +437,187 @@ export default function SearchResultsNavbar({
     }
   };
 
-  const isExpanded = activePopover !== null;
+  const searchBarContent = (expanded: boolean) => (
+    <>
+      <div className="flex items-center flex-1 min-w-0">
+        {/* WHERE */}
+        <Popover open={activePopover === 'where'} onOpenChange={(open) => handlePopoverChange('where', open)}>
+          <PopoverTrigger asChild>
+            <button className={`flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left ${expanded ? 'pr-6' : 'pr-5'}`}>
+              <span className={`text-xs font-medium leading-tight ${expanded ? 'text-gray-700' : 'text-gray-500'}`}>Where</span>
+              <span className={`text-xs truncate leading-tight flex items-center gap-1.5 ${locationDisplayValue ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
+                {locationDisplayValue || 'Choose Location'}
+                {isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
+              </span>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-[min(402px,calc(100vw-2rem))] p-0 border-[#e9e9eb] rounded-lg"
+            align="start"
+            sideOffset={12}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <div className="p-6 flex flex-col gap-6">
+              <HeroLocationSuggest
+                hasAccess={true}
+                onLocationSelect={handleLocationSelect}
+                onInputChange={(value) => setIsTypingLocation(value.length > 0)}
+                onGeocodingStateChange={setIsGeocoding}
+                showLocationIcon={true}
+                setDisplayValue={setLocationDisplayValue}
+                contentClassName="p-0"
+                placeholder={
+                  selectedLocation?.description
+                    ? 'Wrong place? Begin typing and select another'
+                    : 'Enter an address or city'
+                }
+              />
 
-  const formatCompactSummary = () => {
-    const parts: string[] = [];
-    if (locationDisplayValue) parts.push(locationDisplayValue);
-    const dateStr = formatDateDisplay();
-    if (dateStr) parts.push(dateStr);
-    const guestStr = formatGuestDisplay();
-    if (guestStr) parts.push(guestStr);
-    return parts.length > 0 ? parts.join(' · ') : 'Search for rentals...';
-  };
+              {!isTypingLocation && (
+                <>
+                  {/* Recent Searches - max 3 */}
+                  {recentSearches.length > 0 && (
+                    <div className="flex flex-col gap-3">
+                      <div className="px-3.5">
+                        <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
+                          Recent Searches
+                        </h3>
+                      </div>
 
-  const handleCompactTriggerClick = () => {
-    setActivePopover('where');
-  };
+                      {recentSearches.slice(0, 3).map((search, index) => (
+                        <button
+                          key={`recent-${index}`}
+                          className="flex flex-col gap-1.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                          onClick={() => handleRecentSearchClick(search.tripId)}
+                          disabled={loadingRecentSearchId === search.tripId}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            {loadingRecentSearchId === search.tripId ? (
+                              <ImSpinner8 className="w-5 h-5 text-gray-500 animate-spin" />
+                            ) : (
+                              <Clock className="w-5 h-5 text-gray-500" />
+                            )}
+                            <span className="font-medium text-[#0d1b2a] text-sm leading-5">
+                              {search.location}
+                            </span>
+                          </div>
+                          <span className="ml-[30px] text-xs text-gray-400">
+                            {search.details}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Suggested - show (5 - recentSearches count) items */}
+                  {(() => {
+                    const recentCount = Math.min(recentSearches.length, 3);
+                    const suggestedCount = Math.max(0, 5 - recentCount);
+                    const visibleSuggestions = suggestedLocations.slice(0, suggestedCount);
+
+                    return visibleSuggestions.length > 0 ? (
+                      <div className="flex flex-col gap-3">
+                        <div className="px-3.5">
+                          <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
+                            Suggested
+                          </h3>
+                        </div>
+
+                        {visibleSuggestions.map((location, index) => (
+                          <button
+                            key={`suggested-${index}`}
+                            className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
+                            onClick={() => handleSuggestedLocationClick(location.title)}
+                          >
+                            <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
+                              <Building2 className="w-6 h-6 text-gray-500" />
+                            </div>
+                            <span className="font-medium text-[#0d1b2a] text-sm leading-5 whitespace-nowrap">
+                              {location.title}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    ) : null;
+                  })()}
+                </>
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* WHEN */}
+        <Popover open={activePopover === 'when'} onOpenChange={(open) => handlePopoverChange('when', open)}>
+          <PopoverTrigger asChild>
+            <button className={`flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left ${expanded ? 'px-6' : 'px-5'}`}>
+              <span className={`text-xs font-medium leading-tight ${expanded ? 'text-gray-700' : 'text-gray-500'}`}>When</span>
+              <span className={`text-xs truncate leading-tight ${formatDateDisplay() ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
+                {formatDateDisplay() || 'Add Dates'}
+              </span>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-auto p-0 border-none"
+            align="center"
+            sideOffset={12}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <SearchDateRange
+              start={dateRange.start}
+              end={dateRange.end}
+              handleChange={handleDateChange}
+              minimumDateRange={{ months: 1 }}
+              maximumDateRange={{ months: 12 }}
+            />
+          </PopoverContent>
+        </Popover>
+
+        {/* WHO */}
+        <Popover open={activePopover === 'who'} onOpenChange={(open) => handlePopoverChange('who', open)}>
+          <PopoverTrigger asChild>
+            <button className={`flex flex-col flex-1 min-w-0 text-left ${expanded ? 'pl-6' : 'pl-5'}`}>
+              <span className={`text-xs font-medium leading-tight ${expanded ? 'text-gray-700' : 'text-gray-500'}`}>Who</span>
+              <span className={`text-xs truncate leading-tight ${formatGuestDisplay() ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
+                {formatGuestDisplay() || 'Add Renters'}
+              </span>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-[320px] p-0 rounded-lg"
+            align="end"
+            sideOffset={12}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <GuestTypeCounter guests={guests} setGuests={setGuests} />
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <Button
+        size="icon"
+        className="w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-3"
+        onClick={handleSubmit}
+        disabled={isSubmitting || isGeocoding}
+      >
+        {isSubmitting || isGeocoding ? (
+          <ImSpinner8 className="animate-spin w-4 h-4" />
+        ) : (
+          <SearchIcon className="w-4 h-4" />
+        )}
+      </Button>
+    </>
+  );
 
   return (
-    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
-      {/* Row 1: Logo + Compact Search Trigger (when collapsed) / Logo only (when expanded) + UserMenu */}
-      <header className="flex items-center px-6 h-[76px]">
-        {/* Left: Logo */}
+    <>
+    <div className="relative z-50 w-full bg-gradient-to-b from-white to-primaryBrand/10">
+      {/* Header row */}
+      <header className="flex items-center justify-between px-6 h-[76px]">
         <Link href="/" className="flex-shrink-0">
           <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
           <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
         </Link>
 
-        {/* Center: Compact search trigger (only when collapsed) */}
-        <div className="flex-1 flex justify-center">
-          <AnimatePresence mode="wait">
-            {!isExpanded && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.15 }}
-                onClick={handleCompactTriggerClick}
-                className="flex items-center gap-3 h-[44px] pl-5 pr-3 bg-white rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)] hover:shadow-[0px_4px_14px_rgba(0,0,0,0.18)] transition-shadow cursor-pointer max-w-[500px]"
-              >
-                <span className="text-sm text-gray-700 truncate">
-                  {formatCompactSummary()}
-                </span>
-                <div className="w-8 h-8 bg-primaryBrand rounded-full flex items-center justify-center flex-shrink-0">
-                  <SearchIcon className="w-3.5 h-3.5 text-white" />
-                </div>
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Right: UserMenu */}
         <div className="flex items-center gap-6 flex-shrink-0">
           <UserMenu
             color="white"
@@ -484,189 +630,45 @@ export default function SearchResultsNavbar({
         </div>
       </header>
 
-      {/* Row 2: Animated expanded search bar */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="overflow-hidden"
-          >
-            <div className="flex justify-center px-6 pb-4">
-              <div className="flex items-center w-full max-w-[700px] h-[56px] pl-6 pr-2 py-2 bg-white rounded-full shadow-[0px_4px_14px_rgba(0,0,0,0.15)]">
-                <div className="flex items-center flex-1 min-w-0">
-                  {/* WHERE */}
-                  <Popover open={activePopover === 'where'} onOpenChange={(open) => handlePopoverChange('where', open)}>
-                    <PopoverTrigger asChild>
-                      <button className="flex flex-col flex-1 min-w-0 border-r border-gray-300 pr-5 text-left">
-                        <span className="text-[11px] font-medium text-gray-500 leading-tight">Where</span>
-                        <span className={`text-sm truncate leading-tight flex items-center gap-1.5 ${locationDisplayValue ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
-                          {locationDisplayValue || 'Choose Location'}
-                          {isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
-                        </span>
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-[min(402px,calc(100vw-2rem))] p-0 border-[#e9e9eb] rounded-lg"
-                      align="start"
-                      sideOffset={12}
-                      onOpenAutoFocus={(e) => e.preventDefault()}
-                    >
-                      <div className="p-6 flex flex-col gap-6">
-                        <HeroLocationSuggest
-                          hasAccess={true}
-                          onLocationSelect={handleLocationSelect}
-                          onInputChange={(value) => setIsTypingLocation(value.length > 0)}
-                          onGeocodingStateChange={setIsGeocoding}
-                          showLocationIcon={true}
-                          setDisplayValue={setLocationDisplayValue}
-                          contentClassName="p-0"
-                          placeholder={
-                            selectedLocation?.description
-                              ? 'Wrong place? Begin typing and select another'
-                              : 'Enter an address or city'
-                          }
-                        />
+      {/* Height spacer — pushes content below navbar down when expanded */}
+      <motion.div
+        initial={false}
+        animate={{ height: isExpanded ? 86 : 0 }}
+        transition={{ duration: 0.15 }}
+      />
 
-                        {!isTypingLocation && (
-                          <>
-                            {/* Recent Searches - max 3 */}
-                            {recentSearches.length > 0 && (
-                              <div className="flex flex-col gap-3">
-                                <div className="px-3.5">
-                                  <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
-                                    Recent Searches
-                                  </h3>
-                                </div>
-
-                                {recentSearches.slice(0, 3).map((search, index) => (
-                                  <button
-                                    key={`recent-${index}`}
-                                    className="flex flex-col gap-1.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
-                                    onClick={() => handleRecentSearchClick(search.tripId)}
-                                    disabled={loadingRecentSearchId === search.tripId}
-                                  >
-                                    <div className="flex items-center gap-2.5">
-                                      {loadingRecentSearchId === search.tripId ? (
-                                        <ImSpinner8 className="w-5 h-5 text-gray-500 animate-spin" />
-                                      ) : (
-                                        <Clock className="w-5 h-5 text-gray-500" />
-                                      )}
-                                      <span className="font-medium text-[#0d1b2a] text-sm leading-5">
-                                        {search.location}
-                                      </span>
-                                    </div>
-                                    <span className="ml-[30px] text-xs text-gray-400">
-                                      {search.details}
-                                    </span>
-                                  </button>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Suggested - show (5 - recentSearches count) items */}
-                            {(() => {
-                              const recentCount = Math.min(recentSearches.length, 3);
-                              const suggestedCount = Math.max(0, 5 - recentCount);
-                              const visibleSuggestions = suggestedLocations.slice(0, suggestedCount);
-
-                              return visibleSuggestions.length > 0 ? (
-                                <div className="flex flex-col gap-3">
-                                  <div className="px-3.5">
-                                    <h3 className="font-normal text-[#0d1b2a] text-xs leading-5">
-                                      Suggested
-                                    </h3>
-                                  </div>
-
-                                  {visibleSuggestions.map((location, index) => (
-                                    <button
-                                      key={`suggested-${index}`}
-                                      className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
-                                      onClick={() => handleSuggestedLocationClick(location.title)}
-                                    >
-                                      <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
-                                        <Building2 className="w-6 h-6 text-gray-500" />
-                                      </div>
-                                      <span className="font-medium text-[#0d1b2a] text-sm leading-5 whitespace-nowrap">
-                                        {location.title}
-                                      </span>
-                                    </button>
-                                  ))}
-                                </div>
-                              ) : null;
-                            })()}
-                          </>
-                        )}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-
-                  {/* WHEN */}
-                  <Popover open={activePopover === 'when'} onOpenChange={(open) => handlePopoverChange('when', open)}>
-                    <PopoverTrigger asChild>
-                      <button className="flex flex-col flex-1 min-w-0 border-r border-gray-300 px-5 text-left">
-                        <span className="text-[11px] font-medium text-gray-500 leading-tight">When</span>
-                        <span className={`text-sm truncate leading-tight ${formatDateDisplay() ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
-                          {formatDateDisplay() || 'Add Dates'}
-                        </span>
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0 border-none"
-                      align="center"
-                      sideOffset={12}
-                      onOpenAutoFocus={(e) => e.preventDefault()}
-                    >
-                      <SearchDateRange
-                        start={dateRange.start}
-                        end={dateRange.end}
-                        handleChange={handleDateChange}
-                        minimumDateRange={{ months: 1 }}
-                        maximumDateRange={{ months: 12 }}
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  {/* WHO */}
-                  <Popover open={activePopover === 'who'} onOpenChange={(open) => handlePopoverChange('who', open)}>
-                    <PopoverTrigger asChild>
-                      <button className="flex flex-col flex-1 min-w-0 pl-5 text-left">
-                        <span className="text-[11px] font-medium text-gray-500 leading-tight">Who</span>
-                        <span className={`text-sm truncate leading-tight ${formatGuestDisplay() ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
-                          {formatGuestDisplay() || 'Add Renters'}
-                        </span>
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-[320px] p-0 rounded-lg"
-                      align="end"
-                      sideOffset={12}
-                      onOpenAutoFocus={(e) => e.preventDefault()}
-                    >
-                      <GuestTypeCounter guests={guests} setGuests={setGuests} />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                <Button
-                  size="icon"
-                  className="w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-3"
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || isGeocoding}
-                >
-                  {isSubmitting || isGeocoding ? (
-                    <ImSpinner8 className="animate-spin w-4 h-4" />
-                  ) : (
-                    <SearchIcon className="w-4 h-4" />
-                  )}
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Search bar — single element, absolutely positioned, animates between header center and below header */}
+      <motion.div
+        className="absolute inset-x-0 z-10 flex justify-center px-6 pointer-events-none"
+        initial={false}
+        animate={{ top: isExpanded ? 88 : 13 }}
+        transition={{ duration: 0.15 }}
+      >
+        <motion.div
+          className="flex items-center w-full h-[50px] bg-white rounded-full pointer-events-auto"
+          initial={false}
+          animate={{
+            maxWidth: isExpanded ? 860 : 700,
+            paddingLeft: 24,
+            paddingRight: isExpanded ? 12 : 8,
+            boxShadow: isExpanded
+              ? '0px 6px 12px rgba(0,0,0,0.15)'
+              : '0px 4px 10px rgba(0,0,0,0.12)',
+          }}
+          transition={{ duration: 0.15 }}
+        >
+          {searchBarContent(isExpanded)}
+        </motion.div>
+      </motion.div>
     </div>
+
+    {/* Desktop popover backdrop */}
+    {activePopover && (
+      <div
+        className="fixed inset-0 z-40 bg-gray-800/40 hidden md:block"
+        onClick={() => setActivePopover(null)}
+      />
+    )}
+    </>
   );
 }
