@@ -12,6 +12,7 @@ import { ImSpinner8 } from 'react-icons/im';
 import { RecentSearch, SuggestedLocationItem } from './search-navbar';
 import { Clock, Building2 } from 'lucide-react';
 import { buildSearchUrl } from '@/app/search/search-page-client';
+import { formatDateDisplay, formatGuestDisplay } from '@/lib/search-display-utils';
 
 type ActiveSection = 'where' | 'when' | 'who' | null;
 
@@ -114,24 +115,8 @@ export default function MobileSearchOverlay({
     setActiveSection('where');
   };
 
-  const formatDateSummary = () => {
-    if (!dateRange.start && !dateRange.end) return 'Add dates';
-    const fmt = (d: Date | null) =>
-      d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-    if (dateRange.start && dateRange.end) return `${fmt(dateRange.start)} – ${fmt(dateRange.end)}`;
-    if (dateRange.start) return `${fmt(dateRange.start)} – ...`;
-    return 'Add dates';
-  };
-
-  const formatGuestSummary = () => {
-    const renters = guests.adults + guests.children;
-    const total = renters + guests.pets;
-    if (total <= 1) return 'Add renters';
-    const parts: string[] = [];
-    if (renters > 0) parts.push(`${renters} Renter${renters !== 1 ? 's' : ''}`);
-    if (guests.pets > 0) parts.push(`${guests.pets} Pet${guests.pets !== 1 ? 's' : ''}`);
-    return parts.join(' and ');
-  };
+  const dateSummary = formatDateDisplay(dateRange) || 'Add dates';
+  const guestSummary = formatGuestDisplay(guests) || 'Add renters';
 
   const handleSearchClick = () => {
     onSubmit();
@@ -251,7 +236,7 @@ export default function MobileSearchOverlay({
             <AccordionCard
               icon={<Calendar className="w-4 h-4" />}
               title="When"
-              summary={formatDateSummary()}
+              summary={dateSummary}
               isExpanded={activeSection === 'when'}
               onToggle={() => setActiveSection(activeSection === 'when' ? null : 'when')}
             >
@@ -269,7 +254,7 @@ export default function MobileSearchOverlay({
             <AccordionCard
               icon={<Users className="w-4 h-4" />}
               title="Who"
-              summary={formatGuestSummary()}
+              summary={guestSummary}
               isExpanded={activeSection === 'who'}
               onToggle={() => setActiveSection(activeSection === 'who' ? null : 'who')}
             >
