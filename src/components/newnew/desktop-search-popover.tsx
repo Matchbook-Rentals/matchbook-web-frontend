@@ -58,11 +58,7 @@ const WherePanel = ({ search, recentSearches, suggestedLocations }: WherePanelPr
       showLocationIcon={true}
       setDisplayValue={search.setLocationDisplayValue}
       contentClassName="p-0"
-      placeholder={
-        search.selectedLocation?.description
-          ? 'Wrong place? Begin typing and select another'
-          : 'Enter an address or city'
-      }
+      placeholder="Enter an address or city"
     />
 
     {!search.isTypingLocation && (
