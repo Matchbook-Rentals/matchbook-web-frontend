@@ -127,7 +127,7 @@ export default function MobileSearchOverlay({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 bg-white/40 flex flex-col md:hidden"
+          className="fixed inset-0 z-50 bg-background flex flex-col md:hidden"
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
@@ -297,11 +297,12 @@ interface AccordionCardProps {
   isExpanded: boolean;
   onToggle: () => void;
   children: React.ReactNode;
+  className?: string;
 }
 
-function AccordionCard({ icon, title, summary, isExpanded, onToggle, children }: AccordionCardProps) {
+function AccordionCard({ icon, title, summary, isExpanded, onToggle, children, className }: AccordionCardProps) {
   return (
-    <div className="rounded-2xl border border-gray-200 shadow-md overflow-hidden bg-background drop-shadow-md">
+    <div className={`rounded-2xl border border-gray-200 shadow-md overflow-hidden bg-background ${className || ''}`}>
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between px-4 py-3"
