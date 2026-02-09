@@ -363,15 +363,15 @@ export default function SearchResultsNavbar({
   const dateDisplay = formatDateDisplay(search.dateRange);
   const guestDisplay = formatGuestDisplay(search.guests);
 
-  const searchBarContent = (expanded: boolean) => (
+  const searchBarContent = () => (
     <>
       <div className="flex items-center flex-1 min-w-0">
         {/* WHERE trigger */}
         <button
-          className={`flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left ${expanded ? 'pr-6' : 'pr-5'}`}
+          className="flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left pr-5"
           onClick={() => search.togglePopover('where')}
         >
-          <span className={`text-xs font-medium leading-tight ${expanded ? 'text-gray-700' : 'text-gray-500'}`}>Where</span>
+          <span className="text-xs font-medium leading-tight text-gray-600">Where</span>
           <span className={`text-xs truncate leading-tight flex items-center gap-1.5 ${search.locationDisplayValue ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
             {search.locationDisplayValue || 'Choose Location'}
             {search.isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
@@ -380,10 +380,10 @@ export default function SearchResultsNavbar({
 
         {/* WHEN trigger */}
         <button
-          className={`flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left ${expanded ? 'px-6' : 'px-5'}`}
+          className="flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left px-5"
           onClick={() => search.togglePopover('when')}
         >
-          <span className={`text-xs font-medium leading-tight ${expanded ? 'text-gray-700' : 'text-gray-500'}`}>When</span>
+          <span className="text-xs font-medium leading-tight text-gray-600">When</span>
           <span className={`text-xs truncate leading-tight ${dateDisplay ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
             {dateDisplay || 'Add Dates'}
           </span>
@@ -391,10 +391,10 @@ export default function SearchResultsNavbar({
 
         {/* WHO trigger */}
         <button
-          className={`flex flex-col flex-1 min-w-0 text-left ${expanded ? 'pl-6' : 'pl-5'}`}
+          className="flex flex-col flex-1 min-w-0 text-left pl-5"
           onClick={() => search.togglePopover('who')}
         >
-          <span className={`text-xs font-medium leading-tight ${expanded ? 'text-gray-700' : 'text-gray-500'}`}>Who</span>
+          <span className="text-xs font-medium leading-tight text-gray-600">Who</span>
           <span className={`text-xs truncate leading-tight ${guestDisplay ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
             {guestDisplay || 'Add Renters'}
           </span>
@@ -442,7 +442,7 @@ export default function SearchResultsNavbar({
       <motion.div
         initial={false}
         animate={{ height: isExpanded ? 86 : 0 }}
-        transition={{ duration: 0.15 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       />
 
       {/* Search bar — single element, absolutely positioned, animates between header center and below header */}
@@ -450,7 +450,7 @@ export default function SearchResultsNavbar({
         className="absolute inset-x-0 z-10 flex flex-col items-center px-6 pointer-events-none"
         initial={false}
         animate={{ top: isExpanded ? 88 : 13 }}
-        transition={{ duration: 0.15 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       >
         {/* Search bar */}
         <motion.div
@@ -464,9 +464,9 @@ export default function SearchResultsNavbar({
               ? '0px 6px 12px rgba(0,0,0,0.15)'
               : '0px 4px 10px rgba(0,0,0,0.12)',
           }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         >
-          {searchBarContent(isExpanded)}
+          {searchBarContent()}
         </motion.div>
 
         {/* Animated dropdown popover */}
