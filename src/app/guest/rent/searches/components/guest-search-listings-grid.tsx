@@ -311,7 +311,7 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
           >
             <div
               ref={gridRef}
-              className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 pl-4 justify-items-center ${
+              className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pl-4 justify-items-center ${
                 isSelectedListing ? 'md:justify-items-center' : 'justify-items-start'
               } ${isSingleListing ? 'pb-0' : 'pb-12'}`}
               style={{
