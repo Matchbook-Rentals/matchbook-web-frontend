@@ -412,7 +412,7 @@ export default function SearchDateRange({
         ))}
       </div>
 
-      {daysSelected > 0 && (
+      {daysSelected > 0 && !singleMonth && (
         <div className="inline-flex items-center px-[18px] py-3">
           <span className="font-semibold text-base text-[#475467]">
             {daysSelected} Days Selected
