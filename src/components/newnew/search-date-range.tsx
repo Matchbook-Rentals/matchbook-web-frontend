@@ -178,8 +178,40 @@ export default function SearchDateRange({
 
   const daysSelected = start && end ? differenceInCalendarDays(end, start) : 0;
 
-  const formatInputDate = (date: Date | null): string =>
-    date ? format(date, 'MMM d, yyyy') : '';
+  const toDateInputValue = (date: Date | null): string =>
+    date ? format(date, 'yyyy-MM-dd') : '';
+
+  const todayStr = format(today, 'yyyy-MM-dd');
+
+  const isRangeValid = (s: Date, e: Date): boolean => {
+    if (e <= s) return false;
+    if (minimumDateRange && normalizeDate(add(s, minimumDateRange)) > e) return false;
+    if (maximumDateRange) {
+      const maxEnd = maximumDateRange.days === null || maximumDateRange.days === undefined
+        ? endOfMonth(add(s, { years: maximumDateRange.years, months: maximumDateRange.months, weeks: maximumDateRange.weeks }))
+        : add(s, maximumDateRange);
+      if (e > normalizeDate(maxEnd)) return false;
+    }
+    return true;
+  };
+
+  const handleDateInput = (value: string, field: 'start' | 'end') => {
+    if (!value) {
+      if (field === 'start') handleChange(null, end);
+      else handleChange(start, null);
+      return;
+    }
+    const date = normalizeDate(new Date(value + 'T00:00:00'));
+    setLeftMonth(date.getMonth());
+    setLeftYear(date.getFullYear());
+    if (field === 'start') {
+      const keepEnd = end && isRangeValid(date, normalizeDate(end));
+      handleChange(date, keepEnd ? end : null);
+    } else {
+      const keepStart = start && isRangeValid(normalizeDate(start), date);
+      handleChange(keepStart ? start : null, date);
+    }
+  };
 
   // ── Range Background Class ──────────────────────────────────────
 
@@ -413,19 +445,24 @@ export default function SearchDateRange({
       <div className="flex items-start gap-4 w-full">
         <div className="flex flex-col items-start gap-1.5 flex-1">
           <label className="font-medium text-[#344054] text-sm">Move in</label>
-          <div className="h-12 w-full bg-white rounded-lg border border-[#d0d5dd] px-3 flex items-center">
-            <span className={`text-sm ${start ? 'text-[#344054]' : 'text-[#667085]'}`}>
-              {formatInputDate(start) || 'Add Date'}
-            </span>
-          </div>
+          <input
+            type="date"
+            value={toDateInputValue(start)}
+            min={todayStr}
+            max={end ? toDateInputValue(end) : undefined}
+            className="h-12 w-full bg-white rounded-lg border border-[#d0d5dd] px-3 text-sm text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054]"
+            onChange={(e) => handleDateInput(e.target.value, 'start')}
+          />
         </div>
         <div className="flex flex-col items-start gap-1.5 flex-1">
           <label className="font-medium text-[#344054] text-sm">Move out</label>
-          <div className="h-12 w-full bg-white rounded-lg border border-[#d0d5dd] px-3 flex items-center">
-            <span className={`text-sm ${end ? 'text-[#344054]' : 'text-[#667085]'}`}>
-              {formatInputDate(end) || 'Add Date'}
-            </span>
-          </div>
+          <input
+            type="date"
+            value={toDateInputValue(end)}
+            min={start ? toDateInputValue(start) : todayStr}
+            className="h-12 w-full bg-white rounded-lg border border-[#d0d5dd] px-3 text-sm text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054]"
+            onChange={(e) => handleDateInput(e.target.value, 'end')}
+          />
         </div>
       </div>
 

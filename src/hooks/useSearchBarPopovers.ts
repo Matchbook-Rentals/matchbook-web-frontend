@@ -151,7 +151,7 @@ export function useSearchBarPopovers(config: UseSearchBarPopoversConfig = {}) {
     const newDates = { start, end };
     setDateRange(newDates);
 
-    if (!hadEnd && end !== null) {
+    if (!hadEnd && start !== null && end !== null) {
       onDateAutoAdvance?.(newDates);
       openPopover('who');
     }
