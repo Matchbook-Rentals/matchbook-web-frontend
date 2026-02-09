@@ -104,6 +104,7 @@ export default function MobileSearchOverlay({
     onDateChange(start, end);
     if (start && end) {
       setActiveSection('who');
+      setGuests(prev => prev.adults >= 1 ? prev : { ...prev, adults: 1 });
     }
   };
 
@@ -256,7 +257,13 @@ export default function MobileSearchOverlay({
               title="Who"
               summary={guestSummary}
               isExpanded={activeSection === 'who'}
-              onToggle={() => setActiveSection(activeSection === 'who' ? null : 'who')}
+              onToggle={() => {
+                const opening = activeSection !== 'who';
+                setActiveSection(opening ? 'who' : null);
+                if (opening) {
+                  setGuests(prev => prev.adults >= 1 ? prev : { ...prev, adults: 1 });
+                }
+              }}
             >
               <GuestTypeCounter guests={guests} setGuests={setGuests} />
             </AccordionCard>

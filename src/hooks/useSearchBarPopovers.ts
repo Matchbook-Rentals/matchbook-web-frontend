@@ -62,6 +62,10 @@ export function useSearchBarPopovers(config: UseSearchBarPopoversConfig = {}) {
 
   // --- Core panel controls ---
 
+  const ensureMinimumAdult = useCallback(() => {
+    setGuests(prev => prev.adults >= 1 ? prev : { ...prev, adults: 1 });
+  }, []);
+
   const openPopover = useCallback((popover: ActivePopover) => {
     if (expandTimeoutRef.current) {
       clearTimeout(expandTimeoutRef.current);
@@ -70,6 +74,7 @@ export function useSearchBarPopovers(config: UseSearchBarPopoversConfig = {}) {
     if (activePopoverRef.current && activePopoverRef.current !== popover) {
       onPopoverClosing?.(activePopoverRef.current);
     }
+    if (popover === 'who') ensureMinimumAdult();
     const delay = getOpenDelay?.() ?? 0;
     if (delay > 0) {
       expandTimeoutRef.current = setTimeout(() => {
@@ -79,7 +84,7 @@ export function useSearchBarPopovers(config: UseSearchBarPopoversConfig = {}) {
     } else {
       setActivePopover(popover);
     }
-  }, [getOpenDelay, onPopoverClosing]);
+  }, [getOpenDelay, onPopoverClosing, ensureMinimumAdult]);
 
   const closePopover = useCallback(() => {
     if (expandTimeoutRef.current) {

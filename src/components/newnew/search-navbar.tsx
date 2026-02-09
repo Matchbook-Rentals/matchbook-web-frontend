@@ -52,7 +52,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
 
   const search = useSearchBarPopovers({
-    initialGuests: { adults: 1, children: 0, pets: 0 },
+    initialGuests: { adults: 0, children: 0, pets: 0 },
   });
 
   const { isSignedIn: isClerkSignedIn } = useAuth();
