@@ -4,16 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { UploadButton } from '@/app/utils/uploadthing';
-import { PlusCircle, X, Trash, Loader2, Camera } from 'lucide-react';
+import { PlusCircle, Trash, Loader2, Camera } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ApplicationItemLabelStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
 import { deleteIncome, deleteIncomeProof } from '@/app/actions/applications';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { Upload } from 'lucide-react';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+
 import { useToast } from "@/components/ui/use-toast";
-import { SecureFileViewer } from '@/components/secure-file-viewer';
+import { SecureFileList } from '@/components/secure-file-viewer';
 import BrandModal from '@/components/BrandModal';
 
 interface UploadData {
@@ -362,20 +362,19 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                   <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
                     <div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
                       {(item.imageUrl || item.fileKey) ? (
-                        <div className="flex items-center space-x-2 justify-start w-full p-4 bg-white rounded-xl border border-solid border-[#d0d5dd]">
-                          <SecureFileViewer
-                            fileKey={item.fileKey}
-                            customId={item.customId}
-                            fileName={item.fileName || 'Income Document'}
-                            fileType="auto"
-                            className="min-h-[80px] w-36"
-                            // Support backward compatibility with direct URLs
-                            fallbackUrl={item.imageUrl}
-                          />
-                          <button type="button" onClick={() => clearIncomeImage(index)} className="p-1 text-red-500 hover:text-red-700">
-                            <X className="h-5 w-5" />
-                          </button>
-                        </div>
+                        <SecureFileList
+                          files={[{
+                            fileKey: item.fileKey,
+                            customId: item.customId,
+                            fileName: item.fileName || 'Income Document',
+                            url: item.imageUrl,
+                          }]}
+                          fileType="image"
+                          className="w-full"
+                          variant="list"
+                          title={`Income Proof ${index + 1}`}
+                          onRemove={() => clearIncomeImage(index)}
+                        />
                       ) : (
                         <UploadButton<UploadData, unknown>
                           endpoint="incomeUploader"
