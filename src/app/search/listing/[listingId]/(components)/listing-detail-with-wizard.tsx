@@ -41,7 +41,6 @@ export default function ListingDetailWithWizard({
   shouldAutoApply,
 }: ListingDetailWithWizardProps) {
   const [wizardState, setWizardState] = useState<WizardState>('listing');
-  const [showDatePopover, setShowDatePopover] = useState(false);
   const [collectedDates, setCollectedDates] = useState<{ start: Date; end: Date } | null>(null);
   const [collectedGuests, setCollectedGuests] = useState<{ adults: number; children: number; pets: number } | null>(null);
   const [hasAppliedLocal, setHasAppliedLocal] = useState(false);
@@ -53,8 +52,6 @@ export default function ListingDetailWithWizard({
     hasTriedAutoApply.current = true;
     setWizardState('application');
   }, [shouldAutoApply]);
-
-  const hasDates = !!initialTripContext;
 
   const effectiveTripContext = collectedDates
     ? {
@@ -81,20 +78,13 @@ export default function ListingDetailWithWizard({
     : initialListingState;
 
   const handleApplyClick = () => {
-    if (!isAuthenticated) return; // Let the default redirect handle it
-
-    if (hasDates || collectedDates) {
-      scrollToTopAndTransition('application');
-    } else {
-      setShowDatePopover(true);
-    }
+    if (!isAuthenticated) return;
+    scrollToTopAndTransition('application');
   };
 
   const handleDatesSelected = (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => {
     setCollectedDates({ start, end });
     setCollectedGuests(guests);
-    setShowDatePopover(false);
-    scrollToTopAndTransition('application');
   };
 
   const handleBackToListing = () => {
@@ -133,8 +123,6 @@ export default function ListingDetailWithWizard({
             calculatedPrice={effectivePrice()}
             listingState={effectiveListingState}
             onApplyClick={isAuthenticated ? handleApplyClick : undefined}
-            showDatePopover={showDatePopover}
-            onDatePopoverChange={setShowDatePopover}
             onDatesSelected={handleDatesSelected}
           />
         </motion.div>

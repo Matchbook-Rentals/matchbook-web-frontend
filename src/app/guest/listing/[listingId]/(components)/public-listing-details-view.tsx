@@ -23,8 +23,6 @@ interface PublicListingDetailsViewProps {
   calculatedPrice?: number | null;
   listingState?: { hasApplied: boolean; isMatched: boolean } | null;
   onApplyClick?: () => void;
-  showDatePopover?: boolean;
-  onDatePopoverChange?: (open: boolean) => void;
   onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
 }
 
@@ -36,8 +34,6 @@ export default function PublicListingDetailsView({
   calculatedPrice = null,
   listingState = null,
   onApplyClick,
-  showDatePopover,
-  onDatePopoverChange,
   onDatesSelected,
 }: PublicListingDetailsViewProps) {
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
@@ -99,8 +95,6 @@ export default function PublicListingDetailsView({
               calculatedPrice={calculatedPrice}
               listingState={listingState}
               onApplyClick={onApplyClick}
-              showDatePopover={showDatePopover}
-              onDatePopoverChange={onDatePopoverChange}
               onDatesSelected={onDatesSelected}
             />
           </div>
