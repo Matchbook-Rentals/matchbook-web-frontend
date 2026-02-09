@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import UserMenu from '@/components/userMenu';
 import DesktopSearchPopover from '@/components/newnew/desktop-search-popover';
+import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
 import { getHostListingsCount } from '@/app/actions/listings';
 import { createTrip, editTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
@@ -86,6 +87,7 @@ export default function SearchResultsNavbar({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingDates, setIsSavingDates] = useState(false);
   const [isSavingGuests, setIsSavingGuests] = useState(false);
+  const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
 
   // Track if we had dates when component mounted (for detecting "first time adding dates")
   const hadDatesInitially = useRef(Boolean(tripData?.startDate && tripData?.endDate));
@@ -269,6 +271,16 @@ export default function SearchResultsNavbar({
     }
   }, [search.activePopover]);
 
+  const handleWhereClick = (e: React.MouseEvent) => {
+    if (window.innerWidth < 768) {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsMobileOverlayOpen(true);
+      return;
+    }
+    search.togglePopover('where');
+  };
+
   // TODO: handle rapid double-press — isSubmitting guard prevents duplicate calls,
   // but if the first call completes and navigation starts before the second press,
   // the user could trigger a second trip creation. Consider disabling the button
@@ -368,11 +380,17 @@ export default function SearchResultsNavbar({
       <div className="flex items-center flex-1 min-w-0">
         {/* WHERE trigger */}
         <button
-          className="flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left pr-5"
-          onClick={() => search.togglePopover('where')}
+          className="flex flex-col flex-1 min-w-0 md:border-r md:border-gray-300 text-left md:pr-5"
+          onClick={handleWhereClick}
         >
-          <span className="text-xs font-medium leading-tight text-gray-600">Where</span>
-          <span className={`text-xs truncate leading-tight flex items-center gap-1.5 ${search.locationDisplayValue ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
+          {/* Mobile: single-line pill text */}
+          <span className="md:hidden text-xs font-medium text-gray-500 truncate flex items-center justify-center gap-1.5 w-full">
+            {search.locationDisplayValue || 'Begin Your Search'}
+            {search.isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
+          </span>
+          {/* Desktop: two-line Where / Choose Location */}
+          <span className="hidden md:inline text-xs font-medium leading-tight text-gray-600">Where</span>
+          <span className={`hidden md:flex text-xs truncate leading-tight items-center gap-1.5 ${search.locationDisplayValue ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
             {search.locationDisplayValue || 'Choose Location'}
             {search.isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
           </span>
@@ -380,7 +398,7 @@ export default function SearchResultsNavbar({
 
         {/* WHEN trigger */}
         <button
-          className="flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left px-5"
+          className="hidden md:flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left px-5"
           onClick={() => search.togglePopover('when')}
         >
           <span className="text-xs font-medium leading-tight text-gray-600">When</span>
@@ -391,7 +409,7 @@ export default function SearchResultsNavbar({
 
         {/* WHO trigger */}
         <button
-          className="flex flex-col flex-1 min-w-0 text-left pl-5"
+          className="hidden md:flex flex-col flex-1 min-w-0 text-left pl-5"
           onClick={() => search.togglePopover('who')}
         >
           <span className="text-xs font-medium leading-tight text-gray-600">Who</span>
@@ -403,7 +421,7 @@ export default function SearchResultsNavbar({
 
       <Button
         size="icon"
-        className="w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-3"
+        className="hidden md:flex w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-3"
         onClick={handleSubmit}
         disabled={isSubmitting || search.isGeocoding}
       >
@@ -438,16 +456,27 @@ export default function SearchResultsNavbar({
         </div>
       </header>
 
-      {/* Height spacer — pushes content below navbar down when expanded */}
+      {/* Mobile: static search bar row below header */}
+      <div className="md:hidden flex items-center justify-center w-full px-6 pb-4 pt-1">
+        <div
+          className="flex items-center w-full h-[50px] pl-6 pr-3 py-2 bg-white rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)]"
+          onClick={handleWhereClick}
+        >
+          {searchBarContent()}
+        </div>
+      </div>
+
+      {/* Desktop: Height spacer — pushes content below navbar down when expanded */}
       <motion.div
+        className="hidden md:block"
         initial={false}
         animate={{ height: isExpanded ? 86 : 0 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       />
 
-      {/* Search bar — single element, absolutely positioned, animates between header center and below header */}
+      {/* Desktop: Search bar — absolutely positioned, animates between header center and below header */}
       <motion.div
-        className="absolute inset-x-0 z-50 flex flex-col items-center px-6 pointer-events-none"
+        className="hidden md:flex absolute inset-x-0 z-50 flex-col items-center px-6 pointer-events-none"
         initial={false}
         animate={{ top: isExpanded ? 88 : 13 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
@@ -488,6 +517,29 @@ export default function SearchResultsNavbar({
         onClick={() => search.closePopover()}
       />
     )}
+
+    <MobileSearchOverlay
+      isOpen={isMobileOverlayOpen}
+      onClose={() => setIsMobileOverlayOpen(false)}
+      onSubmit={() => {
+        setIsMobileOverlayOpen(false);
+        handleSubmit();
+      }}
+      isSubmitting={isSubmitting}
+      isGeocoding={search.isGeocoding}
+      selectedLocation={search.selectedLocation}
+      locationDisplayValue={search.locationDisplayValue}
+      setLocationDisplayValue={search.setLocationDisplayValue}
+      onLocationSelect={search.handleLocationSelect}
+      onGeocodingStateChange={search.setIsGeocoding}
+      onSuggestedLocationClick={search.handleSuggestedLocationClick}
+      dateRange={search.dateRange}
+      onDateChange={search.handleDateChange}
+      guests={search.guests}
+      setGuests={search.setGuests}
+      recentSearches={recentSearches}
+      suggestedLocations={suggestedLocations}
+    />
     </>
   );
 }
