@@ -418,9 +418,9 @@ export default function SearchResultsNavbar({
 
   return (
     <>
-    <div className="relative z-50 w-full bg-gradient-to-b from-white to-primaryBrand/10">
+    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
       {/* Header row */}
-      <header className="flex items-center justify-between px-6 h-[76px]">
+      <header className="relative z-30 flex items-center justify-between px-6 h-[76px]">
         <Link href="/" className="flex-shrink-0">
           <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
           <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
@@ -447,7 +447,7 @@ export default function SearchResultsNavbar({
 
       {/* Search bar — single element, absolutely positioned, animates between header center and below header */}
       <motion.div
-        className="absolute inset-x-0 z-10 flex flex-col items-center px-6 pointer-events-none"
+        className="absolute inset-x-0 z-50 flex flex-col items-center px-6 pointer-events-none"
         initial={false}
         animate={{ top: isExpanded ? 88 : 13 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}

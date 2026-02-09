@@ -139,9 +139,9 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
 
   return (
     <>
-    <div className="relative z-50 w-full bg-gradient-to-b from-white to-primaryBrand/10">
+    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
       {/* Header row */}
-      <header className="flex items-center justify-between px-6 h-[76px]">
+      <header className="relative z-30 flex items-center justify-between px-6 h-[76px]">
         <Link href="/">
           <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
           <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
@@ -170,7 +170,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
       </header>
 
       {/* Search bar row */}
-      <div className="flex items-center justify-center w-full px-6 pb-6 pt-3">
+      <div className="relative z-50 flex items-center justify-center w-full px-6 pb-6 pt-3">
         <div className="relative w-full max-w-[860px]">
           {/* Search bar pill */}
           <div className="flex items-center w-full h-[50px] pl-6 pr-3 py-2 bg-white rounded-full shadow-[0px_6px_12px_rgba(0,0,0,0.15)]">
