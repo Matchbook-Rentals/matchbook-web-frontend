@@ -101,12 +101,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic listing routes (public guest listing pages)
   let listingPages: MetadataRoute.Sitemap = []
-  
+
   try {
     // Test basic connection first
     const count = await prisma.listing.count()
     console.log('Total listing count:', count)
-    
+
     // Fetch approved and active listings for sitemap
     const listings = await prisma.listing.findMany({
       where: {
@@ -132,8 +132,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Continue without listing pages if database is unavailable
   }
 
+  // Dynamic article routes (published blog articles)
+  let articlePages: MetadataRoute.Sitemap = []
+
+  try {
+    const articles = await prisma.blogArticle.findMany({
+      where: {
+        published: true
+      },
+      select: {
+        slug: true,
+        updatedAt: true,
+        createdAt: true
+      },
+      take: 10000 // Limit to prevent sitemap from becoming too large
+    })
+
+    articlePages = articles.map((article) => ({
+      url: `${baseUrl}/articles/${article.slug}`,
+      lastModified: article.updatedAt || article.createdAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
+  } catch (error) {
+    console.error('Error fetching articles for sitemap:', error)
+    // Continue without article pages if database is unavailable
+  }
+
   // TODO: Add other dynamic routes for:
-  // - Individual articles: /articles/[slug]
   // - Trip details: /app/rent/searches/[tripId]
   // - Match details: /match/[matchId]
   // These would typically be fetched from your database
@@ -146,5 +172,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...guestPages,
     ...completionPages,
     ...listingPages,
+    ...articlePages,
   ]
 }
