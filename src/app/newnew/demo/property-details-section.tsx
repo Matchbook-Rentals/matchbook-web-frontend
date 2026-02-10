@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Package, Calendar, Home, MapPin, FileText } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 
 interface PropertyDetailsSectionProps {
   title: string;
@@ -14,6 +15,7 @@ interface PropertyDetailsSectionProps {
   numAdults: number;
   numChildren: number;
   numPets: number;
+  bookingId?: string;
 }
 
 export default function PropertyDetailsSection({
@@ -25,13 +27,19 @@ export default function PropertyDetailsSection({
   numAdults,
   numChildren,
   numPets,
+  bookingId,
 }: PropertyDetailsSectionProps) {
+  const router = useRouter();
   const [copiedAddress, setCopiedAddress] = useState(false);
 
-  const handleCopyAddress = () => {
-    navigator.clipboard.writeText(address);
-    setCopiedAddress(true);
-    setTimeout(() => setCopiedAddress(false), 2000);
+  const handleCopyAddress = async () => {
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
   };
 
   const formatDisplayDate = (date: Date) => {
@@ -79,7 +87,10 @@ export default function PropertyDetailsSection({
 
       {/* Action Buttons */}
       <div className="space-y-2">
-        <button className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg">
+        <button
+          onClick={() => bookingId && router.push(`/app/rent/booking/${bookingId}/move-in/instructions`)}
+          className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
+        >
           <Package className="w-6 h-6 text-gray-700" />
           <span className="text-gray-900 text-base">Move in Instructions</span>
         </button>
@@ -97,7 +108,11 @@ export default function PropertyDetailsSection({
           onClick={handleCopyAddress}
           className="ml-4 p-2 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
         >
-          <Copy className="w-5 h-5 text-gray-600" />
+          {copiedAddress ? (
+            <span className="text-sm font-medium text-teal-600">Copied!</span>
+          ) : (
+            <Copy className="w-5 h-5 text-gray-600" />
+          )}
         </button>
       </div>
 

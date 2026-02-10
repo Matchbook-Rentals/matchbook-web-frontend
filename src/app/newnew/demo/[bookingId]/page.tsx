@@ -324,6 +324,7 @@ export default async function DemoPage({ params }: DemoPageProps) {
     numAdults: booking.numAdults || 0,
     numChildren: booking.numChildren || 0,
     numPets: booking.numPets || 0,
+    bookingId: params.bookingId,
   };
 
   return (

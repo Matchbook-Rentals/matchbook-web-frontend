@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Package, Calendar, Home, MapPin, FileText } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 
 interface PropertyDetailsSectionProps {
   title: string;
@@ -14,6 +15,7 @@ interface PropertyDetailsSectionProps {
   numAdults: number;
   numChildren: number;
   numPets: number;
+  bookingId: string;
 }
 
 export default function PropertyDetailsSection({
@@ -25,7 +27,9 @@ export default function PropertyDetailsSection({
   numAdults,
   numChildren,
   numPets,
+  bookingId,
 }: PropertyDetailsSectionProps) {
+  const router = useRouter();
   const [copiedAddress, setCopiedAddress] = useState(false);
 
   const handleCopyAddress = () => {
@@ -79,7 +83,10 @@ export default function PropertyDetailsSection({
 
       {/* Action Buttons */}
       <div className="space-y-2">
-        <button className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg">
+        <button
+          onClick={() => router.push(`/app/rent/booking/${bookingId}/move-in/instructions`)}
+          className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
+        >
           <Package className="w-6 h-6 text-gray-700" />
           <span className="text-gray-900 text-base">Move in Instructions</span>
         </button>

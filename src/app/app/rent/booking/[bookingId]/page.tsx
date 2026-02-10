@@ -323,6 +323,7 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
     numAdults: booking.numAdults || 0,
     numChildren: booking.numChildren || 0,
     numPets: booking.numPets || 0,
+    bookingId: params.bookingId,
   };
 
   return (
