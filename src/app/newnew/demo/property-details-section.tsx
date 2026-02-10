@@ -16,6 +16,8 @@ interface PropertyDetailsSectionProps {
   numChildren: number;
   numPets: number;
   bookingId?: string;
+  matchId?: string;
+  leaseDocumentId?: string | null;
 }
 
 export default function PropertyDetailsSection({
@@ -28,6 +30,8 @@ export default function PropertyDetailsSection({
   numChildren,
   numPets,
   bookingId,
+  matchId,
+  leaseDocumentId,
 }: PropertyDetailsSectionProps) {
   const router = useRouter();
   const [copiedAddress, setCopiedAddress] = useState(false);
@@ -52,6 +56,35 @@ export default function PropertyDetailsSection({
     if (numChildren > 0) parts.push(`${numChildren} child${numChildren > 1 ? 'ren' : ''}`);
     if (numPets > 0) parts.push(`${numPets} pet${numPets > 1 ? 's' : ''}`);
     return parts.join(', ');
+  };
+
+  const handleViewLease = () => {
+    if (leaseDocumentId) {
+      window.open(`/api/documents/${leaseDocumentId}/view`, '_blank');
+    } else if (matchId) {
+      router.push(`/app/rent/match/${matchId}/lease-signing`);
+    } else {
+      console.log('No lease document available');
+    }
+  };
+
+  const handleViewListing = () => {
+    // Extract listing ID from booking or navigate to search
+    console.log('View listing clicked');
+  };
+
+  const handleGetDirections = () => {
+    // Open Google Maps with the address
+    const encodedAddress = encodeURIComponent(address);
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+  };
+
+  const handleModifyDates = () => {
+    if (bookingId) {
+      router.push(`/app/rent/booking/${bookingId}/modify-dates`);
+    } else {
+      console.log('Modify dates clicked (demo mode)');
+    }
   };
 
   return (
@@ -101,7 +134,10 @@ export default function PropertyDetailsSection({
           <span className="text-gray-900 text-base">Move in Instructions</span>
         </button>
 
-        <button className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg">
+        <button 
+          onClick={handleModifyDates}
+          className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
+        >
           <Calendar className="w-6 h-6 text-gray-700" />
           <span className="text-gray-900 text-base">Modify Dates</span>
         </button>
@@ -124,17 +160,26 @@ export default function PropertyDetailsSection({
 
       {/* More Action Links */}
       <div className="space-y-2">
-        <button className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg">
+        <button 
+          onClick={handleViewListing}
+          className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
+        >
           <Home className="w-6 h-6 text-gray-700" />
           <span className="text-gray-900 text-base">View Listing</span>
         </button>
 
-        <button className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg">
+        <button 
+          onClick={handleGetDirections}
+          className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
+        >
           <MapPin className="w-6 h-6 text-gray-700" />
           <span className="text-gray-900 text-base">Get Directions</span>
         </button>
 
-        <button className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg">
+        <button 
+          onClick={handleViewLease}
+          className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
+        >
           <FileText className="w-6 h-6 text-gray-700" />
           <span className="text-gray-900 text-base">View Lease</span>
         </button>

@@ -31,44 +31,103 @@ export default async function StaticDemoPage() {
     }
   }) : null;
 
-  // Fetch a random approved listing
-  const listingCount = await prisma.listing.count({
-    where: {
-      approvalStatus: 'approved',
-      markedActiveByUser: true,
-    }
-  });
+  // Fetch a random booking from the user's bookings
+  let booking = null;
+  if (userId) {
+    const bookingCount = await prisma.booking.count({
+      where: { userId: userId }
+    });
 
-  // Get a random offset
-  const randomOffset = Math.floor(Math.random() * listingCount);
-
-  // Fetch one random listing
-  const listing = await prisma.listing.findFirst({
-    where: {
-      approvalStatus: 'approved',
-      markedActiveByUser: true,
-    },
-    skip: randomOffset,
-    select: {
-      title: true,
-      streetAddress1: true,
-      city: true,
-      state: true,
-      postalCode: true,
-      imageSrc: true,
-      latitude: true,
-      longitude: true,
-      listingImages: {
-        take: 1,
-        select: {
-          url: true
+    if (bookingCount > 0) {
+      const randomOffset = Math.floor(Math.random() * bookingCount);
+      booking = await prisma.booking.findFirst({
+        where: { userId: userId },
+        skip: randomOffset,
+        include: {
+          listing: {
+            select: {
+              title: true,
+              streetAddress1: true,
+              city: true,
+              state: true,
+              postalCode: true,
+              imageSrc: true,
+              latitude: true,
+              longitude: true,
+              listingImages: {
+                take: 1,
+                select: { url: true }
+              }
+            }
+          },
+          match: {
+            select: {
+              id: true,
+              leaseDocumentId: true
+            }
+          },
+          trip: {
+            select: {
+              numAdults: true,
+              numChildren: true,
+              numPets: true
+            }
+          }
         }
-      }
+      });
     }
-  });
+  }
 
-  // Fallback data if no listing found
-  const propertyData = listing ? {
+  // Fallback: Fetch a random approved listing if no booking found
+  let listing = null;
+  if (!booking) {
+    const listingCount = await prisma.listing.count({
+      where: {
+        approvalStatus: 'approved',
+        markedActiveByUser: true,
+      }
+    });
+
+    if (listingCount > 0) {
+      const randomOffset = Math.floor(Math.random() * listingCount);
+      listing = await prisma.listing.findFirst({
+        where: {
+          approvalStatus: 'approved',
+          markedActiveByUser: true,
+        },
+        skip: randomOffset,
+        select: {
+          title: true,
+          streetAddress1: true,
+          city: true,
+          state: true,
+          postalCode: true,
+          imageSrc: true,
+          latitude: true,
+          longitude: true,
+          listingImages: {
+            take: 1,
+            select: { url: true }
+          }
+        }
+      });
+    }
+  }
+
+  // Prepare property data from booking (or fallback to listing/mock data)
+  const propertyData = booking ? {
+    title: booking.listing.title || "Beautiful Rental Home",
+    imageSrc: booking.listing.listingImages?.[0]?.url || booking.listing.imageSrc || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop",
+    address: formatAddress(booking.listing),
+    startDate: booking.startDate,
+    endDate: booking.endDate,
+    numAdults: booking.trip?.numAdults || 2,
+    numChildren: booking.trip?.numChildren || 0,
+    numPets: booking.trip?.numPets || 0,
+    bookingId: booking.id,
+    matchId: booking.matchId,
+    leaseDocumentId: booking.match?.leaseDocumentId,
+  } : listing ? {
     title: listing.title || "Beautiful Rental Home",
     imageSrc: listing.listingImages?.[0]?.url || listing.imageSrc || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop",
     address: formatAddress(listing),
@@ -88,7 +147,10 @@ export default async function StaticDemoPage() {
     numPets: 1,
   };
 
-  const mapCoordinates = listing ? {
+  const mapCoordinates = booking ? {
+    latitude: booking.listing.latitude,
+    longitude: booking.listing.longitude
+  } : listing ? {
     latitude: listing.latitude,
     longitude: listing.longitude
   } : {
