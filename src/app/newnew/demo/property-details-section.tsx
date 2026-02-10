@@ -18,6 +18,7 @@ interface PropertyDetailsSectionProps {
   bookingId?: string;
   matchId?: string;
   leaseDocumentId?: string | null;
+  listingId?: string;
 }
 
 export default function PropertyDetailsSection({
@@ -32,6 +33,7 @@ export default function PropertyDetailsSection({
   bookingId,
   matchId,
   leaseDocumentId,
+  listingId,
 }: PropertyDetailsSectionProps) {
   const router = useRouter();
   const [copiedAddress, setCopiedAddress] = useState(false);
@@ -69,8 +71,14 @@ export default function PropertyDetailsSection({
   };
 
   const handleViewListing = () => {
-    // Extract listing ID from booking or navigate to search
-    console.log('View listing clicked');
+    if (listingId) {
+      const url = bookingId 
+        ? `/search/listing/${listingId}?bookingId=${bookingId}`
+        : `/search/listing/${listingId}`;
+      router.push(url);
+    } else {
+      console.log('No listing ID available');
+    }
   };
 
   const handleGetDirections = () => {

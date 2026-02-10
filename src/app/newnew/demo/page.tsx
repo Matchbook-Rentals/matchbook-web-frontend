@@ -46,6 +46,7 @@ export default async function StaticDemoPage() {
         include: {
           listing: {
             select: {
+              id: true,
               title: true,
               streetAddress1: true,
               city: true,
@@ -97,6 +98,7 @@ export default async function StaticDemoPage() {
         },
         skip: randomOffset,
         select: {
+          id: true,
           title: true,
           streetAddress1: true,
           city: true,
@@ -127,6 +129,7 @@ export default async function StaticDemoPage() {
     bookingId: booking.id,
     matchId: booking.matchId,
     leaseDocumentId: booking.match?.leaseDocumentId,
+    listingId: booking.listing.id,
   } : listing ? {
     title: listing.title || "Beautiful Rental Home",
     imageSrc: listing.listingImages?.[0]?.url || listing.imageSrc || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop",
@@ -136,6 +139,7 @@ export default async function StaticDemoPage() {
     numAdults: 2,
     numChildren: 1,
     numPets: 1,
+    listingId: listing.id,
   } : {
     title: "Luxury Home with Golden Gate Bridge View",
     imageSrc: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop",
