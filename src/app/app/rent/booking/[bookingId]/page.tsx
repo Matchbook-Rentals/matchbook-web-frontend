@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
 import { RentPaymentsTable } from "@/app/app/rent/bookings/components/rent-payments-table";
+import RenterNavbar from "@/components/renter-navbar";
 
 interface BookingDetailsPageProps {
   params: {
@@ -120,13 +121,22 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
     redirect("/app/rent/bookings");
   }
 
+  // Fetch user data for navbar and payment methods
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      email: true,
+      stripeCustomerId: true,
+    }
+  });
+
   // Fetch user's payment methods
   let paymentMethods: any[] = [];
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { stripeCustomerId: true }
-    });
 
     if (user?.stripeCustomerId) {
       const [cardMethods, bankMethods] = await Promise.all([
@@ -328,6 +338,11 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <RenterNavbar
+        userId={userId}
+        user={user}
+        isSignedIn={!!userId}
+      />
       <div className="max-w-[1280px] mx-auto">
         {/* Header with Back Button */}
         <div className="px-6 pt-6">

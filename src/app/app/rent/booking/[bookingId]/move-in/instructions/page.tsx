@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Home, Car, Wifi, FileText, MapPin, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
+import RenterNavbar from "@/components/renter-navbar";
 
 interface MoveInInstructionsPageProps {
   params: {
@@ -28,6 +29,18 @@ export default async function MoveInInstructionsPage({ params }: MoveInInstructi
   if (!userId) {
     redirect("/sign-in");
   }
+
+  // Fetch user data for navbar
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      email: true,
+    }
+  });
 
   // Fetch booking with listing details
   const booking = await prisma.booking.findUnique({
@@ -96,12 +109,17 @@ export default async function MoveInInstructionsPage({ params }: MoveInInstructi
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-[800px] mx-auto px-6 py-8">
+      <RenterNavbar
+        userId={userId}
+        user={user}
+        isSignedIn={!!userId}
+      />
+      <div className="max-w-[800px] mx-auto px-6 pb-8">
         {/* Back Button */}
         <Link href={`/app/rent/booking/${params.bookingId}`}>
           <Button
             variant="outline"
-            className="mb-6 border-teal-600 text-teal-600 hover:bg-teal-50"
+            className="mt-6 mb-6 border-teal-600 text-teal-600 hover:bg-teal-50"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Booking

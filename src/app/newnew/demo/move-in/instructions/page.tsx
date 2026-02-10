@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Home, Car, Wifi, FileText, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import ListingDetailNavbar from "@/components/listing-detail-navbar";
+import RenterNavbar from "@/components/renter-navbar";
 import prisma from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 
@@ -63,7 +63,7 @@ export default async function DemoMoveInInstructionsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-      <ListingDetailNavbar
+      <RenterNavbar
         userId={userId}
         user={user}
         isSignedIn={!!userId}
