@@ -1,13 +1,87 @@
-'use client';
-
 import { Button } from "@/components/ui/button";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
 import PaymentsSection from "./payments-section";
 import { RentPaymentsTable } from "@/app/app/rent/bookings/components/rent-payments-table";
+import prisma from "@/lib/prismadb";
 
-export default function DemoPage() {
-  // Sample data for the real payments table
+function formatAddress(listing: any): string {
+  const parts = [
+    listing.streetAddress1,
+    listing.city,
+    listing.state,
+    listing.postalCode
+  ].filter(Boolean);
+  return parts.join(', ');
+}
+
+export default async function StaticDemoPage() {
+  // Fetch a random approved listing
+  const listingCount = await prisma.listing.count({
+    where: {
+      approvalStatus: 'approved',
+      markedActiveByUser: true,
+    }
+  });
+
+  // Get a random offset
+  const randomOffset = Math.floor(Math.random() * listingCount);
+
+  // Fetch one random listing
+  const listing = await prisma.listing.findFirst({
+    where: {
+      approvalStatus: 'approved',
+      markedActiveByUser: true,
+    },
+    skip: randomOffset,
+    select: {
+      title: true,
+      streetAddress1: true,
+      city: true,
+      state: true,
+      postalCode: true,
+      imageSrc: true,
+      latitude: true,
+      longitude: true,
+      listingImages: {
+        take: 1,
+        select: {
+          url: true
+        }
+      }
+    }
+  });
+
+  // Fallback data if no listing found
+  const propertyData = listing ? {
+    title: listing.title || "Beautiful Rental Home",
+    imageSrc: listing.listingImages?.[0]?.url || listing.imageSrc || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop",
+    address: formatAddress(listing),
+    startDate: new Date("2025-06-12"),
+    endDate: new Date("2025-09-12"),
+    numAdults: 2,
+    numChildren: 1,
+    numPets: 1,
+  } : {
+    title: "Luxury Home with Golden Gate Bridge View",
+    imageSrc: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop",
+    address: "3024 N 1400 E North Ogden, UT 84414",
+    startDate: new Date("2025-06-12"),
+    endDate: new Date("2025-09-12"),
+    numAdults: 2,
+    numChildren: 1,
+    numPets: 1,
+  };
+
+  const mapCoordinates = listing ? {
+    latitude: listing.latitude,
+    longitude: listing.longitude
+  } : {
+    latitude: 41.3057,
+    longitude: -111.9538
+  };
+
+  // Fake payments data
   const samplePaymentsData = {
     upcoming: [
       {
@@ -17,7 +91,7 @@ export default function DemoPage() {
         bank: "Chase",
         dueDate: "03/15/2025",
         status: "Scheduled",
-        paymentId: "1",
+        paymentId: "demo-1",
       },
       {
         amount: "2,350.30",
@@ -26,7 +100,7 @@ export default function DemoPage() {
         bank: "Chase",
         dueDate: "04/15/2025",
         status: "Scheduled",
-        paymentId: "2",
+        paymentId: "demo-2",
       },
       {
         amount: "2,350.30",
@@ -35,7 +109,7 @@ export default function DemoPage() {
         bank: "Chase",
         dueDate: "05/15/2025",
         status: "Scheduled",
-        paymentId: "3",
+        paymentId: "demo-3",
       },
     ],
     past: [
@@ -46,7 +120,7 @@ export default function DemoPage() {
         bank: "Chase",
         dueDate: "01/15/2025",
         status: "Completed",
-        paymentId: "4",
+        paymentId: "demo-4",
       },
       {
         amount: "2,350.30",
@@ -55,20 +129,20 @@ export default function DemoPage() {
         bank: "Chase",
         dueDate: "02/15/2025",
         status: "Completed",
-        paymentId: "5",
+        paymentId: "demo-5",
       },
     ],
   };
 
   const samplePaymentMethods = [
     {
-      id: "pm_1",
+      id: "pm_demo_1",
       type: "bank" as const,
       bankName: "Chase",
       lastFour: "4242",
     },
     {
-      id: "pm_2",
+      id: "pm_demo_2",
       type: "card" as const,
       brand: "visa",
       lastFour: "1234",
@@ -92,10 +166,10 @@ export default function DemoPage() {
         {/* Main Content Grid */}
         <div className="px-6 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column - Property Details */}
-          <PropertyDetailsSection />
+          <PropertyDetailsSection {...propertyData} />
 
-          {/* Right Column - Map Placeholder */}
-          <MapPlaceholder />
+          {/* Right Column - Map */}
+          <MapPlaceholder {...mapCoordinates} />
         </div>
 
         {/* Fake Payments Section */}
