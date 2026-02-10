@@ -1,7 +1,7 @@
 # Agent Development Guide
 
 ## Build/Test Commands
-- **Build**: `npm run build`
+- **Build**: ⚠️ **DO NOT RUN** - This breaks dev instances
 - **Lint**: `npm run lint` 
 - **Tests**: `npm test` (vitest run), `npm run test:watch` (vitest watch)
 - **Single test file**: `vitest run path/to/test.spec.ts`
