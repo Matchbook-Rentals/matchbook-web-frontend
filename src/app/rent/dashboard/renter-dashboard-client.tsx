@@ -4,12 +4,13 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, MoreVertical } from 'lucide-react';
+import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { SingleFamilyIcon } from '@/components/icons-v3';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { APP_PAGE_MARGIN } from '@/constants/styles';
+import { RenterDashboardApplicationCard } from './renter-dashboard-application-card';
 import type {
   RenterDashboardData,
   DashboardTrip,
@@ -276,83 +277,6 @@ const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
 };
 
 // Applications Section
-const ApplicationCard = ({ app }: { app: DashboardApplication }) => {
-  const imageUrl = app.listing.listingImages[0]?.url || PLACEHOLDER_IMAGE;
-  const location = app.listing.city && app.listing.state
-    ? `${app.listing.city}, ${app.listing.state}`
-    : app.listing.state || 'Location not available';
-
-  return (
-    <div className="w-full bg-white rounded-[15px] border-[0.4px] border-[#0b6e6e]">
-      <div className="p-[17px]">
-        <div className="flex items-start gap-6">
-          <div
-            className="w-[148px] h-[134px] rounded-xl bg-cover bg-center flex-shrink-0"
-            style={{ backgroundImage: `url(${imageUrl})` }}
-          />
-
-          <div className="flex flex-col gap-[5px] flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="font-poppins font-medium text-[#373940] text-base">
-                {app.listing.title}
-              </h3>
-              <div className="h-6 px-2.5 py-1 bg-[#e6f6fd] rounded-full border border-[#00a6e8] flex items-center">
-                <span className="font-poppins font-medium text-[#00a6e8] text-[10px] leading-5">
-                  Pending
-                </span>
-              </div>
-            </div>
-
-            <div className="font-poppins font-light text-black text-xs">
-              {formatDateRange(app.startDate, app.endDate)}
-            </div>
-
-            <div className="font-poppins font-normal text-[#777b8b] text-[10px]">
-              {location}
-            </div>
-
-            <div className="font-poppins font-normal text-[#777b8b] text-[10px]">
-              {formatOccupants(app.trip.numAdults, app.trip.numChildren, app.trip.numPets)}
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end justify-between h-[134px] flex-shrink-0">
-            <button className="w-6 h-6 p-0 rounded-[5px] border border-[#3c8787] flex items-center justify-center hover:bg-gray-50">
-              <MoreVertical className="w-4 h-4 text-[#3c8787]" />
-            </button>
-
-            <div className="flex items-center gap-3">
-              <BrandButton
-                variant="outline"
-                size="sm"
-                href={`/app/rent/applications/${app.id}`}
-                className="w-[115px] h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] hover:bg-transparent"
-              >
-                <span className="font-poppins font-semibold text-[#3c8787] text-[11px] leading-5">
-                  View
-                </span>
-              </BrandButton>
-
-              {app.listing.user && (
-                <BrandButton
-                  variant="outline"
-                  size="sm"
-                  href={`/app/rent/messages?userId=${app.listing.user.id}`}
-                  className="w-[115px] h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] hover:bg-transparent"
-                >
-                  <span className="font-poppins font-semibold text-[#3c8787] text-[11px] leading-5">
-                    Message Host
-                  </span>
-                </BrandButton>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const ApplicationsSection = ({ applications }: { applications: DashboardApplication[] }) => {
   if (applications.length === 0) return null;
 
@@ -365,9 +289,25 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
         </BrandButton>
       </div>
       <div className="space-y-4">
-        {applications.map((app) => (
-          <ApplicationCard key={app.id} app={app} />
-        ))}
+        {applications.map((app) => {
+          const location = app.listing.city && app.listing.state
+            ? `${app.listing.city}, ${app.listing.state}`
+            : app.listing.state || 'Location not available';
+
+          return (
+            <RenterDashboardApplicationCard
+              key={app.id}
+              title={app.listing.title}
+              status="Pending"
+              dateRange={formatDateRange(app.startDate, app.endDate)}
+              location={location}
+              guests={formatOccupants(app.trip.numAdults, app.trip.numChildren, app.trip.numPets)}
+              imageUrl={app.listing.listingImages[0]?.url || PLACEHOLDER_IMAGE}
+              applicationId={app.id}
+              userId={app.listing.user?.id}
+            />
+          );
+        })}
       </div>
     </section>
   );
