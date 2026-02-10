@@ -15,7 +15,8 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import SearchDateRange from '@/components/newnew/search-date-range';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { ChevronDown, CheckCircle } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { VerifiedIcon } from '@/components/icons-v3';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 
 interface PublicListingDetailsBoxProps {
@@ -164,9 +165,9 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
           variant="outline"
           className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
         >
-          <CheckCircle className="w-4 h-4 text-[#3c8787]" />
-          <span className="font-normal text-xs text-[#3c8787] font-['Poppins']">
-            Verified
+          <VerifiedIcon className="w-[21px] h-[21px]" />
+          <span className="font-normal text-xs text-[#0B6E6E] font-['Poppins'] leading-normal">
+            Verified Host
           </span>
         </Badge>
 
