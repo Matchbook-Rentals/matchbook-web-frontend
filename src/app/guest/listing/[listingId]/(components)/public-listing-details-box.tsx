@@ -188,11 +188,11 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
             </div>
 
             <div className="flex items-center gap-1 h-8">
-              <StarIcon className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+              <StarIcon className="h-5 w-5 text-[#FFD700] fill-[#FFD700]" />
               <span className="font-normal text-[#717680] text-sm font-['Poppins']">
                 {listing?.averageRating
                   ? `${listing.averageRating.toFixed(1)} (${listing?.numberOfStays || 0})`
-                  : <span className="italic">No reviews yet</span>}
+                  : `Be ${host?.firstName || 'Host'}'s first booking`}
               </span>
             </div>
           </div>
