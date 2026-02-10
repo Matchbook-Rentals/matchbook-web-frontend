@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Home, ChevronRight, ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
+import { Home, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
@@ -338,15 +338,17 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
 };
 
 // Favorites Section
+const FAVORITES_PER_LOAD = 12;
+
 const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
-  const router = useRouter();
+  const [displayedCount, setDisplayedCount] = useState(FAVORITES_PER_LOAD);
+  const [gridColumns, setGridColumns] = useState(2);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   if (favorites.length === 0) return null;
 
-  const handleApply = async () => {
-    // This would be handled by the HomepageListingCard component
-  };
+  const displayedFavorites = favorites.slice(0, displayedCount);
+  const hasMore = displayedCount < favorites.length;
 
   // Transform favorites to listing format for HomepageListingCard
   const favoriteListings = favorites.map((fav) => ({
@@ -360,34 +362,67 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
     })),
   }));
 
+  // Reset displayed count when favorites change
+  useEffect(() => {
+    setDisplayedCount(FAVORITES_PER_LOAD);
+  }, [favorites.length]);
+
+  // Track grid columns for trigger calculation
+  useEffect(() => {
+    const updateGridColumns = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) setGridColumns(5);
+      else if (width >= 768) setGridColumns(4);
+      else if (width >= 640) setGridColumns(3);
+      else setGridColumns(2);
+    };
+
+    updateGridColumns();
+    window.addEventListener('resize', updateGridColumns);
+    return () => window.removeEventListener('resize', updateGridColumns);
+  }, []);
+
+  const loadMore = useCallback(() => {
+    setDisplayedCount((prev) => Math.min(prev + FAVORITES_PER_LOAD, favorites.length));
+  }, [favorites.length]);
+
+  // IntersectionObserver to trigger loading more
+  useEffect(() => {
+    if (!hasMore) return;
+
+    const triggerIndex = Math.max(0, displayedFavorites.length - gridColumns * 2);
+    const triggerElement = gridRef.current?.children[triggerIndex] as HTMLElement | undefined;
+    if (!triggerElement) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) loadMore();
+      },
+      { root: null, rootMargin: '200px', threshold: 0.1 }
+    );
+
+    observer.observe(triggerElement);
+    return () => observer.disconnect();
+  }, [displayedFavorites.length, gridColumns, hasMore, loadMore]);
+
   return (
     <section className="mb-8">
-      <button
-        className="flex items-center gap-2 mb-4 w-full text-left"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
+      <div className="flex items-center gap-2 mb-4">
         <h2 className="text-lg font-medium text-[#404040]">Favorites</h2>
-        {isExpanded ? (
-          <ChevronUp className="w-5 h-5 text-gray-500" />
-        ) : (
-          <ChevronDown className="w-5 h-5 text-gray-500" />
-        )}
         <span className="text-sm text-gray-500">({favorites.length})</span>
-      </button>
-      {isExpanded && (
-        <div className="flex gap-4 overflow-x-auto pb-2">
-          {favorites.map((fav, index) => (
-            <HomepageListingCard
-              key={fav.id}
-              listing={favoriteListings[index] as any}
-              badge="liked"
-              tripId={fav.tripId}
-              isApplied={fav.isApplied}
-              initialFavorited={true}
-            />
-          ))}
-        </div>
-      )}
+      </div>
+      <div ref={gridRef} className="flex flex-wrap gap-6">
+        {displayedFavorites.map((fav, index) => (
+          <HomepageListingCard
+            key={fav.id}
+            listing={favoriteListings[index] as any}
+            badge="liked"
+            tripId={fav.tripId}
+            isApplied={fav.isApplied}
+            initialFavorited={true}
+          />
+        ))}
+      </div>
     </section>
   );
 };
