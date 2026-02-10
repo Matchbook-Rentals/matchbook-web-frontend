@@ -7,6 +7,8 @@ import PublicListingDetailsBox from './public-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Card, CardContent } from '@/components/ui/card';
+import ShareButton from '@/components/ui/share-button';
+import { usePathname, useParams } from 'next/navigation';
 
 interface PublicListingDetailsViewProps {
   listing: ListingAndImages;
@@ -26,6 +28,8 @@ interface PublicListingDetailsViewProps {
   onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_URL || "";
+
 export default function PublicListingDetailsView({
   listing,
   locationString,
@@ -40,6 +44,8 @@ export default function PublicListingDetailsView({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const { tripId } = useParams();
 
   // Set up the map
   React.useEffect(() => {
@@ -69,6 +75,33 @@ export default function PublicListingDetailsView({
   return (
     <>
       <div className="w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6">
+        {/* Title and Share Button - Above Image Carousel */}
+        <div className="mb-4">
+          {/* Desktop Title and Share Button */}
+          <div className="hidden lg:flex items-center justify-between">
+            <h1 className="font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
+              {listing.title || "Your Home Away From Home"}
+            </h1>
+            <ShareButton
+              title={`${listing.title} on Matchbook`}
+              text={`Check out this listing on Matchbook: ${pathname}`}
+              url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+            />
+          </div>
+          
+          {/* Mobile Title and Share Button */}
+          <div className="flex lg:hidden items-center justify-between">
+            <h2 className="flex-1 font-medium text-[#404040] text-xl md:text-2xl tracking-[-2.00px] font-['Poppins',Helvetica]">
+              {listing.title || "Your Home Away From Home"}
+            </h2>
+            <ShareButton
+              title={`${listing.title} on Matchbook`}
+              text={`Check out this listing on Matchbook: ${pathname}`}
+              url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+            />
+          </div>
+        </div>
+
         <ListingImageCarousel listingImages={listing.listingImages || []} maxHeight={420} />
 
         <div className="flex justify-between gap-x-8 lg:gap-x-16 relative">
