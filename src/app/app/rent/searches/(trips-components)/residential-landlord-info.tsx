@@ -185,7 +185,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
           headerText = `Residence ${index + 1}`;
         }
         return (
-          <Card key={index} className="py-6 px-0 bg-neutral-50 rounded-xl border-none shadow-none">
+          <Card key={index} className="py-6 px-0 rounded-xl border-none shadow-none">
             <CardContent className="p-0 flex flex-col gap-8">
               <div className="flex flex-col items-start gap-5 w-full">
                 <div className="flex flex-col gap-2 w-full">
