@@ -158,7 +158,7 @@ export default function HeroLocationSuggest({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           type="text"
-          className="w-full h-full text-sm focus:outline-none min-w-0 placeholder-[#667085] bg-background"
+          className="w-full h-full text-base focus:outline-none min-w-0 placeholder-[#667085] bg-background"
           autoFocus={autoFocus}
         />
       </div>
