@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Home, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { ChevronRight, MoreVertical } from 'lucide-react';
+import { SingleFamilyIcon } from '@/components/icons-v3';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
@@ -67,21 +68,25 @@ const SEARCHES_PER_PAGE = 9;
 const SearchCard = ({ trip, compact = false }: { trip: DashboardTrip; compact?: boolean }) => (
   <Link
     href={`/guest/rent/searches/${trip.id}`}
-    className="flex items-center gap-4 bg-white border border-gray-200 rounded-lg px-4 py-3 hover:border-gray-300 transition-colors"
+    className="flex w-full max-w-[318px] h-[52px] items-center gap-2 px-0 hover:bg-transparent"
   >
-    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-      <Home className="w-5 h-5 text-gray-500" />
+    <div className="flex w-9 h-9 items-center justify-center p-3 bg-white rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs shrink-0">
+      <SingleFamilyIcon className="w-6 h-6" />
     </div>
-    <p className="font-medium text-sm text-[#404040] truncate min-w-0 shrink">
+
+    <div className="flex items-center justify-center min-w-[77px] h-[52px] font-poppins font-medium text-[#373940] text-[11px] tracking-[0] leading-[normal]">
       {getLocationDisplay(trip)}
-    </p>
-    <p className="text-sm text-gray-500 truncate min-w-0 shrink-[2]">
+    </div>
+
+    <div className="flex items-center justify-center min-w-[109px] h-[52px] font-poppins font-normal text-[#777b8b] text-[10px] tracking-[0] leading-[normal]">
       {formatDateRange(trip.startDate, trip.endDate)}
-    </p>
-    <p className="hidden sm:block text-sm text-gray-500 truncate min-w-0 shrink-[3]">
+    </div>
+
+    <div className="flex items-center justify-center min-w-[72px] h-[52px] font-poppins font-normal text-[#777b8b] text-[10px] tracking-[0] leading-[normal]">
       {formatOccupants(trip.numAdults, trip.numChildren, trip.numPets)}
-    </p>
-    <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+    </div>
+
+    <ChevronRight className="w-[15px] h-[15px] text-gray-700 shrink-0" />
   </Link>
 );
 
@@ -271,6 +276,83 @@ const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
 };
 
 // Applications Section
+const ApplicationCard = ({ app }: { app: DashboardApplication }) => {
+  const imageUrl = app.listing.listingImages[0]?.url || PLACEHOLDER_IMAGE;
+  const location = app.listing.city && app.listing.state
+    ? `${app.listing.city}, ${app.listing.state}`
+    : app.listing.state || 'Location not available';
+
+  return (
+    <div className="w-full bg-white rounded-[15px] border-[0.4px] border-[#0b6e6e]">
+      <div className="p-[17px]">
+        <div className="flex items-start gap-6">
+          <div
+            className="w-[148px] h-[134px] rounded-xl bg-cover bg-center flex-shrink-0"
+            style={{ backgroundImage: `url(${imageUrl})` }}
+          />
+
+          <div className="flex flex-col gap-[5px] flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="font-poppins font-medium text-[#373940] text-base">
+                {app.listing.title}
+              </h3>
+              <div className="h-6 px-2.5 py-1 bg-[#e6f6fd] rounded-full border border-[#00a6e8] flex items-center">
+                <span className="font-poppins font-medium text-[#00a6e8] text-[10px] leading-5">
+                  Pending
+                </span>
+              </div>
+            </div>
+
+            <div className="font-poppins font-light text-black text-xs">
+              {formatDateRange(app.startDate, app.endDate)}
+            </div>
+
+            <div className="font-poppins font-normal text-[#777b8b] text-[10px]">
+              {location}
+            </div>
+
+            <div className="font-poppins font-normal text-[#777b8b] text-[10px]">
+              {formatOccupants(app.trip.numAdults, app.trip.numChildren, app.trip.numPets)}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-end justify-between h-[134px] flex-shrink-0">
+            <button className="w-6 h-6 p-0 rounded-[5px] border border-[#3c8787] flex items-center justify-center hover:bg-gray-50">
+              <MoreVertical className="w-4 h-4 text-[#3c8787]" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <BrandButton
+                variant="outline"
+                size="sm"
+                href={`/app/rent/applications/${app.id}`}
+                className="w-[115px] h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] hover:bg-transparent"
+              >
+                <span className="font-poppins font-semibold text-[#3c8787] text-[11px] leading-5">
+                  View
+                </span>
+              </BrandButton>
+
+              {app.listing.user && (
+                <BrandButton
+                  variant="outline"
+                  size="sm"
+                  href={`/app/rent/messages?userId=${app.listing.user.id}`}
+                  className="w-[115px] h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] hover:bg-transparent"
+                >
+                  <span className="font-poppins font-semibold text-[#3c8787] text-[11px] leading-5">
+                    Message Host
+                  </span>
+                </BrandButton>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ApplicationsSection = ({ applications }: { applications: DashboardApplication[] }) => {
   if (applications.length === 0) return null;
 
@@ -284,53 +366,7 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
       </div>
       <div className="space-y-4">
         {applications.map((app) => (
-          <div
-            key={app.id}
-            className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col md:flex-row"
-          >
-            <div className="relative w-full md:w-48 h-40 md:h-auto flex-shrink-0">
-              <Image
-                src={app.listing.listingImages[0]?.url || PLACEHOLDER_IMAGE}
-                alt={app.listing.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="flex-1 p-4 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="font-medium text-[#404040]">{app.listing.title}</h3>
-                  <span className="px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">
-                    Pending
-                  </span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">
-                  {formatDateRange(app.startDate, app.endDate)}
-                </p>
-                <p className="text-sm text-gray-500">{app.listing.state}</p>
-                <p className="text-sm text-gray-500">
-                  {formatOccupants(app.trip.numAdults, app.trip.numChildren, app.trip.numPets)}
-                </p>
-              </div>
-              <div className="flex items-center gap-3 mt-4">
-                <BrandButton variant="outline" size="sm" href={`/app/rent/applications/${app.id}`}>
-                  View
-                </BrandButton>
-                {app.listing.user && (
-                  <BrandButton
-                    variant="outline"
-                    size="sm"
-                    href={`/app/rent/messages?userId=${app.listing.user.id}`}
-                  >
-                    Message Host
-                  </BrandButton>
-                )}
-                <button className="p-1 hover:bg-gray-100 rounded">
-                  <MoreHorizontal className="w-5 h-5 text-gray-500" />
-                </button>
-              </div>
-            </div>
-          </div>
+          <ApplicationCard key={app.id} app={app} />
         ))}
       </div>
     </section>
@@ -431,7 +467,7 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
 const EmptyState = () => (
   <div className="text-center py-16">
     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-      <Home className="w-8 h-8 text-gray-400" />
+      <SingleFamilyIcon className="w-8 h-8 text-gray-400" />
     </div>
     <h2 className="text-xl font-medium text-[#404040] mb-2">No activity yet</h2>
     <p className="text-gray-500 mb-6">Start searching for your perfect rental home</p>
