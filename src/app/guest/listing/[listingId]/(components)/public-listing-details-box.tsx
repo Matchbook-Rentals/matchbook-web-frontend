@@ -7,7 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { BrandButton } from '@/components/ui/brandButton';
-import Image from 'next/image';
+
 import { useRouter } from 'next/navigation';
 import { applyToListingFromSearch } from '@/app/actions/housing-requests';
 import { getOrCreateListingConversation } from '@/app/actions/housing-requests';
@@ -15,7 +15,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import SearchDateRange from '@/components/newnew/search-date-range';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, CheckCircle } from 'lucide-react';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 
 interface PublicListingDetailsBoxProps {
@@ -159,6 +159,17 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   return (
     <Card className="w-full border border-[#0000001a] rounded-xl">
       <CardContent className="flex flex-col items-start gap-5 p-4">
+        {/* Verified badge */}
+        <Badge
+          variant="outline"
+          className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
+        >
+          <CheckCircle className="w-4 h-4 text-[#3c8787]" />
+          <span className="font-normal text-xs text-[#3c8787] font-['Poppins']">
+            Verified
+          </span>
+        </Badge>
+
         {/* Host information */}
         <div className="flex items-center gap-3 w-full">
           <Avatar className="w-[59px] h-[59px] rounded-xl">
@@ -186,22 +197,6 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
             </div>
           </div>
         </div>
-
-        {/* Verified badge */}
-        <Badge
-          variant="outline"
-          className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
-        >
-          <Image
-            src="/svg/verified-badge.svg"
-            alt="Verified"
-            width={16}
-            height={16}
-          />
-          <span className="font-normal text-xs text-[#717680] font-['Poppins']">
-            Verified
-          </span>
-        </Badge>
 
         <Separator className="w-full" />
 
