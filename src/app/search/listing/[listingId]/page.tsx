@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { ListingAndImages } from '@/types'
 import prisma from '@/lib/prismadb'
-import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
+import ListingDetailNavbar from "@/components/listing-detail-navbar";
 import { PAGE_MARGIN } from '@/constants/styles'
 import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from 'next';
@@ -181,11 +181,10 @@ export default async function SearchListingPage({ params, searchParams }: Listin
 
   return (
     <>
-      <MatchbookHeader
+      <ListingDetailNavbar
         userId={user?.id || null}
         user={userObject}
         isSignedIn={!!user?.id}
-        className={`${PAGE_MARGIN} px-0`}
         hasListings={hasListings}
       />
       <div className={`${PAGE_MARGIN} font-montserrat min-h-screen`}>
