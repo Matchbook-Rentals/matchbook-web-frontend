@@ -1,8 +1,6 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ListingAndImages } from '@/types';
-import { usePathname, useParams } from 'next/navigation';
-import ListingHeader from './listing-header';
 import PropertyDetails from './property-details';
 import PricingInfo from './pricing-info';
 import HighlightsSection from './highlights-section';
@@ -10,8 +8,6 @@ import AmenitiesSection from './amenities-section';
 import HostInformation from './host-information';
 import DescriptionSection from './description-section';
 import { calculateRent } from '@/lib/calculate-rent';
-
-const baseUrl = process.env.NEXT_PUBLIC_URL || "";
 const sectionStyles = 'border-b pb-5 mt-5';
 
 interface ListingDescriptionProps {
@@ -22,20 +18,10 @@ interface ListingDescriptionProps {
 }
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFullAmenities = false, isFlexible = false, trip }) => {
-  const pathname = usePathname();
-  const { tripId } = useParams();
-
   const calculatedPrice = trip ? calculateRent({ listing, trip }) : undefined;
 
   return (
     <div className='w-full'>
-      <ListingHeader 
-        listing={listing}
-        pathname={pathname}
-        tripId={tripId as string}
-        baseUrl={baseUrl}
-      />
-      
       <Card className="border-none shadow-none rounded-xl mt-5 lg:block hidden">
         <CardContent className="p-0">
           <PropertyDetails listing={listing} />
