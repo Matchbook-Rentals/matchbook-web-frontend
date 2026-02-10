@@ -145,6 +145,11 @@ interface ApplicationErrors {
 
 export const initialState = {
   tripId: undefined as string | undefined,
+  moveInDate: undefined as Date | undefined,
+  moveOutDate: undefined as Date | undefined,
+  numAdults: 1,
+  numChildren: 0,
+  numPets: 0,
   personalInfo: {
     firstName: '',
     lastName: '',
@@ -178,6 +183,11 @@ export const initialState = {
 
 interface ApplicationState {
   tripId?: string;
+  moveInDate?: Date;
+  moveOutDate?: Date;
+  numAdults: number;
+  numChildren: number;
+  numPets: number;
   personalInfo: PersonalInfo;
   ids: Identification[];
   verificationImages: VerificationImage[];
@@ -198,6 +208,11 @@ interface ApplicationState {
 
   // Actions
   setTripId: (tripId: string) => void;
+  setMoveInDate: (date: Date) => void;
+  setMoveOutDate: (date: Date) => void;
+  setNumAdults: (num: number) => void;
+  setNumChildren: (num: number) => void;
+  setNumPets: (num: number) => void;
   setPersonalInfo: (info: PersonalInfo) => void;
   setIds: (ids: Identification[]) => void;
   setVerificationImages: (images: VerificationImage[]) => void;
@@ -282,6 +297,11 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   originalData: { ...initialState },
 
   setTripId: (tripId) => set({ tripId }),
+  setMoveInDate: (date) => set({ moveInDate: date }),
+  setMoveOutDate: (date) => set({ moveOutDate: date }),
+  setNumAdults: (num) => set({ numAdults: num }),
+  setNumChildren: (num) => set({ numChildren: num }),
+  setNumPets: (num) => set({ numPets: num }),
   setPersonalInfo: (info) => set({ personalInfo: info }),
   setIds: (ids) => set({ ids }),
   setVerificationImages: (images) => set({ verificationImages: images }),
@@ -334,6 +354,11 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
 
     const newData = {
       tripId: application.tripId || undefined,
+      moveInDate: application.moveInDate ? new Date(application.moveInDate) : undefined,
+      moveOutDate: application.moveOutDate ? new Date(application.moveOutDate) : undefined,
+      numAdults: application.numAdults || 1,
+      numChildren: application.numChildren || 0,
+      numPets: application.numPets || 0,
       personalInfo: {
         firstName: application.firstName || '',
         lastName: application.lastName || '',
@@ -426,6 +451,11 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     const state = get();
     const newData = {
       tripId: state.tripId,
+      moveInDate: state.moveInDate,
+      moveOutDate: state.moveOutDate,
+      numAdults: state.numAdults,
+      numChildren: state.numChildren,
+      numPets: state.numPets,
       personalInfo: state.personalInfo,
       ids: state.ids,
       verificationImages: state.verificationImages,

@@ -65,6 +65,16 @@ export default function ApplicationWizard({
     residentialHistory,
     incomes,
     answers,
+    moveInDate,
+    moveOutDate,
+    numAdults,
+    numChildren,
+    numPets,
+    setMoveInDate,
+    setMoveOutDate,
+    setNumAdults,
+    setNumChildren,
+    setNumPets,
     initializeFromApplication,
     resetStore,
     setErrors,
@@ -73,6 +83,16 @@ export default function ApplicationWizard({
 
   useEffect(() => {
     resetStore();
+
+    // Initialize trip context from props
+    if (tripContext) {
+      setMoveInDate(tripContext.startDate);
+      setMoveOutDate(tripContext.endDate);
+      setNumAdults(tripContext.numAdults ?? 1);
+      setNumChildren(tripContext.numChildren ?? 0);
+      setNumPets(tripContext.numPets ?? 0);
+    }
+
     if (application) {
       initializeFromApplication(application);
     }
@@ -86,7 +106,7 @@ export default function ApplicationWizard({
       }
     };
     fetchFull();
-  }, [application, initializeFromApplication, resetStore]);
+  }, [application, initializeFromApplication, resetStore, tripContext, setMoveInDate, setMoveOutDate, setNumAdults, setNumChildren, setNumPets]);
 
   const getFirstErrorMessage = (errors: any): string | null => {
     if (errors.personalInfo) {
@@ -171,6 +191,11 @@ export default function ApplicationWizard({
     return {
       ...personalInfo,
       dateOfBirth: formattedDateOfBirth,
+      moveInDate: moveInDate?.toISOString(),
+      moveOutDate: moveOutDate?.toISOString(),
+      numAdults,
+      numChildren,
+      numPets,
       ...answers,
       incomes,
       identifications: ids.map((id) => ({
@@ -259,11 +284,16 @@ export default function ApplicationWizard({
       {/* Trip Context Display */}
       <div className="mb-10">
         <TripContextDisplay
-          startDate={tripContext.startDate}
-          endDate={tripContext.endDate}
-          numAdults={tripContext.numAdults ?? 1}
-          numChildren={tripContext.numChildren ?? 0}
-          numPets={tripContext.numPets ?? 0}
+          startDate={moveInDate || tripContext.startDate}
+          endDate={moveOutDate || tripContext.endDate}
+          numAdults={numAdults}
+          numChildren={numChildren}
+          numPets={numPets}
+          onStartDateChange={setMoveInDate}
+          onEndDateChange={setMoveOutDate}
+          onNumAdultsChange={setNumAdults}
+          onNumChildrenChange={setNumChildren}
+          onNumPetsChange={setNumPets}
         />
       </div>
 
