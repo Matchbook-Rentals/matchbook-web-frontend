@@ -88,7 +88,13 @@ export default function PropertyDetailsSection({
       {/* Action Buttons */}
       <div className="space-y-2">
         <button
-          onClick={() => bookingId && router.push(`/app/rent/booking/${bookingId}/move-in/instructions`)}
+          onClick={() => {
+            if (bookingId) {
+              router.push(`/app/rent/booking/${bookingId}/move-in/instructions`);
+            } else {
+              router.push('/newnew/demo/move-in/instructions');
+            }
+          }}
           className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
         >
           <Package className="w-6 h-6 text-gray-700" />

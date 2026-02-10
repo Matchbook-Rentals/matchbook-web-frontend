@@ -3,7 +3,9 @@ import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
 import PaymentsSection from "./payments-section";
 import { RentPaymentsTable } from "@/app/app/rent/bookings/components/rent-payments-table";
+import ListingDetailNavbar from "@/components/listing-detail-navbar";
 import prisma from "@/lib/prismadb";
+import { auth } from "@clerk/nextjs/server";
 
 function formatAddress(listing: any): string {
   const parts = [
@@ -16,6 +18,19 @@ function formatAddress(listing: any): string {
 }
 
 export default async function StaticDemoPage() {
+  // Get current user for navbar
+  const { userId } = auth();
+  const user = userId ? await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      email: true,
+    }
+  }) : null;
+
   // Fetch a random approved listing
   const listingCount = await prisma.listing.count({
     where: {
@@ -152,6 +167,13 @@ export default async function StaticDemoPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <ListingDetailNavbar
+        userId={userId}
+        user={user}
+        isSignedIn={!!userId}
+      />
+      
       <div className="max-w-[1280px] mx-auto">
         {/* Header with Back Button */}
         <div className="px-6 pt-6">

@@ -2,33 +2,73 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Home, Car, Wifi, FileText, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import ListingDetailNavbar from "@/components/listing-detail-navbar";
+import prisma from "@/lib/prismadb";
+import { auth } from "@clerk/nextjs/server";
 
-export default function DemoMoveInInstructionsPage() {
-  const instructions = [
+// Demo data - mimics what would come from database
+const DEMO_DATA = {
+  property: {
+    title: "Luxury Home with Golden Gate Bridge View",
+    address: "3024 N 1400 E North Ogden, UT 84414",
+    moveInDate: "Thursday, June 12, 2025",
+  },
+  host: {
+    name: "Daniel Resner",
+    phone: "(555) 123-4567",
+    email: "daniel@example.com",
+  },
+  instructions: [
     {
       icon: Home,
       title: "Property Access",
-      content: "The front door has a smart lock. Your access code is 1234#. To enter, press the code followed by the # key. The lock will beep twice and the light will turn green. If you have any issues, there's a spare key in the lockbox on the back porch - the lockbox code is 5678.\n\nGarage access: Use the keypad on the right side of the garage door. Your code is the same as the front door (1234#)."
+      content: "The front door has a smart lock. Your access code is 1234#. To enter, press the code followed by the # key. The lock will beep twice and the light will turn green. If you have any issues, there's a spare key in the lockbox on the back porch - the lockbox code is 5678.\n\nGarage access: Use the keypad on the right side of the garage door. Your code is the same as the front door (1234#).",
+      emptyMessage: "No property access instructions provided yet."
     },
     {
       icon: Car,
       title: "Parking",
-      content: "You have two assigned parking spaces in the driveway - the two spots closest to the house. Street parking is also available if you have additional vehicles.\n\nPlease do not park in front of the neighbor's driveway (the house with the red door). They're very particular about it!\n\nIf you need to park a trailer or RV, please use the extended parking area on the left side of the property."
+      content: "You have two assigned parking spaces in the driveway - the two spots closest to the house. Street parking is also available if you have additional vehicles.\n\nPlease do not park in front of the neighbor's driveway (the house with the red door). They're very particular about it!\n\nIf you need to park a trailer or RV, please use the extended parking area on the left side of the property.",
+      emptyMessage: "No parking information provided yet."
     },
     {
       icon: Wifi,
       title: "WiFi",
-      content: "Network Name: HomeAway_Guest_5G\nPassword: WelcomeHome2025!\n\nFor best performance, connect to the 5G network. The router is located in the living room closet if you need to restart it.\n\nWe have high-speed fiber internet (1 Gbps) so feel free to stream, work remotely, or game without any worries about bandwidth."
+      content: "Network Name: HomeAway_Guest_5G\nPassword: WelcomeHome2025!\n\nFor best performance, connect to the 5G network. The router is located in the living room closet if you need to restart it.\n\nWe have high-speed fiber internet (1 Gbps) so feel free to stream, work remotely, or game without any worries about bandwidth.",
+      emptyMessage: "No WiFi information provided yet."
     },
     {
       icon: FileText,
       title: "Other Notes",
-      content: "Welcome to your home away from home! Here are a few things to know:\n\n• Trash pickup is every Tuesday morning - please put bins out Monday night\n• The thermostat is a Nest - feel free to adjust to your comfort\n• All linens and towels are provided in the hallway closet\n• Coffee maker, pots/pans, and dishes are fully stocked in the kitchen\n• Check-out time is 11 AM - please start the dishwasher before you leave\n\nLocal recommendations:\n• Best coffee: Blue Bottle Coffee (5 min drive)\n• Groceries: Whole Foods (10 min drive)\n• Emergency contacts are on the fridge\n\nEnjoy your stay!"
+      content: "Welcome to your home away from home! Here are a few things to know:\n\n• Trash pickup is every Tuesday morning - please put bins out Monday night\n• The thermostat is a Nest - feel free to adjust to your comfort\n• All linens and towels are provided in the hallway closet\n• Coffee maker, pots/pans, and dishes are fully stocked in the kitchen\n• Check-out time is 11 AM - please start the dishwasher before you leave\n\nLocal recommendations:\n• Best coffee: Blue Bottle Coffee (5 min drive)\n• Groceries: Whole Foods (10 min drive)\n• Emergency contacts are on the fridge\n\nEnjoy your stay!",
+      emptyMessage: "No additional notes provided yet."
     }
-  ];
+  ],
+};
+
+export default async function DemoMoveInInstructionsPage() {
+  // Get current user for navbar
+  const { userId } = auth();
+  const user = userId ? await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      email: true,
+    }
+  }) : null;
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <ListingDetailNavbar
+        userId={userId}
+        user={user}
+        isSignedIn={!!userId}
+      />
+      
       <div className="max-w-[800px] mx-auto px-6 py-8">
         {/* Back Button */}
         <Link href="/newnew/demo">
@@ -60,24 +100,26 @@ export default function DemoMoveInInstructionsPage() {
             <div className="flex items-start gap-3">
               <Home className="w-5 h-5 text-gray-600 mt-0.5" />
               <div>
-                <div className="font-medium text-gray-900">Luxury Home with Golden Gate Bridge View</div>
-                <div className="text-gray-600 text-sm">3024 N 1400 E North Ogden, UT 84414</div>
+                <div className="font-medium text-gray-900">{DEMO_DATA.property.title}</div>
+                <div className="text-gray-600 text-sm">{DEMO_DATA.property.address}</div>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Calendar className="w-5 h-5 text-gray-600 mt-0.5" />
               <div>
                 <div className="font-medium text-gray-900">Move-In Date</div>
-                <div className="text-gray-600 text-sm">Thursday, June 12, 2025</div>
+                <div className="text-gray-600 text-sm">{DEMO_DATA.property.moveInDate}</div>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <FileText className="w-5 h-5 text-gray-600 mt-0.5" />
               <div>
                 <div className="font-medium text-gray-900">Host Contact</div>
-                <div className="text-gray-600 text-sm">Daniel Resner</div>
-                <div className="text-gray-600 text-sm">(555) 123-4567</div>
-                <div className="text-gray-600 text-sm">daniel@example.com</div>
+                <div className="text-gray-600 text-sm">{DEMO_DATA.host.name}</div>
+                {DEMO_DATA.host.phone && (
+                  <div className="text-gray-600 text-sm">{DEMO_DATA.host.phone}</div>
+                )}
+                <div className="text-gray-600 text-sm">{DEMO_DATA.host.email}</div>
               </div>
             </div>
           </CardContent>
@@ -85,7 +127,7 @@ export default function DemoMoveInInstructionsPage() {
 
         {/* Instructions Cards */}
         <div className="space-y-6">
-          {instructions.map((instruction, index) => {
+          {DEMO_DATA.instructions.map((instruction, index) => {
             const Icon = instruction.icon;
             return (
               <Card key={index}>
@@ -96,9 +138,15 @@ export default function DemoMoveInInstructionsPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
-                    {instruction.content}
-                  </p>
+                  {instruction.content ? (
+                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      {instruction.content}
+                    </p>
+                  ) : (
+                    <p className="text-gray-500 italic">
+                      {instruction.emptyMessage}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             );
@@ -112,9 +160,9 @@ export default function DemoMoveInInstructionsPage() {
               <p className="text-gray-700 mb-4">
                 Have questions about your move-in?
               </p>
-              <a href="mailto:daniel@example.com">
+              <a href={`mailto:${DEMO_DATA.host.email}`}>
                 <Button className="bg-teal-600 hover:bg-teal-700 text-white">
-                  Contact Daniel Resner
+                  Contact {DEMO_DATA.host.name}
                 </Button>
               </a>
             </div>
