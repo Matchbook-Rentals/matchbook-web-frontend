@@ -33,7 +33,7 @@ export const GuestAuthModal: React.FC<GuestAuthModalProps> = ({
       <div className="px-6">
         <h3 className="text-lg font-semibold mb-4">Sign in required</h3>
         <p className="text-gray-600 mb-6">
-          In order to apply to a listing you must be signed in and create an application. Please sign in to continue.
+          Please sign in to continue. You must have an account to save favorites and apply to listings.
         </p>
         <div className="flex gap-3">
           <BrandButton

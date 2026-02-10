@@ -613,11 +613,23 @@ export default function SearchPageClient({
     isLiked: (id: string) => favIds.has(id),
     isDisliked: (id: string) => dislikedIds.has(id),
     isRequested: () => false,
-    optimisticLike,
-    optimisticDislike,
+    optimisticLike: (id: string) => {
+      if (!isSignedIn) {
+        showAuthPrompt();
+        return;
+      }
+      optimisticLike(id);
+    },
+    optimisticDislike: (id: string) => {
+      if (!isSignedIn) {
+        showAuthPrompt();
+        return;
+      }
+      optimisticDislike(id);
+    },
     optimisticRemoveLike,
     optimisticRemoveDislike,
-  }), [favIds, dislikedIds, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
+  }), [favIds, dislikedIds, isSignedIn, showAuthPrompt, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
 
   // Map markers - use localTripData for dates to enable price calculation
   const mockTrip = useMemo(() => ({
@@ -767,7 +779,7 @@ export default function SearchPageClient({
                   <Button
                     onClick={searchThisArea}
                     disabled={isSearching}
-                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full hover:bg-gray-100 hover:text-gray-900 hover:shadow-md"
+                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-background/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full hover:bg-gray-100 hover:text-gray-900 hover:shadow-md"
                   >
                     {isSearching ? 'Loading...' : 'Search this area'}
                   </Button>
@@ -782,7 +794,7 @@ export default function SearchPageClient({
           <AnimatePresence>
             {isSlideMapOpen && (
               <motion.div
-                className="fixed top-0 left-0 w-full h-full bg-white z-50"
+                className="fixed top-0 left-0 w-full h-full bg-background z-50"
                 variants={slideUpVariants}
                 initial="initial"
                 animate="animate"
@@ -809,7 +821,7 @@ export default function SearchPageClient({
                   <Button
                     onClick={searchThisArea}
                     disabled={isSearching}
-                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-white/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full hover:bg-gray-100 hover:text-gray-900 hover:shadow-md"
+                    className="absolute left-1/2 top-3 z-20 -translate-x-1/2 bg-background/90 text-gray-900 border border-gray-200 shadow-sm px-5 py-2.5 rounded-full hover:bg-gray-100 hover:text-gray-900 hover:shadow-md"
                   >
                     {isSearching ? 'Loading...' : 'Search this area'}
                   </Button>

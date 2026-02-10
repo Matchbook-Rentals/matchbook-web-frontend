@@ -27,6 +27,7 @@ interface PopularListingsSectionProps {
   onFavorite?: (listingId: string, isFavorited: boolean, sectionTripId?: string, center?: { lat: number; lng: number }, locationString?: string) => void;
   onSignInPrompt?: () => void;
   authUserState?: Partial<HomepageUserState>;
+  isSignedIn?: boolean;
 }
 
 type BadgeType = 'matched' | 'liked';
@@ -42,6 +43,7 @@ interface ListingRowProps {
   isExploreLoading?: boolean;
   authUserState?: Partial<HomepageUserState>;
   sectionTripId?: string;
+  isSignedIn?: boolean;
 }
 
 const SCROLL_AMOUNT = 608;
@@ -78,7 +80,7 @@ const getListingState = (
   };
 };
 
-function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading, authUserState, sectionTripId }: ListingRowProps) {
+function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading, authUserState, sectionTripId, isSignedIn }: ListingRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -200,6 +202,7 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
                 matchId={state.matchId}
                 onFavorite={onFavorite}
                 onSignInPrompt={onSignInPrompt}
+                isSignedIn={isSignedIn}
               />
             ));
           })()}
@@ -214,7 +217,7 @@ function ListingRow({ title, listings, showBadges = false, guestFavoriteIds, onF
 const hasExploreTarget = (section: ListingSection): boolean =>
   section.center !== undefined;
 
-export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt, authUserState }: PopularListingsSectionProps) {
+export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt, authUserState, isSignedIn }: PopularListingsSectionProps) {
   const router = useRouter();
   const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
 
@@ -258,19 +261,20 @@ export default function PopularListingsSection({ sections, guestFavoriteIds, onF
       <section className="py-8">
         {hasSections ? (
           sections.map((section, index) => (
-            <ListingRow
-              key={`${section.title}-${index}`}
-              title={section.title}
-              listings={section.listings}
-              showBadges={section.showBadges}
-              guestFavoriteIds={guestFavoriteIds}
-              onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.sectionTripId, section.center, section.locationString) : undefined}
-              onSignInPrompt={onSignInPrompt}
-              onExploreClick={hasExploreTarget(section) ? () => handleExploreClick(section, index) : undefined}
-              isExploreLoading={loadingIndex === index}
-              authUserState={authUserState}
-              sectionTripId={section.sectionTripId}
-            />
+          <ListingRow
+            key={`${section.title}-${index}`}
+            title={section.title}
+            listings={section.listings}
+            showBadges={section.showBadges}
+            guestFavoriteIds={guestFavoriteIds}
+            onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.sectionTripId, section.center, section.locationString) : undefined}
+            onSignInPrompt={onSignInPrompt}
+            onExploreClick={hasExploreTarget(section) ? () => handleExploreClick(section, index) : undefined}
+            isExploreLoading={loadingIndex === index}
+            authUserState={authUserState}
+            sectionTripId={section.sectionTripId}
+            isSignedIn={isSignedIn}
+          />
           ))
         ) : (
           renderEmptyState()

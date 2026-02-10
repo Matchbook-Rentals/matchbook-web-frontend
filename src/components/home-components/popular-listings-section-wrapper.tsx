@@ -61,71 +61,14 @@ export default function PopularListingsSectionWrapper({
   );
   const [recentTripId, setRecentTripId] = useState<string | null>(initialRecentTripId ?? null);
 
-  // Load guest favorites on mount (only for unauthenticated users)
-  useEffect(() => {
-    if (isSignedIn) return;
-    const sessionId = GuestSessionService.getSessionIdFromCookie();
-    if (!sessionId) return;
-    setGuestSessionId(sessionId);
-    pullGuestFavoritesFromDb(sessionId).then((result) => {
-      if (result.success) {
-        setGuestFavoriteIds(new Set(result.favoriteIds));
-      }
-    });
-  }, [isSignedIn]);
+  // Guest favorites removed - users must sign in to like listings
 
-  // Handle guest favorite toggle
-  const handleGuestFavorite = useCallback(async (
-    listingId: string,
-    isFavorited: boolean,
-    _sectionTripId?: string,
-    center?: { lat: number; lng: number },
-    locationString?: string,
-  ) => {
-    if (isSignedIn) return;
-
-    let sessionId = guestSessionId;
-
-    // Lazy session creation on first like
-    if (!sessionId && isFavorited && center) {
-      const result = await createGuestSession({
-        locationString: locationString || 'Unknown',
-        latitude: center.lat,
-        longitude: center.lng,
-      });
-      if (!result.success || !result.sessionId) return;
-      sessionId = result.sessionId;
-      setGuestSessionId(sessionId);
-      // Store in cookie/localStorage for persistence
-      GuestSessionService.storeSession(
-        GuestSessionService.createGuestSessionData({
-          locationString: locationString || 'Unknown',
-          latitude: center.lat,
-          longitude: center.lng,
-        }, sessionId)
-      );
-    }
-
-    if (!sessionId) return;
-
-    // Optimistic UI update
-    setGuestFavoriteIds((prev) => {
-      const next = new Set(prev);
-      if (isFavorited) {
-        next.add(listingId);
-      } else {
-        next.delete(listingId);
-      }
-      return next;
-    });
-
-    // Persist to DB
-    if (isFavorited) {
-      await guestOptimisticFavorite(sessionId, listingId);
-    } else {
-      await guestOptimisticRemoveFavorite(sessionId, listingId);
-    }
-  }, [isSignedIn, guestSessionId]);
+  // Guest favorites are no longer supported - users must sign in to like listings
+  const handleGuestFavorite = useCallback(async () => {
+    // This function should never be called since we now enforce sign-in
+    // But we keep it for type compatibility
+    handleGuestApplyPrompt();
+  }, []);
 
   // Handle authenticated user favorite toggle
   const handleAuthFavorite = useCallback(async (
@@ -378,13 +321,14 @@ export default function PopularListingsSectionWrapper({
     <>
       <PopularListingsSection
         sections={sections}
-        guestFavoriteIds={isSignedIn ? undefined : guestFavoriteIds}
+        guestFavoriteIds={isSignedIn ? undefined : new Set()} // Empty set for guests
         onFavorite={isSignedIn ? handleAuthFavorite : handleGuestFavorite}
         onSignInPrompt={isSignedIn ? undefined : handleGuestApplyPrompt}
         authUserState={isSignedIn ? {
           ...userState,
           favoritedListingIds: Array.from(authFavoriteIds),
         } : undefined}
+        isSignedIn={isSignedIn}
       />
       <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
     </>

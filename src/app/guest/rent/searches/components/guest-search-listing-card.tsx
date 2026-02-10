@@ -97,14 +97,33 @@ export default function SearchListingCard({ listing, status, className, style, d
       }
     : null;
 
-  // Either use the custom snapshot passed in or fall back to the guest context
+  // Use custom snapshot if provided (from search-page-client), otherwise use auth from context
+  // For guests, all like actions should trigger sign-in prompt
+  const { isSignedIn } = useAuth();
+  
   const snapshot = customSnapshot || {
     isLiked: () => false,
     isDisliked: () => false,
-    optimisticLike: (id: string) => actions.showAuthPrompt('like', id),
-    optimisticDislike: (id: string) => actions.showAuthPrompt('like', id),
-    optimisticRemoveLike: (id: string) => actions.showAuthPrompt('like', id),
-    optimisticRemoveDislike: (id: string) => actions.showAuthPrompt('like', id)
+    optimisticLike: (id: string) => {
+      if (!isSignedIn) {
+        actions.showAuthPrompt('like', id);
+      }
+    },
+    optimisticDislike: (id: string) => {
+      if (!isSignedIn) {
+        actions.showAuthPrompt('like', id);
+      }
+    },
+    optimisticRemoveLike: (id: string) => {
+      if (!isSignedIn) {
+        actions.showAuthPrompt('like', id);
+      }
+    },
+    optimisticRemoveDislike: (id: string) => {
+      if (!isSignedIn) {
+        actions.showAuthPrompt('like', id);
+      }
+    }
   };
 
   const getStatusIcon = (status: ListingStatus) => {

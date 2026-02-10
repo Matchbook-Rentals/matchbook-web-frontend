@@ -27,6 +27,7 @@ interface HomepageListingCardProps {
   onSignInPrompt?: () => void;
   initialFavorited?: boolean;
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
+  isSignedIn?: boolean;
 }
 
 export default function HomepageListingCard({
@@ -40,6 +41,7 @@ export default function HomepageListingCard({
   onSignInPrompt,
   initialFavorited,
   onFavorite,
+  isSignedIn,
 }: HomepageListingCardProps) {
   const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
@@ -131,6 +133,11 @@ export default function HomepageListingCard({
     e.stopPropagation();
     // Prevent unfavoriting when matched or has pending application
     if (badge === 'matched' || isApplied) return;
+    // Enforce sign-in for liking
+    if (!isSignedIn) {
+      onSignInPrompt?.();
+      return;
+    }
     const newState = !isFavorited;
     setIsFavorited(newState);
     onFavorite?.(listing.id, newState);
