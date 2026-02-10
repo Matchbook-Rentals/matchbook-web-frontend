@@ -346,7 +346,38 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                   </div>
                 </div>
 
-                {/* Row 4: Property Type (radio buttons) */}
+                {/* Row 4: Monthly Payment */}
+                <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
+                    <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
+                      <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
+                        <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          Monthly Payment
+                        </Label>
+                        <span className="text-red-500 ml-1">*</span>
+                      </div>
+
+                      <MonthlyPaymentInput
+                        id={`monthlyPayment-${index}`}
+                        value={residence.monthlyPayment || ''}
+                        onChange={(value) => handleMonthlyPaymentChange(index, value)}
+                        className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${
+                          fieldErrors[`residentialHistory.${index}.monthlyPayment`] ? 'border-red-500' : 'border-[#d0d5dd]'
+                        }`}
+                      />
+                      {fieldErrors[`residentialHistory.${index}.monthlyPayment`] && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {fieldErrors[`residentialHistory.${index}.monthlyPayment`]}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Spacer for 2-column layout */}
+                  <div className="flex flex-col items-start gap-1.5 relative flex-1 grow"></div>
+                </div>
+
+                {/* Row 5: Property Type (radio buttons) */}
                 <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
                   <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
                     <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -393,7 +424,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                   </div>
                 </div>
 
-                {/* Row 5: Landlord Info (only show if renting) */}
+                {/* Row 6: Landlord Info (only show if renting) */}
                 {residence.housingStatus === 'rent' && (
                   <>
                     <div className="mt-4 mb-2">

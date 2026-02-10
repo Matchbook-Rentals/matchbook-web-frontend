@@ -22,6 +22,7 @@ import {
 } from '@/utils/application-validation';
 import { SaveStatusIndicator } from '@/components/ui/save-status-indicator';
 import { ApplicationItemHeaderStyles } from '@/constants/styles';
+import { TripContextDisplay } from '@/app/app/rent/searches/(trips-components)/trip-context-display';
 
 const INPUT_CLASS_NAME = `
   flex h-12 items-center gap-2 px-3 py-2
@@ -35,7 +36,14 @@ const INPUT_CLASS_NAME = `
 
 interface ApplicationWizardProps {
   listing: ListingAndImages;
-  tripContext: { tripId?: string; startDate: Date; endDate: Date };
+  tripContext: {
+    tripId?: string;
+    startDate: Date;
+    endDate: Date;
+    numAdults?: number;
+    numChildren?: number;
+    numPets?: number;
+  };
   application: any;
   onBack: () => void;
   onComplete: () => void;
@@ -247,6 +255,17 @@ export default function ApplicationWizard({
   return (
     <div className="w-full max-w-3xl mx-auto pb-24">
       <SaveStatusIndicator />
+
+      {/* Trip Context Display */}
+      <div className="mb-10">
+        <TripContextDisplay
+          startDate={tripContext.startDate}
+          endDate={tripContext.endDate}
+          numAdults={tripContext.numAdults ?? 1}
+          numChildren={tripContext.numChildren ?? 0}
+          numPets={tripContext.numPets ?? 0}
+        />
+      </div>
 
       {/* All form sections */}
       <div className="space-y-10">

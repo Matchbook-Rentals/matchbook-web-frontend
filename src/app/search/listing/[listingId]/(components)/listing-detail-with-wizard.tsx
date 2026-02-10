@@ -58,11 +58,20 @@ export default function ListingDetailWithWizard({
         tripId: initialTripContext?.tripId,
         startDate: collectedDates.start,
         endDate: collectedDates.end,
-        numAdults: collectedGuests?.adults ?? 1,
-        numChildren: collectedGuests?.children ?? 0,
-        numPets: collectedGuests?.pets ?? 0,
+        numAdults: collectedGuests?.adults ?? initialTripContext?.numAdults ?? 1,
+        numChildren: collectedGuests?.children ?? initialTripContext?.numChildren ?? 0,
+        numPets: collectedGuests?.pets ?? initialTripContext?.numPets ?? 0,
       }
-    : initialTripContext;
+    : initialTripContext
+    ? {
+        tripId: initialTripContext.tripId,
+        startDate: initialTripContext.startDate,
+        endDate: initialTripContext.endDate,
+        numAdults: initialTripContext.numAdults ?? 1,
+        numChildren: initialTripContext.numChildren ?? 0,
+        numPets: initialTripContext.numPets ?? 0,
+      }
+    : null;
 
   const effectivePrice = useCallback(() => {
     if (collectedDates) {

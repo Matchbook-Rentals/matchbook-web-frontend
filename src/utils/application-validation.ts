@@ -181,6 +181,27 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
         errors.durationOfTenancy[i] = error;
       }
 
+      // Validate monthly payment
+      const monthlyPayment = entry.monthlyPayment ? entry.monthlyPayment : '';
+      if (!monthlyPayment.trim()) {
+        const error = isCurrentResidence
+          ? 'Current Residence: Monthly Payment is required'
+          : 'Previous Residence: Monthly Payment is required';
+        console.log(`❌ Validation failed: monthlyPayment[${i}] - "${monthlyPayment}" - ${error}`);
+        errors.monthlyPayment = errors.monthlyPayment || [];
+        errors.monthlyPayment[i] = error;
+      } else {
+        const amount = parseInt(monthlyPayment);
+        if (isNaN(amount) || amount <= 0) {
+          const error = isCurrentResidence
+            ? 'Current Residence: Monthly Payment must be greater than 0'
+            : 'Previous Residence: Monthly Payment must be greater than 0';
+          console.log(`❌ Validation failed: monthlyPayment[${i}] - "${monthlyPayment}" - ${error}`);
+          errors.monthlyPayment = errors.monthlyPayment || [];
+          errors.monthlyPayment[i] = error;
+        }
+      }
+
       if (entry.housingStatus === 'rent') {
         const landlordFirstName = entry.landlordFirstName ? entry.landlordFirstName : '';
         const landlordLastName = entry.landlordLastName ? entry.landlordLastName : '';
