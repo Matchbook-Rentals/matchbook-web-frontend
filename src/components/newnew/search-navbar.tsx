@@ -173,7 +173,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
       <div className="relative z-50 flex items-center justify-center w-full px-6 pb-6 pt-3">
         <div className="relative w-full max-w-[860px]">
           {/* Search bar pill */}
-          <div className="flex items-center w-full h-[50px] pl-6 pr-3 py-2 bg-white rounded-full shadow-[0px_6px_12px_rgba(0,0,0,0.15)]">
+          <div className="flex items-center w-full h-[50px] pl-6 pr-3 py-2 bg-background rounded-full shadow-[0px_6px_12px_rgba(0,0,0,0.15)]">
             <div className="flex items-center flex-1 min-w-0">
 
               {/* WHERE trigger */}

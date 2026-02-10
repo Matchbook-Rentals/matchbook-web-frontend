@@ -151,14 +151,14 @@ export default function HeroLocationSuggest({
   return (
 
     <div className={`${contentClassName}`}>
-      <div className="h-12 w-full bg-white rounded-lg border border-[#d0d5dd] px-3 flex items-center">
+      <div className="h-12 w-full bg-background rounded-lg border border-[#d0d5dd] px-3 flex items-center">
         <input
           value={inputValue}
           onChange={handleInput}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           type="text"
-          className="w-full h-full text-sm focus:outline-none min-w-0 placeholder-[#667085]"
+          className="w-full h-full text-sm focus:outline-none min-w-0 placeholder-[#667085] bg-background"
           autoFocus={autoFocus}
         />
       </div>

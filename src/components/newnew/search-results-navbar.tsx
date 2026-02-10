@@ -459,7 +459,7 @@ export default function SearchResultsNavbar({
       {/* Mobile: static search bar row below header */}
       <div className="md:hidden flex items-center justify-center w-full px-6 pb-4 pt-1">
         <div
-          className="flex items-center w-full h-[50px] pl-6 pr-3 py-2 bg-white rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)]"
+          className="flex items-center w-full h-[50px] pl-6 pr-3 py-2 bg-background rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)]"
           onClick={handleWhereClick}
         >
           {searchBarContent()}
@@ -483,7 +483,7 @@ export default function SearchResultsNavbar({
       >
         {/* Search bar */}
         <motion.div
-          className="flex items-center w-full h-[50px] bg-white rounded-full pointer-events-auto"
+          className="flex items-center w-full h-[50px] bg-background rounded-full pointer-events-auto"
           initial={false}
           animate={{
             maxWidth: isExpanded ? 860 : 700,

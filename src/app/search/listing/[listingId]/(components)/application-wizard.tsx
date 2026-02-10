@@ -26,7 +26,7 @@ import { ApplicationItemHeaderStyles } from '@/constants/styles';
 const INPUT_CLASS_NAME = `
   flex h-12 items-center gap-2 px-3 py-2
   relative self-stretch w-full
-  bg-white rounded-lg border border-solid border-[#d0d5dd]
+  bg-background rounded-lg border border-solid border-[#d0d5dd]
   shadow-shadows-shadow-xs
   text-gray-900
   placeholder:text-gray-400
@@ -278,7 +278,7 @@ export default function ApplicationWizard({
       </div>
 
       {/* Sticky footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-20">
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 p-4 z-20">
         <div className="max-w-3xl mx-auto flex justify-between items-center">
           <Button
             variant="outline"

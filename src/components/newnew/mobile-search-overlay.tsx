@@ -217,7 +217,7 @@ export default function MobileSearchOverlay({
                               className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
                               onClick={() => handleSuggestedClick(location.title)}
                             >
-                              <div className="flex w-[48px] h-[48px] items-center justify-center bg-white rounded-lg border border-[#eaecf0] shadow-sm flex-shrink-0">
+                              <div className="flex w-[48px] h-[48px] items-center justify-center bg-background rounded-lg border border-[#eaecf0] shadow-sm flex-shrink-0">
                                 <Building2 className="w-5 h-5 text-gray-500" />
                               </div>
                               <span className="font-medium text-[#0d1b2a] text-sm">

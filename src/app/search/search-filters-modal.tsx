@@ -341,7 +341,7 @@ export default function SearchFiltersModal({
     >
       <div className="flex flex-col max-h-[90vh]">
         {/* ---- Header ---- */}
-        <div className="flex-none flex items-center justify-between px-6 py-4 border-b bg-white z-10">
+        <div className="flex-none flex items-center justify-between px-6 py-4 border-b bg-background z-10">
           <h2 className="text-xl font-semibold">Filters</h2>
           <button onClick={clearFilters} className="text-sm font-medium text-[#3c8787] hover:underline">
             Clear Filters
@@ -426,7 +426,7 @@ export default function SearchFiltersModal({
         </ScrollArea>
 
         {/* ---- Footer ---- */}
-        <div className="flex-none flex items-center justify-between px-6 py-4 border-t bg-white z-10">
+        <div className="flex-none flex items-center justify-between px-6 py-4 border-t bg-background z-10">
           <Button variant="outline" onClick={cancel} className="px-6">
             Cancel
           </Button>

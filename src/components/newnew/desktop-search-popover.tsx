@@ -138,7 +138,7 @@ const SuggestedLocationsList = ({
           className="flex items-center gap-2.5 p-3.5 rounded-2xl hover:bg-gray-50 transition-colors text-left"
           onClick={() => search.handleSuggestedLocationClick(location.title)}
         >
-          <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-white rounded-[10px] border border-[#eaecf0] shadow-sm">
+          <div className="flex w-[60px] h-[60px] items-center justify-center p-3 bg-background rounded-[10px] border border-[#eaecf0] shadow-sm">
             <Building2 className="w-6 h-6 text-gray-500" />
           </div>
           <span className="font-medium text-[#0d1b2a] text-sm leading-5 whitespace-nowrap">
@@ -221,7 +221,7 @@ export default function DesktopSearchPopover({
           transition={{ duration: ENTER_EXIT_DURATION }}
         >
           <motion.div
-            className="absolute top-0 bg-white rounded-lg shadow-md border border-[#e9e9eb] overflow-hidden"
+            className="absolute top-0 bg-background rounded-lg shadow-md border border-[#e9e9eb] overflow-hidden"
             animate={{ width: panelWidth, left: panelLeft }}
             transition={{
               duration: CONTAINER_DURATION,
